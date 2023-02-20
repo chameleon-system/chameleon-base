@@ -1,17 +1,15 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgNewsletterQueue;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class PkgNewsletterCampaign {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal|null - Portal */
-private \ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal = null,
-/** @var null|string - Portal */
-private ?string $cmsPortalId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Campaign source (utm_source) */
 private string $utmSource = '', 
@@ -27,44 +25,15 @@ private string $utmCampaign = '',
     // TCMSFieldVarchar
 /** @var string - Newsletter title */
 private string $name = '', 
-    // TCMSFieldTreeNode
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTree - Newlsetter template page */
-private \ChameleonSystem\CoreBundle\Entity\CmsTree|null $cmsTreeNodeId = null, 
-    // TCMSFieldBoolean
-/** @var bool - Newsletter queue active */
-private bool $active = false, 
     // TCMSFieldVarchar
 /** @var string - Subject */
 private string $subject = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgNewsletterQueue[] - Queue items */
-private \Doctrine\Common\Collections\Collection $pkgNewsletterQueueCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldText
-/** @var string - Content text */
-private string $contentPlain = '', 
-    // TCMSFieldDateTimeNow
-/** @var \DateTime|null - Desired shipping time */
-private \DateTime|null $queueDate = null, 
-    // TCMSFieldNewsletterCampaignStatistics
-/** @var string - Send status */
-private string $sendStatistics = '', 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - Start of shipping */
-private \DateTime|null $sendStartDate = null, 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - End of shipping */
-private \DateTime|null $sendEndDate = null, 
-    // TCMSFieldBoolean
-/** @var bool - Generate user-specific newsletters */
-private bool $generateUserDependingNewsletter = false, 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgNewsletterGroup[] - Recipient list */
-private \Doctrine\Common\Collections\Collection $pkgNewsletterGroupMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldBoolean
-/** @var bool - Enable Google Analytics tagging */
-private bool $googleAnalyticsActive = false  ) {}
+/** @var Collection<int, pkgNewsletterQueue> - Queue items */
+private Collection $pkgNewsletterQueueCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -153,34 +122,6 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldTreeNode
-public function getCmsTreeNodeId(): \ChameleonSystem\CoreBundle\Entity\CmsTree|null
-{
-    return $this->cmsTreeNodeId;
-}
-public function setCmsTreeNodeId(\ChameleonSystem\CoreBundle\Entity\CmsTree|null $cmsTreeNodeId): self
-{
-    $this->cmsTreeNodeId = $cmsTreeNodeId;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isActive(): bool
-{
-    return $this->active;
-}
-public function setActive(bool $active): self
-{
-    $this->active = $active;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getSubject(): string
 {
@@ -195,154 +136,33 @@ public function setSubject(string $subject): self
 
 
   
-    // TCMSFieldLookup
-public function getCmsPortal(): \ChameleonSystem\CoreBundle\Entity\CmsPortal|null
-{
-    return $this->cmsPortal;
-}
-public function setCmsPortal(\ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal): self
-{
-    $this->cmsPortal = $cmsPortal;
-    $this->cmsPortalId = $cmsPortal?->getId();
-
-    return $this;
-}
-public function getCmsPortalId(): ?string
-{
-    return $this->cmsPortalId;
-}
-public function setCmsPortalId(?string $cmsPortalId): self
-{
-    $this->cmsPortalId = $cmsPortalId;
-    // todo - load new id
-    //$this->cmsPortalId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
     // TCMSFieldPropertyTable
-public function getPkgNewsletterQueueCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgNewsletterQueue>
+*/
+public function getPkgNewsletterQueueCollection(): Collection
 {
     return $this->pkgNewsletterQueueCollection;
 }
-public function setPkgNewsletterQueueCollection(\Doctrine\Common\Collections\Collection $pkgNewsletterQueueCollection): self
+
+public function addPkgNewsletterQueueCollection(pkgNewsletterQueue $pkgNewsletterQueue): self
 {
-    $this->pkgNewsletterQueueCollection = $pkgNewsletterQueueCollection;
+    if (!$this->pkgNewsletterQueueCollection->contains($pkgNewsletterQueue)) {
+        $this->pkgNewsletterQueueCollection->add($pkgNewsletterQueue);
+        $pkgNewsletterQueue->setPkgNewsletterCampaign($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldText
-public function getContentPlain(): string
+public function removePkgNewsletterQueueCollection(pkgNewsletterQueue $pkgNewsletterQueue): self
 {
-    return $this->contentPlain;
-}
-public function setContentPlain(string $contentPlain): self
-{
-    $this->contentPlain = $contentPlain;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDateTimeNow
-public function getQueueDate(): \DateTime|null
-{
-    return $this->queueDate;
-}
-public function setQueueDate(\DateTime|null $queueDate): self
-{
-    $this->queueDate = $queueDate;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNewsletterCampaignStatistics
-public function getSendStatistics(): string
-{
-    return $this->sendStatistics;
-}
-public function setSendStatistics(string $sendStatistics): self
-{
-    $this->sendStatistics = $sendStatistics;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDateTime
-public function getSendStartDate(): \DateTime|null
-{
-    return $this->sendStartDate;
-}
-public function setSendStartDate(\DateTime|null $sendStartDate): self
-{
-    $this->sendStartDate = $sendStartDate;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDateTime
-public function getSendEndDate(): \DateTime|null
-{
-    return $this->sendEndDate;
-}
-public function setSendEndDate(\DateTime|null $sendEndDate): self
-{
-    $this->sendEndDate = $sendEndDate;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isGenerateUserDependingNewsletter(): bool
-{
-    return $this->generateUserDependingNewsletter;
-}
-public function setGenerateUserDependingNewsletter(bool $generateUserDependingNewsletter): self
-{
-    $this->generateUserDependingNewsletter = $generateUserDependingNewsletter;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselect
-public function getPkgNewsletterGroupMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->pkgNewsletterGroupMlt;
-}
-public function setPkgNewsletterGroupMlt(\Doctrine\Common\Collections\Collection $pkgNewsletterGroupMlt): self
-{
-    $this->pkgNewsletterGroupMlt = $pkgNewsletterGroupMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isGoogleAnalyticsActive(): bool
-{
-    return $this->googleAnalyticsActive;
-}
-public function setGoogleAnalyticsActive(bool $googleAnalyticsActive): self
-{
-    $this->googleAnalyticsActive = $googleAnalyticsActive;
+    if ($this->pkgNewsletterQueueCollection->removeElement($pkgNewsletterQueue)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgNewsletterQueue->getPkgNewsletterCampaign() === $this) {
+            $pkgNewsletterQueue->setPkgNewsletterCampaign(null);
+        }
+    }
 
     return $this;
 }

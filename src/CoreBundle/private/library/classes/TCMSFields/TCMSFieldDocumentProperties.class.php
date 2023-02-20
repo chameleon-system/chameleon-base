@@ -13,11 +13,6 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 
 class TCMSFieldDocumentProperties extends TCMSField
 {
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        // todo: implement
-        return parent::getDoctrineDataModelParts($namespace);
-    }
     public function GetHTML()
     {
         $oFileType = new TCMSRecord('cms_filetype', $this->oTableRow->sqlData['cms_filetype_id']);

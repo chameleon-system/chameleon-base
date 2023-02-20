@@ -7,47 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="logoHeaderId" type="string" field="logo_header_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="logoHeader" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="logo_header_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="fromName"  column="from_name"  nullable="false"  />
-            <field name="replyEmail"  column="reply_email"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="fromEmail"  column="from_email"  nullable="false"  />
-            <field name="imprint"  column="imprint"  nullable="false"  />
-            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
-    <join-column name="cms_portal_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="includeAllNewsletterUsers"  column="include_all_newsletter_users"  nullable="false"  />
-            <field name="includeNewsletterUserNotAssignedToAnyGroup"  column="include_newsletter_user_not_assigned_to_any_group"  nullable="false"  />
-            <field name="includeAllNewsletterUsersWithNoExtranetAccount"  column="include_all_newsletter_users_with_no_extranet_account"  nullable="false"  />
-            <many-to-many field="dataExtranetGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetGroup">
-    <join-table name="pkg_newsletter_group_data_extranet_group_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
+            <field name="fromName" type="string" column="from_name" length="255" nullable="false"  />
+            <field name="replyEmail" type="string" column="reply_email" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="fromEmail" type="string" column="from_email" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

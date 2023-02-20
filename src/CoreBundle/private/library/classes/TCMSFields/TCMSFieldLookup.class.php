@@ -49,54 +49,6 @@ class TCMSFieldLookup extends TCMSField
      */
     protected $options = array();
 
-
-    private function getDoctrineVariables(string $namespace): array
-    {
-        $fieldNameObject = $this->name;
-        if (true === str_ends_with($this->name, '_id')) {
-            $fieldNameObject = substr($this->name, 0, -3);
-        }
-        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false));
-        $type = sprintf('%s|null', $targetClass);
-        $fieldNameId = $fieldNameObject . '_id';
-        return [
-            'source' => __CLASS__,
-            'type' => $type,
-            'targetClass' => $targetClass,
-            'fieldNameObject' => $fieldNameObject,
-            'fieldNameId' => $fieldNameId,
-            'docCommentType' => $type,
-            'description' => $this->oDefinition->sqlData['translation'],
-            'propertyObjectName' => $this->snakeToCamelCase($fieldNameObject),
-            'propertyIdName' => $this->snakeToCamelCase($fieldNameId),
-            'allowDefaultValue' => true,
-            'defaultValue' => 'null',
-            'objectSetterName' => 'set'.$this->snakeToCamelCase($fieldNameObject, false),
-            'objectGetterName' => 'get'.$this->snakeToCamelCase($fieldNameObject, false),
-            'idSetterName' =>'set'.$this->snakeToCamelCase($fieldNameId, false),
-            'idGetterName' => 'get'.$this->snakeToCamelCase($fieldNameId, false),
-        ];
-    }
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $parameter = $this->getDoctrineVariables($namespace);
-        $objectPropertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameter)->render();
-        $objectMethodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameter)->render();
-
-        return new DataModelParts(
-            $objectPropertyCode,
-            $objectMethodCode
-        );
-    }
-
-    public function getDoctrineDataModelXml(string $namespace): ?string
-    {
-        $parameter = $this->getDoctrineVariables($namespace);
-        $mapperRenderer = $this->getDoctrineRenderer('mapping/many-to-one-test.xml.twig', $parameter);
-
-        return $mapperRenderer->render();
-    }
-
     public function GetHTML()
     {
         $this->GetOptions();

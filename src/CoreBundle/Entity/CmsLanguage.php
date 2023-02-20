@@ -1,22 +1,20 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsLanguage {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldBoolean
-/** @var bool - Activated for frontend */
-private bool $activeForFrontEnd = true, 
     // TCMSFieldVarchar
 /** @var string - ISO 639-1 language code */
 private string $iso6391 = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -43,20 +41,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isActiveForFrontEnd(): bool
-{
-    return $this->activeForFrontEnd;
-}
-public function setActiveForFrontEnd(bool $activeForFrontEnd): self
-{
-    $this->activeForFrontEnd = $activeForFrontEnd;
 
     return $this;
 }

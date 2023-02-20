@@ -7,22 +7,13 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="active"  column="active"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
-            <field name="descriptionShort"  column="description_short"  nullable="false"  />
-            <field type="array" name="cmsMediaId" column="cms_media_id"  nullable="false"  />
-            <field name="color"  column="color"  nullable="false"  />
-            <field name="css"  column="css"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="sizetable"  column="sizetable"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="descriptionShort" type="string" column="description_short" length="255" nullable="false"  />
+            <field name="css" type="string" column="css" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

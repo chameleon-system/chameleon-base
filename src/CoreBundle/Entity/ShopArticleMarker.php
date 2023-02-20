@@ -1,28 +1,20 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class ShopArticleMarker {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Icon */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia = null,
-/** @var null|string - Icon */
-private ?string $cmsMediaId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - System name */
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Title (as shown on the website) */
-private string $title = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Description */
-private string $description = ''  ) {}
+private string $title = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -63,48 +55,6 @@ public function getTitle(): string
 public function setTitle(string $title): self
 {
     $this->title = $title;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsMedia(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->cmsMedia;
-}
-public function setCmsMedia(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMedia): self
-{
-    $this->cmsMedia = $cmsMedia;
-    $this->cmsMediaId = $cmsMedia?->getId();
-
-    return $this;
-}
-public function getCmsMediaId(): ?string
-{
-    return $this->cmsMediaId;
-}
-public function setCmsMediaId(?string $cmsMediaId): self
-{
-    $this->cmsMediaId = $cmsMediaId;
-    // todo - load new id
-    //$this->cmsMediaId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldWYSIWYG
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
 
     return $this;
 }

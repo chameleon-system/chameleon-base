@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsTags {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -12,11 +13,11 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - URL name */
 private string $urlname = '', 
-    // TCMSFieldNumber
-/** @var int - Quantity */
-private int $count = 0  ) {}
+    // TCMSFieldVarchar
+/** @var string - Quantity */
+private string $count = '0'  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -63,12 +64,12 @@ public function setUrlname(string $urlname): self
 
 
   
-    // TCMSFieldNumber
-public function getCount(): int
+    // TCMSFieldVarchar
+public function getCount(): string
 {
     return $this->count;
 }
-public function setCount(int $count): self
+public function setCount(string $count): self
 {
     $this->count = $count;
 

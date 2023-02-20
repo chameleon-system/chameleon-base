@@ -7,42 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="layout"  column="layout"  nullable="false"  />
-            <one-to-many field="cmsMasterPagedefSpotCollection" target-entity="ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot" mapped-by="cmsMasterPagedefId" />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="layout" type="string" column="layout" length="255" nullable="false"  />
+            <one-to-many field="cmsMasterPagedefSpotCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot" mapped-by="cmsMasterPagedef" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <many-to-many field="pkgCmsThemeBlockMlt" target-entity="ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock">
-    <join-table name="cms_master_pagedef_pkg_cms_theme_block_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="actionPluginList"  column="action_plugin_list"  nullable="false"  />
-            <field name="restrictToPortals"  column="restrict_to_portals"  nullable="false"  />
-            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
-    <join-table name="cms_master_pagedef_cms_portal_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="wysiwygCssUrl"  column="wysiwyg_css_url"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
+            <field name="wysiwygCssUrl" type="string" column="wysiwyg_css_url" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

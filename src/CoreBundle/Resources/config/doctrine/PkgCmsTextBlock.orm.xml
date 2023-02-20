@@ -7,26 +7,12 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
-    <join-table name="pkg_cms_text_block_cms_portal_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="systemname"  column="systemname"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="content"  column="content"  nullable="false"  />
+            <field name="systemname" type="string" column="systemname" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

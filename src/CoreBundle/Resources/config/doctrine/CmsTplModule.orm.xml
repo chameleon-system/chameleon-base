@@ -7,56 +7,13 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="iconList"  column="icon_list"  nullable="false"  />
-            <field name="iconFontCssClass"  column="icon_font_css_class"  nullable="false"  />
-            <field name="viewMapperConfig"  column="view_mapper_config"  nullable="false"  />
-            <field name="mapperChain"  column="mapper_chain"  nullable="false"  />
-            <field name="viewMapping"  column="view_mapping"  nullable="false"  />
-            <field name="revisionManagementActive"  column="revision_management_active"  nullable="false"  />
-            <field name="isCopyAllowed"  column="is_copy_allowed"  nullable="false"  />
-            <field name="showInTemplateEngine"  column="show_in_template_engine"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
-            <field name="isRestricted"  column="is_restricted"  nullable="false"  />
-            <many-to-many field="cmsUsergroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsUsergroup">
-    <join-table name="cms_tpl_module_cms_usergroup_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <many-to-many field="cmsPortalMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal">
-    <join-table name="cms_tpl_module_cms_portal_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="name"  column="name"  nullable="false"  />
-            <many-to-many field="cmsTblConfMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTblConf">
-    <join-table name="cms_tpl_module_cms_tbl_conf_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="classname"  column="classname"  nullable="false"  />
+            <field name="iconFontCssClass" type="string" column="icon_font_css_class" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="classname" type="string" column="classname" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

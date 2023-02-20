@@ -22,16 +22,6 @@ class TCMSFieldDateTime extends TCMSField
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDateTime';
 
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $data = $this->getDoctrineDataModelViewData(
-            ['type' => '\DateTime|null', 'defaultValue' => 'null', 'allowDefaultValue' => true]
-        );
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
-    }
     public function GetHTML()
     {
         /** @var SecurityHelperAccess $securityHelper */

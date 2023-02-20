@@ -7,18 +7,16 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="nameOfEntryPoint"  column="name_of_entry_point"  nullable="false"  />
-            <field name="exitClass"  column="exit_class"  nullable="false"  />
-            <field name="exitClassSubtype"  column="exit_class_subtype"  nullable="false"  />
-            <field name="exitClassType"  column="exit_class_type"  nullable="false"  />
-            <one-to-many field="pkgCmsClassManagerExtensionCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgCmsClassManagerExtension" mapped-by="pkgCmsClassManagerId" />
+            <field name="nameOfEntryPoint" type="string" column="name_of_entry_point" length="255" nullable="false"  />
+            <field name="exitClass" type="string" column="exit_class" length="255" nullable="false"  />
+            <field name="exitClassSubtype" type="string" column="exit_class_subtype" length="255" nullable="false"  />
+            <one-to-many field="pkgCmsClassManagerExtensionCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgCmsClassManagerExtension" mapped-by="pkgCmsClassManager" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

@@ -7,84 +7,26 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="nameVariantInfo"  column="name_variant_info"  nullable="false"  />
-            <many-to-one field="shopOrderId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="shopOrderItem">
+            <field name="nameVariantInfo" type="string" column="name_variant_info" length="255" nullable="false"  />
+            <many-to-one field="shopOrder" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="shopOrderItemCollection" >
     <join-column name="shop_order_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="basketItemKey"  column="basket_item_key"  nullable="false"  />
-            <field name="shopArticleId" type="string" field="shop_article_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle">
-    <join-column name="shop_article_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="articlenumber"  column="articlenumber"  nullable="false"  />
-            <field name="descriptionShort"  column="description_short"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="shopManufacturerId" type="string" field="shop_manufacturer_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopManufacturer" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopManufacturer">
-    <join-column name="shop_manufacturer_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="shopManufacturerName"  column="shop_manufacturer_name"  nullable="false"  />
-            <field name="price"  column="price"  nullable="false"  />
-            <field name="priceReference"  column="price_reference"  nullable="false"  />
-            <field name="priceDiscounted"  column="price_discounted"  nullable="false"  />
-            <field name="vatPercent"  column="vat_percent"  nullable="false"  />
-            <field name="sizeWeight"  column="size_weight"  nullable="false"  />
-            <field name="sizeWidth"  column="size_width"  nullable="false"  />
-            <field name="sizeHeight"  column="size_height"  nullable="false"  />
-            <field name="sizeLength"  column="size_length"  nullable="false"  />
-            <field name="stock"  column="stock"  nullable="false"  />
-            <field name="quantityInUnits"  column="quantity_in_units"  nullable="false"  />
-            <field name="shopUnitOfMeasurementId" type="string" field="shop_unit_of_measurement_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopUnitOfMeasurement" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopUnitOfMeasurement">
-    <join-column name="shop_unit_of_measurement_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="virtualArticle"  column="virtual_article"  nullable="false"  />
-            <field name="excludeFromVouchers"  column="exclude_from_vouchers"  nullable="false"  />
-            <field name="excludeFromDiscounts"  column="exclude_from_discounts"  nullable="false"  />
-            <field name="subtitle"  column="subtitle"  nullable="false"  />
-            <field name="isNew"  column="is_new"  nullable="false"  />
-            <field name="pages"  column="pages"  nullable="false"  />
-            <field name="usp"  column="usp"  nullable="false"  />
-            <field name="customData"  column="custom_data"  nullable="false"  />
-            <field name="orderAmount"  column="order_amount"  nullable="false"  />
-            <field name="orderPriceTotal"  column="order_price_total"  nullable="false"  />
-            <field name="orderPriceAfterDiscounts"  column="order_price_after_discounts"  nullable="false"  />
-            <field name="orderTotalWeight"  column="order_total_weight"  nullable="false"  />
-            <field name="orderTotalVolume"  column="order_total_volume"  nullable="false"  />
-            <field name="orderPrice"  column="order_price"  nullable="false"  />
-            <field name="isBundle"  column="is_bundle"  nullable="false"  />
-            <one-to-many field="shopOrderBundleArticleCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrderBundleArticle" mapped-by="shopOrderItemId" />
+            <field name="basketItemKey" type="string" column="basket_item_key" length="32" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="articlenumber" type="string" column="articlenumber" length="255" nullable="false"  />
+            <field name="shopManufacturerName" type="string" column="shop_manufacturer_name" length="255" nullable="false"  />
+            <field name="stock" type="string" column="stock" length="255" nullable="false"  />
+            <field name="subtitle" type="string" column="subtitle" length="255" nullable="false"  />
+            <field name="pages" type="string" column="pages" length="255" nullable="false"  />
+            <field name="usp" type="string" column="usp" length="255" nullable="false"  />
+            <one-to-many field="shopOrderBundleArticleCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderBundleArticle" mapped-by="shopOrderItem" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <many-to-many field="download" target-entity="ChameleonSystem\CoreBundle\Entity\CmsDocument">
-    <join-table name="shop_order_item_download_cms_document_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
     </entity>
 
 </doctrine-mapping>

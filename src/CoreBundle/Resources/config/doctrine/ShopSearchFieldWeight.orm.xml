@@ -7,38 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopId" target-entity="ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="shopSearchFieldWeight">
+            <many-to-one field="shop" target-entity="\ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="shopSearchFieldWeightCollection" >
     <join-column name="shop_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="cmsLanguageId" type="string" field="cms_language_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
-    <join-column name="cms_language_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="tablename"  column="tablename"  nullable="false"  />
-            <field name="fieldname"  column="fieldname"  nullable="false"  />
-            <field name="weight"  column="weight"  nullable="false"  />
-            <field name="shopSearchQueryId" type="string" field="shop_search_query_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopSearchQuery" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopSearchQuery">
-    <join-column name="shop_search_query_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="fieldNameInQuery"  column="field_name_in_query"  nullable="false"  />
-            <field name="indexPartialWords"  column="index_partial_words"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="tablename" type="string" column="tablename" length="255" nullable="false"  />
+            <field name="fieldname" type="string" column="fieldname" length="255" nullable="false"  />
+            <field name="fieldNameInQuery" type="string" column="field_name_in_query" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -4,10 +4,13 @@ namespace ChameleonSystem\AutoclassesBundle\TableConfExport;
 
 class DataModelParts
 {
-    public function __construct(private readonly string $property, private readonly string $methods, private readonly bool $defaultValue = false)
-    {
+    public function __construct(
+        private readonly string $property,
+        private readonly string $methods,
+        private readonly array $includes = [],
+        private readonly bool $defaultValue = false
+    ) {
     }
-
 
 
     /**
@@ -27,13 +30,22 @@ class DataModelParts
     }
 
     /**
+     * @return array
+     */
+    public function getIncludes(): array
+    {
+        return $this->includes;
+    }
+
+
+
+    /**
      * @return bool
      */
     public function hasDefaultValue(): bool
     {
         return $this->defaultValue;
     }
-
 
 
 }

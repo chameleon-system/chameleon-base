@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgCmsCounter {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -12,17 +13,11 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - System name */
 private string $systemName = '', 
-    // TCMSFieldExtendedLookupMultiTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsConfig|\ChameleonSystem\CoreBundle\Entity\CmsPortal|\ChameleonSystem\CoreBundle\Entity\Shop|null - Owner */
-private \ChameleonSystem\CoreBundle\Entity\CmsConfig|\ChameleonSystem\CoreBundle\Entity\CmsPortal|\ChameleonSystem\CoreBundle\Entity\Shop|null $owner = null,
-// TCMSFieldExtendedLookupMultiTable
-/** @var string - Owner */
-private string $ownerTable = '', 
-    // TCMSFieldNumber
-/** @var int - Value */
-private int $value = 0  ) {}
+    // TCMSFieldVarchar
+/** @var string - Value */
+private string $value = '0'  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -69,38 +64,12 @@ public function setSystemName(string $systemName): self
 
 
   
-    // TCMSFieldExtendedLookupMultiTable
-public function getOwner(): \ChameleonSystem\CoreBundle\Entity\CmsConfig|\ChameleonSystem\CoreBundle\Entity\CmsPortal|\ChameleonSystem\CoreBundle\Entity\Shop|null
-{
-    return $this->owner;
-}
-public function setOwner(\ChameleonSystem\CoreBundle\Entity\CmsConfig|\ChameleonSystem\CoreBundle\Entity\CmsPortal|\ChameleonSystem\CoreBundle\Entity\Shop|null $owner): self
-{
-    $this->owner = $owner;
-
-    return $this;
-}
-
-// TCMSFieldExtendedLookupMultiTable
-public function getOwnerTable(): string
-{
-    return $this->ownerTable;
-}
-public function setOwnerTable(string $ownerTable): self
-{
-    $this->ownerTable = $ownerTable;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNumber
-public function getValue(): int
+    // TCMSFieldVarchar
+public function getValue(): string
 {
     return $this->value;
 }
-public function setValue(int $value): self
+public function setValue(string $value): self
 {
     $this->value = $value;
 

@@ -7,19 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="dateRestrictionField"  column="date_restriction_field"  nullable="false"  />
-            <field name="groups"  column="groups"  nullable="false"  />
-            <field name="query"  column="query"  nullable="false"  />
-            <field name="portalRestrictionField"  column="portal_restriction_field"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
+            <field name="dateRestrictionField" type="string" column="date_restriction_field" length="255" nullable="false"  />
+            <field name="groups" type="string" column="groups" length="255" nullable="false"  />
+            <field name="portalRestrictionField" type="string" column="portal_restriction_field" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

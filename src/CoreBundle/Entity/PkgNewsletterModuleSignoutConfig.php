@@ -1,46 +1,31 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+
 class PkgNewsletterModuleSignoutConfig {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null - Belongs to module instance */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance = null,
-/** @var null|string - Belongs to module instance */
-private ?string $cmsTplModuleInstanceId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsTplModuleInstance|null - Belongs to module instance */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
     // TCMSFieldVarchar
 /** @var string - Signout (title) */
 private string $signoutTitle = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Signout (text) */
-private string $signoutText = '', 
     // TCMSFieldVarchar
 /** @var string - Signout confirmation (title) */
 private string $signoutConfirmTitle = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Signout confirmation (text) */
-private string $signoutConfirmText = '', 
     // TCMSFieldVarchar
 /** @var string - Signed out (title) */
 private string $signedoutTitle = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Signed out (text) */
-private string $signedoutText = '', 
     // TCMSFieldVarchar
 /** @var string - No newsletter signed up for (title) */
-private string $noNewsletterSignedup = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - No newsletter signed up for (text) */
-private string $noNewsletterSignedupText = '', 
-    // TCMSFieldBoolean
-/** @var bool - Use double opt-out */
-private bool $useDoubleOptOut = false  ) {}
+private string $noNewsletterSignedup = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -59,31 +44,18 @@ private bool $useDoubleOptOut = false  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsTplModuleInstance(): \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null
+    // TCMSFieldLookupParentID
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
 }
-public function setCmsTplModuleInstance(\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance): self
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
 {
     $this->cmsTplModuleInstance = $cmsTplModuleInstance;
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstance?->getId();
 
     return $this;
 }
-public function getCmsTplModuleInstanceId(): ?string
-{
-    return $this->cmsTplModuleInstanceId;
-}
-public function setCmsTplModuleInstanceId(?string $cmsTplModuleInstanceId): self
-{
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstanceId;
-    // todo - load new id
-    //$this->cmsTplModuleInstanceId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -95,20 +67,6 @@ public function getSignoutTitle(): string
 public function setSignoutTitle(string $signoutTitle): self
 {
     $this->signoutTitle = $signoutTitle;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldWYSIWYG
-public function getSignoutText(): string
-{
-    return $this->signoutText;
-}
-public function setSignoutText(string $signoutText): self
-{
-    $this->signoutText = $signoutText;
 
     return $this;
 }
@@ -129,20 +87,6 @@ public function setSignoutConfirmTitle(string $signoutConfirmTitle): self
 
 
   
-    // TCMSFieldWYSIWYG
-public function getSignoutConfirmText(): string
-{
-    return $this->signoutConfirmText;
-}
-public function setSignoutConfirmText(string $signoutConfirmText): self
-{
-    $this->signoutConfirmText = $signoutConfirmText;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getSignedoutTitle(): string
 {
@@ -157,20 +101,6 @@ public function setSignedoutTitle(string $signedoutTitle): self
 
 
   
-    // TCMSFieldWYSIWYG
-public function getSignedoutText(): string
-{
-    return $this->signedoutText;
-}
-public function setSignedoutText(string $signedoutText): self
-{
-    $this->signedoutText = $signedoutText;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getNoNewsletterSignedup(): string
 {
@@ -179,34 +109,6 @@ public function getNoNewsletterSignedup(): string
 public function setNoNewsletterSignedup(string $noNewsletterSignedup): self
 {
     $this->noNewsletterSignedup = $noNewsletterSignedup;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldWYSIWYG
-public function getNoNewsletterSignedupText(): string
-{
-    return $this->noNewsletterSignedupText;
-}
-public function setNoNewsletterSignedupText(string $noNewsletterSignedupText): self
-{
-    $this->noNewsletterSignedupText = $noNewsletterSignedupText;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isUseDoubleOptOut(): bool
-{
-    return $this->useDoubleOptOut;
-}
-public function setUseDoubleOptOut(bool $useDoubleOptOut): self
-{
-    $this->useDoubleOptOut = $useDoubleOptOut;
 
     return $this;
 }

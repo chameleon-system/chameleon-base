@@ -7,40 +7,18 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="iconList"  column="icon_list"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="uniquecmsname"  column="uniquecmsname"  nullable="false"  />
-            <field name="cmsContentBoxId" type="string" field="cms_content_box_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsContentBox" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsContentBox">
-    <join-column name="cms_content_box_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="cmsUsergroupId" type="string" field="cms_usergroup_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsUsergroup" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUsergroup">
-    <join-column name="cms_usergroup_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="module"  column="module"  nullable="false"  />
-            <field name="parameter"  column="parameter"  nullable="false"  />
-            <field name="moduleLocation"  column="module_location"  nullable="false"  />
-            <field name="showAsPopup"  column="show_as_popup"  nullable="false"  />
-            <field name="width"  column="width"  nullable="false"  />
-            <field name="height"  column="height"  nullable="false"  />
-            <field name="active"  column="active"  nullable="false"  />
-            <field name="iconFontCssClass"  column="icon_font_css_class"  nullable="false"  />
+            <field name="name" type="string" column="name" length="60" nullable="false"  />
+            <field name="uniquecmsname" type="string" column="uniquecmsname" length="255" nullable="false"  />
+            <field name="module" type="string" column="module" length="255" nullable="false"  />
+            <field name="parameter" type="string" column="parameter" length="100" nullable="false"  />
+            <field name="moduleLocation" type="string" column="module_location" length="255" nullable="false"  />
+            <field name="width" type="string" column="width" length="4" nullable="false"  />
+            <field name="height" type="string" column="height" length="4" nullable="false"  />
+            <field name="iconFontCssClass" type="string" column="icon_font_css_class" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

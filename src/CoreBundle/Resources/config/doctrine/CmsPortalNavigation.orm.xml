@@ -7,18 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsPortalId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsPortal" inversed-by="propertyNavigations">
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal" inversed-by="propertyNavigationsCollection" >
     <join-column name="cms_portal_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="treeNode"  column="tree_node"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

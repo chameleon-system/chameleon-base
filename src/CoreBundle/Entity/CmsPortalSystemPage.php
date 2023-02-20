@@ -1,28 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+
 class CmsPortalSystemPage {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal|null - Belongs to portal */
-private \ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal = null,
-/** @var null|string - Belongs to portal */
-private ?string $cmsPortalId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsPortal|null - Belongs to portal */
+private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldTreeNode
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTree - Page */
-private \ChameleonSystem\CoreBundle\Entity\CmsTree|null $cmsTreeId = null, 
     // TCMSFieldVarchar
 /** @var string - System name */
 private string $nameInternal = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -41,31 +38,18 @@ private string $nameInternal = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsPortal(): \ChameleonSystem\CoreBundle\Entity\CmsPortal|null
+    // TCMSFieldLookupParentID
+public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;
 }
-public function setCmsPortal(\ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal): self
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
 {
     $this->cmsPortal = $cmsPortal;
-    $this->cmsPortalId = $cmsPortal?->getId();
 
     return $this;
 }
-public function getCmsPortalId(): ?string
-{
-    return $this->cmsPortalId;
-}
-public function setCmsPortalId(?string $cmsPortalId): self
-{
-    $this->cmsPortalId = $cmsPortalId;
-    // todo - load new id
-    //$this->cmsPortalId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -77,20 +61,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldTreeNode
-public function getCmsTreeId(): \ChameleonSystem\CoreBundle\Entity\CmsTree|null
-{
-    return $this->cmsTreeId;
-}
-public function setCmsTreeId(\ChameleonSystem\CoreBundle\Entity\CmsTree|null $cmsTreeId): self
-{
-    $this->cmsTreeId = $cmsTreeId;
 
     return $this;
 }

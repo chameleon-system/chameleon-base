@@ -7,27 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="pkgShopPaymentTransactionId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction" inversed-by="pkgShopPaymentTransactionPosition">
+            <many-to-one field="pkgShopPaymentTransaction" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction" inversed-by="pkgShopPaymentTransactionPositionCollection" >
     <join-column name="pkg_shop_payment_transaction_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="amount"  column="amount"  nullable="false"  />
-            <field name="value"  column="value"  nullable="false"  />
-            <field name="type"  column="type"  nullable="false"  />
-            <field name="shopOrderItemId" type="string" field="shop_order_item_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopOrderItem" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem">
-    <join-column name="shop_order_item_id" referenced-column-name="id" />
-</many-to-one>
+            <field name="amount" type="string" column="amount" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

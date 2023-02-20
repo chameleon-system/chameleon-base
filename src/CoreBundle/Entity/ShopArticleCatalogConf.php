@@ -1,43 +1,32 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+use ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConfDefaultOrder;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class ShopArticleCatalogConf {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null - Belongs to module instance */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance = null,
-/** @var null|string - Belongs to module instance */
-private ?string $cmsTplModuleInstanceId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby|null - Default sorting */
-private \ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby|null $shopModuleArticlelistOrderby = null,
-/** @var null|string - Default sorting */
-private ?string $shopModuleArticlelistOrderbyId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsTplModuleInstance|null - Belongs to module instance */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
     // TCMSFieldVarchar
 /** @var string - Title / headline */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConfDefaultOrder[] - Alternative default sorting */
-private \Doctrine\Common\Collections\Collection $shopArticleCatalogConfDefaultOrderCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldBoolean
-/** @var bool - Offer Reserving at 0 stock */
-private bool $showSubcategoryProducts = false, 
-    // TCMSFieldNumber
-/** @var int - Articles per page */
-private int $pageSize = 20, 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby[] - Available sortings */
-private \Doctrine\Common\Collections\Collection $shopModuleArticlelistOrderbyMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldWYSIWYG
-/** @var string - Introduction text */
-private string $intro = ''  ) {}
+/** @var Collection<int, shopArticleCatalogConfDefaultOrder> - Alternative default sorting */
+private Collection $shopArticleCatalogConfDefaultOrderCollection = new ArrayCollection()
+, 
+    // TCMSFieldVarchar
+/** @var string - Articles per page */
+private string $pageSize = '20'  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -56,31 +45,18 @@ private string $intro = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsTplModuleInstance(): \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null
+    // TCMSFieldLookupParentID
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
 }
-public function setCmsTplModuleInstance(\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance): self
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
 {
     $this->cmsTplModuleInstance = $cmsTplModuleInstance;
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstance?->getId();
 
     return $this;
 }
-public function getCmsTplModuleInstanceId(): ?string
-{
-    return $this->cmsTplModuleInstanceId;
-}
-public function setCmsTplModuleInstanceId(?string $cmsTplModuleInstanceId): self
-{
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstanceId;
-    // todo - load new id
-    //$this->cmsTplModuleInstanceId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -99,97 +75,46 @@ public function setName(string $name): self
 
   
     // TCMSFieldPropertyTable
-public function getShopArticleCatalogConfDefaultOrderCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticleCatalogConfDefaultOrder>
+*/
+public function getShopArticleCatalogConfDefaultOrderCollection(): Collection
 {
     return $this->shopArticleCatalogConfDefaultOrderCollection;
 }
-public function setShopArticleCatalogConfDefaultOrderCollection(\Doctrine\Common\Collections\Collection $shopArticleCatalogConfDefaultOrderCollection): self
+
+public function addShopArticleCatalogConfDefaultOrderCollection(shopArticleCatalogConfDefaultOrder $shopArticleCatalogConfDefaultOrder): self
 {
-    $this->shopArticleCatalogConfDefaultOrderCollection = $shopArticleCatalogConfDefaultOrderCollection;
+    if (!$this->shopArticleCatalogConfDefaultOrderCollection->contains($shopArticleCatalogConfDefaultOrder)) {
+        $this->shopArticleCatalogConfDefaultOrderCollection->add($shopArticleCatalogConfDefaultOrder);
+        $shopArticleCatalogConfDefaultOrder->setShopArticleCatalogConf($this);
+    }
+
+    return $this;
+}
+
+public function removeShopArticleCatalogConfDefaultOrderCollection(shopArticleCatalogConfDefaultOrder $shopArticleCatalogConfDefaultOrder): self
+{
+    if ($this->shopArticleCatalogConfDefaultOrderCollection->removeElement($shopArticleCatalogConfDefaultOrder)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticleCatalogConfDefaultOrder->getShopArticleCatalogConf() === $this) {
+            $shopArticleCatalogConfDefaultOrder->setShopArticleCatalogConf(null);
+        }
+    }
 
     return $this;
 }
 
 
   
-    // TCMSFieldBoolean
-public function isShowSubcategoryProducts(): bool
-{
-    return $this->showSubcategoryProducts;
-}
-public function setShowSubcategoryProducts(bool $showSubcategoryProducts): self
-{
-    $this->showSubcategoryProducts = $showSubcategoryProducts;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNumber
-public function getPageSize(): int
+    // TCMSFieldVarchar
+public function getPageSize(): string
 {
     return $this->pageSize;
 }
-public function setPageSize(int $pageSize): self
+public function setPageSize(string $pageSize): self
 {
     $this->pageSize = $pageSize;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShopModuleArticlelistOrderby(): \ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby|null
-{
-    return $this->shopModuleArticlelistOrderby;
-}
-public function setShopModuleArticlelistOrderby(\ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby|null $shopModuleArticlelistOrderby): self
-{
-    $this->shopModuleArticlelistOrderby = $shopModuleArticlelistOrderby;
-    $this->shopModuleArticlelistOrderbyId = $shopModuleArticlelistOrderby?->getId();
-
-    return $this;
-}
-public function getShopModuleArticlelistOrderbyId(): ?string
-{
-    return $this->shopModuleArticlelistOrderbyId;
-}
-public function setShopModuleArticlelistOrderbyId(?string $shopModuleArticlelistOrderbyId): self
-{
-    $this->shopModuleArticlelistOrderbyId = $shopModuleArticlelistOrderbyId;
-    // todo - load new id
-    //$this->shopModuleArticlelistOrderbyId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getShopModuleArticlelistOrderbyMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopModuleArticlelistOrderbyMlt;
-}
-public function setShopModuleArticlelistOrderbyMlt(\Doctrine\Common\Collections\Collection $shopModuleArticlelistOrderbyMlt): self
-{
-    $this->shopModuleArticlelistOrderbyMlt = $shopModuleArticlelistOrderbyMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldWYSIWYG
-public function getIntro(): string
-{
-    return $this->intro;
-}
-public function setIntro(string $intro): self
-{
-    $this->intro = $intro;
 
     return $this;
 }

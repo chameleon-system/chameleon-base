@@ -1,43 +1,31 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+
 class ShopSuggestArticleLog {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null - Shop customer */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser = null,
-/** @var null|string - Shop customer */
-private ?string $dataExtranetUserId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle|null - Product / item */
-private \ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle = null,
-/** @var null|string - Product / item */
-private ?string $shopArticleId = null
+        
+    // TCMSFieldLookupParentID
+/** @var DataExtranetUser|null - Shop customer */
+private ?DataExtranetUser $dataExtranetUser = null
 , 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - Created on */
-private \DateTime|null $datecreated = null, 
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 /** @var string - From (email) */
 private string $fromEmail = '', 
     // TCMSFieldVarchar
 /** @var string - From (name) */
 private string $fromName = '', 
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 /** @var string - Feedback recipient (email address) */
 private string $toEmail = '', 
     // TCMSFieldVarchar
 /** @var string - To (name) */
-private string $toName = '', 
-    // TCMSFieldText
-/** @var string - Comment */
-private string $comment = ''  ) {}
+private string $toName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -56,77 +44,22 @@ private string $comment = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldDateTime
-public function getDatecreated(): \DateTime|null
-{
-    return $this->datecreated;
-}
-public function setDatecreated(\DateTime|null $datecreated): self
-{
-    $this->datecreated = $datecreated;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getDataExtranetUser(): \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null
+    // TCMSFieldLookupParentID
+public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;
 }
-public function setDataExtranetUser(\ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser): self
+
+public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
 {
     $this->dataExtranetUser = $dataExtranetUser;
-    $this->dataExtranetUserId = $dataExtranetUser?->getId();
 
     return $this;
 }
-public function getDataExtranetUserId(): ?string
-{
-    return $this->dataExtranetUserId;
-}
-public function setDataExtranetUserId(?string $dataExtranetUserId): self
-{
-    $this->dataExtranetUserId = $dataExtranetUserId;
-    // todo - load new id
-    //$this->dataExtranetUserId = $?->getId();
-
-    return $this;
-}
-
 
 
   
-    // TCMSFieldLookup
-public function getShopArticle(): \ChameleonSystem\CoreBundle\Entity\ShopArticle|null
-{
-    return $this->shopArticle;
-}
-public function setShopArticle(\ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle): self
-{
-    $this->shopArticle = $shopArticle;
-    $this->shopArticleId = $shopArticle?->getId();
-
-    return $this;
-}
-public function getShopArticleId(): ?string
-{
-    return $this->shopArticleId;
-}
-public function setShopArticleId(?string $shopArticleId): self
-{
-    $this->shopArticleId = $shopArticleId;
-    // todo - load new id
-    //$this->shopArticleId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 public function getFromEmail(): string
 {
     return $this->fromEmail;
@@ -154,7 +87,7 @@ public function setFromName(string $fromName): self
 
 
   
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 public function getToEmail(): string
 {
     return $this->toEmail;
@@ -176,20 +109,6 @@ public function getToName(): string
 public function setToName(string $toName): self
 {
     $this->toName = $toName;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getComment(): string
-{
-    return $this->comment;
-}
-public function setComment(string $comment): self
-{
-    $this->comment = $comment;
 
     return $this;
 }

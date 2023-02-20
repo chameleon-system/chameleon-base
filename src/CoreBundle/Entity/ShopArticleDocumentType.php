@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class ShopArticleDocumentType {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -13,7 +14,7 @@ private string $name = '',
 /** @var string - System name */
 private string $systemname = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }

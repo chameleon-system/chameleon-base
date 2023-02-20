@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsLocals {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -25,7 +26,7 @@ private string $dateFormatCalendar = 'DMY-',
 /** @var string - Numbers */
 private string $numbers = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }

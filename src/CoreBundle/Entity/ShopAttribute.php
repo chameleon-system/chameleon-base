@@ -1,28 +1,27 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopAttributeValue;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class ShopAttribute {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldBoolean
-/** @var bool - System attributes */
-private bool $isSystemAttribute = false, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopAttributeValue[] - Attribute values */
-private \Doctrine\Common\Collections\Collection $shopAttributeValueCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopAttributeValue> - Attribute values */
+private Collection $shopAttributeValueCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Internal name */
-private string $systemName = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Description */
-private string $description = ''  ) {}
+private string $systemName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -55,28 +54,33 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldBoolean
-public function isIsSystemAttribute(): bool
+    // TCMSFieldPropertyTable
+/**
+* @return Collection<int, shopAttributeValue>
+*/
+public function getShopAttributeValueCollection(): Collection
 {
-    return $this->isSystemAttribute;
+    return $this->shopAttributeValueCollection;
 }
-public function setIsSystemAttribute(bool $isSystemAttribute): self
+
+public function addShopAttributeValueCollection(shopAttributeValue $shopAttributeValue): self
 {
-    $this->isSystemAttribute = $isSystemAttribute;
+    if (!$this->shopAttributeValueCollection->contains($shopAttributeValue)) {
+        $this->shopAttributeValueCollection->add($shopAttributeValue);
+        $shopAttributeValue->setShopAttribute($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldPropertyTable
-public function getShopAttributeValueCollection(): \Doctrine\Common\Collections\Collection
+public function removeShopAttributeValueCollection(shopAttributeValue $shopAttributeValue): self
 {
-    return $this->shopAttributeValueCollection;
-}
-public function setShopAttributeValueCollection(\Doctrine\Common\Collections\Collection $shopAttributeValueCollection): self
-{
-    $this->shopAttributeValueCollection = $shopAttributeValueCollection;
+    if ($this->shopAttributeValueCollection->removeElement($shopAttributeValue)) {
+        // set the owning side to null (unless already changed)
+        if ($shopAttributeValue->getShopAttribute() === $this) {
+            $shopAttributeValue->setShopAttribute(null);
+        }
+    }
 
     return $this;
 }
@@ -91,20 +95,6 @@ public function getSystemName(): string
 public function setSystemName(string $systemName): self
 {
     $this->systemName = $systemName;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldWYSIWYG
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
 
     return $this;
 }

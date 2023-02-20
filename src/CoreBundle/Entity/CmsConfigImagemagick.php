@@ -1,34 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsConfig;
+
 class CmsConfigImagemagick {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsConfig|null - Configuration */
-private \ChameleonSystem\CoreBundle\Entity\CmsConfig|null $cmsConfig = null,
-/** @var null|string - Configuration */
-private ?string $cmsConfigId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsConfig|null - Configuration */
+private ?CmsConfig $cmsConfig = null
 , 
-    // TCMSFieldNumber
-/** @var int - Is effective from this image size in pixel */
-private int $fromImageSize = 0, 
-    // TCMSFieldBoolean
-/** @var bool - Force JPEG. This extends to PNG.  */
-private bool $forceJpeg = false, 
-    // TCMSFieldNumber
-/** @var int - Quality */
-private int $quality = 100, 
-    // TCMSFieldBoolean
-/** @var bool - Sharpen */
-private bool $scharpen = false, 
-    // TCMSFieldDecimal
-/** @var float - Gamma correction */
-private float $gamma = 1  ) {}
+    // TCMSFieldVarchar
+/** @var string - Is effective from this image size in pixel */
+private string $fromImageSize = '', 
+    // TCMSFieldVarchar
+/** @var string - Quality */
+private string $quality = '100'  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -47,40 +38,27 @@ private float $gamma = 1  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsConfig(): \ChameleonSystem\CoreBundle\Entity\CmsConfig|null
+    // TCMSFieldLookupParentID
+public function getCmsConfig(): ?CmsConfig
 {
     return $this->cmsConfig;
 }
-public function setCmsConfig(\ChameleonSystem\CoreBundle\Entity\CmsConfig|null $cmsConfig): self
+
+public function setCmsConfig(?CmsConfig $cmsConfig): self
 {
     $this->cmsConfig = $cmsConfig;
-    $this->cmsConfigId = $cmsConfig?->getId();
 
     return $this;
 }
-public function getCmsConfigId(): ?string
-{
-    return $this->cmsConfigId;
-}
-public function setCmsConfigId(?string $cmsConfigId): self
-{
-    $this->cmsConfigId = $cmsConfigId;
-    // todo - load new id
-    //$this->cmsConfigId = $?->getId();
-
-    return $this;
-}
-
 
 
   
-    // TCMSFieldNumber
-public function getFromImageSize(): int
+    // TCMSFieldVarchar
+public function getFromImageSize(): string
 {
     return $this->fromImageSize;
 }
-public function setFromImageSize(int $fromImageSize): self
+public function setFromImageSize(string $fromImageSize): self
 {
     $this->fromImageSize = $fromImageSize;
 
@@ -89,56 +67,14 @@ public function setFromImageSize(int $fromImageSize): self
 
 
   
-    // TCMSFieldBoolean
-public function isForceJpeg(): bool
-{
-    return $this->forceJpeg;
-}
-public function setForceJpeg(bool $forceJpeg): self
-{
-    $this->forceJpeg = $forceJpeg;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNumber
-public function getQuality(): int
+    // TCMSFieldVarchar
+public function getQuality(): string
 {
     return $this->quality;
 }
-public function setQuality(int $quality): self
+public function setQuality(string $quality): self
 {
     $this->quality = $quality;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isScharpen(): bool
-{
-    return $this->scharpen;
-}
-public function setScharpen(bool $scharpen): self
-{
-    $this->scharpen = $scharpen;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getGamma(): float
-{
-    return $this->gamma;
-}
-public function setGamma(float $gamma): self
-{
-    $this->gamma = $gamma;
 
     return $this;
 }

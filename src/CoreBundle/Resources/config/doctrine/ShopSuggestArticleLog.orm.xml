@@ -7,30 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="datecreated"  column="datecreated"  nullable="false"  />
-            <many-to-one field="dataExtranetUserId" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="shopSuggestArticleLog">
+            <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="shopSuggestArticleLogCollection" >
     <join-column name="data_extranet_user_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="shopArticleId" type="string" field="shop_article_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle">
-    <join-column name="shop_article_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="fromEmail"  column="from_email"  nullable="false"  />
-            <field name="fromName"  column="from_name"  nullable="false"  />
-            <field name="toEmail"  column="to_email"  nullable="false"  />
-            <field name="toName"  column="to_name"  nullable="false"  />
-            <field name="comment"  column="comment"  nullable="false"  />
+            <field name="fromEmail" type="string" column="from_email" length="255" nullable="false"  />
+            <field name="fromName" type="string" column="from_name" length="255" nullable="false"  />
+            <field name="toEmail" type="string" column="to_email" length="255" nullable="false"  />
+            <field name="toName" type="string" column="to_name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

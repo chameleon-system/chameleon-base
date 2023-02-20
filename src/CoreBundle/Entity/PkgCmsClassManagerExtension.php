@@ -1,31 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgCmsClassManager;
+
 class PkgCmsClassManagerExtension {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgCmsClassManager|null - Belongs to */
-private \ChameleonSystem\CoreBundle\Entity\PkgCmsClassManager|null $pkgCmsClassManager = null,
-/** @var null|string - Belongs to */
-private ?string $pkgCmsClassManagerId = null
+        
+    // TCMSFieldLookupParentID
+/** @var PkgCmsClassManager|null - Belongs to */
+private ?PkgCmsClassManager $pkgCmsClassManager = null
 , 
     // TCMSFieldVarchar
 /** @var string - Class */
 private string $class = '', 
     // TCMSFieldVarchar
 /** @var string - Path relative to library/classes */
-private string $classSubtype = '', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $classType = 'Customer', 
-    // TCMSFieldPosition
-/** @var int - Sorting */
-private int $position = 0  ) {}
+private string $classSubtype = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -44,31 +38,18 @@ private int $position = 0  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getPkgCmsClassManager(): \ChameleonSystem\CoreBundle\Entity\PkgCmsClassManager|null
+    // TCMSFieldLookupParentID
+public function getPkgCmsClassManager(): ?PkgCmsClassManager
 {
     return $this->pkgCmsClassManager;
 }
-public function setPkgCmsClassManager(\ChameleonSystem\CoreBundle\Entity\PkgCmsClassManager|null $pkgCmsClassManager): self
+
+public function setPkgCmsClassManager(?PkgCmsClassManager $pkgCmsClassManager): self
 {
     $this->pkgCmsClassManager = $pkgCmsClassManager;
-    $this->pkgCmsClassManagerId = $pkgCmsClassManager?->getId();
 
     return $this;
 }
-public function getPkgCmsClassManagerId(): ?string
-{
-    return $this->pkgCmsClassManagerId;
-}
-public function setPkgCmsClassManagerId(?string $pkgCmsClassManagerId): self
-{
-    $this->pkgCmsClassManagerId = $pkgCmsClassManagerId;
-    // todo - load new id
-    //$this->pkgCmsClassManagerId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -94,34 +75,6 @@ public function getClassSubtype(): string
 public function setClassSubtype(string $classSubtype): self
 {
     $this->classSubtype = $classSubtype;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
 
     return $this;
 }

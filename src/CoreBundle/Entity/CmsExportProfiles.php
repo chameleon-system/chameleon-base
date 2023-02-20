@@ -1,34 +1,24 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsExportProfilesFields;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class CmsExportProfiles {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal|null - Editorial department */
-private \ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal = null,
-/** @var null|string - Editorial department */
-private ?string $cmsPortalId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null - Table */
-private \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf = null,
-/** @var null|string - Table */
-private ?string $cmsTblConfId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Profile name */
 private string $name = '', 
-    // TCMSFieldOption
-/** @var string - Export format */
-private string $exportType = 'TABs', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsExportProfilesFields[] - Fields to be exported */
-private \Doctrine\Common\Collections\Collection $cmsExportProfilesFieldsCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, cmsExportProfilesFields> - Fields to be exported */
+private Collection $cmsExportProfilesFieldsCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -61,84 +51,33 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldLookup
-public function getCmsPortal(): \ChameleonSystem\CoreBundle\Entity\CmsPortal|null
-{
-    return $this->cmsPortal;
-}
-public function setCmsPortal(\ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal): self
-{
-    $this->cmsPortal = $cmsPortal;
-    $this->cmsPortalId = $cmsPortal?->getId();
-
-    return $this;
-}
-public function getCmsPortalId(): ?string
-{
-    return $this->cmsPortalId;
-}
-public function setCmsPortalId(?string $cmsPortalId): self
-{
-    $this->cmsPortalId = $cmsPortalId;
-    // todo - load new id
-    //$this->cmsPortalId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldOption
-public function getExportType(): string
-{
-    return $this->exportType;
-}
-public function setExportType(string $exportType): self
-{
-    $this->exportType = $exportType;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsTblConf(): \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null
-{
-    return $this->cmsTblConf;
-}
-public function setCmsTblConf(\ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf): self
-{
-    $this->cmsTblConf = $cmsTblConf;
-    $this->cmsTblConfId = $cmsTblConf?->getId();
-
-    return $this;
-}
-public function getCmsTblConfId(): ?string
-{
-    return $this->cmsTblConfId;
-}
-public function setCmsTblConfId(?string $cmsTblConfId): self
-{
-    $this->cmsTblConfId = $cmsTblConfId;
-    // todo - load new id
-    //$this->cmsTblConfId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
     // TCMSFieldPropertyTable
-public function getCmsExportProfilesFieldsCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsExportProfilesFields>
+*/
+public function getCmsExportProfilesFieldsCollection(): Collection
 {
     return $this->cmsExportProfilesFieldsCollection;
 }
-public function setCmsExportProfilesFieldsCollection(\Doctrine\Common\Collections\Collection $cmsExportProfilesFieldsCollection): self
+
+public function addCmsExportProfilesFieldsCollection(cmsExportProfilesFields $cmsExportProfilesFields): self
 {
-    $this->cmsExportProfilesFieldsCollection = $cmsExportProfilesFieldsCollection;
+    if (!$this->cmsExportProfilesFieldsCollection->contains($cmsExportProfilesFields)) {
+        $this->cmsExportProfilesFieldsCollection->add($cmsExportProfilesFields);
+        $cmsExportProfilesFields->setCmsExportProfiles($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsExportProfilesFieldsCollection(cmsExportProfilesFields $cmsExportProfilesFields): self
+{
+    if ($this->cmsExportProfilesFieldsCollection->removeElement($cmsExportProfilesFields)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsExportProfilesFields->getCmsExportProfiles() === $this) {
+            $cmsExportProfilesFields->setCmsExportProfiles(null);
+        }
+    }
 
     return $this;
 }

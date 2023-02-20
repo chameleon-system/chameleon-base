@@ -7,26 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="trans"  column="049_trans"  nullable="false"  />
-            <field name="forceAutoIncrement"  column="force_auto_increment"  nullable="false"  />
-            <field name="classSubtype"  column="class_subtype"  nullable="false"  />
-            <field name="constname"  column="constname"  nullable="false"  />
-            <field name="mysqlType"  column="mysql_type"  nullable="false"  />
-            <field name="lengthSet"  column="length_set"  nullable="false"  />
-            <field name="baseType"  column="base_type"  nullable="false"  />
-            <field name="helpText"  column="help_text"  nullable="false"  />
-            <field name="mysqlStandardValue"  column="mysql_standard_value"  nullable="false"  />
-            <field name="fieldclass"  column="fieldclass"  nullable="false"  />
-            <field name="classType"  column="class_type"  nullable="false"  />
-            <field name="containsImages"  column="contains_images"  nullable="false"  />
-            <field name="indextype"  column="indextype"  nullable="false"  />
+            <field name="trans" type="string" column="049_trans" length="255" nullable="false"  />
+            <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false"  />
+            <field name="constname" type="string" column="constname" length="255" nullable="false"  />
+            <field name="mysqlType" type="string" column="mysql_type" length="255" nullable="false"  />
+            <field name="lengthSet" type="string" column="length_set" length="255" nullable="false"  />
+            <field name="mysqlStandardValue" type="string" column="mysql_standard_value" length="255" nullable="false"  />
+            <field name="fieldclass" type="string" column="fieldclass" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

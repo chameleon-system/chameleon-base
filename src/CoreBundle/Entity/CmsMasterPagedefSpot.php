@@ -1,22 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef;
+use ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock;
+use ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpotParameter;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpotAccess;
+
 class CmsMasterPagedefSpot {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef|null - Belongs to the CMS page template */
-private \ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef|null $cmsMasterPagedef = null,
-/** @var null|string - Belongs to the CMS page template */
-private ?string $cmsMasterPagedefId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock|null - Belongs to theme block */
-private \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock|null $pkgCmsThemeBlock = null,
-/** @var null|string - Belongs to theme block */
-private ?string $pkgCmsThemeBlockId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsMasterPagedef|null - Belongs to the CMS page template */
+private ?CmsMasterPagedef $cmsMasterPagedef = null
+, 
+    // TCMSFieldLookupParentID
+/** @var PkgCmsThemeBlock|null - Belongs to theme block */
+private ?PkgCmsThemeBlock $pkgCmsThemeBlock = null
 , 
     // TCMSFieldVarchar
 /** @var string - Name */
@@ -27,17 +30,16 @@ private string $model = '',
     // TCMSFieldVarchar
 /** @var string - Module view */
 private string $view = '', 
-    // TCMSFieldBoolean
-/** @var bool - Static */
-private bool $static = true, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpotParameter[] - Parameter */
-private \Doctrine\Common\Collections\Collection $cmsMasterPagedefSpotParameterCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, cmsMasterPagedefSpotParameter> - Parameter */
+private Collection $cmsMasterPagedefSpotParameterCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpotAccess[] - Spot restrictions */
-private \Doctrine\Common\Collections\Collection $cmsMasterPagedefSpotAccessCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, cmsMasterPagedefSpotAccess> - Spot restrictions */
+private Collection $cmsMasterPagedefSpotAccessCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -56,59 +58,33 @@ private \Doctrine\Common\Collections\Collection $cmsMasterPagedefSpotAccessColle
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsMasterPagedef(): \ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef|null
+    // TCMSFieldLookupParentID
+public function getCmsMasterPagedef(): ?CmsMasterPagedef
 {
     return $this->cmsMasterPagedef;
 }
-public function setCmsMasterPagedef(\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef|null $cmsMasterPagedef): self
+
+public function setCmsMasterPagedef(?CmsMasterPagedef $cmsMasterPagedef): self
 {
     $this->cmsMasterPagedef = $cmsMasterPagedef;
-    $this->cmsMasterPagedefId = $cmsMasterPagedef?->getId();
 
     return $this;
 }
-public function getCmsMasterPagedefId(): ?string
-{
-    return $this->cmsMasterPagedefId;
-}
-public function setCmsMasterPagedefId(?string $cmsMasterPagedefId): self
-{
-    $this->cmsMasterPagedefId = $cmsMasterPagedefId;
-    // todo - load new id
-    //$this->cmsMasterPagedefId = $?->getId();
-
-    return $this;
-}
-
 
 
   
-    // TCMSFieldLookup
-public function getPkgCmsThemeBlock(): \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock|null
+    // TCMSFieldLookupParentID
+public function getPkgCmsThemeBlock(): ?PkgCmsThemeBlock
 {
     return $this->pkgCmsThemeBlock;
 }
-public function setPkgCmsThemeBlock(\ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock|null $pkgCmsThemeBlock): self
+
+public function setPkgCmsThemeBlock(?PkgCmsThemeBlock $pkgCmsThemeBlock): self
 {
     $this->pkgCmsThemeBlock = $pkgCmsThemeBlock;
-    $this->pkgCmsThemeBlockId = $pkgCmsThemeBlock?->getId();
 
     return $this;
 }
-public function getPkgCmsThemeBlockId(): ?string
-{
-    return $this->pkgCmsThemeBlockId;
-}
-public function setPkgCmsThemeBlockId(?string $pkgCmsThemeBlockId): self
-{
-    $this->pkgCmsThemeBlockId = $pkgCmsThemeBlockId;
-    // todo - load new id
-    //$this->pkgCmsThemeBlockId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -154,28 +130,33 @@ public function setView(string $view): self
 
 
   
-    // TCMSFieldBoolean
-public function isStatic(): bool
-{
-    return $this->static;
-}
-public function setStatic(bool $static): self
-{
-    $this->static = $static;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getCmsMasterPagedefSpotParameterCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsMasterPagedefSpotParameter>
+*/
+public function getCmsMasterPagedefSpotParameterCollection(): Collection
 {
     return $this->cmsMasterPagedefSpotParameterCollection;
 }
-public function setCmsMasterPagedefSpotParameterCollection(\Doctrine\Common\Collections\Collection $cmsMasterPagedefSpotParameterCollection): self
+
+public function addCmsMasterPagedefSpotParameterCollection(cmsMasterPagedefSpotParameter $cmsMasterPagedefSpotParameter): self
 {
-    $this->cmsMasterPagedefSpotParameterCollection = $cmsMasterPagedefSpotParameterCollection;
+    if (!$this->cmsMasterPagedefSpotParameterCollection->contains($cmsMasterPagedefSpotParameter)) {
+        $this->cmsMasterPagedefSpotParameterCollection->add($cmsMasterPagedefSpotParameter);
+        $cmsMasterPagedefSpotParameter->setCmsMasterPagedefSpot($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsMasterPagedefSpotParameterCollection(cmsMasterPagedefSpotParameter $cmsMasterPagedefSpotParameter): self
+{
+    if ($this->cmsMasterPagedefSpotParameterCollection->removeElement($cmsMasterPagedefSpotParameter)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsMasterPagedefSpotParameter->getCmsMasterPagedefSpot() === $this) {
+            $cmsMasterPagedefSpotParameter->setCmsMasterPagedefSpot(null);
+        }
+    }
 
     return $this;
 }
@@ -183,13 +164,32 @@ public function setCmsMasterPagedefSpotParameterCollection(\Doctrine\Common\Coll
 
   
     // TCMSFieldPropertyTable
-public function getCmsMasterPagedefSpotAccessCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsMasterPagedefSpotAccess>
+*/
+public function getCmsMasterPagedefSpotAccessCollection(): Collection
 {
     return $this->cmsMasterPagedefSpotAccessCollection;
 }
-public function setCmsMasterPagedefSpotAccessCollection(\Doctrine\Common\Collections\Collection $cmsMasterPagedefSpotAccessCollection): self
+
+public function addCmsMasterPagedefSpotAccessCollection(cmsMasterPagedefSpotAccess $cmsMasterPagedefSpotAccess): self
 {
-    $this->cmsMasterPagedefSpotAccessCollection = $cmsMasterPagedefSpotAccessCollection;
+    if (!$this->cmsMasterPagedefSpotAccessCollection->contains($cmsMasterPagedefSpotAccess)) {
+        $this->cmsMasterPagedefSpotAccessCollection->add($cmsMasterPagedefSpotAccess);
+        $cmsMasterPagedefSpotAccess->setCmsMasterPagedefSpot($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsMasterPagedefSpotAccessCollection(cmsMasterPagedefSpotAccess $cmsMasterPagedefSpotAccess): self
+{
+    if ($this->cmsMasterPagedefSpotAccessCollection->removeElement($cmsMasterPagedefSpotAccess)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsMasterPagedefSpotAccess->getCmsMasterPagedefSpot() === $this) {
+            $cmsMasterPagedefSpotAccess->setCmsMasterPagedefSpot(null);
+        }
+    }
 
     return $this;
 }

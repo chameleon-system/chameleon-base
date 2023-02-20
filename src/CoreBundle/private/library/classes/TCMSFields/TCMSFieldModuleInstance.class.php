@@ -32,10 +32,6 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
      * @var TCMSTPLModule
      */
     public $oModule = null;
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts {
-        return parent::getDoctrineDataModelParts($namespace);
-    }
-
 
     public function GetHTML()
     {

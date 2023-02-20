@@ -1,25 +1,20 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgNewsletterRobinson {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal|null - Portal */
-private \ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal = null,
-/** @var null|string - Portal */
-private ?string $cmsPortalId = null
-, 
-    // TCMSFieldEmail
+        
+    // TCMSFieldVarchar
 /** @var string - Email address */
 private string $email = '', 
     // TCMSFieldVarchar
 /** @var string - Reason for blacklisting */
 private string $reason = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -38,35 +33,7 @@ private string $reason = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsPortal(): \ChameleonSystem\CoreBundle\Entity\CmsPortal|null
-{
-    return $this->cmsPortal;
-}
-public function setCmsPortal(\ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal): self
-{
-    $this->cmsPortal = $cmsPortal;
-    $this->cmsPortalId = $cmsPortal?->getId();
-
-    return $this;
-}
-public function getCmsPortalId(): ?string
-{
-    return $this->cmsPortalId;
-}
-public function setCmsPortalId(?string $cmsPortalId): self
-{
-    $this->cmsPortalId = $cmsPortalId;
-    // todo - load new id
-    //$this->cmsPortalId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 public function getEmail(): string
 {
     return $this->email;

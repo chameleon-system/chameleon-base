@@ -17,10 +17,6 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 class TCMSFieldSeparator extends TCMSField
 {
 
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        return null;
-    }
     public function __construct()
     {
         $this->completeRow = true;

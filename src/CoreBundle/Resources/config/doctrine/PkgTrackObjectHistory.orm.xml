@@ -7,35 +7,18 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="tableName"  column="table_name"  nullable="false"  />
-            <field name="ownerId"  column="owner_id"  nullable="false"  />
-            <field name="datecreated"  column="datecreated"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="dataExtranetUserId" type="string" field="data_extranet_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
-    <join-column name="data_extranet_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="sessionId"  column="session_id"  nullable="false"  />
-            <field name="ip"  column="ip"  nullable="false"  />
-            <field name="requestChecksum"  column="request_checksum"  nullable="false"  />
-            <many-to-one field="pkgTrackObjectId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgTrackObject" >
+            <field name="tableName" type="string" column="table_name" length="255" nullable="false"  />
+            <field name="ownerId" type="string" column="owner_id" length="255" nullable="false"  />
+            <field name="sessionId" type="string" column="session_id" length="255" nullable="false"  />
+            <field name="ip" type="string" column="ip" length="255" nullable="false"  />
+            <field name="requestChecksum" type="string" column="request_checksum" length="255" nullable="false"  />
+            <many-to-one field="pkgTrackObject" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgTrackObject">
     <join-column name="pkg_track_object_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="itemCounted"  column="item_counted"  nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -7,233 +7,58 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <many-to-many field="shopArticle2Mlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle">
-    <join-table name="shop_article_shop_article2_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="seoPattern"  column="seo_pattern"  nullable="false"  />
-            <field name="articlenumber"  column="articlenumber"  nullable="false"  />
-            <one-to-many field="shopArticleImageCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleImage" mapped-by="shopArticleId" />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="seoPattern" type="string" column="seo_pattern" length="255" nullable="false"  />
+            <field name="articlenumber" type="string" column="articlenumber" length="255" nullable="false"  />
+            <one-to-many field="shopArticleImageCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleImage" mapped-by="shopArticle" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="cmsMediaDefaultPreviewImageId" type="string" field="cms_media_default_preview_image_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsMediaDefaultPreviewImage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="cms_media_default_preview_image_id" referenced-column-name="id" />
-</many-to-one>
-            <one-to-many field="shopArticlePreviewImageCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticlePreviewImage" mapped-by="shopArticleId" />
+            <one-to-many field="shopArticlePreviewImageCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticlePreviewImage" mapped-by="shopArticle" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="shopArticleDocumentCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleDocument" mapped-by="shopArticleId" />
+            <one-to-many field="shopArticleDocumentCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleDocument" mapped-by="shopArticle" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="listRank"  column="list_rank"  nullable="false"  />
-            <field name="datecreated"  column="datecreated"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="active"  column="active"  nullable="false"  />
-            <field name="descriptionShort"  column="description_short"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="shopManufacturerId" type="string" field="shop_manufacturer_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopManufacturer" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopManufacturer">
-    <join-column name="shop_manufacturer_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="price"  column="price"  nullable="false"  />
-            <field name="priceReference"  column="price_reference"  nullable="false"  />
-            <field name="shopVatId" type="string" field="shop_vat_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopVat" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVat">
-    <join-column name="shop_vat_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="sizeWeight"  column="size_weight"  nullable="false"  />
-            <field name="sizeWidth"  column="size_width"  nullable="false"  />
-            <field name="sizeHeight"  column="size_height"  nullable="false"  />
-            <field name="sizeLength"  column="size_length"  nullable="false"  />
-            <field name="quantityInUnits"  column="quantity_in_units"  nullable="false"  />
-            <field name="shopUnitOfMeasurementId" type="string" field="shop_unit_of_measurement_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopUnitOfMeasurement" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopUnitOfMeasurement">
-    <join-column name="shop_unit_of_measurement_id" referenced-column-name="id" />
-</many-to-one>
-            <one-to-many field="shopArticleStockCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleStock" mapped-by="shopArticleId" />
+            <field name="listRank" type="string" column="list_rank" length="255" nullable="false"  />
+            <one-to-many field="shopArticleStockCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleStock" mapped-by="shopArticle" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="showPreorderOnZeroStock"  column="show_preorder_on_zero_stock"  nullable="false"  />
-            <field name="shopStockMessageId" type="string" field="shop_stock_message_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopStockMessage" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopStockMessage">
-    <join-column name="shop_stock_message_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="virtualArticle"  column="virtual_article"  nullable="false"  />
-            <field name="isSearchable"  column="is_searchable"  nullable="false"  />
-            <field name="excludeFromShippingCostCalculation"  column="exclude_from_shipping_cost_calculation"  nullable="false"  />
-            <field name="excludeFromVouchers"  column="exclude_from_vouchers"  nullable="false"  />
-            <field name="excludeFromDiscounts"  column="exclude_from_discounts"  nullable="false"  />
-            <many-to-many field="shopArticleGroupMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleGroup">
-    <join-table name="shop_article_shop_article_group_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <many-to-many field="shopArticleTypeMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleType">
-    <join-table name="shop_article_shop_article_type_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <many-to-many field="shopCategoryMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopCategory">
-    <join-table name="shop_article_shop_category_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="shopCategoryId" type="string" field="shop_category_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopCategory" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopCategory">
-    <join-column name="shop_category_id" referenced-column-name="id" />
-</many-to-one>
-            <many-to-many field="shopArticleMarkerMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleMarker">
-    <join-table name="shop_article_shop_article_marker_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <many-to-many field="shopAttributeValueMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopAttributeValue">
-    <join-table name="shop_article_shop_attribute_value_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <many-to-many field="shopMlt" target-entity="ChameleonSystem\CoreBundle\Entity\Shop">
-    <join-table name="shop_article_shop_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <one-to-many field="shopArticleContributorCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleContributor" mapped-by="shopArticleId" />
+            <one-to-many field="shopArticleContributorCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleContributor" mapped-by="shopArticle" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="subtitle"  column="subtitle"  nullable="false"  />
-            <field name="isNew"  column="is_new"  nullable="false"  />
-            <field name="usp"  column="usp"  nullable="false"  />
-            <field name="stars"  column="stars"  nullable="false"  />
-            <one-to-many field="shopArticleReviewCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleReview" mapped-by="shopArticleId" />
+            <field name="subtitle" type="string" column="subtitle" length="255" nullable="false"  />
+            <field name="usp" type="string" column="usp" length="255" nullable="false"  />
+            <field name="stars" type="string" column="stars" length="255" nullable="false"  />
+            <one-to-many field="shopArticleReviewCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleReview" mapped-by="shopArticle" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="isBundle"  column="is_bundle"  nullable="false"  />
-            <one-to-many field="shopBundleArticleCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopBundleArticle" mapped-by="shopArticleId" />
+            <one-to-many field="shopBundleArticleCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopBundleArticle" mapped-by="shopArticle" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <many-to-many field="download" target-entity="ChameleonSystem\CoreBundle\Entity\CmsDocument">
-    <join-table name="shop_article_download_cms_document_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="nameVariantInfo"  column="name_variant_info"  nullable="false"  />
-            <field name="shopVariantSetId" type="string" field="shop_variant_set_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopVariantSet" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVariantSet">
-    <join-column name="shop_variant_set_id" referenced-column-name="id" />
-</many-to-one>
-            <many-to-one field="variantParentId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleVariants">
+            <field name="nameVariantInfo" type="string" column="name_variant_info" length="255" nullable="false"  />
+            <many-to-one field="variantParent" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleVariantsCollection" >
     <join-column name="variant_parent_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="variantParentIsActive"  column="variant_parent_is_active"  nullable="false"  />
-            <one-to-many field="shopArticleVariantsCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle" mapped-by="variantParentId" />
+            <one-to-many field="shopArticleVariantsCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle" mapped-by="variantParent" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <many-to-many field="shopVariantTypeValueMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopVariantTypeValue">
-    <join-table name="shop_article_shop_variant_type_value_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="metaKeywords"  column="meta_keywords"  nullable="false"  />
-            <field name="metaDescription"  column="meta_description"  nullable="false"  />
-            <many-to-many field="shopArticleMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticle">
-    <join-table name="shop_article_shop_article_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <many-to-many field="cmsTagsMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTags">
-    <join-table name="shop_article_cms_tags_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <one-to-many field="shopArticleStatsCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleStats" mapped-by="shopArticleId" />
+            <field name="metaKeywords" type="string" column="meta_keywords" length="255" nullable="false"  />
+            <field name="metaDescription" type="string" column="meta_description" length="255" nullable="false"  />
+            <one-to-many field="shopArticleStatsCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleStats" mapped-by="shopArticle" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

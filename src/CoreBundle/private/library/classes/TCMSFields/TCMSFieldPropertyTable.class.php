@@ -16,6 +16,7 @@ use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * presents a 1:n table (ie n records for the current table)
@@ -33,42 +34,55 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldProperty';
 
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $parentFieldName = $this->GetMatchingParentFieldName();
+        if (stringEndsWith($parentFieldName, '_id')) {
+            $parentFieldName = substr($parentFieldName, 0, -3);
+        }
+
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => $this->snakeToCamelCase($this->GetPropertyTableName()),
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name.'_collection'),
+            'methodParameter' => $this->snakeToCamelCase($this->name),
+            'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
+        ];
+        $parameters['docCommentType'] = sprintf('Collection<int, %s>', $parameters['type']);
+        $propertyCode = $this->getDoctrineRenderer('model/property-list.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/property-list.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [
+                ltrim(sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false)), '\\'),
+                'Doctrine\\Common\\Collections\\Collection',
+                'Doctrine\\Common\\Collections\\ArrayCollection',
+            ],
+            true
+        );
+    }
+
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        $parentFieldName = $this->GetMatchingParentFieldName();
+        if (stringEndsWith($parentFieldName, '_id')) {
+            $parentFieldName = substr($parentFieldName, 0, -3);
+        }
+        return $this->getDoctrineRenderer('mapping/one-to-many-property-list.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name.'_collection'),
+            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false)),
+            'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
+        ])->render();
+    }
+
     public function __construct()
     {
         $this->isPropertyField = true;
     }
-
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $type = sprintf('%s\%s[]', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false));
-
-        $data = $this->getDoctrineDataModelViewData(
-            [
-                'propertyName' => $this->snakeToCamelCase($this->name.'_collection'),
-                'type' => '\Doctrine\Common\Collections\Collection',
-                'docCommentType' => $type,
-                'defaultValue' => 'new \Doctrine\Common\Collections\ArrayCollection()',
-            ]
-        );
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
-    }
-
-    public function getDoctrineDataModelXml(string $namespace): ?string
-    {
-
-        $mapperRenderer = $this->getDoctrineRenderer('mapping/one-to-many.xml.twig');
-        $definition = $this->oDefinition->sqlData;
-        $targetClass = sprintf('%s\%s', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false));
-        $mapperRenderer->setVar('definition', $definition);
-        $mapperRenderer->setVar('targetClass', ltrim($targetClass, '\\'));
-        $mapperRenderer->setVar('parentFieldName', $this->snakeToCamelCase($this->GetMatchingParentFieldName()));
-        $mapperRenderer->setVar('fieldName', $this->snakeToCamelCase($this->name.'_collection'));
-        return $mapperRenderer->render();
-    }
-
 
     public function GetHTML()
     {

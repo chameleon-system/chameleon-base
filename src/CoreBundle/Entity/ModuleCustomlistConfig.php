@@ -1,34 +1,30 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ModuleCustomlistConfigSortfields;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class ModuleCustomlistConfig {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null - Belongs to module instance */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance = null,
-/** @var null|string - Belongs to module instance */
-private ?string $cmsTplModuleInstanceId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Title */
 private string $name = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Introduction text */
-private string $intro = '', 
-    // TCMSFieldNumber
-/** @var int - Items per page */
-private int $recordsPerPage = 0, 
+    // TCMSFieldVarchar
+/** @var string - Items per page */
+private string $recordsPerPage = '0', 
     // TCMSFieldVarchar
 /** @var string - Grouping field */
 private string $groupField = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ModuleCustomlistConfigSortfields[] - Sorting */
-private \Doctrine\Common\Collections\Collection $orderinfoCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, moduleCustomlistConfigSortfields> - Sorting */
+private Collection $orderinfoCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -47,34 +43,6 @@ private \Doctrine\Common\Collections\Collection $orderinfoCollection = new \Doct
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsTplModuleInstance(): \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null
-{
-    return $this->cmsTplModuleInstance;
-}
-public function setCmsTplModuleInstance(\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance): self
-{
-    $this->cmsTplModuleInstance = $cmsTplModuleInstance;
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstance?->getId();
-
-    return $this;
-}
-public function getCmsTplModuleInstanceId(): ?string
-{
-    return $this->cmsTplModuleInstanceId;
-}
-public function setCmsTplModuleInstanceId(?string $cmsTplModuleInstanceId): self
-{
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstanceId;
-    // todo - load new id
-    //$this->cmsTplModuleInstanceId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
     // TCMSFieldVarchar
 public function getName(): string
 {
@@ -89,26 +57,12 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldWYSIWYG
-public function getIntro(): string
-{
-    return $this->intro;
-}
-public function setIntro(string $intro): self
-{
-    $this->intro = $intro;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNumber
-public function getRecordsPerPage(): int
+    // TCMSFieldVarchar
+public function getRecordsPerPage(): string
 {
     return $this->recordsPerPage;
 }
-public function setRecordsPerPage(int $recordsPerPage): self
+public function setRecordsPerPage(string $recordsPerPage): self
 {
     $this->recordsPerPage = $recordsPerPage;
 
@@ -132,13 +86,32 @@ public function setGroupField(string $groupField): self
 
   
     // TCMSFieldPropertyTable
-public function getOrderinfoCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, moduleCustomlistConfigSortfields>
+*/
+public function getOrderinfoCollection(): Collection
 {
     return $this->orderinfoCollection;
 }
-public function setOrderinfoCollection(\Doctrine\Common\Collections\Collection $orderinfoCollection): self
+
+public function addOrderinfoCollection(moduleCustomlistConfigSortfields $orderinfo): self
 {
-    $this->orderinfoCollection = $orderinfoCollection;
+    if (!$this->orderinfoCollection->contains($orderinfo)) {
+        $this->orderinfoCollection->add($orderinfo);
+        $orderinfo->setModuleCustomlistConfig($this);
+    }
+
+    return $this;
+}
+
+public function removeOrderinfoCollection(moduleCustomlistConfigSortfields $orderinfo): self
+{
+    if ($this->orderinfoCollection->removeElement($orderinfo)) {
+        // set the owning side to null (unless already changed)
+        if ($orderinfo->getModuleCustomlistConfig() === $this) {
+            $orderinfo->setModuleCustomlistConfig(null);
+        }
+    }
 
     return $this;
 }

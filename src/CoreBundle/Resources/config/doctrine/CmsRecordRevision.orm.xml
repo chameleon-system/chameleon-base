@@ -7,44 +7,13 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="cmsRecordRevisionId" type="string" field="cms_record_revision_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsRecordRevision" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsRecordRevision">
-    <join-column name="cms_record_revision_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="cmsTblConfId" type="string" field="cms_tbl_conf_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
-    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="recordid"  column="recordid"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="revisionNr"  column="revision_nr"  nullable="false"  />
-            <field name="cmsUserId" type="string" field="cms_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
-    <join-column name="cms_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="createTimestamp"  column="create_timestamp"  nullable="false"  />
-            <field name="lastActiveTimestamp"  column="last_active_timestamp"  nullable="false"  />
-            <field name="data"  column="data"  nullable="false"  />
+            <field name="recordid" type="string" column="recordid" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="revisionNr" type="string" column="revision_nr" length="11" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

@@ -1,25 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class ShopWrapping {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle|null - Wrapping item */
-private \ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle = null,
-/** @var null|string - Wrapping item */
-private ?string $shopArticleId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = '', 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -49,48 +41,6 @@ public function setName(string $name): self
 
     return $this;
 }
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShopArticle(): \ChameleonSystem\CoreBundle\Entity\ShopArticle|null
-{
-    return $this->shopArticle;
-}
-public function setShopArticle(\ChameleonSystem\CoreBundle\Entity\ShopArticle|null $shopArticle): self
-{
-    $this->shopArticle = $shopArticle;
-    $this->shopArticleId = $shopArticle?->getId();
-
-    return $this;
-}
-public function getShopArticleId(): ?string
-{
-    return $this->shopArticleId;
-}
-public function setShopArticleId(?string $shopArticleId): self
-{
-    $this->shopArticleId = $shopArticleId;
-    // todo - load new id
-    //$this->shopArticleId = $?->getId();
-
-    return $this;
-}
-
 
 
   

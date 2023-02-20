@@ -7,25 +7,12 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="url"  column="url"  nullable="false"  />
-            <many-to-many field="cmsRightMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsRight">
-    <join-table name="cms_menu_custom_item_cms_right_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="url" type="string" column="url" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

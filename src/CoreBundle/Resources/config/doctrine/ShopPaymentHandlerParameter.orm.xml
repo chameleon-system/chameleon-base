@@ -7,29 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopPaymentHandlerId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopPaymentHandler" inversed-by="shopPaymentHandlerParameter">
+            <many-to-one field="shopPaymentHandler" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopPaymentHandler" inversed-by="shopPaymentHandlerParameterCollection" >
     <join-column name="shop_payment_handler_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="type"  column="type"  nullable="false"  />
-            <field name="systemname"  column="systemname"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="value"  column="value"  nullable="false"  />
-            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
-    <join-column name="cms_portal_id" referenced-column-name="id" />
-</many-to-one>
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="systemname" type="string" column="systemname" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

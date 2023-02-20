@@ -7,62 +7,22 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="parentId" type="string" field="parent_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="parent" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTree">
-    <join-column name="parent_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="lft"  column="lft"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="rgt"  column="rgt"  nullable="false"  />
-            <field name="urlname"  column="urlname"  nullable="false"  />
-            <field name="hidden"  column="hidden"  nullable="false"  />
-            <field name="showExtranetPage"  column="show_extranet_page"  nullable="false"  />
-            <field name="entrySort"  column="entry_sort"  nullable="false"  />
-            <field name="link"  column="link"  nullable="false"  />
-            <field name="linkTarget"  column="linkTarget"  nullable="false"  />
-            <field name="cmsTplPagePrimaryLink"  column="cms_tpl_page_primary_link"  nullable="false"  />
-            <field name="naviIconCmsMediaId" type="string" field="navi_icon_cms_media_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="naviIconCmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="navi_icon_cms_media_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="pathcache"  column="pathcache"  nullable="false"  />
-            <field name="cmsTplModuleInstanceId" type="string" field="cms_tpl_module_instance_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
-    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="seoNofollow"  column="seo_nofollow"  nullable="false"  />
-            <many-to-many field="cmsTplPageMlt" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplPage">
-    <join-table name="cms_tree_cms_tpl_page_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="htmlAccessKey"  column="html_access_key"  nullable="false"  />
-            <field name="cssClasses"  column="css_classes"  nullable="false"  />
-            <one-to-many field="cmsTreeNodeCollection" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTreeNode" mapped-by="cmsTreeId" />
+            <field name="lft" type="string" column="lft" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="rgt" type="string" column="rgt" length="255" nullable="false"  />
+            <field name="urlname" type="string" column="urlname" length="255" nullable="false"  />
+            <field name="entrySort" type="string" column="entry_sort" length="255" nullable="false"  />
+            <field name="link" type="string" column="link" length="255" nullable="false"  />
+            <field name="cmsTplPagePrimaryLink" type="string" column="cms_tpl_page_primary_link" length="255" nullable="false"  />
+            <field name="htmlAccessKey" type="string" column="html_access_key" length="1" nullable="false"  />
+            <field name="cssClasses" type="string" column="css_classes" length="255" nullable="false"  />
+            <one-to-many field="cmsTreeNodeCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTreeNode" mapped-by="cmsTree" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

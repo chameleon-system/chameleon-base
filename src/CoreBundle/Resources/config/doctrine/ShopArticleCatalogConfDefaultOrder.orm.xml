@@ -7,35 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopArticleCatalogConfId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConf" inversed-by="shopArticleCatalogConfDefaultOrder">
+            <many-to-one field="shopArticleCatalogConf" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConf" inversed-by="shopArticleCatalogConfDefaultOrderCollection" >
     <join-column name="shop_article_catalog_conf_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="shopModuleArticlelistOrderbyId" type="string" field="shop_module_articlelist_orderby_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopModuleArticlelistOrderby" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby">
-    <join-column name="shop_module_articlelist_orderby_id" referenced-column-name="id" />
-</many-to-one>
-            <many-to-many field="shopCategoryMlt" target-entity="ChameleonSystem\CoreBundle\Entity\ShopCategory">
-    <join-table name="shop_article_catalog_conf_default_order_shop_category_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

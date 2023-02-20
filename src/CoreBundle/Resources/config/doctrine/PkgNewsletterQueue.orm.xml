@@ -7,23 +7,11 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="pkgNewsletterUserId" type="string" field="pkg_newsletter_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgNewsletterUser" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterUser">
-    <join-column name="pkg_newsletter_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="dateSent"  column="date_sent"  nullable="false"  />
-            <many-to-one field="pkgNewsletterCampaignId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgNewsletterCampaign" inversed-by="pkgNewsletterQueue">
+            <many-to-one field="pkgNewsletterCampaign" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterCampaign" inversed-by="pkgNewsletterQueueCollection" >
     <join-column name="pkg_newsletter_campaign_id" referenced-column-name="id" />
 </many-to-one>
     </entity>

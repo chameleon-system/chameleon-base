@@ -7,20 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsTblConfId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTblConf" inversed-by="cmsTblFieldTab">
+            <many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf" inversed-by="cmsTblFieldTabCollection" >
     <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
-            <field name="systemname"  column="systemname"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="systemname" type="string" column="systemname" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

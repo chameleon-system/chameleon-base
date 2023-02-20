@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgShopListfilterItemType {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -15,20 +16,11 @@ private string $class = '',
     // TCMSFieldVarchar
 /** @var string - Class subtypes of the filter element */
 private string $classSubtype = '', 
-    // TCMSFieldOption
-/** @var string - Class type of the filter element */
-private string $classType = 'Core', 
     // TCMSFieldVarchar
 /** @var string - View of the filter element */
-private string $view = '', 
-    // TCMSFieldOption
-/** @var string - Class type of the view for the filter element */
-private string $viewClassType = 'Core', 
-    // TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsFieldConf[] - Available fields of the filter element */
-private \Doctrine\Common\Collections\Collection $cmsFieldConfMlt = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+private string $view = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -89,20 +81,6 @@ public function setClassSubtype(string $classSubtype): self
 
 
   
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getView(): string
 {
@@ -111,34 +89,6 @@ public function getView(): string
 public function setView(string $view): self
 {
     $this->view = $view;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getViewClassType(): string
-{
-    return $this->viewClassType;
-}
-public function setViewClassType(string $viewClassType): self
-{
-    $this->viewClassType = $viewClassType;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable
-public function getCmsFieldConfMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsFieldConfMlt;
-}
-public function setCmsFieldConfMlt(\Doctrine\Common\Collections\Collection $cmsFieldConfMlt): self
-{
-    $this->cmsFieldConfMlt = $cmsFieldConfMlt;
 
     return $this;
 }

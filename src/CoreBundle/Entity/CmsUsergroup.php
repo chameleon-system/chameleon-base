@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class CmsUsergroup {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -11,15 +12,9 @@ class CmsUsergroup {
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - CMS group ID */
-private string $internalIdentifier = '', 
-    // TCMSFieldBoolean
-/** @var bool - Is selectable */
-private bool $isChooseable = true, 
-    // TCMSFieldBoolean
-/** @var bool - Required by the system */
-private bool $isSystem = false  ) {}
+private string $internalIdentifier = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -60,34 +55,6 @@ public function getInternalIdentifier(): string
 public function setInternalIdentifier(string $internalIdentifier): self
 {
     $this->internalIdentifier = $internalIdentifier;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isIsChooseable(): bool
-{
-    return $this->isChooseable;
-}
-public function setIsChooseable(bool $isChooseable): self
-{
-    $this->isChooseable = $isChooseable;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isIsSystem(): bool
-{
-    return $this->isSystem;
-}
-public function setIsSystem(bool $isSystem): self
-{
-    $this->isSystem = $isSystem;
 
     return $this;
 }

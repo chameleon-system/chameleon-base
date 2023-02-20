@@ -1,34 +1,32 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup;
+use ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessageTrigger;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class PkgShopPaymentIpnTrigger {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup|null - Belongs to payment provider */
-private \ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup|null $shopPaymentHandlerGroup = null,
-/** @var null|string - Belongs to payment provider */
-private ?string $shopPaymentHandlerGroupId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopPaymentHandlerGroup|null - Belongs to payment provider */
+private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
 , 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessageTrigger[] -  */
-private \Doctrine\Common\Collections\Collection $pkgShopPaymentIpnMessageTriggerCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldBoolean
-/** @var bool - Active */
-private bool $active = false, 
-    // TCMSFieldURL
+/** @var Collection<int, pkgShopPaymentIpnMessageTrigger> -  */
+private Collection $pkgShopPaymentIpnMessageTriggerCollection = new ArrayCollection()
+, 
+    // TCMSFieldVarchar
 /** @var string - Target URL */
 private string $targetUrl = '', 
-    // TCMSFieldNumber
-/** @var int - Timeout */
-private int $timeoutSeconds = 30, 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus[] - Status codes to be forwarded */
-private \Doctrine\Common\Collections\Collection $pkgShopPaymentIpnStatusMlt = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+    // TCMSFieldVarchar
+/** @var string - Timeout */
+private string $timeoutSeconds = '30'  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -47,63 +45,55 @@ private \Doctrine\Common\Collections\Collection $pkgShopPaymentIpnStatusMlt = ne
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopPaymentHandlerGroup(): \ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup|null
+    // TCMSFieldLookupParentID
+public function getShopPaymentHandlerGroup(): ?ShopPaymentHandlerGroup
 {
     return $this->shopPaymentHandlerGroup;
 }
-public function setShopPaymentHandlerGroup(\ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup|null $shopPaymentHandlerGroup): self
+
+public function setShopPaymentHandlerGroup(?ShopPaymentHandlerGroup $shopPaymentHandlerGroup): self
 {
     $this->shopPaymentHandlerGroup = $shopPaymentHandlerGroup;
-    $this->shopPaymentHandlerGroupId = $shopPaymentHandlerGroup?->getId();
 
     return $this;
 }
-public function getShopPaymentHandlerGroupId(): ?string
-{
-    return $this->shopPaymentHandlerGroupId;
-}
-public function setShopPaymentHandlerGroupId(?string $shopPaymentHandlerGroupId): self
-{
-    $this->shopPaymentHandlerGroupId = $shopPaymentHandlerGroupId;
-    // todo - load new id
-    //$this->shopPaymentHandlerGroupId = $?->getId();
-
-    return $this;
-}
-
 
 
   
     // TCMSFieldPropertyTable
-public function getPkgShopPaymentIpnMessageTriggerCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgShopPaymentIpnMessageTrigger>
+*/
+public function getPkgShopPaymentIpnMessageTriggerCollection(): Collection
 {
     return $this->pkgShopPaymentIpnMessageTriggerCollection;
 }
-public function setPkgShopPaymentIpnMessageTriggerCollection(\Doctrine\Common\Collections\Collection $pkgShopPaymentIpnMessageTriggerCollection): self
+
+public function addPkgShopPaymentIpnMessageTriggerCollection(pkgShopPaymentIpnMessageTrigger $pkgShopPaymentIpnMessageTrigger): self
 {
-    $this->pkgShopPaymentIpnMessageTriggerCollection = $pkgShopPaymentIpnMessageTriggerCollection;
+    if (!$this->pkgShopPaymentIpnMessageTriggerCollection->contains($pkgShopPaymentIpnMessageTrigger)) {
+        $this->pkgShopPaymentIpnMessageTriggerCollection->add($pkgShopPaymentIpnMessageTrigger);
+        $pkgShopPaymentIpnMessageTrigger->setPkgShopPaymentIpnTrigger($this);
+    }
+
+    return $this;
+}
+
+public function removePkgShopPaymentIpnMessageTriggerCollection(pkgShopPaymentIpnMessageTrigger $pkgShopPaymentIpnMessageTrigger): self
+{
+    if ($this->pkgShopPaymentIpnMessageTriggerCollection->removeElement($pkgShopPaymentIpnMessageTrigger)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgShopPaymentIpnMessageTrigger->getPkgShopPaymentIpnTrigger() === $this) {
+            $pkgShopPaymentIpnMessageTrigger->setPkgShopPaymentIpnTrigger(null);
+        }
+    }
 
     return $this;
 }
 
 
   
-    // TCMSFieldBoolean
-public function isActive(): bool
-{
-    return $this->active;
-}
-public function setActive(bool $active): self
-{
-    $this->active = $active;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldURL
+    // TCMSFieldVarchar
 public function getTargetUrl(): string
 {
     return $this->targetUrl;
@@ -117,28 +107,14 @@ public function setTargetUrl(string $targetUrl): self
 
 
   
-    // TCMSFieldNumber
-public function getTimeoutSeconds(): int
+    // TCMSFieldVarchar
+public function getTimeoutSeconds(): string
 {
     return $this->timeoutSeconds;
 }
-public function setTimeoutSeconds(int $timeoutSeconds): self
+public function setTimeoutSeconds(string $timeoutSeconds): self
 {
     $this->timeoutSeconds = $timeoutSeconds;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselect
-public function getPkgShopPaymentIpnStatusMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->pkgShopPaymentIpnStatusMlt;
-}
-public function setPkgShopPaymentIpnStatusMlt(\Doctrine\Common\Collections\Collection $pkgShopPaymentIpnStatusMlt): self
-{
-    $this->pkgShopPaymentIpnStatusMlt = $pkgShopPaymentIpnStatusMlt;
 
     return $this;
 }

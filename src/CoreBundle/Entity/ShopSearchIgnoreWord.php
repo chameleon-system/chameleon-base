@@ -1,28 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\Shop;
+
 class ShopSearchIgnoreWord {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\Shop|null - Belongs to shop */
-private \ChameleonSystem\CoreBundle\Entity\Shop|null $shop = null,
-/** @var null|string - Belongs to shop */
-private ?string $shopId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsLanguage|null - Language */
-private \ChameleonSystem\CoreBundle\Entity\CmsLanguage|null $cmsLanguage = null,
-/** @var null|string - Language */
-private ?string $cmsLanguageId = null
+        
+    // TCMSFieldLookupParentID
+/** @var Shop|null - Belongs to shop */
+private ?Shop $shop = null
 , 
     // TCMSFieldVarchar
 /** @var string - Word */
 private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -41,59 +35,18 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShop(): \ChameleonSystem\CoreBundle\Entity\Shop|null
+    // TCMSFieldLookupParentID
+public function getShop(): ?Shop
 {
     return $this->shop;
 }
-public function setShop(\ChameleonSystem\CoreBundle\Entity\Shop|null $shop): self
+
+public function setShop(?Shop $shop): self
 {
     $this->shop = $shop;
-    $this->shopId = $shop?->getId();
 
     return $this;
 }
-public function getShopId(): ?string
-{
-    return $this->shopId;
-}
-public function setShopId(?string $shopId): self
-{
-    $this->shopId = $shopId;
-    // todo - load new id
-    //$this->shopId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getCmsLanguage(): \ChameleonSystem\CoreBundle\Entity\CmsLanguage|null
-{
-    return $this->cmsLanguage;
-}
-public function setCmsLanguage(\ChameleonSystem\CoreBundle\Entity\CmsLanguage|null $cmsLanguage): self
-{
-    $this->cmsLanguage = $cmsLanguage;
-    $this->cmsLanguageId = $cmsLanguage?->getId();
-
-    return $this;
-}
-public function getCmsLanguageId(): ?string
-{
-    return $this->cmsLanguageId;
-}
-public function setCmsLanguageId(?string $cmsLanguageId): self
-{
-    $this->cmsLanguageId = $cmsLanguageId;
-    // todo - load new id
-    //$this->cmsLanguageId = $?->getId();
-
-    return $this;
-}
-
 
 
   

@@ -7,24 +7,13 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="systemName"  column="system_name"  nullable="false"  />
-            <field name="ownerId" type="string" field="owner_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="owner" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsConfig">
-    <join-column name="owner_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="value"  column="value"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="systemName" type="string" column="system_name" length="255" nullable="false"  />
+            <field name="value" type="string" column="value" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

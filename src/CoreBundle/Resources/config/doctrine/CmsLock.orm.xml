@@ -7,31 +7,11 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="recordid"  column="recordid"  nullable="false"  />
-            <field name="cmsUserId" type="string" field="cms_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
-    <join-column name="cms_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="timeStamp"  column="time_stamp"  nullable="false"  />
-            <field name="cmsTblConfId" type="string" field="cms_tbl_conf_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
-    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
-</many-to-one>
+            <field name="recordid" type="string" column="recordid" length="36" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

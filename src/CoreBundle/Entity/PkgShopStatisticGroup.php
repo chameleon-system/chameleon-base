@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgShopStatisticGroup {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -12,20 +13,14 @@ private string $dateRestrictionField = '`shop_order`.`datecreated`',
     // TCMSFieldVarchar
 /** @var string - Groups */
 private string $groups = '', 
-    // TCMSFieldText
-/** @var string - Query */
-private string $query = '', 
     // TCMSFieldVarchar
 /** @var string - Field with portal limitation */
 private string $portalRestrictionField = '', 
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = '', 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -72,20 +67,6 @@ public function setGroups(string $groups): self
 
 
   
-    // TCMSFieldText
-public function getQuery(): string
-{
-    return $this->query;
-}
-public function setQuery(string $query): self
-{
-    $this->query = $query;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getPortalRestrictionField(): string
 {
@@ -108,20 +89,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
 
     return $this;
 }

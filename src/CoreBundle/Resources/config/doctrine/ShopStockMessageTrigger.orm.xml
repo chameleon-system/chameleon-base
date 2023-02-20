@@ -7,20 +7,17 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopStockMessageId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopStockMessage" inversed-by="shopStockMessageTrigger">
+            <many-to-one field="shopStockMessage" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopStockMessage" inversed-by="shopStockMessageTriggerCollection" >
     <join-column name="shop_stock_message_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="amount"  column="amount"  nullable="false"  />
-            <field name="message"  column="message"  nullable="false"  />
-            <field name="systemName"  column="system_name"  nullable="false"  />
-            <field name="cssClass"  column="css_class"  nullable="false"  />
+            <field name="amount" type="string" column="amount" length="255" nullable="false"  />
+            <field name="message" type="string" column="message" length="255" nullable="false"  />
+            <field name="systemName" type="string" column="system_name" length="255" nullable="false"  />
+            <field name="cssClass" type="string" column="css_class" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

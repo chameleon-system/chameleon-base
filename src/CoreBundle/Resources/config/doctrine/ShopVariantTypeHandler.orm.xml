@@ -7,18 +7,13 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="class"  column="class"  nullable="false"  />
-            <field name="classSubtype"  column="class_subtype"  nullable="false"  />
-            <field name="classType"  column="class_type"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="class" type="string" column="class" length="255" nullable="false"  />
+            <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

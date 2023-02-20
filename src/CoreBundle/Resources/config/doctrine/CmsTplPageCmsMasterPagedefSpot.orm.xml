@@ -7,29 +7,18 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="model"  column="model"  nullable="false"  />
-            <many-to-one field="cmsTplPageId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplPage" inversed-by="cmsTplPageCmsMasterPagedefSpot">
+            <field name="model" type="string" column="model" length="255" nullable="false"  />
+            <many-to-one field="cmsTplPage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplPage" inversed-by="cmsTplPageCmsMasterPagedefSpotCollection" >
     <join-column name="cms_tpl_page_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="cmsMasterPagedefSpotId" type="string" field="cms_master_pagedef_spot_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsMasterPagedefSpot" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot">
-    <join-column name="cms_master_pagedef_spot_id" referenced-column-name="id" />
-</many-to-one>
-            <many-to-one field="cmsTplModuleInstanceId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" inversed-by="cmsTplPageCmsMasterPagedefSpot">
+            <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" inversed-by="cmsTplPageCmsMasterPagedefSpotCollection" >
     <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="view"  column="view"  nullable="false"  />
+            <field name="view" type="string" column="view" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

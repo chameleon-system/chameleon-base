@@ -1,28 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
+
 class CmsTblConfIndex {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null - Belongs to table */
-private \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf = null,
-/** @var null|string - Belongs to table */
-private ?string $cmsTblConfId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsTblConf|null - Belongs to table */
+private ?CmsTblConf $cmsTblConf = null
 , 
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Field list */
-private string $definition = '', 
-    // TCMSFieldOption
-/** @var string - Index type */
-private string $type = 'INDEX'  ) {}
+private string $definition = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -41,31 +38,18 @@ private string $type = 'INDEX'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsTblConf(): \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null
+    // TCMSFieldLookupParentID
+public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;
 }
-public function setCmsTblConf(\ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf): self
+
+public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
 {
     $this->cmsTblConf = $cmsTblConf;
-    $this->cmsTblConfId = $cmsTblConf?->getId();
 
     return $this;
 }
-public function getCmsTblConfId(): ?string
-{
-    return $this->cmsTblConfId;
-}
-public function setCmsTblConfId(?string $cmsTblConfId): self
-{
-    $this->cmsTblConfId = $cmsTblConfId;
-    // todo - load new id
-    //$this->cmsTblConfId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -91,20 +75,6 @@ public function getDefinition(): string
 public function setDefinition(string $definition): self
 {
     $this->definition = $definition;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getType(): string
-{
-    return $this->type;
-}
-public function setType(string $type): self
-{
-    $this->type = $type;
 
     return $this;
 }

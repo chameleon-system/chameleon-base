@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgShopCurrency {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -12,17 +13,11 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - Symbol */
 private string $symbol = '', 
-    // TCMSFieldDecimal
-/** @var float - Conversion factor */
-private float $factor = 1, 
-    // TCMSFieldUniqueMarker
-/** @var bool - Is the base currency */
-private bool $isBaseCurrency = false, 
     // TCMSFieldVarchar
 /** @var string - ISO-4217 Code */
 private string $iso4217 = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -63,34 +58,6 @@ public function getSymbol(): string
 public function setSymbol(string $symbol): self
 {
     $this->symbol = $symbol;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getFactor(): float
-{
-    return $this->factor;
-}
-public function setFactor(float $factor): self
-{
-    $this->factor = $factor;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldUniqueMarker
-public function isIsBaseCurrency(): bool
-{
-    return $this->isBaseCurrency;
-}
-public function setIsBaseCurrency(bool $isBaseCurrency): self
-{
-    $this->isBaseCurrency = $isBaseCurrency;
 
     return $this;
 }

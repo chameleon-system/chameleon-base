@@ -1,19 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class ShopVat {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = '', 
-    // TCMSFieldDecimal
-/** @var float - Percentage */
-private float $vatPercent = 0  ) {}
+private string $name = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -40,20 +38,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getVatPercent(): float
-{
-    return $this->vatPercent;
-}
-public function setVatPercent(float $vatPercent): self
-{
-    $this->vatPercent = $vatPercent;
 
     return $this;
 }

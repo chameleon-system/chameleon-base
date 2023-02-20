@@ -7,17 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="title"  column="title"  nullable="false"  />
-            <field name="introtext"  column="introtext"  nullable="false"  />
-            <one-to-many field="pkgShopListfilterItemCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopListfilterItem" mapped-by="pkgShopListfilterId" />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="title" type="string" column="title" length="255" nullable="false"  />
+            <one-to-many field="pkgShopListfilterItemCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilterItem" mapped-by="pkgShopListfilter" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

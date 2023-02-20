@@ -7,43 +7,19 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="idcode"  column="idcode"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="subject"  column="subject"  nullable="false"  />
-            <field name="mailto"  column="mailto"  nullable="false"  />
-            <field name="mailtoName"  column="mailto_name"  nullable="false"  />
-            <field name="mailfrom"  column="mailfrom"  nullable="false"  />
-            <field name="mailfromName"  column="mailfrom_name"  nullable="false"  />
-            <field name="mailbcc"  column="mailbcc"  nullable="false"  />
-            <field name="body"  column="body"  nullable="false"  />
-            <field name="bodyText"  column="body_text"  nullable="false"  />
-            <many-to-many field="attachment" target-entity="ChameleonSystem\CoreBundle\Entity\CmsDocument">
-    <join-table name="data_mail_profile_attachment_cms_document_mlt">
-        <join-columns>
-            <join-column name="source_id" referenced-column-name="id"/>
-        </join-columns>
-        <inverse-join-columns>
-            <join-column name="target_id" referenced-column-name="id"/>
-        </inverse-join-columns>
-    </join-table>
-</many-to-many>
-            <field name="template"  column="template"  nullable="false"  />
-            <field name="templateText"  column="template_text"  nullable="false"  />
-            <field name="cmsPortalId" type="string" field="cms_portal_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
-    <join-column name="cms_portal_id" referenced-column-name="id" />
-</many-to-one>
+            <field name="idcode" type="string" column="idcode" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="subject" type="string" column="subject" length="255" nullable="false"  />
+            <field name="mailto" type="string" column="mailto" length="255" nullable="false"  />
+            <field name="mailtoName" type="string" column="mailto_name" length="255" nullable="false"  />
+            <field name="mailfrom" type="string" column="mailfrom" length="255" nullable="false"  />
+            <field name="mailfromName" type="string" column="mailfrom_name" length="255" nullable="false"  />
+            <field name="template" type="string" column="template" length="255" nullable="false"  />
+            <field name="templateText" type="string" column="template_text" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

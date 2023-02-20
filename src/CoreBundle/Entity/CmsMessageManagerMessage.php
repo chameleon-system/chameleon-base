@@ -1,40 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+
 class CmsMessageManagerMessage {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal|null - Belongs to portal */
-private \ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal = null,
-/** @var null|string - Belongs to portal */
-private ?string $cmsPortalId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessageType|null - Message type */
-private \ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessageType|null $cmsMessageManagerMessageType = null,
-/** @var null|string - Message type */
-private ?string $cmsMessageManagerMessageTypeId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsPortal|null - Belongs to portal */
+private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldVarchar
 /** @var string - Code */
 private string $name = '', 
-    // TCMSFieldText
-/** @var string - Message description */
-private string $description = '', 
-    // TCMSFieldText
-/** @var string - Message */
-private string $message = '', 
-    // TCMSFieldOption
-/** @var string - Type */
-private string $messageLocationType = 'Core', 
     // TCMSFieldVarchar
 /** @var string - View */
 private string $messageView = 'standard'  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -53,31 +38,18 @@ private string $messageView = 'standard'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsPortal(): \ChameleonSystem\CoreBundle\Entity\CmsPortal|null
+    // TCMSFieldLookupParentID
+public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;
 }
-public function setCmsPortal(\ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal): self
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
 {
     $this->cmsPortal = $cmsPortal;
-    $this->cmsPortalId = $cmsPortal?->getId();
 
     return $this;
 }
-public function getCmsPortalId(): ?string
-{
-    return $this->cmsPortalId;
-}
-public function setCmsPortalId(?string $cmsPortalId): self
-{
-    $this->cmsPortalId = $cmsPortalId;
-    // todo - load new id
-    //$this->cmsPortalId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -89,76 +61,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsMessageManagerMessageType(): \ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessageType|null
-{
-    return $this->cmsMessageManagerMessageType;
-}
-public function setCmsMessageManagerMessageType(\ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessageType|null $cmsMessageManagerMessageType): self
-{
-    $this->cmsMessageManagerMessageType = $cmsMessageManagerMessageType;
-    $this->cmsMessageManagerMessageTypeId = $cmsMessageManagerMessageType?->getId();
-
-    return $this;
-}
-public function getCmsMessageManagerMessageTypeId(): ?string
-{
-    return $this->cmsMessageManagerMessageTypeId;
-}
-public function setCmsMessageManagerMessageTypeId(?string $cmsMessageManagerMessageTypeId): self
-{
-    $this->cmsMessageManagerMessageTypeId = $cmsMessageManagerMessageTypeId;
-    // todo - load new id
-    //$this->cmsMessageManagerMessageTypeId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldText
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getMessage(): string
-{
-    return $this->message;
-}
-public function setMessage(string $message): self
-{
-    $this->message = $message;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getMessageLocationType(): string
-{
-    return $this->messageLocationType;
-}
-public function setMessageLocationType(string $messageLocationType): self
-{
-    $this->messageLocationType = $messageLocationType;
 
     return $this;
 }

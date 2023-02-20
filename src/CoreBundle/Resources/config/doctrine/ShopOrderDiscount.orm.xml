@@ -7,24 +7,20 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopOrderId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="shopOrderDiscount">
+            <many-to-one field="shopOrder" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="shopOrderDiscountCollection" >
     <join-column name="shop_order_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="shopDiscountId"  column="shop_discount_id"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="value"  column="value"  nullable="false"  />
-            <field name="valuetype"  column="valuetype"  nullable="false"  />
-            <field name="freearticleName"  column="freearticle_name"  nullable="false"  />
-            <field name="freearticleArticlenumber"  column="freearticle_articlenumber"  nullable="false"  />
-            <field name="freearticleId"  column="freearticle_id"  nullable="false"  />
-            <field name="total"  column="total"  nullable="false"  />
+            <field name="shopDiscountId" type="string" column="shop_discount_id" length="255" nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="value" type="string" column="value" length="255" nullable="false"  />
+            <field name="valuetype" type="string" column="valuetype" length="255" nullable="false"  />
+            <field name="freearticleName" type="string" column="freearticle_name" length="255" nullable="false"  />
+            <field name="freearticleArticlenumber" type="string" column="freearticle_articlenumber" length="255" nullable="false"  />
+            <field name="freearticleId" type="string" column="freearticle_id" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

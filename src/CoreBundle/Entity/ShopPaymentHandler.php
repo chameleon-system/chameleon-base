@@ -1,37 +1,35 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup;
+use ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerParameter;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class ShopPaymentHandler {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup|null - Belongs to payment provider */
-private \ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup|null $shopPaymentHandlerGroup = null,
-/** @var null|string - Belongs to payment provider */
-private ?string $shopPaymentHandlerGroupId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopPaymentHandlerGroup|null - Belongs to payment provider */
+private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
 , 
     // TCMSFieldVarchar
 /** @var string - Internal name for payment handler */
 private string $name = '', 
-    // TCMSFieldBoolean
-/** @var bool - Block user selection */
-private bool $blockUserSelection = false, 
     // TCMSFieldVarchar
 /** @var string - Class name */
 private string $class = '', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $classType = 'Core', 
     // TCMSFieldVarchar
 /** @var string - Class subtype */
 private string $classSubtype = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerParameter[] - Configuration settings */
-private \Doctrine\Common\Collections\Collection $shopPaymentHandlerParameterCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, shopPaymentHandlerParameter> - Configuration settings */
+private Collection $shopPaymentHandlerParameterCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -50,31 +48,18 @@ private \Doctrine\Common\Collections\Collection $shopPaymentHandlerParameterColl
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopPaymentHandlerGroup(): \ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup|null
+    // TCMSFieldLookupParentID
+public function getShopPaymentHandlerGroup(): ?ShopPaymentHandlerGroup
 {
     return $this->shopPaymentHandlerGroup;
 }
-public function setShopPaymentHandlerGroup(\ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup|null $shopPaymentHandlerGroup): self
+
+public function setShopPaymentHandlerGroup(?ShopPaymentHandlerGroup $shopPaymentHandlerGroup): self
 {
     $this->shopPaymentHandlerGroup = $shopPaymentHandlerGroup;
-    $this->shopPaymentHandlerGroupId = $shopPaymentHandlerGroup?->getId();
 
     return $this;
 }
-public function getShopPaymentHandlerGroupId(): ?string
-{
-    return $this->shopPaymentHandlerGroupId;
-}
-public function setShopPaymentHandlerGroupId(?string $shopPaymentHandlerGroupId): self
-{
-    $this->shopPaymentHandlerGroupId = $shopPaymentHandlerGroupId;
-    // todo - load new id
-    //$this->shopPaymentHandlerGroupId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -92,20 +77,6 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldBoolean
-public function isBlockUserSelection(): bool
-{
-    return $this->blockUserSelection;
-}
-public function setBlockUserSelection(bool $blockUserSelection): self
-{
-    $this->blockUserSelection = $blockUserSelection;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getClass(): string
 {
@@ -114,20 +85,6 @@ public function getClass(): string
 public function setClass(string $class): self
 {
     $this->class = $class;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
 
     return $this;
 }
@@ -149,13 +106,32 @@ public function setClassSubtype(string $classSubtype): self
 
   
     // TCMSFieldPropertyTable
-public function getShopPaymentHandlerParameterCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopPaymentHandlerParameter>
+*/
+public function getShopPaymentHandlerParameterCollection(): Collection
 {
     return $this->shopPaymentHandlerParameterCollection;
 }
-public function setShopPaymentHandlerParameterCollection(\Doctrine\Common\Collections\Collection $shopPaymentHandlerParameterCollection): self
+
+public function addShopPaymentHandlerParameterCollection(shopPaymentHandlerParameter $shopPaymentHandlerParameter): self
 {
-    $this->shopPaymentHandlerParameterCollection = $shopPaymentHandlerParameterCollection;
+    if (!$this->shopPaymentHandlerParameterCollection->contains($shopPaymentHandlerParameter)) {
+        $this->shopPaymentHandlerParameterCollection->add($shopPaymentHandlerParameter);
+        $shopPaymentHandlerParameter->setShopPaymentHandler($this);
+    }
+
+    return $this;
+}
+
+public function removeShopPaymentHandlerParameterCollection(shopPaymentHandlerParameter $shopPaymentHandlerParameter): self
+{
+    if ($this->shopPaymentHandlerParameterCollection->removeElement($shopPaymentHandlerParameter)) {
+        // set the owning side to null (unless already changed)
+        if ($shopPaymentHandlerParameter->getShopPaymentHandler() === $this) {
+            $shopPaymentHandlerParameter->setShopPaymentHandler(null);
+        }
+    }
 
     return $this;
 }

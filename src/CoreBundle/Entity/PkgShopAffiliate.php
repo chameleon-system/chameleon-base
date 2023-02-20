@@ -1,16 +1,19 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\Shop;
+use ChameleonSystem\CoreBundle\Entity\PkgShopAffiliateParameter;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class PkgShopAffiliate {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\Shop|null - Belongs to shop */
-private \ChameleonSystem\CoreBundle\Entity\Shop|null $shop = null,
-/** @var null|string - Belongs to shop */
-private ?string $shopId = null
+        
+    // TCMSFieldLookupParentID
+/** @var Shop|null - Belongs to shop */
+private ?Shop $shop = null
 , 
     // TCMSFieldVarchar
 /** @var string - Name */
@@ -18,26 +21,21 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - URL parameter used to transfer the tracking code */
 private string $urlParameterName = '', 
-    // TCMSFieldNumber
-/** @var int - Seconds, for which the code is still valid with inactive session */
-private int $numberOfSecondsValid = 0, 
+    // TCMSFieldVarchar
+/** @var string - Seconds, for which the code is still valid with inactive session */
+private string $numberOfSecondsValid = '0', 
     // TCMSFieldVarchar
 /** @var string - Class */
 private string $class = '', 
     // TCMSFieldVarchar
 /** @var string - Class subtype (path relative to ./classes) */
 private string $classSubtype = '', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $classType = 'Customer', 
-    // TCMSFieldText
-/** @var string - Code to be integrated on order success page */
-private string $orderSuccessCode = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopAffiliateParameter[] - Parameter */
-private \Doctrine\Common\Collections\Collection $pkgShopAffiliateParameterCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, pkgShopAffiliateParameter> - Parameter */
+private Collection $pkgShopAffiliateParameterCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -56,31 +54,18 @@ private \Doctrine\Common\Collections\Collection $pkgShopAffiliateParameterCollec
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShop(): \ChameleonSystem\CoreBundle\Entity\Shop|null
+    // TCMSFieldLookupParentID
+public function getShop(): ?Shop
 {
     return $this->shop;
 }
-public function setShop(\ChameleonSystem\CoreBundle\Entity\Shop|null $shop): self
+
+public function setShop(?Shop $shop): self
 {
     $this->shop = $shop;
-    $this->shopId = $shop?->getId();
 
     return $this;
 }
-public function getShopId(): ?string
-{
-    return $this->shopId;
-}
-public function setShopId(?string $shopId): self
-{
-    $this->shopId = $shopId;
-    // todo - load new id
-    //$this->shopId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -112,12 +97,12 @@ public function setUrlParameterName(string $urlParameterName): self
 
 
   
-    // TCMSFieldNumber
-public function getNumberOfSecondsValid(): int
+    // TCMSFieldVarchar
+public function getNumberOfSecondsValid(): string
 {
     return $this->numberOfSecondsValid;
 }
-public function setNumberOfSecondsValid(int $numberOfSecondsValid): self
+public function setNumberOfSecondsValid(string $numberOfSecondsValid): self
 {
     $this->numberOfSecondsValid = $numberOfSecondsValid;
 
@@ -154,42 +139,33 @@ public function setClassSubtype(string $classSubtype): self
 
 
   
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getOrderSuccessCode(): string
-{
-    return $this->orderSuccessCode;
-}
-public function setOrderSuccessCode(string $orderSuccessCode): self
-{
-    $this->orderSuccessCode = $orderSuccessCode;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getPkgShopAffiliateParameterCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgShopAffiliateParameter>
+*/
+public function getPkgShopAffiliateParameterCollection(): Collection
 {
     return $this->pkgShopAffiliateParameterCollection;
 }
-public function setPkgShopAffiliateParameterCollection(\Doctrine\Common\Collections\Collection $pkgShopAffiliateParameterCollection): self
+
+public function addPkgShopAffiliateParameterCollection(pkgShopAffiliateParameter $pkgShopAffiliateParameter): self
 {
-    $this->pkgShopAffiliateParameterCollection = $pkgShopAffiliateParameterCollection;
+    if (!$this->pkgShopAffiliateParameterCollection->contains($pkgShopAffiliateParameter)) {
+        $this->pkgShopAffiliateParameterCollection->add($pkgShopAffiliateParameter);
+        $pkgShopAffiliateParameter->setPkgShopAffiliate($this);
+    }
+
+    return $this;
+}
+
+public function removePkgShopAffiliateParameterCollection(pkgShopAffiliateParameter $pkgShopAffiliateParameter): self
+{
+    if ($this->pkgShopAffiliateParameterCollection->removeElement($pkgShopAffiliateParameter)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgShopAffiliateParameter->getPkgShopAffiliate() === $this) {
+            $pkgShopAffiliateParameter->setPkgShopAffiliate(null);
+        }
+    }
 
     return $this;
 }

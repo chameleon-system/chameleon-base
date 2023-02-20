@@ -7,66 +7,26 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopCategoryId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopCategory" inversed-by="shopCategory">
+            <many-to-one field="shopCategory" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopCategory" inversed-by="shopCategoryCollection" >
     <join-column name="shop_category_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="detailPageCmsTreeId"  column="detail_page_cms_tree_id"  nullable="false"  />
-            <field name="naviIconCmsMediaId" type="string" field="navi_icon_cms_media_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="naviIconCmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="navi_icon_cms_media_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="urlPath"  column="url_path"  nullable="false"  />
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="active"  column="active"  nullable="false"  />
-            <field name="treeActive"  column="tree_active"  nullable="false"  />
-            <field name="nameProduct"  column="name_product"  nullable="false"  />
-            <field name="seoPattern"  column="seo_pattern"  nullable="false"  />
-            <field name="shopVatId" type="string" field="shop_vat_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopVat" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVat">
-    <join-column name="shop_vat_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="colorcode"  column="colorcode"  nullable="false"  />
-            <field name="categoryHightlight"  column="category_hightlight"  nullable="false"  />
-            <field name="imageId" type="string" field="image_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="image" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
-    <join-column name="image_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="position"  column="position"  nullable="false"  />
-            <one-to-many field="shopCategoryCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopCategory" mapped-by="shopCategoryId" />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="nameProduct" type="string" column="name_product" length="255" nullable="false"  />
+            <field name="seoPattern" type="string" column="seo_pattern" length="255" nullable="false"  />
+            <one-to-many field="shopCategoryCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopCategory" mapped-by="shopCategory" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="descriptionShort"  column="description_short"  nullable="false"  />
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="metaKeywords"  column="meta_keywords"  nullable="false"  />
-            <field name="pkgShopListfilterId" type="string" field="pkg_shop_listfilter_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgShopListfilter" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilter">
-    <join-column name="pkg_shop_listfilter_id" referenced-column-name="id" />
-</many-to-one>
-            <one-to-many field="shopCategoryTabCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopCategoryTab" mapped-by="shopCategoryId" />
+            <field name="metaKeywords" type="string" column="meta_keywords" length="255" nullable="false"  />
+            <one-to-many field="shopCategoryTabCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopCategoryTab" mapped-by="shopCategory" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="metaDescription"  column="meta_description"  nullable="false"  />
+            <field name="metaDescription" type="string" column="meta_description" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

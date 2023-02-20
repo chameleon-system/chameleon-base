@@ -7,42 +7,11 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="pkgCommentTypeId" type="string" field="pkg_comment_type_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgCommentType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgCommentType">
-    <join-column name="pkg_comment_type_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="itemId"  column="item_id"  nullable="false"  />
-            <field name="dataExtranetUserId" type="string" field="data_extranet_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
-    <join-column name="data_extranet_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="createdTimestamp"  column="created_timestamp"  nullable="false"  />
-            <field name="comment"  column="comment"  nullable="false"  />
-            <field name="pkgCommentId" type="string" field="pkg_comment_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgComment" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgComment">
-    <join-column name="pkg_comment_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="markAsDeleted"  column="mark_as_deleted"  nullable="false"  />
-            <field name="markAsReported"  column="mark_as_reported"  nullable="false"  />
+            <field name="itemId" type="string" column="item_id" length="36" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

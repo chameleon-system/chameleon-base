@@ -7,21 +7,20 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="dataExtranetUserId" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="pkgShopWishlist">
+            <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="pkgShopWishlistCollection" >
     <join-column name="data_extranet_user_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="description"  column="description"  nullable="false"  />
-            <field name="isPublic"  column="is_public"  nullable="false"  />
-            <one-to-many field="pkgShopWishlistArticleCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopWishlistArticle" mapped-by="pkgShopWishlistId" />
+            <one-to-many field="pkgShopWishlistArticleCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopWishlistArticle" mapped-by="pkgShopWishlist" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <one-to-many field="pkgShopWishlistMailHistoryCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopWishlistMailHistory" mapped-by="pkgShopWishlistId" />
+            <one-to-many field="pkgShopWishlistMailHistoryCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopWishlistMailHistory" mapped-by="pkgShopWishlist" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

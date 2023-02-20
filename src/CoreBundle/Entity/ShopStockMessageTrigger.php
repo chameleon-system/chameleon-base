@@ -1,20 +1,20 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopStockMessage;
+
 class ShopStockMessageTrigger {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopStockMessage|null - Stock message */
-private \ChameleonSystem\CoreBundle\Entity\ShopStockMessage|null $shopStockMessage = null,
-/** @var null|string - Stock message */
-private ?string $shopStockMessageId = null
+        
+    // TCMSFieldLookupParentID
+/** @var ShopStockMessage|null - Stock message */
+private ?ShopStockMessage $shopStockMessage = null
 , 
-    // TCMSFieldNumber
-/** @var int - Amount */
-private int $amount = 0, 
+    // TCMSFieldVarchar
+/** @var string - Amount */
+private string $amount = '', 
     // TCMSFieldVarchar
 /** @var string - Message */
 private string $message = '', 
@@ -25,7 +25,7 @@ private string $systemName = '',
 /** @var string - CSS class */
 private string $cssClass = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -44,40 +44,27 @@ private string $cssClass = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getShopStockMessage(): \ChameleonSystem\CoreBundle\Entity\ShopStockMessage|null
+    // TCMSFieldLookupParentID
+public function getShopStockMessage(): ?ShopStockMessage
 {
     return $this->shopStockMessage;
 }
-public function setShopStockMessage(\ChameleonSystem\CoreBundle\Entity\ShopStockMessage|null $shopStockMessage): self
+
+public function setShopStockMessage(?ShopStockMessage $shopStockMessage): self
 {
     $this->shopStockMessage = $shopStockMessage;
-    $this->shopStockMessageId = $shopStockMessage?->getId();
 
     return $this;
 }
-public function getShopStockMessageId(): ?string
-{
-    return $this->shopStockMessageId;
-}
-public function setShopStockMessageId(?string $shopStockMessageId): self
-{
-    $this->shopStockMessageId = $shopStockMessageId;
-    // todo - load new id
-    //$this->shopStockMessageId = $?->getId();
-
-    return $this;
-}
-
 
 
   
-    // TCMSFieldNumber
-public function getAmount(): int
+    // TCMSFieldVarchar
+public function getAmount(): string
 {
     return $this->amount;
 }
-public function setAmount(int $amount): self
+public function setAmount(string $amount): self
 {
     $this->amount = $amount;
 

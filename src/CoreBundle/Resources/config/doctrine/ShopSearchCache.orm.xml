@@ -7,22 +7,19 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopId" target-entity="ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="shopSearchCache">
+            <many-to-one field="shop" target-entity="\ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="shopSearchCacheCollection" >
     <join-column name="shop_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="searchkey"  column="searchkey"  nullable="false"  />
-            <field name="lastUsedDate"  column="last_used_date"  nullable="false"  />
-            <one-to-many field="shopSearchCacheItemCollection" target-entity="ChameleonSystem\CoreBundle\Entity\ShopSearchCacheItem" mapped-by="shopSearchCacheId" />
+            <field name="searchkey" type="string" column="searchkey" length="32" nullable="false"  />
+            <one-to-many field="shopSearchCacheItemCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopSearchCacheItem" mapped-by="shopSearchCache" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="categoryHits"  column="category_hits"  nullable="false"  />
-            <field name="numberOfRecordsFound"  column="number_of_records_found"  nullable="false"  />
+            <field name="numberOfRecordsFound" type="string" column="number_of_records_found" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

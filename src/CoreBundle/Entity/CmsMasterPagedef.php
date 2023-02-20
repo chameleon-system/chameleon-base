@@ -1,43 +1,30 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class CmsMasterPagedef {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldText
-/** @var string - Description */
-private string $description = '', 
     // TCMSFieldVarchar
 /** @var string - Layout */
 private string $layout = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot[] - Spots */
-private \Doctrine\Common\Collections\Collection $cmsMasterPagedefSpotCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock[] - Theme blocks */
-private \Doctrine\Common\Collections\Collection $pkgCmsThemeBlockMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldText
-/** @var string - Action-Plugins */
-private string $actionPluginList = '', 
-    // TCMSFieldBoolean
-/** @var bool - Restrict to certain portals only */
-private bool $restrictToPortals = false, 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal[] - CMS module extension */
-private \Doctrine\Common\Collections\Collection $cmsPortalMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, cmsMasterPagedefSpot> - Spots */
+private Collection $cmsMasterPagedefSpotCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - WYSIWYG CSS URL */
-private string $wysiwygCssUrl = '', 
-    // TCMSFieldPosition
-/** @var int -  */
-private int $position = 0  ) {}
+private string $wysiwygCssUrl = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -70,20 +57,6 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldText
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldVarchar
 public function getLayout(): string
 {
@@ -99,69 +72,32 @@ public function setLayout(string $layout): self
 
   
     // TCMSFieldPropertyTable
-public function getCmsMasterPagedefSpotCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsMasterPagedefSpot>
+*/
+public function getCmsMasterPagedefSpotCollection(): Collection
 {
     return $this->cmsMasterPagedefSpotCollection;
 }
-public function setCmsMasterPagedefSpotCollection(\Doctrine\Common\Collections\Collection $cmsMasterPagedefSpotCollection): self
+
+public function addCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMasterPagedefSpot): self
 {
-    $this->cmsMasterPagedefSpotCollection = $cmsMasterPagedefSpotCollection;
+    if (!$this->cmsMasterPagedefSpotCollection->contains($cmsMasterPagedefSpot)) {
+        $this->cmsMasterPagedefSpotCollection->add($cmsMasterPagedefSpot);
+        $cmsMasterPagedefSpot->setCmsMasterPagedef($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldLookupMultiselect
-public function getPkgCmsThemeBlockMlt(): \Doctrine\Common\Collections\Collection
+public function removeCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMasterPagedefSpot): self
 {
-    return $this->pkgCmsThemeBlockMlt;
-}
-public function setPkgCmsThemeBlockMlt(\Doctrine\Common\Collections\Collection $pkgCmsThemeBlockMlt): self
-{
-    $this->pkgCmsThemeBlockMlt = $pkgCmsThemeBlockMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getActionPluginList(): string
-{
-    return $this->actionPluginList;
-}
-public function setActionPluginList(string $actionPluginList): self
-{
-    $this->actionPluginList = $actionPluginList;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isRestrictToPortals(): bool
-{
-    return $this->restrictToPortals;
-}
-public function setRestrictToPortals(bool $restrictToPortals): self
-{
-    $this->restrictToPortals = $restrictToPortals;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsPortalMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsPortalMlt;
-}
-public function setCmsPortalMlt(\Doctrine\Common\Collections\Collection $cmsPortalMlt): self
-{
-    $this->cmsPortalMlt = $cmsPortalMlt;
+    if ($this->cmsMasterPagedefSpotCollection->removeElement($cmsMasterPagedefSpot)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsMasterPagedefSpot->getCmsMasterPagedef() === $this) {
+            $cmsMasterPagedefSpot->setCmsMasterPagedef(null);
+        }
+    }
 
     return $this;
 }
@@ -176,20 +112,6 @@ public function getWysiwygCssUrl(): string
 public function setWysiwygCssUrl(string $wysiwygCssUrl): self
 {
     $this->wysiwygCssUrl = $wysiwygCssUrl;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
 
     return $this;
 }

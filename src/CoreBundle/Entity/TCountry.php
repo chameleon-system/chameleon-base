@@ -1,9 +1,10 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class TCountry {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -27,9 +28,6 @@ private string $germanName = '',
     // TCMSFieldVarchar
 /** @var string - German zip code */
 private string $germanPostalcode = '', 
-    // TCMSFieldBoolean
-/** @var bool - EU member state */
-private bool $euMember = false, 
     // TCMSFieldVarchar
 /** @var string - toplevel domain */
 private string $toplevelDomain = '', 
@@ -37,7 +35,7 @@ private string $toplevelDomain = '',
 /** @var string - main currency */
 private string $primaryCurrencyIso4217 = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -148,20 +146,6 @@ public function getGermanPostalcode(): string
 public function setGermanPostalcode(string $germanPostalcode): self
 {
     $this->germanPostalcode = $germanPostalcode;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isEuMember(): bool
-{
-    return $this->euMember;
-}
-public function setEuMember(bool $euMember): self
-{
-    $this->euMember = $euMember;
 
     return $this;
 }

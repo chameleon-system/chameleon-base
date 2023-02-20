@@ -1,28 +1,26 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgTrackObject {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldNumber
-/** @var int -  */
-private int $count = 0, 
+    // TCMSFieldVarchar
+/** @var string -  */
+private string $count = '0', 
     // TCMSFieldVarchar
 /** @var string -  */
 private string $tableName = '', 
     // TCMSFieldVarchar
 /** @var string -  */
 private string $ownerId = '', 
-    // TCMSFieldDateTimeNow
-/** @var \DateTime|null -  */
-private \DateTime|null $datecreated = null, 
     // TCMSFieldVarchar
 /** @var string -  */
 private string $timeBlock = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -41,12 +39,12 @@ private string $timeBlock = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldNumber
-public function getCount(): int
+    // TCMSFieldVarchar
+public function getCount(): string
 {
     return $this->count;
 }
-public function setCount(int $count): self
+public function setCount(string $count): self
 {
     $this->count = $count;
 
@@ -77,20 +75,6 @@ public function getOwnerId(): string
 public function setOwnerId(string $ownerId): self
 {
     $this->ownerId = $ownerId;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDateTimeNow
-public function getDatecreated(): \DateTime|null
-{
-    return $this->datecreated;
-}
-public function setDatecreated(\DateTime|null $datecreated): self
-{
-    $this->datecreated = $datecreated;
 
     return $this;
 }

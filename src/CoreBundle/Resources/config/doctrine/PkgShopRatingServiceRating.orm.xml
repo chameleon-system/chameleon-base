@@ -7,27 +7,12 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="pkgShopRatingServiceId" type="string" field="pkg_shop_rating_service_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgShopRatingService" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopRatingService">
-    <join-column name="pkg_shop_rating_service_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="remoteKey"  column="remote_key"  nullable="false"  />
-            <field name="score"  column="score"  nullable="false"  />
-            <field name="rawdata"  column="rawdata"  nullable="false"  />
-            <field name="ratingUser"  column="rating_user"  nullable="false"  />
-            <field name="ratingText"  column="rating_text"  nullable="false"  />
-            <field name="ratingDate"  column="rating_date"  nullable="false"  />
+            <field name="remoteKey" type="string" column="remote_key" length="59" nullable="false"  />
+            <field name="ratingUser" type="string" column="rating_user" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

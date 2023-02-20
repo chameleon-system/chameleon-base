@@ -33,11 +33,6 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
      */
     protected $sMatrixTableName = 'cms_portal_language_matrix';
 
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        // todo: implement
-        return parent::getDoctrineDataModelParts($namespace);
-    }
 
     public function GetHTML()
     {

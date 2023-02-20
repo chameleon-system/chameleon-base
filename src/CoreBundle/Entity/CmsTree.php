@@ -1,68 +1,36 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTreeNode;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class CmsTree {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTree|null - Is subnode of */
-private \ChameleonSystem\CoreBundle\Entity\CmsTree|null $parent = null,
-/** @var null|string - Is subnode of */
-private ?string $parentId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Icon for navigation */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $naviIconCmsMedia = null,
-/** @var null|string - Icon for navigation */
-private ?string $naviIconCmsMediaId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null - Connect module to navigation */
-private \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance = null,
-/** @var null|string - Connect module to navigation */
-private ?string $cmsTplModuleInstanceId = null
-, 
-    // TCMSFieldNumber
-/** @var int - Nested set: left */
-private int $lft = 0, 
+        
+    // TCMSFieldVarchar
+/** @var string - Nested set: left */
+private string $lft = '', 
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldNumber
-/** @var int - Nested set: right */
-private int $rgt = 0, 
-    // TCMSFieldSEOURLTitle
+    // TCMSFieldVarchar
+/** @var string - Nested set: right */
+private string $rgt = '', 
+    // TCMSFieldVarchar
 /** @var string - URL name */
 private string $urlname = '', 
-    // TCMSFieldBoolean
-/** @var bool - Hide */
-private bool $hidden = false, 
-    // TCMSFieldBoolean
-/** @var bool - Show restricted page in navigation */
-private bool $showExtranetPage = false, 
-    // TCMSFieldNumber
-/** @var int - Position */
-private int $entrySort = 0, 
-    // TCMSFieldURL
+    // TCMSFieldVarchar
+/** @var string - Position */
+private string $entrySort = '', 
+    // TCMSFieldVarchar
 /** @var string - External link */
 private string $link = '', 
-    // TCMSFieldBoolean
-/** @var bool - Open link in new window */
-private bool $linkTarget = false, 
-    // TCMSFieldTreePageAssignment
+    // TCMSFieldVarchar
 /** @var string - Pages / layouts */
 private string $cmsTplPagePrimaryLink = '', 
-    // TCMSFieldText
-/** @var string - Navigation path cache */
-private string $pathcache = '', 
-    // TCMSFieldBoolean
-/** @var bool - SEO: no follow */
-private bool $seoNofollow = false, 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTplPage[] - SEO: no follow - page exclusion list */
-private \Doctrine\Common\Collections\Collection $cmsTplPageMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
     // TCMSFieldVarchar
 /** @var string - Hotkeys */
 private string $htmlAccessKey = '', 
@@ -70,10 +38,11 @@ private string $htmlAccessKey = '',
 /** @var string - CSS classes */
 private string $cssClasses = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTreeNode[] - Connected pages */
-private \Doctrine\Common\Collections\Collection $cmsTreeNodeCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, cmsTreeNode> - Connected pages */
+private Collection $cmsTreeNodeCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -92,40 +61,12 @@ private \Doctrine\Common\Collections\Collection $cmsTreeNodeCollection = new \Do
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getParent(): \ChameleonSystem\CoreBundle\Entity\CmsTree|null
-{
-    return $this->parent;
-}
-public function setParent(\ChameleonSystem\CoreBundle\Entity\CmsTree|null $parent): self
-{
-    $this->parent = $parent;
-    $this->parentId = $parent?->getId();
-
-    return $this;
-}
-public function getParentId(): ?string
-{
-    return $this->parentId;
-}
-public function setParentId(?string $parentId): self
-{
-    $this->parentId = $parentId;
-    // todo - load new id
-    //$this->parentId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldNumber
-public function getLft(): int
+    // TCMSFieldVarchar
+public function getLft(): string
 {
     return $this->lft;
 }
-public function setLft(int $lft): self
+public function setLft(string $lft): self
 {
     $this->lft = $lft;
 
@@ -148,12 +89,12 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldNumber
-public function getRgt(): int
+    // TCMSFieldVarchar
+public function getRgt(): string
 {
     return $this->rgt;
 }
-public function setRgt(int $rgt): self
+public function setRgt(string $rgt): self
 {
     $this->rgt = $rgt;
 
@@ -162,7 +103,7 @@ public function setRgt(int $rgt): self
 
 
   
-    // TCMSFieldSEOURLTitle
+    // TCMSFieldVarchar
 public function getUrlname(): string
 {
     return $this->urlname;
@@ -176,40 +117,12 @@ public function setUrlname(string $urlname): self
 
 
   
-    // TCMSFieldBoolean
-public function isHidden(): bool
-{
-    return $this->hidden;
-}
-public function setHidden(bool $hidden): self
-{
-    $this->hidden = $hidden;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isShowExtranetPage(): bool
-{
-    return $this->showExtranetPage;
-}
-public function setShowExtranetPage(bool $showExtranetPage): self
-{
-    $this->showExtranetPage = $showExtranetPage;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNumber
-public function getEntrySort(): int
+    // TCMSFieldVarchar
+public function getEntrySort(): string
 {
     return $this->entrySort;
 }
-public function setEntrySort(int $entrySort): self
+public function setEntrySort(string $entrySort): self
 {
     $this->entrySort = $entrySort;
 
@@ -218,7 +131,7 @@ public function setEntrySort(int $entrySort): self
 
 
   
-    // TCMSFieldURL
+    // TCMSFieldVarchar
 public function getLink(): string
 {
     return $this->link;
@@ -232,21 +145,7 @@ public function setLink(string $link): self
 
 
   
-    // TCMSFieldBoolean
-public function isLinkTarget(): bool
-{
-    return $this->linkTarget;
-}
-public function setLinkTarget(bool $linkTarget): self
-{
-    $this->linkTarget = $linkTarget;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldTreePageAssignment
+    // TCMSFieldVarchar
 public function getCmsTplPagePrimaryLink(): string
 {
     return $this->cmsTplPagePrimaryLink;
@@ -254,104 +153,6 @@ public function getCmsTplPagePrimaryLink(): string
 public function setCmsTplPagePrimaryLink(string $cmsTplPagePrimaryLink): self
 {
     $this->cmsTplPagePrimaryLink = $cmsTplPagePrimaryLink;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getNaviIconCmsMedia(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
-{
-    return $this->naviIconCmsMedia;
-}
-public function setNaviIconCmsMedia(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $naviIconCmsMedia): self
-{
-    $this->naviIconCmsMedia = $naviIconCmsMedia;
-    $this->naviIconCmsMediaId = $naviIconCmsMedia?->getId();
-
-    return $this;
-}
-public function getNaviIconCmsMediaId(): ?string
-{
-    return $this->naviIconCmsMediaId;
-}
-public function setNaviIconCmsMediaId(?string $naviIconCmsMediaId): self
-{
-    $this->naviIconCmsMediaId = $naviIconCmsMediaId;
-    // todo - load new id
-    //$this->naviIconCmsMediaId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldText
-public function getPathcache(): string
-{
-    return $this->pathcache;
-}
-public function setPathcache(string $pathcache): self
-{
-    $this->pathcache = $pathcache;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getCmsTplModuleInstance(): \ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null
-{
-    return $this->cmsTplModuleInstance;
-}
-public function setCmsTplModuleInstance(\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance|null $cmsTplModuleInstance): self
-{
-    $this->cmsTplModuleInstance = $cmsTplModuleInstance;
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstance?->getId();
-
-    return $this;
-}
-public function getCmsTplModuleInstanceId(): ?string
-{
-    return $this->cmsTplModuleInstanceId;
-}
-public function setCmsTplModuleInstanceId(?string $cmsTplModuleInstanceId): self
-{
-    $this->cmsTplModuleInstanceId = $cmsTplModuleInstanceId;
-    // todo - load new id
-    //$this->cmsTplModuleInstanceId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldBoolean
-public function isSeoNofollow(): bool
-{
-    return $this->seoNofollow;
-}
-public function setSeoNofollow(bool $seoNofollow): self
-{
-    $this->seoNofollow = $seoNofollow;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselect
-public function getCmsTplPageMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsTplPageMlt;
-}
-public function setCmsTplPageMlt(\Doctrine\Common\Collections\Collection $cmsTplPageMlt): self
-{
-    $this->cmsTplPageMlt = $cmsTplPageMlt;
 
     return $this;
 }
@@ -387,13 +188,32 @@ public function setCssClasses(string $cssClasses): self
 
   
     // TCMSFieldPropertyTable
-public function getCmsTreeNodeCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, cmsTreeNode>
+*/
+public function getCmsTreeNodeCollection(): Collection
 {
     return $this->cmsTreeNodeCollection;
 }
-public function setCmsTreeNodeCollection(\Doctrine\Common\Collections\Collection $cmsTreeNodeCollection): self
+
+public function addCmsTreeNodeCollection(cmsTreeNode $cmsTreeNode): self
 {
-    $this->cmsTreeNodeCollection = $cmsTreeNodeCollection;
+    if (!$this->cmsTreeNodeCollection->contains($cmsTreeNode)) {
+        $this->cmsTreeNodeCollection->add($cmsTreeNode);
+        $cmsTreeNode->setCmsTree($this);
+    }
+
+    return $this;
+}
+
+public function removeCmsTreeNodeCollection(cmsTreeNode $cmsTreeNode): self
+{
+    if ($this->cmsTreeNodeCollection->removeElement($cmsTreeNode)) {
+        // set the owning side to null (unless already changed)
+        if ($cmsTreeNode->getCmsTree() === $this) {
+            $cmsTreeNode->setCmsTree(null);
+        }
+    }
 
     return $this;
 }

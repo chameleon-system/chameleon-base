@@ -7,31 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="pkgShopWishlistId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopWishlist" inversed-by="pkgShopWishlistArticle">
+            <many-to-one field="pkgShopWishlist" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopWishlist" inversed-by="pkgShopWishlistArticleCollection" >
     <join-column name="pkg_shop_wishlist_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="datecreated"  column="datecreated"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="amount"  column="amount"  nullable="false"  />
-            <field name="shopArticleId" type="string" field="shop_article_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle">
-    <join-column name="shop_article_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="comment"  column="comment"  nullable="false"  />
+            <field name="amount" type="string" column="amount" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

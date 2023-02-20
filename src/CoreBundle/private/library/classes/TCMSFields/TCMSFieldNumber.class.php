@@ -21,13 +21,6 @@ class TCMSFieldNumber extends TCMSFieldVarchar
         return $html;
     }
 
-    protected function getDoctrineDataModelViewData(array $additionalData): array
-    {
-        $additionalData['type'] = 'int';
-        return parent::getDoctrineDataModelViewData($additionalData);
-    }
-
-
     /**
      * checks if field is mandatory and if field content is valid
      * overwrite this method to add your field based validation

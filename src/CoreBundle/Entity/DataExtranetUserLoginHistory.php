@@ -1,25 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+
 class DataExtranetUserLoginHistory {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null - Corresponding user */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser = null,
-/** @var null|string - Corresponding user */
-private ?string $dataExtranetUserId = null
+        
+    // TCMSFieldLookupParentID
+/** @var DataExtranetUser|null - Corresponding user */
+private ?DataExtranetUser $dataExtranetUser = null
 , 
-    // TCMSFieldDateTimeNow
-/** @var \DateTime|null - Date */
-private \DateTime|null $datecreated = null, 
     // TCMSFieldVarchar
 /** @var string - User IP */
 private string $userIp = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -38,42 +35,15 @@ private string $userIp = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getDataExtranetUser(): \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null
+    // TCMSFieldLookupParentID
+public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;
 }
-public function setDataExtranetUser(\ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser): self
+
+public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
 {
     $this->dataExtranetUser = $dataExtranetUser;
-    $this->dataExtranetUserId = $dataExtranetUser?->getId();
-
-    return $this;
-}
-public function getDataExtranetUserId(): ?string
-{
-    return $this->dataExtranetUserId;
-}
-public function setDataExtranetUserId(?string $dataExtranetUserId): self
-{
-    $this->dataExtranetUserId = $dataExtranetUserId;
-    // todo - load new id
-    //$this->dataExtranetUserId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldDateTimeNow
-public function getDatecreated(): \DateTime|null
-{
-    return $this->datecreated;
-}
-public function setDatecreated(\DateTime|null $datecreated): self
-{
-    $this->datecreated = $datecreated;
 
     return $this;
 }

@@ -1,31 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgShopWishlist;
+
 class PkgShopWishlistMailHistory {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopWishlist|null - Belongs to wishlist */
-private \ChameleonSystem\CoreBundle\Entity\PkgShopWishlist|null $pkgShopWishlist = null,
-/** @var null|string - Belongs to wishlist */
-private ?string $pkgShopWishlistId = null
+        
+    // TCMSFieldLookupParentID
+/** @var PkgShopWishlist|null - Belongs to wishlist */
+private ?PkgShopWishlist $pkgShopWishlist = null
 , 
-    // TCMSFieldDateTime
-/** @var \DateTime|null - Email sent on */
-private \DateTime|null $datesend = null, 
     // TCMSFieldVarchar
 /** @var string - Recipient name */
 private string $toName = '', 
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 /** @var string - Feedback recipient (Email address) */
-private string $toEmail = '', 
-    // TCMSFieldText
-/** @var string - Comment */
-private string $comment = ''  ) {}
+private string $toEmail = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -44,42 +38,15 @@ private string $comment = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getPkgShopWishlist(): \ChameleonSystem\CoreBundle\Entity\PkgShopWishlist|null
+    // TCMSFieldLookupParentID
+public function getPkgShopWishlist(): ?PkgShopWishlist
 {
     return $this->pkgShopWishlist;
 }
-public function setPkgShopWishlist(\ChameleonSystem\CoreBundle\Entity\PkgShopWishlist|null $pkgShopWishlist): self
+
+public function setPkgShopWishlist(?PkgShopWishlist $pkgShopWishlist): self
 {
     $this->pkgShopWishlist = $pkgShopWishlist;
-    $this->pkgShopWishlistId = $pkgShopWishlist?->getId();
-
-    return $this;
-}
-public function getPkgShopWishlistId(): ?string
-{
-    return $this->pkgShopWishlistId;
-}
-public function setPkgShopWishlistId(?string $pkgShopWishlistId): self
-{
-    $this->pkgShopWishlistId = $pkgShopWishlistId;
-    // todo - load new id
-    //$this->pkgShopWishlistId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldDateTime
-public function getDatesend(): \DateTime|null
-{
-    return $this->datesend;
-}
-public function setDatesend(\DateTime|null $datesend): self
-{
-    $this->datesend = $datesend;
 
     return $this;
 }
@@ -100,7 +67,7 @@ public function setToName(string $toName): self
 
 
   
-    // TCMSFieldEmail
+    // TCMSFieldVarchar
 public function getToEmail(): string
 {
     return $this->toEmail;
@@ -108,20 +75,6 @@ public function getToEmail(): string
 public function setToEmail(string $toEmail): self
 {
     $this->toEmail = $toEmail;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getComment(): string
-{
-    return $this->comment;
-}
-public function setComment(string $comment): self
-{
-    $this->comment = $comment;
 
     return $this;
 }

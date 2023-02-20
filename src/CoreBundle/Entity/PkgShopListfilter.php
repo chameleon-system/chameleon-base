@@ -1,9 +1,13 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgShopListfilterItem;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class PkgShopListfilter {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
@@ -12,14 +16,12 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - Title to be shown on top of the filter on the website */
 private string $title = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Description text shown on top of the filter */
-private string $introtext = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopListfilterItem[] - List filter entries */
-private \Doctrine\Common\Collections\Collection $pkgShopListfilterItemCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, pkgShopListfilterItem> - List filter entries */
+private Collection $pkgShopListfilterItemCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -66,28 +68,33 @@ public function setTitle(string $title): self
 
 
   
-    // TCMSFieldWYSIWYG
-public function getIntrotext(): string
+    // TCMSFieldPropertyTable
+/**
+* @return Collection<int, pkgShopListfilterItem>
+*/
+public function getPkgShopListfilterItemCollection(): Collection
 {
-    return $this->introtext;
+    return $this->pkgShopListfilterItemCollection;
 }
-public function setIntrotext(string $introtext): self
+
+public function addPkgShopListfilterItemCollection(pkgShopListfilterItem $pkgShopListfilterItem): self
 {
-    $this->introtext = $introtext;
+    if (!$this->pkgShopListfilterItemCollection->contains($pkgShopListfilterItem)) {
+        $this->pkgShopListfilterItemCollection->add($pkgShopListfilterItem);
+        $pkgShopListfilterItem->setPkgShopListfilter($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldPropertyTable
-public function getPkgShopListfilterItemCollection(): \Doctrine\Common\Collections\Collection
+public function removePkgShopListfilterItemCollection(pkgShopListfilterItem $pkgShopListfilterItem): self
 {
-    return $this->pkgShopListfilterItemCollection;
-}
-public function setPkgShopListfilterItemCollection(\Doctrine\Common\Collections\Collection $pkgShopListfilterItemCollection): self
-{
-    $this->pkgShopListfilterItemCollection = $pkgShopListfilterItemCollection;
+    if ($this->pkgShopListfilterItemCollection->removeElement($pkgShopListfilterItem)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgShopListfilterItem->getPkgShopListfilter() === $this) {
+            $pkgShopListfilterItem->setPkgShopListfilter(null);
+        }
+    }
 
     return $this;
 }

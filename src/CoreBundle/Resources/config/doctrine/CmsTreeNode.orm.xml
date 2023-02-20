@@ -7,26 +7,12 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="active"  column="active"  nullable="false"  />
-            <field name="startDate"  column="start_date"  nullable="false"  />
-            <field name="endDate"  column="end_date"  nullable="false"  />
-            <field name="tbl"  column="tbl"  nullable="false"  />
-            <field name="contidId" type="string" field="contid_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="contid" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplPage">
-    <join-column name="contid_id" referenced-column-name="id" />
-</many-to-one>
-            <many-to-one field="cmsTreeId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsTree" inversed-by="cmsTreeNode">
+            <field name="tbl" type="string" column="tbl" length="255" nullable="false"  />
+            <many-to-one field="cmsTree" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTree" inversed-by="cmsTreeNodeCollection" >
     <join-column name="cms_tree_id" referenced-column-name="id" />
 </many-to-one>
     </entity>

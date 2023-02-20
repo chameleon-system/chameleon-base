@@ -1,28 +1,24 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopVariantType;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class ShopVariantSet {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopVariantDisplayHandler|null - Display handler for variant selection in  shop */
-private \ChameleonSystem\CoreBundle\Entity\ShopVariantDisplayHandler|null $shopVariantDisplayHandler = null,
-/** @var null|string - Display handler for variant selection in  shop */
-private ?string $shopVariantDisplayHandlerId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopVariantType[] - Variant types of variant set */
-private \Doctrine\Common\Collections\Collection $shopVariantTypeCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsFieldConf[] - Fields of variant which may differ from parent item */
-private \Doctrine\Common\Collections\Collection $cmsFieldConfMlt = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, shopVariantType> - Variant types of variant set */
+private Collection $shopVariantTypeCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -56,58 +52,35 @@ public function setName(string $name): self
 
   
     // TCMSFieldPropertyTable
-public function getShopVariantTypeCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopVariantType>
+*/
+public function getShopVariantTypeCollection(): Collection
 {
     return $this->shopVariantTypeCollection;
 }
-public function setShopVariantTypeCollection(\Doctrine\Common\Collections\Collection $shopVariantTypeCollection): self
+
+public function addShopVariantTypeCollection(shopVariantType $shopVariantType): self
 {
-    $this->shopVariantTypeCollection = $shopVariantTypeCollection;
+    if (!$this->shopVariantTypeCollection->contains($shopVariantType)) {
+        $this->shopVariantTypeCollection->add($shopVariantType);
+        $shopVariantType->setShopVariantSet($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable
-public function getCmsFieldConfMlt(): \Doctrine\Common\Collections\Collection
+public function removeShopVariantTypeCollection(shopVariantType $shopVariantType): self
 {
-    return $this->cmsFieldConfMlt;
-}
-public function setCmsFieldConfMlt(\Doctrine\Common\Collections\Collection $cmsFieldConfMlt): self
-{
-    $this->cmsFieldConfMlt = $cmsFieldConfMlt;
+    if ($this->shopVariantTypeCollection->removeElement($shopVariantType)) {
+        // set the owning side to null (unless already changed)
+        if ($shopVariantType->getShopVariantSet() === $this) {
+            $shopVariantType->setShopVariantSet(null);
+        }
+    }
 
     return $this;
 }
-
-
-  
-    // TCMSFieldLookup
-public function getShopVariantDisplayHandler(): \ChameleonSystem\CoreBundle\Entity\ShopVariantDisplayHandler|null
-{
-    return $this->shopVariantDisplayHandler;
-}
-public function setShopVariantDisplayHandler(\ChameleonSystem\CoreBundle\Entity\ShopVariantDisplayHandler|null $shopVariantDisplayHandler): self
-{
-    $this->shopVariantDisplayHandler = $shopVariantDisplayHandler;
-    $this->shopVariantDisplayHandlerId = $shopVariantDisplayHandler?->getId();
-
-    return $this;
-}
-public function getShopVariantDisplayHandlerId(): ?string
-{
-    return $this->shopVariantDisplayHandlerId;
-}
-public function setShopVariantDisplayHandlerId(?string $shopVariantDisplayHandlerId): self
-{
-    $this->shopVariantDisplayHandlerId = $shopVariantDisplayHandlerId;
-    // todo - load new id
-    //$this->shopVariantDisplayHandlerId = $?->getId();
-
-    return $this;
-}
-
 
 
   

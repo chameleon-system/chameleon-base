@@ -7,53 +7,20 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="shopOrderId" target-entity="ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="pkgShopPaymentTransaction">
+            <many-to-one field="shopOrder" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="pkgShopPaymentTransactionCollection" >
     <join-column name="shop_order_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="dataExtranetUserId" type="string" field="data_extranet_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
-    <join-column name="data_extranet_user_id" referenced-column-name="id" />
-</many-to-one>
-            <one-to-many field="pkgShopPaymentTransactionPositionCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionPosition" mapped-by="pkgShopPaymentTransactionId" />
+            <one-to-many field="pkgShopPaymentTransactionPositionCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionPosition" mapped-by="pkgShopPaymentTransaction" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
-            <field name="pkgShopPaymentTransactionTypeId" type="string" field="pkg_shop_payment_transaction_type_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgShopPaymentTransactionType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionType">
-    <join-column name="pkg_shop_payment_transaction_type_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="cmsUserId" type="string" field="cms_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
-    <join-column name="cms_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="datecreated"  column="datecreated"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="ip"  column="ip"  nullable="false"  />
-            <field name="amount"  column="amount"  nullable="false"  />
-            <field name="context"  column="context"  nullable="false"  />
-            <field name="sequenceNumber"  column="sequence_number"  nullable="false"  />
-            <field name="confirmed"  column="confirmed"  nullable="false"  />
-            <field name="confirmedDate"  column="confirmed_date"  nullable="false"  />
+            <field name="ip" type="string" column="ip" length="255" nullable="false"  />
+            <field name="context" type="string" column="context" length="255" nullable="false"  />
+            <field name="sequenceNumber" type="string" column="sequence_number" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

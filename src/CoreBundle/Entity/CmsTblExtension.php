@@ -1,16 +1,16 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
+
 class CmsTblExtension {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null - Text template */
-private \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf = null,
-/** @var null|string - Text template */
-private ?string $cmsTblConfId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsTblConf|null - Text template */
+private ?CmsTblConf $cmsTblConf = null
 , 
     // TCMSFieldVarchar
 /** @var string - Classname */
@@ -21,12 +21,6 @@ private string $nameList = '',
     // TCMSFieldVarchar
 /** @var string - Subtype */
 private string $subtype = 'dbobjects', 
-    // TCMSFieldOption
-/** @var string - Type */
-private string $type = 'Customer', 
-    // TCMSFieldPosition
-/** @var int - Position */
-private int $position = 0, 
     // TCMSFieldVarchar
 /** @var string - Name of the last extension before Tadb* */
 private string $virtualItemClassName = '', 
@@ -34,7 +28,7 @@ private string $virtualItemClassName = '',
 /** @var string - Name of the last extension before Tadb*List */
 private string $virtualItemClassListName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -53,31 +47,18 @@ private string $virtualItemClassListName = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsTblConf(): \ChameleonSystem\CoreBundle\Entity\CmsTblConf|null
+    // TCMSFieldLookupParentID
+public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;
 }
-public function setCmsTblConf(\ChameleonSystem\CoreBundle\Entity\CmsTblConf|null $cmsTblConf): self
+
+public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
 {
     $this->cmsTblConf = $cmsTblConf;
-    $this->cmsTblConfId = $cmsTblConf?->getId();
 
     return $this;
 }
-public function getCmsTblConfId(): ?string
-{
-    return $this->cmsTblConfId;
-}
-public function setCmsTblConfId(?string $cmsTblConfId): self
-{
-    $this->cmsTblConfId = $cmsTblConfId;
-    // todo - load new id
-    //$this->cmsTblConfId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -117,34 +98,6 @@ public function getSubtype(): string
 public function setSubtype(string $subtype): self
 {
     $this->subtype = $subtype;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getType(): string
-{
-    return $this->type;
-}
-public function setType(string $type): self
-{
-    $this->type = $type;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPosition
-public function getPosition(): int
-{
-    return $this->position;
-}
-public function setPosition(int $position): self
-{
-    $this->position = $position;
 
     return $this;
 }

@@ -1,19 +1,20 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgCmsCoreLogChannel {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldNumber
-/** @var int - Maximum age of entries for this channel (in seconds) */
-private int $maxLogAgeInSeconds = 0  ) {}
+    // TCMSFieldVarchar
+/** @var string - Maximum age of entries for this channel (in seconds) */
+private string $maxLogAgeInSeconds = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -32,7 +33,7 @@ private int $maxLogAgeInSeconds = 0  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldVarcharUnique
+    // TCMSFieldVarchar
 public function getName(): string
 {
     return $this->name;
@@ -46,12 +47,12 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldNumber
-public function getMaxLogAgeInSeconds(): int
+    // TCMSFieldVarchar
+public function getMaxLogAgeInSeconds(): string
 {
     return $this->maxLogAgeInSeconds;
 }
-public function setMaxLogAgeInSeconds(int $maxLogAgeInSeconds): self
+public function setMaxLogAgeInSeconds(string $maxLogAgeInSeconds): self
 {
     $this->maxLogAgeInSeconds = $maxLogAgeInSeconds;
 

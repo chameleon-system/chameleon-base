@@ -7,21 +7,15 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="cmsConfigId" target-entity="ChameleonSystem\CoreBundle\Entity\CmsConfig" inversed-by="cmsConfigImagemagick">
+            <many-to-one field="cmsConfig" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsConfig" inversed-by="cmsConfigImagemagickCollection" >
     <join-column name="cms_config_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="fromImageSize"  column="from_image_size"  nullable="false"  />
-            <field name="forceJpeg"  column="force_jpeg"  nullable="false"  />
-            <field name="quality"  column="quality"  nullable="false"  />
-            <field name="scharpen"  column="scharpen"  nullable="false"  />
-            <field name="gamma"  column="gamma"  nullable="false"  />
+            <field name="fromImageSize" type="string" column="from_image_size" length="255" nullable="false"  />
+            <field name="quality" type="string" column="quality" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

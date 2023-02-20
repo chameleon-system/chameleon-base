@@ -1,31 +1,31 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+use ChameleonSystem\CoreBundle\Entity\PkgShopWishlistArticle;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\PkgShopWishlistMailHistory;
+
 class PkgShopWishlist {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null - Belongs to user */
-private \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser = null,
-/** @var null|string - Belongs to user */
-private ?string $dataExtranetUserId = null
+        
+    // TCMSFieldLookupParentID
+/** @var DataExtranetUser|null - Belongs to user */
+private ?DataExtranetUser $dataExtranetUser = null
 , 
-    // TCMSFieldText
-/** @var string - Description stored by the user */
-private string $description = '', 
-    // TCMSFieldBoolean
-/** @var bool - Public */
-private bool $isPublic = false, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopWishlistArticle[] - Wishlist articles */
-private \Doctrine\Common\Collections\Collection $pkgShopWishlistArticleCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, pkgShopWishlistArticle> - Wishlist articles */
+private Collection $pkgShopWishlistArticleCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\PkgShopWishlistMailHistory[] - Wishlist mail history */
-private \Doctrine\Common\Collections\Collection $pkgShopWishlistMailHistoryCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, pkgShopWishlistMailHistory> - Wishlist mail history */
+private Collection $pkgShopWishlistMailHistoryCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -44,56 +44,15 @@ private \Doctrine\Common\Collections\Collection $pkgShopWishlistMailHistoryColle
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getDataExtranetUser(): \ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null
+    // TCMSFieldLookupParentID
+public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;
 }
-public function setDataExtranetUser(\ChameleonSystem\CoreBundle\Entity\DataExtranetUser|null $dataExtranetUser): self
+
+public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
 {
     $this->dataExtranetUser = $dataExtranetUser;
-    $this->dataExtranetUserId = $dataExtranetUser?->getId();
-
-    return $this;
-}
-public function getDataExtranetUserId(): ?string
-{
-    return $this->dataExtranetUserId;
-}
-public function setDataExtranetUserId(?string $dataExtranetUserId): self
-{
-    $this->dataExtranetUserId = $dataExtranetUserId;
-    // todo - load new id
-    //$this->dataExtranetUserId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldText
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isIsPublic(): bool
-{
-    return $this->isPublic;
-}
-public function setIsPublic(bool $isPublic): self
-{
-    $this->isPublic = $isPublic;
 
     return $this;
 }
@@ -101,13 +60,32 @@ public function setIsPublic(bool $isPublic): self
 
   
     // TCMSFieldPropertyTable
-public function getPkgShopWishlistArticleCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgShopWishlistArticle>
+*/
+public function getPkgShopWishlistArticleCollection(): Collection
 {
     return $this->pkgShopWishlistArticleCollection;
 }
-public function setPkgShopWishlistArticleCollection(\Doctrine\Common\Collections\Collection $pkgShopWishlistArticleCollection): self
+
+public function addPkgShopWishlistArticleCollection(pkgShopWishlistArticle $pkgShopWishlistArticle): self
 {
-    $this->pkgShopWishlistArticleCollection = $pkgShopWishlistArticleCollection;
+    if (!$this->pkgShopWishlistArticleCollection->contains($pkgShopWishlistArticle)) {
+        $this->pkgShopWishlistArticleCollection->add($pkgShopWishlistArticle);
+        $pkgShopWishlistArticle->setPkgShopWishlist($this);
+    }
+
+    return $this;
+}
+
+public function removePkgShopWishlistArticleCollection(pkgShopWishlistArticle $pkgShopWishlistArticle): self
+{
+    if ($this->pkgShopWishlistArticleCollection->removeElement($pkgShopWishlistArticle)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgShopWishlistArticle->getPkgShopWishlist() === $this) {
+            $pkgShopWishlistArticle->setPkgShopWishlist(null);
+        }
+    }
 
     return $this;
 }
@@ -115,13 +93,32 @@ public function setPkgShopWishlistArticleCollection(\Doctrine\Common\Collections
 
   
     // TCMSFieldPropertyTable
-public function getPkgShopWishlistMailHistoryCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, pkgShopWishlistMailHistory>
+*/
+public function getPkgShopWishlistMailHistoryCollection(): Collection
 {
     return $this->pkgShopWishlistMailHistoryCollection;
 }
-public function setPkgShopWishlistMailHistoryCollection(\Doctrine\Common\Collections\Collection $pkgShopWishlistMailHistoryCollection): self
+
+public function addPkgShopWishlistMailHistoryCollection(pkgShopWishlistMailHistory $pkgShopWishlistMailHistory): self
 {
-    $this->pkgShopWishlistMailHistoryCollection = $pkgShopWishlistMailHistoryCollection;
+    if (!$this->pkgShopWishlistMailHistoryCollection->contains($pkgShopWishlistMailHistory)) {
+        $this->pkgShopWishlistMailHistoryCollection->add($pkgShopWishlistMailHistory);
+        $pkgShopWishlistMailHistory->setPkgShopWishlist($this);
+    }
+
+    return $this;
+}
+
+public function removePkgShopWishlistMailHistoryCollection(pkgShopWishlistMailHistory $pkgShopWishlistMailHistory): self
+{
+    if ($this->pkgShopWishlistMailHistoryCollection->removeElement($pkgShopWishlistMailHistory)) {
+        // set the owning side to null (unless already changed)
+        if ($pkgShopWishlistMailHistory->getPkgShopWishlist() === $this) {
+            $pkgShopWishlistMailHistory->setPkgShopWishlist(null);
+        }
+    }
 
     return $this;
 }

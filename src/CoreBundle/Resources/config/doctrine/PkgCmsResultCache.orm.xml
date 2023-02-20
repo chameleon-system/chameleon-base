@@ -7,27 +7,12 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="ownerHash"  column="owner_hash"  nullable="false"  />
-            <field name="hash"  column="hash"  nullable="false"  />
-            <field name="dateCreated"  column="date_created"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="dateExpireAfter"  column="date_expire_after"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="data"  column="data"  nullable="false"  />
-            <field name="garbageCollectWhenExpired"  column="garbage_collect_when_expired"  nullable="false"  />
+            <field name="ownerHash" type="string" column="owner_hash" length="255" nullable="false"  />
+            <field name="hash" type="string" column="hash" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

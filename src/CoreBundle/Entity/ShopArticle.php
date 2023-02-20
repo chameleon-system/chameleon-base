@@ -1,65 +1,25 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopArticleImage;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\ShopArticlePreviewImage;
+use ChameleonSystem\CoreBundle\Entity\ShopArticleDocument;
+use ChameleonSystem\CoreBundle\Entity\ShopArticleStock;
+use ChameleonSystem\CoreBundle\Entity\ShopArticleContributor;
+use ChameleonSystem\CoreBundle\Entity\ShopArticleReview;
+use ChameleonSystem\CoreBundle\Entity\ShopBundleArticle;
+use ChameleonSystem\CoreBundle\Entity\ShopArticleStats;
+
 class ShopArticle {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsMedia|null - Default preview image of the product */
-private \ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMediaDefaultPreviewImage = null,
-/** @var null|string - Default preview image of the product */
-private ?string $cmsMediaDefaultPreviewImageId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopManufacturer|null - Manufacturer / Brand */
-private \ChameleonSystem\CoreBundle\Entity\ShopManufacturer|null $shopManufacturer = null,
-/** @var null|string - Manufacturer / Brand */
-private ?string $shopManufacturerId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopVat|null - VAT group */
-private \ChameleonSystem\CoreBundle\Entity\ShopVat|null $shopVat = null,
-/** @var null|string - VAT group */
-private ?string $shopVatId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopUnitOfMeasurement|null - Measurement unit of content */
-private \ChameleonSystem\CoreBundle\Entity\ShopUnitOfMeasurement|null $shopUnitOfMeasurement = null,
-/** @var null|string - Measurement unit of content */
-private ?string $shopUnitOfMeasurementId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopStockMessage|null - Delivery status */
-private \ChameleonSystem\CoreBundle\Entity\ShopStockMessage|null $shopStockMessage = null,
-/** @var null|string - Delivery status */
-private ?string $shopStockMessageId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopCategory|null - Main category of the product */
-private \ChameleonSystem\CoreBundle\Entity\ShopCategory|null $shopCategory = null,
-/** @var null|string - Main category of the product */
-private ?string $shopCategoryId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopVariantSet|null - Variant set */
-private \ChameleonSystem\CoreBundle\Entity\ShopVariantSet|null $shopVariantSet = null,
-/** @var null|string - Variant set */
-private ?string $shopVariantSetId = null
-,   
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle|null - Is a variant of */
-private \ChameleonSystem\CoreBundle\Entity\ShopArticle|null $variantParent = null,
-/** @var null|string - Is a variant of */
-private ?string $variantParentId = null
-, 
+        
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle[] - Accessories  */
-private \Doctrine\Common\Collections\Collection $shopArticle2Mlt = new \Doctrine\Common\Collections\ArrayCollection(), 
     // TCMSFieldVarchar
 /** @var string - SEO pattern */
 private string $seoPattern = '', 
@@ -67,98 +27,31 @@ private string $seoPattern = '',
 /** @var string - Product number */
 private string $articlenumber = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleImage[] - Detailed product pictures */
-private \Doctrine\Common\Collections\Collection $shopArticleImageCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopArticleImage> - Detailed product pictures */
+private Collection $shopArticleImageCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticlePreviewImage[] - Product preview images */
-private \Doctrine\Common\Collections\Collection $shopArticlePreviewImageCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopArticlePreviewImage> - Product preview images */
+private Collection $shopArticlePreviewImageCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleDocument[] - Product documents */
-private \Doctrine\Common\Collections\Collection $shopArticleDocumentCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldNumber
-/** @var int - Quantifier / Product ranking */
-private int $listRank = 0, 
-    // TCMSFieldDateTimeNow
-/** @var \DateTime|null - Created on */
-private \DateTime|null $datecreated = null, 
-    // TCMSFieldBoolean
-/** @var bool - Active */
-private bool $active = false, 
-    // TCMSFieldWYSIWYG
-/** @var string - Short description */
-private string $descriptionShort = '', 
-    // TCMSFieldWYSIWYG
-/** @var string - Description */
-private string $description = '', 
-    // TCMSFieldPrice
-/** @var float - Price */
-private float $price = 0, 
-    // TCMSFieldPrice
-/** @var float - Reference price */
-private float $priceReference = 0, 
-    // TCMSFieldDecimal
-/** @var float - Weight (grams) */
-private float $sizeWeight = 0, 
-    // TCMSFieldDecimal
-/** @var float - Width (meters) */
-private float $sizeWidth = 0, 
-    // TCMSFieldDecimal
-/** @var float - Height (meters) */
-private float $sizeHeight = 0, 
-    // TCMSFieldDecimal
-/** @var float - Length (meters) */
-private float $sizeLength = 0, 
-    // TCMSFieldDecimal
-/** @var float - Content */
-private float $quantityInUnits = 0, 
+/** @var Collection<int, shopArticleDocument> - Product documents */
+private Collection $shopArticleDocumentCollection = new ArrayCollection()
+, 
+    // TCMSFieldVarchar
+/** @var string - Quantifier / Product ranking */
+private string $listRank = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleStock[] - Stock */
-private \Doctrine\Common\Collections\Collection $shopArticleStockCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldBoolean
-/** @var bool - Offer preorder at 0 stock */
-private bool $showPreorderOnZeroStock = false, 
-    // TCMSFieldBoolean
-/** @var bool - Virtual product */
-private bool $virtualArticle = false, 
-    // TCMSFieldBoolean
-/** @var bool - Is searchable */
-private bool $isSearchable = true, 
-    // TCMSFieldBoolean
-/** @var bool - Product is free of shipping costs */
-private bool $excludeFromShippingCostCalculation = false, 
-    // TCMSFieldBoolean
-/** @var bool - Do not allow vouchers */
-private bool $excludeFromVouchers = false, 
-    // TCMSFieldBoolean
-/** @var bool - Do not allow discounts */
-private bool $excludeFromDiscounts = false, 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleGroup[] - Product groups */
-private \Doctrine\Common\Collections\Collection $shopArticleGroupMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleType[] - Product type */
-private \Doctrine\Common\Collections\Collection $shopArticleTypeMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopCategory[] - Product categories */
-private \Doctrine\Common\Collections\Collection $shopCategoryMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleMarker[] - Product characteristics */
-private \Doctrine\Common\Collections\Collection $shopArticleMarkerMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopAttributeValue[] - Product attributes */
-private \Doctrine\Common\Collections\Collection $shopAttributeValueMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\Shop[] - Restrict to the following shops */
-private \Doctrine\Common\Collections\Collection $shopMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopArticleStock> - Stock */
+private Collection $shopArticleStockCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleContributor[] - Contributing persons */
-private \Doctrine\Common\Collections\Collection $shopArticleContributorCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopArticleContributor> - Contributing persons */
+private Collection $shopArticleContributorCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Subtitle */
 private string $subtitle = '', 
-    // TCMSFieldBoolean
-/** @var bool - Mark as new */
-private bool $isNew = false, 
     // TCMSFieldVarchar
 /** @var string - USP */
 private string $usp = '', 
@@ -166,46 +59,36 @@ private string $usp = '',
 /** @var string - Number of stars */
 private string $stars = '', 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleReview[] - Customer reviews */
-private \Doctrine\Common\Collections\Collection $shopArticleReviewCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldBoolean
-/** @var bool - Is a bundle */
-private bool $isBundle = false, 
+/** @var Collection<int, shopArticleReview> - Customer reviews */
+private Collection $shopArticleReviewCollection = new ArrayCollection()
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopBundleArticle[] - Items belonging to this bundle */
-private \Doctrine\Common\Collections\Collection $shopBundleArticleCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldDownloads
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsDocument[] - Download file */
-private \Doctrine\Common\Collections\Collection $download = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopBundleArticle> - Items belonging to this bundle */
+private Collection $shopBundleArticleCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Variant name */
 private string $nameVariantInfo = '', 
-    // TCMSFieldBoolean
-/** @var bool - Is the parent of the variant active? */
-private bool $variantParentIsActive = true, 
+    // TCMSFieldLookupParentID
+/** @var ShopArticle|null - Is a variant of */
+private ?ShopArticle $variantParent = null
+, 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle[] - Product variants */
-private \Doctrine\Common\Collections\Collection $shopArticleVariantsCollection = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldShopVariantDetails
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopVariantTypeValue[] - Variant values */
-private \Doctrine\Common\Collections\Collection $shopVariantTypeValueMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
+/** @var Collection<int, shopArticle> - Product variants */
+private Collection $shopArticleVariantsCollection = new ArrayCollection()
+, 
     // TCMSFieldVarchar
 /** @var string - Meta keywords */
 private string $metaKeywords = '', 
     // TCMSFieldVarchar
 /** @var string - Meta description */
 private string $metaDescription = '', 
-    // TCMSFieldLookupMultiselect
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticle[] - Similar products */
-private \Doctrine\Common\Collections\Collection $shopArticleMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
-    // TCMSFieldLookupMultiselectTags
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTags[] - Tag / Catchword */
-private \Doctrine\Common\Collections\Collection $cmsTagsMlt = new \Doctrine\Common\Collections\ArrayCollection(), 
     // TCMSFieldPropertyTable
-/** @var \ChameleonSystem\CoreBundle\Entity\ShopArticleStats[] - Statistics */
-private \Doctrine\Common\Collections\Collection $shopArticleStatsCollection = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+/** @var Collection<int, shopArticleStats> - Statistics */
+private Collection $shopArticleStatsCollection = new ArrayCollection()
+  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -232,20 +115,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselect
-public function getShopArticle2Mlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopArticle2Mlt;
-}
-public function setShopArticle2Mlt(\Doctrine\Common\Collections\Collection $shopArticle2Mlt): self
-{
-    $this->shopArticle2Mlt = $shopArticle2Mlt;
 
     return $this;
 }
@@ -281,55 +150,65 @@ public function setArticlenumber(string $articlenumber): self
 
   
     // TCMSFieldPropertyTable
-public function getShopArticleImageCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticleImage>
+*/
+public function getShopArticleImageCollection(): Collection
 {
     return $this->shopArticleImageCollection;
 }
-public function setShopArticleImageCollection(\Doctrine\Common\Collections\Collection $shopArticleImageCollection): self
+
+public function addShopArticleImageCollection(shopArticleImage $shopArticleImage): self
 {
-    $this->shopArticleImageCollection = $shopArticleImageCollection;
+    if (!$this->shopArticleImageCollection->contains($shopArticleImage)) {
+        $this->shopArticleImageCollection->add($shopArticleImage);
+        $shopArticleImage->setShopArticle($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldLookup
-public function getCmsMediaDefaultPreviewImage(): \ChameleonSystem\CoreBundle\Entity\CmsMedia|null
+public function removeShopArticleImageCollection(shopArticleImage $shopArticleImage): self
 {
-    return $this->cmsMediaDefaultPreviewImage;
-}
-public function setCmsMediaDefaultPreviewImage(\ChameleonSystem\CoreBundle\Entity\CmsMedia|null $cmsMediaDefaultPreviewImage): self
-{
-    $this->cmsMediaDefaultPreviewImage = $cmsMediaDefaultPreviewImage;
-    $this->cmsMediaDefaultPreviewImageId = $cmsMediaDefaultPreviewImage?->getId();
+    if ($this->shopArticleImageCollection->removeElement($shopArticleImage)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticleImage->getShopArticle() === $this) {
+            $shopArticleImage->setShopArticle(null);
+        }
+    }
 
     return $this;
 }
-public function getCmsMediaDefaultPreviewImageId(): ?string
-{
-    return $this->cmsMediaDefaultPreviewImageId;
-}
-public function setCmsMediaDefaultPreviewImageId(?string $cmsMediaDefaultPreviewImageId): self
-{
-    $this->cmsMediaDefaultPreviewImageId = $cmsMediaDefaultPreviewImageId;
-    // todo - load new id
-    //$this->cmsMediaDefaultPreviewImageId = $?->getId();
-
-    return $this;
-}
-
 
 
   
     // TCMSFieldPropertyTable
-public function getShopArticlePreviewImageCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticlePreviewImage>
+*/
+public function getShopArticlePreviewImageCollection(): Collection
 {
     return $this->shopArticlePreviewImageCollection;
 }
-public function setShopArticlePreviewImageCollection(\Doctrine\Common\Collections\Collection $shopArticlePreviewImageCollection): self
+
+public function addShopArticlePreviewImageCollection(shopArticlePreviewImage $shopArticlePreviewImage): self
 {
-    $this->shopArticlePreviewImageCollection = $shopArticlePreviewImageCollection;
+    if (!$this->shopArticlePreviewImageCollection->contains($shopArticlePreviewImage)) {
+        $this->shopArticlePreviewImageCollection->add($shopArticlePreviewImage);
+        $shopArticlePreviewImage->setShopArticle($this);
+    }
+
+    return $this;
+}
+
+public function removeShopArticlePreviewImageCollection(shopArticlePreviewImage $shopArticlePreviewImage): self
+{
+    if ($this->shopArticlePreviewImageCollection->removeElement($shopArticlePreviewImage)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticlePreviewImage->getShopArticle() === $this) {
+            $shopArticlePreviewImage->setShopArticle(null);
+        }
+    }
 
     return $this;
 }
@@ -337,25 +216,44 @@ public function setShopArticlePreviewImageCollection(\Doctrine\Common\Collection
 
   
     // TCMSFieldPropertyTable
-public function getShopArticleDocumentCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticleDocument>
+*/
+public function getShopArticleDocumentCollection(): Collection
 {
     return $this->shopArticleDocumentCollection;
 }
-public function setShopArticleDocumentCollection(\Doctrine\Common\Collections\Collection $shopArticleDocumentCollection): self
+
+public function addShopArticleDocumentCollection(shopArticleDocument $shopArticleDocument): self
 {
-    $this->shopArticleDocumentCollection = $shopArticleDocumentCollection;
+    if (!$this->shopArticleDocumentCollection->contains($shopArticleDocument)) {
+        $this->shopArticleDocumentCollection->add($shopArticleDocument);
+        $shopArticleDocument->setShopArticle($this);
+    }
+
+    return $this;
+}
+
+public function removeShopArticleDocumentCollection(shopArticleDocument $shopArticleDocument): self
+{
+    if ($this->shopArticleDocumentCollection->removeElement($shopArticleDocument)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticleDocument->getShopArticle() === $this) {
+            $shopArticleDocument->setShopArticle(null);
+        }
+    }
 
     return $this;
 }
 
 
   
-    // TCMSFieldNumber
-public function getListRank(): int
+    // TCMSFieldVarchar
+public function getListRank(): string
 {
     return $this->listRank;
 }
-public function setListRank(int $listRank): self
+public function setListRank(string $listRank): self
 {
     $this->listRank = $listRank;
 
@@ -364,476 +262,33 @@ public function setListRank(int $listRank): self
 
 
   
-    // TCMSFieldDateTimeNow
-public function getDatecreated(): \DateTime|null
-{
-    return $this->datecreated;
-}
-public function setDatecreated(\DateTime|null $datecreated): self
-{
-    $this->datecreated = $datecreated;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isActive(): bool
-{
-    return $this->active;
-}
-public function setActive(bool $active): self
-{
-    $this->active = $active;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldWYSIWYG
-public function getDescriptionShort(): string
-{
-    return $this->descriptionShort;
-}
-public function setDescriptionShort(string $descriptionShort): self
-{
-    $this->descriptionShort = $descriptionShort;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldWYSIWYG
-public function getDescription(): string
-{
-    return $this->description;
-}
-public function setDescription(string $description): self
-{
-    $this->description = $description;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShopManufacturer(): \ChameleonSystem\CoreBundle\Entity\ShopManufacturer|null
-{
-    return $this->shopManufacturer;
-}
-public function setShopManufacturer(\ChameleonSystem\CoreBundle\Entity\ShopManufacturer|null $shopManufacturer): self
-{
-    $this->shopManufacturer = $shopManufacturer;
-    $this->shopManufacturerId = $shopManufacturer?->getId();
-
-    return $this;
-}
-public function getShopManufacturerId(): ?string
-{
-    return $this->shopManufacturerId;
-}
-public function setShopManufacturerId(?string $shopManufacturerId): self
-{
-    $this->shopManufacturerId = $shopManufacturerId;
-    // todo - load new id
-    //$this->shopManufacturerId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldPrice
-public function getPrice(): float
-{
-    return $this->price;
-}
-public function setPrice(float $price): self
-{
-    $this->price = $price;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldPrice
-public function getPriceReference(): float
-{
-    return $this->priceReference;
-}
-public function setPriceReference(float $priceReference): self
-{
-    $this->priceReference = $priceReference;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShopVat(): \ChameleonSystem\CoreBundle\Entity\ShopVat|null
-{
-    return $this->shopVat;
-}
-public function setShopVat(\ChameleonSystem\CoreBundle\Entity\ShopVat|null $shopVat): self
-{
-    $this->shopVat = $shopVat;
-    $this->shopVatId = $shopVat?->getId();
-
-    return $this;
-}
-public function getShopVatId(): ?string
-{
-    return $this->shopVatId;
-}
-public function setShopVatId(?string $shopVatId): self
-{
-    $this->shopVatId = $shopVatId;
-    // todo - load new id
-    //$this->shopVatId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldDecimal
-public function getSizeWeight(): float
-{
-    return $this->sizeWeight;
-}
-public function setSizeWeight(float $sizeWeight): self
-{
-    $this->sizeWeight = $sizeWeight;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getSizeWidth(): float
-{
-    return $this->sizeWidth;
-}
-public function setSizeWidth(float $sizeWidth): self
-{
-    $this->sizeWidth = $sizeWidth;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getSizeHeight(): float
-{
-    return $this->sizeHeight;
-}
-public function setSizeHeight(float $sizeHeight): self
-{
-    $this->sizeHeight = $sizeHeight;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getSizeLength(): float
-{
-    return $this->sizeLength;
-}
-public function setSizeLength(float $sizeLength): self
-{
-    $this->sizeLength = $sizeLength;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldDecimal
-public function getQuantityInUnits(): float
-{
-    return $this->quantityInUnits;
-}
-public function setQuantityInUnits(float $quantityInUnits): self
-{
-    $this->quantityInUnits = $quantityInUnits;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShopUnitOfMeasurement(): \ChameleonSystem\CoreBundle\Entity\ShopUnitOfMeasurement|null
-{
-    return $this->shopUnitOfMeasurement;
-}
-public function setShopUnitOfMeasurement(\ChameleonSystem\CoreBundle\Entity\ShopUnitOfMeasurement|null $shopUnitOfMeasurement): self
-{
-    $this->shopUnitOfMeasurement = $shopUnitOfMeasurement;
-    $this->shopUnitOfMeasurementId = $shopUnitOfMeasurement?->getId();
-
-    return $this;
-}
-public function getShopUnitOfMeasurementId(): ?string
-{
-    return $this->shopUnitOfMeasurementId;
-}
-public function setShopUnitOfMeasurementId(?string $shopUnitOfMeasurementId): self
-{
-    $this->shopUnitOfMeasurementId = $shopUnitOfMeasurementId;
-    // todo - load new id
-    //$this->shopUnitOfMeasurementId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
     // TCMSFieldPropertyTable
-public function getShopArticleStockCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticleStock>
+*/
+public function getShopArticleStockCollection(): Collection
 {
     return $this->shopArticleStockCollection;
 }
-public function setShopArticleStockCollection(\Doctrine\Common\Collections\Collection $shopArticleStockCollection): self
+
+public function addShopArticleStockCollection(shopArticleStock $shopArticleStock): self
 {
-    $this->shopArticleStockCollection = $shopArticleStockCollection;
+    if (!$this->shopArticleStockCollection->contains($shopArticleStock)) {
+        $this->shopArticleStockCollection->add($shopArticleStock);
+        $shopArticleStock->setShopArticle($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldBoolean
-public function isShowPreorderOnZeroStock(): bool
+public function removeShopArticleStockCollection(shopArticleStock $shopArticleStock): self
 {
-    return $this->showPreorderOnZeroStock;
-}
-public function setShowPreorderOnZeroStock(bool $showPreorderOnZeroStock): self
-{
-    $this->showPreorderOnZeroStock = $showPreorderOnZeroStock;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShopStockMessage(): \ChameleonSystem\CoreBundle\Entity\ShopStockMessage|null
-{
-    return $this->shopStockMessage;
-}
-public function setShopStockMessage(\ChameleonSystem\CoreBundle\Entity\ShopStockMessage|null $shopStockMessage): self
-{
-    $this->shopStockMessage = $shopStockMessage;
-    $this->shopStockMessageId = $shopStockMessage?->getId();
-
-    return $this;
-}
-public function getShopStockMessageId(): ?string
-{
-    return $this->shopStockMessageId;
-}
-public function setShopStockMessageId(?string $shopStockMessageId): self
-{
-    $this->shopStockMessageId = $shopStockMessageId;
-    // todo - load new id
-    //$this->shopStockMessageId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldBoolean
-public function isVirtualArticle(): bool
-{
-    return $this->virtualArticle;
-}
-public function setVirtualArticle(bool $virtualArticle): self
-{
-    $this->virtualArticle = $virtualArticle;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isIsSearchable(): bool
-{
-    return $this->isSearchable;
-}
-public function setIsSearchable(bool $isSearchable): self
-{
-    $this->isSearchable = $isSearchable;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isExcludeFromShippingCostCalculation(): bool
-{
-    return $this->excludeFromShippingCostCalculation;
-}
-public function setExcludeFromShippingCostCalculation(bool $excludeFromShippingCostCalculation): self
-{
-    $this->excludeFromShippingCostCalculation = $excludeFromShippingCostCalculation;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isExcludeFromVouchers(): bool
-{
-    return $this->excludeFromVouchers;
-}
-public function setExcludeFromVouchers(bool $excludeFromVouchers): self
-{
-    $this->excludeFromVouchers = $excludeFromVouchers;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isExcludeFromDiscounts(): bool
-{
-    return $this->excludeFromDiscounts;
-}
-public function setExcludeFromDiscounts(bool $excludeFromDiscounts): self
-{
-    $this->excludeFromDiscounts = $excludeFromDiscounts;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselect
-public function getShopArticleGroupMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopArticleGroupMlt;
-}
-public function setShopArticleGroupMlt(\Doctrine\Common\Collections\Collection $shopArticleGroupMlt): self
-{
-    $this->shopArticleGroupMlt = $shopArticleGroupMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getShopArticleTypeMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopArticleTypeMlt;
-}
-public function setShopArticleTypeMlt(\Doctrine\Common\Collections\Collection $shopArticleTypeMlt): self
-{
-    $this->shopArticleTypeMlt = $shopArticleTypeMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselect
-public function getShopCategoryMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopCategoryMlt;
-}
-public function setShopCategoryMlt(\Doctrine\Common\Collections\Collection $shopCategoryMlt): self
-{
-    $this->shopCategoryMlt = $shopCategoryMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookup
-public function getShopCategory(): \ChameleonSystem\CoreBundle\Entity\ShopCategory|null
-{
-    return $this->shopCategory;
-}
-public function setShopCategory(\ChameleonSystem\CoreBundle\Entity\ShopCategory|null $shopCategory): self
-{
-    $this->shopCategory = $shopCategory;
-    $this->shopCategoryId = $shopCategory?->getId();
-
-    return $this;
-}
-public function getShopCategoryId(): ?string
-{
-    return $this->shopCategoryId;
-}
-public function setShopCategoryId(?string $shopCategoryId): self
-{
-    $this->shopCategoryId = $shopCategoryId;
-    // todo - load new id
-    //$this->shopCategoryId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getShopArticleMarkerMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopArticleMarkerMlt;
-}
-public function setShopArticleMarkerMlt(\Doctrine\Common\Collections\Collection $shopArticleMarkerMlt): self
-{
-    $this->shopArticleMarkerMlt = $shopArticleMarkerMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselect
-public function getShopAttributeValueMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopAttributeValueMlt;
-}
-public function setShopAttributeValueMlt(\Doctrine\Common\Collections\Collection $shopAttributeValueMlt): self
-{
-    $this->shopAttributeValueMlt = $shopAttributeValueMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getShopMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopMlt;
-}
-public function setShopMlt(\Doctrine\Common\Collections\Collection $shopMlt): self
-{
-    $this->shopMlt = $shopMlt;
+    if ($this->shopArticleStockCollection->removeElement($shopArticleStock)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticleStock->getShopArticle() === $this) {
+            $shopArticleStock->setShopArticle(null);
+        }
+    }
 
     return $this;
 }
@@ -841,13 +296,32 @@ public function setShopMlt(\Doctrine\Common\Collections\Collection $shopMlt): se
 
   
     // TCMSFieldPropertyTable
-public function getShopArticleContributorCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticleContributor>
+*/
+public function getShopArticleContributorCollection(): Collection
 {
     return $this->shopArticleContributorCollection;
 }
-public function setShopArticleContributorCollection(\Doctrine\Common\Collections\Collection $shopArticleContributorCollection): self
+
+public function addShopArticleContributorCollection(shopArticleContributor $shopArticleContributor): self
 {
-    $this->shopArticleContributorCollection = $shopArticleContributorCollection;
+    if (!$this->shopArticleContributorCollection->contains($shopArticleContributor)) {
+        $this->shopArticleContributorCollection->add($shopArticleContributor);
+        $shopArticleContributor->setShopArticle($this);
+    }
+
+    return $this;
+}
+
+public function removeShopArticleContributorCollection(shopArticleContributor $shopArticleContributor): self
+{
+    if ($this->shopArticleContributorCollection->removeElement($shopArticleContributor)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticleContributor->getShopArticle() === $this) {
+            $shopArticleContributor->setShopArticle(null);
+        }
+    }
 
     return $this;
 }
@@ -862,20 +336,6 @@ public function getSubtitle(): string
 public function setSubtitle(string $subtitle): self
 {
     $this->subtitle = $subtitle;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isIsNew(): bool
-{
-    return $this->isNew;
-}
-public function setIsNew(bool $isNew): self
-{
-    $this->isNew = $isNew;
 
     return $this;
 }
@@ -911,27 +371,32 @@ public function setStars(string $stars): self
 
   
     // TCMSFieldPropertyTable
-public function getShopArticleReviewCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticleReview>
+*/
+public function getShopArticleReviewCollection(): Collection
 {
     return $this->shopArticleReviewCollection;
 }
-public function setShopArticleReviewCollection(\Doctrine\Common\Collections\Collection $shopArticleReviewCollection): self
+
+public function addShopArticleReviewCollection(shopArticleReview $shopArticleReview): self
 {
-    $this->shopArticleReviewCollection = $shopArticleReviewCollection;
+    if (!$this->shopArticleReviewCollection->contains($shopArticleReview)) {
+        $this->shopArticleReviewCollection->add($shopArticleReview);
+        $shopArticleReview->setShopArticle($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldBoolean
-public function isIsBundle(): bool
+public function removeShopArticleReviewCollection(shopArticleReview $shopArticleReview): self
 {
-    return $this->isBundle;
-}
-public function setIsBundle(bool $isBundle): self
-{
-    $this->isBundle = $isBundle;
+    if ($this->shopArticleReviewCollection->removeElement($shopArticleReview)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticleReview->getShopArticle() === $this) {
+            $shopArticleReview->setShopArticle(null);
+        }
+    }
 
     return $this;
 }
@@ -939,27 +404,32 @@ public function setIsBundle(bool $isBundle): self
 
   
     // TCMSFieldPropertyTable
-public function getShopBundleArticleCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopBundleArticle>
+*/
+public function getShopBundleArticleCollection(): Collection
 {
     return $this->shopBundleArticleCollection;
 }
-public function setShopBundleArticleCollection(\Doctrine\Common\Collections\Collection $shopBundleArticleCollection): self
+
+public function addShopBundleArticleCollection(shopBundleArticle $shopBundleArticle): self
 {
-    $this->shopBundleArticleCollection = $shopBundleArticleCollection;
+    if (!$this->shopBundleArticleCollection->contains($shopBundleArticle)) {
+        $this->shopBundleArticleCollection->add($shopBundleArticle);
+        $shopBundleArticle->setShopArticle($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldDownloads
-public function getDownload(): \Doctrine\Common\Collections\Collection
+public function removeShopBundleArticleCollection(shopBundleArticle $shopBundleArticle): self
 {
-    return $this->download;
-}
-public function setDownload(\Doctrine\Common\Collections\Collection $download): self
-{
-    $this->download = $download;
+    if ($this->shopBundleArticleCollection->removeElement($shopBundleArticle)) {
+        // set the owning side to null (unless already changed)
+        if ($shopBundleArticle->getShopArticle() === $this) {
+            $shopBundleArticle->setShopArticle(null);
+        }
+    }
 
     return $this;
 }
@@ -980,70 +450,15 @@ public function setNameVariantInfo(string $nameVariantInfo): self
 
 
   
-    // TCMSFieldLookup
-public function getShopVariantSet(): \ChameleonSystem\CoreBundle\Entity\ShopVariantSet|null
-{
-    return $this->shopVariantSet;
-}
-public function setShopVariantSet(\ChameleonSystem\CoreBundle\Entity\ShopVariantSet|null $shopVariantSet): self
-{
-    $this->shopVariantSet = $shopVariantSet;
-    $this->shopVariantSetId = $shopVariantSet?->getId();
-
-    return $this;
-}
-public function getShopVariantSetId(): ?string
-{
-    return $this->shopVariantSetId;
-}
-public function setShopVariantSetId(?string $shopVariantSetId): self
-{
-    $this->shopVariantSetId = $shopVariantSetId;
-    // todo - load new id
-    //$this->shopVariantSetId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldLookup
-public function getVariantParent(): \ChameleonSystem\CoreBundle\Entity\ShopArticle|null
+    // TCMSFieldLookupParentID
+public function getVariantParent(): ?ShopArticle
 {
     return $this->variantParent;
 }
-public function setVariantParent(\ChameleonSystem\CoreBundle\Entity\ShopArticle|null $variantParent): self
+
+public function setVariantParent(?ShopArticle $variantParent): self
 {
     $this->variantParent = $variantParent;
-    $this->variantParentId = $variantParent?->getId();
-
-    return $this;
-}
-public function getVariantParentId(): ?string
-{
-    return $this->variantParentId;
-}
-public function setVariantParentId(?string $variantParentId): self
-{
-    $this->variantParentId = $variantParentId;
-    // todo - load new id
-    //$this->variantParentId = $?->getId();
-
-    return $this;
-}
-
-
-
-  
-    // TCMSFieldBoolean
-public function isVariantParentIsActive(): bool
-{
-    return $this->variantParentIsActive;
-}
-public function setVariantParentIsActive(bool $variantParentIsActive): self
-{
-    $this->variantParentIsActive = $variantParentIsActive;
 
     return $this;
 }
@@ -1051,27 +466,32 @@ public function setVariantParentIsActive(bool $variantParentIsActive): self
 
   
     // TCMSFieldPropertyTable
-public function getShopArticleVariantsCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticle>
+*/
+public function getShopArticleVariantsCollection(): Collection
 {
     return $this->shopArticleVariantsCollection;
 }
-public function setShopArticleVariantsCollection(\Doctrine\Common\Collections\Collection $shopArticleVariantsCollection): self
+
+public function addShopArticleVariantsCollection(shopArticle $shopArticleVariants): self
 {
-    $this->shopArticleVariantsCollection = $shopArticleVariantsCollection;
+    if (!$this->shopArticleVariantsCollection->contains($shopArticleVariants)) {
+        $this->shopArticleVariantsCollection->add($shopArticleVariants);
+        $shopArticleVariants->setVariantParent($this);
+    }
 
     return $this;
 }
 
-
-  
-    // TCMSFieldShopVariantDetails
-public function getShopVariantTypeValueMlt(): \Doctrine\Common\Collections\Collection
+public function removeShopArticleVariantsCollection(shopArticle $shopArticleVariants): self
 {
-    return $this->shopVariantTypeValueMlt;
-}
-public function setShopVariantTypeValueMlt(\Doctrine\Common\Collections\Collection $shopVariantTypeValueMlt): self
-{
-    $this->shopVariantTypeValueMlt = $shopVariantTypeValueMlt;
+    if ($this->shopArticleVariantsCollection->removeElement($shopArticleVariants)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticleVariants->getVariantParent() === $this) {
+            $shopArticleVariants->setVariantParent(null);
+        }
+    }
 
     return $this;
 }
@@ -1106,42 +526,33 @@ public function setMetaDescription(string $metaDescription): self
 
 
   
-    // TCMSFieldLookupMultiselect
-public function getShopArticleMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->shopArticleMlt;
-}
-public function setShopArticleMlt(\Doctrine\Common\Collections\Collection $shopArticleMlt): self
-{
-    $this->shopArticleMlt = $shopArticleMlt;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectTags
-public function getCmsTagsMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsTagsMlt;
-}
-public function setCmsTagsMlt(\Doctrine\Common\Collections\Collection $cmsTagsMlt): self
-{
-    $this->cmsTagsMlt = $cmsTagsMlt;
-
-    return $this;
-}
-
-
-  
     // TCMSFieldPropertyTable
-public function getShopArticleStatsCollection(): \Doctrine\Common\Collections\Collection
+/**
+* @return Collection<int, shopArticleStats>
+*/
+public function getShopArticleStatsCollection(): Collection
 {
     return $this->shopArticleStatsCollection;
 }
-public function setShopArticleStatsCollection(\Doctrine\Common\Collections\Collection $shopArticleStatsCollection): self
+
+public function addShopArticleStatsCollection(shopArticleStats $shopArticleStats): self
 {
-    $this->shopArticleStatsCollection = $shopArticleStatsCollection;
+    if (!$this->shopArticleStatsCollection->contains($shopArticleStats)) {
+        $this->shopArticleStatsCollection->add($shopArticleStats);
+        $shopArticleStats->setShopArticle($this);
+    }
+
+    return $this;
+}
+
+public function removeShopArticleStatsCollection(shopArticleStats $shopArticleStats): self
+{
+    if ($this->shopArticleStatsCollection->removeElement($shopArticleStats)) {
+        // set the owning side to null (unless already changed)
+        if ($shopArticleStats->getShopArticle() === $this) {
+            $shopArticleStats->setShopArticle(null);
+        }
+    }
 
     return $this;
 }

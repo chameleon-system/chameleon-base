@@ -7,45 +7,21 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="pkgShopListfilterId" target-entity="ChameleonSystem\CoreBundle\Entity\PkgShopListfilter" inversed-by="pkgShopListfilterItem">
+            <many-to-one field="pkgShopListfilter" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilter" inversed-by="pkgShopListfilterItemCollection" >
     <join-column name="pkg_shop_listfilter_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="pkgShopListfilterItemTypeId" type="string" field="pkg_shop_listfilter_item_type_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgShopListfilterItemType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilterItemType">
-    <join-column name="pkg_shop_listfilter_item_type_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="name"  column="name"  nullable="false"  />
-            <field name="systemname"  column="systemname"  nullable="false"  />
-            <field name="shopAttributeId" type="string" field="shop_attribute_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopAttribute" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopAttribute">
-    <join-column name="shop_attribute_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="allowMultiSelection"  column="allow_multi_selection"  nullable="false"  />
-            <field name="showAllOnPageLoad"  column="show_all_on_page_load"  nullable="false"  />
-            <field name="previewSize"  column="preview_size"  nullable="false"  />
-            <field name="showScrollbars"  column="show_scrollbars"  nullable="false"  />
-            <field name="minValue"  column="min_value"  nullable="false"  />
-            <field name="maxValue"  column="max_value"  nullable="false"  />
-            <field name="mysqlFieldName"  column="mysql_field_name"  nullable="false"  />
-            <field name="view"  column="view"  nullable="false"  />
-            <field name="viewClassType"  column="view_class_type"  nullable="false"  />
-            <field name="position"  column="position"  nullable="false"  />
-            <field name="variantIdentifier"  column="variant_identifier"  nullable="false"  />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <field name="systemname" type="string" column="systemname" length="255" nullable="false"  />
+            <field name="previewSize" type="string" column="preview_size" length="255" nullable="false"  />
+            <field name="minValue" type="string" column="min_value" length="255" nullable="false"  />
+            <field name="maxValue" type="string" column="max_value" length="255" nullable="false"  />
+            <field name="mysqlFieldName" type="string" column="mysql_field_name" length="255" nullable="false"  />
+            <field name="view" type="string" column="view" length="255" nullable="false"  />
+            <field name="variantIdentifier" type="string" column="variant_identifier" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

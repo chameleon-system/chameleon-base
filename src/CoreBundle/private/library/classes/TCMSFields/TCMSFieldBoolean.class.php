@@ -18,24 +18,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TCMSFieldBoolean extends TCMSFieldOption
 {
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $defaultValue = $this->oDefinition->sqlData['field_default_value'] ?? null;
-        if (null !== $defaultValue) {
-            if ('1' === $defaultValue) {
-                $defaultValue = 'true';
-            } else {
-                $defaultValue = 'false';
-            }
-        }
-
-        $data = $this->getDoctrineDataModelViewData(['type' => 'bool', 'defaultValue' => $defaultValue]);
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts($rendererProperty->render(),$rendererMethod->render(), $data['allowDefaultValue']);
-
-    }
     public function GetOptions()
     {
         parent::GetOptions();

@@ -1,25 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+
 class CmsPortalNavigation {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
-          
-    // TCMSFieldLookup
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal|null - Belongs to portal */
-private \ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal = null,
-/** @var null|string - Belongs to portal */
-private ?string $cmsPortalId = null
+        
+    // TCMSFieldLookupParentID
+/** @var CmsPortal|null - Belongs to portal */
+private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldVarchar
 /** @var string - Navigation title */
-private string $name = 'neue Navigation', 
-    // TCMSFieldNavigationTreeNode
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsTree - Start node in navigation tree */
-private \ChameleonSystem\CoreBundle\Entity\CmsTree|null $treeNode = null  ) {}
+private string $name = 'neue Navigation'  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -38,31 +35,18 @@ private \ChameleonSystem\CoreBundle\Entity\CmsTree|null $treeNode = null  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookup
-public function getCmsPortal(): \ChameleonSystem\CoreBundle\Entity\CmsPortal|null
+    // TCMSFieldLookupParentID
+public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;
 }
-public function setCmsPortal(\ChameleonSystem\CoreBundle\Entity\CmsPortal|null $cmsPortal): self
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
 {
     $this->cmsPortal = $cmsPortal;
-    $this->cmsPortalId = $cmsPortal?->getId();
 
     return $this;
 }
-public function getCmsPortalId(): ?string
-{
-    return $this->cmsPortalId;
-}
-public function setCmsPortalId(?string $cmsPortalId): self
-{
-    $this->cmsPortalId = $cmsPortalId;
-    // todo - load new id
-    //$this->cmsPortalId = $?->getId();
-
-    return $this;
-}
-
 
 
   
@@ -74,20 +58,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldNavigationTreeNode
-public function getTreeNode(): \ChameleonSystem\CoreBundle\Entity\CmsTree|null
-{
-    return $this->treeNode;
-}
-public function setTreeNode(\ChameleonSystem\CoreBundle\Entity\CmsTree|null $treeNode): self
-{
-    $this->treeNode = $treeNode;
 
     return $this;
 }

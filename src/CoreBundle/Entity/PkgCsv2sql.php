@@ -1,17 +1,15 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgCsv2sql {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string -  */
 private string $name = '', 
-    // TCMSFieldText
-/** @var string - Column mapping */
-private string $columnMapping = '', 
     // TCMSFieldVarchar
 /** @var string - File / directory */
 private string $source = '', 
@@ -22,7 +20,7 @@ private string $sourceCharset = 'UTF-8',
 /** @var string - Target table */
 private string $destinationTableName = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -49,20 +47,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldText
-public function getColumnMapping(): string
-{
-    return $this->columnMapping;
-}
-public function setColumnMapping(string $columnMapping): self
-{
-    $this->columnMapping = $columnMapping;
 
     return $this;
 }

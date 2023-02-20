@@ -7,38 +7,11 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="pkgShopWishlistId" type="string" field="pkg_shop_wishlist_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="pkgShopWishlist" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopWishlist">
-    <join-column name="pkg_shop_wishlist_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="shopOrderItemId" type="string" field="shop_order_item_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="shopOrderItem" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem">
-    <join-column name="shop_order_item_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="dataExtranetUserId" type="string" field="data_extranet_user_id" length="36">
-    <options>
-        <option name="default"></option>
-    </options>
-</field>
-<many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
-    <join-column name="data_extranet_user_id" referenced-column-name="id" />
-</many-to-one>
-            <field name="dataExtranetUserEmail"  column="data_extranet_user_email"  nullable="false"  />
+            <field name="dataExtranetUserEmail" type="string" column="data_extranet_user_email" length="255" nullable="false"  />
     </entity>
 
 </doctrine-mapping>

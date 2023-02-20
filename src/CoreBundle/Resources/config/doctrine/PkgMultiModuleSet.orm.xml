@@ -7,15 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <field name="name"  column="name"  nullable="false"  />
-            <one-to-many field="pkgMultiModuleSetItemCollection" target-entity="ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSetItem" mapped-by="pkgMultiModuleSetId" />
+            <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <one-to-many field="pkgMultiModuleSetItemCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSetItem" mapped-by="pkgMultiModuleSet" orphan-removal="true">
+    <cascade-persist/>
+</one-to-many>
 
     </entity>
 

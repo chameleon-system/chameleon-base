@@ -18,18 +18,6 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 /**/
 class TCMSFieldTreeNode extends TCMSField
 {
-    protected function getDoctrineDataModelViewData(array $additionalData): array
-    {
-
-        $additionalData['defaultValue'] = 'null';
-        $newValues = parent::getDoctrineDataModelViewData($additionalData);
-
-        $newValues['type'] = $newValues['type'].'|null';
-
-        return $newValues;
-    }
-
-
     public function GetHTML()
     {
         $path = $this->_GetTreePath();
@@ -41,19 +29,6 @@ class TCMSFieldTreeNode extends TCMSField
 
         return $html;
     }
-
-    public function getDoctrineDataModelParts(string $namespace): ?DataModelParts
-    {
-        $type = sprintf('%s\%s', $namespace, $this->snakeToCamelCase('cms_tree', false));
-
-        $data = $this->getDoctrineDataModelViewData(['type' => $type]);
-
-        $rendererProperty = $this->getDoctrineRenderer('model/default.property.php.twig', $data);
-        $rendererMethod = $this->getDoctrineRenderer('model/default.methods.php.twig', $data);
-
-        return new DataModelParts($rendererProperty->render(), $rendererMethod->render(), $data['allowDefaultValue']);
-    }
-
 
     public function GetReadOnly()
     {

@@ -1,17 +1,15 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+
 class PkgExternalTracker {
   public function __construct(
-    private string|null $id = null,
+    private string $id,
     private int|null $cmsident = null,
         
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldBoolean
-/** @var bool - Active */
-private bool $active = false, 
     // TCMSFieldVarchar
 /** @var string - User / site code */
 private string $identifier = '', 
@@ -23,15 +21,9 @@ private string $testIdentifier = '',
 private string $class = '', 
     // TCMSFieldVarchar
 /** @var string - Class subtype (path) */
-private string $classSubtype = '', 
-    // TCMSFieldOption
-/** @var string - Class type */
-private string $classType = 'Customer', 
-    // TCMSFieldLookupMultiselectCheckboxes
-/** @var \ChameleonSystem\CoreBundle\Entity\CmsPortal[] - Portal selection */
-private \Doctrine\Common\Collections\Collection $cmsPortalMlt = new \Doctrine\Common\Collections\ArrayCollection()  ) {}
+private string $classSubtype = ''  ) {}
 
-  public function getId(): ?string
+  public function getId(): string
   {
     return $this->id;
   }
@@ -58,20 +50,6 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldBoolean
-public function isActive(): bool
-{
-    return $this->active;
-}
-public function setActive(bool $active): self
-{
-    $this->active = $active;
 
     return $this;
 }
@@ -128,34 +106,6 @@ public function getClassSubtype(): string
 public function setClassSubtype(string $classSubtype): self
 {
     $this->classSubtype = $classSubtype;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldOption
-public function getClassType(): string
-{
-    return $this->classType;
-}
-public function setClassType(string $classType): self
-{
-    $this->classType = $classType;
-
-    return $this;
-}
-
-
-  
-    // TCMSFieldLookupMultiselectCheckboxes
-public function getCmsPortalMlt(): \Doctrine\Common\Collections\Collection
-{
-    return $this->cmsPortalMlt;
-}
-public function setCmsPortalMlt(\Doctrine\Common\Collections\Collection $cmsPortalMlt): self
-{
-    $this->cmsPortalMlt = $cmsPortalMlt;
 
     return $this;
 }

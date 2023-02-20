@@ -7,22 +7,14 @@
 
 
 
-        <id name="id" type="string" length="36" column="id" unique="true">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="doctrine.uuid_generator"/>
-        </id>
+        <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
-            <many-to-one field="dataExtranetUserId" target-entity="ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="dataExtranetUserLoginHistory">
+            <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="dataExtranetUserLoginHistoryCollection" >
     <join-column name="data_extranet_user_id" referenced-column-name="id" />
 </many-to-one>
-            <field name="datecreated"  column="datecreated"  nullable="false">
-    <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-    </options>
-</field>
-            <field name="userIp"  column="user_ip"  nullable="false"  />
+            <field name="userIp" type="string" column="user_ip" length="50" nullable="false"  />
     </entity>
 
 </doctrine-mapping>
