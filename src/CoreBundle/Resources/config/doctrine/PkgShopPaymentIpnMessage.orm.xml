@@ -15,11 +15,17 @@
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
             <many-to-one field="shopOrder" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="pkgShopPaymentIpnMessageCollection" >
     <join-column name="shop_order_id" referenced-column-name="id" />
 </many-to-one>
             <many-to-one field="shopPaymentHandlerGroup" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup" inversed-by="pkgShopPaymentIpnMessageCollection" >
     <join-column name="shop_payment_handler_group_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="pkgShopPaymentIpnStatus" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus">
+    <join-column name="pkg_shop_payment_ipn_status_id" referenced-column-name="id" />
 </many-to-one>
             <field name="errorType" type="string" column="error_type" length="255" nullable="false"  />
             <field name="ip" type="string" column="ip" length="255" nullable="false"  />

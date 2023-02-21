@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsContentBox;
+use ChameleonSystem\CoreBundle\Entity\CmsUsergroup;
 
 class CmsModule {
   public function __construct(
@@ -13,6 +15,14 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - CMS abbreviation */
 private string $uniquecmsname = '', 
+    // TCMSFieldLookup
+/** @var CmsContentBox|null - Show in category window */
+private ?CmsContentBox $cmsContentBox = null
+, 
+    // TCMSFieldLookup
+/** @var CmsUsergroup|null - Module belongs to group */
+private ?CmsUsergroup $cmsUsergroup = null
+, 
     // TCMSFieldVarchar
 /** @var string - Module page configuration */
 private string $module = '', 
@@ -73,6 +83,36 @@ public function getUniquecmsname(): string
 public function setUniquecmsname(string $uniquecmsname): self
 {
     $this->uniquecmsname = $uniquecmsname;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsContentBox(): ?CmsContentBox
+{
+    return $this->cmsContentBox;
+}
+
+public function setCmsContentBox(?CmsContentBox $cmsContentBox): self
+{
+    $this->cmsContentBox = $cmsContentBox;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsUsergroup(): ?CmsUsergroup
+{
+    return $this->cmsUsergroup;
+}
+
+public function setCmsUsergroup(?CmsUsergroup $cmsUsergroup): self
+{
+    $this->cmsUsergroup = $cmsUsergroup;
 
     return $this;
 }

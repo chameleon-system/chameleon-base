@@ -8,9 +8,13 @@ class ShopOrderBundleArticle {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopOrderItem|null - Bundle articles of the order */
 private ?ShopOrderItem $shopOrderItem = null
+, 
+    // TCMSFieldLookup
+/** @var ShopOrderItem|null - Article belonging to bundle */
+private ?ShopOrderItem $bundleArticle = null
 , 
     // TCMSFieldVarchar
 /** @var string - Units */
@@ -35,7 +39,7 @@ private string $amount = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopOrderItem(): ?ShopOrderItem
 {
     return $this->shopOrderItem;
@@ -44,6 +48,21 @@ public function getShopOrderItem(): ?ShopOrderItem
 public function setShopOrderItem(?ShopOrderItem $shopOrderItem): self
 {
     $this->shopOrderItem = $shopOrderItem;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getBundleArticle(): ?ShopOrderItem
+{
+    return $this->bundleArticle;
+}
+
+public function setBundleArticle(?ShopOrderItem $bundleArticle): self
+{
+    $this->bundleArticle = $bundleArticle;
 
     return $this;
 }

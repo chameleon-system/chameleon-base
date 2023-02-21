@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsUser;
+use ChameleonSystem\CoreBundle\Entity\CmsDocumentTree;
 
 class CmsDocument {
   public function __construct(
@@ -13,6 +15,10 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - File name */
 private string $filename = '', 
+    // TCMSFieldLookup
+/** @var CmsUser|null - Last changed by */
+private ?CmsUser $cmsUser = null
+, 
     // TCMSFieldVarchar
 /** @var string - Image width */
 private string $hiddenImageWidth = '', 
@@ -22,6 +28,10 @@ private string $hiddenImageHeight = '',
     // TCMSFieldVarchar
 /** @var string - User downloads */
 private string $counter = '', 
+    // TCMSFieldLookup
+/** @var CmsDocumentTree|null - Folder */
+private ?CmsDocumentTree $cmsDocumentTree = null
+, 
     // TCMSFieldVarchar
 /** @var string - File size */
 private string $filesize = '', 
@@ -76,6 +86,21 @@ public function setFilename(string $filename): self
 
 
   
+    // TCMSFieldLookup
+public function getCmsUser(): ?CmsUser
+{
+    return $this->cmsUser;
+}
+
+public function setCmsUser(?CmsUser $cmsUser): self
+{
+    $this->cmsUser = $cmsUser;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getHiddenImageWidth(): string
 {
@@ -112,6 +137,21 @@ public function getCounter(): string
 public function setCounter(string $counter): self
 {
     $this->counter = $counter;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsDocumentTree(): ?CmsDocumentTree
+{
+    return $this->cmsDocumentTree;
+}
+
+public function setCmsDocumentTree(?CmsDocumentTree $cmsDocumentTree): self
+{
+    $this->cmsDocumentTree = $cmsDocumentTree;
 
     return $this;
 }

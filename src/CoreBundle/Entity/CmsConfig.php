@@ -4,9 +4,13 @@ namespace ChameleonSystem\CoreBundle\Entity;
 use ChameleonSystem\CoreBundle\Entity\CmsConfigImagemagick;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
 use ChameleonSystem\CoreBundle\Entity\CmsConfigParameter;
 use ChameleonSystem\CoreBundle\Entity\CmsMessageManagerBackendMessage;
 use ChameleonSystem\CoreBundle\Entity\CmsConfigCmsmoduleExtensions;
+use ChameleonSystem\CoreBundle\Entity\PkgCmsTheme;
+use ChameleonSystem\CoreBundle\Entity\CmsConfigThemes;
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
 use ChameleonSystem\CoreBundle\Entity\CmsIpWhitelist;
 
 class CmsConfig {
@@ -21,6 +25,10 @@ private Collection $cmsConfigImagemagickCollection = new ArrayCollection()
     // TCMSFieldVarchar
 /** @var string - Chunk size for uploader in KB */
 private string $uploaderChunkSize = '1024', 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - Basic language (needed for field-based translations) */
+private ?CmsLanguage $translationBaseLanguage = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsConfigParameter> - Configuration settings */
 private Collection $cmsConfigParameterCollection = new ArrayCollection()
@@ -44,6 +52,18 @@ private string $smtpPort = '25',
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsConfigCmsmoduleExtensions> - CMS module extensions */
 private Collection $cmsConfigCmsmoduleExtensionsCollection = new ArrayCollection()
+, 
+    // TCMSFieldLookup
+/** @var PkgCmsTheme|null - Backend Theme */
+private ?PkgCmsTheme $pkgCmsTheme = null
+, 
+    // TCMSFieldLookup
+/** @var CmsConfigThemes|null - CMS themes */
+private ?CmsConfigThemes $cmsConfigThemes = null
+, 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Main portal */
+private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsIpWhitelist> - Permitted IPs */
@@ -134,6 +154,21 @@ public function getUploaderChunkSize(): string
 public function setUploaderChunkSize(string $uploaderChunkSize): self
 {
     $this->uploaderChunkSize = $uploaderChunkSize;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getTranslationBaseLanguage(): ?CmsLanguage
+{
+    return $this->translationBaseLanguage;
+}
+
+public function setTranslationBaseLanguage(?CmsLanguage $translationBaseLanguage): self
+{
+    $this->translationBaseLanguage = $translationBaseLanguage;
 
     return $this;
 }
@@ -289,6 +324,51 @@ public function removeCmsConfigCmsmoduleExtensionsCollection(cmsConfigCmsmoduleE
             $cmsConfigCmsmoduleExtensions->setCmsConfig(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgCmsTheme(): ?PkgCmsTheme
+{
+    return $this->pkgCmsTheme;
+}
+
+public function setPkgCmsTheme(?PkgCmsTheme $pkgCmsTheme): self
+{
+    $this->pkgCmsTheme = $pkgCmsTheme;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsConfigThemes(): ?CmsConfigThemes
+{
+    return $this->cmsConfigThemes;
+}
+
+public function setCmsConfigThemes(?CmsConfigThemes $cmsConfigThemes): self
+{
+    $this->cmsConfigThemes = $cmsConfigThemes;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
 
     return $this;
 }

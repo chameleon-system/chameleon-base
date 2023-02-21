@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
 use ChameleonSystem\CoreBundle\Entity\CmsTreeNode;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,6 +12,10 @@ class CmsTree {
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var CmsTree|null - Is subnode of */
+private ?CmsTree $parent = null
+, 
     // TCMSFieldVarchar
 /** @var string - Nested set: left */
 private string $lft = '', 
@@ -31,6 +37,14 @@ private string $link = '',
     // TCMSFieldVarchar
 /** @var string - Pages / layouts */
 private string $cmsTplPagePrimaryLink = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Icon for navigation */
+private ?CmsMedia $naviIconCmsMedia = null
+, 
+    // TCMSFieldLookup
+/** @var CmsTplModuleInstance|null - Connect module to navigation */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
+, 
     // TCMSFieldVarchar
 /** @var string - Hotkeys */
 private string $htmlAccessKey = '', 
@@ -61,6 +75,21 @@ private Collection $cmsTreeNodeCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getParent(): ?CmsTree
+{
+    return $this->parent;
+}
+
+public function setParent(?CmsTree $parent): self
+{
+    $this->parent = $parent;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getLft(): string
 {
@@ -153,6 +182,36 @@ public function getCmsTplPagePrimaryLink(): string
 public function setCmsTplPagePrimaryLink(string $cmsTplPagePrimaryLink): self
 {
     $this->cmsTplPagePrimaryLink = $cmsTplPagePrimaryLink;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getNaviIconCmsMedia(): ?CmsMedia
+{
+    return $this->naviIconCmsMedia;
+}
+
+public function setNaviIconCmsMedia(?CmsMedia $naviIconCmsMedia): self
+{
+    $this->naviIconCmsMedia = $naviIconCmsMedia;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
+{
+    return $this->cmsTplModuleInstance;
+}
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
+{
+    $this->cmsTplModuleInstance = $cmsTplModuleInstance;
 
     return $this;
 }

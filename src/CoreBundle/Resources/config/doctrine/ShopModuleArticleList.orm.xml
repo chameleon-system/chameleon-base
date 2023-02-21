@@ -15,6 +15,15 @@
     <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
 </many-to-one>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <many-to-one field="i" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="icon" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="shopModuleArticleListFilter" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticleListFilter">
+    <join-column name="shop_module_article_list_filter_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="shopModuleArticlelistOrderby" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby">
+    <join-column name="shop_module_articlelist_orderby_id" referenced-column-name="id" />
+</many-to-one>
             <field name="numberOfArticles" type="string" column="number_of_articles" length="255" nullable="false"  />
             <field name="numberOfArticlesPerPage" type="string" column="number_of_articles_per_page" length="255" nullable="false"  />
             <one-to-many field="shopModuleArticleListArticleCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticleListArticle" mapped-by="shopModuleArticleList" orphan-removal="true">

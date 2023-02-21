@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsUser;
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
 use ChameleonSystem\CoreBundle\Entity\PkgCmsChangelogItem;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,6 +12,14 @@ class PkgCmsChangelogSet {
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var CmsUser|null - User who made the change */
+private ?CmsUser $cmsU = null
+, 
+    // TCMSFieldLookup
+/** @var CmsTblConf|null - The main table that was changed */
+private ?CmsTblConf $cmsTblC = null
+, 
     // TCMSFieldVarchar
 /** @var string - ID of the changed data record */
 private string $modifiedId = '', 
@@ -43,6 +53,36 @@ private Collection $pkgCmsChangelogItemCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getCmsU(): ?CmsUser
+{
+    return $this->cmsU;
+}
+
+public function setCmsU(?CmsUser $cmsU): self
+{
+    $this->cmsU = $cmsU;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTblC(): ?CmsTblConf
+{
+    return $this->cmsTblC;
+}
+
+public function setCmsTblC(?CmsTblConf $cmsTblC): self
+{
+    $this->cmsTblC = $cmsTblC;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getModifiedId(): string
 {

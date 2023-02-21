@@ -16,6 +16,12 @@
 </many-to-one>
             <field name="name" type="string" column="name" length="80" nullable="false"  />
             <field name="translation" type="string" column="translation" length="80" nullable="false"  />
+            <many-to-one field="cmsFieldType" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsFieldType">
+    <join-column name="cms_field_type_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsTblField_" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblFieldTab">
+    <join-column name="cms_tbl_field_tab" referenced-column-name="id" />
+</many-to-one>
             <field name="fieldclass" type="string" column="fieldclass" length="255" nullable="false"  />
             <field name="fieldclassSubtype" type="string" column="fieldclass_subtype" length="255" nullable="false"  />
             <field name="fieldDefaultValue" type="string" column="field_default_value" length="255" nullable="false"  />

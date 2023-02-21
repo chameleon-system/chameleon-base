@@ -16,6 +16,9 @@
 </one-to-many>
 
             <field name="uploaderChunkSize" type="string" column="uploader_chunk_size" length="255" nullable="false"  />
+            <many-to-one field="translationBaseLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="translation_base_language_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="cmsConfigParameterCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsConfigParameter" mapped-by="cmsConfig" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>
@@ -32,6 +35,15 @@
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="pkgCmsTheme" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgCmsTheme">
+    <join-column name="pkg_cms_theme_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsConfigThemes" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsConfigThemes">
+    <join-column name="cms_config_themes_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="cmsIpWhitelistCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsIpWhitelist" mapped-by="cmsConfig" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>

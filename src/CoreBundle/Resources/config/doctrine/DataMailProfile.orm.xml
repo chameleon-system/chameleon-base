@@ -20,6 +20,9 @@
             <field name="mailfromName" type="string" column="mailfrom_name" length="255" nullable="false"  />
             <field name="template" type="string" column="template" length="255" nullable="false"  />
             <field name="templateText" type="string" column="template_text" length="255" nullable="false"  />
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

@@ -2,6 +2,7 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsTplPage;
+use ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot;
 use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
 
 class CmsTplPageCmsMasterPagedefSpot {
@@ -12,11 +13,15 @@ class CmsTplPageCmsMasterPagedefSpot {
     // TCMSFieldVarchar
 /** @var string - Model */
 private string $model = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTplPage|null - Layout */
 private ?CmsTplPage $cmsTplPage = null
 , 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+/** @var CmsMasterPagedefSpot|null - Belongs to cms page template spot */
+private ?CmsMasterPagedefSpot $cmsMasterPagedefSpot = null
+, 
+    // TCMSFieldLookup
 /** @var CmsTplModuleInstance|null - Module instance */
 private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
@@ -57,7 +62,7 @@ public function setModel(string $model): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTplPage(): ?CmsTplPage
 {
     return $this->cmsTplPage;
@@ -72,7 +77,22 @@ public function setCmsTplPage(?CmsTplPage $cmsTplPage): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+public function getCmsMasterPagedefSpot(): ?CmsMasterPagedefSpot
+{
+    return $this->cmsMasterPagedefSpot;
+}
+
+public function setCmsMasterPagedefSpot(?CmsMasterPagedefSpot $cmsMasterPagedefSpot): self
+{
+    $this->cmsMasterPagedefSpot = $cmsMasterPagedefSpot;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
 public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;

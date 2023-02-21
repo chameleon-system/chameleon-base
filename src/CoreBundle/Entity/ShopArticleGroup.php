@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopVat;
 
 class ShopArticleGroup {
   public function __construct(
@@ -9,7 +10,11 @@ class ShopArticleGroup {
         
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = ''  ) {}
+private string $name = '', 
+    // TCMSFieldLookup
+/** @var ShopVat|null - VAT group */
+private ?ShopVat $shopVat = null
+  ) {}
 
   public function getId(): string
   {
@@ -38,6 +43,21 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopVat(): ?ShopVat
+{
+    return $this->shopVat;
+}
+
+public function setShopVat(?ShopVat $shopVat): self
+{
+    $this->shopVat = $shopVat;
 
     return $this;
 }

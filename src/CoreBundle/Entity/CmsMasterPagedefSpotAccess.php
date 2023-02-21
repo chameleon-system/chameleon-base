@@ -8,7 +8,7 @@ class CmsMasterPagedefSpotAccess {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsMasterPagedefSpot|null - Belongs to cms page template spot */
 private ?CmsMasterPagedefSpot $cmsMasterPagedefSpot = null
 , 
@@ -35,7 +35,7 @@ private string $model = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsMasterPagedefSpot(): ?CmsMasterPagedefSpot
 {
     return $this->cmsMasterPagedefSpot;

@@ -8,11 +8,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use ChameleonSystem\CoreBundle\Entity\AmazonPaymentIdMapping;
 use ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction;
 use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\PkgShopRatingService;
 use ChameleonSystem\CoreBundle\Entity\ShopOrderItem;
 use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+use ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation;
+use ChameleonSystem\CoreBundle\Entity\DataCountry;
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
+use ChameleonSystem\CoreBundle\Entity\ShopShippingGroup;
 use ChameleonSystem\CoreBundle\Entity\ShopOrderShippingGroupParameter;
+use ChameleonSystem\CoreBundle\Entity\ShopPaymentMethod;
 use ChameleonSystem\CoreBundle\Entity\ShopOrderPaymentMethodParameter;
 use ChameleonSystem\CoreBundle\Entity\ShopOrderVat;
+use ChameleonSystem\CoreBundle\Entity\PkgShopCurrency;
+use ChameleonSystem\CoreBundle\Entity\PkgShopAffiliate;
 use ChameleonSystem\CoreBundle\Entity\ShopVoucherUse;
 use ChameleonSystem\CoreBundle\Entity\ShopOrderDiscount;
 use ChameleonSystem\CoreBundle\Entity\ShopOrderStatus;
@@ -22,7 +30,7 @@ class ShopOrder {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var Shop|null - Belongs to shop */
 private ?Shop $shop = null
 , 
@@ -38,13 +46,17 @@ private Collection $amazonPaymentIdMappingCollection = new ArrayCollection()
 /** @var Collection<int, pkgShopPaymentTransaction> - Transactions */
 private Collection $pkgShopPaymentTransactionCollection = new ArrayCollection()
 , 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsPortal|null - Placed by portal */
 private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldVarchar
 /** @var string - Order number */
 private string $ordernumber = '', 
+    // TCMSFieldLookup
+/** @var PkgShopRatingService|null - Used rating service */
+private ?PkgShopRatingService $pkgShopRatingService = null
+, 
     // TCMSFieldVarchar
 /** @var string - Basket ID (unique ID that is already assigned in the order process) */
 private string $orderIdent = '', 
@@ -52,7 +64,7 @@ private string $orderIdent = '',
 /** @var Collection<int, shopOrderItem> - Items */
 private Collection $shopOrderItemCollection = new ArrayCollection()
 , 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var DataExtranetUser|null - Shop customer */
 private ?DataExtranetUser $dataExtranetUser = null
 , 
@@ -65,6 +77,10 @@ private string $userEmail = '',
     // TCMSFieldVarchar
 /** @var string - Company */
 private string $adrBillingCompany = '', 
+    // TCMSFieldLookup
+/** @var DataExtranetSalutation|null - Salutation */
+private ?DataExtranetSalutation $adrBillingSalutation = null
+, 
     // TCMSFieldVarchar
 /** @var string - First name */
 private string $adrBillingFirstname = '', 
@@ -86,18 +102,30 @@ private string $adrBillingCity = '',
     // TCMSFieldVarchar
 /** @var string - Zip code */
 private string $adrBillingPostalcode = '', 
+    // TCMSFieldLookup
+/** @var DataCountry|null - Country */
+private ?DataCountry $adrBillingCountry = null
+, 
     // TCMSFieldVarchar
 /** @var string - Telephone */
 private string $adrBillingTelefon = '', 
     // TCMSFieldVarchar
 /** @var string - Fax */
 private string $adrBillingFax = '', 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - Language */
+private ?CmsLanguage $cmsLanguage = null
+, 
     // TCMSFieldVarchar
 /** @var string - User IP */
 private string $userIp = '', 
     // TCMSFieldVarchar
 /** @var string - Company */
 private string $adrShippingCompany = '', 
+    // TCMSFieldLookup
+/** @var DataExtranetSalutation|null - Salutation */
+private ?DataExtranetSalutation $adrShippingSalutation = null
+, 
     // TCMSFieldVarchar
 /** @var string - First name */
 private string $adrShippingFirstname = '', 
@@ -119,18 +147,30 @@ private string $adrShippingCity = '',
     // TCMSFieldVarchar
 /** @var string - Zip code */
 private string $adrShippingPostalcode = '', 
+    // TCMSFieldLookup
+/** @var DataCountry|null - Country */
+private ?DataCountry $adrShippingCountry = null
+, 
     // TCMSFieldVarchar
 /** @var string - Telephone */
 private string $adrShippingTelefon = '', 
     // TCMSFieldVarchar
 /** @var string - Fax */
 private string $adrShippingFax = '', 
+    // TCMSFieldLookup
+/** @var ShopShippingGroup|null - Shipping cost group */
+private ?ShopShippingGroup $shopShippingGroup = null
+, 
     // TCMSFieldVarchar
 /** @var string - Shipping cost group – name */
 private string $shopShippingGroupName = '', 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopOrderShippingGroupParameter> - Shipping cost group – parameter/user data */
 private Collection $shopOrderShippingGroupParameterCollection = new ArrayCollection()
+, 
+    // TCMSFieldLookup
+/** @var ShopPaymentMethod|null - Payment method */
+private ?ShopPaymentMethod $shopPaymentMethod = null
 , 
     // TCMSFieldVarchar
 /** @var string - Payment method – name */
@@ -143,12 +183,20 @@ private Collection $shopOrderPaymentMethodParameterCollection = new ArrayCollect
 /** @var Collection<int, shopOrderVat> - Order VAT (by tax rate) */
 private Collection $shopOrderVatCollection = new ArrayCollection()
 , 
+    // TCMSFieldLookup
+/** @var PkgShopCurrency|null - Currency */
+private ?PkgShopCurrency $pkgShopCurrency = null
+, 
     // TCMSFieldVarchar
 /** @var string - Number of different items */
 private string $countUniqueArticles = '', 
     // TCMSFieldVarchar
 /** @var string - Affiliate code */
 private string $affiliateCode = '', 
+    // TCMSFieldLookup
+/** @var PkgShopAffiliate|null - Order created via affiliate program */
+private ?PkgShopAffiliate $pkgShopAffiliate = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopVoucherUse> - Used vouchers */
 private Collection $shopVoucherUseCollection = new ArrayCollection()
@@ -184,7 +232,7 @@ private string $vatId = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShop(): ?Shop
 {
     return $this->shop;
@@ -298,7 +346,7 @@ public function removePkgShopPaymentTransactionCollection(pkgShopPaymentTransact
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;
@@ -321,6 +369,21 @@ public function getOrdernumber(): string
 public function setOrdernumber(string $ordernumber): self
 {
     $this->ordernumber = $ordernumber;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopRatingService(): ?PkgShopRatingService
+{
+    return $this->pkgShopRatingService;
+}
+
+public function setPkgShopRatingService(?PkgShopRatingService $pkgShopRatingService): self
+{
+    $this->pkgShopRatingService = $pkgShopRatingService;
 
     return $this;
 }
@@ -374,7 +437,7 @@ public function removeShopOrderItemCollection(shopOrderItem $shopOrderItem): sel
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;
@@ -425,6 +488,21 @@ public function getAdrBillingCompany(): string
 public function setAdrBillingCompany(string $adrBillingCompany): self
 {
     $this->adrBillingCompany = $adrBillingCompany;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getAdrBillingSalutation(): ?DataExtranetSalutation
+{
+    return $this->adrBillingSalutation;
+}
+
+public function setAdrBillingSalutation(?DataExtranetSalutation $adrBillingSalutation): self
+{
+    $this->adrBillingSalutation = $adrBillingSalutation;
 
     return $this;
 }
@@ -529,6 +607,21 @@ public function setAdrBillingPostalcode(string $adrBillingPostalcode): self
 
 
   
+    // TCMSFieldLookup
+public function getAdrBillingCountry(): ?DataCountry
+{
+    return $this->adrBillingCountry;
+}
+
+public function setAdrBillingCountry(?DataCountry $adrBillingCountry): self
+{
+    $this->adrBillingCountry = $adrBillingCountry;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getAdrBillingTelefon(): string
 {
@@ -557,6 +650,21 @@ public function setAdrBillingFax(string $adrBillingFax): self
 
 
   
+    // TCMSFieldLookup
+public function getCmsLanguage(): ?CmsLanguage
+{
+    return $this->cmsLanguage;
+}
+
+public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
+{
+    $this->cmsLanguage = $cmsLanguage;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getUserIp(): string
 {
@@ -579,6 +687,21 @@ public function getAdrShippingCompany(): string
 public function setAdrShippingCompany(string $adrShippingCompany): self
 {
     $this->adrShippingCompany = $adrShippingCompany;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getAdrShippingSalutation(): ?DataExtranetSalutation
+{
+    return $this->adrShippingSalutation;
+}
+
+public function setAdrShippingSalutation(?DataExtranetSalutation $adrShippingSalutation): self
+{
+    $this->adrShippingSalutation = $adrShippingSalutation;
 
     return $this;
 }
@@ -683,6 +806,21 @@ public function setAdrShippingPostalcode(string $adrShippingPostalcode): self
 
 
   
+    // TCMSFieldLookup
+public function getAdrShippingCountry(): ?DataCountry
+{
+    return $this->adrShippingCountry;
+}
+
+public function setAdrShippingCountry(?DataCountry $adrShippingCountry): self
+{
+    $this->adrShippingCountry = $adrShippingCountry;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getAdrShippingTelefon(): string
 {
@@ -705,6 +843,21 @@ public function getAdrShippingFax(): string
 public function setAdrShippingFax(string $adrShippingFax): self
 {
     $this->adrShippingFax = $adrShippingFax;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopShippingGroup(): ?ShopShippingGroup
+{
+    return $this->shopShippingGroup;
+}
+
+public function setShopShippingGroup(?ShopShippingGroup $shopShippingGroup): self
+{
+    $this->shopShippingGroup = $shopShippingGroup;
 
     return $this;
 }
@@ -752,6 +905,21 @@ public function removeShopOrderShippingGroupParameterCollection(shopOrderShippin
             $shopOrderShippingGroupParameter->setShopOrder(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopPaymentMethod(): ?ShopPaymentMethod
+{
+    return $this->shopPaymentMethod;
+}
+
+public function setShopPaymentMethod(?ShopPaymentMethod $shopPaymentMethod): self
+{
+    $this->shopPaymentMethod = $shopPaymentMethod;
 
     return $this;
 }
@@ -838,6 +1006,21 @@ public function removeShopOrderVatCollection(shopOrderVat $shopOrderVat): self
 
 
   
+    // TCMSFieldLookup
+public function getPkgShopCurrency(): ?PkgShopCurrency
+{
+    return $this->pkgShopCurrency;
+}
+
+public function setPkgShopCurrency(?PkgShopCurrency $pkgShopCurrency): self
+{
+    $this->pkgShopCurrency = $pkgShopCurrency;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getCountUniqueArticles(): string
 {
@@ -860,6 +1043,21 @@ public function getAffiliateCode(): string
 public function setAffiliateCode(string $affiliateCode): self
 {
     $this->affiliateCode = $affiliateCode;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopAffiliate(): ?PkgShopAffiliate
+{
+    return $this->pkgShopAffiliate;
+}
+
+public function setPkgShopAffiliate(?PkgShopAffiliate $pkgShopAffiliate): self
+{
+    $this->pkgShopAffiliate = $pkgShopAffiliate;
 
     return $this;
 }

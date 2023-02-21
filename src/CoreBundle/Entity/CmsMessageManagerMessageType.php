@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class CmsMessageManagerMessageType {
   public function __construct(
@@ -13,6 +14,10 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - Systemname */
 private string $systemname = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Icon */
+private ?CmsMedia $cmsMedia = null
+, 
     // TCMSFieldVarchar
 /** @var string - Class name */
 private string $class = ''  ) {}
@@ -58,6 +63,21 @@ public function getSystemname(): string
 public function setSystemname(string $systemname): self
 {
     $this->systemname = $systemname;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
 
     return $this;
 }

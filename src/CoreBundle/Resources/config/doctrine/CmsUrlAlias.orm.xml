@@ -17,6 +17,9 @@
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="sourceUrl" type="string" column="source_url" length="255" nullable="false"  />
             <field name="targetUrl" type="string" column="target_url" length="255" nullable="false"  />
+            <many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
+    <join-column name="cms_user_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

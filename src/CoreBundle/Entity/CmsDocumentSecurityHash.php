@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsDocument;
 use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
 
 class CmsDocumentSecurityHash {
@@ -8,7 +9,11 @@ class CmsDocumentSecurityHash {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+/** @var CmsDocument|null -  */
+private ?CmsDocument $cmsDocument = null
+, 
+    // TCMSFieldLookup
 /** @var DataExtranetUser|null -  */
 private ?DataExtranetUser $dataExtranetUser = null
   ) {}
@@ -32,7 +37,22 @@ private ?DataExtranetUser $dataExtranetUser = null
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+public function getCmsDocument(): ?CmsDocument
+{
+    return $this->cmsDocument;
+}
+
+public function setCmsDocument(?CmsDocument $cmsDocument): self
+{
+    $this->cmsDocument = $cmsDocument;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
 public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;

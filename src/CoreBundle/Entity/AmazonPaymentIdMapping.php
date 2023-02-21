@@ -2,13 +2,14 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\ShopOrder;
+use ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction;
 
 class AmazonPaymentIdMapping {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopOrder|null - Belongs to order */
 private ?ShopOrder $shopOrder = null
 , 
@@ -26,7 +27,11 @@ private string $amazonId = '',
 private string $type = '', 
     // TCMSFieldVarchar
 /** @var string - Request mode */
-private string $requestMode = '1'  ) {}
+private string $requestMode = '1', 
+    // TCMSFieldLookup
+/** @var PkgShopPaymentTransaction|null - Belongs to transaction */
+private ?PkgShopPaymentTransaction $pkgShopPaymentTransaction = null
+  ) {}
 
   public function getId(): string
   {
@@ -47,7 +52,7 @@ private string $requestMode = '1'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopOrder(): ?ShopOrder
 {
     return $this->shopOrder;
@@ -126,6 +131,21 @@ public function getRequestMode(): string
 public function setRequestMode(string $requestMode): self
 {
     $this->requestMode = $requestMode;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopPaymentTransaction(): ?PkgShopPaymentTransaction
+{
+    return $this->pkgShopPaymentTransaction;
+}
+
+public function setPkgShopPaymentTransaction(?PkgShopPaymentTransaction $pkgShopPaymentTransaction): self
+{
+    $this->pkgShopPaymentTransaction = $pkgShopPaymentTransaction;
 
     return $this;
 }

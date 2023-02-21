@@ -4,11 +4,14 @@ namespace ChameleonSystem\CoreBundle\Entity;
 use ChameleonSystem\CoreBundle\Entity\CmsTblFieldTab;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\CmsContentBox;
 use ChameleonSystem\CoreBundle\Entity\CmsFieldConf;
 use ChameleonSystem\CoreBundle\Entity\CmsTblDisplayListFields;
 use ChameleonSystem\CoreBundle\Entity\CmsTblDisplayOrderfields;
 use ChameleonSystem\CoreBundle\Entity\CmsTblListClass;
 use ChameleonSystem\CoreBundle\Entity\CmsTblConfRestrictions;
+use ChameleonSystem\CoreBundle\Entity\CmsTplPage;
+use ChameleonSystem\CoreBundle\Entity\CmsUsergroup;
 use ChameleonSystem\CoreBundle\Entity\CmsTblExtension;
 use ChameleonSystem\CoreBundle\Entity\CmsTblConfIndex;
 
@@ -26,6 +29,10 @@ private string $translation = '',
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsTblFieldTab> - Field category/tabs */
 private Collection $cmsTblFieldTabCollection = new ArrayCollection()
+, 
+    // TCMSFieldLookup
+/** @var CmsContentBox|null - View in category window */
+private ?CmsContentBox $cmsContentBox = null
 , 
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsFieldConf> - Record fields */
@@ -64,6 +71,10 @@ private string $listGroupFieldColumn = '',
 /** @var Collection<int, cmsTblListClass> - List views */
 private Collection $cmsTblListClassCollection = new ArrayCollection()
 , 
+    // TCMSFieldLookup
+/** @var CmsTblListClass|null - List view default class */
+private ?CmsTblListClass $cmsTblListClass = null
+, 
     // TCMSFieldVarchar
 /** @var string - Table editor php class */
 private string $tableEditorClass = '', 
@@ -73,6 +84,14 @@ private string $tableEditorClassSubtype = '',
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsTblConfRestrictions> - List restrictions */
 private Collection $cmsTblConfRestrictionsCollection = new ArrayCollection()
+, 
+    // TCMSFieldLookup
+/** @var CmsTplPage|null - Preview page */
+private ?CmsTplPage $cmsTplPage = null
+, 
+    // TCMSFieldLookup
+/** @var CmsUsergroup|null - Table belongs to group */
+private ?CmsUsergroup $cmsUsergroup = null
 , 
     // TCMSFieldVarchar
 /** @var string - Is derived from */
@@ -169,6 +188,21 @@ public function removeCmsTblFieldTabCollection(cmsTblFieldTab $cmsTblFieldTab): 
             $cmsTblFieldTab->setCmsTblConf(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsContentBox(): ?CmsContentBox
+{
+    return $this->cmsContentBox;
+}
+
+public function setCmsContentBox(?CmsContentBox $cmsContentBox): self
+{
+    $this->cmsContentBox = $cmsContentBox;
 
     return $this;
 }
@@ -405,6 +439,21 @@ public function removeCmsTblListClassCollection(cmsTblListClass $cmsTblListClass
 
 
   
+    // TCMSFieldLookup
+public function getCmsTblListClass(): ?CmsTblListClass
+{
+    return $this->cmsTblListClass;
+}
+
+public function setCmsTblListClass(?CmsTblListClass $cmsTblListClass): self
+{
+    $this->cmsTblListClass = $cmsTblListClass;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getTableEditorClass(): string
 {
@@ -460,6 +509,36 @@ public function removeCmsTblConfRestrictionsCollection(cmsTblConfRestrictions $c
             $cmsTblConfRestrictions->setCmsTblConf(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTplPage(): ?CmsTplPage
+{
+    return $this->cmsTplPage;
+}
+
+public function setCmsTplPage(?CmsTplPage $cmsTplPage): self
+{
+    $this->cmsTplPage = $cmsTplPage;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsUsergroup(): ?CmsUsergroup
+{
+    return $this->cmsUsergroup;
+}
+
+public function setCmsUsergroup(?CmsUsergroup $cmsUsergroup): self
+{
+    $this->cmsUsergroup = $cmsUsergroup;
 
     return $this;
 }

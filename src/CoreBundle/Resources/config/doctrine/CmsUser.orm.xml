@@ -16,11 +16,17 @@
             <field name="firstname" type="string" column="firstname" length="60" nullable="false"  />
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="email" type="string" column="email" length="255" nullable="false"  />
+            <many-to-one field="ima" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="images" referenced-column-name="id" />
+</many-to-one>
             <field name="company" type="string" column="company" length="255" nullable="false"  />
             <field name="department" type="string" column="department" length="255" nullable="false"  />
             <field name="city" type="string" column="city" length="255" nullable="false"  />
             <field name="tel" type="string" column="tel" length="255" nullable="false"  />
             <field name="fax" type="string" column="fax" length="255" nullable="false"  />
+            <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="cms_language_id" referenced-column-name="id" />
+</many-to-one>
             <field name="languages" type="string" column="languages" length="255" nullable="false"  />
             <field name="cmsCurrentEditLanguage" type="string" column="cms_current_edit_language" length="4" nullable="false"  />
             <field name="taskShowCount" type="string" column="task_show_count" length="255" nullable="false"  />

@@ -14,6 +14,9 @@
             <many-to-one field="shopOrder" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="shopOrderStatusCollection" >
     <join-column name="shop_order_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="shopOrderStatusCode" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderStatusCode">
+    <join-column name="shop_order_status_code_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="shopOrderStatusItemCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderStatusItem" mapped-by="shopOrderStatus" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>

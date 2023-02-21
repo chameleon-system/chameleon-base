@@ -10,6 +10,10 @@ class CmsDocumentTree {
     // TCMSFieldVarchar
 /** @var string - Category name */
 private string $name = '', 
+    // TCMSFieldLookup
+/** @var CmsDocumentTree|null - Parent ID */
+private ?CmsDocumentTree $parent = null
+, 
     // TCMSFieldVarchar
 /** @var string - Depth */
 private string $depth = '', 
@@ -44,6 +48,21 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getParent(): ?CmsDocumentTree
+{
+    return $this->parent;
+}
+
+public function setParent(?CmsDocumentTree $parent): self
+{
+    $this->parent = $parent;
 
     return $this;
 }

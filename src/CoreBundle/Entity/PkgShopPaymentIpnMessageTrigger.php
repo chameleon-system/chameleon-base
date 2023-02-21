@@ -9,11 +9,11 @@ class PkgShopPaymentIpnMessageTrigger {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgShopPaymentIpnTrigger|null - Trigger */
 private ?PkgShopPaymentIpnTrigger $pkgShopPaymentIpnTrigger = null
 , 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgShopPaymentIpnMessage|null - IPN Message */
 private ?PkgShopPaymentIpnMessage $pkgShopPaymentIpnMessage = null
 , 
@@ -40,7 +40,7 @@ private string $attemptCount = '0'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgShopPaymentIpnTrigger(): ?PkgShopPaymentIpnTrigger
 {
     return $this->pkgShopPaymentIpnTrigger;
@@ -55,7 +55,7 @@ public function setPkgShopPaymentIpnTrigger(?PkgShopPaymentIpnTrigger $pkgShopPa
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgShopPaymentIpnMessage(): ?PkgShopPaymentIpnMessage
 {
     return $this->pkgShopPaymentIpnMessage;

@@ -8,7 +8,7 @@ class DataExtranetModuleMyAccount {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTplModuleInstance|null - Belongs to module instance */
 private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
@@ -35,7 +35,7 @@ private string $headline = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;

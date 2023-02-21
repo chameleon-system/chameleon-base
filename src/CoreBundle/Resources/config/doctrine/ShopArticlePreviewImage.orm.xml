@@ -14,6 +14,12 @@
             <many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticlePreviewImageCollection" >
     <join-column name="shop_article_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="shopArticleImageSize" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticleImageSize">
+    <join-column name="shop_article_image_size_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="cms_media_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

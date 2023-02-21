@@ -1,6 +1,9 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
+use ChameleonSystem\CoreBundle\Entity\CmsModule;
+use ChameleonSystem\CoreBundle\Entity\CmsMenuCustomItem;
 use ChameleonSystem\CoreBundle\Entity\CmsMenuCategory;
 
 class CmsMenuItem {
@@ -11,10 +14,17 @@ class CmsMenuItem {
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
+    // TCMSFieldExtendedLookupMultiTable
+/** @var CmsTblConf|CmsModule|CmsMenuCustomItem|null - Target */
+private ?CmsTblConf|CmsModule|CmsMenuCustomItem $tar = null
+,
+// TCMSFieldExtendedLookupMultiTable
+/** @var string - Target */
+private string $targetTableName = '', 
     // TCMSFieldVarchar
 /** @var string - Icon font CSS class */
 private string $iconFontCssClass = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsMenuCategory|null - CMS main menu category */
 private ?CmsMenuCategory $cmsMenuCategory = null
   ) {}
@@ -52,6 +62,32 @@ public function setName(string $name): self
 
 
   
+    // TCMSFieldExtendedLookupMultiTable
+public function getTar(): ?CmsTblConf|CmsModule|CmsMenuCustomItem
+{
+    return $this->tar;
+}
+
+public function setTar(?CmsTblConf|CmsModule|CmsMenuCustomItem $tar): self
+{
+    $this->tar = $tar;
+
+    return $this;
+}
+// TCMSFieldExtendedLookupMultiTable
+public function getTarget(): string
+{
+    return $this->targetTableName;
+}
+public function setTarget(string $targetTableName): self
+{
+    $this->targetTableName = $targetTableName;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getIconFontCssClass(): string
 {
@@ -66,7 +102,7 @@ public function setIconFontCssClass(string $iconFontCssClass): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsMenuCategory(): ?CmsMenuCategory
 {
     return $this->cmsMenuCategory;

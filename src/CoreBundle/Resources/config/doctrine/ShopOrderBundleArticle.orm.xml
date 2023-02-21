@@ -14,6 +14,9 @@
             <many-to-one field="shopOrderItem" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem" inversed-by="shopOrderBundleArticleCollection" >
     <join-column name="shop_order_item_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="bundleArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem">
+    <join-column name="bundle_article_id" referenced-column-name="id" />
+</many-to-one>
             <field name="amount" type="string" column="amount" length="255" nullable="false"  />
     </entity>
 

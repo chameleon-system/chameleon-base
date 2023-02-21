@@ -12,6 +12,12 @@
             <generator strategy="AUTO"/>
         </field>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <many-to-one field="shopVoucherSeriesSponsor" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVoucherSeriesSponsor">
+    <join-column name="shop_voucher_series_sponsor_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="shopVat" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVat">
+    <join-column name="shop_vat_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="shopVoucherCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVoucher" mapped-by="shopVoucherSeries" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>

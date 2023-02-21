@@ -2,13 +2,15 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+use ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation;
+use ChameleonSystem\CoreBundle\Entity\DataCountry;
 
 class DataExtranetUserAddress {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var DataExtranetUser|null - Belongs to customer */
 private ?DataExtranetUser $dataExtranetUser = null
 , 
@@ -24,6 +26,10 @@ private string $vatId = '',
     // TCMSFieldVarchar
 /** @var string - Address Appendix */
 private string $addressAdditionalInfo = '', 
+    // TCMSFieldLookup
+/** @var DataExtranetSalutation|null - Salutation */
+private ?DataExtranetSalutation $dataExtranetSalutation = null
+, 
     // TCMSFieldVarchar
 /** @var string - First name */
 private string $firstname = '', 
@@ -42,6 +48,10 @@ private string $city = '',
     // TCMSFieldVarchar
 /** @var string - Zip code */
 private string $postalcode = '', 
+    // TCMSFieldLookup
+/** @var DataCountry|null - Country */
+private ?DataCountry $dataCountry = null
+, 
     // TCMSFieldVarchar
 /** @var string - Telephone */
 private string $telefon = '', 
@@ -68,7 +78,7 @@ private string $fax = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;
@@ -133,6 +143,21 @@ public function getAddressAdditionalInfo(): string
 public function setAddressAdditionalInfo(string $addressAdditionalInfo): self
 {
     $this->addressAdditionalInfo = $addressAdditionalInfo;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getDataExtranetSalutation(): ?DataExtranetSalutation
+{
+    return $this->dataExtranetSalutation;
+}
+
+public function setDataExtranetSalutation(?DataExtranetSalutation $dataExtranetSalutation): self
+{
+    $this->dataExtranetSalutation = $dataExtranetSalutation;
 
     return $this;
 }
@@ -217,6 +242,21 @@ public function getPostalcode(): string
 public function setPostalcode(string $postalcode): self
 {
     $this->postalcode = $postalcode;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getDataCountry(): ?DataCountry
+{
+    return $this->dataCountry;
+}
+
+public function setDataCountry(?DataCountry $dataCountry): self
+{
+    $this->dataCountry = $dataCountry;
 
     return $this;
 }

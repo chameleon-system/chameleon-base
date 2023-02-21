@@ -2,13 +2,14 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\CmsUser;
 
 class CmsUrlAlias {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsPortal|null - Belongs to portal */
 private ?CmsPortal $cmsPortal = null
 , 
@@ -20,7 +21,11 @@ private string $name = '',
 private string $sourceUrl = '', 
     // TCMSFieldVarchar
 /** @var string - Target */
-private string $targetUrl = ''  ) {}
+private string $targetUrl = '', 
+    // TCMSFieldLookup
+/** @var CmsUser|null - Created by */
+private ?CmsUser $cmsUser = null
+  ) {}
 
   public function getId(): string
   {
@@ -41,7 +46,7 @@ private string $targetUrl = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;
@@ -92,6 +97,21 @@ public function getTargetUrl(): string
 public function setTargetUrl(string $targetUrl): self
 {
     $this->targetUrl = $targetUrl;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsUser(): ?CmsUser
+{
+    return $this->cmsUser;
+}
+
+public function setCmsUser(?CmsUser $cmsUser): self
+{
+    $this->cmsUser = $cmsUser;
 
     return $this;
 }

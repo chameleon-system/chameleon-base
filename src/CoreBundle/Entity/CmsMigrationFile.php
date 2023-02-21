@@ -11,7 +11,7 @@ class CmsMigrationFile {
     // TCMSFieldVarchar
 /** @var string - Build number */
 private string $buildNumber = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsMigrationCounter|null -  */
 private ?CmsMigrationCounter $cmsMigrationCounter = null
   ) {}
@@ -49,7 +49,7 @@ public function setBuildNumber(string $buildNumber): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsMigrationCounter(): ?CmsMigrationCounter
 {
     return $this->cmsMigrationCounter;

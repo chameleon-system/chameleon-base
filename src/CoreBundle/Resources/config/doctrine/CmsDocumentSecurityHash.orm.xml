@@ -11,6 +11,9 @@
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
+            <many-to-one field="cmsDocument" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsDocument">
+    <join-column name="cms_document_id" referenced-column-name="id" />
+</many-to-one>
             <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
     <join-column name="data_extranet_user_id" referenced-column-name="id" />
 </many-to-one>

@@ -4,8 +4,10 @@ namespace ChameleonSystem\CoreBundle\Entity;
 use ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnMessageTrigger;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
 use ChameleonSystem\CoreBundle\Entity\ShopOrder;
 use ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup;
+use ChameleonSystem\CoreBundle\Entity\PkgShopPaymentIpnStatus;
 
 class PkgShopPaymentIpnMessage {
   public function __construct(
@@ -16,13 +18,21 @@ class PkgShopPaymentIpnMessage {
 /** @var Collection<int, pkgShopPaymentIpnMessageTrigger> - Forwarding logs */
 private Collection $pkgShopPaymentIpnMessageTriggerCollection = new ArrayCollection()
 , 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Activated via this portal */
+private ?CmsPortal $cmsPortal = null
+, 
+    // TCMSFieldLookup
 /** @var ShopOrder|null - Belongs to order (ID) */
 private ?ShopOrder $shopOrder = null
 , 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopPaymentHandlerGroup|null - Payment provider */
 private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
+, 
+    // TCMSFieldLookup
+/** @var PkgShopPaymentIpnStatus|null - Status */
+private ?PkgShopPaymentIpnStatus $pkgShopPaymentIpnStatus = null
 , 
     // TCMSFieldVarchar
 /** @var string - Type of error */
@@ -86,7 +96,22 @@ public function removePkgShopPaymentIpnMessageTriggerCollection(pkgShopPaymentIp
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
 public function getShopOrder(): ?ShopOrder
 {
     return $this->shopOrder;
@@ -101,7 +126,7 @@ public function setShopOrder(?ShopOrder $shopOrder): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopPaymentHandlerGroup(): ?ShopPaymentHandlerGroup
 {
     return $this->shopPaymentHandlerGroup;
@@ -110,6 +135,21 @@ public function getShopPaymentHandlerGroup(): ?ShopPaymentHandlerGroup
 public function setShopPaymentHandlerGroup(?ShopPaymentHandlerGroup $shopPaymentHandlerGroup): self
 {
     $this->shopPaymentHandlerGroup = $shopPaymentHandlerGroup;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopPaymentIpnStatus(): ?PkgShopPaymentIpnStatus
+{
+    return $this->pkgShopPaymentIpnStatus;
+}
+
+public function setPkgShopPaymentIpnStatus(?PkgShopPaymentIpnStatus $pkgShopPaymentIpnStatus): self
+{
+    $this->pkgShopPaymentIpnStatus = $pkgShopPaymentIpnStatus;
 
     return $this;
 }

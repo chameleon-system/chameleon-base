@@ -15,6 +15,9 @@
             <field name="title" type="string" column="title" length="255" nullable="false"  />
             <field name="identifier" type="string" column="identifier" length="255" nullable="false"  />
             <field name="externalIdentifier" type="string" column="external_identifier" length="255" nullable="false"  />
+            <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="cms_language_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="propertyNavigationsCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortalNavigation" mapped-by="cmsPortal" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>
@@ -28,6 +31,15 @@
 </one-to-many>
 
             <field name="faviconUrl" type="string" column="favicon_url" length="255" nullable="false"  />
+            <many-to-one field="ima" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="images" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="watermarkL" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="watermark_logo" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="backgroundIm" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="background_image" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="cmsMessageManagerMessageCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessage" mapped-by="cmsPortal" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>
@@ -39,6 +51,12 @@
             <field name="metaDescription" type="string" column="meta_description" length="200" nullable="false"  />
             <field name="metaAuthor" type="string" column="meta_author" length="255" nullable="false"  />
             <field name="metaPublisher" type="string" column="meta_publisher" length="255" nullable="false"  />
+            <many-to-one field="cmsLocals" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLocals">
+    <join-column name="cms_locals_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="pkgCmsTheme" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgCmsTheme">
+    <join-column name="pkg_cms_theme_id" referenced-column-name="id" />
+</many-to-one>
             <field name="googleAnalyticNumber" type="string" column="google_analytic_number" length="255" nullable="false"  />
             <field name="etrackerId" type="string" column="etracker_id" length="255" nullable="false"  />
             <field name="ivwId" type="string" column="ivw_id" length="255" nullable="false"  />

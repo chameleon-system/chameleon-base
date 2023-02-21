@@ -11,7 +11,7 @@ class ShopPaymentHandler {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopPaymentHandlerGroup|null - Belongs to payment provider */
 private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
 , 
@@ -48,7 +48,7 @@ private Collection $shopPaymentHandlerParameterCollection = new ArrayCollection(
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopPaymentHandlerGroup(): ?ShopPaymentHandlerGroup
 {
     return $this->shopPaymentHandlerGroup;

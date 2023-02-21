@@ -8,7 +8,7 @@ class PkgShopAffiliateParameter {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgShopAffiliate|null - Belongs to affiliate program */
 private ?PkgShopAffiliate $pkgShopAffiliate = null
 , 
@@ -35,7 +35,7 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgShopAffiliate(): ?PkgShopAffiliate
 {
     return $this->pkgShopAffiliate;

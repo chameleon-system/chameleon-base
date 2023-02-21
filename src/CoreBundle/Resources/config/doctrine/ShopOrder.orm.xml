@@ -30,6 +30,9 @@
     <join-column name="cms_portal_id" referenced-column-name="id" />
 </many-to-one>
             <field name="ordernumber" type="string" column="ordernumber" length="255" nullable="false"  />
+            <many-to-one field="pkgShopRatingService" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopRatingService">
+    <join-column name="pkg_shop_rating_service_id" referenced-column-name="id" />
+</many-to-one>
             <field name="orderIdent" type="string" column="order_ident" length="20" nullable="false"  />
             <one-to-many field="shopOrderItemCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem" mapped-by="shopOrder" orphan-removal="true">
     <cascade-persist/>
@@ -41,6 +44,9 @@
             <field name="customerNumber" type="string" column="customer_number" length="255" nullable="false"  />
             <field name="userEmail" type="string" column="user_email" length="255" nullable="false"  />
             <field name="adrBillingCompany" type="string" column="adr_billing_company" length="255" nullable="false"  />
+            <many-to-one field="adrBillingSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
+    <join-column name="adr_billing_salutation_id" referenced-column-name="id" />
+</many-to-one>
             <field name="adrBillingFirstname" type="string" column="adr_billing_firstname" length="255" nullable="false"  />
             <field name="adrBillingLastname" type="string" column="adr_billing_lastname" length="255" nullable="false"  />
             <field name="adrBillingAdditionalInfo" type="string" column="adr_billing_additional_info" length="255" nullable="false"  />
@@ -48,10 +54,19 @@
             <field name="adrBillingStreetnr" type="string" column="adr_billing_streetnr" length="255" nullable="false"  />
             <field name="adrBillingCity" type="string" column="adr_billing_city" length="255" nullable="false"  />
             <field name="adrBillingPostalcode" type="string" column="adr_billing_postalcode" length="255" nullable="false"  />
+            <many-to-one field="adrBillingCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\DataCountry">
+    <join-column name="adr_billing_country_id" referenced-column-name="id" />
+</many-to-one>
             <field name="adrBillingTelefon" type="string" column="adr_billing_telefon" length="255" nullable="false"  />
             <field name="adrBillingFax" type="string" column="adr_billing_fax" length="255" nullable="false"  />
+            <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="cms_language_id" referenced-column-name="id" />
+</many-to-one>
             <field name="userIp" type="string" column="user_ip" length="50" nullable="false"  />
             <field name="adrShippingCompany" type="string" column="adr_shipping_company" length="255" nullable="false"  />
+            <many-to-one field="adrShippingSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
+    <join-column name="adr_shipping_salutation_id" referenced-column-name="id" />
+</many-to-one>
             <field name="adrShippingFirstname" type="string" column="adr_shipping_firstname" length="255" nullable="false"  />
             <field name="adrShippingLastname" type="string" column="adr_shipping_lastname" length="255" nullable="false"  />
             <field name="adrShippingAdditionalInfo" type="string" column="adr_shipping_additional_info" length="255" nullable="false"  />
@@ -59,13 +74,22 @@
             <field name="adrShippingStreetnr" type="string" column="adr_shipping_streetnr" length="255" nullable="false"  />
             <field name="adrShippingCity" type="string" column="adr_shipping_city" length="255" nullable="false"  />
             <field name="adrShippingPostalcode" type="string" column="adr_shipping_postalcode" length="255" nullable="false"  />
+            <many-to-one field="adrShippingCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\DataCountry">
+    <join-column name="adr_shipping_country_id" referenced-column-name="id" />
+</many-to-one>
             <field name="adrShippingTelefon" type="string" column="adr_shipping_telefon" length="255" nullable="false"  />
             <field name="adrShippingFax" type="string" column="adr_shipping_fax" length="255" nullable="false"  />
+            <many-to-one field="shopShippingGroup" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopShippingGroup">
+    <join-column name="shop_shipping_group_id" referenced-column-name="id" />
+</many-to-one>
             <field name="shopShippingGroupName" type="string" column="shop_shipping_group_name" length="255" nullable="false"  />
             <one-to-many field="shopOrderShippingGroupParameterCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderShippingGroupParameter" mapped-by="shopOrder" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="shopPaymentMethod" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopPaymentMethod">
+    <join-column name="shop_payment_method_id" referenced-column-name="id" />
+</many-to-one>
             <field name="shopPaymentMethodName" type="string" column="shop_payment_method_name" length="255" nullable="false"  />
             <one-to-many field="shopOrderPaymentMethodParameterCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderPaymentMethodParameter" mapped-by="shopOrder" orphan-removal="true">
     <cascade-persist/>
@@ -75,8 +99,14 @@
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="pkgShopCurrency" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopCurrency">
+    <join-column name="pkg_shop_currency_id" referenced-column-name="id" />
+</many-to-one>
             <field name="countUniqueArticles" type="string" column="count_unique_articles" length="255" nullable="false"  />
             <field name="affiliateCode" type="string" column="affiliate_code" length="255" nullable="false"  />
+            <many-to-one field="pkgShopAffiliate" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopAffiliate">
+    <join-column name="pkg_shop_affiliate_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="shopVoucherUseCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVoucherUse" mapped-by="shopOrder" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>

@@ -11,7 +11,7 @@ class CmsTblDisplayListFields {
     // TCMSFieldVarchar
 /** @var string - Field name */
 private string $title = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTblConf|null - Belongs to table */
 private ?CmsTblConf $cmsTblConf = null
 , 
@@ -64,7 +64,7 @@ public function setTitle(string $title): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;

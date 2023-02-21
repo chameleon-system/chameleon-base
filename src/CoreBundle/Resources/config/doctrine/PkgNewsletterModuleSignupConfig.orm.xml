@@ -14,6 +14,9 @@
             <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
     <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="mainModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
+    <join-column name="main_module_instance_id" referenced-column-name="id" />
+</many-to-one>
             <field name="signupHeadline" type="string" column="signup_headline" length="255" nullable="false"  />
             <field name="confirmTitle" type="string" column="confirm_title" length="255" nullable="false"  />
             <field name="signedupHeadline" type="string" column="signedup_headline" length="255" nullable="false"  />

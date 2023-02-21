@@ -2,19 +2,24 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+use ChameleonSystem\CoreBundle\Entity\PkgCommentType;
 
 class PkgCommentModuleConfig {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTplModuleInstance|null - Belongs to module instance */
 private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
     // TCMSFieldVarchar
 /** @var string - Headline */
 private string $name = '', 
+    // TCMSFieldLookup
+/** @var PkgCommentType|null - Type of comment */
+private ?PkgCommentType $pkgCommentType = null
+, 
     // TCMSFieldVarchar
 /** @var string - Comments per page */
 private string $numberOfCommentsPerPage = '20', 
@@ -41,7 +46,7 @@ private string $commentOnDelete = 'Dieser Kommentar wurde gelöscht'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
@@ -64,6 +69,21 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgCommentType(): ?PkgCommentType
+{
+    return $this->pkgCommentType;
+}
+
+public function setPkgCommentType(?PkgCommentType $pkgCommentType): self
+{
+    $this->pkgCommentType = $pkgCommentType;
 
     return $this;
 }

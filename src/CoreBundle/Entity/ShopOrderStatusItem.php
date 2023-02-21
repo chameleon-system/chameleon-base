@@ -2,15 +2,20 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\ShopOrderStatus;
+use ChameleonSystem\CoreBundle\Entity\ShopOrderItem;
 
 class ShopOrderStatusItem {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopOrderStatus|null - Belongs to status */
 private ?ShopOrderStatus $shopOrderStatus = null
+, 
+    // TCMSFieldLookup
+/** @var ShopOrderItem|null - Product */
+private ?ShopOrderItem $shopOrderItem = null
   ) {}
 
   public function getId(): string
@@ -32,7 +37,7 @@ private ?ShopOrderStatus $shopOrderStatus = null
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopOrderStatus(): ?ShopOrderStatus
 {
     return $this->shopOrderStatus;
@@ -41,6 +46,21 @@ public function getShopOrderStatus(): ?ShopOrderStatus
 public function setShopOrderStatus(?ShopOrderStatus $shopOrderStatus): self
 {
     $this->shopOrderStatus = $shopOrderStatus;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopOrderItem(): ?ShopOrderItem
+{
+    return $this->shopOrderItem;
+}
+
+public function setShopOrderItem(?ShopOrderItem $shopOrderItem): self
+{
+    $this->shopOrderItem = $shopOrderItem;
 
     return $this;
 }

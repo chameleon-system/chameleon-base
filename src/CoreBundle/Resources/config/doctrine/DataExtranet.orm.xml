@@ -14,6 +14,9 @@
             <field name="sessionlife" type="string" column="sessionlife" length="255" nullable="false"  />
             <field name="fpwdTitle" type="string" column="fpwd_title" length="255" nullable="false"  />
             <field name="noaccessTitle" type="string" column="noaccess_title" length="255" nullable="false"  />
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
             <field name="extranetSpotName" type="string" column="extranet_spot_name" length="255" nullable="false"  />
             <field name="passwordChangeKeyTimeValidity" type="string" column="password_change_key_time_validity" length="255" nullable="false"  />
     </entity>

@@ -2,6 +2,7 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet;
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
 
 class PkgMultiModuleSetItem {
   public function __construct(
@@ -11,9 +12,13 @@ class PkgMultiModuleSetItem {
     // TCMSFieldVarchar
 /** @var string - Module name */
 private string $name = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgMultiModuleSet|null - Belongs to set */
 private ?PkgMultiModuleSet $pkgMultiModuleSet = null
+, 
+    // TCMSFieldLookup
+/** @var CmsTplModuleInstance|null - Module instance */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
     // TCMSFieldVarchar
 /** @var string - System name */
@@ -52,7 +57,7 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgMultiModuleSet(): ?PkgMultiModuleSet
 {
     return $this->pkgMultiModuleSet;
@@ -61,6 +66,21 @@ public function getPkgMultiModuleSet(): ?PkgMultiModuleSet
 public function setPkgMultiModuleSet(?PkgMultiModuleSet $pkgMultiModuleSet): self
 {
     $this->pkgMultiModuleSet = $pkgMultiModuleSet;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
+{
+    return $this->cmsTplModuleInstance;
+}
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
+{
+    $this->cmsTplModuleInstance = $cmsTplModuleInstance;
 
     return $this;
 }

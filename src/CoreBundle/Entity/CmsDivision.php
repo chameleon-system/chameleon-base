@@ -2,19 +2,29 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class CmsDivision {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsPortal|null - Belongs to portal / website */
 private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldVarchar
 /** @var string - Area name */
 private string $name = '', 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - Area language */
+private ?CmsLanguage $cmsLanguage = null
+, 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Background image */
+private ?CmsMedia $backgroundIm = null
+, 
     // TCMSFieldVarchar
 /** @var string - IVW code */
 private string $ivwCode = '', 
@@ -41,7 +51,7 @@ private string $menuStopLevel = '0'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;
@@ -64,6 +74,36 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsLanguage(): ?CmsLanguage
+{
+    return $this->cmsLanguage;
+}
+
+public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
+{
+    $this->cmsLanguage = $cmsLanguage;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getBackgroundIm(): ?CmsMedia
+{
+    return $this->backgroundIm;
+}
+
+public function setBackgroundIm(?CmsMedia $backgroundIm): self
+{
+    $this->backgroundIm = $backgroundIm;
 
     return $this;
 }

@@ -16,6 +16,12 @@
     <join-column name="shop_id" referenced-column-name="id" />
 </many-to-one>
             <field name="systemName" type="string" column="system_name" length="255" nullable="false"  />
+            <many-to-one field="pkgShopPaymentTransactionType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionType">
+    <join-column name="pkg_shop_payment_transaction_type_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="dataMailProfile" target-entity="\ChameleonSystem\CoreBundle\Entity\DataMailProfile">
+    <join-column name="data_mail_profile_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

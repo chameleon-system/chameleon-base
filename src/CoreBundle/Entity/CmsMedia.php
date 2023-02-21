@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsFiletype;
+use ChameleonSystem\CoreBundle\Entity\CmsUser;
 
 class CmsMedia {
   public function __construct(
@@ -10,6 +12,10 @@ class CmsMedia {
     // TCMSFieldVarchar
 /** @var string - Height */
 private string $height = '0', 
+    // TCMSFieldLookup
+/** @var CmsFiletype|null - Image type */
+private ?CmsFiletype $cmsFiletype = null
+, 
     // TCMSFieldVarchar
 /** @var string - File size */
 private string $filesize = '', 
@@ -34,9 +40,17 @@ private string $customFilename = '',
     // TCMSFieldVarchar
 /** @var string - Path */
 private string $path = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Preview image */
+private ?CmsMedia $cmsMedia = null
+, 
     // TCMSFieldVarchar
 /** @var string - Refresh Token */
-private string $refreshToken = ''  ) {}
+private string $refreshToken = '', 
+    // TCMSFieldLookup
+/** @var CmsUser|null - Last changed by */
+private ?CmsUser $cmsUser = null
+  ) {}
 
   public function getId(): string
   {
@@ -65,6 +79,21 @@ public function getHeight(): string
 public function setHeight(string $height): self
 {
     $this->height = $height;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsFiletype(): ?CmsFiletype
+{
+    return $this->cmsFiletype;
+}
+
+public function setCmsFiletype(?CmsFiletype $cmsFiletype): self
+{
+    $this->cmsFiletype = $cmsFiletype;
 
     return $this;
 }
@@ -183,6 +212,21 @@ public function setPath(string $path): self
 
 
   
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getRefreshToken(): string
 {
@@ -191,6 +235,21 @@ public function getRefreshToken(): string
 public function setRefreshToken(string $refreshToken): self
 {
     $this->refreshToken = $refreshToken;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsUser(): ?CmsUser
+{
+    return $this->cmsUser;
+}
+
+public function setCmsUser(?CmsUser $cmsUser): self
+{
+    $this->cmsUser = $cmsUser;
 
     return $this;
 }

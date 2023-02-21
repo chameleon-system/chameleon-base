@@ -16,6 +16,9 @@
 </many-to-one>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="sslname" type="string" column="sslname" length="255" nullable="false"  />
+            <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="cms_language_id" referenced-column-name="id" />
+</many-to-one>
             <field name="googleApiKey" type="string" column="google_api_key" length="255" nullable="false"  />
     </entity>
 

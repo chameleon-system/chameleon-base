@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class PkgShopRatingService {
   public function __construct(
@@ -13,6 +14,10 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - System name */
 private string $systemName = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Icon */
+private ?CmsMedia $iconCmsMedia = null
+, 
     // TCMSFieldVarchar
 /** @var string - Shop URL */
 private string $shopUrl = '', 
@@ -82,6 +87,21 @@ public function getSystemName(): string
 public function setSystemName(string $systemName): self
 {
     $this->systemName = $systemName;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getIconCmsMedia(): ?CmsMedia
+{
+    return $this->iconCmsMedia;
+}
+
+public function setIconCmsMedia(?CmsMedia $iconCmsMedia): self
+{
+    $this->iconCmsMedia = $iconCmsMedia;
 
     return $this;
 }

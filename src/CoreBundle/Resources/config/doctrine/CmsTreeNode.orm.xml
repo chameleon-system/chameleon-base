@@ -12,6 +12,9 @@
             <generator strategy="AUTO"/>
         </field>
             <field name="tbl" type="string" column="tbl" length="255" nullable="false"  />
+            <many-to-one field="con" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplPage">
+    <join-column name="contid" referenced-column-name="id" />
+</many-to-one>
             <many-to-one field="cmsTree" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTree" inversed-by="cmsTreeNodeCollection" >
     <join-column name="cms_tree_id" referenced-column-name="id" />
 </many-to-one>

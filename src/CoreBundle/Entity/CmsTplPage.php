@@ -1,15 +1,24 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMasterPagedef;
 use ChameleonSystem\CoreBundle\Entity\CmsTplPageCmsMasterPagedefSpot;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
+use ChameleonSystem\CoreBundle\Entity\CmsUser;
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
 
 class CmsTplPage {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var CmsMasterPagedef|null - Page template */
+private ?CmsMasterPagedef $cmsMasterPagedef = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsTplPageCmsMasterPagedefSpot> - Spots */
 private Collection $cmsTplPageCmsMasterPagedefSpotCollection = new ArrayCollection()
@@ -20,9 +29,25 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - SEO pattern */
 private string $seoPattern = '', 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Belongs to portal / website */
+private ?CmsPortal $cmsPortal = null
+, 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Background image */
+private ?CmsMedia $backgroundIm = null
+, 
+    // TCMSFieldLookup
+/** @var CmsUser|null - Created by */
+private ?CmsUser $cmsUser = null
+, 
     // TCMSFieldVarchar
 /** @var string - IVW page code */
 private string $ivwCode = '', 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - Content language */
+private ?CmsLanguage $cmsLanguage = null
+, 
     // TCMSFieldVarchar
 /** @var string - Short description */
 private string $metaDescription = '', 
@@ -61,6 +86,21 @@ private string $metaRevisitAfter = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getCmsMasterPagedef(): ?CmsMasterPagedef
+{
+    return $this->cmsMasterPagedef;
+}
+
+public function setCmsMasterPagedef(?CmsMasterPagedef $cmsMasterPagedef): self
+{
+    $this->cmsMasterPagedef = $cmsMasterPagedef;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldPropertyTable
 /**
 * @return Collection<int, cmsTplPageCmsMasterPagedefSpot>
@@ -122,6 +162,51 @@ public function setSeoPattern(string $seoPattern): self
 
 
   
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getBackgroundIm(): ?CmsMedia
+{
+    return $this->backgroundIm;
+}
+
+public function setBackgroundIm(?CmsMedia $backgroundIm): self
+{
+    $this->backgroundIm = $backgroundIm;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsUser(): ?CmsUser
+{
+    return $this->cmsUser;
+}
+
+public function setCmsUser(?CmsUser $cmsUser): self
+{
+    $this->cmsUser = $cmsUser;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getIvwCode(): string
 {
@@ -130,6 +215,21 @@ public function getIvwCode(): string
 public function setIvwCode(string $ivwCode): self
 {
     $this->ivwCode = $ivwCode;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsLanguage(): ?CmsLanguage
+{
+    return $this->cmsLanguage;
+}
+
+public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
+{
+    $this->cmsLanguage = $cmsLanguage;
 
     return $this;
 }

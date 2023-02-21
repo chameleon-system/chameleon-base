@@ -5,13 +5,14 @@ use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
 use ChameleonSystem\CoreBundle\Entity\ShopArticleCatalogConfDefaultOrder;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby;
 
 class ShopArticleCatalogConf {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTplModuleInstance|null - Belongs to module instance */
 private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
@@ -24,7 +25,11 @@ private Collection $shopArticleCatalogConfDefaultOrderCollection = new ArrayColl
 , 
     // TCMSFieldVarchar
 /** @var string - Articles per page */
-private string $pageSize = '20'  ) {}
+private string $pageSize = '20', 
+    // TCMSFieldLookup
+/** @var ShopModuleArticlelistOrderby|null - Default sorting */
+private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null
+  ) {}
 
   public function getId(): string
   {
@@ -45,7 +50,7 @@ private string $pageSize = '20'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
@@ -115,6 +120,21 @@ public function getPageSize(): string
 public function setPageSize(string $pageSize): self
 {
     $this->pageSize = $pageSize;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopModuleArticlelistOrderby(): ?ShopModuleArticlelistOrderby
+{
+    return $this->shopModuleArticlelistOrderby;
+}
+
+public function setShopModuleArticlelistOrderby(?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby): self
+{
+    $this->shopModuleArticlelistOrderby = $shopModuleArticlelistOrderby;
 
     return $this;
 }

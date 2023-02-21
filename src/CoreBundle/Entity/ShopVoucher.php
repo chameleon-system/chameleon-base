@@ -11,7 +11,7 @@ class ShopVoucher {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopVoucherSeries|null - Belongs to voucher series */
 private ?ShopVoucherSeries $shopVoucherSeries = null
 , 
@@ -42,7 +42,7 @@ private Collection $shopVoucherUseCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopVoucherSeries(): ?ShopVoucherSeries
 {
     return $this->shopVoucherSeries;

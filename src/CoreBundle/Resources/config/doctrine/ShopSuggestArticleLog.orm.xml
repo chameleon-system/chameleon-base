@@ -14,6 +14,9 @@
             <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser" inversed-by="shopSuggestArticleLogCollection" >
     <join-column name="data_extranet_user_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle">
+    <join-column name="shop_article_id" referenced-column-name="id" />
+</many-to-one>
             <field name="fromEmail" type="string" column="from_email" length="255" nullable="false"  />
             <field name="fromName" type="string" column="from_name" length="255" nullable="false"  />
             <field name="toEmail" type="string" column="to_email" length="255" nullable="false"  />

@@ -11,6 +11,9 @@
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
+            <many-to-one field="parent" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTree">
+    <join-column name="parent_id" referenced-column-name="id" />
+</many-to-one>
             <field name="lft" type="string" column="lft" length="255" nullable="false"  />
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="rgt" type="string" column="rgt" length="255" nullable="false"  />
@@ -18,6 +21,12 @@
             <field name="entrySort" type="string" column="entry_sort" length="255" nullable="false"  />
             <field name="link" type="string" column="link" length="255" nullable="false"  />
             <field name="cmsTplPagePrimaryLink" type="string" column="cms_tpl_page_primary_link" length="255" nullable="false"  />
+            <many-to-one field="naviIconCmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="navi_icon_cms_media_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
             <field name="htmlAccessKey" type="string" column="html_access_key" length="1" nullable="false"  />
             <field name="cssClasses" type="string" column="css_classes" length="255" nullable="false"  />
             <one-to-many field="cmsTreeNodeCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTreeNode" mapped-by="cmsTree" orphan-removal="true">

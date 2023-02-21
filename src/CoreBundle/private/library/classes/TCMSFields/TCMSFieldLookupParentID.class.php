@@ -26,32 +26,6 @@ use function PHPUnit\Framework\stringEndsWith;
 /**/
 class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransformableInterface
 {
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
-    {
-        $propertyName = $this->name;
-        if (stringEndsWith($propertyName, '_id')) {
-            $propertyName = substr($propertyName, 0, -3);
-        }
-
-        $parameters = [
-            'source' => __CLASS__,
-            'type' => $this->snakeToCamelCase($this->GetConnectedTableName(), false),
-            'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToCamelCase($propertyName),
-        ];
-        $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
-        $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();
-
-        return new DataModelParts(
-            $propertyCode,
-            $methodCode,
-            [
-                ltrim(sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)), '\\'),
-            ],
-            true
-        );
-    }
-
 
     public function getDoctrineDataModelXml(string $namespace): string
     {

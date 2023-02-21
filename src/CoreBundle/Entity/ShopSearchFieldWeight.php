@@ -2,15 +2,21 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\Shop;
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
+use ChameleonSystem\CoreBundle\Entity\ShopSearchQuery;
 
 class ShopSearchFieldWeight {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var Shop|null - Belongs to shop */
 private ?Shop $shop = null
+, 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - Language */
+private ?CmsLanguage $cmsLanguage = null
 , 
     // TCMSFieldVarchar
 /** @var string - Descriptive name of the field / table combination */
@@ -21,6 +27,10 @@ private string $tablename = '',
     // TCMSFieldVarchar
 /** @var string - Field */
 private string $fieldname = '', 
+    // TCMSFieldLookup
+/** @var ShopSearchQuery|null - Selection to be used */
+private ?ShopSearchQuery $shopSearchQuery = null
+, 
     // TCMSFieldVarchar
 /** @var string - Field name in query */
 private string $fieldNameInQuery = ''  ) {}
@@ -44,7 +54,7 @@ private string $fieldNameInQuery = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShop(): ?Shop
 {
     return $this->shop;
@@ -53,6 +63,21 @@ public function getShop(): ?Shop
 public function setShop(?Shop $shop): self
 {
     $this->shop = $shop;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsLanguage(): ?CmsLanguage
+{
+    return $this->cmsLanguage;
+}
+
+public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
+{
+    $this->cmsLanguage = $cmsLanguage;
 
     return $this;
 }
@@ -95,6 +120,21 @@ public function getFieldname(): string
 public function setFieldname(string $fieldname): self
 {
     $this->fieldname = $fieldname;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopSearchQuery(): ?ShopSearchQuery
+{
+    return $this->shopSearchQuery;
+}
+
+public function setShopSearchQuery(?ShopSearchQuery $shopSearchQuery): self
+{
+    $this->shopSearchQuery = $shopSearchQuery;
 
     return $this;
 }

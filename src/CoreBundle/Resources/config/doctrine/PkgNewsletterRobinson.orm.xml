@@ -11,6 +11,9 @@
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
             <field name="email" type="string" column="email" length="255" nullable="false"  />
             <field name="reason" type="string" column="reason" length="255" nullable="false"  />
     </entity>

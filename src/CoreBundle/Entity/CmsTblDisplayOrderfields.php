@@ -11,7 +11,7 @@ class CmsTblDisplayOrderfields {
     // TCMSFieldVarchar
 /** @var string - Database field name */
 private string $name = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTblConf|null - Belongs to table */
 private ?CmsTblConf $cmsTblConf = null
   ) {}
@@ -49,7 +49,7 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;

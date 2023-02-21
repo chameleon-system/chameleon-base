@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class PkgCmsTheme {
   public function __construct(
@@ -12,7 +13,11 @@ class PkgCmsTheme {
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Own LESS file */
-private string $lessFile = ''  ) {}
+private string $lessFile = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Preview image */
+private ?CmsMedia $cmsMedia = null
+  ) {}
 
   public function getId(): string
   {
@@ -55,6 +60,21 @@ public function getLessFile(): string
 public function setLessFile(string $lessFile): self
 {
     $this->lessFile = $lessFile;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
 
     return $this;
 }

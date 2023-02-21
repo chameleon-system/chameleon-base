@@ -13,6 +13,9 @@
         </field>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="systemName" type="string" column="system_name" length="255" nullable="false"  />
+            <many-to-one field="ow" target-entity="\ChameleonSystem\AutoclassesBundle\TableConfExport\AbstractEntity">
+    <join-column name="owner" referenced-column-name="id" />
+</many-to-one>
             <field name="value" type="string" column="value" length="255" nullable="false"  />
     </entity>
 

@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
 use ChameleonSystem\CoreBundle\Entity\PkgTrackObject;
 
 class PkgTrackObjectHistory {
@@ -14,6 +15,10 @@ private string $tableName = '',
     // TCMSFieldVarchar
 /** @var string -  */
 private string $ownerId = '', 
+    // TCMSFieldLookup
+/** @var DataExtranetUser|null -  */
+private ?DataExtranetUser $dataExtranetUser = null
+, 
     // TCMSFieldVarchar
 /** @var string -  */
 private string $sessionId = '', 
@@ -23,7 +28,7 @@ private string $ip = '',
     // TCMSFieldVarchar
 /** @var string -  */
 private string $requestChecksum = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgTrackObject|null -  */
 private ?PkgTrackObject $pkgTrackObject = null
   ) {}
@@ -75,6 +80,21 @@ public function setOwnerId(string $ownerId): self
 
 
   
+    // TCMSFieldLookup
+public function getDataExtranetUser(): ?DataExtranetUser
+{
+    return $this->dataExtranetUser;
+}
+
+public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
+{
+    $this->dataExtranetUser = $dataExtranetUser;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getSessionId(): string
 {
@@ -117,7 +137,7 @@ public function setRequestChecksum(string $requestChecksum): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgTrackObject(): ?PkgTrackObject
 {
     return $this->pkgTrackObject;

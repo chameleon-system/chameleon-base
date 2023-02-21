@@ -8,7 +8,7 @@ class CmsExportProfilesFields {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsExportProfiles|null - Belongs to profile */
 private ?CmsExportProfiles $cmsExportProfiles = null
 , 
@@ -35,7 +35,7 @@ private string $htmlTemplate = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsExportProfiles(): ?CmsExportProfiles
 {
     return $this->cmsExportProfiles;

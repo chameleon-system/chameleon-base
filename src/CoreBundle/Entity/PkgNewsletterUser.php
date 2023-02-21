@@ -1,15 +1,26 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+use ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation;
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
 
 class PkgNewsletterUser {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var DataExtranetUser|null - Belongs to customer */
+private ?DataExtranetUser $dataExtranetUser = null
+, 
     // TCMSFieldVarchar
 /** @var string - Email address */
 private string $email = '', 
+    // TCMSFieldLookup
+/** @var DataExtranetSalutation|null - Write delete log */
+private ?DataExtranetSalutation $dataExtranetSalutation = null
+, 
     // TCMSFieldVarchar
 /** @var string - First name */
 private string $firstname = '', 
@@ -19,6 +30,10 @@ private string $lastname = '',
     // TCMSFieldVarchar
 /** @var string - Company */
 private string $company = '', 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Portal */
+private ?CmsPortal $cmsPortal = null
+, 
     // TCMSFieldVarchar
 /** @var string - Confirmation code */
 private string $optincode = '', 
@@ -45,6 +60,21 @@ private string $optoutcode = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getDataExtranetUser(): ?DataExtranetUser
+{
+    return $this->dataExtranetUser;
+}
+
+public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
+{
+    $this->dataExtranetUser = $dataExtranetUser;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getEmail(): string
 {
@@ -53,6 +83,21 @@ public function getEmail(): string
 public function setEmail(string $email): self
 {
     $this->email = $email;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getDataExtranetSalutation(): ?DataExtranetSalutation
+{
+    return $this->dataExtranetSalutation;
+}
+
+public function setDataExtranetSalutation(?DataExtranetSalutation $dataExtranetSalutation): self
+{
+    $this->dataExtranetSalutation = $dataExtranetSalutation;
 
     return $this;
 }
@@ -95,6 +140,21 @@ public function getCompany(): string
 public function setCompany(string $company): self
 {
     $this->company = $company;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
 
     return $this;
 }

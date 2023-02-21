@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopVoucherSeriesSponsor;
+use ChameleonSystem\CoreBundle\Entity\ShopVat;
 use ChameleonSystem\CoreBundle\Entity\ShopVoucher;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,6 +15,14 @@ class ShopVoucherSeries {
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
+    // TCMSFieldLookup
+/** @var ShopVoucherSeriesSponsor|null - Voucher sponsor */
+private ?ShopVoucherSeriesSponsor $shopVoucherSeriesSponsor = null
+, 
+    // TCMSFieldLookup
+/** @var ShopVat|null - VAT group */
+private ?ShopVat $shopVat = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopVoucher> - Vouchers belonging to the series */
 private Collection $shopVoucherCollection = new ArrayCollection()
@@ -45,6 +55,36 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopVoucherSeriesSponsor(): ?ShopVoucherSeriesSponsor
+{
+    return $this->shopVoucherSeriesSponsor;
+}
+
+public function setShopVoucherSeriesSponsor(?ShopVoucherSeriesSponsor $shopVoucherSeriesSponsor): self
+{
+    $this->shopVoucherSeriesSponsor = $shopVoucherSeriesSponsor;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopVat(): ?ShopVat
+{
+    return $this->shopVat;
+}
+
+public function setShopVat(?ShopVat $shopVat): self
+{
+    $this->shopVat = $shopVat;
 
     return $this;
 }

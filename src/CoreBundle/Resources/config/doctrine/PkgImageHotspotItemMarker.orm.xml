@@ -17,7 +17,16 @@
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="top" type="string" column="top" length="255" nullable="false"  />
             <field name="left" type="string" column="left" length="255" nullable="false"  />
+            <many-to-one field="linkedRec" target-entity="\ChameleonSystem\AutoclassesBundle\TableConfExport\AbstractEntity">
+    <join-column name="linked_record" referenced-column-name="id" />
+</many-to-one>
             <field name="url" type="string" column="url" length="255" nullable="false"  />
+            <many-to-one field="cmsMedia" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="cms_media_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsMediaHover" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="cms_media_hover_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

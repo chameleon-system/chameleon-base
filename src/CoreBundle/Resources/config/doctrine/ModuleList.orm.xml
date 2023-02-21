@@ -11,8 +11,14 @@
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
+            <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
             <field name="name" type="string" column="name" length="80" nullable="false"  />
             <field name="subHeadline" type="string" column="sub_headline" length="255" nullable="false"  />
+            <many-to-one field="moduleListCat" target-entity="\ChameleonSystem\CoreBundle\Entity\ModuleListCat">
+    <join-column name="module_list_cat_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

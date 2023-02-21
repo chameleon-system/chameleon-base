@@ -1,18 +1,28 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class ModuleText {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var CmsTplModuleInstance|null - Module instance */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
+, 
     // TCMSFieldVarchar
 /** @var string - Headline */
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Sub headline */
-private string $subheadline = ''  ) {}
+private string $subheadline = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Optional icon */
+private ?CmsMedia $i = null
+  ) {}
 
   public function getId(): string
   {
@@ -33,6 +43,21 @@ private string $subheadline = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
+{
+    return $this->cmsTplModuleInstance;
+}
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
+{
+    $this->cmsTplModuleInstance = $cmsTplModuleInstance;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getName(): string
 {
@@ -55,6 +80,21 @@ public function getSubheadline(): string
 public function setSubheadline(string $subheadline): self
 {
     $this->subheadline = $subheadline;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getI(): ?CmsMedia
+{
+    return $this->i;
+}
+
+public function setI(?CmsMedia $i): self
+{
+    $this->i = $i;
 
     return $this;
 }

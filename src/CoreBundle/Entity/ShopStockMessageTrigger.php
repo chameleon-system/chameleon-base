@@ -8,7 +8,7 @@ class ShopStockMessageTrigger {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopStockMessage|null - Stock message */
 private ?ShopStockMessage $shopStockMessage = null
 , 
@@ -44,7 +44,7 @@ private string $cssClass = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopStockMessage(): ?ShopStockMessage
 {
     return $this->shopStockMessage;

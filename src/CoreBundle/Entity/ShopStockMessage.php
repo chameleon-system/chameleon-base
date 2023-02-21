@@ -17,7 +17,7 @@ private string $className = '',
     // TCMSFieldVarchar
 /** @var string - Class subtype (path) */
 private string $classSubtype = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var Shop|null - Belongs to shop */
 private ?Shop $shop = null
 , 
@@ -88,7 +88,7 @@ public function setClassSubtype(string $classSubtype): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShop(): ?Shop
 {
     return $this->shop;

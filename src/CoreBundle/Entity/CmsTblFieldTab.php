@@ -8,7 +8,7 @@ class CmsTblFieldTab {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTblConf|null - Belongs to table */
 private ?CmsTblConf $cmsTblConf = null
 , 
@@ -38,7 +38,7 @@ private string $systemname = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;

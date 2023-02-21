@@ -1,12 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgNewsletterGroup;
 
 class PkgNewsletterConfirmation {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var PkgNewsletterGroup|null - Subscription to newsletter group */
+private ?PkgNewsletterGroup $pkgNewsletterGroup = null
+, 
     // TCMSFieldVarchar
 /** @var string - Double opt-out key */
 private string $optoutKey = ''  ) {}
@@ -30,6 +35,21 @@ private string $optoutKey = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getPkgNewsletterGroup(): ?PkgNewsletterGroup
+{
+    return $this->pkgNewsletterGroup;
+}
+
+public function setPkgNewsletterGroup(?PkgNewsletterGroup $pkgNewsletterGroup): self
+{
+    $this->pkgNewsletterGroup = $pkgNewsletterGroup;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getOptoutKey(): string
 {

@@ -15,6 +15,9 @@
             <many-to-one field="cmsTplPage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplPage" inversed-by="cmsTplPageCmsMasterPagedefSpotCollection" >
     <join-column name="cms_tpl_page_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="cmsMasterPagedefSpot" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot">
+    <join-column name="cms_master_pagedef_spot_id" referenced-column-name="id" />
+</many-to-one>
             <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance" inversed-by="cmsTplPageCmsMasterPagedefSpotCollection" >
     <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
 </many-to-one>

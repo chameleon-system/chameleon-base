@@ -12,6 +12,9 @@
             <generator strategy="AUTO"/>
         </field>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <many-to-one field="tar" target-entity="\ChameleonSystem\AutoclassesBundle\TableConfExport\AbstractEntity">
+    <join-column name="target" referenced-column-name="id" />
+</many-to-one>
             <field name="iconFontCssClass" type="string" column="icon_font_css_class" length="255" nullable="false"  />
             <many-to-one field="cmsMenuCategory" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMenuCategory" inversed-by="cmsMenuItemCollection" >
     <join-column name="cms_menu_category_id" referenced-column-name="id" />

@@ -14,6 +14,9 @@
             <many-to-one field="shopOrderStatus" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderStatus" inversed-by="shopOrderStatusItemCollection" >
     <join-column name="shop_order_status_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="shopOrderItem" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrderItem">
+    <join-column name="shop_order_item_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

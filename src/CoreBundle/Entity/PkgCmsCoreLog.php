@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+use ChameleonSystem\CoreBundle\Entity\CmsUser;
 
 class PkgCmsCoreLog {
   public function __construct(
@@ -43,9 +45,17 @@ private string $server = '',
     // TCMSFieldVarchar
 /** @var string - Client IP address */
 private string $ip = '', 
+    // TCMSFieldLookup
+/** @var DataExtranetUser|null - Extranet user ID */
+private ?DataExtranetUser $dataExtranetUser = null
+, 
     // TCMSFieldVarchar
 /** @var string - Extranet user login */
-private string $dataExtranetUserName = ''  ) {}
+private string $dataExtranetUserName = '', 
+    // TCMSFieldLookup
+/** @var CmsUser|null - CMS user */
+private ?CmsUser $cmsUser = null
+  ) {}
 
   public function getId(): string
   {
@@ -234,6 +244,21 @@ public function setIp(string $ip): self
 
 
   
+    // TCMSFieldLookup
+public function getDataExtranetUser(): ?DataExtranetUser
+{
+    return $this->dataExtranetUser;
+}
+
+public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
+{
+    $this->dataExtranetUser = $dataExtranetUser;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getDataExtranetUserName(): string
 {
@@ -242,6 +267,21 @@ public function getDataExtranetUserName(): string
 public function setDataExtranetUserName(string $dataExtranetUserName): self
 {
     $this->dataExtranetUserName = $dataExtranetUserName;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsUser(): ?CmsUser
+{
+    return $this->cmsUser;
+}
+
+public function setCmsUser(?CmsUser $cmsUser): self
+{
+    $this->cmsUser = $cmsUser;
 
     return $this;
 }

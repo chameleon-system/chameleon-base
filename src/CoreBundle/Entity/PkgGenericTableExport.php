@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
 
 class PkgGenericTableExport {
   public function __construct(
@@ -25,6 +26,10 @@ private string $viewPath = '',
     // TCMSFieldVarchar
 /** @var string - File name for export */
 private string $exportFilename = '', 
+    // TCMSFieldLookup
+/** @var CmsTblConf|null - Source table */
+private ?CmsTblConf $cmsTblConf = null
+, 
     // TCMSFieldVarchar
 /** @var string - Class */
 private string $class = '', 
@@ -129,6 +134,21 @@ public function getExportFilename(): string
 public function setExportFilename(string $exportFilename): self
 {
     $this->exportFilename = $exportFilename;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTblConf(): ?CmsTblConf
+{
+    return $this->cmsTblConf;
+}
+
+public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
+{
+    $this->cmsTblConf = $cmsTblConf;
 
     return $this;
 }

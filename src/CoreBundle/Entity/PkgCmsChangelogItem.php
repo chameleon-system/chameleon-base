@@ -9,11 +9,11 @@ class PkgCmsChangelogItem {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgCmsChangelogSet|null - Changeset */
 private ?PkgCmsChangelogSet $pkgCmsChangelogSet = null
 , 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsFieldConf|null - Changed field */
 private ?CmsFieldConf $cmsFieldC = null
   ) {}
@@ -37,7 +37,7 @@ private ?CmsFieldConf $cmsFieldC = null
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgCmsChangelogSet(): ?PkgCmsChangelogSet
 {
     return $this->pkgCmsChangelogSet;
@@ -52,7 +52,7 @@ public function setPkgCmsChangelogSet(?PkgCmsChangelogSet $pkgCmsChangelogSet): 
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsFieldC(): ?CmsFieldConf
 {
     return $this->cmsFieldC;

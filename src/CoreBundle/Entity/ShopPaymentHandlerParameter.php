@@ -2,13 +2,14 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\ShopPaymentHandler;
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
 
 class ShopPaymentHandlerParameter {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopPaymentHandler|null - Belongs to payment handler */
 private ?ShopPaymentHandler $shopPaymentHandler = null
 , 
@@ -17,7 +18,11 @@ private ?ShopPaymentHandler $shopPaymentHandler = null
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - System name */
-private string $systemname = ''  ) {}
+private string $systemname = '', 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Applies to this portal only */
+private ?CmsPortal $cmsPortal = null
+  ) {}
 
   public function getId(): string
   {
@@ -38,7 +43,7 @@ private string $systemname = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopPaymentHandler(): ?ShopPaymentHandler
 {
     return $this->shopPaymentHandler;
@@ -75,6 +80,21 @@ public function getSystemname(): string
 public function setSystemname(string $systemname): self
 {
     $this->systemname = $systemname;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
 
     return $this;
 }

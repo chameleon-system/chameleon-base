@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
 
 class PkgCommentType {
   public function __construct(
@@ -16,6 +17,10 @@ private string $pkgCommentClassName = '',
     // TCMSFieldVarchar
 /** @var string - Path to class for pkg_comment */
 private string $pkgCommentClassSubType = '', 
+    // TCMSFieldLookup
+/** @var CmsTblConf|null - Table */
+private ?CmsTblConf $cmsTblConf = null
+, 
     // TCMSFieldVarchar
 /** @var string - Class name */
 private string $className = '', 
@@ -78,6 +83,21 @@ public function getPkgCommentClassSubType(): string
 public function setPkgCommentClassSubType(string $pkgCommentClassSubType): self
 {
     $this->pkgCommentClassSubType = $pkgCommentClassSubType;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTblConf(): ?CmsTblConf
+{
+    return $this->cmsTblConf;
+}
+
+public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
+{
+    $this->cmsTblConf = $cmsTblConf;
 
     return $this;
 }

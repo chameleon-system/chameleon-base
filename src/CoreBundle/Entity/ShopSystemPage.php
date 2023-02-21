@@ -8,7 +8,7 @@ class ShopSystemPage {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var Shop|null - Belongs to shop */
 private ?Shop $shop = null
 , 
@@ -38,7 +38,7 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShop(): ?Shop
 {
     return $this->shop;

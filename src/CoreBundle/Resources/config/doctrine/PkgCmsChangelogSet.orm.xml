@@ -11,6 +11,12 @@
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
+            <many-to-one field="cmsU" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
+    <join-column name="cms_user" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsTblC" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
+    <join-column name="cms_tbl_conf" referenced-column-name="id" />
+</many-to-one>
             <field name="modifiedId" type="string" column="modified_id" length="255" nullable="false"  />
             <field name="modifiedName" type="string" column="modified_name" length="255" nullable="false"  />
             <field name="changeType" type="string" column="change_type" length="255" nullable="false"  />

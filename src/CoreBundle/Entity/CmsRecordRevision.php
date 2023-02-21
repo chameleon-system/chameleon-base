@@ -1,12 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
+use ChameleonSystem\CoreBundle\Entity\CmsUser;
 
 class CmsRecordRevision {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var CmsRecordRevision|null - belongs to revision */
+private ?CmsRecordRevision $cmsRecordRevision = null
+, 
+    // TCMSFieldLookup
+/** @var CmsTblConf|null - Table */
+private ?CmsTblConf $cmsTblConf = null
+, 
     // TCMSFieldVarchar
 /** @var string - Record ID */
 private string $recordid = '', 
@@ -15,7 +25,11 @@ private string $recordid = '',
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Version number */
-private string $revisionNr = ''  ) {}
+private string $revisionNr = '', 
+    // TCMSFieldLookup
+/** @var CmsUser|null - Editor */
+private ?CmsUser $cmsUser = null
+  ) {}
 
   public function getId(): string
   {
@@ -36,6 +50,36 @@ private string $revisionNr = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getCmsRecordRevision(): ?CmsRecordRevision
+{
+    return $this->cmsRecordRevision;
+}
+
+public function setCmsRecordRevision(?CmsRecordRevision $cmsRecordRevision): self
+{
+    $this->cmsRecordRevision = $cmsRecordRevision;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTblConf(): ?CmsTblConf
+{
+    return $this->cmsTblConf;
+}
+
+public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
+{
+    $this->cmsTblConf = $cmsTblConf;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getRecordid(): string
 {
@@ -72,6 +116,21 @@ public function getRevisionNr(): string
 public function setRevisionNr(string $revisionNr): self
 {
     $this->revisionNr = $revisionNr;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsUser(): ?CmsUser
+{
+    return $this->cmsUser;
+}
+
+public function setCmsUser(?CmsUser $cmsUser): self
+{
+    $this->cmsUser = $cmsUser;
 
     return $this;
 }
