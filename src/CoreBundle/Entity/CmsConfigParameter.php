@@ -8,7 +8,7 @@ class CmsConfigParameter {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsConfig|null - Belongs to CMS config */
 private ?CmsConfig $cmsConfig = null
 , 
@@ -38,7 +38,7 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsConfig(): ?CmsConfig
 {
     return $this->cmsConfig;

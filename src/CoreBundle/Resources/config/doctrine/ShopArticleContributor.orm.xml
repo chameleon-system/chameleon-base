@@ -14,6 +14,12 @@
             <many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle" inversed-by="shopArticleContributorCollection" >
     <join-column name="shop_article_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="shopContributor" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopContributor">
+    <join-column name="shop_contributor_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="shopContributorType" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopContributorType">
+    <join-column name="shop_contributor_type_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

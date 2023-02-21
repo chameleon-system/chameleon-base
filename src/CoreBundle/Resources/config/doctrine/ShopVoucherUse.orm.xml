@@ -17,6 +17,9 @@
             <many-to-one field="shopOrder" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="shopVoucherUseCollection" >
     <join-column name="shop_order_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="pkgShopCurrency" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopCurrency">
+    <join-column name="pkg_shop_currency_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

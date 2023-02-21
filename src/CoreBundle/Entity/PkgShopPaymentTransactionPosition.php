@@ -2,19 +2,24 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction;
+use ChameleonSystem\CoreBundle\Entity\ShopOrderItem;
 
 class PkgShopPaymentTransactionPosition {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgShopPaymentTransaction|null - Belongs to transaction */
 private ?PkgShopPaymentTransaction $pkgShopPaymentTransaction = null
 , 
     // TCMSFieldVarchar
 /** @var string - Amount */
-private string $amount = ''  ) {}
+private string $amount = '', 
+    // TCMSFieldLookup
+/** @var ShopOrderItem|null - Order item */
+private ?ShopOrderItem $shopOrderItem = null
+  ) {}
 
   public function getId(): string
   {
@@ -35,7 +40,7 @@ private string $amount = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgShopPaymentTransaction(): ?PkgShopPaymentTransaction
 {
     return $this->pkgShopPaymentTransaction;
@@ -58,6 +63,21 @@ public function getAmount(): string
 public function setAmount(string $amount): self
 {
     $this->amount = $amount;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopOrderItem(): ?ShopOrderItem
+{
+    return $this->shopOrderItem;
+}
+
+public function setShopOrderItem(?ShopOrderItem $shopOrderItem): self
+{
+    $this->shopOrderItem = $shopOrderItem;
 
     return $this;
 }

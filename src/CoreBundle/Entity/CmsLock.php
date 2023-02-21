@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsUser;
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
 
 class CmsLock {
   public function __construct(
@@ -9,7 +11,15 @@ class CmsLock {
         
     // TCMSFieldVarchar
 /** @var string - Record ID */
-private string $recordid = ''  ) {}
+private string $recordid = '', 
+    // TCMSFieldLookup
+/** @var CmsUser|null - Editor */
+private ?CmsUser $cmsUser = null
+, 
+    // TCMSFieldLookup
+/** @var CmsTblConf|null - Lock table */
+private ?CmsTblConf $cmsTblConf = null
+  ) {}
 
   public function getId(): string
   {
@@ -38,6 +48,36 @@ public function getRecordid(): string
 public function setRecordid(string $recordid): self
 {
     $this->recordid = $recordid;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsUser(): ?CmsUser
+{
+    return $this->cmsUser;
+}
+
+public function setCmsUser(?CmsUser $cmsUser): self
+{
+    $this->cmsUser = $cmsUser;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTblConf(): ?CmsTblConf
+{
+    return $this->cmsTblConf;
+}
+
+public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
+{
+    $this->cmsTblConf = $cmsTblConf;
 
     return $this;
 }

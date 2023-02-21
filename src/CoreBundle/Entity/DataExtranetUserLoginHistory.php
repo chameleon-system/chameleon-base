@@ -8,7 +8,7 @@ class DataExtranetUserLoginHistory {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var DataExtranetUser|null - Corresponding user */
 private ?DataExtranetUser $dataExtranetUser = null
 , 
@@ -35,7 +35,7 @@ private string $userIp = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;

@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
 use ChameleonSystem\CoreBundle\Entity\PkgNewsletterQueue;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,6 +29,10 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - Subject */
 private string $subject = '', 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Portal */
+private ?CmsPortal $cmsPortal = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, pkgNewsletterQueue> - Queue items */
 private Collection $pkgNewsletterQueueCollection = new ArrayCollection()
@@ -130,6 +135,21 @@ public function getSubject(): string
 public function setSubject(string $subject): self
 {
     $this->subject = $subject;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
 
     return $this;
 }

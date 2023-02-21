@@ -12,7 +12,7 @@ class PkgShopWishlist {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var DataExtranetUser|null - Belongs to user */
 private ?DataExtranetUser $dataExtranetUser = null
 , 
@@ -44,7 +44,7 @@ private Collection $pkgShopWishlistMailHistoryCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;

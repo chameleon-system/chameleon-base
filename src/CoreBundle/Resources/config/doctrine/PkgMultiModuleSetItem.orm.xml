@@ -15,6 +15,9 @@
             <many-to-one field="pkgMultiModuleSet" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgMultiModuleSet" inversed-by="pkgMultiModuleSetItemCollection" >
     <join-column name="pkg_multi_module_set_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
             <field name="systemName" type="string" column="system_name" length="255" nullable="false"  />
     </entity>
 

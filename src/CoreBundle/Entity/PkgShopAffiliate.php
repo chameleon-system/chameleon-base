@@ -11,7 +11,7 @@ class PkgShopAffiliate {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var Shop|null - Belongs to shop */
 private ?Shop $shop = null
 , 
@@ -54,7 +54,7 @@ private Collection $pkgShopAffiliateParameterCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShop(): ?Shop
 {
     return $this->shop;

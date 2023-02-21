@@ -8,7 +8,7 @@ class ShopOrderShippingGroupParameter {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopOrder|null - Belongs to order */
 private ?ShopOrder $shopOrder = null
 , 
@@ -35,7 +35,7 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopOrder(): ?ShopOrder
 {
     return $this->shopOrder;

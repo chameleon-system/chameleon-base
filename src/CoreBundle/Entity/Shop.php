@@ -4,17 +4,27 @@ namespace ChameleonSystem\CoreBundle\Entity;
 use ChameleonSystem\CoreBundle\Entity\ShopOrderStatusCode;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\PkgShopCurrency;
+use ChameleonSystem\CoreBundle\Entity\ShopCategory;
+use ChameleonSystem\CoreBundle\Entity\TCountry;
 use ChameleonSystem\CoreBundle\Entity\ShopBankAccount;
 use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+use ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby;
+use ChameleonSystem\CoreBundle\Entity\ShopVat;
+use ChameleonSystem\CoreBundle\Entity\ShopShippingGroup;
+use ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation;
+use ChameleonSystem\CoreBundle\Entity\DataCountry;
 use ChameleonSystem\CoreBundle\Entity\PkgShopAffiliate;
 use ChameleonSystem\CoreBundle\Entity\ShopArticleImageSize;
 use ChameleonSystem\CoreBundle\Entity\ShopSystemInfo;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 use ChameleonSystem\CoreBundle\Entity\ShopSearchLog;
 use ChameleonSystem\CoreBundle\Entity\ShopSearchFieldWeight;
 use ChameleonSystem\CoreBundle\Entity\ShopSearchIgnoreWord;
 use ChameleonSystem\CoreBundle\Entity\ShopSearchKeywordArticle;
 use ChameleonSystem\CoreBundle\Entity\ShopSearchCache;
 use ChameleonSystem\CoreBundle\Entity\ShopStockMessage;
+use ChameleonSystem\CoreBundle\Entity\PkgShopListfilter;
 use ChameleonSystem\CoreBundle\Entity\PkgShopFooterCategory;
 
 class Shop {
@@ -26,9 +36,17 @@ class Shop {
 /** @var Collection<int, shopOrderStatusCode> - Available shipping status codes */
 private Collection $shopOrderStatusCodeCollection = new ArrayCollection()
 , 
+    // TCMSFieldLookup
+/** @var PkgShopCurrency|null - Default currency */
+private ?PkgShopCurrency $defaultPkgShopCurrency = null
+, 
     // TCMSFieldVarchar
 /** @var string - Shop name */
 private string $name = '', 
+    // TCMSFieldLookup
+/** @var ShopCategory|null - Shop main category */
+private ?ShopCategory $shopCategory = null
+, 
     // TCMSFieldVarchar
 /** @var string - Company name */
 private string $adrCompany = '', 
@@ -41,6 +59,10 @@ private string $adrZip = '',
     // TCMSFieldVarchar
 /** @var string - Company city */
 private string $adrCity = '', 
+    // TCMSFieldLookup
+/** @var TCountry|null - Company country */
+private ?TCountry $tCountry = null
+, 
     // TCMSFieldVarchar
 /** @var string - Telephone (customer service) */
 private string $customerServiceTelephone = '', 
@@ -61,6 +83,26 @@ private Collection $dataExtranetUserCollection = new ArrayCollection()
     // TCMSFieldVarchar
 /** @var string - Length of product history of an user */
 private string $dataExtranetUserShopArticleHistoryMaxArticleCount = '20', 
+    // TCMSFieldLookup
+/** @var ShopModuleArticlelistOrderby|null - Default sorting of items in the category view */
+private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null
+, 
+    // TCMSFieldLookup
+/** @var ShopVat|null - Default VAT group */
+private ?ShopVat $shopVat = null
+, 
+    // TCMSFieldLookup
+/** @var ShopShippingGroup|null - Default shipping group */
+private ?ShopShippingGroup $shopShippingGroup = null
+, 
+    // TCMSFieldLookup
+/** @var DataExtranetSalutation|null - Default salutation */
+private ?DataExtranetSalutation $dataExtranetSalutation = null
+, 
+    // TCMSFieldLookup
+/** @var DataCountry|null - Default country */
+private ?DataCountry $dataCountry = null
+, 
     // TCMSFieldVarchar
 /** @var string - Affiliate URL parameter */
 private string $affiliateParameterName = '', 
@@ -75,6 +117,10 @@ private Collection $shopArticleImageSizeCollection = new ArrayCollection()
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopSystemInfo> - Shop specific information / text blocks (e.g. Terms and Conditions) */
 private Collection $shopSystemInfoCollection = new ArrayCollection()
+, 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Replacement image */
+private ?CmsMedia $notFoundIm = null
 , 
     // TCMSFieldVarchar
 /** @var string - Shortest searchable partial word */
@@ -118,6 +164,14 @@ private Collection $shopStockMessageCollection = new ArrayCollection()
     // TCMSFieldVarchar
 /** @var string - Export key */
 private string $exportKey = '', 
+    // TCMSFieldLookup
+/** @var PkgShopListfilter|null - Results list filter */
+private ?PkgShopListfilter $pkgShopListfilterPostsearch = null
+, 
+    // TCMSFieldLookup
+/** @var PkgShopListfilter|null - Category list filter for categories without subcategories */
+private ?PkgShopListfilter $pkgShopListfilterCategoryFilter = null
+, 
     // TCMSFieldVarchar
 /** @var string - Maximum size of cookie for item history (in KB) */
 private string $dataExtranetUserShopArticleHistoryMaxCookieSize = '0', 
@@ -181,6 +235,21 @@ public function removeShopOrderStatusCodeCollection(shopOrderStatusCode $shopOrd
 
 
   
+    // TCMSFieldLookup
+public function getDefaultPkgShopCurrency(): ?PkgShopCurrency
+{
+    return $this->defaultPkgShopCurrency;
+}
+
+public function setDefaultPkgShopCurrency(?PkgShopCurrency $defaultPkgShopCurrency): self
+{
+    $this->defaultPkgShopCurrency = $defaultPkgShopCurrency;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getName(): string
 {
@@ -189,6 +258,21 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopCategory(): ?ShopCategory
+{
+    return $this->shopCategory;
+}
+
+public function setShopCategory(?ShopCategory $shopCategory): self
+{
+    $this->shopCategory = $shopCategory;
 
     return $this;
 }
@@ -245,6 +329,21 @@ public function getAdrCity(): string
 public function setAdrCity(string $adrCity): self
 {
     $this->adrCity = $adrCity;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getTCountry(): ?TCountry
+{
+    return $this->tCountry;
+}
+
+public function setTCountry(?TCountry $tCountry): self
+{
+    $this->tCountry = $tCountry;
 
     return $this;
 }
@@ -373,6 +472,81 @@ public function setDataExtranetUserShopArticleHistoryMaxArticleCount(string $dat
 
 
   
+    // TCMSFieldLookup
+public function getShopModuleArticlelistOrderby(): ?ShopModuleArticlelistOrderby
+{
+    return $this->shopModuleArticlelistOrderby;
+}
+
+public function setShopModuleArticlelistOrderby(?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby): self
+{
+    $this->shopModuleArticlelistOrderby = $shopModuleArticlelistOrderby;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopVat(): ?ShopVat
+{
+    return $this->shopVat;
+}
+
+public function setShopVat(?ShopVat $shopVat): self
+{
+    $this->shopVat = $shopVat;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopShippingGroup(): ?ShopShippingGroup
+{
+    return $this->shopShippingGroup;
+}
+
+public function setShopShippingGroup(?ShopShippingGroup $shopShippingGroup): self
+{
+    $this->shopShippingGroup = $shopShippingGroup;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getDataExtranetSalutation(): ?DataExtranetSalutation
+{
+    return $this->dataExtranetSalutation;
+}
+
+public function setDataExtranetSalutation(?DataExtranetSalutation $dataExtranetSalutation): self
+{
+    $this->dataExtranetSalutation = $dataExtranetSalutation;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getDataCountry(): ?DataCountry
+{
+    return $this->dataCountry;
+}
+
+public function setDataCountry(?DataCountry $dataCountry): self
+{
+    $this->dataCountry = $dataCountry;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getAffiliateParameterName(): string
 {
@@ -480,6 +654,21 @@ public function removeShopSystemInfoCollection(shopSystemInfo $shopSystemInfo): 
             $shopSystemInfo->setShop(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getNotFoundIm(): ?CmsMedia
+{
+    return $this->notFoundIm;
+}
+
+public function setNotFoundIm(?CmsMedia $notFoundIm): self
+{
+    $this->notFoundIm = $notFoundIm;
 
     return $this;
 }
@@ -762,6 +951,36 @@ public function getExportKey(): string
 public function setExportKey(string $exportKey): self
 {
     $this->exportKey = $exportKey;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopListfilterPostsearch(): ?PkgShopListfilter
+{
+    return $this->pkgShopListfilterPostsearch;
+}
+
+public function setPkgShopListfilterPostsearch(?PkgShopListfilter $pkgShopListfilterPostsearch): self
+{
+    $this->pkgShopListfilterPostsearch = $pkgShopListfilterPostsearch;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopListfilterCategoryFilter(): ?PkgShopListfilter
+{
+    return $this->pkgShopListfilterCategoryFilter;
+}
+
+public function setPkgShopListfilterCategoryFilter(?PkgShopListfilter $pkgShopListfilterCategoryFilter): self
+{
+    $this->pkgShopListfilterCategoryFilter = $pkgShopListfilterCategoryFilter;
 
     return $this;
 }

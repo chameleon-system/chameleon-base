@@ -2,13 +2,14 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class DataImgTeaser {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTplModuleInstance|null - Belongs to module instance */
 private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
@@ -20,7 +21,11 @@ private string $name = '',
 private string $altText = '', 
     // TCMSFieldVarchar
 /** @var string - Link */
-private string $link = ''  ) {}
+private string $link = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Image */
+private ?CmsMedia $cmsMedia = null
+  ) {}
 
   public function getId(): string
   {
@@ -41,7 +46,7 @@ private string $link = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
@@ -92,6 +97,21 @@ public function getLink(): string
 public function setLink(string $link): self
 {
     $this->link = $link;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
 
     return $this;
 }

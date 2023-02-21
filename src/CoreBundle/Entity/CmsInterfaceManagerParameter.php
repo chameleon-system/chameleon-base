@@ -8,7 +8,7 @@ class CmsInterfaceManagerParameter {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsInterfaceManager|null - Belongs to interface */
 private ?CmsInterfaceManager $cmsInterfaceManager = null
 , 
@@ -38,7 +38,7 @@ private string $value = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsInterfaceManager(): ?CmsInterfaceManager
 {
     return $this->cmsInterfaceManager;

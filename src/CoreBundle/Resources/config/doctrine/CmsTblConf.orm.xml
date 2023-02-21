@@ -17,6 +17,9 @@
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="cmsContentBox" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsContentBox">
+    <join-column name="cms_content_box_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="cmsFieldConfMltCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsFieldConf" mapped-by="cmsTblConf" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>
@@ -40,12 +43,21 @@
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="cmsTblListClass" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblListClass">
+    <join-column name="cms_tbl_list_class_id" referenced-column-name="id" />
+</many-to-one>
             <field name="tableEditorClass" type="string" column="table_editor_class" length="255" nullable="false"  />
             <field name="tableEditorClassSubtype" type="string" column="table_editor_class_subtype" length="255" nullable="false"  />
             <one-to-many field="cmsTblConfRestrictionsCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConfRestrictions" mapped-by="cmsTblConf" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="cmsTplPage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplPage">
+    <join-column name="cms_tpl_page_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsUsergroup" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUsergroup">
+    <join-column name="cms_usergroup_id" referenced-column-name="id" />
+</many-to-one>
             <field name="dbobjectExtendClass" type="string" column="dbobject_extend_class" length="255" nullable="false"  />
             <field name="dbobjectExtendSubtype" type="string" column="dbobject_extend_subtype" length="255" nullable="false"  />
             <one-to-many field="cmsTblExtensionCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblExtension" mapped-by="cmsTblConf" orphan-removal="true">

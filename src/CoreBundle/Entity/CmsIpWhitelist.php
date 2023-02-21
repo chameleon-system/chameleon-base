@@ -8,7 +8,7 @@ class CmsIpWhitelist {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsConfig|null - Belongs to cms settings */
 private ?CmsConfig $cmsConfig = null
 , 
@@ -35,7 +35,7 @@ private string $ip = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsConfig(): ?CmsConfig
 {
     return $this->cmsConfig;

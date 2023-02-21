@@ -16,6 +16,9 @@
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="shopVariantDisplayHandler" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopVariantDisplayHandler">
+    <join-column name="shop_variant_display_handler_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

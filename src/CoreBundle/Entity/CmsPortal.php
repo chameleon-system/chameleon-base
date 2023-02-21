@@ -1,13 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
 use ChameleonSystem\CoreBundle\Entity\CmsPortalNavigation;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use ChameleonSystem\CoreBundle\Entity\CmsDivision;
 use ChameleonSystem\CoreBundle\Entity\CmsPortalDomains;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 use ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessage;
 use ChameleonSystem\CoreBundle\Entity\CmsPortalSystemPage;
+use ChameleonSystem\CoreBundle\Entity\CmsLocals;
+use ChameleonSystem\CoreBundle\Entity\PkgCmsTheme;
 use ChameleonSystem\CoreBundle\Entity\CmsUrlAlias;
 
 class CmsPortal {
@@ -27,6 +31,10 @@ private string $identifier = '',
     // TCMSFieldVarchar
 /** @var string - External portal name */
 private string $externalIdentifier = '', 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - Portal language */
+private ?CmsLanguage $cmsLanguage = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsPortalNavigation> - Navigations */
 private Collection $propertyNavigationsCollection = new ArrayCollection()
@@ -42,6 +50,18 @@ private Collection $cmsPortalDomainsCollection = new ArrayCollection()
     // TCMSFieldVarchar
 /** @var string - Favicon URL */
 private string $faviconUrl = '/favicon.ico', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Logo */
+private ?CmsMedia $ima = null
+, 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Logo for watermarking */
+private ?CmsMedia $watermarkL = null
+, 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Background image */
+private ?CmsMedia $backgroundIm = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsMessageManagerMessage> - System messages / error codes */
 private Collection $cmsMessageManagerMessageCollection = new ArrayCollection()
@@ -59,6 +79,14 @@ private string $metaAuthor = '',
     // TCMSFieldVarchar
 /** @var string - Publisher */
 private string $metaPublisher = '', 
+    // TCMSFieldLookup
+/** @var CmsLocals|null - Locale */
+private ?CmsLocals $cmsLocals = null
+, 
+    // TCMSFieldLookup
+/** @var PkgCmsTheme|null - Website presentation / theme */
+private ?PkgCmsTheme $pkgCmsTheme = null
+, 
     // TCMSFieldVarchar
 /** @var string - Google Analytics ID */
 private string $googleAnalyticNumber = '', 
@@ -145,6 +173,21 @@ public function getExternalIdentifier(): string
 public function setExternalIdentifier(string $externalIdentifier): self
 {
     $this->externalIdentifier = $externalIdentifier;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsLanguage(): ?CmsLanguage
+{
+    return $this->cmsLanguage;
+}
+
+public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
+{
+    $this->cmsLanguage = $cmsLanguage;
 
     return $this;
 }
@@ -264,6 +307,51 @@ public function setFaviconUrl(string $faviconUrl): self
 
 
   
+    // TCMSFieldLookup
+public function getIma(): ?CmsMedia
+{
+    return $this->ima;
+}
+
+public function setIma(?CmsMedia $ima): self
+{
+    $this->ima = $ima;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getWatermarkL(): ?CmsMedia
+{
+    return $this->watermarkL;
+}
+
+public function setWatermarkL(?CmsMedia $watermarkL): self
+{
+    $this->watermarkL = $watermarkL;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getBackgroundIm(): ?CmsMedia
+{
+    return $this->backgroundIm;
+}
+
+public function setBackgroundIm(?CmsMedia $backgroundIm): self
+{
+    $this->backgroundIm = $backgroundIm;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldPropertyTable
 /**
 * @return Collection<int, cmsMessageManagerMessage>
@@ -366,6 +454,36 @@ public function getMetaPublisher(): string
 public function setMetaPublisher(string $metaPublisher): self
 {
     $this->metaPublisher = $metaPublisher;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsLocals(): ?CmsLocals
+{
+    return $this->cmsLocals;
+}
+
+public function setCmsLocals(?CmsLocals $cmsLocals): self
+{
+    $this->cmsLocals = $cmsLocals;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgCmsTheme(): ?PkgCmsTheme
+{
+    return $this->pkgCmsTheme;
+}
+
+public function setPkgCmsTheme(?PkgCmsTheme $pkgCmsTheme): self
+{
+    $this->pkgCmsTheme = $pkgCmsTheme;
 
     return $this;
 }

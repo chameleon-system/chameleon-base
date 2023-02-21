@@ -8,7 +8,7 @@ class CmsPortalSystemPage {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsPortal|null - Belongs to portal */
 private ?CmsPortal $cmsPortal = null
 , 
@@ -38,7 +38,7 @@ private string $nameInternal = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;

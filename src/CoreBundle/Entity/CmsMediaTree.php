@@ -13,6 +13,10 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - URL path to the image */
 private string $pathCache = '', 
+    // TCMSFieldLookup
+/** @var CmsMediaTree|null - Is subitem of */
+private ?CmsMediaTree $parent = null
+, 
     // TCMSFieldVarchar
 /** @var string - Position */
 private string $entrySort = ''  ) {}
@@ -58,6 +62,21 @@ public function getPathCache(): string
 public function setPathCache(string $pathCache): self
 {
     $this->pathCache = $pathCache;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getParent(): ?CmsMediaTree
+{
+    return $this->parent;
+}
+
+public function setParent(?CmsMediaTree $parent): self
+{
+    $this->parent = $parent;
 
     return $this;
 }

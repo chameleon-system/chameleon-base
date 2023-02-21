@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
 
 class DataMailProfile {
   public function __construct(
@@ -33,7 +34,11 @@ private string $mailfromName = '',
 private string $template = '', 
     // TCMSFieldVarchar
 /** @var string - Text template */
-private string $templateText = ''  ) {}
+private string $templateText = '', 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Belongs to portal */
+private ?CmsPortal $cmsPortal = null
+  ) {}
 
   public function getId(): string
   {
@@ -174,6 +179,21 @@ public function getTemplateText(): string
 public function setTemplateText(string $templateText): self
 {
     $this->templateText = $templateText;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
 
     return $this;
 }

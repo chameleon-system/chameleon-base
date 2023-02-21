@@ -2,15 +2,21 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\PkgShopListfilter;
+use ChameleonSystem\CoreBundle\Entity\PkgShopListfilterItemType;
+use ChameleonSystem\CoreBundle\Entity\ShopAttribute;
 
 class PkgShopListfilterItem {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgShopListfilter|null - Belongs to list filter configuration */
 private ?PkgShopListfilter $pkgShopListfilter = null
+, 
+    // TCMSFieldLookup
+/** @var PkgShopListfilterItemType|null - Filter type */
+private ?PkgShopListfilterItemType $pkgShopListfilterItemT = null
 , 
     // TCMSFieldVarchar
 /** @var string - Name */
@@ -18,6 +24,10 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - System name */
 private string $systemname = '', 
+    // TCMSFieldLookup
+/** @var ShopAttribute|null - Belonging product attribute */
+private ?ShopAttribute $shopAttrib = null
+, 
     // TCMSFieldVarchar
 /** @var string - Window size */
 private string $previewSize = '', 
@@ -56,7 +66,7 @@ private string $variantIdentifier = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgShopListfilter(): ?PkgShopListfilter
 {
     return $this->pkgShopListfilter;
@@ -65,6 +75,21 @@ public function getPkgShopListfilter(): ?PkgShopListfilter
 public function setPkgShopListfilter(?PkgShopListfilter $pkgShopListfilter): self
 {
     $this->pkgShopListfilter = $pkgShopListfilter;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopListfilterItemT(): ?PkgShopListfilterItemType
+{
+    return $this->pkgShopListfilterItemT;
+}
+
+public function setPkgShopListfilterItemT(?PkgShopListfilterItemType $pkgShopListfilterItemT): self
+{
+    $this->pkgShopListfilterItemT = $pkgShopListfilterItemT;
 
     return $this;
 }
@@ -93,6 +118,21 @@ public function getSystemname(): string
 public function setSystemname(string $systemname): self
 {
     $this->systemname = $systemname;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopAttrib(): ?ShopAttribute
+{
+    return $this->shopAttrib;
+}
+
+public function setShopAttrib(?ShopAttribute $shopAttrib): self
+{
+    $this->shopAttrib = $shopAttrib;
 
     return $this;
 }

@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopArticle;
 
 class ShopWrapping {
   public function __construct(
@@ -9,7 +10,11 @@ class ShopWrapping {
         
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = ''  ) {}
+private string $name = '', 
+    // TCMSFieldLookup
+/** @var ShopArticle|null - Wrapping item */
+private ?ShopArticle $shopArticle = null
+  ) {}
 
   public function getId(): string
   {
@@ -38,6 +43,21 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopArticle(): ?ShopArticle
+{
+    return $this->shopArticle;
+}
+
+public function setShopArticle(?ShopArticle $shopArticle): self
+{
+    $this->shopArticle = $shopArticle;
 
     return $this;
 }

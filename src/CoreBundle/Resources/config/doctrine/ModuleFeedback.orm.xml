@@ -11,6 +11,9 @@
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
+            <many-to-one field="cmsTplModuleInstance" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance">
+    <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
+</many-to-one>
             <field name="name" type="string" column="name" length="80" nullable="false"  />
             <field name="toEmail" type="string" column="to_email" length="255" nullable="false"  />
             <field name="fromEmail" type="string" column="from_email" length="255" nullable="false"  />

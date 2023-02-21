@@ -2,13 +2,14 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
 
 class CmsPortalDomains {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsPortal|null - Portal */
 private ?CmsPortal $cmsPortal = null
 , 
@@ -18,6 +19,10 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - SSL domain name */
 private string $sslname = '', 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - Language */
+private ?CmsLanguage $cmsLanguage = null
+, 
     // TCMSFieldVarchar
 /** @var string - Google API key */
 private string $googleApiKey = ''  ) {}
@@ -41,7 +46,7 @@ private string $googleApiKey = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;
@@ -78,6 +83,21 @@ public function getSslname(): string
 public function setSslname(string $sslname): self
 {
     $this->sslname = $sslname;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsLanguage(): ?CmsLanguage
+{
+    return $this->cmsLanguage;
+}
+
+public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
+{
+    $this->cmsLanguage = $cmsLanguage;
 
     return $this;
 }

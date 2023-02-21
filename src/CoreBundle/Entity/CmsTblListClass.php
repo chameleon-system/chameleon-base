@@ -17,7 +17,7 @@ private string $classSubtype = '',
     // TCMSFieldVarchar
 /** @var string - Class name */
 private string $classname = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTblConf|null - Belongs to */
 private ?CmsTblConf $cmsTblConf = null
   ) {}
@@ -83,7 +83,7 @@ public function setClassname(string $classname): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;

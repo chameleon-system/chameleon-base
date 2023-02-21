@@ -14,8 +14,14 @@
             <many-to-one field="pkgShopListfilter" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilter" inversed-by="pkgShopListfilterItemCollection" >
     <join-column name="pkg_shop_listfilter_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="pkgShopListfilterItemT" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopListfilterItemType">
+    <join-column name="pkg_shop_listfilter_item_type" referenced-column-name="id" />
+</many-to-one>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="systemname" type="string" column="systemname" length="255" nullable="false"  />
+            <many-to-one field="shopAttrib" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopAttribute">
+    <join-column name="shop_attribute" referenced-column-name="id" />
+</many-to-one>
             <field name="previewSize" type="string" column="preview_size" length="255" nullable="false"  />
             <field name="minValue" type="string" column="min_value" length="255" nullable="false"  />
             <field name="maxValue" type="string" column="max_value" length="255" nullable="false"  />

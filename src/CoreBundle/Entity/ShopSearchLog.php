@@ -2,6 +2,7 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\Shop;
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
 use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
 
 class ShopSearchLog {
@@ -9,9 +10,13 @@ class ShopSearchLog {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var Shop|null - Belongs to shop */
 private ?Shop $shop = null
+, 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - Language */
+private ?CmsLanguage $cmsLanguage = null
 , 
     // TCMSFieldVarchar
 /** @var string - Search term */
@@ -19,7 +24,7 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - Number of results */
 private string $numberOfResults = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var DataExtranetUser|null - Executed by */
 private ?DataExtranetUser $dataExtranetUser = null
   ) {}
@@ -43,7 +48,7 @@ private ?DataExtranetUser $dataExtranetUser = null
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShop(): ?Shop
 {
     return $this->shop;
@@ -52,6 +57,21 @@ public function getShop(): ?Shop
 public function setShop(?Shop $shop): self
 {
     $this->shop = $shop;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsLanguage(): ?CmsLanguage
+{
+    return $this->cmsLanguage;
+}
+
+public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
+{
+    $this->cmsLanguage = $cmsLanguage;
 
     return $this;
 }
@@ -86,7 +106,7 @@ public function setNumberOfResults(string $numberOfResults): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;

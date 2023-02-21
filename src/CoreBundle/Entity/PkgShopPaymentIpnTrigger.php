@@ -11,7 +11,7 @@ class PkgShopPaymentIpnTrigger {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopPaymentHandlerGroup|null - Belongs to payment provider */
 private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
 , 
@@ -45,7 +45,7 @@ private string $timeoutSeconds = '30'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopPaymentHandlerGroup(): ?ShopPaymentHandlerGroup
 {
     return $this->shopPaymentHandlerGroup;

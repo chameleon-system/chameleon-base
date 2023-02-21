@@ -13,11 +13,11 @@ class CmsMasterPagedefSpot {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsMasterPagedef|null - Belongs to the CMS page template */
 private ?CmsMasterPagedef $cmsMasterPagedef = null
 , 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgCmsThemeBlock|null - Belongs to theme block */
 private ?PkgCmsThemeBlock $pkgCmsThemeBlock = null
 , 
@@ -58,7 +58,7 @@ private Collection $cmsMasterPagedefSpotAccessCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsMasterPagedef(): ?CmsMasterPagedef
 {
     return $this->cmsMasterPagedef;
@@ -73,7 +73,7 @@ public function setCmsMasterPagedef(?CmsMasterPagedef $cmsMasterPagedef): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgCmsThemeBlock(): ?PkgCmsThemeBlock
 {
     return $this->pkgCmsThemeBlock;

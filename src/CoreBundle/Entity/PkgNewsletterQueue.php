@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\PkgNewsletterUser;
 use ChameleonSystem\CoreBundle\Entity\PkgNewsletterCampaign;
 
 class PkgNewsletterQueue {
@@ -8,7 +9,11 @@ class PkgNewsletterQueue {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+/** @var PkgNewsletterUser|null - Newsletter subscriber */
+private ?PkgNewsletterUser $pkgNewsletterU = null
+, 
+    // TCMSFieldLookup
 /** @var PkgNewsletterCampaign|null - Newsletter */
 private ?PkgNewsletterCampaign $pkgNewsletterCampaign = null
   ) {}
@@ -32,7 +37,22 @@ private ?PkgNewsletterCampaign $pkgNewsletterCampaign = null
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+public function getPkgNewsletterU(): ?PkgNewsletterUser
+{
+    return $this->pkgNewsletterU;
+}
+
+public function setPkgNewsletterU(?PkgNewsletterUser $pkgNewsletterU): self
+{
+    $this->pkgNewsletterU = $pkgNewsletterU;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
 public function getPkgNewsletterCampaign(): ?PkgNewsletterCampaign
 {
     return $this->pkgNewsletterCampaign;

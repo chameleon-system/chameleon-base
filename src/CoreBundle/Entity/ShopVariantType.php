@@ -2,6 +2,7 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\ShopVariantSet;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 use ChameleonSystem\CoreBundle\Entity\ShopVariantTypeValue;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,13 +12,17 @@ class ShopVariantType {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopVariantSet|null - Belongs to variant set */
 private ?ShopVariantSet $shopVariantSet = null
 , 
     // TCMSFieldVarchar
 /** @var string - URL name */
 private string $urlName = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Image or icon for variant type (optional) */
+private ?CmsMedia $cmsMedia = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopVariantTypeValue> - Available variant values */
 private Collection $shopVariantTypeValueCollection = new ArrayCollection()
@@ -48,7 +53,7 @@ private string $identifier = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopVariantSet(): ?ShopVariantSet
 {
     return $this->shopVariantSet;
@@ -71,6 +76,21 @@ public function getUrlName(): string
 public function setUrlName(string $urlName): self
 {
     $this->urlName = $urlName;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
 
     return $this;
 }

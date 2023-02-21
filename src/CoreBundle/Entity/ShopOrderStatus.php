@@ -2,6 +2,7 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\ShopOrder;
+use ChameleonSystem\CoreBundle\Entity\ShopOrderStatusCode;
 use ChameleonSystem\CoreBundle\Entity\ShopOrderStatusItem;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,9 +12,13 @@ class ShopOrderStatus {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopOrder|null - Belongs to order */
 private ?ShopOrder $shopOrder = null
+, 
+    // TCMSFieldLookup
+/** @var ShopOrderStatusCode|null - Status code */
+private ?ShopOrderStatusCode $shopOrderStatusCode = null
 , 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopOrderStatusItem> - Order status items */
@@ -39,7 +44,7 @@ private Collection $shopOrderStatusItemCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopOrder(): ?ShopOrder
 {
     return $this->shopOrder;
@@ -48,6 +53,21 @@ public function getShopOrder(): ?ShopOrder
 public function setShopOrder(?ShopOrder $shopOrder): self
 {
     $this->shopOrder = $shopOrder;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopOrderStatusCode(): ?ShopOrderStatusCode
+{
+    return $this->shopOrderStatusCode;
+}
+
+public function setShopOrderStatusCode(?ShopOrderStatusCode $shopOrderStatusCode): self
+{
+    $this->shopOrderStatusCode = $shopOrderStatusCode;
 
     return $this;
 }

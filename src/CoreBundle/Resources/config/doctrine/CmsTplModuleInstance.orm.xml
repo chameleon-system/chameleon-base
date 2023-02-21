@@ -16,7 +16,13 @@
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
             <field name="template" type="string" column="template" length="255" nullable="false"  />
+            <many-to-one field="cmsTplModule" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplModule">
+    <join-column name="cms_tpl_module_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

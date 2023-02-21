@@ -1,12 +1,22 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
+use ChameleonSystem\CoreBundle\Entity\CmsImageCropPreset;
 
 class CmsImageCrop {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Image */
+private ?CmsMedia $cmsMedia = null
+, 
+    // TCMSFieldLookup
+/** @var CmsImageCropPreset|null - Preset */
+private ?CmsImageCropPreset $cmsImageCropPreset = null
+, 
     // TCMSFieldVarchar
 /** @var string - X position of crop */
 private string $posX = '0', 
@@ -42,6 +52,36 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsImageCropPreset(): ?CmsImageCropPreset
+{
+    return $this->cmsImageCropPreset;
+}
+
+public function setCmsImageCropPreset(?CmsImageCropPreset $cmsImageCropPreset): self
+{
+    $this->cmsImageCropPreset = $cmsImageCropPreset;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getPosX(): string
 {

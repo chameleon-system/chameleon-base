@@ -2,15 +2,20 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+use ChameleonSystem\CoreBundle\Entity\PkgShopRatingService;
 
 class PkgShopRatingServiceWidgetConfig {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTplModuleInstance|null - Module instance */
 private ?CmsTplModuleInstance $cmsTplModuleInstance = null
+, 
+    // TCMSFieldLookup
+/** @var PkgShopRatingService|null - Rating service */
+private ?PkgShopRatingService $pkgShopRatingService = null
   ) {}
 
   public function getId(): string
@@ -32,7 +37,7 @@ private ?CmsTplModuleInstance $cmsTplModuleInstance = null
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
@@ -41,6 +46,21 @@ public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
 {
     $this->cmsTplModuleInstance = $cmsTplModuleInstance;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopRatingService(): ?PkgShopRatingService
+{
+    return $this->pkgShopRatingService;
+}
+
+public function setPkgShopRatingService(?PkgShopRatingService $pkgShopRatingService): self
+{
+    $this->pkgShopRatingService = $pkgShopRatingService;
 
     return $this;
 }

@@ -12,6 +12,12 @@
             <generator strategy="AUTO"/>
         </field>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
+    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="cmsExportProfilesFieldsCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsExportProfilesFields" mapped-by="cmsExportProfiles" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>

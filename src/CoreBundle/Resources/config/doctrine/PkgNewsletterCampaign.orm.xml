@@ -17,6 +17,9 @@
             <field name="utmCampaign" type="string" column="utm_campaign" length="255" nullable="false"  />
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="subject" type="string" column="subject" length="255" nullable="false"  />
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="pkgNewsletterQueueCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterQueue" mapped-by="pkgNewsletterCampaign" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>

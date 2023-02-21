@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTplPage;
 use ChameleonSystem\CoreBundle\Entity\CmsTree;
 
 class CmsTreeNode {
@@ -11,7 +12,11 @@ class CmsTreeNode {
     // TCMSFieldVarchar
 /** @var string - Table of linked record */
 private string $tbl = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+/** @var CmsTplPage|null - ID of linked record */
+private ?CmsTplPage $con = null
+, 
+    // TCMSFieldLookup
 /** @var CmsTree|null - Navigation item */
 private ?CmsTree $cmsTree = null
   ) {}
@@ -49,7 +54,22 @@ public function setTbl(string $tbl): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+public function getCon(): ?CmsTplPage
+{
+    return $this->con;
+}
+
+public function setCon(?CmsTplPage $con): self
+{
+    $this->con = $con;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
 public function getCmsTree(): ?CmsTree
 {
     return $this->cmsTree;

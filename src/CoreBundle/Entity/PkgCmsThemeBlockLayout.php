@@ -2,13 +2,14 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlock;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class PkgCmsThemeBlockLayout {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgCmsThemeBlock|null - Belongs to theme block */
 private ?PkgCmsThemeBlock $pkgCmsThemeBlock = null
 , 
@@ -20,7 +21,11 @@ private string $name = '',
 private string $layoutFile = '', 
     // TCMSFieldVarchar
 /** @var string - Path to own LESS/CSS */
-private string $lessFile = ''  ) {}
+private string $lessFile = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Preview image */
+private ?CmsMedia $cmsMedia = null
+  ) {}
 
   public function getId(): string
   {
@@ -41,7 +46,7 @@ private string $lessFile = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgCmsThemeBlock(): ?PkgCmsThemeBlock
 {
     return $this->pkgCmsThemeBlock;
@@ -92,6 +97,21 @@ public function getLessFile(): string
 public function setLessFile(string $lessFile): self
 {
     $this->lessFile = $lessFile;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
 
     return $this;
 }

@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
 
 class DataExtranet {
   public function __construct(
@@ -16,6 +17,10 @@ private string $fpwdTitle = '',
     // TCMSFieldVarchar
 /** @var string - Title */
 private string $noaccessTitle = '', 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Portal configuration */
+private ?CmsPortal $cmsPortal = null
+, 
     // TCMSFieldVarchar
 /** @var string - Name of the spot where an extranet module is available */
 private string $extranetSpotName = '', 
@@ -78,6 +83,21 @@ public function getNoaccessTitle(): string
 public function setNoaccessTitle(string $noaccessTitle): self
 {
     $this->noaccessTitle = $noaccessTitle;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
 
     return $this;
 }

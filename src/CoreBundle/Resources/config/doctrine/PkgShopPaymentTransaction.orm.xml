@@ -14,10 +14,19 @@
             <many-to-one field="shopOrder" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopOrder" inversed-by="pkgShopPaymentTransactionCollection" >
     <join-column name="shop_order_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUser">
+    <join-column name="data_extranet_user_id" referenced-column-name="id" />
+</many-to-one>
             <one-to-many field="pkgShopPaymentTransactionPositionCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionPosition" mapped-by="pkgShopPaymentTransaction" orphan-removal="true">
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="pkgShopPaymentTransactionType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransactionType">
+    <join-column name="pkg_shop_payment_transaction_type_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
+    <join-column name="cms_user_id" referenced-column-name="id" />
+</many-to-one>
             <field name="ip" type="string" column="ip" length="255" nullable="false"  />
             <field name="context" type="string" column="context" length="255" nullable="false"  />
             <field name="sequenceNumber" type="string" column="sequence_number" length="255" nullable="false"  />

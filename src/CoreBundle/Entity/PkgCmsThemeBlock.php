@@ -5,6 +5,7 @@ use ChameleonSystem\CoreBundle\Entity\CmsMasterPagedefSpot;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use ChameleonSystem\CoreBundle\Entity\PkgCmsThemeBlockLayout;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class PkgCmsThemeBlock {
   public function __construct(
@@ -24,6 +25,14 @@ private Collection $cmsMasterPagedefSpotCollection = new ArrayCollection()
     // TCMSFieldPropertyTable
 /** @var Collection<int, pkgCmsThemeBlockLayout> - Layouts */
 private Collection $pkgCmsThemeBlockLayoutCollection = new ArrayCollection()
+, 
+    // TCMSFieldLookup
+/** @var PkgCmsThemeBlockLayout|null - Default layout */
+private ?PkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout = null
+, 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Preview image */
+private ?CmsMedia $cmsMedia = null
   ) {}
 
   public function getId(): string
@@ -133,6 +142,36 @@ public function removePkgCmsThemeBlockLayoutCollection(pkgCmsThemeBlockLayout $p
             $pkgCmsThemeBlockLayout->setPkgCmsThemeBlock(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgCmsThemeBlockLayout(): ?PkgCmsThemeBlockLayout
+{
+    return $this->pkgCmsThemeBlockLayout;
+}
+
+public function setPkgCmsThemeBlockLayout(?PkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout): self
+{
+    $this->pkgCmsThemeBlockLayout = $pkgCmsThemeBlockLayout;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
 
     return $this;
 }

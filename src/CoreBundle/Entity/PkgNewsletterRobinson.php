@@ -1,12 +1,17 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
 
 class PkgNewsletterRobinson {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Portal */
+private ?CmsPortal $cmsPortal = null
+, 
     // TCMSFieldVarchar
 /** @var string - Email address */
 private string $email = '', 
@@ -33,6 +38,21 @@ private string $reason = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getEmail(): string
 {

@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class ShopVoucherSeriesSponsor {
   public function __construct(
@@ -9,7 +10,11 @@ class ShopVoucherSeriesSponsor {
         
     // TCMSFieldVarchar
 /** @var string - Name */
-private string $name = ''  ) {}
+private string $name = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Logo */
+private ?CmsMedia $cmsMedia = null
+  ) {}
 
   public function getId(): string
   {
@@ -38,6 +43,21 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
 
     return $this;
 }

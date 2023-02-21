@@ -9,11 +9,11 @@ class ShopArticleReview {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopArticle|null - Belongs to product */
 private ?ShopArticle $shopArticle = null
 , 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var DataExtranetUser|null - Written by */
 private ?DataExtranetUser $dataExtranetUser = null
 , 
@@ -61,7 +61,7 @@ private string $userIp = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopArticle(): ?ShopArticle
 {
     return $this->shopArticle;
@@ -76,7 +76,7 @@ public function setShopArticle(?ShopArticle $shopArticle): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;

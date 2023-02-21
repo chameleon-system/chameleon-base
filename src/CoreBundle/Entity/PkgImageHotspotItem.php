@@ -2,6 +2,7 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\PkgImageHotspot;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 use ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItemSpot;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,13 +13,21 @@ class PkgImageHotspotItem {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgImageHotspot|null - Belongs to image hotspot */
 private ?PkgImageHotspot $pkgImageHotspot = null
 , 
     // TCMSFieldVarchar
 /** @var string - Alternative text for image */
 private string $name = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Image */
+private ?CmsMedia $cmsMedia = null
+,
+// ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
+/** @var CmsMedia|null - Image */
+private ?CmsMedia $cmsMediaIdImageCrop = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, pkgImageHotspotItemSpot> - Hotspots and linked areas */
 private Collection $pkgImageHotspotItemSpotCollection = new ArrayCollection()
@@ -47,7 +56,7 @@ private Collection $pkgImageHotspotItemMarkerCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgImageHotspot(): ?PkgImageHotspot
 {
     return $this->pkgImageHotspot;
@@ -70,6 +79,33 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
+
+    return $this;
+}
+// ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field\TCMSFieldMediaWithImageCrop
+public function getCmsMediaIdImageCrop(): ?CmsMedia
+{
+    return $this->cmsMediaIdImageCrop;
+}
+
+public function setCmsMediaIdImageCrop(?CmsMedia $cmsMediaIdImageCrop): self
+{
+    $this->cmsMediaIdImageCrop = $cmsMediaIdImageCrop;
 
     return $this;
 }

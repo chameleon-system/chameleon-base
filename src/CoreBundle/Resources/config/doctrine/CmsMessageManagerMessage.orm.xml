@@ -15,6 +15,9 @@
     <join-column name="cms_portal_id" referenced-column-name="id" />
 </many-to-one>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <many-to-one field="cmsMessageManagerMessageType" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessageType">
+    <join-column name="cms_message_manager_message_type_id" referenced-column-name="id" />
+</many-to-one>
             <field name="messageView" type="string" column="message_view" length="255" nullable="false"  />
     </entity>
 

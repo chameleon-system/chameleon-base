@@ -4,6 +4,8 @@ namespace ChameleonSystem\CoreBundle\Entity;
 use ChameleonSystem\CoreBundle\Entity\CmsTplPageCmsMasterPagedefSpot;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\CmsTplModule;
 
 class CmsTplModuleInstance {
   public function __construct(
@@ -17,9 +19,17 @@ private string $name = '',
 /** @var Collection<int, cmsTplPageCmsMasterPagedefSpot> - CMS pages dynamic spots */
 private Collection $cmsTplPageCmsMasterPagedefSpotCollection = new ArrayCollection()
 , 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - was created in portal */
+private ?CmsPortal $cmsPortal = null
+, 
     // TCMSFieldVarchar
 /** @var string - File name of the module template */
-private string $template = ''  ) {}
+private string $template = '', 
+    // TCMSFieldLookup
+/** @var CmsTplModule|null - Module ID */
+private ?CmsTplModule $cmsTplModule = null
+  ) {}
 
   public function getId(): string
   {
@@ -87,6 +97,21 @@ public function removeCmsTplPageCmsMasterPagedefSpotCollection(cmsTplPageCmsMast
 
 
   
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getTemplate(): string
 {
@@ -95,6 +120,21 @@ public function getTemplate(): string
 public function setTemplate(string $template): self
 {
     $this->template = $template;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTplModule(): ?CmsTplModule
+{
+    return $this->cmsTplModule;
+}
+
+public function setCmsTplModule(?CmsTplModule $cmsTplModule): self
+{
+    $this->cmsTplModule = $cmsTplModule;
 
     return $this;
 }

@@ -8,7 +8,7 @@ class ShopAttributeValue {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopAttribute|null - Belongs to the attribute */
 private ?ShopAttribute $shopAttribute = null
 , 
@@ -35,7 +35,7 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopAttribute(): ?ShopAttribute
 {
     return $this->shopAttribute;

@@ -2,19 +2,24 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessageType;
 
 class CmsMessageManagerMessage {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsPortal|null - Belongs to portal */
 private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldVarchar
 /** @var string - Code */
 private string $name = '', 
+    // TCMSFieldLookup
+/** @var CmsMessageManagerMessageType|null - Message type */
+private ?CmsMessageManagerMessageType $cmsMessageManagerMessageType = null
+, 
     // TCMSFieldVarchar
 /** @var string - View */
 private string $messageView = 'standard'  ) {}
@@ -38,7 +43,7 @@ private string $messageView = 'standard'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsPortal(): ?CmsPortal
 {
     return $this->cmsPortal;
@@ -61,6 +66,21 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMessageManagerMessageType(): ?CmsMessageManagerMessageType
+{
+    return $this->cmsMessageManagerMessageType;
+}
+
+public function setCmsMessageManagerMessageType(?CmsMessageManagerMessageType $cmsMessageManagerMessageType): self
+{
+    $this->cmsMessageManagerMessageType = $cmsMessageManagerMessageType;
 
     return $this;
 }

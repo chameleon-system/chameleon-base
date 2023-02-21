@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
 use ChameleonSystem\CoreBundle\Entity\CmsExportProfilesFields;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,6 +15,14 @@ class CmsExportProfiles {
     // TCMSFieldVarchar
 /** @var string - Profile name */
 private string $name = '', 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Editorial department */
+private ?CmsPortal $cmsPortal = null
+, 
+    // TCMSFieldLookup
+/** @var CmsTblConf|null - Table */
+private ?CmsTblConf $cmsTblConf = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, cmsExportProfilesFields> - Fields to be exported */
 private Collection $cmsExportProfilesFieldsCollection = new ArrayCollection()
@@ -45,6 +55,36 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTblConf(): ?CmsTblConf
+{
+    return $this->cmsTblConf;
+}
+
+public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
+{
+    $this->cmsTblConf = $cmsTblConf;
 
     return $this;
 }

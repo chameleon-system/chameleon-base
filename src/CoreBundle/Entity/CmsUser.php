@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
 
 class CmsUser {
   public function __construct(
@@ -22,6 +24,10 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - Email address */
 private string $email = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Image */
+private ?CmsMedia $ima = null
+, 
     // TCMSFieldVarchar
 /** @var string - Company */
 private string $company = '', 
@@ -37,6 +43,10 @@ private string $tel = '',
     // TCMSFieldVarchar
 /** @var string - Fax */
 private string $fax = '', 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - CMS language */
+private ?CmsLanguage $cmsLanguage = null
+, 
     // TCMSFieldVarchar
 /** @var string - Alternative languages */
 private string $languages = 'de', 
@@ -139,6 +149,21 @@ public function setEmail(string $email): self
 
 
   
+    // TCMSFieldLookup
+public function getIma(): ?CmsMedia
+{
+    return $this->ima;
+}
+
+public function setIma(?CmsMedia $ima): self
+{
+    $this->ima = $ima;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getCompany(): string
 {
@@ -203,6 +228,21 @@ public function getFax(): string
 public function setFax(string $fax): self
 {
     $this->fax = $fax;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsLanguage(): ?CmsLanguage
+{
+    return $this->cmsLanguage;
+}
+
+public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
+{
+    $this->cmsLanguage = $cmsLanguage;
 
     return $this;
 }

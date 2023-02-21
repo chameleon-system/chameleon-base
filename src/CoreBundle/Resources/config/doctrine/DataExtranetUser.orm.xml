@@ -14,10 +14,16 @@
             <many-to-one field="shop" target-entity="\ChameleonSystem\CoreBundle\Entity\Shop" inversed-by="dataExtranetUserCollection" >
     <join-column name="shop_id" referenced-column-name="id" />
 </many-to-one>
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
             <field name="customerNumber" type="string" column="customer_number" length="255" nullable="false"  />
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="password" type="string" column="password" length="255" nullable="false"  />
             <field name="passwordChangeKey" type="string" column="password_change_key" length="255" nullable="false"  />
+            <many-to-one field="dataExtranetSalutation" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation">
+    <join-column name="data_extranet_salutation_id" referenced-column-name="id" />
+</many-to-one>
             <field name="firstname" type="string" column="firstname" length="255" nullable="false"  />
             <field name="lastname" type="string" column="lastname" length="255" nullable="false"  />
             <field name="company" type="string" column="company" length="255" nullable="false"  />
@@ -25,6 +31,9 @@
             <field name="streetnr" type="string" column="streetnr" length="255" nullable="false"  />
             <field name="postalcode" type="string" column="postalcode" length="255" nullable="false"  />
             <field name="city" type="string" column="city" length="255" nullable="false"  />
+            <many-to-one field="dataCountry" target-entity="\ChameleonSystem\CoreBundle\Entity\DataCountry">
+    <join-column name="data_country_id" referenced-column-name="id" />
+</many-to-one>
             <field name="vatId" type="string" column="vat_id" length="255" nullable="false"  />
             <field name="telefon" type="string" column="telefon" length="255" nullable="false"  />
             <field name="mobile" type="string" column="mobile" length="255" nullable="false"  />
@@ -43,6 +52,12 @@
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="defaultBillingAddress" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress">
+    <join-column name="default_billing_address_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="defaultShippingAddress" target-entity="\ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress">
+    <join-column name="default_shipping_address_id" referenced-column-name="id" />
+</many-to-one>
             <field name="tmpconfirmkey" type="string" column="tmpconfirmkey" length="32" nullable="false"  />
             <one-to-many field="shopUserPurchasedVoucherCollection" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopUserPurchasedVoucher" mapped-by="dataExtranetUser" orphan-removal="true">
     <cascade-persist/>
@@ -76,6 +91,9 @@
     <cascade-persist/>
 </one-to-many>
 
+            <many-to-one field="pkgShopCurrency" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopCurrency">
+    <join-column name="pkg_shop_currency_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

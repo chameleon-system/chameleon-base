@@ -12,7 +12,11 @@ class ShopUnitOfMeasurement {
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Symbol / abbreviation */
-private string $symbol = ''  ) {}
+private string $symbol = '', 
+    // TCMSFieldLookup
+/** @var ShopUnitOfMeasurement|null - Base unit */
+private ?ShopUnitOfMeasurement $shopUnitOfMeasurement = null
+  ) {}
 
   public function getId(): string
   {
@@ -55,6 +59,21 @@ public function getSymbol(): string
 public function setSymbol(string $symbol): self
 {
     $this->symbol = $symbol;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopUnitOfMeasurement(): ?ShopUnitOfMeasurement
+{
+    return $this->shopUnitOfMeasurement;
+}
+
+public function setShopUnitOfMeasurement(?ShopUnitOfMeasurement $shopUnitOfMeasurement): self
+{
+    $this->shopUnitOfMeasurement = $shopUnitOfMeasurement;
 
     return $this;
 }

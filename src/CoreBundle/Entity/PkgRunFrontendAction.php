@@ -1,6 +1,8 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\CmsLanguage;
 
 class PkgRunFrontendAction {
   public function __construct(
@@ -12,7 +14,15 @@ class PkgRunFrontendAction {
 private string $class = '', 
     // TCMSFieldVarchar
 /** @var string -  */
-private string $randomKey = ''  ) {}
+private string $randomKey = '', 
+    // TCMSFieldLookup
+/** @var CmsPortal|null -  */
+private ?CmsPortal $cmsPortal = null
+, 
+    // TCMSFieldLookup
+/** @var CmsLanguage|null - Language */
+private ?CmsLanguage $cmsLanguage = null
+  ) {}
 
   public function getId(): string
   {
@@ -55,6 +65,36 @@ public function getRandomKey(): string
 public function setRandomKey(string $randomKey): self
 {
     $this->randomKey = $randomKey;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsLanguage(): ?CmsLanguage
+{
+    return $this->cmsLanguage;
+}
+
+public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
+{
+    $this->cmsLanguage = $cmsLanguage;
 
     return $this;
 }

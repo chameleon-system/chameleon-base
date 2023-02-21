@@ -11,6 +11,9 @@
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
         </field>
+            <many-to-one field="pkgNewsletterU" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterUser">
+    <join-column name="pkg_newsletter_user" referenced-column-name="id" />
+</many-to-one>
             <many-to-one field="pkgNewsletterCampaign" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgNewsletterCampaign" inversed-by="pkgNewsletterQueueCollection" >
     <join-column name="pkg_newsletter_campaign_id" referenced-column-name="id" />
 </many-to-one>

@@ -2,6 +2,9 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\Shop;
+use ChameleonSystem\CoreBundle\Entity\CmsPortal;
+use ChameleonSystem\CoreBundle\Entity\DataExtranetSalutation;
+use ChameleonSystem\CoreBundle\Entity\DataCountry;
 use ChameleonSystem\CoreBundle\Entity\DataExtranetUserAddress;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,15 +17,20 @@ use ChameleonSystem\CoreBundle\Entity\ShopSearchLog;
 use ChameleonSystem\CoreBundle\Entity\ShopSuggestArticleLog;
 use ChameleonSystem\CoreBundle\Entity\ShopArticleReview;
 use ChameleonSystem\CoreBundle\Entity\PkgShopWishlist;
+use ChameleonSystem\CoreBundle\Entity\PkgShopCurrency;
 
 class DataExtranetUser {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var Shop|null - Belongs to shop */
 private ?Shop $shop = null
+, 
+    // TCMSFieldLookup
+/** @var CmsPortal|null - Belongs to portal */
+private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldVarchar
 /** @var string - Customer number */
@@ -36,6 +44,10 @@ private string $password = '',
     // TCMSFieldVarchar
 /** @var string - Password change key */
 private string $passwordChangeKey = '', 
+    // TCMSFieldLookup
+/** @var DataExtranetSalutation|null - Name */
+private ?DataExtranetSalutation $dataExtranetSalutation = null
+, 
     // TCMSFieldVarchar
 /** @var string - First name */
 private string $firstname = '', 
@@ -57,6 +69,10 @@ private string $postalcode = '',
     // TCMSFieldVarchar
 /** @var string - City */
 private string $city = '', 
+    // TCMSFieldLookup
+/** @var DataCountry|null - Country */
+private ?DataCountry $dataCountry = null
+, 
     // TCMSFieldVarchar
 /** @var string - USTID */
 private string $vatId = '', 
@@ -95,6 +111,14 @@ private string $loginSalt = '',
 /** @var Collection<int, dataExtranetUserLoginHistory> - Login process */
 private Collection $dataExtranetUserLoginHistoryCollection = new ArrayCollection()
 , 
+    // TCMSFieldLookup
+/** @var DataExtranetUserAddress|null - Last billing address */
+private ?DataExtranetUserAddress $defaultBillingAddress = null
+, 
+    // TCMSFieldLookup
+/** @var DataExtranetUserAddress|null - Last used shipping address */
+private ?DataExtranetUserAddress $defaultShippingAddress = null
+, 
     // TCMSFieldVarchar
 /** @var string - Confirmation key */
 private string $tmpconfirmkey = '', 
@@ -129,6 +153,10 @@ private Collection $shopArticleReviewCollection = new ArrayCollection()
     // TCMSFieldPropertyTable
 /** @var Collection<int, pkgShopWishlist> - Wish list */
 private Collection $pkgShopWishlistCollection = new ArrayCollection()
+, 
+    // TCMSFieldLookup
+/** @var PkgShopCurrency|null - Currency */
+private ?PkgShopCurrency $pkgShopCurrency = null
   ) {}
 
   public function getId(): string
@@ -150,7 +178,7 @@ private Collection $pkgShopWishlistCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShop(): ?Shop
 {
     return $this->shop;
@@ -159,6 +187,21 @@ public function getShop(): ?Shop
 public function setShop(?Shop $shop): self
 {
     $this->shop = $shop;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsPortal(): ?CmsPortal
+{
+    return $this->cmsPortal;
+}
+
+public function setCmsPortal(?CmsPortal $cmsPortal): self
+{
+    $this->cmsPortal = $cmsPortal;
 
     return $this;
 }
@@ -215,6 +258,21 @@ public function getPasswordChangeKey(): string
 public function setPasswordChangeKey(string $passwordChangeKey): self
 {
     $this->passwordChangeKey = $passwordChangeKey;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getDataExtranetSalutation(): ?DataExtranetSalutation
+{
+    return $this->dataExtranetSalutation;
+}
+
+public function setDataExtranetSalutation(?DataExtranetSalutation $dataExtranetSalutation): self
+{
+    $this->dataExtranetSalutation = $dataExtranetSalutation;
 
     return $this;
 }
@@ -313,6 +371,21 @@ public function getCity(): string
 public function setCity(string $city): self
 {
     $this->city = $city;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getDataCountry(): ?DataCountry
+{
+    return $this->dataCountry;
+}
+
+public function setDataCountry(?DataCountry $dataCountry): self
+{
+    $this->dataCountry = $dataCountry;
 
     return $this;
 }
@@ -519,6 +592,36 @@ public function removeDataExtranetUserLoginHistoryCollection(dataExtranetUserLog
             $dataExtranetUserLoginHistory->setDataExtranetUser(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getDefaultBillingAddress(): ?DataExtranetUserAddress
+{
+    return $this->defaultBillingAddress;
+}
+
+public function setDefaultBillingAddress(?DataExtranetUserAddress $defaultBillingAddress): self
+{
+    $this->defaultBillingAddress = $defaultBillingAddress;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getDefaultShippingAddress(): ?DataExtranetUserAddress
+{
+    return $this->defaultShippingAddress;
+}
+
+public function setDefaultShippingAddress(?DataExtranetUserAddress $defaultShippingAddress): self
+{
+    $this->defaultShippingAddress = $defaultShippingAddress;
 
     return $this;
 }
@@ -797,6 +900,21 @@ public function removePkgShopWishlistCollection(pkgShopWishlist $pkgShopWishlist
             $pkgShopWishlist->setDataExtranetUser(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopCurrency(): ?PkgShopCurrency
+{
+    return $this->pkgShopCurrency;
+}
+
+public function setPkgShopCurrency(?PkgShopCurrency $pkgShopCurrency): self
+{
+    $this->pkgShopCurrency = $pkgShopCurrency;
 
     return $this;
 }

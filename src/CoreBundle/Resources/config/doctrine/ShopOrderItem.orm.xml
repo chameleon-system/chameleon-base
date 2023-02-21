@@ -16,10 +16,19 @@
     <join-column name="shop_order_id" referenced-column-name="id" />
 </many-to-one>
             <field name="basketItemKey" type="string" column="basket_item_key" length="32" nullable="false"  />
+            <many-to-one field="shopArticle" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopArticle">
+    <join-column name="shop_article_id" referenced-column-name="id" />
+</many-to-one>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="articlenumber" type="string" column="articlenumber" length="255" nullable="false"  />
+            <many-to-one field="shopManufacturer" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopManufacturer">
+    <join-column name="shop_manufacturer_id" referenced-column-name="id" />
+</many-to-one>
             <field name="shopManufacturerName" type="string" column="shop_manufacturer_name" length="255" nullable="false"  />
             <field name="stock" type="string" column="stock" length="255" nullable="false"  />
+            <many-to-one field="shopUnitOfMeasurement" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopUnitOfMeasurement">
+    <join-column name="shop_unit_of_measurement_id" referenced-column-name="id" />
+</many-to-one>
             <field name="subtitle" type="string" column="subtitle" length="255" nullable="false"  />
             <field name="pages" type="string" column="pages" length="255" nullable="false"  />
             <field name="usp" type="string" column="usp" length="255" nullable="false"  />

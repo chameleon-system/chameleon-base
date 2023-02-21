@@ -16,6 +16,9 @@
 </many-to-one>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="systemname" type="string" column="systemname" length="255" nullable="false"  />
+            <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsPortal">
+    <join-column name="cms_portal_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

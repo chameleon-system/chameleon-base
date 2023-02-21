@@ -2,13 +2,15 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
+use ChameleonSystem\CoreBundle\Entity\CmsFieldType;
+use ChameleonSystem\CoreBundle\Entity\CmsTblFieldTab;
 
 class CmsFieldConf {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTblConf|null - Belongs to Table */
 private ?CmsTblConf $cmsTblConf = null
 , 
@@ -18,6 +20,14 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - Translation */
 private string $translation = '', 
+    // TCMSFieldLookup
+/** @var CmsFieldType|null - Field type */
+private ?CmsFieldType $cmsFieldType = null
+, 
+    // TCMSFieldLookup
+/** @var CmsTblFieldTab|null - Belongs to field-category / tab */
+private ?CmsTblFieldTab $cmsTblField_ = null
+, 
     // TCMSFieldVarchar
 /** @var string - PHP class */
 private string $fieldclass = '', 
@@ -53,7 +63,7 @@ private string $validationRegex = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;
@@ -90,6 +100,36 @@ public function getTranslation(): string
 public function setTranslation(string $translation): self
 {
     $this->translation = $translation;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsFieldType(): ?CmsFieldType
+{
+    return $this->cmsFieldType;
+}
+
+public function setCmsFieldType(?CmsFieldType $cmsFieldType): self
+{
+    $this->cmsFieldType = $cmsFieldType;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsTblField_(): ?CmsTblFieldTab
+{
+    return $this->cmsTblField_;
+}
+
+public function setCmsTblField_(?CmsTblFieldTab $cmsTblField_): self
+{
+    $this->cmsTblField_ = $cmsTblField_;
 
     return $this;
 }

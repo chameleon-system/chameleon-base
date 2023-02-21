@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMessageManagerMessageType;
 use ChameleonSystem\CoreBundle\Entity\CmsConfig;
 
 class CmsMessageManagerBackendMessage {
@@ -8,7 +9,11 @@ class CmsMessageManagerBackendMessage {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+/** @var CmsMessageManagerMessageType|null - Message type */
+private ?CmsMessageManagerMessageType $cmsMessageManagerMessageType = null
+, 
+    // TCMSFieldLookup
 /** @var CmsConfig|null - Belongs to CMS config */
 private ?CmsConfig $cmsConfig = null
 , 
@@ -35,7 +40,22 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+public function getCmsMessageManagerMessageType(): ?CmsMessageManagerMessageType
+{
+    return $this->cmsMessageManagerMessageType;
+}
+
+public function setCmsMessageManagerMessageType(?CmsMessageManagerMessageType $cmsMessageManagerMessageType): self
+{
+    $this->cmsMessageManagerMessageType = $cmsMessageManagerMessageType;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
 public function getCmsConfig(): ?CmsConfig
 {
     return $this->cmsConfig;

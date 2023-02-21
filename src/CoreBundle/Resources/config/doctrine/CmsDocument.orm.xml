@@ -13,9 +13,15 @@
         </field>
             <field name="name" type="string" column="name" length="60" nullable="false"  />
             <field name="filename" type="string" column="filename" length="255" nullable="false"  />
+            <many-to-one field="cmsUser" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsUser">
+    <join-column name="cms_user_id" referenced-column-name="id" />
+</many-to-one>
             <field name="hiddenImageWidth" type="string" column="hidden_image_width" length="6" nullable="false"  />
             <field name="hiddenImageHeight" type="string" column="hidden_image_height" length="6" nullable="false"  />
             <field name="counter" type="string" column="counter" length="11" nullable="false"  />
+            <many-to-one field="cmsDocumentTree" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsDocumentTree">
+    <join-column name="cms_document_tree_id" referenced-column-name="id" />
+</many-to-one>
             <field name="filesize" type="string" column="filesize" length="16" nullable="false"  />
             <field name="seoName" type="string" column="seo_name" length="255" nullable="false"  />
     </entity>

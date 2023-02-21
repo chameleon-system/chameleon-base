@@ -15,6 +15,9 @@
     <join-column name="cms_tpl_module_instance_id" referenced-column-name="id" />
 </many-to-one>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <many-to-one field="pkgCommentType" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgCommentType">
+    <join-column name="pkg_comment_type_id" referenced-column-name="id" />
+</many-to-one>
             <field name="numberOfCommentsPerPage" type="string" column="number_of_comments_per_page" length="255" nullable="false"  />
             <field name="commentOnDelete" type="string" column="comment_on_delete" length="255" nullable="false"  />
     </entity>

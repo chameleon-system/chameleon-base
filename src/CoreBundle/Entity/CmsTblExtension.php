@@ -8,7 +8,7 @@ class CmsTblExtension {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTblConf|null - Text template */
 private ?CmsTblConf $cmsTblConf = null
 , 
@@ -47,7 +47,7 @@ private string $virtualItemClassListName = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;

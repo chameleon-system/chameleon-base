@@ -8,7 +8,7 @@ class PkgCmsClassManagerExtension {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgCmsClassManager|null - Belongs to */
 private ?PkgCmsClassManager $pkgCmsClassManager = null
 , 
@@ -38,7 +38,7 @@ private string $classSubtype = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgCmsClassManager(): ?PkgCmsClassManager
 {
     return $this->pkgCmsClassManager;

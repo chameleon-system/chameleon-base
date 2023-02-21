@@ -8,7 +8,7 @@ class ShopArticleStock {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopArticle|null - Belongs to */
 private ?ShopArticle $shopArticle = null
 , 
@@ -35,7 +35,7 @@ private string $amount = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopArticle(): ?ShopArticle
 {
     return $this->shopArticle;

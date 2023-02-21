@@ -10,11 +10,13 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * ReloadOnChange=true.
@@ -28,7 +30,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
  * connectedTableName=tablename
  * to the field type configuration.
  */
-class TCMSFieldLookup extends TCMSField
+class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterface
 {
     /**
      * set this to true if you want to allow an empty selection in the select box.
@@ -48,6 +50,50 @@ class TCMSFieldLookup extends TCMSField
      * @var array
      */
     protected $options = array();
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => $this->snakeToCamelCase($this->GetConnectedTableName(), false),
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($propertyName),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [
+                ltrim(sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)), '\\'),
+            ],
+            true
+        );
+    }
+
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $viewName = 'mapping/many-to-one.xml.twig';
+
+        return $this->getDoctrineRenderer($viewName, [
+            'fieldName' => $this->snakeToCamelCase($propertyName),
+            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+            'column' => $this->name
+        ])->render();
+    }
+
 
     public function GetHTML()
     {

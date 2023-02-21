@@ -2,15 +2,20 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\DataExtranetUser;
+use ChameleonSystem\CoreBundle\Entity\ShopArticle;
 
 class ShopSuggestArticleLog {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var DataExtranetUser|null - Shop customer */
 private ?DataExtranetUser $dataExtranetUser = null
+, 
+    // TCMSFieldLookup
+/** @var ShopArticle|null - Product / item */
+private ?ShopArticle $shopArticle = null
 , 
     // TCMSFieldVarchar
 /** @var string - From (email) */
@@ -44,7 +49,7 @@ private string $toName = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getDataExtranetUser(): ?DataExtranetUser
 {
     return $this->dataExtranetUser;
@@ -53,6 +58,21 @@ public function getDataExtranetUser(): ?DataExtranetUser
 public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
 {
     $this->dataExtranetUser = $dataExtranetUser;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopArticle(): ?ShopArticle
+{
+    return $this->shopArticle;
+}
+
+public function setShopArticle(?ShopArticle $shopArticle): self
+{
+    $this->shopArticle = $shopArticle;
 
     return $this;
 }

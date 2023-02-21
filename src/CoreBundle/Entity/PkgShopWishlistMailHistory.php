@@ -8,7 +8,7 @@ class PkgShopWishlistMailHistory {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgShopWishlist|null - Belongs to wishlist */
 private ?PkgShopWishlist $pkgShopWishlist = null
 , 
@@ -38,7 +38,7 @@ private string $toEmail = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgShopWishlist(): ?PkgShopWishlist
 {
     return $this->pkgShopWishlist;

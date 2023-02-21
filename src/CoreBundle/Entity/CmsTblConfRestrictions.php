@@ -14,7 +14,7 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - Callback function */
 private string $function = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTblConf|null - Table */
 private ?CmsTblConf $cmsTblConf = null
   ) {}
@@ -66,7 +66,7 @@ public function setFunction(string $function): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTblConf(): ?CmsTblConf
 {
     return $this->cmsTblConf;

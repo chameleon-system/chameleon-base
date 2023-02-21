@@ -20,6 +20,9 @@
 </one-to-many>
 
             <field name="pageSize" type="string" column="page_size" length="255" nullable="false"  />
+            <many-to-one field="shopModuleArticlelistOrderby" target-entity="\ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby">
+    <join-column name="shop_module_articlelist_orderby_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

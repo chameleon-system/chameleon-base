@@ -4,12 +4,19 @@ namespace ChameleonSystem\CoreBundle\Entity;
 use ChameleonSystem\CoreBundle\Entity\ShopArticleImage;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 use ChameleonSystem\CoreBundle\Entity\ShopArticlePreviewImage;
 use ChameleonSystem\CoreBundle\Entity\ShopArticleDocument;
+use ChameleonSystem\CoreBundle\Entity\ShopManufacturer;
+use ChameleonSystem\CoreBundle\Entity\ShopVat;
+use ChameleonSystem\CoreBundle\Entity\ShopUnitOfMeasurement;
 use ChameleonSystem\CoreBundle\Entity\ShopArticleStock;
+use ChameleonSystem\CoreBundle\Entity\ShopStockMessage;
+use ChameleonSystem\CoreBundle\Entity\ShopCategory;
 use ChameleonSystem\CoreBundle\Entity\ShopArticleContributor;
 use ChameleonSystem\CoreBundle\Entity\ShopArticleReview;
 use ChameleonSystem\CoreBundle\Entity\ShopBundleArticle;
+use ChameleonSystem\CoreBundle\Entity\ShopVariantSet;
 use ChameleonSystem\CoreBundle\Entity\ShopArticleStats;
 
 class ShopArticle {
@@ -30,6 +37,10 @@ private string $articlenumber = '',
 /** @var Collection<int, shopArticleImage> - Detailed product pictures */
 private Collection $shopArticleImageCollection = new ArrayCollection()
 , 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Default preview image of the product */
+private ?CmsMedia $cmsMediaDefaultPreviewImage = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopArticlePreviewImage> - Product preview images */
 private Collection $shopArticlePreviewImageCollection = new ArrayCollection()
@@ -41,9 +52,29 @@ private Collection $shopArticleDocumentCollection = new ArrayCollection()
     // TCMSFieldVarchar
 /** @var string - Quantifier / Product ranking */
 private string $listRank = '', 
+    // TCMSFieldLookup
+/** @var ShopManufacturer|null - Manufacturer / Brand */
+private ?ShopManufacturer $shopManufacturer = null
+, 
+    // TCMSFieldLookup
+/** @var ShopVat|null - VAT group */
+private ?ShopVat $shopVat = null
+, 
+    // TCMSFieldLookup
+/** @var ShopUnitOfMeasurement|null - Measurement unit of content */
+private ?ShopUnitOfMeasurement $shopUnitOfMeasurement = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopArticleStock> - Stock */
 private Collection $shopArticleStockCollection = new ArrayCollection()
+, 
+    // TCMSFieldLookup
+/** @var ShopStockMessage|null - Delivery status */
+private ?ShopStockMessage $shopStockMessage = null
+, 
+    // TCMSFieldLookup
+/** @var ShopCategory|null - Main category of the product */
+private ?ShopCategory $shopCategory = null
 , 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopArticleContributor> - Contributing persons */
@@ -69,7 +100,11 @@ private Collection $shopBundleArticleCollection = new ArrayCollection()
     // TCMSFieldVarchar
 /** @var string - Variant name */
 private string $nameVariantInfo = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+/** @var ShopVariantSet|null - Variant set */
+private ?ShopVariantSet $shopVariantSet = null
+, 
+    // TCMSFieldLookup
 /** @var ShopArticle|null - Is a variant of */
 private ?ShopArticle $variantParent = null
 , 
@@ -182,6 +217,21 @@ public function removeShopArticleImageCollection(shopArticleImage $shopArticleIm
 
 
   
+    // TCMSFieldLookup
+public function getCmsMediaDefaultPreviewImage(): ?CmsMedia
+{
+    return $this->cmsMediaDefaultPreviewImage;
+}
+
+public function setCmsMediaDefaultPreviewImage(?CmsMedia $cmsMediaDefaultPreviewImage): self
+{
+    $this->cmsMediaDefaultPreviewImage = $cmsMediaDefaultPreviewImage;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldPropertyTable
 /**
 * @return Collection<int, shopArticlePreviewImage>
@@ -262,6 +312,51 @@ public function setListRank(string $listRank): self
 
 
   
+    // TCMSFieldLookup
+public function getShopManufacturer(): ?ShopManufacturer
+{
+    return $this->shopManufacturer;
+}
+
+public function setShopManufacturer(?ShopManufacturer $shopManufacturer): self
+{
+    $this->shopManufacturer = $shopManufacturer;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopVat(): ?ShopVat
+{
+    return $this->shopVat;
+}
+
+public function setShopVat(?ShopVat $shopVat): self
+{
+    $this->shopVat = $shopVat;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopUnitOfMeasurement(): ?ShopUnitOfMeasurement
+{
+    return $this->shopUnitOfMeasurement;
+}
+
+public function setShopUnitOfMeasurement(?ShopUnitOfMeasurement $shopUnitOfMeasurement): self
+{
+    $this->shopUnitOfMeasurement = $shopUnitOfMeasurement;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldPropertyTable
 /**
 * @return Collection<int, shopArticleStock>
@@ -289,6 +384,36 @@ public function removeShopArticleStockCollection(shopArticleStock $shopArticleSt
             $shopArticleStock->setShopArticle(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopStockMessage(): ?ShopStockMessage
+{
+    return $this->shopStockMessage;
+}
+
+public function setShopStockMessage(?ShopStockMessage $shopStockMessage): self
+{
+    $this->shopStockMessage = $shopStockMessage;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopCategory(): ?ShopCategory
+{
+    return $this->shopCategory;
+}
+
+public function setShopCategory(?ShopCategory $shopCategory): self
+{
+    $this->shopCategory = $shopCategory;
 
     return $this;
 }
@@ -450,7 +575,22 @@ public function setNameVariantInfo(string $nameVariantInfo): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+public function getShopVariantSet(): ?ShopVariantSet
+{
+    return $this->shopVariantSet;
+}
+
+public function setShopVariantSet(?ShopVariantSet $shopVariantSet): self
+{
+    $this->shopVariantSet = $shopVariantSet;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
 public function getVariantParent(): ?ShopArticle
 {
     return $this->variantParent;

@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopOrder;
 
 class ShopOrderBasket {
   public function __construct(
@@ -19,6 +20,10 @@ private string $datecreated = '',
     // TCMSFieldVarchar
 /** @var string - Last changed */
 private string $lastmodified = '', 
+    // TCMSFieldLookup
+/** @var ShopOrder|null - Order */
+private ?ShopOrder $shopOrder = null
+, 
     // TCMSFieldVarchar
 /** @var string - Last update in step */
 private string $updateStepname = ''  ) {}
@@ -92,6 +97,21 @@ public function getLastmodified(): string
 public function setLastmodified(string $lastmodified): self
 {
     $this->lastmodified = $lastmodified;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopOrder(): ?ShopOrder
+{
+    return $this->shopOrder;
+}
+
+public function setShopOrder(?ShopOrder $shopOrder): self
+{
+    $this->shopOrder = $shopOrder;
 
     return $this;
 }

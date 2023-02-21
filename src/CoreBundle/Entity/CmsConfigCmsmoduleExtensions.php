@@ -11,7 +11,7 @@ class CmsConfigCmsmoduleExtensions {
     // TCMSFieldVarchar
 /** @var string - Overwritten by */
 private string $newclass = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsConfig|null - Belongs to cms config */
 private ?CmsConfig $cmsConfig = null
 , 
@@ -52,7 +52,7 @@ public function setNewclass(string $newclass): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsConfig(): ?CmsConfig
 {
     return $this->cmsConfig;

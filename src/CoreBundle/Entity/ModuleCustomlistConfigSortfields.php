@@ -8,7 +8,7 @@ class ModuleCustomlistConfigSortfields {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ModuleCustomlistConfig|null - Belongs to list */
 private ?ModuleCustomlistConfig $moduleCustomlistConfig = null
 , 
@@ -35,7 +35,7 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getModuleCustomlistConfig(): ?ModuleCustomlistConfig
 {
     return $this->moduleCustomlistConfig;

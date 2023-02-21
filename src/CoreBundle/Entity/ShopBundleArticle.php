@@ -8,9 +8,13 @@ class ShopBundleArticle {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopArticle|null - Belongs to bundle article */
 private ?ShopArticle $shopArticle = null
+, 
+    // TCMSFieldLookup
+/** @var ShopArticle|null - Article */
+private ?ShopArticle $bundleArticle = null
 , 
     // TCMSFieldVarchar
 /** @var string - Units */
@@ -35,7 +39,7 @@ private string $amount = '1'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopArticle(): ?ShopArticle
 {
     return $this->shopArticle;
@@ -44,6 +48,21 @@ public function getShopArticle(): ?ShopArticle
 public function setShopArticle(?ShopArticle $shopArticle): self
 {
     $this->shopArticle = $shopArticle;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getBundleArticle(): ?ShopArticle
+{
+    return $this->bundleArticle;
+}
+
+public function setBundleArticle(?ShopArticle $bundleArticle): self
+{
+    $this->bundleArticle = $bundleArticle;
 
     return $this;
 }

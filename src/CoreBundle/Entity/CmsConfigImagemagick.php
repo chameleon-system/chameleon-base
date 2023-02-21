@@ -8,7 +8,7 @@ class CmsConfigImagemagick {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsConfig|null - Configuration */
 private ?CmsConfig $cmsConfig = null
 , 
@@ -38,7 +38,7 @@ private string $quality = '100'  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsConfig(): ?CmsConfig
 {
     return $this->cmsConfig;

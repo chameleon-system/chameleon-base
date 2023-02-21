@@ -14,6 +14,9 @@
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="pkgCommentClassName" type="string" column="pkg_comment_class_name" length="255" nullable="false"  />
             <field name="pkgCommentClassSubType" type="string" column="pkg_comment_class_sub_type" length="255" nullable="false"  />
+            <many-to-one field="cmsTblConf" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTblConf">
+    <join-column name="cms_tbl_conf_id" referenced-column-name="id" />
+</many-to-one>
             <field name="className" type="string" column="class_name" length="255" nullable="false"  />
             <field name="classSubType" type="string" column="class_sub_type" length="255" nullable="false"  />
     </entity>

@@ -2,6 +2,9 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
+use ChameleonSystem\CoreBundle\Entity\ShopModuleArticleListFilter;
+use ChameleonSystem\CoreBundle\Entity\ShopModuleArticlelistOrderby;
 use ChameleonSystem\CoreBundle\Entity\ShopModuleArticleListArticle;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,13 +14,25 @@ class ShopModuleArticleList {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTplModuleInstance|null - Belongs to module instance */
 private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 , 
     // TCMSFieldVarchar
 /** @var string - Headline */
 private string $name = '', 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Icon */
+private ?CmsMedia $i = null
+, 
+    // TCMSFieldLookup
+/** @var ShopModuleArticleListFilter|null - Filter / content */
+private ?ShopModuleArticleListFilter $shopModuleArticleListFilter = null
+, 
+    // TCMSFieldLookup
+/** @var ShopModuleArticlelistOrderby|null - Sorting */
+private ?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby = null
+, 
     // TCMSFieldVarchar
 /** @var string - Number of articles shown */
 private string $numberOfArticles = '-1', 
@@ -48,7 +63,7 @@ private Collection $shopModuleArticleListArticleCollection = new ArrayCollection
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
@@ -71,6 +86,51 @@ public function getName(): string
 public function setName(string $name): self
 {
     $this->name = $name;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getI(): ?CmsMedia
+{
+    return $this->i;
+}
+
+public function setI(?CmsMedia $i): self
+{
+    $this->i = $i;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopModuleArticleListFilter(): ?ShopModuleArticleListFilter
+{
+    return $this->shopModuleArticleListFilter;
+}
+
+public function setShopModuleArticleListFilter(?ShopModuleArticleListFilter $shopModuleArticleListFilter): self
+{
+    $this->shopModuleArticleListFilter = $shopModuleArticleListFilter;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopModuleArticlelistOrderby(): ?ShopModuleArticlelistOrderby
+{
+    return $this->shopModuleArticlelistOrderby;
+}
+
+public function setShopModuleArticlelistOrderby(?ShopModuleArticlelistOrderby $shopModuleArticlelistOrderby): self
+{
+    $this->shopModuleArticlelistOrderby = $shopModuleArticlelistOrderby;
 
     return $this;
 }

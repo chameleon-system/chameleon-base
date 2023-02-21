@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\ShopCategory;
 use ChameleonSystem\CoreBundle\Entity\Shop;
 
 class PkgShopFooterCategory {
@@ -11,7 +12,11 @@ class PkgShopFooterCategory {
     // TCMSFieldVarchar
 /** @var string - Main category / heading */
 private string $name = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+/** @var ShopCategory|null - Product category */
+private ?ShopCategory $shopCategory = null
+, 
+    // TCMSFieldLookup
 /** @var Shop|null - Belongs to shop */
 private ?Shop $shop = null
   ) {}
@@ -49,7 +54,22 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
+public function getShopCategory(): ?ShopCategory
+{
+    return $this->shopCategory;
+}
+
+public function setShopCategory(?ShopCategory $shopCategory): self
+{
+    $this->shopCategory = $shopCategory;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
 public function getShop(): ?Shop
 {
     return $this->shop;

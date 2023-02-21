@@ -2,13 +2,16 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem;
+use ChameleonSystem\CoreBundle\Entity\ShopArticle;
+use ChameleonSystem\CoreBundle\Entity\ShopCategory;
+use ChameleonSystem\CoreBundle\Entity\CmsTplPage;
 
 class PkgImageHotspotItemSpot {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var PkgImageHotspotItem|null - Belongs to hotspot image */
 private ?PkgImageHotspotItem $pkgImageHotspotItem = null
 , 
@@ -18,6 +21,13 @@ private string $top = '',
     // TCMSFieldVarchar
 /** @var string - Distance left */
 private string $left = '', 
+    // TCMSFieldExtendedLookupMultiTable
+/** @var ShopArticle|ShopCategory|CmsTplPage|null - Linked CMS object */
+private ?ShopArticle|ShopCategory|CmsTplPage $linkedRec = null
+,
+// TCMSFieldExtendedLookupMultiTable
+/** @var string - Linked CMS object */
+private string $linkedRecordTableName = '', 
     // TCMSFieldVarchar
 /** @var string - External URL */
 private string $externalUrl = ''  ) {}
@@ -41,7 +51,7 @@ private string $externalUrl = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getPkgImageHotspotItem(): ?PkgImageHotspotItem
 {
     return $this->pkgImageHotspotItem;
@@ -78,6 +88,32 @@ public function getLeft(): string
 public function setLeft(string $left): self
 {
     $this->left = $left;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldExtendedLookupMultiTable
+public function getLinkedRec(): ?ShopArticle|ShopCategory|CmsTplPage
+{
+    return $this->linkedRec;
+}
+
+public function setLinkedRec(?ShopArticle|ShopCategory|CmsTplPage $linkedRec): self
+{
+    $this->linkedRec = $linkedRec;
+
+    return $this;
+}
+// TCMSFieldExtendedLookupMultiTable
+public function getLinkedRecord(): string
+{
+    return $this->linkedRecordTableName;
+}
+public function setLinkedRecord(string $linkedRecordTableName): self
+{
+    $this->linkedRecordTableName = $linkedRecordTableName;
 
     return $this;
 }

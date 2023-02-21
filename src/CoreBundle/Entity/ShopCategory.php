@@ -1,8 +1,11 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
+use ChameleonSystem\CoreBundle\Entity\ShopVat;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\PkgShopListfilter;
 use ChameleonSystem\CoreBundle\Entity\ShopCategoryTab;
 
 class ShopCategory {
@@ -10,9 +13,13 @@ class ShopCategory {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopCategory|null - Subcategory of */
 private ?ShopCategory $shopCategory = null
+, 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Icon for navigation */
+private ?CmsMedia $naviIconCmsMedia = null
 , 
     // TCMSFieldVarchar
 /** @var string - Category name */
@@ -23,6 +30,14 @@ private string $nameProduct = '',
     // TCMSFieldVarchar
 /** @var string - SEO pattern */
 private string $seoPattern = '', 
+    // TCMSFieldLookup
+/** @var ShopVat|null - VAT group */
+private ?ShopVat $shopVat = null
+, 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Category image */
+private ?CmsMedia $im = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopCategory> - Subcategories */
 private Collection $shopCategoryCollection = new ArrayCollection()
@@ -30,6 +45,10 @@ private Collection $shopCategoryCollection = new ArrayCollection()
     // TCMSFieldVarchar
 /** @var string - Meta keywords */
 private string $metaKeywords = '', 
+    // TCMSFieldLookup
+/** @var PkgShopListfilter|null - List filter for the category */
+private ?PkgShopListfilter $pkgShopListfilter = null
+, 
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopCategoryTab> - Category */
 private Collection $shopCategoryTabCollection = new ArrayCollection()
@@ -57,7 +76,7 @@ private string $metaDescription = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopCategory(): ?ShopCategory
 {
     return $this->shopCategory;
@@ -66,6 +85,21 @@ public function getShopCategory(): ?ShopCategory
 public function setShopCategory(?ShopCategory $shopCategory): self
 {
     $this->shopCategory = $shopCategory;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getNaviIconCmsMedia(): ?CmsMedia
+{
+    return $this->naviIconCmsMedia;
+}
+
+public function setNaviIconCmsMedia(?CmsMedia $naviIconCmsMedia): self
+{
+    $this->naviIconCmsMedia = $naviIconCmsMedia;
 
     return $this;
 }
@@ -114,6 +148,36 @@ public function setSeoPattern(string $seoPattern): self
 
 
   
+    // TCMSFieldLookup
+public function getShopVat(): ?ShopVat
+{
+    return $this->shopVat;
+}
+
+public function setShopVat(?ShopVat $shopVat): self
+{
+    $this->shopVat = $shopVat;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getIm(): ?CmsMedia
+{
+    return $this->im;
+}
+
+public function setIm(?CmsMedia $im): self
+{
+    $this->im = $im;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldPropertyTable
 /**
 * @return Collection<int, shopCategory>
@@ -155,6 +219,21 @@ public function getMetaKeywords(): string
 public function setMetaKeywords(string $metaKeywords): self
 {
     $this->metaKeywords = $metaKeywords;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getPkgShopListfilter(): ?PkgShopListfilter
+{
+    return $this->pkgShopListfilter;
+}
+
+public function setPkgShopListfilter(?PkgShopListfilter $pkgShopListfilter): self
+{
+    $this->pkgShopListfilter = $pkgShopListfilter;
 
     return $this;
 }

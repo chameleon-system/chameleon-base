@@ -1,6 +1,7 @@
 <?php
 namespace ChameleonSystem\CoreBundle\Entity;
 
+use ChameleonSystem\CoreBundle\Entity\CmsTplModuleInstance;
 use ChameleonSystem\CoreBundle\Entity\ModuleCustomlistConfigSortfields;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,6 +11,10 @@ class ModuleCustomlistConfig {
     private string $id,
     private int|null $cmsident = null,
         
+    // TCMSFieldLookup
+/** @var CmsTplModuleInstance|null - Belongs to module instance */
+private ?CmsTplModuleInstance $cmsTplModuleInstance = null
+, 
     // TCMSFieldVarchar
 /** @var string - Title */
 private string $name = '', 
@@ -43,6 +48,21 @@ private Collection $orderinfoCollection = new ArrayCollection()
     $this->cmsident = $cmsident;
     return $this;
   }
+    // TCMSFieldLookup
+public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
+{
+    return $this->cmsTplModuleInstance;
+}
+
+public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
+{
+    $this->cmsTplModuleInstance = $cmsTplModuleInstance;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getName(): string
 {

@@ -19,6 +19,9 @@
             <field name="amazonId" type="string" column="amazon_id" length="32" nullable="false"  />
             <field name="type" type="string" column="type" length="255" nullable="false"  />
             <field name="requestMode" type="string" column="request_mode" length="255" nullable="false"  />
+            <many-to-one field="pkgShopPaymentTransaction" target-entity="\ChameleonSystem\CoreBundle\Entity\PkgShopPaymentTransaction">
+    <join-column name="pkg_shop_payment_transaction_id" referenced-column-name="id" />
+</many-to-one>
     </entity>
 
 </doctrine-mapping>

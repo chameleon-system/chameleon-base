@@ -2,13 +2,16 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\ShopPaymentHandlerGroup;
+use ChameleonSystem\CoreBundle\Entity\ShopPaymentHandler;
+use ChameleonSystem\CoreBundle\Entity\ShopVat;
+use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class ShopPaymentMethod {
   public function __construct(
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopPaymentHandlerGroup|null - Belongs to payment provider */
 private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
 , 
@@ -17,7 +20,19 @@ private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Internal system name */
-private string $nameInternal = ''  ) {}
+private string $nameInternal = '', 
+    // TCMSFieldLookup
+/** @var ShopPaymentHandler|null - Payment handler */
+private ?ShopPaymentHandler $shopPaymentHandler = null
+, 
+    // TCMSFieldLookup
+/** @var ShopVat|null - VAT group */
+private ?ShopVat $shopVat = null
+, 
+    // TCMSFieldLookup
+/** @var CmsMedia|null - Icon */
+private ?CmsMedia $cmsMedia = null
+  ) {}
 
   public function getId(): string
   {
@@ -38,7 +53,7 @@ private string $nameInternal = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopPaymentHandlerGroup(): ?ShopPaymentHandlerGroup
 {
     return $this->shopPaymentHandlerGroup;
@@ -75,6 +90,51 @@ public function getNameInternal(): string
 public function setNameInternal(string $nameInternal): self
 {
     $this->nameInternal = $nameInternal;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopPaymentHandler(): ?ShopPaymentHandler
+{
+    return $this->shopPaymentHandler;
+}
+
+public function setShopPaymentHandler(?ShopPaymentHandler $shopPaymentHandler): self
+{
+    $this->shopPaymentHandler = $shopPaymentHandler;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopVat(): ?ShopVat
+{
+    return $this->shopVat;
+}
+
+public function setShopVat(?ShopVat $shopVat): self
+{
+    $this->shopVat = $shopVat;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getCmsMedia(): ?CmsMedia
+{
+    return $this->cmsMedia;
+}
+
+public function setCmsMedia(?CmsMedia $cmsMedia): self
+{
+    $this->cmsMedia = $cmsMedia;
 
     return $this;
 }

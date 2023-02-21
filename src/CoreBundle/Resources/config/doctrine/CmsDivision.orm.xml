@@ -15,6 +15,12 @@
     <join-column name="cms_portal_id" referenced-column-name="id" />
 </many-to-one>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
+            <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsLanguage">
+    <join-column name="cms_language_id" referenced-column-name="id" />
+</many-to-one>
+            <many-to-one field="backgroundIm" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsMedia">
+    <join-column name="background_image" referenced-column-name="id" />
+</many-to-one>
             <field name="ivwCode" type="string" column="ivw_code" length="255" nullable="false"  />
             <field name="menuStopLevel" type="string" column="menu_stop_level" length="2" nullable="false"  />
     </entity>

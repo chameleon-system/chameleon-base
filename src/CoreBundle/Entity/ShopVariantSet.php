@@ -4,6 +4,7 @@ namespace ChameleonSystem\CoreBundle\Entity;
 use ChameleonSystem\CoreBundle\Entity\ShopVariantType;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ChameleonSystem\CoreBundle\Entity\ShopVariantDisplayHandler;
 
 class ShopVariantSet {
   public function __construct(
@@ -16,6 +17,10 @@ private string $name = '',
     // TCMSFieldPropertyTable
 /** @var Collection<int, shopVariantType> - Variant types of variant set */
 private Collection $shopVariantTypeCollection = new ArrayCollection()
+, 
+    // TCMSFieldLookup
+/** @var ShopVariantDisplayHandler|null - Display handler for variant selection in  shop */
+private ?ShopVariantDisplayHandler $shopVariantDisplayHandler = null
   ) {}
 
   public function getId(): string
@@ -78,6 +83,21 @@ public function removeShopVariantTypeCollection(shopVariantType $shopVariantType
             $shopVariantType->setShopVariantSet(null);
         }
     }
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopVariantDisplayHandler(): ?ShopVariantDisplayHandler
+{
+    return $this->shopVariantDisplayHandler;
+}
+
+public function setShopVariantDisplayHandler(?ShopVariantDisplayHandler $shopVariantDisplayHandler): self
+{
+    $this->shopVariantDisplayHandler = $shopVariantDisplayHandler;
 
     return $this;
 }

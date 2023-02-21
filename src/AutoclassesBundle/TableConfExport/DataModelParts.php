@@ -12,6 +12,15 @@ class DataModelParts
     ) {
     }
 
+    public function merge(DataModelParts $additional): DataModelParts
+    {
+        return new DataModelParts(
+            implode(",\n", [$this->property, $additional->property]),
+            implode("\n", [$this->methods . $additional->methods]),
+            array_merge($this->includes, $additional->includes),
+            $this->defaultValue || $additional->defaultValue
+        );
+    }
 
     /**
      * @return string

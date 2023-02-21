@@ -8,7 +8,7 @@ class ShopOrderDiscount {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopOrder|null - Order ID */
 private ?ShopOrder $shopOrder = null
 , 
@@ -53,7 +53,7 @@ private string $freearticleId = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopOrder(): ?ShopOrder
 {
     return $this->shopOrder;

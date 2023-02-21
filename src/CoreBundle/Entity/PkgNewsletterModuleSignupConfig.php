@@ -8,9 +8,13 @@ class PkgNewsletterModuleSignupConfig {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var CmsTplModuleInstance|null - Belongs to module instance */
 private ?CmsTplModuleInstance $cmsTplModuleInstance = null
+, 
+    // TCMSFieldLookup
+/** @var CmsTplModuleInstance|null - Belongs to newsletter module */
+private ?CmsTplModuleInstance $mainModuleInstance = null
 , 
     // TCMSFieldVarchar
 /** @var string - Signup (title) */
@@ -44,7 +48,7 @@ private string $nonewsignupTitle = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 {
     return $this->cmsTplModuleInstance;
@@ -53,6 +57,21 @@ public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
 public function setCmsTplModuleInstance(?CmsTplModuleInstance $cmsTplModuleInstance): self
 {
     $this->cmsTplModuleInstance = $cmsTplModuleInstance;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getMainModuleInstance(): ?CmsTplModuleInstance
+{
+    return $this->mainModuleInstance;
+}
+
+public function setMainModuleInstance(?CmsTplModuleInstance $mainModuleInstance): self
+{
+    $this->mainModuleInstance = $mainModuleInstance;
 
     return $this;
 }

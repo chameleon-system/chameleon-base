@@ -2,6 +2,9 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\ShopOrder;
+use ChameleonSystem\CoreBundle\Entity\ShopArticle;
+use ChameleonSystem\CoreBundle\Entity\ShopManufacturer;
+use ChameleonSystem\CoreBundle\Entity\ShopUnitOfMeasurement;
 use ChameleonSystem\CoreBundle\Entity\ShopOrderBundleArticle;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,25 +17,37 @@ class ShopOrderItem {
     // TCMSFieldVarchar
 /** @var string - Variant */
 private string $nameVariantInfo = '', 
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopOrder|null - Belongs to order */
 private ?ShopOrder $shopOrder = null
 , 
     // TCMSFieldVarchar
 /** @var string - sBasketItemKey is the key for the position in the consumer basket */
 private string $basketItemKey = '', 
+    // TCMSFieldLookup
+/** @var ShopArticle|null - Original article from shop */
+private ?ShopArticle $shopArticle = null
+, 
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
     // TCMSFieldVarchar
 /** @var string - Article number */
 private string $articlenumber = '', 
+    // TCMSFieldLookup
+/** @var ShopManufacturer|null - Manufacturer/ brand */
+private ?ShopManufacturer $shopManufacturer = null
+, 
     // TCMSFieldVarchar
 /** @var string - Manufacturer / brand name */
 private string $shopManufacturerName = '', 
     // TCMSFieldVarchar
 /** @var string - Stock at time of order */
 private string $stock = '', 
+    // TCMSFieldLookup
+/** @var ShopUnitOfMeasurement|null - Unit of measurement of content */
+private ?ShopUnitOfMeasurement $shopUnitOfMeasurement = null
+, 
     // TCMSFieldVarchar
 /** @var string - Subtitle */
 private string $subtitle = '', 
@@ -80,7 +95,7 @@ public function setNameVariantInfo(string $nameVariantInfo): self
 
 
   
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopOrder(): ?ShopOrder
 {
     return $this->shopOrder;
@@ -103,6 +118,21 @@ public function getBasketItemKey(): string
 public function setBasketItemKey(string $basketItemKey): self
 {
     $this->basketItemKey = $basketItemKey;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopArticle(): ?ShopArticle
+{
+    return $this->shopArticle;
+}
+
+public function setShopArticle(?ShopArticle $shopArticle): self
+{
+    $this->shopArticle = $shopArticle;
 
     return $this;
 }
@@ -137,6 +167,21 @@ public function setArticlenumber(string $articlenumber): self
 
 
   
+    // TCMSFieldLookup
+public function getShopManufacturer(): ?ShopManufacturer
+{
+    return $this->shopManufacturer;
+}
+
+public function setShopManufacturer(?ShopManufacturer $shopManufacturer): self
+{
+    $this->shopManufacturer = $shopManufacturer;
+
+    return $this;
+}
+
+
+  
     // TCMSFieldVarchar
 public function getShopManufacturerName(): string
 {
@@ -159,6 +204,21 @@ public function getStock(): string
 public function setStock(string $stock): self
 {
     $this->stock = $stock;
+
+    return $this;
+}
+
+
+  
+    // TCMSFieldLookup
+public function getShopUnitOfMeasurement(): ?ShopUnitOfMeasurement
+{
+    return $this->shopUnitOfMeasurement;
+}
+
+public function setShopUnitOfMeasurement(?ShopUnitOfMeasurement $shopUnitOfMeasurement): self
+{
+    $this->shopUnitOfMeasurement = $shopUnitOfMeasurement;
 
     return $this;
 }

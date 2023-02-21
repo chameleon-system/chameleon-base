@@ -8,7 +8,7 @@ class ShopCategoryTab {
     private string $id,
     private int|null $cmsident = null,
         
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 /** @var ShopCategory|null - Belongs to category */
 private ?ShopCategory $shopCategory = null
 , 
@@ -35,7 +35,7 @@ private string $name = ''  ) {}
     $this->cmsident = $cmsident;
     return $this;
   }
-    // TCMSFieldLookupParentID
+    // TCMSFieldLookup
 public function getShopCategory(): ?ShopCategory
 {
     return $this->shopCategory;
