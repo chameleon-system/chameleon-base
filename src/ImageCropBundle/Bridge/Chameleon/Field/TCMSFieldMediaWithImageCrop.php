@@ -31,12 +31,69 @@ use TdbCmsLanguage;
 use TGlobal;
 use TViewParser;
 use ViewRenderer;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * {@inheritdoc}
  */
 class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 {
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $lookupFieldDef = parent::getDoctrineDataModelParts($namespace);
+
+        $propertyName = $this->getFieldNameOfAdditionalField($this->name);
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => $this->snakeToCamelCase($this->GetConnectedTableName(), false),
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($propertyName),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();
+
+        $cropImageDef = new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [
+                ltrim(sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)), '\\'),
+            ],
+            true
+        );
+
+        return $lookupFieldDef->merge($cropImageDef);
+
+    }
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        $lookupFieldMapping =  parent::getDoctrineDataModelXml($namespace);
+
+        $propertyName = $this->getFieldNameOfAdditionalField($this->name);
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $viewName = 'mapping/many-to-one.xml.twig';
+
+        $additionalFieldMapping = $this->getDoctrineRenderer($viewName, [
+            'fieldName' => $this->snakeToCamelCase($propertyName),
+            'targetClass' => sprintf(
+                '%s\\%s',
+                $namespace,
+                $this->snakeToCamelCase($this->GetConnectedTableName(), false)
+            ),
+            'column' => $this->name
+        ])->render();
+
+        return $lookupFieldMapping."\n".$additionalFieldMapping;
+    }
+
+
     /**
      * {@inheritDoc}
      */
