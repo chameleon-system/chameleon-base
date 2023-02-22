@@ -19,7 +19,7 @@ private ?Shop $shop = null
 /** @var string - Search key */
 private string $searchkey = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopSearchCacheItem> - Results */
+/** @var Collection<int, ShopSearchCacheItem> - Results */
 private Collection $shopSearchCacheItemCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -76,14 +76,14 @@ public function setSearchkey(string $searchkey): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopSearchCacheItem>
+* @return Collection<int, ShopSearchCacheItem>
 */
 public function getShopSearchCacheItemCollection(): Collection
 {
     return $this->shopSearchCacheItemCollection;
 }
 
-public function addShopSearchCacheItemCollection(shopSearchCacheItem $shopSearchCacheItem): self
+public function addShopSearchCacheItemCollection(ShopSearchCacheItem $shopSearchCacheItem): self
 {
     if (!$this->shopSearchCacheItemCollection->contains($shopSearchCacheItem)) {
         $this->shopSearchCacheItemCollection->add($shopSearchCacheItem);
@@ -93,7 +93,7 @@ public function addShopSearchCacheItemCollection(shopSearchCacheItem $shopSearch
     return $this;
 }
 
-public function removeShopSearchCacheItemCollection(shopSearchCacheItem $shopSearchCacheItem): self
+public function removeShopSearchCacheItemCollection(ShopSearchCacheItem $shopSearchCacheItem): self
 {
     if ($this->shopSearchCacheItemCollection->removeElement($shopSearchCacheItem)) {
         // set the owning side to null (unless already changed)

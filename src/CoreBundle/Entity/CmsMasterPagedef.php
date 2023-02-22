@@ -17,7 +17,7 @@ private string $name = '',
 /** @var string - Layout */
 private string $layout = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsMasterPagedefSpot> - Spots */
+/** @var Collection<int, CmsMasterPagedefSpot> - Spots */
 private Collection $cmsMasterPagedefSpotCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -73,14 +73,14 @@ public function setLayout(string $layout): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsMasterPagedefSpot>
+* @return Collection<int, CmsMasterPagedefSpot>
 */
 public function getCmsMasterPagedefSpotCollection(): Collection
 {
     return $this->cmsMasterPagedefSpotCollection;
 }
 
-public function addCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMasterPagedefSpot): self
+public function addCmsMasterPagedefSpotCollection(CmsMasterPagedefSpot $cmsMasterPagedefSpot): self
 {
     if (!$this->cmsMasterPagedefSpotCollection->contains($cmsMasterPagedefSpot)) {
         $this->cmsMasterPagedefSpotCollection->add($cmsMasterPagedefSpot);
@@ -90,7 +90,7 @@ public function addCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMaste
     return $this;
 }
 
-public function removeCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMasterPagedefSpot): self
+public function removeCmsMasterPagedefSpotCollection(CmsMasterPagedefSpot $cmsMasterPagedefSpot): self
 {
     if ($this->cmsMasterPagedefSpotCollection->removeElement($cmsMasterPagedefSpot)) {
         // set the owning side to null (unless already changed)

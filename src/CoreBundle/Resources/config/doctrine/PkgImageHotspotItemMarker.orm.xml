@@ -17,7 +17,7 @@
             <field name="name" type="string" column="name" length="255" nullable="false"  />
             <field name="top" type="string" column="top" length="255" nullable="false"  />
             <field name="left" type="string" column="left" length="255" nullable="false"  />
-            <many-to-one field="linkedRec" target-entity="\ChameleonSystem\AutoclassesBundle\TableConfExport\AbstractEntity">
+            <many-to-one field="linkedRec" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTplPage">
     <join-column name="linked_record" referenced-column-name="id" />
 </many-to-one>
             <field name="url" type="string" column="url" length="255" nullable="false"  />

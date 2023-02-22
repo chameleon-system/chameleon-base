@@ -19,11 +19,11 @@ private string $name = '',
 /** @var string - System name */
 private string $systemName = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsMasterPagedefSpot> - Spots */
+/** @var Collection<int, CmsMasterPagedefSpot> - Spots */
 private Collection $cmsMasterPagedefSpotCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgCmsThemeBlockLayout> - Layouts */
+/** @var Collection<int, PkgCmsThemeBlockLayout> - Layouts */
 private Collection $pkgCmsThemeBlockLayoutCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -84,14 +84,14 @@ public function setSystemName(string $systemName): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsMasterPagedefSpot>
+* @return Collection<int, CmsMasterPagedefSpot>
 */
 public function getCmsMasterPagedefSpotCollection(): Collection
 {
     return $this->cmsMasterPagedefSpotCollection;
 }
 
-public function addCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMasterPagedefSpot): self
+public function addCmsMasterPagedefSpotCollection(CmsMasterPagedefSpot $cmsMasterPagedefSpot): self
 {
     if (!$this->cmsMasterPagedefSpotCollection->contains($cmsMasterPagedefSpot)) {
         $this->cmsMasterPagedefSpotCollection->add($cmsMasterPagedefSpot);
@@ -101,7 +101,7 @@ public function addCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMaste
     return $this;
 }
 
-public function removeCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMasterPagedefSpot): self
+public function removeCmsMasterPagedefSpotCollection(CmsMasterPagedefSpot $cmsMasterPagedefSpot): self
 {
     if ($this->cmsMasterPagedefSpotCollection->removeElement($cmsMasterPagedefSpot)) {
         // set the owning side to null (unless already changed)
@@ -117,14 +117,14 @@ public function removeCmsMasterPagedefSpotCollection(cmsMasterPagedefSpot $cmsMa
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgCmsThemeBlockLayout>
+* @return Collection<int, PkgCmsThemeBlockLayout>
 */
 public function getPkgCmsThemeBlockLayoutCollection(): Collection
 {
     return $this->pkgCmsThemeBlockLayoutCollection;
 }
 
-public function addPkgCmsThemeBlockLayoutCollection(pkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout): self
+public function addPkgCmsThemeBlockLayoutCollection(PkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout): self
 {
     if (!$this->pkgCmsThemeBlockLayoutCollection->contains($pkgCmsThemeBlockLayout)) {
         $this->pkgCmsThemeBlockLayoutCollection->add($pkgCmsThemeBlockLayout);
@@ -134,7 +134,7 @@ public function addPkgCmsThemeBlockLayoutCollection(pkgCmsThemeBlockLayout $pkgC
     return $this;
 }
 
-public function removePkgCmsThemeBlockLayoutCollection(pkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout): self
+public function removePkgCmsThemeBlockLayoutCollection(PkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout): self
 {
     if ($this->pkgCmsThemeBlockLayoutCollection->removeElement($pkgCmsThemeBlockLayout)) {
         // set the owning side to null (unless already changed)

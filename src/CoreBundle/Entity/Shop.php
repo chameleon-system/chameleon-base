@@ -33,7 +33,7 @@ class Shop {
     private int|null $cmsident = null,
         
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrderStatusCode> - Available shipping status codes */
+/** @var Collection<int, ShopOrderStatusCode> - Available shipping status codes */
 private Collection $shopOrderStatusCodeCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -73,11 +73,11 @@ private string $customerServiceEmail = '',
 /** @var string - VAT registration number */
 private string $shopvatnumber = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopBankAccount> - Bank accounts */
+/** @var Collection<int, ShopBankAccount> - Bank accounts */
 private Collection $shopBankAccountCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, dataExtranetUser> - Customers */
+/** @var Collection<int, DataExtranetUser> - Customers */
 private Collection $dataExtranetUserCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -107,15 +107,15 @@ private ?DataCountry $dataCountry = null
 /** @var string - Affiliate URL parameter */
 private string $affiliateParameterName = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopAffiliate> - Affiliate programs */
+/** @var Collection<int, PkgShopAffiliate> - Affiliate programs */
 private Collection $pkgShopAffiliateCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticleImageSize> - Size of product images */
+/** @var Collection<int, ShopArticleImageSize> - Size of product images */
 private Collection $shopArticleImageSizeCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopSystemInfo> - Shop specific information / text blocks (e.g. Terms and Conditions) */
+/** @var Collection<int, ShopSystemInfo> - Shop specific information / text blocks (e.g. Terms and Conditions) */
 private Collection $shopSystemInfoCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -132,23 +132,23 @@ private string $shopSearchMaxIndexLength = '10',
 /** @var string - Maximum age of search cache */
 private string $maxSearchCacheAgeInHours = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopSearchLog> - Search log */
+/** @var Collection<int, ShopSearchLog> - Search log */
 private Collection $shopSearchLogCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopSearchFieldWeight> - Fields weight */
+/** @var Collection<int, ShopSearchFieldWeight> - Fields weight */
 private Collection $shopSearchFieldWeightCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopSearchIgnoreWord> - Words to be ignored in searches */
+/** @var Collection<int, ShopSearchIgnoreWord> - Words to be ignored in searches */
 private Collection $shopSearchIgnoreWordCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopSearchKeywordArticle> - Manually selected search results */
+/** @var Collection<int, ShopSearchKeywordArticle> - Manually selected search results */
 private Collection $shopSearchKeywordArticleCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopSearchCache> - Search cache */
+/** @var Collection<int, ShopSearchCache> - Search cache */
 private Collection $shopSearchCacheCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -158,7 +158,7 @@ private string $basketSpotName = '',
 /** @var string - Name of the spot containing the central shop handler */
 private string $shopCentralHandlerSpotName = 'oShopCentralHandler', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopStockMessage> - Stock messages */
+/** @var Collection<int, ShopStockMessage> - Stock messages */
 private Collection $shopStockMessageCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -179,7 +179,7 @@ private string $dataExtranetUserShopArticleHistoryMaxCookieSize = '0',
 /** @var string - Shipping delay (days) */
 private string $shopreviewmailMailDelay = '4', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopFooterCategory> - Footer categories */
+/** @var Collection<int, PkgShopFooterCategory> - Footer categories */
 private Collection $pkgShopFooterCategoryCollection = new ArrayCollection()
   ) {}
 
@@ -204,14 +204,14 @@ private Collection $pkgShopFooterCategoryCollection = new ArrayCollection()
   }
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrderStatusCode>
+* @return Collection<int, ShopOrderStatusCode>
 */
 public function getShopOrderStatusCodeCollection(): Collection
 {
     return $this->shopOrderStatusCodeCollection;
 }
 
-public function addShopOrderStatusCodeCollection(shopOrderStatusCode $shopOrderStatusCode): self
+public function addShopOrderStatusCodeCollection(ShopOrderStatusCode $shopOrderStatusCode): self
 {
     if (!$this->shopOrderStatusCodeCollection->contains($shopOrderStatusCode)) {
         $this->shopOrderStatusCodeCollection->add($shopOrderStatusCode);
@@ -221,7 +221,7 @@ public function addShopOrderStatusCodeCollection(shopOrderStatusCode $shopOrderS
     return $this;
 }
 
-public function removeShopOrderStatusCodeCollection(shopOrderStatusCode $shopOrderStatusCode): self
+public function removeShopOrderStatusCodeCollection(ShopOrderStatusCode $shopOrderStatusCode): self
 {
     if ($this->shopOrderStatusCodeCollection->removeElement($shopOrderStatusCode)) {
         // set the owning side to null (unless already changed)
@@ -394,14 +394,14 @@ public function setShopvatnumber(string $shopvatnumber): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopBankAccount>
+* @return Collection<int, ShopBankAccount>
 */
 public function getShopBankAccountCollection(): Collection
 {
     return $this->shopBankAccountCollection;
 }
 
-public function addShopBankAccountCollection(shopBankAccount $shopBankAccount): self
+public function addShopBankAccountCollection(ShopBankAccount $shopBankAccount): self
 {
     if (!$this->shopBankAccountCollection->contains($shopBankAccount)) {
         $this->shopBankAccountCollection->add($shopBankAccount);
@@ -411,7 +411,7 @@ public function addShopBankAccountCollection(shopBankAccount $shopBankAccount): 
     return $this;
 }
 
-public function removeShopBankAccountCollection(shopBankAccount $shopBankAccount): self
+public function removeShopBankAccountCollection(ShopBankAccount $shopBankAccount): self
 {
     if ($this->shopBankAccountCollection->removeElement($shopBankAccount)) {
         // set the owning side to null (unless already changed)
@@ -427,14 +427,14 @@ public function removeShopBankAccountCollection(shopBankAccount $shopBankAccount
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, dataExtranetUser>
+* @return Collection<int, DataExtranetUser>
 */
 public function getDataExtranetUserCollection(): Collection
 {
     return $this->dataExtranetUserCollection;
 }
 
-public function addDataExtranetUserCollection(dataExtranetUser $dataExtranetUser): self
+public function addDataExtranetUserCollection(DataExtranetUser $dataExtranetUser): self
 {
     if (!$this->dataExtranetUserCollection->contains($dataExtranetUser)) {
         $this->dataExtranetUserCollection->add($dataExtranetUser);
@@ -444,7 +444,7 @@ public function addDataExtranetUserCollection(dataExtranetUser $dataExtranetUser
     return $this;
 }
 
-public function removeDataExtranetUserCollection(dataExtranetUser $dataExtranetUser): self
+public function removeDataExtranetUserCollection(DataExtranetUser $dataExtranetUser): self
 {
     if ($this->dataExtranetUserCollection->removeElement($dataExtranetUser)) {
         // set the owning side to null (unless already changed)
@@ -563,14 +563,14 @@ public function setAffiliateParameterName(string $affiliateParameterName): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopAffiliate>
+* @return Collection<int, PkgShopAffiliate>
 */
 public function getPkgShopAffiliateCollection(): Collection
 {
     return $this->pkgShopAffiliateCollection;
 }
 
-public function addPkgShopAffiliateCollection(pkgShopAffiliate $pkgShopAffiliate): self
+public function addPkgShopAffiliateCollection(PkgShopAffiliate $pkgShopAffiliate): self
 {
     if (!$this->pkgShopAffiliateCollection->contains($pkgShopAffiliate)) {
         $this->pkgShopAffiliateCollection->add($pkgShopAffiliate);
@@ -580,7 +580,7 @@ public function addPkgShopAffiliateCollection(pkgShopAffiliate $pkgShopAffiliate
     return $this;
 }
 
-public function removePkgShopAffiliateCollection(pkgShopAffiliate $pkgShopAffiliate): self
+public function removePkgShopAffiliateCollection(PkgShopAffiliate $pkgShopAffiliate): self
 {
     if ($this->pkgShopAffiliateCollection->removeElement($pkgShopAffiliate)) {
         // set the owning side to null (unless already changed)
@@ -596,14 +596,14 @@ public function removePkgShopAffiliateCollection(pkgShopAffiliate $pkgShopAffili
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticleImageSize>
+* @return Collection<int, ShopArticleImageSize>
 */
 public function getShopArticleImageSizeCollection(): Collection
 {
     return $this->shopArticleImageSizeCollection;
 }
 
-public function addShopArticleImageSizeCollection(shopArticleImageSize $shopArticleImageSize): self
+public function addShopArticleImageSizeCollection(ShopArticleImageSize $shopArticleImageSize): self
 {
     if (!$this->shopArticleImageSizeCollection->contains($shopArticleImageSize)) {
         $this->shopArticleImageSizeCollection->add($shopArticleImageSize);
@@ -613,7 +613,7 @@ public function addShopArticleImageSizeCollection(shopArticleImageSize $shopArti
     return $this;
 }
 
-public function removeShopArticleImageSizeCollection(shopArticleImageSize $shopArticleImageSize): self
+public function removeShopArticleImageSizeCollection(ShopArticleImageSize $shopArticleImageSize): self
 {
     if ($this->shopArticleImageSizeCollection->removeElement($shopArticleImageSize)) {
         // set the owning side to null (unless already changed)
@@ -629,14 +629,14 @@ public function removeShopArticleImageSizeCollection(shopArticleImageSize $shopA
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopSystemInfo>
+* @return Collection<int, ShopSystemInfo>
 */
 public function getShopSystemInfoCollection(): Collection
 {
     return $this->shopSystemInfoCollection;
 }
 
-public function addShopSystemInfoCollection(shopSystemInfo $shopSystemInfo): self
+public function addShopSystemInfoCollection(ShopSystemInfo $shopSystemInfo): self
 {
     if (!$this->shopSystemInfoCollection->contains($shopSystemInfo)) {
         $this->shopSystemInfoCollection->add($shopSystemInfo);
@@ -646,7 +646,7 @@ public function addShopSystemInfoCollection(shopSystemInfo $shopSystemInfo): sel
     return $this;
 }
 
-public function removeShopSystemInfoCollection(shopSystemInfo $shopSystemInfo): self
+public function removeShopSystemInfoCollection(ShopSystemInfo $shopSystemInfo): self
 {
     if ($this->shopSystemInfoCollection->removeElement($shopSystemInfo)) {
         // set the owning side to null (unless already changed)
@@ -719,14 +719,14 @@ public function setMaxSearchCacheAgeInHours(string $maxSearchCacheAgeInHours): s
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopSearchLog>
+* @return Collection<int, ShopSearchLog>
 */
 public function getShopSearchLogCollection(): Collection
 {
     return $this->shopSearchLogCollection;
 }
 
-public function addShopSearchLogCollection(shopSearchLog $shopSearchLog): self
+public function addShopSearchLogCollection(ShopSearchLog $shopSearchLog): self
 {
     if (!$this->shopSearchLogCollection->contains($shopSearchLog)) {
         $this->shopSearchLogCollection->add($shopSearchLog);
@@ -736,7 +736,7 @@ public function addShopSearchLogCollection(shopSearchLog $shopSearchLog): self
     return $this;
 }
 
-public function removeShopSearchLogCollection(shopSearchLog $shopSearchLog): self
+public function removeShopSearchLogCollection(ShopSearchLog $shopSearchLog): self
 {
     if ($this->shopSearchLogCollection->removeElement($shopSearchLog)) {
         // set the owning side to null (unless already changed)
@@ -752,14 +752,14 @@ public function removeShopSearchLogCollection(shopSearchLog $shopSearchLog): sel
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopSearchFieldWeight>
+* @return Collection<int, ShopSearchFieldWeight>
 */
 public function getShopSearchFieldWeightCollection(): Collection
 {
     return $this->shopSearchFieldWeightCollection;
 }
 
-public function addShopSearchFieldWeightCollection(shopSearchFieldWeight $shopSearchFieldWeight): self
+public function addShopSearchFieldWeightCollection(ShopSearchFieldWeight $shopSearchFieldWeight): self
 {
     if (!$this->shopSearchFieldWeightCollection->contains($shopSearchFieldWeight)) {
         $this->shopSearchFieldWeightCollection->add($shopSearchFieldWeight);
@@ -769,7 +769,7 @@ public function addShopSearchFieldWeightCollection(shopSearchFieldWeight $shopSe
     return $this;
 }
 
-public function removeShopSearchFieldWeightCollection(shopSearchFieldWeight $shopSearchFieldWeight): self
+public function removeShopSearchFieldWeightCollection(ShopSearchFieldWeight $shopSearchFieldWeight): self
 {
     if ($this->shopSearchFieldWeightCollection->removeElement($shopSearchFieldWeight)) {
         // set the owning side to null (unless already changed)
@@ -785,14 +785,14 @@ public function removeShopSearchFieldWeightCollection(shopSearchFieldWeight $sho
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopSearchIgnoreWord>
+* @return Collection<int, ShopSearchIgnoreWord>
 */
 public function getShopSearchIgnoreWordCollection(): Collection
 {
     return $this->shopSearchIgnoreWordCollection;
 }
 
-public function addShopSearchIgnoreWordCollection(shopSearchIgnoreWord $shopSearchIgnoreWord): self
+public function addShopSearchIgnoreWordCollection(ShopSearchIgnoreWord $shopSearchIgnoreWord): self
 {
     if (!$this->shopSearchIgnoreWordCollection->contains($shopSearchIgnoreWord)) {
         $this->shopSearchIgnoreWordCollection->add($shopSearchIgnoreWord);
@@ -802,7 +802,7 @@ public function addShopSearchIgnoreWordCollection(shopSearchIgnoreWord $shopSear
     return $this;
 }
 
-public function removeShopSearchIgnoreWordCollection(shopSearchIgnoreWord $shopSearchIgnoreWord): self
+public function removeShopSearchIgnoreWordCollection(ShopSearchIgnoreWord $shopSearchIgnoreWord): self
 {
     if ($this->shopSearchIgnoreWordCollection->removeElement($shopSearchIgnoreWord)) {
         // set the owning side to null (unless already changed)
@@ -818,14 +818,14 @@ public function removeShopSearchIgnoreWordCollection(shopSearchIgnoreWord $shopS
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopSearchKeywordArticle>
+* @return Collection<int, ShopSearchKeywordArticle>
 */
 public function getShopSearchKeywordArticleCollection(): Collection
 {
     return $this->shopSearchKeywordArticleCollection;
 }
 
-public function addShopSearchKeywordArticleCollection(shopSearchKeywordArticle $shopSearchKeywordArticle): self
+public function addShopSearchKeywordArticleCollection(ShopSearchKeywordArticle $shopSearchKeywordArticle): self
 {
     if (!$this->shopSearchKeywordArticleCollection->contains($shopSearchKeywordArticle)) {
         $this->shopSearchKeywordArticleCollection->add($shopSearchKeywordArticle);
@@ -835,7 +835,7 @@ public function addShopSearchKeywordArticleCollection(shopSearchKeywordArticle $
     return $this;
 }
 
-public function removeShopSearchKeywordArticleCollection(shopSearchKeywordArticle $shopSearchKeywordArticle): self
+public function removeShopSearchKeywordArticleCollection(ShopSearchKeywordArticle $shopSearchKeywordArticle): self
 {
     if ($this->shopSearchKeywordArticleCollection->removeElement($shopSearchKeywordArticle)) {
         // set the owning side to null (unless already changed)
@@ -851,14 +851,14 @@ public function removeShopSearchKeywordArticleCollection(shopSearchKeywordArticl
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopSearchCache>
+* @return Collection<int, ShopSearchCache>
 */
 public function getShopSearchCacheCollection(): Collection
 {
     return $this->shopSearchCacheCollection;
 }
 
-public function addShopSearchCacheCollection(shopSearchCache $shopSearchCache): self
+public function addShopSearchCacheCollection(ShopSearchCache $shopSearchCache): self
 {
     if (!$this->shopSearchCacheCollection->contains($shopSearchCache)) {
         $this->shopSearchCacheCollection->add($shopSearchCache);
@@ -868,7 +868,7 @@ public function addShopSearchCacheCollection(shopSearchCache $shopSearchCache): 
     return $this;
 }
 
-public function removeShopSearchCacheCollection(shopSearchCache $shopSearchCache): self
+public function removeShopSearchCacheCollection(ShopSearchCache $shopSearchCache): self
 {
     if ($this->shopSearchCacheCollection->removeElement($shopSearchCache)) {
         // set the owning side to null (unless already changed)
@@ -912,14 +912,14 @@ public function setShopCentralHandlerSpotName(string $shopCentralHandlerSpotName
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopStockMessage>
+* @return Collection<int, ShopStockMessage>
 */
 public function getShopStockMessageCollection(): Collection
 {
     return $this->shopStockMessageCollection;
 }
 
-public function addShopStockMessageCollection(shopStockMessage $shopStockMessage): self
+public function addShopStockMessageCollection(ShopStockMessage $shopStockMessage): self
 {
     if (!$this->shopStockMessageCollection->contains($shopStockMessage)) {
         $this->shopStockMessageCollection->add($shopStockMessage);
@@ -929,7 +929,7 @@ public function addShopStockMessageCollection(shopStockMessage $shopStockMessage
     return $this;
 }
 
-public function removeShopStockMessageCollection(shopStockMessage $shopStockMessage): self
+public function removeShopStockMessageCollection(ShopStockMessage $shopStockMessage): self
 {
     if ($this->shopStockMessageCollection->removeElement($shopStockMessage)) {
         // set the owning side to null (unless already changed)
@@ -1017,14 +1017,14 @@ public function setShopreviewmailMailDelay(string $shopreviewmailMailDelay): sel
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopFooterCategory>
+* @return Collection<int, PkgShopFooterCategory>
 */
 public function getPkgShopFooterCategoryCollection(): Collection
 {
     return $this->pkgShopFooterCategoryCollection;
 }
 
-public function addPkgShopFooterCategoryCollection(pkgShopFooterCategory $pkgShopFooterCategory): self
+public function addPkgShopFooterCategoryCollection(PkgShopFooterCategory $pkgShopFooterCategory): self
 {
     if (!$this->pkgShopFooterCategoryCollection->contains($pkgShopFooterCategory)) {
         $this->pkgShopFooterCategoryCollection->add($pkgShopFooterCategory);
@@ -1034,7 +1034,7 @@ public function addPkgShopFooterCategoryCollection(pkgShopFooterCategory $pkgSho
     return $this;
 }
 
-public function removePkgShopFooterCategoryCollection(pkgShopFooterCategory $pkgShopFooterCategory): self
+public function removePkgShopFooterCategoryCollection(PkgShopFooterCategory $pkgShopFooterCategory): self
 {
     if ($this->pkgShopFooterCategoryCollection->removeElement($pkgShopFooterCategory)) {
         // set the owning side to null (unless already changed)

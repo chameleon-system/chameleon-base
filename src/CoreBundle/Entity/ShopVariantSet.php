@@ -15,7 +15,7 @@ class ShopVariantSet {
 /** @var string - Name */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopVariantType> - Variant types of variant set */
+/** @var Collection<int, ShopVariantType> - Variant types of variant set */
 private Collection $shopVariantTypeCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -58,14 +58,14 @@ public function setName(string $name): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopVariantType>
+* @return Collection<int, ShopVariantType>
 */
 public function getShopVariantTypeCollection(): Collection
 {
     return $this->shopVariantTypeCollection;
 }
 
-public function addShopVariantTypeCollection(shopVariantType $shopVariantType): self
+public function addShopVariantTypeCollection(ShopVariantType $shopVariantType): self
 {
     if (!$this->shopVariantTypeCollection->contains($shopVariantType)) {
         $this->shopVariantTypeCollection->add($shopVariantType);
@@ -75,7 +75,7 @@ public function addShopVariantTypeCollection(shopVariantType $shopVariantType): 
     return $this;
 }
 
-public function removeShopVariantTypeCollection(shopVariantType $shopVariantType): self
+public function removeShopVariantTypeCollection(ShopVariantType $shopVariantType): self
 {
     if ($this->shopVariantTypeCollection->removeElement($shopVariantType)) {
         // set the owning side to null (unless already changed)

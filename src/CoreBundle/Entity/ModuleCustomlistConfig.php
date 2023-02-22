@@ -25,7 +25,7 @@ private string $recordsPerPage = '0',
 /** @var string - Grouping field */
 private string $groupField = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, moduleCustomlistConfigSortfields> - Sorting */
+/** @var Collection<int, ModuleCustomlistConfigSortfields> - Sorting */
 private Collection $orderinfoCollection = new ArrayCollection()
   ) {}
 
@@ -107,14 +107,14 @@ public function setGroupField(string $groupField): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, moduleCustomlistConfigSortfields>
+* @return Collection<int, ModuleCustomlistConfigSortfields>
 */
 public function getOrderinfoCollection(): Collection
 {
     return $this->orderinfoCollection;
 }
 
-public function addOrderinfoCollection(moduleCustomlistConfigSortfields $orderinfo): self
+public function addOrderinfoCollection(ModuleCustomlistConfigSortfields $orderinfo): self
 {
     if (!$this->orderinfoCollection->contains($orderinfo)) {
         $this->orderinfoCollection->add($orderinfo);
@@ -124,7 +124,7 @@ public function addOrderinfoCollection(moduleCustomlistConfigSortfields $orderin
     return $this;
 }
 
-public function removeOrderinfoCollection(moduleCustomlistConfigSortfields $orderinfo): self
+public function removeOrderinfoCollection(ModuleCustomlistConfigSortfields $orderinfo): self
 {
     if ($this->orderinfoCollection->removeElement($orderinfo)) {
         // set the owning side to null (unless already changed)

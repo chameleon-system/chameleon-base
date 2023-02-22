@@ -23,7 +23,7 @@ private ?ShopOrder $shopOrder = null
 private ?DataExtranetUser $dataExtranetUser = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopPaymentTransactionPosition> - Positions */
+/** @var Collection<int, PkgShopPaymentTransactionPosition> - Positions */
 private Collection $pkgShopPaymentTransactionPositionCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -95,14 +95,14 @@ public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopPaymentTransactionPosition>
+* @return Collection<int, PkgShopPaymentTransactionPosition>
 */
 public function getPkgShopPaymentTransactionPositionCollection(): Collection
 {
     return $this->pkgShopPaymentTransactionPositionCollection;
 }
 
-public function addPkgShopPaymentTransactionPositionCollection(pkgShopPaymentTransactionPosition $pkgShopPaymentTransactionPosition): self
+public function addPkgShopPaymentTransactionPositionCollection(PkgShopPaymentTransactionPosition $pkgShopPaymentTransactionPosition): self
 {
     if (!$this->pkgShopPaymentTransactionPositionCollection->contains($pkgShopPaymentTransactionPosition)) {
         $this->pkgShopPaymentTransactionPositionCollection->add($pkgShopPaymentTransactionPosition);
@@ -112,7 +112,7 @@ public function addPkgShopPaymentTransactionPositionCollection(pkgShopPaymentTra
     return $this;
 }
 
-public function removePkgShopPaymentTransactionPositionCollection(pkgShopPaymentTransactionPosition $pkgShopPaymentTransactionPosition): self
+public function removePkgShopPaymentTransactionPositionCollection(PkgShopPaymentTransactionPosition $pkgShopPaymentTransactionPosition): self
 {
     if ($this->pkgShopPaymentTransactionPositionCollection->removeElement($pkgShopPaymentTransactionPosition)) {
         // set the owning side to null (unless already changed)

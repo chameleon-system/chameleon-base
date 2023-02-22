@@ -35,15 +35,15 @@ class ShopOrder {
 private ?Shop $shop = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopPaymentIpnMessage> -  */
+/** @var Collection<int, PkgShopPaymentIpnMessage> -  */
 private Collection $pkgShopPaymentIpnMessageCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, amazonPaymentIdMapping> - Amazon Pay */
+/** @var Collection<int, AmazonPaymentIdMapping> - Amazon Pay */
 private Collection $amazonPaymentIdMappingCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopPaymentTransaction> - Transactions */
+/** @var Collection<int, PkgShopPaymentTransaction> - Transactions */
 private Collection $pkgShopPaymentTransactionCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -61,7 +61,7 @@ private ?PkgShopRatingService $pkgShopRatingService = null
 /** @var string - Basket ID (unique ID that is already assigned in the order process) */
 private string $orderIdent = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrderItem> - Items */
+/** @var Collection<int, ShopOrderItem> - Items */
 private Collection $shopOrderItemCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -165,7 +165,7 @@ private ?ShopShippingGroup $shopShippingGroup = null
 /** @var string - Shipping cost group – name */
 private string $shopShippingGroupName = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrderShippingGroupParameter> - Shipping cost group – parameter/user data */
+/** @var Collection<int, ShopOrderShippingGroupParameter> - Shipping cost group – parameter/user data */
 private Collection $shopOrderShippingGroupParameterCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -176,11 +176,11 @@ private ?ShopPaymentMethod $shopPaymentMethod = null
 /** @var string - Payment method – name */
 private string $shopPaymentMethodName = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrderPaymentMethodParameter> - Payment method – parameter/user data */
+/** @var Collection<int, ShopOrderPaymentMethodParameter> - Payment method – parameter/user data */
 private Collection $shopOrderPaymentMethodParameterCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrderVat> - Order VAT (by tax rate) */
+/** @var Collection<int, ShopOrderVat> - Order VAT (by tax rate) */
 private Collection $shopOrderVatCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -198,15 +198,15 @@ private string $affiliateCode = '',
 private ?PkgShopAffiliate $pkgShopAffiliate = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopVoucherUse> - Used vouchers */
+/** @var Collection<int, ShopVoucherUse> - Used vouchers */
 private Collection $shopVoucherUseCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrderDiscount> - Discount */
+/** @var Collection<int, ShopOrderDiscount> - Discount */
 private Collection $shopOrderDiscountCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrderStatus> - Order status */
+/** @var Collection<int, ShopOrderStatus> - Order status */
 private Collection $shopOrderStatusCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -249,14 +249,14 @@ public function setShop(?Shop $shop): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopPaymentIpnMessage>
+* @return Collection<int, PkgShopPaymentIpnMessage>
 */
 public function getPkgShopPaymentIpnMessageCollection(): Collection
 {
     return $this->pkgShopPaymentIpnMessageCollection;
 }
 
-public function addPkgShopPaymentIpnMessageCollection(pkgShopPaymentIpnMessage $pkgShopPaymentIpnMessage): self
+public function addPkgShopPaymentIpnMessageCollection(PkgShopPaymentIpnMessage $pkgShopPaymentIpnMessage): self
 {
     if (!$this->pkgShopPaymentIpnMessageCollection->contains($pkgShopPaymentIpnMessage)) {
         $this->pkgShopPaymentIpnMessageCollection->add($pkgShopPaymentIpnMessage);
@@ -266,7 +266,7 @@ public function addPkgShopPaymentIpnMessageCollection(pkgShopPaymentIpnMessage $
     return $this;
 }
 
-public function removePkgShopPaymentIpnMessageCollection(pkgShopPaymentIpnMessage $pkgShopPaymentIpnMessage): self
+public function removePkgShopPaymentIpnMessageCollection(PkgShopPaymentIpnMessage $pkgShopPaymentIpnMessage): self
 {
     if ($this->pkgShopPaymentIpnMessageCollection->removeElement($pkgShopPaymentIpnMessage)) {
         // set the owning side to null (unless already changed)
@@ -282,14 +282,14 @@ public function removePkgShopPaymentIpnMessageCollection(pkgShopPaymentIpnMessag
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, amazonPaymentIdMapping>
+* @return Collection<int, AmazonPaymentIdMapping>
 */
 public function getAmazonPaymentIdMappingCollection(): Collection
 {
     return $this->amazonPaymentIdMappingCollection;
 }
 
-public function addAmazonPaymentIdMappingCollection(amazonPaymentIdMapping $amazonPaymentIdMapping): self
+public function addAmazonPaymentIdMappingCollection(AmazonPaymentIdMapping $amazonPaymentIdMapping): self
 {
     if (!$this->amazonPaymentIdMappingCollection->contains($amazonPaymentIdMapping)) {
         $this->amazonPaymentIdMappingCollection->add($amazonPaymentIdMapping);
@@ -299,7 +299,7 @@ public function addAmazonPaymentIdMappingCollection(amazonPaymentIdMapping $amaz
     return $this;
 }
 
-public function removeAmazonPaymentIdMappingCollection(amazonPaymentIdMapping $amazonPaymentIdMapping): self
+public function removeAmazonPaymentIdMappingCollection(AmazonPaymentIdMapping $amazonPaymentIdMapping): self
 {
     if ($this->amazonPaymentIdMappingCollection->removeElement($amazonPaymentIdMapping)) {
         // set the owning side to null (unless already changed)
@@ -315,14 +315,14 @@ public function removeAmazonPaymentIdMappingCollection(amazonPaymentIdMapping $a
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopPaymentTransaction>
+* @return Collection<int, PkgShopPaymentTransaction>
 */
 public function getPkgShopPaymentTransactionCollection(): Collection
 {
     return $this->pkgShopPaymentTransactionCollection;
 }
 
-public function addPkgShopPaymentTransactionCollection(pkgShopPaymentTransaction $pkgShopPaymentTransaction): self
+public function addPkgShopPaymentTransactionCollection(PkgShopPaymentTransaction $pkgShopPaymentTransaction): self
 {
     if (!$this->pkgShopPaymentTransactionCollection->contains($pkgShopPaymentTransaction)) {
         $this->pkgShopPaymentTransactionCollection->add($pkgShopPaymentTransaction);
@@ -332,7 +332,7 @@ public function addPkgShopPaymentTransactionCollection(pkgShopPaymentTransaction
     return $this;
 }
 
-public function removePkgShopPaymentTransactionCollection(pkgShopPaymentTransaction $pkgShopPaymentTransaction): self
+public function removePkgShopPaymentTransactionCollection(PkgShopPaymentTransaction $pkgShopPaymentTransaction): self
 {
     if ($this->pkgShopPaymentTransactionCollection->removeElement($pkgShopPaymentTransaction)) {
         // set the owning side to null (unless already changed)
@@ -406,14 +406,14 @@ public function setOrderIdent(string $orderIdent): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrderItem>
+* @return Collection<int, ShopOrderItem>
 */
 public function getShopOrderItemCollection(): Collection
 {
     return $this->shopOrderItemCollection;
 }
 
-public function addShopOrderItemCollection(shopOrderItem $shopOrderItem): self
+public function addShopOrderItemCollection(ShopOrderItem $shopOrderItem): self
 {
     if (!$this->shopOrderItemCollection->contains($shopOrderItem)) {
         $this->shopOrderItemCollection->add($shopOrderItem);
@@ -423,7 +423,7 @@ public function addShopOrderItemCollection(shopOrderItem $shopOrderItem): self
     return $this;
 }
 
-public function removeShopOrderItemCollection(shopOrderItem $shopOrderItem): self
+public function removeShopOrderItemCollection(ShopOrderItem $shopOrderItem): self
 {
     if ($this->shopOrderItemCollection->removeElement($shopOrderItem)) {
         // set the owning side to null (unless already changed)
@@ -880,14 +880,14 @@ public function setShopShippingGroupName(string $shopShippingGroupName): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrderShippingGroupParameter>
+* @return Collection<int, ShopOrderShippingGroupParameter>
 */
 public function getShopOrderShippingGroupParameterCollection(): Collection
 {
     return $this->shopOrderShippingGroupParameterCollection;
 }
 
-public function addShopOrderShippingGroupParameterCollection(shopOrderShippingGroupParameter $shopOrderShippingGroupParameter): self
+public function addShopOrderShippingGroupParameterCollection(ShopOrderShippingGroupParameter $shopOrderShippingGroupParameter): self
 {
     if (!$this->shopOrderShippingGroupParameterCollection->contains($shopOrderShippingGroupParameter)) {
         $this->shopOrderShippingGroupParameterCollection->add($shopOrderShippingGroupParameter);
@@ -897,7 +897,7 @@ public function addShopOrderShippingGroupParameterCollection(shopOrderShippingGr
     return $this;
 }
 
-public function removeShopOrderShippingGroupParameterCollection(shopOrderShippingGroupParameter $shopOrderShippingGroupParameter): self
+public function removeShopOrderShippingGroupParameterCollection(ShopOrderShippingGroupParameter $shopOrderShippingGroupParameter): self
 {
     if ($this->shopOrderShippingGroupParameterCollection->removeElement($shopOrderShippingGroupParameter)) {
         // set the owning side to null (unless already changed)
@@ -942,14 +942,14 @@ public function setShopPaymentMethodName(string $shopPaymentMethodName): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrderPaymentMethodParameter>
+* @return Collection<int, ShopOrderPaymentMethodParameter>
 */
 public function getShopOrderPaymentMethodParameterCollection(): Collection
 {
     return $this->shopOrderPaymentMethodParameterCollection;
 }
 
-public function addShopOrderPaymentMethodParameterCollection(shopOrderPaymentMethodParameter $shopOrderPaymentMethodParameter): self
+public function addShopOrderPaymentMethodParameterCollection(ShopOrderPaymentMethodParameter $shopOrderPaymentMethodParameter): self
 {
     if (!$this->shopOrderPaymentMethodParameterCollection->contains($shopOrderPaymentMethodParameter)) {
         $this->shopOrderPaymentMethodParameterCollection->add($shopOrderPaymentMethodParameter);
@@ -959,7 +959,7 @@ public function addShopOrderPaymentMethodParameterCollection(shopOrderPaymentMet
     return $this;
 }
 
-public function removeShopOrderPaymentMethodParameterCollection(shopOrderPaymentMethodParameter $shopOrderPaymentMethodParameter): self
+public function removeShopOrderPaymentMethodParameterCollection(ShopOrderPaymentMethodParameter $shopOrderPaymentMethodParameter): self
 {
     if ($this->shopOrderPaymentMethodParameterCollection->removeElement($shopOrderPaymentMethodParameter)) {
         // set the owning side to null (unless already changed)
@@ -975,14 +975,14 @@ public function removeShopOrderPaymentMethodParameterCollection(shopOrderPayment
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrderVat>
+* @return Collection<int, ShopOrderVat>
 */
 public function getShopOrderVatCollection(): Collection
 {
     return $this->shopOrderVatCollection;
 }
 
-public function addShopOrderVatCollection(shopOrderVat $shopOrderVat): self
+public function addShopOrderVatCollection(ShopOrderVat $shopOrderVat): self
 {
     if (!$this->shopOrderVatCollection->contains($shopOrderVat)) {
         $this->shopOrderVatCollection->add($shopOrderVat);
@@ -992,7 +992,7 @@ public function addShopOrderVatCollection(shopOrderVat $shopOrderVat): self
     return $this;
 }
 
-public function removeShopOrderVatCollection(shopOrderVat $shopOrderVat): self
+public function removeShopOrderVatCollection(ShopOrderVat $shopOrderVat): self
 {
     if ($this->shopOrderVatCollection->removeElement($shopOrderVat)) {
         // set the owning side to null (unless already changed)
@@ -1066,14 +1066,14 @@ public function setPkgShopAffiliate(?PkgShopAffiliate $pkgShopAffiliate): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopVoucherUse>
+* @return Collection<int, ShopVoucherUse>
 */
 public function getShopVoucherUseCollection(): Collection
 {
     return $this->shopVoucherUseCollection;
 }
 
-public function addShopVoucherUseCollection(shopVoucherUse $shopVoucherUse): self
+public function addShopVoucherUseCollection(ShopVoucherUse $shopVoucherUse): self
 {
     if (!$this->shopVoucherUseCollection->contains($shopVoucherUse)) {
         $this->shopVoucherUseCollection->add($shopVoucherUse);
@@ -1083,7 +1083,7 @@ public function addShopVoucherUseCollection(shopVoucherUse $shopVoucherUse): sel
     return $this;
 }
 
-public function removeShopVoucherUseCollection(shopVoucherUse $shopVoucherUse): self
+public function removeShopVoucherUseCollection(ShopVoucherUse $shopVoucherUse): self
 {
     if ($this->shopVoucherUseCollection->removeElement($shopVoucherUse)) {
         // set the owning side to null (unless already changed)
@@ -1099,14 +1099,14 @@ public function removeShopVoucherUseCollection(shopVoucherUse $shopVoucherUse): 
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrderDiscount>
+* @return Collection<int, ShopOrderDiscount>
 */
 public function getShopOrderDiscountCollection(): Collection
 {
     return $this->shopOrderDiscountCollection;
 }
 
-public function addShopOrderDiscountCollection(shopOrderDiscount $shopOrderDiscount): self
+public function addShopOrderDiscountCollection(ShopOrderDiscount $shopOrderDiscount): self
 {
     if (!$this->shopOrderDiscountCollection->contains($shopOrderDiscount)) {
         $this->shopOrderDiscountCollection->add($shopOrderDiscount);
@@ -1116,7 +1116,7 @@ public function addShopOrderDiscountCollection(shopOrderDiscount $shopOrderDisco
     return $this;
 }
 
-public function removeShopOrderDiscountCollection(shopOrderDiscount $shopOrderDiscount): self
+public function removeShopOrderDiscountCollection(ShopOrderDiscount $shopOrderDiscount): self
 {
     if ($this->shopOrderDiscountCollection->removeElement($shopOrderDiscount)) {
         // set the owning side to null (unless already changed)
@@ -1132,14 +1132,14 @@ public function removeShopOrderDiscountCollection(shopOrderDiscount $shopOrderDi
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrderStatus>
+* @return Collection<int, ShopOrderStatus>
 */
 public function getShopOrderStatusCollection(): Collection
 {
     return $this->shopOrderStatusCollection;
 }
 
-public function addShopOrderStatusCollection(shopOrderStatus $shopOrderStatus): self
+public function addShopOrderStatusCollection(ShopOrderStatus $shopOrderStatus): self
 {
     if (!$this->shopOrderStatusCollection->contains($shopOrderStatus)) {
         $this->shopOrderStatusCollection->add($shopOrderStatus);
@@ -1149,7 +1149,7 @@ public function addShopOrderStatusCollection(shopOrderStatus $shopOrderStatus): 
     return $this;
 }
 
-public function removeShopOrderStatusCollection(shopOrderStatus $shopOrderStatus): self
+public function removeShopOrderStatusCollection(ShopOrderStatus $shopOrderStatus): self
 {
     if ($this->shopOrderStatusCollection->removeElement($shopOrderStatus)) {
         // set the owning side to null (unless already changed)

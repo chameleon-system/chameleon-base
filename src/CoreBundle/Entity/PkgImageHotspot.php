@@ -22,7 +22,7 @@ private string $name = '',
 /** @var string - How long should an image be displayed (in seconds)? */
 private string $autoSlideTime = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgImageHotspotItem> - Images */
+/** @var Collection<int, PkgImageHotspotItem> - Images */
 private Collection $pkgImageHotspotItemCollection = new ArrayCollection()
   ) {}
 
@@ -90,14 +90,14 @@ public function setAutoSlideTime(string $autoSlideTime): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgImageHotspotItem>
+* @return Collection<int, PkgImageHotspotItem>
 */
 public function getPkgImageHotspotItemCollection(): Collection
 {
     return $this->pkgImageHotspotItemCollection;
 }
 
-public function addPkgImageHotspotItemCollection(pkgImageHotspotItem $pkgImageHotspotItem): self
+public function addPkgImageHotspotItemCollection(PkgImageHotspotItem $pkgImageHotspotItem): self
 {
     if (!$this->pkgImageHotspotItemCollection->contains($pkgImageHotspotItem)) {
         $this->pkgImageHotspotItemCollection->add($pkgImageHotspotItem);
@@ -107,7 +107,7 @@ public function addPkgImageHotspotItemCollection(pkgImageHotspotItem $pkgImageHo
     return $this;
 }
 
-public function removePkgImageHotspotItemCollection(pkgImageHotspotItem $pkgImageHotspotItem): self
+public function removePkgImageHotspotItemCollection(PkgImageHotspotItem $pkgImageHotspotItem): self
 {
     if ($this->pkgImageHotspotItemCollection->removeElement($pkgImageHotspotItem)) {
         // set the owning side to null (unless already changed)

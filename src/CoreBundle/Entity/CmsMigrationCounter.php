@@ -14,7 +14,7 @@ class CmsMigrationCounter {
 /** @var string - Name */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsMigrationFile> - Update data */
+/** @var Collection<int, CmsMigrationFile> - Update data */
 private Collection $cmsMigrationFileCollection = new ArrayCollection()
   ) {}
 
@@ -53,14 +53,14 @@ public function setName(string $name): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsMigrationFile>
+* @return Collection<int, CmsMigrationFile>
 */
 public function getCmsMigrationFileCollection(): Collection
 {
     return $this->cmsMigrationFileCollection;
 }
 
-public function addCmsMigrationFileCollection(cmsMigrationFile $cmsMigrationFile): self
+public function addCmsMigrationFileCollection(CmsMigrationFile $cmsMigrationFile): self
 {
     if (!$this->cmsMigrationFileCollection->contains($cmsMigrationFile)) {
         $this->cmsMigrationFileCollection->add($cmsMigrationFile);
@@ -70,7 +70,7 @@ public function addCmsMigrationFileCollection(cmsMigrationFile $cmsMigrationFile
     return $this;
 }
 
-public function removeCmsMigrationFileCollection(cmsMigrationFile $cmsMigrationFile): self
+public function removeCmsMigrationFileCollection(CmsMigrationFile $cmsMigrationFile): self
 {
     if ($this->cmsMigrationFileCollection->removeElement($cmsMigrationFile)) {
         // set the owning side to null (unless already changed)

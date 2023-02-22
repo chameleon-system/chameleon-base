@@ -29,11 +29,11 @@ private ?CmsMedia $cmsMedia = null
 private ?CmsMedia $cmsMediaIdImageCrop = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgImageHotspotItemSpot> - Hotspots and linked areas */
+/** @var Collection<int, PkgImageHotspotItemSpot> - Hotspots and linked areas */
 private Collection $pkgImageHotspotItemSpotCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgImageHotspotItemMarker> - Hotspots with image */
+/** @var Collection<int, PkgImageHotspotItemMarker> - Hotspots with image */
 private Collection $pkgImageHotspotItemMarkerCollection = new ArrayCollection()
   ) {}
 
@@ -114,14 +114,14 @@ public function setCmsMediaIdImageCrop(?CmsMedia $cmsMediaIdImageCrop): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgImageHotspotItemSpot>
+* @return Collection<int, PkgImageHotspotItemSpot>
 */
 public function getPkgImageHotspotItemSpotCollection(): Collection
 {
     return $this->pkgImageHotspotItemSpotCollection;
 }
 
-public function addPkgImageHotspotItemSpotCollection(pkgImageHotspotItemSpot $pkgImageHotspotItemSpot): self
+public function addPkgImageHotspotItemSpotCollection(PkgImageHotspotItemSpot $pkgImageHotspotItemSpot): self
 {
     if (!$this->pkgImageHotspotItemSpotCollection->contains($pkgImageHotspotItemSpot)) {
         $this->pkgImageHotspotItemSpotCollection->add($pkgImageHotspotItemSpot);
@@ -131,7 +131,7 @@ public function addPkgImageHotspotItemSpotCollection(pkgImageHotspotItemSpot $pk
     return $this;
 }
 
-public function removePkgImageHotspotItemSpotCollection(pkgImageHotspotItemSpot $pkgImageHotspotItemSpot): self
+public function removePkgImageHotspotItemSpotCollection(PkgImageHotspotItemSpot $pkgImageHotspotItemSpot): self
 {
     if ($this->pkgImageHotspotItemSpotCollection->removeElement($pkgImageHotspotItemSpot)) {
         // set the owning side to null (unless already changed)
@@ -147,14 +147,14 @@ public function removePkgImageHotspotItemSpotCollection(pkgImageHotspotItemSpot 
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgImageHotspotItemMarker>
+* @return Collection<int, PkgImageHotspotItemMarker>
 */
 public function getPkgImageHotspotItemMarkerCollection(): Collection
 {
     return $this->pkgImageHotspotItemMarkerCollection;
 }
 
-public function addPkgImageHotspotItemMarkerCollection(pkgImageHotspotItemMarker $pkgImageHotspotItemMarker): self
+public function addPkgImageHotspotItemMarkerCollection(PkgImageHotspotItemMarker $pkgImageHotspotItemMarker): self
 {
     if (!$this->pkgImageHotspotItemMarkerCollection->contains($pkgImageHotspotItemMarker)) {
         $this->pkgImageHotspotItemMarkerCollection->add($pkgImageHotspotItemMarker);
@@ -164,7 +164,7 @@ public function addPkgImageHotspotItemMarkerCollection(pkgImageHotspotItemMarker
     return $this;
 }
 
-public function removePkgImageHotspotItemMarkerCollection(pkgImageHotspotItemMarker $pkgImageHotspotItemMarker): self
+public function removePkgImageHotspotItemMarkerCollection(PkgImageHotspotItemMarker $pkgImageHotspotItemMarker): self
 {
     if ($this->pkgImageHotspotItemMarkerCollection->removeElement($pkgImageHotspotItemMarker)) {
         // set the owning side to null (unless already changed)

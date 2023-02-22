@@ -39,7 +39,7 @@ private ?ShopVat $shopVat = null
 private ?CmsMedia $im = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopCategory> - Subcategories */
+/** @var Collection<int, ShopCategory> - Subcategories */
 private Collection $shopCategoryCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -50,7 +50,7 @@ private string $metaKeywords = '',
 private ?PkgShopListfilter $pkgShopListfilter = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopCategoryTab> - Category */
+/** @var Collection<int, ShopCategoryTab> - Category */
 private Collection $shopCategoryTabCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -180,14 +180,14 @@ public function setIm(?CmsMedia $im): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopCategory>
+* @return Collection<int, ShopCategory>
 */
 public function getShopCategoryCollection(): Collection
 {
     return $this->shopCategoryCollection;
 }
 
-public function addShopCategoryCollection(shopCategory $shopCategory): self
+public function addShopCategoryCollection(ShopCategory $shopCategory): self
 {
     if (!$this->shopCategoryCollection->contains($shopCategory)) {
         $this->shopCategoryCollection->add($shopCategory);
@@ -197,7 +197,7 @@ public function addShopCategoryCollection(shopCategory $shopCategory): self
     return $this;
 }
 
-public function removeShopCategoryCollection(shopCategory $shopCategory): self
+public function removeShopCategoryCollection(ShopCategory $shopCategory): self
 {
     if ($this->shopCategoryCollection->removeElement($shopCategory)) {
         // set the owning side to null (unless already changed)
@@ -242,14 +242,14 @@ public function setPkgShopListfilter(?PkgShopListfilter $pkgShopListfilter): sel
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopCategoryTab>
+* @return Collection<int, ShopCategoryTab>
 */
 public function getShopCategoryTabCollection(): Collection
 {
     return $this->shopCategoryTabCollection;
 }
 
-public function addShopCategoryTabCollection(shopCategoryTab $shopCategoryTab): self
+public function addShopCategoryTabCollection(ShopCategoryTab $shopCategoryTab): self
 {
     if (!$this->shopCategoryTabCollection->contains($shopCategoryTab)) {
         $this->shopCategoryTabCollection->add($shopCategoryTab);
@@ -259,7 +259,7 @@ public function addShopCategoryTabCollection(shopCategoryTab $shopCategoryTab): 
     return $this;
 }
 
-public function removeShopCategoryTabCollection(shopCategoryTab $shopCategoryTab): self
+public function removeShopCategoryTabCollection(ShopCategoryTab $shopCategoryTab): self
 {
     if ($this->shopCategoryTabCollection->removeElement($shopCategoryTab)) {
         // set the owning side to null (unless already changed)

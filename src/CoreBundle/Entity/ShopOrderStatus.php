@@ -21,7 +21,7 @@ private ?ShopOrder $shopOrder = null
 private ?ShopOrderStatusCode $shopOrderStatusCode = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrderStatusItem> - Order status items */
+/** @var Collection<int, ShopOrderStatusItem> - Order status items */
 private Collection $shopOrderStatusItemCollection = new ArrayCollection()
   ) {}
 
@@ -76,14 +76,14 @@ public function setShopOrderStatusCode(?ShopOrderStatusCode $shopOrderStatusCode
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrderStatusItem>
+* @return Collection<int, ShopOrderStatusItem>
 */
 public function getShopOrderStatusItemCollection(): Collection
 {
     return $this->shopOrderStatusItemCollection;
 }
 
-public function addShopOrderStatusItemCollection(shopOrderStatusItem $shopOrderStatusItem): self
+public function addShopOrderStatusItemCollection(ShopOrderStatusItem $shopOrderStatusItem): self
 {
     if (!$this->shopOrderStatusItemCollection->contains($shopOrderStatusItem)) {
         $this->shopOrderStatusItemCollection->add($shopOrderStatusItem);
@@ -93,7 +93,7 @@ public function addShopOrderStatusItemCollection(shopOrderStatusItem $shopOrderS
     return $this;
 }
 
-public function removeShopOrderStatusItemCollection(shopOrderStatusItem $shopOrderStatusItem): self
+public function removeShopOrderStatusItemCollection(ShopOrderStatusItem $shopOrderStatusItem): self
 {
     if ($this->shopOrderStatusItemCollection->removeElement($shopOrderStatusItem)) {
         // set the owning side to null (unless already changed)

@@ -3,7 +3,6 @@ namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsPortal;
 use ChameleonSystem\CoreBundle\Entity\CmsTree;
-use ChameleonSystem\CoreBundle\Entity\ShopCategory;
 
 class PkgShopPrimaryNavi {
   public function __construct(
@@ -17,13 +16,10 @@ private ?CmsPortal $cmsPortal = null
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldExtendedLookupMultiTable
-/** @var CmsTree|ShopCategory|null - Select navigation */
-private ?CmsTree|ShopCategory $tar = null
-,
-// TCMSFieldExtendedLookupMultiTable
-/** @var string - Select navigation */
-private string $targetTableName = '', 
+    // TCMSFieldLookup
+/** @var CmsTree|null - Select navigation */
+private ?CmsTree $tar = null
+, 
     // TCMSFieldVarchar
 /** @var string - Individual CSS class */
 private string $cssClass = ''  ) {}
@@ -76,26 +72,15 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldExtendedLookupMultiTable
-public function getTar(): ?CmsTree|ShopCategory
+    // TCMSFieldLookup
+public function getTar(): ?CmsTree
 {
     return $this->tar;
 }
 
-public function setTar(?CmsTree|ShopCategory $tar): self
+public function setTar(?CmsTree $tar): self
 {
     $this->tar = $tar;
-
-    return $this;
-}
-// TCMSFieldExtendedLookupMultiTable
-public function getTarget(): string
-{
-    return $this->targetTableName;
-}
-public function setTarget(string $targetTableName): self
-{
-    $this->targetTableName = $targetTableName;
 
     return $this;
 }

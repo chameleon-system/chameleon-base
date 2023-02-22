@@ -34,7 +34,7 @@ private string $seoPattern = '',
 /** @var string - Product number */
 private string $articlenumber = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticleImage> - Detailed product pictures */
+/** @var Collection<int, ShopArticleImage> - Detailed product pictures */
 private Collection $shopArticleImageCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -42,11 +42,11 @@ private Collection $shopArticleImageCollection = new ArrayCollection()
 private ?CmsMedia $cmsMediaDefaultPreviewImage = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticlePreviewImage> - Product preview images */
+/** @var Collection<int, ShopArticlePreviewImage> - Product preview images */
 private Collection $shopArticlePreviewImageCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticleDocument> - Product documents */
+/** @var Collection<int, ShopArticleDocument> - Product documents */
 private Collection $shopArticleDocumentCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -65,7 +65,7 @@ private ?ShopVat $shopVat = null
 private ?ShopUnitOfMeasurement $shopUnitOfMeasurement = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticleStock> - Stock */
+/** @var Collection<int, ShopArticleStock> - Stock */
 private Collection $shopArticleStockCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -77,7 +77,7 @@ private ?ShopStockMessage $shopStockMessage = null
 private ?ShopCategory $shopCategory = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticleContributor> - Contributing persons */
+/** @var Collection<int, ShopArticleContributor> - Contributing persons */
 private Collection $shopArticleContributorCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -90,11 +90,11 @@ private string $usp = '',
 /** @var string - Number of stars */
 private string $stars = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticleReview> - Customer reviews */
+/** @var Collection<int, ShopArticleReview> - Customer reviews */
 private Collection $shopArticleReviewCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopBundleArticle> - Items belonging to this bundle */
+/** @var Collection<int, ShopBundleArticle> - Items belonging to this bundle */
 private Collection $shopBundleArticleCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -109,7 +109,7 @@ private ?ShopVariantSet $shopVariantSet = null
 private ?ShopArticle $variantParent = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticle> - Product variants */
+/** @var Collection<int, ShopArticle> - Product variants */
 private Collection $shopArticleVariantsCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -119,7 +119,7 @@ private string $metaKeywords = '',
 /** @var string - Meta description */
 private string $metaDescription = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticleStats> - Statistics */
+/** @var Collection<int, ShopArticleStats> - Statistics */
 private Collection $shopArticleStatsCollection = new ArrayCollection()
   ) {}
 
@@ -186,14 +186,14 @@ public function setArticlenumber(string $articlenumber): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticleImage>
+* @return Collection<int, ShopArticleImage>
 */
 public function getShopArticleImageCollection(): Collection
 {
     return $this->shopArticleImageCollection;
 }
 
-public function addShopArticleImageCollection(shopArticleImage $shopArticleImage): self
+public function addShopArticleImageCollection(ShopArticleImage $shopArticleImage): self
 {
     if (!$this->shopArticleImageCollection->contains($shopArticleImage)) {
         $this->shopArticleImageCollection->add($shopArticleImage);
@@ -203,7 +203,7 @@ public function addShopArticleImageCollection(shopArticleImage $shopArticleImage
     return $this;
 }
 
-public function removeShopArticleImageCollection(shopArticleImage $shopArticleImage): self
+public function removeShopArticleImageCollection(ShopArticleImage $shopArticleImage): self
 {
     if ($this->shopArticleImageCollection->removeElement($shopArticleImage)) {
         // set the owning side to null (unless already changed)
@@ -234,14 +234,14 @@ public function setCmsMediaDefaultPreviewImage(?CmsMedia $cmsMediaDefaultPreview
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticlePreviewImage>
+* @return Collection<int, ShopArticlePreviewImage>
 */
 public function getShopArticlePreviewImageCollection(): Collection
 {
     return $this->shopArticlePreviewImageCollection;
 }
 
-public function addShopArticlePreviewImageCollection(shopArticlePreviewImage $shopArticlePreviewImage): self
+public function addShopArticlePreviewImageCollection(ShopArticlePreviewImage $shopArticlePreviewImage): self
 {
     if (!$this->shopArticlePreviewImageCollection->contains($shopArticlePreviewImage)) {
         $this->shopArticlePreviewImageCollection->add($shopArticlePreviewImage);
@@ -251,7 +251,7 @@ public function addShopArticlePreviewImageCollection(shopArticlePreviewImage $sh
     return $this;
 }
 
-public function removeShopArticlePreviewImageCollection(shopArticlePreviewImage $shopArticlePreviewImage): self
+public function removeShopArticlePreviewImageCollection(ShopArticlePreviewImage $shopArticlePreviewImage): self
 {
     if ($this->shopArticlePreviewImageCollection->removeElement($shopArticlePreviewImage)) {
         // set the owning side to null (unless already changed)
@@ -267,14 +267,14 @@ public function removeShopArticlePreviewImageCollection(shopArticlePreviewImage 
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticleDocument>
+* @return Collection<int, ShopArticleDocument>
 */
 public function getShopArticleDocumentCollection(): Collection
 {
     return $this->shopArticleDocumentCollection;
 }
 
-public function addShopArticleDocumentCollection(shopArticleDocument $shopArticleDocument): self
+public function addShopArticleDocumentCollection(ShopArticleDocument $shopArticleDocument): self
 {
     if (!$this->shopArticleDocumentCollection->contains($shopArticleDocument)) {
         $this->shopArticleDocumentCollection->add($shopArticleDocument);
@@ -284,7 +284,7 @@ public function addShopArticleDocumentCollection(shopArticleDocument $shopArticl
     return $this;
 }
 
-public function removeShopArticleDocumentCollection(shopArticleDocument $shopArticleDocument): self
+public function removeShopArticleDocumentCollection(ShopArticleDocument $shopArticleDocument): self
 {
     if ($this->shopArticleDocumentCollection->removeElement($shopArticleDocument)) {
         // set the owning side to null (unless already changed)
@@ -359,14 +359,14 @@ public function setShopUnitOfMeasurement(?ShopUnitOfMeasurement $shopUnitOfMeasu
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticleStock>
+* @return Collection<int, ShopArticleStock>
 */
 public function getShopArticleStockCollection(): Collection
 {
     return $this->shopArticleStockCollection;
 }
 
-public function addShopArticleStockCollection(shopArticleStock $shopArticleStock): self
+public function addShopArticleStockCollection(ShopArticleStock $shopArticleStock): self
 {
     if (!$this->shopArticleStockCollection->contains($shopArticleStock)) {
         $this->shopArticleStockCollection->add($shopArticleStock);
@@ -376,7 +376,7 @@ public function addShopArticleStockCollection(shopArticleStock $shopArticleStock
     return $this;
 }
 
-public function removeShopArticleStockCollection(shopArticleStock $shopArticleStock): self
+public function removeShopArticleStockCollection(ShopArticleStock $shopArticleStock): self
 {
     if ($this->shopArticleStockCollection->removeElement($shopArticleStock)) {
         // set the owning side to null (unless already changed)
@@ -422,14 +422,14 @@ public function setShopCategory(?ShopCategory $shopCategory): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticleContributor>
+* @return Collection<int, ShopArticleContributor>
 */
 public function getShopArticleContributorCollection(): Collection
 {
     return $this->shopArticleContributorCollection;
 }
 
-public function addShopArticleContributorCollection(shopArticleContributor $shopArticleContributor): self
+public function addShopArticleContributorCollection(ShopArticleContributor $shopArticleContributor): self
 {
     if (!$this->shopArticleContributorCollection->contains($shopArticleContributor)) {
         $this->shopArticleContributorCollection->add($shopArticleContributor);
@@ -439,7 +439,7 @@ public function addShopArticleContributorCollection(shopArticleContributor $shop
     return $this;
 }
 
-public function removeShopArticleContributorCollection(shopArticleContributor $shopArticleContributor): self
+public function removeShopArticleContributorCollection(ShopArticleContributor $shopArticleContributor): self
 {
     if ($this->shopArticleContributorCollection->removeElement($shopArticleContributor)) {
         // set the owning side to null (unless already changed)
@@ -497,14 +497,14 @@ public function setStars(string $stars): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticleReview>
+* @return Collection<int, ShopArticleReview>
 */
 public function getShopArticleReviewCollection(): Collection
 {
     return $this->shopArticleReviewCollection;
 }
 
-public function addShopArticleReviewCollection(shopArticleReview $shopArticleReview): self
+public function addShopArticleReviewCollection(ShopArticleReview $shopArticleReview): self
 {
     if (!$this->shopArticleReviewCollection->contains($shopArticleReview)) {
         $this->shopArticleReviewCollection->add($shopArticleReview);
@@ -514,7 +514,7 @@ public function addShopArticleReviewCollection(shopArticleReview $shopArticleRev
     return $this;
 }
 
-public function removeShopArticleReviewCollection(shopArticleReview $shopArticleReview): self
+public function removeShopArticleReviewCollection(ShopArticleReview $shopArticleReview): self
 {
     if ($this->shopArticleReviewCollection->removeElement($shopArticleReview)) {
         // set the owning side to null (unless already changed)
@@ -530,14 +530,14 @@ public function removeShopArticleReviewCollection(shopArticleReview $shopArticle
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopBundleArticle>
+* @return Collection<int, ShopBundleArticle>
 */
 public function getShopBundleArticleCollection(): Collection
 {
     return $this->shopBundleArticleCollection;
 }
 
-public function addShopBundleArticleCollection(shopBundleArticle $shopBundleArticle): self
+public function addShopBundleArticleCollection(ShopBundleArticle $shopBundleArticle): self
 {
     if (!$this->shopBundleArticleCollection->contains($shopBundleArticle)) {
         $this->shopBundleArticleCollection->add($shopBundleArticle);
@@ -547,7 +547,7 @@ public function addShopBundleArticleCollection(shopBundleArticle $shopBundleArti
     return $this;
 }
 
-public function removeShopBundleArticleCollection(shopBundleArticle $shopBundleArticle): self
+public function removeShopBundleArticleCollection(ShopBundleArticle $shopBundleArticle): self
 {
     if ($this->shopBundleArticleCollection->removeElement($shopBundleArticle)) {
         // set the owning side to null (unless already changed)
@@ -607,14 +607,14 @@ public function setVariantParent(?ShopArticle $variantParent): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticle>
+* @return Collection<int, ShopArticle>
 */
 public function getShopArticleVariantsCollection(): Collection
 {
     return $this->shopArticleVariantsCollection;
 }
 
-public function addShopArticleVariantsCollection(shopArticle $shopArticleVariants): self
+public function addShopArticleVariantsCollection(ShopArticle $shopArticleVariants): self
 {
     if (!$this->shopArticleVariantsCollection->contains($shopArticleVariants)) {
         $this->shopArticleVariantsCollection->add($shopArticleVariants);
@@ -624,7 +624,7 @@ public function addShopArticleVariantsCollection(shopArticle $shopArticleVariant
     return $this;
 }
 
-public function removeShopArticleVariantsCollection(shopArticle $shopArticleVariants): self
+public function removeShopArticleVariantsCollection(ShopArticle $shopArticleVariants): self
 {
     if ($this->shopArticleVariantsCollection->removeElement($shopArticleVariants)) {
         // set the owning side to null (unless already changed)
@@ -668,14 +668,14 @@ public function setMetaDescription(string $metaDescription): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticleStats>
+* @return Collection<int, ShopArticleStats>
 */
 public function getShopArticleStatsCollection(): Collection
 {
     return $this->shopArticleStatsCollection;
 }
 
-public function addShopArticleStatsCollection(shopArticleStats $shopArticleStats): self
+public function addShopArticleStatsCollection(ShopArticleStats $shopArticleStats): self
 {
     if (!$this->shopArticleStatsCollection->contains($shopArticleStats)) {
         $this->shopArticleStatsCollection->add($shopArticleStats);
@@ -685,7 +685,7 @@ public function addShopArticleStatsCollection(shopArticleStats $shopArticleStats
     return $this;
 }
 
-public function removeShopArticleStatsCollection(shopArticleStats $shopArticleStats): self
+public function removeShopArticleStatsCollection(ShopArticleStats $shopArticleStats): self
 {
     if ($this->shopArticleStatsCollection->removeElement($shopArticleStats)) {
         // set the owning side to null (unless already changed)

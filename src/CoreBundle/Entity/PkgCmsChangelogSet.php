@@ -30,7 +30,7 @@ private string $modifiedName = '',
 /** @var string - Type of change (INSERT, UPDATE, DELETE) */
 private string $changeType = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgCmsChangelogItem> - Changes */
+/** @var Collection<int, PkgCmsChangelogItem> - Changes */
 private Collection $pkgCmsChangelogItemCollection = new ArrayCollection()
   ) {}
 
@@ -127,14 +127,14 @@ public function setChangeType(string $changeType): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgCmsChangelogItem>
+* @return Collection<int, PkgCmsChangelogItem>
 */
 public function getPkgCmsChangelogItemCollection(): Collection
 {
     return $this->pkgCmsChangelogItemCollection;
 }
 
-public function addPkgCmsChangelogItemCollection(pkgCmsChangelogItem $pkgCmsChangelogItem): self
+public function addPkgCmsChangelogItemCollection(PkgCmsChangelogItem $pkgCmsChangelogItem): self
 {
     if (!$this->pkgCmsChangelogItemCollection->contains($pkgCmsChangelogItem)) {
         $this->pkgCmsChangelogItemCollection->add($pkgCmsChangelogItem);
@@ -144,7 +144,7 @@ public function addPkgCmsChangelogItemCollection(pkgCmsChangelogItem $pkgCmsChan
     return $this;
 }
 
-public function removePkgCmsChangelogItemCollection(pkgCmsChangelogItem $pkgCmsChangelogItem): self
+public function removePkgCmsChangelogItemCollection(PkgCmsChangelogItem $pkgCmsChangelogItem): self
 {
     if ($this->pkgCmsChangelogItemCollection->removeElement($pkgCmsChangelogItem)) {
         // set the owning side to null (unless already changed)

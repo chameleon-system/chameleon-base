@@ -24,7 +24,7 @@ private string $urlName = '',
 private ?CmsMedia $cmsMedia = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopVariantTypeValue> - Available variant values */
+/** @var Collection<int, ShopVariantTypeValue> - Available variant values */
 private Collection $shopVariantTypeValueCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -99,14 +99,14 @@ public function setCmsMedia(?CmsMedia $cmsMedia): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopVariantTypeValue>
+* @return Collection<int, ShopVariantTypeValue>
 */
 public function getShopVariantTypeValueCollection(): Collection
 {
     return $this->shopVariantTypeValueCollection;
 }
 
-public function addShopVariantTypeValueCollection(shopVariantTypeValue $shopVariantTypeValue): self
+public function addShopVariantTypeValueCollection(ShopVariantTypeValue $shopVariantTypeValue): self
 {
     if (!$this->shopVariantTypeValueCollection->contains($shopVariantTypeValue)) {
         $this->shopVariantTypeValueCollection->add($shopVariantTypeValue);
@@ -116,7 +116,7 @@ public function addShopVariantTypeValueCollection(shopVariantTypeValue $shopVari
     return $this;
 }
 
-public function removeShopVariantTypeValueCollection(shopVariantTypeValue $shopVariantTypeValue): self
+public function removeShopVariantTypeValueCollection(ShopVariantTypeValue $shopVariantTypeValue): self
 {
     if ($this->shopVariantTypeValueCollection->removeElement($shopVariantTypeValue)) {
         // set the owning side to null (unless already changed)

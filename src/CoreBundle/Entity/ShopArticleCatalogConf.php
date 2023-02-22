@@ -20,7 +20,7 @@ private ?CmsTplModuleInstance $cmsTplModuleInstance = null
 /** @var string - Title / headline */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticleCatalogConfDefaultOrder> - Alternative default sorting */
+/** @var Collection<int, ShopArticleCatalogConfDefaultOrder> - Alternative default sorting */
 private Collection $shopArticleCatalogConfDefaultOrderCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -81,14 +81,14 @@ public function setName(string $name): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticleCatalogConfDefaultOrder>
+* @return Collection<int, ShopArticleCatalogConfDefaultOrder>
 */
 public function getShopArticleCatalogConfDefaultOrderCollection(): Collection
 {
     return $this->shopArticleCatalogConfDefaultOrderCollection;
 }
 
-public function addShopArticleCatalogConfDefaultOrderCollection(shopArticleCatalogConfDefaultOrder $shopArticleCatalogConfDefaultOrder): self
+public function addShopArticleCatalogConfDefaultOrderCollection(ShopArticleCatalogConfDefaultOrder $shopArticleCatalogConfDefaultOrder): self
 {
     if (!$this->shopArticleCatalogConfDefaultOrderCollection->contains($shopArticleCatalogConfDefaultOrder)) {
         $this->shopArticleCatalogConfDefaultOrderCollection->add($shopArticleCatalogConfDefaultOrder);
@@ -98,7 +98,7 @@ public function addShopArticleCatalogConfDefaultOrderCollection(shopArticleCatal
     return $this;
 }
 
-public function removeShopArticleCatalogConfDefaultOrderCollection(shopArticleCatalogConfDefaultOrder $shopArticleCatalogConfDefaultOrder): self
+public function removeShopArticleCatalogConfDefaultOrderCollection(ShopArticleCatalogConfDefaultOrder $shopArticleCatalogConfDefaultOrder): self
 {
     if ($this->shopArticleCatalogConfDefaultOrderCollection->removeElement($shopArticleCatalogConfDefaultOrder)) {
         // set the owning side to null (unless already changed)

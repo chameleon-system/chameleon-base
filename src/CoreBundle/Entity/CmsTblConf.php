@@ -27,7 +27,7 @@ private string $name = '',
 /** @var string - Title */
 private string $translation = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTblFieldTab> - Field category/tabs */
+/** @var Collection<int, CmsTblFieldTab> - Field category/tabs */
 private Collection $cmsTblFieldTabCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -35,15 +35,15 @@ private Collection $cmsTblFieldTabCollection = new ArrayCollection()
 private ?CmsContentBox $cmsContentBox = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsFieldConf> - Record fields */
+/** @var Collection<int, CmsFieldConf> - Record fields */
 private Collection $cmsFieldConfMltCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTblDisplayListFields> - List fields */
+/** @var Collection<int, CmsTblDisplayListFields> - List fields */
 private Collection $propertyListFieldsCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTblDisplayOrderfields> - Sort fields */
+/** @var Collection<int, CmsTblDisplayOrderfields> - Sort fields */
 private Collection $propertyOrderFieldsCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -68,7 +68,7 @@ private string $listGroupFieldHeader = '',
 /** @var string - Group field column name */
 private string $listGroupFieldColumn = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTblListClass> - List views */
+/** @var Collection<int, CmsTblListClass> - List views */
 private Collection $cmsTblListClassCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -82,7 +82,7 @@ private string $tableEditorClass = '',
 /** @var string - Path to table editor class */
 private string $tableEditorClassSubtype = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTblConfRestrictions> - List restrictions */
+/** @var Collection<int, CmsTblConfRestrictions> - List restrictions */
 private Collection $cmsTblConfRestrictionsCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -100,14 +100,14 @@ private string $dbobjectExtendClass = 'TCMSRecord',
 /** @var string - Is extended from: Classtype */
 private string $dbobjectExtendSubtype = 'dbobjects', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTblExtension> - Extensions */
+/** @var Collection<int, CmsTblExtension> - Extensions */
 private Collection $cmsTblExtensionCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
 /** @var string - Automatically limit list object to this number of entries */
 private string $autoLimitResults = '-1', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTblConfIndex> - Index definitions */
+/** @var Collection<int, CmsTblConfIndex> - Index definitions */
 private Collection $cmsTblConfIndexCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -163,14 +163,14 @@ public function setTranslation(string $translation): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTblFieldTab>
+* @return Collection<int, CmsTblFieldTab>
 */
 public function getCmsTblFieldTabCollection(): Collection
 {
     return $this->cmsTblFieldTabCollection;
 }
 
-public function addCmsTblFieldTabCollection(cmsTblFieldTab $cmsTblFieldTab): self
+public function addCmsTblFieldTabCollection(CmsTblFieldTab $cmsTblFieldTab): self
 {
     if (!$this->cmsTblFieldTabCollection->contains($cmsTblFieldTab)) {
         $this->cmsTblFieldTabCollection->add($cmsTblFieldTab);
@@ -180,7 +180,7 @@ public function addCmsTblFieldTabCollection(cmsTblFieldTab $cmsTblFieldTab): sel
     return $this;
 }
 
-public function removeCmsTblFieldTabCollection(cmsTblFieldTab $cmsTblFieldTab): self
+public function removeCmsTblFieldTabCollection(CmsTblFieldTab $cmsTblFieldTab): self
 {
     if ($this->cmsTblFieldTabCollection->removeElement($cmsTblFieldTab)) {
         // set the owning side to null (unless already changed)
@@ -211,14 +211,14 @@ public function setCmsContentBox(?CmsContentBox $cmsContentBox): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsFieldConf>
+* @return Collection<int, CmsFieldConf>
 */
 public function getCmsFieldConfMltCollection(): Collection
 {
     return $this->cmsFieldConfMltCollection;
 }
 
-public function addCmsFieldConfMltCollection(cmsFieldConf $cmsFieldConfMlt): self
+public function addCmsFieldConfMltCollection(CmsFieldConf $cmsFieldConfMlt): self
 {
     if (!$this->cmsFieldConfMltCollection->contains($cmsFieldConfMlt)) {
         $this->cmsFieldConfMltCollection->add($cmsFieldConfMlt);
@@ -228,7 +228,7 @@ public function addCmsFieldConfMltCollection(cmsFieldConf $cmsFieldConfMlt): sel
     return $this;
 }
 
-public function removeCmsFieldConfMltCollection(cmsFieldConf $cmsFieldConfMlt): self
+public function removeCmsFieldConfMltCollection(CmsFieldConf $cmsFieldConfMlt): self
 {
     if ($this->cmsFieldConfMltCollection->removeElement($cmsFieldConfMlt)) {
         // set the owning side to null (unless already changed)
@@ -244,14 +244,14 @@ public function removeCmsFieldConfMltCollection(cmsFieldConf $cmsFieldConfMlt): 
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTblDisplayListFields>
+* @return Collection<int, CmsTblDisplayListFields>
 */
 public function getPropertyListFieldsCollection(): Collection
 {
     return $this->propertyListFieldsCollection;
 }
 
-public function addPropertyListFieldsCollection(cmsTblDisplayListFields $propertyListFields): self
+public function addPropertyListFieldsCollection(CmsTblDisplayListFields $propertyListFields): self
 {
     if (!$this->propertyListFieldsCollection->contains($propertyListFields)) {
         $this->propertyListFieldsCollection->add($propertyListFields);
@@ -261,7 +261,7 @@ public function addPropertyListFieldsCollection(cmsTblDisplayListFields $propert
     return $this;
 }
 
-public function removePropertyListFieldsCollection(cmsTblDisplayListFields $propertyListFields): self
+public function removePropertyListFieldsCollection(CmsTblDisplayListFields $propertyListFields): self
 {
     if ($this->propertyListFieldsCollection->removeElement($propertyListFields)) {
         // set the owning side to null (unless already changed)
@@ -277,14 +277,14 @@ public function removePropertyListFieldsCollection(cmsTblDisplayListFields $prop
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTblDisplayOrderfields>
+* @return Collection<int, CmsTblDisplayOrderfields>
 */
 public function getPropertyOrderFieldsCollection(): Collection
 {
     return $this->propertyOrderFieldsCollection;
 }
 
-public function addPropertyOrderFieldsCollection(cmsTblDisplayOrderfields $propertyOrderFields): self
+public function addPropertyOrderFieldsCollection(CmsTblDisplayOrderfields $propertyOrderFields): self
 {
     if (!$this->propertyOrderFieldsCollection->contains($propertyOrderFields)) {
         $this->propertyOrderFieldsCollection->add($propertyOrderFields);
@@ -294,7 +294,7 @@ public function addPropertyOrderFieldsCollection(cmsTblDisplayOrderfields $prope
     return $this;
 }
 
-public function removePropertyOrderFieldsCollection(cmsTblDisplayOrderfields $propertyOrderFields): self
+public function removePropertyOrderFieldsCollection(CmsTblDisplayOrderfields $propertyOrderFields): self
 {
     if ($this->propertyOrderFieldsCollection->removeElement($propertyOrderFields)) {
         // set the owning side to null (unless already changed)
@@ -408,14 +408,14 @@ public function setListGroupFieldColumn(string $listGroupFieldColumn): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTblListClass>
+* @return Collection<int, CmsTblListClass>
 */
 public function getCmsTblListClassCollection(): Collection
 {
     return $this->cmsTblListClassCollection;
 }
 
-public function addCmsTblListClassCollection(cmsTblListClass $cmsTblListClass): self
+public function addCmsTblListClassCollection(CmsTblListClass $cmsTblListClass): self
 {
     if (!$this->cmsTblListClassCollection->contains($cmsTblListClass)) {
         $this->cmsTblListClassCollection->add($cmsTblListClass);
@@ -425,7 +425,7 @@ public function addCmsTblListClassCollection(cmsTblListClass $cmsTblListClass): 
     return $this;
 }
 
-public function removeCmsTblListClassCollection(cmsTblListClass $cmsTblListClass): self
+public function removeCmsTblListClassCollection(CmsTblListClass $cmsTblListClass): self
 {
     if ($this->cmsTblListClassCollection->removeElement($cmsTblListClass)) {
         // set the owning side to null (unless already changed)
@@ -484,14 +484,14 @@ public function setTableEditorClassSubtype(string $tableEditorClassSubtype): sel
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTblConfRestrictions>
+* @return Collection<int, CmsTblConfRestrictions>
 */
 public function getCmsTblConfRestrictionsCollection(): Collection
 {
     return $this->cmsTblConfRestrictionsCollection;
 }
 
-public function addCmsTblConfRestrictionsCollection(cmsTblConfRestrictions $cmsTblConfRestrictions): self
+public function addCmsTblConfRestrictionsCollection(CmsTblConfRestrictions $cmsTblConfRestrictions): self
 {
     if (!$this->cmsTblConfRestrictionsCollection->contains($cmsTblConfRestrictions)) {
         $this->cmsTblConfRestrictionsCollection->add($cmsTblConfRestrictions);
@@ -501,7 +501,7 @@ public function addCmsTblConfRestrictionsCollection(cmsTblConfRestrictions $cmsT
     return $this;
 }
 
-public function removeCmsTblConfRestrictionsCollection(cmsTblConfRestrictions $cmsTblConfRestrictions): self
+public function removeCmsTblConfRestrictionsCollection(CmsTblConfRestrictions $cmsTblConfRestrictions): self
 {
     if ($this->cmsTblConfRestrictionsCollection->removeElement($cmsTblConfRestrictions)) {
         // set the owning side to null (unless already changed)
@@ -575,14 +575,14 @@ public function setDbobjectExtendSubtype(string $dbobjectExtendSubtype): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTblExtension>
+* @return Collection<int, CmsTblExtension>
 */
 public function getCmsTblExtensionCollection(): Collection
 {
     return $this->cmsTblExtensionCollection;
 }
 
-public function addCmsTblExtensionCollection(cmsTblExtension $cmsTblExtension): self
+public function addCmsTblExtensionCollection(CmsTblExtension $cmsTblExtension): self
 {
     if (!$this->cmsTblExtensionCollection->contains($cmsTblExtension)) {
         $this->cmsTblExtensionCollection->add($cmsTblExtension);
@@ -592,7 +592,7 @@ public function addCmsTblExtensionCollection(cmsTblExtension $cmsTblExtension): 
     return $this;
 }
 
-public function removeCmsTblExtensionCollection(cmsTblExtension $cmsTblExtension): self
+public function removeCmsTblExtensionCollection(CmsTblExtension $cmsTblExtension): self
 {
     if ($this->cmsTblExtensionCollection->removeElement($cmsTblExtension)) {
         // set the owning side to null (unless already changed)
@@ -622,14 +622,14 @@ public function setAutoLimitResults(string $autoLimitResults): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTblConfIndex>
+* @return Collection<int, CmsTblConfIndex>
 */
 public function getCmsTblConfIndexCollection(): Collection
 {
     return $this->cmsTblConfIndexCollection;
 }
 
-public function addCmsTblConfIndexCollection(cmsTblConfIndex $cmsTblConfIndex): self
+public function addCmsTblConfIndexCollection(CmsTblConfIndex $cmsTblConfIndex): self
 {
     if (!$this->cmsTblConfIndexCollection->contains($cmsTblConfIndex)) {
         $this->cmsTblConfIndexCollection->add($cmsTblConfIndex);
@@ -639,7 +639,7 @@ public function addCmsTblConfIndexCollection(cmsTblConfIndex $cmsTblConfIndex): 
     return $this;
 }
 
-public function removeCmsTblConfIndexCollection(cmsTblConfIndex $cmsTblConfIndex): self
+public function removeCmsTblConfIndexCollection(CmsTblConfIndex $cmsTblConfIndex): self
 {
     if ($this->cmsTblConfIndexCollection->removeElement($cmsTblConfIndex)) {
         // set the owning side to null (unless already changed)

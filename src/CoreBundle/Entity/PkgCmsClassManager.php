@@ -20,7 +20,7 @@ private string $exitClass = '',
 /** @var string - End item class: path */
 private string $exitClassSubtype = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgCmsClassManagerExtension> - Classes administered by the inheritance manager */
+/** @var Collection<int, PkgCmsClassManagerExtension> - Classes administered by the inheritance manager */
 private Collection $pkgCmsClassManagerExtensionCollection = new ArrayCollection()
   ) {}
 
@@ -87,14 +87,14 @@ public function setExitClassSubtype(string $exitClassSubtype): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgCmsClassManagerExtension>
+* @return Collection<int, PkgCmsClassManagerExtension>
 */
 public function getPkgCmsClassManagerExtensionCollection(): Collection
 {
     return $this->pkgCmsClassManagerExtensionCollection;
 }
 
-public function addPkgCmsClassManagerExtensionCollection(pkgCmsClassManagerExtension $pkgCmsClassManagerExtension): self
+public function addPkgCmsClassManagerExtensionCollection(PkgCmsClassManagerExtension $pkgCmsClassManagerExtension): self
 {
     if (!$this->pkgCmsClassManagerExtensionCollection->contains($pkgCmsClassManagerExtension)) {
         $this->pkgCmsClassManagerExtensionCollection->add($pkgCmsClassManagerExtension);
@@ -104,7 +104,7 @@ public function addPkgCmsClassManagerExtensionCollection(pkgCmsClassManagerExten
     return $this;
 }
 
-public function removePkgCmsClassManagerExtensionCollection(pkgCmsClassManagerExtension $pkgCmsClassManagerExtension): self
+public function removePkgCmsClassManagerExtensionCollection(PkgCmsClassManagerExtension $pkgCmsClassManagerExtension): self
 {
     if ($this->pkgCmsClassManagerExtensionCollection->removeElement($pkgCmsClassManagerExtension)) {
         // set the owning side to null (unless already changed)
