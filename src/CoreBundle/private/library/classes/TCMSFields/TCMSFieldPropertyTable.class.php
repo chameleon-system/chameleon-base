@@ -94,6 +94,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             ),
             'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
             'enableCascadeRemove' => $enableCascadeRemove,
+            'comment' => $this->oDefinition->sqlData['translation'],
         ];
 
         $viewName = 'mapping/one-to-many-property-list.xml.twig';

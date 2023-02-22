@@ -10,14 +10,60 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * {inheritdoc}.
  */
-class TCMSFieldBoolean extends TCMSFieldOption
+class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableInterface
 {
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $default = $this->oDefinition->sqlData['field_default_value'];
+        if ('' === $default) {
+            $default = '0';
+        }
+
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => 'bool',
+            'docCommentType' => 'bool',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("%s", '1' === $default ? 'true' : 'false'),
+            'allowDefaultValue' => true,
+            'getterName' => 'is'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [],
+            true
+        );
+    }
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        $default = $this->oDefinition->sqlData['field_default_value'];
+        if ('' === $default) {
+            $default = '0';
+        }
+        return $this->getDoctrineRenderer('mapping/boolean.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'boolean',
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'column' => $this->name,
+            'default' => $default,
+        ])->render();
+    }
+
+
     public function GetOptions()
     {
         parent::GetOptions();

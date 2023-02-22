@@ -73,6 +73,8 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
                 $this->snakeToCamelCase($this->GetConnectedTableName(), false)
             ),
             'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+
         ];
 
 

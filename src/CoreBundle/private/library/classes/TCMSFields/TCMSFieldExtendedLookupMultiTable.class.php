@@ -88,6 +88,9 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'type' => 'string',
             'column' => $this->name,
             'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+
         ])->render();
 
         $tableNameMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
@@ -95,6 +98,9 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'type' => 'string',
             'column' => $this->getTableFieldName(),
             'length' => '255',
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+
         ])->render();
 
         return $idMapping. "\n" .$tableNameMapping;
