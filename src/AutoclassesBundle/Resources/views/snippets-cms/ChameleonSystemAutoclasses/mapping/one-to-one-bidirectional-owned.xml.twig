@@ -1,0 +1,4 @@
+{#https://www.doctrine-project.org/projects/doctrine-orm/en/2.14/reference/association-mapping.html#one-to-one-bidirectional#}
+<one-to-one field="{{ fieldName }}" target-entity="{{ targetClass }}" inversed-by="{{ owningCollectionProperty }}">
+    <join-column name="{{ column }}" referenced-column-name="id" />
+</one-to-one>

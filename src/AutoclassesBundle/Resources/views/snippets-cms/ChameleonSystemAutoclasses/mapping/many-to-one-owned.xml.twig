@@ -1,3 +1,8 @@
 <many-to-one field="{{ fieldName }}" target-entity="{{ targetClass }}" inversed-by="{{ owningCollectionProperty }}" >
+    {% if enableCascadeRemove %}
+    <cascade>
+        <cascade-remove/>
+    </cascade>
+    {% endif %}
     <join-column name="{{ column }}" referenced-column-name="id" />
 </many-to-one>

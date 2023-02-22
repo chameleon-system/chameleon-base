@@ -59,7 +59,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         }
 
         $parameters = [
-            'source' => __CLASS__,
+            'source' => get_class($this),
             'type' => $this->snakeToCamelCase($this->GetConnectedTableName(), false),
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($propertyName),

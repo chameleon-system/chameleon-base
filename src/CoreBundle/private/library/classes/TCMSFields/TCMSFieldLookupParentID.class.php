@@ -26,6 +26,37 @@ use function PHPUnit\Framework\stringEndsWith;
 /**/
 class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransformableInterface
 {
+    private function isOneToOneConnection(): bool
+    {
+        $query = "SELECT `only_one_record_tbl` from `cms_tbl_conf` WHERE `name` = :tableName";
+        $onlyOneRecord = $this->getDatabaseConnection()->fetchOne(
+            $query,
+            ['tableName' => $this->sTableName]
+        );
+        if ('1' === $onlyOneRecord) {
+            return true;
+        }
+
+        $query = "SELECT `cms_field_conf`.`fieldtype_config`
+                            FROM `cms_field_conf`
+                            INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
+                            WHERE `cms_tbl_conf`.`name` = :tableName AND `cms_field_conf`.`name` = :fieldName";
+        $fieldConfigRow = $this->getDatabaseConnection()->fetchAssociative(
+            $query,
+            ['tableName' => $this->GetConnectedTableName(), 'fieldName' => $this->getOwningFieldName()]
+        );
+
+        if (false === $fieldConfigRow) {
+            return false;
+        }
+
+        $fieldConf = new TPkgCmsStringUtilities_ReadConfig($fieldConfigRow['fieldtype_config']);
+        if ('true' === $fieldConf->getConfigValue('bOnlyOneRecord')) {
+            return true;
+        }
+
+        return false;
+    }
 
     public function getDoctrineDataModelXml(string $namespace): string
     {
@@ -34,18 +65,29 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
             $propertyName = substr($propertyName, 0, -3);
         }
 
+        $parameters = [
+            'fieldName' => $this->snakeToCamelCase($propertyName),
+            'targetClass' => sprintf(
+                '%s\\%s',
+                $namespace,
+                $this->snakeToCamelCase($this->GetConnectedTableName(), false)
+            ),
+            'column' => $this->name,
+        ];
+
+
         $hasOwner = null !== $this->getOwningFieldName();
         $viewName = 'mapping/many-to-one-owned.xml.twig';
         if (false === $hasOwner) {
             $viewName = 'mapping/many-to-one.xml.twig';
+        } else {
+            $parameters['owningCollectionProperty'] = $this->snakeToCamelCase($this->getOwningFieldName().'_collection');
+            if (true === $this->isOneToOneConnection()) {
+                $viewName = 'mapping/one-to-one-bidirectional-owned.xml.twig';
+            }
         }
 
-        return $this->getDoctrineRenderer($viewName, [
-            'fieldName' => $this->snakeToCamelCase($propertyName),
-            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
-            'column' => $this->name,
-            'owningCollectionProperty' => $this->snakeToCamelCase($this->getOwningFieldName().'_collection'),
-        ])->render();
+        return $this->getDoctrineRenderer($viewName, $parameters)->render();
     }
 
     public function GetHTML()
