@@ -31,11 +31,11 @@ private string $model = '',
 /** @var string - Module view */
 private string $view = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsMasterPagedefSpotParameter> - Parameter */
+/** @var Collection<int, CmsMasterPagedefSpotParameter> - Parameter */
 private Collection $cmsMasterPagedefSpotParameterCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsMasterPagedefSpotAccess> - Spot restrictions */
+/** @var Collection<int, CmsMasterPagedefSpotAccess> - Spot restrictions */
 private Collection $cmsMasterPagedefSpotAccessCollection = new ArrayCollection()
   ) {}
 
@@ -132,14 +132,14 @@ public function setView(string $view): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsMasterPagedefSpotParameter>
+* @return Collection<int, CmsMasterPagedefSpotParameter>
 */
 public function getCmsMasterPagedefSpotParameterCollection(): Collection
 {
     return $this->cmsMasterPagedefSpotParameterCollection;
 }
 
-public function addCmsMasterPagedefSpotParameterCollection(cmsMasterPagedefSpotParameter $cmsMasterPagedefSpotParameter): self
+public function addCmsMasterPagedefSpotParameterCollection(CmsMasterPagedefSpotParameter $cmsMasterPagedefSpotParameter): self
 {
     if (!$this->cmsMasterPagedefSpotParameterCollection->contains($cmsMasterPagedefSpotParameter)) {
         $this->cmsMasterPagedefSpotParameterCollection->add($cmsMasterPagedefSpotParameter);
@@ -149,7 +149,7 @@ public function addCmsMasterPagedefSpotParameterCollection(cmsMasterPagedefSpotP
     return $this;
 }
 
-public function removeCmsMasterPagedefSpotParameterCollection(cmsMasterPagedefSpotParameter $cmsMasterPagedefSpotParameter): self
+public function removeCmsMasterPagedefSpotParameterCollection(CmsMasterPagedefSpotParameter $cmsMasterPagedefSpotParameter): self
 {
     if ($this->cmsMasterPagedefSpotParameterCollection->removeElement($cmsMasterPagedefSpotParameter)) {
         // set the owning side to null (unless already changed)
@@ -165,14 +165,14 @@ public function removeCmsMasterPagedefSpotParameterCollection(cmsMasterPagedefSp
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsMasterPagedefSpotAccess>
+* @return Collection<int, CmsMasterPagedefSpotAccess>
 */
 public function getCmsMasterPagedefSpotAccessCollection(): Collection
 {
     return $this->cmsMasterPagedefSpotAccessCollection;
 }
 
-public function addCmsMasterPagedefSpotAccessCollection(cmsMasterPagedefSpotAccess $cmsMasterPagedefSpotAccess): self
+public function addCmsMasterPagedefSpotAccessCollection(CmsMasterPagedefSpotAccess $cmsMasterPagedefSpotAccess): self
 {
     if (!$this->cmsMasterPagedefSpotAccessCollection->contains($cmsMasterPagedefSpotAccess)) {
         $this->cmsMasterPagedefSpotAccessCollection->add($cmsMasterPagedefSpotAccess);
@@ -182,7 +182,7 @@ public function addCmsMasterPagedefSpotAccessCollection(cmsMasterPagedefSpotAcce
     return $this;
 }
 
-public function removeCmsMasterPagedefSpotAccessCollection(cmsMasterPagedefSpotAccess $cmsMasterPagedefSpotAccess): self
+public function removeCmsMasterPagedefSpotAccessCollection(CmsMasterPagedefSpotAccess $cmsMasterPagedefSpotAccess): self
 {
     if ($this->cmsMasterPagedefSpotAccessCollection->removeElement($cmsMasterPagedefSpotAccess)) {
         // set the owning side to null (unless already changed)

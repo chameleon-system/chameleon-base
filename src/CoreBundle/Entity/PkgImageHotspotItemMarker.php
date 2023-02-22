@@ -3,8 +3,6 @@ namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\PkgImageHotspotItem;
 use ChameleonSystem\CoreBundle\Entity\CmsTplPage;
-use ChameleonSystem\CoreBundle\Entity\ShopCategory;
-use ChameleonSystem\CoreBundle\Entity\ShopArticle;
 use ChameleonSystem\CoreBundle\Entity\CmsMedia;
 
 class PkgImageHotspotItemMarker {
@@ -25,13 +23,10 @@ private string $top = '',
     // TCMSFieldVarchar
 /** @var string - Position of left border relative to left border of background image */
 private string $left = '', 
-    // TCMSFieldExtendedLookupMultiTable
-/** @var CmsTplPage|ShopCategory|ShopArticle|null - Link to object */
-private ?CmsTplPage|ShopCategory|ShopArticle $linkedRec = null
-,
-// TCMSFieldExtendedLookupMultiTable
-/** @var string - Link to object */
-private string $linkedRecordTableName = '', 
+    // TCMSFieldLookup
+/** @var CmsTplPage|null - Link to object */
+private ?CmsTplPage $linkedRec = null
+, 
     // TCMSFieldVarchar
 /** @var string - Alternative link */
 private string $url = '', 
@@ -120,26 +115,15 @@ public function setLeft(string $left): self
 
 
   
-    // TCMSFieldExtendedLookupMultiTable
-public function getLinkedRec(): ?CmsTplPage|ShopCategory|ShopArticle
+    // TCMSFieldLookup
+public function getLinkedRec(): ?CmsTplPage
 {
     return $this->linkedRec;
 }
 
-public function setLinkedRec(?CmsTplPage|ShopCategory|ShopArticle $linkedRec): self
+public function setLinkedRec(?CmsTplPage $linkedRec): self
 {
     $this->linkedRec = $linkedRec;
-
-    return $this;
-}
-// TCMSFieldExtendedLookupMultiTable
-public function getLinkedRecord(): string
-{
-    return $this->linkedRecordTableName;
-}
-public function setLinkedRecord(string $linkedRecordTableName): self
-{
-    $this->linkedRecordTableName = $linkedRecordTableName;
 
     return $this;
 }

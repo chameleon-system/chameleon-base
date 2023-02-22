@@ -52,7 +52,7 @@ private string $htmlAccessKey = '',
 /** @var string - CSS classes */
 private string $cssClasses = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTreeNode> - Connected pages */
+/** @var Collection<int, CmsTreeNode> - Connected pages */
 private Collection $cmsTreeNodeCollection = new ArrayCollection()
   ) {}
 
@@ -248,14 +248,14 @@ public function setCssClasses(string $cssClasses): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTreeNode>
+* @return Collection<int, CmsTreeNode>
 */
 public function getCmsTreeNodeCollection(): Collection
 {
     return $this->cmsTreeNodeCollection;
 }
 
-public function addCmsTreeNodeCollection(cmsTreeNode $cmsTreeNode): self
+public function addCmsTreeNodeCollection(CmsTreeNode $cmsTreeNode): self
 {
     if (!$this->cmsTreeNodeCollection->contains($cmsTreeNode)) {
         $this->cmsTreeNodeCollection->add($cmsTreeNode);
@@ -265,7 +265,7 @@ public function addCmsTreeNodeCollection(cmsTreeNode $cmsTreeNode): self
     return $this;
 }
 
-public function removeCmsTreeNodeCollection(cmsTreeNode $cmsTreeNode): self
+public function removeCmsTreeNodeCollection(CmsTreeNode $cmsTreeNode): self
 {
     if ($this->cmsTreeNodeCollection->removeElement($cmsTreeNode)) {
         // set the owning side to null (unless already changed)

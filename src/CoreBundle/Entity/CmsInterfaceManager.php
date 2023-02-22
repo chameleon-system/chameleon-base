@@ -23,7 +23,7 @@ private string $class = '',
 /** @var string - Class subtype */
 private string $classSubtype = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsInterfaceManagerParameter> - Parameter */
+/** @var Collection<int, CmsInterfaceManagerParameter> - Parameter */
 private Collection $cmsInterfaceManagerParameterCollection = new ArrayCollection()
   ) {}
 
@@ -104,14 +104,14 @@ public function setClassSubtype(string $classSubtype): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsInterfaceManagerParameter>
+* @return Collection<int, CmsInterfaceManagerParameter>
 */
 public function getCmsInterfaceManagerParameterCollection(): Collection
 {
     return $this->cmsInterfaceManagerParameterCollection;
 }
 
-public function addCmsInterfaceManagerParameterCollection(cmsInterfaceManagerParameter $cmsInterfaceManagerParameter): self
+public function addCmsInterfaceManagerParameterCollection(CmsInterfaceManagerParameter $cmsInterfaceManagerParameter): self
 {
     if (!$this->cmsInterfaceManagerParameterCollection->contains($cmsInterfaceManagerParameter)) {
         $this->cmsInterfaceManagerParameterCollection->add($cmsInterfaceManagerParameter);
@@ -121,7 +121,7 @@ public function addCmsInterfaceManagerParameterCollection(cmsInterfaceManagerPar
     return $this;
 }
 
-public function removeCmsInterfaceManagerParameterCollection(cmsInterfaceManagerParameter $cmsInterfaceManagerParameter): self
+public function removeCmsInterfaceManagerParameterCollection(CmsInterfaceManagerParameter $cmsInterfaceManagerParameter): self
 {
     if ($this->cmsInterfaceManagerParameterCollection->removeElement($cmsInterfaceManagerParameter)) {
         // set the owning side to null (unless already changed)

@@ -17,7 +17,7 @@ private string $name = '',
 /** @var string - Title to be shown on top of the filter on the website */
 private string $title = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopListfilterItem> - List filter entries */
+/** @var Collection<int, PkgShopListfilterItem> - List filter entries */
 private Collection $pkgShopListfilterItemCollection = new ArrayCollection()
   ) {}
 
@@ -70,14 +70,14 @@ public function setTitle(string $title): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopListfilterItem>
+* @return Collection<int, PkgShopListfilterItem>
 */
 public function getPkgShopListfilterItemCollection(): Collection
 {
     return $this->pkgShopListfilterItemCollection;
 }
 
-public function addPkgShopListfilterItemCollection(pkgShopListfilterItem $pkgShopListfilterItem): self
+public function addPkgShopListfilterItemCollection(PkgShopListfilterItem $pkgShopListfilterItem): self
 {
     if (!$this->pkgShopListfilterItemCollection->contains($pkgShopListfilterItem)) {
         $this->pkgShopListfilterItemCollection->add($pkgShopListfilterItem);
@@ -87,7 +87,7 @@ public function addPkgShopListfilterItemCollection(pkgShopListfilterItem $pkgSho
     return $this;
 }
 
-public function removePkgShopListfilterItemCollection(pkgShopListfilterItem $pkgShopListfilterItem): self
+public function removePkgShopListfilterItemCollection(PkgShopListfilterItem $pkgShopListfilterItem): self
 {
     if ($this->pkgShopListfilterItemCollection->removeElement($pkgShopListfilterItem)) {
         // set the owning side to null (unless already changed)

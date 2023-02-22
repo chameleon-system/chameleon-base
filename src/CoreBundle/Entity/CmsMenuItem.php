@@ -2,8 +2,6 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsTblConf;
-use ChameleonSystem\CoreBundle\Entity\CmsModule;
-use ChameleonSystem\CoreBundle\Entity\CmsMenuCustomItem;
 use ChameleonSystem\CoreBundle\Entity\CmsMenuCategory;
 
 class CmsMenuItem {
@@ -14,13 +12,10 @@ class CmsMenuItem {
     // TCMSFieldVarchar
 /** @var string - Name */
 private string $name = '', 
-    // TCMSFieldExtendedLookupMultiTable
-/** @var CmsTblConf|CmsModule|CmsMenuCustomItem|null - Target */
-private ?CmsTblConf|CmsModule|CmsMenuCustomItem $tar = null
-,
-// TCMSFieldExtendedLookupMultiTable
-/** @var string - Target */
-private string $targetTableName = '', 
+    // TCMSFieldLookup
+/** @var CmsTblConf|null - Target */
+private ?CmsTblConf $tar = null
+, 
     // TCMSFieldVarchar
 /** @var string - Icon font CSS class */
 private string $iconFontCssClass = '', 
@@ -62,26 +57,15 @@ public function setName(string $name): self
 
 
   
-    // TCMSFieldExtendedLookupMultiTable
-public function getTar(): ?CmsTblConf|CmsModule|CmsMenuCustomItem
+    // TCMSFieldLookup
+public function getTar(): ?CmsTblConf
 {
     return $this->tar;
 }
 
-public function setTar(?CmsTblConf|CmsModule|CmsMenuCustomItem $tar): self
+public function setTar(?CmsTblConf $tar): self
 {
     $this->tar = $tar;
-
-    return $this;
-}
-// TCMSFieldExtendedLookupMultiTable
-public function getTarget(): string
-{
-    return $this->targetTableName;
-}
-public function setTarget(string $targetTableName): self
-{
-    $this->targetTableName = $targetTableName;
 
     return $this;
 }

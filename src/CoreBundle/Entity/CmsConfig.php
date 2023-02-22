@@ -19,7 +19,7 @@ class CmsConfig {
     private int|null $cmsident = null,
         
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsConfigImagemagick> - ImageMagick settings */
+/** @var Collection<int, CmsConfigImagemagick> - ImageMagick settings */
 private Collection $cmsConfigImagemagickCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -30,11 +30,11 @@ private string $uploaderChunkSize = '1024',
 private ?CmsLanguage $translationBaseLanguage = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsConfigParameter> - Configuration settings */
+/** @var Collection<int, CmsConfigParameter> - Configuration settings */
 private Collection $cmsConfigParameterCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsMessageManagerBackendMessage> - System messages / error codes */
+/** @var Collection<int, CmsMessageManagerBackendMessage> - System messages / error codes */
 private Collection $cmsMessageManagerBackendMessageCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -50,7 +50,7 @@ private string $smtpPassword = '',
 /** @var string - SMTP port */
 private string $smtpPort = '25', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsConfigCmsmoduleExtensions> - CMS module extensions */
+/** @var Collection<int, CmsConfigCmsmoduleExtensions> - CMS module extensions */
 private Collection $cmsConfigCmsmoduleExtensionsCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -66,7 +66,7 @@ private ?CmsConfigThemes $cmsConfigThemes = null
 private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsIpWhitelist> - Permitted IPs */
+/** @var Collection<int, CmsIpWhitelist> - Permitted IPs */
 private Collection $cmsIpWhitelistCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -115,14 +115,14 @@ private string $build = '1'  ) {}
   }
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsConfigImagemagick>
+* @return Collection<int, CmsConfigImagemagick>
 */
 public function getCmsConfigImagemagickCollection(): Collection
 {
     return $this->cmsConfigImagemagickCollection;
 }
 
-public function addCmsConfigImagemagickCollection(cmsConfigImagemagick $cmsConfigImagemagick): self
+public function addCmsConfigImagemagickCollection(CmsConfigImagemagick $cmsConfigImagemagick): self
 {
     if (!$this->cmsConfigImagemagickCollection->contains($cmsConfigImagemagick)) {
         $this->cmsConfigImagemagickCollection->add($cmsConfigImagemagick);
@@ -132,7 +132,7 @@ public function addCmsConfigImagemagickCollection(cmsConfigImagemagick $cmsConfi
     return $this;
 }
 
-public function removeCmsConfigImagemagickCollection(cmsConfigImagemagick $cmsConfigImagemagick): self
+public function removeCmsConfigImagemagickCollection(CmsConfigImagemagick $cmsConfigImagemagick): self
 {
     if ($this->cmsConfigImagemagickCollection->removeElement($cmsConfigImagemagick)) {
         // set the owning side to null (unless already changed)
@@ -177,14 +177,14 @@ public function setTranslationBaseLanguage(?CmsLanguage $translationBaseLanguage
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsConfigParameter>
+* @return Collection<int, CmsConfigParameter>
 */
 public function getCmsConfigParameterCollection(): Collection
 {
     return $this->cmsConfigParameterCollection;
 }
 
-public function addCmsConfigParameterCollection(cmsConfigParameter $cmsConfigParameter): self
+public function addCmsConfigParameterCollection(CmsConfigParameter $cmsConfigParameter): self
 {
     if (!$this->cmsConfigParameterCollection->contains($cmsConfigParameter)) {
         $this->cmsConfigParameterCollection->add($cmsConfigParameter);
@@ -194,7 +194,7 @@ public function addCmsConfigParameterCollection(cmsConfigParameter $cmsConfigPar
     return $this;
 }
 
-public function removeCmsConfigParameterCollection(cmsConfigParameter $cmsConfigParameter): self
+public function removeCmsConfigParameterCollection(CmsConfigParameter $cmsConfigParameter): self
 {
     if ($this->cmsConfigParameterCollection->removeElement($cmsConfigParameter)) {
         // set the owning side to null (unless already changed)
@@ -210,14 +210,14 @@ public function removeCmsConfigParameterCollection(cmsConfigParameter $cmsConfig
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsMessageManagerBackendMessage>
+* @return Collection<int, CmsMessageManagerBackendMessage>
 */
 public function getCmsMessageManagerBackendMessageCollection(): Collection
 {
     return $this->cmsMessageManagerBackendMessageCollection;
 }
 
-public function addCmsMessageManagerBackendMessageCollection(cmsMessageManagerBackendMessage $cmsMessageManagerBackendMessage): self
+public function addCmsMessageManagerBackendMessageCollection(CmsMessageManagerBackendMessage $cmsMessageManagerBackendMessage): self
 {
     if (!$this->cmsMessageManagerBackendMessageCollection->contains($cmsMessageManagerBackendMessage)) {
         $this->cmsMessageManagerBackendMessageCollection->add($cmsMessageManagerBackendMessage);
@@ -227,7 +227,7 @@ public function addCmsMessageManagerBackendMessageCollection(cmsMessageManagerBa
     return $this;
 }
 
-public function removeCmsMessageManagerBackendMessageCollection(cmsMessageManagerBackendMessage $cmsMessageManagerBackendMessage): self
+public function removeCmsMessageManagerBackendMessageCollection(CmsMessageManagerBackendMessage $cmsMessageManagerBackendMessage): self
 {
     if ($this->cmsMessageManagerBackendMessageCollection->removeElement($cmsMessageManagerBackendMessage)) {
         // set the owning side to null (unless already changed)
@@ -299,14 +299,14 @@ public function setSmtpPort(string $smtpPort): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsConfigCmsmoduleExtensions>
+* @return Collection<int, CmsConfigCmsmoduleExtensions>
 */
 public function getCmsConfigCmsmoduleExtensionsCollection(): Collection
 {
     return $this->cmsConfigCmsmoduleExtensionsCollection;
 }
 
-public function addCmsConfigCmsmoduleExtensionsCollection(cmsConfigCmsmoduleExtensions $cmsConfigCmsmoduleExtensions): self
+public function addCmsConfigCmsmoduleExtensionsCollection(CmsConfigCmsmoduleExtensions $cmsConfigCmsmoduleExtensions): self
 {
     if (!$this->cmsConfigCmsmoduleExtensionsCollection->contains($cmsConfigCmsmoduleExtensions)) {
         $this->cmsConfigCmsmoduleExtensionsCollection->add($cmsConfigCmsmoduleExtensions);
@@ -316,7 +316,7 @@ public function addCmsConfigCmsmoduleExtensionsCollection(cmsConfigCmsmoduleExte
     return $this;
 }
 
-public function removeCmsConfigCmsmoduleExtensionsCollection(cmsConfigCmsmoduleExtensions $cmsConfigCmsmoduleExtensions): self
+public function removeCmsConfigCmsmoduleExtensionsCollection(CmsConfigCmsmoduleExtensions $cmsConfigCmsmoduleExtensions): self
 {
     if ($this->cmsConfigCmsmoduleExtensionsCollection->removeElement($cmsConfigCmsmoduleExtensions)) {
         // set the owning side to null (unless already changed)
@@ -377,14 +377,14 @@ public function setCmsPortal(?CmsPortal $cmsPortal): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsIpWhitelist>
+* @return Collection<int, CmsIpWhitelist>
 */
 public function getCmsIpWhitelistCollection(): Collection
 {
     return $this->cmsIpWhitelistCollection;
 }
 
-public function addCmsIpWhitelistCollection(cmsIpWhitelist $cmsIpWhitelist): self
+public function addCmsIpWhitelistCollection(CmsIpWhitelist $cmsIpWhitelist): self
 {
     if (!$this->cmsIpWhitelistCollection->contains($cmsIpWhitelist)) {
         $this->cmsIpWhitelistCollection->add($cmsIpWhitelist);
@@ -394,7 +394,7 @@ public function addCmsIpWhitelistCollection(cmsIpWhitelist $cmsIpWhitelist): sel
     return $this;
 }
 
-public function removeCmsIpWhitelistCollection(cmsIpWhitelist $cmsIpWhitelist): self
+public function removeCmsIpWhitelistCollection(CmsIpWhitelist $cmsIpWhitelist): self
 {
     if ($this->cmsIpWhitelistCollection->removeElement($cmsIpWhitelist)) {
         // set the owning side to null (unless already changed)

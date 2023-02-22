@@ -25,7 +25,7 @@ private string $class = '',
 /** @var string - Class subtype */
 private string $classSubtype = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopPaymentHandlerParameter> - Configuration settings */
+/** @var Collection<int, ShopPaymentHandlerParameter> - Configuration settings */
 private Collection $shopPaymentHandlerParameterCollection = new ArrayCollection()
   ) {}
 
@@ -107,14 +107,14 @@ public function setClassSubtype(string $classSubtype): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopPaymentHandlerParameter>
+* @return Collection<int, ShopPaymentHandlerParameter>
 */
 public function getShopPaymentHandlerParameterCollection(): Collection
 {
     return $this->shopPaymentHandlerParameterCollection;
 }
 
-public function addShopPaymentHandlerParameterCollection(shopPaymentHandlerParameter $shopPaymentHandlerParameter): self
+public function addShopPaymentHandlerParameterCollection(ShopPaymentHandlerParameter $shopPaymentHandlerParameter): self
 {
     if (!$this->shopPaymentHandlerParameterCollection->contains($shopPaymentHandlerParameter)) {
         $this->shopPaymentHandlerParameterCollection->add($shopPaymentHandlerParameter);
@@ -124,7 +124,7 @@ public function addShopPaymentHandlerParameterCollection(shopPaymentHandlerParam
     return $this;
 }
 
-public function removeShopPaymentHandlerParameterCollection(shopPaymentHandlerParameter $shopPaymentHandlerParameter): self
+public function removeShopPaymentHandlerParameterCollection(ShopPaymentHandlerParameter $shopPaymentHandlerParameter): self
 {
     if ($this->shopPaymentHandlerParameterCollection->removeElement($shopPaymentHandlerParameter)) {
         // set the owning side to null (unless already changed)

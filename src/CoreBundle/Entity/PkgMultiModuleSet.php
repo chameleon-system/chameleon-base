@@ -14,7 +14,7 @@ class PkgMultiModuleSet {
 /** @var string - Name of the set */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgMultiModuleSetItem> - Set consists of these modules */
+/** @var Collection<int, PkgMultiModuleSetItem> - Set consists of these modules */
 private Collection $pkgMultiModuleSetItemCollection = new ArrayCollection()
   ) {}
 
@@ -53,14 +53,14 @@ public function setName(string $name): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgMultiModuleSetItem>
+* @return Collection<int, PkgMultiModuleSetItem>
 */
 public function getPkgMultiModuleSetItemCollection(): Collection
 {
     return $this->pkgMultiModuleSetItemCollection;
 }
 
-public function addPkgMultiModuleSetItemCollection(pkgMultiModuleSetItem $pkgMultiModuleSetItem): self
+public function addPkgMultiModuleSetItemCollection(PkgMultiModuleSetItem $pkgMultiModuleSetItem): self
 {
     if (!$this->pkgMultiModuleSetItemCollection->contains($pkgMultiModuleSetItem)) {
         $this->pkgMultiModuleSetItemCollection->add($pkgMultiModuleSetItem);
@@ -70,7 +70,7 @@ public function addPkgMultiModuleSetItemCollection(pkgMultiModuleSetItem $pkgMul
     return $this;
 }
 
-public function removePkgMultiModuleSetItemCollection(pkgMultiModuleSetItem $pkgMultiModuleSetItem): self
+public function removePkgMultiModuleSetItemCollection(PkgMultiModuleSetItem $pkgMultiModuleSetItem): self
 {
     if ($this->pkgMultiModuleSetItemCollection->removeElement($pkgMultiModuleSetItem)) {
         // set the owning side to null (unless already changed)

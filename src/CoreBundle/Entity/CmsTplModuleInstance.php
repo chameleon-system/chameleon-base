@@ -16,7 +16,7 @@ class CmsTplModuleInstance {
 /** @var string - Instance name */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTplPageCmsMasterPagedefSpot> - CMS pages dynamic spots */
+/** @var Collection<int, CmsTplPageCmsMasterPagedefSpot> - CMS pages dynamic spots */
 private Collection $cmsTplPageCmsMasterPagedefSpotCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -66,14 +66,14 @@ public function setName(string $name): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTplPageCmsMasterPagedefSpot>
+* @return Collection<int, CmsTplPageCmsMasterPagedefSpot>
 */
 public function getCmsTplPageCmsMasterPagedefSpotCollection(): Collection
 {
     return $this->cmsTplPageCmsMasterPagedefSpotCollection;
 }
 
-public function addCmsTplPageCmsMasterPagedefSpotCollection(cmsTplPageCmsMasterPagedefSpot $cmsTplPageCmsMasterPagedefSpot): self
+public function addCmsTplPageCmsMasterPagedefSpotCollection(CmsTplPageCmsMasterPagedefSpot $cmsTplPageCmsMasterPagedefSpot): self
 {
     if (!$this->cmsTplPageCmsMasterPagedefSpotCollection->contains($cmsTplPageCmsMasterPagedefSpot)) {
         $this->cmsTplPageCmsMasterPagedefSpotCollection->add($cmsTplPageCmsMasterPagedefSpot);
@@ -83,7 +83,7 @@ public function addCmsTplPageCmsMasterPagedefSpotCollection(cmsTplPageCmsMasterP
     return $this;
 }
 
-public function removeCmsTplPageCmsMasterPagedefSpotCollection(cmsTplPageCmsMasterPagedefSpot $cmsTplPageCmsMasterPagedefSpot): self
+public function removeCmsTplPageCmsMasterPagedefSpotCollection(CmsTplPageCmsMasterPagedefSpot $cmsTplPageCmsMasterPagedefSpot): self
 {
     if ($this->cmsTplPageCmsMasterPagedefSpotCollection->removeElement($cmsTplPageCmsMasterPagedefSpot)) {
         // set the owning side to null (unless already changed)

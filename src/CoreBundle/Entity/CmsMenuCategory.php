@@ -20,7 +20,7 @@ private string $systemName = '',
 /** @var string -  */
 private string $iconFontCssClass = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsMenuItem> - Menu items */
+/** @var Collection<int, CmsMenuItem> - Menu items */
 private Collection $cmsMenuItemCollection = new ArrayCollection()
   ) {}
 
@@ -87,14 +87,14 @@ public function setIconFontCssClass(string $iconFontCssClass): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsMenuItem>
+* @return Collection<int, CmsMenuItem>
 */
 public function getCmsMenuItemCollection(): Collection
 {
     return $this->cmsMenuItemCollection;
 }
 
-public function addCmsMenuItemCollection(cmsMenuItem $cmsMenuItem): self
+public function addCmsMenuItemCollection(CmsMenuItem $cmsMenuItem): self
 {
     if (!$this->cmsMenuItemCollection->contains($cmsMenuItem)) {
         $this->cmsMenuItemCollection->add($cmsMenuItem);
@@ -104,7 +104,7 @@ public function addCmsMenuItemCollection(cmsMenuItem $cmsMenuItem): self
     return $this;
 }
 
-public function removeCmsMenuItemCollection(cmsMenuItem $cmsMenuItem): self
+public function removeCmsMenuItemCollection(CmsMenuItem $cmsMenuItem): self
 {
     if ($this->cmsMenuItemCollection->removeElement($cmsMenuItem)) {
         // set the owning side to null (unless already changed)

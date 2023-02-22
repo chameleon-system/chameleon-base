@@ -15,7 +15,7 @@
     <join-column name="cms_portal_id" referenced-column-name="id" />
 </many-to-one>
             <field name="name" type="string" column="name" length="255" nullable="false"  />
-            <many-to-one field="tar" target-entity="\ChameleonSystem\AutoclassesBundle\TableConfExport\AbstractEntity">
+            <many-to-one field="tar" target-entity="\ChameleonSystem\CoreBundle\Entity\CmsTree">
     <join-column name="target" referenced-column-name="id" />
 </many-to-one>
             <field name="cssClass" type="string" column="css_class" length="255" nullable="false"  />

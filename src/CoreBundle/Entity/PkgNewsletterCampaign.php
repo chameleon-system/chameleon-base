@@ -34,7 +34,7 @@ private string $subject = '',
 private ?CmsPortal $cmsPortal = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgNewsletterQueue> - Queue items */
+/** @var Collection<int, PkgNewsletterQueue> - Queue items */
 private Collection $pkgNewsletterQueueCollection = new ArrayCollection()
   ) {}
 
@@ -158,14 +158,14 @@ public function setCmsPortal(?CmsPortal $cmsPortal): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgNewsletterQueue>
+* @return Collection<int, PkgNewsletterQueue>
 */
 public function getPkgNewsletterQueueCollection(): Collection
 {
     return $this->pkgNewsletterQueueCollection;
 }
 
-public function addPkgNewsletterQueueCollection(pkgNewsletterQueue $pkgNewsletterQueue): self
+public function addPkgNewsletterQueueCollection(PkgNewsletterQueue $pkgNewsletterQueue): self
 {
     if (!$this->pkgNewsletterQueueCollection->contains($pkgNewsletterQueue)) {
         $this->pkgNewsletterQueueCollection->add($pkgNewsletterQueue);
@@ -175,7 +175,7 @@ public function addPkgNewsletterQueueCollection(pkgNewsletterQueue $pkgNewslette
     return $this;
 }
 
-public function removePkgNewsletterQueueCollection(pkgNewsletterQueue $pkgNewsletterQueue): self
+public function removePkgNewsletterQueueCollection(PkgNewsletterQueue $pkgNewsletterQueue): self
 {
     if ($this->pkgNewsletterQueueCollection->removeElement($pkgNewsletterQueue)) {
         // set the owning side to null (unless already changed)

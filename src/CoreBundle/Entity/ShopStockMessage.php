@@ -34,7 +34,7 @@ private string $name = '',
 /** @var string - System name */
 private string $internalName = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopStockMessageTrigger> - Stock messages */
+/** @var Collection<int, ShopStockMessageTrigger> - Stock messages */
 private Collection $shopStockMessageTriggerCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -161,14 +161,14 @@ public function setInternalName(string $internalName): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopStockMessageTrigger>
+* @return Collection<int, ShopStockMessageTrigger>
 */
 public function getShopStockMessageTriggerCollection(): Collection
 {
     return $this->shopStockMessageTriggerCollection;
 }
 
-public function addShopStockMessageTriggerCollection(shopStockMessageTrigger $shopStockMessageTrigger): self
+public function addShopStockMessageTriggerCollection(ShopStockMessageTrigger $shopStockMessageTrigger): self
 {
     if (!$this->shopStockMessageTriggerCollection->contains($shopStockMessageTrigger)) {
         $this->shopStockMessageTriggerCollection->add($shopStockMessageTrigger);
@@ -178,7 +178,7 @@ public function addShopStockMessageTriggerCollection(shopStockMessageTrigger $sh
     return $this;
 }
 
-public function removeShopStockMessageTriggerCollection(shopStockMessageTrigger $shopStockMessageTrigger): self
+public function removeShopStockMessageTriggerCollection(ShopStockMessageTrigger $shopStockMessageTrigger): self
 {
     if ($this->shopStockMessageTriggerCollection->removeElement($shopStockMessageTrigger)) {
         // set the owning side to null (unless already changed)

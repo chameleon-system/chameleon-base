@@ -24,7 +24,7 @@ private ?CmsPortal $cmsPortal = null
 private ?CmsTblConf $cmsTblConf = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsExportProfilesFields> - Fields to be exported */
+/** @var Collection<int, CmsExportProfilesFields> - Fields to be exported */
 private Collection $cmsExportProfilesFieldsCollection = new ArrayCollection()
   ) {}
 
@@ -93,14 +93,14 @@ public function setCmsTblConf(?CmsTblConf $cmsTblConf): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsExportProfilesFields>
+* @return Collection<int, CmsExportProfilesFields>
 */
 public function getCmsExportProfilesFieldsCollection(): Collection
 {
     return $this->cmsExportProfilesFieldsCollection;
 }
 
-public function addCmsExportProfilesFieldsCollection(cmsExportProfilesFields $cmsExportProfilesFields): self
+public function addCmsExportProfilesFieldsCollection(CmsExportProfilesFields $cmsExportProfilesFields): self
 {
     if (!$this->cmsExportProfilesFieldsCollection->contains($cmsExportProfilesFields)) {
         $this->cmsExportProfilesFieldsCollection->add($cmsExportProfilesFields);
@@ -110,7 +110,7 @@ public function addCmsExportProfilesFieldsCollection(cmsExportProfilesFields $cm
     return $this;
 }
 
-public function removeCmsExportProfilesFieldsCollection(cmsExportProfilesFields $cmsExportProfilesFields): self
+public function removeCmsExportProfilesFieldsCollection(CmsExportProfilesFields $cmsExportProfilesFields): self
 {
     if ($this->cmsExportProfilesFieldsCollection->removeElement($cmsExportProfilesFields)) {
         // set the owning side to null (unless already changed)

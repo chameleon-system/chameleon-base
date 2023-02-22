@@ -58,7 +58,7 @@ private string $pages = '',
 /** @var string - USP */
 private string $usp = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrderBundleArticle> - Articles in order that belong to this bundle */
+/** @var Collection<int, ShopOrderBundleArticle> - Articles in order that belong to this bundle */
 private Collection $shopOrderBundleArticleCollection = new ArrayCollection()
   ) {}
 
@@ -269,14 +269,14 @@ public function setUsp(string $usp): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrderBundleArticle>
+* @return Collection<int, ShopOrderBundleArticle>
 */
 public function getShopOrderBundleArticleCollection(): Collection
 {
     return $this->shopOrderBundleArticleCollection;
 }
 
-public function addShopOrderBundleArticleCollection(shopOrderBundleArticle $shopOrderBundleArticle): self
+public function addShopOrderBundleArticleCollection(ShopOrderBundleArticle $shopOrderBundleArticle): self
 {
     if (!$this->shopOrderBundleArticleCollection->contains($shopOrderBundleArticle)) {
         $this->shopOrderBundleArticleCollection->add($shopOrderBundleArticle);
@@ -286,7 +286,7 @@ public function addShopOrderBundleArticleCollection(shopOrderBundleArticle $shop
     return $this;
 }
 
-public function removeShopOrderBundleArticleCollection(shopOrderBundleArticle $shopOrderBundleArticle): self
+public function removeShopOrderBundleArticleCollection(ShopOrderBundleArticle $shopOrderBundleArticle): self
 {
     if ($this->shopOrderBundleArticleCollection->removeElement($shopOrderBundleArticle)) {
         // set the owning side to null (unless already changed)

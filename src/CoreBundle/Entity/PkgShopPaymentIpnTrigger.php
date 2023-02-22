@@ -16,7 +16,7 @@ class PkgShopPaymentIpnTrigger {
 private ?ShopPaymentHandlerGroup $shopPaymentHandlerGroup = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopPaymentIpnMessageTrigger> -  */
+/** @var Collection<int, PkgShopPaymentIpnMessageTrigger> -  */
 private Collection $pkgShopPaymentIpnMessageTriggerCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -62,14 +62,14 @@ public function setShopPaymentHandlerGroup(?ShopPaymentHandlerGroup $shopPayment
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopPaymentIpnMessageTrigger>
+* @return Collection<int, PkgShopPaymentIpnMessageTrigger>
 */
 public function getPkgShopPaymentIpnMessageTriggerCollection(): Collection
 {
     return $this->pkgShopPaymentIpnMessageTriggerCollection;
 }
 
-public function addPkgShopPaymentIpnMessageTriggerCollection(pkgShopPaymentIpnMessageTrigger $pkgShopPaymentIpnMessageTrigger): self
+public function addPkgShopPaymentIpnMessageTriggerCollection(PkgShopPaymentIpnMessageTrigger $pkgShopPaymentIpnMessageTrigger): self
 {
     if (!$this->pkgShopPaymentIpnMessageTriggerCollection->contains($pkgShopPaymentIpnMessageTrigger)) {
         $this->pkgShopPaymentIpnMessageTriggerCollection->add($pkgShopPaymentIpnMessageTrigger);
@@ -79,7 +79,7 @@ public function addPkgShopPaymentIpnMessageTriggerCollection(pkgShopPaymentIpnMe
     return $this;
 }
 
-public function removePkgShopPaymentIpnMessageTriggerCollection(pkgShopPaymentIpnMessageTrigger $pkgShopPaymentIpnMessageTrigger): self
+public function removePkgShopPaymentIpnMessageTriggerCollection(PkgShopPaymentIpnMessageTrigger $pkgShopPaymentIpnMessageTrigger): self
 {
     if ($this->pkgShopPaymentIpnMessageTriggerCollection->removeElement($pkgShopPaymentIpnMessageTrigger)) {
         // set the owning side to null (unless already changed)

@@ -14,7 +14,7 @@ class ShopAttribute {
 /** @var string - Name */
 private string $name = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopAttributeValue> - Attribute values */
+/** @var Collection<int, ShopAttributeValue> - Attribute values */
 private Collection $shopAttributeValueCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -56,14 +56,14 @@ public function setName(string $name): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopAttributeValue>
+* @return Collection<int, ShopAttributeValue>
 */
 public function getShopAttributeValueCollection(): Collection
 {
     return $this->shopAttributeValueCollection;
 }
 
-public function addShopAttributeValueCollection(shopAttributeValue $shopAttributeValue): self
+public function addShopAttributeValueCollection(ShopAttributeValue $shopAttributeValue): self
 {
     if (!$this->shopAttributeValueCollection->contains($shopAttributeValue)) {
         $this->shopAttributeValueCollection->add($shopAttributeValue);
@@ -73,7 +73,7 @@ public function addShopAttributeValueCollection(shopAttributeValue $shopAttribut
     return $this;
 }
 
-public function removeShopAttributeValueCollection(shopAttributeValue $shopAttributeValue): self
+public function removeShopAttributeValueCollection(ShopAttributeValue $shopAttributeValue): self
 {
     if ($this->shopAttributeValueCollection->removeElement($shopAttributeValue)) {
         // set the owning side to null (unless already changed)

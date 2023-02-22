@@ -36,15 +36,15 @@ private string $externalIdentifier = '',
 private ?CmsLanguage $cmsLanguage = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsPortalNavigation> - Navigations */
+/** @var Collection<int, CmsPortalNavigation> - Navigations */
 private Collection $propertyNavigationsCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsDivision> - Sections */
+/** @var Collection<int, CmsDivision> - Sections */
 private Collection $cmsPortalDivisionsCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsPortalDomains> - Domains */
+/** @var Collection<int, CmsPortalDomains> - Domains */
 private Collection $cmsPortalDomainsCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -63,11 +63,11 @@ private ?CmsMedia $watermarkL = null
 private ?CmsMedia $backgroundIm = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsMessageManagerMessage> - System messages / error codes */
+/** @var Collection<int, CmsMessageManagerMessage> - System messages / error codes */
 private Collection $cmsMessageManagerMessageCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsPortalSystemPage> - System pages */
+/** @var Collection<int, CmsPortalSystemPage> - System pages */
 private Collection $cmsPortalSystemPageCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -100,7 +100,7 @@ private string $ivwId = '',
 /** @var string - WYSIWYG text editor CSS URL */
 private string $wysiwygCssUrl = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsUrlAlias> - URL alias list */
+/** @var Collection<int, CmsUrlAlias> - URL alias list */
 private Collection $cmsUrlAliasCollection = new ArrayCollection()
   ) {}
 
@@ -196,14 +196,14 @@ public function setCmsLanguage(?CmsLanguage $cmsLanguage): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsPortalNavigation>
+* @return Collection<int, CmsPortalNavigation>
 */
 public function getPropertyNavigationsCollection(): Collection
 {
     return $this->propertyNavigationsCollection;
 }
 
-public function addPropertyNavigationsCollection(cmsPortalNavigation $propertyNavigations): self
+public function addPropertyNavigationsCollection(CmsPortalNavigation $propertyNavigations): self
 {
     if (!$this->propertyNavigationsCollection->contains($propertyNavigations)) {
         $this->propertyNavigationsCollection->add($propertyNavigations);
@@ -213,7 +213,7 @@ public function addPropertyNavigationsCollection(cmsPortalNavigation $propertyNa
     return $this;
 }
 
-public function removePropertyNavigationsCollection(cmsPortalNavigation $propertyNavigations): self
+public function removePropertyNavigationsCollection(CmsPortalNavigation $propertyNavigations): self
 {
     if ($this->propertyNavigationsCollection->removeElement($propertyNavigations)) {
         // set the owning side to null (unless already changed)
@@ -229,14 +229,14 @@ public function removePropertyNavigationsCollection(cmsPortalNavigation $propert
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsDivision>
+* @return Collection<int, CmsDivision>
 */
 public function getCmsPortalDivisionsCollection(): Collection
 {
     return $this->cmsPortalDivisionsCollection;
 }
 
-public function addCmsPortalDivisionsCollection(cmsDivision $cmsPortalDivisions): self
+public function addCmsPortalDivisionsCollection(CmsDivision $cmsPortalDivisions): self
 {
     if (!$this->cmsPortalDivisionsCollection->contains($cmsPortalDivisions)) {
         $this->cmsPortalDivisionsCollection->add($cmsPortalDivisions);
@@ -246,7 +246,7 @@ public function addCmsPortalDivisionsCollection(cmsDivision $cmsPortalDivisions)
     return $this;
 }
 
-public function removeCmsPortalDivisionsCollection(cmsDivision $cmsPortalDivisions): self
+public function removeCmsPortalDivisionsCollection(CmsDivision $cmsPortalDivisions): self
 {
     if ($this->cmsPortalDivisionsCollection->removeElement($cmsPortalDivisions)) {
         // set the owning side to null (unless already changed)
@@ -262,14 +262,14 @@ public function removeCmsPortalDivisionsCollection(cmsDivision $cmsPortalDivisio
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsPortalDomains>
+* @return Collection<int, CmsPortalDomains>
 */
 public function getCmsPortalDomainsCollection(): Collection
 {
     return $this->cmsPortalDomainsCollection;
 }
 
-public function addCmsPortalDomainsCollection(cmsPortalDomains $cmsPortalDomains): self
+public function addCmsPortalDomainsCollection(CmsPortalDomains $cmsPortalDomains): self
 {
     if (!$this->cmsPortalDomainsCollection->contains($cmsPortalDomains)) {
         $this->cmsPortalDomainsCollection->add($cmsPortalDomains);
@@ -279,7 +279,7 @@ public function addCmsPortalDomainsCollection(cmsPortalDomains $cmsPortalDomains
     return $this;
 }
 
-public function removeCmsPortalDomainsCollection(cmsPortalDomains $cmsPortalDomains): self
+public function removeCmsPortalDomainsCollection(CmsPortalDomains $cmsPortalDomains): self
 {
     if ($this->cmsPortalDomainsCollection->removeElement($cmsPortalDomains)) {
         // set the owning side to null (unless already changed)
@@ -354,14 +354,14 @@ public function setBackgroundIm(?CmsMedia $backgroundIm): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsMessageManagerMessage>
+* @return Collection<int, CmsMessageManagerMessage>
 */
 public function getCmsMessageManagerMessageCollection(): Collection
 {
     return $this->cmsMessageManagerMessageCollection;
 }
 
-public function addCmsMessageManagerMessageCollection(cmsMessageManagerMessage $cmsMessageManagerMessage): self
+public function addCmsMessageManagerMessageCollection(CmsMessageManagerMessage $cmsMessageManagerMessage): self
 {
     if (!$this->cmsMessageManagerMessageCollection->contains($cmsMessageManagerMessage)) {
         $this->cmsMessageManagerMessageCollection->add($cmsMessageManagerMessage);
@@ -371,7 +371,7 @@ public function addCmsMessageManagerMessageCollection(cmsMessageManagerMessage $
     return $this;
 }
 
-public function removeCmsMessageManagerMessageCollection(cmsMessageManagerMessage $cmsMessageManagerMessage): self
+public function removeCmsMessageManagerMessageCollection(CmsMessageManagerMessage $cmsMessageManagerMessage): self
 {
     if ($this->cmsMessageManagerMessageCollection->removeElement($cmsMessageManagerMessage)) {
         // set the owning side to null (unless already changed)
@@ -387,14 +387,14 @@ public function removeCmsMessageManagerMessageCollection(cmsMessageManagerMessag
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsPortalSystemPage>
+* @return Collection<int, CmsPortalSystemPage>
 */
 public function getCmsPortalSystemPageCollection(): Collection
 {
     return $this->cmsPortalSystemPageCollection;
 }
 
-public function addCmsPortalSystemPageCollection(cmsPortalSystemPage $cmsPortalSystemPage): self
+public function addCmsPortalSystemPageCollection(CmsPortalSystemPage $cmsPortalSystemPage): self
 {
     if (!$this->cmsPortalSystemPageCollection->contains($cmsPortalSystemPage)) {
         $this->cmsPortalSystemPageCollection->add($cmsPortalSystemPage);
@@ -404,7 +404,7 @@ public function addCmsPortalSystemPageCollection(cmsPortalSystemPage $cmsPortalS
     return $this;
 }
 
-public function removeCmsPortalSystemPageCollection(cmsPortalSystemPage $cmsPortalSystemPage): self
+public function removeCmsPortalSystemPageCollection(CmsPortalSystemPage $cmsPortalSystemPage): self
 {
     if ($this->cmsPortalSystemPageCollection->removeElement($cmsPortalSystemPage)) {
         // set the owning side to null (unless already changed)
@@ -548,14 +548,14 @@ public function setWysiwygCssUrl(string $wysiwygCssUrl): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsUrlAlias>
+* @return Collection<int, CmsUrlAlias>
 */
 public function getCmsUrlAliasCollection(): Collection
 {
     return $this->cmsUrlAliasCollection;
 }
 
-public function addCmsUrlAliasCollection(cmsUrlAlias $cmsUrlAlias): self
+public function addCmsUrlAliasCollection(CmsUrlAlias $cmsUrlAlias): self
 {
     if (!$this->cmsUrlAliasCollection->contains($cmsUrlAlias)) {
         $this->cmsUrlAliasCollection->add($cmsUrlAlias);
@@ -565,7 +565,7 @@ public function addCmsUrlAliasCollection(cmsUrlAlias $cmsUrlAlias): self
     return $this;
 }
 
-public function removeCmsUrlAliasCollection(cmsUrlAlias $cmsUrlAlias): self
+public function removeCmsUrlAliasCollection(CmsUrlAlias $cmsUrlAlias): self
 {
     if ($this->cmsUrlAliasCollection->removeElement($cmsUrlAlias)) {
         // set the owning side to null (unless already changed)

@@ -24,7 +24,7 @@ private ?ShopVoucherSeriesSponsor $shopVoucherSeriesSponsor = null
 private ?ShopVat $shopVat = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopVoucher> - Vouchers belonging to the series */
+/** @var Collection<int, ShopVoucher> - Vouchers belonging to the series */
 private Collection $shopVoucherCollection = new ArrayCollection()
   ) {}
 
@@ -93,14 +93,14 @@ public function setShopVat(?ShopVat $shopVat): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopVoucher>
+* @return Collection<int, ShopVoucher>
 */
 public function getShopVoucherCollection(): Collection
 {
     return $this->shopVoucherCollection;
 }
 
-public function addShopVoucherCollection(shopVoucher $shopVoucher): self
+public function addShopVoucherCollection(ShopVoucher $shopVoucher): self
 {
     if (!$this->shopVoucherCollection->contains($shopVoucher)) {
         $this->shopVoucherCollection->add($shopVoucher);
@@ -110,7 +110,7 @@ public function addShopVoucherCollection(shopVoucher $shopVoucher): self
     return $this;
 }
 
-public function removeShopVoucherCollection(shopVoucher $shopVoucher): self
+public function removeShopVoucherCollection(ShopVoucher $shopVoucher): self
 {
     if ($this->shopVoucherCollection->removeElement($shopVoucher)) {
         // set the owning side to null (unless already changed)

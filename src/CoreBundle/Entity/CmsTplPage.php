@@ -20,7 +20,7 @@ class CmsTplPage {
 private ?CmsMasterPagedef $cmsMasterPagedef = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, cmsTplPageCmsMasterPagedefSpot> - Spots */
+/** @var Collection<int, CmsTplPageCmsMasterPagedefSpot> - Spots */
 private Collection $cmsTplPageCmsMasterPagedefSpotCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -103,14 +103,14 @@ public function setCmsMasterPagedef(?CmsMasterPagedef $cmsMasterPagedef): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, cmsTplPageCmsMasterPagedefSpot>
+* @return Collection<int, CmsTplPageCmsMasterPagedefSpot>
 */
 public function getCmsTplPageCmsMasterPagedefSpotCollection(): Collection
 {
     return $this->cmsTplPageCmsMasterPagedefSpotCollection;
 }
 
-public function addCmsTplPageCmsMasterPagedefSpotCollection(cmsTplPageCmsMasterPagedefSpot $cmsTplPageCmsMasterPagedefSpot): self
+public function addCmsTplPageCmsMasterPagedefSpotCollection(CmsTplPageCmsMasterPagedefSpot $cmsTplPageCmsMasterPagedefSpot): self
 {
     if (!$this->cmsTplPageCmsMasterPagedefSpotCollection->contains($cmsTplPageCmsMasterPagedefSpot)) {
         $this->cmsTplPageCmsMasterPagedefSpotCollection->add($cmsTplPageCmsMasterPagedefSpot);
@@ -120,7 +120,7 @@ public function addCmsTplPageCmsMasterPagedefSpotCollection(cmsTplPageCmsMasterP
     return $this;
 }
 
-public function removeCmsTplPageCmsMasterPagedefSpotCollection(cmsTplPageCmsMasterPagedefSpot $cmsTplPageCmsMasterPagedefSpot): self
+public function removeCmsTplPageCmsMasterPagedefSpotCollection(CmsTplPageCmsMasterPagedefSpot $cmsTplPageCmsMasterPagedefSpot): self
 {
     if ($this->cmsTplPageCmsMasterPagedefSpotCollection->removeElement($cmsTplPageCmsMasterPagedefSpot)) {
         // set the owning side to null (unless already changed)

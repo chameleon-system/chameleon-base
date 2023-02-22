@@ -2,8 +2,6 @@
 namespace ChameleonSystem\CoreBundle\Entity;
 
 use ChameleonSystem\CoreBundle\Entity\CmsConfig;
-use ChameleonSystem\CoreBundle\Entity\CmsPortal;
-use ChameleonSystem\CoreBundle\Entity\Shop;
 
 class PkgCmsCounter {
   public function __construct(
@@ -16,13 +14,10 @@ private string $name = '',
     // TCMSFieldVarchar
 /** @var string - System name */
 private string $systemName = '', 
-    // TCMSFieldExtendedLookupMultiTable
-/** @var CmsConfig|CmsPortal|Shop|null - Owner */
-private ?CmsConfig|CmsPortal|Shop $ow = null
-,
-// TCMSFieldExtendedLookupMultiTable
-/** @var string - Owner */
-private string $ownerTableName = '', 
+    // TCMSFieldLookup
+/** @var CmsConfig|null - Owner */
+private ?CmsConfig $ow = null
+, 
     // TCMSFieldVarchar
 /** @var string - Value */
 private string $value = '0'  ) {}
@@ -74,26 +69,15 @@ public function setSystemName(string $systemName): self
 
 
   
-    // TCMSFieldExtendedLookupMultiTable
-public function getOw(): ?CmsConfig|CmsPortal|Shop
+    // TCMSFieldLookup
+public function getOw(): ?CmsConfig
 {
     return $this->ow;
 }
 
-public function setOw(?CmsConfig|CmsPortal|Shop $ow): self
+public function setOw(?CmsConfig $ow): self
 {
     $this->ow = $ow;
-
-    return $this;
-}
-// TCMSFieldExtendedLookupMultiTable
-public function getOwner(): string
-{
-    return $this->ownerTableName;
-}
-public function setOwner(string $ownerTableName): self
-{
-    $this->ownerTableName = $ownerTableName;
 
     return $this;
 }

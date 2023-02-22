@@ -95,7 +95,7 @@ private string $email = '',
 /** @var string - Fax */
 private string $fax = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, dataExtranetUserAddress> - Addresses */
+/** @var Collection<int, DataExtranetUserAddress> - Addresses */
 private Collection $dataExtranetUserAddressCollection = new ArrayCollection()
 , 
     // TCMSFieldVarchar
@@ -108,7 +108,7 @@ private string $loginTimestamp = '',
 /** @var string - Login salt */
 private string $loginSalt = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, dataExtranetUserLoginHistory> - Login process */
+/** @var Collection<int, DataExtranetUserLoginHistory> - Login process */
 private Collection $dataExtranetUserLoginHistoryCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -123,35 +123,35 @@ private ?DataExtranetUserAddress $defaultShippingAddress = null
 /** @var string - Confirmation key */
 private string $tmpconfirmkey = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopUserPurchasedVoucher> - Bought vouchers */
+/** @var Collection<int, ShopUserPurchasedVoucher> - Bought vouchers */
 private Collection $shopUserPurchasedVoucherCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopUserNoticeList> - Notice list */
+/** @var Collection<int, ShopUserNoticeList> - Notice list */
 private Collection $shopUserNoticeListCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopOrder> - Orders */
+/** @var Collection<int, ShopOrder> - Orders */
 private Collection $shopOrderCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, dataExtranetUserShopArticleHistory> - Last viewed */
+/** @var Collection<int, DataExtranetUserShopArticleHistory> - Last viewed */
 private Collection $dataExtranetUserShopArticleHistoryCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopSearchLog> - Searches executed by customer */
+/** @var Collection<int, ShopSearchLog> - Searches executed by customer */
 private Collection $shopSearchLogCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopSuggestArticleLog> - Customer recommendations */
+/** @var Collection<int, ShopSuggestArticleLog> - Customer recommendations */
 private Collection $shopSuggestArticleLogCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopArticleReview> - Reviews */
+/** @var Collection<int, ShopArticleReview> - Reviews */
 private Collection $shopArticleReviewCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopWishlist> - Wish list */
+/** @var Collection<int, PkgShopWishlist> - Wish list */
 private Collection $pkgShopWishlistCollection = new ArrayCollection()
 , 
     // TCMSFieldLookup
@@ -492,14 +492,14 @@ public function setFax(string $fax): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, dataExtranetUserAddress>
+* @return Collection<int, DataExtranetUserAddress>
 */
 public function getDataExtranetUserAddressCollection(): Collection
 {
     return $this->dataExtranetUserAddressCollection;
 }
 
-public function addDataExtranetUserAddressCollection(dataExtranetUserAddress $dataExtranetUserAddress): self
+public function addDataExtranetUserAddressCollection(DataExtranetUserAddress $dataExtranetUserAddress): self
 {
     if (!$this->dataExtranetUserAddressCollection->contains($dataExtranetUserAddress)) {
         $this->dataExtranetUserAddressCollection->add($dataExtranetUserAddress);
@@ -509,7 +509,7 @@ public function addDataExtranetUserAddressCollection(dataExtranetUserAddress $da
     return $this;
 }
 
-public function removeDataExtranetUserAddressCollection(dataExtranetUserAddress $dataExtranetUserAddress): self
+public function removeDataExtranetUserAddressCollection(DataExtranetUserAddress $dataExtranetUserAddress): self
 {
     if ($this->dataExtranetUserAddressCollection->removeElement($dataExtranetUserAddress)) {
         // set the owning side to null (unless already changed)
@@ -567,14 +567,14 @@ public function setLoginSalt(string $loginSalt): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, dataExtranetUserLoginHistory>
+* @return Collection<int, DataExtranetUserLoginHistory>
 */
 public function getDataExtranetUserLoginHistoryCollection(): Collection
 {
     return $this->dataExtranetUserLoginHistoryCollection;
 }
 
-public function addDataExtranetUserLoginHistoryCollection(dataExtranetUserLoginHistory $dataExtranetUserLoginHistory): self
+public function addDataExtranetUserLoginHistoryCollection(DataExtranetUserLoginHistory $dataExtranetUserLoginHistory): self
 {
     if (!$this->dataExtranetUserLoginHistoryCollection->contains($dataExtranetUserLoginHistory)) {
         $this->dataExtranetUserLoginHistoryCollection->add($dataExtranetUserLoginHistory);
@@ -584,7 +584,7 @@ public function addDataExtranetUserLoginHistoryCollection(dataExtranetUserLoginH
     return $this;
 }
 
-public function removeDataExtranetUserLoginHistoryCollection(dataExtranetUserLoginHistory $dataExtranetUserLoginHistory): self
+public function removeDataExtranetUserLoginHistoryCollection(DataExtranetUserLoginHistory $dataExtranetUserLoginHistory): self
 {
     if ($this->dataExtranetUserLoginHistoryCollection->removeElement($dataExtranetUserLoginHistory)) {
         // set the owning side to null (unless already changed)
@@ -644,14 +644,14 @@ public function setTmpconfirmkey(string $tmpconfirmkey): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopUserPurchasedVoucher>
+* @return Collection<int, ShopUserPurchasedVoucher>
 */
 public function getShopUserPurchasedVoucherCollection(): Collection
 {
     return $this->shopUserPurchasedVoucherCollection;
 }
 
-public function addShopUserPurchasedVoucherCollection(shopUserPurchasedVoucher $shopUserPurchasedVoucher): self
+public function addShopUserPurchasedVoucherCollection(ShopUserPurchasedVoucher $shopUserPurchasedVoucher): self
 {
     if (!$this->shopUserPurchasedVoucherCollection->contains($shopUserPurchasedVoucher)) {
         $this->shopUserPurchasedVoucherCollection->add($shopUserPurchasedVoucher);
@@ -661,7 +661,7 @@ public function addShopUserPurchasedVoucherCollection(shopUserPurchasedVoucher $
     return $this;
 }
 
-public function removeShopUserPurchasedVoucherCollection(shopUserPurchasedVoucher $shopUserPurchasedVoucher): self
+public function removeShopUserPurchasedVoucherCollection(ShopUserPurchasedVoucher $shopUserPurchasedVoucher): self
 {
     if ($this->shopUserPurchasedVoucherCollection->removeElement($shopUserPurchasedVoucher)) {
         // set the owning side to null (unless already changed)
@@ -677,14 +677,14 @@ public function removeShopUserPurchasedVoucherCollection(shopUserPurchasedVouche
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopUserNoticeList>
+* @return Collection<int, ShopUserNoticeList>
 */
 public function getShopUserNoticeListCollection(): Collection
 {
     return $this->shopUserNoticeListCollection;
 }
 
-public function addShopUserNoticeListCollection(shopUserNoticeList $shopUserNoticeList): self
+public function addShopUserNoticeListCollection(ShopUserNoticeList $shopUserNoticeList): self
 {
     if (!$this->shopUserNoticeListCollection->contains($shopUserNoticeList)) {
         $this->shopUserNoticeListCollection->add($shopUserNoticeList);
@@ -694,7 +694,7 @@ public function addShopUserNoticeListCollection(shopUserNoticeList $shopUserNoti
     return $this;
 }
 
-public function removeShopUserNoticeListCollection(shopUserNoticeList $shopUserNoticeList): self
+public function removeShopUserNoticeListCollection(ShopUserNoticeList $shopUserNoticeList): self
 {
     if ($this->shopUserNoticeListCollection->removeElement($shopUserNoticeList)) {
         // set the owning side to null (unless already changed)
@@ -710,14 +710,14 @@ public function removeShopUserNoticeListCollection(shopUserNoticeList $shopUserN
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopOrder>
+* @return Collection<int, ShopOrder>
 */
 public function getShopOrderCollection(): Collection
 {
     return $this->shopOrderCollection;
 }
 
-public function addShopOrderCollection(shopOrder $shopOrder): self
+public function addShopOrderCollection(ShopOrder $shopOrder): self
 {
     if (!$this->shopOrderCollection->contains($shopOrder)) {
         $this->shopOrderCollection->add($shopOrder);
@@ -727,7 +727,7 @@ public function addShopOrderCollection(shopOrder $shopOrder): self
     return $this;
 }
 
-public function removeShopOrderCollection(shopOrder $shopOrder): self
+public function removeShopOrderCollection(ShopOrder $shopOrder): self
 {
     if ($this->shopOrderCollection->removeElement($shopOrder)) {
         // set the owning side to null (unless already changed)
@@ -743,14 +743,14 @@ public function removeShopOrderCollection(shopOrder $shopOrder): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, dataExtranetUserShopArticleHistory>
+* @return Collection<int, DataExtranetUserShopArticleHistory>
 */
 public function getDataExtranetUserShopArticleHistoryCollection(): Collection
 {
     return $this->dataExtranetUserShopArticleHistoryCollection;
 }
 
-public function addDataExtranetUserShopArticleHistoryCollection(dataExtranetUserShopArticleHistory $dataExtranetUserShopArticleHistory): self
+public function addDataExtranetUserShopArticleHistoryCollection(DataExtranetUserShopArticleHistory $dataExtranetUserShopArticleHistory): self
 {
     if (!$this->dataExtranetUserShopArticleHistoryCollection->contains($dataExtranetUserShopArticleHistory)) {
         $this->dataExtranetUserShopArticleHistoryCollection->add($dataExtranetUserShopArticleHistory);
@@ -760,7 +760,7 @@ public function addDataExtranetUserShopArticleHistoryCollection(dataExtranetUser
     return $this;
 }
 
-public function removeDataExtranetUserShopArticleHistoryCollection(dataExtranetUserShopArticleHistory $dataExtranetUserShopArticleHistory): self
+public function removeDataExtranetUserShopArticleHistoryCollection(DataExtranetUserShopArticleHistory $dataExtranetUserShopArticleHistory): self
 {
     if ($this->dataExtranetUserShopArticleHistoryCollection->removeElement($dataExtranetUserShopArticleHistory)) {
         // set the owning side to null (unless already changed)
@@ -776,14 +776,14 @@ public function removeDataExtranetUserShopArticleHistoryCollection(dataExtranetU
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopSearchLog>
+* @return Collection<int, ShopSearchLog>
 */
 public function getShopSearchLogCollection(): Collection
 {
     return $this->shopSearchLogCollection;
 }
 
-public function addShopSearchLogCollection(shopSearchLog $shopSearchLog): self
+public function addShopSearchLogCollection(ShopSearchLog $shopSearchLog): self
 {
     if (!$this->shopSearchLogCollection->contains($shopSearchLog)) {
         $this->shopSearchLogCollection->add($shopSearchLog);
@@ -793,7 +793,7 @@ public function addShopSearchLogCollection(shopSearchLog $shopSearchLog): self
     return $this;
 }
 
-public function removeShopSearchLogCollection(shopSearchLog $shopSearchLog): self
+public function removeShopSearchLogCollection(ShopSearchLog $shopSearchLog): self
 {
     if ($this->shopSearchLogCollection->removeElement($shopSearchLog)) {
         // set the owning side to null (unless already changed)
@@ -809,14 +809,14 @@ public function removeShopSearchLogCollection(shopSearchLog $shopSearchLog): sel
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopSuggestArticleLog>
+* @return Collection<int, ShopSuggestArticleLog>
 */
 public function getShopSuggestArticleLogCollection(): Collection
 {
     return $this->shopSuggestArticleLogCollection;
 }
 
-public function addShopSuggestArticleLogCollection(shopSuggestArticleLog $shopSuggestArticleLog): self
+public function addShopSuggestArticleLogCollection(ShopSuggestArticleLog $shopSuggestArticleLog): self
 {
     if (!$this->shopSuggestArticleLogCollection->contains($shopSuggestArticleLog)) {
         $this->shopSuggestArticleLogCollection->add($shopSuggestArticleLog);
@@ -826,7 +826,7 @@ public function addShopSuggestArticleLogCollection(shopSuggestArticleLog $shopSu
     return $this;
 }
 
-public function removeShopSuggestArticleLogCollection(shopSuggestArticleLog $shopSuggestArticleLog): self
+public function removeShopSuggestArticleLogCollection(ShopSuggestArticleLog $shopSuggestArticleLog): self
 {
     if ($this->shopSuggestArticleLogCollection->removeElement($shopSuggestArticleLog)) {
         // set the owning side to null (unless already changed)
@@ -842,14 +842,14 @@ public function removeShopSuggestArticleLogCollection(shopSuggestArticleLog $sho
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopArticleReview>
+* @return Collection<int, ShopArticleReview>
 */
 public function getShopArticleReviewCollection(): Collection
 {
     return $this->shopArticleReviewCollection;
 }
 
-public function addShopArticleReviewCollection(shopArticleReview $shopArticleReview): self
+public function addShopArticleReviewCollection(ShopArticleReview $shopArticleReview): self
 {
     if (!$this->shopArticleReviewCollection->contains($shopArticleReview)) {
         $this->shopArticleReviewCollection->add($shopArticleReview);
@@ -859,7 +859,7 @@ public function addShopArticleReviewCollection(shopArticleReview $shopArticleRev
     return $this;
 }
 
-public function removeShopArticleReviewCollection(shopArticleReview $shopArticleReview): self
+public function removeShopArticleReviewCollection(ShopArticleReview $shopArticleReview): self
 {
     if ($this->shopArticleReviewCollection->removeElement($shopArticleReview)) {
         // set the owning side to null (unless already changed)
@@ -875,14 +875,14 @@ public function removeShopArticleReviewCollection(shopArticleReview $shopArticle
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopWishlist>
+* @return Collection<int, PkgShopWishlist>
 */
 public function getPkgShopWishlistCollection(): Collection
 {
     return $this->pkgShopWishlistCollection;
 }
 
-public function addPkgShopWishlistCollection(pkgShopWishlist $pkgShopWishlist): self
+public function addPkgShopWishlistCollection(PkgShopWishlist $pkgShopWishlist): self
 {
     if (!$this->pkgShopWishlistCollection->contains($pkgShopWishlist)) {
         $this->pkgShopWishlistCollection->add($pkgShopWishlist);
@@ -892,7 +892,7 @@ public function addPkgShopWishlistCollection(pkgShopWishlist $pkgShopWishlist): 
     return $this;
 }
 
-public function removePkgShopWishlistCollection(pkgShopWishlist $pkgShopWishlist): self
+public function removePkgShopWishlistCollection(PkgShopWishlist $pkgShopWishlist): self
 {
     if ($this->pkgShopWishlistCollection->removeElement($pkgShopWishlist)) {
         // set the owning side to null (unless already changed)

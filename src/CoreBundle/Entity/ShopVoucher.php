@@ -19,7 +19,7 @@ private ?ShopVoucherSeries $shopVoucherSeries = null
 /** @var string - Code */
 private string $code = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopVoucherUse> - Voucher usages */
+/** @var Collection<int, ShopVoucherUse> - Voucher usages */
 private Collection $shopVoucherUseCollection = new ArrayCollection()
   ) {}
 
@@ -73,14 +73,14 @@ public function setCode(string $code): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopVoucherUse>
+* @return Collection<int, ShopVoucherUse>
 */
 public function getShopVoucherUseCollection(): Collection
 {
     return $this->shopVoucherUseCollection;
 }
 
-public function addShopVoucherUseCollection(shopVoucherUse $shopVoucherUse): self
+public function addShopVoucherUseCollection(ShopVoucherUse $shopVoucherUse): self
 {
     if (!$this->shopVoucherUseCollection->contains($shopVoucherUse)) {
         $this->shopVoucherUseCollection->add($shopVoucherUse);
@@ -90,7 +90,7 @@ public function addShopVoucherUseCollection(shopVoucherUse $shopVoucherUse): sel
     return $this;
 }
 
-public function removeShopVoucherUseCollection(shopVoucherUse $shopVoucherUse): self
+public function removeShopVoucherUseCollection(ShopVoucherUse $shopVoucherUse): self
 {
     if ($this->shopVoucherUseCollection->removeElement($shopVoucherUse)) {
         // set the owning side to null (unless already changed)

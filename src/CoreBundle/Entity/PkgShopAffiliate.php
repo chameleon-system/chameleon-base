@@ -31,7 +31,7 @@ private string $class = '',
 /** @var string - Class subtype (path relative to ./classes) */
 private string $classSubtype = '', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopAffiliateParameter> - Parameter */
+/** @var Collection<int, PkgShopAffiliateParameter> - Parameter */
 private Collection $pkgShopAffiliateParameterCollection = new ArrayCollection()
   ) {}
 
@@ -141,14 +141,14 @@ public function setClassSubtype(string $classSubtype): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopAffiliateParameter>
+* @return Collection<int, PkgShopAffiliateParameter>
 */
 public function getPkgShopAffiliateParameterCollection(): Collection
 {
     return $this->pkgShopAffiliateParameterCollection;
 }
 
-public function addPkgShopAffiliateParameterCollection(pkgShopAffiliateParameter $pkgShopAffiliateParameter): self
+public function addPkgShopAffiliateParameterCollection(PkgShopAffiliateParameter $pkgShopAffiliateParameter): self
 {
     if (!$this->pkgShopAffiliateParameterCollection->contains($pkgShopAffiliateParameter)) {
         $this->pkgShopAffiliateParameterCollection->add($pkgShopAffiliateParameter);
@@ -158,7 +158,7 @@ public function addPkgShopAffiliateParameterCollection(pkgShopAffiliateParameter
     return $this;
 }
 
-public function removePkgShopAffiliateParameterCollection(pkgShopAffiliateParameter $pkgShopAffiliateParameter): self
+public function removePkgShopAffiliateParameterCollection(PkgShopAffiliateParameter $pkgShopAffiliateParameter): self
 {
     if ($this->pkgShopAffiliateParameterCollection->removeElement($pkgShopAffiliateParameter)) {
         // set the owning side to null (unless already changed)

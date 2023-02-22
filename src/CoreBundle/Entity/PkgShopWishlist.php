@@ -17,11 +17,11 @@ class PkgShopWishlist {
 private ?DataExtranetUser $dataExtranetUser = null
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopWishlistArticle> - Wishlist articles */
+/** @var Collection<int, PkgShopWishlistArticle> - Wishlist articles */
 private Collection $pkgShopWishlistArticleCollection = new ArrayCollection()
 , 
     // TCMSFieldPropertyTable
-/** @var Collection<int, pkgShopWishlistMailHistory> - Wishlist mail history */
+/** @var Collection<int, PkgShopWishlistMailHistory> - Wishlist mail history */
 private Collection $pkgShopWishlistMailHistoryCollection = new ArrayCollection()
   ) {}
 
@@ -61,14 +61,14 @@ public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopWishlistArticle>
+* @return Collection<int, PkgShopWishlistArticle>
 */
 public function getPkgShopWishlistArticleCollection(): Collection
 {
     return $this->pkgShopWishlistArticleCollection;
 }
 
-public function addPkgShopWishlistArticleCollection(pkgShopWishlistArticle $pkgShopWishlistArticle): self
+public function addPkgShopWishlistArticleCollection(PkgShopWishlistArticle $pkgShopWishlistArticle): self
 {
     if (!$this->pkgShopWishlistArticleCollection->contains($pkgShopWishlistArticle)) {
         $this->pkgShopWishlistArticleCollection->add($pkgShopWishlistArticle);
@@ -78,7 +78,7 @@ public function addPkgShopWishlistArticleCollection(pkgShopWishlistArticle $pkgS
     return $this;
 }
 
-public function removePkgShopWishlistArticleCollection(pkgShopWishlistArticle $pkgShopWishlistArticle): self
+public function removePkgShopWishlistArticleCollection(PkgShopWishlistArticle $pkgShopWishlistArticle): self
 {
     if ($this->pkgShopWishlistArticleCollection->removeElement($pkgShopWishlistArticle)) {
         // set the owning side to null (unless already changed)
@@ -94,14 +94,14 @@ public function removePkgShopWishlistArticleCollection(pkgShopWishlistArticle $p
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, pkgShopWishlistMailHistory>
+* @return Collection<int, PkgShopWishlistMailHistory>
 */
 public function getPkgShopWishlistMailHistoryCollection(): Collection
 {
     return $this->pkgShopWishlistMailHistoryCollection;
 }
 
-public function addPkgShopWishlistMailHistoryCollection(pkgShopWishlistMailHistory $pkgShopWishlistMailHistory): self
+public function addPkgShopWishlistMailHistoryCollection(PkgShopWishlistMailHistory $pkgShopWishlistMailHistory): self
 {
     if (!$this->pkgShopWishlistMailHistoryCollection->contains($pkgShopWishlistMailHistory)) {
         $this->pkgShopWishlistMailHistoryCollection->add($pkgShopWishlistMailHistory);
@@ -111,7 +111,7 @@ public function addPkgShopWishlistMailHistoryCollection(pkgShopWishlistMailHisto
     return $this;
 }
 
-public function removePkgShopWishlistMailHistoryCollection(pkgShopWishlistMailHistory $pkgShopWishlistMailHistory): self
+public function removePkgShopWishlistMailHistoryCollection(PkgShopWishlistMailHistory $pkgShopWishlistMailHistory): self
 {
     if ($this->pkgShopWishlistMailHistoryCollection->removeElement($pkgShopWishlistMailHistory)) {
         // set the owning side to null (unless already changed)

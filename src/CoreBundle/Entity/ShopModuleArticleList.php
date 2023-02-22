@@ -40,7 +40,7 @@ private string $numberOfArticles = '-1',
 /** @var string - Number of articles per page */
 private string $numberOfArticlesPerPage = '10', 
     // TCMSFieldPropertyTable
-/** @var Collection<int, shopModuleArticleListArticle> - Show these articles */
+/** @var Collection<int, ShopModuleArticleListArticle> - Show these articles */
 private Collection $shopModuleArticleListArticleCollection = new ArrayCollection()
   ) {}
 
@@ -167,14 +167,14 @@ public function setNumberOfArticlesPerPage(string $numberOfArticlesPerPage): sel
   
     // TCMSFieldPropertyTable
 /**
-* @return Collection<int, shopModuleArticleListArticle>
+* @return Collection<int, ShopModuleArticleListArticle>
 */
 public function getShopModuleArticleListArticleCollection(): Collection
 {
     return $this->shopModuleArticleListArticleCollection;
 }
 
-public function addShopModuleArticleListArticleCollection(shopModuleArticleListArticle $shopModuleArticleListArticle): self
+public function addShopModuleArticleListArticleCollection(ShopModuleArticleListArticle $shopModuleArticleListArticle): self
 {
     if (!$this->shopModuleArticleListArticleCollection->contains($shopModuleArticleListArticle)) {
         $this->shopModuleArticleListArticleCollection->add($shopModuleArticleListArticle);
@@ -184,7 +184,7 @@ public function addShopModuleArticleListArticleCollection(shopModuleArticleListA
     return $this;
 }
 
-public function removeShopModuleArticleListArticleCollection(shopModuleArticleListArticle $shopModuleArticleListArticle): self
+public function removeShopModuleArticleListArticleCollection(ShopModuleArticleListArticle $shopModuleArticleListArticle): self
 {
     if ($this->shopModuleArticleListArticleCollection->removeElement($shopModuleArticleListArticle)) {
         // set the owning side to null (unless already changed)
