@@ -34,7 +34,7 @@ class AuthenticityTokenStorage implements ClearableTokenStorageInterface
         $this->namespace = $namespace;
     }
 
-    public function clear()
+    public function clear(): void
     {
         $session = $this->getSession();
         if (null === $session) {
