@@ -9,11 +9,54 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+
 /**
  * a number (int).
 /**/
-class TCMSFieldNumber extends TCMSFieldVarchar
+class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableInterface
 {
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $defaultValue = $this->oDefinition->sqlData['field_default_value'];
+        if ('' === $defaultValue) {
+            $defaultValue = '0';
+        }
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => 'int',
+            'docCommentType' => 'int',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("%s", addslashes($defaultValue)),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [],
+            true
+        );
+    }
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        return $this->getDoctrineRenderer('mapping/integer.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'integer',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+        ])->render();
+    }
+
     public function GetHTML()
     {
         $html = '<input class="fieldnumber form-control form-control-sm" type="text" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data).'" />';
