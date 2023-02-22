@@ -85,7 +85,8 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
                 $namespace,
                 $this->snakeToCamelCase($this->GetConnectedTableName(), false)
             ),
-            'column' => $this->name
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
         ])->render();
 
         return $lookupFieldMapping."\n".$additionalFieldMapping;

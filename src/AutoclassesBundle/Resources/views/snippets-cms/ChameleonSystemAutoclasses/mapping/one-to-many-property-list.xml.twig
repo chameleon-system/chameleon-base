@@ -1,3 +1,6 @@
 <one-to-many field="{{ fieldName }}" target-entity="{{ targetClass }}" mapped-by="{{ parentFieldName }}" orphan-removal="true">
+    <options>
+        <option name="comment">{{ comment }}</option>
+    </options>
     <cascade-persist/>
 </one-to-many>

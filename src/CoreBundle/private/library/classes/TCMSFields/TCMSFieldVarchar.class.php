@@ -64,6 +64,8 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
             'fieldName' => $this->snakeToCamelCase($this->name),
             'type' => 'string',
             'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
             'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
         ])->render();
     }
