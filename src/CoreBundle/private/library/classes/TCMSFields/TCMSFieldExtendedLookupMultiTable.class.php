@@ -16,6 +16,7 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\Common\Collections\Expr\Comparison;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * Lookup to different tables.
@@ -25,6 +26,80 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     const TABLE_NAME_FIELD_SUFFIX = '_table_name';
 
     const FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
+
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        // todo: we currently handle this field as two string fields - we may be able to replace this with single table inheritance von doctrine
+        // https://www.doctrine-project.org/projects/doctrine-orm/en/2.14/reference/inheritance-mapping.html#entity-inheritance
+        // alternatively we may need to use a relation that maps the type
+        // item_link[source_id, target_id, type].
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => 'string',
+            'docCommentType' => 'string',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        $idField = new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [],
+            true
+        );
+
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => 'string',
+            'docCommentType' => 'string',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->getTableFieldName()),
+            'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->getTableFieldName(), false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->getTableFieldName(), false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        $tableNameField = new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [],
+            true
+        );
+
+        return $idField->merge($tableNameField);
+
+
+    }
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        $idMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'string',
+            'column' => $this->name,
+            'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
+        ])->render();
+
+        $tableNameMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->getTableFieldName()),
+            'type' => 'string',
+            'column' => $this->getTableFieldName(),
+            'length' => '255',
+        ])->render();
+
+        return $idMapping. "\n" .$tableNameMapping;
+
+    }
 
     /**
      * returns the name of the table this field is connected with
