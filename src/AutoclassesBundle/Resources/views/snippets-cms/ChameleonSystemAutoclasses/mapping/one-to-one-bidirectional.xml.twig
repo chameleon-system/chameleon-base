@@ -1,2 +1,8 @@
 {#https://www.doctrine-project.org/projects/doctrine-orm/en/2.14/reference/association-mapping.html#one-to-one-bidirectional#}
-<one-to-one field="cart" target-entity="Cart" mapped-by="customer" />
+<one-to-one field="{{ fieldName }}" target-entity="{{ targetClass }}" mapped-by="{{ parentFieldName }}">
+    {% if enableCascadeRemove %}
+        <cascade>
+            <cascade-remove/>
+        </cascade>
+    {% endif %}
+</one-to-one>

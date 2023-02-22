@@ -40,7 +40,6 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         if (stringEndsWith($parentFieldName, '_id')) {
             $parentFieldName = substr($parentFieldName, 0, -3);
         }
-
         $parameters = [
             'source' => __CLASS__,
             'type' => $this->snakeToCamelCase($this->GetPropertyTableName(), false),
@@ -50,8 +49,16 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
         ];
         $parameters['docCommentType'] = sprintf('Collection<int, %s>', $parameters['type']);
-        $propertyCode = $this->getDoctrineRenderer('model/property-list.property.php.twig', $parameters)->render();
-        $methodCode = $this->getDoctrineRenderer('model/property-list.methods.php.twig', $parameters)->render();
+
+        $oneToOneRelation = $this->isOneToOneConnection();
+
+        if (true === $oneToOneRelation) {
+            $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
+            $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();
+        } else {
+            $propertyCode = $this->getDoctrineRenderer('model/property-list.property.php.twig', $parameters)->render();
+            $methodCode = $this->getDoctrineRenderer('model/property-list.methods.php.twig', $parameters)->render();
+        }
 
         return new DataModelParts(
             $propertyCode,
@@ -68,15 +75,33 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
     public function getDoctrineDataModelXml(string $namespace): string
     {
+        $preventReferenceDelete = $this->oDefinition->GetFieldtypeConfigKey('preventReferenceDeletion') ?? 'false';
+        $enableCascadeRemove = 'false' === $preventReferenceDelete;
+
+        $oneToOneRelation = $this->isOneToOneConnection();
+
+
         $parentFieldName = $this->GetMatchingParentFieldName();
         if (stringEndsWith($parentFieldName, '_id')) {
             $parentFieldName = substr($parentFieldName, 0, -3);
         }
-        return $this->getDoctrineRenderer('mapping/one-to-many-property-list.xml.twig', [
+        $parameters = [
             'fieldName' => $this->snakeToCamelCase($this->name.'_collection'),
-            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false)),
+            'targetClass' => sprintf(
+                '%s\\%s',
+                $namespace,
+                $this->snakeToCamelCase($this->GetPropertyTableName(), false)
+            ),
             'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
-        ])->render();
+            'enableCascadeRemove' => $enableCascadeRemove,
+        ];
+
+        $viewName = 'mapping/one-to-many-property-list.xml.twig';
+        if (true === $oneToOneRelation) {
+            $viewName = 'mapping/one-to-one-bidirectional.xml.twig';
+        }
+
+        return $this->getDoctrineRenderer($viewName, $parameters)->render();
     }
 
     public function __construct()
@@ -175,6 +200,15 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         $sOnClickEvent = "CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState('".TGlobal::OutJS($this->name)."_iframe','".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aEditorRequest)."');";
 
         return $sOnClickEvent;
+    }
+
+    private function isOneToOneConnection(): bool
+    {
+        /** @var $oForeignTableConf TCMSTableConf */
+        $oForeignTableConf = new TCMSTableConf();
+        $sPropertyTableName = $this->GetPropertyTableName();
+        $oForeignTableConf->LoadFromField('name', $sPropertyTableName);
+        return 'true' === $this->oDefinition->GetFieldtypeConfigKey('bOnlyOneRecord') || '1' === $oForeignTableConf->sqlData['only_one_record_tbl'];
     }
 
     /**
