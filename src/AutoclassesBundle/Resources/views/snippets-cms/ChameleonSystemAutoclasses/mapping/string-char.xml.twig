@@ -3,6 +3,6 @@
     <options>
         <option name="fixed">true</option>
         <option name="comment">{{ comment }}</option>
-        <option name="default">{{ default }}</option>
+        {% if default is defined %}<option name="default">{{ default }}</option>{% endif %}
     </options>
 </field>

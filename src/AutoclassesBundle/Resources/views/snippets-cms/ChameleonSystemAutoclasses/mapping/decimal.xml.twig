@@ -1,5 +1,5 @@
 {# @var definition array #}
-<field name="{{ fieldName }}" type="{{ type }}" column="{{ column }}" nullable="false" >
+<field name="{{ fieldName }}" type="decimal" column="{{ column }}" length="{{ length }}" nullable="false" precision="{{ precision }}" scale="{{ scale }}" >
     <options>
         <option name="comment">{{ comment }}</option>
         {% if default is defined %}<option name="default">{{ default }}</option>{% endif %}
