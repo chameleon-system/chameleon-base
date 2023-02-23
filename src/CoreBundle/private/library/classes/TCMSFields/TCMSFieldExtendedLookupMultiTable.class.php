@@ -35,7 +35,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         // alternatively we may need to use a relation that maps the type
         // item_link[source_id, target_id, type].
         $parameters = [
-            'source' => __CLASS__,
+            'source' => get_class($this),
             'type' => 'string',
             'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],
@@ -56,7 +56,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         );
 
         $parameters = [
-            'source' => __CLASS__,
+            'source' => get_class($this),
             'type' => 'string',
             'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],

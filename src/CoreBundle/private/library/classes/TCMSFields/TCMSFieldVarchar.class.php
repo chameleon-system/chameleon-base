@@ -37,7 +37,7 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
     public function getDoctrineDataModelParts(string $namespace): DataModelParts
     {
         $parameters = [
-            'source' => __CLASS__,
+            'source' => get_class($this),
             'type' => 'string',
             'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],

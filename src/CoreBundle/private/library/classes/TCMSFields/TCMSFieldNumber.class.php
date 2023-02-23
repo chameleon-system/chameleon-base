@@ -25,7 +25,7 @@ class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableI
             $defaultValue = '0';
         }
         $parameters = [
-            'source' => __CLASS__,
+            'source' => get_class($this),
             'type' => 'int',
             'docCommentType' => 'int',
             'description' => $this->oDefinition->sqlData['translation'],

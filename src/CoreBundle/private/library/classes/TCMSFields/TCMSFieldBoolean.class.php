@@ -27,7 +27,7 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
         }
 
         $parameters = [
-            'source' => __CLASS__,
+            'source' => get_class($this),
             'type' => 'bool',
             'docCommentType' => 'bool',
             'description' => $this->oDefinition->sqlData['translation'],
