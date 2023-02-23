@@ -1,6 +1,6 @@
 <field name="{{ propertyIdName }}" type="string" field="{{ fieldNameId }}" length="36">
     <options>
-        <option name="default"></option>
+        {% if default is defined %}<option name="default">{{ default }}</option>{% endif %}
     </options>
 </field>
 <many-to-one field="{{ propertyObjectName }}" target-entity="{{ targetClass }}">
