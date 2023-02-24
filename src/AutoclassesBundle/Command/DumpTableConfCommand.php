@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DumpTableConfCommand extends Command
 {
-    private const ENTITY_NAMESPACE = '\ChameleonSystem\CoreBundle\Entity';
+    private const ENTITY_NAMESPACE = '\ChameleonSystem\DataAccessBundle\Entity';
 
     public function __construct(
         private readonly TableConfExporterInterface $tableConfExporter,
@@ -27,8 +27,8 @@ class DumpTableConfCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $tables = $this->tableConfExporter->getTables();
-        $targetDir = $this->projectPath.'/vendor/chameleon-system/chameleon-base/src/CoreBundle/Entity';
-        $mappingDir = $this->projectPath.'/vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/config/doctrine';
+        $targetDir = $this->projectPath.'/vendor/chameleon-system/chameleon-base/src/DataAccessBundle/src/Entity';
+        $mappingDir = $this->projectPath.'/vendor/chameleon-system/chameleon-base/src/DataAccessBundle/config/doctrine';
         if (false===is_dir($targetDir)) {
             if (!mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
                 throw new \RuntimeException(sprintf('Directory "%s" was not created', $targetDir));
