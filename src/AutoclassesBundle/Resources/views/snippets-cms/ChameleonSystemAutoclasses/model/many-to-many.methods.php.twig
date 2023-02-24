@@ -1,0 +1,32 @@
+{% autoescape false %}
+// {{ source }}
+/**
+* @return {{ docCommentType }}
+*/
+public function get{{ propertyName |chameleon_ucfirst  }}(): Collection
+{
+    return $this->{{ propertyName }};
+}
+
+public function add{{ propertyName |chameleon_ucfirst  }}({{ type }} ${{ methodParameter }}): self
+{
+    if (!$this->{{ propertyName }}->contains(${{ methodParameter }})) {
+        $this->{{ propertyName }}->add(${{ methodParameter }});
+        ${{ methodParameter }}->set{{parentFieldName|chameleon_ucfirst  }}($this);
+    }
+
+    return $this;
+}
+
+public function remove{{ propertyName |chameleon_ucfirst  }}({{ type }} ${{ methodParameter }}): self
+{
+    if ($this->{{ propertyName }}->removeElement(${{ methodParameter }})) {
+        // set the owning side to null (unless already changed)
+        if (${{ methodParameter }}->get{{parentFieldName|chameleon_ucfirst  }}() === $this) {
+            ${{ methodParameter }}->set{{parentFieldName|chameleon_ucfirst  }}(null);
+        }
+    }
+
+    return $this;
+}
+{% endautoescape %}
