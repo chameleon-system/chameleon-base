@@ -10,9 +10,63 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+use function PHPUnit\Framework\stringEndsWith;
 
-abstract class TCMSMLTField extends TCMSField
+abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableInterface
 {
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_mlt')) {
+            $propertyName = substr($propertyName, 0, -4);
+        }
+        $targetClass = $this->snakeToCamelCase($this->GetForeignTableName(), false);
+        $parameters = [
+            'source' => get_class($this),
+            'type' => $targetClass,
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($propertyName.'_collection'),
+            'methodParameter' => $this->snakeToCamelCase($this->name),
+        ];
+        $parameters['docCommentType'] = sprintf('Collection<int, %s>', $parameters['type']);
+
+        $propertyCode = $this->getDoctrineRenderer('model/many-to-many.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/many-to-many.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [
+                ltrim(sprintf('%s\\%s', $namespace, $targetClass), '\\'),
+                'Doctrine\\Common\\Collections\\Collection',
+                'Doctrine\\Common\\Collections\\ArrayCollection',
+            ],
+            true
+        );
+    }
+
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_mlt')) {
+            $propertyName = substr($propertyName, 0, -4);
+        }
+
+        $viewName = 'mapping/many-to-many.xml.twig';
+
+        return $this->getDoctrineRenderer($viewName, [
+            'fieldName' => $this->snakeToCamelCase($propertyName.'_collection'),
+            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+            'joinTable' => $this->GetMLTTableName(),
+            'comment' => $this->oDefinition->sqlData['translation'],
+
+        ])->render();
+    }
+
+
     public function __construct()
     {
         $this->isMLTField = true;
