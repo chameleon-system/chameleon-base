@@ -9,15 +9,59 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+
 /**
  * a long text field.
 /**/
-class TCMSFieldText extends TCMSField
+class TCMSFieldText extends TCMSField implements DoctrineTransformableInterface
 {
     /**
      * view path for frontend.
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldText';
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'string',
+            'docCommentType' => 'string',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            [],
+            true
+        );
+    }
+
+    public function getDoctrineDataModelXml(string $namespace): string
+    {
+        $parameter = [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'text',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+
+        ];
+        if ('' !== $this->oDefinition->sqlData['field_default_value']) {
+            $parameter['default'] = $this->oDefinition->sqlData['field_default_value'];
+        }
+
+        return $this->getDoctrineRenderer('mapping/text.xml.twig', $parameter)->render();
+    }
+
 
     /**
      * {@inheritdoc}
