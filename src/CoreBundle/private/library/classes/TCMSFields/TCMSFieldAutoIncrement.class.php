@@ -22,9 +22,4 @@ class TCMSFieldAutoIncrement extends TCMSFieldNumber
     {
         throw new Exception('TCMSFieldAutoIncrement not implemented yet');
     }
-
-    public function getDoctrineDataModelXml(string $namespace): string
-    {
-        throw new Exception('TCMSFieldAutoIncrement not implemented yet');
-    }
 }

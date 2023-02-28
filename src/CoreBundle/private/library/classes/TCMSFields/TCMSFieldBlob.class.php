@@ -36,12 +36,13 @@ class TCMSFieldBlob extends TCMSFieldText
         return new DataModelParts(
             $propertyCode,
             $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
             [],
             true
         );
     }
 
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         $parameter = [
             'fieldName' => $this->snakeToCamelCase($this->name),

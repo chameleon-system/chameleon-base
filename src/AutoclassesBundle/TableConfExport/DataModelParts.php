@@ -7,8 +7,11 @@ class DataModelParts
     public function __construct(
         private readonly string $property,
         private readonly string $methods,
-        private readonly array $includes = [],
-        private readonly bool $defaultValue = false
+        private readonly string $mappingXml,
+        private readonly array $classImports = [],
+        private readonly bool $defaultValue = false,
+        /** @var array<string, string> - key is the event, value the method */
+        private readonly array $liveCycleCallbacks = []
     ) {
     }
 
@@ -16,11 +19,30 @@ class DataModelParts
     {
         return new DataModelParts(
             implode(",\n", [$this->property, $additional->property]),
-            implode("\n", [$this->methods . $additional->methods]),
-            array_merge($this->includes, $additional->includes),
-            $this->defaultValue || $additional->defaultValue
+            implode("\n", [$this->methods.$additional->methods]),
+            sprintf("%s\n%s", $this->mappingXml, $additional->mappingXml),
+            array_merge($this->classImports, $additional->classImports),
+            $this->defaultValue || $additional->defaultValue,
+            array_merge($this->liveCycleCallbacks, $additional->liveCycleCallbacks)
         );
     }
+
+    /**
+     * @return string
+     */
+    public function getMappingXml(): string
+    {
+        return $this->mappingXml;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLiveCycleCallbacks(): array
+    {
+        return $this->liveCycleCallbacks;
+    }
+
 
     /**
      * @return string
@@ -41,9 +63,9 @@ class DataModelParts
     /**
      * @return array
      */
-    public function getIncludes(): array
+    public function getClassImports(): array
     {
-        return $this->includes;
+        return $this->classImports;
     }
 
 

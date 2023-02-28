@@ -51,6 +51,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $idField = new DataModelParts(
             $propertyCode,
             $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
             [],
             true
         );
@@ -71,7 +72,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
         $tableNameField = new DataModelParts(
             $propertyCode,
-            $methodCode,
+            $methodCode, '',
             [],
             true
         );
@@ -81,7 +82,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
     }
 
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         $idMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),

@@ -38,6 +38,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
         return new DataModelParts(
             $propertyCode,
             $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
             [
                 ltrim(sprintf('%s\\%s', $namespace, $targetClass), '\\'),
                 'Doctrine\\Common\\Collections\\Collection',
@@ -48,7 +49,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
     }
 
 
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         $propertyName = $this->name;
         if (stringEndsWith($propertyName, '_mlt')) {

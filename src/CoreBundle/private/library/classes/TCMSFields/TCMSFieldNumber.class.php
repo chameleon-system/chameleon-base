@@ -41,12 +41,13 @@ class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableI
         return new DataModelParts(
             $propertyCode,
             $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
             [],
             true
         );
     }
 
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         return $this->getDoctrineRenderer('mapping/integer.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),

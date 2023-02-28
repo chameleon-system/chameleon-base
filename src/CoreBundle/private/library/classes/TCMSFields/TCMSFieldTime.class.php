@@ -20,10 +20,6 @@ class TCMSFieldTime extends TCMSFieldNumber
         throw new Exception('TCMSFieldTime not implemented yet');
     }
 
-    public function getDoctrineDataModelXml(string $namespace): string
-    {
-        throw new Exception('TCMSFieldTime not implemented yet');
-    }
     /**
      * {@inheritdoc}
      */

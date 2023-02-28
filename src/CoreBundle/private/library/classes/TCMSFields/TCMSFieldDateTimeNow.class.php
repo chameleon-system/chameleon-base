@@ -39,6 +39,7 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
         return new DataModelParts(
             $propertyCode,
             $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
             [],
             true
         );
