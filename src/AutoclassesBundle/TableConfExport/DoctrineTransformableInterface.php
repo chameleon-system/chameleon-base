@@ -10,8 +10,4 @@ interface DoctrineTransformableInterface
      */
     public function getDoctrineDataModelParts(string $namespace): DataModelParts;
 
-    /**
-     * return the xml config for the doctrine entity.
-     */
-    public function getDoctrineDataModelXml(string $namespace): string;
 }

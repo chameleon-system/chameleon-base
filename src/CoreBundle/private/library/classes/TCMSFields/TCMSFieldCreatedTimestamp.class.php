@@ -14,7 +14,7 @@
 /**/
 class TCMSFieldCreatedTimestamp extends TCMSFieldTimestamp
 {
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         return $this->getDoctrineRenderer('mapping/datetime.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),

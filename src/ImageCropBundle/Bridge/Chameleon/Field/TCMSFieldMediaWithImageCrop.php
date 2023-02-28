@@ -57,8 +57,12 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $cropImageDef = new DataModelParts(
             $propertyCode,
             $methodCode,
+            '',
             [
-                ltrim(sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)), '\\'),
+                ltrim(
+                    sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+                    '\\'
+                ),
             ],
             true
         );
@@ -67,7 +71,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
     }
 
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         $lookupFieldMapping =  parent::getDoctrineDataModelXml($namespace);
 

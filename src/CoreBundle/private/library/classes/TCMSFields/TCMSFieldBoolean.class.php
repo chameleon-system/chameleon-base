@@ -43,12 +43,13 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
         return new DataModelParts(
             $propertyCode,
             $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
             [],
             true
         );
     }
 
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         $default = $this->oDefinition->sqlData['field_default_value'];
         if ('' === $default) {

@@ -36,17 +36,12 @@ class TableConfExporter implements TableConfExporterInterface
         }
         $fields = [];
         $dataModelPartsList = [];
-        $propertyMappings = [];
         $fieldConfig->GoToStart();
         while ($field = $fieldConfig->Next()) {
             if (false === $field instanceof DoctrineTransformableInterface) {
                 continue;
             }
             $fields[] = $field;
-            $propertyMapping = $field->getDoctrineDataModelXml($namespace);
-            if (null !== $propertyMapping) {
-                $propertyMappings[] = $propertyMapping;
-            }
 
             $dataModelParts = $field->getDoctrineDataModelParts($namespace);
             if (null === $dataModelParts) {
@@ -57,8 +52,22 @@ class TableConfExporter implements TableConfExporterInterface
         $className = $this->snakeToCamelCase($tableConf['name'], false);
         $fqn = sprintf('%s\%s', $namespace, $className);
 
-        $dataModelCode = $this->generateDataModelCode($tableConf, $className, $fqn, $namespace, $fields, $dataModelPartsList);
-        $dataModelMapping = $this->generateDataModelMapping($tableConf, $className, $fqn, $namespace, $fields, $propertyMappings);
+        $dataModelCode = $this->generateDataModelCode(
+            $tableConf,
+            $className,
+            $fqn,
+            $namespace,
+            $fields,
+            $dataModelPartsList
+        );
+        $dataModelMapping = $this->generateDataModelMapping(
+            $tableConf,
+            $className,
+            $fqn,
+            $namespace,
+            $fields,
+            $dataModelPartsList
+        );
 
         file_put_contents($targetDir.'/'.$className.'.php', $dataModelCode);
         file_put_contents($mappingDir.'/'.$className.'.orm.xml', $dataModelMapping);
@@ -73,7 +82,7 @@ class TableConfExporter implements TableConfExporterInterface
      * @param string $fqn
      * @param string $namespace
      * @param \TCMSField[] $fields
-     * @param array<string> $classProperties
+     * @param DataModelParts[] $classProperties
      * @return string
      * @throws \TPkgSnippetRenderer_SnippetRenderingException
      */
@@ -96,7 +105,7 @@ class TableConfExporter implements TableConfExporterInterface
         $oSnippetRenderer->setVar('fqn', ltrim($fqn , '\\'));
         $oSnippetRenderer->setVar('namespace', ltrim($namespace, '\\'));
         $oSnippetRenderer->setVar('fields', $fields);
-        $oSnippetRenderer->setVar('propertyMappings', $propertyMappings);
+        $oSnippetRenderer->setVar('propertyMappings', array_map(static fn(DataModelParts $part) => $part->getMappingXml(), $propertyMappings));
 
         $content = $oSnippetRenderer->render();
 
@@ -137,7 +146,7 @@ class TableConfExporter implements TableConfExporterInterface
         $selfName = ltrim(sprintf('%s\%s', $namespace, $className), '\\');
         $imports = [];
         foreach ($dataModelPartsList as $dataModel) {
-            foreach ($dataModel->getIncludes() as $include) {
+            foreach ($dataModel->getClassImports() as $include) {
                 if ($include === $selfName) {
                     continue;
                 }

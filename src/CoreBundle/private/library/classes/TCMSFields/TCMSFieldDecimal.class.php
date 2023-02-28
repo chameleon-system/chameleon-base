@@ -48,12 +48,13 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
         return new DataModelParts(
             $propertyCode,
             $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
             [],
             true
         );
     }
 
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         $lengthData = $this->oDefinition->sqlData['length_set'];
         if ('' === $lengthData) {

@@ -70,15 +70,19 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         return new DataModelParts(
             $propertyCode,
             $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
             [
-                ltrim(sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)), '\\'),
+                ltrim(
+                    sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+                    '\\'
+                ),
             ],
             true
         );
     }
 
 
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         $propertyName = $this->name;
         if (stringEndsWith($propertyName, '_id')) {

@@ -63,8 +63,12 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         return new DataModelParts(
             $propertyCode,
             $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
             [
-                ltrim(sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false)), '\\'),
+                ltrim(
+                    sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false)),
+                    '\\'
+                ),
                 'Doctrine\\Common\\Collections\\Collection',
                 'Doctrine\\Common\\Collections\\ArrayCollection',
             ],
@@ -73,7 +77,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
     }
 
 
-    public function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
         $preventReferenceDelete = $this->oDefinition->GetFieldtypeConfigKey('preventReferenceDeletion') ?? 'false';
         $enableCascadeRemove = 'false' === $preventReferenceDelete;
