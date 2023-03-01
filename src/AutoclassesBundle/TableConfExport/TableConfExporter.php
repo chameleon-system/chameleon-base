@@ -106,10 +106,9 @@ class TableConfExporter implements TableConfExporterInterface
         $oSnippetRenderer->setVar('namespace', ltrim($namespace, '\\'));
         $oSnippetRenderer->setVar('fields', $fields);
         $oSnippetRenderer->setVar('propertyMappings', array_map(static fn(DataModelParts $part) => $part->getMappingXml(), $propertyMappings));
+        $oSnippetRenderer->setVar('liveCycleCallbacks', array_map(static fn(DataModelParts $part) => $part->getLiveCycleCallbacks(), $propertyMappings));
 
-        $content = $oSnippetRenderer->render();
-
-        return $content;
+        return $oSnippetRenderer->render();
     }
 
     /**

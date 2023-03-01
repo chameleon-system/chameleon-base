@@ -10,20 +10,29 @@ class DataModelParts
         private readonly string $mappingXml,
         private readonly array $classImports = [],
         private readonly bool $defaultValue = false,
-        /** @var array<string, string> - key is the event, value the method */
+        /** @var array<string, array<string>> - key is the event, value a list of methods */
         private readonly array $liveCycleCallbacks = []
     ) {
     }
 
     public function merge(DataModelParts $additional): DataModelParts
     {
+
+        $liveCycleCallbacks = $this->liveCycleCallbacks;
+        foreach ($additional->liveCycleCallbacks as $event => $methods) {
+            $newListOfMethods = $this->liveCycleCallbacks[$event] ?? [];
+            array_push($newListOfMethods, ...$methods);
+            $newListOfMethods = array_unique($newListOfMethods);
+            $liveCycleCallbacks[$event] = $newListOfMethods;
+        }
+
         return new DataModelParts(
             implode(",\n", [$this->property, $additional->property]),
             implode("\n", [$this->methods.$additional->methods]),
             sprintf("%s\n%s", $this->mappingXml, $additional->mappingXml),
             array_merge($this->classImports, $additional->classImports),
             $this->defaultValue || $additional->defaultValue,
-            array_merge($this->liveCycleCallbacks, $additional->liveCycleCallbacks)
+            $liveCycleCallbacks
         );
     }
 
