@@ -9,8 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 class TCMSFieldEncodedData extends TCMSFieldBlob
 {
+    // todo custom type is not an option. Instead we need to add a prePersist and postLoad lifecycle hook.
+    // doctrine itself does not recommand using the database for encryption/decryption https://github.com/doctrine/orm/issues/1744
+
+
     public function ConvertDataToFieldBasedData($sData)
     {
         $sData = parent::ConvertDataToFieldBasedData($sData);

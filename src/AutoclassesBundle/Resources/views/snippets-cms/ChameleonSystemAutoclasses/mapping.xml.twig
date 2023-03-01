@@ -29,6 +29,16 @@
             {{ propertyMapping | raw }}
         {%- endfor %}
 
+        {% if liveCycleCallbacks|length > 0 %}
+        <lifecycle-callbacks>
+            {% for event, methodList in liveCycleCallbacks %}
+                {% for method in methodList %}
+                    <lifecycle-callback type="{{ event }}" method="{{ method }}"/>
+                {% endfor %}
+            {% endfor %}
+        </lifecycle-callbacks>
+        {% endif %}
+
     </entity>
 
 </doctrine-mapping>
