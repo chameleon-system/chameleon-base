@@ -19,6 +19,8 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
  */
 class TCMSFieldPortalLanguageMatrix extends TCMSField
 {
+    // todo - doctrine transformation
+
     /**
      * indicates if GetHTML should render the form in read only mode.
      *

@@ -17,6 +17,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**/
 class TCMSFieldOption extends TCMSField
 {
+    // todo - doctrine transformation
+
     /**
      * array of options to list in the select box.
      *

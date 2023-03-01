@@ -16,6 +16,8 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 /**/
 class TCMSFieldTablefieldname extends TCMSFieldOption
 {
+    // todo - doctrine transformation
+
     public function GetOptions()
     {
         // use the field name to make a lookup of the right table

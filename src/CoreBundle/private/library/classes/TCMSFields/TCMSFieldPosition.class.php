@@ -16,6 +16,8 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 /**/
 class TCMSFieldPosition extends TCMSField
 {
+    // todo - doctrine transformation
+
     /**
      * conf of the table holding the position field.
      *

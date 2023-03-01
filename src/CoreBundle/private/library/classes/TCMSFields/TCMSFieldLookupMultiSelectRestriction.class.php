@@ -15,6 +15,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
 {
+    // todo - doctrine transformation
+
     const INVERSE_EMPTY_FIELD_NAME_POST_NAME = '_inverse_empty';
 
     /**

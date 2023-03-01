@@ -21,6 +21,8 @@
 /**/
 class TCMSFieldLookupDirectory extends TCMSField
 {
+    // todo - doctrine transformation
+
     public function GetHTML()
     {
         $this->GetOptions();

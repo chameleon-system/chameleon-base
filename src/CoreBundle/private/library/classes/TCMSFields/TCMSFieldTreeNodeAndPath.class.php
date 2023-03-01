@@ -18,6 +18,7 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 /**/
 class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
 {
+    // todo - doctrine transformation
 
     /**
      * changes an existing field definition (alter table).

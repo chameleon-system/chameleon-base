@@ -18,6 +18,8 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 /**/
 class TCMSFieldTreeNode extends TCMSField
 {
+    // todo - doctrine transformation
+
     public function GetHTML()
     {
         $path = $this->_GetTreePath();

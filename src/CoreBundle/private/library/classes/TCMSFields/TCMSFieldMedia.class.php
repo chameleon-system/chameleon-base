@@ -16,6 +16,8 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 /**/
 class TCMSFieldMedia extends \TCMSField
 {
+    // todo - doctrine transformation
+
     /**
      * view path for frontend.
      */
