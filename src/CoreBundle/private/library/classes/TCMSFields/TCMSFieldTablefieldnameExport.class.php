@@ -14,6 +14,8 @@
 /**/
 class TCMSFieldTablefieldnameExport extends TCMSFieldTablefieldname
 {
+    // todo - doctrine transformation
+
     public function GetOptions()
     {
         $profileID = $this->oTableRow->sqlData['cms_export_profiles_id'];

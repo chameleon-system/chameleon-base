@@ -14,6 +14,8 @@
 /**/
 class TCMSFieldIconList extends TCMSField
 {
+    // todo - doctrine transformation
+
     public function GetHTML()
     {
         $image = $this->_GetHTMLValue();

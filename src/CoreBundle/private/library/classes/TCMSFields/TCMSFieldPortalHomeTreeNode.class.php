@@ -16,6 +16,8 @@
  */
 class TCMSFieldPortalHomeTreeNode extends TCMSFieldTreeNode
 {
+    // todo - doctrine transformation
+
     public function _GetOpenWindowJS()
     {
         $js = "loadHomeTreeNodeSelection('".TGlobal::OutHTML($this->name)."')";

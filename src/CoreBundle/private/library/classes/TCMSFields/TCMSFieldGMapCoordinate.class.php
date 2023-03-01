@@ -14,6 +14,8 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 class TCMSFieldGMapCoordinate extends TCMSField
 {
+    // todo - doctrine transformation
+
     /**
      * {@inheritdoc}
      */

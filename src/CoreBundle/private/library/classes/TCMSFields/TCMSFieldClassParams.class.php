@@ -20,6 +20,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 /**/
 class TCMSFieldClassParams extends TCMSField
 {
+    // todo - doctrine transformation
     public function GetHTML()
     {
         parent::GetHTML();

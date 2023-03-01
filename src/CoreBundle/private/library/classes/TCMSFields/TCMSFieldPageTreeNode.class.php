@@ -16,6 +16,8 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
 {
+    // todo - doctrine transformation
+
     /**
      * @var string
      */

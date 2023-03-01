@@ -14,6 +14,8 @@
 /**/
 class TCMSFieldTimezone extends TCMSField
 {
+    // todo - doctrine transformation
+
     public function GetHTML()
     {
         $value = $this->_GetHTMLValue();

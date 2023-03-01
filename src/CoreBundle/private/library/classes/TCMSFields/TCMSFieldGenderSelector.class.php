@@ -16,6 +16,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**/
 class TCMSFieldGenderSelector extends TCMSFieldOption
 {
+    // todo - doctrine transformation
+
     /**
      * {@inheritdoc}
      */

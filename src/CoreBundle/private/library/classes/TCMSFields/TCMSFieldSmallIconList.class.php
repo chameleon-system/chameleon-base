@@ -14,6 +14,8 @@
 /**/
 class TCMSFieldSmallIconList extends TCMSFieldIconList
 {
+    // todo - doctrine transformation
+
     protected function _GetModulePagedef()
     {
         return 'CMSsmallIconlist';
