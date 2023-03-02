@@ -10,13 +10,13 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 
 /**
  * The image pool.
 /**/
-class TCMSFieldMedia extends \TCMSField
+class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterface
 {
-    // todo - doctrine transformation
 
     /**
      * view path for frontend.
@@ -35,6 +35,44 @@ class TCMSFieldMedia extends \TCMSField
      */
     public $oTableConf = null;
 
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $default = explode(',', $this->oDefinition->sqlData['field_default_value']);
+        $defaultEscaped = array_map(static fn(string $item) => sprintf("'%s'", trim($item)), $default);
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'array',
+            'docCommentType' => 'array<string>',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf('[%s]',implode(', ',$defaultEscaped)),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        return $this->getDoctrineRenderer('mapping/string.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'simple_array',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+            'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
+        ])->render();
+    }
 
     public function GetReadOnly()
     {

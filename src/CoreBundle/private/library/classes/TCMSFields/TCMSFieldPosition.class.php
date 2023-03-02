@@ -10,13 +10,13 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 
 /**
  * std varchar text field (max 255 chars).
 /**/
-class TCMSFieldPosition extends TCMSField
+class TCMSFieldPosition extends TCMSField implements DoctrineTransformableInterface
 {
-    // todo - doctrine transformation
 
     /**
      * conf of the table holding the position field.
@@ -24,6 +24,47 @@ class TCMSFieldPosition extends TCMSField
      * @var TCMSTableConf
      */
     protected $oTableConf = null;
+
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $defaultValue = $this->oDefinition->sqlData['field_default_value'];
+        if ('' === $defaultValue) {
+            $defaultValue = '0';
+        }
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'int',
+            'docCommentType' => 'int',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("%s", addslashes($defaultValue)),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        return $this->getDoctrineRenderer('mapping/integer.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'integer',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+        ])->render();
+    }
 
     public function GetHTML()
     {

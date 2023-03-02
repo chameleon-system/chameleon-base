@@ -23,8 +23,6 @@ use function PHPUnit\Framework\stringEndsWith;
  */
 class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 {
-    // todo - doctrine transformation
-
     const TABLE_NAME_FIELD_SUFFIX = '_table_name';
 
     const FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';

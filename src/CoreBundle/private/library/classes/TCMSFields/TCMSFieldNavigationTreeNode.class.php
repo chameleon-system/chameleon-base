@@ -14,7 +14,6 @@
 /**/
 class TCMSFieldNavigationTreeNode extends TCMSFieldTreeNode
 {
-    // todo - doctrine transformation
 
     public function _GetOpenWindowJS()
     {

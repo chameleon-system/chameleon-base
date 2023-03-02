@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+
 /**
  * lists the entries for a directory (not recursive at the moment)
  * - needs a directory parameter in the field config like:.
@@ -19,9 +22,45 @@
  * - if no filetypes are set it will list only directories
  *
 /**/
-class TCMSFieldLookupDirectory extends TCMSField
+class TCMSFieldLookupDirectory extends TCMSField implements DoctrineTransformableInterface
 {
-    // todo - doctrine transformation
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'string',
+            'docCommentType' => 'string',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        return $this->getDoctrineRenderer('mapping/string.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'string',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+            'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
+        ])->render();
+    }
 
     public function GetHTML()
     {

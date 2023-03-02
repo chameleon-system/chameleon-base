@@ -18,8 +18,6 @@ use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
  */
 class TCMSFieldPasswordEncrypted extends TCMSFieldPassword
 {
-    // todo - doctrine transformation
-
     const ENCRYPTED_PASSWORD_RAW_FIELD_PREFIX = 'password_encrypted_raw_';
 
     public function __construct()
