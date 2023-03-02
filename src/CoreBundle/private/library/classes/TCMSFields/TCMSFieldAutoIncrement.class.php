@@ -16,10 +16,12 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 /**/
 class TCMSFieldAutoIncrement extends TCMSFieldNumber
 {
-    // todo - not used in the default project - need to map to a generated value. not sure if this is even possible - i think there can be only one autoincrement field per table
-
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    protected function getDoctrineDataModelXml(string $namespace): string
     {
-        throw new Exception('TCMSFieldAutoIncrement not implemented yet');
+        return $this->getDoctrineRenderer('mapping/autoincrement.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+        ])->render();
     }
 }
