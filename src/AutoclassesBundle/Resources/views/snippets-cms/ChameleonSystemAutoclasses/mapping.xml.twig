@@ -22,6 +22,9 @@
         <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
         </field>
 
         {%- for propertyMapping in propertyMappings %}
