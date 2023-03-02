@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableInterface;
+
 /**
  * field to select an icon based on a directory icon listing.
 /**/
-class TCMSFieldIconList extends TCMSField
+class TCMSFieldIconList extends TCMSField implements DoctrineNotTransformableInterface
 {
-    // todo - doctrine transformation
-
     public function GetHTML()
     {
         $image = $this->_GetHTMLValue();

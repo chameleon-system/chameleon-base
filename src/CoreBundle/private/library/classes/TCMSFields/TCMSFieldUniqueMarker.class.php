@@ -18,8 +18,6 @@ use Doctrine\Common\Collections\Expr\Comparison;
 /**/
 class TCMSFieldUniqueMarker extends TCMSFieldBoolean
 {
-    // todo - doctrine transformation
-
     /**
      * {@inheritdoc}
      */

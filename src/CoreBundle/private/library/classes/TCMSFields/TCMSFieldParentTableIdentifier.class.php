@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-class TCMSFieldParentTableIdentifier extends TCMSField
-{
-    // todo - doctrine transformation
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableInterface;
 
+class TCMSFieldParentTableIdentifier extends TCMSField implements DoctrineNotTransformableInterface
+{
     public function GetHTML()
     {
         $html = $this->_GetHTMLValue();

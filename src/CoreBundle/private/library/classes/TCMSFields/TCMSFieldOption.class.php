@@ -9,15 +9,58 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * an enum field.
 /**/
-class TCMSFieldOption extends TCMSField
+class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterface
 {
-    // todo - doctrine transformation
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'string',
+            'docCommentType' => 'string',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        $options = explode(',',$this->oDefinition->sqlData['length_set']);
+        $options = array_map(static fn(string $option) => trim($option, "' "), $options);
+        $maxLength = array_reduce($options, static function (int $size, string $option) {
+            return max([$size, mb_strlen($option)]);
+        }, 0);
+        return $this->getDoctrineRenderer('mapping/string-char.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'string',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+            'length' => $maxLength,
+        ])->render();
+    }
 
     /**
      * array of options to list in the select box.

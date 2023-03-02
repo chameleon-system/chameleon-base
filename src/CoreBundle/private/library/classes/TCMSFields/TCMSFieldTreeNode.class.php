@@ -10,15 +10,58 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * picks a node from a tree.
 /**/
-class TCMSFieldTreeNode extends TCMSField
+class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterface
 {
-    // todo - doctrine transformation
+
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $targetTable = 'cms_tree';
+
+        $parameters = [
+            'source' => get_class($this),
+            'type' => $this->snakeToCamelCase($targetTable, false),
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($propertyName),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();
+
+        $viewName = 'mapping/many-to-one.xml.twig';
+
+        $mappingCode = $this->getDoctrineRenderer($viewName, [
+            'fieldName' => $this->snakeToCamelCase($propertyName),
+            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($targetTable, false)),
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+
+        ])->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $mappingCode,
+            [
+                ltrim(
+                    sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($targetTable, false)),
+                    '\\'
+                ),
+            ],
+            true
+        );
+    }
 
     public function GetHTML()
     {

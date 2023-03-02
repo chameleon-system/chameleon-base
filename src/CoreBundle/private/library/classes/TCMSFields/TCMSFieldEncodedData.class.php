@@ -10,13 +10,52 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 
-class TCMSFieldEncodedData extends TCMSFieldBlob
+class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformableInterface
 {
-    // todo - doctrine transformation
+    // doctrine itself does not recomand using the database for encryption/decryption https://github.com/doctrine/orm/issues/1744
+    // for now, we assume that the encoding / decoding happens outside of doctrine
+    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    {
+        $parameters = [
+            'source' => get_class($this),
+            'type' => '?string',
+            'docCommentType' => 'string|null',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => 'null',
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
 
-    // todo custom type is not an option. Instead we need to add a prePersist and postLoad lifecycle hook.
-    // doctrine itself does not recommand using the database for encryption/decryption https://github.com/doctrine/orm/issues/1744
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        $parameter = [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'blob',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+
+        ];
+        if ('' !== $this->oDefinition->sqlData['field_default_value']) {
+            $parameter['default'] = $this->oDefinition->sqlData['field_default_value'];
+        }
+
+        return $this->getDoctrineRenderer('mapping/text.xml.twig', $parameter)->render();
+    }
 
 
     public function ConvertDataToFieldBasedData($sData)

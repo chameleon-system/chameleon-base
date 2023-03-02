@@ -10,16 +10,19 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableInterface;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * Renders a list of languages per portal to allow language specific selections.
  * you can call the filtered selection using the function: TdbYourTable::GetListForPortalLanguage();.
  */
-class TCMSFieldPortalLanguageMatrix extends TCMSField
+class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTransformableInterface
 {
-    // todo - doctrine transformation
+    // Only used in a single project. We'll need to handle it there.
 
     /**
      * indicates if GetHTML should render the form in read only mode.

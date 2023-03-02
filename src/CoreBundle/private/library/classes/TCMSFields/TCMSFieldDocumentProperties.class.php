@@ -10,10 +10,11 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableInterface;
 
-class TCMSFieldDocumentProperties extends TCMSField
+class TCMSFieldDocumentProperties extends TCMSField implements DoctrineNotTransformableInterface
 {
-    // todo - doctrine transformation
+    // Has been overwritten to show additional infos about the document. Is not relevant for doctrine.
 
     public function GetHTML()
     {

@@ -10,12 +10,13 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 
 /**
  * The class takes data and serializes it to db.
  *
 /**/
-class TCMSFieldBlob extends TCMSFieldText
+class TCMSFieldBlob extends TCMSFieldText implements DoctrineTransformableInterface
 {
     public function getDoctrineDataModelParts(string $namespace): DataModelParts
     {

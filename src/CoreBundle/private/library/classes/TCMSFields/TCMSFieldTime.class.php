@@ -13,8 +13,6 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 
 class TCMSFieldTime extends TCMSFieldNumber
 {
-    // todo - not used in the default project
-
     public function getDoctrineDataModelParts(string $namespace): DataModelParts
     {
         throw new Exception('TCMSFieldTime not implemented yet');
