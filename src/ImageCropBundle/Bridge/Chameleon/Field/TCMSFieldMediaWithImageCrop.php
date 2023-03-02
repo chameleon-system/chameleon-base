@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
@@ -26,10 +27,10 @@ use TCMSLogChange;
 use TCMSTableToClass;
 use TdbCmsImageCrop;
 use TdbCmsImageCropPreset;
+use TdbCmsLanguage;
 use TGlobal;
 use TViewParser;
 use ViewRenderer;
-use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * {@inheritdoc}
@@ -41,7 +42,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $lookupFieldDef = parent::getDoctrineDataModelParts($namespace);
 
         $propertyName = $this->getFieldNameOfAdditionalField($this->name);
-        if (stringEndsWith($propertyName, '_id')) {
+        if (str_ends_with($propertyName, '_id')) {
             $propertyName = substr($propertyName, 0, -3);
         }
 
@@ -76,7 +77,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $lookupFieldMapping =  parent::getDoctrineDataModelXml($namespace);
 
         $propertyName = $this->getFieldNameOfAdditionalField($this->name);
-        if (stringEndsWith($propertyName, '_id')) {
+        if (str_ends_with($propertyName, '_id')) {
             $propertyName = substr($propertyName, 0, -3);
         }
 
@@ -163,7 +164,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $additionalFieldNameTranslated = $additionalFieldName;
 
         if (true === $this->oDefinition->isTranslatable()) {
-            $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+            $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
             if (null !== $editLanguage && $this->getFieldTranslationUtil()->isTranslationNeeded($editLanguage)) {
                 $additionalFieldNameTranslated .= '__'.$editLanguage->fieldIso6391;
             }
@@ -182,7 +183,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
         $migrationQueryData = new MigrationQueryData(
             $this->sTableName,
-            $this->getLanguageService()->getActiveEditLanguage()->fieldIso6391
+            TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId())->fieldIso6391
         );
         $migrationQueryData
             ->setFields($data)
@@ -398,7 +399,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $fieldHtml .= $viewRenderer->Render('imageCrop/TCmsFieldMediaWithImageCrop/button.html.twig');
 
         $imageId = $this->_GetFieldValue();
-        $languageId = $this->getLanguageService()->getActiveEditLanguage()->id;
+        $languageId = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId())->id;
         $crop = null;
         $cmsMedia = $this->getCmsMediaDataAccess()->getCmsMedia($imageId, $languageId);
         if (null !== $cmsMedia) {
@@ -550,5 +551,10 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     private function getFieldTranslationUtil(): FieldTranslationUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.field_translation');
+    }
+
+    protected function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
     }
 }
