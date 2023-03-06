@@ -35,9 +35,6 @@ class CMSInterface extends TCMSModelBase
         $aGroupListUser = TTools::MysqlRealEscapeArray($groups);
         $sGroupSQL = '';
         foreach ($aGroupListUser as $sGroupId => $sGroupSystemName) {
-            if ('-' === $sGroupId) {
-                continue;
-            }
             if ('' != $sGroupSQL) {
                 $sGroupSQL .= ',';
             }
