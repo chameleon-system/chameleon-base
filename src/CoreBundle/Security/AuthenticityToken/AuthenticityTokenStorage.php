@@ -5,6 +5,7 @@ namespace ChameleonSystem\CoreBundle\Security\AuthenticityToken;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\Exception\TokenNotFoundException;
+use Symfony\Component\Security\Csrf\TokenStorage\ClearableTokenStorageInterface;
 use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
@@ -12,7 +13,7 @@ use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
  * Mimics \Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage, but avoids injecting the session service
  * as this doesn't work in Chameleon.
  */
-class AuthenticityTokenStorage implements TokenStorageInterface
+class AuthenticityTokenStorage implements ClearableTokenStorageInterface
 {
     /**
      * @var RequestStack
@@ -27,10 +28,26 @@ class AuthenticityTokenStorage implements TokenStorageInterface
      * @param RequestStack $requestStack
      * @param string       $namespace
      */
-    public function __construct(RequestStack $requestStack, $namespace = SessionTokenStorage::SESSION_NAMESPACE)
+    public function __construct(RequestStack $requestStack, string $namespace = SessionTokenStorage::SESSION_NAMESPACE)
     {
         $this->requestStack = $requestStack;
         $this->namespace = $namespace;
+    }
+
+    public function clear(): void
+    {
+        $session = $this->getSession();
+        if (null === $session) {
+            return;
+        }
+        $sessionKeys = $session->all();
+        foreach ($sessionKeys as $key => $value) {
+            if (false === str_starts_with($this->namespace . '/', $key)) {
+                continue;
+            }
+
+            $session->remove($key);
+        }
     }
 
     /**

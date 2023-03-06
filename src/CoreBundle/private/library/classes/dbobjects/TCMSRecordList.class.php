@@ -748,7 +748,7 @@ class TCMSRecordList extends TIterator
     protected function getEntityList()
     {
         if (null === $this->entityList) {
-            $this->entityList = new EntityList($this->getDatabaseConnection(), $this->sQuery, $this->getQueryParameters(), $this->getQueryParameterTypes());
+            $this->entityList = new EntityList($this->getDatabaseConnection(), $this->sQuery, $this->getQueryParameters()??[], $this->getQueryParameterTypes()??[]);
         }
 
         return $this->entityList;
