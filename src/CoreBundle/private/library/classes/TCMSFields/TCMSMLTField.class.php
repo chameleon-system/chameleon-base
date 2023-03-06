@@ -16,7 +16,7 @@ use function PHPUnit\Framework\stringEndsWith;
 abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableInterface
 {
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $propertyName = $this->name;
         if (stringEndsWith($propertyName, '_mlt')) {
@@ -38,9 +38,9 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
         return new DataModelParts(
             $propertyCode,
             $methodCode,
-            $this->getDoctrineDataModelXml($namespace),
+            $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [
-                ltrim(sprintf('%s\\%s', $namespace, $targetClass), '\\'),
+                ltrim(sprintf('%s\\%s', $tableNamespaceMapping[$this->GetForeignTableName()], $targetClass), '\\'),
                 'Doctrine\\Common\\Collections\\Collection',
                 'Doctrine\\Common\\Collections\\ArrayCollection',
             ],
@@ -49,7 +49,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
     }
 
 
-    protected function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         $propertyName = $this->name;
         if (stringEndsWith($propertyName, '_mlt')) {
@@ -60,7 +60,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
 
         return $this->getDoctrineRenderer($viewName, [
             'fieldName' => $this->snakeToCamelCase($propertyName.'_collection'),
-            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetForeignTableName()], $this->snakeToCamelCase($this->GetForeignTableName(), false)),
             'joinTable' => $this->GetMLTTableName(),
             'comment' => $this->oDefinition->sqlData['translation'],
 

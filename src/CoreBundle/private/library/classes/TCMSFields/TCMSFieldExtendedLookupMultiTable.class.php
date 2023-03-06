@@ -28,7 +28,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     const FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
 
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         // todo: we currently handle this field as two string fields - we may be able to replace this with single table inheritance von doctrine
         // https://www.doctrine-project.org/projects/doctrine-orm/en/2.14/reference/inheritance-mapping.html#entity-inheritance
@@ -51,7 +51,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $idField = new DataModelParts(
             $propertyCode,
             $methodCode,
-            $this->getDoctrineDataModelXml($namespace),
+            $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [],
             true
         );
@@ -82,7 +82,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
     }
 
-    protected function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         $idMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),

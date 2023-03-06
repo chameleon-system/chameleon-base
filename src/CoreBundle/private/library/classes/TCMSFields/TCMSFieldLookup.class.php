@@ -51,7 +51,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
      */
     protected $options = array();
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $propertyName = $this->name;
         if (stringEndsWith($propertyName, '_id')) {
@@ -70,10 +70,10 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         return new DataModelParts(
             $propertyCode,
             $methodCode,
-            $this->getDoctrineDataModelXml($namespace),
+            $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [
                 ltrim(
-                    sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
                     '\\'
                 ),
             ],
@@ -82,7 +82,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
     }
 
 
-    protected function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
     {
         $propertyName = $this->name;
         if (stringEndsWith($propertyName, '_id')) {
@@ -93,7 +93,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         return $this->getDoctrineRenderer($viewName, [
             'fieldName' => $this->snakeToCamelCase($propertyName),
-            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
 

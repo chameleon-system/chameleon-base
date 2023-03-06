@@ -16,6 +16,6 @@ interface TableConfExporterInterface
      * @return string - fqn of the generated model
      * @throws \Exception
      */
-    public function export(TableConfigurationDataModel $table, string $namespace, string $targetDir, string $mappingDir): string;
+    public function export(TableConfigurationDataModel $table, string $namespace, string $targetDir, string $mappingDir, array $tableNamespaceMapping): string;
 
 }

@@ -19,7 +19,7 @@ require_once PATH_LIBRARY.'/functions/ConvertDate.fun.php';
 class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterface
 {
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
             'source' => get_class($this),

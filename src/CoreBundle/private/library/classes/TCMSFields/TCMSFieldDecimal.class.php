@@ -29,7 +29,7 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDecimal';
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
             'source' => get_class($this),

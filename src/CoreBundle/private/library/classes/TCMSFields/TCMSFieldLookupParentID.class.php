@@ -58,7 +58,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         return false;
     }
 
-    protected function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         $propertyName = $this->name;
         if (stringEndsWith($propertyName, '_id')) {
@@ -69,7 +69,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
             'fieldName' => $this->snakeToCamelCase($propertyName),
             'targetClass' => sprintf(
                 '%s\\%s',
-                $namespace,
+                $tableNamespaceMapping[$this->GetConnectedTableName()],
                 $this->snakeToCamelCase($this->GetConnectedTableName(), false)
             ),
             'column' => $this->name,

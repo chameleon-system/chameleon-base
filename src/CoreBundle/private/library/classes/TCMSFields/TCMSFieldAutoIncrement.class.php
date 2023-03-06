@@ -16,7 +16,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 /**/
 class TCMSFieldAutoIncrement extends TCMSFieldNumber
 {
-    protected function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         return $this->getDoctrineRenderer('mapping/autoincrement.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),

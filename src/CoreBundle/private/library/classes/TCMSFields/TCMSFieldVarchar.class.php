@@ -34,7 +34,7 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldVarchar';
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
             'source' => get_class($this),
@@ -53,13 +53,13 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
         return new DataModelParts(
             $propertyCode,
             $methodCode,
-            $this->getDoctrineDataModelXml($namespace),
+            $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [],
             true
         );
     }
 
-    protected function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         return $this->getDoctrineRenderer('mapping/string.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),

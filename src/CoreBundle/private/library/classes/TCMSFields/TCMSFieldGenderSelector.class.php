@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TCMSFieldGenderSelector extends TCMSFieldOption implements DoctrineTransformableInterface
 {
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
             'source' => get_class($this),

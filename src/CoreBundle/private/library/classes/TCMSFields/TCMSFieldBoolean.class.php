@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableInterface
 {
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $default = $this->oDefinition->sqlData['field_default_value'];
         if ('' === $default) {
