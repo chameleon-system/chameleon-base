@@ -12,6 +12,9 @@ class CmsUserRoleConstants
      */
     final public const CMS_USER = 'ROLE_CMS_USER';
 
+    /** Fake ID for the ROLE_CMS_USER in the user role array */
+    final public const CMS_USER_FAKE_ID = '-';
+
     /**
      * corresponds the role assigned via cms_role.name = 'cms_admin'
      */

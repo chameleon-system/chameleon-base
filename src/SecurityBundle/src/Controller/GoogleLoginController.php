@@ -19,13 +19,10 @@ class GoogleLoginController extends AbstractController
     #[Route('/cms/google-login', name: 'connect_google_start')]
     public function connectAction()
     {
-        // on Symfony 3.3 or lower, $clientRegistry = $this->get('knpu.oauth2.registry');
-
-        // will redirect to Facebook!
         return $this->clientRegistry
             ->getClient('google_main') // key used in config/packages/knpu_oauth2_client.yaml
             ->redirect([
-                'openid','https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile' // the scopes you want to access
+                'openid','https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'
             ]);
     }
 
@@ -33,10 +30,6 @@ class GoogleLoginController extends AbstractController
     #[Route('/cms/google-check', name: 'connect_google_check')]
     public function connectCheckAction(Request $request)
     {
-        return new Response('jolo');
-        // ** if you want to *authenticate* the user, then
-        // leave this method blank and create a Guard authenticator
-        // (read below)
-
+        return new Response('....');
     }
 }

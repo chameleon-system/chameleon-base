@@ -3,6 +3,7 @@
 namespace ChameleonSystem\SecurityBundle\CmsUser;
 
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants as CmsUserRoleConstantsAlias;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -107,7 +108,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
             return $carry;
         }, []);
-        $roles['-'] = CmsUserRoleConstants::CMS_USER;
+        $roles[CmsUserRoleConstantsAlias::CMS_USER_FAKE_ID] = CmsUserRoleConstants::CMS_USER;
 
 
         $userRightRows = $this->connection->fetchAllAssociative(

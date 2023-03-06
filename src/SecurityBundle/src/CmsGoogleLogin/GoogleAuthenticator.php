@@ -65,13 +65,9 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        // change "app_homepage" to some route in your app
         $targetUrl = '/cms';
 
         return new RedirectResponse($targetUrl);
-
-        // or, on success, let the request continue to be handled by the controller
-        //return null;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
@@ -88,7 +84,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
         return new RedirectResponse(
-            '/cms/', // might be the site, where users choose their oauth provider
+            '/cms/',
             Response::HTTP_TEMPORARY_REDIRECT
         );
     }
