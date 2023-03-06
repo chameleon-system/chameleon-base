@@ -25,11 +25,4 @@ class GoogleLoginController extends AbstractController
                 'openid','https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'
             ]);
     }
-
-
-    #[Route('/cms/google-check', name: 'connect_google_check')]
-    public function connectCheckAction(Request $request)
-    {
-        return new Response('....');
-    }
 }
