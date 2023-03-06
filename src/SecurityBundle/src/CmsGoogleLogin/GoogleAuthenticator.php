@@ -44,12 +44,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
         if ((null !== $hostedDomain) && false === array_key_exists($hostedDomain, $this->allowedDomains)) {
             throw new AuthenticationException(sprintf('The hosted domain %s is not allowed.', $hostedDomain));
         }
-        $email = $user->getEmail();
-        $mailDomain = mb_substr($email, mb_strpos($email, '@')+1);
-        if ((null !== $mailDomain) && false === array_key_exists($mailDomain, $this->allowedDomains)) {
-            throw new AuthenticationException(sprintf('The hosted domain %s is not allowed.', $mailDomain));
-        }
-        if (null === $hostedDomain && null === $mailDomain) {
+        if (null === $hostedDomain) {
             throw new AuthenticationException('No hosted domain or email address found.');
         }
 

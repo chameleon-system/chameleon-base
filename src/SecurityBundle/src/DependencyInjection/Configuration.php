@@ -20,7 +20,7 @@ class Configuration implements ConfigurationInterface
                         ->useAttributeAsKey('domain')
                         ->arrayPrototype()
                             ->children()
-                                ->scalarNode('domain')->info("G suite/Google App domain. Users (G Suite/Google Apps) musst be from this domain - or the email must be from this domain")->end()
+                                ->scalarNode('domain')->info("G suite/Google App domain. Users (G Suite/Google Apps) musst be from this domain.")->end()
                                 ->scalarNode('value')->isRequired()->info('New users will be based on this user.')->end()
                             ->end()
                         ->end()
