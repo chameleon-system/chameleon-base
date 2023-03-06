@@ -34,7 +34,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldProperty';
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parentFieldName = $this->GetMatchingParentFieldName();
         if (stringEndsWith($parentFieldName, '_id')) {
@@ -63,10 +63,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         return new DataModelParts(
             $propertyCode,
             $methodCode,
-            $this->getDoctrineDataModelXml($namespace),
+            $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [
                 ltrim(
-                    sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetPropertyTableName(), false)),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetPropertyTableName()], $this->snakeToCamelCase($this->GetPropertyTableName(), false)),
                     '\\'
                 ),
                 'Doctrine\\Common\\Collections\\Collection',
@@ -77,7 +77,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
     }
 
 
-    protected function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         $preventReferenceDelete = $this->oDefinition->GetFieldtypeConfigKey('preventReferenceDeletion') ?? 'false';
         $enableCascadeRemove = 'false' === $preventReferenceDelete;
@@ -93,7 +93,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             'fieldName' => $this->snakeToCamelCase($this->name.'_collection'),
             'targetClass' => sprintf(
                 '%s\\%s',
-                $namespace,
+                $tableNamespaceMapping[$this->GetPropertyTableName()],
                 $this->snakeToCamelCase($this->GetPropertyTableName(), false)
             ),
             'parentFieldName' => $this->snakeToCamelCase($parentFieldName),

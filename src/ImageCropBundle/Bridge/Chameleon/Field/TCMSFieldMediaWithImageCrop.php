@@ -37,9 +37,9 @@ use ViewRenderer;
  */
 class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 {
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
-        $lookupFieldDef = parent::getDoctrineDataModelParts($namespace);
+        $lookupFieldDef = parent::getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
 
         $propertyName = $this->getFieldNameOfAdditionalField($this->name);
         if (str_ends_with($propertyName, '_id')) {
@@ -61,7 +61,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             '',
             [
                 ltrim(
-                    sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
                     '\\'
                 ),
             ],
@@ -72,9 +72,9 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
     }
 
-    protected function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
-        $lookupFieldMapping =  parent::getDoctrineDataModelXml($namespace);
+        $lookupFieldMapping =  parent::getDoctrineDataModelXml($namespace, $tableNamespaceMapping);
 
         $propertyName = $this->getFieldNameOfAdditionalField($this->name);
         if (str_ends_with($propertyName, '_id')) {
@@ -87,7 +87,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             'fieldName' => $this->snakeToCamelCase($propertyName),
             'targetClass' => sprintf(
                 '%s\\%s',
-                $namespace,
+                $tableNamespaceMapping[$this->GetConnectedTableName()],
                 $this->snakeToCamelCase($this->GetConnectedTableName(), false)
             ),
             'column' => $this->name,

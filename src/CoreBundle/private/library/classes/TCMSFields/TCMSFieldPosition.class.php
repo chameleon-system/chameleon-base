@@ -26,7 +26,7 @@ class TCMSFieldPosition extends TCMSField implements DoctrineTransformableInterf
     protected $oTableConf = null;
 
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $defaultValue = $this->oDefinition->sqlData['field_default_value'];
         if ('' === $defaultValue) {

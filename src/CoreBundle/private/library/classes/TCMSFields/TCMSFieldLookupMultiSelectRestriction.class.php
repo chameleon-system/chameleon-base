@@ -16,9 +16,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
 {
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
-        $parts = parent::getDoctrineDataModelParts($namespace);
+        $parts = parent::getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
 
 
 

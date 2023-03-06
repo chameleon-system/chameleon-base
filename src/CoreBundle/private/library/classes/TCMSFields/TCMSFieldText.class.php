@@ -22,7 +22,7 @@ class TCMSFieldText extends TCMSField implements DoctrineTransformableInterface
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldText';
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
             'source' => get_class($this),

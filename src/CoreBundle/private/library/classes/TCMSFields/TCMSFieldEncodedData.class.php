@@ -16,7 +16,7 @@ class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformabl
 {
     // doctrine itself does not recomand using the database for encryption/decryption https://github.com/doctrine/orm/issues/1744
     // for now, we assume that the encoding / decoding happens outside of doctrine
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
             'source' => get_class($this),

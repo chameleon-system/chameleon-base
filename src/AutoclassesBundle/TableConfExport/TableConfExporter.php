@@ -20,7 +20,7 @@ class TableConfExporter implements TableConfExporterInterface
         return $this->dataAccessCmsTblConf->getTableConfigurations();
     }
 
-    public function export(TableConfigurationDataModel $table, string $namespace, string $targetDir, string $mappingDir): string
+    public function export(TableConfigurationDataModel $table, string $namespace, string $targetDir, string $mappingDir, array $tableNamespaceMapping): string
     {
 
 
@@ -43,7 +43,7 @@ class TableConfExporter implements TableConfExporterInterface
             }
             $fields[] = $field;
 
-            $dataModelParts = $field->getDoctrineDataModelParts($namespace);
+            $dataModelParts = $field->getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
             if (null === $dataModelParts) {
                 continue;
             }
@@ -58,7 +58,8 @@ class TableConfExporter implements TableConfExporterInterface
             $fqn,
             $namespace,
             $fields,
-            $dataModelPartsList
+            $dataModelPartsList,
+            $tableNamespaceMapping
         );
         $dataModelMapping = $this->generateDataModelMapping(
             $tableConf,
@@ -66,11 +67,20 @@ class TableConfExporter implements TableConfExporterInterface
             $fqn,
             $namespace,
             $fields,
-            $dataModelPartsList
+            $dataModelPartsList,
+            $tableNamespaceMapping
         );
 
+        $mappingSubPathPos = strpos($mappingDir, '/config/doctrine');
+        $extension = substr($mappingDir, $mappingSubPathPos+strlen('/config/doctrine/'));
+        $mappingCleanPath = substr($mappingDir, 0, $mappingSubPathPos). '/config/doctrine';
+        $mappingClass = $className;
+        if ('' !== $extension && '/' !== $extension) {
+            $mappingClass = str_replace('/', '.', trim($extension, '/'). '/'. $className);
+        }
+
         file_put_contents($targetDir.'/'.$className.'.php', $dataModelCode);
-        file_put_contents($mappingDir.'/'.$className.'.orm.xml', $dataModelMapping);
+        file_put_contents($mappingCleanPath.'/'.$mappingClass.'.orm.xml', $dataModelMapping);
 
         return $fqn;
 

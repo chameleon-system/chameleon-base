@@ -18,7 +18,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableInterface
 {
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $defaultValue = $this->oDefinition->sqlData['field_default_value'];
         if ('' === $defaultValue) {
@@ -41,13 +41,13 @@ class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableI
         return new DataModelParts(
             $propertyCode,
             $methodCode,
-            $this->getDoctrineDataModelXml($namespace),
+            $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [],
             true
         );
     }
 
-    protected function getDoctrineDataModelXml(string $namespace): string
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         return $this->getDoctrineRenderer('mapping/integer.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),

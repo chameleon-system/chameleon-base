@@ -20,7 +20,7 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDateTimeNow';
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
             'source' => get_class($this),

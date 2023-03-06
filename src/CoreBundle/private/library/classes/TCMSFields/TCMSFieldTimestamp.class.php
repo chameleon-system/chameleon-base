@@ -18,7 +18,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 class TCMSFieldTimestamp extends TCMSField implements DoctrineTransformableInterface
 {
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
             'source' => get_class($this),

@@ -21,7 +21,7 @@ use function PHPUnit\Framework\stringEndsWith;
 class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterface
 {
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $propertyName = $this->name;
         if (stringEndsWith($propertyName, '_id')) {
@@ -43,7 +43,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
 
         $mappingCode = $this->getDoctrineRenderer($viewName, [
             'fieldName' => $this->snakeToCamelCase($propertyName),
-            'targetClass' => sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($targetTable, false)),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToCamelCase($targetTable, false)),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
 
@@ -55,7 +55,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
             $mappingCode,
             [
                 ltrim(
-                    sprintf('%s\\%s', $namespace, $this->snakeToCamelCase($targetTable, false)),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToCamelCase($targetTable, false)),
                     '\\'
                 ),
             ],

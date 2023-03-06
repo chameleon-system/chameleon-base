@@ -18,7 +18,7 @@
         <service id="ChameleonSystem\AutoclassesBundle\Command\DumpTableConfCommand">
             <tag name="console.command"/>
             <argument type="service" id="ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporter"/>
-            <argument>%kernel.project_dir%</argument>
+            <argument type="service" id="file_locator" />
         </service>
 
         <service id="ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporter">

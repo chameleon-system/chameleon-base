@@ -35,7 +35,7 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
      */
     public $oTableConf = null;
 
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $default = explode(',', $this->oDefinition->sqlData['field_default_value']);
         $defaultEscaped = array_map(static fn(string $item) => sprintf("'%s'", trim($item)), $default);

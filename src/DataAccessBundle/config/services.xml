@@ -6,7 +6,7 @@
 
     <services>
         <defaults autowire="true" autoconfigure="true"  />
-        <prototype namespace="ChameleonSystem\DataAccessBundle\" resource="../src/*" exclude="../src/{Model,DependencyInjection}"/>
+        <prototype namespace="ChameleonSystem\DataAccessBundle\" resource="../src/*" exclude="../src/{Model,Entity,DependencyInjection}"/>
     </services>
 
 </container>

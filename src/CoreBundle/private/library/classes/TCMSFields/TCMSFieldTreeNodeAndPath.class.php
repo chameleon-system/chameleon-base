@@ -18,9 +18,9 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 /**/
 class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
 {
-    public function getDoctrineDataModelParts(string $namespace): DataModelParts
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
-        $parts = parent::getDoctrineDataModelParts($namespace);
+        $parts = parent::getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
 
         $pathFieldName = $this->name . '_path';
 
