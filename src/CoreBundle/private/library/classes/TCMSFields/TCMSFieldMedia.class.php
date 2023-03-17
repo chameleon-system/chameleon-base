@@ -47,8 +47,8 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf('[%s]',implode(', ',$defaultEscaped)),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();

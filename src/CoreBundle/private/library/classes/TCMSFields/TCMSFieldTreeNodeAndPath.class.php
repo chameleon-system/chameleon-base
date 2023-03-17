@@ -32,8 +32,8 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
             'propertyName' => $this->snakeToCamelCase($pathFieldName),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToCamelCase($pathFieldName, false),
-            'setterName' => 'set'. $this->snakeToCamelCase($pathFieldName, false),
+            'getterName' => 'get'. $this->snakeToPascalCase($pathFieldName),
+            'setterName' => 'set'. $this->snakeToPascalCase($pathFieldName),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();

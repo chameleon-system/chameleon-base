@@ -60,7 +60,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         $parameters = [
             'source' => get_class($this),
-            'type' => $this->snakeToCamelCase($this->GetConnectedTableName(), false),
+            'type' => $this->snakeToPascalCase($this->GetConnectedTableName()),
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($propertyName),
         ];
@@ -73,7 +73,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
             $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [
                 ltrim(
-                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToPascalCase($this->GetConnectedTableName())),
                     '\\'
                 ),
             ],
@@ -93,7 +93,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         return $this->getDoctrineRenderer($viewName, [
             'fieldName' => $this->snakeToCamelCase($propertyName),
-            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToPascalCase($this->GetConnectedTableName())),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
 

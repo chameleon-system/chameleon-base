@@ -10,9 +10,9 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableInterface;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMarkerInterface;
 
-class TCMSFieldDocumentProperties extends TCMSField implements DoctrineNotTransformableInterface
+class TCMSFieldDocumentProperties extends TCMSField implements DoctrineNotTransformableMarkerInterface
 {
     // Has been overwritten to show additional infos about the document. Is not relevant for doctrine.
 

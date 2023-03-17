@@ -22,7 +22,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
         if (stringEndsWith($propertyName, '_mlt')) {
             $propertyName = substr($propertyName, 0, -4);
         }
-        $targetClass = $this->snakeToCamelCase($this->GetForeignTableName(), false);
+        $targetClass = $this->snakeToPascalCase($this->GetForeignTableName());
         $parameters = [
             'source' => get_class($this),
             'type' => $targetClass,
@@ -60,7 +60,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
 
         return $this->getDoctrineRenderer($viewName, [
             'fieldName' => $this->snakeToCamelCase($propertyName.'_collection'),
-            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetForeignTableName()], $this->snakeToCamelCase($this->GetForeignTableName(), false)),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetForeignTableName()], $this->snakeToPascalCase($this->GetForeignTableName())),
             'joinTable' => $this->GetMLTTableName(),
             'comment' => $this->oDefinition->sqlData['translation'],
 

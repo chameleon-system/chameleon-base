@@ -165,7 +165,7 @@ class TCMSField implements TCMSFieldVisitableInterface
 
 
 
-    protected function snakeToCamelCase(string $string, bool $lowerCaseFirst = true): string
+    protected function snakeToCamelCase(string $string): string
     {
         $firstPart = substr($string, 0, strpos($string, '_'));
         if (is_numeric($firstPart)) {
@@ -178,11 +178,11 @@ class TCMSField implements TCMSFieldVisitableInterface
             return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
         }, $string);
 
-        if ($lowerCaseFirst) {
-            $camelCasedName = lcfirst($camelCasedName);
-        }
-
         return $camelCasedName;
+    }
+    protected function snakeToPascalCase(string $string): string
+    {
+        return lcfirst($this->snakeToCamelCase($string));
     }
 
 
@@ -584,10 +584,6 @@ class TCMSField implements TCMSFieldVisitableInterface
         $connection->query($updateQuery);
     }
 
-    public function getDoctrineDataModelGetterName(string $getterPrefix, string $fieldName): string
-    {
-        return $getterPrefix.ucfirst($this->snakeToCamelCase($fieldName));
-    }
 
     /**
      * update default value of a field with associated workflow.

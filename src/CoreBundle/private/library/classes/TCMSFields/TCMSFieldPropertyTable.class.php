@@ -42,7 +42,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         }
         $parameters = [
             'source' => get_class($this),
-            'type' => $this->snakeToCamelCase($this->GetPropertyTableName(), false),
+            'type' => $this->snakeToPascalCase($this->GetPropertyTableName()),
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($this->name.'_collection'),
             'methodParameter' => $this->snakeToCamelCase($this->name),
@@ -66,7 +66,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [
                 ltrim(
-                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetPropertyTableName()], $this->snakeToCamelCase($this->GetPropertyTableName(), false)),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetPropertyTableName()], $this->snakeToPascalCase($this->GetPropertyTableName())),
                     '\\'
                 ),
                 'Doctrine\\Common\\Collections\\Collection',
@@ -94,7 +94,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             'targetClass' => sprintf(
                 '%s\\%s',
                 $tableNamespaceMapping[$this->GetPropertyTableName()],
-                $this->snakeToCamelCase($this->GetPropertyTableName(), false)
+                $this->snakeToPascalCase($this->GetPropertyTableName())
             ),
             'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
             'enableCascadeRemove' => $enableCascadeRemove,

@@ -3,22 +3,6 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="{{ fqn }}" table="{{ table.name }}">
-
-{#        <indexes>#}
-{#            <index name="name_idx" columns="name"/>#}
-{#            <index columns="user_email"/>#}
-{#        </indexes>#}
-
-{#        <unique-constraints>#}
-{#            <unique-constraint columns="name,user_email" name="search_idx" />#}
-{#        </unique-constraints>#}
-
-{#        <lifecycle-callbacks>#}
-{#            <lifecycle-callback type="prePersist" method="doStuffOknPrePersist"/>#}
-{#            <lifecycle-callback type="prePersist" method="doOtherStuffOnPrePersistToo"/>#}
-{#            <lifecycle-callback type="postPersist" method="doStuffOnPostPersist"/>#}
-{#        </lifecycle-callbacks>#}
-
         <id name="id" type="string" length="36" column="id" unique="true" />
         <field name="cmsident" type="integer" column="cmsident" unique="true">
             <generator strategy="AUTO"/>

@@ -49,7 +49,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
         $parameters = [
             'source' => __CLASS__,
-            'type' => $this->snakeToCamelCase($this->GetConnectedTableName(), false),
+            'type' => $this->snakeToPascalCase($this->GetConnectedTableName()),
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($propertyName),
         ];
@@ -62,7 +62,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             '',
             [
                 ltrim(
-                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToCamelCase($this->GetConnectedTableName(), false)),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToPascalCase($this->GetConnectedTableName())),
                     '\\'
                 ),
             ],
@@ -89,7 +89,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             'targetClass' => sprintf(
                 '%s\\%s',
                 $tableNamespaceMapping[$this->GetConnectedTableName()],
-                $this->snakeToCamelCase($this->GetConnectedTableName(), false)
+                $this->snakeToPascalCase($this->GetConnectedTableName())
             ),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

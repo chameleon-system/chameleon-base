@@ -32,7 +32,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
 
         $parameters = [
             'source' => get_class($this),
-            'type' => $this->snakeToCamelCase($targetTable, false),
+            'type' => $this->snakeToPascalCase($targetTable),
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($propertyName),
         ];
@@ -43,7 +43,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
 
         $mappingCode = $this->getDoctrineRenderer($viewName, [
             'fieldName' => $this->snakeToCamelCase($propertyName),
-            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToCamelCase($targetTable, false)),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToPascalCase($targetTable)),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
 
@@ -55,7 +55,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
             $mappingCode,
             [
                 ltrim(
-                    sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToCamelCase($targetTable, false)),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToPascalCase($targetTable)),
                     '\\'
                 ),
             ],

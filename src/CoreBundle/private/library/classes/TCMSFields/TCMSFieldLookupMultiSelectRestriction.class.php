@@ -35,16 +35,12 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             'propertyName' => $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
             'defaultValue' => sprintf("%s", '1' === $default ? 'true' : 'false'),
             'allowDefaultValue' => true,
-            'getterName' => 'is'. $this->snakeToCamelCase($this->getInverseEmptyFieldName(), false),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->getInverseEmptyFieldName(), false),
+            'getterName' => 'is'. $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
 
-        $default = $this->oDefinition->sqlData['field_default_value'];
-        if ('' === $default) {
-            $default = '0';
-        }
         $mappingXml =  $this->getDoctrineRenderer('mapping/boolean.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
             'type' => 'boolean',
