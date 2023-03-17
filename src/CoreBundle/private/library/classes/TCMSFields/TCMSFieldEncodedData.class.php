@@ -14,7 +14,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 
 class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformableInterface
 {
-    // doctrine itself does not recomand using the database for encryption/decryption https://github.com/doctrine/orm/issues/1744
+    // doctrine itself does not recommend using the database for encryption/decryption https://github.com/doctrine/orm/issues/1744
     // for now, we assume that the encoding / decoding happens outside of doctrine
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
@@ -26,8 +26,8 @@ class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformabl
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => 'null',
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();

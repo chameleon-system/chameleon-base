@@ -70,7 +70,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
             'targetClass' => sprintf(
                 '%s\\%s',
                 $tableNamespaceMapping[$this->GetConnectedTableName()],
-                $this->snakeToCamelCase($this->GetConnectedTableName(), false)
+                $this->snakeToPascalCase($this->GetConnectedTableName())
             ),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

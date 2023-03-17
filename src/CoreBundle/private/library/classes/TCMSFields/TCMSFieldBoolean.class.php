@@ -34,8 +34,8 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("%s", '1' === $default ? 'true' : 'false'),
             'allowDefaultValue' => true,
-            'getterName' => 'is'. $this->snakeToCamelCase($this->name, false),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+            'getterName' => 'is'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();

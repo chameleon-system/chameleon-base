@@ -30,7 +30,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
-        // todo: we currently handle this field as two string fields - we may be able to replace this with single table inheritance von doctrine
+        // todo: we currently handle this field as two string fields - we may be able to replace this with single table inheritance from doctrine
         // https://www.doctrine-project.org/projects/doctrine-orm/en/2.14/reference/inheritance-mapping.html#entity-inheritance
         // alternatively we may need to use a relation that maps the type
         // item_link[source_id, target_id, type].
@@ -42,8 +42,8 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToCamelCase($this->name, false),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->name, false),
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -64,8 +64,8 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'propertyName' => $this->snakeToCamelCase($this->getTableFieldName()),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToCamelCase($this->getTableFieldName(), false),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->getTableFieldName(), false),
+            'getterName' => 'get'. $this->snakeToPascalCase($this->getTableFieldName()),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->getTableFieldName()),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();

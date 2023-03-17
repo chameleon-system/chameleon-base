@@ -49,7 +49,7 @@ class TableConfExporter implements TableConfExporterInterface
             }
             $dataModelPartsList[] = $dataModelParts;
         }
-        $className = $this->snakeToCamelCase($tableConf['name'], false);
+        $className = $this->snakeToPascalCase($tableConf['name']);
         $fqn = sprintf('%s\%s', $namespace, $className);
 
         $dataModelCode = $this->generateDataModelCode(
@@ -104,21 +104,21 @@ class TableConfExporter implements TableConfExporterInterface
         array $fields,
         array $propertyMappings
     ): string {
-        $oSnippetRenderer = clone $this->snippetRenderer;
-        $oSnippetRenderer->InitializeSource(
+        $snippetRenderer = clone $this->snippetRenderer;
+        $snippetRenderer->InitializeSource(
             'ChameleonSystemAutoclasses/mapping.xml.twig',
             \IPkgSnippetRenderer::SOURCE_TYPE_FILE
         );
-        $oSnippetRenderer->clear();
-        $oSnippetRenderer->setVar('table', $tableConf);
-        $oSnippetRenderer->setVar('className', $className);
-        $oSnippetRenderer->setVar('fqn', ltrim($fqn , '\\'));
-        $oSnippetRenderer->setVar('namespace', ltrim($namespace, '\\'));
-        $oSnippetRenderer->setVar('fields', $fields);
-        $oSnippetRenderer->setVar('propertyMappings', array_map(static fn(DataModelParts $part) => $part->getMappingXml(), $propertyMappings));
-        $oSnippetRenderer->setVar('liveCycleCallbacks', array_map(static fn(DataModelParts $part) => $part->getLiveCycleCallbacks(), $propertyMappings));
+        $snippetRenderer->clear();
+        $snippetRenderer->setVar('table', $tableConf);
+        $snippetRenderer->setVar('className', $className);
+        $snippetRenderer->setVar('fqn', ltrim($fqn , '\\'));
+        $snippetRenderer->setVar('namespace', ltrim($namespace, '\\'));
+        $snippetRenderer->setVar('fields', $fields);
+        $snippetRenderer->setVar('propertyMappings', array_map(static fn(DataModelParts $part) => $part->getMappingXml(), $propertyMappings));
+        $snippetRenderer->setVar('liveCycleCallbacks', array_map(static fn(DataModelParts $part) => $part->getLiveCycleCallbacks(), $propertyMappings));
 
-        return $oSnippetRenderer->render();
+        return $snippetRenderer->render();
     }
 
     /**
@@ -141,11 +141,11 @@ class TableConfExporter implements TableConfExporterInterface
     ): string {
         $oSnippetRenderer = clone $this->snippetRenderer;
         $oSnippetRenderer->InitializeSource(
-            'ChameleonSystemAutoclasses/test.php.twig',
+            'ChameleonSystemAutoclasses/class.php.twig',
             \IPkgSnippetRenderer::SOURCE_TYPE_FILE
         );
         $oSnippetRenderer->clear();
-        $oSnippetRenderer->setVar('table', $tableConf);
+        $oSnippetRenderer->setVar('tableConf', $tableConf);
         $oSnippetRenderer->setVar('className', $className);
         $oSnippetRenderer->setVar('fqn', $fqn);
         $oSnippetRenderer->setVar('namespace', ltrim($namespace, '\\'));
@@ -175,17 +175,17 @@ class TableConfExporter implements TableConfExporterInterface
         return $this->snakeToCamelCase($field->name);
     }
 
-    public function snakeToCamelCase(string $string, bool $lowerCaseFirst = true): string
+    private function snakeToCamelCase(string $string): string
     {
         $camelCasedName = preg_replace_callback('/(^|_|\.)+(.)/', function ($match) {
             return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
         }, $string);
 
-        if ($lowerCaseFirst) {
-            $camelCasedName = lcfirst($camelCasedName);
-        }
-
         return $camelCasedName;
+    }
+    public function snakeToPascalCase(string $string): string
+    {
+        return lcfirst($this->snakeToCamelCase($string));
     }
 
     private function indent(?string $string, int $indent):?string

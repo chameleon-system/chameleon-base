@@ -116,8 +116,6 @@ Validate the mapping
 app/console doctrine:schema:validate
 ```
 
-todo: the command should be able to export classes into different namespaces.
-
 ## Adjust Composer Dependencies
 
 In `composer.json`, adjust version constraints for all Chameleon dependencies from `~7.1.0` to `~7.2.0` and run

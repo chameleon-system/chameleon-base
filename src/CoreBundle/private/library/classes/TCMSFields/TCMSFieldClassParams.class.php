@@ -10,7 +10,7 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableInterface;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMarkerInterface;
 
 /**
  * this field type loads a class, that is set via field config params
@@ -19,7 +19,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableIn
  * the values are stored as key=val pairs (one per line).
  *
 /**/
-class TCMSFieldClassParams extends TCMSField implements DoctrineNotTransformableInterface
+class TCMSFieldClassParams extends TCMSField implements DoctrineNotTransformableMarkerInterface
 {
     // not in the cms_field_type table
     public function GetHTML()
