@@ -16,48 +16,38 @@ class AutoclassesMapGenerator implements AutoclassesMapGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateAutoclassesMap($autoclassesDir)
+    public function generateAutoclassesMap(string $autoclassesDir): array
     {
         return $this->getClassesFromDirectory($autoclassesDir);
     }
 
-    /**
-     * @param string $rootPath
-     * @param string $relativePath
-     *
-     * @return array
-     */
-    private function getClassesFromDirectory($rootPath, $relativePath = '')
+    private function getClassesFromDirectory(string $rootPath, string $relativePath = ''): array
     {
-        $classes = array();
-        $dirPath = $rootPath;
-        if (!empty($relativePath)) {
-            $dirPath .= '/'.$relativePath;
+        $classes = [];
+
+        $dirPath = rtrim($rootPath . '/' . $relativePath, '/');
+
+        if (false === is_dir($dirPath)) {
+            return $classes;
         }
-        if (is_dir($dirPath)) {
-            $d = dir($dirPath);
-            while (false !== ($entry = $d->read())) {
-                if ('.' === $entry || '..' === $entry || '.' === substr($entry, 0, 1)) {
-                    continue;
-                }
-                if (is_dir($dirPath.'/'.$entry)) {
-                    $newRelativePath = $relativePath;
-                    if (!empty($newRelativePath)) {
-                        $newRelativePath .= '/';
-                    }
-                    $newRelativePath .= $entry;
-                    // parse sub-dir
-                    $subClasses = $this->getClassesFromDirectory($rootPath, $newRelativePath);
-                    if (count($subClasses) > 0) {
-                        // add array
-                        $classes = array_merge($classes, $subClasses);
-                    }
-                } elseif ('.class.php' === substr($entry, -10)) {
-                    $className = substr($entry, 0, -10);
-                    $classes[$className] = $relativePath;
-                }
+
+        foreach (scandir($dirPath) as $entry) {
+            if (true === in_array($entry, ['.', '..',]) || '.' === substr($entry, 0, 1))
+            {
+                continue;
             }
-            $d->close();
+
+            $entryPath = $dirPath . '/' . $entry;
+            if (true === is_dir($entryPath)) {
+                $subClasses = $this->getClassesFromDirectory($rootPath, $relativePath . '/' . $entry);
+
+                if (false === empty($subClasses)) {
+                    $classes = array_merge($classes, $subClasses);
+                }
+            } elseif ('.class.php' === substr($entry, -10)) {
+                $className = substr($entry, 0, -10);
+                $classes[$className] = $relativePath;
+            }
         }
 
         return $classes;

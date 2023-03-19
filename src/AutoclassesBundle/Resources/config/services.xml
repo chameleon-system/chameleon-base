@@ -15,6 +15,8 @@
         <service id="chameleon_system_autoclasses.auto_class_manager" class="ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManager" public="false">
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_core.filemanager" />
+            <argument type="service" id="monolog.logger.auto_classes"/>
+            <argument type="service" id="chameleon_system_autoclasses.data_access.autoclasses"/>
         </service>
 
         <service id="chameleon_system_autoclasses.autoclasses_db_adapter" class="ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapter" public="false">
@@ -46,7 +48,7 @@
             <argument>%chameleon_system_autoclasses.cache_warmer.autoclasses_dir%</argument>
             <argument type="service" id="chameleon_system_autoclasses.cache_warmer" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
-            <tag name="kernel.event_listener" event="kernel.request" method="checkAutoclasses" priority="253" />
+            <tag name="kernel.event_listener" event="kernel.request" method="checkAutoClasses" priority="253" />
         </service>
 
         <service id="chameleon_system_autoclasses.command.generate_autoclasses" class="ChameleonSystem\AutoclassesBundle\Command\GenerateAutoclassesCommand">

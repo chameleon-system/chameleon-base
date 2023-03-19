@@ -15,43 +15,21 @@ use TCMSConfig;
 
 class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterface
 {
-    /**
-     * @var AutoclassesDataAccessInterface
-     */
-    private $decorated;
-    /**
-     * @var array
-     */
-    private $tableExtensionData;
-    /**
-     * @var array
-     */
-    private $fieldData;
-    /**
-     * @var TCMSConfig
-     */
-    private $config;
-    /**
-     * @var array
-     */
-    private $tableOrderByData;
-    /**
-     * @var array
-     */
-    private $tableConfigData;
 
-    /**
-     * @param AutoclassesDataAccessInterface $decorated
-     */
+    private AutoclassesDataAccessInterface $decorated;
+    private ?array $tableExtensionData = null;
+    private ?array $fieldData = null;
+    private ?TCMSConfig $config = null;
+    private ?array $tableOrderByData = null;
+    private ?array $tableConfigData = null;
+
+
     public function __construct(AutoclassesDataAccessInterface $decorated)
     {
         $this->decorated = $decorated;
     }
 
-    /**
-     * @return void
-     */
-    public function clearCache()
+    public function clearCache(): void
     {
         $this->tableExtensionData = null;
         $this->fieldData = null;
@@ -63,7 +41,7 @@ class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterfac
     /**
      * {@inheritdoc}
      */
-    public function getTableExtensionData()
+    public function getTableExtensionData(): array
     {
         if (null === $this->tableExtensionData) {
             $this->tableExtensionData = $this->decorated->getTableExtensionData();
@@ -75,7 +53,7 @@ class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterfac
     /**
      * {@inheritdoc}
      */
-    public function getFieldData()
+    public function getFieldData(): array
     {
         if (null === $this->fieldData) {
             $this->fieldData = $this->decorated->getFieldData();
@@ -87,7 +65,7 @@ class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterfac
     /**
      * {@inheritdoc}
      */
-    public function getConfig()
+    public function getConfig(): TCMSConfig
     {
         if (null === $this->config) {
             $this->config = $this->decorated->getConfig();
@@ -99,7 +77,7 @@ class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterfac
     /**
      * {@inheritdoc}
      */
-    public function getTableOrderByData()
+    public function getTableOrderByData(): array
     {
         if (null === $this->tableOrderByData) {
             $this->tableOrderByData = $this->decorated->getTableOrderByData();
@@ -111,7 +89,7 @@ class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterfac
     /**
      * {@inheritdoc}
      */
-    public function getTableConfigData()
+    public function getTableConfigData(): array
     {
         if (null === $this->tableConfigData) {
             $this->tableConfigData = $this->decorated->getTableConfigData();

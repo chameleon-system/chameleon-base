@@ -32,7 +32,7 @@ class RequestListenerTest extends TestCase
         $evt = $this->getResponseEventProphet(HttpKernelInterface::MASTER_REQUEST, RequestTypeInterface::REQUEST_TYPE_BACKEND);
         $infoService = $this->getRequestInfoService(true);
         $listener = new RequestListener(__DIR__.'/fixtures/nonexistantdir', $cacheWarmer->reveal(), $infoService);
-        $listener->checkAutoclasses($evt->reveal());
+        $listener->checkAutoClasses($evt->reveal());
         $cacheWarmer->updateAllTables()->shouldHaveBeenCalled();
         $this->assertTrue(true);
     }
@@ -46,7 +46,7 @@ class RequestListenerTest extends TestCase
         $evt = $this->getResponseEventProphet(HttpKernelInterface::MASTER_REQUEST, RequestTypeInterface::REQUEST_TYPE_BACKEND);
         $infoService = $this->getRequestInfoService(true);
         $listener = new RequestListener(__DIR__.'/fixtures/autoclasses', $cacheWarmer->reveal(), $infoService);
-        $listener->checkAutoclasses($evt->reveal());
+        $listener->checkAutoClasses($evt->reveal());
         $cacheWarmer->updateAllTables()->shouldNotHaveBeenCalled();
         $this->assertTrue(true);
     }
@@ -60,7 +60,7 @@ class RequestListenerTest extends TestCase
         $evt = $this->getResponseEventProphet(HttpKernelInterface::SUB_REQUEST, RequestTypeInterface::REQUEST_TYPE_BACKEND);
         $infoService = $this->getRequestInfoService(true);
         $listener = new RequestListener(__DIR__.'/fixtures/nonexistantdir', $cacheWarmer->reveal(), $infoService);
-        $listener->checkAutoclasses($evt->reveal());
+        $listener->checkAutoClasses($evt->reveal());
         $cacheWarmer->updateAllTables()->shouldNotHaveBeenCalled();
         $this->assertTrue(true);
     }
@@ -74,7 +74,7 @@ class RequestListenerTest extends TestCase
         $evt = $this->getResponseEventProphet(HttpKernelInterface::MASTER_REQUEST, RequestTypeInterface::REQUEST_TYPE_FRONTEND);
         $infoService = $this->getRequestInfoService(false);
         $listener = new RequestListener(__DIR__.'/fixtures/nonexistantdir', $cacheWarmer->reveal(), $infoService);
-        $listener->checkAutoclasses($evt->reveal());
+        $listener->checkAutoClasses($evt->reveal());
         $cacheWarmer->updateAllTables()->shouldNotHaveBeenCalled();
         $this->assertTrue(true);
     }

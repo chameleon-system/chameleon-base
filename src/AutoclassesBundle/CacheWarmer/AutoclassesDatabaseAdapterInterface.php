@@ -20,21 +20,21 @@ interface AutoclassesDatabaseAdapterInterface
      *
      * @return void
      */
-    public function setConnection(Connection $conn);
+    public function setConnection(Connection $conn): void;
 
     /**
      * @return string[]
      */
-    public function getTableClassList();
+    public function getTableClassList(): array;
 
     /**
      * @return string[]
      */
-    public function getVirtualClassList();
+    public function getVirtualClassList(): array;
 
     /**
      * @param string $id
      * @return string|null
      */
-    public function getTableNameForId($id);
+    public function getTableNameForId(string $id): ?string;
 }

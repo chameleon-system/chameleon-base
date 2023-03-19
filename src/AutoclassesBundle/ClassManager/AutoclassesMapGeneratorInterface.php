@@ -23,5 +23,5 @@ interface AutoclassesMapGeneratorInterface
      *
      * @return array a list of autoclasses (mapping class names to their types)
      */
-    public function generateAutoclassesMap($autoclassesDir);
+    public function generateAutoclassesMap(string $autoclassesDir): array;
 }

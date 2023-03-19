@@ -12,31 +12,29 @@
 namespace ChameleonSystem\AutoclassesBundle\Handler;
 
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Doctrine\DBAL\Exception;
 use TCMSTableToClass;
 
 class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_AbstractBase
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function create($sClassName, $targetDir)
+
+    public function create(string $sClassName, string $targetDir): void
     {
         $tableConfId = $this->getTableConfIdForClassName($sClassName);
         if (null === $tableConfId) {
             return;
         }
-        $oClassWriter = new TCMSTableToClass($this->filemanager, $targetDir);
+        $oClassWriter = new TCMSTableToClass($this->fileManager, $targetDir);
         if ($oClassWriter->Load($tableConfId)) {
             $oClassWriter->Update($sClassName);
         }
     }
 
     /**
-     * @param string $className
-     *
      * @return int|string|null
      */
-    private function getTableConfIdForClassName($className)
+    private function getTableConfIdForClassName(string $className)
     {
         if (TCMSTableToClass::PREFIX_CLASS === substr($className, 0, strlen(TCMSTableToClass::PREFIX_CLASS))) {
             $tableName = substr($className, strlen(TCMSTableToClass::PREFIX_CLASS));
@@ -63,14 +61,9 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
         }
     }
 
-    /**
-     * @param string $tableName
-     *
-     * @return string|null
-     */
-    private function getTableConfIdForTableName($tableName)
+    private function getTableConfIdForTableName(string $tableName): ?string
     {
-        $data = $this->getAutoclassesDataAccess()->getTableConfigData();
+        $data = $this->getAutoClassesDataAccess()->getTableConfigData();
         foreach ($data as $id => $tableConf) {
             if ($tableConf['name'] === $tableName) {
                 return $id;
@@ -80,26 +73,14 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
         return null;
     }
 
-    /**
-     * converts the key under which the auto class definition is stored into the class name which the key stands for.
-     *
-     * @param string $sKey
-     *
-     * @return string
-     */
-    public function getClassNameFromKey($sKey)
+
+    public function getClassNameFromKey(string $sKey): string
     {
         return TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sKey);
     }
 
-    /**
-     * returns true if the auto class handler knows how to handle the class name passed.
-     *
-     * @param string $sClassName
-     *
-     * @return bool
-     */
-    public function canHandleClass($sClassName)
+
+    public function canHandleClass(string $sClassName): bool
     {
         $bIsTdbObject = (TCMSTableToClass::PREFIX_CLASS == substr(
             $sClassName,
@@ -124,16 +105,16 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
 
     /**
      * return an array holding classes the handler is responsible for.
-     *
-     * @return array
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Driver\Exception
      */
-    public function getClassNameList()
+    public function getClassNameList(): array
     {
         if (null === $this->aClassNameList) {
             $this->aClassNameList = array();
             $query = 'SELECT `name` FROM `cms_tbl_conf` ORDER BY `cmsident`';
-            $tRes = $this->getDatabaseConnection()->query($query);
-            while ($aRow = $tRes->fetch(\PDO::FETCH_NUM)) {
+            $tRes = $this->getDatabaseConnection()->executeQuery($query);
+            while ($aRow = $tRes->fetchNumeric()) {
                 $this->aClassNameList[] = $this->getClassNameFromKey($aRow[0]);
             }
         }
@@ -141,11 +122,4 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
         return $this->aClassNameList;
     }
 
-    /**
-     * @return AutoclassesDataAccessInterface
-     */
-    private function getAutoclassesDataAccess()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
-    }
 }

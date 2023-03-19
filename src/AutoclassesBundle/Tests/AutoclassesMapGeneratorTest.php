@@ -16,10 +16,8 @@ use PHPUnit\Framework\TestCase;
 
 class AutoclassesMapGeneratorTest extends TestCase
 {
-    /**
-     * @var AutoclassesMapGenerator
-     */
-    private $mapGenerator;
+
+    private AutoclassesMapGenerator $mapGenerator;
 
     /**
      * {@inheritdoc}

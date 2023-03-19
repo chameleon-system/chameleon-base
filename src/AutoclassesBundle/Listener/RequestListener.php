@@ -12,39 +12,31 @@
 namespace ChameleonSystem\AutoclassesBundle\Listener;
 
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
+use ChameleonSystem\AutoclassesBundle\Exception\TPkgCmsCoreAutoClassManagerException_Recursion;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestListener
 {
-    /**
-     * @var string
-     */
-    private $autoclassesDir;
-    /**
-     * @var \ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer
-     */
-    private $cacheWarmer;
-    /**
-     * @var \ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface
-     */
-    private $requestInfoService;
 
-    /**
-     * @param string $autoclassesDir
-     */
-    public function __construct($autoclassesDir, AutoclassesCacheWarmer $cacheWarmer, RequestInfoServiceInterface $requestInfoService)
+    private string $autoClassesDir;
+
+    private AutoclassesCacheWarmer $cacheWarmer;
+
+    private RequestInfoServiceInterface $requestInfoService;
+
+    public function __construct(string $autoClassesDir, AutoclassesCacheWarmer $cacheWarmer, RequestInfoServiceInterface $requestInfoService)
     {
-        $this->autoclassesDir = $autoclassesDir;
+        $this->autoClassesDir = $autoClassesDir;
         $this->cacheWarmer = $cacheWarmer;
         $this->requestInfoService = $requestInfoService;
     }
 
     /**
-     * @return void
+     * @throws TPkgCmsCoreAutoClassManagerException_Recursion
      */
-    public function checkAutoclasses(RequestEvent $evt)
+    public function checkAutoClasses(RequestEvent $evt): void
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $evt->getRequestType()) {
             return;
@@ -54,7 +46,7 @@ class RequestListener
             return;
         }
 
-        if (!file_exists($this->autoclassesDir)) {
+        if (false === file_exists($this->autoClassesDir)) {
             $this->cacheWarmer->updateAllTables();
         }
     }

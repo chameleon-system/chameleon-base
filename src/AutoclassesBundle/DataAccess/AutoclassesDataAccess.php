@@ -12,6 +12,7 @@
 namespace ChameleonSystem\AutoclassesBundle\DataAccess;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Exception;
 use PDO;
 use TCMSConfig;
 use TCMSField;
@@ -21,14 +22,10 @@ use TIterator;
 
 class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
 
-    /**
-     * @param Connection $connection
-     */
+    private Connection $connection;
+
+
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -36,15 +33,17 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 
     /**
      * {@inheritdoc}
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function getTableExtensionData()
+    public function getTableExtensionData(): array
     {
-        $data = array();
+        $data = [];
         $query = 'SELECT *
                   FROM `cms_tbl_extension`
                   ORDER BY `position` DESC';
         $statement = $this->connection->executeQuery($query);
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetchAssociative()) {
             $data[$row['cms_tbl_conf_id']][] = $row;
         }
 
@@ -53,17 +52,20 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
-    public function getFieldData()
+    public function getFieldData(): array
     {
-        $data = array();
+        $data = [];
         $query = 'SELECT `cms_field_conf`.*, `cms_tbl_conf`.`name` AS tablename
                   FROM `cms_field_conf`
                   INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
                   ORDER BY `position` ASC';
         $statement = $this->connection->executeQuery($query);
-        $fieldTypes = array();
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        $fieldTypes = [];
+
+        while ($row = $statement->fetchAssociative()) {
             $tableConfId = $row['cms_tbl_conf_id'];
             if (false === isset($data[$tableConfId])) {
                 $data[$tableConfId] = new TIterator();
@@ -71,6 +73,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
             $className = trim($row['fieldclass']);
 
             $fieldType = $row['cms_field_type_id'];
+
             if (false === isset($fieldTypes[$fieldType])) {
                 $fieldDef = new TCMSTableToField_TCMSFieldType();
                 $fieldDef->Load($fieldType);
@@ -83,7 +86,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
                 $className = trim($fieldDef->sqlData['fieldclass']);
             }
 
-            /** @var $field TCMSField */
+            /** @var TCMSField $field  */
             $field = new $className();
             $field->setDatabaseConnection($this->connection);
             $field->data = $row['field_default_value'];
@@ -100,7 +103,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfig()
+    public function getConfig(): TCMSConfig
     {
         $cmsConfig = new TCMSConfig();
         $cmsConfig->Load(1);
@@ -110,20 +113,22 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 
     /**
      * {@inheritdoc}
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function getTableOrderByData()
+    public function getTableOrderByData(): array
     {
-        $data = array();
+        $data = [];
 
         $query = 'SELECT `name`, `sort_order_direction`, `cms_tbl_conf_id` 
                   FROM `cms_tbl_display_orderfields` 
                   ORDER BY `position` ASC';
         $statement = $this->connection->executeQuery($query);
 
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetchAssociative()) {
             $tableConfId = $row['cms_tbl_conf_id'];
             if (false === isset($data[$tableConfId])) {
-                $data[$tableConfId] = array();
+                $data[$tableConfId] = [];
             }
             $data[$tableConfId][] = $row;
         }
@@ -133,15 +138,16 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 
     /**
      * {@inheritdoc}
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function getTableConfigData()
+    public function getTableConfigData(): array
     {
-        $data = array();
+        $data = [];
 
-        $query = 'SELECT * 
-                  FROM `cms_tbl_conf`';
+        $query = 'SELECT * FROM `cms_tbl_conf`';
         $statement = $this->connection->executeQuery($query);
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetchAssociative()) {
             $data[$row['id']] = $row;
         }
 

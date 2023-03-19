@@ -12,50 +12,48 @@
 namespace ChameleonSystem\AutoclassesBundle\CacheWarmer;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 
 class AutoclassesDatabaseAdapter implements AutoclassesDatabaseAdapterInterface
 {
-    /**
-     * @var Connection
-     */
-    private $conn;
+    private Connection $conn;
 
     /**
      * {@inheritdoc}
      */
-    public function setConnection(Connection $conn)
+    public function setConnection(Connection $conn): void
     {
         $this->conn = $conn;
     }
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function getTableClassList()
+    public function getTableClassList(): array
     {
-        $all = $this->conn->fetchAll('SELECT `name` from `cms_tbl_conf`');
+        $all = $this->conn->fetchAllAssociative('SELECT `name` from `cms_tbl_conf`');
 
         return $this->getNamesArray($all);
     }
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function getVirtualClassList()
+    public function getVirtualClassList(): array
     {
-        $all = $this->conn->fetchAll('SELECT `name_of_entry_point` as \'name\' FROM `pkg_cms_class_manager`');
+        $all = $this->conn->fetchAllAssociative('SELECT `name_of_entry_point` as `name` FROM `pkg_cms_class_manager`');
 
         return $this->getNamesArray($all);
     }
 
     /**
-     * @param array $all
-     *
      * @return string[]
      */
-    private function getNamesArray(array $all)
+    private function getNamesArray(array $all): array
     {
-        $result = array();
+        $result = [];
         foreach ($all as $entry) {
             $result[] = $entry['name'];
         }
@@ -65,10 +63,11 @@ class AutoclassesDatabaseAdapter implements AutoclassesDatabaseAdapterInterface
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function getTableNameForId($id)
+    public function getTableNameForId(string $id): ?string
     {
-        $result = $this->conn->fetchAll('SELECT `name` from `cms_tbl_conf` WHERE id=:id', array('id' => $id));
+        $result = $this->conn->fetchAllAssociative('SELECT `name` from `cms_tbl_conf` WHERE id=:id', ['id' => $id]);
         if (0 === count($result)) {
             return null;
         }

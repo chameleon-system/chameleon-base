@@ -15,44 +15,29 @@ interface IPkgCmsCoreAutoClassHandler
 {
     /**
      * create the auto class.
-     *
-     * @param string $sClassName
-     * @param string $targetDir
-     *
-     * @return void
      */
-    public function create($sClassName, $targetDir);
+    public function create(string $sClassName, string $targetDir): void;
 
     /**
      * converts the key under which the auto class definition is stored into the class name which the key stands for.
      *
-     * @param string $sKey
-     *
-     * @return string
+     * @return string|false
      */
-    public function getClassNameFromKey($sKey);
+    public function getClassNameFromKey(string $sKey);
 
     /**
      * returns true if the auto class handler knows how to handle the class name passed.
-     *
-     * @param string $sClassName
-     *
-     * @return bool
      */
-    public function canHandleClass($sClassName);
+    public function canHandleClass(string $sClassName): bool;
 
     /**
      * return an array holding classes the handler is responsible for.
-     *
-     * @return array
      */
-    public function getClassNameList();
+    public function getClassNameList(): array;
 
     /**
      * resets the internal cache (e.g. for the glue mapping)
      * Call this when recreating classes.
-     *
-     * @return void
      */
-    public function resetInternalCache();
+    public function resetInternalCache(): void;
 }

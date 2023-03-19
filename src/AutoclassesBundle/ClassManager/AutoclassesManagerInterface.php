@@ -30,7 +30,7 @@ interface AutoclassesManagerInterface
      *
      * @throws TPkgCmsCoreAutoClassManagerException_Recursion
      */
-    public function create($classname, $targetDir);
+    public function create(string $classname, string $targetDir): bool;
 
     /**
      * Registers a handler that is able to create autoclasses of a certain type.
@@ -39,5 +39,5 @@ interface AutoclassesManagerInterface
      *
      * @return void
      */
-    public function registerHandler(IPkgCmsCoreAutoClassHandler $handler);
+    public function registerHandler(IPkgCmsCoreAutoClassHandler $handler): void;
 }

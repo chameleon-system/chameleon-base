@@ -13,32 +13,19 @@ namespace ChameleonSystem\AutoclassesBundle\Exception;
 
 class TPkgCmsCoreAutoClassManagerException_Recursion extends TPkgCmsCoreAutoClassManagerException
 {
-    /**
-     * @var string|null
-     */
-    private $sNameOfClassAttemptedToGenerate = null;
-    /**
-     * @var array|null
-     */
-    private $aClassCallStack = null;
 
-    /**
-     * @param string $sNameOfClassAttemptedToGenerate
-     * @param array  $aClassCallStack
-     * @param string $filename
-     * @param int    $lineno
-     */
-    public function __construct($sNameOfClassAttemptedToGenerate, $aClassCallStack, $filename, $lineno)
+    private ?string $sNameOfClassAttemptedToGenerate = null;
+    private ?array $aClassCallStack = null;
+
+    public function __construct(string $sNameOfClassAttemptedToGenerate, array $aClassCallStack, string $filename, int $lineno)
     {
         $this->sNameOfClassAttemptedToGenerate = $sNameOfClassAttemptedToGenerate;
         $this->aClassCallStack = $aClassCallStack;
         parent::__construct($this->generateMessageFromCallDetails(), 0, E_USER_ERROR, $filename, $lineno);
     }
 
-    /**
-     * @return string
-     */
-    private function generateMessageFromCallDetails()
+
+    private function generateMessageFromCallDetails(): string
     {
         return "Unable to generate auto class {$this->sNameOfClassAttemptedToGenerate} because a recursion occured. Class-Call-Stack: ".implode(
             ', ',

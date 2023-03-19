@@ -9,42 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace ChameleonSystem\AutoclassesBundle\CacheWarmer;
+namespace ChameleonSystem\AutoClassesBundle\CacheWarmer;
 
-use ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface;
-use ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface;
+use ChameleonSystem\AutoClassesBundle\ClassManager\AutoclassesMapGeneratorInterface;
+use ChameleonSystem\AutoClassesBundle\ClassManager\AutoclassesManagerInterface;
+use ChameleonSystem\AutoclassesBundle\Exception\TPkgCmsCoreAutoClassManagerException_Recursion;
 use IPkgCmsFileManager;
 
 class AutoclassesCacheWarmer
 {
-    /**
-     * @var AutoclassesDatabaseAdapterInterface
-     */
-    private $databaseAdapter;
-    /**
-     * @var AutoclassesManagerInterface
-     */
-    private $autoClassManager;
-    /**
-     * @var AutoclassesMapGeneratorInterface
-     */
-    private $autoclassesMapGenerator;
-    /**
-     * @var IPkgCmsFileManager
-     */
-    private $fileManager;
-    /**
-     * @var string
-     */
-    private $cacheDir;
+    private AutoclassesDatabaseAdapterInterface $databaseAdapter;
+    private AutoclassesManagerInterface $autoClassManager;
+    private AutoclassesMapGeneratorInterface $autoclassesMapGenerator;
+    private IPkgCmsFileManager $fileManager;
+    private string $cacheDir;
 
-    /**
-     * @param AutoclassesManagerInterface         $autoClassManager
-     * @param AutoclassesDatabaseAdapterInterface $databaseAdapter
-     * @param AutoclassesMapGeneratorInterface    $autoclassesMapGenerator
-     * @param IPkgCmsFileManager                  $filemanager
-     * @param string                              $cacheDir
-     */
     public function __construct(AutoclassesManagerInterface $autoClassManager, AutoclassesDatabaseAdapterInterface $databaseAdapter, AutoclassesMapGeneratorInterface $autoclassesMapGenerator, IPkgCmsFileManager $filemanager, $cacheDir)
     {
         $this->autoClassManager = $autoClassManager;
@@ -54,27 +33,18 @@ class AutoclassesCacheWarmer
         $this->cacheDir = $cacheDir;
     }
 
-    /**
-     * @param string $id
-     *
-     * @return void
-     */
-    public function updateTableById($id)
+    public function updateTableById(string $id): void
     {
-        $tablename = $this->databaseAdapter->getTableNameForId($id);
-        if (null !== $tablename) {
-            $this->updateTableByName($tablename);
+        $tableName = $this->databaseAdapter->getTableNameForId($id);
+
+        if (null !== $tableName) {
+            $this->updateTableByName($tableName);
         }
     }
 
-    /**
-     * @param string $tablename
-     *
-     * @return void
-     */
-    public function updateTableByName($tablename)
+    public function updateTableByName(string $tableName): void
     {
-        $classesToCreate = $this->getClassListForTableName($tablename);
+        $classesToCreate = $this->getClassListForTableName($tableName);
         foreach ($classesToCreate as $classToCreate) {
             $this->autoClassManager->create($classToCreate, $this->cacheDir);
         }
@@ -82,56 +52,48 @@ class AutoclassesCacheWarmer
     }
 
     /**
-     * @return void
+     * @throws TPkgCmsCoreAutoClassManagerException_Recursion
      */
-    public function updateAllTables()
+    public function updateAllTables(): void
     {
         $targetDir = $this->cacheDir;
-        $autoclassesExistedBefore = false;
-        if (file_exists($targetDir)) {
+        $autoClassesExistedBefore = file_exists($targetDir);
+
+        if (true === $autoClassesExistedBefore) {
             $targetDir = $this->createTempCacheDir();
-            $autoclassesExistedBefore = true;
         }
-        $tableClasses = $this->getTableClassNamesToLoad();
-        foreach (array('virtualClasses', 'tableClasses') as $type) {
-            foreach ($tableClasses[$type] as $class) {
-                $this->autoClassManager->create($class, $targetDir);
+
+        $tableClassNames = $this->getTableClassNamesToLoad();
+
+        foreach (['virtualClasses', 'tableClasses'] as $type) {
+            foreach ($tableClassNames[$type] as $className) {
+                $this->autoClassManager->create($className, $targetDir);
             }
             $this->regenerateClassmap($targetDir);
         }
 
-        if ($autoclassesExistedBefore) {
-            $this->makeTempDirToAutoclassesDir($targetDir);
+        if (true === $autoClassesExistedBefore) {
+            $this->makeTempDirToAutoClassesDir($targetDir);
         }
     }
 
-    /**
-     * @return string
-     */
-    private function createTempCacheDir()
+    private function createTempCacheDir(): string
     {
-        $tempCacheDir = $this->cacheDir;
-        $tempCacheDir = rtrim($tempCacheDir, DIRECTORY_SEPARATOR);
-        $tempCacheDir[strlen($tempCacheDir) - 1] = '_';
-        $tempCacheDir .= DIRECTORY_SEPARATOR;
+        $tempCacheDir = rtrim($this->cacheDir, DIRECTORY_SEPARATOR) . '_' . DIRECTORY_SEPARATOR;
 
-        if (file_exists($tempCacheDir)) {
+        if (true === file_exists($tempCacheDir)) {
             $this->fileManager->deldir($tempCacheDir, true);
         }
+
         mkdir($tempCacheDir, 0777, true);
 
         return $tempCacheDir;
     }
 
-    /**
-     * @param string $targetDir
-     *
-     * @return void
-     */
-    private function makeTempDirToAutoclassesDir($targetDir)
+    private function makeTempDirToAutoClassesDir(string $targetDir): void
     {
         $oldCacheDir = $this->getOldCacheDir();
-        if (file_exists($oldCacheDir)) {
+        if (true === file_exists($oldCacheDir)) {
             $this->fileManager->deldir($oldCacheDir, true);
         }
         $this->fileManager->move($this->cacheDir, $oldCacheDir);
@@ -139,52 +101,35 @@ class AutoclassesCacheWarmer
         $this->fileManager->deldir($oldCacheDir, true);
     }
 
-    /**
-     * @return string
-     */
-    private function getOldCacheDir()
-    {
-        $dir = $this->cacheDir;
-        $dir = rtrim($dir, DIRECTORY_SEPARATOR);
-        $dir .= '_old';
-        $dir .= DIRECTORY_SEPARATOR;
 
-        return $dir;
+    private function getOldCacheDir(): string
+    {
+        return rtrim($this->cacheDir, DIRECTORY_SEPARATOR) . '_old' . DIRECTORY_SEPARATOR;;
     }
 
-    /**
-     * @return array
-     */
-    public function getTableClassNamesToLoad()
+    public function getTableClassNamesToLoad(): array
     {
         // get all table classes
         $result = $this->databaseAdapter->getTableClassList();
 
-        $convertedList = array();
+        $convertedList = [];
         foreach ($result as $bareClassName) {
             $classNames = $this->getClassListForTableName($bareClassName);
             $convertedList = array_merge($convertedList, $classNames);
         }
 
-        $result2 = $this->databaseAdapter->getVirtualClassList();
+        $virtualClassList = $this->databaseAdapter->getVirtualClassList();
 
-        $convertedList = array('virtualClasses' => $result2, 'tableClasses' => $convertedList);
-
-        return $convertedList;
+        return ['virtualClasses' => $virtualClassList, 'tableClasses' => $convertedList];
     }
 
-    /**
-     * @param string $bareClassName
-     *
-     * @return string
-     */
-    private function convertToCamelCase($bareClassName)
+    private function convertToCamelCase(string $bareClassName): string
     {
         $className = preg_replace_callback('/(_.)/', function ($matches) {
             return strtoupper(substr($matches[0], 1, 1));
         }, $bareClassName);
 
-        return strtoupper(substr($className, 0, 1)).substr($className, 1);
+        return strtoupper(substr($className, 0, 1)) . substr($className, 1);
     }
 
     /**
@@ -196,10 +141,10 @@ class AutoclassesCacheWarmer
     {
         $list = array();
         $realClassName = $this->convertToCamelCase($bareClassName);
-        $list[] = 'Tdb'.$realClassName;
-        $list[] = 'TAdb'.$realClassName;
-        $list[] = 'Tdb'.$realClassName.'List';
-        $list[] = 'TAdb'.$realClassName.'List';
+        $list[] = 'Tdb' . $realClassName;
+        $list[] = 'TAdb' . $realClassName;
+        $list[] = 'Tdb' . $realClassName . 'List';
+        $list[] = 'TAdb' . $realClassName . 'List';
 
         return $list;
     }
@@ -215,7 +160,7 @@ class AutoclassesCacheWarmer
             $targetDir = $this->cacheDir;
         }
         $classData = $this->autoclassesMapGenerator->generateAutoclassesMap($targetDir);
-        $filePath = $targetDir.'autoloader.chameleon.txt';
+        $filePath = $targetDir . 'autoloader.chameleon.txt';
         $file = $this->fileManager->fopen($filePath, 'wb');
         $this->writeClassmap($file, $classData);
         $this->fileManager->fclose($file);
@@ -225,7 +170,7 @@ class AutoclassesCacheWarmer
 
     /**
      * @param resource $file
-     * @param array    $classData
+     * @param array $classData
      *
      * @return void
      */

@@ -13,6 +13,7 @@ namespace ChameleonSystem\AutoclassesBundle\Tests;
 
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface;
+use ChameleonSystem\AutoclassesBundle\Exception\TPkgCmsCoreAutoClassManagerException_Recursion;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -22,8 +23,7 @@ class AutoclassesCacheWarmerTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var AutoclassesCacheWarmer */
-    private $warmer;
+    private AutoclassesCacheWarmer $warmer;
 
     protected function tearDown(): void
     {
@@ -36,9 +36,9 @@ class AutoclassesCacheWarmerTest extends TestCase
      */
     public function it_updates_single_tables_by_id()
     {
-        /** @var $manager \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy */
+        /** @var \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy $manager */
         $manager = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface');
-        /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
+        /** @var AutoclassesDatabaseAdapterInterface|ObjectProphecy $adapter */
         $adapter = $this->prophesize('\ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface');
         $adapter
             ->getTableNameForId('123')
@@ -49,15 +49,15 @@ class AutoclassesCacheWarmerTest extends TestCase
         /** @var \IPkgCmsFileManager|ObjectProphecy $filemanager */
         $filemanager = $this->prophesize('\IPkgCmsFileManager');
         $cacheDir = __DIR__.'/cache/';
-        /** @var $autoclassesMapGenerator \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy */
-        $autoclassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
-        $autoclassesMapGenerator
+        /** @var $autoClassesMapGenerator \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy */
+        $autoClassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
+        $autoClassesMapGenerator
             ->generateAutoclassesMap($cacheDir)
-            ->willReturn(array(
+            ->willReturn([
                 'TestClass' => 'TestType',
-            ));
+            ]);
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoClassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
 
         $this->warmer->updateTableById('123');
 
@@ -72,24 +72,24 @@ class AutoclassesCacheWarmerTest extends TestCase
      */
     public function it_updates_single_tables_by_name()
     {
-        /** @var $manager \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy */
+        /** @var \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy $manager */
         $manager = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface');
-        /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
+        /** @var AutoclassesDatabaseAdapterInterface|ObjectProphecy $adapter */
         $adapter = $this->prophesize('\ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface');
         /** @var \IPkgCmsFileManager|ObjectProphecy $filemanager */
         $filemanager = $this->prophesize('\IPkgCmsFileManager');
 
         $cacheDir = __DIR__.'/cache/';
 
-        /** @var $autoclassesMapGenerator \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy */
-        $autoclassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
-        $autoclassesMapGenerator
+        /** @var \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy $autoClassesMapGenerator */
+        $autoClassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
+        $autoClassesMapGenerator
             ->generateAutoclassesMap($cacheDir)
-            ->willReturn(array(
+            ->willReturn([
                 'TestClass' => 'TestType',
-            ));
+            ]);
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoClassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
 
         $this->warmer->updateTableByName('foo_table');
 
@@ -104,22 +104,22 @@ class AutoclassesCacheWarmerTest extends TestCase
      */
     public function it_ignores_nonexistant_tables()
     {
-        /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
+        /** @var AutoclassesDatabaseAdapterInterface|ObjectProphecy $adapter */
         $adapter = $this->prophesize('\ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface');
         $adapter
             ->getTableNameForId('123')
             ->willReturn(
                 null
             );
-        /** @var $manager \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy */
+        /** @var \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy $manager */
         $manager = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface');
-        /** @var $autoclassesMapGenerator \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy */
-        $autoclassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
+        /** @var \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy $autoClassesMapGenerator */
+        $autoClassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
         /** @var \IPkgCmsFileManager|ObjectProphecy $filemanager */
         $filemanager = $this->prophesize('\IPkgCmsFileManager');
         $cacheDir = '';
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoClassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
 
         $this->warmer->updateTableById('123');
 
@@ -131,41 +131,41 @@ class AutoclassesCacheWarmerTest extends TestCase
      */
     public function it_converts_underscore_names_to_autoclass_names()
     {
-        /** @var $manager \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy */
+        /** @var \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy $manager */
         $manager = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface');
-        /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
+        /** @var AutoclassesDatabaseAdapterInterface|ObjectProphecy $adapter */
         $adapter = $this->prophesize('\ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface');
         $adapter
             ->getTableClassList()
             ->willReturn(
-                array(
+                [
                     'foo_bar',
                     'bar_baz',
                     'a_b_cx',
-                )
+                ]
             );
         $adapter
             ->getVirtualClassList()
             ->willReturn(
-                array(
+                [
                     'vfoo_bar',
                     'vbar_baz',
                     'va_b_cx',
-                )
+                ]
             );
-        /** @var $autoclassesMapGenerator \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy */
-        $autoclassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
-        /** @var \IPkgCmsFileManager|ObjectProphecy $filemanager */
-        $filemanager = $this->prophesize('\IPkgCmsFileManager');
+        /** @var \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy $autoClassesMapGenerator */
+        $autoClassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
+        /** @var \IPkgCmsFileManager|ObjectProphecy $fileManager */
+        $fileManager = $this->prophesize('\IPkgCmsFileManager');
         $cacheDir = '';
 
-        $expected = array(
-            'virtualClasses' => array(
+        $expected = [
+            'virtualClasses' => [
                 'vfoo_bar',
                 'vbar_baz',
                 'va_b_cx',
-            ),
-            'tableClasses' => array(
+            ],
+            'tableClasses' => [
                 'TdbFooBar',
                 'TAdbFooBar',
                 'TdbFooBarList',
@@ -178,10 +178,10 @@ class AutoclassesCacheWarmerTest extends TestCase
                 'TAdbABCx',
                 'TdbABCxList',
                 'TAdbABCxList',
-            ),
-        );
+            ],
+        ];
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoClassesMapGenerator->reveal(), $fileManager->reveal(), $cacheDir);
 
         $result = $this->warmer->getTableClassNamesToLoad();
         $this->assertEquals($expected, $result);
@@ -189,41 +189,42 @@ class AutoclassesCacheWarmerTest extends TestCase
 
     /**
      * @test
+     * @throws TPkgCmsCoreAutoClassManagerException_Recursion
      */
     public function it_should_warm_the_complete_cache()
     {
-        /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
+        /** @var AutoclassesDatabaseAdapterInterface|ObjectProphecy $adapter */
         $adapter = $this->prophesize('\ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface');
         $adapter
             ->getTableClassList()
             ->willReturn(
-                array(
+                [
                     'foo_bar',
-                )
+                ]
             );
         $adapter
             ->getVirtualClassList()
             ->willReturn(
-                array(
+                [
                     'vfoo_bar',
-                )
+                ]
             );
-        /** @var \IPkgCmsFileManager|ObjectProphecy $filemanager */
-        $filemanager = $this->prophesize('\IPkgCmsFileManager');
+        /** @var \IPkgCmsFileManager|ObjectProphecy $fileManager */
+        $fileManager = $this->prophesize('\IPkgCmsFileManager');
         $cacheDir = __DIR__.'/cache/';
         $tempCacheDir = __DIR__.'/cach_/';
-        /** @var $autoclassesMapGenerator \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy */
-        $autoclassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
-        $autoclassesMapGenerator
+        /** @var \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface|ObjectProphecy $autoClassesMapGenerator */
+        $autoClassesMapGenerator = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface');
+        $autoClassesMapGenerator
             ->generateAutoclassesMap($tempCacheDir)
-            ->willReturn(array(
+            ->willReturn([
                 'TestClass' => 'TestType',
-            ));
+            ]);
 
         /** @var $manager \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy */
         $manager = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface');
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoClassesMapGenerator->reveal(), $fileManager->reveal(), $cacheDir);
 
         $this->warmer->updateAllTables();
 

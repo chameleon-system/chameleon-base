@@ -11,8 +11,10 @@
 
 namespace ChameleonSystem\AutoclassesBundle\Handler;
 
+use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use Doctrine\DBAL\Connection;
 use IPkgCmsFileManager;
+use Psr\Log\LoggerInterface;
 
 abstract class TPkgCoreAutoClassHandler_AbstractBase implements IPkgCmsCoreAutoClassHandler
 {
@@ -21,47 +23,47 @@ abstract class TPkgCoreAutoClassHandler_AbstractBase implements IPkgCmsCoreAutoC
      */
     protected $aClassMapping = null;
 
-    /**
-     * @var null|array
-     */
-    protected $aClassExtensionList = null;
+    protected ?array $aClassExtensionList = null;
 
     /**
      * @var null|class-string[]
      */
-    protected $aClassNameList = null;
+    protected ?array $aClassNameList = null;
 
-    /**
-     * @var IPkgCmsFileManager
-     */
-    protected $filemanager;
+    protected IPkgCmsFileManager $fileManager;
 
-    /**
-     * @var Connection
-     */
-    private $databaseConnection;
+    private Connection $databaseConnection;
+    private LoggerInterface $logger;
+    private AutoclassesDataAccessInterface $autoClassesDataAccess;
 
-    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager)
+    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $fileManager, LoggerInterface $logger, AutoclassesDataAccessInterface $autoClassesDataAccess)
     {
         $this->databaseConnection = $databaseConnection;
-        $this->filemanager = $filemanager;
+        $this->fileManager = $fileManager;
+        $this->logger = $logger;
+        $this->autoClassesDataAccess = $autoClassesDataAccess;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function resetInternalCache()
+    public function resetInternalCache(): void
     {
         $this->aClassMapping = null;
         $this->aClassExtensionList = null;
         $this->aClassNameList = null;
     }
 
-    /**
-     * @return Connection
-     */
-    protected function getDatabaseConnection()
+    protected function getDatabaseConnection(): Connection
     {
         return $this->databaseConnection;
+    }
+
+    protected function getLogger(): LoggerInterface
+    {
+        return $this->logger;
+    }
+
+
+    protected function getAutoClassesDataAccess(): AutoclassesDataAccessInterface
+    {
+        return $this->autoClassesDataAccess;
     }
 }

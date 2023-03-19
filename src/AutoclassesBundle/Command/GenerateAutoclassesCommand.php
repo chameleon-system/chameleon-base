@@ -21,10 +21,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class GenerateAutoclassesCommand extends Command
 {
-    /**
-     * @var AutoclassesCacheWarmer
-     */
-    private $autoclassesCacheWarmer;
+
+    private AutoclassesCacheWarmer $autoclassesCacheWarmer;
 
     public function __construct(AutoclassesCacheWarmer $autoclassesCacheWarmer)
     {
@@ -34,10 +32,8 @@ class GenerateAutoclassesCommand extends Command
 
     /**
      * {@inheritDoc}
-     *
-     * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Generates all autoclasses')

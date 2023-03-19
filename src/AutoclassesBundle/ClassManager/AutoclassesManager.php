@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\AutoclassesBundle\ClassManager;
 
+use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use ChameleonSystem\AutoclassesBundle\Exception\TPkgCmsCoreAutoClassManagerException_Recursion;
 use ChameleonSystem\AutoclassesBundle\Handler\IPkgCmsCoreAutoClassHandler;
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_AbstractBase;
@@ -18,6 +19,7 @@ use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TableClas
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TPkgCmsClassManager;
 use Doctrine\DBAL\Connection;
 use IPkgCmsFileManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * {@inheritdoc}
@@ -27,28 +29,23 @@ class AutoclassesManager implements AutoclassesManagerInterface
     /**
      * @var TPkgCoreAutoClassHandler_AbstractBase[]
      */
-    private $handlerList = array();
-    /**
-     * to prevent infinite recursion we push each class being processed onto the callstack - and pop it back out when it has been generated.
-     *
-     * @var array
-     */
-    private $callStack = array();
+    private array $handlerList = [];
 
     /**
-     * @param Connection         $databaseConnection
-     * @param IPkgCmsFileManager $filemanager
+     * to prevent infinite recursion we push each class being processed onto the callstack - and pop it back out when it has been generated.
      */
-    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager)
+    private array $callStack = [];
+
+    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $fileManager, LoggerInterface $logger, AutoclassesDataAccessInterface $autoClassesDataAccess)
     {
-        $this->registerHandler(new TPkgCoreAutoClassHandler_TableClass($databaseConnection, $filemanager));
-        $this->registerHandler(new TPkgCoreAutoClassHandler_TPkgCmsClassManager($databaseConnection, $filemanager));
+        $this->registerHandler(new TPkgCoreAutoClassHandler_TableClass($databaseConnection, $fileManager, $logger, $autoClassesDataAccess));
+        $this->registerHandler(new TPkgCoreAutoClassHandler_TPkgCmsClassManager($databaseConnection, $fileManager, $logger, $autoClassesDataAccess));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function registerHandler(IPkgCmsCoreAutoClassHandler $handler)
+    public function registerHandler(IPkgCmsCoreAutoClassHandler $handler): void
     {
         $this->handlerList[] = $handler;
     }
@@ -56,7 +53,7 @@ class AutoclassesManager implements AutoclassesManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function create($classname, $targetDir)
+    public function create(string $classname, string $targetDir): bool
     {
         $classCreated = false;
         if (true === $this->isInCallStack($classname)) {
@@ -75,35 +72,23 @@ class AutoclassesManager implements AutoclassesManagerInterface
             $handler->create($classname, $targetDir);
             break;
         }
+
         $this->popFromCallStack();
 
         return $classCreated;
     }
 
-    /**
-     * @param string $className
-     *
-     * @return bool
-     */
-    private function isInCallStack($className)
+    private function isInCallStack(string $className): bool
     {
         return in_array($className, $this->callStack);
     }
 
-    /**
-     * @param string $className
-     *
-     * @return void
-     */
-    private function pushToCallStack($className)
+    private function pushToCallStack(string $className): void
     {
         $this->callStack[] = $className;
     }
 
-    /**
-     * @return string
-     */
-    private function popFromCallStack()
+    private function popFromCallStack(): string
     {
         return array_pop($this->callStack);
     }
