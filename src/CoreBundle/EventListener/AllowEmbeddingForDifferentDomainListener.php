@@ -37,7 +37,7 @@ class AllowEmbeddingForDifferentDomainListener
     {
         $request = $event->getRequest();
 
-        if (false === $this->isPreviewMode($request)) {
+        if (false === $this->isPreviewMode($request->get('__previewmode'))) {
             return;
         }
 
@@ -53,9 +53,9 @@ class AllowEmbeddingForDifferentDomainListener
         header("X-Frame-Options: ALLOW-FROM $refererHost");
     }
 
-    private function isPreviewMode(Request $request): bool
+    private function isPreviewMode(?string $previewMode): bool
     {
-        return 'true' === $request->get('__previewmode');
+        return 'true' === $previewMode;
     }
 
     private function getRefererHost(Request $request): ?string
