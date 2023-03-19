@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\AutoclassesBundle\ClassManager;
 
+use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use ChameleonSystem\AutoclassesBundle\Exception\TPkgCmsCoreAutoClassManagerException_Recursion;
 use ChameleonSystem\AutoclassesBundle\Handler\IPkgCmsCoreAutoClassHandler;
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_AbstractBase;
@@ -39,10 +40,10 @@ class AutoclassesManager implements AutoclassesManagerInterface
      * @param Connection         $databaseConnection
      * @param IPkgCmsFileManager $filemanager
      */
-    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager)
+    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager, \TPkgCmsVirtualClassManager $virtualClassManager, AutoclassesDataAccessInterface $autoClassDataAccess)
     {
-        $this->registerHandler(new TPkgCoreAutoClassHandler_TableClass($databaseConnection, $filemanager));
-        $this->registerHandler(new TPkgCoreAutoClassHandler_TPkgCmsClassManager($databaseConnection, $filemanager));
+        $this->registerHandler(new TPkgCoreAutoClassHandler_TableClass($databaseConnection, $filemanager, $autoClassDataAccess));
+        $this->registerHandler(new TPkgCoreAutoClassHandler_TPkgCmsClassManager($databaseConnection, $filemanager, $virtualClassManager));
     }
 
     /**

@@ -227,7 +227,7 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
                 $this->databaseConnection->quoteIdentifier($fieldNameTranslated),
                 $this->databaseConnection->quoteIdentifier($usage->getTargetTableName())
             );
-            $row = $this->databaseConnection->fetchAssoc($query, array('id' => $usage->getTargetRecordId()));
+            $row = $this->databaseConnection->fetchAssociative($query, array('id' => $usage->getTargetRecordId()));
             $images = explode(',', $row['fieldValue']);
             foreach ($images as $key => $imageId) {
                 if ($imageId === $usage->getMediaItemId()) {
@@ -284,7 +284,7 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
                 $this->databaseConnection->quoteIdentifier($fieldNameTranslated),
                 $this->databaseConnection->quoteIdentifier($usage->getTargetTableName())
             );
-            $row = $this->databaseConnection->fetchAssoc(
+            $row = $this->databaseConnection->fetchAssociative(
                 $query,
                 array('id' => $usage->getTargetRecordId())
             );

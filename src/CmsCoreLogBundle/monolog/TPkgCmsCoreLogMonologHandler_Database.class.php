@@ -30,7 +30,7 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
         $this->connection = $connection;
     }
 
-    protected function write(array $record)
+    protected function write(array $record): void
     {
         static $rootDir = null;
         if (null === $rootDir) {

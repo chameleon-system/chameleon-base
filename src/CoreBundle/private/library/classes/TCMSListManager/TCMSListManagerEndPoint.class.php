@@ -12,6 +12,9 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -58,9 +61,9 @@ class TCMSListManagerEndPoint
      *
      * @param TdbCmsTblConf $oTableConf
      */
-    public function Init(&$oTableConf)
+    public function Init($oTableConf)
     {
-        $this->oTableConf = &$oTableConf;
+        $this->oTableConf = $oTableConf;
     }
 
     /**
@@ -107,9 +110,9 @@ class TCMSListManagerEndPoint
     public function CheckTableRights()
     {
         $tableRights = false;
-
-        $oGlobal = TGlobal::instance();
-        $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
         if ($tableInUserGroup) {
             $tableRights = true;
         }
@@ -182,7 +185,7 @@ class TCMSListManagerEndPoint
             }
 
             // now add custom restrictions if present
-            $oCustomRestrictions = &$this->oTableConf->GetProperties('cms_tbl_conf_restrictions', 'TCMSTableConfRestriction');
+            $oCustomRestrictions = $this->oTableConf->GetProperties('cms_tbl_conf_restrictions', 'TCMSTableConfRestriction');
             while ($oCustomRestriction = $oCustomRestrictions->Next()) {
                 /** @var $oCustomRestriction TCMSTableConfRestriction */
                 $sCustomRestriction = $oCustomRestriction->GetRestriction($this->oTableConf);
@@ -265,14 +268,22 @@ class TCMSListManagerEndPoint
     public function GetPortalRestriction()
     {
         $query = '';
-        $oUser = &TCMSUser::GetActiveUser();
-
-        if (null === $oUser || $oUser->oAccessManager->user->portals->hasNoPortals) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return false;
-        } // exit if the field does not exist
+        }
+
+
+        $portals = $securityHelper->getUser()?->getPortals();
+        if (null === $portals) {
+            $portals = [];
+        }
+        $portalRestrictions = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quote($id), array_keys($portals)));
+
 
         // we add the portal restriction ONLY if the user does not have the cms_admin role (admins may see all portals)
-        if (false === $oUser->oAccessManager->user->IsAdmin()) {
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             $databaseConnection = $this->getDatabaseConnection();
             $sTableName = $this->oTableConf->sqlData['name'];
             $quotedTableName = $databaseConnection->quoteIdentifier($sTableName);
@@ -282,15 +293,14 @@ class TCMSListManagerEndPoint
             $portalLinkExists = ($portalMLTFieldExists || $portalIDFieldExists);
             if ($portalLinkExists) {
                 $restriction = '';
-                $portalRestriction = $oUser->oAccessManager->user->portals->PortalList();
                 $mltTable = $this->oTableConf->sqlData['name'].'_cms_portal_mlt';
                 $quotedMltTable = $databaseConnection->quoteIdentifier($mltTable);
-                if (false !== $portalRestriction) { // the user is in portals...
+                if ('' !== $portalRestrictions) { // the user is in portals...
                     if ($portalMLTFieldExists) {
                         // mlt connection (record may be in many portals)
 
                         $mltSubSelect = $this->getSubselectForMlt($quotedTableName, $quotedMltTable);
-                        $mltSubSelect .= " OR $quotedMltTable.`target_id` IN ($portalRestriction)";
+                        $mltSubSelect .= " OR $quotedMltTable.`target_id` IN ($portalRestrictions)";
 
                         $restriction .= " $quotedTableName.`id` IN ($mltSubSelect)";
                     }
@@ -298,7 +308,7 @@ class TCMSListManagerEndPoint
                         if (!empty($restriction)) {
                             $restriction .= ' AND ';
                         }
-                        $restriction .= " ($quotedTableName.`cms_portal_id` IN ($portalRestriction) OR $quotedTableName.`cms_portal_id` = '' OR $quotedTableName.`cms_portal_id` = '0')";
+                        $restriction .= " ($quotedTableName.`cms_portal_id` IN ($portalRestrictions) OR $quotedTableName.`cms_portal_id` = '' OR $quotedTableName.`cms_portal_id` = '0')";
                     }
                 } else {
                     if ($portalMLTFieldExists) {
@@ -316,13 +326,12 @@ class TCMSListManagerEndPoint
                     }
                 }
                 $query .= " $restriction";
-            } elseif ('`cms_portal`.`name`' == $this->oTableConf->sqlData['list_group_field'] || 'cms_portal' == $this->oTableConf->sqlData['name']) {
+            } elseif ('`cms_portal`.`name`' === $this->oTableConf->sqlData['list_group_field'] || 'cms_portal' === $this->oTableConf->sqlData['name']) {
                 // if the portal is the group field, or we are the portal table then we will need to restrict by portal as well...
-                $portalRestriction = $oUser->oAccessManager->user->portals->PortalList();
-                if (false === $portalRestriction) {
+                if ('' === $portalRestrictions) {
                     $query = ' 1=2';
                 } else {
-                    $query = " (`cms_portal`.`id` IN ($portalRestriction))";
+                    $query = " (`cms_portal`.`id` IN ($portalRestrictions))";
                 }
             }
         }
@@ -355,10 +364,21 @@ class TCMSListManagerEndPoint
     public function GetUserRestriction()
     {
         $query = '';
-        $oGlobal = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
+        $userGroupIds = $securityHelper->getUser()?->getGroups();
+        if (null === $userGroupIds) {
+            $userGroupIds = [];
+        }
+        if (0 === count($userGroupIds)) {
+            $groupList = false;
+        } else {
+            $groupList = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quote($id), array_keys($userGroupIds)));
+        }
 
         $restrictionQuery = '';
-        if (!$oGlobal->oUser->oAccessManager->HasShowAllPermission($this->oTableConf->sqlData['name']) && !$oGlobal->oUser->oAccessManager->HasShowAllReadOnlyPermission($this->oTableConf->sqlData['name'])) {
+        if (!$securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->sqlData['name'])) {
             // user does not have the right to view or edit records he did not create. does the table
             // contain a user field (cms_user_id)
             // a user that does not have permission to see all records may still view a record if it
@@ -367,7 +387,7 @@ class TCMSListManagerEndPoint
             $userField = MySqlLegacySupport::getInstance()->query($tmpQuery);
 
             if (MySqlLegacySupport::getInstance()->num_rows($userField) > 0) {
-                $restrictionQuery = $this->CreateRestriction('cms_user_id', "= '".$oGlobal->oUser->oAccessManager->user->id."'");
+                $restrictionQuery = $this->CreateRestriction('cms_user_id', "= '".$userId."'");
             }
 
             // check for user groups
@@ -375,7 +395,6 @@ class TCMSListManagerEndPoint
             //$tmpQuery = "SHOW FIELDS FROM `{$this->oTableConf->sqlData['name']}` LIKE 'cms_usergroup_mlt'";
             $userField = MySqlLegacySupport::getInstance()->query($tmpQuery);
             if (MySqlLegacySupport::getInstance()->num_rows($userField) > 0) {
-                $groupList = $oGlobal->oUser->oAccessManager->user->groups->GroupList();
                 if (false !== $groupList) {
                     if (!empty($restrictionQuery)) {
                         $restrictionQuery .= ' OR ';
@@ -447,16 +466,17 @@ class TCMSListManagerEndPoint
      *
      * @return TIterator
      */
-    public function &GetMenuItems()
+    public function GetMenuItems()
     {
         if (is_null($this->oMenuItems)) {
             $this->oMenuItems = new TIterator();
             // std menuitems...
-            $oGlobal = TGlobal::instance();
 
-            $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
-            if ($tableInUserGroup) {
-                if ($oGlobal->oUser->oAccessManager->HasNewPermission($this->oTableConf->sqlData['name'])) {
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $allowTableAccess = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
+            if ($allowTableAccess) {
+                if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->fieldName)) {
                     // new
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.new');
@@ -467,7 +487,7 @@ class TCMSListManagerEndPoint
                 }
 
                 // if we have edit access to the table editor, then we also show a link to it
-                if ($oGlobal->oUser->oAccessManager->HasEditPermission('cms_tbl_conf')) {
+                if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, 'cms_tbl_conf')) {
                     $oTableEditorConf = new TCMSTableConf();
                     /** @var $oTableEditorConf TCMSTableConf */
                     $oTableEditorConf->LoadFromField('name', 'cms_tbl_conf');
@@ -488,7 +508,7 @@ class TCMSListManagerEndPoint
                         $aParameter = array_merge($aParameter, $aAdditionalParams);
                     }
 
-                    $oMenuItem->sOnClick = "top.document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
+                    $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter); // TODO support "top" target?
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
 

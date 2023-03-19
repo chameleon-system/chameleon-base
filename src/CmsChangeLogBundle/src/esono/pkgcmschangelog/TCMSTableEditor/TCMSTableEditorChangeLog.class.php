@@ -46,7 +46,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             $oMenuItem->sItemKey = 'getdisplayvalue';
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_cms_change_log.action.show_changes');
             $oMenuItem->sIcon = 'far fa-edit';
-            $oMenuItem->sOnClick = "document.location.href='".$this->getUrlUtil()->getArrayAsUrl($aParam, '?')."'";
+            $oMenuItem->href = $this->getUrlUtil()->getArrayAsUrl($aParam, '?');
             $this->oMenuItems->AddItem($oMenuItem);
         }
     }
@@ -54,7 +54,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     /**
      * {@inheritdoc}
      */
-    public function Save(&$postData, $bDataIsInSQLForm = false)
+    public function Save($postData, $bDataIsInSQLForm = false)
     {
         if ($this->oTableConf->fieldChangelogActive) {
             $this->failOnForbiddenTables();
@@ -73,7 +73,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      *
      * @return void
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
@@ -95,7 +95,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      *
      * @return array
      */
-    protected function computeDifferences(&$newFields, &$oPostTable)
+    protected function computeDifferences($newFields, $oPostTable)
     {
         $result = [];
 
@@ -159,15 +159,20 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      */
     protected function createChangeSet($sAction)
     {
+
         $oChangeSet = TdbPkgCmsChangelogSet::GetNewInstance();
         $oTableEditor = TTools::GetTableEditorManager($oChangeSet->table);
         $oTableEditor->AllowEditByAll(true);
         $oTableEditor->Insert();
 
+        /** @var \ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess $securityHelper */
+        $securityHelper = \ChameleonSystem\CoreBundle\ServiceLocator::get(\ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess::class);
+
+
         $aData = array();
         $aData['id'] = $oTableEditor->sId;
         $aData['modify_date'] = date('Y-m-d H:i:s');
-        $aData['cms_user'] = TCMSUser::GetActiveUser()->id;
+        $aData['cms_user'] = $securityHelper->getUser()?->getId();
         $aData['cms_tbl_conf'] = $this->sTableId;
         $aData['modified_id'] = $this->oTable->id;
         $aData['modified_name'] = $this->getNameColumnValue();
@@ -228,7 +233,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     /**
      * {@inheritDoc}
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 

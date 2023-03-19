@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
@@ -34,7 +36,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $this->sourceTable = $this->global->GetUserData('sourceTable');
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $rpcAction = $this->global->GetUserData('action');
 
@@ -249,7 +251,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $sFieldListString = '';
         $bFindShowField = false;
         if (!is_null($oListFieldsList) && $oListFieldsList->Length() > 0) {
-            while ($oListField = &$oListFieldsList->Next()) {
+            while ($oListField = $oListFieldsList->Next()) {
                 if ($oListField->fieldShowInSort) {
                     if (!empty($oListField->fieldTitle)) {
                         $sFieldListString .= '<th scope="col" id="'.$oListField->fieldDbAlias.'" class="">'.$oListField->fieldTitle.'</th>';
@@ -282,7 +284,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $sFieldListString = '';
         $bFindShowField = false;
         if (!is_null($oListFieldsList) && $oListFieldsList->Length() > 0) {
-            while ($oListField = &$oListFieldsList->Next()) {
+            while ($oListField = $oListFieldsList->Next()) {
                 if ($oListField->fieldShowInSort) {
                     if (empty($oListField->fieldCallbackFnc)) {
                         $sFieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.$oRecord->sqlData[$oListField->fieldDbAlias].'</td>';
@@ -378,7 +380,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $pos = 0;
         $aQuery = array();
         TCacheManager::PerformeTableChange($sTargetTable, $sSourcerecordId);
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
+        $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
         foreach ($aPosOrder as $id) {
             ++$pos;
             $updateQuery = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($sMltTableName)."`
@@ -420,5 +422,9 @@ class CMSFieldMLTRPC extends TCMSModelBase
     private function getLanguageService()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+    }
+    private function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
     }
 }

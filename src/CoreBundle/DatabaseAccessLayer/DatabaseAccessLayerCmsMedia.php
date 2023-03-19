@@ -45,7 +45,7 @@ class DatabaseAccessLayerCmsMedia extends AbstractDatabaseAccessLayer
         $this->isLoaded = true;
 
         $query = 'SELECT * FROM `cms_media` WHERE cmsident < 1000';
-        $mediaList = $this->getDatabaseConnection()->fetchAll($query);
+        $mediaList = $this->getDatabaseConnection()->fetchAllAssociative($query);
         foreach ($mediaList as $mediaData) {
             $mediaObject = \TdbCmsMedia::GetNewInstance($mediaData);
             $this->setCache($mediaObject->id, $mediaObject);

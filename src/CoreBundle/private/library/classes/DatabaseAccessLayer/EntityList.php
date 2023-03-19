@@ -21,61 +21,27 @@ use Doctrine\DBAL\Statement;
  */
 class EntityList implements EntityListInterface
 {
-    /**
-     * @var Connection
-     */
-    private $databaseConnection;
+    private Connection $databaseConnection;
 
-    /**
-     * @var T[]
-     */
-    private $entityList = array();
+    private array $entityList = array();
 
-    /**
-     * @var int
-     */
-    private $entityIndex = 0;
-
-    /**
-     * @var string
-     */
-    private $query;
+    private int $entityIndex = 0;
+    private string $query;
 
     /**
      * @var Statement|null
      */
     private $databaseEntityListStatement = null;
 
-    /**
-     * @var int
-     */
-    private $entityCount = null;
-    /**
-     * @var int
-     */
-    private $entityCountEstimate = null;
-    /**
-     * @var int
-     */
-    private $currentPage = 0;
-    /**
-     * @var EntityListPager
-     */
-    private $pager;
+    private ?int $entityCount = null;
+    private ?int $entityCountEstimate = null;
+    private int $currentPage = 0;
+    private ?EntityListPagerInterface $pager = null;
 
-    /**
-     * @var int|null
-     */
-    private $maxNumberOfResults = null;
+    private ?int $maxNumberOfResults = null;
 
-    /**
-     * @var array
-     */
-    private $queryParameters = null;
-    /**
-     * @var array
-     */
-    private $queryParameterTypes = null;
+    private array $queryParameters;
+    private array $queryParameterTypes = [];
 
     /**
      * @param string     $query
@@ -83,7 +49,7 @@ class EntityList implements EntityListInterface
      * @param array      $queryParameterTypes - same as the parameters types of the Connection
      * @param Connection $databaseConnection
      */
-    public function __construct(Connection $databaseConnection, $query, array $queryParameters = null, array $queryParameterTypes = null)
+    public function __construct(Connection $databaseConnection, string $query, array $queryParameters = [], array $queryParameterTypes = [])
     {
         $this->query = $query;
         $this->databaseConnection = $databaseConnection;
@@ -110,7 +76,7 @@ class EntityList implements EntityListInterface
     /**
      * @return Connection
      */
-    protected function getDatabaseConnection()
+    protected function getDatabaseConnection(): Connection
     {
         return $this->databaseConnection;
     }
@@ -118,7 +84,7 @@ class EntityList implements EntityListInterface
     /**
      * @return T|false
      */
-    public function current()
+    public function current(): mixed
     {
         if ($this->entityIndex < 0) {
             return false;
@@ -134,9 +100,8 @@ class EntityList implements EntityListInterface
 
     /**
      * Move forward to next element.
-     * {@inheritDoc}
      */
-    public function next()
+    public function next(): void
     {
         if (isset($this->entityList[$this->entityIndex]) && false === $this->entityList[$this->entityIndex]) {
             return;
@@ -145,10 +110,7 @@ class EntityList implements EntityListInterface
         $this->current(); // make sure the item is fetched and stored
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function previous()
+    public function previous(): void
     {
         if ($this->entityIndex < 0) {
             return;
@@ -156,37 +118,27 @@ class EntityList implements EntityListInterface
         --$this->entityIndex;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function key()
+    public function key(): int
     {
         return $this->entityIndex;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function valid()
+    public function valid(): bool
     {
         $item = $this->current();
 
         return false !== $item;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function rewind()
+    public function rewind(): void
     {
         $this->entityIndex = 0;
     }
 
     /**
      * returns an exact count of the number of records matching the query.
-     * {@inheritDoc}
      */
-    public function count()
+    public function count(): int
     {
         if (null !== $this->entityCount) {
             return $this->correctCountUsingMaxNumberOfResultsAllowed($this->entityCount);
@@ -219,7 +171,7 @@ class EntityList implements EntityListInterface
      * @param int $count
      * @return int
      */
-    private function correctCountUsingMaxNumberOfResultsAllowed($count)
+    private function correctCountUsingMaxNumberOfResultsAllowed(int $count): int
     {
         if (null === $this->maxNumberOfResults) {
             return $count;
@@ -232,7 +184,7 @@ class EntityList implements EntityListInterface
      * estimates the number of records found. If a count is already known, it will return that instead.
      * {@inheritDoc}
      */
-    public function estimateCount()
+    public function estimateCount(): int
     {
         if (null !== $this->entityCount) {
             return $this->correctCountUsingMaxNumberOfResultsAllowed($this->entityCount);
@@ -243,7 +195,7 @@ class EntityList implements EntityListInterface
         }
 
         $query = 'EXPLAIN '.$this->query;
-        $estimateRow = $this->getDatabaseConnection()->fetchAssoc($query);
+        $estimateRow = $this->getDatabaseConnection()->fetchAssociative($query);
         $this->entityCountEstimate = (int) $estimateRow['rows'];
 
         return $this->correctCountUsingMaxNumberOfResultsAllowed($this->entityCountEstimate);
@@ -253,7 +205,7 @@ class EntityList implements EntityListInterface
      * @param string $query
      * @return string
      */
-    private function getNormalizeQuery($query)
+    private function getNormalizeQuery(string $query): string
     {
         return str_replace(array("\n", "\n\r", "\t"), ' ', mb_strtoupper($query));
     }
@@ -262,7 +214,7 @@ class EntityList implements EntityListInterface
      * @param string $query
      * @return string
      */
-    private function removeOrderByFromQuery($query)
+    private function removeOrderByFromQuery(string $query): string
     {
         $queryModifier = $this->getQueryModifierOrderByService();
 
@@ -272,7 +224,7 @@ class EntityList implements EntityListInterface
     /**
      * @return QueryModifierOrderByInterface
      */
-    protected function getQueryModifierOrderByService()
+    protected function getQueryModifierOrderByService(): QueryModifierOrderByInterface
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.query_modifier.order_by');
     }
@@ -280,7 +232,7 @@ class EntityList implements EntityListInterface
     /**
      * {@inheritDoc}
      */
-    public function setPageSize($pageSize)
+    public function setPageSize(int $pageSize): self
     {
         $this->pager = $this->getEntityListPager($pageSize);
         $this->resetList();
@@ -291,7 +243,7 @@ class EntityList implements EntityListInterface
     /**
      * {@inheritDoc}
      */
-    public function setCurrentPage($currentPage)
+    public function setCurrentPage(int $currentPage): self
     {
         $this->currentPage = $currentPage;
         $this->resetList();
@@ -302,7 +254,7 @@ class EntityList implements EntityListInterface
     /**
      * @return void
      */
-    private function resetList()
+    private function resetList():void
     {
         $this->databaseEntityListStatement = null;
         $this->entityList = array();
@@ -312,7 +264,7 @@ class EntityList implements EntityListInterface
     /**
      * @return void
      */
-    private function resetListCounts()
+    private function resetListCounts(): void
     {
         $this->entityCount = null;
         $this->entityCountEstimate = null;
@@ -322,7 +274,7 @@ class EntityList implements EntityListInterface
      * @param string $query
      * @return string
      */
-    private function getExecutableQuery($query)
+    private function getExecutableQuery(string $query): string
     {
         if (null !== $this->pager) {
             $query = $this->pager->getQueryForPage($query, $this->currentPage);
@@ -339,7 +291,7 @@ class EntityList implements EntityListInterface
      * @param int $position
      * @return void
      */
-    public function seek($position)
+    public function seek(int $position): void
     {
         // backwards seek
         if (isset($this->entityList[$position])) {
@@ -357,7 +309,7 @@ class EntityList implements EntityListInterface
     /**
      * @return int
      */
-    public function getCurrentPosition()
+    public function getCurrentPosition(): int
     {
         return $this->entityIndex;
     }
@@ -365,7 +317,7 @@ class EntityList implements EntityListInterface
     /**
      * {@inheritDoc}
      */
-    public function end()
+    public function end(): void
     {
         if ($this->entityIndex < 0) {
             $this->entityIndex = 0;
@@ -378,7 +330,7 @@ class EntityList implements EntityListInterface
     /**
      * {@inheritDoc}
      */
-    public function setQuery($query)
+    public function setQuery(string $query): void
     {
         $this->query = $query;
         $this->resetList();
@@ -387,65 +339,50 @@ class EntityList implements EntityListInterface
 
     /**
      * limit results to - pass null to remove the restriction.
-     *
-     * @param int $maxNumberOfResults
-     * @return void
+
      */
-    public function setMaxAllowedResults($maxNumberOfResults)
+    public function setMaxAllowedResults(?int $maxNumberOfResults): void
     {
         $this->maxNumberOfResults = $maxNumberOfResults;
         $this->resetList();
         $this->resetListCounts();
     }
 
-    /**
-     * @param string $query
-     * @return string
-     */
-    private function addMaxNumberOfResultsRestrictionToQuery($query)
+
+    private function addMaxNumberOfResultsRestrictionToQuery(string $query): string
     {
         $queryModifier = new QueryModifierRestrictNumberOfResults($query);
 
         return $queryModifier->restrictToMaxNumberOfResults($this->maxNumberOfResults);
     }
 
-    /**
-     * @return EntityListPagerInterface
-     */
-    protected function getEntityListPager($pageSize)
+    protected function getEntityListPager(int $pageSize): EntityListPagerInterface
     {
         return new EntityListPager($pageSize);
     }
 
-    /**
-     * @return string
-     */
-    protected function getQuery()
+    protected function getQuery(): string
     {
         return $this->query;
     }
 
-    /**
-     * @return array
-     */
-    protected function getQueryParameters()
+    protected function getQueryParameters(): array
     {
-        return (null === $this->queryParameters) ? array() : $this->queryParameters;
+        return $this->queryParameters;
     }
 
-    /**
-     * @return array
-     */
-    protected function getQueryParametersTypes()
+    protected function getQueryParametersTypes(): array
     {
-        return (null === $this->queryParameterTypes) ? array() : $this->queryParameterTypes;
+        return $this->queryParameterTypes;
     }
 
-    /**
-     * @return int
-     */
-    public function getNumberOfResultsOnPage()
+    public function getNumberOfResultsOnPage(): int
     {
-        return $this->getDatabaseEntityListStatement()->rowCount();
+        $statement = $this->getDatabaseEntityListStatement();
+        if (null === $statement) {
+            return 0;
+        }
+
+        return $statement->rowCount();
     }
 }

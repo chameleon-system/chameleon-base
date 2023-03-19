@@ -18,6 +18,7 @@ use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Tests\Security\AuthenticityToken\fixtures\AuthenticityTokenStorageMock;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -25,6 +26,8 @@ use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class AuthenticityTokenManagerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var bool
      */
@@ -58,7 +61,7 @@ class AuthenticityTokenManagerTest extends TestCase
      */
     private $actualResult;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -70,7 +73,7 @@ class AuthenticityTokenManagerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -102,7 +105,7 @@ class AuthenticityTokenManagerTest extends TestCase
 
         $this->whenIsProtectionEnabledIsCalled();
 
-        $this->thenTheExpectedResultShouldBeReturned($expectedResult);
+        $this->thenTheExactExpectedResultShouldBeReturned($expectedResult);
     }
 
     public function provideDataForTestIsProtectionEnabled()
@@ -195,6 +198,26 @@ class AuthenticityTokenManagerTest extends TestCase
      */
     private function thenTheExpectedResultShouldBeReturned($expectedResult): void
     {
+        if (is_string($expectedResult)) {
+            $this->assertIsString($this->actualResult);
+            $this->assertStringStartsWith($expectedResult, $this->actualResult);
+            return;
+        }
+        if (is_array($expectedResult)) {
+            $this->assertIsArray($this->actualResult);
+            foreach ($expectedResult as $expectedKey) {
+                $this->assertArrayHasKey($expectedKey, $this->actualResult);
+            }
+            return;
+        }
+        $this->assertTrue(false, 'Expected either a string or an array');
+    }
+
+    /**
+     * @param bool|string|array $expectedResult
+     */
+    private function thenTheExactExpectedResultShouldBeReturned($expectedResult): void
+    {
         $this->assertEquals($expectedResult, $this->actualResult);
     }
 
@@ -216,7 +239,7 @@ class AuthenticityTokenManagerTest extends TestCase
 
         $this->whenIsTokenValidIsCalled();
 
-        $this->thenTheExpectedResultShouldBeReturned($expectedResult);
+        $this->thenTheExactExpectedResultShouldBeReturned($expectedResult);
 
         if (null === $submittedToken) {
             $this->thenFilteredGetInputShouldHaveBeenCalled();
@@ -417,7 +440,9 @@ class AuthenticityTokenManagerTest extends TestCase
 
     private function thenTheContentOfThisPathShouldBeReturned(string $expectationPath): void
     {
-        $this->assertStringEqualsFile($expectationPath, $this->actualResult);
+        // todo: this will not test the randomization of the token as it is private to the CsrfTokenManager. This should be tested somehow as well
+        $result = preg_replace('/<input type="hidden" name="cmsauthenticitytoken" value="[^"]+"/', '<input type="hidden" name="cmsauthenticitytoken" value="some-token"', $this->actualResult);
+        $this->assertStringEqualsFile($expectationPath, $result);
     }
 
     /**
@@ -434,7 +459,7 @@ class AuthenticityTokenManagerTest extends TestCase
 
         $this->whenGetTokenPlaceholderAsParameterIsCalled($format);
 
-        $this->thenTheExpectedResultShouldBeReturned($expectedValue);
+        $this->thenTheExactExpectedResultShouldBeReturned($expectedValue);
     }
 
     private function givenWeAreInBackendMode(): void
@@ -503,16 +528,16 @@ class AuthenticityTokenManagerTest extends TestCase
         return [
             [
                 AuthenticityTokenManagerInterface::TOKEN_FORMAT_GET,
-                'cmsauthenticitytoken=some-token',
+                'cmsauthenticitytoken=',
             ],
             [
                 AuthenticityTokenManagerInterface::TOKEN_FORMAT_POST,
-                '<input type="hidden" name="cmsauthenticitytoken" value="some-token" />',
+                '<input type="hidden" name="cmsauthenticitytoken" value="',
             ],
             [
                 AuthenticityTokenManagerInterface::TOKEN_FORMAT_ARRAY,
                 [
-                    'cmsauthenticitytoken' => 'some-token',
+                    'cmsauthenticitytoken',
                 ],
             ],
         ];

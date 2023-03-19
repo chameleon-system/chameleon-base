@@ -49,7 +49,7 @@ class TPkgCmsStringUtilities_VariableInjection implements IPkgCmsStringUtilities
                     $this->aInternalDataCache['__bPassVarsThroughOutHTML'] = false;
                 }
 
-                $sString = preg_replace_callback($matchString, array(&$this, 'InsertVariablesIntoMessageString'), $sString);
+                $sString = preg_replace_callback($matchString, array($this, 'InsertVariablesIntoMessageString'), $sString);
                 $this->aInternalDataCache = null;
             }
         }

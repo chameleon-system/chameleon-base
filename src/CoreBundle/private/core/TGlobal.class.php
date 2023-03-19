@@ -10,7 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use Symfony\Component\Translation\TranslatorInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TGlobal extends TGlobalBase
 {
@@ -22,31 +23,6 @@ class TGlobal extends TGlobalBase
     public static function setMode($mode)
     {
         self::$mode = $mode;
-    }
-
-    public function __get($sParameterName)
-    {
-        if (self::MODE_FRONTEND === self::$mode) {
-            if ('oUser' === $sParameterName) {
-                $this->oUser = &TCMSUser::GetActiveUser();
-                if (!$this->oUser && 'true' == !$this->GetUserData('__modulechooser')) {
-                    // no user set yet... so autologin the webuser...
-                    $this->oUser = new TCMSUser();
-                    $aUserData = $this->GetWebuserLoginData();
-                    $this->oUser->Login($aUserData['loginName'], $aUserData['password']);
-                }
-
-                return $this->oUser;
-            } else {
-                return parent::__get($sParameterName);
-            }
-        } else {
-            if ('oUser' === $sParameterName) {
-                return TCMSUser::GetActiveUser();
-            } else {
-                trigger_error('ERROR - parameter requested from TGlobal that does not exist', E_USER_ERROR);
-            }
-        }
     }
 
     /**
@@ -108,28 +84,24 @@ class TGlobal extends TGlobalBase
      * returns a list of all language ids the current user is allowed to edit.
      *
      * @return array
+     * @deprecated 7.2 fetch the edit languages from SecurityHelperAccess::getUser()?->getAvailableEditLanguages()
      */
     public function GetLanguageIdList()
     {
         if (self::MODE_BACKEND === self::$mode) {
-            if (null === $this->aLangaugeIds) {
-                $databaseConnection = ServiceLocator::get('database_connection');
-                $this->aLangaugeIds = array($this->oUser->sqlData['cms_language_id']);
-                // fetch user language list
-                $tmp = explode(',', $this->oUser->sqlData['languages']);
-                foreach ($tmp as $lang) {
-                    $query = 'SELECT * FROM `cms_language` WHERE `iso_6391` = :languageCode';
-                    if ($langrow = $databaseConnection->fetchAssoc($query, array('languageCode' => trim($lang)))) {
-                        $this->aLangaugeIds[] = $langrow['id'];
-                    }
-                }
-                if (count($this->aLangaugeIds) < 1) {
-                    $oCMSConfig = TdbCmsConfig::GetInstance();
-                    $this->aLangaugeIds[] = $oCMSConfig->fieldTranslationBaseLanguageId;
-                }
+            // get security helper
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $languages = $securityHelper->getUser()?->getAvailableEditLanguages();
+            if (null === $languages) {
+               $languages = [];
+            } else {
+                $languages = array_keys($languages);
             }
-
-            return $this->aLangaugeIds;
+            if (0 === count($languages)) {
+                $languages = [TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId];
+            }
+            return $languages;
         }
 
         return parent::GetLanguageIdList();

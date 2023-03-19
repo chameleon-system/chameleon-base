@@ -48,7 +48,7 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
     public function getMediaTree($languageId)
     {
         try {
-            $rowRootNode = $this->databaseConnection->fetchAssoc(
+            $rowRootNode = $this->databaseConnection->fetchAssociative(
                 "SELECT * FROM `cms_media_tree` WHERE `parent_id` = ''"
             );
             $rootNode = $this->createMediaTreeNodeModelFromTableObject(
@@ -91,7 +91,7 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
     private function getChildrenForMediaTreeNodeId($id, $languageId)
     {
         $children = array();
-        $rows = $this->databaseConnection->fetchAll(
+        $rows = $this->databaseConnection->fetchAllAssociative(
             'SELECT * FROM `cms_media_tree` WHERE `parent_id` = :parentId ORDER BY `entry_sort`',
             array('parentId' => $id)
         );
@@ -133,7 +133,7 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
     private function getMaxEntrySort($parentId)
     {
         $query = 'SELECT MAX(entry_sort) AS entry_sort FROM `cms_media_tree` WHERE `parent_id` = :parentId';
-        $row = $this->databaseConnection->fetchAssoc($query, array('parentId' => $parentId));
+        $row = $this->databaseConnection->fetchAssociative($query, array('parentId' => $parentId));
 
         return (int) $row['entry_sort'];
     }
@@ -144,7 +144,7 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
     public function getMediaTreeNode($id, $languageId)
     {
         try {
-            $row = $this->databaseConnection->fetchAssoc(
+            $row = $this->databaseConnection->fetchAssociative(
                 'SELECT * FROM `cms_media_tree` WHERE `id` = :id',
                 array('id' => $id)
             );

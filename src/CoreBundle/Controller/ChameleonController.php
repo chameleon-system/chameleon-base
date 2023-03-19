@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\Controller;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
+use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
@@ -145,7 +146,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function __invoke()
     {
         $event = new ChameleonControllerInvokeEvent($this);
-        $this->eventDispatcher->dispatch(ChameleonControllerEvents::INVOKE, $event);
+        $this->eventDispatcher->dispatch($event, ChameleonControllerEvents::INVOKE);
 
         $pagedef = $this->getRequest()->attributes->get('pagedef');
         $this->handleRequest($pagedef);
@@ -307,7 +308,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @deprecated since 6.2.10 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
      */
-    public function &GetPagedefObject($pagedef)
+    public function GetPagedefObject($pagedef)
     {
         $oPageDefinitionFile = new TCMSPageDefinitionFile();
         $fullPageDefPath = $this->PageDefinitionFile($pagedef);
@@ -372,7 +373,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @return void
      */
-    protected function ExecuteModuleMethod(&$modulesObject)
+    protected function ExecuteModuleMethod($modulesObject)
     {
         $moduleFunctions = $this->getRequestedModuleFunctions();
 
@@ -473,7 +474,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @return string
      */
-    public function PreOutputCallbackFunction(&$sPageContent)
+    public function PreOutputCallbackFunction($sPageContent)
     {
         static $bHeaderParsed = false;
         TPkgCmsEventManager::GetInstance()->NotifyObservers(
@@ -549,7 +550,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $bHeaderParsed = true;
             }
         }
-        $sPageContent = $this->responseVariableReplacer->replaceVariables($sPageContent);
+
+        $event = new FilterContentEvent($sPageContent);
+        $this->eventDispatcher->dispatch($event, CoreEvents::FILTER_CONTENT);
+        $sPageContent = $event->getContent();
         $this->sGeneratedPage .= $sPageContent;
 
         return $sPageContent;
@@ -615,7 +619,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $event = new HtmlIncludeEvent();
         /** @var HtmlIncludeEvent $event */
-        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_HTML_HEADER_INCLUDE, $event);
+        $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_HTML_HEADER_INCLUDE);
 
         if ($bAsArray) {
             return $event->getData();
@@ -676,7 +680,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $event = new HtmlIncludeEvent();
 
         /** @var HtmlIncludeEvent $event */
-        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_HTML_FOOTER_INCLUDE, $event);
+        $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_HTML_FOOTER_INCLUDE);
 
         $aModuleFooterData = $event->getData();
 

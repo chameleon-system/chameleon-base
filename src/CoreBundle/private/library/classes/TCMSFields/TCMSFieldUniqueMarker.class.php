@@ -28,7 +28,7 @@ class TCMSFieldUniqueMarker extends TCMSFieldBoolean
             return true;
         }
 
-        $oTableConf = &$this->oTableRow->GetTableConf();
+        $oTableConf = $this->oTableRow->GetTableConf();
         $databaseConnection = $this->getDatabaseConnection();
 
         $setFields = [];

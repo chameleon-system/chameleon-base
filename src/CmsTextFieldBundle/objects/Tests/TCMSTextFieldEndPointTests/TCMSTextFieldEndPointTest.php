@@ -23,14 +23,14 @@ class TCMSTextFieldEndPointTest extends TestCase
     /** @var ReflectionMethod */
     protected $_GetDownloadSpans = null;
 
-    public function SetUp()
+    public function setUp(): void
     {
         $this->oCmsTextFieldEndPoint = new TCMSTextFieldEndPoint();
         $this->_GetDownloadSpans = new ReflectionMethod('TCMSTextFieldEndPoint', '_GetDownloadSpans');
         $this->_GetDownloadSpans->setAccessible(true);
     }
 
-    public function TearDown()
+    public function TearDown(): void
     {
         $this->oCmsTextFieldEndPoint = null;
     }

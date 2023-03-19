@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * @deprecated since 6.3.0 - classic main menu will be removed in a future Chameleon release
@@ -28,7 +30,7 @@ class MTMenuManager extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         $this->RenderMenues();
@@ -86,16 +88,13 @@ class MTMenuManager extends TCMSModelBase
         if (!is_array($aParameters)) {
             $aParameters = array();
         }
-        /** @var $oCMSUser TdbCmsUser */
-        $oCMSUser = &TCMSUser::GetActiveUser();
-        $oTdbCMSUser = TdbCmsUser::GetNewInstance();
-        $oTdbCMSUser->Load($oCMSUser->id);
 
-        /** @var $oBackendLanguage TdbCmsLanguage */
-        $oBackendLanguage = $oTdbCMSUser->GetFieldCmsLanguage();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $aParameters['sCMSUserId'] = $oTdbCMSUser->id;
-        $aParameters['sBackendLanguageId'] = $oBackendLanguage->id;
+
+        $aParameters['sCMSUserId'] = $securityHelper->getUser()?->getId();
+        $aParameters['sBackendLanguageId'] = $securityHelper->getUser()?->getCmsLanguageId();
 
         return $aParameters;
     }
@@ -108,8 +107,9 @@ class MTMenuManager extends TCMSModelBase
         $aClearTriggers = parent::_GetCacheTableInfos();
         $aClearTriggers[] = array('table' => 'cms_tbl_conf', 'id' => '');
         $aClearTriggers[] = array('table' => 'cms_content_box', 'id' => '');
-        $oCMSUser = &TCMSUser::GetActiveUser();
-        $aClearTriggers[] = array('table' => 'cms_user', 'id' => $oCMSUser->id);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $aClearTriggers[] = array('table' => 'cms_user', 'id' => $securityHelper->getUser()?->getId());
         $aClearTriggers[] = array('table' => 'cms_widget_task', 'id' => '');
 
         return $aClearTriggers;

@@ -19,7 +19,7 @@ use esono\pkgCmsRouting\exceptions\PortalNotFoundException;
 use LogicException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use TdbCmsPortalDomains;
 
 class CheckPortalDomainListener
@@ -50,17 +50,15 @@ class CheckPortalDomainListener
     }
 
     /**
-     * @param GetResponseEvent $event
-     *
      * @throws PortalNotFoundException
      * @throws InvalidPortalDomainException
      * @throws LogicException
      *
      * @return void
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
@@ -83,7 +81,7 @@ class CheckPortalDomainListener
     }
 
     /**
-     * @param GetResponseEvent    $event
+     * @param RequestEvent        $event
      * @param TdbCmsPortalDomains $activeDomain
      * @param string              $hostFromRequest
      *
@@ -92,7 +90,7 @@ class CheckPortalDomainListener
      *
      * @return void
      */
-    private function redirectToPrimaryDomainIfRequired(GetResponseEvent $event, TdbCmsPortalDomains $activeDomain, $hostFromRequest)
+    private function redirectToPrimaryDomainIfRequired(RequestEvent $event, TdbCmsPortalDomains $activeDomain, $hostFromRequest)
     {
         if (false === $this->forcePrimaryDomain) {
             return;

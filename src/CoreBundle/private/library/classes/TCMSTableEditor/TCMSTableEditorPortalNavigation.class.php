@@ -29,7 +29,7 @@ class TCMSTableEditorPortalNavigation extends TCMSTableEditor
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         $this->UpdateSubtreePathCache($oPostTable->sqlData['tree_node']);
         if (!is_null($this->oTablePreChangeData) && !empty($this->oTablePreChangeData->sqlData['tree_node'])) {
@@ -66,7 +66,7 @@ class TCMSTableEditorPortalNavigation extends TCMSTableEditor
                ";
         MySqlLegacySupport::getInstance()->query($query);
         TCacheManager::PerformeTableChange('cms_tree', $iNodeId);
-        $oChildren = &$oNode->GetChildren();
+        $oChildren = $oNode->GetChildren();
         while ($oChild = $oChildren->Next()) {
             /** @var $oChild TCMSTreeNode */
             $this->UpdateSubtreePathCache($oChild->id);

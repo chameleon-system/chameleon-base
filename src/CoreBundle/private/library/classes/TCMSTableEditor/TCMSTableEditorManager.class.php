@@ -9,6 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -159,10 +164,10 @@ class TCMSTableEditorManager
         /** @var $oCmsTblConf TdbCmsTblConf */
         $this->oTableConf = TdbCmsTblConf::GetNewInstance();
         if (null === $sLanguageID) {
-            $oUser = &TdbCmsUser::GetActiveUser();
-            if ($oUser && is_array($oUser->sqlData) && array_key_exists('cms_language_id', $oUser->sqlData)) {
-                $this->oTableConf->SetLanguage($oUser->GetCurrentEditLanguageID());
-            }
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+            $this->oTableConf->SetLanguage($backendSession->getCurrentEditLanguageId());
         } else {
             $this->oTableConf->SetLanguage($sLanguageID);
         }
@@ -178,7 +183,7 @@ class TCMSTableEditorManager
         }
         unset($oRecord);
 
-        $this->oTableEditor = &$this->TableEditorFactory();
+        $this->oTableEditor = $this->TableEditorFactory();
         $this->oTableEditor->AllowEditByAll($this->bAllowEditByAll);
         $this->oTableEditor->AllowEditByWebUser($this->bAllowEditByWebUser);
         $this->oTableEditor->sRestriction = $this->sRestriction;
@@ -228,7 +233,7 @@ class TCMSTableEditorManager
      * Load the table editor class that is configured in cms_tbl_conf.
      * @return TCMSTableEditor
      */
-    public function &TableEditorFactory()
+    public function TableEditorFactory()
     {
         // check if table editor is extended
         if (!empty($this->oTableConf->sqlData['table_editor_class'])) {
@@ -329,8 +334,7 @@ class TCMSTableEditorManager
                 $this->sId = $id;
                 $this->oTableEditor->Init($this->sTableId, $this->sId); // reinit for new id
             }
-
-            $oMessageManager = TCMSMessageManager::GetInstance();
+            $flashMessageService = $this->getFlashMessageService();
             $sConsumerName = self::MESSAGE_MANAGER_CONSUMER;
 
             if (TTools::RecordExists($this->oTableEditor->oTableConf->sqlData['name'], 'id', $this->sId)) {
@@ -338,14 +342,14 @@ class TCMSTableEditorManager
 
                 $this->oTableEditor->Delete($this->sId);
                 $this->sId = $this->oTableEditor->sId;
-                $oMessageManager->AddMessage(
+                $flashMessageService->AddMessage(
                     $sConsumerName,
                     'TABLEEDITOR_DELETE_RECORD_SUCCESS',
                     array('id' => $this->sId, 'name' => $sRecordName)
                 );
                 $bReturnVal = true;
             } else {
-                $oMessageManager->AddMessage(
+                $flashMessageService->AddMessage(
                     $sConsumerName,
                     'TABLEEDITOR_DELETE_RECORD_DOES_NOT_EXIST',
                     array('id' => $this->sId, 'name' => 'Unknown')
@@ -370,9 +374,6 @@ class TCMSTableEditorManager
         }
         if ($bAllowDelete) {
             $bAllowDelete = $this->hasDeletePermission();
-        }
-        if ($bAllowDelete && isset($this->oTableEditor)) {
-            $bAllowDelete = !$this->oTableEditor->IsInDeleteBlackList();
         }
 
         return $bAllowDelete;
@@ -429,9 +430,10 @@ class TCMSTableEditorManager
         if (true === $this->bAllowEditByAll) {
             return true;
         }
-        $user = &TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        return (null !== $user) && $user->oAccessManager->HasNewPermission($this->oTableConf->sqlData['name']);
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->sqlData['name']);
     }
 
     /**
@@ -442,9 +444,11 @@ class TCMSTableEditorManager
         if (true === $this->bAllowEditByAll) {
             return true;
         }
-        $user = &TCMSUser::GetActiveUser();
 
-        return (null !== $user) && $user->oAccessManager->HasNewLanguagePermission($this->oTableConf->sqlData['name']);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW_LANGUAGE, $this->oTableConf->sqlData['name']);
     }
 
     /**
@@ -455,9 +459,10 @@ class TCMSTableEditorManager
         if (true === $this->bAllowDeleteByAll) {
             return true;
         }
-        $user = &TCMSUser::GetActiveUser();
 
-        return (null !== $user) && $user->oAccessManager->HasDeletePermission($this->oTableConf->sqlData['name']);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name']);
     }
 
     /**
@@ -608,5 +613,10 @@ class TCMSTableEditorManager
         }
 
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }

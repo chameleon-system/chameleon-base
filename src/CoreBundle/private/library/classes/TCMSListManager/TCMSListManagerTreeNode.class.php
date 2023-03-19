@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+
 class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
 {
     protected $sTreeNodeTableID = null;
@@ -64,11 +68,11 @@ class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
             $this->sTreeNodeTableID = TTools::GetCMSTableId('cms_tree_node');
         }
 
-        $oGlobal = TGlobal::instance();
-
-        $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
         if ($tableInUserGroup) {
-            if ($oGlobal->oUser->oAccessManager->HasNewPermission($this->oTableConf->sqlData['name'])) {
+            if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->sqlData['name'])) {
                 // remove old new button
                 $this->oMenuItems->RemoveItem('sItemKey', 'new');
 
@@ -84,7 +88,7 @@ class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
                     $aParameter = array_merge($aParameter, $aAdditionalParams);
                 }
 
-                $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter)."'";
+                $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
                 $this->oMenuItems->AddItem($oMenuItem);
             }
         }

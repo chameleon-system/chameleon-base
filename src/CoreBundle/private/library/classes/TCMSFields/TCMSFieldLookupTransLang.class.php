@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 /**
  * lookup.
 /**/
@@ -16,8 +20,18 @@ class TCMSFieldLookupTransLang extends TCMSFieldLookup
 {
     public function GetOptions()
     {
-        $oGlobal = TGlobal::instance();
-        $languageList = $oGlobal->oUser->oAccessManager->user->editLanguages->GetLanguageList();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $languages = $securityHelper->getUser()?->getAvailableEditLanguages();
+        if (null === $languages) {
+            $languages = array();
+        }
+
+        $languageList = implode(
+            ', ',
+            array_map(fn(string $languageId) => $this->getDatabaseConnection()->quote($languageId),
+                array_keys($languages))
+        );
 
         $this->options = array();
         $tblName = mb_substr($this->name, 0, -3);
@@ -26,9 +40,9 @@ class TCMSFieldLookupTransLang extends TCMSFieldLookup
         $sNameField = $oTableConf->GetNameColumn();
 
         if (!empty($languageList)) {
-            $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($tblName).'` WHERE `id` IN ('.$languageList.') ORDER BY `'.MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'`';
+            $query = 'SELECT * FROM '.$this->getDatabaseConnection()->quoteIdentifier($tblName).' WHERE `id` IN ('.$languageList.') ORDER BY '.$this->getDatabaseConnection()->quoteIdentifier($sNameField);
         } else {
-            $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($tblName).'` ORDER BY `'.MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'`';
+            $query = 'SELECT * FROM '.$this->getDatabaseConnection()->quoteIdentifier($tblName).' ORDER BY '.$this->getDatabaseConnection()->quoteIdentifier($sNameField);
         }
         $oTable = new TCMSRecordList('TCMSRecord', $tblName, $query);
         $this->allowEmptySelection = true; // add the "please choose" option

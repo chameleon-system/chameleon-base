@@ -4,9 +4,11 @@ namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use esono\pkgCmsCache\CacheInterface;
-use TGlobal;
 
 class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPagedefInterface
 {
@@ -67,12 +69,16 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
 
     private function getCacheKeyParameters(string $pagedef): array
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $security = $securityHelper->getSecurity();
+
         $cacheKey = array(
             'type' => 'pagedefdata',
             'pagedef' => $pagedef,
             'requestMasterPageDef' => $this->inputFilterUtil->getFilteredInput('__masterPageDef', false),
             'isTemplateEngineMode' => $this->requestInfoService->isCmsTemplateEngineEditMode(),
-            'cmsuserdefined' => TGlobal::CMSUserDefined(),
+            'cmsuserdefined' => null !== $security->getToken() && $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER),
         );
 
         if ($cacheKey['cmsuserdefined'] && $cacheKey['requestMasterPageDef']) {

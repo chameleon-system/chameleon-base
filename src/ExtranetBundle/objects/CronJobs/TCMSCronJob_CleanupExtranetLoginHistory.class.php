@@ -13,7 +13,7 @@
  * removes all entries in login history below CHAMELEON_EXTRANET_LOGIN_HISTORY_LIMIT
  * false = no limit.
 /**/
-class TCMSCronJob_CleanupExtranetLoginHistory extends TCMSCronJob
+class TCMSCronJob_CleanupExtranetLoginHistory extends TdbCmsCronjobs
 {
     /**
      * fetch a list of all user ids that have too many entries, then delete entries via subquery.

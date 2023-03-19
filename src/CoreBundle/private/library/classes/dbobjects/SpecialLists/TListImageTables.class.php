@@ -16,9 +16,18 @@
  */
 class TListImageTables extends TCMSRecordList
 {
+    public function __construct()
+    {
+        parent::__construct($sTableObject = 'TCMSTableConf', 'cms_tbl_conf', $this->_GetQuery());
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
     public function TListImageTables()
     {
-        parent::TCMSRecordList($sTableObject = 'TCMSTableConf', 'cms_tbl_conf', $this->_GetQuery());
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     protected function _GetQuery()

@@ -108,7 +108,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
                 array('mediaTreeIds' => $treeIds),
                 array('mediaTreeIds' => Connection::PARAM_STR_ARRAY)
             );
-            $rows = $stm->fetchAll(\PDO::FETCH_ASSOC);
+            $rows = $stm->fetchAllAssociative(\PDO::FETCH_ASSOC);
         } catch (DBALException $e) {
             throw new DataAccessException(
                 sprintf('Error getting media items for tree node %s: %s', $mediaTreeNode->getId(), $e->getMessage())
@@ -426,7 +426,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             $numberOfPages = (int) ceil($numberOfRecords / $mediaManagerListRequest->getPageSize());
 
             $mediaItems = array();
-            $rows = $stm->fetchAll(\PDO::FETCH_ASSOC);
+            $rows = $stm->fetchAllAssociative(\PDO::FETCH_ASSOC);
             foreach ($rows as $row) {
                 $mediaItems[] = $this->createDataModelFromTableObject(TdbCmsMedia::GetNewInstance($row, $languageId));
             }
@@ -500,7 +500,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     public function getMediaItem($id, $languageId)
     {
         try {
-            $row = $this->databaseConnection->fetchAssoc(
+            $row = $this->databaseConnection->fetchAssociative(
                 'SELECT * FROM `cms_media` WHERE `id` = :id',
                 array('id' => $id)
             );
@@ -581,7 +581,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
      */
     private function saveField($mediaItemId, $fieldName, $value, $languageId)
     {
-        $row = $this->databaseConnection->fetchAssoc(
+        $row = $this->databaseConnection->fetchAssociative(
             'SELECT * FROM `cms_media` WHERE `id` = :id',
             array('id' => $mediaItemId)
         );
@@ -709,7 +709,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
                          ORDER BY (%1$s LIKE :termPre) DESC, length(%1$s)',
                 $this->databaseConnection->quoteIdentifier('cms_tags.'.$tagNameFieldName)
             );
-            $rows = $this->databaseConnection->fetchAll(
+            $rows = $this->databaseConnection->fetchAllAssociative(
                 $query,
                 array('termLike' => '%'.$searchTerm.'%', 'termPre' => $searchTerm.'%')
             );

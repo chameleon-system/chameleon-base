@@ -8,7 +8,7 @@
   $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
   $query = 'SELECT `id`, `class_extensions` FROM `cms_portal`';
-  $result = $databaseConnection->fetchAll($query);
+  $result = $databaseConnection->fetchAllAssociative($query);
   foreach ($result as $row) {
       if ('' !== trim($row['class_extensions'])) {
           TCMSLogChange::addInfoMessage("Field cms_portal.class_extensions was deleted. In the record with ID {$row['id']}, this value was set: {$row['class_extensions']}", TCMSLogChange::INFO_MESSAGE_LEVEL_TODO);
@@ -36,7 +36,7 @@ $fieldId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cms_portal'
   TCMSLogChange::delete(__LINE__, $data);
 
   $query = 'SELECT `id`, `class_extensions` FROM `cms_config`';
-  $result = $databaseConnection->fetchAll($query);
+  $result = $databaseConnection->fetchAllAssociative($query);
   foreach ($result as $row) {
       if ('' !== trim($row['class_extensions'])) {
           TCMSLogChange::addInfoMessage("Field cms_config.class_extensions was deleted. In the record with ID {$row['id']}, this value was set: {$row['class_extensions']}", TCMSLogChange::INFO_MESSAGE_LEVEL_TODO);

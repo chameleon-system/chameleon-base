@@ -40,7 +40,7 @@
                         <a href="<?=$oItem->sDetailLink; ?>&module_fnc[<?=$data['sModuleSpotName']; ?>]=ShowItem"><?=TGlobal::OutHTML($oItem->sqlData['name']); ?></a>
                         <?php
                     } else {
-                        $oDownloads = &$oItem->GetDownloads('cms_document_mlt');
+                        $oDownloads = $oItem->GetDownloads('cms_document_mlt');
                         while ($oDownload = $oDownloads->Next()) {
                             ?>
                             <div style="padding-bottom:3px"><?=$oDownload->getDownloadHtmlTag(); ?></div>

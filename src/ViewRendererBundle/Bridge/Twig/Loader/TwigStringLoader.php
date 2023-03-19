@@ -2,6 +2,9 @@
 
 namespace ChameleonSystem\ViewRendererBundle\Bridge\Twig\Loader;
 
+use Twig\Loader\LoaderInterface;
+use Twig\Source;
+
 /**
  * Loads a template from a string. In the Chameleon System this class is only used in case a template could not be
  * found. We can then display the template name so that developers can more easily locate errors.
@@ -19,7 +22,7 @@ namespace ChameleonSystem\ViewRendererBundle\Bridge\Twig\Loader;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TwigStringLoader implements \Twig_LoaderInterface
+class TwigStringLoader implements LoaderInterface
 {
     /**
      * @param string $name
@@ -34,11 +37,10 @@ class TwigStringLoader implements \Twig_LoaderInterface
 
     /**
      * @param string $name
-     * @return \Twig_Source
      */
-    public function getSourceContext($name)
+    public function getSourceContext($name): Source
     {
-        return new \Twig_Source($name, $name);
+        return new Source($name, $name);
     }
 
     /**
@@ -52,9 +54,8 @@ class TwigStringLoader implements \Twig_LoaderInterface
 
     /**
      * @param string $name
-     * @return string
      */
-    public function getCacheKey($name)
+    public function getCacheKey($name): string
     {
         return $name;
     }
@@ -62,9 +63,8 @@ class TwigStringLoader implements \Twig_LoaderInterface
     /**
      * @param string $name
      * @param int $time
-     * @return bool
      */
-    public function isFresh($name, $time)
+    public function isFresh($name, $time): bool
     {
         return true;
     }

@@ -9,8 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\CoreBundle\Wysiwyg\CkEditorConfigProviderInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -208,8 +212,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     protected function getToolbar()
     {
         $aToolbar = $this->getCkeditorConfigProvider()->getToolbar();
-        $oUser = &TCMSUser::GetActiveUser();
-        $aToolbar = $this->getModifiedToolbarByUser($oUser, $aToolbar);
+        $aToolbar = $this->getModifiedToolbarByUser($aToolbar);
         $aToolbar = $this->getModifiedToolbarByConstant($aToolbar);
         $aToolbar = $this->getModifiedToolbarByFieldConfig($aToolbar);
 
@@ -227,14 +230,15 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * @param TCMSUser $oUser
      * @param array    $aToolbar
      *
      * @return array
      */
-    protected function getModifiedToolbarByUser(TCMSUser $oUser, $aToolbar)
+    protected function getModifiedToolbarByUser($aToolbar)
     {
-        if (!$oUser->oAccessManager->PermitFunction('cms_wysiwyg_htmlcodeview')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted('CMS_RIGHT_CMS_WYSIWYG_HTMLCODEVIEW')) {
             $aToolbar = $this->removeItemFromToolbar($aToolbar, 'Source');
         }
 
@@ -370,11 +374,16 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     private function getLanguageCode()
     {
-        /** @var $oUser TdbCmsUser */
-        $oUser = TdbCmsUser::GetActiveUser();
-        $oBackendLanguage = $oUser->GetFieldCmsLanguage();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $languageId = $securityHelper->getUser()?->getCmsLanguageId();
+        if (null === $languageId) {
+            return null;
+        }
+        /** @var LanguageServiceInterface $languageService */
+        $languageService = ServiceLocator::get('chameleon_system_core.language_service');
 
-        return $oBackendLanguage->fieldIso6391;
+        return $languageService->getLanguageIsoCode($languageId);
     }
 
     /**

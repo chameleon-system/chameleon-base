@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -64,10 +66,10 @@ class TCMSModelBase extends TModelBase
                 if (method_exists($this, 'ExecuteAjaxCallInField')) {
                     $functionResult = $this->ExecuteAjaxCallInField($fieldName);
                 } else {
-                    $functionResult = &$this->_CallMethod($methodName);
+                    $functionResult = $this->_CallMethod($methodName);
                 }
             } else {
-                $functionResult = &$this->_CallMethod($methodName);
+                $functionResult = $this->_CallMethod($methodName);
             }
             $this->OutPutAjaxCallResult($functionResult);
         }
@@ -99,11 +101,21 @@ class TCMSModelBase extends TModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
-        $this->data['oCMSUser'] = TCMSUser::GetActiveUser();
-        $oConfig = &TdbCmsConfig::GetInstance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $user = $securityHelper->getUser();
+        $userObject = null;
+        if (null !== $user) {
+            $userObject = TdbCmsUser::GetNewInstance();
+            $userObject->Load($user->getId());
+        }
+
+        $this->data['oCMSUser'] = $userObject;
+        $oConfig = TdbCmsConfig::GetInstance();
         $this->data['sThemePath'] = $oConfig->GetThemeURL();
 
         return $this->data;
@@ -119,7 +131,10 @@ class TCMSModelBase extends TModelBase
             return $includes;
         }
         $includes = parent::GetHtmlHeadIncludes();
-        if (false === TCMSUser::CMSUserDefined()) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return $includes;
         }
         $request = $this->getCurrentRequest();

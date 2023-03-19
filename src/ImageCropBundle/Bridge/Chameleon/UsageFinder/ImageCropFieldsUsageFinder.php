@@ -38,7 +38,7 @@ class ImageCropFieldsUsageFinder extends AbstractImageFieldsUsageFinder
                     $this->databaseConnection->quoteIdentifier($fieldRow['tableName']),
                     $this->databaseConnection->quoteIdentifier($fieldRow['fieldName'])
                 );
-                $records = $this->databaseConnection->fetchAll(
+                $records = $this->databaseConnection->fetchAllAssociative(
                     $query,
                     array(
                         'mediaItemId' => $mediaItem->getId(),

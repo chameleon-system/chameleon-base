@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \Symfony\Component\Translation\TranslatorInterface
+ * @var \Symfony\Contracts\Translation\TranslatorInterface
  *
  * @deprecated since 6.3.8
  */

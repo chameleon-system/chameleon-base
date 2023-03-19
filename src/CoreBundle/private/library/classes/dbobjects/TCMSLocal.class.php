@@ -33,7 +33,7 @@ class TCMSLocal extends TCMSRecord
 
     public function __construct($id = null, $iLanguage = null)
     {
-        parent::TCMSRecord('cms_locals', $id, $iLanguage);
+        parent::__construct('cms_locals', $id, $iLanguage);
     }
 
     protected function PostLoadHook()
@@ -55,7 +55,7 @@ class TCMSLocal extends TCMSRecord
      * @return TdbCmsLocals|false Only returns false if there is an initialization loop. It is not necessary to consider
      *                            this normally, but only in code that is potentially used in request bootstrapping context (including autoclasses).
      */
-    public static function &GetActive()
+    public static function GetActive()
     {
         static $oActive = false;
         static $bLastInitDidNotCountBecauseNoActivePageWasLoaded = false;

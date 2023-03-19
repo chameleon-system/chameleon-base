@@ -12,7 +12,7 @@
 use ChameleonSystem\CoreBundle\Interfaces\MediaManagerUrlGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
 {
@@ -88,7 +88,7 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
      *
      * @return string
      */
-    protected function GetImageBox(&$oImage, $position, $bReadOnly, $sFieldName, $sTableId, $sRecordId)
+    protected function GetImageBox($oImage, $position, $bReadOnly, $sFieldName, $sTableId, $sRecordId)
     {
         $bImageIsSet = false;
         $aImageData = array();

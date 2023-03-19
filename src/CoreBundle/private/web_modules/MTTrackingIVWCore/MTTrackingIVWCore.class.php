@@ -47,7 +47,7 @@ class MTTrackingIVWCore extends TUserCustomModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         $this->data['sSZMTag'] = '';

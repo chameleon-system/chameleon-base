@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 /**
  * presents a 1:n table (ie n records for the current table)
@@ -193,7 +196,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
         if (!empty($sOwningField)) {
             $aMethodData = $this->GetFieldMethodBaseDataArray();
-            $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName();
+            $aMethodData['sMethodName'] = $this->GetFieldMethodName();
             $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->GetPropertyTableName()).'List';
 
             $aMethodData['sCallMethodName'] = 'GetListFor'.TCMSTableToClass::GetClassName('', $sOwningField);
@@ -269,8 +272,9 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         if ('1' == $this->oDefinition->sqlData['restrict_to_groups']) {
             // check if the user is in one of the connected groups
 
-            $fieldGroups = $this->oDefinition->GetPermissionGroups();
-            if (!$oGlobal->oUser->oAccessManager->user->IsInGroups($fieldGroups)) {
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            if (!$securityHelper->isGranted(CmsPermissionAttributeConstants::ACCESS, $this->oDefinition)) {
                 $modifier = 'hidden';
             } else {
                 if (!$this->hasViewRightToPropertyTable()) {
@@ -288,21 +292,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
     protected function hasViewRightToPropertyTable()
     {
-        $hasViewRight = false;
-        $sPropertyTable = $this->GetPropertyTableName();
-        $oUser = TCMSUser::GetActiveUser();
-        if ($oUser && $oUser->oAccessManager) {
-            if ($oUser->oAccessManager->HasShowAllPermission($sPropertyTable)
-                || $oUser->oAccessManager->HasShowAllReadOnlyPermission($sPropertyTable)
-                || $oUser->oAccessManager->HasEditPermission($sPropertyTable)
-                || $oUser->oAccessManager->HasNewPermission($sPropertyTable)) {
-                $hasViewRight = true;
-            }
-        } else {
-            $hasViewRight = true;
-        }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        return $hasViewRight;
+        return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->GetPropertyTableName());
     }
 
     /**

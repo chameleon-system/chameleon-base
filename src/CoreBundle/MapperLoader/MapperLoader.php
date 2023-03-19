@@ -11,23 +11,20 @@
 
 namespace ChameleonSystem\CoreBundle\MapperLoader;
 
-use IViewMapper;
 use LogicException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 
 class MapperLoader implements MapperLoaderInterface
 {
     /**
-     * @var ContainerInterface
+     * @var ServiceLocator
      */
-    private $container;
+    private $serviceLocator;
 
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ServiceLocator $serviceLocator)
     {
-        $this->container = $container;
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
@@ -35,17 +32,15 @@ class MapperLoader implements MapperLoaderInterface
      */
     public function getMapper($identifier)
     {
-        $object = $this->container->get($identifier, ContainerInterface::NULL_ON_INVALID_REFERENCE);
-        if (null === $object) {
-            if (false === class_exists($identifier)) {
-                throw new LogicException(sprintf('Tried to instantiate mapper "%s", but neither a service with this ID nor a class with this name was found.', $identifier));
+        try {
+            $service = $this->serviceLocator->get($identifier);
+        } catch (NotFoundExceptionInterface $exception) {
+            if (false === \class_exists($identifier)) {
+                throw new LogicException(sprintf('Tried to instantiate mapper "%s", but neither a service with this ID nor a class with this name was found. Note it must be tagged with chameleon_system.mapper.', $identifier));
             }
-            $object = new $identifier();
-        }
-        if (false === $object instanceof IViewMapper) {
-            throw new LogicException(sprintf('Tried to instantiate mapper with identifier %s, but the resolved class does not implement IViewMapper.', $identifier));
+            $service = new $identifier();
         }
 
-        return $object;
+        return $service;
     }
 }

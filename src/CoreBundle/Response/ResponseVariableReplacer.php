@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Response;
 
+use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
@@ -42,6 +43,15 @@ class ResponseVariableReplacer implements ResponseVariableReplacerInterface
     public function addVariable(string $key, string $value): void
     {
         $this->variables[$key] = $value;
+    }
+
+    /**
+     * @return void
+     * @throws TokenInjectionFailedException
+     */
+    public function handleResponse(FilterContentEvent $event)
+    {
+        $event->setContent($this->replaceVariables($event->getContent()));
     }
 
     /**

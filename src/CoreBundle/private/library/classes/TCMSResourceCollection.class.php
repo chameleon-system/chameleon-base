@@ -15,6 +15,8 @@ use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Service\CssMinifierServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -99,7 +101,10 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             // do not enable in backend mode
             return false;
         }
-        $bIsTemplateEngine = 'true' === $bIsModuleChooser && TCMSUser::CMSUserDefined();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $bIsTemplateEngine = 'true' === $bIsModuleChooser && $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
         if (true === $bIsTemplateEngine) {
             return false;
         }
@@ -477,7 +482,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     private function dispatchJSMinifyEvent($jsContent)
     {
         $event = new ResourceCollectionJavaScriptCollectedEvent($jsContent);
-        $event = $this->eventDispatcher->dispatch(CoreEvents::GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT, $event);
+        $event = $this->eventDispatcher->dispatch($event, CoreEvents::GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT);
 
         return $event->getContent();
     }

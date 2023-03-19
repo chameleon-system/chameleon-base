@@ -21,7 +21,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function _OverwriteDefaults(&$oFields)
+    protected function _OverwriteDefaults($oFields)
     {
         parent::_OverwriteDefaults($oFields);
 
@@ -83,25 +83,25 @@ class TCMSTableEditorDomain extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 
         $changedDomain = new TdbCmsPortalDomains($this->sId);
         $event = new ChangeDomainEvent(array($changedDomain));
-        $this->getEventDispatcher()->dispatch(CoreEvents::ADD_DOMAIN, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_DOMAIN);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
         $changedDomain = new TdbCmsPortalDomains($this->sId);
         $event = new ChangeDomainEvent(array($changedDomain));
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_DOMAIN, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_DOMAIN);
     }
 
     /**
@@ -113,7 +113,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
 
         $changedDomain = new TdbCmsPortalDomains($this->sId);
         $event = new ChangeDomainEvent(array($changedDomain));
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_DOMAIN, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_DOMAIN);
     }
 
     /**

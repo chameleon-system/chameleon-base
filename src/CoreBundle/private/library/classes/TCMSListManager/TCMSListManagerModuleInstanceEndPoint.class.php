@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 
 class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTable
@@ -23,7 +25,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
     /**
      * {@inheritdoc}
      */
-    public function Init(&$oTableConf)
+    public function Init($oTableConf)
     {
         $tableConf = TdbCmsTblConf::GetNewInstance();
         $tableConf->LoadFromField('name', 'cms_tpl_module_instance');
@@ -81,7 +83,8 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
     {
         $query = parent::GetCustomRestriction();
 
-        $oUser = TCMSUser::GetActiveUser();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         if (!empty($query)) {
             $query .= ' AND ';
@@ -98,7 +101,17 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         }
 
         $sUserGroupRestriction = '';
-        $sGroupList = $oUser->oAccessManager->user->groups->GroupList();
+        $userGroups = $securityHelper->getUser()?->getGroups();
+        if (null === $userGroups) {
+            $userGroups = [];
+        }
+        $sGroupList = implode(
+            ', ',
+            array_map(fn($id) => $this->getDatabaseConnection()->quote($id),
+                array_keys(
+                    $userGroups
+                ))
+        );
         if (!empty($sGroupList)) {
             $sUserGroupRestriction = " OR `cms_tpl_module_cms_usergroup_mlt`.`target_id` IN ({$sGroupList})";
         }
@@ -106,7 +119,17 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         $query .= " AND (`cms_tpl_module`.`is_restricted` = '0'{$sUserGroupRestriction})";
 
         // add portal restrictions
-        $sPortalList = $oUser->oAccessManager->user->portals->PortalList();
+        $portals = $securityHelper->getUser()?->getPortals();
+        if (null === $portals) {
+            $portals = [];
+        }
+        $sPortalList = implode(
+            ', ',
+            array_map(fn($id) => $this->getDatabaseConnection()->quote($id),
+                array_keys(
+                    $portals
+                ))
+        );
         if (!empty($sPortalList)) {
             $sPortalRestriction = ' OR `cms_tpl_module_cms_portal_mlt`.`target_id` IN ('.$sPortalList.')';
         }

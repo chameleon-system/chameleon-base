@@ -119,7 +119,7 @@ class MTGlobalListCore extends TUserCustomModelBase
         return $this->oItem && false !== $this->oItem->sqlData;
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
 
@@ -144,7 +144,7 @@ class MTGlobalListCore extends TUserCustomModelBase
     {
         $this->data['oPortal'] = $this->oPage->GetPortal();
         $this->data['pageURL'] = $this->data['oPortal']->GetPrimaryDomain().'/'.$this->getPageService()->getLinkToPageObjectRelative($this->oPage);
-        $this->data['oPage'] = &$this->oPage;
+        $this->data['oPage'] = $this->oPage;
     }
 
     /**

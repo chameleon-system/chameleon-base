@@ -15,14 +15,17 @@ use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class AutoclassesCacheWarmerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /** @var AutoclassesCacheWarmer */
     private $warmer;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->warmer = null;
@@ -33,6 +36,8 @@ class AutoclassesCacheWarmerTest extends TestCase
      */
     public function it_updates_single_tables_by_id()
     {
+        /** @var \Symfony\Component\DependencyInjection\ContainerInterface|ObjectProphecy $container */
+        $container = $this->prophesize('\Symfony\Component\DependencyInjection\ContainerInterface');
         /** @var $manager \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy */
         $manager = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface');
         /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
@@ -54,7 +59,7 @@ class AutoclassesCacheWarmerTest extends TestCase
                 'TestClass' => 'TestType',
             ));
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir, $container->reveal());
 
         $this->warmer->updateTableById('123');
 
@@ -69,6 +74,8 @@ class AutoclassesCacheWarmerTest extends TestCase
      */
     public function it_updates_single_tables_by_name()
     {
+        /** @var \Symfony\Component\DependencyInjection\ContainerInterface|ObjectProphecy $container */
+        $container = $this->prophesize('\Symfony\Component\DependencyInjection\ContainerInterface');
         /** @var $manager \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy */
         $manager = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface');
         /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
@@ -86,7 +93,7 @@ class AutoclassesCacheWarmerTest extends TestCase
                 'TestClass' => 'TestType',
             ));
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir, $container->reveal());
 
         $this->warmer->updateTableByName('foo_table');
 
@@ -101,6 +108,8 @@ class AutoclassesCacheWarmerTest extends TestCase
      */
     public function it_ignores_nonexistant_tables()
     {
+        /** @var \Symfony\Component\DependencyInjection\ContainerInterface|ObjectProphecy $container */
+        $container = $this->prophesize('\Symfony\Component\DependencyInjection\ContainerInterface');
         /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
         $adapter = $this->prophesize('\ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface');
         $adapter
@@ -116,7 +125,7 @@ class AutoclassesCacheWarmerTest extends TestCase
         $filemanager = $this->prophesize('\IPkgCmsFileManager');
         $cacheDir = '';
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir, $container->reveal());
 
         $this->warmer->updateTableById('123');
 
@@ -128,6 +137,8 @@ class AutoclassesCacheWarmerTest extends TestCase
      */
     public function it_converts_underscore_names_to_autoclass_names()
     {
+        /** @var \Symfony\Component\DependencyInjection\ContainerInterface|ObjectProphecy $container */
+        $container = $this->prophesize('\Symfony\Component\DependencyInjection\ContainerInterface');
         /** @var $manager \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy */
         $manager = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface');
         /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
@@ -178,7 +189,7 @@ class AutoclassesCacheWarmerTest extends TestCase
             ),
         );
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir, $container->reveal());
 
         $result = $this->warmer->getTableClassNamesToLoad();
         $this->assertEquals($expected, $result);
@@ -189,6 +200,8 @@ class AutoclassesCacheWarmerTest extends TestCase
      */
     public function it_should_warm_the_complete_cache()
     {
+        /** @var \Symfony\Component\DependencyInjection\ContainerInterface|ObjectProphecy $container */
+        $container = $this->prophesize('\Symfony\Component\DependencyInjection\ContainerInterface');
         /** @var $adapter AutoclassesDatabaseAdapterInterface|ObjectProphecy */
         $adapter = $this->prophesize('\ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapterInterface');
         $adapter
@@ -220,7 +233,7 @@ class AutoclassesCacheWarmerTest extends TestCase
         /** @var $manager \ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface|ObjectProphecy */
         $manager = $this->prophesize('\ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface');
 
-        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir);
+        $this->warmer = new AutoclassesCacheWarmer($manager->reveal(), $adapter->reveal(), $autoclassesMapGenerator->reveal(), $filemanager->reveal(), $cacheDir, $container->reveal());
 
         $this->warmer->updateAllTables();
 

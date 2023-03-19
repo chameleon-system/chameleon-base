@@ -250,7 +250,7 @@ class NestedSetHelper implements NestedSetHelperInterface
         $quotedParentIdField = $this->connection->quoteIdentifier($this->parentIdField);
         $quotedNodeSortField = $this->connection->quoteIdentifier($this->nodeSortField);
         $query = "SELECT * FROM $quotedTableName WHERE $quotedParentIdField = :parentId ORDER BY $quotedNodeSortField ASC";
-        $children = $this->connection->fetchAll($query,
+        $children = $this->connection->fetchAllAssociative($query,
             array(
                 'parentId' => (null !== $parentId) ? $parentId : '',
             )

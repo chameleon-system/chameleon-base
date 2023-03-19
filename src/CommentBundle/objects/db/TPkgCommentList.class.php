@@ -31,7 +31,7 @@ class TPkgCommentList extends TPkgCommentListAutoParent
      *
      * @return TdbPkgComment
      */
-    protected function &_NewElement(&$aData)
+    protected function _NewElement($aData): TdbPkgComment
     {
         $oElement = parent::_NewElement($aData);
         if ($oElement) {

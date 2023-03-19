@@ -34,7 +34,7 @@ class TCMSFlatRecord extends TCMSRecord
      *
      * @return TCMSFlatRecord
      */
-    public static function &GetInstance($sTableName, $sFilterField = 'id', $sFilterValue = 1, $iLanguageId = null, $sObjectName = 'TCMSFlatRecord')
+    public static function GetInstance($sTableName, $sFilterField = 'id', $sFilterValue = 1, $iLanguageId = null, $sObjectName = 'TCMSFlatRecord')
     {
         //static $aInstance = array();
         $sKey = $sObjectName.$sFilterField.$sFilterValue;
@@ -49,7 +49,7 @@ class TCMSFlatRecord extends TCMSRecord
             } else {
                 $oInstance->LoadFromField($sFilterField, $sFilterValue);
             }
-            self::$aInstance[$sKey] = &$oInstance;
+            self::$aInstance[$sKey] = $oInstance;
         }
 
         return self::$aInstance[$sKey];

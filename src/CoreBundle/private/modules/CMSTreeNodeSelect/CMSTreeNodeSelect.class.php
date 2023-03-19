@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
  * @deprecated since 6.3.8 - use NavigationTreeSingleSelect instead
  */
@@ -43,7 +46,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
      */
     protected $aRestrictedNodes = array();
 
-    public function &Execute()
+    public function Execute()
     {
         $this->GetPortalTreeRootNode();
 
@@ -51,7 +54,9 @@ class CMSTreeNodeSelect extends TCMSModelBase
         $this->nodeID = $this->global->GetUserData('id');
 
         $oRootNode = new TdbCmsTree();
-        $oRootNode->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+        $oRootNode->SetLanguage($backendSession->getCurrentEditLanguageId());
         $oRootNode->Load($this->rootTreeID);
 
         $this->data['treeHTML'] = '';
@@ -83,7 +88,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
      * @param string $path
      * @param int    $level
      */
-    protected function RenderTree(&$oNode, $activeID, $fieldName, $path = '', $level = 0)
+    protected function RenderTree($oNode, $activeID, $fieldName, $path = '', $level = 0)
     {
         $sNodeName = $oNode->fieldName;
         if (!empty($sNodeName)) {
@@ -107,7 +112,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
 
             $this->data['treeHTML'] .= '</a>';
 
-            $oChildren = &$oNode->GetChildren(true);
+            $oChildren = $oNode->GetChildren(true);
             $iChildrenCount = $oChildren->Length();
             if ($iChildrenCount > 0) {
                 $this->data['treeHTML'] .= "\n".$spacer."<ul>\n";

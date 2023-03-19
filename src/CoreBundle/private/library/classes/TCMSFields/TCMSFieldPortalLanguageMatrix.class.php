@@ -305,7 +305,7 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
         $aMethodData = $this->GetFieldMethodBaseDataArray();
         $sMethodName = 'GetListForPortalLanguage';
 
-        $aMethodData['sMethodName'] = '&'.$sMethodName;
+        $aMethodData['sMethodName'] = $sMethodName;
         $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->sTableName).'List';
 
         $aMethodData['sClassName'] = $aMethodData['sReturnType'];
@@ -333,7 +333,7 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
      * @param string     $sNewName
      * @param array|null $postData
      */
-    public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
+    public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
     {
     }
 
@@ -390,7 +390,7 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
      *
      * @return string
      */
-    public function _GetSQLDefinition(&$fieldDefinition = null)
+    public function _GetSQLDefinition($fieldDefinition = null)
     {
         return '';
     }

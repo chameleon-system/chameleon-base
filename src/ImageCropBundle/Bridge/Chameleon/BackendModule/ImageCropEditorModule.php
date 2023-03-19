@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\BackendModule;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
@@ -30,7 +31,7 @@ use ICmsCoreRedirect;
 use IMapperCacheTriggerRestricted;
 use IMapperVisitorRestricted;
 use MTPkgViewRendererAbstractModuleMapper;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TdbCmsImageCropPresetList;
 use TGlobal;
 
@@ -127,7 +128,8 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         InputFilterUtilInterface $inputFilterUtil,
         TranslatorInterface $translator,
         LanguageServiceInterface $languageService,
-        FlashMessageServiceInterface $flashMessageService
+        FlashMessageServiceInterface $flashMessageService,
+        readonly private BackendSessionInterface $backendSession
     ) {
         parent::__construct();
         $this->imageCropPresetDataAccess = $imageCropPresetDataAccess;
@@ -223,7 +225,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $imageId = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_IMAGE_ID);
 
-        return $this->cmsMediaDataAccess->getCmsMedia($imageId, $this->languageService->getActiveEditLanguage()->id);
+        return $this->cmsMediaDataAccess->getCmsMedia($imageId, $this->backendSession->getCurrentEditLanguageId());
     }
 
     /**
@@ -238,7 +240,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
         return $this->imageCropDataAccess->getImageCropById(
             $cropId,
-            $this->languageService->getActiveEditLanguage()->id
+            $this->backendSession->getCurrentEditLanguageId()
         );
     }
 
@@ -252,11 +254,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
             return null;
         }
 
-        $editLanguage = $this->languageService->getActiveEditLanguage();
-
         return $this->imageCropPresetDataAccess->getPresetBySystemName(
             $systemName,
-            null !== $editLanguage ? $editLanguage->id : null
+            $this->backendSession->getCurrentEditLanguageId()
         );
     }
 
@@ -476,7 +476,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         $cropId = $this->inputFilterUtil->getFilteredGetInput('cropId');
         $crop = $this->imageCropDataAccess->getImageCropById(
             $cropId,
-            $this->languageService->getActiveEditLanguage()->id
+            $this->backendSession->getCurrentEditLanguageId()
         );
 
         if (null === $imageId || null === $crop) {
@@ -490,7 +490,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         $croppedImage = $this->cropImageService->getCroppedImageForCmsMediaIdAndCropId(
             $imageId,
             $cropId,
-            $this->languageService->getActiveEditLanguage()->id
+            $this->backendSession->getCurrentEditLanguageId()
         );
         if (null !== $croppedImage) {
             $url = $croppedImage->getImageUrl();

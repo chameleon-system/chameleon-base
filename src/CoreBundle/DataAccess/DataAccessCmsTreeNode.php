@@ -46,7 +46,7 @@ class DataAccessCmsTreeNode implements DataAccessInterface
     {
         $query = 'SELECT * FROM `cms_tree_node`';
 
-        $result = $this->databaseConnection->fetchAll($query);
+        $result = $this->databaseConnection->fetchAllAssociative($query);
         $treeNodes = array();
         if (null === $languageId) {
             $languageId = $this->languageService->getActiveLanguageId();

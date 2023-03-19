@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 
 class CMSNewsletterSubscriberImport extends TCMSModelBase
@@ -20,7 +21,7 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->CheckRights();
@@ -33,8 +34,13 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
      */
     protected function CheckRights()
     {
-        $oCMSUser = &TCMSUser::GetActiveUser();
-        $aPortals = $oCMSUser->GetMLTIdList('cms_portal', 'cms_portal_mlt');
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $aPortals = $securityHelper->getUser()?->getPortals();
+        if (null !== $aPortals) {
+            $aPortals = array_keys($aPortals);
+        }
 
         $databaseConnection = $this->getDatabaseConnection();
         $idListString = implode(',', array_map(array($databaseConnection, 'quote'), $aPortals));

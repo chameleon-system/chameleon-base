@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 class CMSNewsletterRobinsonImport extends TCMSModelBase
 {
     const MESSAGE_MANAGER_CONSUMER = 'CMSNewsletterRobinsonImport';
@@ -16,7 +19,7 @@ class CMSNewsletterRobinsonImport extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $this->GetPortals();
@@ -34,9 +37,18 @@ class CMSNewsletterRobinsonImport extends TCMSModelBase
      */
     protected function GetPortals()
     {
-        $oCMSUser = &TCMSUser::GetActiveUser();
-        $oPortals = $oCMSUser->GetMLT('cms_portal_mlt');
-        $this->data['oPortals'] = $oPortals;
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $portalIds = $securityHelper->getUser()?->getPortals();
+
+        if (null === $portalIds || 0 === count($portalIds)) {
+            return;
+        }
+        $portalIdList = implode(', ', array_map(static fn(string $portalId) => $portalId, array_keys($portalIds)));
+
+        $portals = TdbCmsPortalList::GetList(sprintf('SELECT * FROM `cms_portal` WHERE `id` IN (%s)', $portalIdList));
+
+        $this->data['oPortals'] = $portals;
     }
 
     protected function DefineInterface()

@@ -24,7 +24,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
     {
         // Redirect URL-Aliases:
         /** @var TCMSSmartURLData $oURLData */
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
         $aUrlList = $this->getUrlAliasListAsSortedArray();
         foreach ($aUrlList as $oURLAlias) {
             // IF our URL has parameters AND we have ignore parameters, then we need to find out if there are any left after that

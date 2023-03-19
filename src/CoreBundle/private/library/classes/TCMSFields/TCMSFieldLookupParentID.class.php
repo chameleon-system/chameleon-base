@@ -11,7 +11,9 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * through the config parameter "bShowLinkToParentRecord=true" you can activate a link
@@ -60,15 +62,16 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
         $itemName = $item->GetName();
 
         $foreignTableName = $this->GetConnectedTableName();
-        $global = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        if ('true' === $showLinkToParentRecord && '' !== $this->data && true === $global->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
+        if ('true' === $showLinkToParentRecord && '' !== $this->data && true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $foreignTableName)) {
             $html .= '<div class="d-flex align-items-center">';
 
             if ('' !== $itemName) {
                 $html .= '<div class="mr-2">'.$itemName.'</div>';
             }
-            $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), "javascript:document.location.href='".$this->GetEditLinkForParentRecord()."';", 'fas fa-location-arrow').'</div>';
+            $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), $this->GetEditLinkForParentRecord(), 'fas fa-location-arrow').'</div>';
             $html .= '</div>';
 
             return $html;

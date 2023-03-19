@@ -27,7 +27,7 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
      */
     private $oTargetConfig = null;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -133,7 +133,7 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
         if (method_exists($oModuleInstance, 'GetFieldCmsTplPageList')) {
             $oPageList = $oModuleInstance->GetFieldCmsTplPageList();
             $bFound = false;
-            while ($oPage = &$oPageList->Next()) {
+            while ($oPage = $oPageList->Next()) {
                 if ($oPage->fieldCmsPortalId == $oPortal->id && !$bFound) {
                     $aReturnArray['URL'] = $this->getPageService()->getLinkToPageObjectRelative($oPage);
                     $query = "SELECT `cms_master_pagedef_spot`.`name` FROM `cms_tpl_page_cms_master_pagedef_spot`
@@ -150,7 +150,7 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
         } elseif (method_exists($oModuleInstance, 'GetFieldCmsTplPageCmsMasterPagedefSpotList')) {
             $oPageDefSpotList = $oModuleInstance->GetFieldCmsTplPageCmsMasterPagedefSpotList();
             $bFound = false;
-            while ($oPageDefSpot = &$oPageDefSpotList->Next()) {
+            while ($oPageDefSpot = $oPageDefSpotList->Next()) {
                 $oPage = TdbCmsTplPage::GetNewInstance();
                 $oPage->Load($oPageDefSpot->fieldCmsTplPageId);
                 if ($oPage->fieldCmsPortalId == $oPortal->id && !$bFound) {

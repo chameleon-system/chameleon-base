@@ -44,23 +44,13 @@ abstract class ChameleonBaseRouter extends Router
          */
         $this->environment = $container->getParameter('kernel.environment');
 
-        $options['matcher_cache_class'] = $this->getMatcherCacheClassName();
-        $options['generator_cache_class'] = $this->getGeneratorCacheClassName();
         $options['resource_type'] = 'chameleon';
-        $options['cache_dir'] = $container->getParameter('kernel.cache_dir');
+        $options['cache_dir'] = $this->generateCacheDirPath((string) $container->getParameter('kernel.cache_dir'));
 
         $this->setOptions($options);
     }
 
-    /**
-     * @return string
-     */
-    abstract protected function getMatcherCacheClassName();
-
-    /**
-     * @return string
-     */
-    abstract protected function getGeneratorCacheClassName();
+    abstract protected function generateCacheDirPath(string $baseCacheDir): string;
 
     /**
      * @param string $newURL
@@ -97,19 +87,25 @@ abstract class ChameleonBaseRouter extends Router
      */
     public function clearCache()
     {
-        $currentDir = $this->getOption('cache_dir');
-        $matcherName = $currentDir.DIRECTORY_SEPARATOR.$this->getMatcherCacheClassName().'.php';
-        @unlink($matcherName);
-        @unlink($matcherName.'.meta');
-        $generatorName = $currentDir.DIRECTORY_SEPARATOR.$this->getGeneratorCacheClassName().'.php';
-        @unlink($generatorName);
-        @unlink($generatorName.'.meta');
+        $currentDir = $this->generateCacheDirPath($this->getOption('cache_dir'));
+        if (false === is_dir($currentDir)) {
+            return;
+        }
+        $d = dir($currentDir);
+        while (false !== ($entry = $d->read())) {
+            $fullName = sprintf('%s%s%s',$currentDir, DIRECTORY_SEPARATOR, $entry);
+            if ($entry === '.' || $entry === '..' || is_dir($fullName)) {
+                continue;
+            }
+            unlink($fullName);
+        }
+        $d->close();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         /*
          * Remove an existing authenticity token (might be set to a concrete value instead of the placeholder)

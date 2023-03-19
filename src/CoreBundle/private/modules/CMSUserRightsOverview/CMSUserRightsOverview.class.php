@@ -16,7 +16,7 @@ use Doctrine\DBAL\Connection;
  */
 class CMSUserRightsOverview extends TModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
 
@@ -28,7 +28,7 @@ class CMSUserRightsOverview extends TModelBase
     protected function GetUserRightsOverview()
     {
         $sRightsOverview = '';
-        $oCmsUserList = &TdbCmsUserList::GetList();
+        $oCmsUserList = TdbCmsUserList::GetList();
         /** @var $oCmsUserList TdbCmsUserList */
         $oCmsUserList->ChangeOrderBy(array('`cms_user`.`name`' => 'ASC'));
         $count = 0;
@@ -95,7 +95,7 @@ class CMSUserRightsOverview extends TModelBase
           ";
 
                 $sTableRight = '';
-                $oCmsTblConfList = &TdbCmsTblConfList::GetList($sQuery);
+                $oCmsTblConfList = TdbCmsTblConfList::GetList($sQuery);
                 /** @var $oCmsTblConfList TdbCmsTblConfList */
                 while ($oTable = $oCmsTblConfList->Next()) {
                     $sTableRight .= $oTable->GetName().', ';
@@ -120,7 +120,7 @@ class CMSUserRightsOverview extends TModelBase
           ";
 
                 $sTableRight = '';
-                $oCmsTblConfList = &TdbCmsTblConfList::GetList($sQuery);
+                $oCmsTblConfList = TdbCmsTblConfList::GetList($sQuery);
                 /** @var $oCmsTblConfList TdbCmsTblConfList */
                 while ($oTable = $oCmsTblConfList->Next()) {
                     $sTableRight .= $oTable->GetName().', ';
@@ -145,7 +145,7 @@ class CMSUserRightsOverview extends TModelBase
           ";
 
                 $sTableRight = '';
-                $oCmsTblConfList = &TdbCmsTblConfList::GetList($sQuery);
+                $oCmsTblConfList = TdbCmsTblConfList::GetList($sQuery);
                 /** @var $oCmsTblConfList TdbCmsTblConfList */
                 while ($oTable = $oCmsTblConfList->Next()) {
                     $sTableRight .= $oTable->GetName().', ';
@@ -170,7 +170,7 @@ class CMSUserRightsOverview extends TModelBase
           ";
 
                 $sTableRight = '';
-                $oCmsTblConfList = &TdbCmsTblConfList::GetList($sQuery);
+                $oCmsTblConfList = TdbCmsTblConfList::GetList($sQuery);
                 /** @var $oCmsTblConfList TdbCmsTblConfList */
                 while ($oTable = $oCmsTblConfList->Next()) {
                     $sTableRight .= $oTable->GetName().', ';
@@ -195,7 +195,7 @@ class CMSUserRightsOverview extends TModelBase
           ";
 
                 $sTableRight = '';
-                $oCmsTblConfList = &TdbCmsTblConfList::GetList($sQuery);
+                $oCmsTblConfList = TdbCmsTblConfList::GetList($sQuery);
                 /** @var $oCmsTblConfList TdbCmsTblConfList */
                 while ($oTable = $oCmsTblConfList->Next()) {
                     $sTableRight .= $oTable->GetName().', ';

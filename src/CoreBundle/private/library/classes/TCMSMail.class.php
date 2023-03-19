@@ -295,7 +295,7 @@ class TCMSMail extends PHPMailer
     /**
      * @param array $addressBag
      */
-    protected function filterAddressBag(array &$addressBag)
+    protected function filterAddressBag(array $addressBag)
     {
         foreach ($addressBag as $key => $aRecipient) {
             $aRecipient[0] = utf8_decode($aRecipient[0]);
@@ -341,7 +341,7 @@ class TCMSMail extends PHPMailer
         }
     }
 
-    protected function GetHTMLBody(&$aData)
+    protected function GetHTMLBody($aData)
     {
         $oTemplateParser = new TViewParser();
         $oTemplateParser->AddVarArray($aData);
@@ -357,7 +357,7 @@ class TCMSMail extends PHPMailer
         return $sContent;
     }
 
-    protected function GetTextBody(&$aData)
+    protected function GetTextBody($aData)
     {
         $oTemplateParser = new TViewParser();
         $oTemplateParser->AddVarArray($aData);

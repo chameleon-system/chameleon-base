@@ -13,7 +13,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 class MTBreadcrumbCore extends TUserModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $activePage = $this->getActivePageService()->getActivePage();

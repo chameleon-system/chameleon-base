@@ -112,7 +112,7 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
             $this->databaseConnection->quoteIdentifier($fieldName)
         );
 
-        return $this->databaseConnection->fetchAll(
+        return $this->databaseConnection->fetchAllAssociative(
             $query,
             ['mediaItemId' => $mediaItem->getId()]
         );
@@ -141,7 +141,7 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
             $this->databaseConnection->quoteIdentifier($mltTableName)
         );
 
-        return $this->databaseConnection->fetchAll(
+        return $this->databaseConnection->fetchAllAssociative(
             $query,
             ['mediaItemId' => $mediaItem->getId()]
         );
@@ -171,7 +171,7 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
         );
         $mediaItemId = $mediaItem->getId();
 
-        return $this->databaseConnection->fetchAll(
+        return $this->databaseConnection->fetchAllAssociative(
             $query,
             [
                 'mediaItemIdCommaFront' => "%,$mediaItemId",
@@ -202,7 +202,7 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
             $wherePart
         );
 
-        return $this->databaseConnection->fetchAll(
+        return $this->databaseConnection->fetchAllAssociative(
             $query,
             ['mediaTag' => '%cmsmedia="'.$mediaItem->getId().'%']
         );

@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use esono\pkgCmsCache\CacheInterface;
 
 class TCMSConfig extends TCMSRecord
@@ -30,14 +31,18 @@ class TCMSConfig extends TCMSRecord
 
     private $aConfigValues = null;
 
+    public function __construct()
+    {
+        parent::__construct('cms_config');
+    }
+
     /**
-     * constructor. do not call directly.
-     *
-     * @return TCMSConfig
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
      */
     public function TCMSConfig()
     {
-        parent::TCMSRecord('cms_config');
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**
@@ -82,9 +87,11 @@ class TCMSConfig extends TCMSRecord
     {
         $bLogDeletes = ('1' == $this->sqlData['log_deletes']);
         if ($bLogDeletes && '0' == $this->sqlData['log_www_user_delete_calls']) {
-            /** @var $oCMSUser TdbCmsUser */
-            $oCMSUser = &TdbCmsUser::GetActiveUser();
-            $bLogDeletes = ('www' != $oCMSUser->sqlData['login']);
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+            $user = $securityHelper->getUser();
+            $bLogDeletes = ('www' !== $user->getUserIdentifier());
         }
 
         return $bLogDeletes;
@@ -158,7 +165,7 @@ class TCMSConfig extends TCMSRecord
      *
      * @return TdbCmsConfig
      */
-    public static function &GetInstance($bReload = false)
+    public static function GetInstance($bReload = false)
     {
         static $instance = null;
         if ('TCMSConfig' === get_called_class()) {
@@ -223,9 +230,9 @@ class TCMSConfig extends TCMSRecord
      *
      * @return TCMSPortal
      */
-    public function &GetPrimaryPortal()
+    public function GetPrimaryPortal()
     {
-        $oPortal = &$this->GetFromInternalCache('_primaryPortal');
+        $oPortal = $this->GetFromInternalCache('_primaryPortal');
         if (is_null($oPortal)) {
             $oPortal = new TCMSPortal();
             $oPortal->Load($this->sqlData['cms_portal_id']);
@@ -345,7 +352,7 @@ class TCMSConfig extends TCMSRecord
      */
     public function GetImageMagickVersion()
     {
-        $sImageMagickVersion = &$this->GetFromInternalCache('_imageMagickVersion');
+        $sImageMagickVersion = $this->GetFromInternalCache('_imageMagickVersion');
         if (is_null($sImageMagickVersion)) {
             $sImageMagickVersion = false;
             $oImageMagick = new imageMagick();
@@ -515,7 +522,7 @@ class TCMSConfig extends TCMSRecord
         if ($oIpWhiteList->Length() > 0) {
             $bUserIsWhiteListed = false;
             //first check the white list configured in the backend (cms settings)
-            while ($oIP = &$oIpWhiteList->Next() && false === $bUserIsWhiteListed) {
+            while ($oIP = $oIpWhiteList->Next() && false === $bUserIsWhiteListed) {
                 $bUserIsWhiteListed = $this->CheckIP($oIP->fieldIp, $sUserIpAddress);
             }
 

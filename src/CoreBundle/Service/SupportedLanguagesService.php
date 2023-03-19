@@ -67,7 +67,7 @@ class SupportedLanguagesService implements SupportedLanguagesServiceInterface
                   JOIN `cms_language` AS l
                   ON mlt.`target_id` = l.`id`
         ';
-        $result = $this->databaseConnection->fetchAll($query);
+        $result = $this->databaseConnection->fetchAllAssociative($query);
         $localeList = array();
         foreach ($result as $row) {
             $localeList[] = $row['code'];

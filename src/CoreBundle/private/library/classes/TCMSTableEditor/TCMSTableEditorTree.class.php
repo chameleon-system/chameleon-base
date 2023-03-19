@@ -15,6 +15,8 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 class TCMSTableEditorTree extends TCMSTableEditor
 {
@@ -30,7 +32,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
      *
      * @param TIterator $oFields - the fields inserted
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
         // get the parent_id from oFields
@@ -60,13 +62,13 @@ class TCMSTableEditorTree extends TCMSTableEditor
 
         $insertedNode = new TdbCmsTree($this->sId);
         $event = new ChangeNavigationTreeNodeEvent(array($insertedNode));
-        $this->getEventDispatcher()->dispatch(CoreEvents::ADD_NAVIGATION_TREE_NODE, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_NAVIGATION_TREE_NODE);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         $fieldTranslationUtil = $this->getFieldTranslationUtil();
         $translatedUrlnameFieldName = $fieldTranslationUtil->getTranslatedFieldName($this->oTableConf->fieldName, 'urlname');
@@ -75,7 +77,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $updatedNodes[] = new TdbCmsTree($this->sId);
         $oFields->GoToStart();
         $urlname = '';
-        while ($oField = &$oFields->Next()) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('name' === $oField->name) {
                 $urlname = $this->getUrlNormalizationUtil()->normalizeUrl($oField->data);
@@ -99,7 +101,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
 
         $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_NODE, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_NODE);
     }
 
     /**
@@ -231,17 +233,18 @@ class TCMSTableEditorTree extends TCMSTableEditor
      *
      * @return TIterator
      */
-    public function &GetMenuItems()
+    public function GetMenuItems()
     {
         if (is_null($this->oMenuItems)) {
             $this->oMenuItems = new TIterator();
             // std menuitems...
-            $oGlobal = TGlobal::instance();
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-            $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+            $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
             if ($tableInUserGroup) {
                 // edit
-                if ($oGlobal->oUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
+                if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save');
                     $oMenuItem->sIcon = 'far fa-save';
@@ -295,13 +298,13 @@ class TCMSTableEditorTree extends TCMSTableEditor
      *
      * @param TIterator $oFields
      */
-    public function _OverwriteDefaults(&$oFields)
+    public function _OverwriteDefaults($oFields)
     {
         parent::_OverwriteDefaults($oFields);
         $oGlobal = TGlobal::instance();
 
         $oFields->GoToStart();
-        while ($oField = &$oFields->Next()) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('parent_id' == $oField->name) {
                 $oField->data = $oGlobal->GetUserData('parent_id');
@@ -324,7 +327,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $oNode = new TdbCmsTree();
         $oNode->Load($sId);
         $deletedNodes[] = $oNode;
-        $oPages = &$oNode->GetAllLinkedPages();
+        $oPages = $oNode->GetAllLinkedPages();
         parent::Delete($sId);
         // and delete all children as well
         $query = "SELECT * FROM `cms_tree` WHERE `parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sId)."'";
@@ -345,7 +348,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $this->writeSqlLog();
 
         $event = new ChangeNavigationTreeNodeEvent($deletedNodes);
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_NAVIGATION_TREE_NODE, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_NAVIGATION_TREE_NODE);
     }
 
     /**

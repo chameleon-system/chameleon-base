@@ -140,7 +140,7 @@ class TCMSSmartURLData
      *
      * @deprecated - you should use the request object instead:  $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest(); // @var Request $request
      */
-    public static function &GetActive()
+    public static function GetActive()
     {
         static $oInstance;
         if (!$oInstance) {

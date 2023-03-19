@@ -14,10 +14,13 @@ namespace ChameleonSystem\ViewRendererBundle\Tests\DataMappingServiceTests;
 use ChameleonSystem\ViewRendererBundle\objects\DataMappingServiceResponseFactory;
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceResponseInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class DataMappingServiceResponseFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var DataMappingServiceResponseFactory
      */
@@ -35,7 +38,7 @@ class DataMappingServiceResponseFactoryTest extends TestCase
      */
     private $response;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->response = null;

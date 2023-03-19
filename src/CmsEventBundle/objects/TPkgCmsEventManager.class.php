@@ -23,7 +23,7 @@ class TPkgCmsEventManager
      * @return TPkgCmsEventManager
      *                             get the event manager instance - always use this method to instantiate
      */
-    public static function &GetInstance()
+    public static function GetInstance()
     {
         static $oInstance = null;
         if (is_null($oInstance)) {
@@ -40,13 +40,13 @@ class TPkgCmsEventManager
      *
      * @return void
      */
-    public function RegisterObserver($sEventContext, $sEventName, IPkgCmsEventObserver &$oObserver)
+    public function RegisterObserver($sEventContext, $sEventName, IPkgCmsEventObserver $oObserver)
     {
         $sFullEventName = $this->GetFullEventName($sEventContext, $sEventName);
         if (!isset($this->aObserver[$sFullEventName])) {
             $this->aObserver[$sFullEventName] = array();
         }
-        $this->aObserver[$sFullEventName][] = &$oObserver;
+        $this->aObserver[$sFullEventName][] = $oObserver;
     }
 
     /**

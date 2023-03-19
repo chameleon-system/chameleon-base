@@ -5,7 +5,15 @@
 
     <services>
         <service id="chameleon_system_cms_changelog.cronjob.archive_changelog_cronjob" class="TCMSCronJob_ArchiveChangeLog" shared="false">
-            <tag name="chameleon_system.cronjob" />
+            <tag name="chameleon_system.cronjob"/>
+
+            <argument type="service" id="chameleon_system_cms_changelog.data_access"/>
+            <argument type="service" id="monolog.logger.cronjob"/>
+            <argument/> <!-- Will be replaced by ChameleonSystemCmsChangeLogExtension -->
+        </service>
+
+        <service id="chameleon_system_cms_changelog.data_access" class="ChameleonSystem\CmsChangeLogBundle\DataAccess\CmsChangeLogDataAccess" public="false">
+            <argument type="service" id="database_connection"/>
         </service>
     </services>
 </container>

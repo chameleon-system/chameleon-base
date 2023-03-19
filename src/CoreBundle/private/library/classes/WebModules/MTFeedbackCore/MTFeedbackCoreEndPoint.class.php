@@ -10,7 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MTFeedbackCoreEndPoint extends TUserCustomModelBase
 {
@@ -36,7 +36,7 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
         $this->_oErrors = new MTFeedbackErrorsCore();
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $this->LoadTableRow();
         $this->data = parent::Execute();
@@ -172,7 +172,7 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
      *
      * @param PHPMailer $oMail
      */
-    protected function AddAttachments(&$oMail)
+    protected function AddAttachments($oMail)
     {
     }
 

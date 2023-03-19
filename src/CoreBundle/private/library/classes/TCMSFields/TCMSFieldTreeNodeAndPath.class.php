@@ -24,7 +24,7 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
      * @param string $sNewName
      * @param array  $postData
      */
-    public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
+    public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
     {
         parent::ChangeFieldDefinition($sOldName, $sNewName, $postData);
 

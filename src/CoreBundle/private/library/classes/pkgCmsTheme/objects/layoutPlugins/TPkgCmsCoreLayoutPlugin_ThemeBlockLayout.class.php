@@ -40,7 +40,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
                         AND `pkg_cms_theme_block_layout`.`pkg_cms_theme_block_id` = :blockId
                         LIMIT 0,1
                         ';
-                $row = $this->getDatabaseConnection()->fetchAssoc($sQuery, array('themeId' => $oPortal->fieldPkgCmsThemeId, 'blockId' => $oThemeBlock->id));
+                $row = $this->getDatabaseConnection()->fetchAssociative($sQuery, array('themeId' => $oPortal->fieldPkgCmsThemeId, 'blockId' => $oThemeBlock->id));
                 $oThemeBlockLayout = null;
                 if (false === $row) {
                     $oThemeBlockLayout = $oThemeBlock->GetFieldPkgCmsThemeBlockLayout();
@@ -56,7 +56,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
                             break;
                         }
                     }
-                    $modules = &$this->moduleLoader;
+                    $modules = $this->moduleLoader;
                     require TGlobal::ProtectedPath($sLayoutPath);
                 }
             }
@@ -95,7 +95,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
                     }
 
                     ob_start();
-                    $modules = &$this;
+                    $modules = $this;
                     require TGlobal::ProtectedPath($sLayoutPath);
                     $sThemeBlock = ob_get_contents();
                     ob_end_clean();

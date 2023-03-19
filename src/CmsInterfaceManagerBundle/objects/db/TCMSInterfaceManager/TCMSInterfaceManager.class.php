@@ -19,7 +19,7 @@ class TCMSInterfaceManager extends TAdbCmsInterfaceManager
      *
      * @return null|TCMSInterfaceManagerBase
      */
-    public static function &GetInterfaceManagerObject($id)
+    public static function GetInterfaceManagerObject($id)
     {
         $oInterface = null;
         $oInterfaceData = TdbCmsInterfaceManager::GetNewInstance();
@@ -42,7 +42,7 @@ class TCMSInterfaceManager extends TAdbCmsInterfaceManager
      *
      * @return null|TCMSInterfaceManagerBase
      */
-    public static function &GetInterfaceManagerObjectBySystemName($sSystemName)
+    public static function GetInterfaceManagerObjectBySystemName($sSystemName)
     {
         $oInterface = null;
         $oInterfaceData = TdbCmsInterfaceManager::GetNewInstance();

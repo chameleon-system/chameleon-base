@@ -74,7 +74,7 @@ class SystemPageService implements SystemPageServiceInterface
         $systemPageList = array();
 
         $pages = \TdbCmsPortalSystemPageList::GetList(null, $language->id);
-        while ($page = &$pages->Next()) {
+        while ($page = $pages->Next()) {
             /** @var TdbCmsPortalSystemPage $page */
             if ($page->fieldCmsPortalId === $portal->id) {
                 $systemPageList[] = $page;

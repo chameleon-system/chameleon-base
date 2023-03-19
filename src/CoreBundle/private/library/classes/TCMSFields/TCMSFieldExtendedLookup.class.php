@@ -11,7 +11,9 @@
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use Symfony\Component\Translation\TranslatorInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * lookup.
@@ -52,20 +54,34 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
     protected function GetGoToRecordButton()
     {
         $sHTML = '';
-        $sForeignTableName = $this->GetConnectedTableName();
+        $tableName = $this->GetConnectedTableName();
 
-        $oGlobal = TGlobal::instance();
-        if ($this->bShowSwitchToRecord && $oGlobal->oUser->oAccessManager->HasNewPermission($sForeignTableName)) {
-            $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), 'javascript:'.$this->GoToRecordJS().';', 'far fa-edit');
+        $target = null;
+        if ('cms_tpl_page' === $tableName) {
+            // for web pages, we need to force open the connected record in the main window because the template engine isn`t usable in a popup window
+            $target = 'top';
+        }
+
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if ($this->bShowSwitchToRecord && $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $tableName)) {
+            $sHTML .= TCMSRender::DrawButton(
+                TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'),
+                $this->getSelectedEntryLink($this->data),
+                'far fa-edit',
+                null,
+                null,
+                null,
+                null,
+                $target
+            );
         }
 
         return $sHTML;
     }
 
     /**
-     * generates the javascript for the go to record button.
-     *
-     * @return string
+     * @deprecated not used anymore
      */
     public function GoToRecordJS()
     {
@@ -136,7 +152,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
      *
      * @return string
      */
-    protected function _GetOpenWindowJS(&$oPopupTableConf)
+    protected function _GetOpenWindowJS($oPopupTableConf)
     {
         $aParams = array('pagedef' => 'extendedLookupList', 'id' => $oPopupTableConf->id, 'fieldName' => $this->name, 'sourceTblConfId' => $this->oDefinition->fieldCmsTblConfId);
         $restriction = $this->getTargetListRestriction();

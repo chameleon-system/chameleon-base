@@ -11,6 +11,7 @@
 
 use ChameleonSystem\core\DatabaseAccessLayer\EntityList;
 use ChameleonSystem\core\DatabaseAccessLayer\QueryModifierOrderByInterface;
+use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Doctrine\DBAL\Connection;
 
@@ -23,6 +24,8 @@ use Doctrine\DBAL\Connection;
  */
 class TCMSRecordList extends TIterator
 {
+    use NamedConstructorSupport;
+
     /**
      * class name used for each record.
      *
@@ -336,15 +339,22 @@ class TCMSRecordList extends TIterator
      * @param string $sTableName
      * @param string $sQuery
      * @param string $sLanguageId
-     *
-     * @return TCMSRecordList
      */
-    public function TCMSRecordList($sTableObject = 'TCMSRecord', $sTableName = null, $sQuery = null, $sLanguageId = null)
+    public function __construct($sTableObject = 'TCMSRecord', $sTableName = null, $sQuery = null, $sLanguageId = null)
     {
         $this->sTableObject = $sTableObject;
         $this->sTableName = $sTableName;
         $this->SetLanguage($sLanguageId);
         $this->sQuery = $sQuery;
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSRecordList()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**
@@ -628,7 +638,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T
      */
-    public function &Random()
+    public function Random()
     {
         $currentItemPointer = $this->getEntityList()->getCurrentPosition();
         $itemIndex = ($this->iNumberOfRecordsToShow > 0) ? $this->iNumberOfRecordsToShow : $this->Length();
@@ -671,7 +681,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T|false
      */
-    public function &current()
+    public function current(): mixed
     {
         $data = $this->getEntityList()->current();
         if (false === $data) {
@@ -687,7 +697,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T|false
      */
-    public function &next()
+    public function next(): mixed
     {
         $data = $this->getEntityList()->current();
         if (false === $data) {
@@ -701,12 +711,27 @@ class TCMSRecordList extends TIterator
         return $this->getItem($itemKey, $data);
     }
 
+    public function key(): int
+    {
+        return $this->getEntityList()->key();
+    }
+
+    public function valid(): bool
+    {
+        return $this->getEntityList()->valid();
+    }
+
+    public function rewind(): void
+    {
+        $this->getEntityList()->rewind();
+    }
+
     /**
      * returns the previous record from the list, moving the pointer back one.
      *
      * @return T|false
      */
-    public function &Previous()
+    public function Previous()
     {
         $this->getEntityList()->previous();
         $data = $this->getEntityList()->current();
@@ -723,7 +748,7 @@ class TCMSRecordList extends TIterator
     protected function getEntityList()
     {
         if (null === $this->entityList) {
-            $this->entityList = new EntityList($this->getDatabaseConnection(), $this->sQuery, $this->getQueryParameters(), $this->getQueryParameterTypes());
+            $this->entityList = new EntityList($this->getDatabaseConnection(), $this->sQuery, $this->getQueryParameters()??[], $this->getQueryParameterTypes()??[]);
         }
 
         return $this->entityList;
@@ -744,7 +769,7 @@ class TCMSRecordList extends TIterator
      *
      * @return T
      */
-    protected function &_NewElement(&$aData)
+    protected function _NewElement($aData)
     {
         $oElement = false;
         // try to fetch the element from _items first
@@ -908,7 +933,7 @@ class TCMSRecordList extends TIterator
         $oCallbackObject = null;
         $sCallbackMethod = '';
         if (!is_null($aCallbackMethodToEvaluate)) {
-            $oCallbackObject = &$aCallbackMethodToEvaluate[0];
+            $oCallbackObject = $aCallbackMethodToEvaluate[0];
             $sCallbackMethod = $aCallbackMethodToEvaluate[1];
         }
 
@@ -1015,7 +1040,7 @@ class TCMSRecordList extends TIterator
      *
      * @return string
      */
-    public function GetListManagerFilterQueryCustomJoins(&$oListManager)
+    public function GetListManagerFilterQueryCustomJoins($oListManager)
     {
         return '';
     }
@@ -1029,7 +1054,7 @@ class TCMSRecordList extends TIterator
      *
      * @return string
      */
-    public function GetListManagerPortalRestriction(&$oListManager, $sQuery)
+    public function GetListManagerPortalRestriction($oListManager, $sQuery)
     {
         return $sQuery;
     }
@@ -1042,7 +1067,7 @@ class TCMSRecordList extends TIterator
      *
      * @return string
      */
-    public function GetListManagerCustomGroupBy(&$oListManager)
+    public function GetListManagerCustomGroupBy($oListManager)
     {
         return '';
     }
@@ -1090,7 +1115,7 @@ class TCMSRecordList extends TIterator
         return $sQuery;
     }
 
-    private function &getItem($itemKey, $data)
+    private function getItem($itemKey, $data)
     {
         if (isset($this->_items[$itemKey])) {
             return $this->_items[$itemKey];

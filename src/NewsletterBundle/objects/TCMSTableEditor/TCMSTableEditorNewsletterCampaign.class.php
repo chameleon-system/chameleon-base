@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+
 class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 {
     /**
@@ -24,10 +28,10 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
      *
      * @return void
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
-        $oNewsletterGroupList = &$oPostTable->GetMLT('pkg_newsletter_group_mlt');
+        $oNewsletterGroupList = $oPostTable->GetMLT('pkg_newsletter_group_mlt');
         if ($oNewsletterGroupList->Length() > 0 && '1' == $oPostTable->sqlData['active']) {
             // to allow fast insert, we work with a tmp table
             $query = 'CREATE TEMPORARY TABLE `_tmp_pkg_newsletter_queue` (
@@ -117,7 +121,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
      *
      * @return void
      */
-    protected function AddUsersToTmpTable(&$oPkgNewsletterGroup)
+    protected function AddUsersToTmpTable($oPkgNewsletterGroup)
     {
         // if we have include_all_newsletter_users set, we can skip all other settings and just add everyone
         if ($oPkgNewsletterGroup->fieldIncludeAllNewsletterUsers) {
@@ -226,7 +230,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
             $oMenuItem->sIcon = 'fas fa-user-slash';
 
             $oGlobal = TGlobal::instance();
-            $oExecutingModulePointer = &$oGlobal->GetExecutingModulePointer();
+            $oExecutingModulePointer = $oGlobal->GetExecutingModulePointer();
 
             $aURLData = array('module_fnc' => array($oExecutingModulePointer->sModuleSpotName => 'ExecuteAjaxCall'), '_fnc' => 'DeleteCampaignQueue', '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id);
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aURLData);
@@ -280,9 +284,11 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 
         $oTargetTableConf = TdbCmsTblConf::GetNewInstance();
         if ($oTargetTableConf->Loadfromfield('name', 'pkg_newsletter_campaign')) {
-            $oGlobal = TGlobal::instance();
-            $bUserIsInCodeTableGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($oTargetTableConf->fieldCmsUsergroupId);
-            $bHasNewPermissionOnTargetTable = ($oGlobal->oUser->oAccessManager->HasNewPermission('pkg_newsletter_campaign'));
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+            $bUserIsInCodeTableGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $oTargetTableConf->fieldName);
+            $bHasNewPermissionOnTargetTable = ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, 'pkg_newsletter_campaign'));
             $bAllowDeletingCampaignQueue = ($bUserIsInCodeTableGroup && $bHasNewPermissionOnTargetTable);
         }
 

@@ -11,11 +11,14 @@
 
 namespace ChameleonSystem\CoreBundle\UniversalUploader\Bridge\Chameleon;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\UniversalUploader\Exception\AccessDeniedException;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploadedFileDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderParameterServiceInterface;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 use TdbCmsUser;
 
 class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
@@ -29,11 +32,13 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
      * @var RequestStack
      */
     private $requestStack;
+    private Security $security;
 
-    public function __construct(UploaderParameterServiceInterface $uploadParameterService, RequestStack $requestStack)
+    public function __construct(UploaderParameterServiceInterface $uploadParameterService, RequestStack $requestStack, Security $security)
     {
         $this->uploadParameterService = $uploadParameterService;
         $this->requestStack = $requestStack;
+        $this->security = $security;
     }
 
     /**
@@ -87,9 +92,8 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
 
         try {
             //fix until #39217 is resolved
-            $backendUser = TdbCmsUser::GetActiveUser();
-            if (false === $backendUser->oAccessManager->HasNewPermission($tableName)) {
-                throw new AccessDeniedException(sprintf('Permission for user %s to add new records to %s has not been granted.', $backendUser->fieldName, $tableName));
+            if (false === $this->security->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $tableName)) {
+                throw new AccessDeniedException(sprintf('Permission for user %s to add new records to %s has not been granted.', $this->security->getUser()?->getUserIdentifier(), $tableName));
             }
 
             $tableEditor->SetUploadData($fileUploadData, true);

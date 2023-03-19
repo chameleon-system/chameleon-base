@@ -21,7 +21,7 @@ class CMSGMap extends TCMSModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         $this->data['googleMapHtml'] = $this->getGoogleMapHtml();

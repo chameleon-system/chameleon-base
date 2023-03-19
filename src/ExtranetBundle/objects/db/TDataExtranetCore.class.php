@@ -35,7 +35,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
      *
      * @return TdbDataExtranet|bool
      */
-    public static function &GetInstance()
+    public static function GetInstance()
     {
         static $oInstance;
         $oActivePage = self::getActivePageService()->getActivePage();

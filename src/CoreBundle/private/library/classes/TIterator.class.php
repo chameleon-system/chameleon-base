@@ -19,7 +19,7 @@
  * @property T[] $_items
  * @property int $_itemPointer
  */
-class TIterator
+class TIterator implements Iterator
 {
     private $itemPointer = 0;
     /**
@@ -80,7 +80,7 @@ class TIterator
      * @param T $item
      * @return void
      */
-    public function AddItem(&$item)
+    public function AddItem($item)
     {
         $this->_items[] = $item;
     }
@@ -92,7 +92,7 @@ class TIterator
      * @param T $item
      * @return void
      */
-    public function AddItemToStart(&$item)
+    public function AddItemToStart($item)
     {
         array_unshift($this->_items, $item);
         if ($this->getItemPointer() > 0) {
@@ -164,7 +164,7 @@ class TIterator
         $tmpCurrentPointer = $this->getItemPointer();
         $this->GoToStart();
         $oItemFound = false;
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if (is_object($oItem) && property_exists($oItem, $propertyName)) {
                 $bMatches = false;
                 if ($bIgnoreCase) {
@@ -173,7 +173,7 @@ class TIterator
                     $bMatches = ($oItem->$propertyName == $propertyValue);
                 }
                 if ($bMatches) {
-                    $oItemFound = &$oItem;
+                    $oItemFound = $oItem;
                 }
             }
         }
@@ -197,7 +197,7 @@ class TIterator
         $tmpCurrentPointer = $this->getItemPointer();
         $this->GoToStart();
         $oItemFound = false;
-        while (!$oItemFound && ($oItem = &$this->Next())) {
+        while (!$oItemFound && ($oItem = $this->Next())) {
             if (is_object($oItem) && property_exists($oItem, $matchPropertyName) && $oItem->$matchPropertyName == $oNewItem->$matchPropertyName) {
                 $this->_items[$this->getItemPointer() - 1] = $oNewItem;
                 $oItemFound = true;
@@ -227,7 +227,7 @@ class TIterator
         $oItemsFound = new self();
 
         $bItemFound = false;
-        while ($oItem = &$this->Next()) {
+        while ($oItem = $this->Next()) {
             if (is_object($oItem) && property_exists($oItem, $propertyName) && $oItem->$propertyName == $propertyValue) {
                 $bItemFound = true;
                 $oItemsFound->AddItem($oItem);
@@ -246,7 +246,7 @@ class TIterator
      *
      * @return T
      */
-    public function &current()
+    public function current(): mixed
     {
         if (-1 == $this->getItemPointer() && count($this->_items) > 0) {
             $this->setItemPointer(0);
@@ -270,7 +270,7 @@ class TIterator
         $bIsInList = false;
         $iCurPos = $this->getItemPointer();
         $this->GoToStart();
-        while (!$bIsInList && ($oTmpItem = &$this->Next())) {
+        while (!$bIsInList && ($oTmpItem = $this->Next())) {
             if ($oTmpItem->IsSameAs($oItem)) {
                 $bIsInList = true;
             }
@@ -285,11 +285,11 @@ class TIterator
      *
      * @return T|false
      */
-    public function &next()
+    public function next(): mixed
     {
         $item = false;
         if ($this->getItemPointer() < $this->Length()) {
-            $item = &$this->Current();
+            $item = $this->Current();
             $this->setItemPointer($this->getItemPointer() + 1);
         }
 
@@ -301,11 +301,11 @@ class TIterator
      *
      * @return T|false
      */
-    public function &Previous()
+    public function Previous()
     {
         $item = false;
         if ($this->getItemPointer() >= 0) {
-            $item = &$this->Current();
+            $item = $this->Current();
             $this->setItemPointer($this->getItemPointer() - 1);
         }
 
@@ -360,7 +360,7 @@ class TIterator
      *
      * @return T|false $item
      */
-    public function &Random()
+    public function Random()
     {
         if ($this->Length() > 0) {
             $randomIndex = array_rand($this->_items);
@@ -407,4 +407,20 @@ class TIterator
     {
         $this->itemPointer = $itemPointer;
     }
+
+    public function key(): int
+    {
+        return $this->getItemPointer();
+    }
+
+    public function valid(): bool
+    {
+        return $this->getItemPointer() < $this->Length();
+    }
+
+    public function rewind(): void
+    {
+        $this->setItemPointer(0);
+    }
+
 }

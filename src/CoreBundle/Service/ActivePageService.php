@@ -131,7 +131,7 @@ class ActivePageService implements ActivePageServiceInterface
 
         if ($this->activePage !== $oldActivePage) {
             $event = new ChangeActivePageEvent($this->activePage, $oldActivePage);
-            $this->eventDispatcher->dispatch(CoreEvents::CHANGE_ACTIVE_PAGE, $event);
+            $this->eventDispatcher->dispatch($event, CoreEvents::CHANGE_ACTIVE_PAGE);
         }
 
         $languageOfPage = $activePage->GetLanguageID();
@@ -159,7 +159,7 @@ class ActivePageService implements ActivePageServiceInterface
      */
     private function getLinkToActivePage(array $additionalParameters = array(), array $excludeParameters = array(), TdbCmsLanguage $language = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
         $route = $request->attributes->get('_route');
         if (null === $route) {
             return '';

@@ -9,12 +9,10 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
-
 /****************************************************************************
  * Download files
 /***************************************************************************/
-class TCMSFieldDownloads extends TCMSMLTField
+class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
 {
     protected $oTableConf = null;
 
@@ -25,7 +23,7 @@ class TCMSFieldDownloads extends TCMSMLTField
 
     public function GetHTML()
     {
-        $this->oTableConf = &$this->oTableRow->GetTableConf();
+        $this->oTableConf = $this->oTableRow->GetTableConf();
 
         $html = '<input type="hidden" id="'.TGlobalBase::OutHTML($this->name).'" name="'.TGlobalBase::OutHTML($this->name).'" value="'.TGlobalBase::OutHTML($this->data).'" />
       <div>';
@@ -58,7 +56,7 @@ class TCMSFieldDownloads extends TCMSMLTField
 
         $html .= '<div id="documentManager_'.$this->name."_anchor\">
       <div class=\"pt-2\">\n";
-        while ($oDownload = &$oDownloads->Next()) {
+        while ($oDownload = $oDownloads->Next()) {
             /** @var $oDownload TCMSDownloadFile */
             $tdWidth = 50;
             if (true === $bReadOnly) {
@@ -111,111 +109,53 @@ class TCMSFieldDownloads extends TCMSMLTField
     }
 
     /**
-     * removes any related tables (like mlt tables). the function will be called
-     * from the outside whenever there is a change of type FROM this type of field.
+     * {@inheritdoc}
      */
-    public function DeleteRelatedTables()
+    public function GetMLTTableName($aFieldData = [])
     {
-        $tableName = $this->GetMLTTableName();
-        $query = 'DROP TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName).'`';
-        MySqlLegacySupport::getInstance()->query($query);
+        $name = $aFieldData['name'] ?? $this->name;
 
-        $aQuery = array(new LogChangeDataModel($query));
-        TCMSLogChange::WriteTransaction($aQuery);
+        return parent::GetMLTTableName(['name' => $name]);
     }
 
     /**
-     * creates any related tables (like mlt tables). the function will be called
-     * from the outside whenever there is a change of type TO this type of field.
+     * {@inheritdoc}
      */
-    public function CreateRelatedTables($returnDDL = false)
-    {
-        $sql = '';
-        $tableName = $this->GetMLTTableName();
-        if (!TGlobal::TableExists($tableName)) {
-            $query = 'CREATE TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName)."` (
-                  `source_id` CHAR( 36 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
-                  `target_id` CHAR( 36 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
-                  `entry_sort` int(11) NOT NULL default '0',
-                  PRIMARY KEY ( `source_id` , `target_id` ),
-                  INDEX (target_id),
-                  INDEX (entry_sort)
-                )";
-
-            if (!$returnDDL) {
-                MySqlLegacySupport::getInstance()->query($query);
-                $aQuery = array(new LogChangeDataModel($query));
-
-                TCMSLogChange::WriteTransaction($aQuery);
-            } else {
-                $sql .= $query.";\n";
-            }
-        }
-        if ($returnDDL) {
-            return $sql;
-        }
-    }
-
-    /**
-     * returns the mlt table name.
-     *
-     * @return string
-     */
-    public function GetMLTTableName()
-    {
-        return $this->sTableName.'_'.$this->name.'_cms_document_mlt';
-    }
-
     public function GetForeignTableName()
     {
         return 'cms_document';
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
+     */
+    protected function GetConnectedTableNameFromFieldConfig($aFieldSQLData, $sParameterKey = 'connectedTableName')
+    {
+        return $this->GetForeignTableName();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function GetConnectedTableName($bExistingCount = true)
     {
-        return 'cms_document';
+        return $this->GetForeignTableName();
     }
 
     /**
-     * overwrite to delete the related download mlt table.
+     * {@inheritdoc}
      */
-    public function DeleteFieldDefinition()
+    protected function GetConnectedTableNameFromSQLData($aNewFieldData)
     {
-        $this->DeleteRelatedTables();
-        parent::DeleteFieldDefinition();
+        return $this->GetForeignTableName();
     }
 
     /**
-     * renders the read only view of the field.
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function GetReadOnly()
+    protected function getConnectedTableNameFromDefinition(): ?string
     {
-        $this->oTableConf = &$this->oTableRow->GetTableConf();
-        $html = $this->GetAttachedDocumentListAsHTML(true);
-
-        return $html;
-    }
-
-    /**
-     * returns true if field data is not empty
-     * overwrite this method for mlt and property fields.
-     *
-     * @return bool
-     */
-    public function HasContent()
-    {
-        $bHasContent = false;
-        $oDownloads = $this->oTableRow->GetDownloads($this->name);
-        if ($oDownloads->Length() > 0) {
-            $bHasContent = true;
-        }
-
-        return $bHasContent;
+        return $this->GetForeignTableName();
     }
 
     /**
@@ -271,7 +211,7 @@ class TCMSFieldDownloads extends TCMSMLTField
      */
     protected function GetForeignTableNameFrontend()
     {
-        return 'cms_document';
+        return $this->GetForeignTableName();
     }
 
     /**
@@ -397,7 +337,7 @@ class TCMSFieldDownloads extends TCMSMLTField
     public function PkgCmsFormPostSaveHook($sId, $oForm)
     {
         if (!$this->oTableConf) {
-            $this->oTableConf = &$this->oTableRow->GetTableConf();
+            $this->oTableConf = $this->oTableRow->GetTableConf();
         }
         if (is_array($this->data) && array_key_exists('x', $this->data)) {
             unset($this->data['x']);
@@ -515,16 +455,6 @@ class TCMSFieldDownloads extends TCMSMLTField
         $aAdditionalViewData['aRecordsConnected'] = $this->GetRecordsConnectedArrayFrontend();
 
         return $aAdditionalViewData;
-    }
-
-    public function FetchMLTRecords()
-    {
-        $foreignTableName = $this->GetForeignTableName();
-        $sFilterQuery = $this->GetMLTFilterQuery();
-        /** @var $oMLTRecords TCMSRecordList */
-        $oMLTRecords = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List', 'GetList'), $sFilterQuery);
-
-        return $oMLTRecords;
     }
 
     /**

@@ -15,7 +15,7 @@ class MTIframeCore extends TUserCustomModelBase
 
     protected $bAllowHTMLDivWrapping = true;
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         $this->LoadTableRow();

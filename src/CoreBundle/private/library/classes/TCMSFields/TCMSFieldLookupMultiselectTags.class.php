@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
@@ -69,7 +70,10 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         $selectBox = '<select id="%s" name="%s[]" data-select2-ajax="%s" class="form-control form-control-sm" data-tags="true" multiple="multiple" %s>';
         $html = sprintf($selectBox, TGlobal::OutHTML($this->name), TGlobal::OutHTML($this->name), $this->getTagAutocompleteUrl(), $dataAjaxSuggestionsUrl);
 
-        $this->oConnectedMLTRecords->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $this->oConnectedMLTRecords->SetLanguage($backendSession->getCurrentEditLanguageId());
         while ($oMLTRecord = $this->oConnectedMLTRecords->Next()) {
             $html .= '<option selected="selected">'.TGlobal::OutHTML($oMLTRecord->GetDisplayValue()).'</option>';
         }
@@ -142,7 +146,10 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 
         $cmsConfig = TdbCmsConfig::GetInstance();
         $baseLanguageId = $cmsConfig->fieldTranslationBaseLanguageId;
-        $activeLanguageId = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $activeLanguageId = $backendSession->getCurrentEditLanguageId();
         if ($baseLanguageId !== $activeLanguageId) {
             return '__'.$this->getLanguageService()->getLanguageIsoCode($activeLanguageId);
         }
@@ -212,7 +219,11 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         }
         $query .= ' LIMIT '.MySqlLegacySupport::getInstance()->real_escape_string($iLimit);
         $oRecordList = TdbCmsTagsList::GetList($query);
-        $oRecordList->SetLanguage(TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $oRecordList->SetLanguage($backendSession->getCurrentEditLanguageId());
 
         while ($oRecord = $oRecordList->Next()) {
             $iTagUsageCount = $oRecord->fieldCount;
@@ -348,6 +359,8 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         $sRecordId = $this->recordId;
         $oTableConf = new TCMSTableConf();
         $oTableConf->LoadFromField('name', $this->sTableName);
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
         $aTagSuggestionsFinal = array();
         if (!empty($sConnectedTagIds)) {
@@ -364,7 +377,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
           LEFT JOIN `'.MySqlLegacySupport::getInstance()->real_escape_string($this->GetMLTTableName()).'` ON `'.MySqlLegacySupport::getInstance()->real_escape_string($this->GetMLTTableName()).'`.`target_id` =  `cms_tags`.`id`
           WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($sMLTTableName).'`.`target_id` NOT IN ('.$sConnectedTagIds.') AND `'.MySqlLegacySupport::getInstance()->real_escape_string($sMLTTableName)."`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($row['id'])."'
           ";
-                $oSimilarTagsList = TdbCmsTagsList::GetList($sMLTQuery, TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+                $oSimilarTagsList = TdbCmsTagsList::GetList($sMLTQuery, $backendSession->getCurrentEditLanguageId());
                 while ($oSimilarTag = $oSimilarTagsList->Next()) {
                     $sTag = $oSimilarTag->GetName();
                     if (!array_key_exists($sTag, $aTagSuggestions)) { // add tag to suggestions

@@ -11,7 +11,7 @@
 
 class CMSFieldPositionRPC extends TCMSModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         $this->GetSortElements();

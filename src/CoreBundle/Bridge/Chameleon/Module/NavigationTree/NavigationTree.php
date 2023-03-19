@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTree;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeNodeEvent;
@@ -25,7 +26,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Doctrine\DBAL\Connection;
 use MTPkgViewRendererAbstractModuleMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TGlobal;
 use TTools;
 
@@ -143,7 +144,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         TTools $tools,
         TGlobal $global,
         FieldTranslationUtil $fieldTranslationUtil,
-        LanguageServiceInterface $languageService
+        BackendSessionInterface $backendSession
     ) {
         parent::__construct();
 
@@ -159,7 +160,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $this->global = $global;
         $this->fieldTranslationUtil = $fieldTranslationUtil;
 
-        $this->editLanguage = $languageService->getActiveEditLanguage();
+        $this->editLanguage = \TdbCmsLanguage::GetNewInstance($backendSession->getCurrentEditLanguageId());
     }
 
     /**
@@ -184,9 +185,18 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
         $currentPageId = $this->inputFilterUtil->getFilteredGetInput('id', '');
         $primaryConnectedNodeIdOfCurrentPage = $this->inputFilterUtil->getFilteredGetInput('primaryTreeNodeId', '');
         $this->rootNodeId = $this->inputFilterUtil->getFilteredGetInput('rootID', \TCMSTreeNode::TREE_ROOT_ID);
+
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+        $activeLanguageIsoCode = $backendSession->getCurrentEditLanguageIso6391();
+
+        $activeLanguageId = null !== $activeLanguageIsoCode ? $this->dbConnection->fetchOne("select `id` from `cms_language` where `iso_6391` = :isoCode", ['isoCode' => $activeLanguageIsoCode]) : false;
+
         if ('' !== $currentPageId) {
             $rootNode = new \TdbCmsTree();
-            $rootNode->SetLanguage(\TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID());
+            if (false !== $activeLanguageId) {
+                $rootNode->SetLanguage($activeLanguageId);
+            }
             $rootNode->Load($this->rootNodeId);
             $visitor->SetMappedValue('pageBreadcrumbsHTML', $this->createPageBreadcrumbs($rootNode));
         }
@@ -442,7 +452,7 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
 
         $updatedNodes[] = $node;
         $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
-        $this->eventDispatcher->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_NODE, $event);
+        $this->eventDispatcher->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_NODE);
 
         return true;
     }
@@ -821,8 +831,10 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
      */
     private function addCachingTriggers(\IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
-        $backendUser = \TCMSUser::GetActiveUser();
-        $cacheTriggerManager->addTrigger('cms_user', $backendUser->id);
+        /** @var \ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess $securityHelper */
+        $securityHelper = \ChameleonSystem\CoreBundle\ServiceLocator::get(\ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess::class);
+
+        $cacheTriggerManager->addTrigger('cms_user', $securityHelper->getUser()?->getId());
         $cacheTriggerManager->addTrigger('cms_user_cms_language_mlt', null);
         $cacheTriggerManager->addTrigger('cms_user_cms_portal_mlt', null);
         $cacheTriggerManager->addTrigger('cms_user_cms_role_mlt', null);
@@ -869,8 +881,10 @@ class NavigationTree extends MTPkgViewRendererAbstractModuleMapper
             $parameters = [];
         }
 
-        $cmsUser = \TCMSUser::GetActiveUser();
-        $parameters['ouserid'] = $cmsUser->id;
+        /** @var \ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess $securityHelper */
+        $securityHelper = \ChameleonSystem\CoreBundle\ServiceLocator::get(\ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess::class);
+
+        $parameters['ouserid'] = $securityHelper->getUser()?->getId();
         $parameters['noassign'] = $this->inputFilterUtil->getFilteredGetInput('noassign');
         $parameters['id'] = $this->inputFilterUtil->getFilteredGetInput('id');
         $parameters['rootID'] = $this->inputFilterUtil->getFilteredGetInput('rootID');

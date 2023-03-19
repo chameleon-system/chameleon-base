@@ -15,7 +15,7 @@ use esono\pkgCmsCache\CacheInterface;
 
 class CMSUpdateManager extends TModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         clearstatcache(true);
@@ -44,14 +44,14 @@ class CMSUpdateManager extends TModelBase
     {
         define('CMSUpdateManagerRunning', true);
         $this->SetTemplate('CMSUpdateManager', 'runUpdate');
-        $oUpdateManager = &TCMSUpdateManager::GetInstance();
+        $oUpdateManager = TCMSUpdateManager::GetInstance();
         $this->data['oUpdateManager'] = $oUpdateManager;
     }
 
     public function RunUpdateSingle()
     {
         $this->SetTemplate('CMSUpdateManager', 'runUpdateSingle');
-        $oUpdateManager = &TCMSUpdateManager::GetInstance();
+        $oUpdateManager = TCMSUpdateManager::GetInstance();
         $this->data['oUpdateManager'] = $oUpdateManager;
     }
 
@@ -88,7 +88,7 @@ class CMSUpdateManager extends TModelBase
         $fileName = $oGlobal->GetUserData('fileName');
         $bundleName = $oGlobal->GetUserData('bundleName');
 
-        $oUpdateManager = &TCMSUpdateManager::GetInstance();
+        $oUpdateManager = TCMSUpdateManager::GetInstance();
 
         return $oUpdateManager->runSingleUpdate($fileName, $bundleName);
     }

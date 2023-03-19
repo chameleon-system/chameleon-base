@@ -9,8 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\Common\Collections\Expr\Comparison;
 
 /**
@@ -78,47 +81,6 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     }
 
     /**
-     * generates the HTML for the "go to record" button.
-     *
-     * @return string
-     */
-    protected function GetGoToRecordButton()
-    {
-        $sHTML = '';
-        $sForeignTableName = $this->GetConnectedTableName();
-
-        $oGlobal = TGlobal::instance();
-        if (!empty($sForeignTableName) && $this->bShowSwitchToRecord && $oGlobal->oUser->oAccessManager->HasNewPermission($sForeignTableName)) {
-            $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), 'javascript:'.$this->GoToRecordJS().';', 'far fa-edit');
-        }
-
-        return $sHTML;
-    }
-
-    /**
-     * generates the javascript for the go to record button.
-     *
-     * @return string
-     */
-    public function GoToRecordJS()
-    {
-        $sJS = '';
-        $sTableName = $this->GetConnectedTableName();
-        if (!empty($sTableName)) {
-            $oTableConf = TdbCmsTblConf::GetNewInstance();
-            $oTableConf->LoadFromField('name', $sTableName);
-
-            if ('cms_tpl_page' == $sTableName) { // for web pages, we need to force open the connected record in the main window because the template engine isn`t usable in a popup window
-                $sJS = "GoToRecordByHiddenIdWithTarget('".$oTableConf->id."','".TGlobal::OutHTML($this->name)."','top')";
-            } else {
-                $sJS = "GoToRecordByHiddenId('".$oTableConf->id."','".TGlobal::OutHTML($this->name)."')";
-            }
-        }
-
-        return $sJS;
-    }
-
-    /**
      * generates HTML for the buttons that open the layover with list of records
      * generates n buttons for each table that is set via config parameter sTables.
      *
@@ -138,8 +100,9 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                 if (count($aTableDisplayNames) > 0 && array_key_exists($sTableName, $aTableDisplayNames)) {
                     $sTableDisplayName = $aTableDisplayNames[$sTableName];
                 }
-                $oGlobal = TGlobal::instance();
-                if (!$oCmsTblConf->fieldOnlyOneRecordTbl && ($oGlobal->oUser->oAccessManager->HasShowAllPermission($sTableName) || $oGlobal->oUser->oAccessManager->HasShowAllReadOnlyPermission($sTableName))) {
+                /** @var SecurityHelperAccess $securityHelper */
+                $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+                if (!$oCmsTblConf->fieldOnlyOneRecordTbl && ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $sTableName))) {
                     $sHTML .= TCMSRender::DrawButton($sTableDisplayName, 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf).';', 'fas fa-th-list');
                     $sHTML .= '<input type="hidden" name="'.TGlobal::OutHTML('aTableNames['.$oCmsTblConf->id).']" id="'.TGlobal::OutHTML('aTableNames['.$oCmsTblConf->id).']" value="'.TGlobal::OutHTML($oCmsTblConf->fieldTranslation).'" />'."\n";
                 }
@@ -165,7 +128,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      *
      * @return string
      */
-    protected function _GetOpenWindowJS(&$oPopupTableConf)
+    protected function _GetOpenWindowJS($oPopupTableConf)
     {
         $js = parent::_GetOpenWindowJS($oPopupTableConf);
 
@@ -267,7 +230,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         $aTables = $this->GetAllowedTables();
         $aMethodData = $this->GetFieldMethodBaseDataArray();
-        $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName();
+        $aMethodData['sMethodName'] = $this->GetFieldMethodName();
         $aMethodData['sReturnType'] = 'null|';
         $sTypes = '';
         $sTables = '';
@@ -355,7 +318,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
         $sMethodName = 'GetListFor'.TCMSTableToClass::ConvertToClassString($this->name);
 
-        $aMethodData['sMethodName'] = '&'.$sMethodName;
+        $aMethodData['sMethodName'] = $sMethodName;
         $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->sTableName).'List';
 
         $aMethodData['sClassName'] = $aMethodData['sReturnType'];
@@ -387,7 +350,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      * @param string     $sNewName
      * @param array|null $postData
      */
-    public function ChangeFieldDefinition($sOldName, $sNewName, &$postData = null)
+    public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
     {
         parent::ChangeFieldDefinition($sOldName, $sNewName, $postData);
 

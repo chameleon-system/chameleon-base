@@ -17,25 +17,25 @@ class TCMSTableEditorShopOrderStep extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 
         $changedStep = new TdbShopOrderStep($this->sId);
         $event = new ChangeShopOrderStepEvent(array($changedStep));
-        $this->getEventDispatcher()->dispatch(CoreEvents::ADD_SHOP_ORDER_STEP, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_SHOP_ORDER_STEP);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
         $changedStep = new TdbShopOrderStep($this->sId);
         $event = new ChangeShopOrderStepEvent(array($changedStep));
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_SHOP_ORDER_STEP, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_SHOP_ORDER_STEP);
     }
 
     /**
@@ -47,6 +47,6 @@ class TCMSTableEditorShopOrderStep extends TCMSTableEditor
 
         $changedStep = new TdbShopOrderStep($this->sId);
         $event = new ChangeShopOrderStepEvent(array($changedStep));
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_SHOP_ORDER_STEP, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_SHOP_ORDER_STEP);
     }
 }

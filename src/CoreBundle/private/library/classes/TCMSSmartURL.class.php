@@ -67,7 +67,7 @@ class TCMSSmartURL
      */
     public static function run(Request $request)
     {
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
         self::HandleTemporaryActivatedLanguages($request);
         self::RedirectOnInvalidExternalArguments();
         $oGlobal = TGlobal::instance();
@@ -139,7 +139,7 @@ class TCMSSmartURL
      *
      * @return int
      */
-    protected static function RunCustomHandlers(Request $request, &$aCustomURLParameters)
+    protected static function RunCustomHandlers(Request $request, $aCustomURLParameters)
     {
         $pagedef = false;
         $oPortal = self::getPortalDomainService()->getActivePortal();
@@ -204,7 +204,7 @@ class TCMSSmartURL
     {
         if (defined('INVALID_GET_PARAMS') && INVALID_GET_PARAMS != '') {
             $bParamFound = false;
-            $oURLData = &TCMSSmartURLData::GetActive();
+            $oURLData = TCMSSmartURLData::GetActive();
             $aAllParamNames = array_keys($oURLData->aParameters);
             $aInvalidGetParams = explode('|', INVALID_GET_PARAMS);
             $aFinalParameters = array();

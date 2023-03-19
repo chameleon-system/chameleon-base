@@ -69,7 +69,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
      *
      * @return TdbPkgCommentType|null
      */
-    public function &GetFieldPkgCommentType()
+    public function GetFieldPkgCommentType()
     {
         /** @var TdbPkgCommentType|null $oItem */
         $oItem = $this->GetFromInternalCache('oLookuppkg_comment_type_id');

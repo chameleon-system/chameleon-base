@@ -18,16 +18,25 @@ class TCMSDocumentManagerTreeNode extends TCMSTreeNode
      */
     public $oChildren = null;
 
-    public function TCMSDocumentManagerTreeNode($id = null)
+    public function __construct($id = null)
     {
-        $table = 'cms_document_tree';
-        parent::TCMSRecord($table, $id);
+        parent::__construct($id, 'cms_document_tree');
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSDocumentManagerTreeNode()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     /**
      * {@inheritdoc}
      */
-    public function &GetChildren($includeHidden = false, $languageId = null)
+    public function GetChildren($includeHidden = false, $languageId = null)
     {
         if (null !== $this->oChildren) {
             return $this->oChildren;

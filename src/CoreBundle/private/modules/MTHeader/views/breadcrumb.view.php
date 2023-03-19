@@ -1,5 +1,4 @@
 <?php
-if (isset($data['oUser'])) {
     $sMainMenuText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')); ?>
     <div id="cmsbreadcrumb">
         <ol class="breadcrumb">
@@ -35,6 +34,3 @@ if (isset($data['oUser'])) {
     } ?>
         </ol>
     </div>
-    <?php
-}
-?>

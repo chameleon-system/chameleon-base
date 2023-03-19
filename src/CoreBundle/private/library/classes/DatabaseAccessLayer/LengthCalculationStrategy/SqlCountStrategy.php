@@ -42,7 +42,7 @@ class SqlCountStrategy implements EntityListLengthCalculationStrategyInterface
     {
         $queryWithoutFields = substr($query, $this->getFromPosition($query));
         $sCountQuery = "SELECT COUNT(*) AS matches {$queryWithoutFields}";
-        $matchRow = $this->databaseConnection->fetchArray($sCountQuery, $queryParameters, $queryParameterTypes);
+        $matchRow = $this->databaseConnection->fetchNumeric($sCountQuery, $queryParameters, $queryParameterTypes);
 
         return (int) $matchRow[0];
     }

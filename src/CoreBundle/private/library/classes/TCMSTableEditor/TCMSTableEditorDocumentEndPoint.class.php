@@ -9,7 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
 {
@@ -41,21 +45,19 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         if (false === TGlobal::IsCMSMode()) {
             return false;
         }
-        $oCMSUser = TCMSUser::GetActiveUser();
-        if (true === is_null($oCMSUser)) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return false;
         }
+
         /**
          * user can download document if:
          * - he is the owner
          * - OR
          * - he has one of the other permissions.
          */
-        if (true === $this->IsOwner($this->oTable->sqlData) ||
-            true === $oCMSUser->oAccessManager->HasEditPermission($this->oTableConf->fieldName) ||
-            true === $oCMSUser->oAccessManager->HasShowAllPermission($this->oTableConf->fieldName) ||
-            true === $oCMSUser->oAccessManager->HasShowAllReadOnlyPermission($this->oTableConf->fieldName)
-        ) {
+        if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTable)) {
             $bAsDownload = ('1' == $this->getInputFilterUtil()->getFilteredInput('asDownload')) ? true : false;
             $this->oTable->downloadDocument($bAsDownload);
 
@@ -68,7 +70,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     /**
      * {@inheritdoc}
      */
-    protected function DataIsValid(&$postData, $oFields = null)
+    protected function DataIsValid($postData, $oFields = null)
     {
         $isValid = parent::DataIsValid($postData, $oFields);
 
@@ -152,7 +154,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
@@ -575,18 +577,19 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      *
      * @return TIterator
      */
-    public function &GetMenuItems()
+    public function GetMenuItems()
     {
         parent::GetMenuItems();
 
         $this->oMenuItems->RemoveItem('sItemKey', 'save');
 
-        $oGlobal = TGlobal::instance();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $tableInUserGroup = $oGlobal->oUser->oAccessManager->user->IsInGroups($this->oTableConf->sqlData['cms_usergroup_id']);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->sqlData['cms_usergroup_id']);
         if ($tableInUserGroup) {
             // edit
-            if ($oGlobal->oUser->oAccessManager->HasEditPermission($this->oTableConf->sqlData['name'])) {
+            if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                 $oMenuItem = new TCMSTableEditorMenuItem();
                 $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save_and_return');
                 $oMenuItem->sIcon = 'far fa-save';

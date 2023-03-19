@@ -70,7 +70,7 @@ class TCMSMessageManagerBackendMessage extends TAdbCmsMessageManagerBackendMessa
     public function GetMessageString()
     {
         $matchString = '/\[\{(.*?)(:(string|number|date))*(:(.*?))*\}\]/si';
-        $sMessage = preg_replace_callback($matchString, array(&$this, 'InsertVariablesIntoMessageString'), $this->fieldMessage);
+        $sMessage = preg_replace_callback($matchString, array($this, 'InsertVariablesIntoMessageString'), $this->fieldMessage);
 
         return $sMessage;
     }
@@ -84,7 +84,7 @@ class TCMSMessageManagerBackendMessage extends TAdbCmsMessageManagerBackendMessa
      */
     protected function InsertVariablesIntoMessageString($aMatches)
     {
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $return = $aMatches[0];
         $var = $aMatches[1];
         if (array_key_exists($var, $this->aMessageParameters)) {

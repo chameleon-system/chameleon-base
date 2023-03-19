@@ -19,7 +19,7 @@ interface ICacheManager
      *
      * @return ICacheManager
      */
-    public static function &GetInstance();
+    public static function GetInstance();
 
     /**
      * @param ICacheManagerStorage $oCacheStorage
@@ -62,7 +62,7 @@ interface ICacheManager
      * @param string $cleanKey
      * @param int    $iMaxLiveInSeconds - max age in seconds before the cache content expires - default = 30 days
      */
-    public static function SetContent($key, &$oContent, $aTableInfos = null, $isPage = false, $cleanKey = null, $iMaxLiveInSeconds = null);
+    public static function SetContent($key, $oContent, $aTableInfos = null, $isPage = false, $cleanKey = null, $iMaxLiveInSeconds = null);
 
     public static function CleanKeyExists($cleanKey);
 

@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -24,7 +26,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
     public $onTitleClickCallBackFnc = null;
     public $actualPageID = null;
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
@@ -99,23 +101,24 @@ class CMSModulePageTreeRPC extends TCMSModelBase
      */
     public function getChildrenPortalCondition()
     {
-        $oUser = &TCMSUser::GetActiveUser();
-        $sPortalList = $oUser->oAccessManager->user->portals->PortalList();
-        $query = 'SELECT * FROM `cms_portal`';
-        if (false !== $sPortalList) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $portalIds = $securityHelper->getUser()?->getPortals();
+        $sPortalList = '';
+        if (null !== $portalIds && count($portalIds) >0) {
+            $sPortalList = implode(', ', array_map(fn(string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portalIds)));
+        }
+
+        $query = 'SELECT `main_node_tree` FROM `cms_portal`';
+        if ('' !== $sPortalList) {
             $query .= ' WHERE `id` NOT IN ('.$sPortalList.')';
         }
-        $aPortalExcludeList = array();
-        $portalRes = MySqlLegacySupport::getInstance()->query($query);
-        while ($portal = MySqlLegacySupport::getInstance()->fetch_assoc($portalRes)) {
-            if (!empty($portal['main_node_tree'])) {
-                $aPortalExcludeList[] = MySqlLegacySupport::getInstance()->real_escape_string($portal['main_node_tree']);
-            }
-        }
+        $portalMainNodes = $this->getDatabaseConnection()->fetchAllAssociative($query);
+        $aPortalExcludeList = array_map(fn($row) => $this->getDatabaseConnection()->quote($row['main_node_tree']), $portalMainNodes);
 
         $sPortalCondition = '';
         if (count($aPortalExcludeList) > 0) {
-            $sPortalCondition .= " AND T.`id` NOT IN ('".implode("','", $aPortalExcludeList)."')";
+            $sPortalCondition .= " AND T.`id` NOT IN (".implode(', ', $aPortalExcludeList).")";
         }
 
         return $sPortalCondition;
@@ -126,7 +129,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
      *
      * @param TCMSTreeNode $oTreeNode
      */
-    public function _nodeProperties(&$oTreeNode)
+    public function _nodeProperties($oTreeNode)
     {
         $child = array();
 

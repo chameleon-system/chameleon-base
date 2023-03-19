@@ -58,7 +58,7 @@ class CsrfTokenManagerFactory
                 $namespaceParts[] = 'frontend-';
             }
 
-            $request = $requestStack->getMasterRequest();
+            $request = $requestStack->getMainRequest();
             if (null !== $request && true === $request->isSecure()) {
                 $namespaceParts[] = 'https-';
             }

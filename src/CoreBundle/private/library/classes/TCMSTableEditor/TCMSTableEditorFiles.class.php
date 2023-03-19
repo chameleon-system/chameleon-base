@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 class TCMSTableEditorFiles extends TCMSTableEditor
 {
     /**
@@ -56,7 +59,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
         parent::Init($tableid, $id, $sLanguageID);
     }
 
-    protected function DataIsValid(&$postData, $oFields = null)
+    protected function DataIsValid($postData, $oFields = null)
     {
         $isValid = parent::DataIsValid($postData, $oFields);
 
@@ -133,7 +136,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      *
      * @return bool
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
@@ -289,12 +292,9 @@ class TCMSTableEditorFiles extends TCMSTableEditor
             }
 
             $postData['time_stamp'] = date('y-m-d H:i:s', time());
-            $oGlobal = TGlobal::instance();
-            /** @var $oGlobal TGlobal */
-            $userID = '';
-            if (!is_null($oGlobal->oUser)) {
-                $userID = $oGlobal->oUser->sqlData['id'];
-            }
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $userID = $securityHelper->getUser()?->getId();
             $postData['cms_user_id'] = $userID;
         }
 
@@ -306,12 +306,12 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      *
      * @param TIterator $oFields
      */
-    protected function PrepareFieldsForSave(&$oFields)
+    protected function PrepareFieldsForSave($oFields)
     {
         parent::PrepareFieldsForSave($oFields);
 
         $oFields->GoToStart();
-        while ($oField = &$oFields->Next()) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('cms_user_id' != $oField->name) {
                 $oField->oDefinition->sqlData['modifier'] = 'none';
@@ -327,7 +327,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      *
      * @return TIterator
      */
-    public function &GetMenuItems()
+    public function GetMenuItems()
     {
         parent::GetMenuItems();
 

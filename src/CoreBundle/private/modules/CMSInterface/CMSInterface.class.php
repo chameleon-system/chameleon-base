@@ -9,15 +9,18 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+
 class CMSInterface extends TCMSModelBase
 {
-    public function &Execute()
+    public function Execute()
     {
         $oGlobal = TGlobal::instance();
         $iInterfaceId = $oGlobal->GetUserData('iInterfaceId');
         $this->data['aMessages'] = array();
         if ('' != $iInterfaceId) {
-            $oInterface = &TdbCmsInterfaceManager::GetInterfaceManagerObject($iInterfaceId);
+            $oInterface = TdbCmsInterfaceManager::GetInterfaceManagerObject($iInterfaceId);
             $oInterface->Init();
             $oInterface->RunImport();
             $this->data['aMessages'] = $oInterface->GetEventInfos(); //"oh no, my import or export failed!";
@@ -25,8 +28,11 @@ class CMSInterface extends TCMSModelBase
         }
 
         parent::Execute();
-        $aGroupListUser = $oGlobal->oUser->oAccessManager->user->groups->GetGroupListAsArray();
-        $aGroupListUser = TTools::MysqlRealEscapeArray($aGroupListUser);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $groups = $securityHelper->getUser()?->getGroups();
+        $aGroupListUser = TTools::MysqlRealEscapeArray($groups);
         $sGroupSQL = '';
         foreach ($aGroupListUser as $sGroupId => $sGroupSystemName) {
             if ('' != $sGroupSQL) {
@@ -49,7 +55,7 @@ class CMSInterface extends TCMSModelBase
                 ';
         }
 
-        $this->data['oInterfaces'] = &TdbCmsInterfaceManagerList::GetList($sQuery);
+        $this->data['oInterfaces'] = TdbCmsInterfaceManagerList::GetList($sQuery);
 
         return $this->data;
     }

@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\Corebundle\Util\UrlUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -163,7 +165,7 @@ class TTools
      *
      * @return string
      */
-    public static function ArrayToString(&$aArray)
+    public static function ArrayToString($aArray)
     {
         $sString = 'array(';
         $position = 0;
@@ -212,7 +214,7 @@ class TTools
      */
     public static function CallModule($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
     {
-        $oModuleLoader = &self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
+        $oModuleLoader = self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
         $oModuleLoader->InitModules($sSpotName);
 
         return $oModuleLoader->GetModule($sSpotName, true);
@@ -228,7 +230,7 @@ class TTools
      *
      * @return TModuleLoader
      */
-    public static function &GetModuleLoaderObject($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
+    public static function GetModuleLoaderObject($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
     {
         $oModuleLoader = self::getSubModuleLoader();
         $aModuleParameters = array('model' => $sModule, 'view' => $sView);
@@ -251,8 +253,8 @@ class TTools
      */
     public static function GetModuleObject($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
     {
-        $oModuleLoader = &self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
-        $oModule = &$oModuleLoader->GetPointerToModule($sSpotName);
+        $oModuleLoader = self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
+        $oModule = $oModuleLoader->GetPointerToModule($sSpotName);
 
         return $oModule;
     }
@@ -906,7 +908,7 @@ class TTools
     {
         $oGlobal = TGlobal::instance();
 
-        $oModulePointer = &$oGlobal->GetExecutingModulePointer();
+        $oModulePointer = $oGlobal->GetExecutingModulePointer();
         $sSpotName = $oModulePointer->sModuleSpotName;
 
         $aParamList = $aOtherParameters;
@@ -1013,7 +1015,7 @@ class TTools
      *
      * @return string - the cutted plain text
      */
-    public static function StripTextWordSave($length = null, $sText, $sAddToText = '')
+    public static function StripTextWordSave($length, $sText, $sAddToText = '')
     {
         $content = strip_tags(trim($sText));
         $content = html_entity_decode($content, ENT_NOQUOTES, 'UTF-8');
@@ -1176,13 +1178,18 @@ class TTools
      */
     public static function IsRecordLocked($sTableID, $sRecordID)
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $userId = $securityHelper->getUser()?->getId();
+        if (null === $userId) {
+            $userId = '';
+        }
         $lockActive = false;
-        $oGlobal = TGlobal::instance();
 
         $query = "SELECT * FROM `cms_lock`
       WHERE `recordid` = '".MySqlLegacySupport::getInstance()->real_escape_string($sRecordID)."'
       AND `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableID)."'
-      AND `cms_user_id` != '".MySqlLegacySupport::getInstance()->real_escape_string($oGlobal->oUser->id)."'
+      AND `cms_user_id` != '".MySqlLegacySupport::getInstance()->real_escape_string($userId)."'
       AND TIMESTAMPDIFF(MINUTE,`time_stamp`,CURRENT_TIMESTAMP()) <= ".RECORD_LOCK_TIMEOUT.'
       ';
 
@@ -1233,8 +1240,11 @@ class TTools
         if (null === $oTableConf) {
             return $aField;
         }
-        $oCmsConfig = &TdbCmsConfig::GetInstance();
-        $sActiveLanguage = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID();
+        $oCmsConfig = TdbCmsConfig::GetInstance();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $sActiveLanguage = $backendSession->getCurrentEditLanguageId();
         if (($sActiveLanguage != $oCmsConfig->sqlData['translation_base_language_id'])) {
             $sActiveLanguagePrefix = TGlobal::GetLanguagePrefix($sActiveLanguage);
             $aTranslatableFields = $oCmsConfig->GetListOfTranslatableFields();
@@ -1634,9 +1644,9 @@ class TTools
             if (null !== $oUser) {
                 $oBillingAddress = $oUser->GetBillingAddress();
                 if (null !== $oBillingAddress) {
-                    $oCountry = &$oBillingAddress->GetFieldDataCountry();
+                    $oCountry = $oBillingAddress->GetFieldDataCountry();
                     if (null !== $oCountry) {
-                        $oTCountry = &$oCountry->GetFieldTCountry();
+                        $oTCountry = $oCountry->GetFieldTCountry();
                         if (null !== $oTCountry) {
                             $sCountry = $oTCountry->fieldIsoCode2;
                         }
@@ -1645,7 +1655,7 @@ class TTools
             }
         } elseif (null !== $sCountryId) {
             $oCountry = TdbDataCountry::GetNewInstance($sCountryId);
-            $oTCountry = &$oCountry->GetFieldTCountry();
+            $oTCountry = $oCountry->GetFieldTCountry();
             if (null !== $oTCountry) {
                 $sCountry = $oTCountry->fieldIsoCode2;
             }

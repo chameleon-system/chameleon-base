@@ -18,10 +18,13 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class NestedSetHelperTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Connection
      */
@@ -39,13 +42,13 @@ class NestedSetHelperTest extends TestCase
     private $parentNodeName;
     private $nodePosition;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         self::$fixtureDir = __DIR__.'/fixtures/';
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->db = null;
@@ -140,7 +143,7 @@ class NestedSetHelperTest extends TestCase
         $this->then_we_should_get_a_tree_matching('initial-tree.txt');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->db->close();
@@ -154,7 +157,7 @@ class NestedSetHelperTest extends TestCase
                     WHERE node.lft BETWEEN parent.lft AND parent.rgt
                     GROUP BY node.name
                     ORDER BY node.lft';
-        $result = $this->db->fetchAll($query);
+        $result = $this->db->fetchAllAssociative($query);
         $resultString = array();
         foreach ($result as $res) {
             $resultString[] = str_repeat('_', 2 * $res['depth']).$res['name'];
@@ -195,7 +198,7 @@ class NestedSetHelperTest extends TestCase
     private function getNodeData($nodeName)
     {
         $query = 'select * from tree where name = :name';
-        $data = $this->db->fetchAssoc($query, array('name' => $nodeName));
+        $data = $this->db->fetchAssociative($query, array('name' => $nodeName));
 
         return $this->nodeMockFactory->createNodeFromArray('tree', $data);
     }
@@ -224,11 +227,11 @@ class NestedSetHelperTest extends TestCase
             $parentNode = $this->getNodeData($this->parentNodeName);
             $parameter['parentNodeId'] = $parentNode->getId();
             $query = 'select MAX(position) from tree WHERE parent_id = :parentId';
-            $max = $this->db->fetchArray($query, array('parentId' => $parentNode->getId()));
+            $max = $this->db->fetchNumeric($query, array('parentId' => $parentNode->getId()));
             $parameter['newNodePosition'] = $max[0] + 1;
         } else {
             $query = "select MAX(position) from tree WHERE parent_id = ''";
-            $max = $this->db->fetchArray($query);
+            $max = $this->db->fetchNumeric($query);
             $parameter['newNodePosition'] = $max[0] + 1;
         }
         $this->db->executeUpdate($insertQuery, $parameter);
@@ -292,7 +295,7 @@ class NestedSetHelperTest extends TestCase
         $query = 'delete from tree where id = :id';
         $this->db->executeUpdate($query, array('id' => $id));
         $childrenQuery = 'select * from tree where parent_id = :id';
-        $children = $this->db->fetchAll($childrenQuery, array('id' => $id));
+        $children = $this->db->fetchAllAssociative($childrenQuery, array('id' => $id));
         foreach ($children as $child) {
             $this->deleteRecursive($child['id']);
         }

@@ -133,7 +133,7 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
      *
      * @deprecated since 6.3.6 - use the normal dependency injection
      */
-    protected function &getTwigHandler()
+    protected function getTwigHandler()
     {
         if (null === $this->twigEnvironment) {
             throw new ViewRenderException('No twig environment set!');

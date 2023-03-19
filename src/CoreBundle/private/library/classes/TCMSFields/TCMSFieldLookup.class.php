@@ -11,6 +11,9 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 /**
  * ReloadOnChange=true.
@@ -67,6 +70,9 @@ class TCMSFieldLookup extends TCMSField
 
     private function addFieldRenderVariables(ViewRenderer $viewRenderer): void
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         $sClass = '';
         $sOnChangeAttr = '';
         if ($this->GetReloadOnChangeParam()) {
@@ -76,7 +82,7 @@ class TCMSFieldLookup extends TCMSField
 
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('language', $securityHelper->getUser()?->getCurrentEditLanguageIsoCode());
         $viewRenderer->AddSourceObject('sClass', $sClass);
         $viewRenderer->AddSourceObject('onchangeAttr', $sOnChangeAttr);
         $viewRenderer->AddSourceObject('options', $this->options);
@@ -84,9 +90,11 @@ class TCMSFieldLookup extends TCMSField
 
         $foreignTableName = $this->GetConnectedTableName();
         $viewRenderer->AddSourceObject('foreignTableName', $foreignTableName);
-        $oGlobal = TGlobal::instance();
-        if ($oGlobal->oUser->oAccessManager->HasEditPermission($foreignTableName)) {
-            $viewRenderer->AddSourceObject('buttonLink', $this->GoToRecordJS());
+
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $foreignTableName)) {
+            $viewRenderer->AddSourceObject('buttonLink', $this->getSelectedEntryLink($this->data));
         }
         $viewRenderer->AddSourceObject('connectedRecordId', $this->data);
     }
@@ -154,14 +162,49 @@ class TCMSFieldLookup extends TCMSField
 
     public function GetReadOnly()
     {
+        $html = $this->_GetHiddenField();
+        $html .= '<div class="row">';
+
         $this->GetOptions();
         if (array_key_exists($this->data, $this->options)) {
-            return $this->_GetHiddenField().'<div class="form-content-simple">'.$this->options[$this->data].'</div>';
-        } else {
-            return $this->_GetHiddenField();
+            $html .= '<div class="form-content-simple col-12 col-lg-8">'.$this->options[$this->data].'</div>';
         }
+
+        if (false === empty($this->data)) {
+            $html .= '<div class="col-12 pt-2 col-lg-4 pt-lg-0">';
+            $html .= TCMSRender::DrawButton(
+                TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'),
+                $this->getSelectedEntryLink($this->data),
+                'far fa-edit'
+            );
+            $html .= '</div>';
+        }
+
+        $html .= '</div>';
+
+        return $html;
     }
 
+    protected function getSelectedEntryLink(string $value): string
+    {
+        $foreignTableName = $this->GetConnectedTableName();
+        $tableConf = \TdbCmsTblConf::GetNewInstance();
+        if (false === $tableConf->LoadFromField('name', $foreignTableName)) {
+            return '';
+        }
+
+        $linkParams = array(
+            'pagedef' => 'tableeditor',
+            'tableid' => $tableConf->id,
+            'id' => urlencode($value),
+        );
+
+        return PATH_CMS_CONTROLLER . $this->getUrlUtil()->getArrayAsUrl($linkParams, '?', '&');
+    }
+
+    /**
+     * @deprecated not used anymore - replaced by normal links (also see getSelectedEntryLink() here)
+     */
     public function GoToRecordJS()
     {
         $tblName = $this->GetConnectedTableName();
@@ -228,19 +271,20 @@ class TCMSFieldLookup extends TCMSField
         if (!empty($sRestriction)) {
             $query .= ' AND '.$sRestriction;
         }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $portals = $securityHelper->getUser()?->getPortals();
+        $sPortalList = implode(', ', array_map(fn (string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portals)));
 
         if ('cms_portal' == $tblName) {
-            $oGlobal = TGlobal::instance();
-            $sPortalList = $oGlobal->oUser->oAccessManager->user->portals->PortalList();
+
             if (!empty($sPortalList)) {
                 $query .= ' AND `cms_portal`.`id` IN ('.$sPortalList.')';
             }
         } elseif (TTools::FieldExists($tblName, 'cms_portal_id')) {
             // if the table holds a portal id, then restrict the list
-            $oGlobal = TGlobal::instance();
-            $sPortalList = $oGlobal->oUser->oAccessManager->user->portals->PortalList();
             if (!empty($sPortalList)) {
-                $query .= ' AND `'.MySqlLegacySupport::getInstance()->real_escape_string($tblName)."`.`cms_portal_id` IN ('', ".$sPortalList.')';
+                $query .= ' AND '.$this->getDatabaseConnection()->quoteIdentifier($tblName).".`cms_portal_id` IN ('', ".$sPortalList.')';
             } else {
                 $query .= ' AND `'.MySqlLegacySupport::getInstance()->real_escape_string($tblName)."`.`cms_portal_id` = ''";
             }
@@ -374,7 +418,7 @@ class TCMSFieldLookup extends TCMSField
     public function RenderFieldMethodsString()
     {
         $aMethodData = $this->GetFieldMethodBaseDataArray();
-        $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName();
+        $aMethodData['sMethodName'] = $this->GetFieldMethodName();
         $class = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->GetConnectedTableName());
 
         $sCode = '';
@@ -428,7 +472,7 @@ class TCMSFieldLookup extends TCMSField
 
         $sMethodName = 'GetListFor'.TCMSTableToClass::ConvertToClassString($this->name);
 
-        $aMethodData['sMethodName'] = '&'.$sMethodName;
+        $aMethodData['sMethodName'] = $sMethodName;
         $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->sTableName).'List';
 
         $aMethodData['sClassName'] = $aMethodData['sReturnType'];
@@ -571,5 +615,10 @@ class TCMSFieldLookup extends TCMSField
     private function getViewRenderer(): ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

@@ -18,8 +18,8 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_cms_text_field');
+        $treeBuilder = new TreeBuilder('chameleon_system_cms_text_field');
+        $root = $treeBuilder->getRootNode();
         $root
             ->isRequired()
             ->addDefaultsIfNotSet();

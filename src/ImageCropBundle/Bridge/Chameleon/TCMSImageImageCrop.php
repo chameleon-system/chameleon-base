@@ -107,8 +107,8 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
         $targetHeight,
         $cropWidth,
         $cropHeight,
-        $x = 0,
-        $y = 0,
+        $x,
+        $y,
         $thumbPath,
         $originalExtension
     ) {
@@ -134,7 +134,7 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
     /**
      * @return ImageCropImageMagick
      */
-    protected function &GetImageMagicObject()
+    protected function GetImageMagicObject()
     {
         $imageMagick = new ImageCropImageMagick();
         $imageMagick->GetImageMagickVersion();

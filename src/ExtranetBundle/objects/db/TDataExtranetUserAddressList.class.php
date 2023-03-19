@@ -27,14 +27,14 @@ class TDataExtranetUserAddressList extends TDataExtranetUserAddressListAutoParen
      *
      * @return TdbDataExtranetUserAddressList
      */
-    public static function &GetUserAddressList($iUserId)
+    public static function GetUserAddressList($iUserId)
     {
         $query = "SELECT `data_extranet_user_address`.*
                   FROM `data_extranet_user_address`
                  WHERE `data_extranet_user_address`.`data_extranet_user_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iUserId)."'
               ORDER BY `data_extranet_user_address`.`company`, `data_extranet_user_address`.`lastname`, `data_extranet_user_address`.`city`
                ";
-        $oList = &TdbDataExtranetUserAddressList::GetList($query);
+        $oList = TdbDataExtranetUserAddressList::GetList($query);
         $oList->SetUserIdForList($iUserId);
 
         return $oList;

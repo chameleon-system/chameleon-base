@@ -198,7 +198,7 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
 
         try {
             $query = 'SELECT * FROM `cms_image_crop` WHERE `cms_media_id` = :mediaItemId';
-            $rows = $this->databaseConnection->fetchAll($query, array('mediaItemId' => $cmsMedia->getId()));
+            $rows = $this->databaseConnection->fetchAllAssociative($query, array('mediaItemId' => $cmsMedia->getId()));
         } catch (DBALException $e) {
             throw new ImageCropDataAccessException(sprintf('Could not get crops: %s', $e->getMessage()), 0, $e);
         }

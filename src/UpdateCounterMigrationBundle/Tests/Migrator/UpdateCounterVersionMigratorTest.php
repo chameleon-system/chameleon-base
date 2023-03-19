@@ -17,10 +17,13 @@ use ChameleonSystem\UpdateCounterMigrationBundle\Exception\InvalidMigrationCount
 use ChameleonSystem\UpdateCounterMigrationBundle\Migrator\UpdateCounterVersionMigrator;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class UpdateCounterVersionMigratorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var UpdateCounterVersionMigrator
      */
@@ -34,7 +37,7 @@ class UpdateCounterVersionMigratorTest extends TestCase
      */
     private $bundleDataAccessMock;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->subject = null;

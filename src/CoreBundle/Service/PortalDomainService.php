@@ -235,7 +235,7 @@ class PortalDomainService implements PortalDomainServiceInterface
 
         if ($oldActivePortal !== $portal) {
             $event = new ChangeActivePortalEvent($oldActivePortal, $portal);
-            $this->eventDispatcher->dispatch(CoreEvents::CHANGE_ACTIVE_PORTAL, $event);
+            $this->eventDispatcher->dispatch($event, CoreEvents::CHANGE_ACTIVE_PORTAL);
         }
     }
 
@@ -248,7 +248,7 @@ class PortalDomainService implements PortalDomainServiceInterface
         $this->domain = $domain;
         if ($oldActiveDomain !== $domain) {
             $event = new ChangeActiveDomainEvent($oldActiveDomain, $domain);
-            $this->eventDispatcher->dispatch(CoreEvents::CHANGE_ACTIVE_PORTAL, $event);
+            $this->eventDispatcher->dispatch($event, CoreEvents::CHANGE_ACTIVE_PORTAL);
         }
     }
 }

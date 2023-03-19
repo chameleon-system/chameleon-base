@@ -1,7 +1,7 @@
 <?php
   /*@var $oStep TdbCmsWizardStep*/
   $oUser = TdbDataExtranetUser::GetInstance();
-  $oExtranetConfig = &TdbDataExtranet::GetInstance();
+  $oExtranetConfig = TdbDataExtranet::GetInstance();
 
 ?>
 <div class="step">

@@ -41,7 +41,7 @@ class CmsMediaTableEditor extends TCMSTableEditorMedia
         $mediaItemDataAccess = $this->getMediaItemDataAccess();
         try {
             $usages = $chainUsageFinder->findUsages(
-                $mediaItemDataAccess->getMediaItem($sImageId, $this->getLanguageService()->getActiveEditLanguage()->id)
+                $mediaItemDataAccess->getMediaItem($sImageId, $this->getBackendSession()->getCurrentEditLanguageId())
             );
 
             foreach ($usages as $usage) {

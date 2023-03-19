@@ -100,13 +100,13 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      *
      * @return TdbCmsWizardStep
      */
-    public static function &GetStep($sStepName, $iInstanceId)
+    public static function GetStep($sStepName, $iInstanceId)
     {
         $oStep = null;
         $oStepData = null;
         if (is_null($sStepName) || false === $sStepName || empty($sStepName)) {
             // fetch the first step instead..
-            $oSteps = &TdbCmsWizardStepList::GetCmsWizardStepListForCmsTplModuleInstance($iInstanceId);
+            $oSteps = TdbCmsWizardStepList::GetCmsWizardStepListForCmsTplModuleInstance($iInstanceId);
             if ($oSteps->Length() > 0) {
                 $oStepData = $oSteps->Current();
             }
@@ -152,7 +152,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      *                                redirects to the step. the step calling this method will store its name in the session,
      *                                so that the new step knows where to return to
      */
-    protected function JumpToStep(TdbCmsWizardStep &$oStep)
+    protected function JumpToStep(TdbCmsWizardStep $oStep)
     {
         $_SESSION[self::SESSION_KEY_NAME] = $this->fieldSystemname;
         $this->getRedirect()->redirect($oStep->GetStepURL());
@@ -190,7 +190,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     public function GetNextStepULR()
     {
         $sLink = false;
-        $oNext = &$this->GetNextStep();
+        $oNext = $this->GetNextStep();
         if (!is_null($oNext)) {
             $sLink = $oNext->GetStepURL();
         }
@@ -210,7 +210,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
         if (!is_null($oBackItem)) {
             $sLink = $oBackItem->GetStepURL();
         } else {
-            $oWizardConf = &$this->GetWizardConf();
+            $oWizardConf = $this->GetWizardConf();
             if (!is_null($oWizardConf)) {
                 if (!empty($oWizardConf->fieldFirstStepReturnNode)) {
                     $oNode = new TCMSTreeNode();
@@ -231,7 +231,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     public function ExecuteStep()
     {
         if ($this->ProcessStep()) {
-            $oNextStep = &$this->GetNextStep();
+            $oNextStep = $this->GetNextStep();
             $this->JumpToStep($oNextStep);
         }
     }
@@ -256,11 +256,11 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      *
      * @return TdbCmsWizardStep
      */
-    protected function &GetNextStep()
+    protected function GetNextStep()
     {
         static $oNextStep;
         if (!$oNextStep) {
-            $oNextStep = &TdbCmsWizardStepList::GetNextStep($this);
+            $oNextStep = TdbCmsWizardStepList::GetNextStep($this);
         }
 
         return $oNextStep;
@@ -275,7 +275,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     {
         static $oPreviousStep;
         if (!$oPreviousStep) {
-            $oPreviousStep = &TdbCmsWizardStepList::GetPreviousStep($this);
+            $oPreviousStep = TdbCmsWizardStepList::GetPreviousStep($this);
         }
 
         return $oPreviousStep;
@@ -328,7 +328,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      *
      * @return TdbCmsWizardConfig
      */
-    protected function &GetWizardConf()
+    protected function GetWizardConf()
     {
         if (is_null($this->oWizardConf)) {
             $this->oWizardConf = TdbCmsWizardConfig::GetNewInstance();
@@ -355,7 +355,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     {
         $oView = new TViewParser();
 
-        $oStepNext = &$this->GetNextStep();
+        $oStepNext = $this->GetNextStep();
         $oStepPrevious = $this->GetPreviousStep();
         $extranetUser = $this->getExtranetUserProvider()->getActiveUser();
         $oView->AddVar('oUser', $extranetUser);
@@ -378,7 +378,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
             $sViewName = $this->GetRenderViewName();
         }
         $sViewType = $this->GetRenderViewType();
-        $aOtherParameters = &$this->GetAdditionalViewVariables($sViewName, $sViewType);
+        $aOtherParameters = $this->GetAdditionalViewVariables($sViewName, $sViewType);
         $this->aViewData = array_merge($this->aViewData, $aOtherParameters);
 
         $oView->AddVarArray($aOtherParameters);
@@ -414,7 +414,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      *
      * @return array
      */
-    protected function &GetAdditionalViewVariables($sViewName, $sViewType)
+    protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
         $aViewVariables = array();
 

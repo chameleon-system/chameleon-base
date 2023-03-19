@@ -216,8 +216,8 @@ class TCMSPagedefEndPoint extends TCMSPage
                     'model' => $model,
                 );
 
-                // check if pagedef spot exists and update it
-                if (null === $this->aOldDynamicModules) {
+                // check if pagedef spot exists in source template configuration and update it
+                if (null === $this->aOldDynamicModules || false === isset($this->aOldDynamicModules[$sSpotName])) {
                     $sSpotID = $spot->id;
                 } else {
                     $sSpotID = $this->aOldDynamicModules[$sSpotName]->id;
@@ -290,7 +290,7 @@ class TCMSPagedefEndPoint extends TCMSPage
                   AND `cms_tpl_page_cms_master_pagedef_spot`.`cms_tpl_module_instance_id` != ''
                   AND `cms_tpl_page_cms_master_pagedef_spot`.`cms_tpl_module_instance_id` != '0'
              ";
-        $oCmsTplPageCmsMasterPagedefSpotList = &TdbCmsTplPageCmsMasterPagedefSpotList::GetList($query);
+        $oCmsTplPageCmsMasterPagedefSpotList = TdbCmsTplPageCmsMasterPagedefSpotList::GetList($query);
         while ($oCmsTplPageCmsMasterPagedefSpot = $oCmsTplPageCmsMasterPagedefSpotList->Next()) {
             $this->UpdateModule($oCmsTplPageCmsMasterPagedefSpot->sqlData['spotname'], $oCmsTplPageCmsMasterPagedefSpot->fieldModel, $oCmsTplPageCmsMasterPagedefSpot->fieldView, $oCmsTplPageCmsMasterPagedefSpot->fieldCmsTplModuleInstanceId);
         }

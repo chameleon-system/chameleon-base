@@ -149,7 +149,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
     protected function checkDownloadPathCorrect($sOutboxPath)
     {
         $bPathCorrect = false;
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
         $sPath = $this->getCleanPath($oURLData->sRelativeURL);
         if (substr($sPath, 0, strlen($sOutboxPath)) == $sOutboxPath) {
             $bPathCorrect = true;
@@ -241,7 +241,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
      */
     protected function getDownloadDataFromURLAsArray($sDownloadOutboxPath)
     {
-        $oURLData = &TCMSSmartURLData::GetActive();
+        $oURLData = TCMSSmartURLData::GetActive();
         $sPath = $this->getCleanPath($oURLData->sRelativeURL);
         $sDownloadUrlData = substr($sPath, strlen($sDownloadOutboxPath));
         if ('/' == substr($sDownloadUrlData, -1)) {

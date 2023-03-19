@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * {@inheritdoc}
@@ -26,10 +28,13 @@ class TCMSFieldDate extends TCMSField
      */
     public function GetHTML()
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('language', $securityHelper->getUser()?->getCurrentEditLanguageIsoCode());
         $viewRenderer->AddSourceObject('datetimepickerFormat', 'L');
         $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'false');
 
@@ -81,7 +86,7 @@ class TCMSFieldDate extends TCMSField
     public function GetCMSHtmlHeadIncludes()
     {
         $includes = parent::GetCMSHtmlHeadIncludes();
-        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/css/tempusdominus-bootstrap-4.min.css')); //datetimepicker
+        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/css/tempusdominus-bootstrap-4.min.css')); //datetimepicker
 
         return $includes;
     }
@@ -93,7 +98,7 @@ class TCMSFieldDate extends TCMSField
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
         $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/moment-2.23.0/js/moment-with-locales.min.js')); //moment.js for datetimepicker
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/js/tempusdominus-bootstrap-4.min.js')); //datetimepicker
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/js/tempusdominus-bootstrap-4.min.js')); //datetimepicker
 
         return $includes;
     }
@@ -229,7 +234,7 @@ class TCMSFieldDate extends TCMSField
      */
     private function getFlashMessageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
     /**
@@ -237,6 +242,6 @@ class TCMSFieldDate extends TCMSField
      */
     private function getViewRenderer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

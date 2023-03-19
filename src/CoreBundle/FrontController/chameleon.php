@@ -73,7 +73,7 @@ class chameleon
      */
     private function InitAutoloader()
     {
-        require_once realpath(PATH_PROJECT_BASE.'/app/autoload.php');
+        require_once realpath(PATH_PROJECT_BASE.'/vendor/autoload.php');
     }
 
     /**
@@ -115,6 +115,12 @@ class chameleon
     {
         if ('console' === REQUEST_PROTOCOL) {
             return true;
+        }
+
+        $requestPath = parse_url($requestUri, PHP_URL_PATH);
+
+        if ('/cms/frontend' === $requestPath) {
+            return false;
         }
 
         return 1 === preg_match('#^/cms($|/|[?])#', $requestUri);

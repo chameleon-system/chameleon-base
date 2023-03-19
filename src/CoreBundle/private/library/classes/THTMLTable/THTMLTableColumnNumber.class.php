@@ -49,7 +49,7 @@ class THTMLTableColumnNumber extends THTMLTableColumn
             if (array_key_exists(self::FILTER_TO, $sSearchFilter)) {
                 $sEndVal = $sSearchFilter[self::FILTER_TO];
             }
-            $oLocal = &TCMSLocal::GetActive();
+            $oLocal = TCMSLocal::GetActive();
             if (!empty($sStartVal)) {
                 $sStartVal = $oLocal->StringToNumber($sStartVal);
             }
@@ -77,9 +77,9 @@ class THTMLTableColumnNumber extends THTMLTableColumn
      *
      * @return string
      */
-    protected function FormatValue($sValue, &$oTableRow)
+    protected function FormatValue($sValue, $oTableRow)
     {
-        $oLocal = &TCMSLocal::GetActive();
+        $oLocal = TCMSLocal::GetActive();
         $iNumberOfDecimals = $this->iNumberOfDecimals;
         if (is_null($iNumberOfDecimals)) {
             $iNumberOfDecimals = 0;

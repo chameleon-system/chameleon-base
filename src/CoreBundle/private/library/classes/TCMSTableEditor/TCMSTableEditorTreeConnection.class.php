@@ -150,7 +150,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 
@@ -184,7 +184,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
          */
         $newTreeConnection = $this->oTable;
         $event = new ChangeNavigationTreeConnectionEvent($newTreeConnection);
-        $this->getEventDispatcher()->dispatch(CoreEvents::ADD_NAVIGATION_TREE_CONNECTION, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_NAVIGATION_TREE_CONNECTION);
     }
 
     /**
@@ -212,13 +212,13 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function _OverwriteDefaults(&$oFields)
+    protected function _OverwriteDefaults($oFields)
     {
         parent::_OverwriteDefaults($oFields);
         $oGlobal = TGlobal::instance();
 
         $oFields->GoToStart();
-        while ($oField = &$oFields->Next()) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('parent_id' == $oField->name) {
                 $oField->data = $oGlobal->GetUserData('parent_id');
@@ -230,7 +230,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
@@ -249,7 +249,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
          */
         $changedTreeConnection = $this->oTable;
         $event = new ChangeNavigationTreeConnectionEvent($changedTreeConnection);
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_NAVIGATION_TREE_CONNECTION, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_CONNECTION);
     }
 
     /**
@@ -308,6 +308,6 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
         parent::Delete($sId);
 
         $event = new ChangeNavigationTreeConnectionEvent($deletedTreeConnection);
-        $this->getEventDispatcher()->dispatch(CoreEvents::DELETE_NAVIGATION_TREE_CONNECTION, $event);
+        $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_NAVIGATION_TREE_CONNECTION);
     }
 }

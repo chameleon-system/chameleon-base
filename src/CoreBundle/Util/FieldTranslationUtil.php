@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Util;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use InvalidArgumentException;
@@ -34,7 +35,8 @@ class FieldTranslationUtil
      */
     public function __construct(
         RequestInfoServiceInterface $requestInfoService,
-        LanguageServiceInterface $languageService
+        LanguageServiceInterface $languageService,
+        readonly private BackendSessionInterface $backendSession
     ) {
         $this->requestInfoService = $requestInfoService;
         $this->languageService = $languageService;
@@ -96,7 +98,7 @@ class FieldTranslationUtil
     private function getCurrentLanguage()
     {
         if ($this->requestInfoService->isBackendMode()) {
-            $language = $this->languageService->getActiveEditLanguage();
+            $language = \TdbCmsLanguage::GetNewInstance($this->backendSession->getCurrentEditLanguageId());
         } else {
             $language = $this->languageService->getActiveLanguage();
         }

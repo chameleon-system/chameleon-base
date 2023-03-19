@@ -177,7 +177,7 @@ abstract class TCMSSmartURLHandler
     {
         $iCount = 0;
         if (null === $oUrlData) {
-            $oUrlData = &TCMSSmartURLData::GetActive();
+            $oUrlData = TCMSSmartURLData::GetActive();
         }
         foreach ($oUrlData->aParameters as $sName => $sValue) {
             if (!in_array($sName, $aFilterParams)) {

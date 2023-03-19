@@ -8,7 +8,7 @@
 TCMSLogChange::requireBundleUpdates('ChameleonSystemCoreBundle', 1490106136);
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$rows = $databaseConnection->fetchAll('SELECT `id`, `time_stamp` FROM `cms_media`');
+$rows = $databaseConnection->fetchAllAssociative('SELECT `id`, `time_stamp` FROM `cms_media`');
 foreach ($rows as $row) {
     $databaseConnection->update(
         'cms_media',

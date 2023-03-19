@@ -26,7 +26,7 @@ class MTFeedbackMapper_AdditionalFields extends MTFeedbackMapper_StandardForm
         $aFieldInput = $oVisitor->GetSourceObject('aFieldInput');
 
         $aSelectFieldList = array('aFieldCountry' => 'data_country_id');
-        $oCountryList = &TdbDataCountryList::GetList();
+        $oCountryList = TdbDataCountryList::GetList();
 
         $aSelectFieldList = $this->SetInputFields(
             $aSelectFieldList,

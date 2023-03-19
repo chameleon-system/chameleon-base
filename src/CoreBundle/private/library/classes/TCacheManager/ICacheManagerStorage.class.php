@@ -31,7 +31,7 @@ interface ICacheManagerStorage
      *
      * @return bool
      */
-    public function SetContent($key, &$oContent, $aTableInfos = null, $isPage = false, $cleanKey = null, $iMaxLiveInSeconds = null);
+    public function SetContent($key, $oContent, $aTableInfos = null, $isPage = false, $cleanKey = null, $iMaxLiveInSeconds = null);
 
     /**
      * @param string $key

@@ -11,10 +11,13 @@
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * used to pick the module, and configure it
@@ -68,11 +71,6 @@ class CMSModuleChooser extends TCMSModelBase
     protected $bPageIsLockedByUser = false;
 
     /**
-     * @var TAccessManager
-     */
-    protected $oAccessManager = null;
-
-    /**
      * called before the execute method, and before any external functions gets called, but
      * after the constructor.
      */
@@ -81,13 +79,11 @@ class CMSModuleChooser extends TCMSModelBase
         $this->LoadModuleInstanceData();
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
-
-        $oActiveUser = &TCMSUser::GetActiveUser();
-        $this->oAccessManager = $oActiveUser->oAccessManager;
-        $this->data['oAccessManager'] = $this->oAccessManager;
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         $this->data['oModuleInstance'] = $this->oModuleInstance;
         $this->data['oModuleInstanceColorState'] = '000000';
@@ -111,7 +107,7 @@ class CMSModuleChooser extends TCMSModelBase
         if ($this->bMasterPagedefRequest) {
             // no change right and no module set, then just show the box
             $this->SetTemplate('CMSModuleChooser', 'placeholder');
-        } elseif (is_null($this->oModuleInstance) && !$oActiveUser->oAccessManager->PermitFunction('cms_template_module_edit')) {
+        } elseif (is_null($this->oModuleInstance) && !$securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
             $this->SetTemplate('CMSModuleChooser', 'readonly');
         } else {
             $this->GetModuleList();
@@ -131,8 +127,10 @@ class CMSModuleChooser extends TCMSModelBase
      */
     protected function CheckFunctionRights()
     {
-        $bHasModuleInstanceEditRight = $this->oAccessManager->HasEditPermission('cms_tpl_module_instance');
-        // $bHasSpotEditRight = $this->oAccessManager->HasEditPermission('cms_tpl_page_cms_master_pagedef_spot');
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $bHasModuleInstanceEditRight = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, 'cms_tpl_module_instance');
         $bHasSpotEditRight = true; // we ignore the table rights on cms_tpl_page_cms_master_pagedef_spot at this moment
 
         //NewInstance
@@ -378,7 +376,8 @@ class CMSModuleChooser extends TCMSModelBase
         static $oModuleList = null;
 
         if (is_null($oModuleList)) {
-            $oUser = &TCMSUser::GetActiveUser();
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
             $oModuleList = new TCMSRecordList();
             $oModuleList->sTableObject = 'TCMSTPLModule';
             $oModuleList->sTableName = 'cms_tpl_module';
@@ -402,15 +401,20 @@ class CMSModuleChooser extends TCMSModelBase
 
             $sUserGroupRestriction = '';
             $sGroupList = '';
-            if (is_object($oUser->oAccessManager->user->groups)) {
-                $sGroupList = $oUser->oAccessManager->user->groups->GroupList();
+            $userGroups = $securityHelper->getUser()?->getGroups();
+            if (null !== $userGroups && count($userGroups) > 0) {
+                $sGroupList = implode(', ', array_map(fn(string $groupId) => $this->getDatabaseConnection()->quote($groupId), array_keys($userGroups)));
             }
             if (!empty($sGroupList)) {
                 $sUserGroupRestriction = " OR `cms_tpl_module_cms_usergroup_mlt`.`target_id` IN ({$sGroupList})";
             }
             $query .= " AND (`cms_tpl_module`.`is_restricted` = '0'{$sUserGroupRestriction})";
             // add portal restrictions
-            $sPortalList = $oUser->oAccessManager->user->portals->PortalList();
+            $portalList = $securityHelper->getUser()?->getPortals();
+            $sPortalList = '';
+            if (null !== $portalList && count($portalList) > 0) {
+                $sPortalList = implode(', ', array_map(fn(string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portalList)));
+            }
             if (!empty($sPortalList)) {
                 $sPortalRestriction = ' OR `cms_tpl_module_cms_portal_mlt`.`target_id` IN ('.$sPortalList.')';
             }
@@ -538,7 +542,7 @@ class CMSModuleChooser extends TCMSModelBase
         if ($oUsedModule->Load($moduleID)) {
             $oModuleUsedTableList = $oUsedModule->GetFieldCmsTblConfList();
             if ($oModuleUsedTableList->Length() > 0) {
-                while ($oModuleUsedTable = &$oModuleUsedTableList->Next()) {
+                while ($oModuleUsedTable = $oModuleUsedTableList->Next()) {
                     $oRecordListToCopy = $this->GetRecordsToCopy($oModuleUsedTable->fieldName, $sOldModlueInstanceId);
                     $bCopySuccess = $this->CopyRecords($oRecordListToCopy, $sNewModuleInstanceId);
                 }
@@ -569,7 +573,7 @@ class CMSModuleChooser extends TCMSModelBase
             $sQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` WHERE `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sOldModuleInstanceId)."'";
             /** @var $oRecordToCopyList TCMSRecordList */
             $oRecordToCopyList = $oTableList->GetList($sQuery);
-            while ($oRecordToCopy = &$oRecordToCopyList->Next()) {
+            while ($oRecordToCopy = $oRecordToCopyList->Next()) {
                 $oRecordListToCopy->AddItem($oRecordToCopy);
             }
         }
@@ -674,7 +678,7 @@ class CMSModuleChooser extends TCMSModelBase
         if (null !== $this->instanceID) {
             // check for page spot record
 
-            $oSpot = &$this->GetCmsTplPageCmsMasterPagedefSpot();
+            $oSpot = $this->GetCmsTplPageCmsMasterPagedefSpot();
             if (null !== $oSpot) {
                 /** @var $oTableEditor TCMSTableEditorManager */
                 $oTableEditor = new TCMSTableEditorManager();
@@ -809,7 +813,7 @@ class CMSModuleChooser extends TCMSModelBase
      *
      * @return TdbCmsTplPageCmsMasterPagedefSpot
      */
-    protected function &GetCmsTplPageCmsMasterPagedefSpot()
+    protected function GetCmsTplPageCmsMasterPagedefSpot()
     {
         $sPageId = $this->global->GetUserData('pagedef');
         if (is_null($this->oCmsTplPageCmsMasterPagedefSpot)) {

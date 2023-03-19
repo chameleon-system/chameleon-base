@@ -39,9 +39,18 @@ class TCMSListDownloadFiles extends TCMSRecordList
      */
     protected $allowedFileTypes = null;
 
+    public function __construct()
+    {
+        parent::__construct($sTableObject = 'TCMSDownloadFile', 'cms_document');
+    }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
     public function TCMSListDownloadFiles()
     {
-        parent::TCMSRecordList($sTableObject = 'TCMSDownloadFile', 'cms_document');
+        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**

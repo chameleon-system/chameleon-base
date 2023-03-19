@@ -9,6 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 /**
  * special field class for the tree. it shows the primary page attached to
  * the tree node. if no page is assigned, it will show a select box with master pagedefs instead
@@ -144,8 +149,9 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
             return;
         }
 
-        $oGlobal = TGlobal::instance();
-        if (false === $oGlobal->oUser->oAccessManager->HasNewPermission('cms_tpl_page')) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, 'cms_tpl_page')) {
             return;
         }
 
@@ -158,8 +164,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
      */
     protected function createPageForNode($treeNodeId, $masterPagedefId)
     {
-        $global = TGlobal::instance();
-        $connectedPageTableConfig = &$this->oAssignedPage->GetTableConf();
+        $connectedPageTableConfig = $this->oAssignedPage->GetTableConf();
         $treeNodeRecord = TdbCmsTree::GetNewInstance();
         $treeNodeRecord->Load($treeNodeId);
         $nodePortal = $treeNodeRecord->GetNodePortal();
@@ -167,6 +172,8 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
         if (null !== $nodePortal) {
             $nodePortalId = $nodePortal->id;
         }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $tableManager = new TCMSTableEditorManager();
         $tableManager->Init($connectedPageTableConfig->id, null);
         $tableManager->Insert();
@@ -175,7 +182,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
             'name' => $this->oTableRow->sqlData['name'],
             'cms_portal_id' => $nodePortalId,
             'primary_tree_id_hidden' => $treeNodeId,
-            'cms_user_id' => $global->oUser->id,
+            'cms_user_id' => $securityHelper->getUser()?->getId(),
         );
 
         $additionalDefaultData = $this->getDefaultPageData();
@@ -205,7 +212,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
     }
 
     /**
-     * @return \Symfony\Component\Translation\TranslatorInterface
+     * @return TranslatorInterface
      */
     private function getTranslator()
     {

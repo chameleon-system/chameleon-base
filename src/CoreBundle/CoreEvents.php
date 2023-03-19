@@ -18,10 +18,6 @@ final class CoreEvents
 
     const GLOBAL_RESOURCE_COLLECTION_COLLECTED_JAVASCRIPT = 'chameleon_system_core.resource_collection_collected.javascript';
 
-    const BACKEND_LOGIN_SUCCESS = 'chameleon_system_core.login_success';
-    const BACKEND_LOGIN_FAILURE = 'chameleon_system_core.login_failure';
-    const BACKEND_LOGOUT_SUCCESS = 'chameleon_system_core.logout_success';
-
     const LOCALE_CHANGED = 'chameleon_system_core.locale_changed';
 
     const CHANGE_ACTIVE_PAGE = 'chameleon_system_core.change_active_page';
@@ -64,4 +60,12 @@ final class CoreEvents
     const BEFORE_DELETE_MEDIA = 'chameleon_system_core.before_delete_media';
 
     const DISPLAY_LISTMANAGER_CELL = 'chameleon_system_core.display_listmanager_cell';
+
+    /**
+     * chameleon_system_core.filter_content is dispatched right before the content is sent to the client.
+     * It has to be used instead of symfony's kernel.response when the content is flushed to the client
+     * before it reaches the end of execution. This is the case in layouts which use
+     * \ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface::FlushContentToBrowser
+     */
+    const FILTER_CONTENT = 'chameleon_system_core.filter_content';
 }

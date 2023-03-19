@@ -13,6 +13,8 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -74,14 +76,14 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 
         $this->data['sTitle'] = $this->_GetTitle();
         $this->data['sURL'] = $this->_GetActivePageURL();
         $this->data['sHost'] = $this->_GetHost();
-        $this->data['oPortalLogo'] = &$this->_GetPortalLogo();
+        $this->data['oPortalLogo'] = $this->_GetPortalLogo();
         $this->data['aMetaData'] = $this->_GetMetaData();
         $this->data['sCustomHeaderData'] = $this->_GetCustomHeaderData();
         $this->data['sHomeURL'] = $this->GetHomeURL();
@@ -280,8 +282,8 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     protected function GetHomeURL()
     {
-        $oPortalHomeNode = &$this->_GetPortalHomeNode();
-        $this->data['oPortalHomeNode'] = &$oPortalHomeNode;
+        $oPortalHomeNode = $this->_GetPortalHomeNode();
+        $this->data['oPortalHomeNode'] = $oPortalHomeNode;
         /** @deprecated - use $data['sHomeURL'] instead of data['oPortalHomeNode']->GetLink(); */
         $url = '/';
         $activePortal = $this->getPortalDomainService()->getActivePortal();
@@ -297,7 +299,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      *
      * @return TdbCmsTree
      */
-    protected function &_GetPortalHomeNode()
+    protected function _GetPortalHomeNode()
     {
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         $oPortalHomeNode = null;
@@ -313,7 +315,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      *
      * @return TCMSImage - returns null if no image is set
      */
-    protected function &_GetPortalLogo()
+    protected function _GetPortalLogo()
     {
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         $oPortalLogo = null;
@@ -408,7 +410,10 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             $sCustomHeaderData = $activePortal->sqlData['custom_metadata'];
 
             // add pageID to content if user is logged in
-            if (true === TCMSUser::CMSUserDefined()) {
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+            if (true === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
                 $activePage = $this->getActivePageService()->getActivePage();
                 $sCustomHeaderData .= "\n<!-- CMS page ID: ".TGlobal::OutHTML($activePage->id).'; IDENT: '.TGlobal::OutHTML($activePage->sqlData['cmsident'])."-->\n";
             }
@@ -502,7 +507,10 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     {
         $cacheParameters = parent::_GetCacheParameters();
 
-        if (true === TCMSUser::CMSUserDefined()) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        if (true === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             $cacheParameters['debugOutputActive'] = true;
         }
 

@@ -256,11 +256,11 @@ class TCMSImageEndpoint
      *
      * @return imageMagick
      */
-    protected function &GetImageMagicObject()
+    protected function GetImageMagicObject()
     {
         static $oImageMagick = null;
         if (is_null($oImageMagick)) {
-            $oConfig = &TdbCmsConfig::GetInstance();
+            $oConfig = TdbCmsConfig::GetInstance();
             /** @var $oConfig TCMSConfig */
             $oImageMagick = $oConfig->GetImageMagickObject();
         }
@@ -310,7 +310,7 @@ class TCMSImageEndpoint
 
         // if the URL uses a relative path, then add the domain/protocol
         if ('http://' !== substr($sImageURL, 0, 7) && 'https://' !== substr($sImageURL, 0, 8) && '[{CMSSTATICURL' !== substr($sImageURL, 0, 14)) {
-            $oSmartURLData = &TCMSSmartURLData::GetActive();
+            $oSmartURLData = TCMSSmartURLData::GetActive();
             $sProtocol = REQUEST_PROTOCOL;
             if (self::ForceNonSSLURLs()) {
                 $sProtocol = 'http';
@@ -526,7 +526,7 @@ class TCMSImageEndpoint
                 // check if the thumbnail exists
                 if (!file_exists($thumbPath)) {
                     if ($this->UseImageMagick() && 0 == count($aEffects)) {
-                        $oImageMagick = &$this->GetImageMagicObject();
+                        $oImageMagick = $this->GetImageMagicObject();
                         $oImageMagick->LoadImage($this->GetLocalMediaDirectory().'/'.$this->aData['path'], $this);
                         $oImageMagick->ResizeImage((int) $oThumb->aData['width'], (int) $oThumb->aData['height']);
                         $oImageMagick->CenterImage($width, $height, '#'.$bgcolor);
@@ -907,7 +907,7 @@ class TCMSImageEndpoint
         return $destImage;
     }
 
-    public function ApplyEffectHook($aEffects, &$oThumb)
+    public function ApplyEffectHook($aEffects, $oThumb)
     {
         return $aEffects;
     }
@@ -922,7 +922,7 @@ class TCMSImageEndpoint
      *                             - reflect => array(bImageline=>true) // second parameter tells the effect if it should render a tiny black line between image and reflection or not
      *                             - round => array(iCornerRadius=>20, sBackgroundColor=>FFFFFF) // second parameter is the radius in pixel, third parameter is background-color in hex
      *
-     * @return resource
+     * @return false|GdImage|resource
      */
     public function GetThumbnailPointer($oThumb, $aEffects = array())
     {
@@ -1057,7 +1057,7 @@ class TCMSImageEndpoint
      *
      * @return bool
      */
-    protected function GetThumbnailProportions(&$oThumb, $maxWidth, $maxHeight, $bStretchImageToFullsize = false)
+    protected function GetThumbnailProportions($oThumb, $maxWidth, $maxHeight, $bStretchImageToFullsize = false)
     {
         $returnVal = false;
         if (0 == $this->aData['width'] || 0 == $this->aData['height']) {
@@ -1349,7 +1349,7 @@ class TCMSImageEndpoint
      */
     protected function ResizeImageUsingImageMagick($sSourceFilePath, $sTargetFilePath, $iThumbWidth, $iThumbHeight, $aEffects = array())
     {
-        $oImageMagick = &$this->GetImageMagicObject();
+        $oImageMagick = $this->GetImageMagicObject();
         $oImageMagick->LoadImage($sSourceFilePath, $this);
         $oImageMagick->ResizeImage($iThumbWidth, $iThumbHeight);
         foreach ($aEffects as $sEffectName => $aEffectParams) {
@@ -1473,7 +1473,7 @@ class TCMSImageEndpoint
             // check if the thumbnail exists
             if (!file_exists($thumbPath)) {
                 if ($this->UseImageMagick()) {
-                    $oImageMagick = &$this->GetImageMagicObject();
+                    $oImageMagick = $this->GetImageMagicObject();
                     $oImageMagick->LoadImage($this->GetLocalMediaDirectory().'/'.$this->aData['path'], $this);
                     $oImageMagick->ResizeImage($width, $height);
                     $oImageMagick->CropImage($iMaxWidth, $iMaxHeight, $bCenter);
@@ -1728,7 +1728,7 @@ class TCMSImageEndpoint
             $oImageType->Load($this->aData['cms_filetype_id']);
             $sThumbURL = $oThumb->GetFullURL();
             if ('/' == substr($sThumbURL, 0, 1)) {
-                $oSmartURLData = &TCMSSmartURLData::GetActive();
+                $oSmartURLData = TCMSSmartURLData::GetActive();
                 $sPrefix = '';
                 if ($oSmartURLData->bIsSSLCall) {
                     $sPrefix = 'https';
@@ -1770,7 +1770,7 @@ class TCMSImageEndpoint
             $sThumbURL = $oThumb->GetFullURL();
 
             if ('/' == substr($sThumbURL, 0, 1)) {
-                $oSmartURLData = &TCMSSmartURLData::GetActive();
+                $oSmartURLData = TCMSSmartURLData::GetActive();
                 if ($oSmartURLData->bIsSSLCall) {
                     $sPrefix = 'https';
                 } else {
@@ -2187,7 +2187,7 @@ class TCMSImageEndpoint
      * 4 = Up to 25 times faster.  Almost identical to imagecopyresampled for most images.
      * 5 = No speedup.  Just uses imagecopyresampled, highest quality but no advantage over imagecopyresampled.
      */
-    protected function fastimagecopyresampled(&$dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h, $quality = 3)
+    protected function fastimagecopyresampled($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h, $quality = 3)
     {
         if (empty($src_image) || empty($dst_image)) {
             return false;

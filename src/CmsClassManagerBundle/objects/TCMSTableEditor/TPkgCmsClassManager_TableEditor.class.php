@@ -23,11 +23,10 @@ class TPkgCmsClassManager_TableEditor extends TCMSTableEditor
      *
      * @return void
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
-        $classManager = new TPkgCmsVirtualClassManager();
-        $classManager->setDatabaseConnection($this->getDatabaseConnection());
+        $classManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         $classManager->load($this->oTable->fieldNameOfEntryPoint);
         if ($this->oTablePreChangeData && $this->oTablePreChangeData->fieldNameOfEntryPoint != $this->oTable->fieldNameOfEntryPoint) {
             $classManager->recreateAutoclasses();
@@ -43,10 +42,9 @@ class TPkgCmsClassManager_TableEditor extends TCMSTableEditor
      */
     protected function DeleteExecute()
     {
-        $classManager = new TPkgCmsVirtualClassManager();
-        $classManager->setDatabaseConnection($this->getDatabaseConnection());
-        $classManager->load($this->oTable->fieldNameOfEntryPoint);
-        $classManager->recreateAutoclasses();
+        /** @var ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer $classManager */
+        $classManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+        $classManager->updateAllTables();
         parent::DeleteExecute();
     }
 }

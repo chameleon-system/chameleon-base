@@ -31,7 +31,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
                         </div>
                         <div class="right">
                             <?php
-                            $oSalutations = &TdbDataExtranetSalutationList::GetList();
+                            $oSalutations = TdbDataExtranetSalutationList::GetList();
                             if (empty($oNewsletterSignup->fieldDataExtranetSalutationId)) {
                                 $sValue = $oUser->fieldDataExtranetSalutationId;
                             } else {
@@ -130,7 +130,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
                             </div>
                             <?php
                                 } ?>
-                            <?php while ($oNesletter = &$oNewsletterGroupList->Next()) /** @var $oNesletter TdbPkgNewsletterGroup */ { ?>
+                            <?php while ($oNesletter = $oNewsletterGroupList->Next()) /** @var $oNesletter TdbPkgNewsletterGroup */ { ?>
                             <?php
                             if (!array_key_exists('aAvailableForUserList', $data)) {
                                 $bNewsletterIsSubsrcibed = false;

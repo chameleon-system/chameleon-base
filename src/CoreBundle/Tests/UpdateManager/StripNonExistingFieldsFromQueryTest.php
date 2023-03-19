@@ -14,10 +14,13 @@ namespace ChameleonSystem\CoreBundle\Tests\UpdateManager;
 use ChameleonSystem\CoreBundle\UpdateManager\StripVirtualFieldsFromQuery;
 use ChameleonSystem\CoreBundle\UpdateManager\VirtualFieldManagerInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 class StripNonExistingFieldsFromQueryTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $virtualFields;
     private $query;
     /**

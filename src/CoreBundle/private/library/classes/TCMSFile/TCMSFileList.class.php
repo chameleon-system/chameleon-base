@@ -45,7 +45,7 @@ class TCMSFileList extends TIterator
             $d = dir($sDir);
             while (false !== ($entry = $d->read())) {
                 if (is_file($sDir.'/'.$entry) && (is_null($sPattern) || $this->StringMatchesPattern($entry, $sPattern))) {
-                    $oItem = &TCMSFile::GetInstance($sDir.'/'.$entry);
+                    $oItem = TCMSFile::GetInstance($sDir.'/'.$entry);
                     $this->AddItem($oItem);
                 }
             }
@@ -57,7 +57,7 @@ class TCMSFileList extends TIterator
             } else {
                 if (count($aFiles) > 0) {
                     foreach ($aFiles as $filename) {
-                        $oItem = &TCMSFile::GetInstance($filename);
+                        $oItem = TCMSFile::GetInstance($filename);
                         $this->AddItem($oItem);
                     }
                 }
@@ -90,7 +90,7 @@ class TCMSFileList extends TIterator
      *
      * @return TCMSFile
      */
-    public function &current()
+    public function current(): TCMSFile|bool
     {
         return parent::Current();
     }
@@ -100,7 +100,7 @@ class TCMSFileList extends TIterator
      *
      * @return TCMSFile|false
      */
-    public function &next()
+    public function next():TCMSFile|bool
     {
         return parent::Next();
     }
@@ -110,7 +110,7 @@ class TCMSFileList extends TIterator
      *
      * @return TCMSFile|false
      */
-    public function &Previous()
+    public function Previous()
     {
         return parent::Previous();
     }
@@ -120,7 +120,7 @@ class TCMSFileList extends TIterator
      *
      * @return TCMSFile|false
      */
-    public function &Random()
+    public function Random()
     {
         return parent::Random();
     }

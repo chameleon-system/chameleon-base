@@ -29,7 +29,7 @@ class TCMSTagCloud extends TIterator
      *
      * @return TCMSTagCloud
      */
-    public static function &GetCloud($sQuery, $sClassName, $aCustomItems = array(), $iMinSize = 100, $iMaxSize = 250)
+    public static function GetCloud($sQuery, $sClassName, $aCustomItems = array(), $iMinSize = 100, $iMaxSize = 250)
     {
         $oCloud = new self();
 

@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 /**
  * a table used to display a resultset
  * example:
- * $oMedia =& TdbCmsMediaList::GetList();
+ * $oMedia = TdbCmsMediaList::GetList();
  * $oHTMLList = new THTMLTable();.
  *
  * $oColumn = THTMLTableColumn::GetInstance('id','`cms_media`.`id`','ID',THTMLTableColumn::FIELD_TYPE_NUMBER);
@@ -157,7 +157,7 @@ class THTMLTable
      *
      * @return string
      */
-    public function GetRowCSSForItem(&$oItem)
+    public function GetRowCSSForItem($oItem)
     {
         $sCSS = '';
         if (!is_null($this->sRowCSSMethodName)) {
@@ -229,10 +229,10 @@ class THTMLTable
      * @param int            $iPageSize
      * @param array          $aCacheTriggerTables - any tables that should trigger a cache clear other than the one passed via oRecordList
      */
-    public function Init(&$oRecordList, $iPageSize = 20, $aCacheTriggerTables = array())
+    public function Init($oRecordList, $iPageSize = 20, $aCacheTriggerTables = array())
     {
         $this->iPageSize = $iPageSize;
-        $this->oRecordList = &$oRecordList;
+        $this->oRecordList = $oRecordList;
 
         $this->sListIdentKey = 'THTMLTable'.$this->oRecordList->GetIdentString();
 
@@ -305,7 +305,7 @@ class THTMLTable
         // add current search data to columns
         if (is_array($this->aSearchData)) {
             $this->oColumns->GoToStart();
-            while ($oColumn = &$this->oColumns->Next()) {
+            while ($oColumn = $this->oColumns->Next()) {
                 /** @var $oColumn THTMLTableColumn */
                 if (array_key_exists($oColumn->sColumnAlias, $this->aSearchData)) {
                     $oColumn->SetSearchData($this->aSearchData[$oColumn->sColumnAlias]);
@@ -315,7 +315,7 @@ class THTMLTable
         }
 
         $aFilter = array();
-        while ($oColumn = &$this->oColumns->Next()) {
+        while ($oColumn = $this->oColumns->Next()) {
             /** @var $oColumn THTMLTableColumn */
             $sTmpFilter = $oColumn->GetFilterQueryString();
             if (!empty($sTmpFilter)) {
@@ -332,7 +332,7 @@ class THTMLTable
         // now ad global search param (if it exists)
         if (!empty($this->sGlobalSearchTerm)) {
             $aFilter = array();
-            while ($oColumn = &$this->oColumns->Next()) {
+            while ($oColumn = $this->oColumns->Next()) {
                 /** @var $oColumn THTMLTableColumn */
                 $sTmpFilter = $oColumn->GetFilterQueryString($this->sGlobalSearchTerm);
                 if (!empty($sTmpFilter)) {
@@ -359,9 +359,9 @@ class THTMLTable
      *
      * @param THTMLTable $oColumn
      */
-    public function AddColumn(&$oColumn)
+    public function AddColumn($oColumn)
     {
-        $oColumn->oOwningTable = &$this;
+        $oColumn->oOwningTable = $this;
         $this->oColumns->AddItem($oColumn);
     }
 
@@ -372,7 +372,7 @@ class THTMLTable
      *
      * @return string
      */
-    public function GetOrderByURL(&$oColumn, $sDirection)
+    public function GetOrderByURL($oColumn, $sDirection)
     {
         $aOrderByChange = array();
 
@@ -400,7 +400,7 @@ class THTMLTable
      *
      * @return string
      */
-    public function GetFilterURL(&$oColumn)
+    public function GetFilterURL($oColumn)
     {
         $aSearchData = array();
         $aSearchData[$oColumn->sColumnAlias] = '';
@@ -425,7 +425,7 @@ class THTMLTable
      *
      * @return string
      */
-    public function GetCurrentOrderByForColumn(&$oColumn)
+    public function GetCurrentOrderByForColumn($oColumn)
     {
         $sOrderBy = null;
         $iOrderKey = '';
@@ -452,7 +452,7 @@ class THTMLTable
      *
      * @return int
      */
-    public function GetOrderByPositionForColumn(&$oColumn)
+    public function GetOrderByPositionForColumn($oColumn)
     {
         $iPos = false;
         reset($this->aOrderByFields);
@@ -622,7 +622,7 @@ class THTMLTable
         $oView = new TViewParser();
 
         $oGlobal = TGlobal::instance();
-        $oModule = &$oGlobal->GetExecutingModulePointer();
+        $oModule = $oGlobal->GetExecutingModulePointer();
         $sControllingModuleSpotName = '';
         if (null !== $oModule) {
             $sControllingModuleSpotName = $oModule->sModuleSpotName;

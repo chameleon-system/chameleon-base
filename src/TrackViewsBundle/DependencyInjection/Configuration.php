@@ -23,8 +23,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('chameleon_system_track_views');
+        $treeBuilder = new TreeBuilder('chameleon_system_track_views');
+        $root = $treeBuilder->getRootNode();
 
         $root
             ->canBeDisabled()

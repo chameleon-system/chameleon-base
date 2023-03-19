@@ -20,7 +20,7 @@ class TUserModuleLoader extends TModuleLoader
      * note: you can force a custom user model to act like a plain user model (ie no modulechooser)
      *       by passing 'static'=>true in the pagedef to the model
      */
-    protected function &_SetModuleConfigData($name, $config, $templateLanguage = null)
+    protected function _SetModuleConfigData($name, $config, $templateLanguage = null)
     {
         $tmpModel = null;
         // depending on the request we may need to change the model to a "pick the module" instance
@@ -30,7 +30,7 @@ class TUserModuleLoader extends TModuleLoader
         $forceStatic = (array_key_exists('static', $config) && true === $config['static']);
         if (!$forceStatic && $requestModuleChooser && TGlobal::CMSUserDefined() && self::ClassIsCustomModule($config['model'])) {
             // need to check if the module has been overwritten using the cms config.
-            $oCMSConfig = &TdbCmsConfig::GetInstance();
+            $oCMSConfig = TdbCmsConfig::GetInstance();
             $sModuleClassName = 'CMSModuleChooser';
 
             $sMappedClassName = $oCMSConfig->GetRealModuleClassName($sModuleClassName);
@@ -38,7 +38,7 @@ class TUserModuleLoader extends TModuleLoader
                 $sModuleClassName = $sMappedClassName;
             }
             $tmpModel = $this->CreateModuleInstance($sModuleClassName);
-            $tmpModel->oCustomerModelObject = &parent::_SetModuleConfigData($name, $config);
+            $tmpModel->oCustomerModelObject = parent::_SetModuleConfigData($name, $config);
             // instanceID is optional. sometimes (like the MTExtranet) we do not have an instance id
             if (isset($config['instanceID'])) {
                 $tmpModel->oCustomerModelObject->instanceID = $config['instanceID'];
@@ -51,7 +51,7 @@ class TUserModuleLoader extends TModuleLoader
                 $tmpModel->templateLanguage = $templateLanguage;
             }
         } else {
-            $tmpModel = &parent::_SetModuleConfigData($name, $config, $templateLanguage);
+            $tmpModel = parent::_SetModuleConfigData($name, $config, $templateLanguage);
             /** @var $tmpModel TUserModelBase */
         }
         if (array_key_exists('instanceID', $config)) {

@@ -9,12 +9,17 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeActiveLanguagesForPortalEvent;
+use ChameleonSystem\CoreBundle\Event\ChangeUseSlashInSeoUrlsEvent;
 use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TCMSTableEditorPortal extends TCMSTableEditor
@@ -166,14 +171,18 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      *
      * @param TIterator $oFields - the fields inserted
      */
-    protected function PostInsertHook(&$oFields)
+    protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
 
-        $oUser = &TCMSUser::GetActiveUser();
-        $this->linkPortalToUser($oUser);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        TCacheManager::PerformeTableChange('cms_user', $oUser->id);
+        $this->linkPortalToUser($securityHelper->getUser()?->getId());
+        /** @var CacheInterface $cache */
+        $cache = ServiceLocator::get('chameleon_system_cms_cache.cache');
+
+        $cache->callTrigger('cms_user', $securityHelper->getUser()?->getId());
     }
 
     /**
@@ -184,32 +193,42 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $this->SetSessionCopiedPortalId();
         parent::OnAfterCopy();
 
-        $oUser = &TCMSUser::GetActiveUser();
-        $this->linkPortalToUser($oUser);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $this->linkPortalToUser($securityHelper->getUser()?->getId());
 
         $this->CopyNaviTree();
         $this->UnsetSessionCopiedPortalId();
-        TCacheManager::PerformeTableChange('cms_user', $oUser->id);
+        /** @var CacheInterface $cache */
+        $cache = ServiceLocator::get('chameleon_system_cms_cache.cache');
+
+        $cache->callTrigger('cms_user', $securityHelper->getUser()?->getId());
+
     }
 
     /**
-     * @param TCMSUser $oUser
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
      */
-    protected function linkPortalToUser(TCMSUser $oUser)
+    protected function linkPortalToUser(?string $userId)
     {
+        if (null === $userId) {
+            return;
+        }
         $query = "INSERT INTO `cms_user_cms_portal_mlt`
-                        SET `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oUser->id)."',
-                            `target_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
-        MySqlLegacySupport::getInstance()->query($query);
+                        SET `source_id` = :userId,
+                            `target_id` = :portalId";
+        $this->getDatabaseConnection()->executeQuery($query, ['userId' => $userId, 'portalId' => $this->sId]);
 
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-        $migrationQueryData = new MigrationQueryData('cms_user_cms_portal_mlt', $editLanguage->fieldIso6391);
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+        $migrationQueryData = new MigrationQueryData('cms_user_cms_portal_mlt', $backendSession->getCurrentEditLanguageIso6391());
         $migrationQueryData
             ->setFields(array(
-                'source_id' => $oUser->id,
+                'source_id' => $userId,
                 'target_id' => $this->sId,
             ))
         ;
@@ -279,7 +298,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
                ";
         $oSourceNavigations->Load($query);
 
-        while ($oSourceNavi = &$oSourceNavigations->Next()) {
+        while ($oSourceNavi = $oSourceNavigations->Next()) {
             // copy root node and subtrees
             // and create navi using new tree node
             // create subnavi
@@ -447,7 +466,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         /** @var $oCmsDivision TdbCmsDivision */
         $oCmsDivision = TdbCmsDivision::GetNewInstance();
         if ($oCmsDivision->LoadFromField('cms_tree_id_tree', $aSourceNode['id'])) {
-            $oDivisionTableConf = &$oCmsDivision->GetTableConf();
+            $oDivisionTableConf = $oCmsDivision->GetTableConf();
 
             /** @var $oTableManager TCMSTableEditorManager */
             $oTableManager = new TCMSTableEditorManager();
@@ -521,7 +540,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    public function Save(&$postData, $bDataIsInSQLForm = false)
+    public function Save($postData, $bDataIsInSQLForm = false)
     {
         $defaultLanguageBeforeChange = $this->oTable->fieldCmsLanguageId;
         $languagesBeforeChange = $this->oTable->GetMLTIdList('cms_language');
@@ -550,7 +569,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
             $languageIsoBeforeChange = $languageService->getLanguageIsoCode($defaultLanguageBeforeChange);
 
             $event = new LocaleChangedEvent($languageIsoAfterChange, $languageIsoBeforeChange);
-            $eventDispatcher->dispatch(CoreEvents::CHANGE_DEFAULT_LANGUAGE_FOR_PORTAL, $event);
+            $eventDispatcher->dispatch($event, CoreEvents::CHANGE_DEFAULT_LANGUAGE_FOR_PORTAL);
         }
     }
 
@@ -563,7 +582,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $languagesAfterChange = $this->oTable->GetMLTIdList('cms_language');
         if (array_diff($languagesBeforeChange, $languagesAfterChange) !== array_diff($languagesAfterChange, $languagesBeforeChange)) {
             $event = new ChangeActiveLanguagesForPortalEvent($this->oTable, $languagesBeforeChange, $languagesAfterChange);
-            $eventDispatcher->dispatch(CoreEvents::CHANGE_ACTIVE_LANGUAGES_FOR_PORTAL, $event);
+            $eventDispatcher->dispatch($event, CoreEvents::CHANGE_ACTIVE_LANGUAGES_FOR_PORTAL);
         }
     }
 
@@ -575,7 +594,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     {
         $useSlashInSeoUrlsAfterChange = $this->oTable->fieldUseSlashInSeoUrls;
         if ($useSlashInSeoUrlsBeforeChange !== $useSlashInSeoUrlsAfterChange) {
-            $eventDispatcher->dispatch(CoreEvents::CHANGE_USE_SLASH_IN_SEO_URLS_FOR_PORTAL);
+            $eventDispatcher->dispatch(new ChangeUseSlashInSeoUrlsEvent(), CoreEvents::CHANGE_USE_SLASH_IN_SEO_URLS_FOR_PORTAL);
         }
     }
 

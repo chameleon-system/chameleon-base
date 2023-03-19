@@ -146,9 +146,15 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
 
     private function getSession(): ?SessionInterface
     {
-        $request = $this->requestStack->getMasterRequest();
-        $session = null === $request ? null : $request->getSession();
-        if (null === $session || false === $session->isStarted()) {
+        $request = $this->requestStack->getMainRequest();
+        if (null === $request) {
+            return null;
+        }
+        if (false === $request->hasSession()) {
+            return null;
+        }
+        $session = $request->getSession();
+        if (false === $session->isStarted()) {
             return null;
         }
 

@@ -7,11 +7,7 @@ if (false === isset($argv[1])) {
 }
 
 $basedir = __DIR__ . '/../../../../../..';
-if (true === file_exists($basedir . '/app/autoload.php')) {
-    include_once $basedir . '/app/autoload.php';
-} else {
-    include_once $basedir . '/vendor/autoload.php';
-}
+include_once $basedir . '/vendor/autoload.php';
 
 $command = strtolower($argv[1]);
 

@@ -88,7 +88,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
         return $this->oActiveComment;
     }
 
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
         $sWhatToShow = $this->aModuleConfig['view'];
@@ -222,7 +222,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
      */
     protected function CommentSaveSuccessHook($oComment, $aRawData)
     {
-        $oConfig = &TCMSConfig::GetInstance();
+        $oConfig = TCMSConfig::GetInstance();
         $oConfigParameter = $oConfig->GetConfigParameter('dbversion-pkgComActivityFeed', false, true);
         if (!is_null($oConfigParameter)) {
             TdbPkgComActivityFeedObject::AddActivity($oComment);
@@ -512,7 +512,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
             $oNewComment = $oTableManager->Save($aData);
             $oTableManager->AllowEditByAll(false);
 
-            $oConfig = &TCMSConfig::GetInstance();
+            $oConfig = TCMSConfig::GetInstance();
             $oConfigParameter = $oConfig->GetConfigParameter('dbversion-pkgComActivityFeed', false, true);
             if (!is_null($oConfigParameter)) {
                 $oNewCommentObject = TdbPkgComment::GetNewInstance($oTableManager->sId);

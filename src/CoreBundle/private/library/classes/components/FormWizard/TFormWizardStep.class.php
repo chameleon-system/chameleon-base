@@ -29,7 +29,7 @@ class TFormWizardStep extends TCMSRecord
      *
      * @return array
      */
-    public function &GetWizardViewData()
+    public function GetWizardViewData()
     {
         $aData = array();
         $aData['aRequiredFields'] = $this->aRequiredFields;

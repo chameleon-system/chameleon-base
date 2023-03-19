@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\CoreEvents;
+use ChameleonSystem\CoreBundle\Event\UpdateBeforeMigrationFilesCollectionEvent;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\Constant\DatabaseMigrationConstants;
 use ChameleonSystem\DatabaseMigration\Counter\MigrationCounterManagerInterface;
@@ -26,7 +27,7 @@ use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Converter\DataModel
 use ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\MigrationDataModelFactory\ChameleonProcessedMigrationDataModelFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * update file management, loads and executes database updates.
@@ -57,7 +58,7 @@ class TCMSUpdateManager
      *
      * @return TCMSUpdateManager
      */
-    public static function &GetInstance()
+    public static function GetInstance()
     {
         static $oUpdateManager;
         if (!$oUpdateManager) {
@@ -87,7 +88,7 @@ class TCMSUpdateManager
      */
     private function getAllMigrationDataModels()
     {
-        $this->getEventDispatcher()->dispatch(CoreEvents::UPDATE_BEFORE_COLLECTION);
+        $this->getEventDispatcher()->dispatch(new UpdateBeforeMigrationFilesCollectionEvent(), CoreEvents::UPDATE_BEFORE_COLLECTION);
 
         return $this->getFileSystemMigrationDataModelFactory()->createMigrationDataModels();
     }

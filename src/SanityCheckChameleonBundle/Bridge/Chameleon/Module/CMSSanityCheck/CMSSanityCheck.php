@@ -18,7 +18,7 @@ use ChameleonSystem\SanityCheck\Resolver\OutputResolverInterface;
 use ChameleonSystem\SanityCheckBundle\Resolver\CheckDataHolderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TModelBase;
 
 /**
@@ -71,7 +71,7 @@ class CMSSanityCheck extends TModelBase
     /**
      * {@inheritdoc}
      */
-    public function &Execute()
+    public function Execute()
     {
         parent::Execute();
 

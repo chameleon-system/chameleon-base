@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class TCMSCronjob_ClearAtomicLocks extends TCMSCronJob
+class TCMSCronjob_ClearAtomicLocks extends TdbCmsCronjobs
 {
 
     /**

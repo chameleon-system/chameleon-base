@@ -43,7 +43,7 @@ class DataAccessCmsTree implements DataAccessCmsTreeInterface
     {
         $query = 'SELECT * FROM `cms_tree` ORDER BY `lft`';
 
-        $result = $this->databaseConnection->fetchAll($query);
+        $result = $this->databaseConnection->fetchAllAssociative($query);
         $trees = array();
         if (null === $languageId) {
             $languageId = $this->languageService->getActiveLanguageId();
@@ -64,7 +64,7 @@ class DataAccessCmsTree implements DataAccessCmsTreeInterface
      */
     public function getAllInvertedNoFollowRulePageIds()
     {
-        $rows = $this->databaseConnection->fetchAll('SELECT `source_id`, `target_id` FROM `cms_tree_cms_tpl_page_mlt`');
+        $rows = $this->databaseConnection->fetchAllAssociative('SELECT `source_id`, `target_id` FROM `cms_tree_cms_tpl_page_mlt`');
 
         if (false === $rows) {
             return array();

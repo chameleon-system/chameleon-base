@@ -13,7 +13,7 @@ class TCMSCountry extends TCMSRecord
 {
     public function __construct($id = null, $iLanguage = null)
     {
-        parent::TCMSRecord('t_country', $id, $iLanguage);
+        parent::__construct('t_country', $id, $iLanguage);
     }
 
     public function GetWikiLink($bCheckIfLinkExists = false)

@@ -11,6 +11,11 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+
 class TableMenuItemProvider implements MenuItemProviderInterface
 {
     /**
@@ -39,15 +44,21 @@ class TableMenuItemProvider implements MenuItemProviderInterface
 
     private function isTableAccessAllowed(\TdbCmsTblConf $tableObject): bool
     {
-        $activeUser = \TCMSUser::GetActiveUser();
-        if (null === $activeUser) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return false;
         }
 
-        $isUserInTableUserGroup = $activeUser->oAccessManager->user->IsInGroups($tableObject->fieldCmsUsergroupId);
-        $isEditAllowed = $activeUser->oAccessManager->HasEditPermission($tableObject->fieldName);
-        $isShowAllReadonlyAllowed = $activeUser->oAccessManager->HasShowAllReadOnlyPermission($tableObject->fieldName);
+        if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableObject->fieldName)) {
+            return false;
+        }
 
-        return true === $isUserInTableUserGroup && (true === $isEditAllowed || true === $isShowAllReadonlyAllowed);
+        if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $tableObject->fieldName)) {
+            return true;
+        }
+
+        return false;
+
     }
 }

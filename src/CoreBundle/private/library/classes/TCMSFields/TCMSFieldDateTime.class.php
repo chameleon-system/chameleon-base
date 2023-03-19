@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 require_once PATH_LIBRARY.'/functions/ConvertDate.fun.php';
 
@@ -22,10 +23,13 @@ class TCMSFieldDateTime extends TCMSField
 
     public function GetHTML()
     {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetHTMLValue());
-        $viewRenderer->AddSourceObject('language', TCMSUser::GetActiveUser()->GetCurrentEditLanguage());
+        $viewRenderer->AddSourceObject('language', $securityHelper->getUser()?->getCurrentEditLanguageIsoCode());
         $viewRenderer->AddSourceObject('datetimepickerFormat', 'L LTS');
         $viewRenderer->AddSourceObject('datetimepickerSideBySide', 'true');
         $viewRenderer->AddSourceObject('datetimepickerWithIcon', false);
@@ -106,7 +110,7 @@ class TCMSFieldDateTime extends TCMSField
     public function GetCMSHtmlHeadIncludes()
     {
         $includes = parent::GetCMSHtmlHeadIncludes();
-        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/css/tempusdominus-bootstrap-4.min.css')); //datetimepicker
+        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/css/tempusdominus-bootstrap-4.min.css')); //datetimepicker
 
         return $includes;
     }
@@ -118,7 +122,7 @@ class TCMSFieldDateTime extends TCMSField
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
         $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/moment-2.23.0/js/moment-with-locales.min.js')); //moment.js for datetimepicker
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.1.2/js/tempusdominus-bootstrap-4.min.js')); //datetimepicker
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/js/tempusdominus-bootstrap-4.min.js')); //datetimepicker
 
         return $includes;
     }

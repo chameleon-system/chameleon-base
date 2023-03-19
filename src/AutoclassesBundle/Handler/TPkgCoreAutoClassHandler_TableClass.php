@@ -12,10 +12,14 @@
 namespace ChameleonSystem\AutoclassesBundle\Handler;
 
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
+use Doctrine\DBAL\Connection;
+use IPkgCmsFileManager;
 use TCMSTableToClass;
 
 class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_AbstractBase
 {
+    private AutoclassesDataAccessInterface $autoClassesDataAccess;
+
     /**
      * {@inheritdoc}
      */
@@ -25,7 +29,7 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
         if (null === $tableConfId) {
             return;
         }
-        $oClassWriter = new TCMSTableToClass($this->filemanager, $targetDir);
+        $oClassWriter = new TCMSTableToClass($this->filemanager, $targetDir, $this->autoClassesDataAccess, $this->getDatabaseConnection());
         if ($oClassWriter->Load($tableConfId)) {
             $oClassWriter->Update($sClassName);
         }
@@ -63,6 +67,13 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
         }
     }
 
+    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager, AutoclassesDataAccessInterface $autoClassesDataAccess)
+    {
+        parent::__construct($databaseConnection, $filemanager);
+        $this->autoClassesDataAccess = $autoClassesDataAccess;
+    }
+
+
     /**
      * @param string $tableName
      *
@@ -70,7 +81,7 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
      */
     private function getTableConfIdForTableName($tableName)
     {
-        $data = $this->getAutoclassesDataAccess()->getTableConfigData();
+        $data = $this->autoClassesDataAccess->getTableConfigData();
         foreach ($data as $id => $tableConf) {
             if ($tableConf['name'] === $tableName) {
                 return $id;
@@ -141,11 +152,5 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
         return $this->aClassNameList;
     }
 
-    /**
-     * @return AutoclassesDataAccessInterface
-     */
-    private function getAutoclassesDataAccess()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
-    }
+
 }

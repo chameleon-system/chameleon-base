@@ -35,11 +35,20 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     private $_cache = array();
 
-    public function TCMSTreeNode($id = null)
+    public function __construct($id = null, $table = 'cms_tree')
     {
-        $table = 'cms_tree';
-        parent::TCMSRecord($table, $id);
+        parent::__construct($table, $id);
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSTreeNode()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     /**
      * @param string $name
@@ -62,7 +71,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     public function CountChildren($includeHidden = false)
     {
-        $oChildren = &$this->GetChildren($includeHidden);
+        $oChildren = $this->GetChildren($includeHidden);
 
         return $oChildren->Length();
     }
@@ -75,7 +84,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      *
      * @return TdbCmsTreeList
      */
-    public function &GetChildren($includeHidden = false, $languageId = null)
+    public function GetChildren($includeHidden = false, $languageId = null)
     {
         $children = self::getTreeService()->getChildren($this->id, $includeHidden, $languageId);
 
@@ -211,7 +220,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
             if ($activePortal->fieldShowNotTanslated) {
                 return true;
             } else {
-                $oURLData = &TCMSSmartURLData::GetActive();
+                $oURLData = TCMSSmartURLData::GetActive();
                 $sLanguagePrefix = $oURLData->sLanguageIdentifier;
                 if (!empty($sLanguagePrefix)) {
                     if (empty($this->sqlData['name__'.$sLanguagePrefix])) {
@@ -351,7 +360,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
           ORDER BY cms_tree.lft DESC
              LIMIT 1
         ';
-        $portal = $this->getDatabaseConnection()->fetchAssoc($query, array('lft' => $this->sqlData['lft'], 'rgt' => $this->sqlData['rgt']));
+        $portal = $this->getDatabaseConnection()->fetchAssociative($query, array('lft' => $this->sqlData['lft'], 'rgt' => $this->sqlData['rgt']));
         if (false === $portal) {
             return null;
         }
@@ -457,7 +466,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      *
      * @return TdbCmsTplPageList
      */
-    public function &GetAllLinkedPages()
+    public function GetAllLinkedPages()
     {
         $query = "SELECT `cms_tpl_page`.*,
                       `cms_tree_node`.`active` AS node_active,
@@ -530,7 +539,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      *
      * @return TdbCmsTree|null
      */
-    public function &GetParentNode()
+    public function GetParentNode()
     {
         $oParentNode = self::getTreeService()->getById($this->sqlData['parent_id']);
 
@@ -544,15 +553,15 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      *
      * @return TCMSTreeNode|null
      */
-    public function &GetPreviousNode($bIncludeHidden = false)
+    public function GetPreviousNode($bIncludeHidden = false)
     {
-        $oParent = &$this->GetParentNode();
+        $oParent = $this->GetParentNode();
 
         $oTempNode = null;
         if (!is_null($oParent)) {
-            $oNodeList = &$oParent->GetChildren($bIncludeHidden);
+            $oNodeList = $oParent->GetChildren($bIncludeHidden);
             $oNodeList->GoToStart();
-            while ($oNode = &$oNodeList->Next()) {
+            while ($oNode = $oNodeList->Next()) {
                 if ($oNode->id == $this->id) {
                     break;
                 }
@@ -570,16 +579,16 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      *
      * @return TCMSTreeNode
      */
-    public function &GetNextNode($bIncludeHidden = false)
+    public function GetNextNode($bIncludeHidden = false)
     {
-        $oParent = &$this->GetParentNode();
+        $oParent = $this->GetParentNode();
 
         $oNode = false;
         if (!is_null($oParent)) {
-            $oNodeList = &$oParent->GetChildren($bIncludeHidden);
+            $oNodeList = $oParent->GetChildren($bIncludeHidden);
             $oNodeList->GoToStart();
             $bNextLoopIsRequiredNode = false;
-            while ($oNode = &$oNodeList->Next()) {
+            while ($oNode = $oNodeList->Next()) {
                 if ($bNextLoopIsRequiredNode) {
                     break;
                 }

@@ -9,12 +9,16 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * list a table
@@ -69,13 +73,14 @@ class MTTableManager extends TCMSModelBase
         $this->AddURLHistory();
 
         if (false === $this->oTableList->CheckTableRights()) {
-            $oCMSUser = &TCMSUser::GetActiveUser();
-            $oCMSUser->Logout();
-            $this->getRedirectService()->redirect(PATH_CMS_CONTROLLER);
+            /** @var RouterInterface $router */
+            $router = ServiceLocator::get('router');
+            $logout = $router->generate('app_logout');
+            $this->getRedirectService()->redirect($logout);
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $inputFilterUtil = $this->getInputFilterUtil();
 
@@ -85,7 +90,10 @@ class MTTableManager extends TCMSModelBase
         $this->data['listCacheKey'] = $this->oTableList->GetListCacheKey();
 
         $this->data['id'] = $inputFilterUtil->getFilteredInput('id');
-        $this->data['permission_new'] = $this->global->oUser->oAccessManager->HasNewPermission($this->oTableConf->sqlData['name']) && $this->oTableList->ShowNewEntryButton();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        $this->data['permission_new'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->sqlData['name']) && $this->oTableList->ShowNewEntryButton();
 
         // load menu
         $this->data['oMenuItems'] = $this->oTableList->GetMenuItems();
@@ -135,7 +143,7 @@ class MTTableManager extends TCMSModelBase
 
         $this->data['listClass'] = $listClass;
 
-        $this->oTableList = &$this->oTableConf->GetListObject($listClass);
+        $this->oTableList = $this->oTableConf->GetListObject($listClass);
         if ('TCMSListManagerMLT' === $listClass) {
             $this->data['bShowCustomSort'] = $this->oTableList->IsCustomSort();
         } else {
@@ -457,7 +465,7 @@ class MTTableManager extends TCMSModelBase
 
         $returnVal = [];
 
-        $editLanguageId = $this->getLanguageService()->getActiveEditLanguage()->id;
+        $editLanguageId = $this->getBackendSession()->getCurrentEditLanguageId();
         $recordList->SetLanguage($editLanguageId);
         /** @var $record TCMSRecord */
         while ($record = $recordList->Next()) {
@@ -486,7 +494,7 @@ class MTTableManager extends TCMSModelBase
             $listClass = $this->aModuleConfig['listClass'];
         }
 
-        $oTableList = &$this->oTableConf->GetListObject($listClass);
+        $oTableList = $this->oTableConf->GetListObject($listClass);
 
         $query = $oTableList->FilterQuery();
         $parentTableAlias = $oTableList->GetTableAlias($query);
@@ -496,7 +504,10 @@ class MTTableManager extends TCMSModelBase
         $fieldIsTranslatable = call_user_func(array($autoClassName, 'CMSFieldIsTranslated'), $nameColumn);
 
         if ($fieldIsTranslatable) {
-            $currentEditLanguageId = TdbCmsUser::GetActiveUser()->GetCurrentEditLanguageID();
+            /** @var BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+
+            $currentEditLanguageId = $backendSession->getCurrentEditLanguageId();
             $languageSuffix = TGlobal::GetLanguagePrefix($currentEditLanguageId);
             if ('' !== $languageSuffix) {
                 $nameColumn .= '__'.$languageSuffix;
@@ -694,5 +705,9 @@ class MTTableManager extends TCMSModelBase
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+    protected function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
     }
 }

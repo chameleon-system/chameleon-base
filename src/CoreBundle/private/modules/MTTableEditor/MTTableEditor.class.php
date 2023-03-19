@@ -13,7 +13,10 @@ use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * edit a table record
@@ -196,9 +199,10 @@ class MTTableEditor extends TCMSModelBase
             $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
 
             if (!$bIsReadOnlyRequest && ((!$bUserHasEditRight && !$bIsInsert && !$this->bIsReadOnlyMode) || ($this->bIsReadOnlyMode && !$bUserHasReadOnlyRight))) {
-                $oCMSUser = &TCMSUser::GetActiveUser();
-                $oCMSUser->Logout();
-                $this->controller->HeaderURLRedirect(PATH_CMS_CONTROLLER);
+                /** @var RouterInterface $router */
+                $router = ServiceLocator::get('router');
+                $logout = $router->generate('app_logout');
+                $this->controller->HeaderURLRedirect($logout);
             }
 
             $this->data['oTabs'] = $this->GetTabsForTable();
@@ -276,7 +280,7 @@ class MTTableEditor extends TCMSModelBase
         }
     }
 
-    public function &Execute()
+    public function Execute()
     {
         $this->data = parent::Execute();
         if ('error' !== $this->aModuleConfig['view']) {
@@ -321,7 +325,7 @@ class MTTableEditor extends TCMSModelBase
             if ($this->isEditFieldMode()) {
                 $editFieldName = $this->global->GetUserData('_fieldName');
                 $this->oTableManager->oTableEditor->setActiveEditField($editFieldName);
-                $this->data['oField'] = &$this->oTableManager->oTableConf->GetField($editFieldName, $oTable);
+                $this->data['oField'] = $this->oTableManager->oTableConf->GetField($editFieldName, $oTable);
                 $this->data['_fieldName'] = $editFieldName;
             } else {
                 $aPostData = $this->global->GetUserData(null);
@@ -341,7 +345,7 @@ class MTTableEditor extends TCMSModelBase
                     $oPostTable->sqlData = array_merge($oPostTable->sqlData, $aPostData);
 
                     $oFields = $this->oTableManager->oTableEditor->oTableConf->GetFields($oPostTable);
-                    while ($oField = &$oFields->Next()) {
+                    while ($oField = $oFields->Next()) {
                         $convertedData = $oField->ConvertPostDataToSQL();
                         if (false === $convertedData || null === $convertedData) {
                             $convertedData = '';
@@ -463,17 +467,19 @@ class MTTableEditor extends TCMSModelBase
     protected function GetPermissionSettings()
     {
         $permissions = array('new' => false, 'edit' => false, 'delete' => false, 'showlist' => false);
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $permissions['edit'] = $this->global->oUser->oAccessManager->HasEditPermission($this->oTableManager->oTableConf->sqlData['name']);
-        $tableInUserGroup = $this->global->oUser->oAccessManager->user->IsInGroups($this->oTableManager->oTableConf->sqlData['cms_usergroup_id']);
+        $permissions['edit'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableManager->oTableConf->sqlData['name']);
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableManager->oTableConf->sqlData['name']);
         if ($tableInUserGroup) {
             $permissions['showlist'] = true;
             if ($this->IsOnlyOneRecordTableRequest()) {
                 $permissions['new'] = false;
                 $permissions['delete'] = false;
             } else {
-                $permissions['new'] = $this->global->oUser->oAccessManager->HasNewPermission($this->oTableManager->oTableConf->sqlData['name']);
-                $permissions['delete'] = $this->global->oUser->oAccessManager->HasDeletePermission($this->oTableManager->oTableConf->sqlData['name']);
+                $permissions['new'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableManager->oTableConf->sqlData['name']);
+                $permissions['delete'] = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableManager->oTableConf->sqlData['name']);
             }
         }
         $this->data['aPermission'] = $permissions;
@@ -526,13 +532,13 @@ class MTTableEditor extends TCMSModelBase
         // get the head includes for all the fields...
         if ($this->global->UserDataExists('_fnc') && 'editfield' === $this->global->GetUserData('_fnc')) {
             $editFieldName = $this->global->GetUserData('_fieldName');
-            $oField = &$this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
+            $oField = $this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
             if (null !== $oField) {
                 $aFieldIncludes = $oField->GetCMSHtmlHeadIncludes();
                 $aIncludes = array_merge($aIncludes, $aFieldIncludes);
             }
         } else {
-            $oFields = &$this->oTableManager->oTableConf->GetFields($this->oTableManager->oTableEditor->oTable);
+            $oFields = $this->oTableManager->oTableConf->GetFields($this->oTableManager->oTableEditor->oTable);
             while ($oField = $oFields->Next()) {
                 /* @var $oField TCMSField */
                 $aFieldIncludes = $oField->GetCMSHtmlHeadIncludes();
@@ -554,13 +560,13 @@ class MTTableEditor extends TCMSModelBase
 
         if ($this->global->UserDataExists('_fnc') && 'editfield' === $this->global->GetUserData('_fnc')) {
             $editFieldName = $this->global->GetUserData('_fieldName');
-            $oField = &$this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
+            $oField = $this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
             if (null !== $oField) {
                 $aFieldIncludes = $oField->GetCMSHtmlFooterIncludes();
                 $aIncludes = array_merge($aIncludes, $aFieldIncludes);
             }
         } else {
-            $oFields = &$this->oTableManager->oTableConf->GetFields($this->oTableManager->oTableEditor->oTable);
+            $oFields = $this->oTableManager->oTableConf->GetFields($this->oTableManager->oTableEditor->oTable);
             while ($oField = $oFields->Next()) {
                 /* @var $oField TCMSField */
                 $aFieldIncludes = $oField->GetCMSHtmlFooterIncludes();
@@ -583,7 +589,7 @@ class MTTableEditor extends TCMSModelBase
         $returnData = false;
         if (!empty($sFieldName) && $this->global->UserDataExists('_fnc')) {
             $sMethodName = $this->global->GetUserData('_fnc');
-            $oField = &$this->oTableManager->oTableConf->GetField($sFieldName, $this->oTableManager->oTableEditor->oTable);
+            $oField = $this->oTableManager->oTableConf->GetField($sFieldName, $this->oTableManager->oTableEditor->oTable);
             if (null !== $oField) {
                 if ($oField->isMethodCallAllowed($sMethodName)) {
                     // execute the method in field object
@@ -603,7 +609,7 @@ class MTTableEditor extends TCMSModelBase
      *
      * @return mixed
      */
-    public function &_CallMethod($sFunctionName, $aMethodParameter = array())
+    public function _CallMethod($sFunctionName, $aMethodParameter = array())
     {
         $tmp = null;
         $isNotAModuleFunction = $this->global->GetUserData('_noModuleFunction');
@@ -677,7 +683,7 @@ class MTTableEditor extends TCMSModelBase
     public function AjaxGetFieldEditBox()
     {
         $editFieldName = $this->global->GetUserData('_fieldName');
-        $oField = &$this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
+        $oField = $this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
         $result = array('field' => $editFieldName, 'content' => $oField->GetContent());
 
         return $result;

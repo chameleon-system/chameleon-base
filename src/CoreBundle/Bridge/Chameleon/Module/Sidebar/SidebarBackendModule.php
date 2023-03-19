@@ -13,11 +13,14 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
 use ChameleonSystem\CoreBundle\DataAccess\UserMenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
@@ -116,6 +119,9 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if (null === $request) {
             return null;
         }
+        if (false === $request->hasSession()) {
+            return null;
+        }
 
         return $request->getSession();
     }
@@ -130,10 +136,11 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
         if (true === $cachingEnabled) {
-            $cmsUser = \TCMSUser::GetActiveUser();
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
             $cacheTriggerManager->addTrigger('cms_tbl_conf', null);
             $cacheTriggerManager->addTrigger('cms_module', null);
-            $cacheTriggerManager->addTrigger('cms_user', null === $cmsUser ? null : $cmsUser->id);
+            $cacheTriggerManager->addTrigger('cms_user', $securityHelper->getUser()?->getId());
             $cacheTriggerManager->addTrigger('cms_menu_category', null);
             $cacheTriggerManager->addTrigger('cms_menu_item', null);
         }
@@ -166,8 +173,9 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function getMenuItems(): array
     {
-        $activeUser = \TCMSUser::GetActiveUser();
-        if (null === $activeUser) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return [];
         }
 
@@ -224,12 +232,18 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function getPopularMenuEntries(array $menuItemMap): ?MenuCategory
     {
-        $activeUser = \TCMSUser::GetActiveUser();
-        if (null === $activeUser) {
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return null;
         }
 
-        $menuItemsClickedByUser = $this->userMenuItemDataAccess->getMenuItemIds($activeUser->id);
+        $userId = $securityHelper->getUser()?->getId();
+        if (null === $userId) {
+            return null;
+        }
+
+        $menuItemsClickedByUser = $this->userMenuItemDataAccess->getMenuItemIds($userId);
         $menuItemsClickedByUser = \array_slice($menuItemsClickedByUser, 0, 6);
 
         $items = [];
@@ -312,13 +326,19 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         if ('' === $menuId) {
             return;
         }
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
+            return ;
+        }
 
-        $activeUser = \TCMSUser::GetActiveUser();
-        if (null === $activeUser) {
+        $userId = $securityHelper->getUser()?->getId();
+
+        if (null === $userId) {
             return;
         }
 
-        $this->userMenuItemDataAccess->trackMenuItem($activeUser->id, $menuId);
+        $this->userMenuItemDataAccess->trackMenuItem($userId, $menuId);
     }
 
     /**
@@ -336,10 +356,13 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         $parameters = parent::_GetCacheParameters();
 
-        $cmsUser = \TCMSUser::GetActiveUser();
-        if (null !== $cmsUser) {
-            $parameters['cmsUserId'] = $cmsUser->id;
-            $parameters['backendLanguageId'] = $cmsUser->fieldCmsLanguageId;
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $user = $securityHelper->getUser();
+
+        if (null !== $user) {
+            $parameters['cmsUserId'] = $user->getId();
+            $parameters['backendLanguageId'] = $user->getCmsLanguageId();
 
             $session = $this->getSession();
             if (null !== $session) {

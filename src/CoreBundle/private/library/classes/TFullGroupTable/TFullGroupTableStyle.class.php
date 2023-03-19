@@ -71,9 +71,9 @@ class TFullGroupTableStyle extends TGroupTableStyle
      */
     public $searchButtonTDstyle = null;
 
-    public function TFullGroupTableStyle()
+    public function __construct()
     {
-        TGroupTableStyle::TGroupTableStyle();
+        parent::__construct();
         $this->header = null;
         $this->search = null;
         $this->navigation = null;
@@ -83,6 +83,16 @@ class TFullGroupTableStyle extends TGroupTableStyle
         $this->searchFieldTDstyle = null;
         $this->searchButtonTDstyle = null;
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TFullGroupTableStyle()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     public function GetHeader()
     {

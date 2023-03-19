@@ -29,7 +29,7 @@ class MTTextFieldMapper_Text extends AbstractViewMapper
         if ($oTextModuleConfiguration && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oTextModuleConfiguration->table, $oTextModuleConfiguration->id);
         }
-        $oDownloadList = &$oTextModuleConfiguration->GetDownloads('data_pool');
+        $oDownloadList = $oTextModuleConfiguration->GetDownloads('data_pool');
         if ($oDownloadList && $oDownloadList->Length() > 0) {
             $aLinkList = array();
             while ($oDownload = $oDownloadList->Next()) {

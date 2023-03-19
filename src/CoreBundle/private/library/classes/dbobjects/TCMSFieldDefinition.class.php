@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 
@@ -21,11 +23,20 @@ class TCMSFieldDefinition extends TCMSRecord
      */
     private $oCacheExtraConfigFieldObject = null;
 
-    public function TCMSFieldDefinition($id = null)
+    public function __construct($id = null)
     {
-        $table = 'cms_field_conf';
-        parent::TCMSRecord($table, $id);
+        parent::__construct('cms_field_conf', $id);
     }
+
+    /**
+     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
+     * @see self::__construct
+     */
+    public function TCMSFieldDefinition()
+    {
+        $this->callConstructorAndLogDeprecation(func_get_args());
+    }
+
 
     public function isVirtualField()
     {
@@ -83,7 +94,7 @@ class TCMSFieldDefinition extends TCMSRecord
      *
      * @return TCMSField|null
      */
-    public function &GetFieldObject()
+    public function GetFieldObject()
     {
         $field = null;
         // check if the field defines a class that overwrites the field type class
@@ -142,7 +153,7 @@ class TCMSFieldDefinition extends TCMSRecord
     {
         $query = "SELECT `constname` FROM `cms_field_type` WHERE `contains_images` = '1'";
         $databaseconnection = self::getDbConnection();
-        $result = $databaseconnection->fetchAll($query);
+        $result = $databaseconnection->fetchAllAssociative($query);
         $imageFieldTypes = array();
         foreach ($result as $row) {
             $imageFieldTypes[] = $row['constname'];
@@ -591,9 +602,13 @@ class TCMSFieldDefinition extends TCMSRecord
 
         $language = null;
         if (null === $sLanguageID) {
-            $oUser = &TCMSUser::GetActiveUser();
-            if (null !== $oUser) {
-                $language = $oUser->GetCurrentEditLanguageObject();
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            $user = $securityHelper->getUser();
+
+
+            if (null !== $user) {
+                $language = self::getLanguageService()->getLanguageFromIsoCode($user->getCurrentEditLanguageIsoCode());
             }
         } else {
             $language = self::getLanguageService()->getLanguage($sLanguageID);

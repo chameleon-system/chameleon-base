@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Expr\Comparison;
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
-$groupsRaw = $databaseConnection->fetchAll("SELECT `id` FROM `cms_usergroup` WHERE `internal_identifier` IN ('cms_revision_management', 'publishing_workflow')");
+$groupsRaw = $databaseConnection->fetchAllAssociative("SELECT `id` FROM `cms_usergroup` WHERE `internal_identifier` IN ('cms_revision_management', 'publishing_workflow')");
 $groups = [];
 foreach ($groupsRaw as $groupRow) {
     $groups[] = $groupRow['id'];

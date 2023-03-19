@@ -12,6 +12,8 @@
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesRequestCacheDataAccess;
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TPkgCmsClassManager;
+use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
+use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\UpdateManager\StripVirtualFieldsFromQuery;
@@ -302,7 +304,7 @@ class TCMSLogChange
     public static function _RunQuery($query, $line, $bInsertId = true)
     {
         /** @var $stripNonExistingFields StripVirtualFieldsFromQuery */
-        $stripNonExistingFields = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.update_manager_strip_virtual_fields_from_query');
+        $stripNonExistingFields = ServiceLocator::get('chameleon_system_core.update_manager_strip_virtual_fields_from_query');
         $query = $stripNonExistingFields->stripNonExistingFields($query);
 
         $sOriginalQuery = $query;
@@ -365,7 +367,7 @@ class TCMSLogChange
      */
     public static function RunQuery($line, $sql, array $parameter = array(), array $types = null)
     {
-        $db = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $db = ServiceLocator::get('database_connection');
 
         $logger = self::getLogger();
         try {
@@ -489,7 +491,7 @@ class TCMSLogChange
         $databaseConnection = self::getDatabaseConnection();
 
         $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-        $sourceMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $mainMenuCategorySystemName));
+        $sourceMenu = $databaseConnection->fetchAssociative($query, array('systemName' => $mainMenuCategorySystemName));
 
         if (false === $sourceMenu) {
             $message = sprintf('Could not place main menu category: %s, because this category is missing.', $mainMenuCategorySystemName);
@@ -502,7 +504,7 @@ class TCMSLogChange
 
         if (null !== $afterThisMainMenuCategory) {
             $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-            $targetMenu = $databaseConnection->fetchAssoc($query, array('systemName' => $afterThisMainMenuCategory));
+            $targetMenu = $databaseConnection->fetchAssociative($query, array('systemName' => $afterThisMainMenuCategory));
 
             if (false === $targetMenu) {
                 $message = sprintf('Could not place main menu category: %s, behind %s because the target category is missing.', $mainMenuCategorySystemName, $afterThisMainMenuCategory);
@@ -655,7 +657,7 @@ class TCMSLogChange
      * @param bool       $bResetRoles  - indicates if all other roles will be kicked and the new role has the exclusive right
      * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6, default = false
      */
-    public static function SetTableRolePermissions($sRoleName = 'cms_admin', $sTableName, $bResetRoles = false, $aPermissions = false)
+    public static function SetTableRolePermissions($sRoleName, $sTableName, $bResetRoles = false, $aPermissions = false)
     {
         $databaseConnection = self::getDatabaseConnection();
         $roleID = self::GetUserRoleIdByKey($sRoleName);
@@ -828,7 +830,7 @@ class TCMSLogChange
     {
         $query = 'SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_field_tab` = :tabId';
 
-        return self::getDatabaseConnection()->fetchArray($query, array('tabId' => $tabId));
+        return self::getDatabaseConnection()->fetchNumeric($query, array('tabId' => $tabId));
     }
 
     /**
@@ -842,7 +844,7 @@ class TCMSLogChange
     {
         $bReturnVal = false;
         if (!empty($sIso6391Code)) {
-            $oConfig = &TdbCmsConfig::GetInstance();
+            $oConfig = TdbCmsConfig::GetInstance();
 
             $oLangList = $oConfig->GetFieldCmsLanguageList();
             if ($oLangList->Length()) {
@@ -979,7 +981,7 @@ class TCMSLogChange
             $existsCheckArray['portalId'] = $sPortalID;
         }
 
-        $existingDatasets = $connection->fetchAll($existsCheckQuery, $existsCheckArray);
+        $existingDatasets = $connection->fetchAllAssociative($existsCheckQuery, $existsCheckArray);
 
         $languageCode = self::getLanguageCodeFromArgument($language);
         $data = static::createMigrationQueryData('cms_message_manager_message', $languageCode);
@@ -1060,7 +1062,7 @@ class TCMSLogChange
         $languageCode = self::getLanguageCodeFromArgument($language);
         $databaseConnection = self::getDatabaseConnection();
         $checkQuery = 'SELECT `id`, `description` FROM `cms_message_manager_backend_message` WHERE `name` = :messageName';
-        $result = $databaseConnection->fetchAll($checkQuery, array(
+        $result = $databaseConnection->fetchAllAssociative($checkQuery, array(
             'messageName' => $identifierName,
         ));
         $data = self::createMigrationQueryData('cms_message_manager_backend_message', $languageCode);
@@ -1131,21 +1133,11 @@ class TCMSLogChange
      */
     public static function createUnusedRecordId($tableName)
     {
-        $databaseConnection = self::getDatabaseConnection();
-        $quotedTableName = $databaseConnection->quoteIdentifier($tableName);
-        $tries = 11;
-        do {
-            $id = TTools::GetUUID();
-            $count = $databaseConnection->fetchColumn("SELECT count(*) FROM $quotedTableName WHERE `id` = :id", array(
-                'id' => $id,
-            ));
-            --$tries;
-        } while (intval($count) > 0 && $tries > 0);
-        if (0 === $tries) {
-            throw new UnexpectedValueException('TCMSLogChange::createUnusedRecordId was unable to create an unused ID after 10 attempts.');
+        try {
+            return self::getGuidCreationService()->findUnusedId($tableName);
+        } catch (GuidCreationFailedException $exception) {
+            throw new UnexpectedValueException($exception->getMessage(), $exception->getCode(), $exception);
         }
-
-        return $id;
     }
 
     /**
@@ -1280,9 +1272,9 @@ class TCMSLogChange
     {
         // check position of field where we want to set the new field behind
         /** @var $databaseConnection \Doctrine\DBAL\Connection */
-        $databaseConnection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $databaseConnection = ServiceLocator::get('database_connection');
         $query = 'SELECT `position` FROM `cms_tbl_extension` WHERE `name` = :preExtensionName';
-        $posData = $databaseConnection->fetchArray($query, array('preExtensionName' => $sPreExtensionName));
+        $posData = $databaseConnection->fetchNumeric($query, array('preExtensionName' => $sPreExtensionName));
         if (false === $posData) {
             self::addInfoMessage("unable to position extension {$sExtensionName} after {$sPreExtensionName} because {$sPreExtensionName} can not be found", self::INFO_MESSAGE_LEVEL_ERROR);
 
@@ -1361,11 +1353,14 @@ class TCMSLogChange
 
     public static function UpdateVirtualNonDbClasses()
     {
-        $filemanager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.filemanager');
-        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filemanager);
+        $filemanager = ServiceLocator::get('chameleon_system_core.filemanager');
+        $virtualClassManager = ServiceLocator::get('chameleon_system_cms_class_manager.manager');
+        $classCacheWarmer = ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filemanager, $virtualClassManager);
         $oList = TdbPkgCmsClassManagerList::GetList();
         while ($oItem = $oList->Next()) {
             $oAutoTableWriter->create($oItem->fieldNameOfEntryPoint, null);
+            $classCacheWarmer->regenerateClassmap();
         }
     }
 
@@ -1383,7 +1378,7 @@ class TCMSLogChange
      */
     public static function CreateVirtualNonDbEntryPoint($iLine, $sEntryPoint, $sExitClass = '', $sExitClassSubType = '', $sExitClassType = 'Core')
     {
-        $oManager = new TPkgCmsVirtualClassManager();
+        $oManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         if (false == $oManager->load($sEntryPoint)) {
             $query = "INSERT INTO `pkg_cms_class_manager`
                           SET `name_of_entry_point` = '".MySqlLegacySupport::getInstance()->real_escape_string($sEntryPoint)."',
@@ -1421,7 +1416,7 @@ class TCMSLogChange
     public static function deleteVirtualEntryPoint($virtualEntryPoint)
     {
         $query = 'select id from pkg_cms_class_manager where name_of_entry_point = :nameOfEntryPoint';
-        $entryPoint = self::getDatabaseConnection()->fetchAssoc($query, array('nameOfEntryPoint' => $virtualEntryPoint));
+        $entryPoint = self::getDatabaseConnection()->fetchAssociative($query, array('nameOfEntryPoint' => $virtualEntryPoint));
         if (false === $entryPoint) {
             throw new ErrorException("unable to delete {$virtualEntryPoint} - not found", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
@@ -1478,7 +1473,7 @@ class TCMSLogChange
      */
     public static function deleteVirtualNonDbExtension($iLine, $sEntryPoint, $sClassName)
     {
-        $oManager = new TPkgCmsVirtualClassManager();
+        $oManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         if (false === $oManager->load($sEntryPoint)) {
             throw new ErrorException("unable to find virtual class entry point {$sEntryPoint} (called from the running update in line {$iLine})", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
@@ -1514,7 +1509,7 @@ class TCMSLogChange
         if (-1 == $iBuildNumber) {
             $iBuildNumber = null;
         }
-        $oUpdateManager = &TCMSUpdateManager::GetInstance();
+        $oUpdateManager = TCMSUpdateManager::GetInstance();
 
         // test if folder exists in vendor packages
         if (false === strpos('/', $sFolderName) && '-updates' === substr($sFolderName, -strlen('-updates'))) {
@@ -1548,7 +1543,7 @@ class TCMSLogChange
      */
     public static function requireBundleUpdates($bundleName, $highestBuildNumber)
     {
-        $oUpdateManager = &TCMSUpdateManager::GetInstance();
+        $oUpdateManager = TCMSUpdateManager::GetInstance();
         echo $oUpdateManager->runUpdates($bundleName, $highestBuildNumber);
     }
 
@@ -1790,7 +1785,7 @@ class TCMSLogChange
 
     public static function getLogger(): LoggerInterface
     {
-        return  \ChameleonSystem\CoreBundle\ServiceLocator::get('monolog.logger.cms_update');
+        return  ServiceLocator::get('monolog.logger.cms_update');
     }
 
     /**
@@ -2078,7 +2073,7 @@ class TCMSLogChange
      */
     public static function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     /**
@@ -2091,7 +2086,7 @@ class TCMSLogChange
     public static function initializeNestedSet($tableName, $parentIdFieldName = 'parent_id', $entrySortField = 'position')
     {
         /** @var $helperServiceFactory \ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface */
-        $helperServiceFactory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
+        $helperServiceFactory = ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
         $helperService = $helperServiceFactory->createNestedSetHelper($tableName, $parentIdFieldName, $entrySortField);
         $helperService->initializeTree();
     }
@@ -2146,7 +2141,7 @@ class TCMSLogChange
      */
     private static function getAutoclassesDataAccessRequestCache()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses_request_cache');
+        return ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses_request_cache');
     }
 
     /**
@@ -2154,7 +2149,7 @@ class TCMSLogChange
      */
     private static function getAutoclassesCacheWarmer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+        return ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
     }
 
     /**
@@ -2229,7 +2224,7 @@ class TCMSLogChange
     private static function executeUpdateOperation($line, $serviceId, MigrationQueryData $migrationQueryData)
     {
         /** @var QueryInterface $operation */
-        $operation = \ChameleonSystem\CoreBundle\ServiceLocator::get($serviceId);
+        $operation = ServiceLocator::get($serviceId);
         try {
             list($query, $queryParams) = $operation->execute($migrationQueryData);
             self::outputSuccess($line, $query, $queryParams);
@@ -2319,7 +2314,7 @@ class TCMSLogChange
     {
         $query = 'SELECT `id` FROM `cms_portal`';
         $databaseConnection = self::getDatabaseConnection();
-        $result = $databaseConnection->fetchAll($query);
+        $result = $databaseConnection->fetchAllAssociative($query);
         $portalIdList = array();
         foreach ($result as $row) {
             $portalIdList[] = $row['id'];
@@ -2341,7 +2336,7 @@ class TCMSLogChange
           ON lang.`id` = mlt.`target_id`
           WHERE mlt.`source_id` = ?';
         $databaseConnection = self::getDatabaseConnection();
-        $result = $databaseConnection->fetchAll($query, array($portalId));
+        $result = $databaseConnection->fetchAllAssociative($query, array($portalId));
         $languageList = array();
         foreach ($result as $row) {
             $languageList[] = $row['iso_6391'];
@@ -2371,7 +2366,7 @@ class TCMSLogChange
      */
     private static function getFieldTranslationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
     /**
@@ -2379,7 +2374,7 @@ class TCMSLogChange
      */
     private static function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -2387,7 +2382,7 @@ class TCMSLogChange
      */
     private static function getMigrationRecorder()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder');
+        return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder');
     }
 
     /**
@@ -2395,7 +2390,7 @@ class TCMSLogChange
      */
     private static function getKernel()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('kernel');
+        return ServiceLocator::get('kernel');
     }
 
     /**
@@ -2403,7 +2398,7 @@ class TCMSLogChange
      */
     private static function getMigrationCounterManager()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.counter.migration_counter_manager');
+        return ServiceLocator::get('chameleon_system_core.counter.migration_counter_manager');
     }
 
     /**
@@ -2420,5 +2415,10 @@ class TCMSLogChange
     private static function getSnippetChainModifier()
     {
         return ServiceLocator::get('chameleon_system_view_renderer.snippet_chain.snippet_chain_modifier');
+    }
+
+    private static function getGuidCreationService(): GuidCreationServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.guid_creation');
     }
 }

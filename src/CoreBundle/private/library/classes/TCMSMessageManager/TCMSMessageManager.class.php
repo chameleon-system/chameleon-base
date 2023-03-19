@@ -17,7 +17,7 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * the class manages messages. any module can place messages into it. they are kept there until they are consumed
@@ -59,7 +59,10 @@ class TCMSMessageManager
     public static function GetInstance($bReload = false)
     {
         $request = ServiceLocator::get('request_stack')->getCurrentRequest();
-        if ((null === $request) || (false === $request->getSession()->isStarted())) {
+        if (null === $request || false === $request->hasSession()) {
+            return null;
+        }
+        if (false === $request->getSession()->isStarted()) {
             return null;
         }
         if ($bReload) {
@@ -375,7 +378,7 @@ class TCMSMessageManager
         }
         $matchString = '/\[\{CMSMSG-(.*?)(:(.*?))?(:(Core|Custom-Core|Customer))?\}\]/si';
 
-        return preg_replace_callback($matchString, array(&$this, 'InjectMessageIntoStringReplaceCallback'), $sText);
+        return preg_replace_callback($matchString, array($this, 'InjectMessageIntoStringReplaceCallback'), $sText);
     }
 
     /**

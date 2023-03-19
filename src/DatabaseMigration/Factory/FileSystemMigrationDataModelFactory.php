@@ -45,7 +45,7 @@ class FileSystemMigrationDataModelFactory implements FileSystemMigrationDataMode
         foreach ($bundles as $bundle) {
             $updateDirectories = $this->migrationPathUtil->getUpdateFoldersFromBundlePath($bundle->getPath());
             foreach ($updateDirectories as $updateDirectory) {
-                $this->addModelsForDirectory($models, $bundle->getName(), $updateDirectory);
+                $models = $this->addModelsForDirectory($models, $bundle->getName(), $updateDirectory);
             }
         }
 
@@ -57,9 +57,9 @@ class FileSystemMigrationDataModelFactory implements FileSystemMigrationDataMode
      * @param string $bundleName
      * @param string $updateDirectory
      *
-     * @return void
+     * @return array
      */
-    private function addModelsForDirectory(array &$models, $bundleName, $updateDirectory)
+    private function addModelsForDirectory(array $models, $bundleName, $updateDirectory): array
     {
         $updateFiles = $this->migrationPathUtil->getUpdateFilesFromFolder($updateDirectory);
 
@@ -73,5 +73,7 @@ class FileSystemMigrationDataModelFactory implements FileSystemMigrationDataMode
             $model->addFile($buildNumber, $updateFile);
         }
         $models[$bundleName] = $model;
+
+        return $models;
     }
 }

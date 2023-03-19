@@ -213,9 +213,9 @@ class Cache implements CacheInterface
             return;
         }
         $this->getDbConnection()->beginTransaction();
-        $query = 'truncate `_cms_cache_info`';
+        $query = 'DELETE FROM `_cms_cache_info`';
         $this->getDbConnection()->query($query);
-        $query = 'truncate `_cms_cache_group`';
+        $query = 'DELETE FROM `_cms_cache_group`';
         try {
             $this->getDbConnection()->query($query);
         } catch (DBALException $e) {

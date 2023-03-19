@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
@@ -65,7 +66,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
      * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         $this->UpdatePageNaviBreadCrumb();
         parent::PostSaveHook($oFields, $oPostTable);
@@ -148,7 +149,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.list.page_settings');
         $oMenuItem->sItemKey = 'pagesettings';
         $oMenuItem->sIcon = 'far fa-edit';
-        $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id)."';";
+        $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id);
         $this->oMenuItems->AddItem($oMenuItem);
 
         $bPageDefExists = (!empty($this->oTable->sqlData['cms_master_pagedef_id']));
@@ -158,7 +159,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.template_engine.action_edit_template');
             $oMenuItem->sItemKey = 'templateengine';
             $oMenuItem->sIcon = 'fa fa-pen-square';
-            $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
+            $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id);
             $oMenuItem->setButtonStyle('btn btn-sm w-100 btn-primary');
             $this->oMenuItems->AddItem($oMenuItem);
 
@@ -166,7 +167,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.template_engine.action_page_preview');
             $oMenuItem->sItemKey = 'pagepreview';
             $oMenuItem->sIcon = 'far fa-eye';
-            $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
+            $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id);
             $this->oMenuItems->AddItem($oMenuItem);
         }
 
@@ -190,7 +191,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.list.page_settings');
         $oMenuItem->sItemKey = 'pagesettings';
         $oMenuItem->sIcon = 'fa fa-pen-square';
-        $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id)."';";
+        $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=tableeditor&tableid=70&id='.TGlobal::OutHTML($this->oTable->id);
         $oMenuItem->setButtonStyle('btn btn-sm w-100 btn-primary');
         $this->oMenuItems->AddItem($oMenuItem);
 
@@ -201,14 +202,14 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.template_engine.action_edit_template');
             $oMenuItem->sItemKey = 'templateengine';
             $oMenuItem->sIcon = 'far fa-edit';
-            $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
+            $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=edit_content&id='.TGlobal::OutHTML($this->oTable->id);
             $this->oMenuItems->AddItem($oMenuItem);
 
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.template_engine.action_page_preview');
             $oMenuItem->sItemKey = 'pagepreview';
             $oMenuItem->sIcon = 'far fa-eye';
-            $oMenuItem->sOnClick = "document.location.href='".PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id)."';";
+            $oMenuItem->href = PATH_CMS_CONTROLLER.'?pagedef=templateengine&_mode=preview_content&id='.TGlobal::OutHTML($this->oTable->id);
             $this->oMenuItems->AddItem($oMenuItem);
         }
     }
@@ -259,10 +260,10 @@ class TCMSTableEditorPage extends TCMSTableEditor
         }
 
         $domain = $portal->GetPrimaryDomain();
-        $cmsUser = TCMSUser::GetActiveUser();
-        $editLanguage = $cmsUser->GetCurrentEditLanguageObject();
+        /** @var BackendSessionInterface $backendSession */
+        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
-        return 'https://'.$domain.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.$this->sId.'&esdisablelinks=true&__previewmode=true&previewLanguageId='.$editLanguage->id;
+        return 'https://'.$domain.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'?pagedef='.urlencode($this->sId).'&esdisablelinks=true&__previewmode=true&previewLanguageId='.urlencode($backendSession->getCurrentEditLanguageId());
     }
 
     /**

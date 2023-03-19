@@ -15,8 +15,10 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSField implements TCMSFieldVisitableInterface
 {
@@ -208,13 +210,9 @@ class TCMSField implements TCMSFieldVisitableInterface
         $modifier = $this->oDefinition->sqlData['modifier'];
         if ('hidden' !== $modifier && '1' == $this->oDefinition->sqlData['restrict_to_groups']) {
             // check if the user is in one of the connected groups
-            $global = $this->getGlobal();
-            $fieldGroups = $this->oDefinition->GetPermissionGroups();
-            if ($global->oUser
-                && $global->oUser->oAccessManager
-                && $global->oUser->oAccessManager->user
-                && !$global->oUser->oAccessManager->user->IsInGroups($fieldGroups)
-            ) {
+            /** @var SecurityHelperAccess $securityHelper */
+            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+            if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::ACCESS, $this->oDefinition)) {
                 $modifier = 'readonly';
             }
         }
@@ -264,7 +262,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $urlUtil = $this->getUrlUtil();
         $translator = $this->getTranslator();
 
-        $tableConf = &$this->oTableRow->GetTableConf();
+        $tableConf = $this->oTableRow->GetTableConf();
         $this->_GetFieldWidth();
         $url = PATH_CMS_CONTROLLER.'?'.$urlUtil->getArrayAsUrl(array(
             'id' => $this->recordId,
@@ -461,7 +459,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      *
      * @return void
      */
-    public function ChangeFieldDefinition($oldName, $newName, &$postData = null)
+    public function ChangeFieldDefinition($oldName, $newName, $postData = null)
     {
         if (true === $this->oDefinition->isVirtualField()) {
             return;
@@ -746,7 +744,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      *
      * @return string
      */
-    public function _GetSQLDefinition(&$fieldDefinition = null)
+    public function _GetSQLDefinition($fieldDefinition = null)
     {
         $connection = $this->getDatabaseConnection();
         $inputFilterUtil = $this->getInputFilterUtil();
@@ -805,7 +803,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      *
      * @return string
      */
-    protected function GetMySQLLengthSet($oFieldType, &$aPostData = null)
+    protected function GetMySQLLengthSet($oFieldType, $aPostData = null)
     {
         $lengthSet = '';
         if (!empty($oFieldType->sqlData['length_set'])) {
@@ -1134,7 +1132,7 @@ class TCMSField implements TCMSFieldVisitableInterface
     {
         $inputFilterUtil = $this->getInputFilterUtil();
         $urlUtil = $this->getUrlUtil();
-        $oTableConf = &$this->oTableRow->GetTableConf();
+        $oTableConf = $this->oTableRow->GetTableConf();
 
         if (!is_array($aParams)) {
             $aParams = array();

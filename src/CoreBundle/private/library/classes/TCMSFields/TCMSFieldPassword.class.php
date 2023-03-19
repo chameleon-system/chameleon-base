@@ -11,8 +11,10 @@
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use Symfony\Component\Translation\TranslatorInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * {@inheritdoc}
@@ -265,11 +267,19 @@ class TCMSFieldPassword extends TCMSFieldVarchar
      */
     private function getBackendLanguageCode()
     {
-        if (null === $this->backendLanguageCode) {
-            $backendUser = TdbCmsUser::GetActiveUser();
-            $backendLanguage = $backendUser->GetFieldCmsLanguage();
-            $this->backendLanguageCode = $backendLanguage->fieldIso6391;
+        if (null !== $this->backendLanguageCode) {
+            return $this->backendLanguageCode;
         }
+
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $languageId = $securityHelper->getUser()?->getCmsLanguageId();
+        if (null === $languageId) {
+            return null;
+        }
+        /** @var LanguageServiceInterface $languageService */
+        $languageService = ServiceLocator::get('chameleon_system_core.language_service');
+        $this->backendLanguageCode = $languageService->getLanguageIsoCode($languageId);
 
         return $this->backendLanguageCode;
     }

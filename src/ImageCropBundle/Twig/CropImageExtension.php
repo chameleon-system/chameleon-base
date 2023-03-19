@@ -11,15 +11,16 @@
 
 namespace ChameleonSystem\ImageCropBundle\Twig;
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\ImageCrop\Interfaces\CropImageServiceInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropPresetDataAccessInterface;
 use TCMSImage;
-use Twig_Extension;
-use Twig_SimpleFilter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class CropImageExtension extends Twig_Extension
+class CropImageExtension extends AbstractExtension
 {
     /**
      * @var ImageCropPresetDataAccessInterface
@@ -51,7 +52,8 @@ class CropImageExtension extends Twig_Extension
         ImageCropPresetDataAccessInterface $imageCropPresetDataAccess,
         CropImageServiceInterface $cropImageService,
         LanguageServiceInterface $languageService,
-        RequestInfoServiceInterface $requestInfoService
+        RequestInfoServiceInterface $requestInfoService,
+        readonly private BackendSessionInterface $backendSession
     ) {
         $this->imageCropPresetDataAccess = $imageCropPresetDataAccess;
         $this->cropImageService = $cropImageService;
@@ -65,10 +67,10 @@ class CropImageExtension extends Twig_Extension
     public function getFilters()
     {
         return array(
-            new Twig_SimpleFilter('imageUrlWithCropFallbackPreset', array($this, 'imageUrlWithCropFallbackPreset')),
-            new Twig_SimpleFilter('imageUrlWithCropFallbackSize', array($this, 'imageUrlWithCropFallbackSize')),
-            new Twig_SimpleFilter('imageHasCropDataForPreset', array($this, 'imageHasCropDataForPreset')),
-            new Twig_SimpleFilter('imageUrlWithCropSize', array($this, 'imageUrlWithCropSize')),
+            new TwigFilter('imageUrlWithCropFallbackPreset', array($this, 'imageUrlWithCropFallbackPreset')),
+            new TwigFilter('imageUrlWithCropFallbackSize', array($this, 'imageUrlWithCropFallbackSize')),
+            new TwigFilter('imageHasCropDataForPreset', array($this, 'imageHasCropDataForPreset')),
+            new TwigFilter('imageUrlWithCropSize', array($this, 'imageUrlWithCropSize')),
         );
     }
 
@@ -114,7 +116,7 @@ class CropImageExtension extends Twig_Extension
     private function getLanguageId()
     {
         if ($this->requestInfoService->isBackendMode()) {
-            return $this->languageService->getActiveEditLanguage()->id;
+            return $this->backendSession->getCurrentEditLanguageId();
         }
 
         return $this->languageService->getActiveLanguageId();

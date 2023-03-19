@@ -16,7 +16,7 @@ use ChameleonSystem\CoreBundle\RequestType\AbstractRequestType;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class RequestTypeListener implements ContainerAwareInterface
 {
@@ -54,9 +54,9 @@ class RequestTypeListener implements ContainerAwareInterface
     /**
      * @return void
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
-        if (false === $event->isMasterRequest()) {
+        if (false === $event->isMainRequest()) {
             return;
         }
         $request = $event->getRequest();

@@ -14,6 +14,8 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -55,8 +57,6 @@ class TGlobalBase
      * @var array
      */
     public $_dataCache = array();
-
-    public $aLangaugeIds = null;
 
     /**
      * holds the current executing module object.
@@ -130,9 +130,9 @@ class TGlobalBase
      *
      * @param TModelBase $oExecutingModuleObject
      */
-    public function SetExecutingModulePointer(&$oExecutingModuleObject)
+    public function SetExecutingModulePointer($oExecutingModuleObject)
     {
-        $this->oExecutingModuleObject = &$oExecutingModuleObject;
+        $this->oExecutingModuleObject = $oExecutingModuleObject;
     }
 
     /**
@@ -140,7 +140,7 @@ class TGlobalBase
      *
      * @return TModelBase
      */
-    public function &GetExecutingModulePointer()
+    public function GetExecutingModulePointer()
     {
         return $this->oExecutingModuleObject;
     }
@@ -329,23 +329,21 @@ class TGlobalBase
 
     public function GetLanguageIdList()
     {
-        if (is_null($this->aLangaugeIds)) {
-            $this->aLangaugeIds = array();
-            $oCMSConfig = TdbCmsConfig::GetInstance();
-            $this->aLangaugeIds[] = $oCMSConfig->fieldTranslationBaseLanguageId;
-        }
-
-        return $this->aLangaugeIds;
+        $oCMSConfig = TdbCmsConfig::GetInstance();
+        return [$oCMSConfig->fieldTranslationBaseLanguageId];
     }
 
     /**
      * checks if active CMS user session is available.
+     * @deprecated use SecurityHelperAccess::class
      *
      * @return bool
      */
     public static function CMSUserDefined()
     {
-        return TCMSUser::CMSUserDefined();
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        return $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
     }
 
     /**
@@ -520,7 +518,7 @@ class TGlobalBase
      *
      * @param array $arrayObj
      */
-    protected function _StripSlashesArray(&$arrayObj)
+    protected function _StripSlashesArray($arrayObj)
     {
         // strips slashes from multidimensional array
         if (is_array($arrayObj)) {
@@ -816,7 +814,7 @@ class TGlobalBase
      *
      * @return TCMSPortalList
      */
-    public function &GetPortals()
+    public function GetPortals()
     {
         if (!array_key_exists('oPortals', $this->_dataCache)) {
             $this->_dataCache['oPortals'] = new TCMSPortalList();
@@ -837,7 +835,7 @@ class TGlobalBase
     {
         static $sBaseLanguageId = null;
         if (null === $sBaseLanguageId) {
-            $oCmsConfig = &TdbCmsConfig::GetInstance();
+            $oCmsConfig = TdbCmsConfig::GetInstance();
             $sBaseLanguageId = $oCmsConfig->fieldTranslationBaseLanguageId;
         }
         $languageService = self::getLanguageService();
@@ -968,11 +966,7 @@ class TGlobalBase
             }
         }
         $sErrorMessage = false;
-        // first make sure the path contains null byte or other
-        $sTmpPath = filter_var($sPath, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES | FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
-
-        $sTmpPath = realpath($sTmpPath);
-        // the file should now be safe..
+        $sTmpPath = realpath($sPath);
         if (empty($sTmpPath)) {
             $sErrorMessage = 'File not found ['.$sPath.']';
         } else {

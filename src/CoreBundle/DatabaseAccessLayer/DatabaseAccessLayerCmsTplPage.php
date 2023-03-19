@@ -80,7 +80,7 @@ class DatabaseAccessLayerCmsTplPage extends AbstractDatabaseAccessLayer implemen
                INNER JOIN `cms_tree_node` ON `cms_tpl_page`.`id` = `cms_tree_node`.`contid`
                ORDER BY `cms_tpl_page`.`cmsident`, `cms_tree_node`.`start_date` DESC, `cms_tree_node`.`cmsident` DESC';
 
-        $pages = $this->getDatabaseConnection()->fetchAll($sQuery);
+        $pages = $this->getDatabaseConnection()->fetchAllAssociative($sQuery);
         $treeIds = array();
         $pageIdsFound = array();
         foreach ($pages as $page) {

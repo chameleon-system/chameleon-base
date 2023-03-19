@@ -20,13 +20,13 @@ class CmsRoutingTableEditor extends TCMSTableEditor
     /**
      * {@inheritDoc}
      */
-    protected function PostSaveHook(&$oFields, &$oPostTable)
+    protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
 
         $this->getEventDispatcher()->dispatch(
-            CoreEvents::CHANGE_ROUTING_CONFIG,
-            new RoutingConfigChangedEvent($this->oTable)
+            new RoutingConfigChangedEvent($this->oTable),
+            CoreEvents::CHANGE_ROUTING_CONFIG
         );
     }
 }

@@ -14,12 +14,12 @@ namespace ChameleonSystem\CoreBundle\Translation;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
 {
     /**
-     * @var TranslatorInterface|TranslatorBagInterface
+     * @var TranslatorInterface&TranslatorBagInterface
      */
     private $delegate;
     /**
@@ -28,7 +28,7 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     private $requestInfoService;
 
     /**
-     * @param TranslatorInterface         $delegate
+     * @param TranslatorInterface&TranslatorBagInterface $delegate
      * @param RequestInfoServiceInterface $requestInfoService
      */
     public function __construct(TranslatorInterface $delegate, RequestInfoServiceInterface $requestInfoService)
@@ -36,12 +36,17 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
         if (!$delegate instanceof TranslatorBagInterface) {
             throw new \LogicException('The translator must implement both TranslatorInterface and TranslatorBagInterface');
         }
+        /** @psalm-suppress InvalidPropertyAssignmentValue */
         $this->delegate = $delegate;
         $this->requestInfoService = $requestInfoService;
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $id
+     * @param array $parameters
+     * @param string|null $domain
+     * @param string|null $locale
+     * @return string
      */
     public function trans($id, array $parameters = array(), $domain = null, $locale = null)
     {
@@ -59,31 +64,9 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     }
 
     /**
-     * @param string $id
-     * @param int $number
-     * @param array $parameters
-     * @param string $domain
-     * @param string $locale
-     * @return string
-     */
-    public function transChoice($id, $number, array $parameters = array(), $domain = null, $locale = null)
-    {
-        return $this->delegate->transChoice($id, $number, $parameters, $domain, $locale);
-    }
-
-    /**
-     * @param string $locale
-     * @return void
-     */
-    public function setLocale($locale)
-    {
-        $this->delegate->setLocale($locale);
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->delegate->getLocale();
     }
