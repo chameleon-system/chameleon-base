@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace ChameleonSystem\AutoClassesBundle\CacheWarmer;
+namespace ChameleonSystem\AutoclassesBundle\CacheWarmer;
 
-use ChameleonSystem\AutoClassesBundle\ClassManager\AutoclassesMapGeneratorInterface;
-use ChameleonSystem\AutoClassesBundle\ClassManager\AutoclassesManagerInterface;
+use ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface;
+use ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface;
 use ChameleonSystem\AutoclassesBundle\Exception\TPkgCmsCoreAutoClassManagerException_Recursion;
 use IPkgCmsFileManager;
 
