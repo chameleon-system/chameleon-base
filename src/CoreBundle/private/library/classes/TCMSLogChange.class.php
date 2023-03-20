@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
+use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesRequestCacheDataAccess;
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TPkgCmsClassManager;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
@@ -1353,8 +1354,13 @@ class TCMSLogChange
 
     public static function UpdateVirtualNonDbClasses()
     {
-        $filemanager = ServiceLocator::get('chameleon_system_core.filemanager');
-        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filemanager);
+        /** @var IPkgCmsFileManager $fileManager */
+        $fileManager = ServiceLocator::get('chameleon_system_core.filemanager');
+
+        /** @var AutoclassesDataAccessInterface $autoClassesDataAccess */
+        $autoClassesDataAccess = ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
+
+        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $fileManager, self::getLogger(), $autoClassesDataAccess);
         $oList = TdbPkgCmsClassManagerList::GetList();
         while ($oItem = $oList->Next()) {
             $oAutoTableWriter->create($oItem->fieldNameOfEntryPoint, null);
