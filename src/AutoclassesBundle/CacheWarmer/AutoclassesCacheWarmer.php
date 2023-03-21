@@ -24,7 +24,7 @@ class AutoclassesCacheWarmer
     private IPkgCmsFileManager $fileManager;
     private string $cacheDir;
 
-    public function __construct(AutoclassesManagerInterface $autoClassManager, AutoclassesDatabaseAdapterInterface $databaseAdapter, AutoclassesMapGeneratorInterface $autoclassesMapGenerator, IPkgCmsFileManager $filemanager, $cacheDir)
+    public function __construct(AutoclassesManagerInterface $autoClassManager, AutoclassesDatabaseAdapterInterface $databaseAdapter, AutoclassesMapGeneratorInterface $autoclassesMapGenerator, IPkgCmsFileManager $filemanager, string $cacheDir)
     {
         $this->autoClassManager = $autoClassManager;
         $this->databaseAdapter = $databaseAdapter;

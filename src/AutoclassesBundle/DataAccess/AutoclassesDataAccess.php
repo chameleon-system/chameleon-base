@@ -92,6 +92,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
             $field->data = $row['field_default_value'];
             $field->sTableName = $row['tablename'];
             $field->name = $row['name'];
+            /** @var TCMSTableToField_TCMSTableFieldConf $field->oDefinition */
             $field->oDefinition = new TCMSTableToField_TCMSTableFieldConf($fieldDef);
             $field->oDefinition->LoadFromRow($row);
             $data[$tableConfId]->AddItem($field);
