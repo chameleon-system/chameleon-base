@@ -19,7 +19,7 @@ use TCMSTableToClass;
 class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_AbstractBase
 {
 
-    public function create(string $sClassName, string $targetDir): void
+    public function create(string $sClassName, ?string $targetDir): void
     {
         $tableConfId = $this->getTableConfIdForClassName($sClassName);
         if (null === $tableConfId) {

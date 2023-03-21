@@ -16,7 +16,7 @@ interface IPkgCmsCoreAutoClassHandler
     /**
      * create the auto class.
      */
-    public function create(string $sClassName, string $targetDir): void;
+    public function create(string $sClassName, ?string $targetDir): void;
 
     /**
      * converts the key under which the auto class definition is stored into the class name which the key stands for.

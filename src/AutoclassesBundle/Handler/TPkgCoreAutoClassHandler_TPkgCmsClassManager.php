@@ -20,7 +20,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
      * {@inheritdoc}
      * @throws Exception
      */
-    public function create(string $sClassName, string $targetDir): void
+    public function create(string $sClassName, ?string $targetDir): void
     {
         $oClassManager = new TPkgCmsVirtualClassManager();
         $oClassManager->setDatabaseConnection($this->getDatabaseConnection());
