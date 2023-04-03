@@ -16,14 +16,8 @@ use TCMSPortal;
 
 class ChangeActivePortalEvent extends Event
 {
-    /**
-     * @var TCMSPortal
-     */
-    private $oldActivePortal;
-    /**
-     * @var TCMSPortal
-     */
-    private $newActivePortal;
+    private ?TCMSPortal $oldActivePortal;
+    private ?TCMSPortal $newActivePortal;
 
     /**
      * @return TCMSPortal
@@ -41,7 +35,7 @@ class ChangeActivePortalEvent extends Event
         return $this->oldActivePortal;
     }
 
-    public function __construct(?TCMSPortal $oldActivePortal, TCMSPortal $newActivePortal)
+    public function __construct(?TCMSPortal $oldActivePortal, TCMSPortal $newActivePortal = null)
     {
         $this->oldActivePortal = $oldActivePortal;
         $this->newActivePortal = $newActivePortal;

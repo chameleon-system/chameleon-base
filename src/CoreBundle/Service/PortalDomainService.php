@@ -230,10 +230,6 @@ class PortalDomainService implements PortalDomainServiceInterface
      */
     public function setActivePortal(TCMSPortal $portal = null)
     {
-        if (null === $portal) {
-            return;
-        }
-
         $oldActivePortal = $this->portal;
         $this->portal = $portal;
 
