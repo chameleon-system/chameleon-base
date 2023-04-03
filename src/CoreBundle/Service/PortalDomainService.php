@@ -32,7 +32,7 @@ use TdbCmsTree;
 class PortalDomainService implements PortalDomainServiceInterface
 {
     /**
-     * @var TdbCmsPortal
+     * @var TdbCmsPortal|null
      */
     private $portal;
     /**
