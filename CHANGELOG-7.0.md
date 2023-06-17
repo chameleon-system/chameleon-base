@@ -6,3 +6,8 @@ strive to make code changes in minor releases in a way that preserves backwards 
 removes the compatibility layer.
 
 Other changes in this release are only minor but breaking changes. See the UPGRADE guide for information.
+
+
+### Added
+
+- Created a new Symfony command `chameleon_system:newsletter:send-newsletter` for sending a specific newsletter by name.
