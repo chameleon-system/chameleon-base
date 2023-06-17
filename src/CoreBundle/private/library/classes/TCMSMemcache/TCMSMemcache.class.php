@@ -95,7 +95,7 @@ class TCMSMemcache
     public function PostInit()
     {
         if (null === $this->oMemcache) {
-//            trigger_error("couldn't get memcached instance", E_USER_ERROR);
+            trigger_error("couldn't get memcached instance", E_USER_ERROR);
         }
     }
 
