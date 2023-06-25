@@ -42,11 +42,17 @@ class SendNewsletterCommand extends Command
              return 0;
         }
 
-        $campaign->SendNewsletter();
+        try {
+            $campaign->SendNewsletter();
+            $output->writeln('Newsletter sent successfully.');
 
-        $output->writeln('Newsletter sent successfully.');
+            return 0;
+        } catch (\Exception $exception) {
+            $output->writeln(sprintf('Exception: %s', $exception->getMessage()));
 
-        return 0;
+            return 1;
+        }
+
     }
 
 }
