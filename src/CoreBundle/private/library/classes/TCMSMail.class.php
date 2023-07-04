@@ -75,6 +75,10 @@ class TCMSMail extends PHPMailer
      */
     private $smtpPassword;
 
+    public function __construct($exceptions = null)
+    {
+        $this->XMailer = null;
+    }
     /**
      * @param TTools $oTools
      */
