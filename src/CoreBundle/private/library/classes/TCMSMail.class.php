@@ -77,6 +77,8 @@ class TCMSMail extends PHPMailer
 
     public function __construct($exceptions = null)
     {
+        parent::__construct($exceptions);
+        
         $this->XMailer = null;
     }
     
