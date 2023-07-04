@@ -79,6 +79,7 @@ class TCMSMail extends PHPMailer
     {
         $this->XMailer = null;
     }
+    
     /**
      * @param TTools $oTools
      */
