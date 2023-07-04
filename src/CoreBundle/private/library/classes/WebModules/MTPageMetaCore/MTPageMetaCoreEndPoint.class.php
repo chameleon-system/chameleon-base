@@ -458,7 +458,6 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         $aMetaData['name']['publisher'] = $activePortal->sqlData['meta_publisher'];
 
         $aMetaData['name']['keywords'] = $activePortal->sqlData['meta_keywords'];
-        $aMetaData['name']['generator'] = 'Chameleon CMS/Shop System - https://www.chameleon-system.com';
         $aMetaData['name']['robots'] = 'index, follow, all, noodp';
 
         $division = $activePage->getDivision();
