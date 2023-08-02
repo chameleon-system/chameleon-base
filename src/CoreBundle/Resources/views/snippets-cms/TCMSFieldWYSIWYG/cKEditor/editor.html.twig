@@ -63,7 +63,7 @@
                 }
 
                 document.addEventListener('tableEditorBeforeSaveEvent', function(e) {
-                    let data = CKEDITOR.instances[{{ sEditorName }}].getData();
+                    let data = CKEDITOR.instances['{{ sEditorName }}'].getData();
                     $('#{{ sEditorName }}').val(data);
                 });
             });
