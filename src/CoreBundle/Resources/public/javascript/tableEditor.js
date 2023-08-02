@@ -19,7 +19,7 @@ var _trans_password = '';
 var _trans_drag = '';
 let tableEditorBeforeSaveEvent = new CustomEvent('tableEditorBeforeSaveEvent', {
     detail: {
-        description: 'is dispatched in ExecutePostCommand' 
+        description: 'is dispatched in ExecutePostCommand and SaveViaAjax' 
     }
 });
 
