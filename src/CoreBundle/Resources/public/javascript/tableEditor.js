@@ -17,7 +17,11 @@ var _trans_icon = '';
 var _trans_link = '';
 var _trans_password = '';
 var _trans_drag = '';
-
+let tableEditorBeforeSaveEvent = new CustomEvent('tableEditorBeforeSaveEvent', {
+    detail: {
+        description: 'is dispatched in ExecutePostCommand' 
+    }
+});
 
 /*
  * get file usages
@@ -55,12 +59,8 @@ function ShowUsageDialog(index, _connectedDataHTML) {
 function ExecutePostCommand(command) {
     document.cmseditform.elements['module_fnc[contentmodule]'].value = command;
     if (command == 'Save') {
-        if ("undefined" != typeof CKEDITOR) {
-            $.map(CKEDITOR.instances, function (instance, instanceName) {
-                $("#" + instanceName).val(instance.getData());
-            });
-        }
-
+                document.dispatchEvent(tableEditorBeforeSaveEvent);
+        
         // remove "something changed" message, because now the data was saved
         window.onbeforeunload = function () {
         };
