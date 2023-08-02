@@ -478,13 +478,8 @@ function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
  */
 
 function SaveViaAjax() {
-
-    if ("undefined" != typeof CKEDITOR) {
-        $.map(CKEDITOR.instances, function (instance, instanceName) {
-            $("#" + instanceName).val(instance.getData());
-        });
-    }
-
+    document.dispatchEvent(tableEditorBeforeSaveEvent);
+                
     if (typeof (framestosave) != 'undefined' && framestosave.length > 0) {
         $.map(framestosave, function (frameToSave, index) {
             $('.itemsave:first', $('#' + frameToSave).contents()).trigger('click')
