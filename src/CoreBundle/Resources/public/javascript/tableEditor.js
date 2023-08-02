@@ -446,8 +446,12 @@ function ReloadMainPage() {
  * tableEditor: save edit table via ajax
  */
 function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
-    if (customCallbackFunction == 'undefined') customCallbackFunction = SaveViaAjaxCallback;
+    if ('undefined' === customCallbackFunction) {
+        customCallbackFunction = SaveViaAjaxCallback;
+    }
 
+    document.dispatchEvent(tableEditorBeforeSaveEvent);
+    
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'ExecuteAjaxCall';
     document.cmseditform._fnc.value = 'AjaxSave';
 
@@ -465,6 +469,8 @@ function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
     if ('undefined' === customCallbackFunction) {
         customCallbackFunction = SaveViaAjaxCallback;
     }
+
+    document.dispatchEvent(tableEditorBeforeSaveEvent);
 
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'ExecuteAjaxCall';
     document.cmseditform._fnc.value = 'AjaxSaveField';
@@ -546,6 +552,8 @@ function ShowMessages(messages) {
 }
 
 function Save() {
+    document.dispatchEvent(tableEditorBeforeSaveEvent);
+    
     CHAMELEON.CORE.showProcessingModal();
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Save';
     document.cmseditform.submit();
