@@ -56,11 +56,8 @@
             CHAMELEON.CORE.CKEditor.instantiate('{{ sEditorName }}', settings);
 
             CKEDITOR.on('instanceReady', function () {
-                if (CKEDITOR.lang.de) {
-                    CKEDITOR.lang.de.common.browseServer = 'CMS Quelle wählen';
-                } else if (CKEDITOR.lang.en) {
-                CKEDITOR.lang.en.common.browseServer = 'Select CMS Source';
-                }
+                if (CKEDITOR.lang.de) CKEDITOR.lang.de.common.browseServer = 'CMS Quelle wählen';
+                else if (CKEDITOR.lang.en) CKEDITOR.lang.en.common.browseServer = 'Select CMS Source';
 
                 document.addEventListener('tableEditorBeforeSaveEvent', function(e) {
                     let data = CKEDITOR.instances['{{ sEditorName }}'].getData();
