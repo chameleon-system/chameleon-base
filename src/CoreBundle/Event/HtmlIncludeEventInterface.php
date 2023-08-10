@@ -28,4 +28,8 @@ interface HtmlIncludeEventInterface
      * @return array
      */
     public function getData();
+
+    public function removeDataElement(string $key): void;
+
+    public function updateDataElement(string $key, string $value): void;
 }
