@@ -59,7 +59,7 @@ function ShowUsageDialog(index, _connectedDataHTML) {
 function ExecutePostCommand(command) {
     document.cmseditform.elements['module_fnc[contentmodule]'].value = command;
     if (command == 'Save') {
-                document.dispatchEvent(tableEditorBeforeSaveEvent);
+        document.dispatchEvent(tableEditorBeforeSaveEvent);
         
         // remove "something changed" message, because now the data was saved
         window.onbeforeunload = function () {
