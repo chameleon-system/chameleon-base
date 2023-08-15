@@ -58,9 +58,15 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
         return $this->data;
     }
 
-    public function removeDataElement(string $key): void
+    public function removeDataElement(string $key): bool
     {
+        if (!isset($this->data[$key]) {
+            return false;
+        }
+    
         unset($this->data[$key]);
+
+        return true;
     }
 
     public function updateDataElement(string $key, string $value): void
@@ -70,7 +76,6 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
 
     /**
      * @param mixed $value
-     *
      * @psalm-assert-if-true string $value
      */
     private function isInteger($value): bool
