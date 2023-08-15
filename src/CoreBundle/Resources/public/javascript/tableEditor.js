@@ -17,7 +17,7 @@ var _trans_icon = '';
 var _trans_link = '';
 var _trans_password = '';
 var _trans_drag = '';
-let tableEditorBeforeSaveEvent = new CustomEvent('tableEditorBeforeSaveEvent', {
+const tableEditorBeforeSaveEvent = new CustomEvent('tableEditorBeforeSaveEvent', {
     detail: {
         description: 'is dispatched in ExecutePostCommand and SaveViaAjax' 
     }
@@ -446,7 +446,7 @@ function ReloadMainPage() {
  * tableEditor: save edit table via ajax
  */
 function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
-    if ('undefined' === customCallbackFunction) {
+    if (customCallbackFunction === 'undefined') {
         customCallbackFunction = SaveViaAjaxCallback;
     }
 
