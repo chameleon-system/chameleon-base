@@ -31,5 +31,5 @@ interface HtmlIncludeEventInterface
 
     public function removeDataElement(string $key): bool;
 
-    public function updateDataElement(string $key, string $value): void;
+    public function updateDataElement(string $key, string $value): bool;
 }
