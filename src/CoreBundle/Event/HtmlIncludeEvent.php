@@ -60,7 +60,7 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
 
     public function removeDataElement(string $key): bool
     {
-        if (!isset($this->data[$key]) {
+        if (!isset($this->data[$key])) {
             return false;
         }
     
@@ -71,7 +71,7 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
 
     public function updateDataElement(string $key, string $value): bool
     {
-        if (!isset($this->data[$key]) {
+        if (!isset($this->data[$key])) {
             return false;
         }
         
