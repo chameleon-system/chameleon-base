@@ -60,8 +60,7 @@
                 else if (CKEDITOR.lang.en) CKEDITOR.lang.en.common.browseServer = 'Select CMS Source';
 
                 document.addEventListener('tableEditorBeforeSaveEvent', function(e) {
-                    let data = CKEDITOR.instances['{{ sEditorName }}'].getData();
-                    $('#{{ sEditorName }}').val(data);
+                    $('#{{ sEditorName }}').val(CKEDITOR.instances['{{ sEditorName }}'].getData());
                 });
             });
     </script>
