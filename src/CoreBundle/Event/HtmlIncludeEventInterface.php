@@ -29,7 +29,7 @@ interface HtmlIncludeEventInterface
      */
     public function getData();
 
-    public function removeDataElement(string $key): void;
+    public function removeDataElement(string $key): bool;
 
     public function updateDataElement(string $key, string $value): void;
 }
