@@ -446,7 +446,7 @@ function ReloadMainPage() {
  * tableEditor: save edit table via ajax
  */
 function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
-    if (customCallbackFunction === 'undefined') {
+    if (typeof customCallbackFunction === 'undefined') {
         customCallbackFunction = SaveViaAjaxCallback;
     }
 
