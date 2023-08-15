@@ -69,9 +69,15 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
         return true;
     }
 
-    public function updateDataElement(string $key, string $value): void
+    public function updateDataElement(string $key, string $value): bool
     {
+        if (!isset($this->data[$key]) {
+            return false;
+        }
+        
         $this->data[$key] = $value;
+
+        return true;
     }
 
     /**
