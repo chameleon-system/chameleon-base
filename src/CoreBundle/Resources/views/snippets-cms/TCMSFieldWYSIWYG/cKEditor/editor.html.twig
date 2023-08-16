@@ -9,7 +9,7 @@
     <script type="text/javascript">
         var editorStyleSets = '';
         editorStyleSets = {{ aEditorSettings.stylesSet|raw }};
-        if (editorStyleSets in CKEDITOR.stylesSet.registered === false) {
+        if (!(editorStyleSets in CKEDITOR.stylesSet.registered)) {
             {% if aEditorSettings.stylesSet %}
                 CKEDITOR.stylesSet.add({{ aEditorSettings.stylesSet|raw }}, [
                     {% for style in aStyles %}
