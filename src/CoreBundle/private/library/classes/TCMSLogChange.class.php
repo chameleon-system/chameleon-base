@@ -1309,6 +1309,8 @@ class TCMSLogChange
         );
         
         if (false === $pos) {
+            self::addInfoMessage("Unable to position tab ".$tabSystemName." after ".$preTabSystemName." because ".$preTabSystemName." was not found", self::INFO_MESSAGE_LEVEL_ERROR);
+            
             return false;
         }
 
