@@ -1312,6 +1312,8 @@ class TCMSLogChange
             return false;
         }
 
+        $pos = (int) $pos;
+
         $query = "UPDATE `cms_tbl_field_tab` SET `position` = `position`+1 WHERE `position` > ".$pos." AND `cms_tbl_conf_id` = ".$databaseConnection->quote($tableId);
         self::_RunQuery($query, __LINE__);
 
