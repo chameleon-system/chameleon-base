@@ -20,6 +20,7 @@ class ChangeActivePortalEvent extends Event
      * @var TCMSPortal|null
      */
     private $oldActivePortal;
+
     /**
      * @var TCMSPortal|null
      */
