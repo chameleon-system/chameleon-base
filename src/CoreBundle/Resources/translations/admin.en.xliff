@@ -2299,6 +2299,10 @@
                 <source>chameleon_system_core.google_map.action_use_coordinates</source>
                 <target>Use</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.google_map.geocoding_via">
+                <source>chameleon_system_core.google_map.geocoding_via</source>
+                <target>Searchresults via <![CDATA[<a href="%url%" target="_blank">%name%</a>]]></target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.google_map.address">
                 <source>chameleon_system_core.google_map.address</source>
                 <target>Address</target>

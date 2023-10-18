@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Geocoding\GeocoderInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TGoogleMapEndPoint
 {
     /**
@@ -218,25 +221,19 @@ class TGoogleMapEndPoint
      *
      * @param string $sPlace
      *
-     * @return array|bool - contains latitude and longitude coordinate
+     * @return array{latitude: float, longitude: float}|false - contains latitude and longitude coordinate
      */
     public function locatePlace($sPlace = '')
     {
-        $aCoordinates = false;
-        $sURL = 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($sPlace);
-
-        $sResponse = file_get_contents($sURL);
-        if (empty($sResponse)) {
+        $results = $this->getGeocoder()->geocode($sPlace);
+        if (0 === count($results)) {
             return false;
         }
 
-        $oGoogleMapsGeoData = json_decode($sResponse);
-
-        if (isset($oGoogleMapsGeoData->results[0]->geometry->location->lat)) {
-            $aCoordinates = array('latitude' => $oGoogleMapsGeoData->results[0]->geometry->location->lat, 'longitude' => $oGoogleMapsGeoData->results[0]->geometry->location->lng);
-        }
-
-        return $aCoordinates;
+        return [
+            'latitude' => $results[0]->getLatitude(),
+            'longitude' => $results[0]->getLongitude(),
+        ];
     }
 
     /**
@@ -972,4 +969,10 @@ class TGoogleMapEndPoint
             $this->aInfoWindowOptions = $aOptions;
         }
     }
+
+    private function getGeocoder(): GeocoderInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.geocoding.geocoder');
+    }
+
 }
