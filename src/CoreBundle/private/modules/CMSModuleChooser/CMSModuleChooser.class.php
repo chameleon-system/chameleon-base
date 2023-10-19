@@ -194,7 +194,7 @@ class CMSModuleChooser extends TCMSModelBase
             $aIncludes[] = '<script> top.document.location.href="'.$this->global->GetUserData('sRedirectURL', array(), TCMSUserInput::FILTER_URL).'";</script>';
         } else {
             /** @var $viewRenderer ViewRenderer */
-            $viewRenderer = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+            $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
             $viewRenderer->AddSourceObject('themePath', TGlobal::GetPathTheme());
             $viewRenderer->AddSourceObject('resourcePath', '/'.TGlobalBase::$PATH_TO_WEB_LIBRARY);
 
@@ -956,7 +956,7 @@ class CMSModuleChooser extends TCMSModelBase
         foreach ($aOtherParameters as $sKey => $sValue) {
             $aParameter[$sKey] = $sValue;
         }
-        $this->controller->HeaderRedirect($aParameter);
+        $this->getRedirectService()->redirectToActivePage($aParameter);
     }
 
     /**
@@ -1067,7 +1067,7 @@ class CMSModuleChooser extends TCMSModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -1075,7 +1075,7 @@ class CMSModuleChooser extends TCMSModelBase
      */
     private function getCacheManager()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 
     /**
@@ -1083,7 +1083,7 @@ class CMSModuleChooser extends TCMSModelBase
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     /**
@@ -1091,7 +1091,7 @@ class CMSModuleChooser extends TCMSModelBase
      */
     private function getViewRenderer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
     /**
@@ -1099,7 +1099,7 @@ class CMSModuleChooser extends TCMSModelBase
      */
     private function getFieldTranslationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
     /**
@@ -1107,6 +1107,11 @@ class CMSModuleChooser extends TCMSModelBase
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

@@ -225,7 +225,7 @@ class CMSTemplateEngine extends TCMSModelBase
         $oMainNavigationSet = $this->IsMainNavigationSet();
         if (!$oMainNavigationSet->bMainNavigationIsSet) {
             $sURL = PATH_CMS_CONTROLLER.'?'.str_replace('&amp;', '&', TTools::GetArrayAsURL(array('pagedef' => 'tableeditor', 'tableid' => $this->sTableID, 'id' => $this->sPageId)));
-            $this->controller->HeaderURLRedirect($sURL);
+            $this->getRedirectService()->redirect($sURL);
         }
 
         $this->IsRecordLocked();
@@ -389,7 +389,7 @@ class CMSTemplateEngine extends TCMSModelBase
 
         // and redirect to "edit page"
         $parameter = array('pagedef' => 'templateengine', 'id' => $this->sPageId, '_mode' => $this->sMode);
-        $this->controller->HeaderRedirect($parameter);
+        $this->getRedirectService()->redirectToActivePage($parameter);
     }
 
     /**
@@ -675,5 +675,10 @@ class CMSTemplateEngine extends TCMSModelBase
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

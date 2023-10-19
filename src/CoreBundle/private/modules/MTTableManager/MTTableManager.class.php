@@ -258,7 +258,7 @@ class MTTableManager extends TCMSModelBase
                     $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
                 }
 
-                $this->controller->HeaderRedirect($parameter);
+                $this->getRedirectService()->redirectToActivePage($parameter);
             } else {
                 /** @var $oRestrictionTableConf TCMSTableConf */
                 $oRestrictionTableConf = new TCMSTableConf();
@@ -269,7 +269,7 @@ class MTTableManager extends TCMSModelBase
                     $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
                 }
 
-                $this->controller->HeaderRedirect($parameter);
+                $this->getRedirectService()->redirectToActivePage($parameter);
             }
         } else {
             $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
@@ -277,7 +277,7 @@ class MTTableManager extends TCMSModelBase
             $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->getHistoryCount() - 1);
         }
 
-        $this->controller->HeaderURLRedirect($parentURL);
+        $this->getRedirectService()->redirect($parentURL);
     }
 
     /**

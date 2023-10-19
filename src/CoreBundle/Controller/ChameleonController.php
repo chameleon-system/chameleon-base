@@ -21,6 +21,7 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManag
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ErrorException;
 use esono\pkgCmsCache\CacheInterface;
@@ -803,9 +804,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @return never
      */
-    public function HeaderRedirect($aParameters)
+    public function HeaderRedirect(array $aParameters)
     {
-        $this->redirect->redirectToActivePage($aParameters);
+        $this->getRedirectService()->redirectToActivePage($aParameters);
     }
 
     /**
@@ -820,7 +821,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     public function HeaderURLRedirect($url = '', $bAllowOnlyRelativeURLs = false)
     {
-        $this->redirect->redirect($url, Response::HTTP_FOUND, $bAllowOnlyRelativeURLs);
+        $this->getRedirectService()->redirect($url, Response::HTTP_FOUND, $bAllowOnlyRelativeURLs);
     }
 
     /**
@@ -934,5 +935,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function setResponseVariableReplacer(ResponseVariableReplacerInterface $responseVariableReplacer): void
     {
         $this->responseVariableReplacer = $responseVariableReplacer;
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }
