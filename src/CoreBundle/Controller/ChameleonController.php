@@ -177,6 +177,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @param bool $bBlockAutoFlushToBrowser
      *
      * @return void
+     *
+     * @deprecated since 7.2.0 - early flushing should not be used
      */
     public function SetBlockAutoFlushToBrowser($bBlockAutoFlushToBrowser)
     {
@@ -185,6 +187,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @return bool
+     *
+     * @deprecated since 7.2.0 - early flushing should not be used
      */
     public function getBlockAutoFlushToBrowser()
     {
