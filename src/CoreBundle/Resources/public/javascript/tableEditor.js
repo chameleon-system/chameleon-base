@@ -18,9 +18,6 @@ var _trans_link = '';
 var _trans_password = '';
 var _trans_drag = '';
 const tableEditorBeforeSaveEvent = new CustomEvent('tableEditorBeforeSaveEvent', {
-    detail: {
-        description: 'is dispatched in ExecutePostCommand and SaveViaAjax and Save'
-    }
 });
 
 /*
