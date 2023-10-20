@@ -33,6 +33,11 @@ In `composer.json`, adjust version constraints for all Chameleon dependencies fr
 
 # Changed Features
 
+## Property modifier restrictions
+
+- \ChameleonSystem\CoreBundle\Controller\ChameleonController::$moduleLoader
+  (public → protected) a getter getModuleLoader() for direct access was added; a magic getter was added to produce deprecation message
+
 ## Deprecated auto-flushing
 
 The function for early flushing content to the browser is deprecated (ChameleonController::FlushContentToBrowser()).
@@ -40,6 +45,8 @@ You should simply be able to remove respective calls in your code.
 If this poses a (perceived) performance problem at all other optimization effort should be done.
 
 # Removed Features
+
+- \ChameleonSystem\CoreBundle\Controller\ChameleonController::PreOutputCallbackFunctionReplaceCustomVars()
 
 # Newly Deprecated Code Entities
 
@@ -54,6 +61,7 @@ If this poses a (perceived) performance problem at all other optimization effort
 ## Methods
 
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::getBlockAutoFlushToBrowser()
+- \ChameleonSystem\CoreBundle\Controller\ChameleonController::PreOutputCallbackFunction()
 - \ChameleonSystem\CoreBundle\Controller\ChameleonController::SetBlockAutoFlushToBrowser()
 - \ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface::FlushContentToBrowser()
 - \TModuleLoader::SetEnableAutoFlush()
