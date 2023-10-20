@@ -18,7 +18,6 @@ use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
-use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -155,6 +154,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         throw new \Exception(sprintf('Unknown getter "%s"', $name));
     }
 
+    // this getter may be added to the ChameleonControllerInterface
     public function getModuleLoader(): TModuleLoader
     {
         return $this->moduleLoader;
@@ -326,13 +326,11 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * return the page definition object. by default, this is file based, but may be page based (template engine).
      *
-     * @param string $pagedef
-     *
      * @return TCMSPageDefinitionFile|false
      *
      * @deprecated since 6.2.10 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
      */
-    public function GetPagedefObject($pagedef)
+    public function GetPagedefObject(string $pagedef)
     {
         /** @var $oPageDefinitionFile TCMSPageDefinitionFile */
         $oPageDefinitionFile = new TCMSPageDefinitionFile();
@@ -496,6 +494,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * gets called when the page output is passed from buffer to client.
      *
      * @param string $sPageContent the contents of the output buffer
+     *
+     * @deprecated since 7.2.0 - you may use of symfony's "kernel.response" event
      *
      * @return string
      */
@@ -720,22 +720,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     protected function runExternalResourceCollectorOnPageContent($sPageContent)
     {
         return $this->resourceCollector->CollectExternalResources($sPageContent);
-    }
-
-    /**
-     * extra hook that replaces messages and custom vars in the string passed.
-     *
-     * @param \stdClass|array|string $sPageContent
-     *
-     * @return \stdClass|array|string
-     *
-     * @deprecated since 6.3.0 - use ResponseVariableReplacerInterface::replaceVariables() instead.
-     *
-     * @throws TokenInjectionFailedException
-     */
-    public function PreOutputCallbackFunctionReplaceCustomVars($sPageContent)
-    {
-        return $this->responseVariableReplacer->replaceVariables($sPageContent);
     }
 
     /**

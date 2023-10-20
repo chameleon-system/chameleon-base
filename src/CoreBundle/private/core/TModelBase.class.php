@@ -59,11 +59,9 @@ class TModelBase
     /**
      * pointer to the controller.
      *
-     * @var ChameleonControllerInterface
-     *
      * @deprecated Don't use this controller. Retrieve it through \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller') instead
      */
-    protected $controller = null;
+    protected ?ChameleonControllerInterface $controller = null;
 
     /**
      * @var $bool
