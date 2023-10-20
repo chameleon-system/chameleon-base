@@ -200,10 +200,10 @@ class MTGlobalListCore extends TUserCustomModelBase
     protected function AddActiveItemToBreadcrumb()
     {
         if (array_key_exists('breadcrumb', $this->controller->moduleLoader->modules)) {
-            $this->controller->moduleLoader->modules['breadcrumb']->aAdditionalBreadcrumbNodes[] = $this->GetBreadcrumbDetailLink();
+            $this->controller->getModuleLoader()->modules['breadcrumb']->aAdditionalBreadcrumbNodes[] = $this->GetBreadcrumbDetailLink();
         }
         if (array_key_exists('metadata', $this->controller->moduleLoader->modules)) {
-            $this->controller->moduleLoader->modules['metadata']->aAdditionalBreadcrumbNodes[] = $this->GetBreadcrumbDetailLink();
+            $this->controller->getModuleLoader()->modules['metadata']->aAdditionalBreadcrumbNodes[] = $this->GetBreadcrumbDetailLink();
         }
     }
 

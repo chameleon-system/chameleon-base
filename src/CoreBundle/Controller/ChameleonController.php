@@ -60,10 +60,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var TGlobal
      */
     protected $global;
-    /**
-     * @var TModuleLoader
-     */
-    public $moduleLoader;
+
+    protected TModuleLoader $moduleLoader;
+
     /**
      * @var array
      *
@@ -139,6 +138,26 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->viewPathManager = $viewPathManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
+    }
+
+    /**
+     * @throws \Exception
+     * @deprecated should be removed after 7.2.0, catches cases of accessing public property 'moduleLoader'
+     */
+    public function __get(string $name)
+    {
+        if ('moduleLoader' === $name) {
+            @trigger_error('The modifier of property \ChameleonSystem\CoreBundle\Controller\ChameleonController::moduleLoader was restricted, use ChameleonController::getModuleLoader() instead', E_USER_DEPRECATED);
+
+            return $this->moduleLoader;
+        }
+
+        throw new \Exception(sprintf('Unknown getter "%s"', $name));
+    }
+
+    public function getModuleLoader(): TModuleLoader
+    {
+        return $this->moduleLoader;
     }
 
     /**

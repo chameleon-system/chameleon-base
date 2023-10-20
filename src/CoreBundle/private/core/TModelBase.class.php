@@ -197,7 +197,7 @@ class TModelBase
     public function Execute()
     {
         $this->data['sModuleSpotName'] = $this->sModuleSpotName;
-        $this->data['_oModules'] = $this->getController()->moduleLoader;
+        $this->data['_oModules'] = $this->getController()->getModuleLoader();
         $pagedef = $this->global->GetUserData('pagedef');
         $this->data['pagedef'] = $pagedef;
         $this->data['_pagedefType'] = 'Core';
