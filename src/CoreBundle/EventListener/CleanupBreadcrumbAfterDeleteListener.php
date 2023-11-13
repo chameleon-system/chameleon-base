@@ -25,6 +25,6 @@ class CleanupBreadcrumbAfterDeleteListener
             return;
         }
 
-        $breadcrumb->removeEntries($event->getTableId(), $event->getRecordId());
+        $breadcrumb->removeEntries($event->getTableId(), $event->getRecordId(), $event->getCmsTblConfId());
     }
 }

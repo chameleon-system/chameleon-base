@@ -15,6 +15,8 @@ class RecordChangeEvent extends Event
      */
     private $recordId;
 
+    private string $cmsTblConfId;
+
     /**
      * @param string $tableId
      * @param string $recordId
@@ -39,5 +41,15 @@ class RecordChangeEvent extends Event
     public function getRecordId()
     {
         return $this->recordId;
+    }
+
+    public function getCmsTblConfId(): string
+    {
+        return $this->cmsTblConfId;
+    }
+
+    public function setCmsTblConfId(string $cmsTblConfId): void
+    {
+        $this->cmsTblConfId = $cmsTblConfId;
     }
 }
