@@ -248,7 +248,7 @@ class TCMSURLHistory
      */
     public function removeEntries(string $tableId, string $entryId, string $cmsTblConfId): void
     {
-        if ( '' === $cmsTblConfId || '' === $entryId) {
+        if ('' === $cmsTblConfId || '' === $entryId) {
             return;
         }
 

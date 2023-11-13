@@ -825,7 +825,7 @@ class MTTableEditor extends TCMSModelBase
     public function Delete($bPreventRedirect = false)
     {
         $this->oTableManager->Delete();
-        //note: a symfony event removes all affected history entries, especially the current one at the top of the history stack
+        // note: the symfony event listener `CleanupBreadcrumbAfterDeleteListener` removes all affected history entries, especially the current one at the top of the history stack
 
         if (!$bPreventRedirect) {
             $inputFilterUtil = $this->getInputFilterUtil();
