@@ -18,6 +18,7 @@ class RecordChangeEvent extends Event
     }
 
     /**
+     * @return string
      * @deprecated use `self::getTableName()` instead
      */
     public function getTableId()
