@@ -6,13 +6,15 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class RecordChangeEvent extends Event
 {
+    private string $tableName;
+    private string $recordId;
+
     private string $cmsTblConfId;
 
-    public function __construct(
-        readonly private string $tableName,
-        readonly private string $recordId,
-    )
+    public function __construct(string $tableName, string $recordId)
     {
+        $this->tableName = $tableName;
+        $this->recordId = $recordId;
     }
 
     /**
