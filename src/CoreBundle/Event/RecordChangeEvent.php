@@ -6,33 +6,26 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class RecordChangeEvent extends Event
 {
-    /**
-     * @var string
-     */
-    private $tableId;
-    /**
-     * @var string
-     */
-    private $recordId;
-
     private string $cmsTblConfId;
 
-    /**
-     * @param string $tableId
-     * @param string $recordId
-     */
-    public function __construct($tableId, $recordId)
+    public function __construct(
+        readonly private string $tableName,
+        readonly private string $recordId,
+    )
     {
-        $this->tableId = $tableId;
-        $this->recordId = $recordId;
     }
 
     /**
-     * @return string
+     * @deprecated use `self::getTableName()` instead
      */
     public function getTableId()
     {
-        return $this->tableId;
+        return $this->tableName;
+    }
+
+    public function getTableName(): string
+    {
+        return $this->tableName;
     }
 
     /**
