@@ -61,10 +61,11 @@ class TCMSURLHistory
     /**
      * adds item to the breadcrumb array.
      *
-     * @param array  $aParameter - url parameters
+     * @param array $aParameter - url parameters
      * @param string $name
+     * @param callable-string|null $filterCallback
      */
-    public function AddItem($aParameter, $name = '')
+    public function AddItem($aParameter, $name = '', ?string $filterCallback = null)
     {
         $foundHistoryElementIndex = $this->getSimilarHistoryElementIndex($aParameter);
 
@@ -78,9 +79,13 @@ class TCMSURLHistory
             'name' => $name,
             'url' => $this->EncodeParameters($aParameter),
             'params' => $aParameter,
+            'filterCallback' => $filterCallback ??  '',
         );
     }
 
+    /**
+     * @note you can use "array_splice($this->aHistory, $index, 1);"
+     */
     private function removeHistoryElementByIndex(int $index): void
     {
         unset($this->aHistory[$index]);
@@ -197,6 +202,7 @@ class TCMSURLHistory
      * removes all history entries with higher index than the given one.
      *
      * @param int $id
+     * @note you can use "array_splice($this->aHistory, $id + 1);"
      */
     public function Clear($id)
     {
