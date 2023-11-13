@@ -257,7 +257,7 @@ class TCMSURLHistory
                 function (array $history) use ($tableId, $entryId, $cmsTblConfId) {
                     $filterCallback = $history['filterCallback'];
                     if (true === is_callable($filterCallback)) {
-                        /** @var $filterCallback callable(array $historyEntry, string $cmsTblConfId, string $entryId, string $cmsTblConfId): bool */
+                        /** @var $filterCallback callable(array $historyEntry, string $tableId, string $entryId, string $cmsTblConfId): bool */
                         return false === $filterCallback($history, $tableId, $entryId, $cmsTblConfId);
                     }
 
