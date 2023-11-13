@@ -226,7 +226,7 @@ class CMSTemplateEngine extends TCMSModelBase
 
         $oMainNavigationSet = $this->IsMainNavigationSet();
         if (!$oMainNavigationSet->bMainNavigationIsSet) {
-            $sURL = PATH_CMS_CONTROLLER.'?'.str_replace('&amp;', '&', TTools::GetArrayAsURL(array('pagedef' => 'tableeditor', 'tableid' => $this->sTableID, 'id' => $this->sPageId)));//, '_nohist' => true)));
+            $sURL = PATH_CMS_CONTROLLER.'?'.str_replace('&amp;', '&', TTools::GetArrayAsURL(array('pagedef' => 'tableeditor', 'tableid' => $this->sTableID, 'id' => $this->sPageId)));
             $this->controller->HeaderURLRedirect($sURL);
         }
 
