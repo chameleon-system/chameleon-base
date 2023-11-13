@@ -500,23 +500,29 @@ class TCMSTableConf extends TCMSRecord
     }
 
     /**
-     * fetches the TdbFooBaa class name and loads it for current table config record.
+     * @param string|null $recordID - the id of the record to load, if any
      *
-     * @param string|null $recordID - record to load
-     *
-     * @return TCMSRecord
+     * @return TCMSRecord|null - null if the class does not exist or the loading of the id fails if given
      */
     public function GetTableObjectInstance($recordID = null)
     {
-        $sClassName = TCMSTableToClass::GetClassName('Tdb', $this->sqlData['name']);
-        /**
-         * @var TCMSRecord $oTdbDataTmp
-         */
-        $oTdbDataTmp = new $sClassName();
-        if (!is_null($recordID)) {
-            $oTdbDataTmp->Load($recordID);
+        $tdbName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->sqlData['name']);
+
+        if (false === \class_exists($tdbName)) {
+            return null;
         }
 
-        return $oTdbDataTmp;
+        /** @var \TCMSRecord $tdb */
+        $tdb = $tdbName::GetNewInstance();
+
+        if (null === $recordID) {
+            return $tdb;
+        }
+
+        if (false === $tdb->Load($recordID)) {
+            return null;
+        }
+
+        return $tdb;
     }
 }
