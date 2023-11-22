@@ -131,11 +131,6 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $this->oTable->sqlData['is_default'] = '0';
         $this->oTable->sqlData['home_node_id'] = '';
         $this->oTable->sqlData['name'] = $this->oTable->sqlData['name'].' Copy';
-
-        //$sNewMainNodeId = $this->CreateNewMainNode();
-        //if (!is_null($sNewMainNodeId)) {
-        //    $this->oTable->sqlData['main_node_tree'] = $sNewMainNodeId;
-        //}
     }
 
     /**
@@ -193,7 +188,6 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $oUser = &TCMSUser::GetActiveUser();
         $this->linkPortalToUser($oUser);
 
-        // todo: check if we can change the method name to a more sensible name without breaking other projects
         $this->CopyNaviTree();
         $this->UnsetSessionCopiedPortalId();
         TCacheManager::PerformeTableChange('cms_user', $oUser->id);
