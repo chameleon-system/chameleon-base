@@ -704,7 +704,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
         $oTableConf = $this->GetTableConf();
         /** @var $oChildEditor TCMSTableEditorManager */
         $oChildEditor = new TCMSTableEditorManager();
-        $oChildEditor->Init($oTableConf->id, $this->id);
+        $oChildEditor->Init($oTableConf->id, $this->id, $this->iLanguageId);
         $oChildEditor->AllowEditByAll(true);
         $oChildEditor->SaveField('pathcache', $sPath);
         $oChildEditor->AllowEditByAll(false);

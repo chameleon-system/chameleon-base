@@ -13,10 +13,15 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeActiveLanguagesForPortalEvent;
 use ChameleonSystem\CoreBundle\Event\ChangeUseSlashInSeoUrlsEvent;
 use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\SupportedLanguagesServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSTableEditorPortal extends TCMSTableEditor
 {
@@ -127,10 +132,10 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $this->oTable->sqlData['home_node_id'] = '';
         $this->oTable->sqlData['name'] = $this->oTable->sqlData['name'].' Copy';
 
-        $sNewMainNodeId = $this->CreateNewMainNode();
-        if (!is_null($sNewMainNodeId)) {
-            $this->oTable->sqlData['main_node_tree'] = $sNewMainNodeId;
-        }
+        //$sNewMainNodeId = $this->CreateNewMainNode();
+        //if (!is_null($sNewMainNodeId)) {
+        //    $this->oTable->sqlData['main_node_tree'] = $sNewMainNodeId;
+        //}
     }
 
     /**
@@ -188,6 +193,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $oUser = &TCMSUser::GetActiveUser();
         $this->linkPortalToUser($oUser);
 
+        // todo: check if we can change the method name to a more sensible name without breaking other projects
         $this->CopyNaviTree();
         $this->UnsetSessionCopiedPortalId();
         TCacheManager::PerformeTableChange('cms_user', $oUser->id);
@@ -255,50 +261,60 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     }
 
     /**
-     * Copy portal navigation includes all trees tree_nodes and pages.
+     * Copy the portals cms_tree
+     * @throws Exception
      */
     protected function CopyNaviTree()
     {
-        $aPortalSystemPages = $this->GetPortalSystemPagesAsArray();
-        /** @var $oPortalNaviTableConf TCMSTableConf */
-        $oPortalNaviTableConf = new TCMSTableConf();
-        $oPortalNaviTableConf->LoadFromField('name', 'cms_portal_navigation');
-
-        //$this->oTable->sqlData['main_node_tree']
-        // now we need to copy the navigations and division along with the corresponding subtrees
-        // NOTE: we ONLY copy items that are connected directly below the primary source node!
-
-        /** @var $oSourceNavigations TCMSRecordList */
-        $oSourceNavigations = new TCMSRecordList();
-        $oSourceNavigations->sTableName = 'cms_portal_navigation';
-        $query = "SELECT `cms_portal_navigation`.*
-                  FROM `cms_portal_navigation`
-            INNER JOIN `cms_tree` ON `cms_portal_navigation`.`tree_node` = `cms_tree`.`id`
-                 WHERE `cms_portal_navigation`.`cms_portal_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sSourceId)."'
-                   AND `cms_tree`.`parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->oOriginalPortal->sqlData['main_node_tree'])."'
-              ORDER BY `cms_tree`.`entry_sort`
-               ";
-        $oSourceNavigations->Load($query);
-
-        while ($oSourceNavi = &$oSourceNavigations->Next()) {
-            // copy root node and subtrees
-            // and create navi using new tree node
-            // create subnavi
-            /** @var $oNaviTreeNode TCMSTreeNode */
-            $oNaviTreeNode = new TCMSTreeNode();
-            $oNaviTreeNode->Load($oSourceNavi->sqlData['tree_node']);
-
-            $iNewNaviNode = $this->CopyOneNode($oNaviTreeNode->sqlData, $this->oTable->sqlData['main_node_tree'], $aPortalSystemPages);
-
-            /** @var $oSubNaviEditor TCMSTableEditorPortalNavigation */
-            $oSubNaviEditor = new TCMSTableEditorManager();
-            $oSubNaviEditor->Init($oPortalNaviTableConf->id);
-            $aSourceNaviData = array('name' => $oSourceNavi->sqlData['name'], 'tree_node' => $iNewNaviNode, 'cms_portal_id' => $this->sId);
-            $oSubNaviEditor->ForceHiddenFieldWriteOnSave(true);
-            $oSubNaviEditor->Save($aSourceNaviData);
-
-            $this->CopySubtree($oSourceNavi->sqlData['tree_node'], $iNewNaviNode, $aPortalSystemPages);
+        $portalRootTreeId = $this->oOriginalPortal->sqlData['main_node_tree'];
+        $portalRootNode = new TdbCmsTree();
+        if (false === $portalRootNode->Load($portalRootTreeId)) {
+            throw new Exception(sprintf('Failed to portal root tree (cms_tree) with id %s', $portalRootTreeId));
         }
+        $systemPages = $this->GetPortalSystemPagesAsArray();
+        $sourceNodeData = $portalRootNode->sqlData;
+        $cmsConfig = TdbCmsConfig::GetInstance();
+        if (null === $cmsConfig) {
+            throw new Exception('No cms config found!');
+        }
+
+        $baseLanguageIso = $cmsConfig->GetFieldTranslationBaseLanguage()->fieldIso6391;
+        $languages = $cmsConfig->GetFieldBasedTranslationLanguageArray();
+        $languages[$baseLanguageIso] = 'base language';
+
+        /** @var TranslatorInterface $translator */
+        $translator = ServiceLocator::get('translator');
+        /** @var LanguageServiceInterface $languageService */
+        $languageService = ServiceLocator::get('chameleon_system_core.language_service');
+        /** @var UrlNormalizationUtil $urlUtil */
+        $urlUtil = ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        $newTreeId = $this->CopyOneNode($sourceNodeData, $portalRootNode->fieldParentId, $systemPages);
+
+        $copyText = sprintf(
+            ' [%s]',
+            $translator->trans(
+                'chameleon_system_core.cms_module_table_editor.copied_record_suffix'
+            )
+        );
+        foreach ($languages as $languageIso => $languageName) {
+            $languageObject = $languageService->getLanguageFromIsoCode($languageIso);
+            if (null === $languageObject) {
+                throw new Exception(sprintf('Failed to load language iso code %s from language table.', $languageIso));
+            }
+            $treeEditorManager = TTools::GetTableEditorManager('cms_tree', $newTreeId, $languageObject->id);
+            $treeEditorManager->AllowEditByAll($this->bAllowEditByAll);
+            /** @var \TCMSTableEditorTree $treeTableEditor */
+            $treeTableEditor = $treeEditorManager->oTableEditor;
+            $newNameValue = $treeTableEditor->oTable->sqlData['name'].$copyText;
+            $urlName = $urlUtil->normalizeUrl( $treeTableEditor->oTable->sqlData['urlname'].$copyText);
+            $treeEditorManager->SaveField('name', $newNameValue, false );
+            $treeEditorManager->SaveField('urlname', $urlName, true );
+            $treeTableEditor->UpdateSubtreePathCache($newTreeId);
+        }
+
+        $this->SaveField('main_node_tree', $newTreeId);
+        $this->CopySubtree($portalRootTreeId, $newTreeId, $systemPages);
+
     }
 
     /**
@@ -351,7 +367,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      * Copy a tree (includes tree connections and pages).
      * Return copied tree id.
      *
-     * @param string $aSourceNode
+     * @param array $aSourceNode
      * @param string $targetParentId
      * @param array  $aPortalSystemPages
      *
@@ -386,6 +402,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
 
         // copy division if one was attached to the source...
         $this->CopyNodeDivision($aSourceNode, $oTreeManager->sId);
+        $this->CopyNodeNavigations($aSourceNode, $oTreeManager->sId);
 
         return $oTreeManager->sId;
     }
@@ -457,9 +474,36 @@ class TCMSTableEditorPortal extends TCMSTableEditor
             unset($aDefaultData['id']);
             $aDefaultData['cms_portal_id'] = $this->sId;
             $aDefaultData['cms_tree_id_tree'] = $sTargetNodeId;
+            $oTableManager->ForceHiddenFieldWriteOnSave(true);
             $oTableManager->Save($aDefaultData);
         }
     }
+
+    /**
+     * copies the navigations attached to a tree node to a new tree node
+     *
+     * @param array  $aSourceNode   - sqlData of the source node
+     * @param string $sTargetNodeId - id of the target tree node
+     */
+    protected function CopyNodeNavigations($aSourceNode, $sTargetNodeId)
+    {
+        $navigation = TdbCmsPortalNavigation::GetNewInstance();
+        if ($navigation->LoadFromField('tree_node', $aSourceNode['id'])) {
+            $navigationTableConf = $navigation->GetTableConf();
+
+            /** @var $oTableManager TCMSTableEditorManager */
+            $oTableManager = new TCMSTableEditorManager();
+            $oTableManager->Init($navigationTableConf->id, null);
+            $oTableManager->AllowEditByAll($this->bAllowEditByAll);
+            $aDefaultData = $navigation->sqlData;
+            unset($aDefaultData['id']);
+            $aDefaultData['cms_portal_id'] = $this->sId;
+            $aDefaultData['tree_node'] = $sTargetNodeId;
+            $oTableManager->ForceHiddenFieldWriteOnSave(true);
+            $oTableManager->Save($aDefaultData);
+        }
+    }
+
 
     /**
      * Activate languages in the frontend for the current session.
