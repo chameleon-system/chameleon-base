@@ -186,7 +186,9 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         parent::OnAfterCopy();
 
         $oUser = &TCMSUser::GetActiveUser();
-        $this->linkPortalToUser($oUser);
+        if (null !== $oUser) {
+            $this->linkPortalToUser($oUser);
+        }
 
         $this->CopyNaviTree();
         $this->UnsetSessionCopiedPortalId();
