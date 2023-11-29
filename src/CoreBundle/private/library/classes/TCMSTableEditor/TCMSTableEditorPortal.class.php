@@ -483,6 +483,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      */
     protected function CopyNodeNavigations($aSourceNode, $sTargetNodeId)
     {
+        // FIXME: This does not copy navigations that are not attached to the tree
         $navigation = TdbCmsPortalNavigation::GetNewInstance();
         if ($navigation->LoadFromField('tree_node', $aSourceNode['id'])) {
             $navigationTableConf = $navigation->GetTableConf();
