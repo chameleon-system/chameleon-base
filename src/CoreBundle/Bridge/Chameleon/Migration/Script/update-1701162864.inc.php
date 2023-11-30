@@ -3,7 +3,6 @@
 <div class="changelog">
     <ul>
         <li>- ref #832: add preventReferenceCopy to property field ("Eigenschaften")</li>
-        <li>- ref #832: add default preventReferenceCopy=true to pkg_article_category_group table's pkg_article_category field</li>
     </ul>
 </div>
 <?php
@@ -120,27 +119,4 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
             'constname' => 'CMSFIELD_PROPERTY',
         ]
     );
-TCMSLogChange::update(__LINE__, $data);
-
-
-$confId = TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('pkg_article_category_group'), 'pkg_article_category');
-// We need the old fieldtype_config to merge it with the new one
-$oldFieldTypeConfig = TCMSLogChange::getDatabaseConnection()->fetchOne(
-    'SELECT fieldtype_config FROM `cms_field_conf` WHERE `id` = :id',
-    ['id' => $confId]
-
-);
-if (false === $oldFieldTypeConfig) {
-    $oldFieldTypeConfig = '';
-}
-$newFieldTypeConfig = trim($oldFieldTypeConfig."\n"."preventReferenceCopy=true", "\n");
-
-$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
-  ->setFields([
-      'fieldtype_config' => $newFieldTypeConfig,
-  ])
-  ->setWhereEquals([
-      'id' => $confId,
-  ])
-;
 TCMSLogChange::update(__LINE__, $data);

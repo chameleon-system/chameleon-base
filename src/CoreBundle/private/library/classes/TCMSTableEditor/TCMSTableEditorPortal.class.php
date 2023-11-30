@@ -483,22 +483,32 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      */
     protected function CopyNodeNavigations($aSourceNode, $sTargetNodeId)
     {
-        // FIXME: This does not copy navigations that are not attached to the tree
-        $navigation = TdbCmsPortalNavigation::GetNewInstance();
-        if ($navigation->LoadFromField('tree_node', $aSourceNode['id'])) {
-            $navigationTableConf = $navigation->GetTableConf();
-
-            /** @var $oTableManager TCMSTableEditorManager */
-            $oTableManager = new TCMSTableEditorManager();
-            $oTableManager->Init($navigationTableConf->id, null);
-            $oTableManager->AllowEditByAll($this->bAllowEditByAll);
-            $aDefaultData = $navigation->sqlData;
-            unset($aDefaultData['id']);
-            $aDefaultData['cms_portal_id'] = $this->sId;
-            $aDefaultData['tree_node'] = $sTargetNodeId;
-            $oTableManager->ForceHiddenFieldWriteOnSave(true);
-            $oTableManager->Save($aDefaultData);
+        // it's possible that more than one navigation is attached to a tree node
+        // so we need to loop through all navigations attached to the source node
+        $query = "SELECT id FROM `cms_portal_navigation` WHERE `tree_node` = :tree_node_id";
+        $navigationIds = $this->getDatabaseConnection()->fetchFirstColumn($query, array('tree_node_id' => $aSourceNode['id']));
+        if (empty($navigationIds)) {
+            return;
         }
+
+        foreach ($navigationIds as $navigationId) {
+            $navigation = TdbCmsPortalNavigation::GetNewInstance();
+            if ($navigation->Load($navigationId)) {
+                $navigationTableConf = $navigation->GetTableConf();
+
+                /** @var $oTableManager TCMSTableEditorManager */
+                $oTableManager = new TCMSTableEditorManager();
+                $oTableManager->Init($navigationTableConf->id, null);
+                $oTableManager->AllowEditByAll($this->bAllowEditByAll);
+                $aDefaultData = $navigation->sqlData;
+                unset($aDefaultData['id']);
+                $aDefaultData['cms_portal_id'] = $this->sId;
+                $aDefaultData['tree_node'] = $sTargetNodeId;
+                $oTableManager->ForceHiddenFieldWriteOnSave(true);
+                $oTableManager->Save($aDefaultData);
+            }
+        }
+
     }
 
 
