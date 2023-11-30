@@ -1,10 +1,12 @@
 // To override CoreUI variables add them to chameleon's custom variables file imported below.
 // Please note that all variables defined in 'chameleon/variables' might be overridden by the original CoreUI sources
 // unless the CoreUI theme marks them as a fallback with `!default`. This is the case i.e. for `$sidebar-width`.
-@import 'chameleon/variables';
+
+@import './chameleon/variables';
 
 // Importing CoreUi
-@import '../../../../../../../../../../coreui/coreui/scss/coreui-standalone';
+@import '../../../../../Theme/node_modules/@coreui/coreui/scss/coreui';
+
 
 // Import any other styles below.
 //@import './chameleon/example';

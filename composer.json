@@ -20,7 +20,6 @@
         "bassjobsen/bootstrap-3-typeahead": "~4.0",
         "chameleon-system/sanitycheck-bundle": "~7.1.0",
         "ckeditor/ckeditor": "4.6.2",
-        "coreui/coreui": "v3.0.0",
         "dmhendricks/file-icon-vectors": "~1.0",
         "doctrine/annotations": "^1.13",
         "doctrine/dbal": "^2.13",

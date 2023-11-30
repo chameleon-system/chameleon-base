@@ -35,7 +35,7 @@ if (TGlobal::CMSUserDefined()) {
     <script src="<?= TGlobal::GetStaticURLToWebLib('/javascript/cms.js'); ?>" type="text/javascript"></script>
     <?php // Scrollbar JS needs to be loaded before CoreUI?>
     <script src="<?= TGlobal::GetPathTheme(); ?>/coreui/js/perfect-scrollbar.min.js" type="text/javascript"></script>
-    <script src="<?= TGlobal::GetPathTheme(); ?>/coreui/js/coreui.min.js" type="text/javascript"></script>
+    <script src="<?= TGlobal::GetPathTheme(); ?>/coreui/js/coreui.min.js?v43" type="text/javascript"></script>
     <script src="<?= TGlobal::GetPathTheme(); ?>/coreui/js/coreui-utilities.min.js" type="text/javascript"></script>
     <?php
 }
