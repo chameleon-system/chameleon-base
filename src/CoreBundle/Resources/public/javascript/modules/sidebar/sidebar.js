@@ -7,21 +7,23 @@
     //   opening and closing items with "nav-dropdown".
 
     function Plugin(baseElement) {
+        // debugger;
         this.$baseElement = $(baseElement);
-        this.$navElement = this.$baseElement.find("nav");
+        this.$navElement = this.$baseElement.find(".sidebar-nav");
         this.$navItems = this.$baseElement.find(".nav-item");
-        this.$navTitles = this.$baseElement.find('.nav-dropdown');
+        this.$navTitles = this.$baseElement.find('.nav-group');
         this.$filterElement = this.$baseElement.find('.sidebar-filter-input');
         this.lastSearchTerm = '';
         this.scrollTopBeforeFilter = 0;
 
-        this.init();
+        // this.init();
     }
     $.extend(Plugin.prototype, {
         init: function () {
+            // debugger;
             this.$filterElement.on('keyup', this.filter.bind(this));
-            this.$baseElement.find('.nav-dropdown-toggle').on('click', this.onCategoryToggle.bind(this));
-            this.$navItems.not(".nav-dropdown").on("click", this.onElementClick.bind(this));
+            this.$baseElement.find('.nav-group-toggle').on('click', this.onCategoryToggle.bind(this));
+            this.$navItems.on("click", this.onElementClick.bind(this));
 
             this.restoreOpenState();
             this.markSelected();
@@ -52,7 +54,7 @@
 
             var outer = this;
 
-            this.$navItems.not(".nav-dropdown").each(function() {
+            this.$navItems.each(function() {
                 var link = $(this).find("a").attr("href");
                 var linkPathAndSearch = outer.getPathAndSearch(link);
 

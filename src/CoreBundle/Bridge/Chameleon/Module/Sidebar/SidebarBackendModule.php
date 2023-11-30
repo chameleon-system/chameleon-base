@@ -129,6 +129,10 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $visitor->SetMappedValue('sidebarElementClickNotificationUrl', $this->getNotificationUrl('reportElementClick'));
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
+        $oConfig = \TdbCmsConfig::GetInstance();
+        $logoUrl =  $oConfig->GetThemeURL().'/images/chameleon_logo_header.png';
+        $visitor->SetMappedValue('logoUrl', $logoUrl);
+
         if (true === $cachingEnabled) {
             $cmsUser = \TCMSUser::GetActiveUser();
             $cacheTriggerManager->addTrigger('cms_tbl_conf', null);

@@ -9,6 +9,7 @@
   "keywords": [],
   "dependencies": {
     "@coreui/coreui": "^4.3.2",
+    "simplebar": "^6.2.5",
     "browserslist": "^3.2.8",
     "glob-parent": "^5.1.2",
     "hosted-git-info": "^2.8.9",

@@ -1,42 +1,54 @@
 {# @var menuItem \ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem #}
 
-<div
-        class="sidebar"
-        data-toggle-category-notification-url="{{ sidebarToggleCategoryNotificationUrl|e('html_attr') }}"
-        data-element-click-notification-url="{{ sidebarElementClickNotificationUrl|e('html_attr') }}"
-        data-active-categories="[{sidebarOpenCategoryIds}]"
->
-    <p class="sidebar-filter-input-wrapper fas"><input
-            type="text"
+<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar"
+    data-toggle-category-notification-url="{{ sidebarToggleCategoryNotificationUrl|e('html_attr') }}"
+    data-element-click-notification-url="{{ sidebarElementClickNotificationUrl|e('html_attr') }}"
+    data-active-categories="[{sidebarOpenCategoryIds}]">
+    <div class="sidebar-brand d-none d-md-flex">
+        <a href="/cms?_rmhist=true&amp;_histid=0">
+            <img class="img-fluid" src="{{ logoUrl | escape('html_attr') }}" alt="Logo Chameleon">
+        </a>
+    </div>
+
+    <p class="sidebar-filter-input-wrapper fas position-relative">
+        <input type="text"
             class="sidebar-filter-input form-control"
             placeholder="{{ 'chameleon_system_core.sidebar.filter_menu'|trans }}"
-            autocomplete="off"
-        /></p>
-    <nav class="sidebar-nav">
-        <ul class="nav">
-            {% for category in menuItems %}
-                <li class="nav-item nav-dropdown" data-categoryid="{{ category.id }}" tabindex="0">
-                    <a class="nav-link nav-dropdown-toggle" href="#">
+            autocomplete="off"/>
+    </p>
+
+    <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
+        {% for category in menuItems %}
+            {% if category.menuItems | length == 0 %}
+                <li class="nav-item">
+                    {{ category.name }}
+                </li>
+            {% else %}
+                <li class="nav-group" data-categoryid="{{ category.id }}" tabindex="0">
+                    <a class="nav-link nav-group-toggle" href="#">
                         <i class="nav-icon {{ category.iconFontCssClass|default('fas fa-sign-out-alt') }}"></i>
                         {{ category.name }}
                     </a>
-                    <ul class="nav-dropdown-items">
+                    <ul class="nav-group-items">
                         {% for menuItem in category.menuItems %}
                             <li class="nav-item" tabindex="0">
                                 <a href="{{ menuItem.url }}" class="nav-link" data-entry-id="{{ menuItem.id | e("html_attr") }}">
-                                    <i class="nav-icon {{ menuItem.icon|e('html_attr') }}"></i>{{ menuItem.name }}
+                                    <i class="nav-icon {{ menuItem.icon|e('html_attr') }}"></i>
+                                    {{ menuItem.name }}
                                 </a>
                             </li>
                         {% endfor %}
                     </ul>
                 </li>
-            {% endfor %}
-        </ul>
+            {% endif %}
+        {% endfor %}
+
+
         <div class="ps__rail-x">
             <div class="ps__thumb-x" tabindex="0"></div>
         </div>
         <div class="ps__rail-y">
             <div class="ps__thumb-y" tabindex="0"></div>
         </div>
-    </nav>
+    </ul>
 </div>
