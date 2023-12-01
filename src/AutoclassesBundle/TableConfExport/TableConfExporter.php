@@ -20,7 +20,14 @@ class TableConfExporter implements TableConfExporterInterface
         return $this->dataAccessCmsTblConf->getTableConfigurations();
     }
 
-    public function export(TableConfigurationDataModel $table, string $namespace, string $targetDir, string $mappingDir, array $tableNamespaceMapping): string
+    public function export(
+        TableConfigurationDataModel $table,
+        string $namespace,
+        string $targetDir,
+        string $mappingDir,
+        string $metaConfigDir,
+        array $tableNamespaceMapping
+    ): string
     {
 
 
@@ -71,6 +78,8 @@ class TableConfExporter implements TableConfExporterInterface
             $tableNamespaceMapping
         );
 
+        $autoClassConfig = $this->generateAutoClassConfig($tableConf, $className, $fqn, $namespace);
+
         $mappingSubPathPos = strpos($mappingDir, '/config/doctrine');
         $extension = substr($mappingDir, $mappingSubPathPos+strlen('/config/doctrine/'));
         $mappingCleanPath = substr($mappingDir, 0, $mappingSubPathPos). '/config/doctrine';
@@ -81,6 +90,7 @@ class TableConfExporter implements TableConfExporterInterface
 
         file_put_contents($targetDir.'/'.$className.'.php', $dataModelCode);
         file_put_contents($mappingCleanPath.'/'.$mappingClass.'.orm.xml', $dataModelMapping);
+        file_put_contents($metaConfigDir.'/'.$mappingClass.'.yaml', $autoClassConfig);
 
         return $fqn;
 
@@ -195,5 +205,17 @@ class TableConfExporter implements TableConfExporterInterface
         }
 
         return str_replace("\n", "\n".str_repeat(' ', $indent), $string);
+    }
+
+    private function generateAutoClassConfig(array $tableConf, string $className, string $fqn, string $namespace): string
+    {
+        // todo: write yaml. should be in a form, that can be read by symfony
+        $config = <<<EOF
+'${tableConf['name']}':
+    entryPoint: 'Tdbxxx'
+    entryPointList: 'Tdbxxx'
+    exit: 'TAdb'
+EOF;
+
     }
 }
