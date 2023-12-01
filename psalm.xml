@@ -30,8 +30,7 @@
             <directory name="src/**/objects/Tests" />
             <directory name="src/**/Bridge/Chameleon/Migration" />
             <file name="src/CoreBundle/Maintenance/Migrator62/autoloadTemplate.php" />
-            <directory name="vendor" />
-            <file name="*.twig" />
+            <file name="**/*.twig" />
         </ignoreFiles>
     </projectFiles>
 
