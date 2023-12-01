@@ -1,0 +1,32 @@
+
+.sidebar-nav {
+  .nav-group {
+    &.show {
+      .nav-group-toggle {
+        color: var(--cui-sidebar-nav-link-active-color);
+        font-weight: bold;
+      }
+    }
+  }
+
+  .nav-link {
+    &.nav-group-toggle {
+      border-top: 1px solid var(--cui-sidebar-nav-group-bg);
+    }
+
+    &.active {
+      font-weight: bold;
+    }
+
+    &:focus {
+      color: var(--cui-sidebar-nav-link-hover-color);
+      text-decoration: none;
+      background: var(--cui-sidebar-nav-link-hover-bg);
+      outline: none;
+    }
+  }
+}
+
+
+
+

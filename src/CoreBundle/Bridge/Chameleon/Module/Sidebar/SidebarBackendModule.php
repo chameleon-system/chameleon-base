@@ -83,7 +83,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         parent::DefineInterface();
 
-        $this->methodCallAllowed[] = 'toggleCategoryOpenState';
+        $this->methodCallAllowed[] = 'saveActiveCategory';
         $this->methodCallAllowed[] = 'reportElementClick';
     }
 
@@ -107,13 +107,17 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
         
         $this->responseVariableReplacer->addVariable('sidebarDisplayState', $value);
-        $this->responseVariableReplacer->addVariable('sidebarOpenCategoryIds', \TGlobal::OutHTML(implode(',', $this->getOpenCategories())));
+        $foo = \TGlobal::OutHTML($this->getOpenCategory());
+        $this->responseVariableReplacer->addVariable('sidebarOpenCategoryId', $foo);
     }
 
     private function getSession(): ?SessionInterface
     {
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
+            return null;
+        }
+        if (null === $request->hasSession()) {
             return null;
         }
 
@@ -125,7 +129,8 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(\IMapperVisitorRestricted $visitor, $cachingEnabled, \IMapperCacheTriggerRestricted $cacheTriggerManager)
     {
-        $visitor->SetMappedValue('sidebarToggleCategoryNotificationUrl', $this->getNotificationUrl('toggleCategoryOpenState'));
+        $visitor->SetMappedValue('popularCategoryId', self::POPULAR_CATEGORY_ID);
+        $visitor->SetMappedValue('sidebarToggleCategoryNotificationUrl', $this->getNotificationUrl('saveActiveCategory'));
         $visitor->SetMappedValue('sidebarElementClickNotificationUrl', $this->getNotificationUrl('reportElementClick'));
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
@@ -215,15 +220,22 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $menuCategories;
     }
 
-    private function getOpenCategories(): array
+    private function getOpenCategory(): string
     {
         $session = $this->getSession();
 
         if (null === $session) {
-            return [];
+            return '';
         }
 
-        return $session->get(self::OPEN_CATEGORIES_SESSION_KEY, []);
+        $openCategory = $session->get(self::OPEN_CATEGORIES_SESSION_KEY, '');
+
+        //Compatibility with version 7.x, because it was an array
+        if (is_array($openCategory) && !empty($openCategory)) {
+            return reset($openCategory);
+        }
+
+        return $openCategory;
     }
 
     private function getPopularMenuEntries(array $menuItemMap): ?MenuCategory
@@ -256,37 +268,23 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         );
     }
 
-    /**
-     * @deprecated since 6.3.8 - use toggleCategoryOpenState
-     */
     protected function saveActiveCategory(): void
-    {
-        $this->toggleCategoryOpenState();
-    }
-
-    protected function toggleCategoryOpenState(): void
     {
         $session = $this->getSession();
         if (null === $session) {
             return;
         }
 
-        $toggledCategoryId = $this->inputFilterUtil->getFilteredPostInput('categoryId', '');
+        $newCategoryId = $this->inputFilterUtil->getFilteredPostInput('categoryId', '');
+        $session->set(self::OPEN_CATEGORIES_SESSION_KEY, $newCategoryId);
+    }
 
-        if ('' === $toggledCategoryId) {
-            return;
-        }
-
-        $activeCategoryIds = $session->get(self::OPEN_CATEGORIES_SESSION_KEY, []);
-
-        $index = array_search($toggledCategoryId, $activeCategoryIds, true);
-        if (false !== $index){
-            unset($activeCategoryIds[$index]);
-        } else {
-            $activeCategoryIds[] = $toggledCategoryId;
-        }
-
-        $session->set(self::OPEN_CATEGORIES_SESSION_KEY, $activeCategoryIds);
+    /**
+     * @deprecated since 8.0.0 - use saveActiveCategory
+     */
+    protected function toggleCategoryOpenState(): void
+    {
+        $this->saveActiveCategory();
     }
 
     /**
@@ -295,8 +293,8 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function GetHtmlHeadIncludes()
     {
         $includes = parent::GetHtmlHeadIncludes();
-        $includes[] = sprintf('<link rel="stylesheet" href="%s/coreui/css/perfect-scrollbar.css" type="text/css" />',
-            \TGlobal::GetPathTheme());
+//        $includes[] = sprintf('<link rel="stylesheet" href="%s/coreui/css/perfect-scrollbar.css" type="text/css" />', \TGlobal::GetPathTheme());
+        $includes[] = sprintf('<link rel="stylesheet" href="%s/coreui/css/simplebar.css" type="text/css" />', \TGlobal::GetPathTheme());
 
         return $includes;
     }

@@ -3,7 +3,7 @@
 <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar"
     data-toggle-category-notification-url="{{ sidebarToggleCategoryNotificationUrl|e('html_attr') }}"
     data-element-click-notification-url="{{ sidebarElementClickNotificationUrl|e('html_attr') }}"
-    data-active-categories="[{sidebarOpenCategoryIds}]">
+    data-active-category="[{sidebarOpenCategoryId}]">
     <div class="sidebar-brand d-none d-md-flex">
         <a href="/cms?_rmhist=true&amp;_histid=0">
             <img class="img-fluid" src="{{ logoUrl | escape('html_attr') }}" alt="Logo Chameleon">
@@ -20,7 +20,7 @@
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
         {% for category in menuItems %}
             {% if category.menuItems | length == 0 %}
-                <li class="nav-item">
+                <li class="nav-item" tabindex="0">
                     {{ category.name }}
                 </li>
             {% else %}

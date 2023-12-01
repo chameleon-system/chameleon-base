@@ -39,8 +39,10 @@
     "prod": "webpack --mode production",
     "cp-perfect-scrollbar-css-to-theme": "cp -f ./node_modules/perfect-scrollbar/css/perfect-scrollbar.css $npm_package_config_outdir/coreui/css/",
     "cp-perfect-scrollbar-js-to-theme": "cp -f ./node_modules/perfect-scrollbar/dist/* $npm_package_config_outdir/coreui/js/",
+    "cp-simplebar-js-to-theme": "cp -f ./node_modules/simplebar/dist/simplebar.js $npm_package_config_outdir/coreui/js/",
+    "cp-simplebar-css-to-theme": "cp -f ./node_modules/simplebar/dist/simplebar.css $npm_package_config_outdir/coreui/css/",
     "cp-coreui-js-to-theme": "cp -f ./node_modules/@coreui/coreui/dist/js/* $npm_package_config_outdir/coreui/js",
-    "copy": "npm run cp-perfect-scrollbar-css-to-theme && npm run cp-coreui-js-to-theme && npm run cp-perfect-scrollbar-js-to-theme",
+    "copy": "npm run cp-perfect-scrollbar-css-to-theme && npm run cp-coreui-js-to-theme && npm run cp-perfect-scrollbar-js-to-theme && npm rum cp-simplebar-js-to-theme && npm run cp-simplebar-css-to-theme",
     "build": "npm install && npm run prod && npm run copy"
   },
   "repository": {

@@ -3,11 +3,10 @@
 
     const pluginName = "chameleonSystemSidebarMenu";
 
-    // NOTE this works parallel to bootstrap "dropdown.js" which reacts on the same css style classes with
-    //   opening and closing items with "nav-dropdown".
+    // NOTE this works parallel to "coreui.js" which reacts on the same css style classes with
+    // opening and closing items with "nav-group".
 
     function Plugin(baseElement) {
-        // debugger;
         this.$baseElement = $(baseElement);
         this.$navElement = this.$baseElement.find(".sidebar-nav");
         this.$navItems = this.$baseElement.find(".nav-item");
@@ -16,11 +15,10 @@
         this.lastSearchTerm = '';
         this.scrollTopBeforeFilter = 0;
 
-        // this.init();
+        this.init();
     }
     $.extend(Plugin.prototype, {
         init: function () {
-            // debugger;
             this.$filterElement.on('keyup', this.filter.bind(this));
             this.$baseElement.find('.nav-group-toggle').on('click', this.onCategoryToggle.bind(this));
             this.$navItems.on("click", this.onElementClick.bind(this));
@@ -41,12 +39,8 @@
             this.handleScrollPosition();
         },
         restoreOpenState: function() {
-            const activeCategoryIdsString = this.$baseElement.data('active-categories');
-            const activeCategoryIds = activeCategoryIdsString.split(",");
-
-            for (var i = 0; i < activeCategoryIds.length; i++) {
-                this.$baseElement.find('[data-categoryid="' + activeCategoryIds[i] +'"]').addClass('open');
-            }
+            const activeCategoryId = this.$baseElement.data('active-category');
+            this.$baseElement.find('[data-categoryid="' + activeCategoryId +'"]').addClass('show open').attr('aria-expanded', 'true');
         },
         markSelected: function() {
             var currentTableId = this.extractTableId(document.location.href);
@@ -59,15 +53,14 @@
                 var linkPathAndSearch = outer.getPathAndSearch(link);
 
                 if (true === outer.entryUrlMatches(linkPathAndSearch, documentPathAndSearch)) {
-                    $(this).addClass("selected-entry");
-
+                    $(this).find('.nav-link').addClass("active");
                     return;
                 }
 
                 var linkTableId = outer.extractTableId(link);
 
                 if (linkTableId === currentTableId && linkTableId !== null) {
-                    $(this).addClass("selected-entry");
+                    $(this).find('.nav-link').addClass("active");
                 }
             });
         },
@@ -86,7 +79,7 @@
             if ('' !== this.lastSearchTerm && '' === searchTerm) {
                 // display all again
 
-                this.$navTitles.removeClass('d-none open');
+                this.$navTitles.removeClass('d-none show');
                 this.$navItems.removeClass('d-none');
 
                 this.restoreOpenState();
@@ -102,12 +95,12 @@
                 return;
             }
 
-            this.$navTitles.addClass('d-none').removeClass('open');
+            this.$navTitles.addClass('d-none').removeClass('show').attr('aria-expanded', 'false');
             this.$navItems.addClass('d-none');
 
             let $matchingNavItems = this.$navItems.find(":chameleonContainsCaseInsensitive('" + searchTerm + "')").closest('.nav-item');
             $matchingNavItems.removeClass('d-none');
-            $matchingNavItems.parents('.nav-item').addClass('open').removeClass('d-none');
+            $matchingNavItems.parents('.nav-group').removeClass('d-none').addClass('show').attr('aria-expanded', 'true');
 
             let currentScrollTop = this.$navElement.scrollTop();
             if (this.$navElement.innerHeight() <= this.$baseElement.innerHeight() && currentScrollTop > 0) {
@@ -122,9 +115,14 @@
                 return;
             }
 
-            const $activeElement = $(document.activeElement);
-            if (!$activeElement.hasClass("nav-item") && !$activeElement.hasClass("sidebar-filter-input")) {
-                return;
+            let $activeElement = $(document.activeElement);
+            if (!$activeElement.hasClass("nav-item") && !$activeElement.hasClass("nav-group") && !$activeElement.hasClass("sidebar-filter-input")) {
+                if ($activeElement.hasClass('nav-link')) {
+                    $activeElement = $activeElement.parent();
+                } else {
+                    return;
+                }
+
             }
 
             // Special case filter input field
@@ -132,7 +130,10 @@
                 const visibleItems = this.getVisibleNavItems();
 
                 if (visibleItems.length > 0) {
-                    visibleItems[0].focus();
+                    const linkElement = visibleItems.eq(0).find("> .nav-link");
+                    if (linkElement.length > 0) {
+                        linkElement.eq(0).focus();
+                    }
                 }
 
                 return;
@@ -140,7 +141,9 @@
 
             // Toggle category or activate link?
             if ("Enter" === evt.key) {
-                if ($activeElement.hasClass("nav-dropdown")) {
+                if ($activeElement.hasClass("nav-group")) {
+                    debugger;
+                    // @ToDo: this doesn't really work yet!!!!
                     this.toggleCategory($activeElement, true);
                 } else {
                     const linkElement = $activeElement.find(".nav-link");
@@ -153,19 +156,25 @@
             }
 
             // Normal arrow navigation
-            if ($activeElement.is(".nav-item") && ("ArrowDown" === evt.key || "ArrowUp" === evt.key)) {
+            if (($activeElement.is(".nav-item") || ($activeElement.is(".nav-group"))) && ("ArrowDown" === evt.key || "ArrowUp" === evt.key)) {
                 let desiredNavItem = null;
 
                 if ("ArrowDown" === evt.key) {
                     desiredNavItem = this.getNextVisibleNavItem($activeElement);
                 } else {
                     // Can also be the text field (a non-nav item)
-
                     desiredNavItem = this.getPreviousVisibleNavItem($activeElement);
                 }
 
                 if (null !== desiredNavItem) {
-                    $(desiredNavItem).focus();
+                    if (desiredNavItem.hasClass('sidebar-filter-input')) {
+                        desiredNavItem.focus();
+                        return;
+                    }
+                    let linkElement = desiredNavItem.find("> .nav-link");
+                    if (linkElement.length > 0) {
+                        linkElement.eq(0).focus();
+                    }
                 }
             }
         },
@@ -176,7 +185,7 @@
 
             if (idx > -1) {
                 if (idx < visibleItems.length - 1) {
-                    return visibleItems[idx + 1];
+                    return visibleItems.eq(idx + 1);
                 } else {
                     return null;
                 }
@@ -191,7 +200,7 @@
 
             if (idx > -1) {
                 if (idx > 0) {
-                    return visibleItems[idx - 1];
+                    return visibleItems.eq(idx - 1);
                 } else {
                     return this.$filterElement;
                 }
@@ -201,32 +210,31 @@
         },
         getVisibleNavItems: function() {
             // NOTE not sure if this has the right order in every browser (depth first)
-            return this.$baseElement.find(".nav-item.nav-dropdown, .nav-item.nav-dropdown.open .nav-item").not(".d-none").toArray();
+            return this.$baseElement.find(".nav-item, .nav-group").not(".d-none");
         },
         onCategoryToggle: function (event) {
-            let category = $(event.target).parent('.nav-dropdown');
+            let category = $(event.target).parent('.nav-group');
             this.toggleCategory(category, false);
         },
         toggleCategory: function($category, byKeyboard) {
-            const categoryId = $category.data('categoryid');
-            const categoryOpen = $category.hasClass("open");
+            let categoryId = $category.data('categoryid');
+
+            if ($category.hasClass("open")) {
+                //active open category is closed and must be removed from the session
+                $category.removeClass('open');
+                categoryId = '';
+            } else {
+                this.$navTitles.removeClass('open');
+                $category.addClass('open');
+            }
 
             if (byKeyboard) {
-                $category.toggleClass("open");
+                $category.toggleClass("show");
+                $category.attr('aria-expanded', $category.hasClass("show") ? 'true' : 'false');
             }
             // Else dropdown.js will react on the click
 
-            var openArray = this.$baseElement.data('active-categories').split(",");
-
-            if (!categoryOpen) {
-                $category.focus();
-
-                openArray.push(categoryId);
-            } else {
-                openArray = openArray.filter(function(value, index, arr) { return value !== categoryId });
-            }
-
-            this.$baseElement.data('active-categories', openArray.join(","));
+            this.$baseElement.data('active-category', categoryId);
 
             const url = this.$baseElement.data('toggle-category-notification-url');
             $.post(url, {
@@ -237,6 +245,7 @@
             this.handleElementClickForPopular($(event.target));
         },
         handleElementClickForPopular: function($clickedItem) {
+            // @ToDo: TEST THIS!!!
             const clickedMenuId = $clickedItem.data("entry-id");
 
             if (0 === clickedMenuId.length) {
@@ -249,6 +258,7 @@
             });
         },
         extractTableId: function(url) {
+            // @ToDo: TEST THIS!!!
             var idx = url.indexOf("?");
 
             if (-1 === idx) {
