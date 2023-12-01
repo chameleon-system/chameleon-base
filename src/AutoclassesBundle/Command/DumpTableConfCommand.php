@@ -35,7 +35,7 @@ class DumpTableConfCommand extends Command
     ) {
         parent::__construct();
     }
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('chameleon_system:autoclasses:dump')
             ->setDescription('Export the table configurations as doctrine data models');
