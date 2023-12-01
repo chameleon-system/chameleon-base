@@ -303,8 +303,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
             $treeTableEditor = $treeEditorManager->oTableEditor;
             $newNameValue = $treeTableEditor->oTable->sqlData['name'].$copyText;
             $urlName = $urlUtil->normalizeUrl( $treeTableEditor->oTable->sqlData['urlname'].$copyText);
-            $treeEditorManager->SaveField('name', $newNameValue, false );
-            $treeEditorManager->SaveField('urlname', $urlName, true );
+            $treeTableEditor->SaveFields(['name' => $newNameValue, 'urlname' => $urlName], false);
             $treeTableEditor->UpdateSubtreePathCache($newTreeId);
         }
 
@@ -499,7 +498,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
                 /** @var $oTableManager TCMSTableEditorManager */
                 $oTableManager = new TCMSTableEditorManager();
                 $oTableManager->Init($navigationTableConf->id, null);
-                $oTableManager->AllowEditByAll($this->bAllowEditByAll);
+                $oTableManager->AllowEditByAll(true);
                 $aDefaultData = $navigation->sqlData;
                 unset($aDefaultData['id']);
                 $aDefaultData['cms_portal_id'] = $this->sId;
