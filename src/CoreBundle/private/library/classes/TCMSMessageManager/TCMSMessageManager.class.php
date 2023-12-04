@@ -436,7 +436,7 @@ class TCMSMessageManager
             $oMessages->GoToStart();
         }
 
-        return join($aFieldClasses, $sDivider);
+        return implode($sDivider, $aFieldClasses);
     }
 
     /**

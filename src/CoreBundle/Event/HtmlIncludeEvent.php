@@ -58,13 +58,33 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
         return $this->data;
     }
 
+    public function removeDataElement(string $key): bool
+    {
+        if (!isset($this->data[$key])) {
+            return false;
+        }
+    
+        unset($this->data[$key]);
+
+        return true;
+    }
+
+    public function updateDataElement(string $key, string $value): bool
+    {
+        if (!isset($this->data[$key])) {
+            return false;
+        }
+        
+        $this->data[$key] = $value;
+
+        return true;
+    }
+
     /**
      * @param mixed $value
-     *
-     * @return bool
      * @psalm-assert-if-true string $value
      */
-    private function isInteger($value)
+    private function isInteger($value): bool
     {
         if (true === is_numeric($value)) {
             $test = (int) $value;

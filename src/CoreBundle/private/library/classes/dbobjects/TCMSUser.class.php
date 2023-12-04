@@ -54,7 +54,7 @@ class TCMSUser extends TCMSRecord
             return false;
         }
         while($group = $groups->next()) {
-            if ($group->fieldName === 'cms_admin') {
+            if ($group->sqlData['name'] === 'cms_admin') {
                 return true;
             }
         }
