@@ -25,4 +25,18 @@ class GoogleLoginController extends AbstractController
                 'openid','https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'
             ]);
     }
+
+
+    /**
+     * After going to google, you're redirected back here
+     * note however, that the method itself will not be called. Instead, `\ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator::authenticate` will handle the request.
+     *
+     * @Route("/cms/google-check", name="connect_google_check")
+     */
+    public function connectCheckAction(Request $request, ClientRegistry $clientRegistry)
+    {
+        // since we want to authenticate the user in symfony, we use a guard authenticator
+        // \ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator::authenticate
+        // and do nothing in this method.
+    }
 }

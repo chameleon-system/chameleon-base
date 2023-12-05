@@ -25,7 +25,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
         $hostedDomain = $googleUser->getHostedDomain();
         $email = $googleUser->getEmail();
         $mailDomain = mb_substr($email, mb_strpos($email, '@')+1);
-        $baseUserName = $this->allowedDomains[$hostedDomain] ?? $this->allowedDomains[$mailDomain] ?? null;
+        $baseUserName = $this->allowedDomains[$hostedDomain]['cloneUserPermissionsFrom'] ?? $this->allowedDomains[$mailDomain]['cloneUserPermissionsFrom'] ?? null;
         if (null === $baseUserName) {
             throw new \Exception('You may only register google users from the following domains: '.implode(', ', array_keys($this->allowedDomains)));
         }
