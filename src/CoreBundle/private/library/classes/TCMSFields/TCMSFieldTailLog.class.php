@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 class TCMSFieldTailLog extends TCMSField
 {
     protected $methodCallAllowed = array('getLogData');

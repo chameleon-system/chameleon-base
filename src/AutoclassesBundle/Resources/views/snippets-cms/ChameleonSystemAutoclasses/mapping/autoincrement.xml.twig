@@ -1,0 +1,8 @@
+{# @var definition array #}
+<field name="{{ fieldName }}" type="integer" column="{{ column }}" nullable="false" unique="true">
+    <generator strategy="AUTO"/>
+    <options>
+        <option name="comment">{{ comment }}</option>
+        <option name="unsigned">true</option>
+    </options>
+</field>

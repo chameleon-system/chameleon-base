@@ -1,0 +1,6 @@
+{# @var definition array #}
+<field name="{{ fieldName }}" {% if fieldType.mysql_type %}type="{{ fieldType.mysql_type|lower }}"{% endif %} column="{{ definition.name }}" {% if length != '' %}length="{{ length }}"{% endif%} nullable="false">
+    <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+    </options>
+</field>

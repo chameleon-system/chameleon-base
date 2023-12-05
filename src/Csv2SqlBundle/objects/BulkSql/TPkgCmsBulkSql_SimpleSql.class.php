@@ -49,7 +49,7 @@ class TPkgCmsBulkSql_SimpleSql implements IPkgCmsBulkSql
     /**
      * add a single row in the target table for given data.
      *
-     * @param $aData
+     * @param array $aData
      *
      * @return bool
      */

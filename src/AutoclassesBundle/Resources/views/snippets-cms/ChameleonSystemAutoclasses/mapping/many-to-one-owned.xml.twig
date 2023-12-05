@@ -1,0 +1,11 @@
+<many-to-one field="{{ fieldName }}" target-entity="{{ targetClass }}" inversed-by="{{ owningCollectionProperty }}" >
+    <options>
+        <option name="comment">{{ comment }}</option>
+    </options>
+    {% if enableCascadeRemove %}
+    <cascade>
+        <cascade-remove/>
+    </cascade>
+    {% endif %}
+    <join-column name="{{ column }}" referenced-column-name="id" />
+</many-to-one>

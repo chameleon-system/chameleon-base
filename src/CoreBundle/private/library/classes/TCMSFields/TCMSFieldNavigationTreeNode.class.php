@@ -14,6 +14,7 @@
 /**/
 class TCMSFieldNavigationTreeNode extends TCMSFieldTreeNode
 {
+
     public function _GetOpenWindowJS()
     {
         $url = PATH_CMS_CONTROLLER.'?pagedef=treenodeselect&fieldName='.urlencode($this->name).'&id='.urlencode($this->data).'&portalID='.$this->oTableRow->sqlData['cms_portal_id'];

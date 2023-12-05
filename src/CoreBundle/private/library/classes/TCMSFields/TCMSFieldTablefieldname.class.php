@@ -9,11 +9,53 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+use function PHPUnit\Framework\stringEndsWith;
+
 /**
  * field name in a table.
 /**/
-class TCMSFieldTablefieldname extends TCMSFieldOption
+class TCMSFieldTablefieldname extends TCMSFieldOption implements DoctrineTransformableInterface
 {
+
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'string',
+            'docCommentType' => 'string',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        return $this->getDoctrineRenderer('mapping/string.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'string',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+            'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
+        ])->render();
+    }
+
     public function GetOptions()
     {
         // use the field name to make a lookup of the right table

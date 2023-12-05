@@ -9,8 +9,15 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 class TCMSFieldTime extends TCMSFieldNumber
 {
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        throw new Exception('TCMSFieldTime not implemented yet');
+    }
+
     /**
      * {@inheritdoc}
      */

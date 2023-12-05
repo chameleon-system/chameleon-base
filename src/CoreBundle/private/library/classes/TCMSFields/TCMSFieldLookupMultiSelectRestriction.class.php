@@ -9,12 +9,57 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
 {
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $parts = parent::getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
+
+
+
+        $default = $this->oDefinition->sqlData['field_default_value'];
+        if ('' === $default) {
+            $default = '0';
+        }
+
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'bool',
+            'docCommentType' => 'bool',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
+            'defaultValue' => sprintf("%s", '1' === $default ? 'true' : 'false'),
+            'allowDefaultValue' => true,
+            'getterName' => 'is'. $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        $mappingXml =  $this->getDoctrineRenderer('mapping/boolean.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
+            'type' => 'boolean',
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'column' => $this->getInverseEmptyFieldName(),
+            'default' => $default,
+        ])->render();
+
+
+        return $parts->merge(new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $mappingXml,
+            [],
+            true
+        ));
+    }
+
+
     const INVERSE_EMPTY_FIELD_NAME_POST_NAME = '_inverse_empty';
 
     /**

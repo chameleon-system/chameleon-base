@@ -9,11 +9,52 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+
 /**
  * Used to select a color.
  */
-class TCMSFieldColorpicker extends TCMSField
+class TCMSFieldColorpicker extends TCMSField implements DoctrineTransformableInterface
 {
+
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'string',
+            'docCommentType' => 'string',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        return $this->getDoctrineRenderer('mapping/string-char.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'string',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+            'length' => '6',
+        ])->render();
+    }
+
     public function GetHTML()
     {
         $value = $this->data;

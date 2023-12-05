@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
@@ -17,6 +18,17 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 /**/
 class TCMSFieldDateToday extends TCMSFieldDate
 {
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        return $this->getDoctrineRenderer('mapping/datetime.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'column' => $this->name,
+            'type' => 'datetime',
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => 'CURRENT_TIMESTAMP',
+        ])->render();
+    }
     /**
      * view path for frontend.
      */

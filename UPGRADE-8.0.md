@@ -98,6 +98,23 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 This list might not be complete. Also take a look at the official Symfony migration documentation:
 https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 
+## Migrating to doctrine ORM
+First, make sure that all property tables have a matching parent key field in the target table. If not, add it.
+Then, run the following command to generate the doctrine entities:
+
+```bash
+app/console chameleon_system:autoclasses:dump
+```
+Validate the entities
+
+```bash
+app/console doctrine:mapping:info
+```
+Validate the mapping
+
+```bash
+app/console doctrine:schema:validate
+```
 
 ## Adjust Composer Dependencies
 

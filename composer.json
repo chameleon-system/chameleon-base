@@ -24,7 +24,6 @@
         "dmhendricks/file-icon-vectors": "~1.0",
         "doctrine/annotations": "^1.13",
         "doctrine/dbal": "^2",
-        "doctrine/doctrine-bundle": "~2.5.0",
         "ezyang/htmlpurifier": "~4.6",
         "kartik-v/strength-meter": "~1.1.0",
         "matthiasmullie/minify": "~1.3.0",
@@ -33,6 +32,7 @@
         "symfony/monolog-bundle": "~3.8.0",
         "symfony/polyfill-apcu": "v1.27.0",
         "tedivm/jshrink": "~1.0",
+        "symfony/orm-pack": "~2.2.0",
 
 
         "symfony/asset": "^5.4",
@@ -161,6 +161,7 @@
 
             "ChameleonSystem\\": "src",
             "ChameleonSystem\\CmsBackendBundle\\": "src/CmsBackendBundle/src",
+            "ChameleonSystem\\DataAccessBundle\\": "src/DataAccessBundle/src",
             "ChameleonSystem\\SecurityBundle\\": "src/SecurityBundle/src",
             "esono\\pkgCmsCache\\": "src/CmsCacheBundle/src/esono/pkgCmsCache",
             "esono\\pkgCmsCounter\\": "src/CmsCounterBundle/src/esono/pkgCmsCounter",

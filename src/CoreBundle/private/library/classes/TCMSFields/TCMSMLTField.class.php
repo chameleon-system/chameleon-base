@@ -9,12 +9,70 @@
  * file that was distributed with this source code.
  */
 
-abstract class TCMSMLTField extends TCMSField
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+use function PHPUnit\Framework\stringEndsWith;
+
+abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableInterface
 {
+
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_mlt')) {
+            $propertyName = substr($propertyName, 0, -4);
+        }
+        $targetClass = $this->snakeToPascalCase($this->GetForeignTableName());
+        $parameters = [
+            'source' => get_class($this),
+            'type' => $targetClass,
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($propertyName.'_collection'),
+            'methodParameter' => $this->snakeToCamelCase($this->name),
+        ];
+        $parameters['docCommentType'] = sprintf('Collection<int, %s>', $parameters['type']);
+
+        $propertyCode = $this->getDoctrineRenderer('model/many-to-many.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/many-to-many.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
+            [
+                ltrim(sprintf('%s\\%s', $tableNamespaceMapping[$this->GetForeignTableName()], $targetClass), '\\'),
+                'Doctrine\\Common\\Collections\\Collection',
+                'Doctrine\\Common\\Collections\\ArrayCollection',
+            ],
+            true
+        );
+    }
+
+
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_mlt')) {
+            $propertyName = substr($propertyName, 0, -4);
+        }
+
+        $viewName = 'mapping/many-to-many.xml.twig';
+
+        return $this->getDoctrineRenderer($viewName, [
+            'fieldName' => $this->snakeToCamelCase($propertyName.'_collection'),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetForeignTableName()], $this->snakeToPascalCase($this->GetForeignTableName())),
+            'joinTable' => $this->GetMLTTableName(),
+            'comment' => $this->oDefinition->sqlData['translation'],
+
+        ])->render();
+    }
+
+
     public function __construct()
     {
         $this->isMLTField = true;
     }
+
 
     public function getMltValues()
     {

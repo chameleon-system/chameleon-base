@@ -1,0 +1,31 @@
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="{{ fqn }}" table="{{ table.name }}">
+        <id name="id" type="string" length="36" column="id" unique="true" />
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+
+        {%- for propertyMapping in propertyMappings %}
+
+            {{ propertyMapping | raw }}
+        {%- endfor %}
+
+        {% if liveCycleCallbacks|length > 0 %}
+        <lifecycle-callbacks>
+            {% for event, methodList in liveCycleCallbacks %}
+                {% for method in methodList %}
+                    <lifecycle-callback type="{{ event }}" method="{{ method }}"/>
+                {% endfor %}
+            {% endfor %}
+        </lifecycle-callbacks>
+        {% endif %}
+
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,14 @@
+{% autoescape false %}
+// {{ source }}
+public function get{{ propertyName |chameleon_ucfirst  }}(): ?{{ type }}
+{
+    return $this->{{ propertyName }};
+}
+
+public function set{{ propertyName |chameleon_ucfirst  }}(?{{ type }} ${{ propertyName }}): self
+{
+    $this->{{ propertyName }} = ${{ propertyName }};
+
+    return $this;
+}
+{% endautoescape %}
