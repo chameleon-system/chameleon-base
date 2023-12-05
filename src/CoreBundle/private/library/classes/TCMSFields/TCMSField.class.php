@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -1619,6 +1620,10 @@ class TCMSField implements TCMSFieldVisitableInterface
         return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
+    protected function getBackendSession(): BackendSessionInterface
+    {
+        return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+    }
     /**
      * @return TranslatorInterface
      */

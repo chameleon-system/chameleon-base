@@ -384,8 +384,8 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                  ";
             MySqlLegacySupport::getInstance()->query($sQuery);
 
-            $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-            $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguage->fieldIso6391);
+            $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
+            $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguageIsoCode);
             $migrationQueryData
                 ->setFields(array(
                     $this->getTableFieldName() => $sTableName,
@@ -430,8 +430,8 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                   WHERE `".MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName())."` != '".MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."'";
         MySqlLegacySupport::getInstance()->query($sQuery);
 
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-        $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguage->fieldIso6391);
+        $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();;
+        $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguageIsoCode);
         $migrationQueryData
             ->setFields(array($this->name => ''))
             ->setWhereExpressions(array(new Comparison($this->getTableFieldName().'', Comparison::NEQ, $sTableName)));

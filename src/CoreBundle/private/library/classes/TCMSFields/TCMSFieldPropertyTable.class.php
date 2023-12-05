@@ -168,8 +168,8 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
                         WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($targetField)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->recordId)."'";
             MySqlLegacySupport::getInstance()->query($query);
 
-            $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-            $migrationQueryData = new MigrationQueryData($tableName, $editLanguage->fieldIso6391);
+            $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
+            $migrationQueryData = new MigrationQueryData($tableName, $editLanguageIsoCode);
             $migrationQueryData
                 ->setWhereEquals(array(
                     $targetField => $this->recordId,

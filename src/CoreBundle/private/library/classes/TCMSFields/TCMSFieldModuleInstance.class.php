@@ -339,8 +339,8 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
                         WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->recordId)."'";
         MySqlLegacySupport::getInstance()->query($query);
 
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-        $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguage->fieldIso6391);
+        $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
+        $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguageIsoCode);
         $migrationQueryData
             ->setFields(array(
                 $this->name.'_view' => $sView,

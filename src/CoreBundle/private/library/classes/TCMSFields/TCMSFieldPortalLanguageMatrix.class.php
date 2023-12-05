@@ -179,8 +179,8 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField
         $sQuery = "DELETE FROM `cms_portal_language_matrix` WHERE `cms_portal_language_matrix`.`cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oTableConfig->id)."'";
         MySqlLegacySupport::getInstance()->query($sQuery);
 
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-        $migrationQueryData = new MigrationQueryData('cms_portal_language_matrix', $editLanguage->fieldIso6391);
+        $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
+        $migrationQueryData = new MigrationQueryData('cms_portal_language_matrix', $editLanguageIsoCode);
         $migrationQueryData
             ->setWhereEquals(array(
               'cms_tbl_conf_id' => $oTableConfig->id,
