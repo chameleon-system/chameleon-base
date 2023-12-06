@@ -9,14 +9,12 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * through the config parameter "bShowLinkToParentRecord=true" you can activate a link
@@ -61,7 +59,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
     protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
     {
         $propertyName = $this->name;
-        if (stringEndsWith($propertyName, '_id')) {
+        if (str_ends_with($propertyName, '_id')) {
             $propertyName = substr($propertyName, 0, -3);
         }
 
