@@ -7,6 +7,25 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    /**
+     * @param \DateTimeImmutable $dateModified
+     * @param string $id
+     * @param string $userIdentifier
+     * @param string $firstname
+     * @param string $lastname
+     * @param string $company
+     * @param string $email
+     * @param string $cmsLanguageId
+     * @param array<string> $availableLanguagesIsoCodes
+     * @param string|null $currentEditLanguageIsoCode
+     * @param array<string, string> $availableEditLanguages
+     * @param string|null $password
+     * @param array<string,string> $roles
+     * @param array<string,string> $rights
+     * @param array<string,string> $groups
+     * @param array<string, string> $portals
+     * @param CmsUserSSOModel[] $ssoIds
+     */
     public function __construct(
         private \DateTimeImmutable $dateModified,
         private string $id,
@@ -24,15 +43,17 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
         readonly private array $rights = [],
         readonly private array $groups = [],
         readonly private array $portals = [],
-        private ?string $googleId = null,
+        private array $ssoIds = []
     ) {
     }
 
-    public function getGoogleId(): ?string
+    /**
+     * @return CmsUserSSOModel[]
+     */
+    public function getSsoIds(): array
     {
-        return $this->googleId;
+        return $this->ssoIds;
     }
-
 
     /**
      * @return \DateTimeImmutable
@@ -205,10 +226,21 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $user;
     }
-    public function withGoogleId(mixed $googleId): self
+
+    public function withSsoId(CmsUserSSOModel $SSOModel): self
     {
         $user = clone $this;
-        $user->googleId = $googleId;
+        foreach ($this->ssoIds as $key => $ssId) {
+            if (
+                $SSOModel->getType() !== $ssId->getType()
+                || $SSOModel->getSsoId() !== $ssId->getSsoId()
+            ) {
+                continue;
+            }
+            // exact match. no need to add.
+            return $user;
+        }
+        $user->ssoIds[] = $SSOModel;
 
         return $user;
     }

@@ -65,10 +65,15 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
     }
 
-    public function loadUserByGoogleId(string $googleId): ?CmsUserModel
+    public function loadUserFromSSOID(string $ssoType, string $ssoId): ?CmsUserModel
     {
-        $query = "SELECT * FROM `cms_user` WHERE `google_id` = :googleId AND `allow_cms_login` = '1' LIMIT 0,1";
-        $userRow = $this->connection->fetchAssociative($query, ['googleId' => $googleId]);
+        $query = "SELECT `cms_user`.* 
+                    FROM `cms_user`
+              INNER JOIN `cms_user_sso` ON `cms_user`.`id` = `cms_user_sso`.`cms_user_id`
+                   WHERE `cms_user_sso`.`type` = :ssoType 
+                     AND `cms_user_sso`.`sso_id` = :ssoId
+                     AND `cms_user`.`allow_cms_login` = '1' LIMIT 0,1";
+        $userRow = $this->connection->fetchAssociative($query, ['ssoType' => $ssoType, 'ssoId' => $ssoId]);
 
         if (false === $userRow) {
             return null;
@@ -167,6 +172,12 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             return $carry;
         }, []);
 
+        $ssoList = [];
+        $ssoRows = $this->connection->fetchAllAssociative('SELECT * FROM `cms_user_sso` WHERE `cms_user_id` = :userId', ['userId' => $userRow['id']]);
+        foreach ($ssoRows as $ssoRow) {
+            $ssoList[] = new CmsUserSSOModel($ssoRow['cms_user_id'], $ssoRow['type'], $ssoRow['sso_id'], $ssoRow['id']);
+        }
+
         return new CmsUserModel(
             \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $userRow['date_modified']),
             $userRow['id'],
@@ -186,7 +197,8 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             $roles,
             $userRights,
             $userGroups,
-            $userPortals
+            $userPortals,
+            $ssoList
         );
     }
 
@@ -194,7 +206,6 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     {
         $this->connection->insert('cms_user', [
             'id' => $user->getId(),
-            'google_id' => $user->getGoogleId() ?? '',
             'login' => $user->getUserIdentifier(),
             'firstname' => $user->getFirstName(),
             'name' => $user->getLastName(),
@@ -206,6 +217,17 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
             'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
         ]);
+        foreach ($user->getSsoIds() as $ssoId) {
+            $ssoData = [
+                'cms_user_id' => $ssoId->getCmsUserId(),
+                'type' => $ssoId->getType(),
+                'sso_id' => $ssoId->getSsoId(),
+            ];
+            if (null !== $ssoId->getId()) {
+                $ssoData['id'] = $ssoId->getId();
+            }
+            $this->connection->insert('cms_user_sso', $ssoData);
+        }
 
         foreach ($user->getAvailableEditLanguages() as $id => $code) {
             $this->connection->insert('cms_user_cms_language_mlt', [
@@ -242,7 +264,6 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         $this->connection->update('cms_user', [
 
             'login' => $user->getUserIdentifier(),
-            'google_id' => $user->getGoogleId() ?? '',
             'firstname' => $user->getFirstName(),
             'name' => $user->getLastName(),
             'company' => $user->getCompany(),
@@ -252,6 +273,26 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
             'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
         ], ['id' => $user->getId(),]);
+
+        $idList = [];
+        foreach ($user->getSsoIds() as $ssoId) {
+            $ssoData = [
+                'cms_user_id' => $ssoId->getCmsUserId(),
+                'type' => $ssoId->getType(),
+                'sso_id' => $ssoId->getSsoId(),
+            ];
+            if (null !== $ssoId->getId()) {
+                $idList[] = $ssoId->getId();
+                $ssoData['id'] = $ssoId->getId();
+                $this->connection->update('cms_user_sso', $ssoData, ['id' => $ssoId->getId()]);
+            } else {
+                $idList[] = $this->connection->insert('cms_user_sso', $ssoData);
+            }
+        }
+        $this->connection->executeQuery(
+            'DELETE FROM `cms_user_sso` WHERE `cms_user_id` = :cmsUserId AND `id` NOT IN (:idList)',
+            ['cmsUserId' => $user->getId(), 'idList' => $idList], ['idList' => Connection::PARAM_STR_ARRAY]
+        );
 
         $this->connection->delete('cms_user_cms_language_mlt', ['source_id' => $user->getId()]);
         foreach ($user->getAvailableEditLanguages() as $id => $code) {

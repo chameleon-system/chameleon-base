@@ -5,10 +5,13 @@ namespace ChameleonSystem\SecurityBundle\CmsGoogleLogin;
 use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\CmsUser\CmsUserSSOModel;
 use League\OAuth2\Client\Provider\GoogleUser;
 
 class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInterface
 {
+    private const SSO_TYPE = 'google';
+
     public function __construct(
         private readonly CmsUserDataAccess $cmsUserDataAccess,
         private readonly GuidCreationServiceInterface $guidService,
@@ -29,15 +32,16 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
         if (null === $baseUserName) {
             throw new \Exception('You may only register google users from the following domains: '.implode(', ', array_keys($this->allowedDomains)));
         }
+        $userId = $this->guidService->findUnusedId('cms_user');
         $user = $this->cmsUserDataAccess->loadUserByIdentifier($baseUserName)
-                ->withId($this->guidService->findUnusedId('cms_user'))
+                ->withId($userId)
                 ->withUserIdentifier($googleUser->getEmail())
                 ->withDateModified(new \DateTimeImmutable())
                 ->withCompany($googleUser->getHostedDomain())
                 ->withEmail($googleUser->getEmail())
                 ->withFirstname($googleUser->getFirstName())
                 ->withLastname($googleUser->getLastName())
-                ->withGoogleId($googleUser->getId());
+                ->withSsoId(new CmsUserSSOModel($userId, self::SSO_TYPE, $googleUser->getId(), $this->guidService->findUnusedId('cms_user_sso')));
 
         return $this->cmsUserDataAccess->createUser($user);
     }
@@ -52,12 +56,18 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
 
         $newUser = $cmsUser
             ->withDateModified(new \DateTimeImmutable())
-            ->withGoogleId($googleUser->getId())
             ->withFirstname($googleUser->getFirstName())
             ->withLastname($googleUser->getLastName())
             ->withEmail($googleUser->getEmail())
             ->withCompany($googleUser->getHostedDomain())
-        ;
+            ->withSsoId(
+                new CmsUserSSOModel(
+                    $cmsUser->getId(),
+                    self::SSO_TYPE,
+                    $googleUser->getId(),
+                    $this->guidService->findUnusedId('cms_user_sso')
+                )
+            );
 
         return $this->cmsUserDataAccess->updateUser($newUser);
     }
@@ -69,7 +79,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
 
     private function getCmsUser(GoogleUser $googleUser): ?CmsUserModel
     {
-        $existingUser = $this->cmsUserDataAccess->loadUserByGoogleId($googleUser->getId());
+        $existingUser = $this->cmsUserDataAccess->loadUserFromSSOID(self::SSO_TYPE, $googleUser->getId());
         if (null !== $existingUser) {
             return $existingUser;
         }
