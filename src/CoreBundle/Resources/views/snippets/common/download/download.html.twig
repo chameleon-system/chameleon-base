@@ -12,8 +12,7 @@
 {% endif %}
 
 <span class="cmsdownloaditem" {{ downloadId|raw }}>
-    <a style="{{ downloadLink.linkStyle|e('html_attr') }}" target="_blank" href="{{ downloadLink.downloadUrl|e('html_attr') }}"
-       onclick="window.open('{{ downloadLink.downloadUrl|e('html_attr') }}','downloaddetail','width=600,height=600,directories=no,location=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes'); return false;">
+    <a style="{{ downloadLink.linkStyle|e('html_attr') }}" target="_blank" href="{{ downloadLink.downloadUrl|e('html_attr') }}">
     <span class="{{ downloadLink.iconCssClass|e('html_attr') }}"></span> {{ fileName|raw }}
     </a>
     {% if downloadLink.showSize %}
