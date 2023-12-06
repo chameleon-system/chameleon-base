@@ -93,15 +93,4 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
 
         return $this->cmsUserDataAccess->loadUserByEMail($email);
     }
-
-    private function getDefault(string $key): string|array
-    {
-        $value = $this->domainToBaseUserMapping[$key] ?? null;
-        if (null !== $value) {
-            return $value;
-        }
-
-        throw new \Exception('Missing config value for '.$key.' in newUserConfig');
-    }
-
 }
