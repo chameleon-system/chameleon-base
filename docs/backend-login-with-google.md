@@ -25,7 +25,7 @@ knpu_oauth2_client:
       type: google
       client_id: '%env(GOOGLE_CLIENT_ID)%'
       client_secret: '%env(GOOGLE_CLIENT_SECRET)%'
-      # route is definied in \ChameleonSystem\SecurityBundle\Controller\GoogleLoginController::connectAction
+      # route is defined in \ChameleonSystem\SecurityBundle\Controller\GoogleLoginController::connectAction
       redirect_route: connect_google_start
       redirect_params: {}
       hosted_domain: 'esono.de'
