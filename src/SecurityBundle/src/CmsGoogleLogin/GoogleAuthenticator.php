@@ -4,6 +4,7 @@ namespace ChameleonSystem\SecurityBundle\CmsGoogleLogin;
 
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use JetBrains\PhpStorm\ArrayShape;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use League\OAuth2\Client\Provider\GoogleUser;
@@ -21,6 +22,11 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationEntrypointInterface
 {
 
+    /**
+     * @param ClientRegistry $clientRegistry
+     * @param GoogleUserRegistrationServiceInterface $registrationService
+     * @param string[] $allowedDomains
+     */
     public function __construct(
         private readonly ClientRegistry $clientRegistry,
         private readonly GoogleUserRegistrationServiceInterface $registrationService,
@@ -41,7 +47,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
 
         $user = $client->fetchUserFromToken($accessToken);
         $hostedDomain = $user->getHostedDomain();
-        if ((null !== $hostedDomain) && false === array_key_exists($hostedDomain, $this->allowedDomains)) {
+        if ((null !== $hostedDomain) && false === in_array($hostedDomain, $this->allowedDomains, true)) {
             throw new AuthenticationException(sprintf('The hosted domain %s is not allowed.', $hostedDomain));
         }
         if (null === $hostedDomain) {

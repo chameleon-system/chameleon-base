@@ -12,10 +12,15 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
 {
     private const SSO_TYPE = 'google';
 
+    /**
+     * @param CmsUserDataAccess $cmsUserDataAccess
+     * @param GuidCreationServiceInterface $guidService
+     * @param array<string, array{cloneUserPermissionsFrom: string}> $domainToBaseUserMapping
+     */
     public function __construct(
         private readonly CmsUserDataAccess $cmsUserDataAccess,
         private readonly GuidCreationServiceInterface $guidService,
-        private readonly array $allowedDomains = []
+        private readonly array $domainToBaseUserMapping = []
     ) {
     }
 
@@ -28,9 +33,9 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
         $hostedDomain = $googleUser->getHostedDomain();
         $email = $googleUser->getEmail();
         $mailDomain = mb_substr($email, mb_strpos($email, '@')+1);
-        $baseUserName = $this->allowedDomains[$hostedDomain]['cloneUserPermissionsFrom'] ?? $this->allowedDomains[$mailDomain]['cloneUserPermissionsFrom'] ?? null;
+        $baseUserName = $this->domainToBaseUserMapping[$hostedDomain]['cloneUserPermissionsFrom'] ?? $this->domainToBaseUserMapping[$mailDomain]['cloneUserPermissionsFrom'] ?? null;
         if (null === $baseUserName) {
-            throw new \Exception('You may only register google users from the following domains: '.implode(', ', array_keys($this->allowedDomains)));
+            throw new \Exception('You may only register google users from the following domains: '.implode(', ', array_keys($this->domainToBaseUserMapping)));
         }
         $userId = $this->guidService->findUnusedId('cms_user');
         $user = $this->cmsUserDataAccess->loadUserByIdentifier($baseUserName)
@@ -91,7 +96,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
 
     private function getDefault(string $key): string|array
     {
-        $value = $this->allowedDomains[$key] ?? null;
+        $value = $this->domainToBaseUserMapping[$key] ?? null;
         if (null !== $value) {
             return $value;
         }

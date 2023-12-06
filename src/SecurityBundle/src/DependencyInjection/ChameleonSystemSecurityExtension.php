@@ -26,9 +26,9 @@ class ChameleonSystemSecurityExtension extends ConfigurableExtension
         $loginController = $container->getDefinition(CmsLoginController::class);
         $loginController->setArgument('$enableGoogleLogin', true);
         $newUserConfig = $container->getDefinition(GoogleUserRegistrationService::class);
-        $newUserConfig->setArgument('$allowedDomains', $mergedConfig['googleLogin']['domainToBaseUserMapping']);
+        $newUserConfig->setArgument('$domainToBaseUserMapping', $mergedConfig['googleLogin']['domainToBaseUserMapping']);
 
         $authenticator = $container->getDefinition(GoogleAuthenticator::class);
-        $authenticator->setArgument('$allowedDomains', $mergedConfig['googleLogin']['domainToBaseUserMapping']);
+        $authenticator->setArgument('$allowedDomains', array_keys($mergedConfig['googleLogin']['domainToBaseUserMapping']));
     }
 }
