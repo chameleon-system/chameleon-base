@@ -45,7 +45,7 @@ class TableConfExporter implements TableConfExporterInterface
         $dataModelPartsList = [];
         $fieldConfig->GoToStart();
         while ($field = $fieldConfig->Next()) {
-            if (false === $field instanceof DoctrineTransformableInterface) {
+            if (false === $field instanceof DoctrineTransformableInterface || false === $field instanceof \TCMSField) {
                 continue;
             }
             $fields[] = $field;

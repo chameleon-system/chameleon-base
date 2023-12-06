@@ -72,7 +72,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
     }
 
-    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
+    protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
     {
         $lookupFieldMapping =  parent::getDoctrineDataModelXml($namespace, $tableNamespaceMapping);
 

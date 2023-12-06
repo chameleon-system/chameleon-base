@@ -54,7 +54,7 @@ interface IPkgSnippetRenderer
      * Set a variable/block to be substituted in the snippet.
      *
      * @param string $sName - variable/block name
-     * @param string $sValue - the string to use in place of the variable/block
+     * @param mixed $sValue - the string to use in place of the variable/block
      *
      * @return void
      */

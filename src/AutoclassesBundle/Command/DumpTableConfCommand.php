@@ -12,11 +12,6 @@ use Symfony\Component\HttpKernel\Config\FileLocator;
 
 class DumpTableConfCommand extends Command
 {
-    /**
-     * @param TableConfExporterInterface $tableConfExporter
-     * @param FileLocator $fileLocator
-     * @param array $tableClassMapping
-     */
     public function __construct(
         private readonly TableConfExporterInterface $tableConfExporter,
         private readonly FileLocator $fileLocator,
@@ -83,6 +78,8 @@ class DumpTableConfCommand extends Command
                         throw new \RuntimeException(sprintf('Directory "%s" was not created', $mappingDir));
                     }
                 }
+
+                $fqn = $this->tableConfExporter->export($table, $tableConfig['namespace'], $targetDir, $mappingDir, $tableNamespaceMapping);
                 if (false===is_dir($tableConfig['metaConfigDir'])) {
                     if (!mkdir($tableConfig['metaConfigDir'], 0755, true) && !is_dir($tableConfig['metaConfigDir'])) {
                         throw new \RuntimeException(sprintf('Directory "%s" was not created', $tableConfig['metaConfigDir']));

@@ -13,7 +13,6 @@ interface TableConfExporterInterface
     public function getTables(): array;
 
     /**
-     * @param string $metaConfigDir
      * @return string - fqn of the generated model
      * @throws \Exception
      */

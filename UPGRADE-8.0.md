@@ -3,7 +3,7 @@ UPGRADE FROM 7.1 to 8.0
 
 # Essentials
 
-The steps in this chapter are required to get the project up and running in version 7.2.
+The steps in this chapter are required to get the project up and running in version 8.0.
 It is recommended to follow these steps in the given order.
 
 ## Change Or Remove Deprecated Code (Symfony)
@@ -118,7 +118,7 @@ app/console doctrine:schema:validate
 
 ## Adjust Composer Dependencies
 
-In `composer.json`, adjust version constraints for all Chameleon dependencies from `~7.1.0` to `~7.2.0` and run
+In `composer.json`, adjust version constraints for all Chameleon dependencies from `~7.1.0` to `~8.0.0` and run
 `composer update`.
 
 Remove the file `app/autoload.php`. It is no longer used by the system (see below).
@@ -130,7 +130,7 @@ Remove the file `app/autoload.php`. It is no longer used by the system (see belo
 The functionality "annotation support" was removed. This file was calling a
 deprecated function `AnnotationRegistry::registerLoader()`. If needed annotations can still be configured and used
 directly in a project.
-However with php 8 you should use attributes instead.
+However with php > 8 you should use attributes instead.
 
 # Newly Deprecated Code Entities
 # Removed Code Entities

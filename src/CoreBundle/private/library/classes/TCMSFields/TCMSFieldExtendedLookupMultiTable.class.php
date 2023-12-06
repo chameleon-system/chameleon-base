@@ -82,7 +82,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
     }
 
-    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
+    protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
     {
         $idMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),
