@@ -203,129 +203,143 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
     public function createUser(CmsUserModel $user): CmsUserModel|UserInterface
     {
-        $this->connection->insert('cms_user', [
-            'id' => $user->getId(),
-            'login' => $user->getUserIdentifier(),
-            'firstname' => $user->getFirstName(),
-            'name' => $user->getLastName(),
-            'company' => $user->getCompany(),
-            'email' => $user->getEmail(),
-            'cms_language_id' => $user->getCmsLanguageId(),
-            'crypted_pw' => '-',
-            'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
-            'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
-            'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
-        ]);
-        foreach ($user->getSsoIds() as $ssoId) {
-            $ssoData = [
-                'cms_user_id' => $ssoId->getCmsUserId(),
-                'type' => $ssoId->getType(),
-                'sso_id' => $ssoId->getSsoId(),
-            ];
-            if (null !== $ssoId->getId()) {
-                $ssoData['id'] = $ssoId->getId();
+        $this->connection->beginTransaction();
+        try{
+            $this->connection->insert('cms_user', [
+                'id' => $user->getId(),
+                'login' => $user->getUserIdentifier(),
+                'firstname' => $user->getFirstName(),
+                'name' => $user->getLastName(),
+                'company' => $user->getCompany(),
+                'email' => $user->getEmail(),
+                'cms_language_id' => $user->getCmsLanguageId(),
+                'crypted_pw' => '-',
+                'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
+                'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
+                'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
+            ]);
+            foreach ($user->getSsoIds() as $ssoId) {
+                $ssoData = [
+                    'cms_user_id' => $ssoId->getCmsUserId(),
+                    'type' => $ssoId->getType(),
+                    'sso_id' => $ssoId->getSsoId(),
+                ];
+                if (null !== $ssoId->getId()) {
+                    $ssoData['id'] = $ssoId->getId();
+                }
+                $this->connection->insert('cms_user_sso', $ssoData);
             }
-            $this->connection->insert('cms_user_sso', $ssoData);
-        }
 
-        foreach ($user->getAvailableEditLanguages() as $id => $code) {
-            $this->connection->insert('cms_user_cms_language_mlt', [
-                'source_id' => $user->getId(),
-                'target_id' => $id,
-            ]);
-        }
-        foreach ($user->getGroups() as $id => $code) {
-            $this->connection->insert('cms_user_cms_usergroup_mlt', [
-                'source_id' => $user->getId(),
-                'target_id' => $id,
-            ]);
-        }
+            foreach ($user->getAvailableEditLanguages() as $id => $code) {
+                $this->connection->insert('cms_user_cms_language_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+            foreach ($user->getGroups() as $id => $code) {
+                $this->connection->insert('cms_user_cms_usergroup_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
 
-        foreach ($user->getRoles() as $id => $code) {
-            $this->connection->insert('cms_user_cms_role_mlt', [
-                'source_id' => $user->getId(),
-                'target_id' => $id,
-            ]);
-        }
+            foreach ($user->getRoles() as $id => $code) {
+                $this->connection->insert('cms_user_cms_role_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
 
-        foreach ($user->getPortals() as $id => $code) {
-            $this->connection->insert('cms_user_cms_portal_mlt', [
-                'source_id' => $user->getId(),
-                'target_id' => $id,
-            ]);
+            foreach ($user->getPortals() as $id => $code) {
+                $this->connection->insert('cms_user_cms_portal_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
         }
+        $this->connection->commit();
 
         return $this->loadUserByIdentifier($user->getUserIdentifier());
+
     }
 
     public function updateUser(CmsUserModel $user): CmsUserModel|UserInterface
     {
-        $this->connection->update('cms_user', [
+        $this->connection->beginTransaction();
 
-            'login' => $user->getUserIdentifier(),
-            'firstname' => $user->getFirstName(),
-            'name' => $user->getLastName(),
-            'company' => $user->getCompany(),
-            'email' => $user->getEmail(),
-            'cms_language_id' => $user->getCmsLanguageId(),
-            'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
-            'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
-            'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
-        ], ['id' => $user->getId(),]);
+        try{
+            $this->connection->update('cms_user', [
+                'login' => $user->getUserIdentifier(),
+                'firstname' => $user->getFirstName(),
+                'name' => $user->getLastName(),
+                'company' => $user->getCompany(),
+                'email' => $user->getEmail(),
+                'cms_language_id' => $user->getCmsLanguageId(),
+                'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
+                'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
+                'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
+            ], ['id' => $user->getId(),]);
 
-        $idList = [];
-        foreach ($user->getSsoIds() as $ssoId) {
-            $ssoData = [
-                'cms_user_id' => $ssoId->getCmsUserId(),
-                'type' => $ssoId->getType(),
-                'sso_id' => $ssoId->getSsoId(),
-            ];
-            if (null !== $ssoId->getId()) {
-                $idList[] = $ssoId->getId();
-                $ssoData['id'] = $ssoId->getId();
-                $this->connection->update('cms_user_sso', $ssoData, ['id' => $ssoId->getId()]);
-            } else {
-                $idList[] = $this->connection->insert('cms_user_sso', $ssoData);
+            $idList = [];
+            foreach ($user->getSsoIds() as $ssoId) {
+                $ssoData = [
+                    'cms_user_id' => $ssoId->getCmsUserId(),
+                    'type' => $ssoId->getType(),
+                    'sso_id' => $ssoId->getSsoId(),
+                ];
+                if (null !== $ssoId->getId()) {
+                    $idList[] = $ssoId->getId();
+                    $ssoData['id'] = $ssoId->getId();
+                    $this->connection->update('cms_user_sso', $ssoData, ['id' => $ssoId->getId()]);
+                } else {
+                    $idList[] = $this->connection->insert('cms_user_sso', $ssoData);
+                }
             }
-        }
-        $this->connection->executeQuery(
-            'DELETE FROM `cms_user_sso` WHERE `cms_user_id` = :cmsUserId AND `id` NOT IN (:idList)',
-            ['cmsUserId' => $user->getId(), 'idList' => $idList], ['idList' => Connection::PARAM_STR_ARRAY]
-        );
+            $this->connection->executeQuery(
+                'DELETE FROM `cms_user_sso` WHERE `cms_user_id` = :cmsUserId AND `id` NOT IN (:idList)',
+                ['cmsUserId' => $user->getId(), 'idList' => $idList], ['idList' => Connection::PARAM_STR_ARRAY]
+            );
 
-        $this->connection->delete('cms_user_cms_language_mlt', ['source_id' => $user->getId()]);
-        foreach ($user->getAvailableEditLanguages() as $id => $code) {
-            $this->connection->insert('cms_user_cms_language_mlt', [
-                'source_id' => $user->getId(),
-                'target_id' => $id,
-            ]);
-        }
-        $this->connection->delete('cms_user_cms_usergroup_mlt', ['source_id' => $user->getId()]);
-        foreach ($user->getGroups() as $id => $code) {
-            $this->connection->insert('cms_user_cms_usergroup_mlt', [
-                'source_id' => $user->getId(),
-                'target_id' => $id,
-            ]);
+            $this->connection->delete('cms_user_cms_language_mlt', ['source_id' => $user->getId()]);
+            foreach ($user->getAvailableEditLanguages() as $id => $code) {
+                $this->connection->insert('cms_user_cms_language_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+            $this->connection->delete('cms_user_cms_usergroup_mlt', ['source_id' => $user->getId()]);
+            foreach ($user->getGroups() as $id => $code) {
+                $this->connection->insert('cms_user_cms_usergroup_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+
+            $this->connection->delete('cms_user_cms_role_mlt', ['source_id' => $user->getId()]);
+            foreach ($user->getRoles() as $id => $code) {
+                $this->connection->insert('cms_user_cms_role_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+
+            $this->connection->delete('cms_user_cms_portal_mlt', ['source_id' => $user->getId()]);
+            foreach ($user->getPortals() as $id => $code) {
+                $this->connection->insert('cms_user_cms_portal_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
         }
 
-        $this->connection->delete('cms_user_cms_role_mlt', ['source_id' => $user->getId()]);
-        foreach ($user->getRoles() as $id => $code) {
-            $this->connection->insert('cms_user_cms_role_mlt', [
-                'source_id' => $user->getId(),
-                'target_id' => $id,
-            ]);
-        }
-
-        $this->connection->delete('cms_user_cms_portal_mlt', ['source_id' => $user->getId()]);
-        foreach ($user->getPortals() as $id => $code) {
-            $this->connection->insert('cms_user_cms_portal_mlt', [
-                'source_id' => $user->getId(),
-                'target_id' => $id,
-            ]);
-        }
+        $this->connection->commit();
 
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
-
-
 }
