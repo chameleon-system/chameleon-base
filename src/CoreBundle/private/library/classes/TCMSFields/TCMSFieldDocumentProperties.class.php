@@ -9,8 +9,13 @@
  * file that was distributed with this source code.
  */
 
-class TCMSFieldDocumentProperties extends TCMSField
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMarkerInterface;
+
+class TCMSFieldDocumentProperties extends TCMSField implements DoctrineNotTransformableMarkerInterface
 {
+    // Has been overwritten to show additional infos about the document. Is not relevant for doctrine.
+
     public function GetHTML()
     {
         $oFileType = new TCMSRecord('cms_filetype', $this->oTableRow->sqlData['cms_filetype_id']);

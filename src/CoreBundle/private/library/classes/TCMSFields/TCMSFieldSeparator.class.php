@@ -9,11 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+
 /**
  * separator.
 /**/
 class TCMSFieldSeparator extends TCMSField
 {
+
     public function __construct()
     {
         $this->completeRow = true;

@@ -9,10 +9,13 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+
 /**
  * a number (int).
  */
-class TCMSFieldDecimal extends TCMSField
+class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterface
 {
     /**
      * decimal points number.
@@ -25,6 +28,52 @@ class TCMSFieldDecimal extends TCMSField
      * view path for frontend.
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldDecimal';
+
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'float',
+            'docCommentType' => 'float',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => sprintf('%s', (float)$this->oDefinition->sqlData['field_default_value']),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        $lengthData = $this->oDefinition->sqlData['length_set'];
+        if ('' === $lengthData) {
+            $lengthData = '10,2';
+        }
+        $lengthParts = explode(',', str_replace(' ', '',$lengthData));
+        if (1 === count($lengthParts)) {
+            $lengthData[1] = 0;
+        }
+        return $this->getDoctrineRenderer('mapping/decimal.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'precision' => $lengthData[0],
+            'scale' => $lengthData[1],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+        ])->render();
+    }
+
 
     public function GetHTML()
     {

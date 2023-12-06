@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
@@ -144,6 +146,46 @@ class TCMSField implements TCMSFieldVisitableInterface
      * @var bool
      */
     protected $bEncryptedData = false;
+
+
+
+    protected function getDoctrineRenderer(string $viewName, array $parameter = []): \IPkgSnippetRenderer
+    {
+        /** @var TPkgSnippetRenderer $snippetRenderer */
+        $snippetRenderer = clone ServiceLocator::get('chameleon_system_snippet_renderer.snippet_renderer');
+        $snippetRenderer->InitializeSource(
+            sprintf('ChameleonSystemAutoclasses/%s', $viewName),
+            \IPkgSnippetRenderer::SOURCE_TYPE_FILE
+        );
+        foreach ($parameter as $key => $value) {
+            $snippetRenderer->setVar($key, $value);
+        }
+
+        return $snippetRenderer;
+    }
+
+
+
+    protected function snakeToCamelCase(string $string): string
+    {
+        $firstPart = substr($string, 0, strpos($string, '_'));
+        if (is_numeric($firstPart)) {
+            // fields/tablenames may not start with a number
+            $string = substr($string, strpos($string, '_')+1);
+        }
+
+
+        $camelCasedName = preg_replace_callback('/(^|_|\.)+(.)/', function ($match) {
+            return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
+        }, $string);
+
+        return $camelCasedName;
+    }
+    protected function snakeToPascalCase(string $string): string
+    {
+        return lcfirst($this->snakeToCamelCase($string));
+    }
+
 
     /**
      * Sets methods that are allowed to be called via URL (ajax calls).
@@ -542,6 +584,7 @@ class TCMSField implements TCMSFieldVisitableInterface
 
         $connection->query($updateQuery);
     }
+
 
     /**
      * update default value of a field with associated workflow.

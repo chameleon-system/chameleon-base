@@ -11,19 +11,22 @@
 
 namespace ChameleonSystem\AutoclassesBundle\DependencyInjection;
 
+use ChameleonSystem\AutoclassesBundle\Command\DumpTableConfCommand;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
-class ChameleonSystemAutoclassesExtension extends Extension
+class ChameleonSystemAutoclassesExtension extends ConfigurableExtension
 {
-    /**
-     * @return void
-     */
-    public function load(array $config, ContainerBuilder $container)
+    protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
+
+        $command = $container->getDefinition(DumpTableConfCommand::class);
+
+        $command->setArgument('$tableClassMapping', $mergedConfig['legacy_table_export']);
     }
+
 }

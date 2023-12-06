@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * presents a 1:n table (ie n records for the current table)
@@ -31,6 +33,81 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
      * view path for frontend.
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldProperty';
+
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $parentFieldName = $this->GetMatchingParentFieldName();
+        if (stringEndsWith($parentFieldName, '_id')) {
+            $parentFieldName = substr($parentFieldName, 0, -3);
+        }
+        $parameters = [
+            'source' => get_class($this),
+            'type' => $this->snakeToPascalCase($this->GetPropertyTableName()),
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name.'_collection'),
+            'methodParameter' => $this->snakeToCamelCase($this->name),
+            'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
+        ];
+        $parameters['docCommentType'] = sprintf('Collection<int, %s>', $parameters['type']);
+
+        $oneToOneRelation = $this->isOneToOneConnection();
+
+        if (true === $oneToOneRelation) {
+            $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
+            $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();
+        } else {
+            $propertyCode = $this->getDoctrineRenderer('model/property-list.property.php.twig', $parameters)->render();
+            $methodCode = $this->getDoctrineRenderer('model/property-list.methods.php.twig', $parameters)->render();
+        }
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
+            [
+                ltrim(
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetPropertyTableName()], $this->snakeToPascalCase($this->GetPropertyTableName())),
+                    '\\'
+                ),
+                'Doctrine\\Common\\Collections\\Collection',
+                'Doctrine\\Common\\Collections\\ArrayCollection',
+            ],
+            true
+        );
+    }
+
+
+    protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
+    {
+        $preventReferenceDelete = $this->oDefinition->GetFieldtypeConfigKey('preventReferenceDeletion') ?? 'false';
+        $enableCascadeRemove = 'false' === $preventReferenceDelete;
+
+        $oneToOneRelation = $this->isOneToOneConnection();
+
+
+        $parentFieldName = $this->GetMatchingParentFieldName();
+        if (stringEndsWith($parentFieldName, '_id')) {
+            $parentFieldName = substr($parentFieldName, 0, -3);
+        }
+        $parameters = [
+            'fieldName' => $this->snakeToCamelCase($this->name.'_collection'),
+            'targetClass' => sprintf(
+                '%s\\%s',
+                $tableNamespaceMapping[$this->GetPropertyTableName()],
+                $this->snakeToPascalCase($this->GetPropertyTableName())
+            ),
+            'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
+            'enableCascadeRemove' => $enableCascadeRemove,
+            'comment' => $this->oDefinition->sqlData['translation'],
+        ];
+
+        $viewName = 'mapping/one-to-many-property-list.xml.twig';
+        if (true === $oneToOneRelation) {
+            $viewName = 'mapping/one-to-one-bidirectional.xml.twig';
+        }
+
+        return $this->getDoctrineRenderer($viewName, $parameters)->render();
+    }
 
     public function __construct()
     {
@@ -128,6 +205,15 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         $sOnClickEvent = "CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState('".TGlobal::OutJS($this->name)."_iframe','".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aEditorRequest)."');";
 
         return $sOnClickEvent;
+    }
+
+    private function isOneToOneConnection(): bool
+    {
+        /** @var $oForeignTableConf TCMSTableConf */
+        $oForeignTableConf = new TCMSTableConf();
+        $sPropertyTableName = $this->GetPropertyTableName();
+        $oForeignTableConf->LoadFromField('name', $sPropertyTableName);
+        return 'true' === $this->oDefinition->GetFieldtypeConfigKey('bOnlyOneRecord') || '1' === $oForeignTableConf->sqlData['only_one_record_tbl'];
     }
 
     /**

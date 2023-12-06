@@ -1,0 +1,58 @@
+{#
+  @var dataModelPartsList \ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts[]
+@var tableConf array
+@var fields \TCMSField[]
+#}
+{% autoescape false %}
+<?php
+namespace {{ namespace }};
+
+{% for import in imports %}
+use {{ import }};
+{% endfor %}
+
+class {{ className }} {
+  public function __construct(
+    private string $id,
+    private int|null $cmsident = null,
+    {% set attributesNoDefaultValue = dataModelPartsList|filter(item => false == item.hasDefaultValue) %}
+    {% set attributesWithDefaultValue = dataModelPartsList|filter(item => true == item.hasDefaultValue) %}
+  {%- for dataModelParts in attributesNoDefaultValue %}
+  
+    {{ dataModelParts.property }}{%- if not loop.last or (attributesWithDefaultValue|length > 0) %}, {% endif %}
+  {%- endfor %}
+  {%- for dataModelParts in attributesWithDefaultValue %}
+
+    {{ dataModelParts.property }}{%- if not loop.last %}, {% endif %}
+  {%- endfor %}
+  ) {}
+
+  public function getId(): string
+  {
+    return $this->id;
+  }
+  public function setId(string $id): self
+  {
+    $this->id = $id;
+    return $this;
+  }
+
+  public function getCmsident(): ?int
+  {
+    return $this->cmsident;
+  }
+  public function setCmsident(int $cmsident): self
+  {
+    $this->cmsident = $cmsident;
+    return $this;
+  }
+
+
+  {%- for dataModelParts in dataModelPartsList %}
+
+    {{ dataModelParts.methods }}
+
+  {% endfor %}
+
+}
+{% endautoescape %}

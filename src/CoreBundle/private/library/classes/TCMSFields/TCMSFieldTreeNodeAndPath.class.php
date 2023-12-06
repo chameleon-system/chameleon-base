@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 
@@ -17,6 +18,45 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 /**/
 class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
 {
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $parts = parent::getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
+
+        $pathFieldName = $this->name . '_path';
+
+        $parameters = [
+            'source' => get_class($this),
+            'type' => 'string',
+            'docCommentType' => 'string',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($pathFieldName),
+            'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToPascalCase($pathFieldName),
+            'setterName' => 'set'. $this->snakeToPascalCase($pathFieldName),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        $mappingXml = $this->getDoctrineRenderer('mapping/string.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($pathFieldName),
+            'type' => 'string',
+            'column' => $pathFieldName,
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => $this->oDefinition->sqlData['field_default_value'],
+            'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
+        ])->render();
+
+        return $parts->merge(new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $mappingXml,
+            [],
+            true
+        ));
+    }
+
+
     /**
      * changes an existing field definition (alter table).
      *

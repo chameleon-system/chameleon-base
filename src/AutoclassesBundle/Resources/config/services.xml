@@ -11,6 +11,21 @@
     </parameters>
 
     <services>
+        <service id="ChameleonSystem\AutoclassesBundle\TableConfExport\TwigExtension">
+            <tag name="twig.extension"/>
+        </service>
+
+        <service id="ChameleonSystem\AutoclassesBundle\Command\DumpTableConfCommand">
+            <tag name="console.command"/>
+            <argument type="service" id="ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporter"/>
+            <argument type="service" id="file_locator" />
+        </service>
+
+        <service id="ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporter">
+            <argument type="service" id="chameleon_system_core.data_access_cms_tbl_conf" />
+            <argument type="service" id="chameleon_system_autoclasses.data_access.autoclasses" />
+            <argument type="service" id="chameleon_system_snippet_renderer.snippet_renderer" />
+        </service>
 
         <service id="chameleon_system_autoclasses.auto_class_manager" class="ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManager" public="false">
             <argument type="service" id="database_connection" />

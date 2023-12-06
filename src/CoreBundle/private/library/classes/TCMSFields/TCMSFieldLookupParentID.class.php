@@ -9,11 +9,14 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * through the config parameter "bShowLinkToParentRecord=true" you can activate a link
@@ -21,8 +24,74 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * by setting bAllowEdit=true you can activate the right to select a different parent
  * note: all items will be made available.
 /**/
-class TCMSFieldLookupParentID extends TCMSFieldLookup
+class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransformableInterface
 {
+    private function isOneToOneConnection(): bool
+    {
+        $query = "SELECT `only_one_record_tbl` from `cms_tbl_conf` WHERE `name` = :tableName";
+        $onlyOneRecord = $this->getDatabaseConnection()->fetchOne(
+            $query,
+            ['tableName' => $this->sTableName]
+        );
+        if ('1' === $onlyOneRecord) {
+            return true;
+        }
+
+        $query = "SELECT `cms_field_conf`.`fieldtype_config`
+                            FROM `cms_field_conf`
+                            INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
+                            WHERE `cms_tbl_conf`.`name` = :tableName AND `cms_field_conf`.`name` = :fieldName";
+        $fieldConfigRow = $this->getDatabaseConnection()->fetchAssociative(
+            $query,
+            ['tableName' => $this->GetConnectedTableName(), 'fieldName' => $this->getOwningFieldName()]
+        );
+
+        if (false === $fieldConfigRow) {
+            return false;
+        }
+
+        $fieldConf = new TPkgCmsStringUtilities_ReadConfig($fieldConfigRow['fieldtype_config']);
+        if ('true' === $fieldConf->getConfigValue('bOnlyOneRecord')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $parameters = [
+            'fieldName' => $this->snakeToCamelCase($propertyName),
+            'targetClass' => sprintf(
+                '%s\\%s',
+                $tableNamespaceMapping[$this->GetConnectedTableName()],
+                $this->snakeToPascalCase($this->GetConnectedTableName())
+            ),
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+
+        ];
+
+
+        $hasOwner = null !== $this->getOwningFieldName();
+        $viewName = 'mapping/many-to-one-owned.xml.twig';
+        if (false === $hasOwner) {
+            $viewName = 'mapping/many-to-one.xml.twig';
+        } else {
+            $parameters['owningCollectionProperty'] = $this->snakeToCamelCase($this->getOwningFieldName().'_collection');
+            if (true === $this->isOneToOneConnection()) {
+                $viewName = 'mapping/one-to-one-bidirectional-owned.xml.twig';
+            }
+        }
+
+        return $this->getDoctrineRenderer($viewName, $parameters)->render();
+    }
+
     public function GetHTML()
     {
         $sHTML = '';
@@ -35,6 +104,33 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup
 
         return $sHTML;
     }
+
+    private function getOwningFieldName(): ?string
+    {
+        $owningTable = $this->GetConnectedTableName();
+        $owningTableConf = TdbCmsTblConf::GetNewInstance();
+        $owningTableConf->LoadFromField('name', $owningTable);
+
+        $fields = $owningTableConf->GetFields(new TCMSRecord());
+        /** @var $field TCMSField */
+        $fields->GoToStart();
+        while ($field = $fields->Next()) {
+            if (false === ($field instanceof TCMSFieldPropertyTable)) {
+                continue;
+            }
+            if ($field->GetPropertyTableName() !== $this->sTableName) {
+                continue;
+            }
+
+            if ($field->GetMatchingParentFieldName() !== $this->name) {
+                continue;
+            }
+            return $field->name;
+        }
+
+        return null;
+    }
+
 
     /**
      * @return string

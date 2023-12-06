@@ -1,0 +1,7 @@
+{# @var definition array #}
+<field name="{{ fieldName }}" type="{{ type }}" column="{{ column }}" nullable="false">
+    <options>
+        <option name="comment">{{ comment }}</option>
+        {% if default is defined %}<option name="default">{{ default }}</option>{% endif %}
+    </options>
+</field>

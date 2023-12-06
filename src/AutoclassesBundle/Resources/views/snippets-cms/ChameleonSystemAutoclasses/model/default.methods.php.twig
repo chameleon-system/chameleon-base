@@ -1,0 +1,13 @@
+{% autoescape false %}
+// {{ source }}
+public function {{ getterName }}(): {{ type }}
+{
+    return $this->{{ propertyName }};
+}
+public function {{ setterName }}({{ type }} ${{ propertyName }}): self
+{
+    $this->{{ propertyName }} = ${{ propertyName }};
+
+    return $this;
+}
+{% endautoescape %}

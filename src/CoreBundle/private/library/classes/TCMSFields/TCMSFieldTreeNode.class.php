@@ -9,14 +9,60 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * picks a node from a tree.
 /**/
-class TCMSFieldTreeNode extends TCMSField
+class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterface
 {
+
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $propertyName = $this->name;
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $targetTable = 'cms_tree';
+
+        $parameters = [
+            'source' => get_class($this),
+            'type' => $this->snakeToPascalCase($targetTable),
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($propertyName),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();
+
+        $viewName = 'mapping/many-to-one.xml.twig';
+
+        $mappingCode = $this->getDoctrineRenderer($viewName, [
+            'fieldName' => $this->snakeToCamelCase($propertyName),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToPascalCase($targetTable)),
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+
+        ])->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $mappingCode,
+            [
+                ltrim(
+                    sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToPascalCase($targetTable)),
+                    '\\'
+                ),
+            ],
+            true
+        );
+    }
+
     public function GetHTML()
     {
         $path = $this->_GetTreePath();

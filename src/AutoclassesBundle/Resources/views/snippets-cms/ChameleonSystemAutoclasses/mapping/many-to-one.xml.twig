@@ -1,0 +1,6 @@
+<many-to-one field="{{ fieldName }}" target-entity="{{ targetClass }}">
+    <join-column name="{{ column }}" referenced-column-name="id" />
+    <options>
+        <option name="comment">{{ comment }}</option>
+    </options>
+</many-to-one>

@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field;
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
@@ -30,12 +31,74 @@ use TdbCmsLanguage;
 use TGlobal;
 use TViewParser;
 use ViewRenderer;
+use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * {@inheritdoc}
  */
 class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 {
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $lookupFieldDef = parent::getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
+
+        $propertyName = $this->getFieldNameOfAdditionalField($this->name);
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $parameters = [
+            'source' => __CLASS__,
+            'type' => $this->snakeToPascalCase($this->GetConnectedTableName()),
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($propertyName),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();
+
+        $cropImageDef = new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            '',
+            [
+                ltrim(
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToPascalCase($this->GetConnectedTableName())),
+                    '\\'
+                ),
+            ],
+            true
+        );
+
+        return $lookupFieldDef->merge($cropImageDef);
+
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
+    {
+        $lookupFieldMapping =  parent::getDoctrineDataModelXml($namespace, $tableNamespaceMapping);
+
+        $propertyName = $this->getFieldNameOfAdditionalField($this->name);
+        if (stringEndsWith($propertyName, '_id')) {
+            $propertyName = substr($propertyName, 0, -3);
+        }
+
+        $viewName = 'mapping/many-to-one.xml.twig';
+
+        $additionalFieldMapping = $this->getDoctrineRenderer($viewName, [
+            'fieldName' => $this->snakeToCamelCase($propertyName),
+            'targetClass' => sprintf(
+                '%s\\%s',
+                $tableNamespaceMapping[$this->GetConnectedTableName()],
+                $this->snakeToPascalCase($this->GetConnectedTableName())
+            ),
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+        ])->render();
+
+        return $lookupFieldMapping."\n".$additionalFieldMapping;
+    }
+
+
     /**
      * {@inheritDoc}
      */

@@ -9,13 +9,52 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 require_once PATH_LIBRARY.'/functions/ConvertDate.fun.php';
 
-class TCMSFieldDateTime extends TCMSField
+class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterface
 {
+
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $parameters = [
+            'source' => get_class($this),
+            'type' => '?\\DateTime',
+            'docCommentType' => '\\DateTime|null',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => 'null',
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        return $this->getDoctrineRenderer('mapping/datetime.xml.twig', [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'column' => $this->name,
+            'type' => 'datetime',
+            'comment' => $this->oDefinition->sqlData['translation'],
+            'default' => null,
+        ])->render();
+    }
+
     /**
      * view path for frontend.
      */

@@ -30,6 +30,7 @@
             <directory name="src/**/objects/Tests" />
             <directory name="src/**/Bridge/Chameleon/Migration" />
             <file name="src/CoreBundle/Maintenance/Migrator62/autoloadTemplate.php" />
+            <file name="src/AutoclassesBundle/Resources/views/snippets-cms/ChameleonSystemAutoclasses/class.php.twig" />
         </ignoreFiles>
     </projectFiles>
 

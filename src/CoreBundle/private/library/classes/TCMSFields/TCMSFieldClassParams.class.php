@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMarkerInterface;
+
 /**
  * this field type loads a class, that is set via field config params
  * (sFieldDBObject, sFieldDBObjectType, sFieldDBObjectSubType) and prints an
@@ -16,8 +19,9 @@
  * the values are stored as key=val pairs (one per line).
  *
 /**/
-class TCMSFieldClassParams extends TCMSField
+class TCMSFieldClassParams extends TCMSField implements DoctrineNotTransformableMarkerInterface
 {
+    // not in the cms_field_type table
     public function GetHTML()
     {
         parent::GetHTML();

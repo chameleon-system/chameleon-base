@@ -9,12 +9,56 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+
 /**
  * The class takes data and serializes it to db.
  *
 /**/
-class TCMSFieldBlob extends TCMSFieldText
+class TCMSFieldBlob extends TCMSFieldText implements DoctrineTransformableInterface
 {
+    public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
+    {
+        $parameters = [
+            'source' => get_class($this),
+            'type' => '?object',
+            'docCommentType' => 'object|null',
+            'description' => $this->oDefinition->sqlData['translation'],
+            'propertyName' => $this->snakeToCamelCase($this->name),
+            'defaultValue' => 'null',
+            'allowDefaultValue' => true,
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+        ];
+        $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
+        $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
+
+        return new DataModelParts(
+            $propertyCode,
+            $methodCode,
+            $this->getDoctrineDataModelXml($namespace),
+            [],
+            true
+        );
+    }
+
+    protected function getDoctrineDataModelXml(string $namespace): string
+    {
+        $parameter = [
+            'fieldName' => $this->snakeToCamelCase($this->name),
+            'type' => 'object',
+            'column' => $this->name,
+            'comment' => $this->oDefinition->sqlData['translation'],
+
+        ];
+        if ('' !== $this->oDefinition->sqlData['field_default_value']) {
+            $parameter['default'] = $this->oDefinition->sqlData['field_default_value'];
+        }
+
+        return $this->getDoctrineRenderer('mapping/text.xml.twig', $parameter)->render();
+    }
+
     public function ConvertDataToFieldBasedData($sData)
     {
         $sData = parent::ConvertDataToFieldBasedData($sData);

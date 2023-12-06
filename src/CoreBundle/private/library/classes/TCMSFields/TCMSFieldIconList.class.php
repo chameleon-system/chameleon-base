@@ -9,10 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMarkerInterface;
+
 /**
  * field to select an icon based on a directory icon listing.
 /**/
-class TCMSFieldIconList extends TCMSField
+class TCMSFieldIconList extends TCMSField implements DoctrineNotTransformableMarkerInterface
 {
     public function GetHTML()
     {

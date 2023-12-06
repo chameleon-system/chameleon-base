@@ -282,6 +282,11 @@ $oFields->GoToStart();
     protected function PostLoadHook() {
         parent::PostLoadHook();
         $oLocal = null;
+        foreach($this->sqlData as $key => $value) {
+            if (null === $value) {
+               $this->sqlData[$key] = '';
+            }
+        }
       <?php
       $needsLanguageHandling = false;
       $oFields->GoToStart();

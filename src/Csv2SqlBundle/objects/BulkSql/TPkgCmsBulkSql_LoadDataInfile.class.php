@@ -12,7 +12,7 @@
 class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $sTableName = null;
     /**
@@ -20,35 +20,41 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
      */
     private $aFields = array();
     /**
-     * @var string
+     * @var string|null
      */
     private $sFileName = null;
     /**
-     * @var resource|false
+     * @var resource|closed-resource|false|null
      */
     private $rFile = null;
 
     /**
-     * @var mysqli
+     * @var mysqli|null
      */
     private $dbConnection = null;
     /**
-     * @var string
+     * @var string|null
      */
     private $dbHost;
     /**
-     * @var string
+     * @var string|null
      */
     private $dbName;
     /**
-     * @var string
+     * @var string|null
      */
     private $dbPassword;
     /**
-     * @var string
+     * @var string|null
      */
     private $dbUser;
 
+    /**
+     * @param string|null $dbHost
+     * @param string|null $dbUser
+     * @param string|null $dbPassword
+     * @param string|null $dbName
+     */
     public function __construct($dbHost = null, $dbUser = null, $dbPassword = null, $dbName = null)
     {
         $this->dbHost = $dbHost;
@@ -101,7 +107,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
     /**
      * return true if the data was writ ten to the target file.
      *
-     * @param array<string, string> $aData
+     * @param string[] $aData
      *
      * @return bool
      */
@@ -182,8 +188,8 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
     }
 
     /**
-     * @param array<string, string> $aData
-     * @return array<string, string>
+     * @param string[] $aData
+     * @return string[]
      */
     protected function EscapeData($aData)
     {
@@ -197,7 +203,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
     /**
      * @param mysqli $dbConnection
      */
-    public function setDbConnection(mysqli $dbConnection)
+    public function setDbConnection(mysqli $dbConnection): void
     {
         $this->dbConnection = $dbConnection;
     }

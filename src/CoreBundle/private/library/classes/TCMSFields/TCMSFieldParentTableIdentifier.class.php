@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
-class TCMSFieldParentTableIdentifier extends TCMSField
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMarkerInterface;
+
+class TCMSFieldParentTableIdentifier extends TCMSField implements DoctrineNotTransformableMarkerInterface
 {
     public function GetHTML()
     {
