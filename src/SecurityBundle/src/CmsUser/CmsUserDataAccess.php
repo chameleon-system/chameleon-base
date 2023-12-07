@@ -34,6 +34,10 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return CmsUserModel::class === $class || is_subclass_of($class, CmsUserModel::class);
     }
 
+    /**
+     * returns the user with the login equal to the identifier passed, if that user is permitted to log into the cms backend.
+     * Throws a UserNotFoundException otherwise.
+     */
     public function loadUserByIdentifier(string $identifier): CmsUserModel|UserInterface
     {
         $query = "SELECT * FROM `cms_user` WHERE `login` = :username AND `allow_cms_login` = '1' LIMIT 0,1";
@@ -48,6 +52,10 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return $this->createUserFromRow($userRow);
     }
 
+    /**
+     * returns the user with the login equal to the $username passed, if that user is permitted to log into the cms backend.
+     *  Throws a UserNotFoundException otherwise.
+    */
     public function loadUserByUsername(string $username)
     {
         return $this->loadUserByIdentifier($username);
@@ -64,7 +72,8 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
     }
 
-    public function loadUserFromSSOID(string $ssoType, string $ssoId): ?CmsUserModel
+
+    public function loadUserWithBackendLoginPermissionFromSSOID(string $ssoType, string $ssoId): ?CmsUserModel
     {
         $query = "SELECT `cms_user`.* 
                     FROM `cms_user`
@@ -81,7 +90,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return $this->createUserFromRow($userRow);
     }
 
-    public function loadUserByEMail(string $email):?CmsUserModel
+    public function loadUserWithBackendLoginPermissionByEMail(string $email):?CmsUserModel
     {
         $query = "SELECT * FROM `cms_user` WHERE `email` = :email AND `allow_cms_login` = '1' LIMIT 0,1";
         $userRow = $this->connection->fetchAssociative($query, ['email' => $email]);

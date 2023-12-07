@@ -84,13 +84,13 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
 
     private function getCmsUser(GoogleUser $googleUser): ?CmsUserModel
     {
-        $existingUser = $this->cmsUserDataAccess->loadUserFromSSOID(self::SSO_TYPE, $googleUser->getId());
+        $existingUser = $this->cmsUserDataAccess->loadUserWithBackendLoginPermissionFromSSOID(self::SSO_TYPE, $googleUser->getId());
         if (null !== $existingUser) {
             return $existingUser;
         }
 
         $email = $googleUser->getEmail();
 
-        return $this->cmsUserDataAccess->loadUserByEMail($email);
+        return $this->cmsUserDataAccess->loadUserWithBackendLoginPermissionByEMail($email);
     }
 }
