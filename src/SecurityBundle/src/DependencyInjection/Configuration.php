@@ -13,15 +13,15 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode->children()
-            ->arrayNode('googleLogin')
+            ->arrayNode('google_login')
                 ->canBeEnabled()
                 ->children()
-                    ->arrayNode('domainToBaseUserMapping')
+                    ->arrayNode('domain_to_base_user_mapping')
                         ->useAttributeAsKey('domain')
                         ->arrayPrototype()
                             ->children()
                                 ->scalarNode('domain')->info("G Suite/Google App domain. Users (G Suite/Google Apps) must be from this domain.")->end()
-                                ->scalarNode('cloneUserPermissionsFrom')->isRequired()->info('New users will be based on this user.')->end()
+                                ->scalarNode('clone_user_permissions_from')->isRequired()->info('New users will be based on this user.')->end()
                             ->end()
                         ->end()
                     ->end()

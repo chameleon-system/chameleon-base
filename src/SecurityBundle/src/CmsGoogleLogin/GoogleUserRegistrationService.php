@@ -15,7 +15,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
     /**
      * @param CmsUserDataAccess $cmsUserDataAccess
      * @param GuidCreationServiceInterface $guidService
-     * @param array<string, array{cloneUserPermissionsFrom: string}> $domainToBaseUserMapping
+     * @param array<string, array{clone_user_permissions_from: string}> $domainToBaseUserMapping
      */
     public function __construct(
         private readonly CmsUserDataAccess $cmsUserDataAccess,
@@ -33,7 +33,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
         $hostedDomain = $googleUser->getHostedDomain();
         $email = $googleUser->getEmail();
         $mailDomain = mb_substr($email, mb_strpos($email, '@')+1);
-        $baseUserName = $this->domainToBaseUserMapping[$hostedDomain]['cloneUserPermissionsFrom'] ?? $this->domainToBaseUserMapping[$mailDomain]['cloneUserPermissionsFrom'] ?? null;
+        $baseUserName = $this->domainToBaseUserMapping[$hostedDomain]['clone_user_permissions_from'] ?? $this->domainToBaseUserMapping[$mailDomain]['clone_user_permissions_from'] ?? null;
         if (null === $baseUserName) {
             throw new \Exception('You may only register google users from the following domains: '.implode(', ', array_keys($this->domainToBaseUserMapping)));
         }

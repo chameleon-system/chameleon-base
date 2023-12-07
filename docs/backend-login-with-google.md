@@ -6,11 +6,11 @@ a specific domain. Example:
 
 ```yaml
 chameleon_system_security:
-  googleLogin:
+  google_login:
     enabled: true
-    domainToBaseUserMapping:
+    domain_to_base_user_mapping:
       - domain: 'esono.de'
-        value: admin
+        clone_user_permissions_from: admin
 ```
 
 The user `admin` will be used as a base for new users that register from the domain `esono.de`.
