@@ -17,6 +17,8 @@ class Configuration implements ConfigurationInterface
                 ->canBeEnabled()
                 ->children()
                     ->arrayNode('domain_to_base_user_mapping')
+                        ->isRequired()
+                        ->defaultValue([])
                         ->useAttributeAsKey('domain')
                         ->arrayPrototype()
                             ->children()
