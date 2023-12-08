@@ -4,11 +4,6 @@ html {
     height: 100%;
 }
 
-/* overwrite min-height: 100vh; set from coreui */
-body.app {
-    min-height: 100%;
-}
-
 #cmscontainer .main {
     display: flex;
     flex-direction: column;

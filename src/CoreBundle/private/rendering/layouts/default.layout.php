@@ -4,11 +4,17 @@
 
 <div class="wrapper d-flex flex-column min-vh-100 bg-light dark:bg-transparent">
   <header class="header header-sticky mb-4">
-      <?php $modules->GetModule('headerimage'); ?>
+      <div class="container-fluid">
+          <?php $modules->GetModule('headerimage'); ?>
+      </div>
+      <div class="header-divider"></div>
+      <div class="container-fluid">
+          <?php $modules->GetModule('breadcrumb'); ?>
+      </div>
   </header>
   <main class="body main flex-grow-1 px-3">
     <div class="container-lg content" id="cmscontentcontainer">
-        <?php $modules->GetModule('breadcrumb'); ?>
+
         <?php $modules->GetModule('contentmodule'); ?>
     </div>
   </main>

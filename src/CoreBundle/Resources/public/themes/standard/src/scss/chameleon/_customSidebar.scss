@@ -18,11 +18,13 @@
       font-weight: bold;
     }
 
-    &:focus {
+    &:focus, &:focus-visible {
       color: var(--cui-sidebar-nav-link-hover-color);
       text-decoration: none;
       background: var(--cui-sidebar-nav-link-hover-bg);
       outline: none;
+      outline-color: transparent;
+      outline-offset: 0;
     }
   }
 }

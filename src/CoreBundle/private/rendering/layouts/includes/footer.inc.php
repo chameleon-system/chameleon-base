@@ -1,4 +1,4 @@
-<footer class="app-footer">
+<footer class="footer justify-content-between">
     <div>
         <span><?php
             $oUser = TCMSUser::GetActiveUser();
@@ -7,7 +7,7 @@
             }
             ?></span>
     </div>
-    <div class="ml-auto">
+    <div>
         <span>&copy;&nbsp;&nbsp;<a href="http://www.esono.de" target="_blank">ESONO AG</a>&nbsp;&nbsp;<?=date('Y'); ?></span>
     </div>
 </footer>

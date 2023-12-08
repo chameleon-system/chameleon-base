@@ -24,16 +24,10 @@ if (false === isset($data['oUser'])) {
 }
 
 ?>
-        <button type="button" class="navbar-toggler sidebar-toggler d-lg-none" data-toggle="sidebar-show">
-            <span class="navbar-toggler-icon"></span>
+        <button class="header-toggler px-md-0 megamenu-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+          <i class="fas fa-bars"></i>
         </button>
-        <a href="<?=PATH_CMS_CONTROLLER; ?>?_rmhist=true&_histid=0" class="navbar-brand d-sm-down-none" style="background-image: url('<?= TGlobal::OutHTML($sLogoURL); ?>');">
-&nbsp;
-        </a>
-        <button type="button" class="navbar-toggler sidebar-toggler d-md-down-none" data-toggle="sidebar-lg-show">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-            <ul class="nav navbar-nav">
+            <ul class="header-nav d-flex">
                 <?php
                 if (true === isset($data['check_messages'])) {
                     ?>
@@ -159,7 +153,7 @@ if (false === isset($data['oUser'])) {
             </ul>
 
 
-            <ul class="nav navbar-nav ml-auto">
+            <ul class="header-nav d-flex">
                 <?php
                     /**
                      * @var ViewRenderer $viewRenderer
