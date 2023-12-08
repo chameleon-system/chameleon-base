@@ -46,12 +46,14 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
         $accessToken = $this->fetchAccessToken($client);
 
         $user = $client->fetchUserFromToken($accessToken);
+        assert($user instanceof GoogleUser);
+
         $hostedDomain = $user->getHostedDomain();
         if ((null !== $hostedDomain) && false === in_array($hostedDomain, $this->allowedDomains, true)) {
             throw new AuthenticationException(sprintf('The hosted domain %s is not allowed.', $hostedDomain));
         }
         if (null === $hostedDomain) {
-            throw new AuthenticationException('No hosted domain or email address found.');
+            throw new AuthenticationException('No hosted domain found.');
         }
 
 
