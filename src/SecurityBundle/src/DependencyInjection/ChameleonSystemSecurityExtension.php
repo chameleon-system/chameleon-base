@@ -20,11 +20,14 @@ class ChameleonSystemSecurityExtension extends ConfigurableExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../config/'));
         $loader->load('services.xml');
 
-        if (false === $mergedConfig['google_login']['enabled']) {
+        $enableGoogleLogin = $mergedConfig['google_login']['enabled'];
+
+        $loginController = $container->getDefinition(CmsLoginController::class);
+        $loginController->setArgument('$enableGoogleLogin', $enableGoogleLogin);
+
+        if (false === $enableGoogleLogin) {
             return;
         }
-        $loginController = $container->getDefinition(CmsLoginController::class);
-        $loginController->setArgument('$enableGoogleLogin', true);
         $newUserConfig = $container->getDefinition(GoogleUserRegistrationService::class);
         $newUserConfig->setArgument(
             '$domainToBaseUserMapping',
