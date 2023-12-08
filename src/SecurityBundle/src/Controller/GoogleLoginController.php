@@ -12,6 +12,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GoogleLoginController extends AbstractController
 {
+    private const GOOGLE_SCOPES = [
+        'openid',
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile'
+    ];
+
     public function __construct(private readonly ClientRegistry $clientRegistry)
     {
     }
@@ -21,9 +27,7 @@ class GoogleLoginController extends AbstractController
     {
         return $this->clientRegistry
             ->getClient('google_main') // key used in config/packages/knpu_oauth2_client.yaml
-            ->redirect([
-                'openid','https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'
-            ]);
+            ->redirect(self::GOOGLE_SCOPES);
     }
 
 
@@ -33,8 +37,9 @@ class GoogleLoginController extends AbstractController
      *
      * @Route("/cms/google-check", name="connect_google_check")
      */
-    public function connectCheckAction(Request $request, ClientRegistry $clientRegistry)
+    public function connectCheckAction(Request $request, ClientRegistry $clientRegistry): Response
     {
+        return new Response('nothing to do');
         // since we want to authenticate the user in symfony, we use a guard authenticator
         // \ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator::authenticate
         // and do nothing in this method.
