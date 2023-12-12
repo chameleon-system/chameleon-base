@@ -23,11 +23,11 @@ class GoogleLoginController extends AbstractController
     }
 
     #[Route('/cms/google-login', name: 'connect_google_start')]
-    public function connectAction()
+    public function connectAction(): Response
     {
         return $this->clientRegistry
             ->getClient('google_main') // key used in config/packages/knpu_oauth2_client.yaml
-            ->redirect(self::GOOGLE_SCOPES);
+            ->redirect(self::GOOGLE_SCOPES, []);
     }
 
 
