@@ -7,14 +7,33 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    /**
+     * @param \DateTimeImmutable $dateModified
+     * @param string $id
+     * @param string $userIdentifier
+     * @param string $firstname
+     * @param string $lastname
+     * @param string $company
+     * @param string $email
+     * @param string $cmsLanguageId
+     * @param array<string> $availableLanguagesIsoCodes
+     * @param string|null $currentEditLanguageIsoCode
+     * @param array<string, string> $availableEditLanguages
+     * @param string|null $password
+     * @param array<string,string> $roles
+     * @param array<string,string> $rights
+     * @param array<string,string> $groups
+     * @param array<string, string> $portals
+     * @param CmsUserSSOModel[] $ssoIds
+     */
     public function __construct(
-        readonly private \DateTimeImmutable $dateModified,
-        readonly private string $id,
-        readonly private string $userIdentifier,
-        readonly private string $firstname,
-        readonly private string $lastname,
-        readonly private string $company,
-        readonly private string $email,
+        private \DateTimeImmutable $dateModified,
+        private string $id,
+        private string $userIdentifier,
+        private string $firstname,
+        private string $lastname,
+        private string $company,
+        private string $email,
         readonly private string $cmsLanguageId,
         readonly private array $availableLanguagesIsoCodes,
         readonly private ?string $currentEditLanguageIsoCode,
@@ -23,8 +42,17 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
         readonly private array $roles = [],
         readonly private array $rights = [],
         readonly private array $groups = [],
-        readonly private array $portals = []
+        readonly private array $portals = [],
+        private array $ssoIds = []
     ) {
+    }
+
+    /**
+     * @return CmsUserSSOModel[]
+     */
+    public function getSsoIds(): array
+    {
+        return $this->ssoIds;
     }
 
     /**
@@ -175,6 +203,78 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
     public function getCurrentEditLanguageIsoCode(): ?string
     {
         return $this->currentEditLanguageIsoCode;
+    }
+
+    public function withId(string $id): self
+    {
+        $user = clone $this;
+        $user->id = $id;
+
+        return $user;
+    }
+    public function withDateModified(\DateTimeImmutable $dateTime): self
+    {
+        $user = clone $this;
+        $user->dateModified = $dateTime;
+
+        return $user;
+    }
+    public function withUserIdentifier(string $userIdentifier): self
+    {
+        $user = clone $this;
+        $user->userIdentifier = $userIdentifier;
+
+        return $user;
+    }
+
+    public function withSsoId(CmsUserSSOModel $SSOModel): self
+    {
+        $user = clone $this;
+        foreach ($this->ssoIds as $key => $ssId) {
+            if (
+                $SSOModel->getType() !== $ssId->getType()
+                || $SSOModel->getSsoId() !== $ssId->getSsoId()
+            ) {
+                continue;
+            }
+            // exact match. no need to add.
+            return $user;
+        }
+        $user->ssoIds[] = $SSOModel;
+
+        return $user;
+    }
+
+    public function withFirstname(string $firstName): self
+    {
+        $user = clone $this;
+        $user->firstname = $firstName;
+
+        return $user;
+    }
+
+    public function withLastname(string $lastName): self
+    {
+        $user = clone $this;
+        $user->lastname = $lastName;
+
+        return $user;
+    }
+
+    public function withEmail(string $email): self
+    {
+        $user = clone $this;
+        $user->email = $email;
+
+        return $user;
+    }
+
+    public function withCompany(string $company): self
+    {
+        $user = clone $this;
+        $user->company = $company;
+
+        return $user;
     }
 
 

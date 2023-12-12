@@ -372,7 +372,9 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
             }
         } else {
             $nameField = $oTableConf->GetNameColumn();
-            $nameField = $this->getFieldTranslationUtil()->getTranslatedFieldName($tblName, $nameField, $this->getLanguageService()->getActiveLanguage());
+            $editLanguageId = $this->getBackendSession()->getCurrentEditLanguageId();
+            $language = TdbCmsLanguage::GetNewInstance($editLanguageId);
+            $nameField = $this->getFieldTranslationUtil()->getTranslatedFieldName($tblName, $nameField, $language);
             $query .= ' ORDER BY '.MySqlLegacySupport::getInstance()->real_escape_string($nameField);
         }
 

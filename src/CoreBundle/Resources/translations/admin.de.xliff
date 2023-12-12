@@ -1632,6 +1632,10 @@
                 <source>chameleon_system_core.cms_module_login.action_login</source>
                 <target>Anmelden</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.security.action_login_google">
+                <source>chameleon_system_core.security.action_login_google</source>
+                <target>Login mit Google</target>
+            </trans-unit>
 
             <trans-unit id="chameleon_system_core.cms_module_table_editor.no_id_set">
                 <source>chameleon_system_core.cms_module_table_editor.no_id_set</source>
