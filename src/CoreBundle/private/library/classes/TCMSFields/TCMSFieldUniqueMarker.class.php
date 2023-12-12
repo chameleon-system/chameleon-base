@@ -77,8 +77,9 @@ class TCMSFieldUniqueMarker extends TCMSFieldBoolean
 
         $databaseConnection->executeUpdate($updateQuery, $parameters);
 
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-        $migrationQueryData = new MigrationQueryData($oTableConf->sqlData['name'], $editLanguage->fieldIso6391);
+        $this->getBackendSession()->getCurrentEditLanguageId();
+        $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
+        $migrationQueryData = new MigrationQueryData($oTableConf->sqlData['name'], $editLanguageIsoCode);
         $migrationQueryData->setFields($setFields);
         $migrationQueryData->setWhereEquals($whereEquals);
         $migrationQueryData->setWhereExpressions($whereExpressions);

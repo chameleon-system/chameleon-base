@@ -16,7 +16,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     {
     }
 
-    public function refreshUser(UserInterface $user): UserInterface
+    public function refreshUser(UserInterface $user): CmsUserModel|UserInterface
     {
         if (!$user instanceof CmsUserModel) {
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
@@ -34,7 +34,11 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return CmsUserModel::class === $class || is_subclass_of($class, CmsUserModel::class);
     }
 
-    public function loadUserByIdentifier(string $identifier): UserInterface
+    /**
+     * returns the user with the login equal to the identifier passed, if that user is permitted to log into the cms backend.
+     * Throws a UserNotFoundException otherwise.
+     */
+    public function loadUserByIdentifier(string $identifier): CmsUserModel|UserInterface
     {
         $query = "SELECT * FROM `cms_user` WHERE `login` = :username AND `allow_cms_login` = '1' LIMIT 0,1";
         $userRow = $this->connection->fetchAssociative($query, ['username' => $identifier]);
@@ -45,6 +49,66 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             );
         }
 
+        return $this->createUserFromRow($userRow);
+    }
+
+    /**
+     * returns the user with the login equal to the $username passed, if that user is permitted to log into the cms backend.
+     *  Throws a UserNotFoundException otherwise.
+    */
+    public function loadUserByUsername(string $username)
+    {
+        return $this->loadUserByIdentifier($username);
+    }
+
+    private function userHasBeenModified(CmsUserModel $user): bool
+    {
+        $query = "SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId";
+        $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
+        if (false === $dateModified) {
+            return true;
+        }
+
+        return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
+    }
+
+
+    public function loadUserWithBackendLoginPermissionFromSSOID(string $ssoType, string $ssoId): ?CmsUserModel
+    {
+        $query = "SELECT `cms_user`.* 
+                    FROM `cms_user`
+              INNER JOIN `cms_user_sso` ON `cms_user`.`id` = `cms_user_sso`.`cms_user_id`
+                   WHERE `cms_user_sso`.`type` = :ssoType 
+                     AND `cms_user_sso`.`sso_id` = :ssoId
+                     AND `cms_user`.`allow_cms_login` = '1' LIMIT 0,1";
+        $userRow = $this->connection->fetchAssociative($query, ['ssoType' => $ssoType, 'ssoId' => $ssoId]);
+
+        if (false === $userRow) {
+            return null;
+        }
+
+        return $this->createUserFromRow($userRow);
+    }
+
+    public function loadUserWithBackendLoginPermissionByEMail(string $email):?CmsUserModel
+    {
+        $query = "SELECT * FROM `cms_user` WHERE `email` = :email AND `allow_cms_login` = '1' LIMIT 0,1";
+        $userRow = $this->connection->fetchAssociative($query, ['email' => $email]);
+
+        if (false === $userRow) {
+            return null;
+        }
+
+        return $this->createUserFromRow($userRow);
+    }
+
+    /**
+     * @param array $userRow
+     * @return CmsUserModel
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function createUserFromRow(array $userRow): CmsUserModel
+    {
         $roleRows = $this->connection->fetchAllAssociative(
             "SELECT `cms_role`.* 
                      FROM `cms_role`
@@ -53,11 +117,11 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             ['userId' => $userRow['id']]
         );
         $roles = array_reduce($roleRows, static function (array $carry, array $row) {
-            $carry[$row['id']] =  sprintf('ROLE_%s', mb_strtoupper($row['name']));
+            $carry[$row['id']] = sprintf('ROLE_%s', mb_strtoupper($row['name']));
 
             return $carry;
         }, []);
-        $roles['-'] = CmsUserRoleConstants::CMS_USER;
+        $roles[CmsUserRoleConstants::CMS_USER_FAKE_ID] = CmsUserRoleConstants::CMS_USER;
 
 
         $userRightRows = $this->connection->fetchAllAssociative(
@@ -70,7 +134,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         );
 
         $userRights = array_reduce($userRightRows, static function (array $carry, array $row) {
-            $carry[$row['id']] = sprintf('CMS_RIGHT_%s',mb_strtoupper($row['name']));
+            $carry[$row['id']] = sprintf('CMS_RIGHT_%s', mb_strtoupper($row['name']));
 
             return $carry;
         }, []);
@@ -114,7 +178,13 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             $carry[$row['iso_6391']] = $row['id'];
 
             return $carry;
-            }, []);
+        }, []);
+
+        $ssoList = [];
+        $ssoRows = $this->connection->fetchAllAssociative('SELECT * FROM `cms_user_sso` WHERE `cms_user_id` = :userId', ['userId' => $userRow['id']]);
+        foreach ($ssoRows as $ssoRow) {
+            $ssoList[] = new CmsUserSSOModel($ssoRow['cms_user_id'], $ssoRow['type'], $ssoRow['sso_id'], $ssoRow['id']);
+        }
 
         return new CmsUserModel(
             \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $userRow['date_modified']),
@@ -135,25 +205,150 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             $roles,
             $userRights,
             $userGroups,
-            $userPortals
+            $userPortals,
+            $ssoList
         );
     }
 
-    public function loadUserByUsername(string $username)
+    public function createUser(CmsUserModel $user): CmsUserModel|UserInterface
     {
-        return $this->loadUserByIdentifier($username);
+        $this->connection->beginTransaction();
+        try{
+            $this->connection->insert('cms_user', [
+                'id' => $user->getId(),
+                'login' => $user->getUserIdentifier(),
+                'firstname' => $user->getFirstName(),
+                'name' => $user->getLastName(),
+                'company' => $user->getCompany(),
+                'email' => $user->getEmail(),
+                'cms_language_id' => $user->getCmsLanguageId(),
+                'crypted_pw' => '-',
+                'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
+                'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
+                'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
+            ]);
+            foreach ($user->getSsoIds() as $ssoId) {
+                $ssoData = [
+                    'cms_user_id' => $ssoId->getCmsUserId(),
+                    'type' => $ssoId->getType(),
+                    'sso_id' => $ssoId->getSsoId(),
+                ];
+                if (null !== $ssoId->getId()) {
+                    $ssoData['id'] = $ssoId->getId();
+                }
+                $this->connection->insert('cms_user_sso', $ssoData);
+            }
+
+            foreach ($user->getAvailableEditLanguages() as $id => $code) {
+                $this->connection->insert('cms_user_cms_language_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+            foreach ($user->getGroups() as $id => $code) {
+                $this->connection->insert('cms_user_cms_usergroup_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+
+            foreach ($user->getRoles() as $id => $code) {
+                $this->connection->insert('cms_user_cms_role_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+
+            foreach ($user->getPortals() as $id => $code) {
+                $this->connection->insert('cms_user_cms_portal_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
+        $this->connection->commit();
+
+        return $this->loadUserByIdentifier($user->getUserIdentifier());
+
     }
 
-    private function userHasBeenModified(CmsUserModel $user): bool
+    public function updateUser(CmsUserModel $user): CmsUserModel|UserInterface
     {
-        $query = "SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId";
-        $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
-        if (false === $dateModified) {
-            return true;
+        $this->connection->beginTransaction();
+
+        try{
+            $this->connection->update('cms_user', [
+                'login' => $user->getUserIdentifier(),
+                'firstname' => $user->getFirstName(),
+                'name' => $user->getLastName(),
+                'company' => $user->getCompany(),
+                'email' => $user->getEmail(),
+                'cms_language_id' => $user->getCmsLanguageId(),
+                'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
+                'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
+                'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
+            ], ['id' => $user->getId(),]);
+
+            $idList = [];
+            foreach ($user->getSsoIds() as $ssoId) {
+                $ssoData = [
+                    'cms_user_id' => $ssoId->getCmsUserId(),
+                    'type' => $ssoId->getType(),
+                    'sso_id' => $ssoId->getSsoId(),
+                ];
+                if (null !== $ssoId->getId()) {
+                    $idList[] = $ssoId->getId();
+                    $ssoData['id'] = $ssoId->getId();
+                    $this->connection->update('cms_user_sso', $ssoData, ['id' => $ssoId->getId()]);
+                } else {
+                    $idList[] = $this->connection->insert('cms_user_sso', $ssoData);
+                }
+            }
+            $this->connection->executeQuery(
+                'DELETE FROM `cms_user_sso` WHERE `cms_user_id` = :cmsUserId AND `id` NOT IN (:idList)',
+                ['cmsUserId' => $user->getId(), 'idList' => $idList], ['idList' => Connection::PARAM_STR_ARRAY]
+            );
+
+            $this->connection->delete('cms_user_cms_language_mlt', ['source_id' => $user->getId()]);
+            foreach ($user->getAvailableEditLanguages() as $id => $code) {
+                $this->connection->insert('cms_user_cms_language_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+            $this->connection->delete('cms_user_cms_usergroup_mlt', ['source_id' => $user->getId()]);
+            foreach ($user->getGroups() as $id => $code) {
+                $this->connection->insert('cms_user_cms_usergroup_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+
+            $this->connection->delete('cms_user_cms_role_mlt', ['source_id' => $user->getId()]);
+            foreach ($user->getRoles() as $id => $code) {
+                $this->connection->insert('cms_user_cms_role_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+
+            $this->connection->delete('cms_user_cms_portal_mlt', ['source_id' => $user->getId()]);
+            foreach ($user->getPortals() as $id => $code) {
+                $this->connection->insert('cms_user_cms_portal_mlt', [
+                    'source_id' => $user->getId(),
+                    'target_id' => $id,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
         }
 
-        return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
+        $this->connection->commit();
+
+        return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
-
-
 }

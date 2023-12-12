@@ -173,8 +173,8 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             array($inverseEmptyFieldName => $inverseEmptyValue),
             array('id' => $this->oTableRow->id)
         );
-        $editLanguage = $this->getLanguageService()->getActiveEditLanguage();
-        $migrationQueryData = new MigrationQueryData($this->oTableRow->table, $editLanguage->fieldIso6391);
+        $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
+        $migrationQueryData = new MigrationQueryData($this->oTableRow->table, $editLanguageIsoCode);
         $migrationQueryData
             ->setFields(array($inverseEmptyFieldName => $inverseEmptyValue))
             ->setWhereEquals(array('id' => $this->oTableRow->id));

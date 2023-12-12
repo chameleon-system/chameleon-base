@@ -87,6 +87,8 @@
         "symfony/web-link": "^5.4",
         "symfony/workflow": "^5.4",
         "symfony/yaml": "^5.4",
+        "knpuniversity/oauth2-client-bundle": "^2.11",
+        "league/oauth2-google": "^4.0",
         "ext-gd": "*"
     },
     "require-dev": {
@@ -158,7 +160,6 @@
             "src/ViewRendererBundle/objects"
         ],
         "psr-4": {
-
             "ChameleonSystem\\": "src",
             "ChameleonSystem\\CmsBackendBundle\\": "src/CmsBackendBundle/src",
             "ChameleonSystem\\DataAccessBundle\\": "src/DataAccessBundle/src",
@@ -167,7 +168,6 @@
             "esono\\pkgCmsCounter\\": "src/CmsCounterBundle/src/esono/pkgCmsCounter",
             "esono\\pkgCmsRouting\\": "src/CmsRoutingBundle/src/esono/pkgCmsRouting",
             "esono\\pkgCoreValidatorConstraints\\": "src/CoreValidatorConstraintsBundle/src/esono/pkgCoreValidatorConstraints"
-
         },
         "exclude-from-classmap": [
             "/tests/",

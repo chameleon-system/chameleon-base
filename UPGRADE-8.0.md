@@ -91,7 +91,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSUser::CMSUserDefined` removed - is `isGranted(\ChameleonSystem\SecurityBundle\CmsUser\UserRoles::CMS_USER)`
 - `\TCMSUser::ValidSessionKey` removed
 - `\TCMSUser::GetUserSessionKey` removed
-- `\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface::getActiveEditLanguage` removed
+- `\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface::getActiveEditLanguage` removed. Use `\ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface::getCurrentEditLanguageIso6391` 
 - `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
 - `\TShopVariantDisplayHandler::AddClearCacheTriggers` removed
 - `\ChameleonSystem\core\DatabaseAccessLayer\EntityList::__construct` no longer accepts `null` for the two last parameters (`$queryParameters` and `$queryParameterTypes`))

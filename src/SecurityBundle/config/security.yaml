@@ -1,6 +1,6 @@
 # config/packages/security.yaml
 security:
-
+  enable_authenticator_manager: true
   # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
   providers:
     # the name of your user provider can be anything
@@ -12,14 +12,18 @@ security:
       algorithm: 'bcrypt'
       cost: 12
   firewalls:
+
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
     backend:
+      custom_authenticators:
+        - ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator
       switch_user: {role: CMS_RIGHT_CMS_AUTO_SWITCH_TO_ANY_USER}
       pattern: ^/cms
+      entry_point: form_login
       lazy: false
-      anonymous: true
+#      anonymous: true
       provider: chameleon_backend_user_provider
       logout:
         path: app_logout
@@ -41,6 +45,8 @@ security:
   # Note: Only the *first* access control that matches will be used
   access_control:
     - { path: ^/cms/login, roles: PUBLIC_ACCESS }
+    - { path: ^/cms/google-login, roles: PUBLIC_ACCESS }
+    - { path: ^/cms/google-check, roles: ROLE_CMS_USER }
     - { path: ^/cms, roles: ROLE_CMS_USER }
     - { path: ^/, roles: PUBLIC_ACCESS }
 
