@@ -129,7 +129,7 @@ class TCMSLogChange
     /**
      * returns the id of a field.
      *
-     * @param int    $tableId
+     * @param string $tableId
      * @param string $sFieldName
      *
      * @return string
@@ -1262,7 +1262,7 @@ class TCMSLogChange
     }
 
     /**
-     * moves a extens behind a given extension in cms_tbl_extension.
+     * Moves an extension behind a given extension in cms_tbl_extension.
      *
      * @param int    $tableId
      * @param string $sExtensionName
@@ -1290,25 +1290,44 @@ class TCMSLogChange
     }
 
     /**
-     * moves a tab behind a given tab in cms_tbl_field_tab.
-     *
-     * @param int    $tableId
-     * @param string $sTabName
-     * @param string $sPreTabName - tabname where we want to set the new tab behind
+     * Moves a tab behind a given tab in cms_tbl_field_tab.
+     * Use the system names for the tabs.
+     * For backwards compatibility the name field is checked too.
      */
-    public static function SetTabPosition($tableId, $sTabName, $sPreTabName)
+    public static function SetTabPosition(string $tableId, string $tabSystemName, string $preTabSystemName): bool
     {
         // check position of field where we want to set the new field behind
-        $query = "SELECT * FROM `cms_tbl_field_tab` WHERE `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sPreTabName)."'";
-        $result = MySqlLegacySupport::getInstance()->query($query);
-        $posFieldRow = MySqlLegacySupport::getInstance()->fetch_assoc($result);
-        $pos = $posFieldRow['position'];
+        $databaseConnection = self::getDatabaseConnection();
 
-        $query = "UPDATE `cms_tbl_field_tab` SET `position` = `position`+1 WHERE `position` > {$pos} AND `cms_tbl_conf_id` = '{$tableId}'";
+        $nameFieldWithTranslationSuffix = self::getFieldTranslationUtil()->getTranslatedFieldName('cms_tbl_field_tab', 'name');
+
+        $query = "SELECT `position` FROM `cms_tbl_field_tab` WHERE `cms_tbl_conf_id` = :tableId AND (".$databaseConnection->quoteIdentifier($nameFieldWithTranslationSuffix)." = :preTabName OR `systemname` = :preTabName)";
+        $pos = $databaseConnection->fetchColumn($query, [
+                'tableId' => $tableId,
+                'preTabName' => $preTabSystemName
+                ]
+        );
+
+        if (false === $pos) {
+            self::addInfoMessage("Unable to position tab ".$tabSystemName." after ".$preTabSystemName." because ".$preTabSystemName." was not found", self::INFO_MESSAGE_LEVEL_ERROR);
+
+            return false;
+        }
+
+        $pos = (int) $pos;
+
+        $query = "UPDATE `cms_tbl_field_tab` SET `position` = `position`+1 WHERE `position` > ".$pos." AND `cms_tbl_conf_id` = ".$databaseConnection->quote($tableId);
         self::_RunQuery($query, __LINE__);
 
-        $query = "UPDATE `cms_tbl_field_tab` SET `position` = '".MySqlLegacySupport::getInstance()->real_escape_string(($pos + 1))."' WHERE `name` = '{$sTabName}'";
+        $query = "UPDATE `cms_tbl_field_tab`
+                     SET `position` = ".$databaseConnection->quote(($pos + 1))."
+                   WHERE
+                        (".$databaseConnection->quoteIdentifier($nameFieldWithTranslationSuffix)." = ".$databaseConnection->quote($tabSystemName)."
+                     OR `systemname` = ".$databaseConnection->quote($tabSystemName).")
+                     AND `cms_tbl_conf_id` = ".$databaseConnection->quote($tableId);
         self::_RunQuery($query, __LINE__);
+
+        return true;
     }
 
     /**
@@ -1774,7 +1793,7 @@ class TCMSLogChange
         self::_RunQuery($query, __LINE__);
 
         if (null !== $sPlaceTabAfter) {
-            self::SetTabPosition($iTableId, $sOriginalTabName, $sPlaceTabAfter);
+            self::SetTabPosition($iTableId, $sTabIdentifier, $sPlaceTabAfter);
         }
 
         return $sTabId;

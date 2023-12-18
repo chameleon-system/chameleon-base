@@ -1060,7 +1060,7 @@ class TCMSTableEditorEndPoint
         $quotedId = $databaseConnection->quote($this->sId);
         $quotedPosition = $databaseConnection->quote($iPosition);
 
-        $sQuery = "SELECT * 
+        $sQuery = "SELECT *
                    FROM $quotedMltTableName
                    WHERE `source_id` = $quotedId
                    ORDER BY `entry_sort` ASC ";
@@ -1696,11 +1696,11 @@ class TCMSTableEditorEndPoint
 
         return $bSaveSuccess;
     }
-    
+
     private function isRecordingActive(): bool
     {
         $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
-        
+
         return $this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive();
     }
 
@@ -1816,21 +1816,29 @@ class TCMSTableEditorEndPoint
      */
     public function CopyPropertyRecords($oField, $sourceRecordID)
     {
-        $oField->oTableRow->id = $sourceRecordID;
-        $sPropertyTableName = $oField->GetPropertyTableName();
-        $sTableClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sPropertyTableName).'List';
-        $sTargetTableForeignKeyFieldName = $oField->GetMatchingParentFieldName();
-        $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sPropertyTableName).'` WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetTableForeignKeyFieldName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sourceRecordID)."'";
-        $oPropertyList = call_user_func(array($sTableClassName, 'GetList'), $query);
-        $sTableID = TTools::GetCMSTableId($sPropertyTableName);
-        $oTableEditorManager = new TCMSTableEditorManager();
-        while ($oProperty = $oPropertyList->Next()) {
-            /** @var $oProperty TCMSRecord */
-            $oTableEditorManager->Init($sTableID, $oProperty->id);
-            $aOverloadedFields = array($sTargetTableForeignKeyFieldName => $this->sId);
-            $oTableEditorManager->AllowEditByAll(true);
-            $oTableEditorManager->DatabaseCopy(false, $aOverloadedFields, $this->bIsCopyAllLanguageValues);
+        $allowReferenceCopy = $oField->allowCopyRecordReferences();
+        if (false === $allowReferenceCopy){
+            return;
         }
+
+        $oField->oTableRow->id = $sourceRecordID;
+
+        $propertyTableName = $oField->GetPropertyTableName();
+        $tableClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $propertyTableName).'List';
+        $targetTableForeignKeyFieldName = $oField->GetMatchingParentFieldName();
+        $query = 'SELECT * FROM `'.$propertyTableName.'` WHERE `'.$targetTableForeignKeyFieldName."` = '".$sourceRecordID."'";
+        $propertyList = $tableClassName::GetList($query);
+
+        $tableID = TTools::GetCMSTableId($propertyTableName);
+        $tableEditorManager = new TCMSTableEditorManager();
+        while ($oProperty = $propertyList->Next()) {
+            /** @var $oProperty TCMSRecord */
+            $tableEditorManager->Init($tableID, $oProperty->id);
+            $overloadedFields = [$targetTableForeignKeyFieldName => $this->sId];
+            $tableEditorManager->AllowEditByAll(true);
+            $tableEditorManager->DatabaseCopy(false, $overloadedFields, $this->bIsCopyAllLanguageValues);
+        }
+        $tableEditorManager->AllowEditByAll(false);
     }
 
     /**
@@ -1943,7 +1951,7 @@ class TCMSTableEditorEndPoint
             $updateQuery = '
               UPDATE '.$databaseConnection->quoteIdentifier($row['tableName']).'
                  SET '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
-                     ".$databaseConnection->quoteIdentifier($row['fieldName'])." = ''   
+                     ".$databaseConnection->quoteIdentifier($row['fieldName'])." = ''
                WHERE ".$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($tableName);
 
             $setFields[$row['fieldName']] = '';
@@ -1992,8 +2000,8 @@ class TCMSTableEditorEndPoint
         $fieldConfigQuery = '
                   SELECT `cms_field_conf`.`name` AS fieldName,
                          `cms_tbl_conf`.`name` AS tableName
-                    FROM `cms_field_conf` 
-               LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
+                    FROM `cms_field_conf`
+               LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id`
                    WHERE `cms_field_conf`.`cms_field_type_id` = :fieldTypeId';
 
         return $databaseConnection->fetchAll($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
@@ -2550,7 +2558,7 @@ class TCMSTableEditorEndPoint
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
-    
+
     private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
     {
         return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');
