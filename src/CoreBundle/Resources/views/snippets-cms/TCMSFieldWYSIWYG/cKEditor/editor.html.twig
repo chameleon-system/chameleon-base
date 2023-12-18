@@ -7,10 +7,9 @@
     </textarea>
 
     <script type="text/javascript">
-
         var editorStyleSets = '';
         editorStyleSets = {{ aEditorSettings.stylesSet|raw }};
-        if (false === editorStyleSets in CKEDITOR.stylesSet.registered) {
+        if (!(editorStyleSets in CKEDITOR.stylesSet.registered)) {
             {% if aEditorSettings.stylesSet %}
                 CKEDITOR.stylesSet.add({{ aEditorSettings.stylesSet|raw }}, [
                     {% for style in aStyles %}
@@ -59,6 +58,10 @@
             CKEDITOR.on('instanceReady', function () {
                 if (CKEDITOR.lang.de) CKEDITOR.lang.de.common.browseServer = 'CMS Quelle wählen';
                 else if (CKEDITOR.lang.en) CKEDITOR.lang.en.common.browseServer = 'Select CMS Source';
+
+                document.addEventListener('tableEditorBeforeSaveEvent', function(e) {
+                    $('#{{ sEditorName }}').val(CKEDITOR.instances['{{ sEditorName }}'].getData());
+                });
             });
     </script>
 </div>
