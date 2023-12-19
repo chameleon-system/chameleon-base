@@ -28,39 +28,32 @@ class imageMagick
     /**
      * temp directory with webserver write rights
      * will be set to upload_tmp_dir from php.ini on init.
-     *
-     * @var string
      */
-    protected $sTempDir = CMS_TMP_DIR; //'/tmp';
+    protected string $sTempDir = CMS_TMP_DIR;
 
     /**
      * quality for JPG images.
      *
-     * @var int
+     * @var int|string
      */
     protected $iJPGQuality = '90';
 
     /**
      * strip the image of any profiles or comments.
-     *
-     * @var bool
      */
-    protected $bStrip = true;
+    protected bool $bStrip = true;
 
     /**
      * version of imageMagick.
-     *
-     * @var string - like: 6.5.4
+     * like: 6.5.4
      */
-    protected $sVersion = '';
+    protected string $sVersion = '';
 
     /**
      * temporary filename used to save the resized/converted image in
      * temp folder before it is moved to the target folder.
-     *
-     * @var string
      */
-    protected $sTempFileName = '';
+    protected string $sTempFileName = '';
 
     /**
      * TCMSFile object of source file.
@@ -71,73 +64,53 @@ class imageMagick
 
     /**
      * raw image data from identify --verbose.
-     *
-     * @var array
      */
-    protected $aImageRawData = array();
+    protected array $aImageRawData = array();
 
     /**
      * parsed image data.
-     *
-     * @var array
      */
-    protected $aImageData = array();
+    protected array $aImageData = array();
 
     /**
      * indicates if an error occured.
-     *
-     * @var bool
      */
-    public $bHasErrors = false;
+    public bool $bHasErrors = false;
 
     /**
      * array of error messages.
-     *
-     * @var array
      */
-    public $aErrorMessages = array();
+    public array $aErrorMessages = array();
 
     /**
      * path to the source image file.
-     *
-     * @var string
      */
-    protected $sSourceFile = '';
+    protected string $sSourceFile = '';
 
     /**
      * path to the target image file.
-     *
-     * @var string
      */
-    protected $sTargetFile = '';
+    protected string $sTargetFile = '';
 
     /**
      * if an image is animated (GIF), it defines the number of scenes.
-     *
-     * @var int
      */
-    protected $iNumberOfScenes = 0;
+    protected int $iNumberOfScenes = 0;
 
     /**
      * the initialized TCMSImage object.
-     *
-     * @var TCMSImage
      */
-    protected $oImage = null;
+    protected ?TCMSImage $oImage = null;
 
     /**
      * indicates if the PHP extension "Imagick" is available instead of shell usage.
-     *
-     * @var bool
      */
-    public $bUsePHPLibrary = false;
+    public bool $bUsePHPLibrary = false;
 
     /**
      * holds the php extension Imagick if available.
-     *
-     * @var Imagick
      */
-    protected $oIMagick = null;
+    protected ?Imagick $oIMagick = null;
 
     /**
      * width of the current thumbnail.
@@ -276,7 +249,7 @@ class imageMagick
      * @param string    $sFilePath - path to the source image
      * @param TCMSImage $oImage
      */
-    public function LoadImage($sFilePath, $oImage = null)
+    public function LoadImage(string $sFilePath, ?TCMSImage $oImage = null)
     {
         $this->aErrorMessages = array();
         $this->bHasErrors = false;
@@ -285,6 +258,7 @@ class imageMagick
             $this->oImage = $oImage;
             if ($this->bUsePHPLibrary) {
                 $this->oIMagick = new Imagick($sFilePath);
+                $this->oIMagick->autoOrient();
             }
         } else {
             $this->AddError('source file not found "'.$sFilePath.'"');
@@ -325,7 +299,7 @@ class imageMagick
      *
      * @return string
      */
-    protected function GetTempFileName($sFilePath, $suffix = '')
+    protected function GetTempFileName(string $sFilePath, $suffix = '')
     {
         $sTempName = preg_replace("/[^a-zA-Z0-9_\.]/", '_', basename($sFilePath));
         $sFilteredHostName = $this->getUrlNormalizationUtil()->normalizeUrl($_SERVER['HTTP_HOST']);
@@ -501,7 +475,7 @@ class imageMagick
                         $aParameter[] = '-background white -flatten';
                     }
                 }
-                $command = $this->sImageMagickDir.'/convert '.$sImParamStrip.' -quality '.escapeshellarg($iQuality).' -limit memory 160MiB -geometry '.escapeshellarg($iWidth.'x'.$iHeight).' '.implode(' ', $aParameter).' '.escapeshellarg($this->oSourceFile->sPath).' '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
+                $command = $this->sImageMagickDir.'/convert '.$sImParamStrip.' -quality '.escapeshellarg($iQuality).' -auto-orient -limit memory 160MiB -geometry '.escapeshellarg($iWidth.'x'.$iHeight).' '.implode(' ', $aParameter).' '.escapeshellarg($this->oSourceFile->sPath).' '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
                 exec($command, $returnarray, $returnvalue);
 
                 if ($returnvalue) {
@@ -551,7 +525,7 @@ class imageMagick
                 $this->oIMagick->writeImage($this->sTempDir.'/'.$this->sTempFileName);
                 $this->oIMagick->destroy();
             } else {
-                $command = $this->sImageMagickDir.'/convert '.escapeshellarg($this->oSourceFile->sPath).' -crop '.escapeshellarg($iWidth.'x'.$iHeight.'+'.$iXViewPoint.'+'.$iYViewPoint).' +repage '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
+                $command = $this->sImageMagickDir.'/convert '.escapeshellarg($this->oSourceFile->sPath).' -auto-orient -crop '.escapeshellarg($iWidth.'x'.$iHeight.'+'.$iXViewPoint.'+'.$iYViewPoint).' +repage '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
                 exec($command, $returnarray, $returnvalue);
 
                 if ($returnvalue) {
@@ -588,7 +562,7 @@ class imageMagick
             if ($this->bUsePHPLibrary) {
                 die('center image using Imagick php extension is not ready yet');
             } else {
-                $command = $this->sImageMagickDir.'/convert '.escapeshellarg($this->oSourceFile->sPath).' -background '.escapeshellarg($sBackGroundColor).' -gravity center -extent '.escapeshellarg($iWidthCanvas.'x'.$iHeightCanvas).' '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
+                $command = $this->sImageMagickDir.'/convert '.escapeshellarg($this->oSourceFile->sPath).' -auto-orient -background '.escapeshellarg($sBackGroundColor).' -gravity center -extent '.escapeshellarg($iWidthCanvas.'x'.$iHeightCanvas).' '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
                 exec($command, $returnarray, $returnvalue);
 
                 if ($returnvalue) {
@@ -675,7 +649,7 @@ class imageMagick
             $sNewTmpFileName = $this->sTempDir.'/'.$this->GetTempFileName($sNewFileName, 'reflect');
 
             //$command = $this->sImageMagickDir."convert ".escapeshellarg($sOldTmpFileName)." -alpha on \( +clone -flip -channel A -evaluate multiply .35 +channel \) -append -size ".escapeshellarg($iOriginalImageWidth)."x".escapeshellarg($iHeightWithReflection)." xc:transparent +swap -gravity North -geometry +0+5 -composite ".escapeshellarg($sNewTmpFileName);
-            $command = $this->sImageMagickDir.'convert '.escapeshellarg($sOldTmpFileName)." -alpha on \( +clone -flip -size ".escapeshellarg($iOriginalImageWidth.'x'.$iHeightReflection)." gradient:gray40-black -alpha off -compose CopyOpacity -composite \) -append -gravity North -crop ".escapeshellarg($iOriginalImageWidth.'x'.$iHeightWithReflection)."+0-5\! -background transparent -compose Over -flatten ".escapeshellarg($sNewTmpFileName);
+            $command = $this->sImageMagickDir.'convert '.escapeshellarg($sOldTmpFileName)." -alpha on \( +clone -flip -size ".escapeshellarg($iOriginalImageWidth.'x'.$iHeightReflection)." gradient:gray40-black -alpha off -compose CopyOpacity -composite \) -append -gravity North -crop ".escapeshellarg($iOriginalImageWidth.'x'.$iHeightWithReflection)."+0-5\! -background transparent -compose Over -flatten -auto-orient ".escapeshellarg($sNewTmpFileName);
 
             exec($command, $returnarray, $returnvalue);
             if ($returnvalue) {
@@ -711,7 +685,7 @@ class imageMagick
             $sNewTmpFileName = $this->sTempDir.'/'.$this->GetTempFileName($sNewFileName, 'radius');
 
             $cmd = $this->sImageMagickDir.'/convert';
-            $cmd .= ' -size '.escapeshellarg($this->iThumbWidth.'x'.$this->iThumbHeight).' xc:none -fill white -draw '.escapeshellarg('roundRectangle 0,0 '.$this->iThumbWidth.','.$this->iThumbHeight.' '.$iRadius.','.$iRadius).' '.escapeshellarg($sOldTmpFileName).' -compose SrcIn -composite '.escapeshellarg($sNewTmpFileName);
+            $cmd .= ' -size '.escapeshellarg($this->iThumbWidth.'x'.$this->iThumbHeight).' xc:none -fill white -draw '.escapeshellarg('roundRectangle 0,0 '.$this->iThumbWidth.','.$this->iThumbHeight.' '.$iRadius.','.$iRadius).' '.escapeshellarg($sOldTmpFileName).' -compose SrcIn -composite -auto-orient '.escapeshellarg($sNewTmpFileName);
 
             exec($cmd, $returnarray, $returnvalue);
             if ($returnvalue) {
@@ -760,8 +734,10 @@ class imageMagick
                     $sNewFilePath = $sTiffPath.'/'.$sNewFileName;
                 }
                 $cmd = $this->sImageMagickDir.'/convert';
+                
+                $sImParamStrip = ' -auto-orient ';
                 if ($this->bStrip) {
-                    $sImParamStrip = ' -strip ';
+                    $sImParamStrip .= ' -strip ';
                 }
                 if (is_array($aColorProfiles) && count($aColorProfiles) > 0) {
                     // ColorProfiles given
@@ -786,27 +762,18 @@ class imageMagick
         return $returnVal;
     }
 
-    /**
-     * @param IPkgCmsFileManager $filemanager
-     */
     public function setFileManager(IPkgCmsFileManager $filemanager)
     {
         $this->fileManager = $filemanager;
     }
 
-    /**
-     * @return CacheInterface
-     */
-    private function getCache()
+    private function getCache(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_cms_cache.cache');
     }
 
-    /**
-     * @return UrlNormalizationUtil
-     */
-    private function getUrlNormalizationUtil()
+    private function getUrlNormalizationUtil(): UrlNormalizationUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }
