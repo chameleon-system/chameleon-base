@@ -15,15 +15,12 @@ use esono\pkgCmsCache\CacheInterface;
 
 class imageMagick
 {
-    /** @var IPkgCmsFileManager */
-    private $fileManager = null;
+    private ?IPkgCmsFileManager $fileManager = null;
 
     /**
      * application directory of imageMagick.
-     *
-     * @var string
      */
-    protected $sImageMagickDir = '/usr/local/bin/'; // ImageMagick binary files
+    protected string $sImageMagickDir = '/usr/local/bin/'; // ImageMagick binary files
 
     /**
      * temp directory with webserver write rights
@@ -435,35 +432,38 @@ class imageMagick
     }
 
     /**
-     * resizes image to given proportions while keeping the aspect ratio.
-     *
-     * @param int $iWidth
-     * @param int $iHeight
-     *
-     * @return bool
+     * Resizes image to the specified width and height.
+     * Takes in account the image orientation set in exif or metadata and rotates the image if necessary.
      */
-    public function ResizeImage($iWidth, $iHeight)
+    public function ResizeImage(int $iWidth, int $iHeight): bool
     {
         $this->iThumbWidth = $iWidth;
         $this->iThumbHeight = $iHeight;
 
+        $aParameter = [];
+        
         $sImParamStrip = '';
         if ($this->bStrip) {
-            $sImParamStrip = ' -strip ';
+            $sImParamStrip = ' -strip';
+        }
+        
+        $orientation = $this->getImageOrientation();
+        
+        if (null !== $orientation) {
+            $aParameter[] = $this->getRotationCommandForOrientation((string) $orientation);
         }
 
         $returnVal = false;
         if (!$this->bHasErrors) {
             if ($this->bUsePHPLibrary) {
-                $this->oIMagick->resizeImage($iWidth, $iHeight, Imagick::FILTER_LANCZOS, 1);
+                $this->oIMagick->resizeImage($iWidth, $iHeight, \Imagick::FILTER_LANCZOS, 1);
                 $this->oIMagick->writeImage($this->sTempDir.'/'.$this->sTempFileName);
                 $this->oIMagick->destroy();
             } else {
-                $aParameter = array();
                 $oImageMagickConfig = TdbCmsConfigImagemagick::GetActiveInstance($iWidth, $iHeight);
                 $iQuality = $this->iJPGQuality;
                 if ($oImageMagickConfig) {
-                    if (1 != $oImageMagickConfig->fieldGamma) {
+                    if (1 !== $oImageMagickConfig->fieldGamma) {
                         $aParameter[] = '-gamma '.escapeshellarg($oImageMagickConfig->fieldGamma);
                     }
                     if ($oImageMagickConfig->fieldScharpen) {
@@ -475,7 +475,7 @@ class imageMagick
                         $aParameter[] = '-background white -flatten';
                     }
                 }
-                $command = $this->sImageMagickDir.'/convert '.$sImParamStrip.' -quality '.escapeshellarg($iQuality).' -auto-orient -limit memory 160MiB -geometry '.escapeshellarg($iWidth.'x'.$iHeight).' '.implode(' ', $aParameter).' '.escapeshellarg($this->oSourceFile->sPath).' '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
+                $command = $this->sImageMagickDir.'/convert '.$sImParamStrip.' -quality '.escapeshellarg($iQuality).' -limit memory 160MiB -geometry '.escapeshellarg($iWidth.'x'.$iHeight).' '.implode(' ', $aParameter).' '.escapeshellarg($this->oSourceFile->sPath).' '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
                 exec($command, $returnarray, $returnvalue);
 
                 if ($returnvalue) {
@@ -493,16 +493,90 @@ class imageMagick
         return $returnVal;
     }
 
+    protected function getImageOrientation(): ?string
+    {
+        $exifData = $this->getExifData();
+
+        return $exifData['Orientation'] ?? null;
+    }
+    
+    protected function getRotationCommandForOrientation(string $orientation): ?string
+    {
+        $command = null;
+        
+        switch ($orientation) {
+            case '1':
+            case 'TopLeft':
+                break;
+            case '2':
+            case 'TopRight':
+                $command = "-flop ";
+                break;
+            case '3':
+            case 'BottomRight':
+                $command = "-rotate 180 ";
+                break;
+            case '4':
+            case 'BottomLeft':
+                $command = "-flip ";
+                break;
+            case '5':
+            case 'LeftTop':
+                $command = "-transpose ";
+                break;
+            case '6':
+            case 'RightTop':
+                $command = "-rotate 90 ";
+                break;
+            case '7':
+            case 'RightBottom':
+                $command = "-transverse ";
+                break;
+            case '8':
+            case 'LeftBottom':
+                $command = "-rotate -90 ";
+                break;
+            default:
+                return null;
+        }
+        
+        return $command;
+    }
+
+    public function getExifData(): ?array
+    {
+        $command = $this->sImageMagickDir.'/identify -verbose '.escapeshellarg($this->oSourceFile->sPath);
+        exec($command, $imageProperties, $returnValue);
+
+        $exifData = [];
+        if (is_array($imageProperties)) {
+            foreach($imageProperties as $key => $val) {
+                if(str_contains($val, 'exif:') || str_contains($val, 'Orientation:')) {
+                    $exifRowString = trim(str_replace('exif:', '',$val));
+                    $exifRowArray = explode(':', $exifRowString);
+                    
+                    if(isset($exifRowArray[1])) {
+                        $exifData[trim($exifRowArray[0])] = trim($exifRowArray[1]);
+                    }
+                }
+            }
+        }
+    
+        return $exifData;
+    }
+
     /**
-     * crop image.
+     * Crop the image to the specified width and height.
      *
-     * @param int  $iWidth
-     * @param int  $iHeight
-     * @param bool $bCenter
+     * @param int $iWidth The desired width of the cropped image.
+     * @param int $iHeight The desired height of the cropped image.
+     * @param bool $bCenter (Optional) Whether to center the crop. Default is true.
      *
-     * @return bool
+     * @return bool True if the image was successfully cropped, false otherwise.
+     * 
+     * @throws ImagickException
      */
-    public function CropImage($iWidth, $iHeight, $bCenter = true)
+    public function CropImage(int $iWidth, int $iHeight, bool $bCenter = true): bool
     {
         $iXViewPoint = 0;
         $iYViewPoint = 0;
@@ -544,15 +618,9 @@ class imageMagick
     }
 
     /**
-     * center image in canvas.
-     *
-     * @param int    $iWidthCanvas
-     * @param int    $iHeightCanvas
-     * @param string $sBackGroundColor
-     *
-     * @return bool
+     * Center image in canvas.
      */
-    public function CenterImage($iWidthCanvas, $iHeightCanvas, $sBackGroundColor = '#ffffff')
+    public function CenterImage(int $iWidthCanvas, int $iHeightCanvas, $sBackGroundColor = '#ffffff'): bool
     {
         $this->iThumbWidth = $iWidthCanvas;
         $this->iThumbHeight = $iHeightCanvas;
@@ -581,13 +649,10 @@ class imageMagick
     }
 
     /**
-     * saves image to file path.
+     * Saves image to file path.
      *
-     * @param string $sTargetFile
-     *
-     * @return bool
      */
-    public function SaveToFile($sTargetFile)
+    public function SaveToFile(string $sTargetFile): bool
     {
         $returnVal = false;
         if (!$this->bHasErrors && !empty($sTargetFile)) {
@@ -630,7 +695,7 @@ class imageMagick
         /**
          *  a) we need a working non shell (library) solution for this
          *  b) the shell version works only standalone - not with rounded corners (you'll get a black background on the reflection)
-         *     so we need also a solution that works also with rounded corners.
+         *     so we need a solution that works also with rounded corners.
          **/
         $returnVal = false;
         $iOriginalImageHeight = $this->iThumbHeight;
@@ -707,13 +772,13 @@ class imageMagick
      * @param string $sTiffPath
      * @param string $sTiffFileName
      * @param string $sJPGPath      if is not set then save jgp image in same dir like the tiff image
-     * @param array  $aColorProfile - array of filenames pointing to the color profile(s) that should be used for converting
+     * @param array  $aColorProfiles - array of filenames pointing to the color profile(s) that should be used for converting
      *                              Important: They are used for converting only and dropped afterwards. This does NOT make your resulting image
      *                              have color profiles
      *
      * @return bool
      */
-    public function ConvertTiffToJpg($sTiffPath, $sTiffFileName, $sJPGPath = '', $aColorProfiles = array())
+    public function ConvertTiffToJpg(string $sTiffPath, string $sTiffFileName, string $sJPGPath = '', array $aColorProfiles = array())
     {
         $returnVal = false;
         if ($this->bUsePHPLibrary) { //library version
