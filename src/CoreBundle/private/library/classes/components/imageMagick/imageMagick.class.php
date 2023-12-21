@@ -450,7 +450,7 @@ class imageMagick
         $orientation = $this->getImageOrientation();
         
         if (null !== $orientation) {
-            $aParameter[] = $this->getRotationCommandForOrientation((string) $orientation);
+            $aParameter[] = $this->getRotationCommandForOrientation($orientation);
         }
 
         $returnVal = false;
