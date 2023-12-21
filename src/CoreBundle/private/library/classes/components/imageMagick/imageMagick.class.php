@@ -30,10 +30,8 @@ class imageMagick
 
     /**
      * quality for JPG images.
-     *
-     * @var int|string
      */
-    protected $iJPGQuality = '90';
+    protected int $iJPGQuality = 90;
 
     /**
      * strip the image of any profiles or comments.
@@ -42,7 +40,7 @@ class imageMagick
 
     /**
      * version of imageMagick.
-     * like: 6.5.4
+     * like: 6.5.4.
      */
     protected string $sVersion = '';
 
@@ -62,12 +60,12 @@ class imageMagick
     /**
      * raw image data from identify --verbose.
      */
-    protected array $aImageRawData = array();
+    protected array $aImageRawData = [];
 
     /**
      * parsed image data.
      */
-    protected array $aImageData = array();
+    protected array $aImageData = [];
 
     /**
      * indicates if an error occured.
@@ -77,7 +75,7 @@ class imageMagick
     /**
      * array of error messages.
      */
-    public array $aErrorMessages = array();
+    public array $aErrorMessages = [];
 
     /**
      * path to the source image file.
@@ -248,7 +246,7 @@ class imageMagick
      */
     public function LoadImage(string $sFilePath, ?TCMSImage $oImage = null)
     {
-        $this->aErrorMessages = array();
+        $this->aErrorMessages = [];
         $this->bHasErrors = false;
         if (file_exists($sFilePath)) {
             $this->sSourceFile = $sFilePath;
@@ -291,12 +289,9 @@ class imageMagick
     /**
      * returns a temporary filename with hostname + uid as prefix.
      *
-     * @param string $sFilePath
-     * @param string $suffix    - optional suffix to add to the filename
-     *
      * @return string
      */
-    protected function GetTempFileName(string $sFilePath, $suffix = '')
+    protected function GetTempFileName(string $sFilePath, string $suffix = '')
     {
         $sTempName = preg_replace("/[^a-zA-Z0-9_\.]/", '_', basename($sFilePath));
         $sFilteredHostName = $this->getUrlNormalizationUtil()->normalizeUrl($_SERVER['HTTP_HOST']);
@@ -441,14 +436,14 @@ class imageMagick
         $this->iThumbHeight = $iHeight;
 
         $aParameter = [];
-        
+
         $sImParamStrip = '';
         if ($this->bStrip) {
             $sImParamStrip = ' -strip';
         }
-        
+
         $orientation = $this->getImageOrientation();
-        
+
         if (null !== $orientation) {
             $aParameter[] = $this->getRotationCommandForOrientation($orientation);
         }
@@ -499,47 +494,47 @@ class imageMagick
 
         return $exifData['Orientation'] ?? null;
     }
-    
+
     protected function getRotationCommandForOrientation(string $orientation): ?string
     {
         $command = null;
-        
+
         switch ($orientation) {
             case '1':
             case 'TopLeft':
                 break;
             case '2':
             case 'TopRight':
-                $command = "-flop ";
+                $command = '-flop ';
                 break;
             case '3':
             case 'BottomRight':
-                $command = "-rotate 180 ";
+                $command = '-rotate 180 ';
                 break;
             case '4':
             case 'BottomLeft':
-                $command = "-flip ";
+                $command = '-flip ';
                 break;
             case '5':
             case 'LeftTop':
-                $command = "-transpose ";
+                $command = '-transpose ';
                 break;
             case '6':
             case 'RightTop':
-                $command = "-rotate 90 ";
+                $command = '-rotate 90 ';
                 break;
             case '7':
             case 'RightBottom':
-                $command = "-transverse ";
+                $command = '-transverse ';
                 break;
             case '8':
             case 'LeftBottom':
-                $command = "-rotate -90 ";
+                $command = '-rotate -90 ';
                 break;
             default:
                 return null;
         }
-        
+
         return $command;
     }
 
@@ -550,30 +545,30 @@ class imageMagick
 
         $exifData = [];
         if (is_array($imageProperties)) {
-            foreach($imageProperties as $key => $val) {
-                if(str_contains($val, 'exif:') || str_contains($val, 'Orientation:')) {
-                    $exifRowString = trim(str_replace('exif:', '',$val));
+            foreach ($imageProperties as $key => $val) {
+                if (str_contains($val, 'exif:') || str_contains($val, 'Orientation:')) {
+                    $exifRowString = trim(str_replace('exif:', '', $val));
                     $exifRowArray = explode(':', $exifRowString);
-                    
-                    if(isset($exifRowArray[1])) {
+
+                    if (isset($exifRowArray[1])) {
                         $exifData[trim($exifRowArray[0])] = trim($exifRowArray[1]);
                     }
                 }
             }
         }
-    
+
         return $exifData;
     }
 
     /**
      * Crop the image to the specified width and height.
      *
-     * @param int $iWidth The desired width of the cropped image.
-     * @param int $iHeight The desired height of the cropped image.
+     * @param int  $iWidth  the desired width of the cropped image
+     * @param int  $iHeight the desired height of the cropped image
      * @param bool $bCenter (Optional) Whether to center the crop. Default is true.
      *
-     * @return bool True if the image was successfully cropped, false otherwise.
-     * 
+     * @return bool true if the image was successfully cropped, false otherwise
+     *
      * @throws ImagickException
      */
     public function CropImage(int $iWidth, int $iHeight, bool $bCenter = true): bool
@@ -628,7 +623,7 @@ class imageMagick
         $returnVal = false;
         if (!$this->bHasErrors) {
             if ($this->bUsePHPLibrary) {
-                die('center image using Imagick php extension is not ready yet');
+                exit('center image using Imagick php extension is not ready yet');
             } else {
                 $command = $this->sImageMagickDir.'/convert '.escapeshellarg($this->oSourceFile->sPath).' -auto-orient -background '.escapeshellarg($sBackGroundColor).' -gravity center -extent '.escapeshellarg($iWidthCanvas.'x'.$iHeightCanvas).' '.escapeshellarg($this->sTempDir.'/'.$this->sTempFileName);
                 exec($command, $returnarray, $returnvalue);
@@ -650,7 +645,6 @@ class imageMagick
 
     /**
      * Saves image to file path.
-     *
      */
     public function SaveToFile(string $sTargetFile): bool
     {
@@ -675,21 +669,19 @@ class imageMagick
     }
 
     /**
-     * adds a reflection to the image.
+     * Adds a reflection to the image.
      *
-     * @param int $iReflectionPercentage: The percentage of the height of the
+     * @param bool $bImageline            Draws a imageline for seperating the original
+     *                                    image and the reflection
+     * @param int  $iReflectionPercentage The percentage of the height of the
      *                                    original image where the reflection effect should take place. For
      *                                    example: if you put in 50 (50%) here, you'll get an mirrored reflection
      *                                    that is 50% as high as your original image. So if your original image
      *                                    was 100 pixel high - your image including mirrored reflection (which
      *                                    will be returned will now be 150 pixel. The higher the percentage,
      *                                    the longer the alpha gradient.
-     * @param int $bImageline:            Draws a imageline for seperating the original
-     *                                    image and the reflection
-     *
-     * @return bool
      */
-    public function AddReflection($bImageline, $iReflectionPercentage)
+    public function AddReflection(bool $bImageline = true, int $iReflectionPercentage): bool
     {
         /** !!!!! IMPORTANT NOTE !!!!! **/
         /**
@@ -706,11 +698,11 @@ class imageMagick
         $this->iThumbHeight = $iHeightWithReflection;
 
         if ($this->bUsePHPLibrary) { // library version
-            die('reflection using Imagick php extension is not ready yet');
+            exit('reflection using Imagick php extension is not ready yet');
         } else { // shell version
             $sOldTmpFileName = $this->sTempDir.'/'.$this->sTempFileName;
 
-            $sNewFileName = str_replace(array('.gif', '.jpeg', '.jpg'), '.png', $this->sSourceFile);
+            $sNewFileName = str_replace(['.gif', '.jpeg', '.jpg'], '.png', $this->sSourceFile);
             $sNewTmpFileName = $this->sTempDir.'/'.$this->GetTempFileName($sNewFileName, 'reflect');
 
             //$command = $this->sImageMagickDir."convert ".escapeshellarg($sOldTmpFileName)." -alpha on \( +clone -flip -channel A -evaluate multiply .35 +channel \) -append -size ".escapeshellarg($iOriginalImageWidth)."x".escapeshellarg($iHeightWithReflection)." xc:transparent +swap -gravity North -geometry +0+5 -composite ".escapeshellarg($sNewTmpFileName);
@@ -719,7 +711,6 @@ class imageMagick
             exec($command, $returnarray, $returnvalue);
             if ($returnvalue) {
                 $this->AddError('couldn`t add reflection to image');
-                $returnVal = false;
             } else {
                 $returnVal = true;
             }
@@ -733,20 +724,16 @@ class imageMagick
 
     /**
      * adds a rounded corner with transparency, target file will be forced to PNG.
-     *
-     * @param int $iRadius
-     *
-     * @return bool
      */
-    public function AddRoundedCorners($iRadius)
+    public function AddRoundedCorners(int $iRadius): bool
     {
         $returnVal = false;
         if ($this->bUsePHPLibrary) { //library version
-            die('rounded corners using Imagick php extension is not ready yet');
+            exit('rounded corners using Imagick php extension is not ready yet');
         } else { // shell version
             $sOldTmpFileName = $this->sTempDir.'/'.$this->sTempFileName;
 
-            $sNewFileName = str_replace(array('.gif', '.jpeg', '.jpg'), '.png', $this->sSourceFile);
+            $sNewFileName = str_replace(['.gif', '.jpeg', '.jpg'], '.png', $this->sSourceFile);
             $sNewTmpFileName = $this->sTempDir.'/'.$this->GetTempFileName($sNewFileName, 'radius');
 
             $cmd = $this->sImageMagickDir.'/convert';
@@ -769,27 +756,23 @@ class imageMagick
     /**
      * Convert a tiff image to a jpg image.
      *
-     * @param string $sTiffPath
-     * @param string $sTiffFileName
-     * @param string $sJPGPath      if is not set then save jgp image in same dir like the tiff image
+     * @param string $sJPGPath       if is not set then save jgp image in same dir like the tiff image
      * @param array  $aColorProfiles - array of filenames pointing to the color profile(s) that should be used for converting
-     *                              Important: They are used for converting only and dropped afterwards. This does NOT make your resulting image
-     *                              have color profiles
-     *
-     * @return bool
+     *                               Important: They are used for converting only and dropped afterwards. This does NOT make your resulting image
+     *                               have color profiles
      */
-    public function ConvertTiffToJpg(string $sTiffPath, string $sTiffFileName, string $sJPGPath = '', array $aColorProfiles = array())
+    public function ConvertTiffToJpg(string $sTiffPath, string $sTiffFileName, string $sJPGPath = '', array $aColorProfiles = []): bool
     {
         $returnVal = false;
         if ($this->bUsePHPLibrary) { //library version
-            die('converting .tiff to .jpg using Imagick php extension is not ready yet');
+            exit('converting .tiff to .jpg using Imagick php extension is not ready yet');
         } else { // shell version
             if ('/' == substr($sTiffPath, strlen($sTiffPath) - 1)) {
                 $sTiffPath = substr($sTiffPath, 0, -1);
             }
             $sTiffFilePath = $sTiffPath.'/'.$sTiffFileName;
             if (file_exists($sTiffFilePath)) {
-                $sNewFileName = str_replace(array('.tif'), '.jpg', $sTiffFileName);
+                $sNewFileName = str_replace(['.tif'], '.jpg', $sTiffFileName);
                 if (!empty($sJPGPath)) {
                     if ('/' == substr($sJPGPath, strlen($sJPGPath) - 1)) {
                         $sJPGPath = substr($sJPGPath, 0, -1);
@@ -799,7 +782,7 @@ class imageMagick
                     $sNewFilePath = $sTiffPath.'/'.$sNewFileName;
                 }
                 $cmd = $this->sImageMagickDir.'/convert';
-                
+
                 $sImParamStrip = ' -auto-orient ';
                 if ($this->bStrip) {
                     $sImParamStrip .= ' -strip ';
@@ -827,9 +810,9 @@ class imageMagick
         return $returnVal;
     }
 
-    public function setFileManager(IPkgCmsFileManager $filemanager)
+    public function setFileManager(IPkgCmsFileManager $fileManager): void
     {
-        $this->fileManager = $filemanager;
+        $this->fileManager = $fileManager;
     }
 
     private function getCache(): CacheInterface
