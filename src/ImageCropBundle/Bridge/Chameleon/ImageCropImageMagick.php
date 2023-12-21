@@ -89,7 +89,7 @@ class ImageCropImageMagick extends imageMagick
     {
         $command = $this->sImageMagickDir.'/convert '.escapeshellarg(
                 $this->oSourceFile->sPath
-            ).' -crop '.escapeshellarg($width.'x'.$height.'+'.$xPos.'+'.$yPos).' +repage '.escapeshellarg(
+            ).' -auto-orient -crop '.escapeshellarg($width.'x'.$height.'+'.$xPos.'+'.$yPos).' +repage '.escapeshellarg(
                 $this->sTempDir.'/'.$this->sTempFileName
             );
         $command = str_replace('//', '/', $command);
