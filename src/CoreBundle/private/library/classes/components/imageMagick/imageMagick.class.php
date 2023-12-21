@@ -50,12 +50,7 @@ class imageMagick
      */
     protected string $sTempFileName = '';
 
-    /**
-     * TCMSFile object of source file.
-     *
-     * @var TCMSFile
-     */
-    protected $oSourceFile = '';
+    protected ?TCMSFile $oSourceFile;
 
     /**
      * raw image data from identify --verbose.
@@ -291,7 +286,7 @@ class imageMagick
      *
      * @return string
      */
-    protected function GetTempFileName(string $sFilePath, string $suffix = '')
+    protected function GetTempFileName(string $sFilePath, string $suffix = ''): string
     {
         $sTempName = preg_replace("/[^a-zA-Z0-9_\.]/", '_', basename($sFilePath));
         $sFilteredHostName = $this->getUrlNormalizationUtil()->normalizeUrl($_SERVER['HTTP_HOST']);
