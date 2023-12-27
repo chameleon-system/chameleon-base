@@ -62,7 +62,7 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
     protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         return $this->getDoctrineRenderer('mapping/string.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'type' => 'string',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

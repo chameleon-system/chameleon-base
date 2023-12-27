@@ -48,7 +48,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
         $parameters = [
             'source' => __CLASS__,
-            'type' => $this->snakeToPascalCase($this->GetConnectedTableName()),
+            'type' => $this->snakeToCamelCase($this->GetConnectedTableName()),
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToPascalCase($propertyName),
         ];
@@ -61,7 +61,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             '',
             [
                 ltrim(
-                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToPascalCase($this->GetConnectedTableName())),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToCamelCase($this->GetConnectedTableName())),
                     '\\'
                 ),
             ],
@@ -84,11 +84,11 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $viewName = 'mapping/many-to-one.xml.twig';
 
         $additionalFieldMapping = $this->getDoctrineRenderer($viewName, [
-            'fieldName' => $this->snakeToCamelCase($propertyName),
+            'fieldName' => $this->snakeToPascalCase($propertyName),
             'targetClass' => sprintf(
                 '%s\\%s',
                 $tableNamespaceMapping[$this->GetConnectedTableName()],
-                $this->snakeToPascalCase($this->GetConnectedTableName())
+                $this->snakeToCamelCase($this->GetConnectedTableName())
             ),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

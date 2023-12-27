@@ -65,7 +65,7 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
     protected function getDoctrineDataModelXml(string $namespace): string
     {
         return $this->getDoctrineRenderer('mapping/string.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'type' => 'simple_array',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

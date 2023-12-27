@@ -44,7 +44,7 @@ class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformabl
     protected function getDoctrineDataModelXml(string $namespace): string
     {
         $parameter = [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'type' => 'blob',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

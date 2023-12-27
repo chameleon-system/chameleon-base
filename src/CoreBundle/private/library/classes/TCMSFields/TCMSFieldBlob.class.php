@@ -46,7 +46,7 @@ class TCMSFieldBlob extends TCMSFieldText implements DoctrineTransformableInterf
     protected function getDoctrineDataModelXml(string $namespace): string
     {
         $parameter = [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'type' => 'object',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

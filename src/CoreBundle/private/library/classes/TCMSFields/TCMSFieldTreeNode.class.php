@@ -31,7 +31,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
 
         $parameters = [
             'source' => get_class($this),
-            'type' => $this->snakeToPascalCase($targetTable),
+            'type' => $this->snakeToCamelCase($targetTable),
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToPascalCase($propertyName),
         ];
@@ -41,8 +41,8 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
         $viewName = 'mapping/many-to-one.xml.twig';
 
         $mappingCode = $this->getDoctrineRenderer($viewName, [
-            'fieldName' => $this->snakeToCamelCase($propertyName),
-            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToPascalCase($targetTable)),
+            'fieldName' => $this->snakeToPascalCase($propertyName),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToCamelCase($targetTable)),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
 
@@ -54,7 +54,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
             $mappingCode,
             [
                 ltrim(
-                    sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToPascalCase($targetTable)),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToCamelCase($targetTable)),
                     '\\'
                 ),
             ],

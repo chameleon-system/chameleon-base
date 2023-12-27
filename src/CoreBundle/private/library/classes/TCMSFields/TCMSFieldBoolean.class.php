@@ -56,7 +56,7 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
             $default = '0';
         }
         return $this->getDoctrineRenderer('mapping/boolean.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'type' => 'boolean',
             'comment' => $this->oDefinition->sqlData['translation'],
             'column' => $this->name,

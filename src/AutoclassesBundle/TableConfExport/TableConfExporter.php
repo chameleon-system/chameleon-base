@@ -70,7 +70,7 @@ class TableConfExporter implements TableConfExporterInterface
             }
             $dataModelPartsList[] = $dataModelParts;
         }
-        $className = $this->snakeToPascalCase($tableConf['name']);
+        $className = $this->snakeToCamelCase($tableConf['name']);
         $fqn = sprintf('%s\%s', $namespace, $className);
 
         $dataModelCode = $this->generateDataModelCode(

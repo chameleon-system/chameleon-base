@@ -39,7 +39,7 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
 
         $mappingXml = $this->getDoctrineRenderer('mapping/string.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($pathFieldName),
+            'fieldName' => $this->snakeToPascalCase($pathFieldName),
             'type' => 'string',
             'column' => $pathFieldName,
             'comment' => $this->oDefinition->sqlData['translation'],

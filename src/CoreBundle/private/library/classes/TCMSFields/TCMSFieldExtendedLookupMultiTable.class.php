@@ -84,7 +84,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
     {
         $idMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'type' => 'string',
             'column' => $this->name,
             'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
@@ -94,7 +94,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         ])->render();
 
         $tableNameMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->getTableFieldName()),
+            'fieldName' => $this->snakeToPascalCase($this->getTableFieldName()),
             'type' => 'string',
             'column' => $this->getTableFieldName(),
             'length' => '255',

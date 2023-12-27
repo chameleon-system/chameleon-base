@@ -58,7 +58,7 @@ class TCMSFieldPosition extends TCMSField implements DoctrineTransformableInterf
     protected function getDoctrineDataModelXml(string $namespace): string
     {
         return $this->getDoctrineRenderer('mapping/integer.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'type' => 'integer',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

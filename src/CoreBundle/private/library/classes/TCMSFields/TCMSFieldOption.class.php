@@ -53,7 +53,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
             return max([$size, mb_strlen($option)]);
         }, 0);
         return $this->getDoctrineRenderer('mapping/string-char.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'type' => 'string',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

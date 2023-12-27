@@ -65,7 +65,7 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
             $lengthData[1] = 0;
         }
         return $this->getDoctrineRenderer('mapping/decimal.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
             'precision' => $lengthData[0],

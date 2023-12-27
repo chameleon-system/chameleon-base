@@ -49,7 +49,7 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
     protected function getDoctrineDataModelXml(string $namespace): string
     {
         return $this->getDoctrineRenderer('mapping/datetime.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'column' => $this->name,
             'type' => 'date',
             'comment' => $this->oDefinition->sqlData['translation'],

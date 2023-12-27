@@ -41,11 +41,11 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         }
         $parameters = [
             'source' => get_class($this),
-            'type' => $this->snakeToPascalCase($this->GetPropertyTableName()),
+            'type' => $this->snakeToCamelCase($this->GetPropertyTableName()),
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToPascalCase($this->name.'_collection'),
-            'methodParameter' => $this->snakeToCamelCase($this->name),
-            'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
+            'methodParameter' => $this->snakeToPascalCase($this->name),
+            'parentFieldName' => $this->snakeToPascalCase($parentFieldName),
         ];
         $parameters['docCommentType'] = sprintf('Collection<int, %s>', $parameters['type']);
 
@@ -65,7 +65,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [
                 ltrim(
-                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetPropertyTableName()], $this->snakeToPascalCase($this->GetPropertyTableName())),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetPropertyTableName()], $this->snakeToCamelCase($this->GetPropertyTableName())),
                     '\\'
                 ),
                 'Doctrine\\Common\\Collections\\Collection',
@@ -89,13 +89,13 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             $parentFieldName = substr($parentFieldName, 0, -3);
         }
         $parameters = [
-            'fieldName' => $this->snakeToCamelCase($this->name.'_collection'),
+            'fieldName' => $this->snakeToPascalCase($this->name.'_collection'),
             'targetClass' => sprintf(
                 '%s\\%s',
                 $tableNamespaceMapping[$this->GetPropertyTableName()],
-                $this->snakeToPascalCase($this->GetPropertyTableName())
+                $this->snakeToCamelCase($this->GetPropertyTableName())
             ),
-            'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
+            'parentFieldName' => $this->snakeToPascalCase($parentFieldName),
             'enableCascadeRemove' => $enableCascadeRemove,
             'comment' => $this->oDefinition->sqlData['translation'],
         ];

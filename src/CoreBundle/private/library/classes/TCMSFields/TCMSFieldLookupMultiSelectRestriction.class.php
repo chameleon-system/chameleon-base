@@ -42,7 +42,7 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
 
         $mappingXml =  $this->getDoctrineRenderer('mapping/boolean.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
+            'fieldName' => $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
             'type' => 'boolean',
             'comment' => $this->oDefinition->sqlData['translation'],
             'column' => $this->getInverseEmptyFieldName(),

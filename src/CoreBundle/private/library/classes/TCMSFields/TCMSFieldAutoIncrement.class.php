@@ -19,7 +19,7 @@ class TCMSFieldAutoIncrement extends TCMSFieldNumber
     protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         return $this->getDoctrineRenderer('mapping/autoincrement.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
         ])->render();

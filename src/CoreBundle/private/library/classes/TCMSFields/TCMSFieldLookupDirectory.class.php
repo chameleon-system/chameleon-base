@@ -53,7 +53,7 @@ class TCMSFieldLookupDirectory extends TCMSField implements DoctrineTransformabl
     protected function getDoctrineDataModelXml(string $namespace): string
     {
         return $this->getDoctrineRenderer('mapping/string.xml.twig', [
-            'fieldName' => $this->snakeToCamelCase($this->name),
+            'fieldName' => $this->snakeToPascalCase($this->name),
             'type' => 'string',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

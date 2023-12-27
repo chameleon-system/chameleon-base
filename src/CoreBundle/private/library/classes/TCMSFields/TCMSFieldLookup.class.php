@@ -59,7 +59,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         $parameters = [
             'source' => get_class($this),
-            'type' => $this->snakeToPascalCase($this->GetConnectedTableName()),
+            'type' => $this->snakeToCamelCase($this->GetConnectedTableName()),
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToPascalCase($propertyName),
         ];
@@ -72,7 +72,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
             $this->getDoctrineDataModelXml($namespace, $tableNamespaceMapping),
             [
                 ltrim(
-                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToPascalCase($this->GetConnectedTableName())),
+                    sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToCamelCase($this->GetConnectedTableName())),
                     '\\'
                 ),
             ],
@@ -91,8 +91,8 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         $viewName = 'mapping/many-to-one.xml.twig';
 
         return $this->getDoctrineRenderer($viewName, [
-            'fieldName' => $this->snakeToCamelCase($propertyName),
-            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToPascalCase($this->GetConnectedTableName())),
+            'fieldName' => $this->snakeToPascalCase($propertyName),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToCamelCase($this->GetConnectedTableName())),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
 
