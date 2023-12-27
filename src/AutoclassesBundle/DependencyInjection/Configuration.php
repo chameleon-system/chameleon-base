@@ -9,7 +9,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('chameleon_system_data_access');
+        $treeBuilder = new TreeBuilder('chameleon_system_autoclasses');
         $root = $treeBuilder->getRootNode();
 
         $root
