@@ -2,31 +2,17 @@
 
 namespace ChameleonSystem\AutoclassesBundle\Command;
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\LegacyTableExportConfig;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporterInterface;
-use ChameleonSystem\DataAccessBundle\ChameleonSystemDataAccessBundle;
-use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpKernel\Config\FileLocator;
 
 class DumpTableConfCommand extends Command
 {
     public function __construct(
         private readonly TableConfExporterInterface $tableConfExporter,
-        private readonly FileLocator $fileLocator,
-        #[ArrayShape([
-                [
-                    'targetDir' => 'string',
-                    'configDir' => 'string',
-                    'metaConfigDir' => 'int',
-                    'namespace' => 'string',
-                    'tables' => 'string[]',
-                ],
-            ]
-
-        )]
-        private readonly array $tableClassMapping = [],
+        private readonly LegacyTableExportConfig $legacyTableExportConfig
     ) {
         parent::__construct();
     }
@@ -43,30 +29,10 @@ class DumpTableConfCommand extends Command
 
         $tableNamespaceMapping = $this->getTableNamespaceMapping();
         foreach ($tables as $table) {
-            $tableConfig = $this->getTableConfig($table->name);
-            if (null === $tableConfig) {
-                $output->writeln(sprintf('<warning>No Config for %s found - using default</warning>', $table->name));
-                $tableConfig = [
-                    'targetDir' => '@AppBundle/src/Entity',
-                    'configDir' => 'AppBundle/config/doctrine',
-                    'metaConfigDir' => 'AppBundle/config/autoClass',
-                    'namespace' => '\\AppBundle\\Entity',
-                    'tables' => [],
-                ];
-            }
+            $tableConfig = $this->legacyTableExportConfig->getTableConfig($table->name);
             $output->write(sprintf('<info>Exporting %s...</info>',$table->name));
 
             try {
-
-                if ('@' === substr( $tableConfig['targetDir'], 0, 1)) {
-                    $bundle = substr($tableConfig['targetDir'], 0, strpos($tableConfig['targetDir'], '/'));
-                    $bundleBasePath = $this->fileLocator->locate($bundle);
-
-                    $tableConfig['targetDir'] = str_replace(sprintf('%s/', $bundle),$bundleBasePath, $tableConfig['targetDir']);
-                    $tableConfig['configDir'] = str_replace(sprintf('%s/', $bundle),$bundleBasePath, $tableConfig['configDir']);
-                    $tableConfig['metaConfigDir'] = str_replace(sprintf('%s/', $bundle),$bundleBasePath, $tableConfig['metaConfigDir']);
-                }
-
                 $targetDir = $tableConfig['targetDir'];
                 $mappingDir = $tableConfig['configDir'];
                 if (false===is_dir($targetDir)) {
@@ -102,20 +68,10 @@ class DumpTableConfCommand extends Command
         return self::SUCCESS;
     }
 
-    private function getTableConfig(string $tableName): ?array
-    {
-        foreach ($this->tableClassMapping as $config) {
-            if (in_array($tableName, $config['tables'], true)) {
-                return $config;
-            }
-        }
-        return null;
-    }
-
     private function getTableNamespaceMapping(): array
     {
         $mapping = [];
-        foreach ($this->tableClassMapping as $mappings) {
+        foreach ($this->legacyTableExportConfig->getConfig() as $mappings) {
             foreach ($mappings['tables'] as $table) {
                 $mapping[$table] = $mappings['namespace'];
             }

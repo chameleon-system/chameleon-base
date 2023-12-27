@@ -18,7 +18,7 @@
         <service id="ChameleonSystem\AutoclassesBundle\Command\DumpTableConfCommand">
             <tag name="console.command"/>
             <argument type="service" id="ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporter"/>
-            <argument type="service" id="file_locator" />
+            <argument type="service" id="ChameleonSystem\AutoclassesBundle\TableConfExport\LegacyTableExportConfig"/>
         </service>
 
         <service id="ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporter">
@@ -27,11 +27,16 @@
             <argument type="service" id="chameleon_system_snippet_renderer.snippet_renderer" />
         </service>
 
+        <service id="ChameleonSystem\AutoclassesBundle\TableConfExport\LegacyTableExportConfig">
+            <argument type="service" id="file_locator"/>
+        </service>
+
         <service id="chameleon_system_autoclasses.auto_class_manager" class="ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManager" public="false">
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_core.filemanager" />
             <argument type="service" id="chameleon_system_cms_class_manager.manager"/>
             <argument type="service" id="chameleon_system_autoclasses.data_access.autoclasses"/>
+            <argument type="service" id="ChameleonSystem\AutoclassesBundle\TableConfExport\LegacyTableExportConfig"/>
         </service>
 
         <service id="chameleon_system_autoclasses.autoclasses_db_adapter" class="ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesDatabaseAdapter" public="false">

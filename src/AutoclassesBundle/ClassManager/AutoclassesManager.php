@@ -17,6 +17,7 @@ use ChameleonSystem\AutoclassesBundle\Handler\IPkgCmsCoreAutoClassHandler;
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_AbstractBase;
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TableClass;
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TPkgCmsClassManager;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\LegacyTableExportConfig;
 use Doctrine\DBAL\Connection;
 use IPkgCmsFileManager;
 
@@ -40,8 +41,16 @@ class AutoclassesManager implements AutoclassesManagerInterface
      * @param Connection         $databaseConnection
      * @param IPkgCmsFileManager $filemanager
      */
-    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager, \TPkgCmsVirtualClassManager $virtualClassManager, AutoclassesDataAccessInterface $autoClassDataAccess)
+    public function __construct(
+        Connection $databaseConnection,
+        IPkgCmsFileManager $filemanager,
+        \TPkgCmsVirtualClassManager $virtualClassManager,
+        AutoclassesDataAccessInterface $autoClassDataAccess,
+        private readonly LegacyTableExportConfig $legacyTableExportConfig
+    )
     {
+
+        // todo generate classes from doctrine/legacy table config
         $this->registerHandler(new TPkgCoreAutoClassHandler_TableClass($databaseConnection, $filemanager, $autoClassDataAccess));
         $this->registerHandler(new TPkgCoreAutoClassHandler_TPkgCmsClassManager($databaseConnection, $filemanager, $virtualClassManager));
     }
