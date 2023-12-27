@@ -29,11 +29,11 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
             'type' => 'string',
             'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToCamelCase($pathFieldName),
+            'propertyName' => $this->snakeToPascalCase($pathFieldName),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($pathFieldName),
-            'setterName' => 'set'. $this->snakeToPascalCase($pathFieldName),
+            'getterName' => 'get'. $this->snakeToCamelCase($pathFieldName),
+            'setterName' => 'set'. $this->snakeToCamelCase($pathFieldName),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();

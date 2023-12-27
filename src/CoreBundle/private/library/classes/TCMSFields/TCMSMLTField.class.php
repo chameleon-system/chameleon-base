@@ -26,7 +26,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
             'source' => get_class($this),
             'type' => $targetClass,
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToCamelCase($propertyName.'_collection'),
+            'propertyName' => $this->snakeToPascalCase($propertyName.'_collection'),
             'methodParameter' => $this->snakeToCamelCase($this->name),
         ];
         $parameters['docCommentType'] = sprintf('Collection<int, %s>', $parameters['type']);

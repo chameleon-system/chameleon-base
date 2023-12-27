@@ -32,11 +32,11 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             'type' => 'bool',
             'docCommentType' => 'bool',
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
+            'propertyName' => $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
             'defaultValue' => sprintf("%s", '1' === $default ? 'true' : 'false'),
             'allowDefaultValue' => true,
-            'getterName' => 'is'. $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
+            'getterName' => 'is'. $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();

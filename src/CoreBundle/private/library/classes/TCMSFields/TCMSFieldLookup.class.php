@@ -61,7 +61,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
             'source' => get_class($this),
             'type' => $this->snakeToPascalCase($this->GetConnectedTableName()),
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToCamelCase($propertyName),
+            'propertyName' => $this->snakeToPascalCase($propertyName),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();

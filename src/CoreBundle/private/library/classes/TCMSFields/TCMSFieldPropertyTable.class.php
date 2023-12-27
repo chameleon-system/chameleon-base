@@ -43,7 +43,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             'source' => get_class($this),
             'type' => $this->snakeToPascalCase($this->GetPropertyTableName()),
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToCamelCase($this->name.'_collection'),
+            'propertyName' => $this->snakeToPascalCase($this->name.'_collection'),
             'methodParameter' => $this->snakeToCamelCase($this->name),
             'parentFieldName' => $this->snakeToCamelCase($parentFieldName),
         ];

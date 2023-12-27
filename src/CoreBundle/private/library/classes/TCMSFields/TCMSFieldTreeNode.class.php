@@ -33,7 +33,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
             'source' => get_class($this),
             'type' => $this->snakeToPascalCase($targetTable),
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToCamelCase($propertyName),
+            'propertyName' => $this->snakeToPascalCase($propertyName),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/lookup.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/lookup.methods.php.twig', $parameters)->render();

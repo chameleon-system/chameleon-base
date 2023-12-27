@@ -26,11 +26,11 @@ class TCMSFieldGenderSelector extends TCMSFieldOption implements DoctrineTransfo
             'type' => 'string',
             'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToCamelCase($this->name),
+            'propertyName' => $this->snakeToPascalCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'. $this->snakeToCamelCase($this->name),
+            'setterName' => 'set'. $this->snakeToCamelCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
