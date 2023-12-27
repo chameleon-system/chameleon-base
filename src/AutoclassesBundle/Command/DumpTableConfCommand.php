@@ -64,6 +64,7 @@ class DumpTableConfCommand extends Command
 
                     $tableConfig['targetDir'] = str_replace(sprintf('%s/', $bundle),$bundleBasePath, $tableConfig['targetDir']);
                     $tableConfig['configDir'] = str_replace(sprintf('%s/', $bundle),$bundleBasePath, $tableConfig['configDir']);
+``                    $tableConfig['metaConfigDir'] = str_replace(sprintf('%s/', $bundle),$bundleBasePath, $tableConfig['metaConfigDir']);
                 }
 
                 $targetDir = $tableConfig['targetDir'];

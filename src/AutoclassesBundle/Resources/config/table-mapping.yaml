@@ -32,6 +32,7 @@ chameleon_system_autoclasses:
       - cms_url_alias
       - cms_user
       - cms_usergroup
+      - cms_user_sso
       - data_atomic_lock
       - data_contact_topic
       - data_country
