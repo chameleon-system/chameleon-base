@@ -14,7 +14,6 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMa
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
-use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * Renders a list of languages per portal to allow language specific selections.
