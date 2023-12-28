@@ -103,8 +103,12 @@ class TableConfExporter implements TableConfExporterInterface
             $mappingClass = str_replace('/', '.', trim($extension, '/').'/'.$className);
         }
 
-        file_put_contents($targetDir.'/'.$className.'.php', $dataModelCode);
-        file_put_contents($mappingCleanPath.'/'.$mappingClass.'.orm.xml', $dataModelMapping);
+        if (false === file_put_contents($targetDir.'/'.$className.'.php', $dataModelCode)) {
+            throw new \RuntimeException(sprintf("Failed to write data model code to file (%s).", $targetDir.'/'.$className.'.php'));
+        }
+        if (false === file_put_contents($mappingCleanPath.'/'.$mappingClass.'.orm.xml', $dataModelMapping)) {
+            throw new \RuntimeException(sprintf("Failed to write data model mapping to file (%s).", $mappingCleanPath.'/'.$mappingClass.'.orm.xml'));
+        }
 
         // disabled for now - the meta data yaml makes sense only after we moved to another admin so we can remove the table conf fully
         //file_put_contents($metaConfigDir.'/'.$mappingClass.'.yaml', $autoClassConfig);
