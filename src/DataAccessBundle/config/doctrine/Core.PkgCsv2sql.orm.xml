@@ -1,0 +1,47 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\PkgCsv2sql" table="pkg_csv2sql">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment"></option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="columnMapping" type="text" column="column_mapping" nullable="false">
+            <options>
+                <option name="comment">Column mapping</option>
+            </options>
+        </field>
+        <field name="source" type="string" column="source" length="255" nullable="false">
+            <options>
+                <option name="comment">File / directory</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sourceCharset" type="string" column="source_charset" length="255" nullable="false">
+            <options>
+                <option name="comment">Character set of the source file(s)</option>
+                <option name="default">UTF-8</option>
+            </options>
+        </field>
+        <field name="destinationTableName" type="string" column="destination_table_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Target table</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

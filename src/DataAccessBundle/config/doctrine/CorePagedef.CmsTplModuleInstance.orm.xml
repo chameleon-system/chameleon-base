@@ -1,0 +1,52 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance"
+            table="cms_tpl_module_instance">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="100" nullable="false">
+            <options>
+                <option name="comment">Instance name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="cmsTplPageCmsMasterPagedefSpotCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplPageCmsMasterPagedefSpot"
+                     mapped-by="cmsTplModuleInstance" orphan-removal="true">
+            <options>
+                <option name="comment">CMS pages dynamic spots</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">was created in portal</option>
+            </options>
+        </many-to-one>
+        <field name="template" type="string" column="template" length="255" nullable="false">
+            <options>
+                <option name="comment">File name of the module template</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsTplModule" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsTplModule">
+            <join-column name="cms_tpl_module_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Module ID</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

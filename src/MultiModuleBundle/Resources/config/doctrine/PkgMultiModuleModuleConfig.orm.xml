@@ -1,0 +1,33 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\MultiModuleBundle\Entity\PkgMultiModuleModuleConfig"
+            table="pkg_multi_module_module_config">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTplModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="cms_tpl_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to module instance</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="pkgMultiModuleSet"
+                     target-entity="\ChameleonSystem\MultiModuleBundle\Entity\PkgMultiModuleSet">
+            <join-column name="pkg_multi_module_set_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Multimodule set</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

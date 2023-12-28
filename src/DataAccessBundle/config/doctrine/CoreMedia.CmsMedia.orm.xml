@@ -1,0 +1,147 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia" table="cms_media">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="height" type="integer" column="height" nullable="false">
+            <options>
+                <option name="comment">Height</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-one field="cmsFiletype" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsFiletype">
+            <join-column name="cms_filetype_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Image type</option>
+            </options>
+        </many-to-one>
+        <field name="filesize" type="integer" column="filesize" nullable="false">
+            <options>
+                <option name="comment">File size</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsMediaTree" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="cms_media_tree_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Image category</option>
+            </options>
+        </many-to-one>
+        <field name="width" type="integer" column="width" nullable="false">
+            <options>
+                <option name="comment">Width</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="description" type="string" column="description" length="255" nullable="false">
+            <options>
+                <option name="comment">Title / Description</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="metatags" type="text" column="metatags" nullable="false">
+            <options>
+                <option name="comment">Keywords / Tags</option>
+            </options>
+        </field>
+        <field name="filetypes" type="string" column="filetypes" length="100" nullable="false">
+            <options>
+                <option name="comment">Supported file types</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="altTag" type="string" column="alt_tag" length="255" nullable="false">
+            <options>
+                <option name="comment">Alt tag</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="systemname" type="string" column="systemname" length="255" nullable="false">
+            <options>
+                <option name="comment">Systemname</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-many field="cmsTagsCollection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsTags">
+            <join-table name="cms_media_cms_tags_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Tags</option>
+            </options>
+        </many-to-many>
+        <field name="customFilename" type="string" column="custom_filename" length="200" nullable="false">
+            <options>
+                <option name="comment">Custom file name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="path" type="string" column="path" length="255" nullable="false">
+            <options>
+                <option name="comment">Path</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsMedia" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="cms_media_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Preview image</option>
+            </options>
+        </many-to-one>
+        <field name="externalEmbedCode" type="text" column="external_embed_code" nullable="false">
+            <options>
+                <option name="comment">Video HTML code</option>
+            </options>
+        </field>
+        <field name="externalVideoThumbnail" type="text" column="external_video_thumbnail" nullable="false">
+            <options>
+                <option name="comment">Thumbnail of an external video</option>
+            </options>
+        </field>
+        <field name="timeStamp" type="datetime" column="time_stamp" nullable="false">
+            <options>
+                <option name="comment">Last changed on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="dateChanged" type="datetime" column="date_changed" nullable="false">
+            <options>
+                <option name="comment">Last changed</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="refreshToken" type="string" column="refresh_token" length="8" nullable="false">
+            <options>
+                <option name="comment">Refresh Token</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsUser" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser">
+            <join-column name="cms_user_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Last changed by</option>
+            </options>
+        </many-to-one>
+        <field name="externalVideoId" type="text" column="external_video_id" nullable="false">
+            <options>
+                <option name="comment">Video ID with external host</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

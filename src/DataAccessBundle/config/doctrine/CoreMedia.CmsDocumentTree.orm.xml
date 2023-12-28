@@ -1,0 +1,48 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocumentTree" table="cms_document_tree">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Category name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="parent" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocumentTree">
+            <join-column name="parent_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Parent ID</option>
+            </options>
+        </many-to-one>
+        <field name="depth" type="integer" column="depth" nullable="false">
+            <options>
+                <option name="comment">Depth</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="hidden" type="boolean" column="hidden" nullable="false">
+            <options>
+                <option name="comment">Hidden?</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="entrySort" type="integer" column="entry_sort" nullable="false">
+            <options>
+                <option name="comment">Sort sequence</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

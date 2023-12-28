@@ -1,0 +1,44 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup" table="data_extranet_group">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="autoAssignActive" type="boolean" column="auto_assign_active" nullable="false">
+            <options>
+                <option name="comment">Automatic assignment is active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="autoAssignOrderValueStart" type="decimal" column="auto_assign_order_value_start" length=""
+               nullable="false" precision="8" scale=",">
+            <options>
+                <option name="comment">Auto assignment from order value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="autoAssignOrderValueEnd" type="decimal" column="auto_assign_order_value_end" length=""
+               nullable="false" precision="8" scale=",">
+            <options>
+                <option name="comment">Auto assignment up to order value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

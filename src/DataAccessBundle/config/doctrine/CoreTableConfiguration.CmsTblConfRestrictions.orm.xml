@@ -1,0 +1,39 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConfRestrictions"
+            table="cms_tbl_conf_restrictions">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Field name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="function" type="string" column="function" length="255" nullable="false">
+            <options>
+                <option name="comment">Callback function</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsTblConf"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf"
+                     inversed-by="cmsTblConfRestrictionsCollection">
+            <options>
+                <option name="comment">Table</option>
+            </options>
+            <join-column name="cms_tbl_conf_id" referenced-column-name="id"/>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,44 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterModuleSignupTeaser"
+            table="pkg_newsletter_module_signup_teaser">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTplModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="cms_tpl_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to module instance</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="configForSignupModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="config_for_signup_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Login takes place via the following instance</option>
+            </options>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Heading</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="intro" type="text" column="intro" nullable="false">
+            <options>
+                <option name="comment">Introduction</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

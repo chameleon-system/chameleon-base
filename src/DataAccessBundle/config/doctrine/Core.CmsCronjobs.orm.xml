@@ -1,0 +1,91 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsCronjobs" table="cms_cronjobs">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="lock" type="boolean" column="lock" nullable="false">
+            <options>
+                <option name="comment">Is running at the moment (locked)</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="lastExecution" type="string" column="last_execution" length="255" nullable="false">
+            <options>
+                <option name="comment">Last executed on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="realLastExecution" type="datetime" column="real_last_execution" nullable="false">
+            <options>
+                <option name="comment">Last excecuted (real)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="cronClass" type="string" column="cron_class" length="255" nullable="false">
+            <options>
+                <option name="comment">Class name/service ID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classLocation" type="string" column="class_location" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Class path</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="unlockAfterNMinutes" type="string" column="unlock_after_n_minutes" length="255" nullable="false">
+            <options>
+                <option name="comment">Reset lock after N minutes</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="executeEveryNMinutes" type="string" column="execute_every_n_minutes" length="255" nullable="false">
+            <options>
+                <option name="comment">Execute every N minutes</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="endExecution" type="date" column="end_execution" nullable="false">
+            <options>
+                <option name="comment">Active until</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="startExecution" type="date" column="start_execution" nullable="false">
+            <options>
+                <option name="comment">Active from</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

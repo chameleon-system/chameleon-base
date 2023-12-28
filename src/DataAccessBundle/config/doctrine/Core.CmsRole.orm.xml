@@ -1,0 +1,68 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole" table="cms_role">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-many field="cmsRoleCollection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_role_cms_role_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Is subordinate role of</option>
+            </options>
+        </many-to-many>
+        <field name="isChooseable" type="boolean" column="is_chooseable" nullable="false">
+            <options>
+                <option name="comment">Is selectable</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="40" nullable="false">
+            <options>
+                <option name="comment">CMS role abbreviation</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-many field="cmsRightCollection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRight">
+            <join-table name="cms_role_cms_right_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">CMS user rights</option>
+            </options>
+        </many-to-many>
+        <field name="isSystem" type="boolean" column="is_system" nullable="false">
+            <options>
+                <option name="comment">Required by the system</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="trans" type="string" column="049_trans" length="40" nullable="false">
+            <options>
+                <option name="comment">German translation</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

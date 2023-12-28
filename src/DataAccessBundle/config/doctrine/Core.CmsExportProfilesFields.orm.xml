@@ -1,0 +1,45 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsExportProfilesFields"
+            table="cms_export_profiles_fields">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsExportProfiles"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsExportProfiles"
+                     inversed-by="cmsExportProfilesFieldsCollection">
+            <options>
+                <option name="comment">Belongs to profile</option>
+            </options>
+            <join-column name="cms_export_profiles_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="fieldname" type="string" column="fieldname" length="255" nullable="false">
+            <options>
+                <option name="comment">Field from table</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sortOrder" type="integer" column="sort_order" nullable="false">
+            <options>
+                <option name="comment">Sort order</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="htmlTemplate" type="string" column="html_template" length="255" nullable="false">
+            <options>
+                <option name="comment">HTML formatting</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

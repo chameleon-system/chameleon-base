@@ -1,0 +1,54 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsLocals" table="cms_locals">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="dateFormat" type="string" column="date_format" length="255" nullable="false">
+            <options>
+                <option name="comment">Date format</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="timeFormat" type="string" column="time_format" length="255" nullable="false">
+            <options>
+                <option name="comment">Time format</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="phpLocalName" type="string" column="php_local_name" length="255" nullable="false">
+            <options>
+                <option name="comment">PHP local name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="dateFormatCalendar" type="string" column="date_format_calendar" length="255" nullable="false">
+            <options>
+                <option name="comment">Short format</option>
+                <option name="default">DMY-</option>
+            </options>
+        </field>
+        <field name="numbers" type="string" column="numbers" length="255" nullable="false">
+            <options>
+                <option name="comment">Numbers</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

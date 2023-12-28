@@ -1,0 +1,276 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal" table="cms_portal">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="title" type="string" column="title" length="255" nullable="false">
+            <options>
+                <option name="comment">Portal title</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="identifier" type="string" column="identifier" length="255" nullable="false">
+            <options>
+                <option name="comment">Identifier / prefix</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="externalIdentifier" type="string" column="external_identifier" length="255" nullable="false">
+            <options>
+                <option name="comment">External portal name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-column name="cms_language_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Portal language</option>
+            </options>
+        </many-to-one>
+        <field name="useMultilanguage" type="boolean" column="use_multilanguage" nullable="false">
+            <options>
+                <option name="comment">Enable multi-language ability</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="showNotTanslated" type="boolean" column="show_not_tanslated" nullable="false">
+            <options>
+                <option name="comment">Show untranslated links</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-one field="mainNodeTree" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="main_node_tree" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Navigation start node</option>
+            </options>
+        </many-to-one>
+        <one-to-many field="propertyNavigationsCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortalNavigation"
+                     mapped-by="cmsPortal" orphan-removal="true">
+            <options>
+                <option name="comment">Navigations</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-one field="homeNode" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="home_node_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Portal home page</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="pageNotFoundNode"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="page_not_found_node" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Page not found</option>
+            </options>
+        </many-to-one>
+        <one-to-many field="cmsPortalDivisionsCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsDivision"
+                     mapped-by="cmsPortal" orphan-removal="true">
+            <options>
+                <option name="comment">Sections</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="sortOrder" type="integer" column="sort_order" nullable="false">
+            <options>
+                <option name="comment">Sorting</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="cmsPortalDomainsCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortalDomains"
+                     mapped-by="cmsPortal" orphan-removal="true">
+            <options>
+                <option name="comment">Domains</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="faviconUrl" type="string" column="favicon_url" length="255" nullable="false">
+            <options>
+                <option name="comment">Favicon URL</option>
+                <option name="default">/favicon.ico</option>
+            </options>
+        </field>
+        <many-to-one field="images" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="images" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Logo</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="watermarkLogo" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="watermark_logo" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Logo for watermarking</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="backgroundImage"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="background_image" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Background image</option>
+            </options>
+        </many-to-one>
+        <one-to-many field="cmsMessageManagerMessageCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsMessageManagerMessage"
+                     mapped-by="cmsPortal" orphan-removal="true">
+            <options>
+                <option name="comment">System messages / error codes</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="cmsPortalSystemPageCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortalSystemPage"
+                     mapped-by="cmsPortal" orphan-removal="true">
+            <options>
+                <option name="comment">System pages</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-many field="cmsLanguageCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-table name="cms_portal_cms_language_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Portal languages</option>
+            </options>
+        </many-to-many>
+        <field name="useGooglesitemap" type="boolean" column="use_googlesitemap" nullable="false">
+            <options>
+                <option name="comment">Google sitemap</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="metaDescription" type="string" column="meta_description" length="200" nullable="false">
+            <options>
+                <option name="comment">Short description</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="metaKeywords" type="text" column="meta_keywords" nullable="false">
+            <options>
+                <option name="comment">Search terms</option>
+            </options>
+        </field>
+        <field name="metaAuthor" type="string" column="meta_author" length="255" nullable="false">
+            <options>
+                <option name="comment">Author</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="metaPublisher" type="string" column="meta_publisher" length="255" nullable="false">
+            <options>
+                <option name="comment">Publisher</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsLocals" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLocals">
+            <join-column name="cms_locals_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Locale</option>
+            </options>
+        </many-to-one>
+        <field name="customMetadata" type="text" column="custom_metadata" nullable="false">
+            <options>
+                <option name="comment">Your meta data</option>
+            </options>
+        </field>
+        <many-to-one field="pkgCmsTheme" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsTheme">
+            <join-column name="pkg_cms_theme_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Website presentation / theme</option>
+            </options>
+        </many-to-one>
+        <field name="actionPluginList" type="text" column="action_plugin_list" nullable="false">
+            <options>
+                <option name="comment">Action-Plugins</option>
+            </options>
+        </field>
+        <field name="googleAnalyticNumber" type="string" column="google_analytic_number" length="255" nullable="false">
+            <options>
+                <option name="comment">Google Analytics ID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="etrackerId" type="string" column="etracker_id" length="255" nullable="false">
+            <options>
+                <option name="comment">etracker ID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="ivwId" type="string" column="ivw_id" length="255" nullable="false">
+            <options>
+                <option name="comment">IVW ID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="indexSearch" type="boolean" column="index_search" nullable="false">
+            <options>
+                <option name="comment">Include in search index generation</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="useSlashInSeoUrls" type="boolean" column="use_slash_in_seo_urls" nullable="false">
+            <options>
+                <option name="comment">Use / instead of .html in SEO URLs</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="deactivePortal" type="boolean" column="deactive_portal" nullable="false">
+            <options>
+                <option name="comment">Deactivate portal</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="wysiwygCssUrl" type="string" column="wysiwyg_css_url" length="255" nullable="false">
+            <options>
+                <option name="comment">WYSIWYG text editor CSS URL</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="cmsUrlAliasCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUrlAlias" mapped-by="cmsPortal"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">URL alias list</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="robots" type="text" column="robots" nullable="false">
+            <options>
+                <option name="comment">robots.txt</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,62 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsMessageManagerMessage"
+            table="cms_message_manager_message">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal"
+                     inversed-by="cmsMessageManagerMessageCollection">
+            <options>
+                <option name="comment">Belongs to portal</option>
+            </options>
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsMessageManagerMessageType"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsMessageManagerMessageType">
+            <join-column name="cms_message_manager_message_type_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Message type</option>
+            </options>
+        </many-to-one>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Message description</option>
+            </options>
+        </field>
+        <field name="message" type="text" column="message" nullable="false">
+            <options>
+                <option name="comment">Message</option>
+            </options>
+        </field>
+        <field name="messageLocationType" type="string" column="message_location_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="messageView" type="string" column="message_view" length="255" nullable="false">
+            <options>
+                <option name="comment">View</option>
+                <option name="default">standard</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

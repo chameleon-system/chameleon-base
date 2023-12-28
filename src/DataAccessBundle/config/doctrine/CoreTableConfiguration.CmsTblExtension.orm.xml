@@ -1,0 +1,71 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblExtension"
+            table="cms_tbl_extension">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTblConf"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf"
+                     inversed-by="cmsTblExtensionCollection">
+            <options>
+                <option name="comment">Text template</option>
+            </options>
+            <join-column name="cms_tbl_conf_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Classname</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="nameList" type="string" column="name_list" length="255" nullable="false">
+            <options>
+                <option name="comment">List class extension</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="subtype" type="string" column="subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Subtype</option>
+                <option name="default">dbobjects</option>
+            </options>
+        </field>
+        <field name="type" type="string" column="type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Type</option>
+                <option name="default">Customer</option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="virtualItemClassName" type="string" column="virtual_item_class_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name of the last extension before Tadb*</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="virtualItemClassListName" type="string" column="virtual_item_class_list_name" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Name of the last extension before Tadb*List</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

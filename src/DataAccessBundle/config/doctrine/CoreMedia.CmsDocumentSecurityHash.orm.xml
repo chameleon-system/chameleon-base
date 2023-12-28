@@ -1,0 +1,49 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocumentSecurityHash"
+            table="cms_document_security_hash">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsDocument" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocument">
+            <join-column name="cms_document_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment"></option>
+            </options>
+        </many-to-one>
+        <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser">
+            <join-column name="data_extranet_user_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment"></option>
+            </options>
+        </many-to-one>
+        <field name="publishdate" type="datetime" column="publishdate" nullable="false">
+            <options>
+                <option name="comment"></option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="enddate" type="datetime" column="enddate" nullable="false">
+            <options>
+                <option name="comment"></option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="token" type="string" column="token" length="36" nullable="false" unique="true">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

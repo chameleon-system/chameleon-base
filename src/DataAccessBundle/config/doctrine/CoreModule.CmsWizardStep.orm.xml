@@ -1,0 +1,104 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreModule\CmsWizardStep" table="cms_wizard_step">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTplModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="cms_tpl_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to module instance</option>
+            </options>
+        </many-to-one>
+        <field name="displayName" type="string" column="display_name" length="255" nullable="false">
+            <options>
+                <option name="comment">CMS display name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Title / headline</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <field name="systemname" type="string" column="systemname" length="255" nullable="false">
+            <options>
+                <option name="comment">Internal name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="urlName" type="string" column="url_name" length="255" nullable="false">
+            <options>
+                <option name="comment">URL name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="class" type="string" column="class" length="255" nullable="false">
+            <options>
+                <option name="comment">Class name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class type</option>
+                <option name="default">Customer</option>
+            </options>
+        </field>
+        <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Class subtype</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="renderViewName" type="string" column="render_view_name" length="255" nullable="false">
+            <options>
+                <option name="comment">View to be used for the step</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="renderViewType" type="string" column="render_view_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">View type</option>
+                <option name="default">Customer</option>
+            </options>
+        </field>
+        <field name="renderViewSubtype" type="string" column="render_view_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">View subtype – where is the view relative to view folder</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="isPackage" type="boolean" column="is_package" nullable="false">
+            <options>
+                <option name="comment">Classes / views come from a package</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

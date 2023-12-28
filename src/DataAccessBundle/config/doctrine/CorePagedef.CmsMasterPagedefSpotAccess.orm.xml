@@ -1,0 +1,38 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedefSpotAccess"
+            table="cms_master_pagedef_spot_access">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsMasterPagedefSpot"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedefSpot"
+                     inversed-by="cmsMasterPagedefSpotAccessCollection">
+            <options>
+                <option name="comment">Belongs to cms page template spot</option>
+            </options>
+            <join-column name="cms_master_pagedef_spot_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="model" type="string" column="model" length="255" nullable="false">
+            <options>
+                <option name="comment">Module</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="views" type="text" column="views" nullable="false">
+            <options>
+                <option name="comment">Views</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

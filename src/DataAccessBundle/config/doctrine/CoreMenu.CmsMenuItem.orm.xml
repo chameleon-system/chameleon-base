@@ -1,0 +1,57 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreMenu\CmsMenuItem" table="cms_menu_item">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="target" type="string" column="target" length="255" nullable="false">
+            <options>
+                <option name="comment">Target</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="targetTableName" type="string" column="target_table_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Target</option>
+                <option name="default"></option>
+            </options>
+        </field>
+
+        <field name="iconFontCssClass" type="string" column="icon_font_css_class" length="255" nullable="false">
+            <options>
+                <option name="comment">Icon font CSS class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsMenuCategory"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMenu\CmsMenuCategory"
+                     inversed-by="cmsMenuItemCollection">
+            <options>
+                <option name="comment">CMS main menu category</option>
+            </options>
+            <join-column name="cms_menu_category_id" referenced-column-name="id"/>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

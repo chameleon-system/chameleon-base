@@ -1,0 +1,70 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\CommentBundle\Entity\PkgCommentType" table="pkg_comment_type">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="pkgCommentClassName" type="string" column="pkg_comment_class_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Class to be used for pkg_comment</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="pkgCommentClassSubType" type="string" column="pkg_comment_class_sub_type" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Path to class for pkg_comment</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsTblConf"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf">
+            <join-column name="cms_tbl_conf_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Table</option>
+            </options>
+        </many-to-one>
+        <field name="pkgCommentClassType" type="string" column="pkg_comment_class_type" length="13" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class type for pkg_comment</option>
+                <option name="default">Customer</option>
+            </options>
+        </field>
+        <field name="className" type="string" column="class_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Class name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classSubType" type="string" column="class_sub_type" length="255" nullable="false">
+            <options>
+                <option name="comment">Class subtype</option>
+                <option name="default">pkgComment/objects/db/TPkgCommentType</option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,120 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsCoreLog" table="pkg_cms_core_log">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="timestamp" type="integer" column="timestamp" nullable="false">
+            <options>
+                <option name="comment">Time stamp</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="channel" type="string" column="channel" length="255" nullable="false">
+            <options>
+                <option name="comment">Channel</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="level" type="integer" column="level" nullable="false">
+            <options>
+                <option name="comment"></option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="message" type="string" column="message" length="516" nullable="false">
+            <options>
+                <option name="comment">Message</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="session" type="string" column="session" length="32" nullable="false">
+            <options>
+                <option name="comment">User session ID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="uid" type="string" column="uid" length="32" nullable="false">
+            <options>
+                <option name="comment">Request ID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="file" type="string" column="file" length="255" nullable="false">
+            <options>
+                <option name="comment">File name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="line" type="integer" column="line" nullable="false">
+            <options>
+                <option name="comment">Line</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="requestUrl" type="string" column="request_url" length="512" nullable="false">
+            <options>
+                <option name="comment">Request URL</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="referrerUrl" type="string" column="referrer_url" length="512" nullable="false">
+            <options>
+                <option name="comment"></option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="httpMethod" type="string" column="http_method" length="4" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">HTTP method</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="server" type="string" column="server" length="255" nullable="false">
+            <options>
+                <option name="comment">Server name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="ip" type="string" column="ip" length="40" nullable="false">
+            <options>
+                <option name="comment">Client IP address</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser">
+            <join-column name="data_extranet_user_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Extranet user ID</option>
+            </options>
+        </many-to-one>
+        <field name="dataExtranetUserName" type="string" column="data_extranet_user_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Extranet user login</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsUser" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser">
+            <join-column name="cms_user_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">CMS user</option>
+            </options>
+        </many-to-one>
+        <field name="context" type="object" column="context" nullable="false">
+            <options>
+                <option name="comment"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

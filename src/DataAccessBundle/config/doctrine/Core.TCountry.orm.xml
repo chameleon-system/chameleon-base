@@ -1,0 +1,80 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\TCountry" table="t_country">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="wikipediaName" type="string" column="wikipedia_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Wikipedia name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="isoCode2" type="string" column="iso_code_2" length="2" nullable="false">
+            <options>
+                <option name="comment">ISO Code two-digit</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="isoCode3" type="string" column="iso_code_3" length="3" nullable="false">
+            <options>
+                <option name="comment">ISO code three-digit</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="internationalDiallingCode" type="string" column="international_dialling_code" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Country code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="germanName" type="string" column="german_name" length="255" nullable="false">
+            <options>
+                <option name="comment">German name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="germanPostalcode" type="string" column="german_postalcode" length="255" nullable="false">
+            <options>
+                <option name="comment">German zip code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="euMember" type="boolean" column="eu_member" nullable="false">
+            <options>
+                <option name="comment">EU member state</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="toplevelDomain" type="string" column="toplevel_domain" length="255" nullable="false">
+            <options>
+                <option name="comment">toplevel domain</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="primaryCurrencyIso4217" type="string" column="primary_currency_iso4217" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">main currency</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>
