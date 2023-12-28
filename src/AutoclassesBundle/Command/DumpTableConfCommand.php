@@ -45,11 +45,12 @@ class DumpTableConfCommand extends Command
                         throw new \RuntimeException(sprintf('Directory "%s" was not created', $mappingDir));
                     }
                 }
-                if (false===is_dir($tableConfig['metaConfigDir'])) {
-                    if (!mkdir($tableConfig['metaConfigDir'], 0755, true) && !is_dir($tableConfig['metaConfigDir'])) {
-                        throw new \RuntimeException(sprintf('Directory "%s" was not created', $tableConfig['metaConfigDir']));
-                    }
-                }
+                // disabled for now - the meta data yaml makes sense only after we moved to another admin so we can remove the table conf fully
+                //if (false===is_dir($tableConfig['metaConfigDir'])) {
+                //    if (!mkdir($tableConfig['metaConfigDir'], 0755, true) && !is_dir($tableConfig['metaConfigDir'])) {
+                //        throw new \RuntimeException(sprintf('Directory "%s" was not created', $tableConfig['metaConfigDir']));
+                //    }
+                //}
                 $fqn = $this->tableConfExporter->export(
                     $table,
                     $tableConfig['namespace'],

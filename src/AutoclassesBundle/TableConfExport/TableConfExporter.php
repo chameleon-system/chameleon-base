@@ -92,7 +92,8 @@ class TableConfExporter implements TableConfExporterInterface
             $tableNamespaceMapping
         );
 
-        $autoClassConfig = $this->generateAutoClassConfig($tableConf, $className, $fqn, $namespace);
+        // disabled for now - the meta data yaml makes sense only after we moved to another admin so we can remove the table conf fully
+        // $autoClassConfig = $this->generateAutoClassConfig($tableConf, $className, $fqn, $namespace);
 
         $mappingSubPathPos = strpos($mappingDir, '/config/doctrine');
         $extension = substr($mappingDir, $mappingSubPathPos + strlen('/config/doctrine/'));
@@ -104,7 +105,9 @@ class TableConfExporter implements TableConfExporterInterface
 
         file_put_contents($targetDir.'/'.$className.'.php', $dataModelCode);
         file_put_contents($mappingCleanPath.'/'.$mappingClass.'.orm.xml', $dataModelMapping);
-        file_put_contents($metaConfigDir.'/'.$mappingClass.'.yaml', $autoClassConfig);
+
+        // disabled for now - the meta data yaml makes sense only after we moved to another admin so we can remove the table conf fully
+        //file_put_contents($metaConfigDir.'/'.$mappingClass.'.yaml', $autoClassConfig);
 
         return $fqn;
 
