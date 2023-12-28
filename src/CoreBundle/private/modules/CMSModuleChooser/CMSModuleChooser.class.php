@@ -956,7 +956,14 @@ class CMSModuleChooser extends TCMSModelBase
         foreach ($aOtherParameters as $sKey => $sValue) {
             $aParameter[$sKey] = $sValue;
         }
-        $this->controller->HeaderRedirect($aParameter);
+        $url = PATH_CMS_CONTROLLER_FRONTEND.'?'.http_build_query($aParameter);
+        $this->getRedirectService()->redirect($url);
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
     /**

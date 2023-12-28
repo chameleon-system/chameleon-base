@@ -6,6 +6,10 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 $menuPrefix = TGlobal::OutHTML($data['sModuleSpotName']);
 $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
 
+/** @var SecurityHelperAccess $securityHelper */
+$securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+
 /**
  * @var $oModule          \TdbCmsTplModule
  * @var $oModuleInstance  \TdbCmsTplModuleInstance
@@ -69,7 +73,7 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             }
             ?>
             <form style="margin:0;padding:0" name="moduleblock<?=$menuPrefix; ?>"
-                  method="post" action="<?=URL_WEB_CONTROLLER; ?>" accept-charset="UTF-8">
+                  method="post" action="<?=PATH_CMS_CONTROLLER_FRONTEND; ?>" accept-charset="UTF-8">
                 <input type="hidden" name="__modulechooser" value="true"/>
                 <input type="hidden" name="pagedef" value="<?=TGlobal::OutHTML($data['pagedef']); ?>"/>
                 <input type="hidden" name="id" value="<?=TGlobal::OutHTML($data['id']); ?>"/>
@@ -137,9 +141,6 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             </li>
             <?php
         }
-
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
             if ($oViews->Length() > 1 && $data['functionRights']['bInstanceChangeViewAllowed']) {
