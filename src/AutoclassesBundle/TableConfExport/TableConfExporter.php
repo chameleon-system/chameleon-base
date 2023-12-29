@@ -70,7 +70,7 @@ class TableConfExporter implements TableConfExporterInterface
             }
             $dataModelPartsList[] = $dataModelParts;
         }
-        $className = $this->snakeToCamelCase($tableConf['name']);
+        $className = $this->snakeToPascalCase($tableConf['name']);
         $fqn = sprintf('%s\%s', $namespace, $className);
 
         $dataModelCode = $this->generateDataModelCode(
@@ -209,21 +209,16 @@ class TableConfExporter implements TableConfExporterInterface
 
     private function getFieldName(\TCMSField $field): string
     {
-        return $this->snakeToCamelCase($field->name);
+        return $this->snakeToPascalCase($field->name);
     }
 
-    private function snakeToCamelCase(string $string): string
+    private function snakeToPascalCase(string $string): string
     {
         $camelCasedName = preg_replace_callback('/(^|_|\.)+(.)/', function ($match) {
             return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
         }, $string);
 
         return $camelCasedName;
-    }
-
-    public function snakeToPascalCase(string $string): string
-    {
-        return lcfirst($this->snakeToCamelCase($string));
     }
 
     private function indent(?string $string, int $indent): ?string
