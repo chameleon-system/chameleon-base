@@ -37,11 +37,11 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
             'type' => 'string',
             'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToPascalCase($this->name),
+            'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", (string)$this->oDefinition->sqlData['field_default_value']),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToCamelCase($this->name),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->name),
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -66,7 +66,7 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
             $lengthData[1] = 0;
         }
         return $this->getDoctrineRenderer('mapping/decimal.xml.twig', [
-            'fieldName' => $this->snakeToPascalCase($this->name),
+            'fieldName' => $this->snakeToCamelCase($this->name),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
             'precision' => $lengthData[0],

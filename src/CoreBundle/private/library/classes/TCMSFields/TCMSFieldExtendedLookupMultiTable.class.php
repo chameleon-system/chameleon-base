@@ -38,11 +38,11 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'type' => 'string',
             'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToPascalCase($this->name),
+            'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToCamelCase($this->name),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->name),
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -60,11 +60,11 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'type' => 'string',
             'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToPascalCase($this->getTableFieldName()),
+            'propertyName' => $this->snakeToCamelCase($this->getTableFieldName()),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToCamelCase($this->getTableFieldName()),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->getTableFieldName()),
+            'getterName' => 'get'. $this->snakeToPascalCase($this->getTableFieldName()),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->getTableFieldName()),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -84,7 +84,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
     {
         $idMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
-            'fieldName' => $this->snakeToPascalCase($this->name),
+            'fieldName' => $this->snakeToCamelCase($this->name),
             'type' => 'string',
             'column' => $this->name,
             'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
@@ -94,7 +94,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         ])->render();
 
         $tableNameMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
-            'fieldName' => $this->snakeToPascalCase($this->getTableFieldName()),
+            'fieldName' => $this->snakeToCamelCase($this->getTableFieldName()),
             'type' => 'string',
             'column' => $this->getTableFieldName(),
             'length' => '255',

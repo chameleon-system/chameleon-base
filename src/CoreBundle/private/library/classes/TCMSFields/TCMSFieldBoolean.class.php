@@ -31,11 +31,11 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
             'type' => 'bool',
             'docCommentType' => 'bool',
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToPascalCase($this->name),
+            'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("%s", '1' === $default ? 'true' : 'false'),
             'allowDefaultValue' => true,
-            'getterName' => 'is'. $this->snakeToCamelCase($this->name),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->name),
+            'getterName' => 'is'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -56,7 +56,7 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
             $default = '0';
         }
         return $this->getDoctrineRenderer('mapping/boolean.xml.twig', [
-            'fieldName' => $this->snakeToPascalCase($this->name),
+            'fieldName' => $this->snakeToCamelCase($this->name),
             'type' => 'boolean',
             'comment' => $this->oDefinition->sqlData['translation'],
             'column' => $this->name,

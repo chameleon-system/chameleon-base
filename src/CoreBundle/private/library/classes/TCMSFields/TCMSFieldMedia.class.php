@@ -44,11 +44,11 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
             'type' => 'array',
             'docCommentType' => 'array<string>',
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToPascalCase($this->name),
+            'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf('[%s]',implode(', ',$defaultEscaped)),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToCamelCase($this->name),
-            'setterName' => 'set'. $this->snakeToCamelCase($this->name),
+            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
+            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -65,7 +65,7 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
     protected function getDoctrineDataModelXml(string $namespace): string
     {
         return $this->getDoctrineRenderer('mapping/string.xml.twig', [
-            'fieldName' => $this->snakeToPascalCase($this->name),
+            'fieldName' => $this->snakeToCamelCase($this->name),
             'type' => 'simple_array',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],

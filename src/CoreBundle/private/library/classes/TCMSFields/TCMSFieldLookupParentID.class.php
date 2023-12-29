@@ -64,11 +64,11 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         }
 
         $parameters = [
-            'fieldName' => $this->snakeToPascalCase($propertyName),
+            'fieldName' => $this->snakeToCamelCase($propertyName),
             'targetClass' => sprintf(
                 '%s\\%s',
                 $tableNamespaceMapping[$this->GetConnectedTableName()],
-                $this->snakeToCamelCase($this->GetConnectedTableName())
+                $this->snakeToPascalCase($this->GetConnectedTableName())
             ),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
@@ -81,7 +81,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         if (false === $hasOwner) {
             $viewName = 'mapping/many-to-one.xml.twig';
         } else {
-            $parameters['owningCollectionProperty'] = $this->snakeToPascalCase($this->getOwningFieldName().'_collection');
+            $parameters['owningCollectionProperty'] = $this->snakeToCamelCase($this->getOwningFieldName().'_collection');
             if (true === $this->isOneToOneConnection()) {
                 $viewName = 'mapping/one-to-one-bidirectional-owned.xml.twig';
             }

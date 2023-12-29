@@ -21,13 +21,13 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
         if (str_ends_with($propertyName, '_mlt')) {
             $propertyName = substr($propertyName, 0, -4);
         }
-        $targetClass = $this->snakeToCamelCase($this->GetForeignTableName());
+        $targetClass = $this->snakeToPascalCase($this->GetForeignTableName());
         $parameters = [
             'source' => get_class($this),
             'type' => $targetClass,
             'description' => $this->oDefinition->sqlData['translation'],
-            'propertyName' => $this->snakeToPascalCase($propertyName.'_collection'),
-            'methodParameter' => $this->snakeToPascalCase($this->name),
+            'propertyName' => $this->snakeToCamelCase($propertyName.'_collection'),
+            'methodParameter' => $this->snakeToCamelCase($this->name),
         ];
         $parameters['docCommentType'] = sprintf('Collection<int, %s>', $parameters['type']);
 
@@ -58,8 +58,8 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
         $viewName = 'mapping/many-to-many.xml.twig';
 
         return $this->getDoctrineRenderer($viewName, [
-            'fieldName' => $this->snakeToPascalCase($propertyName.'_collection'),
-            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetForeignTableName()], $this->snakeToCamelCase($this->GetForeignTableName())),
+            'fieldName' => $this->snakeToCamelCase($propertyName.'_collection'),
+            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetForeignTableName()], $this->snakeToPascalCase($this->GetForeignTableName())),
             'joinTable' => $this->GetMLTTableName(),
             'comment' => $this->oDefinition->sqlData['translation'],
 

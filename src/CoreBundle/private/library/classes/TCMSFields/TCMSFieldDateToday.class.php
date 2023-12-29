@@ -22,7 +22,7 @@ class TCMSFieldDateToday extends TCMSFieldDate
     protected function getDoctrineDataModelXml(string $namespace): string
     {
         return $this->getDoctrineRenderer('mapping/datetime.xml.twig', [
-            'fieldName' => $this->snakeToPascalCase($this->name),
+            'fieldName' => $this->snakeToCamelCase($this->name),
             'column' => $this->name,
             'type' => 'datetime',
             'comment' => $this->oDefinition->sqlData['translation'],
