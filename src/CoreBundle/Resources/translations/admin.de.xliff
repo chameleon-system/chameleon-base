@@ -2348,10 +2348,13 @@
                 <source>chameleon_system_core.navigation_tree.cancel_selection</source>
                 <target>Abbrechen</target>
             </trans-unit>
-
             <trans-unit id="chameleon_system_core.record_list.sql_error">
                 <source>chameleon_system_core.record_list.sql_error</source>
                 <target>Beim Erstellen der Liste ist ein Datenbank-Fehler aufgetreten. Vermutlich handelt es sich um ein Konfigurationsproblem in den Tabelleneinstellungen. Der Fehler wurde geloggt.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_css_icon.select_icon">
+                <source>chameleon_system_core.field_css_icon.select_icon</source>
+                <target>Icon auswählen</target>
             </trans-unit>
         </body>
     </file>

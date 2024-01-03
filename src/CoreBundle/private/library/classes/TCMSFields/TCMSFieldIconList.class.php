@@ -11,6 +11,7 @@
 
 /**
  * field to select an icon based on a directory icon listing.
+ * @deprecated since 7.1.6
 /**/
 class TCMSFieldIconList extends TCMSField
 {

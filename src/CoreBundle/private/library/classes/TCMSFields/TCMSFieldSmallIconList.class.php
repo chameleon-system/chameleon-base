@@ -10,8 +10,8 @@
  */
 
 /**
- * date field.
-/**/
+ * @deprecated since 7.1.6
+ */
 class TCMSFieldSmallIconList extends TCMSFieldIconList
 {
     protected function _GetModulePagedef()

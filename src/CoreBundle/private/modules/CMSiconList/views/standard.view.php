@@ -1,3 +1,8 @@
+<?php
+/**
+ * @deprecated since 7.1.6
+ */
+?>
 <script type="text/javascript">
     /*
      * iconList field: sets selected icon
@@ -9,4 +14,3 @@
 </script>
 <?php
 echo $data['iconList'];
-?>
