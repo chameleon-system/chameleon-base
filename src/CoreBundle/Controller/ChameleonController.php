@@ -18,9 +18,9 @@ use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
-use ChameleonSystem\CoreBundle\Security\AuthenticityToken\TokenInjectionFailedException;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ErrorException;
 use esono\pkgCmsCache\CacheInterface;
@@ -59,10 +59,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var TGlobal
      */
     protected $global;
-    /**
-     * @var TModuleLoader
-     */
-    public $moduleLoader;
+
+    protected TModuleLoader $moduleLoader;
+
     /**
      * @var array
      *
@@ -141,6 +140,27 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
+     * @throws \Exception
+     * @deprecated should be removed after 7.2.0, catches cases of accessing public property 'moduleLoader'
+     */
+    public function __get(string $name)
+    {
+        if ('moduleLoader' === $name) {
+            @trigger_error('The modifier of property \ChameleonSystem\CoreBundle\Controller\ChameleonController::moduleLoader was restricted, use ChameleonController::getModuleLoader() instead', E_USER_DEPRECATED);
+
+            return $this->moduleLoader;
+        }
+
+        throw new \Exception(sprintf('Unknown getter "%s"', $name));
+    }
+
+    // this getter may be added to the ChameleonControllerInterface
+    public function getModuleLoader(): TModuleLoader
+    {
+        return $this->moduleLoader;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __invoke()
@@ -176,6 +196,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @param bool $bBlockAutoFlushToBrowser
      *
      * @return void
+     *
+     * @deprecated since 7.2.0 - early flushing should not be used
      */
     public function SetBlockAutoFlushToBrowser($bBlockAutoFlushToBrowser)
     {
@@ -184,6 +206,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
     /**
      * @return bool
+     *
+     * @deprecated since 7.2.0 - early flushing should not be used
      */
     public function getBlockAutoFlushToBrowser()
     {
@@ -302,13 +326,11 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * return the page definition object. by default, this is file based, but may be page based (template engine).
      *
-     * @param string $pagedef
-     *
      * @return TCMSPageDefinitionFile|false
      *
      * @deprecated since 6.2.10 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
      */
-    public function GetPagedefObject($pagedef)
+    public function GetPagedefObject(string $pagedef)
     {
         /** @var $oPageDefinitionFile TCMSPageDefinitionFile */
         $oPageDefinitionFile = new TCMSPageDefinitionFile();
@@ -472,6 +494,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * gets called when the page output is passed from buffer to client.
      *
      * @param string $sPageContent the contents of the output buffer
+     *
+     * @deprecated since 7.2.0 - you may use of symfony's "kernel.response" event
      *
      * @return string
      */
@@ -699,22 +723,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * extra hook that replaces messages and custom vars in the string passed.
-     *
-     * @param \stdClass|array|string $sPageContent
-     *
-     * @return \stdClass|array|string
-     *
-     * @deprecated since 6.3.0 - use ResponseVariableReplacerInterface::replaceVariables() instead.
-     *
-     * @throws TokenInjectionFailedException
-     */
-    public function PreOutputCallbackFunctionReplaceCustomVars($sPageContent)
-    {
-        return $this->responseVariableReplacer->replaceVariables($sPageContent);
-    }
-
-    /**
      * return an array of variables to search/replace in the rendered page
      * use this hook to add vars that should never be cached.
      *
@@ -803,9 +811,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @return never
      */
-    public function HeaderRedirect($aParameters)
+    public function HeaderRedirect(array $aParameters)
     {
-        $this->redirect->redirectToActivePage($aParameters);
+        $this->getRedirectService()->redirectToActivePage($aParameters);
     }
 
     /**
@@ -820,7 +828,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     public function HeaderURLRedirect($url = '', $bAllowOnlyRelativeURLs = false)
     {
-        $this->redirect->redirect($url, Response::HTTP_FOUND, $bAllowOnlyRelativeURLs);
+        $this->getRedirectService()->redirect($url, Response::HTTP_FOUND, $bAllowOnlyRelativeURLs);
     }
 
     /**
@@ -934,5 +942,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
     public function setResponseVariableReplacer(ResponseVariableReplacerInterface $responseVariableReplacer): void
     {
         $this->responseVariableReplacer = $responseVariableReplacer;
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

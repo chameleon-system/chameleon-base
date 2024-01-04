@@ -59,11 +59,9 @@ class TModelBase
     /**
      * pointer to the controller.
      *
-     * @var ChameleonControllerInterface
-     *
      * @deprecated Don't use this controller. Retrieve it through \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller') instead
      */
-    protected $controller = null;
+    protected ?ChameleonControllerInterface $controller = null;
 
     /**
      * @var $bool
@@ -197,7 +195,7 @@ class TModelBase
     public function Execute()
     {
         $this->data['sModuleSpotName'] = $this->sModuleSpotName;
-        $this->data['_oModules'] = $this->getController()->moduleLoader;
+        $this->data['_oModules'] = $this->getController()->getModuleLoader();
         $pagedef = $this->global->GetUserData('pagedef');
         $this->data['pagedef'] = $pagedef;
         $this->data['_pagedefType'] = 'Core';

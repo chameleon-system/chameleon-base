@@ -41,7 +41,7 @@ class MTCMSExportModuleCore extends TUserCustomModelBase
         $bAllowExport = (array_key_exists(self::SESSION_INFO_NAME, $_SESSION) && array_key_exists($this->iInstId.$this->sView, $_SESSION[self::SESSION_INFO_NAME]));
         $bAllowExport = ($bAllowExport && $_SESSION[self::SESSION_INFO_NAME][$this->iInstId.$this->sView]);
         if (!$bAllowExport) {
-            $this->controller->HeaderURLRedirect($this->getPageService()->getLinkToPortalHomePageAbsolute());
+            $this->getRedirectService()->redirect($this->getPageService()->getLinkToPortalHomePageAbsolute());
         }
 
         parent::Init();
@@ -62,5 +62,10 @@ class MTCMSExportModuleCore extends TUserCustomModelBase
     private function getPageService(): PageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.page_service');
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

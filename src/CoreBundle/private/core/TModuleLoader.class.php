@@ -122,6 +122,8 @@ class TModuleLoader
 
     /**
      * @param bool $bEnableAutoFlush
+     *
+     * @deprecated since 7.2.0 - early flushing should not be used
      */
     public function SetEnableAutoFlush($bEnableAutoFlush)
     {

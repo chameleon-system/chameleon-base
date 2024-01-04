@@ -202,7 +202,7 @@ class MTTableEditor extends TCMSModelBase
                 /** @var RouterInterface $router */
                 $router = ServiceLocator::get('router');
                 $logout = $router->generate('app_logout');
-                $this->controller->HeaderURLRedirect($logout);
+                $this->getRedirectService()->redirect($logout);
             }
 
             $this->data['oTabs'] = $this->GetTabsForTable();
@@ -653,7 +653,7 @@ class MTTableEditor extends TCMSModelBase
                 if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
                     $parameter = array_merge($parameter, $aAdditionalParams);
                 }
-                $this->controller->HeaderRedirect($parameter);
+                $this->getRedirectService()->redirectToActivePage($parameter);
             } else {
                 $this->LoadMessages(true);
             }
@@ -814,7 +814,7 @@ class MTTableEditor extends TCMSModelBase
             if (is_array($additionalParams) && count($additionalParams) > 0) {
                 $parameters = array_merge($parameters, $additionalParams);
             }
-            $this->controller->HeaderRedirect($parameters);
+            $this->getRedirectService()->redirectToActivePage($parameters);
         } else {
             $sModuleName = get_class($this);
             $sTableName = $this->oTableManager->oTableConf->GetName();
@@ -866,7 +866,7 @@ class MTTableEditor extends TCMSModelBase
                     }
 
                     $breadcrumb->PopURL();
-                    $this->controller->HeaderRedirect($parameter);
+                    $this->getRedirectService()->redirectToActivePage($parameter);
                 } else {
                     /** @var $oRestrictionTableConf TCMSTableConf */
                     $oRestrictionTableConf = new TCMSTableConf();
@@ -885,7 +885,7 @@ class MTTableEditor extends TCMSModelBase
                     }
 
                     $breadcrumb->PopURL();
-                    $this->controller->HeaderRedirect($parameter);
+                    $this->getRedirectService()->redirectToActivePage($parameter);
                 }
             } else {
                 // remove last item from url history
@@ -900,7 +900,7 @@ class MTTableEditor extends TCMSModelBase
             }
 
             if (!empty($parentURL)) {
-                $this->controller->HeaderURLRedirect($parentURL);
+                $this->getRedirectService()->redirect($parentURL);
             }
         }
     }
@@ -944,7 +944,7 @@ class MTTableEditor extends TCMSModelBase
             $parameter = array_merge($parameter, $aAdditionalParams);
         }
 
-        $this->controller->HeaderRedirect($parameter);
+        $this->getRedirectService()->redirectToActivePage($parameter);
     }
 
     /**
@@ -977,7 +977,7 @@ class MTTableEditor extends TCMSModelBase
             $parameters = array_merge($parameters, $additionalParameters);
         }
 
-        $this->controller->HeaderRedirect($parameters);
+        $this->getRedirectService()->redirectToActivePage($parameters);
     }
 
     /**
@@ -1081,5 +1081,10 @@ class MTTableEditor extends TCMSModelBase
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

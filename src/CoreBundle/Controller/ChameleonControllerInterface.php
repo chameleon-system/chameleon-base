@@ -75,6 +75,8 @@ interface ChameleonControllerInterface
      *
      * @param bool $enableAutoFlush
      * @return void
+     *
+     * @deprecated since 7.2.0 - early flushing should not be used
      */
     public function FlushContentToBrowser($enableAutoFlush = false);
 }

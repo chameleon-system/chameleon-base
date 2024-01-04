@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class MTTableEditorComponent extends MTTableEditor
 {
     /**
@@ -32,6 +34,11 @@ class MTTableEditorComponent extends MTTableEditor
             $parameter = array_merge($parameter, $aAdditionalParams);
         }
 
-        $this->controller->HeaderRedirect($parameter);
+        $this->getRedirectService()->redirectToActivePage($parameter);
+    }
+
+    private function getRedirectService(): ICmsCoreRedirect
+    {
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

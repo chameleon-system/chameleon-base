@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * Handles global lists that are edited via the main menu (not connected to a module - hence global).
@@ -193,17 +195,19 @@ class MTGlobalListCore extends TUserCustomModelBase
     }
 
     /**
-     * added the link and title of the current list itme to the breadcrumb module instance
+     * added the link and title of the current list item to the breadcrumb module instance
      * we assume that the instance runs under the name "breadcrumb". if that is not the
      * case, then you will need to overwrite this function.
      */
-    protected function AddActiveItemToBreadcrumb()
+    protected function AddActiveItemToBreadcrumb(): void
     {
-        if (array_key_exists('breadcrumb', $this->controller->moduleLoader->modules)) {
-            $this->controller->moduleLoader->modules['breadcrumb']->aAdditionalBreadcrumbNodes[] = $this->GetBreadcrumbDetailLink();
+        /** @var TModuleLoader $moduleLoader */
+        $moduleLoader = $this->getController()->getModuleLoader();
+        if (array_key_exists('breadcrumb', $moduleLoader->modules)) {
+            $moduleLoader->modules['breadcrumb']->aAdditionalBreadcrumbNodes[] = $this->GetBreadcrumbDetailLink();
         }
-        if (array_key_exists('metadata', $this->controller->moduleLoader->modules)) {
-            $this->controller->moduleLoader->modules['metadata']->aAdditionalBreadcrumbNodes[] = $this->GetBreadcrumbDetailLink();
+        if (array_key_exists('metadata', $moduleLoader->modules)) {
+            $moduleLoader->modules['metadata']->aAdditionalBreadcrumbNodes[] = $this->GetBreadcrumbDetailLink();
         }
     }
 
@@ -388,27 +392,23 @@ class MTGlobalListCore extends TUserCustomModelBase
         return array(array('table' => $this->GetTableName(), 'id' => ''));
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return LanguageServiceInterface
-     */
-    private function getLanguageService()
+    private function getLanguageService(): LanguageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    /**
-     * @return PageServiceInterface
-     */
-    private function getPageService()
+    private function getPageService(): PageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ServiceLocator::get('chameleon_system_core.page_service');
+    }
+
+    private function getController(): ChameleonControllerInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.chameleon_controller');
     }
 }

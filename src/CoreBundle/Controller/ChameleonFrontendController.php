@@ -74,10 +74,9 @@ class ChameleonFrontendController extends ChameleonController
     }
 
     /**
-     * @param string $pagedef
      * @return \TCMSPageDefinitionFile|\TCMSPagedef|\TdbCmsMasterPagedef|false
      */
-    public function GetPagedefObject($pagedef)
+    public function GetPagedefObject(string $pagedef)
     {
         //check if the pagedef exists in the database... if it does, use it. if not, use the file
         $oPageDefinitionFile = null;

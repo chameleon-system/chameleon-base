@@ -687,6 +687,8 @@ if (!defined('CMS_DEFAULT_TIME_ZONE')) {
 
 /*
  * enable flushing
+ *
+ * @deprecated since 7.2.0 - early flushing should not be used
 */
 if (!defined('CHAMELEON_ENABLE_FLUSHING')) {
     define('CHAMELEON_ENABLE_FLUSHING', false);

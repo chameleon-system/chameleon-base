@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\UpdateCounterMigrationBundle\Exception\InvalidMigrationCounterException;
 use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -39,11 +40,7 @@ class MTLoginEndPoint extends TCMSModelBase
         }
 
         if ($this->global->CMSUserDefined()) {
-            /**
-             * @psalm-suppress UndefinedInterfaceMethod
-             * @FIXME The `HeaderRedirect` method only exists on 1 of the 2 interface implementations.
-             */
-            $this->controller->HeaderRedirect([]);
+            $this->getRedirectService()->redirectToActivePage([]);
         }
 
         return $this->data;
@@ -74,7 +71,7 @@ class MTLoginEndPoint extends TCMSModelBase
         }
 
         if (true === $needsRedirect) {
-            $this->getRedirect()->redirectToActivePage([
+            $this->getRedirectService()->redirectToActivePage([
                 'pagedef' => 'CMSUpdateManager',
                 'module_fnc' => array($this->sModuleSpotName => 'RunUpdates'),
             ]);
@@ -86,15 +83,15 @@ class MTLoginEndPoint extends TCMSModelBase
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     /**
      * @return ICmsCoreRedirect
      */
-    private function getRedirect()
+    private function getRedirectService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
     /**
@@ -102,6 +99,6 @@ class MTLoginEndPoint extends TCMSModelBase
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 }
