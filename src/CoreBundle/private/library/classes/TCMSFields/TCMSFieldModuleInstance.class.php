@@ -144,8 +144,12 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
             /** @var $this->oModuleInstance TCMSTPLModuleInstance */
             $this->oModuleInstance->Load($this->data);
             $this->oModule = new TCMSTPLModule();
-            /** @var $oModule TCMSTPLModule */
-            $this->oModule->Load($this->oModuleInstance->sqlData['cms_tpl_module_id']);
+            if (false !== $this->oModuleInstance->sqlData) {
+                $this->oModule->Load($this->oModuleInstance->sqlData['cms_tpl_module_id']);
+            } else {
+                $this->oModule = null;
+                $this->oModuleInstance = null;
+            }
         }
     }
 
