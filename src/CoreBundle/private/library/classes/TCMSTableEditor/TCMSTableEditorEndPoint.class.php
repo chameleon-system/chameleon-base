@@ -1793,21 +1793,18 @@ class TCMSTableEditorEndPoint
     {
         $mltTableName = $oField->GetMLTTableName();
         $oField->oTableRow->id = $sourceRecordID;
-        $oFieldType = $oField->oDefinition->GetFieldType();
-        if ('CMSFIELD_DOCUMENTS' == $oFieldType->sqlData['constname']) {
-            $foreignTableName = 'cms_document';
-        } else {
-            $foreignTableName = $oField->GetConnectedTableName();
-        }
-        $query = 'SELECT *
-                  FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($foreignTableName).'`
-             LEFT JOIN `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName).'` ON `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName)."`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sourceRecordID)."'
-                 WHERE `".MySqlLegacySupport::getInstance()->real_escape_string($foreignTableName).'`.`id` = `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName).'`.`target_id`
-               ';
-        $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List';
-        $oRecordList = call_user_func_array(array($sClassName, 'GetList'), array($query, null, false, true, true));
-        while ($oRecord = $oRecordList->Next()) {
-            $this->AddMLTConnection($oField->name, $oRecord->id);
+
+        $query = sprintf(
+            '
+                SELECT %1$s.`target_id`
+                  FROM %1$s
+                 WHERE %1$s.`source_id` = :sourceRecordId
+              ORDER BY %1$s.`entry_sort` ASC',
+            $this->databaseConnection->quoteIdentifier($mltTableName)
+        );
+        $connectedItems = $this->databaseConnection->fetchFirstColumn($query, ['sourceRecordId' => $sourceRecordID]);
+        foreach ($connectedItems as $connectedItemId) {
+            $this->AddMLTConnection($oField->name, $connectedItemId);
         }
     }
 
