@@ -273,12 +273,12 @@ class imageMagick
     /**
      * adds an error message.
      *
-     * @param string $sMessage
+     * @param string $message
      */
-    protected function AddError($sMessage)
+    protected function AddError($message)
     {
         $this->bHasErrors = true;
-        $this->aErrorMessages = $sMessage;
+        $this->aErrorMessages[] = $message;
     }
 
     /**
