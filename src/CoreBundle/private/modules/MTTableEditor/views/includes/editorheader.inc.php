@@ -4,8 +4,8 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 $oController = TGlobal::GetController();
 ?>
-<nav class="navbar navbar-light bg-light pl-2 pr-2 pt-0">
-    <span class="navbar-brand pt-2"><?php
+<nav class="navbar navbar-light bg-light px-2">
+    <span class="navbar-brand"><?php
         if ('' === $sRecordName) {
             $sRecordName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
         } else {
@@ -24,7 +24,7 @@ $oController = TGlobal::GetController();
         <div class="callout callout-info mt-0 mb-1"><strong class="text-muted">ID:</strong><br><strong class="h6">'.$data['id'].'</strong></div>';
         ?>
         <div>
-            <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button"
+            <button class="btn btn-outline-info btn-sm mr-2" type="button" role="button"
                     data-toggle="popover"
                     data-placement="bottom"
                     data-content="<?= TGlobal::OutHTML($idsPopoverText); ?>"
@@ -32,7 +32,7 @@ $oController = TGlobal::GetController();
             >
                 <i class="fas fa-database"></i> IDs
             </button>
-            <button class="entry-id-copy-button btn btn-outline-info btn-sm mt-2 mr-2"
+            <button class="entry-id-copy-button btn btn-outline-info btn-sm mr-2"
                     data-entry-id="<?= TGlobal::OutHTML($data['id']) ?>"
                     title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.text.copy_id_to_clipboard')) ?>"
             >
@@ -109,7 +109,7 @@ $oController = TGlobal::GetController();
             ], PATH_CMS_CONTROLLER.'?', '&');
             ?>
 
-            <div class="mt-2 typeahead-relative">
+            <div class="typeahead-relative">
                 <input id="quicklookuplist"
                        class="form-control"
                        placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.other_entries')); ?>"
