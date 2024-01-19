@@ -10,7 +10,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
       'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_tbl_display_orderfields'),
       'name' => 'only_backend',
       'translation' => 'Benutze das Feld nur zur Sortierung im CMS-Backend',
-      'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_STRING'),
+      'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_BOOLEAN'),
       'cms_tbl_field_tab' => '',
       'isrequired' => '0',
       'fieldclass' => '',
@@ -22,7 +22,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
       'fieldtype_config' => '',
       'restrict_to_groups' => '0',
       'field_width' => '',
-      'position' => '0',
+      'position' => '0', //position will be set below
       '049_helptext' => '',
       'row_hexcolor' => '',
       'is_translatable' => '0',
@@ -36,3 +36,5 @@ $query ="ALTER TABLE `cms_tbl_display_orderfields`
             ADD `only_backend` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Benutze das Feld nur zur Sortierung im CMS-Backend: ',
             ADD INDEX `only_backend` (`only_backend`)";
 TCMSLogChange::RunQuery(__LINE__, $query);
+
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_tbl_display_orderfields'), 'only_backend', 'cms_tbl_conf_id');
