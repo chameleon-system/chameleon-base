@@ -12,6 +12,7 @@
 namespace ChameleonSystem\AutoclassesBundle\DataAccess;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\InvalidFieldNameException;
 use PDO;
 use TCMSConfig;
 use TCMSField;
@@ -115,10 +116,22 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
     {
         $data = array();
 
-        $query = 'SELECT `name`, `sort_order_direction`, `cms_tbl_conf_id` , `only_backend`
-                  FROM `cms_tbl_display_orderfields`
-                  ORDER BY `position` ASC';
-        $statement = $this->connection->executeQuery($query);
+        try {
+            $query = 'SELECT `name`, `sort_order_direction`, `cms_tbl_conf_id` , `only_backend`
+                      FROM `cms_tbl_display_orderfields`
+                      ORDER BY `position` ASC';
+            $statement = $this->connection->executeQuery($query);
+        } catch (InvalidFieldNameException $e) {
+            // we try to circumvent a chicken and egg problem here:
+            // the field only_backend was added in a later migration and that migration may not have been executed yet
+            if (false === strpos($e->getMessage(), "Unknown column 'only_backend'")) {
+                throw $e;
+            }
+            $query = 'SELECT `name`, `sort_order_direction`, `cms_tbl_conf_id`
+                      FROM `cms_tbl_display_orderfields`
+                      ORDER BY `position` ASC';
+            $statement = $this->connection->executeQuery($query);
+        }
 
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $tableConfId = $row['cms_tbl_conf_id'];
