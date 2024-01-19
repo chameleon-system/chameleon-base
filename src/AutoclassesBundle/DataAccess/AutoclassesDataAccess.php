@@ -115,8 +115,8 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
     {
         $data = array();
 
-        $query = 'SELECT `name`, `sort_order_direction`, `cms_tbl_conf_id` 
-                  FROM `cms_tbl_display_orderfields` 
+        $query = 'SELECT `name`, `sort_order_direction`, `cms_tbl_conf_id` , `only_backend`
+                  FROM `cms_tbl_display_orderfields`
                   ORDER BY `position` ASC';
         $statement = $this->connection->executeQuery($query);
 
@@ -138,7 +138,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
     {
         $data = array();
 
-        $query = 'SELECT * 
+        $query = 'SELECT *
                   FROM `cms_tbl_conf`';
         $statement = $this->connection->executeQuery($query);
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
