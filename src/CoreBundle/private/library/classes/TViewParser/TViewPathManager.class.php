@@ -235,9 +235,9 @@ class TViewPathManager implements IViewPathManager
      */
     public function getObjectViewPath($sViewName, $sSubType = '', $sType = 'Core')
     {
-        $sViewFileName = $sSubType.'/'.$sViewName.'.view.php';
+        $viewFileName = $sSubType.'/'.$sViewName.'.view.php';
 
-        $sTemplatePathFromTheme = $this->getTemplateFilePathFromTheme($sViewFileName, TPkgViewRendererSnippetDirectory::PATH_OBJECTVIEWS);
+        $sTemplatePathFromTheme = $this->getTemplateFilePathFromTheme($viewFileName, TPkgViewRendererSnippetDirectory::PATH_OBJECTVIEWS);
         if (null !== $sTemplatePathFromTheme) {
             return $sTemplatePathFromTheme;
         }
@@ -245,28 +245,28 @@ class TViewPathManager implements IViewPathManager
         /**
          * @deprecated all object views should move to a theme directory
          */
-        $sPath = _CMS_CUSTOMER_CORE.'/objectviews';
+        $path = _CMS_CUSTOMER_CORE.'/objectviews';
 
         // overwrite path with theme path if we find a portal for the current page and a theme is set
         $activePortal = $this->portalDomainService->getActivePortal();
         if (null !== $activePortal) {
-            $sThemePath = $activePortal->GetThemeObjectViewsPath();
-            if (!empty($sThemePath)) {
-                $sPath = $sThemePath;
+            $themePath = $activePortal->GetThemeObjectViewsPath();
+            if (false === empty($themePath)) {
+                $path = $themePath;
             }
         }
 
-        $sTemplatePath = $sPath.'/'.$sViewFileName;
+        $templatePath = $path.'/'.$viewFileName;
     
-        if (file_exists($sTemplatePath)) {
-            return $sTemplatePath;
+        if (file_exists($templatePath)) {
+            return $templatePath;
         } 
 
         // fallback to core
-        $sPath = _CMS_CORE.'/rendering/objectviews/';
-        $sTemplatePath = $sPath.'/'.$sViewFileName;
+        $path = _CMS_CORE.'/rendering/objectviews/';
+        $templatePath = $path.'/'.$viewFileName;
 
-        return $sTemplatePath;
+        return $templatePath;
     }
 
     /**
