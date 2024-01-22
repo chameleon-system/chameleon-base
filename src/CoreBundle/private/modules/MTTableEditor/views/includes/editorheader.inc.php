@@ -25,9 +25,9 @@ $oController = TGlobal::GetController();
         ?>
         <div>
             <button class="btn btn-outline-info btn-sm mr-2" type="button" role="button"
-                    data-toggle="popover"
-                    data-placement="bottom"
-                    data-content="<?= TGlobal::OutHTML($idsPopoverText); ?>"
+                    data-coreui-toggle="popover"
+                    data-coreui-placement="bottom"
+                    data-coreui-content="<?= TGlobal::OutHTML($idsPopoverText); ?>"
                     data-original-title="IDs"
             >
                 <i class="fas fa-database"></i> IDs
@@ -43,9 +43,9 @@ $oController = TGlobal::GetController();
         <?php
         if ('' !== $oTableDefinition->sqlData['notes']) {
             ?>
-            <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
-                    data-placement="bottom"
-                    data-content="<?= nl2br(TGlobal::OutHTML($oTableDefinition->sqlData['notes'])); ?>"
+            <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-coreui-toggle="popover"
+                    data-coreui-placement="bottom"
+                    data-coreui-content="<?= nl2br(TGlobal::OutHTML($oTableDefinition->sqlData['notes'])); ?>"
                     data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')); ?>">
                 <i class="fas fa-question-circle"></i> <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')); ?>
             </button>
@@ -64,9 +64,9 @@ $oController = TGlobal::GetController();
             }
 
             $sData .= '<div class="callout callout-danger mt-0 mb-1">'.$oCmsLock->GetDateField('time_stamp').'</div>'; ?>
-            <button class="btn btn-danger btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
-                    data-placement="bottom"
-                    data-content="<?= TGlobal::OutHTML($sData); ?>"
+            <button class="btn btn-danger btn-sm mt-2 mr-2" type="button" role="button" data-coreui-toggle="popover"
+                    data-coreui-placement="bottom"
+                    data-coreui-content="<?= TGlobal::OutHTML($sData); ?>"
                     data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.record_lock.locked_by')); ?>">
                 <i class="fas fa-user-lock"></i> <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')); ?>
             </button>

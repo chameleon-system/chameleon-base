@@ -6,15 +6,22 @@ CHAMELEON.CORE = CHAMELEON.CORE || {};
 var sLastDialogID = null;
 
 CHAMELEON.CORE.showProcessingModal = function () {
-    var processingDialogContainer = $("#processingModal");
-
-    if (!(processingDialogContainer.data('bs.modal') || {})._isShown){
-        processingDialogContainer.modal('show');
+    var processingDialogContainer = document.querySelector("#processingModal");
+    if (processingDialogContainer) {
+        if (typeof coreuiProcessingModal === 'undefined') {
+            coreuiProcessingModal = new coreui.Modal(processingDialogContainer, {
+                focus: true
+            });
+        }
+        coreuiProcessingModal.show();
     }
 };
 
 CHAMELEON.CORE.hideProcessingModal = function () {
-    $("#processingModal").modal('hide');
+    var processingDialogContainer = document.querySelector("#processingModal");
+    if (processingDialogContainer && coreuiProcessingModal) {
+        coreuiProcessingModal.hide();
+    }
 };
 
 function PostAjaxForm(formid, functionName) {
@@ -221,23 +228,21 @@ function LoadJQMDialog(width, height, dialogContent, hasCloseButton, title, isDr
 CHAMELEON.CORE.getModalSizeClassByPixel = function (width) {
 
     if (typeof width === 'undefined') {
-        return 'modal-xxl';
+        return 'modal-xl';
     }
 
     width = parseInt(width,10);
 
     if (0 === width) {
-        return 'modal-xxl';
+        return 'modal-xl';
     }
 
-    if (width > 950) {
-        return 'modal-xxl';
-    } else if (width >= 720) {
+    if (width > 1140) {
         return 'modal-xl';
-    } else if (width > 540) {
+    } else if (width > 800) {
         return 'modal-lg';
-    } else if (width > 300) {
-        return 'modal-md';
+    } else if (width > 500) {
+        return ''; //default
     }
 
     return 'modal-sm';
@@ -246,7 +251,7 @@ CHAMELEON.CORE.getModalSizeClassByPixel = function (width) {
 CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
 
     if (typeof sizeClass === 'undefined') {
-        sizeClass = 'modal-xxl';
+        sizeClass = 'modal-xl';
     }
 
     var modalDialog = document.getElementById('modalDialog');
@@ -257,21 +262,20 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
         newModal.className = 'modal fade';
         newModal.setAttribute('tabindex', '-1');
         newModal.setAttribute('role', 'dialog');
-        newModal.setAttribute('aria-labelledby', 'modalDialog');
+        newModal.setAttribute('aria-labelledby', 'modalDialogLabel');
         newModal.setAttribute('aria-hidden', 'true');
         newModal.innerHTML = '<div class="modal-dialog modal-dialog-centered ' + sizeClass + '">\n' +
-            '            <div class="modal-content">      ' +
-            '                <div class="modal-header" id="modalHeader">\n' +
-            '                    <h5 class="modal-title" id="modalDialogLabel"></h5>\n' +
-            '                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
-            '                        <span aria-hidden="true">&times;</span>\n' +
-            '                    </button>\n' +
-            '                </div>' +
-            '                <div class="modal-body">\n' +
-            '            </div>\n' +
-            '            </div>\n' +
-            '        </div>\n' +
-            '    </div>';
+            '                     <div class="modal-content">      ' +
+            '                         <div class="modal-header" id="modalHeader">\n' +
+            '                             <h5 class="modal-title" id="modalDialogLabel"></h5>\n' +
+            '                             <button type="button" class="close" data-coreui-dismiss="modal" aria-label="Close">\n' +
+            '                                 <span aria-hidden="true">&times;</span>\n' +
+            '                             </button>\n' +
+            '                         </div>' +
+            '                         <div class="modal-body">\n' +
+            '                         </div>\n' +
+            '                     </div>\n' +
+            '                 </div>';
         document.body.appendChild(newModal);
         modalDialog = document.getElementById('modalDialog');
     } else {
@@ -287,29 +291,33 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
 
     // set title
     var modaldialogLabel = document.getElementById('modalDialogLabel');
-    modaldialogLabel.innerHTML = '';
 
     if (title) {
         modaldialogLabel.innerHTML = title;
+    } else {
+        modaldialogLabel.innerHTML = '';
     }
-
-    // set content after dialog is initialized
-    $('#modalDialog').on('shown.bs.modal', function () {
-        $('#modalDialog .modal-body').html(content);
-    });
 
     if (typeof height === 'undefined' || height < 300) {
         height = window.innerHeight-150;
     }
 
-    var modalBody = document.querySelectorAll('#modalDialog .modal-body')[0];
+    var modalBody = modalDialog.querySelector('.modal-body');
     modalBody.style.height = height+'px';
 
-    var $modalDialog = $('#modalDialog');
-
     // init/reset modal
-    $modalDialog.modal({});
-    $modalDialog.modal('handleUpdate');
+    modalCoreui = new coreui.Modal(modalDialog, {
+        focus: true
+    })
+
+    // set content after dialog is initialized
+    modalDialog.addEventListener('shown.coreui.modal', function () {
+        let modalBody = modalDialog.querySelector('.modal-body');
+        modalBody.innerHTML = content;
+    });
+
+    modalCoreui.show();
+    modalCoreui.handleUpdate();
 };
 
 /*
@@ -341,11 +349,15 @@ function CreateModalIFrameDialogFromContent(content, width, height, title, isDra
  * creates a ModalDialog with close button from DIV-Container (ID)
  */
 function CreateModalDialogFromContainer(contentID, width, height, title, isDraggable, isResizable) {
-    var content = $('#' + contentID).html();
-    $('#' + contentID).html('');
-    top.sLastDialogID = contentID;
-    var dialogContent = '<div style="width:100%;height:100%;" id="modal_dialog_content">' + content + '</div>';
-    CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
+    let contentElemt = document.querySelector('#' + contentID).innerHTML;
+    if (contentElemt) {
+        var content = contentElemt.innerHTML;
+        contentElemt.innerHTML = '';
+        top.sLastDialogID = contentID;
+        var dialogContent = '<div style="width:100%;height:100%;" id="modal_dialog_content">' + content + '</div>';
+        CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
+    }
+
 }
 
 /*
@@ -362,8 +374,13 @@ function CreateMediaZoomDialogFromImageURL(imageURL, width, height) {
  * closes Modal Dialog
  */
 function CloseModalIFrameDialog() {
-    $('#modalDialog .modal-body').html('&nbsp;');
-    $('#modalDialog').modal('hide');
+    let modalBody = document.querySelector('#modalDialog .modal-body');
+    if (modalBody) {
+        modalBody.innerHTML = '&nbsp;';
+        if (typeof modalCoreui !== 'undefined') {
+            modalCoreui.hide();
+        }
+    }
     CHAMELEON.CORE.hideProcessingModal();
 }
 
@@ -426,8 +443,17 @@ $(document).ready(function () {
     initLightBox();
 
     // init tooltips
+    //@ToDo: update tooltip to new coreui
     $('[data-toggle="tooltip"], [rel="tooltip"]').tooltip({container: 'body', trigger: 'hover'});
-    $('[data-toggle="popover"]').popover({ html: true });
+
+    const popoverTriggerList = document.querySelectorAll('[data-coreui-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => {
+        return new coreui.Popover(popoverTriggerEl, {
+            html: true
+        });
+    });
+
+
 });
 
 function initLightBox(){
