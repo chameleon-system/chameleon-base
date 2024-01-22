@@ -12,6 +12,7 @@
 namespace ChameleonSystem\AutoclassesBundle\DataAccess;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\InvalidFieldNameException;
 use PDO;
 use TCMSConfig;
 use TCMSField;
@@ -113,19 +114,23 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
      */
     public function getTableOrderByData()
     {
-        $data = array();
 
-        $query = 'SELECT `name`, `sort_order_direction`, `cms_tbl_conf_id` , `only_backend`
-                  FROM `cms_tbl_display_orderfields`
-                  ORDER BY `position` ASC';
+
+        $query = 'SELECT * FROM `cms_tbl_display_orderfields` ORDER BY `position` ASC';
         $statement = $this->connection->executeQuery($query);
 
+        $data = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $tableConfId = $row['cms_tbl_conf_id'];
             if (false === isset($data[$tableConfId])) {
-                $data[$tableConfId] = array();
+                $data[$tableConfId] = [];
             }
-            $data[$tableConfId][] = $row;
+            // we try to circumvent a chicken and egg problem here:
+            // the field only_backend was added in a later migration and that migration may not have been executed yet
+            // in this way we only keep the fields that are needed and a missing only_backend column will be ignored
+            $data[$tableConfId][] = array_filter($row, function ($key) {
+                return in_array($key, ['name', 'sort_order_direction', 'cms_tbl_conf_id', 'only_backend'], true);
+            }, ARRAY_FILTER_USE_KEY);
         }
 
         return $data;
