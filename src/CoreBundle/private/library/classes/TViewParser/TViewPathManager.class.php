@@ -229,7 +229,7 @@ class TViewPathManager implements IViewPathManager
     /**
      * @param string $sViewName
      * @param string $sSubType
-     * @param string $sType
+     * @param string $sType @deprecated since 7.1.6
      *
      * @return string
      */
@@ -237,39 +237,34 @@ class TViewPathManager implements IViewPathManager
     {
         $sViewFileName = $sSubType.'/'.$sViewName.'.view.php';
 
-        switch ($sType) {
-            case 'Core':
-                $sPath = _CMS_CORE.'/rendering/objectviews/';
-                $sTemplatePath = $sPath.'/'.$sViewFileName;
-                break;
-            case 'Custom-Core':
-                $sPath = _CMS_CUSTOM_CORE.'/rendering/objectviews/';
-                $sTemplatePath = $sPath.'/'.$sViewFileName;
-                break;
-            case 'Customer':
-            default:
-                $sTemplatePathFromTheme = $this->getTemplateFilePathFromTheme($sViewFileName, TPkgViewRendererSnippetDirectory::PATH_OBJECTVIEWS);
-                if (null !== $sTemplatePathFromTheme) {
-                    $sTemplatePath = $sTemplatePathFromTheme;
-                } else {
-                    /**
-                     * @deprecated all object views should move to a theme directory
-                     */
-                    $sPath = _CMS_CUSTOMER_CORE.'/objectviews';
-
-                    // overwrite path with theme path if we find a portal for the current page and a theme is set
-                    $activePortal = $this->portalDomainService->getActivePortal();
-                    if (null !== $activePortal) {
-                        $sThemePath = $activePortal->GetThemeObjectViewsPath();
-                        if (!empty($sThemePath)) {
-                            $sPath = $sThemePath;
-                        }
-                    }
-
-                    $sTemplatePath = $sPath.'/'.$sViewFileName;
-                }
-                break;
+        $sTemplatePathFromTheme = $this->getTemplateFilePathFromTheme($sViewFileName, TPkgViewRendererSnippetDirectory::PATH_OBJECTVIEWS);
+        if (null !== $sTemplatePathFromTheme) {
+            return $sTemplatePathFromTheme;
         }
+        
+        /**
+         * @deprecated all object views should move to a theme directory
+         */
+        $sPath = _CMS_CUSTOMER_CORE.'/objectviews';
+
+        // overwrite path with theme path if we find a portal for the current page and a theme is set
+        $activePortal = $this->portalDomainService->getActivePortal();
+        if (null !== $activePortal) {
+            $sThemePath = $activePortal->GetThemeObjectViewsPath();
+            if (!empty($sThemePath)) {
+                $sPath = $sThemePath;
+            }
+        }
+
+        $sTemplatePath = $sPath.'/'.$sViewFileName;
+    
+        if (file_exists($sTemplatePath)) {
+            return $sTemplatePath;
+        } 
+
+        // fallback to core
+        $sPath = _CMS_CORE.'/rendering/objectviews/';
+        $sTemplatePath = $sPath.'/'.$sViewFileName;
 
         return $sTemplatePath;
     }
