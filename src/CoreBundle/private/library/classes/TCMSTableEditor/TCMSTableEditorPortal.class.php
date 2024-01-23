@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeActiveLanguagesForPortalEvent;
 use ChameleonSystem\CoreBundle\Event\ChangeUseSlashInSeoUrlsEvent;
 use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
+use ChameleonSystem\CoreBundle\Event\TreeIdMapCompletedEvent;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\SupportedLanguagesServiceInterface;
@@ -25,6 +26,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSTableEditorPortal extends TCMSTableEditor
 {
+    protected array $treeIdMap = [];
+
     /**
      * the portal being copied (only set on a copy call).
      *
@@ -308,8 +311,19 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         }
 
         $this->SaveField('main_node_tree', $newTreeId);
+        $this->addToTreeIdMap($portalRootTreeId, $newTreeId);
         $this->CopySubtree($portalRootTreeId, $newTreeId, $systemPages);
+        $this->dispatchTreeIdMapCompletedEvent();
+    }
 
+    /**
+     * There are cases when you need to know the tree ids of the source and the copied tree node, to e.g. change a reference to the copied tree node in a proprietary bundle.
+     * This dispatches an event that holds a map of all old tree ids to the new tree ids.
+     * @return EventDispatcherInterface
+     */
+    protected function dispatchTreeIdMapCompletedEvent()
+    {
+        $this->getEventDispatcher()->dispatch(new TreeIdMapCompletedEvent($this->treeIdMap), CoreEvents::TREE_ID_MAP_COMPLETED);
     }
 
     /**
@@ -399,7 +413,14 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $this->CopyNodeDivision($aSourceNode, $oTreeManager->sId);
         $this->CopyNodeNavigations($aSourceNode, $oTreeManager->sId);
 
+        $this->addToTreeIdMap($aSourceNode['id'], $oTreeManager->sId);
+
         return $oTreeManager->sId;
+    }
+
+    protected function addToTreeIdMap(string $sourceTreeId, string $copiedTreeId): void
+    {
+        $this->treeIdMap[$sourceTreeId] = $copiedTreeId;
     }
 
     /**
