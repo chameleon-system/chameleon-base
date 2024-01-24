@@ -48,7 +48,7 @@ class NewsletterUserDataFactory implements NewsletterUserDataFactoryInterface
 
         $htmllink = $campaign->GetLinkToHTMLNewsletter($user);
 
-        $newsletterUserDataModel = NewsletterUserDataModel($salutation, $firstname, $lastname, $email, $unsubscribelink, $htmllink);
+        $newsletterUserDataModel = new NewsletterUserDataModel($salutation, $firstname, $lastname, $email, $unsubscribelink, $htmllink);
 
         if ('' !== $user->fieldDataExtranetUserId) {
             $newsletterUserDataModel->setExtranetUserId($user->fieldDataExtranetUserId);
