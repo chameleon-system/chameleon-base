@@ -507,7 +507,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
 
         $submitButton = '';
         if (0 !== $count) {
-            $submitButton = TCMSRender::DrawButton($this->translator->trans('chameleon_system_core.table_editor_cms_user.action_copy_permissions'), "javascript:$('#copyUserRightsForm').submit();", 'far fa-clone', "mt-4 mb-1");
+            $submitButton = '<button type="submit" class="mt-4 mb-1 btn btn-primary"> <span class="far fa-clone mr-1"></span>'.$this->translator->trans('chameleon_system_core.table_editor_cms_user.action_copy_permissions').'</button>';
         }
         $sDialogContent .= $submitButton . $listContent . $submitButton."
         </form>
