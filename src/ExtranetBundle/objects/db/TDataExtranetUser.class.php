@@ -91,6 +91,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @var array
      */
     protected $pageAccessCache = array();
+    
+    protected bool $callPostLoginHook = true;
 
     /**
      * @param string|null $id
@@ -116,6 +118,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
 
         trigger_error('no such property ('.$sPropertyName.') in TDataExtranetUser', E_USER_ERROR);
+    }
+    
+    public function setCallPostLoginHook(bool $callPostLoginHook): void
+    {
+        $this->callPostLoginHook = $callPostLoginHook;
     }
 
     /**
@@ -495,7 +502,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
         if (!empty($sPlainPassword)) {
             $this->isLoggedIn = $this->PerformLogin($sPlainPassword, $sLoginName);
-            if ($this->isLoggedIn) {
+            if ($this->isLoggedIn && true === $this->callPostLoginHook) {
                 $this->PostLoginHook();
             }
         }
@@ -598,9 +605,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         $this->AllowEditByAll(true);
         $bWasLoggedIn = $this->Login($sLoginName, $sPassword);
         $this->AllowEditByAll(false);
-        if ($bWasLoggedIn && $callPostLoginHook) {
-            $this->PostLoginHook();
-        }
+        
+        $this->setCallPostLoginHook($callPostLoginHook);
 
         return $bWasLoggedIn;
     }
@@ -623,7 +629,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
         if ($oUser->LoadFromFields($fields, true)) {
             $this->isLoggedIn = $this->SaveUserLogindata($sLoginName, $oUser->id);
-            if ($this->isLoggedIn) {
+            if ($this->isLoggedIn && true === $this->callPostLoginHook) {
                 $this->PostLoginHook();
             }
         }
