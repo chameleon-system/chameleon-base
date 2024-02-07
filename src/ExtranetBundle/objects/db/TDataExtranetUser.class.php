@@ -602,11 +602,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     public function DirectLogin($sLoginName, $sPassword, $callPostLoginHook = false)
     {
+        $this->setCallPostLoginHook($callPostLoginHook);
+        
         $this->AllowEditByAll(true);
         $bWasLoggedIn = $this->Login($sLoginName, $sPassword);
         $this->AllowEditByAll(false);
-        
-        $this->setCallPostLoginHook($callPostLoginHook);
 
         return $bWasLoggedIn;
     }
