@@ -173,23 +173,25 @@ class TGroupTableField
      */
     private function getCellValue(array $row, $isTableHeader)
     {
-        if (null === $this->name || array_key_exists($this->name, $row)) {
-            if (null !== $this->name) {
-                $cellValue = $row[$this->name];
-            } else {
-                $cellValue = '';
-            }
-            if (null === $this->format) {
+        $cellValue = '';
+        
+        if (null !== $this->name && isset($row[$this->name])) {
+            $cellValue = $row[$this->name];
+        } 
+        
+        if (null === $this->format) {
+            if (null === $this->name || array_key_exists($this->name, $row)) {
                 if (false === $isTableHeader) {
                     $cellValue = $this->EscapeCellValue($cellValue);
                 }
             } else {
-                $cellValue = $this->getFormatBasedCellValueForDisplayString($row, $cellValue);
+                $cellValue = sprintf('[Error: unable to find column ({%s})]', $this->name);
             }
         } else {
-            $cellValue = sprintf('[Error: unable to find column ({%s})]', $this->name);
+            // has callback method
+            $cellValue = $this->getFormatBasedCellValueForDisplayString($row, $cellValue);
         }
-
+        
         if (CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
             $cellValue = $this->getFormattedValueForDisplayString($row, $cellValue);
         }
