@@ -26,7 +26,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
     protected ?\TCMSURLHistory $history = null;
 
     public function __construct(
-        /** not used, could be removed */
+        /** @deprecated 7.1.6 - not used, could be removed */
         RequestStack $requestStack
     ) {
     }
