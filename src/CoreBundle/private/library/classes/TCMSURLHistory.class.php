@@ -16,10 +16,12 @@ class TCMSURLHistory
 {
     /**
      * the list of history objects.
-     *
-     * @var array
      */
-    public $aHistory = array();
+    public array $aHistory = [];
+    /**
+     * @var callable|null
+     */
+    private $onChangeCallback = null;
 
     public function __get($name)
     {
@@ -51,6 +53,8 @@ class TCMSURLHistory
             $trace[0]['file'],
             $trace[0]['line']),
             E_USER_NOTICE);
+
+        $this->update();
     }
 
     public function __isset($name)
@@ -81,6 +85,8 @@ class TCMSURLHistory
             'params' => $aParameter,
             'filterCallback' => $filterCallback ??  '',
         );
+
+        $this->update();
     }
 
     /**
@@ -91,6 +97,7 @@ class TCMSURLHistory
         unset($this->aHistory[$index]);
         // reset the index
         $this->aHistory = array_values($this->aHistory);
+        $this->update();
     }
 
     public function getSimilarHistoryElementIndex(array $newElementParameters): ?int
@@ -138,6 +145,7 @@ class TCMSURLHistory
     {
         $url = $this->GetURL();
         array_pop($this->aHistory);
+        $this->update();
 
         return $url;
     }
@@ -217,6 +225,8 @@ class TCMSURLHistory
             for ($i = $endpoint; $i > $id; --$i) {
                 unset($this->aHistory[$i]);
             }
+
+            $this->update();
         }
     }
 
@@ -226,6 +236,7 @@ class TCMSURLHistory
     public function reset()
     {
         $this->aHistory = [];
+        $this->update();
     }
 
     /**
@@ -265,5 +276,19 @@ class TCMSURLHistory
                 }
             )
         );
+
+        $this->update();
+    }
+
+    public function setOnChangeCallback(callable $onChangeCallback): void
+    {
+        $this->onChangeCallback = $onChangeCallback;
+    }
+
+    private function update(): void
+    {
+        if (true === is_callable($this->onChangeCallback)) {
+            call_user_func($this->onChangeCallback);
+        }
     }
 }
