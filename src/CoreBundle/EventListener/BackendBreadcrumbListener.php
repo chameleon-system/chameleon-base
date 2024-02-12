@@ -79,7 +79,7 @@ class BackendBreadcrumbListener
            return false;
        }
 
-        return '/cms' === $request->getPathInfo();
+        return PATH_CMS_CONTROLLER === $request->getPathInfo();
     }
 
     private function handleBreadcrumbHistory(): void
