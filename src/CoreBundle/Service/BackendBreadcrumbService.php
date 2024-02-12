@@ -40,7 +40,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 
         $breadCrumbHistory = $this->getBreadcrumbFromSession($backendUser);
 
-        if (null === $breadCrumbHistory || false === $breadCrumbHistory->paramsParameterExists()) {
+        if (false === $breadCrumbHistory->paramsParameterExists()) {
             if (true === $this->getCache()->isActive()) {
                 return $this->resetCache($backendUser);
             } else {
@@ -51,7 +51,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
         return $this->getBreadcrumbFromSession($backendUser);
     }
 
-    private function getBreadcrumbFromSession(\TCMSUser $backendUser): ?\TCMSURLHistory
+    private function getBreadcrumbFromSession(\TCMSUser $backendUser): \TCMSURLHistory
     {
         if (null !== $this->history) {
             return $this->history;
