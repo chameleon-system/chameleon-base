@@ -140,22 +140,21 @@ class TViewPathManager implements IViewPathManager
             return null;
         }
 
-        $aThemeDirectoryChain = $this->viewRendererSnippetDirectory->getBasePaths($activePortal, $sThemeSubdirectory);
-        if (0 === count($aThemeDirectoryChain)) {
+        $themeDirectoryChain = $this->viewRendererSnippetDirectory->getBasePaths($activePortal, $sThemeSubdirectory);
+        if (0 === count($themeDirectoryChain)) {
             return null;
         }
 
-        $aThemeDirectoryChain = array_reverse($aThemeDirectoryChain);
-        foreach ($aThemeDirectoryChain as $sThemeChainPath) {
-            $sFilePath = $sThemeChainPath.'/'.$sViewFileName;
+        $themeDirectoryChain = array_reverse($themeDirectoryChain);
+        foreach ($themeDirectoryChain as $themeChainPath) {
+            $filename = $themeChainPath.'/'.$sViewFileName;
 
-            if (true === file_exists($sFilePath)) {
-                $sTemplatePath = $sFilePath;
-                break;
+            if (true === file_exists($filename)) {
+                return $filename;
             }
         }
 
-        return $sTemplatePath;
+        return null;
     }
 
     /**
