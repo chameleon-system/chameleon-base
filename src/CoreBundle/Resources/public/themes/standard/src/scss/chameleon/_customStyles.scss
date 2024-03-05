@@ -2,6 +2,10 @@ a {
   text-decoration: none;
 }
 
+.btn-primary, .btn-danger {
+  color: $white !important;
+}
+
 .form-switch {
   &.form-switch-lg {
     min-height: 1.3125rem; //reset to .form-check
