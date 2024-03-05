@@ -97,11 +97,11 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $escapedId = $sEscapedNameField.'_'.$escapedRecordId;
 
             $html .= '<div class="checkboxDIV">';
-            $html .= '
-                          <label class="form-check-label" for="'.$escapedId.'">
+            $html .= '<div class="form-check form-switch form-switch-lg">
                           <input class="form-check-input" type="checkbox" name="'.$sEscapedNameField.'['.$escapedRecordId.']" value="'.$escapedRecordId.'" id="'.$escapedId.'" '.$checked.' '.$disabled.'>
                           '.TGlobal::OutHTML($displayValue).'
-                          </label>';
+                          <label class="form-check-label" for="'.$escapedId.'">
+                      </div>';
 
             if (true === $hasEditPermissionForForeignTable) {
                 $url = $urlUtil->getArrayAsUrl(

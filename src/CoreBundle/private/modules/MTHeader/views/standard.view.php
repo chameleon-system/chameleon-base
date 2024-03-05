@@ -35,7 +35,8 @@ if (false === isset($data['oUser'])) {
         <li class="nav-item px2 dropdown">
           <a
               class="nav-link dropdown-toggle text-danger"
-              data-toggle="dropdown"
+              data-coreui-toggle="dropdown"
+              data-coreui-auto-close="outside"
               href="#"
               role="button"
               aria-haspopup="true"
@@ -46,7 +47,7 @@ if (false === isset($data['oUser'])) {
                                 <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.admin_message.button_title')); ?>
                             </span>
           </a>
-          <div class="dropdown-menu dropdown-menu-left">
+          <div class="dropdown-menu dropdown-menu-start">
               <?php
               foreach ($data['check_messages'] as $message) {
                   echo '<span class="dropdown-item">'.$message.'</span>';
@@ -62,7 +63,8 @@ if (false === isset($data['oUser'])) {
           <a
               id="navbarDropdownLanguage"
               class="nav-link dropdown-toggle"
-              data-toggle="dropdown"
+              data-coreui-toggle="dropdown"
+              data-coreui-auto-close="outside"
               href="#"
               role="button"
               aria-haspopup="true"
@@ -73,7 +75,7 @@ if (false === isset($data['oUser'])) {
                             <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.menu_edit_language_menu')); ?>
                         </span>
           </a>
-          <div class="dropdown-menu dropdown-menu-left">
+          <div class="dropdown-menu dropdown-menu-start">
               <?php
               $authenticityTokenId = AuthenticityTokenManagerInterface::TOKEN_ID;
               $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_fnc', 'editLanguageID', $authenticityTokenId));
@@ -119,7 +121,8 @@ if (false === isset($data['oUser'])) {
           <a
               id="navbarDropdownCache"
               class="nav-link dropdown-toggle"
-              data-toggle="dropdown"
+              data-coreui-toggle="dropdown"
+              data-coreui-auto-close="outside"
               href="#"
               role="button"
               aria-haspopup="true"
@@ -130,7 +133,7 @@ if (false === isset($data['oUser'])) {
                                 <?= $translator->trans('chameleon_system_core.cms_module_header.menu_cache'); ?>
                             </span>
           </a>
-          <div class="dropdown-menu dropdown-menu-left">
+          <div class="dropdown-menu dropdown-menu-start">
             <a class="dropdown-item" href="javascript:GetAjaxCall('<?=$clearCacheURL; ?>', DisplayAjaxMessage)" title="<?= $translator->trans('chameleon_system_core.cms_module_header.action_clear_page_cache_title'); ?>">
               <i class="fas fa-sync"></i>
                 <?= $translator->trans('chameleon_system_core.cms_module_header.action_clear_page_cache'); ?>
@@ -154,49 +157,48 @@ if (false === isset($data['oUser'])) {
   </ul>
 </div>
 
+<ul class="header-nav d-flex">
+    <?php
+        /**
+         * @var ViewRenderer $viewRenderer
+         */
+        $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        $viewRenderer->addMapperFromIdentifier('chameleon_system_core.mapper.update_recorder');
+        $viewRenderer->AddSourceObject('sModuleSpotName', $sModuleSpotName);
 
+        echo $viewRenderer->Render('MTUpdateRecorder/flyout.html.twig');
 
-            <ul class="header-nav d-flex">
-                <?php
-                    /**
-                     * @var ViewRenderer $viewRenderer
-                     */
-                    $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
-                    $viewRenderer->addMapperFromIdentifier('chameleon_system_core.mapper.update_recorder');
-                    $viewRenderer->AddSourceObject('sModuleSpotName', $sModuleSpotName);
+$userButtonStyle = '';
+$oUser = TCMSUser::GetActiveUser();
+$bIsAdminUser = ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->user && $oUser->oAccessManager->user->IsAdmin());
+if (!_DEVELOPMENT_MODE && $bIsAdminUser) {
+    $userButtonStyle = 'text-danger';
+} ?>
 
-                    echo $viewRenderer->Render('MTUpdateRecorder/flyout.html.twig');
-
-            $userButtonStyle = '';
-            $oUser = TCMSUser::GetActiveUser();
-            $bIsAdminUser = ($oUser && $oUser->oAccessManager && $oUser->oAccessManager->user && $oUser->oAccessManager->user->IsAdmin());
-            if (!_DEVELOPMENT_MODE && $bIsAdminUser) {
-                $userButtonStyle = 'text-danger';
-            } ?>
-
-                    <li class="nav-item px-2 dropdown">
-                        <a
-                            class="nav-link dropdown-toggle <?= $userButtonStyle; ?>"
-                            data-toggle="dropdown"
-                            href="#"
-                            role="button"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                        >
-                            <i class="fas fa-user"></i>
-                            <span class="d-md-down-none">
-                                <?=$oUser->fieldLogin; ?>
-                            </span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="<?= PATH_CMS_CONTROLLER; ?>?pagedef=tableeditor&tableid=<?= $data['iTableIDCMSUser']; ?>&id=<?= $data['oUser']->id; ?>&<?= urlencode('module_fnc[contentmodule]'); ?>">
-                                <i class="fas fa-user"></i>
-                                <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_open_profile')); ?>
-                            </a>
-                            <a class="dropdown-item" href="<?= PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('pagedef' => 'login', 'module_fnc' => array('contentmodule' => 'Logout'))); ?>">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_logout')); ?>
-                            </a>
-                        </div>
-                    </li>
-            </ul>
+        <li class="nav-item px-2 dropdown">
+            <a
+                class="nav-link dropdown-toggle <?= $userButtonStyle; ?>"
+                data-coreui-toggle="dropdown"
+                data-coreui-auto-close="outside"
+                href="#"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+            >
+                <i class="fas fa-user"></i>
+                <span class="d-md-down-none">
+                    <?=$oUser->fieldLogin; ?>
+                </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+                <a class="dropdown-item" href="<?= PATH_CMS_CONTROLLER; ?>?pagedef=tableeditor&tableid=<?= $data['iTableIDCMSUser']; ?>&id=<?= $data['oUser']->id; ?>&<?= urlencode('module_fnc[contentmodule]'); ?>">
+                    <i class="fas fa-user"></i>
+                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_open_profile')); ?>
+                </a>
+                <a class="dropdown-item" href="<?= PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('pagedef' => 'login', 'module_fnc' => array('contentmodule' => 'Logout'))); ?>">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_header.action_logout')); ?>
+                </a>
+            </div>
+        </li>
+</ul>

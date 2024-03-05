@@ -4,7 +4,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 $oController = TGlobal::GetController();
 ?>
-<nav class="navbar navbar-light bg-light px-2">
+<nav class="navbar navbar-light px-2">
     <span class="navbar-brand"><?php
         if ('' === $sRecordName) {
             $sRecordName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');

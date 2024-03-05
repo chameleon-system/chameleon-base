@@ -1,16 +1,24 @@
 <?php require_once PATH_LAYOUTTEMPLATES.'/includes/cms_head_data.inc.php'; ?>
-<header class="app-header navbar">
-<?php $modules->GetModule('headerimage'); ?>
-</header>
-<div id="cmscontainer" class="app-body">
-    <?php $modules->GetModule('sidebar'); ?>
-    <main class="main" id="cmscontentcontainer">
+<body>
+<?php $modules->GetModule('sidebar'); ?>
+
+<div class="wrapper d-flex flex-column min-vh-100 bg-light dark:bg-transparent">
+  <header class="header header-sticky mb-4">
+    <div class="container-fluid">
+        <?php $modules->GetModule('headerimage'); ?>
+    </div>
+    <div class="header-divider"></div>
+    <div class="container-fluid">
         <?php $modules->GetModule('breadcrumb'); ?>
-        <div class="container-fluid">
+    </div>
+  </header>
+  <main class="body main flex-grow-1 px-3">
+    <div class="container-fluid content px-0" id="cmscontentcontainer">
         <?php $modules->GetModule('templateengine'); ?>
-        </div>
-    </main>
+    </div>
+  </main>
+    <?php require_once PATH_LAYOUTTEMPLATES.'/includes/footer.inc.php'; ?>
 </div>
-<?php require_once PATH_LAYOUTTEMPLATES.'/includes/footer.inc.php'; ?>
+
 </body>
 </html>

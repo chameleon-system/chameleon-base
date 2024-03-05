@@ -72,12 +72,8 @@ html {
     color: #098dba;
 }
 
-.dropdown-menu.dropdown-menu-right {
+.dropdown-menu.dropdown-menu-end {
     max-width: calc(100% - 8px);
-}
-
-.dropdown-menu .dropdown-item {
-    padding: 10px;
 }
 
 .dropdown-menu .dropdown-item.translation-sub {
@@ -178,7 +174,8 @@ legend {
     position: relative;
 }
 
-.typeahead.dropdown-menu-right {
+.typeahead.dropdown-menu-right,
+.typeahead.dropdown-menu-end {
     right: 8px;
 }
 
@@ -236,7 +233,6 @@ html:not([dir=rtl]) .wrapper {
 
 #dbLoggerDropdown {
     min-width: 260px;
-    padding-left: 10px;
 }
 
 .app-header .navbar-brand {

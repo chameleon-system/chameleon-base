@@ -1,3 +1,26 @@
 a {
   text-decoration: none;
 }
+
+.form-switch {
+  &.form-switch-lg {
+    min-height: 1.3125rem; //reset to .form-check
+    padding-left: 2.5em;
+
+    .form-check-input {
+      width: 2em;
+      height: 1em;
+      margin-left: -2.5em;
+    }
+  }
+  &.form-switch-xl {
+    min-height: 2em;  //lg * 1.5
+    padding-left: 3.75em;
+
+    .form-check-input {
+      width: 3em;
+      height: 1.5em;
+      margin-left: -3.75em;
+    }
+  }
+}
