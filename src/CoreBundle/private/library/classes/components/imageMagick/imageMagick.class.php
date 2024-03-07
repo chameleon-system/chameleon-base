@@ -412,7 +412,7 @@ class imageMagick
                 if ($returnvalue || 0 == count($returnarray)) {
                     $this->AddError('GetNumberOfScenes(): Incorrect Image Format or ImageMagick not found');
                 } else {
-                    $this->iNumberOfScenes = trim($returnarray[0]);
+                    $this->iNumberOfScenes = (int) trim($returnarray[0]);
                     $returnVal = true;
                 }
             }
