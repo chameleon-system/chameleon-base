@@ -134,33 +134,27 @@ class TViewPathManager implements IViewPathManager
      */
     protected function getTemplateFilePathFromTheme($sViewFileName, $sThemeSubdirectory)
     {
-        $sTemplatePath = null;
-        if (true === TGlobal::IsCMSMode()) {
-            return null;
-        }
-
         $activePortal = $this->portalDomainService->getActivePortal();
         // overwrite path with theme path if we find a portal for the current page and a theme is set
         if (null === $activePortal) {
             return null;
         }
 
-        $aThemeDirectoryChain = $this->viewRendererSnippetDirectory->getBasePaths($activePortal, $sThemeSubdirectory);
-        if (0 === count($aThemeDirectoryChain)) {
+        $themeDirectoryChain = $this->viewRendererSnippetDirectory->getBasePaths($activePortal, $sThemeSubdirectory);
+        if (0 === count($themeDirectoryChain)) {
             return null;
         }
 
-        $aThemeDirectoryChain = array_reverse($aThemeDirectoryChain);
-        foreach ($aThemeDirectoryChain as $sThemeChainPath) {
-            $sFilePath = $sThemeChainPath.'/'.$sViewFileName;
+        $themeDirectoryChain = array_reverse($themeDirectoryChain);
+        foreach ($themeDirectoryChain as $themeChainPath) {
+            $filename = $themeChainPath.'/'.$sViewFileName;
 
-            if (true === file_exists($sFilePath)) {
-                $sTemplatePath = $sFilePath;
-                break;
+            if (true === file_exists($filename)) {
+                return $filename;
             }
         }
 
-        return $sTemplatePath;
+        return null;
     }
 
     /**
