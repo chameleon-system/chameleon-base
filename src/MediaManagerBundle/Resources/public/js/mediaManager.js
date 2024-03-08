@@ -633,6 +633,10 @@
                     $(".entry-id-copy-button").on("click", function() {
                         CHAMELEON.CORE.copyToClipboard($(this).data("entry-id"));
                     });
+
+                    $(".image-url-copy-button").on("click", function() {
+                        CHAMELEON.CORE.copyToClipboard($(this).data("image-url"));
+                    });
                 },
                 dataType: 'JSON'
             });

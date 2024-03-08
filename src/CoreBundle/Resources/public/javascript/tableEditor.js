@@ -17,7 +17,8 @@ var _trans_icon = '';
 var _trans_link = '';
 var _trans_password = '';
 var _trans_drag = '';
-
+const tableEditorBeforeSaveEvent = new CustomEvent('tableEditorBeforeSaveEvent', {
+});
 
 /*
  * get file usages
@@ -55,12 +56,8 @@ function ShowUsageDialog(index, _connectedDataHTML) {
 function ExecutePostCommand(command) {
     document.cmseditform.elements['module_fnc[contentmodule]'].value = command;
     if (command == 'Save') {
-        if ("undefined" != typeof CKEDITOR) {
-            $.map(CKEDITOR.instances, function (instance, instanceName) {
-                $("#" + instanceName).val(instance.getData());
-            });
-        }
-
+        document.dispatchEvent(tableEditorBeforeSaveEvent);
+        
         // remove "something changed" message, because now the data was saved
         window.onbeforeunload = function () {
         };
@@ -446,8 +443,12 @@ function ReloadMainPage() {
  * tableEditor: save edit table via ajax
  */
 function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
-    if (customCallbackFunction == 'undefined') customCallbackFunction = SaveViaAjaxCallback;
+    if (typeof customCallbackFunction === 'undefined') {
+        customCallbackFunction = SaveViaAjaxCallback;
+    }
 
+    document.dispatchEvent(tableEditorBeforeSaveEvent);
+    
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'ExecuteAjaxCall';
     document.cmseditform._fnc.value = 'AjaxSave';
 
@@ -466,6 +467,8 @@ function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
         customCallbackFunction = SaveViaAjaxCallback;
     }
 
+    document.dispatchEvent(tableEditorBeforeSaveEvent);
+
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'ExecuteAjaxCall';
     document.cmseditform._fnc.value = 'AjaxSaveField';
 
@@ -478,13 +481,8 @@ function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
  */
 
 function SaveViaAjax() {
-
-    if ("undefined" != typeof CKEDITOR) {
-        $.map(CKEDITOR.instances, function (instance, instanceName) {
-            $("#" + instanceName).val(instance.getData());
-        });
-    }
-
+    document.dispatchEvent(tableEditorBeforeSaveEvent);
+                
     if (typeof (framestosave) != 'undefined' && framestosave.length > 0) {
         $.map(framestosave, function (frameToSave, index) {
             $('.itemsave:first', $('#' + frameToSave).contents()).trigger('click')
@@ -551,6 +549,8 @@ function ShowMessages(messages) {
 }
 
 function Save() {
+    document.dispatchEvent(tableEditorBeforeSaveEvent);
+    
     CHAMELEON.CORE.showProcessingModal();
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Save';
     document.cmseditform.submit();

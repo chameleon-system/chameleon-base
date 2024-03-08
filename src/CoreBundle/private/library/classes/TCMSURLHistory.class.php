@@ -16,10 +16,12 @@ class TCMSURLHistory
 {
     /**
      * the list of history objects.
-     *
-     * @var array
      */
-    public $aHistory = array();
+    public array $aHistory = [];
+    /**
+     * @var callable|null
+     */
+    private $onChangeCallback = null;
 
     public function __get($name)
     {
@@ -51,6 +53,8 @@ class TCMSURLHistory
             $trace[0]['file'],
             $trace[0]['line']),
             E_USER_NOTICE);
+
+        $this->update();
     }
 
     public function __isset($name)
@@ -61,10 +65,11 @@ class TCMSURLHistory
     /**
      * adds item to the breadcrumb array.
      *
-     * @param array  $aParameter - url parameters
+     * @param array $aParameter - url parameters
      * @param string $name
+     * @param callable-string|null $filterCallback
      */
-    public function AddItem($aParameter, $name = '')
+    public function AddItem($aParameter, $name = '', ?string $filterCallback = null)
     {
         $foundHistoryElementIndex = $this->getSimilarHistoryElementIndex($aParameter);
 
@@ -78,14 +83,21 @@ class TCMSURLHistory
             'name' => $name,
             'url' => $this->EncodeParameters($aParameter),
             'params' => $aParameter,
+            'filterCallback' => $filterCallback ??  '',
         );
+
+        $this->update();
     }
 
+    /**
+     * @note you can use "array_splice($this->aHistory, $index, 1);"
+     */
     private function removeHistoryElementByIndex(int $index): void
     {
         unset($this->aHistory[$index]);
         // reset the index
         $this->aHistory = array_values($this->aHistory);
+        $this->update();
     }
 
     public function getSimilarHistoryElementIndex(array $newElementParameters): ?int
@@ -133,6 +145,7 @@ class TCMSURLHistory
     {
         $url = $this->GetURL();
         array_pop($this->aHistory);
+        $this->update();
 
         return $url;
     }
@@ -197,6 +210,7 @@ class TCMSURLHistory
      * removes all history entries with higher index than the given one.
      *
      * @param int $id
+     * @note you can use "array_splice($this->aHistory, $id + 1);"
      */
     public function Clear($id)
     {
@@ -211,6 +225,8 @@ class TCMSURLHistory
             for ($i = $endpoint; $i > $id; --$i) {
                 unset($this->aHistory[$i]);
             }
+
+            $this->update();
         }
     }
 
@@ -220,6 +236,7 @@ class TCMSURLHistory
     public function reset()
     {
         $this->aHistory = [];
+        $this->update();
     }
 
     /**
@@ -239,31 +256,39 @@ class TCMSURLHistory
 
     /**
      * Removing history entries concerning this table entry.
-     *
-     * @param string $tableId
-     * @param string $entryId
      */
-    public function removeEntries(string $tableId, string $entryId): void
+    public function removeEntries(string $tableId, string $entryId, string $cmsTblConfId): void
     {
-        if ('' === $tableId || '' === $entryId) {
+        if ('' === $cmsTblConfId || '' === $entryId) {
             return;
         }
 
-        $length = count($this->aHistory);
-        $changed = false;
-        for ($i = 0; $i < $length; ++$i) {
-            $hasTableId = false !== strpos($this->aHistory[$i]['url'], 'tableid='.$tableId);
-            $hasEntryId = false !== strpos($this->aHistory[$i]['url'], 'id='.$entryId);
-            if (true === $hasTableId && true === $hasEntryId) {
-                $changed = true;
-                unset($this->aHistory[$i]);
-            }
-        }
+        $this->aHistory = array_values(
+            array_filter($this->aHistory,
+                function (array $history) use ($tableId, $entryId, $cmsTblConfId) {
+                    $filterCallback = $history['filterCallback'];
+                    if (true === is_callable($filterCallback)) {
+                        /** @var $filterCallback callable(array $historyEntry, string $tableId, string $entryId, string $cmsTblConfId): bool */
+                        return false === $filterCallback($history, $tableId, $entryId, $cmsTblConfId);
+                    }
 
-        if (true === $changed) {
-            // remove now "empty" indices
+                    return false === ($cmsTblConfId === ($history['params']['tableid'] ?? null) && $entryId === ($history['params']['id'] ?? null));
+                }
+            )
+        );
 
-            $this->aHistory = array_values($this->aHistory);
+        $this->update();
+    }
+
+    public function setOnChangeCallback(callable $onChangeCallback): void
+    {
+        $this->onChangeCallback = $onChangeCallback;
+    }
+
+    private function update(): void
+    {
+        if (true === is_callable($this->onChangeCallback)) {
+            call_user_func($this->onChangeCallback);
         }
     }
 }

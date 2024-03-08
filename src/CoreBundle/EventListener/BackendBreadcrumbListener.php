@@ -63,8 +63,23 @@ class BackendBreadcrumbListener
         if (false === $this->requestInfoService->isBackendMode()) {
             return;
         }
+        
+        if (false === $this->isValidBreadcrumbRequest()) {
+            return;
+        }
 
         $this->handleBreadcrumbHistory();
+    }
+    
+    private function isValidBreadcrumbRequest(): bool
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+       if (true === $request->isXmlHttpRequest()) {
+           return false;
+       }
+
+        return PATH_CMS_CONTROLLER === $request->getPathInfo();
     }
 
     private function handleBreadcrumbHistory(): void

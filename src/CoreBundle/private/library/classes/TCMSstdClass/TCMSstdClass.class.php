@@ -18,7 +18,7 @@ class TCMSstdClass extends stdClass
     /**
      * record id.
      *
-     * @var int
+     * @var string
      */
     public $id = null;
 

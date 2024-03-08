@@ -819,6 +819,7 @@ class TCMSTableEditorEndPoint
         }
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $this->sId);
+        $event->setCmsTblConfId($this->sTableId);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_RECORD);
     }
 
@@ -1060,7 +1061,7 @@ class TCMSTableEditorEndPoint
         $quotedId = $databaseConnection->quote($this->sId);
         $quotedPosition = $databaseConnection->quote($iPosition);
 
-        $sQuery = "SELECT * 
+        $sQuery = "SELECT *
                    FROM $quotedMltTableName
                    WHERE `source_id` = $quotedId
                    ORDER BY `entry_sort` ASC ";
@@ -1217,6 +1218,7 @@ class TCMSTableEditorEndPoint
         TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $sCacheTriggerID);
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $this->sId);
+        $event->setCmsTblConfId($this->sTableId);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::INSERT_RECORD);
     }
 
@@ -1311,6 +1313,7 @@ class TCMSTableEditorEndPoint
         TCMSLogChange::WriteTransaction($aQuery);
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $sDeleteId);
+        $event->setCmsTblConfId($this->sTableId);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_RECORD);
 
         $this->sId = null;
@@ -1696,11 +1699,11 @@ class TCMSTableEditorEndPoint
 
         return $bSaveSuccess;
     }
-    
+
     private function isRecordingActive(): bool
     {
         $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
-        
+
         return $this->IsQueryLoggingAllowed() && $migrationRecorderStateHandler->isDatabaseLoggingActive();
     }
 
@@ -1790,21 +1793,18 @@ class TCMSTableEditorEndPoint
     {
         $mltTableName = $oField->GetMLTTableName();
         $oField->oTableRow->id = $sourceRecordID;
-        $oFieldType = $oField->oDefinition->GetFieldType();
-        if ('CMSFIELD_DOCUMENTS' == $oFieldType->sqlData['constname']) {
-            $foreignTableName = 'cms_document';
-        } else {
-            $foreignTableName = $oField->GetConnectedTableName();
-        }
-        $query = 'SELECT *
-                  FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($foreignTableName).'`
-             LEFT JOIN `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName).'` ON `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName)."`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sourceRecordID)."'
-                 WHERE `".MySqlLegacySupport::getInstance()->real_escape_string($foreignTableName).'`.`id` = `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName).'`.`target_id`
-               ';
-        $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List';
-        $oRecordList = call_user_func_array(array($sClassName, 'GetList'), array($query, null, false, true, true));
-        while ($oRecord = $oRecordList->Next()) {
-            $this->AddMLTConnection($oField->name, $oRecord->id);
+
+        $query = sprintf(
+            '
+                SELECT %1$s.`target_id`
+                  FROM %1$s
+                 WHERE %1$s.`source_id` = :sourceRecordId
+              ORDER BY %1$s.`entry_sort` ASC',
+            $this->databaseConnection->quoteIdentifier($mltTableName)
+        );
+        $connectedItems = $this->databaseConnection->fetchFirstColumn($query, ['sourceRecordId' => $sourceRecordID]);
+        foreach ($connectedItems as $connectedItemId) {
+            $this->AddMLTConnection($oField->name, $connectedItemId);
         }
     }
 
@@ -1816,21 +1816,29 @@ class TCMSTableEditorEndPoint
      */
     public function CopyPropertyRecords($oField, $sourceRecordID)
     {
-        $oField->oTableRow->id = $sourceRecordID;
-        $sPropertyTableName = $oField->GetPropertyTableName();
-        $sTableClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sPropertyTableName).'List';
-        $sTargetTableForeignKeyFieldName = $oField->GetMatchingParentFieldName();
-        $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sPropertyTableName).'` WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetTableForeignKeyFieldName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sourceRecordID)."'";
-        $oPropertyList = call_user_func(array($sTableClassName, 'GetList'), $query);
-        $sTableID = TTools::GetCMSTableId($sPropertyTableName);
-        $oTableEditorManager = new TCMSTableEditorManager();
-        while ($oProperty = $oPropertyList->Next()) {
-            /** @var $oProperty TCMSRecord */
-            $oTableEditorManager->Init($sTableID, $oProperty->id);
-            $aOverloadedFields = array($sTargetTableForeignKeyFieldName => $this->sId);
-            $oTableEditorManager->AllowEditByAll(true);
-            $oTableEditorManager->DatabaseCopy(false, $aOverloadedFields, $this->bIsCopyAllLanguageValues);
+        $allowReferenceCopy = $oField->allowCopyRecordReferences();
+        if (false === $allowReferenceCopy){
+            return;
         }
+
+        $oField->oTableRow->id = $sourceRecordID;
+
+        $propertyTableName = $oField->GetPropertyTableName();
+        $tableClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $propertyTableName).'List';
+        $targetTableForeignKeyFieldName = $oField->GetMatchingParentFieldName();
+        $query = 'SELECT * FROM `'.$propertyTableName.'` WHERE `'.$targetTableForeignKeyFieldName."` = '".$sourceRecordID."'";
+        $propertyList = $tableClassName::GetList($query);
+
+        $tableID = TTools::GetCMSTableId($propertyTableName);
+        $tableEditorManager = new TCMSTableEditorManager();
+        while ($oProperty = $propertyList->Next()) {
+            /** @var $oProperty TCMSRecord */
+            $tableEditorManager->Init($tableID, $oProperty->id);
+            $overloadedFields = [$targetTableForeignKeyFieldName => $this->sId];
+            $tableEditorManager->AllowEditByAll(true);
+            $tableEditorManager->DatabaseCopy(false, $overloadedFields, $this->bIsCopyAllLanguageValues);
+        }
+        $tableEditorManager->AllowEditByAll(false);
     }
 
     /**
@@ -1943,7 +1951,7 @@ class TCMSTableEditorEndPoint
             $updateQuery = '
               UPDATE '.$databaseConnection->quoteIdentifier($row['tableName']).'
                  SET '.$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX)." = '',
-                     ".$databaseConnection->quoteIdentifier($row['fieldName'])." = ''   
+                     ".$databaseConnection->quoteIdentifier($row['fieldName'])." = ''
                WHERE ".$databaseConnection->quoteIdentifier($row['fieldName'].TCMSFieldExtendedLookupMultiTable::TABLE_NAME_FIELD_SUFFIX).' = '.$databaseConnection->quote($tableName);
 
             $setFields[$row['fieldName']] = '';
@@ -1992,8 +2000,8 @@ class TCMSTableEditorEndPoint
         $fieldConfigQuery = '
                   SELECT `cms_field_conf`.`name` AS fieldName,
                          `cms_tbl_conf`.`name` AS tableName
-                    FROM `cms_field_conf` 
-               LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id` 
+                    FROM `cms_field_conf`
+               LEFT JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id`
                    WHERE `cms_field_conf`.`cms_field_type_id` = :fieldTypeId';
 
         return $databaseConnection->fetchAll($fieldConfigQuery, ['fieldTypeId' => $fieldTypeId]);
@@ -2550,7 +2558,7 @@ class TCMSTableEditorEndPoint
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
-    
+
     private function getMigrationRecorderStateHandler(): MigrationRecorderStateHandler
     {
         return ServiceLocator::get('chameleon_system_database_migration.recorder.migration_recorder_state_handler');

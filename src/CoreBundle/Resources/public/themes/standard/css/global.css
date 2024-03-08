@@ -161,7 +161,7 @@ legend {
 }
 .button-element {
     margin-left: -3px!important;
-    margin-right: -3px!important;
+    margin-right: 0px!important;
 }
 
 .button-element .button-item {
@@ -390,4 +390,3 @@ Bootstrap 4 addons.
 .cke_panel iframe {
     min-height: initial;
 }
-

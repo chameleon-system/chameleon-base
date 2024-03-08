@@ -933,5 +933,8 @@
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_core.tools"/>
         </service>
+
+        <service id="chameleon_system_core.service.font_awesome" class="ChameleonSystem\CoreBundle\Service\FontAwesomeService" public="true">
+        </service>
     </services>
 </container>
