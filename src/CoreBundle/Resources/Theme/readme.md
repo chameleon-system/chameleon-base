@@ -28,8 +28,6 @@ The following scripts will be useful during development and installation:
 1. `build` Please call this script to re-install or update CoreUI. It will execute the following steps:
   * Install all requirements for the build process of CoreUI
   * Install all CoreUI requirements and assets
-  * Install 'Perfect Scrollbar' ([GitHub - mdbootstrap/perfect-scrollbar: Minimalistic but perfect custom scrollbar plugin](https://github.com/mdbootstrap/perfect-scrollbar))
-  * Copy all necessary files for 'Perfect Scrollbar' to Chameleon's theme directory
   * Copy CoreUI's JavaScript files to Chameleon's theme directory
   * Run the `css` command (see below)
 

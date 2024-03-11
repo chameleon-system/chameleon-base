@@ -293,7 +293,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     public function GetHtmlHeadIncludes()
     {
         $includes = parent::GetHtmlHeadIncludes();
-//        $includes[] = sprintf('<link rel="stylesheet" href="%s/coreui/css/perfect-scrollbar.css" type="text/css" />', \TGlobal::GetPathTheme());
         $includes[] = sprintf('<link rel="stylesheet" href="%s/coreui/css/simplebar.css" type="text/css" />', \TGlobal::GetPathTheme());
 
         return $includes;
