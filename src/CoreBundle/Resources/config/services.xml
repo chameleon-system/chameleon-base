@@ -301,7 +301,6 @@
                 <argument>login</argument>
                 <argument type="collection"></argument>
             </call>
-
         </service>
 
         <service id="chameleon_system_core.request_info_service" class="ChameleonSystem\CoreBundle\Service\RequestInfoService" public="true">
@@ -936,5 +935,7 @@
 
         <service id="chameleon_system_core.service.font_awesome" class="ChameleonSystem\CoreBundle\Service\FontAwesomeService" public="true">
         </service>
+
+        <service id="chameleon_system_core.service.field_extension_render_service" class="ChameleonSystem\CoreBundle\Service\FieldExtensionRenderService" public="true" />
     </services>
 </container>
