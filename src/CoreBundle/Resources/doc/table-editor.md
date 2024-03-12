@@ -2,12 +2,12 @@
 
 ## Extending a group of fields with additional functionality
 
-It is possible to add additional HTML + assets to one ore a group of fields
-The ouput will be below the field. Examples are: text manipulations like AI features, translations, previews etc.
+It is possible to add additional HTML + assets to one or a group of fields.
+The output will be below the field. Examples are: text manipulations like AI features, translations, previews etc.
 
 Create a service like this example:
 
-```php 
+```PHP 
 
 <?php
 
@@ -113,9 +113,9 @@ class FieldExtensionExampleService extends FieldExtensionServiceAbstract impleme
 ```
 
 Tag the service with "chameleon_system_core.field_extension" to add it to all field renderings.
-(theoretically all services implementing the FieldExtensionInterface should be automatically tagged, but that didn't work yet.)
+(theoretically, all services implementing the FieldExtensionInterface should be automatically tagged, but that didn't work yet.)
 
-```xml
+```XML
     <service id="chameleon_system_core.service.field_extension_example_service" class="ChameleonSystem\CoreBundle\Service\FieldExtensionExampleService">
       <tag name="chameleon_system_core.field_extension"/>
     </service>

@@ -32,7 +32,7 @@ class FieldExtensionRenderService implements FieldExtensionRenderServiceInterfac
     {
         $includes = [];
         foreach($this->fieldExtensions as $fieldExtension) {
-            $includes = $fieldExtension->getHtmlHeadIncludes($field);
+            $includes = array_merge($includes, $fieldExtension->getHtmlHeadIncludes($field));
         }
         
         return $includes;
@@ -42,7 +42,7 @@ class FieldExtensionRenderService implements FieldExtensionRenderServiceInterfac
     {
         $includes = [];
         foreach($this->fieldExtensions as $fieldExtension) {
-            $includes = $fieldExtension->getHtmlFooterIncludes($field);
+            $includes = array_merge($includes, $fieldExtension->getHtmlFooterIncludes($field));
         }
 
         return $includes;
