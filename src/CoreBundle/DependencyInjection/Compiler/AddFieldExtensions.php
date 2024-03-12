@@ -10,7 +10,7 @@ class AddFieldExtensions implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->has('chameleon_system_core.service.field_extension_render_service')) {
+        if (false === $container->has('chameleon_system_core.service.field_extension_render_service')) {
             return;
         }
 
