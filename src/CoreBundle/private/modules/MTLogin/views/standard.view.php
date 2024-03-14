@@ -10,7 +10,6 @@
                         <input type="hidden" name="pagedef" value="login" />
                         <input type="hidden" name="module_fnc[contentmodule]" value="Login" />
                         <input type="hidden" name="redirectParams" value="<?=$redirectParams; ?>" />
-                        <input type="hidden" name="login" value="<?=$login; ?>" />
                         <fieldset>
                             <?php
                             if (array_key_exists('errmsg', $data)) {
@@ -44,7 +43,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    $( document ).ready(function() {
+    $(document).ready(function() {
         if (parent.frames.length > 0) {
             parent.location.href = self.document.location
         }
