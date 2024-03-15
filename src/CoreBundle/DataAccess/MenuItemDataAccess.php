@@ -12,16 +12,12 @@
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuCategory;
-use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItemFactoryInterface;
 use ChameleonSystem\CoreBundle\DataModel\MenuCategoryAndItem;
 
 class MenuItemDataAccess implements MenuItemDataAccessInterface
 {
-    /**
-     * @var MenuItemFactoryInterface
-     */
-    private $menuItemFactory;
+    private MenuItemFactoryInterface $menuItemFactory;
 
     public function __construct(MenuItemFactoryInterface $menuItemFactory)
     {
@@ -41,19 +37,17 @@ class MenuItemDataAccess implements MenuItemDataAccessInterface
         $menuCategories = [];
 
         $tdbCategoryList = \TdbCmsMenuCategoryList::GetList();
-        $tdbCategoryList->ChangeOrderBy([
-            '`cms_menu_category`.`position`' => 'ASC',
-        ]);
-        $tdbCategoryList->GoToStart();
-        while (false !== $tdbCategory = $tdbCategoryList->Next()) {
+        $tdbCategoryList->ChangeOrderBy(['`cms_menu_category`.`position`' => 'ASC']);
+
+        foreach ($tdbCategoryList as $tdbCategory) {
             $menuItems = [];
             $tdbMenuItemList = $tdbCategory->GetFieldCmsMenuItemList();
             $tdbMenuItemList->ChangeOrderBy([
                 '`cms_menu_item`.`cms_menu_category_id`' => 'ASC',
                 '`cms_menu_item`.`position`' => 'ASC',
             ]);
-            $tdbMenuItemList->GoToStart();
-            while (false !== $tdbMenuItem = $tdbMenuItemList->Next()) {
+
+            foreach ($tdbMenuItemList as $tdbMenuItem) {
                 $menuItem = $this->menuItemFactory->createMenuItem($tdbMenuItem);
                 if (null !== $menuItem) {
                     $menuItems[] = $menuItem;

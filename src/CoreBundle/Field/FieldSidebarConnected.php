@@ -24,8 +24,6 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
 
     public function __construct(?MenuItemDataAccessInterface $menuItemDataAccess = null)
     {
-        // TODO isVirtual?
-
         if (null === $menuItemDataAccess) {
             $menuItemDataAccess = ServiceLocator::get('chameleon_system_core.sidebar.menu_access');
         }
@@ -35,10 +33,16 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
     /**
      * {@inheritDoc}
      */
-    public function GetReadOnly() {
+    public function GetReadOnly()
+    {
         $menuPath = $this->getMenuPath($this->recordId);
 
         return sprintf('<div class="form-control form-control-sm" readonly>%s</div>', $menuPath);
+    }
+
+    public function GetHTML()
+    {
+        return $this->GetReadOnly();
     }
 
     private function getMenuPath(string $tableId): string
@@ -48,8 +52,6 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
         if (null === $menuEntry) {
             return '';
         }
-
-        // TODO remove field "view in category window" (-> is there still a legacy case for it?)
 
         return $menuEntry->getMenuCategory()->getName().' / '.$menuEntry->getMenuItem()->getName();
     }
