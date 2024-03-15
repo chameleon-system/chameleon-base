@@ -17,10 +17,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class FieldSidebarConnected extends \TCMSFieldVarchar
 {
-    /**
-     * @var MenuItemDataAccessInterface
-     */
-    private $menuItemDataAccess;
+    private MenuItemDataAccessInterface $menuItemDataAccess;
 
     public function __construct(?MenuItemDataAccessInterface $menuItemDataAccess = null)
     {
