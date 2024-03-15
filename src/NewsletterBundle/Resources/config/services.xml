@@ -42,10 +42,13 @@
 
         <service id="chameleon_system_newsletter.mapper.quick_signup" class="TPkgNewsletterMapper_QuickSignup">
             <tag name="chameleon_system.mapper"/>
-
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.system_page_service" />
         </service>
 
+        <service id="chameleon_system_newsletter.command.send_newsletter" class="ChameleonSystem\NewsletterBundle\Command\SendNewsletterCommand">
+            <tag name="console.command"/>
+            <argument type="service" id="database_connection"/>
+        </service>        
     </services>
 </container>
