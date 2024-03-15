@@ -11,16 +11,16 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
-use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
+use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuCategory;
 
 class MenuItemDataAccessRuntimeCache implements MenuItemDataAccessInterface
 {
-    private $categoryCache = null;
-
     /**
-     * @var MenuItemDataAccessInterface
+     * @var MenuCategory[]|null
      */
-    private $subject;
+    private ?array $categoryCache = null;
+
+    private MenuItemDataAccessInterface $subject;
 
     public function __construct(MenuItemDataAccessInterface $subject)
     {

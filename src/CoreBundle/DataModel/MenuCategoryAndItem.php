@@ -7,15 +7,8 @@ use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItem;
 
 class MenuCategoryAndItem
 {
-    /**
-     * @var MenuCategory
-     */
-    private $menuCategory;
-
-    /**
-     * @var MenuItem
-     */
-    private $menuItem;
+    private MenuCategory $menuCategory;
+    private MenuItem $menuItem;
 
     public function __construct(MenuCategory $menuCategory, MenuItem $menuItem)
     {
