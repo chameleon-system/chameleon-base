@@ -256,7 +256,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
             $sViewPath = $this->fieldViewPath.'/';
         }
 
-        $sViewPath .= $this->fieldView.'.twig';
+        $sViewPath .= rtrim($this->fieldView, '.twig').'.twig';
 
         return $sViewPath;
     }
@@ -275,7 +275,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
                 $sViewPath = $this->fieldViewPath.'/';
             }
 
-            $sViewPath .= $this->fieldHeaderView.'.twig';
+            $sViewPath .= rtrim($this->fieldHeaderView, '.twig').'.twig';
         }
 
         return $sViewPath;
