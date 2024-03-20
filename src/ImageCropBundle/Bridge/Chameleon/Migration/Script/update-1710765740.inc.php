@@ -9,4 +9,4 @@ $connection = TCMSLogChange::getDatabaseConnection();
 
 $backendThemeId = $connection->fetchOne('SELECT `pkg_cms_theme_id` FROM `cms_config`');
 
-TCMSLogChange::addToSnippetChain('@ChameleonSystem/ImageCropBundle/Resources/views', '@ChameleonSystemCoreBundle/Resources/views', [$backendThemeId]);
+TCMSLogChange::addToSnippetChain('@ChameleonSystemImageCropBundle/Resources/views', '@ChameleonSystemCoreBundle/Resources/views', [$backendThemeId]);
