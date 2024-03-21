@@ -1,3 +1,6 @@
 js:
-  - /bundles/chameleonsystemthemeshopstandard/js/chameleon.js
-  - /assets/snippets/pkgNewsletter/signUp.js
+  - /bundles/chameleonsystemnewsletter/js/chameleon.js
+  - /bundles/chameleonsystemnewsletter/js/signUp.js
+
+less:
+  - /bundles/chameleonsystemnewsletter/less/newsletterSignUp.less
