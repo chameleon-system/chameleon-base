@@ -1,7 +1,6 @@
 <?php
 
-/** @var $oNewsletterSignup TdbPkgNewsletterUser */
-/** @var $oNewsletterConfig TdbPkgNewsletterModuleSignupconfig */
+/** @var \TdbPkgNewsletterModuleSignupconfig $oNewsletterConfig */
 $oViewRenderer = new ViewRenderer();
 
 $oViewRenderer->addMapperFromIdentifier('chameleon_system_newsletter.mapper.signout_config');

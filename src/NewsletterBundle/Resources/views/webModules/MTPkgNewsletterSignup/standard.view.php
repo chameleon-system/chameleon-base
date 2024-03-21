@@ -1,8 +1,8 @@
 <?php
 
-/** @var $oNewsletterSignup TdbPkgNewsletterUser */
-/** @var $oNewsletterConfig TdbPkgNewsletterModuleSignupconfig */
-/** @var $aMainModuleInfo array */
+/** @var \TdbPkgNewsletterUser $oNewsletterSignup */
+/** @var \TdbPkgNewsletterModuleSignupconfig $oNewsletterConfig */
+/** @var array $aMainModuleInfo */
 $oViewRenderer = new ViewRenderer();
 
 $oViewRenderer->addMapperFromIdentifier('chameleon_system_newsletter.mapper.signup_config');
