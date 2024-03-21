@@ -60,6 +60,63 @@
                 <source>chameleon_system_newsletter.text.list_of_subscribed_groups_polite</source>
                 <target>You're currently subscribed to these groups:</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.form_salutation">
+                <source>chameleon_system_theme_shop_standard.newsletter.form_salutation</source>
+                <target>Salutation</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.form_first_name">
+                <source>chameleon_system_theme_shop_standard.newsletter.form_first_name</source>
+                <target>First name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.form_last_name">
+                <source>chameleon_system_theme_shop_standard.newsletter.form_last_name</source>
+                <target>Last name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.form_subscribe_all">
+                <source>chameleon_system_theme_shop_standard.newsletter.form_subscribe_all</source>
+                <target>Subscribe to all newsletters</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.action_subscribe">
+                <source>chameleon_system_theme_shop_standard.newsletter.action_subscribe</source>
+                <target>Subscribe</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.form_sign_up_email">
+                <source>chameleon_system_theme_shop_standard.newsletter.form_sign_up_email</source>
+                <target>Email address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.signout_my_account">
+                <source>chameleon_system_theme_shop_standard.newsletter.signout_my_account</source>
+                <target><![CDATA[You've subscribed to our newsletter. Click <a href="%sActionLink%">here</a> to unsubscribe.]]></target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.signup_my_account">
+                <source>chameleon_system_theme_shop_standard.newsletter.signup_my_account</source>
+                <target><![CDATA[You're not subscribed to our newsletter. Click <a href="%sActionLink%">here</a> to subscribe.]]></target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.form_quick_signup_help">
+                <source>chameleon_system_theme_shop_standard.newsletter.form_quick_signup_help</source>
+                <target>Enter email address and subscribe to our newsletter</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.form_quick_signup_title">
+                <source>chameleon_system_theme_shop_standard.newsletter.form_quick_signup_title</source>
+                <target>Newsletter subscription</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.my_newsletters_headline">
+                <source>chameleon_system_theme_shop_standard.newsletter.my_newsletters_headline</source>
+                <target>The newsletters you're subscribed to</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.unsubscribe_form_email">
+                <source>chameleon_system_theme_shop_standard.newsletter.unsubscribe_form_email</source>
+                <target>Email address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.unsubscribe_form_unsubscribe_all">
+                <source>chameleon_system_theme_shop_standard.newsletter.unsubscribe_form_unsubscribe_all</source>
+                <target>Unsubscribe from all newsletters</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_theme_shop_standard.newsletter.unsubscribe_action_unsubscribe">
+                <source>chameleon_system_theme_shop_standard.newsletter.unsubscribe_action_unsubscribe</source>
+                <target>Unsubscribe</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
