@@ -842,8 +842,8 @@
             <argument type="service" id="request_stack"/>
             <argument type="service" id="chameleon_system_core.util.input_filter"/>
             <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
-            <argument type="service" id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory"/>
             <argument type="service" id="translator"/>
+            <argument type="service" id="chameleon_system_core.sidebar.menu_access"/>
             <argument type="service" id="chameleon_system_core.sidebar.user_menu_access"/>
         </service>
 
@@ -857,6 +857,16 @@
         </service>
         <service id="chameleon_system_core.bridge.chameleon.module.sidebar.custom_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\CustomMenuItemProvider">
             <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsMenuCustomItem" />
+        </service>
+
+        <service id="chameleon_system_core.sidebar.menu_access" class="ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccess" public="true">
+            <argument type="service" id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory"/>
+        </service>
+
+        <service id="chameleon_system_core.sidebar.menu_access_runtime_cache"
+                 class="ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccessRuntimeCache"
+                 decorates="chameleon_system_core.sidebar.menu_access">
+            <argument type="service" id="chameleon_system_core.sidebar.menu_access_runtime_cache.inner"/>
         </service>
 
         <service id="chameleon_system_core.sidebar.user_menu_access" class="ChameleonSystem\CoreBundle\DataAccess\UserMenuItemDataAccess" shared="false">
