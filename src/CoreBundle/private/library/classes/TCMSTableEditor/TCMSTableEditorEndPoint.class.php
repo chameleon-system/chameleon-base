@@ -1853,7 +1853,7 @@ class TCMSTableEditorEndPoint
         $bAllowRecordReferenceDeletion = $oPropertyFieldObject->allowDeleteRecordReferences();
         $foreignKeyName = $oPropertyFieldObject->GetMatchingParentFieldName();
         if (false !== $foreignKeyName) {
-            $propertyTable = $oPropertyField->sqlData['field_default_value'];
+            $propertyTable = $oPropertyFieldObject->GetPropertyTableName();
             if (empty($propertyTable)) { // connected property table name not set in default value, try fieldname itself
                 $propertyTable = $oPropertyField->sqlData['name'];
             }
