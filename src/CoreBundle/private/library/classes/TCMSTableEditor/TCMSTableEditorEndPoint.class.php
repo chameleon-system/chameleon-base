@@ -1854,10 +1854,6 @@ class TCMSTableEditorEndPoint
         $foreignKeyName = $oPropertyFieldObject->GetMatchingParentFieldName();
         if (false !== $foreignKeyName) {
             $propertyTable = $oPropertyFieldObject->GetPropertyTableName();
-            if (empty($propertyTable)) { // connected property table name not set in default value, try fieldname itself
-                $propertyTable = $oPropertyField->sqlData['name'];
-            }
-
             $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($propertyTable).'` WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($foreignKeyName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
 
             $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $propertyTable).'List';
