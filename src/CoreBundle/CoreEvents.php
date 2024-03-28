@@ -68,4 +68,12 @@ final class CoreEvents
      * \ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface::FlushContentToBrowser
      */
     const FILTER_CONTENT = 'chameleon_system_core.filter_content';
+
+    /**
+     * When copying a portal a map of old tree ids to new tree ids is created.
+     * - @see TCMSPortal::dispatchTreeIdMapCompletedEvent()
+     * - @see \ChameleonSystem\CoreBundle\Event\TreeIdMapCompletedEvent
+     * This event is dispatched when the map is completed and therefore available to e. g. proprietary modules that need to fix references to tree ids.
+     */
+    const TREE_ID_MAP_COMPLETED = 'chameleon_system_core.tree_id_map_completed';
 }

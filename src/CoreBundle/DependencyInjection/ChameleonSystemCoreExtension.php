@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\DependencyInjection;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
+use ChameleonSystem\CoreBundle\Interfaces\FieldExtensionInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -64,6 +65,8 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
         $this->addResources($container);
 
         $this->configureResourceCollectorService($config['resource_collection'], $container);
+        
+        $container->registerForAutoconfiguration(FieldExtensionInterface::class)->addTag('chameleon_system_core.field_extension');
     }
 
     private function configureResourceCollectorService(

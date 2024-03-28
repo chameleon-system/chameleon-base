@@ -135,6 +135,11 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     {
         return $this->GetLinkForNode($this->fieldNodeConfirmRegistration, $bForcePortal);
     }
+    
+    public function getLinkLoginSuccessPage(bool $forcePortal = false): ?string
+    {
+        return $this->GetLinkForNode($this->fieldLoginSuccessNodeId, $forcePortal);
+    }
 
     /**
      * @param string $sSpotName
@@ -155,9 +160,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
      */
     public function GetLinkMyAccountPage($bForcePortal = false)
     {
-        $field = ('' !== $this->fieldNodeMyAccountCmsTreeId) ? $this->fieldNodeMyAccountCmsTreeId : $this->fieldLoginSuccessNodeId;
-
-        return $this->GetLinkForNode($field, $bForcePortal);
+        return $this->GetLinkForNode($this->fieldNodeMyAccountCmsTreeId, $bForcePortal);
     }
 
     /**
@@ -170,6 +173,10 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
      */
     protected function GetLinkForNode($iNodeId, $bForcePortal = false)
     {
+        if (empty($iNodeId)) {
+            return null;
+        }
+
         $sKey = 'nodeLink'.$iNodeId;
         if ($bForcePortal) {
             $sKey .= '-withportal';

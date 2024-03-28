@@ -942,8 +942,14 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $this->RedirectToURL($successURL, true);
         }
 
-        $oConf = TdbDataExtranet::GetInstance();
-        $redirectURL = $oConf->GetLinkMyAccountPage();
+        $extranetConfig = TdbDataExtranet::GetInstance();
+
+        $redirectURL = $extranetConfig->getLinkLoginSuccessPage();
+        
+        if (null === $redirectURL) {
+            $redirectURL = $extranetConfig->GetLinkMyAccountPage();
+        }
+        
         $this->RedirectToURL($redirectURL, true);
     }
 

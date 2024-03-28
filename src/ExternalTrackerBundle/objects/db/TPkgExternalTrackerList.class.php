@@ -34,8 +34,18 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     public static function GetActiveInstance()
     {
         static $oInstance = null;
+        static $bTrackerListWasLoaded = false;
         if (is_null($oInstance)) {
-            $oInstance = TdbPkgExternalTrackerList::GetList();
+            $oInstance = new TdbPkgExternalTrackerList();
+        }
+        if (false === $bTrackerListWasLoaded) {
+            // we must load the items in the list only once the active page has come available. Otherwise, portal restrictions cannot apply
+            $activePage = self::getMyActivePageService()->getActivePage();
+            if (null !== $activePage) {
+                $iLanguageId = self::getMyLanguageService()->getActiveLanguageId();
+                $oInstance->Load(TdbPkgExternalTrackerList::GetDefaultQuery($iLanguageId));
+                $bTrackerListWasLoaded = true;
+            }
         }
 
         return $oInstance;

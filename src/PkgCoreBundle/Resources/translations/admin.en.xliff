@@ -3,10 +3,6 @@
     <file source-language="en" target-language="de" datatype="plaintext" original="admin.en.xliff">
         <body>
 
-            <trans-unit id="chameleon_system_core.cms_module_login.error_unsupported_browser">
-                <source>chameleon_system_core.cms_module_login.error_unsupported_browser</source>
-                <target>Your web browser is unfortunately not supported.</target>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_login.error_user_already_logged_in">
                 <source>chameleon_system_core.cms_module_login.error_user_already_logged_in</source>
                 <target>You cannot log in with this user account because it is already logged in.</target>

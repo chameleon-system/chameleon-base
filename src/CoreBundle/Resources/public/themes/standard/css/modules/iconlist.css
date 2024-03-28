@@ -1,4 +1,8 @@
-/* the box of the icon selector field module */
+/* 
+* the box of the icon selector field module
+* @deprecated since 7.1.6 
+*/
+
 .iconBox, .smallIconBox {
   float:left;
   width: 140px;

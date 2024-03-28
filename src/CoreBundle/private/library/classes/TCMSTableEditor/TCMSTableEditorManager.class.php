@@ -151,7 +151,7 @@ class TCMSTableEditorManager
      *
      * @param string $sTableId
      * @param string $sId
-     * @param string $sLanguageID - overwrites the user language and loads the record in this language instead
+     * @param ?string $sLanguageID - overwrites the user language and loads the record in this language instead
      *
      * @return bool - returns false if the record doesn`t exist
      */

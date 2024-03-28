@@ -74,7 +74,7 @@ class TViewParser
      *
      * @param string $sViewName - name of the view (do not include .view.php)
      * @param string $sSubType  - path relative to objectviews
-     * @param string $sType     - Core, Custom, Customer
+     * @param string $sType     - @deprecated since 7.1.6
      *
      * @example RenderObjectView('metadata','dbobjects/TCMSActivePage','Core')
      *

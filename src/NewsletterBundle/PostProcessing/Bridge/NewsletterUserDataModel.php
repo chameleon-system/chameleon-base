@@ -13,45 +13,15 @@ namespace ChameleonSystem\NewsletterBundle\PostProcessing\Bridge;
 
 class NewsletterUserDataModel
 {
-    /**
-     * @var string
-     */
-    private $salutation;
+    private string $salutation;
+    private string $firstName;
+    private string $lastName;
+    private string $eMail;
+    private string $unsubscribeLink;
+    private string $htmlLink;
+    private ?string $extranetUserId = null;
 
-    /**
-     * @var string
-     */
-    private $firstName;
-
-    /**
-     * @var string
-     */
-    private $lastName;
-
-    /**
-     * @var string
-     */
-    private $eMail;
-
-    /**
-     * @var string
-     */
-    private $unsubscribeLink;
-
-    /**
-     * @var string
-     */
-    private $htmlLink;
-
-    /**
-     * @param string $salutation
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $eMail
-     * @param string $unsubscribeLink
-     * @param string $htmlLink
-     */
-    public function __construct($salutation, $firstName, $lastName, $eMail, $unsubscribeLink, $htmlLink)
+    public function __construct(string $salutation, string $firstName, string $lastName, string $eMail, string $unsubscribeLink, string $htmlLink)
     {
         $this->salutation = $salutation;
         $this->firstName = $firstName;
@@ -61,51 +31,43 @@ class NewsletterUserDataModel
         $this->htmlLink = $htmlLink;
     }
 
-    /**
-     * @return string
-     */
-    public function getSalutation()
+    public function getSalutation(): string
     {
         return $this->salutation;
     }
 
-    /**
-     * @return string
-     */
-    public function getFirstName()
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    /**
-     * @return string
-     */
-    public function getLastName()
+    public function getLastName(): string
     {
         return $this->lastName;
     }
 
-    /**
-     * @return string
-     */
-    public function getEMail()
+    public function getEMail(): string
     {
         return $this->eMail;
     }
 
-    /**
-     * @return string
-     */
-    public function getUnsubscribeLink()
+    public function getUnsubscribeLink(): string
     {
         return $this->unsubscribeLink;
     }
 
-    /**
-     * @return string
-     */
-    public function getHtmlLink()
+    public function getHtmlLink(): string
     {
         return $this->htmlLink;
+    }
+
+    public function getExtranetUserId(): ?string
+    {
+        return $this->extranetUserId;
+    }
+
+    public function setExtranetUserId(?string $extranetUserId): void
+    {
+        $this->extranetUserId = $extranetUserId;
     }
 }

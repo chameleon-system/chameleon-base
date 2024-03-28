@@ -7,9 +7,6 @@ Installation
 ------------
 
 - Add `new \ChameleonSystem\ImageCropBundle\ChameleonSystemImageCropBundle()` to the AppKernel.
-- Add a symlink inside `customer/src/extensions/snippets-cms/` pointing to `vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/snippets-cms/imageCrop`.
-To extend templates, symlinks have to be changed accordingly.
-- Add a symlink inside `customer/src/extensions/objectviews/TCMSFields` (create directory if needed) pointing to `vendor/chameleon-system/chameleon-base/src/ImageCropBundle/Resources/views/objectviews/TCMSFields/TCMSFieldMediaWithImageCrop`
 - Run CMS updates.
 - Run assets:install console command.
 - Clear Symfony cache.

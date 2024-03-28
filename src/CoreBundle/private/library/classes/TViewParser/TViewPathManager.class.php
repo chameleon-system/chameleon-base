@@ -134,33 +134,27 @@ class TViewPathManager implements IViewPathManager
      */
     protected function getTemplateFilePathFromTheme($sViewFileName, $sThemeSubdirectory)
     {
-        $sTemplatePath = null;
-        if (true === TGlobal::IsCMSMode()) {
-            return null;
-        }
-
         $activePortal = $this->portalDomainService->getActivePortal();
         // overwrite path with theme path if we find a portal for the current page and a theme is set
         if (null === $activePortal) {
             return null;
         }
 
-        $aThemeDirectoryChain = $this->viewRendererSnippetDirectory->getBasePaths($activePortal, $sThemeSubdirectory);
-        if (0 === count($aThemeDirectoryChain)) {
+        $themeDirectoryChain = $this->viewRendererSnippetDirectory->getBasePaths($activePortal, $sThemeSubdirectory);
+        if (0 === count($themeDirectoryChain)) {
             return null;
         }
 
-        $aThemeDirectoryChain = array_reverse($aThemeDirectoryChain);
-        foreach ($aThemeDirectoryChain as $sThemeChainPath) {
-            $sFilePath = $sThemeChainPath.'/'.$sViewFileName;
+        $themeDirectoryChain = array_reverse($themeDirectoryChain);
+        foreach ($themeDirectoryChain as $themeChainPath) {
+            $filename = $themeChainPath.'/'.$sViewFileName;
 
-            if (true === file_exists($sFilePath)) {
-                $sTemplatePath = $sFilePath;
-                break;
+            if (true === file_exists($filename)) {
+                return $filename;
             }
         }
 
-        return $sTemplatePath;
+        return null;
     }
 
     /**
@@ -229,49 +223,44 @@ class TViewPathManager implements IViewPathManager
     /**
      * @param string $sViewName
      * @param string $sSubType
-     * @param string $sType
+     * @param string $sType @deprecated since 7.1.6
      *
      * @return string
      */
     public function getObjectViewPath($sViewName, $sSubType = '', $sType = 'Core')
     {
-        $sViewFileName = $sSubType.'/'.$sViewName.'.view.php';
+        $viewFileName = $sSubType.'/'.$sViewName.'.view.php';
 
-        switch ($sType) {
-            case 'Core':
-                $sPath = _CMS_CORE.'/rendering/objectviews/';
-                $sTemplatePath = $sPath.'/'.$sViewFileName;
-                break;
-            case 'Custom-Core':
-                $sPath = _CMS_CUSTOM_CORE.'/rendering/objectviews/';
-                $sTemplatePath = $sPath.'/'.$sViewFileName;
-                break;
-            case 'Customer':
-            default:
-                $sTemplatePathFromTheme = $this->getTemplateFilePathFromTheme($sViewFileName, TPkgViewRendererSnippetDirectory::PATH_OBJECTVIEWS);
-                if (null !== $sTemplatePathFromTheme) {
-                    $sTemplatePath = $sTemplatePathFromTheme;
-                } else {
-                    /**
-                     * @deprecated all object views should move to a theme directory
-                     */
-                    $sPath = _CMS_CUSTOMER_CORE.'/objectviews';
+        $sTemplatePathFromTheme = $this->getTemplateFilePathFromTheme($viewFileName, TPkgViewRendererSnippetDirectory::PATH_OBJECTVIEWS);
+        if (null !== $sTemplatePathFromTheme) {
+            return $sTemplatePathFromTheme;
+        }
+        
+        /**
+         * @deprecated all object views should move to a theme directory
+         */
+        $path = _CMS_CUSTOMER_CORE.'/objectviews';
 
-                    // overwrite path with theme path if we find a portal for the current page and a theme is set
-                    $activePortal = $this->portalDomainService->getActivePortal();
-                    if (null !== $activePortal) {
-                        $sThemePath = $activePortal->GetThemeObjectViewsPath();
-                        if (!empty($sThemePath)) {
-                            $sPath = $sThemePath;
-                        }
-                    }
-
-                    $sTemplatePath = $sPath.'/'.$sViewFileName;
-                }
-                break;
+        // overwrite path with theme path if we find a portal for the current page and a theme is set
+        $activePortal = $this->portalDomainService->getActivePortal();
+        if (null !== $activePortal) {
+            $themePath = $activePortal->GetThemeObjectViewsPath();
+            if (false === empty($themePath)) {
+                $path = $themePath;
+            }
         }
 
-        return $sTemplatePath;
+        $templatePath = $path.'/'.$viewFileName;
+    
+        if (file_exists($templatePath)) {
+            return $templatePath;
+        } 
+
+        // fallback to core
+        $path = _CMS_CORE.'/rendering/objectviews/';
+        $templatePath = $path.'/'.$viewFileName;
+
+        return $templatePath;
     }
 
     /**

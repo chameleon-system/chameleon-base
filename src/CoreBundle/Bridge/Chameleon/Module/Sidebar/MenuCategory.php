@@ -59,6 +59,9 @@ class MenuCategory
         return $this->iconFontCssClass;
     }
 
+    /**
+     * @return MenuItem[]
+     */
     public function getMenuItems(): array
     {
         return $this->menuItems;

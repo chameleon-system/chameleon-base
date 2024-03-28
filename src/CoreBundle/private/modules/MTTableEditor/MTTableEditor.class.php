@@ -831,6 +831,7 @@ class MTTableEditor extends TCMSModelBase
     public function Delete($bPreventRedirect = false)
     {
         $this->oTableManager->Delete();
+        // note: the symfony event listener `CleanupBreadcrumbAfterDeleteListener` removes all affected history entries, especially the current one at the top of the history stack
 
         if (!$bPreventRedirect) {
             $inputFilterUtil = $this->getInputFilterUtil();
@@ -865,7 +866,6 @@ class MTTableEditor extends TCMSModelBase
                         $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
                     }
 
-                    $breadcrumb->PopURL();
                     $this->getRedirectService()->redirectToActivePage($parameter);
                 } else {
                     /** @var $oRestrictionTableConf TCMSTableConf */
@@ -884,13 +884,9 @@ class MTTableEditor extends TCMSModelBase
                         $parameter['sourceRecordID'] = $sourceRecordId;
                     }
 
-                    $breadcrumb->PopURL();
                     $this->getRedirectService()->redirectToActivePage($parameter);
                 }
             } else {
-                // remove last item from url history
-                $breadcrumb->PopURL();
-
                 $parentURL = $breadcrumb->GetURL();
                 if (false === $parentURL) {
                     $parentURL = URL_CMS_CONTROLLER;
