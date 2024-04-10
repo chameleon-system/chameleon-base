@@ -21,7 +21,7 @@
     "path-parse": "^1.0.7",
     "perfect-scrollbar": "^1.5.3",
     "postcss": "^7.0.36",
-    "tar": "^4.4.18",
+    "tar": "^6.2.1",
     "trim": "^0.0.3",
     "trim-newlines": "^3.0.1",
     "y18n": "^3.2.2",
