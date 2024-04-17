@@ -73,7 +73,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
             // drop members already in queue..
             $query = "DELETE `_tmp_pkg_newsletter_queue`.*
                    FROM `_tmp_pkg_newsletter_queue`
-             INNER JOIN `pkg_newsletter_queue` ON _tmp_pkg_newsletter_queue`.`pkg_newsletter_user` = `pkg_newsletter_queue`.`pkg_newsletter_user`
+             INNER JOIN `pkg_newsletter_queue` ON `_tmp_pkg_newsletter_queue`.`pkg_newsletter_user` = `pkg_newsletter_queue`.`pkg_newsletter_user`
                   WHERE `pkg_newsletter_queue`.`pkg_newsletter_campaign_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'
                 ";
             MySqlLegacySupport::getInstance()->query($query);
