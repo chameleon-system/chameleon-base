@@ -9,14 +9,15 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\BackendLoginEvent;
 use ChameleonSystem\CoreBundle\Event\BackendLogoutEvent;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
+use ChameleonSystem\CoreBundle\Service\PreviewModeServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpClient\Exception\RedirectionException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -174,6 +175,13 @@ class TCMSUser extends TCMSRecord
             $this->getAuthenticityTokenManager()->refreshToken();
         }
 
+        try {
+            self::getPreviewModeService()->grantPreviewAccess($this->bLoggedIn, self::getCmsUserId());
+        } catch (RedirectionException $e) {
+            self::getPreviewModeService()->grantPreviewAccess(\TCMSUser::CMSUserDefined(), self::getCmsUserId());
+            throw $e;
+        }
+
         // release old locks
         $query = 'DELETE FROM `cms_lock` WHERE TIMESTAMPDIFF(MINUTE,`time_stamp`,CURRENT_TIMESTAMP()) >= '.RECORD_LOCK_TIMEOUT.'';
         MySqlLegacySupport::getInstance()->query($query);
@@ -246,6 +254,8 @@ class TCMSUser extends TCMSRecord
                 }
             }
         }
+
+        self::getPreviewModeService()->grantPreviewAccess(false, self::getCmsUserId());
 
         self::getEventDispatcher()->dispatch(new BackendLogoutEvent($user), CoreEvents::BACKEND_LOGOUT_SUCCESS);
     }
@@ -480,6 +490,13 @@ class TCMSUser extends TCMSRecord
         return $imageTag;
     }
 
+    protected static function getCmsUserId(): string
+    {
+        $user = \TCMSUser::GetActiveUser();
+
+        return $user?->id ?? '';
+    }
+
     /**
      * @return AuthenticityTokenManagerInterface
      */
@@ -507,5 +524,10 @@ class TCMSUser extends TCMSRecord
     private static function getRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    protected static function getPreviewModeService(): PreviewModeServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.preview_mode_service');
     }
 }
