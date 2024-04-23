@@ -335,6 +335,11 @@
             <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
 
+        <service id="chameleon_system_core.preview_mode_service" class="ChameleonSystem\CoreBundle\Service\PreviewModeService" public="true">
+            <argument type="string">%secret%</argument>
+            <argument type="service" id="database_connection"/>
+        </service>
+
         <service id="chameleon_system_core.service_initializer.portal_domain_service" class="ChameleonSystem\CoreBundle\Service\Initializer\PortalDomainServiceInitializer" public="false">
             <argument type="service" id="chameleon_system_core.util.input_filter" />
             <argument type="service" id="service_container" />
