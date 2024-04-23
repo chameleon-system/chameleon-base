@@ -29,7 +29,7 @@ class PreviewModeService implements PreviewModeServiceInterface
                 $pos = strpos($cookieString, '|');
                 if (false !== $pos) {
                     $previewToken = substr($cookieString, 0, $pos);
-                    $previewTokenExists = '1' === $this->connection->fetchOne("SELECT 1 FROM `cms_user` WHERE `preview_token` = ?", [$previewToken]);
+                    $previewTokenExists = 1 === (int) $this->connection->fetchOne("SELECT 1 FROM `cms_user` WHERE `preview_token` = ?", [$previewToken]);
                     if (true === $previewTokenExists) {
                         $hash = $this->generateHash(substr($cookieString, 0, $pos));
                         $accessGranted = $hash === substr($cookieString, $pos + 1);
