@@ -7,12 +7,12 @@ use TTools;
 
 class PreviewModeService implements PreviewModeServiceInterface
 {
-    private const COOKIE_NAME = 'preview_mode';
+    protected const COOKIE_NAME = 'preview_mode';
 
     public function __construct(
-        private readonly string $hashingSecret,
-        private readonly Connection $connection,
-        private readonly TTools $tools,
+        protected readonly string $hashingSecret,
+        protected readonly Connection $connection,
+        protected readonly TTools $tools,
     ) {
     }
 
@@ -57,7 +57,7 @@ class PreviewModeService implements PreviewModeServiceInterface
         setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token));
     }
 
-    private function generateHash(string $toHash): string
+    protected function generateHash(string $toHash): string
     {
         return hash('md5', $toHash.$this->hashingSecret);
     }

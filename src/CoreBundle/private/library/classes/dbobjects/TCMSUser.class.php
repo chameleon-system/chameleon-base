@@ -490,7 +490,7 @@ class TCMSUser extends TCMSRecord
         return $imageTag;
     }
 
-    private static function getCmsUserId(): string
+    protected static function getCmsUserId(): string
     {
         $user = \TCMSUser::GetActiveUser();
 
@@ -526,7 +526,7 @@ class TCMSUser extends TCMSRecord
         return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
-    private static function getPreviewModeService(): PreviewModeServiceInterface
+    protected static function getPreviewModeService(): PreviewModeServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.preview_mode_service');
     }
