@@ -3,6 +3,7 @@
 namespace ChameleonSystem\CoreBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use TTools;
 
 class PreviewModeService implements PreviewModeServiceInterface
 {
@@ -11,6 +12,7 @@ class PreviewModeService implements PreviewModeServiceInterface
     public function __construct(
         private readonly string $hashingSecret,
         private readonly Connection $connection,
+        private readonly TTools $tools,
     ) {
     }
 
@@ -50,7 +52,7 @@ class PreviewModeService implements PreviewModeServiceInterface
 
             return;
         }
-        $token = \TTools::GetUUID();
+        $token = $this->tools::GetUUID();
         $this->connection->update('cms_user', ['preview_token' => $token], ['id' => $cmsUserId]);
         setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token));
     }
