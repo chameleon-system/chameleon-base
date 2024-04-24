@@ -347,6 +347,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
                 $this->SaveField('height', $oPostTable->sqlData['height']);
             }
 
+            $sOldName = $this->oTablePreChangeData->fieldPath ?? '';
             $this->SaveField('date_changed', date('Y-m-d H:i:s'));
             /**
              * @var TCmsMedia $media
@@ -363,9 +364,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
             } else { // no new image uploaded
                 // check if we need to rename the object
                 if (is_object($this->oTablePreChangeData) && '' === $media->sqlData['external_video_id']) {
-                    $sOldName = $this->oTablePreChangeData->fieldPath;
-
-                    if ($sOldName !== $sNewName) {
+                    if ($sOldName !== $sNewName && '' !== $sOldName) {
                         $sourcePath = PATH_MEDIA_LIBRARY.'/'.$sOldName;
                         $targetPath = PATH_MEDIA_LIBRARY.'/'.$sNewName;
                         if (true === \is_readable($sourcePath) && true === \is_file($sourcePath)) {
