@@ -19,8 +19,6 @@ if (false === $connection->fetchOne("SHOW COLUMNS FROM `cms_user` WHERE `Field` 
             'fieldclass' => '',
             'modifier' => 'none',
             'field_default_value' => '',
-            'threshold_notice' => '0',
-            'threshold_warning' => '0',
             'length_set' => '',
             'fieldtype_config' => '',
             'restrict_to_groups' => '0',
