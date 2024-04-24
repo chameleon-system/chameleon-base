@@ -60,17 +60,17 @@ class ChameleonStandardExtension extends AbstractExtension
             'escape' => new TwigFilter(
                 'escape',
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::chameleonTwigEscapeFilter',
-                array('needs_environment' => true, 'is_safe_callback' => 'twig_escape_filter_is_safe')
+                array('needs_environment' => true, 'is_safe' => ['html', 'js', 'css'])
             ),
             'e' => new TwigFilter(
                 'e',
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::chameleonTwigEscapeFilter',
-                array('needs_environment' => true, 'is_safe_callback' => 'twig_escape_filter_is_safe')
+                array('needs_environment' => true, 'is_safe' => ['html', 'js', 'css'])
             ),
             'sanitizeurl' => new TwigFilter(
                 'sanitizeurl',
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::sanitizeUrl',
-                array('needs_environment' => true, 'is_safe_callback' => 'twig_escape_filter_is_safe')
+                array('needs_environment' => true, 'is_safe' => ['html', 'js', 'css'])
             ),
         );
     }
