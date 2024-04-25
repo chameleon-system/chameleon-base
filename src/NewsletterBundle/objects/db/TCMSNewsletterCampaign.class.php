@@ -9,10 +9,15 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Controller\ChameleonFrontendController;
+use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 {
@@ -164,12 +169,9 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
                 $aNewsletterGroups[] = $oNewsletterGroup->id;
             }
             if (false === $sGeneratedNewsletter || true === $this->fieldGenerateUserDependingNewsletter) {
-                if (true === $this->fieldGenerateUserDependingNewsletter) {
-                    $sGeneratedNewsletter = $this->CreateEmailFromTemplate($oNewsletterUser);
-                } else {
-                    $sGeneratedNewsletter = $this->CreateEmailFromTemplate();
-                }
+                $sGeneratedNewsletter = $this->generateNewsletterViaFrontend($oNewsletterUser) ?? false;
             }
+
             $bSent = $this->SendMail($oNewsletterGroup, $oNewsletterUser, $sGeneratedNewsletter, $aNewsletterGroups, $bAddAllUnsubscribeLinks);
             if (true === $bSent) {
                 // mark entry as completed
@@ -405,6 +407,43 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         return $return;
     }
 
+    protected function generateNewsletterViaFrontend(TdbPkgNewsletterUser $oNewsletterUser): ?string
+    {
+        $page = self::getPageService()->getByTreeId($this->fieldCmsTreeNodeId);
+        if (null === $page) {
+            return null;
+        }
+
+        $portal = TdbCmsPortal::GetNewInstance();
+        if (false === $portal->Load($this->fieldCmsPortalId)) {
+            return null;
+        }
+        $this->getPortalDomainService()->setActivePortal($portal);
+
+        $queryParams = true === $this->fieldGenerateUserDependingNewsletter
+            ? [TdbPkgNewsletterUser::URL_USER_ID_PARAMETER => $oNewsletterUser->id, TdbPkgNewsletterCampaign::URL_USER_ID_PARAMETER => $this->id]
+            : [];
+
+        $request = new Request($queryParams, [], ['pagedef' => $page->id]);
+
+        $requestStack = $this->getRequestStack();
+        $requestStack->push($request);
+
+        $requestInfoService = $this->getRequestInfoService();
+        $oldRequestType = $requestInfoService->getChameleonRequestType();
+        $requestInfoService->setChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_FRONTEND); // temporarily change state
+
+        // start request
+        $chameleonFrontendController = $this->getChameleonFrontendController();
+        $response = $chameleonFrontendController();
+        $sGeneratedNewsletter = $response->getContent();
+
+        $requestInfoService->setChameleonRequestType($oldRequestType); // restore state
+        $requestStack->pop();
+
+        return $sGeneratedNewsletter;
+    }
+
     /**
      * @return TCMSMail
      */
@@ -440,5 +479,20 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     private function getLogger(): LoggerInterface
     {
         return ServiceLocator::get('logger');
+    }
+
+    protected function getRequestStack(): RequestStack
+    {
+        return ServiceLocator::get('request_stack');
+    }
+
+    protected function getChameleonFrontendController(): ChameleonFrontendController
+    {
+        return ServiceLocator::get('chameleon_system_core.frontend_controller');
+    }
+
+    protected function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 }
