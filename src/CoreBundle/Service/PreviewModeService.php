@@ -3,6 +3,7 @@
 namespace ChameleonSystem\CoreBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use TTools;
 
 class PreviewModeService implements PreviewModeServiceInterface
@@ -16,9 +17,6 @@ class PreviewModeService implements PreviewModeServiceInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function currentSessionHasPreviewAccess(): bool
     {
         static $accessGranted = null;
@@ -29,7 +27,13 @@ class PreviewModeService implements PreviewModeServiceInterface
                 $pos = strpos($cookieString, '|');
                 if (false !== $pos) {
                     $previewToken = substr($cookieString, 0, $pos);
-                    $previewTokenExists = 1 === (int) $this->connection->fetchOne("SELECT 1 FROM `cms_user` WHERE `preview_token` = ?", [$previewToken]);
+
+                    try {
+                        $previewTokenExists = 1 === (int) $this->connection->fetchOne("SELECT 1 FROM `cms_user` WHERE `preview_token` = ?", [$previewToken]);
+                    } catch (Exception) {
+                        return false; // ignore if field not exists yet
+                    }
+
                     if (true === $previewTokenExists) {
                         $hash = $this->generateHash(substr($cookieString, 0, $pos));
                         $accessGranted = $hash === substr($cookieString, $pos + 1);
@@ -41,20 +45,21 @@ class PreviewModeService implements PreviewModeServiceInterface
         return $accessGranted;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function grantPreviewAccess(bool $previewGranted, string $cmsUserId): void
     {
-        if (false === $previewGranted) {
-            setcookie(self::COOKIE_NAME, '');
-            $this->connection->update('cms_user', ['preview_token' => ''], ['id' => $cmsUserId]);
+        try {
+            if (false === $previewGranted) {
+                setcookie(self::COOKIE_NAME, '');
+                $this->connection->update('cms_user', ['preview_token' => ''], ['id' => $cmsUserId]);
 
-            return;
+                return;
+            }
+            $token = $this->tools::GetUUID();
+            $this->connection->update('cms_user', ['preview_token' => $token], ['id' => $cmsUserId]);
+            setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token));
+        } catch (Exception) {
+            // ignore if field not exists yet
         }
-        $token = $this->tools::GetUUID();
-        $this->connection->update('cms_user', ['preview_token' => $token], ['id' => $cmsUserId]);
-        setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token));
     }
 
     protected function generateHash(string $toHash): string
