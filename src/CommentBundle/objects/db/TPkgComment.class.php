@@ -14,19 +14,15 @@ use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
 class TPkgComment extends TPkgCommentAutoParent
 {
-    const URL_NAME_ID_PAGE = 'chameleon_system_comment.url.id_page';
+    public const URL_NAME = 'chameleon_system_comment_url_name'; // possibly obsolet
+    public const URL_NAME_ID_PAGE = 'chameleon_system_comment_url_id_page';
+    public const URL_NAME_JUMPER = 'chameleon_system_comment_url_jumper';
 
-    const URL_NAME_ID = 'sCommentId';
+    private const MESSAGE_CONSUMER_NAME = 'comments';
+    private const URL_NAME_ID = 'sCommentId';
+    private const URL_ACTION_PARAMETER = 'action';
 
-    const URL_NAME = 'chameleon_system_comment.url.name';
-
-    const URL_NAME_JUMPER = 'chameleon_system_comment.url.jumper';
-
-    const MESSAGE_CONSUMER_NAME = 'comments';
-
-    const URL_ACTION_PARAMETER = 'action';
-
-    const VIEW_PATH = 'pkgComment/views/db/TPkgComment';
+    private const VIEW_PATH = 'pkgComment/views/db/TPkgComment';
 
     /**
      * @var string[]
