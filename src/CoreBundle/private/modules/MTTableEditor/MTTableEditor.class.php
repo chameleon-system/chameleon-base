@@ -216,10 +216,13 @@ class MTTableEditor extends TCMSModelBase
 
     protected function handleMissingRecord(): void
     {
-        if (false === $this->isCopy() || null === $this->sId) {
+        if (false === $this->isCopy() || true === empty($this->sId)) {
             $moduleName = get_class($this);
             $tableName = $this->oTableManager->oTableConf->GetName();
-            $id = $this->sId ?? TGlobal::Translate('chameleon_system_core.cms_module_table_editor.no_id_set');
+            $id = $this->sId;
+            if (true === empty($id)) {
+                $id = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.no_id_set');
+            }
             $this->data['errorMessage'] = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.error_record_missing', ['%id%' => $id, '%tableName%' => $tableName]);
             $this->SetTemplate($moduleName, 'error');
         }
