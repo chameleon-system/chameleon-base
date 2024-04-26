@@ -196,7 +196,7 @@ class MTTableEditor extends TCMSModelBase
 
         $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
 
-        if (false === isReadOnlyRequest && (false === $bUserHasEditRight && false === $isInsert && false === $this->bIsReadOnlyMode || true === $this->bIsReadOnlyMode && false === $bUserHasReadOnlyRight)) {
+        if (false === $isReadOnlyRequest && (false === $bUserHasEditRight && false === $isInsert && false === $this->bIsReadOnlyMode || true === $this->bIsReadOnlyMode && false === $bUserHasReadOnlyRight)) {
             $cmsUser = TCMSUser::GetActiveUser();
             if (null !== $cmsUser) {
                 $cmsUser->Logout();
