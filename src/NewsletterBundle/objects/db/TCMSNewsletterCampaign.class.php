@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -424,7 +425,10 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
             ? [TdbPkgNewsletterUser::URL_USER_ID_PARAMETER => $oNewsletterUser->id, TdbPkgNewsletterCampaign::URL_USER_ID_PARAMETER => $this->id]
             : [];
 
-        $request = new Request($queryParams, [], ['pagedef' => $page->id]);
+        $request = Request::createFromGlobals();
+        $request->query = new ParameterBag($queryParams);
+        $request->request = new ParameterBag();
+        $request->attributes = new ParameterBag(['pagedef' => $page->id]);
 
         $requestStack = $this->getRequestStack();
         $requestStack->push($request);
