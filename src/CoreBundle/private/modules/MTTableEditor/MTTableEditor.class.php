@@ -196,7 +196,7 @@ class MTTableEditor extends TCMSModelBase
 
         $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
 
-        if (!$isReadOnlyRequest && ((!$bUserHasEditRight && !$isInsert && !$this->bIsReadOnlyMode) || ($this->bIsReadOnlyMode && !$bUserHasReadOnlyRight))) {
+        if (false === isReadOnlyRequest && (false === $bUserHasEditRight && false === $isInsert && false === $this->bIsReadOnlyMode || true === $this->bIsReadOnlyMode && false === $bUserHasReadOnlyRight)) {
             $cmsUser = TCMSUser::GetActiveUser();
             if (null !== $cmsUser) {
                 $cmsUser->Logout();
@@ -211,25 +211,16 @@ class MTTableEditor extends TCMSModelBase
         $inputFilterUtil = $this->getInputFilterUtil();
         $moduleFunctions = $inputFilterUtil->getFilteredInput('module_fnc');
 
-        if (is_array($moduleFunctions)
-            && array_key_exists('contentmodule', $moduleFunctions)
-            && 'Copy' === $moduleFunctions['contentmodule']) {
-            return true;
-        }
-        
-        return false;
+        return 'Copy' === ($moduleFunctions['contentmodule'] ?? null);
     }
 
     protected function handleMissingRecord(): void
     {
-        if ((false === $this->isCopy() && false === empty($this->sId)) || empty($this->sId)) {
+        if (false === $this->isCopy() || null === $this->sId) {
             $moduleName = get_class($this);
             $tableName = $this->oTableManager->oTableConf->GetName();
-            $id = $this->sId;
-            if (empty($id)) {
-                $id = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.no_id_set');
-            }
-            $this->data['errorMessage'] = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.error_record_missing', array('%id%' => $id, '%tableName%' => $tableName));
+            $id = $this->sId ?? TGlobal::Translate('chameleon_system_core.cms_module_table_editor.no_id_set');
+            $this->data['errorMessage'] = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.error_record_missing', ['%id%' => $id, '%tableName%' => $tableName]);
             $this->SetTemplate($moduleName, 'error');
         }
     }
