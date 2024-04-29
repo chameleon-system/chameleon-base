@@ -373,6 +373,7 @@
             <argument type="service" id="chameleon_system_core.util.routing" />
             <argument type="service" id="chameleon_system_core.tree_service" />
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_system_page" />
+            <argument type="service" id="chameleon_system_core.active_page_service" />
         </service>
 
         <service id="chameleon_system_core.page_service" class="ChameleonSystem\CoreBundle\Service\PageService" public="true">

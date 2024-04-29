@@ -12,50 +12,39 @@
 namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessInterface;
+use ChameleonSystem\CoreBundle\DataModel\PageDataModel;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsPortalSystemPage;
-use TdbCmsTree;
 
 class SystemPageService implements SystemPageServiceInterface
 {
-    /**
-     * @var PortalDomainServiceInterface
-     */
-    private $portalDomainService;
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
-    /**
-     * @var UrlUtil
-     */
-    private $urlUtil;
-    /**
-     * @var RoutingUtilInterface
-     */
-    private $routingUtil;
-    /**
-     * @var TreeServiceInterface
-     */
-    private $treeService;
-    /**
-     * @var DataAccessInterface
-     */
-    private $dataAccess;
+    private PortalDomainServiceInterface $portalDomainService;
+    private LanguageServiceInterface $languageService;
+    private UrlUtil $urlUtil;
+    private RoutingUtilInterface $routingUtil;
+    private TreeServiceInterface $treeService;
+    private DataAccessInterface $dataAccess;
+    private ActivePageServiceInterface $activePageService;
 
     /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param LanguageServiceInterface     $languageService
-     * @param UrlUtil                      $urlUtil
-     * @param RoutingUtilInterface         $routingUtil
-     * @param TreeServiceInterface         $treeNodeService
-     * @param DataAccessInterface          $dataAccess
+     * \TdbCmsPortalSystemPage[] $systemPageCache
      */
-    public function __construct(PortalDomainServiceInterface $portalDomainService, LanguageServiceInterface $languageService, UrlUtil $urlUtil, RoutingUtilInterface $routingUtil, TreeServiceInterface $treeNodeService, DataAccessInterface $dataAccess)
+    private array $systemPageCache = [];
+
+    /**
+     * \TdbCmsTree[] $systemPageTreeCache
+     */
+    private array $systemPageTreeCache = [];
+
+    public function __construct(
+        PortalDomainServiceInterface $portalDomainService,
+        LanguageServiceInterface $languageService,
+        UrlUtil $urlUtil,
+        RoutingUtilInterface $routingUtil,
+        TreeServiceInterface $treeNodeService,
+        DataAccessInterface $dataAccess,
+        ActivePageServiceInterface $activePageService)
     {
         $this->portalDomainService = $portalDomainService;
         $this->languageService = $languageService;
@@ -63,19 +52,17 @@ class SystemPageService implements SystemPageServiceInterface
         $this->routingUtil = $routingUtil;
         $this->treeService = $treeNodeService;
         $this->dataAccess = $dataAccess;
+        $this->activePageService = $activePageService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSystemPageList(TdbCmsPortal $portal, TdbCmsLanguage $language)
+    public function getSystemPageList(\TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
-        /** @var TdbCmsPortalSystemPage[] $systemPageList */
-        $systemPageList = array();
+        /** @var \TdbCmsPortalSystemPage[] $systemPageList */
+        $systemPageList = [];
 
         $pages = \TdbCmsPortalSystemPageList::GetList(null, $language->id);
         while ($page = &$pages->Next()) {
-            /** @var TdbCmsPortalSystemPage $page */
+            /** @var \TdbCmsPortalSystemPage $page */
             if ($page->fieldCmsPortalId === $portal->id) {
                 $systemPageList[] = $page;
             }
@@ -84,11 +71,12 @@ class SystemPageService implements SystemPageServiceInterface
         return $systemPageList;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSystemPage($systemPageNameInternal, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function getSystemPage($systemPageNameInternal, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
+        if ($this->systemPageCache[$systemPageNameInternal] ?? null) {
+            return $this->systemPageCache[$systemPageNameInternal];
+        }
+
         if (null === $portal) {
             $portal = $this->portalDomainService->getActivePortal();
         }
@@ -100,10 +88,12 @@ class SystemPageService implements SystemPageServiceInterface
         }
 
         $systemPageList = $this->dataAccess->loadAll($language->id);
-        /** @var TdbCmsPortalSystemPage $systemPage */
+        /** @var \TdbCmsPortalSystemPage $systemPage */
         foreach ($systemPageList as $systemPage) {
             if ($systemPageNameInternal === $systemPage->fieldNameInternal
                 && $portal->id === $systemPage->fieldCmsPortalId) {
+                $this->systemPageCache[$systemPageNameInternal] = $systemPage;
+
                 return $systemPage;
             }
         }
@@ -111,25 +101,19 @@ class SystemPageService implements SystemPageServiceInterface
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getLinkToSystemPageRelative($systemPageNameInternal, array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function getLinkToSystemPageRelative($systemPageNameInternal, array $parameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
         $tree = $this->getSystemPageTree($systemPageNameInternal, $portal, $language);
 
         return $this->treeService->getLinkToPageForTreeRelative($tree, $parameters, $language);
     }
 
-    /**
-     * @param string              $systemPageNameInternal
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
-     *
-     * @return TdbCmsTree|null
-     */
-    private function getSystemPageTree($systemPageNameInternal, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function getSystemPageTree(string $systemPageNameInternal, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null): ?\TdbCmsTree
     {
+        if ($this->systemPageTreeCache[$systemPageNameInternal] ?? null) {
+            return $this->systemPageTreeCache[$systemPageNameInternal];
+        }
+
         $systemPage = $this->getSystemPage($systemPageNameInternal, $portal, $language);
         if (null === $systemPage) {
             throw new RouteNotFoundException("No system page was found with system name '$systemPageNameInternal'");
@@ -139,16 +123,45 @@ class SystemPageService implements SystemPageServiceInterface
             throw new RouteNotFoundException("No tree node is assigned to the system page with system name '$systemPageNameInternal'");
         }
 
+        $this->systemPageTreeCache[$systemPageNameInternal] = $tree;
+
         return $tree;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getLinkToSystemPageAbsolute($systemPageNameInternal, array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $forceSecure = false)
+    public function getLinkToSystemPageAbsolute($systemPageNameInternal, array $parameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $forceSecure = false)
     {
         $tree = $this->getSystemPageTree($systemPageNameInternal, $portal, $language);
 
         return $this->treeService->getLinkToPageForTreeAbsolute($tree, $parameters, $language);
+    }
+
+    public function getPageDataModel(string $systemPageNameInternal, array $parameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null): ?PageDataModel
+    {
+        $relativeUrl = $this->getLinkToSystemPageRelative($systemPageNameInternal, $parameters, $portal, $language);
+        $absoluteUrl = $this->getLinkToSystemPageAbsolute($systemPageNameInternal, $parameters, $portal, $language);
+
+        $treeNodeRecord = $this->getSystemPageTree($systemPageNameInternal, $portal, $language);
+        $pageRecord = $treeNodeRecord->GetLinkedPageObject();
+
+        $pageDataModel = new PageDataModel();
+        $pageDataModel->setPortalId($pageRecord->fieldCmsPortalId);
+        $pageDataModel->setName($pageRecord->GetName());
+        $pageDataModel->setPrimarytreeNodeId($treeNodeRecord->id);
+        $pageDataModel->setRelativeUrl($relativeUrl);
+        $pageDataModel->setAbsoluteUrl($absoluteUrl);
+        $pageDataModel->setIsActivePage($this->isActivePage($pageRecord));
+
+        return $pageDataModel;
+    }
+
+    protected function isActivePage(\TdbCmsTplPage $pageRecord)
+    {
+        $activePage = $this->activePageService->getActivePage();
+
+        if (null === $activePage) {
+            return false;
+        }
+
+        return $pageRecord->id = $activePage->id;
     }
 }
