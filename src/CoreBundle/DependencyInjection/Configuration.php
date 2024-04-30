@@ -156,7 +156,7 @@ class Configuration implements ConfigurationInterface
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
             ->scalarNode('geo_json_endpoint')
-                ->defaultValue('https://nominatim.openstreetmap.org/search?format=geojson&country=de&q={query}')
+                ->defaultValue('https://nominatim.openstreetmap.org/search?format=geojson&q={query}')
                 ->info('URL of a GeoJson geocoding endpoint. The {query} placeholder will be replaced by the string to search. Must respond to GET requests and must return a GeoJson FeatureCollection. Fetches data from nominatim by default but can be configurred to use a self hosted geocoder such as photon')
             ->end()
             ->arrayNode('attribution')
