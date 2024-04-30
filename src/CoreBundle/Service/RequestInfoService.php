@@ -98,8 +98,7 @@ class RequestInfoService implements RequestInfoServiceInterface
     }
 
     /**
-     * TODO add method this to the interface in future
-     * @param $requestType int one of \ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface::REQUEST_TYPE_*
+     * {@inheritdoc}
      */
     public function setChameleonRequestType(int $requestType): void
     {
