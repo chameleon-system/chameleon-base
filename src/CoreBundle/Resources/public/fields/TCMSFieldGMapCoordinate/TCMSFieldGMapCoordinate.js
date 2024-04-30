@@ -1,3 +1,10 @@
+/**
+ * @typedef {object} GeocodingResult
+ * @property {string|null} name
+ * @property {float} longitude
+ * @property {float} latitude
+ */
+
 if (typeof CHAMELEON === "undefined" || !CHAMELEON) {
     var CHAMELEON = {};
 }
@@ -123,32 +130,54 @@ CHAMELEON.CORE.TCMSFieldGMapCoordinate =
     },
 
     /**
-     * @param {decimal} latitude
-     * @param {decimal} longitude
+     * @param {string|null} latitude
+     * @param {string|null} longitude
      */
     viewCoordinate: function (latitude, longitude) {
-        $("#coordinates").html(CHAMELEON.CORE.TCMSFieldGMapCoordinate.coordinateTitle + ': ' + latitude + ' | ' + longitude);
+        if (latitude && longitude) {
+            $("#coordinates").html(CHAMELEON.CORE.TCMSFieldGMapCoordinate.coordinateTitle + ': ' + latitude + ' | ' + longitude);
+        } else {
+            $("#coordinates").html('');
+        }
     },
 
     /**
      * @param {string} address
      */
     searchPlace: function (address) {
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({'address': address}, function (results, status) {
-
-            if (status == google.maps.GeocoderStatus.OK) {
-                var point = results[0].geometry.location;
-                CHAMELEON.CORE.TCMSFieldGMapCoordinate.coordinateMarker.setPosition(point);
-                CHAMELEON.CORE.TCMSFieldGMapCoordinate.latitude = point.lat();
-                CHAMELEON.CORE.TCMSFieldGMapCoordinate.longitude = point.lng();
-                CHAMELEON.CORE.TCMSFieldGMapCoordinate.viewCoordinate(point.lat().toFixed(5), point.lng().toFixed(5));
-
-                var mapObject = window[CHAMELEON.CORE.TCMSFieldGMapCoordinate.mapId];
-                mapObject.setCenter(results[0].geometry.location);
-            } else {
-                alert("Geocode was not successful for the following reason: " + status);
+        CHAMELEON.CORE.TCMSFieldGMapCoordinate.geocode(address).then(coordinates => {
+            if (!coordinates) {
+                CHAMELEON.CORE.TCMSFieldGMapCoordinate.viewCoordinate(null, null);
+                return;
             }
+
+            var point = new google.maps.LatLng(coordinates.latitude, coordinates.longitude);
+            CHAMELEON.CORE.TCMSFieldGMapCoordinate.coordinateMarker.setPosition(point);
+            CHAMELEON.CORE.TCMSFieldGMapCoordinate.latitude = point.lat();
+            CHAMELEON.CORE.TCMSFieldGMapCoordinate.longitude = point.lng();
+            CHAMELEON.CORE.TCMSFieldGMapCoordinate.viewCoordinate(
+                point.lat().toFixed(5),
+                point.lng().toFixed(5),
+            );
+            var mapObject = window[CHAMELEON.CORE.TCMSFieldGMapCoordinate.mapId];
+            mapObject.setCenter(point);
+        }).catch(reason => {
+            alert("Geocode was not successful for the following reason: " + reason);
         });
-    }
+    },
+
+    /**
+     * @param {string} query
+     * @return {Promise<GeocodingResult|null, string>}
+     */
+    geocode: function(query) {
+        return fetch(`/cms/rest/geocode?query=${encodeURIComponent(query)}`, { method: 'GET' })
+            .then(response => {
+                if (response.status !== 200) {
+                    throw response.statusText;
+                }
+                return response.json();
+            })
+            .then(response => response[0] ?? null);
+    },
 };

@@ -20,3 +20,9 @@ cms_backend:
   requirements:
     trailingSlash: "[/]?"
   schemes: ["https"]
+
+backend_geocoder:
+  path: /cms/rest/geocode
+  defaults: { _controller: 'chameleon_system_core.geocoding.geocoding_controller' }
+  schemes: ['https']
+  methods: ['GET']
