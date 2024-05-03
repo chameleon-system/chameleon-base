@@ -401,7 +401,7 @@ class TCMSField implements TCMSFieldVisitableInterface
     public function getValueForFieldExtension(): string
     {
         if (true === $this->bReadOnlyMode) {
-            return [];
+            return '';
         }
 
         $inputFieldFilterUtil = $this->getInputFilterUtil();
