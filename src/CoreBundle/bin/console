@@ -3,10 +3,14 @@
 
 set_time_limit(0);
 
+$vendorPath = realpath(__DIR__.'/../../../..');
+if (true === isset($_composer_bin_dir)) {
+    $vendorPath = realpath($_composer_bin_dir .'/../');
+}
 /**
  * set $_SERVER vars manually, as they are not available in console.
  */
-$_SERVER['DOCUMENT_ROOT'] = realpath(__DIR__.'/../../../../../../web');
+$_SERVER['DOCUMENT_ROOT'] = realpath($vendorPath.'/../web');
 $_SERVER['HTTP_HOST'] = 'you-have-no-host-because-you-are-in-console.com';
 define('REQUEST_PROTOCOL', 'console');
 
@@ -15,8 +19,10 @@ require_once __DIR__.'/../Resources/config/const.inc.php';
 
 if (file_exists(PATH_PROJECT_BASE.'/app/autoload.php')) {
     include_once PATH_PROJECT_BASE.'/app/autoload.php';
+} elseif (isset($_composer_autoload_path)) {
+    include_once $_composer_autoload_path;
 } else {
-    include_once __DIR__.'/../../../../../autoload.php';
+    include_once $vendorPath.'/autoload.php';
 }
 
 require_once PATH_PROJECT_CONFIG.'/config.inc.php';
