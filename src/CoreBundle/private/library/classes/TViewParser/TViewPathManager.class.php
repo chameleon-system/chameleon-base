@@ -160,7 +160,9 @@ class TViewPathManager implements IViewPathManager
     /**
      * The path in the mono repo in chameleon is different from the path in the composer files of the
      * individual packages. This is an unfortunate change and should not really concern the core.
-     * Can be removed once the packages have been moved back into the folder where they belong.
+     * Renaming bundles again is a massiv amount of work and would re-introduce bad names. So we keep
+     * the mapping - In order to be able to remove the mapping `\TViewPathManager::getObjectPackageViewPath`
+     * needs to be deprecated - and replaced by a method that expects the bundle name instead of a path mapping
      * @param string $privatePackageName
      * @return string
      */
