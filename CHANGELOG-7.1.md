@@ -41,7 +41,10 @@ List of changes, the newer versions at the top, with following possible types:
   their prefixes.
 * A global Javascript event `tableEditorBeforeSaveEvent` in the backend is added in order to write back CKEditor's 
   internal stored values into the hidden fields before submitting the form instances at the save process. So dispatch
-  this event if you add a custom Javascript save method. 
+  this event if you add a custom Javascript save method.
+* A new readonly "Im Menü unter" (German) field is introduced for tables, which are connected with a menu item. There
+  field shows you the first CMS-path of this entry. For example, for the table "Cronjobs" (`cms_cronjobs`) the path
+  is "System / Cronjobs".
   
 ## Changed Features
 
