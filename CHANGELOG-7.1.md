@@ -82,7 +82,10 @@ List of changes, the newer versions at the top, with following possible types:
 * After fixing the bug, now it's possible to redirect to a configured page after a successful extranet user login as
   provided. The fallback is the user's home (account) page. 
 * The wishlist cookie now allows up to 25 entries.
-
+* The `NewsletterBundle` has a more comfortable installation and management of the resources now, avoiding a symlink of
+  its resources in the project's extension folder. Instead, it will be run via Chameleon's theme snippet system. For more information,
+  consult the `NewsletterBundle/README.md` file.  
+ 
 ## Changed Interfaces
 
 Additional methods:
