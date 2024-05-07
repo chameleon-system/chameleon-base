@@ -3,7 +3,7 @@
 
 set_time_limit(0);
 
-$vendorPath = realpath(__DIR__.'/../../../..');
+$vendorPath = realpath(__DIR__.'/../../../../..');
 if (true === isset($_composer_bin_dir)) {
     $vendorPath = realpath($_composer_bin_dir .'/../');
 }
