@@ -60,6 +60,63 @@
                 <source>chameleon_system_newsletter.text.list_of_subscribed_groups_polite</source>
                 <target>Sie sind noch in folgenden Gruppen angemeldet:</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_newsletter.newsletter.form_salutation">
+                <source>chameleon_system_newsletter.newsletter.form_salutation</source>
+                <target>Anrede</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.form_first_name">
+                <source>chameleon_system_newsletter.newsletter.form_first_name</source>
+                <target>Vorname</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.form_last_name">
+                <source>chameleon_system_newsletter.newsletter.form_last_name</source>
+                <target>Nachname</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.form_subscribe_all">
+                <source>chameleon_system_newsletter.newsletter.form_subscribe_all</source>
+                <target>Alle Newsletter abonnieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.action_subscribe">
+                <source>chameleon_system_newsletter.newsletter.action_subscribe</source>
+                <target>Abonnieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.form_sign_up_email">
+                <source>chameleon_system_newsletter.newsletter.form_sign_up_email</source>
+                <target>E-Mail-Adresse</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.signout_my_account">
+                <source>chameleon_system_newsletter.newsletter.signout_my_account</source>
+                <target><![CDATA[Sie haben den Newsletter abonniert. Klicken Sie <a href="%sActionLink%">hier</a> um unseren Newsletter abzubestellen.]]></target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.signup_my_account">
+                <source>chameleon_system_newsletter.newsletter.signup_my_account</source>
+                <target><![CDATA[Sie haben den Newsletter nicht abonniert. Klicken Sie <a href="%sActionLink%">hier</a> um unseren Newsletter jetzt zu abonnieren.]]></target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.form_quick_signup_help">
+                <source>chameleon_system_newsletter.newsletter.form_quick_signup_help</source>
+                <target>E-Mail-Adresse eingeben und unseren Newsletter abonnieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.form_quick_signup_title">
+                <source>chameleon_system_newsletter.newsletter.form_quick_signup_title</source>
+                <target>Newsletteranmeldung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.my_newsletters_headline">
+                <source>chameleon_system_newsletter.newsletter.my_newsletters_headline</source>
+                <target>Ihre abonnierten Newsletter</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.unsubscribe_form_email">
+                <source>chameleon_system_newsletter.newsletter.unsubscribe_form_email</source>
+                <target>E-Mail-Adresse</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.unsubscribe_form_unsubscribe_all">
+                <source>chameleon_system_newsletter.newsletter.unsubscribe_form_unsubscribe_all</source>
+                <target>Alle Newsletter abmelden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter.newsletter.unsubscribe_action_unsubscribe">
+                <source>chameleon_system_newsletter.newsletter.unsubscribe_action_unsubscribe</source>
+                <target>Abmelden</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

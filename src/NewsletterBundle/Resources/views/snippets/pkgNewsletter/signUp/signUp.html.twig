@@ -32,31 +32,64 @@
 
 
 
-<div class="snippetPkgNewsletterSignOutSignOut">
+<div class="snippetPkgNewsletterSignUpSignUp">
     {% include '/pkgNewsletter/signUp/headlineWithWYSIWYGText.html.twig' %}
 
     <div class="form">
-        <form name="newNewsletterSignOut" accept-charset="utf-8" method="post" {% if sNewsletterLink %}action="{{ sNewsletterLink }}"{% endif %} class="form-horizontal">
-            <input type="hidden" name="module_fnc[{{ sModuleSpotName }}]" value="SignOut"/>
+        <form name="newNewsletterSign" accept-charset="utf-8" method="post" action="{{ sNewsletterLink }}" class="form-horizontal">
+            <input type="hidden" name="module_fnc[{{ sModuleSpotName }}]" value="SignUp"/>
 
             {% if sMessageGeneral %}
                 <div class="errortext">
                     {{sMessageGeneral|raw}}
                 </div>
             {% endif %}
+
+            {% set aFieldSalutationMapped = {
+            'sInputClass' : 'span4',
+            'sLabelText' : 'chameleon_system_newsletter.newsletter.form_salutation'|trans,
+            'sName' : sFieldNamesPrefix~'[data_extranet_salutation_id]',
+            'bRequired' : true,
+            'sFieldId': "newsSignUpSalutation",
+            'sError': aFieldSalutation.sError,
+            'sValue' : aFieldSalutation.sValue,
+            'aValueList' : aFieldSalutation.aValueList} %}
+            {% include "/common/userInput/form/select.html.twig" with aFieldSalutationMapped%}
+
+            {% set aFieldFirstNameMapped = {
+            'sInputClass' : 'span4',
+            'sLabelText' : 'chameleon_system_newsletter.newsletter.form_first_name'|trans,
+            'sName' : sFieldNamesPrefix~'[firstname]',
+            'bRequired' : true,
+            'sFieldId': "newsSignUpFirstName",
+            'sError': aFieldFirstName.sError,
+            'sValue' : aFieldFirstName.sValue} %}
+            {% include "/common/userInput/form/text.html.twig" with aFieldFirstNameMapped%}
+
+            {% set aFieldLastNameMapped = {
+            'sInputClass' : 'span4',
+            'sLabelText' : 'chameleon_system_newsletter.newsletter.form_last_name'|trans,
+            'sName' : sFieldNamesPrefix~'[lastname]',
+            'bRequired' : true,
+            'sFieldId': "newsSignUpLastName",
+            'sError': aFieldLastName.sError,
+            'sValue' : aFieldLastName.sValue} %}
+            {% include "/common/userInput/form/text.html.twig" with aFieldLastNameMapped%}
+
             {% if bShowEmailField == true%}
                 {% set aFieldEmailMapped = {
                 'sInputClass' : 'span4',
-                'sLabelText' : 'chameleon_system_theme_shop_standard.newsletter.unsubscribe_form_email'|trans,
-                'sName' : sFieldNamesPrefix~'[signoutmail]',
+                'sLabelText' : 'chameleon_system_newsletter.newsletter.form_sign_up_email'|trans,
+                'sName' : sFieldNamesPrefix~'[email]',
                 'bRequired' : true,
-                'sFieldId': "newsSignOutEMail",
+                'sFieldId': "newsSignUpEMail",
                 'sError': aFieldEmail.sError,
                 'sValue' : aFieldEmail.sValue} %}
                 {% include "/common/userInput/form/text.html.twig" with aFieldEmailMapped%}
             {% endif %}
+
             {% if aGroupList|length > 0 %}
-                <div class="">{{ "chameleon_system_theme_shop_standard.newsletter.my_newsletters_headline"|trans }}</div>
+                <div class="">{{ "chameleon_system_newsletter.newsletter.form_newsletter"|trans }}</div>
 
                 {% if sMessageNewsletterList %}
                     <div class="errortext">
@@ -67,14 +100,12 @@
                 {% if aGroupList|length > 1 %}
                     <div class="row">
                         <div class="span4">
-                            {% set aFieldMapped = {'sLabelText' : 'chameleon_system_theme_shop_standard.newsletter.unsubscribe_form_unsubscribe_all'|trans,
-                            'sInputClass' : '',
-                            'sPlaceholder' : '',
+                            {% set aFieldMapped = {'sLabelText' : 'chameleon_system_newsletter.newsletter.form_subscribe_all'|trans,
                             'sFieldId' : 'all',
                             'sName' : sFieldNamesPrefix~'[newsletter][all]',
                             'sError': aFieldAllNewsletter.sError,
                             'sValue' : '1',
-                            'sFieldId': "newsSignOutAllNews",
+                            'sFieldId': "newsSignUpAllNews",
                             'sHelpText': '',
                             'bIsChecked': aFieldAllNewsletter.bIsChecked,
                             'sOnClick' : "CHAMELEON.Custom.pkgNewsletter.toggleSignUpGroups(this);"} %}
@@ -82,17 +113,15 @@
                         </div>
                     </div>
                 {% endif %}
-
                 {% for aGroup in aGroupList %}
                     <div class="row">
                         <div class="span4">
                             {% set aFieldMapped = {'sLabelText' : aGroup.sName,
                             'sInputClass' : 'newsletter_group',
-                            'sPlaceholder' : '',
                             'sName' : sFieldNamesPrefix~'[newsletter][' ~ aGroup.id ~ ']',
                             'sError': aGroup.sError,
                             'sValue' : '1',
-                            'sFieldId': "newsSignOutNews"~aGroup.id,
+                            'sFieldId': "newsSignUpNews"~aGroup.id,
                             'sHelpText': '',
                             'bIsChecked': aGroup.bIsChecked,
                             'sOnClick' : "CHAMELEON.Custom.pkgNewsletter.toggleAllSignUpCheckbox(this);"} %}
@@ -101,7 +130,7 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            {% include "/common/userInput/buttonStandard.html.twig" with {sButtonText:"chameleon_system_theme_shop_standard.newsletter.unsubscribe_action_unsubscribe"|trans}%}
+            {% include "/common/userInput/buttonStandard.html.twig" with {sButtonText:"chameleon_system_newsletter.newsletter.action_subscribe"|trans}%}
         </form>
     </div>
 </div>
