@@ -5,7 +5,7 @@ Inject the service chameleon_system_database_migration.recorder.migration_record
 
 .. code-block:: php
 
-    $filePointer = $migrationRecorder->startTransation($activeTrackName, $activeBuildNumber);
+    $filePointer = $migrationRecorder->startTransaction($activeTrackName, $activeBuildNumber);
     $migrationRecorder->writeQueries($filePointer, $dataModels);
     $migrationRecorder->endTransaction($filePointer);
 

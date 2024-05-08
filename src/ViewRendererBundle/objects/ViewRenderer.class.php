@@ -10,6 +10,9 @@
  */
 
 use ChameleonSystem\CoreBundle\MapperLoader\MapperLoaderInterface;
+use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceInterface;
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceResponseInterface;
 use ChameleonSystem\ViewRendererBundle\objects\ViewRendererEvent;
@@ -64,6 +67,13 @@ class ViewRenderer
      */
     private $mapperLoader;
 
+    protected bool $isBackendMode = false;
+
+    /**
+     * @var int|null one of \ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface::REQUEST_TYPE_*
+     */
+    private ?int $oldRequestType = null;
+
     /**
      * @param DataMappingServiceInterface|null $dataMappingService
      * @param IPkgSnippetRenderer|null         $snippetRenderer
@@ -72,28 +82,28 @@ class ViewRenderer
      */
     public function __construct(DataMappingServiceInterface $dataMappingService = null, IPkgSnippetRenderer $snippetRenderer = null, EventDispatcherInterface $eventDispatcher = null, MapperLoaderInterface $mapperLoader = null)
     {
-        $showViewSourceHtmlHints = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.debug.show_view_source_html_hints');
+        $showViewSourceHtmlHints = ServiceLocator::getParameter('chameleon_system_core.debug.show_view_source_html_hints');
         $this->showHTMLHints = ($showViewSourceHtmlHints && _DEVELOPMENT_MODE);
         $this->dataMappingService = $dataMappingService;
 
         if (null === $this->dataMappingService) {
-            $this->dataMappingService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.data_mapping_service');
+            $this->dataMappingService = ServiceLocator::get('chameleon_system_view_renderer.data_mapping_service');
         }
 
         $this->mapperChainMappingService = clone $this->dataMappingService;
         $this->snippetRenderer = $snippetRenderer;
 
         if (null === $this->snippetRenderer) {
-            $this->snippetRenderer = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_snippet_renderer.snippet_renderer');
+            $this->snippetRenderer = ServiceLocator::get('chameleon_system_snippet_renderer.snippet_renderer');
         }
 
         $this->eventDispatcher = $eventDispatcher;
         if (null === $this->eventDispatcher) {
-            $this->eventDispatcher = \ChameleonSystem\CoreBundle\ServiceLocator::get('event_dispatcher');
+            $this->eventDispatcher = ServiceLocator::get('event_dispatcher');
         }
         $this->mapperLoader = $mapperLoader;
         if (null === $this->mapperLoader) {
-            $this->mapperLoader = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.mapper_loader');
+            $this->mapperLoader = ServiceLocator::get('chameleon_system_core.mapper_loader');
         }
     }
 
@@ -243,7 +253,10 @@ class ViewRenderer
                 $oSnippetRenderer->setVar($key, $value);
             }
         }
+
+        $this->modifyTemporarilyRequestType();
         $renderedContent = $oSnippetRenderer->render();
+        $this->restoreTemporarilyRequestType();
 
         if ($this->getShowHTMLHints()) {
             $mappersUsed = $this->dataMappingService->getMapperNameList();
@@ -289,5 +302,41 @@ class ViewRenderer
         $this->addMapperFromIdentifier('chameleon_system_view_renderer.mapper.list_handler');
         $this->AddSourceObject(TPkgViewRendererMapper_ListHandler::SOURCE_DATA_INPUT, $this->dataMappingService->getSourceData());
         $this->AddSourceObject(TPkgViewRendererMapper_ListHandler::SOURCE_DATA_NAME, $this->listMapHandler);
+    }
+
+    public function isBackendMode(): bool
+    {
+        return $this->isBackendMode;
+    }
+
+    public function setIsBackendMode(bool $isBackendMode = true): void
+    {
+        $this->isBackendMode = $isBackendMode;
+    }
+
+    protected function modifyTemporarilyRequestType(): void
+    {
+        if (false === $this->isBackendMode()) {
+            $this->oldRequestType = null;
+
+            return;
+        }
+
+        $this->oldRequestType = $this->getRequestInfoService()->getChameleonRequestType();
+        $this->getRequestInfoService()->setChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_BACKEND);
+    }
+
+    protected function restoreTemporarilyRequestType(): void
+    {
+        if (false === $this->isBackendMode() || null === $this->oldRequestType) {
+            return;
+        }
+
+        $this->getRequestInfoService()->setChameleonRequestType($this->oldRequestType);
+    }
+
+    protected function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 }
