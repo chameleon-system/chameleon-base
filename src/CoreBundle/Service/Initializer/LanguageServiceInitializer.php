@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\Exception\InvalidLanguageException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\PageService;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -88,7 +89,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     private function determineLanguageForCmsTemplateEngineMode()
     {
         /** @var string|null $previewLanguageId */
-        $previewLanguageId = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
+        $previewLanguageId = $this->getPreviewLanguageId();
 
         if (null !== $previewLanguageId) {
             $languageId = $previewLanguageId;
@@ -147,7 +148,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         /** @var string|null $previewMode */
         $previewMode = $this->inputFilterUtil->getFilteredInput('__previewmode', null);
         /** @var string|null $previewLanguageId */
-        $previewLanguageId = $this->inputFilterUtil->getFilteredInput('previewLanguageId', null);
+        $previewLanguageId = $this->getPreviewLanguageId();
         if (null !== $previewMode && null !== $previewLanguageId) {
             return $previewLanguageId;
         }
@@ -344,5 +345,57 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     private function getActivePageService()
     {
         return $this->container->get('chameleon_system_core.active_page_service');
+    }
+
+    private function getPageService(): PageService
+    {
+        return $this->container->get('chameleon_system_core.page_service');
+    }
+
+    private function getPreviewLanguageId(): ?string
+    {
+        $previewLanguageId = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
+        if (null === $previewLanguageId) {
+            return null;
+        }
+
+        //if we are not in preview mode, we don't do any further validations, because it's expensive
+        $previewMode = $this->inputFilterUtil->getFilteredInput('__previewmode');
+        if (null === $previewMode) {
+            return null;
+        }
+
+        //because the portal might not support the requested preview language, we need to check if the language is valid
+        //since we are somewhere in the backend we need to extract the portal/language from the page
+        $pageDef = $this->inputFilterUtil->getFilteredInput('pagedef');
+        $page = $this->getPageService()->getById($pageDef);
+        if (null === $page) {
+            throw new \Exception("Unable to load requested page to determine if previewLanguageId is valid. PageDef: $pageDef, LanguageId: $previewLanguageId");
+        }
+
+        $pagePortalId = $page->fieldCmsPortalId;
+        if (true === $this->isLanguageAvailabeOnPortal($previewLanguageId, $pagePortalId)) {
+            return $previewLanguageId;
+        }
+
+        $portal = \TdbCmsPortal::GetNewInstance();
+        if (false === $portal->Load($pagePortalId)) {
+            throw new \Exception("Unable to load portal of requested page to determine if previewLanguageId is valid. PageDef: $pageDef, LanguageId: $previewLanguageId");
+        }
+
+        return $portal->fieldCmsLanguageId;
+    }
+
+    private function isLanguageAvailabeOnPortal(string $languageId, string $portalId): bool
+    {
+        $select = 'SELECT `source_id` FROM `cms_portal_cms_language_mlt` WHERE `source_id` = :portalId AND `target_id` = :languageId';
+        $result = $this->databaseConnection->fetchOne($select, [
+            'portalId' => $portalId,
+            'languageId' => $languageId,
+        ]);
+        if (false === $result) {
+            return false;
+        }
+        return true;
     }
 }
