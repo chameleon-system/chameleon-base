@@ -278,10 +278,7 @@ class MTTableEditor extends TCMSModelBase
                 $params = array_merge($params, $aAdditionalParams);
             }
 
-            $sRecordName = '';
-            if (null !== $this->oTableManager->oTableEditor->oTable) {
-                $sRecordName = $this->oTableManager->oTableEditor->oTable->GetName();
-            }
+            $sRecordName = $this->oTableManager->oTableEditor->oTable?->GetDisplayValue() ?? '';
             $breadcrumb->AddItem($params, $sRecordName);
         }
     }
