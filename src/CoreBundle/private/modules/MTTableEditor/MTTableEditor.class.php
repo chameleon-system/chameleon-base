@@ -707,8 +707,10 @@ class MTTableEditor extends TCMSModelBase
 
             if (false !== $oRecordData) {
                 $sName = '';
-                if (isset($this->oTableManager->oTableEditor->oTable) && null !== $this->oTableManager->oTableEditor->oTable) {
-                    $sName = $this->oTableManager->oTableEditor->oTable->GetName();
+                $table = $this->oTableManager->oTableEditor->oTable ?? null;
+                if (null !== $table) {
+                    $sName = $table->GetName();
+                    $oRecordData->breadcrumbName = $table->GetDisplayValue();
                 } elseif (isset($postData['name'])) {
                     $sName = $postData['name'];
                 }
