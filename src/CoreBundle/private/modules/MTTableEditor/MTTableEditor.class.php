@@ -278,10 +278,7 @@ class MTTableEditor extends TCMSModelBase
                 $params = array_merge($params, $aAdditionalParams);
             }
 
-            $sRecordName = '';
-            if (null !== $this->oTableManager->oTableEditor->oTable) {
-                $sRecordName = $this->oTableManager->oTableEditor->oTable->GetName();
-            }
+            $sRecordName = $this->oTableManager->oTableEditor->oTable->GetDisplayValue() ?? '';
             $breadcrumb->AddItem($params, $sRecordName);
         }
     }
@@ -710,8 +707,10 @@ class MTTableEditor extends TCMSModelBase
 
             if (false !== $oRecordData) {
                 $sName = '';
-                if (isset($this->oTableManager->oTableEditor->oTable) && null !== $this->oTableManager->oTableEditor->oTable) {
-                    $sName = $this->oTableManager->oTableEditor->oTable->GetName();
+                $table = $this->oTableManager->oTableEditor->oTable ?? null;
+                if (null !== $table) {
+                    $sName = $table->GetName();
+                    $oRecordData->breadcrumbName = $table->GetDisplayValue();
                 } elseif (isset($postData['name'])) {
                     $sName = $postData['name'];
                 }
