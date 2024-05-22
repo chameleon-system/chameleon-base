@@ -278,7 +278,7 @@ class MTTableEditor extends TCMSModelBase
                 $params = array_merge($params, $aAdditionalParams);
             }
 
-            $sRecordName = $this->oTableManager->oTableEditor->oTable->GetDisplayValue() ?? '';
+            $sRecordName = $this->oTableManager->oTableEditor->oTable?->GetDisplayValue() ?? '';
             $breadcrumb->AddItem($params, $sRecordName);
         }
     }
@@ -706,8 +706,7 @@ class MTTableEditor extends TCMSModelBase
             $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
 
             if (false !== $oRecordData) {
-                $sName = '';
-                $table = $this->oTableManager->oTableEditor->oTable ?? null;
+                $table = true === isset($this->oTableManager->oTableEditor->oTable) ? $this->oTableManager->oTableEditor->oTable : null;
                 if (null !== $table) {
                     $sName = $table->GetName();
                     $oRecordData->breadcrumbName = $table->GetDisplayValue();
