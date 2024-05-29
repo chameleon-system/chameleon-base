@@ -20,6 +20,7 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -85,6 +86,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 
     /**
      * @return string|null
+     * @throws \Exception
      */
     private function determineLanguageForCmsTemplateEngineMode()
     {
@@ -102,6 +104,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 
     /**
      * @return string|null
+     * @throws \Exception
      */
     private function determineLanguageDefault()
     {
@@ -352,6 +355,9 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         return $this->container->get('chameleon_system_core.page_service');
     }
 
+    /**
+     * @throws \Exception
+     */
     private function getPreviewLanguageId(): ?string
     {
         $previewLanguageId = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
@@ -374,7 +380,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         }
 
         $pagePortalId = $page->fieldCmsPortalId;
-        if (true === $this->isLanguageAvailabeOnPortal($previewLanguageId, $pagePortalId)) {
+        if (true === $this->isLanguageAvailableOnPortal($previewLanguageId, $pagePortalId)) {
             return $previewLanguageId;
         }
 
@@ -386,7 +392,10 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         return $portal->fieldCmsLanguageId;
     }
 
-    private function isLanguageAvailabeOnPortal(string $languageId, string $portalId): bool
+    /**
+     * @throws Exception
+     */
+    private function isLanguageAvailableOnPortal(string $languageId, string $portalId): bool
     {
         $select = 'SELECT `source_id` FROM `cms_portal_cms_language_mlt` WHERE `source_id` = :portalId AND `target_id` = :languageId';
         $result = $this->databaseConnection->fetchOne($select, [
