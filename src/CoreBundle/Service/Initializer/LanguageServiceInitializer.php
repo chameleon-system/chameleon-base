@@ -15,7 +15,7 @@ use ChameleonSystem\CoreBundle\Exception\InvalidLanguageException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\PageService;
+use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -347,7 +347,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         return $this->container->get('chameleon_system_core.active_page_service');
     }
 
-    private function getPageService(): PageService
+    private function getPageService(): PageServiceInterface
     {
         return $this->container->get('chameleon_system_core.page_service');
     }
