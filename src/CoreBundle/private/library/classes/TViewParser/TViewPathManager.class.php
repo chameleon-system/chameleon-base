@@ -99,7 +99,7 @@ class TViewPathManager implements IViewPathManager
             $sViewFileName = $sModuleName.'/'.$sViewName.'.view.php';
             $sTemplatePath = $this->getTemplateFilePathFromTheme($sViewFileName, TPkgViewRendererSnippetDirectory::PATH_MODULES);
             if (false === file_exists($sTemplatePath)) {
-                //maybe the view is from a bundle of monorepo
+                //maybe the view is from a bundle
                 $sMappedPath = str_replace('//', '/', $sMappedPath);
                 $templatePathBundle = $sMappedPath . $baseModuleName . '/views/' . $sViewName . '.view.php';
                 if (file_exists($templatePathBundle)) {
