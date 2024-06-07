@@ -22,6 +22,7 @@ class TCMSCronJobSendNewsletter extends TdbCmsCronjobs
             $portal = $newsletter->GetFieldCmsPortal();
             if (null !== $portal) {
                 $newsletter->SetLanguage($portal->fieldCmsLanguageId);
+                $newsletter->PostLoadHook(); // reload with the set language
             }
             $newsletter->SendNewsletter();
         }

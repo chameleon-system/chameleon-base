@@ -24,25 +24,24 @@ class TPkgNewsletterModuleSignupConfig extends TPkgNewsletterModuleSignupConfigA
      */
     public function GetFieldPkgNewsletterGroupList($sOrderBy = '')
     {
-        $oPortal = $this->getPortalDomainService()->getActivePortal();
-        $sSelect = "SELECT `pkg_newsletter_group`.*
+        $portal = $this->getPortalDomainService()->getActivePortal();
+        $query = "SELECT `pkg_newsletter_group`.*
                       FROM `pkg_newsletter_group`
                 INNER JOIN `pkg_newsletter_module_signup_config_pkg_newsletter_group_mlt` ON `pkg_newsletter_group`.`id` = `pkg_newsletter_module_signup_config_pkg_newsletter_group_mlt`.`target_id`
                      WHERE `pkg_newsletter_module_signup_config_pkg_newsletter_group_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
                        AND (
-                                `pkg_newsletter_group`.`cms_portal_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oPortal->id)."'
+                                `pkg_newsletter_group`.`cms_portal_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($portal->id)."'
                                 OR
                                 `pkg_newsletter_group`.`cms_portal_id` = ''
                             )
                    ";
         if ('' !== $sOrderBy) {
-            $sSelect .= ' ORDER BY '.$sOrderBy;
+            $query .= ' ORDER BY '.$sOrderBy;
         } else {
-            $sSelect .= ' ORDER BY `pkg_newsletter_group`.`name` ASC';
+            $query .= ' ORDER BY `pkg_newsletter_group`.`name` ASC';
         }
-        $oNewsletterGroupList = TdbPkgNewsletterGroupList::GetList($sSelect);
 
-        return $oNewsletterGroupList;
+        return TdbPkgNewsletterGroupList::GetList($query);
     }
 
     private function getPortalDomainService(): PortalDomainServiceInterface
