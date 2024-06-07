@@ -420,6 +420,8 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
             return null;
         }
         $this->getPortalDomainService()->setActivePortal($portal);
+        $domain = $this->getPortalDomainService()->getPrimaryDomain();
+        $hostName = $domain->fieldName;
 
         $queryParams = true === $this->fieldGenerateUserDependingNewsletter
             ? [TdbPkgNewsletterUser::URL_USER_ID_PARAMETER => $oNewsletterUser->id, TdbPkgNewsletterCampaign::URL_USER_ID_PARAMETER => $this->id]
@@ -429,6 +431,8 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         $request->query = new ParameterBag($queryParams);
         $request->request = new ParameterBag();
         $request->attributes = new ParameterBag(['pagedef' => $page->id]);
+        $request->server->set('HTTP_HOST', $hostName);
+        $request->headers->set('host', $hostName);
 
         $requestStack = $this->getRequestStack();
         $requestStack->push($request);
@@ -447,7 +451,6 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 
         return $sGeneratedNewsletter;
     }
-
     /**
      * @return TCMSMail
      */
