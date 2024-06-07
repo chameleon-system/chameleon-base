@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 
 class TViewPathManager implements IViewPathManager
 {
@@ -89,12 +91,23 @@ class TViewPathManager implements IViewPathManager
         if (null === $sMappedPath) {
             $sMappedPath = PATH_CUSTOMER_FRAMEWORK.'/modules/';
         }
+        $baseModuleName = baseName(str_replace('\\', '/', $sModuleName));
         $sModuleName = str_replace('\\', '_', $sModuleName);
         // try to get it first from customer module path
         $sTemplatePath = $sMappedPath.$sModuleName.'/views/'.$sViewName.'.view.php';
         if (false === file_exists($sTemplatePath)) {
             $sViewFileName = $sModuleName.'/'.$sViewName.'.view.php';
             $sTemplatePath = $this->getTemplateFilePathFromTheme($sViewFileName, TPkgViewRendererSnippetDirectory::PATH_MODULES);
+            if (false === file_exists($sTemplatePath)) {
+                //maybe the view is from a bundle
+                $sMappedPath = str_replace('//', '/', $sMappedPath);
+                $templatePathBundle = $sMappedPath . $baseModuleName . '/views/' . $sViewName . '.view.php';
+                if (file_exists($templatePathBundle)) {
+                    return $templatePathBundle;
+                } else {
+                    $this->getLogger()->error(sprintf('View not found in path: %s or %s', $sTemplatePath, $templatePathBundle));
+                }
+            }
         }
         if (null !== $sTemplatePath) {
             return $sTemplatePath;
@@ -524,4 +537,9 @@ class TViewPathManager implements IViewPathManager
         'pkgshopwishlist' => 'chameleon-shop/src/ShopWishlistBundle',
         'pkgtshoppaymenthandlersofortueberweisung' => 'chameleon-shop/src/ShopPaymentHandlerSofortueberweisungBundle',
     ];
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
+    }
 }
