@@ -451,7 +451,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 
         return $generatedNewsletter;
     }
-    
+
     /**
      * @return TCMSMail
      */
