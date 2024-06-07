@@ -444,13 +444,14 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         // start request
         $chameleonFrontendController = $this->getChameleonFrontendController();
         $response = $chameleonFrontendController();
-        $sGeneratedNewsletter = $response->getContent();
+        $generatedNewsletter = $response->getContent();
 
         $requestInfoService->setChameleonRequestType($oldRequestType); // restore state
         $requestStack->pop();
 
-        return $sGeneratedNewsletter;
+        return $generatedNewsletter;
     }
+    
     /**
      * @return TCMSMail
      */
