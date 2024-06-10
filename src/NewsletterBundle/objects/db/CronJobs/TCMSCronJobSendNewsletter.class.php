@@ -16,13 +16,16 @@ class TCMSCronJobSendNewsletter extends TdbCmsCronjobs
      */
     protected function _ExecuteCron()
     {
+        $languageService = self::getLanguageService();
+
         $now = date('Y-m-d H:i:s');
         $newsletterList = TdbPkgNewsletterCampaignList::GetList("SELECT * FROM `pkg_newsletter_campaign` WHERE `queue_date` <= '".MySqlLegacySupport::getInstance()->real_escape_string($now)."' AND `active` = '1'");
         while ($newsletter = $newsletterList->Next()) {
             $portal = $newsletter->GetFieldCmsPortal();
             if (null !== $portal) {
+                $languageService->setActiveLanguage($portal->fieldCmsLanguageId);
                 $newsletter->SetLanguage($portal->fieldCmsLanguageId);
-                $newsletter->PostLoadHook(); // reload with the set language
+                $newsletter->PostLoadHook(); // reload with the portal default language
             }
             $newsletter->SendNewsletter();
         }
