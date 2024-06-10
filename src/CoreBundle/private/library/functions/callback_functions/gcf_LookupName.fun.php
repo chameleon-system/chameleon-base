@@ -11,7 +11,12 @@
 
 function gcf_LookupName($field, $row, $fieldName = '')
 {
-    $tblName = mb_substr($fieldName, 0, -3);
+    if (str_ends_with($fieldName, '_id')) {
+        $tblName = substr($fieldName, 0, -3);
+    } else {
+        $tblName = $fieldName;
+    }
+
     // check if the field has a counter and fix the lookup table name
     if (is_numeric(mb_substr($tblName, -1))) {
         $tblName = mb_substr($tblName, 0, -2);
