@@ -92,7 +92,7 @@ class TableConfExporter implements TableConfExporterInterface
             $tableNamespaceMapping
         );
 
-        // disabled for now - the meta data yaml makes sense only after we moved to another admin so we can remove the table conf fully
+        // todo: re-enable once we move to another admin that may need this data.
         // $autoClassConfig = $this->generateAutoClassConfig($tableConf, $className, $fqn, $namespace);
 
         $mappingSubPathPos = strpos($mappingDir, '/config/doctrine');
@@ -110,7 +110,7 @@ class TableConfExporter implements TableConfExporterInterface
             throw new \RuntimeException(sprintf("Failed to write data model mapping to file (%s).", $mappingCleanPath.'/'.$mappingClass.'.orm.xml'));
         }
 
-        // disabled for now - the meta data yaml makes sense only after we moved to another admin so we can remove the table conf fully
+        // todo: re-enable once we move to another admin that may need this data.
         //file_put_contents($metaConfigDir.'/'.$mappingClass.'.yaml', $autoClassConfig);
 
         return $fqn;
