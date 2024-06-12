@@ -214,11 +214,11 @@ class TableConfExporter implements TableConfExporterInterface
 
     private function snakeToPascalCase(string $string): string
     {
-        $camelCasedName = preg_replace_callback('/(^|_|\.)+(.)/', function ($match) {
+        $pascalCaseName = preg_replace_callback('/(^|_|\.)+(.)/', static function ($match) {
             return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
         }, $string);
 
-        return $camelCasedName;
+        return $pascalCaseName;
     }
 
     private function indent(?string $string, int $indent): ?string
