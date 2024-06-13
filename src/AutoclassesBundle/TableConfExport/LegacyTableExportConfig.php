@@ -91,7 +91,7 @@ class LegacyTableExportConfig
     private function getDefaultTableConfig(): array
     {
         return [
-            'targetDir' => 'AppBundle/src/Entity',
+            'targetDir' => '@AppBundle/src/Entity',
             'configDir' => 'AppBundle/config/doctrine',
             'metaConfigDir' => 'AppBundle/config/autoClass',
             'namespace' => '\\AppBundle\\Entity',
