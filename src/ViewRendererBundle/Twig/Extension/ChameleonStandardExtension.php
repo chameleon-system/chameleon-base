@@ -12,16 +12,12 @@
 namespace ChameleonSystem\ViewRendererBundle\Twig\Extension;
 
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
-use Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension;
-use Symfony\Component\Form\Extension\Core\CoreExtension;
 use Twig\Environment;
 use Twig\Error\RuntimeError;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\EscaperExtension;
 use Twig\Runtime\EscaperRuntime;
 use Twig\TwigFilter;
-use Twig_Environment;
-use Twig_SimpleFilter;
 
 class ChameleonStandardExtension extends AbstractExtension
 {
