@@ -80,8 +80,6 @@ class ChameleonStandardExtension extends AbstractExtension
     public static function chameleonTwigEscapeFilter(Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
     {
         if (false === is_string($string)) {
-            //return twig_escape_filter($env, $string, $strategy, $charset, $autoescape);
-            //return self::escape($env, $string);
             return self::escape($env, $string, $strategy, $charset, $autoescape);
         }
 
@@ -91,13 +89,11 @@ class ChameleonStandardExtension extends AbstractExtension
         }
 
         if (false === str_contains($string, $authenticityTokenName)) {
-            //return twig_escape_filter($env, $string, $strategy, $charset, $autoescape);
             return self::escape($env, $string, $strategy, $charset, $autoescape);
         }
 
         $placeholder = '___CHAMELEON_AUTHENTICITY_TOKEN___';
         $string = str_replace($authenticityTokenName, $placeholder, $string);
-        //$escaped = twig_escape_filter($env, $string, $strategy, $charset, $autoescape);
         $escaped = self::escape($env, $string, $strategy, $charset, $autoescape);
 
         $escaped = str_replace($placeholder, $authenticityTokenName, $escaped);
