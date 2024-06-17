@@ -218,9 +218,9 @@ $oFields->GoToStart();
      *
      * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
      * @param string $sLanguage - init with the language passed
-     * @return <?=$sClassName; ?>
+     * @return <?=$sClassName."\n"; ?>
      */
-    static public function GetNewInstance($sData = null, $sLanguage = null): <?=$sClassName; ?>
+    static public function GetNewInstance($sData = null, $sLanguage = null)
     {
         $oObject = new <?=$sClassName; ?>();
         if (!is_null($sLanguage)) {
