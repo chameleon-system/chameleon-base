@@ -151,8 +151,8 @@ class Configuration implements ConfigurationInterface
      */
     private function getGeoJsonGeocoderConfig()
     {
-        $tree = new TreeBuilder();
-        $subTree = $tree->root('geocoder');
+        $tree = new TreeBuilder('geocoder');
+        $subTree = $tree->getRootNode();
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
             ->scalarNode('geo_json_endpoint')
