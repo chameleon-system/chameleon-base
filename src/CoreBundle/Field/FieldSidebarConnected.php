@@ -75,7 +75,7 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
     /**
      * {@inheritDoc}
      */
-    public function ChangeFieldDefinition($oldName, $newName, &$postData = null)
+    public function ChangeFieldDefinition($oldName, $newName, $postData = null)
     {
     }
 
