@@ -73,7 +73,7 @@ class ChameleonStandardExtension extends AbstractExtension
      * @param string|null      $charset
      * @param bool|null        $autoescape
      *
-     * @return string
+     * @return mixed
      *
      * @throws RuntimeError
      */
