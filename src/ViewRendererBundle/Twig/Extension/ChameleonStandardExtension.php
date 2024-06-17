@@ -12,15 +12,13 @@
 namespace ChameleonSystem\ViewRendererBundle\Twig\Extension;
 
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
-use Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension;
-use Symfony\Component\Form\Extension\Core\CoreExtension;
 use Twig\Environment;
 use Twig\Error\RuntimeError;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\EscaperExtension;
+use Twig\Runtime\EscaperRuntime;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use Twig_Environment;
-use Twig_SimpleFilter;
 
 class ChameleonStandardExtension extends AbstractExtension
 {
@@ -85,14 +83,14 @@ class ChameleonStandardExtension extends AbstractExtension
      * @param string|null      $charset
      * @param bool|null        $autoescape
      *
-     * @return string
+     * @return mixed
      *
      * @throws RuntimeError
      */
     public static function chameleonTwigEscapeFilter(Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
     {
-        if (!is_string($string)) {
-            return twig_escape_filter($env, $string, $strategy, $charset, $autoescape);
+        if (false === is_string($string)) {
+            return self::escape($env, $string, $strategy, $charset, $autoescape);
         }
 
         static $authenticityTokenName = null;
@@ -100,17 +98,37 @@ class ChameleonStandardExtension extends AbstractExtension
             $authenticityTokenName = sprintf('[{%s}]', AuthenticityTokenManagerInterface::TOKEN_ID);
         }
 
-        if (false === strpos($string, $authenticityTokenName)) {
-            return twig_escape_filter($env, $string, $strategy, $charset, $autoescape);
+        if (false === str_contains($string, $authenticityTokenName)) {
+            return self::escape($env, $string, $strategy, $charset, $autoescape);
         }
 
         $placeholder = '___CHAMELEON_AUTHENTICITY_TOKEN___';
         $string = str_replace($authenticityTokenName, $placeholder, $string);
-        $escaped = twig_escape_filter($env, $string, $strategy, $charset, $autoescape);
+        $escaped = self::escape($env, $string, $strategy, $charset, $autoescape);
 
         $escaped = str_replace($placeholder, $authenticityTokenName, $escaped);
 
         return $escaped;
+    }
+
+    /**
+     * @param mixed $string can be a string, a \Twig\Markup, an object with `__toString` method, or any other type
+     * @throws RuntimeError
+     */
+    private static function escape(Environment $env, mixed $string, string $strategy, ?string $charset, bool $autoescape): mixed
+    {
+        // Twig 3.10 and above
+        if (true === class_exists(EscaperRuntime::class)) {
+            return $env->getRuntime(EscaperRuntime::class)->escape($string, $strategy, $charset, $autoescape);
+        }
+
+        // Twig 3.9
+        if (true === method_exists(EscaperExtension::class, 'escape')) {
+            return EscaperExtension::escape($env, $string, $strategy, $charset, $autoescape);
+        }
+
+        // to be removed when support for Twig 3 is dropped
+        return twig_escape_filter($env, $string, $strategy, $charset, $autoescape);
     }
 
     /**

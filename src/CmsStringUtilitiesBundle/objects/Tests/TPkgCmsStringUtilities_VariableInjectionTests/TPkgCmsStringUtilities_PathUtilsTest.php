@@ -13,9 +13,19 @@ use PHPUnit\Framework\TestCase;
 
 class TPkgCmsStringUtilities_PathUtilsTest extends TestCase
 {
+    private static array $testMethodsWithSymlinks = [
+        'testRealPathLinkedUnderRoot',
+        'testRealPathBothLinkedUnderRoot',
+    ];
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        if (true === in_array($this->name(), self::$testMethodsWithSymlinks) && false === is_link(__DIR__.'/../testdirs/foo/barlinked')) {
+            $this->markTestSkipped(sprintf('The test method "%s" was skipped, because the environment does not support symlinks', $this->name()));
+        }
+
         $_SERVER['DOCUMENT_ROOT'] = '/my/documentroot';
     }
 

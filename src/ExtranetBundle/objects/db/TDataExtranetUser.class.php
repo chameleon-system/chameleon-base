@@ -40,6 +40,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
     const TICKETVARNAME = '_MTExtranetCoreUserTicketNewSystem';
 
+    public const FORM_DATA_NAME_USER = 'aUser';
+
     /**
      * the session data of the extranet user. used to validate the login session.
      *

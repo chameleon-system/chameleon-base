@@ -381,6 +381,7 @@
             <argument type="service" id="chameleon_system_core.util.routing" />
             <argument type="service" id="chameleon_system_core.tree_service" />
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_system_page" />
+            <argument type="service" id="chameleon_system_core.active_page_service" />
         </service>
 
         <service id="chameleon_system_core.page_service" class="ChameleonSystem\CoreBundle\Service\PageService" public="true">
@@ -958,5 +959,19 @@
         </service>
 
         <service id="chameleon_system_core.service.field_extension_render_service" class="ChameleonSystem\CoreBundle\Service\FieldExtensionRenderService" public="true" />
+
+        <service id="chameleon_system_core.http_client" class="Symfony\Contracts\HttpClient\HttpClientInterface" public="true">
+            <factory class="Symfony\Component\HttpClient\HttpClient" method="create" />
+        </service>
+
+        <service id="chameleon_system_core.geocoding.geocoder" class="ChameleonSystem\CoreBundle\Geocoding\GeoJsonGeocoder" public="true">
+            <argument type="string" /> <!-- Endpoint is set by extension from configuration -->
+            <argument type="service" id="chameleon_system_core.http_client" />
+            <argument type="service" id="logger" />
+            <tag name="monolog.logger" channel="chameleon_system.geocoding" />
+        </service>
+        <service id="chameleon_system_core.geocoding.geocoding_controller" class="ChameleonSystem\CoreBundle\Geocoding\GeocodingController" public="true">
+            <argument type="service" id="chameleon_system_core.geocoding.geocoder" />
+        </service>
     </services>
 </container>

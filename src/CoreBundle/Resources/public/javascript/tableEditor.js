@@ -518,7 +518,7 @@ function SaveViaAjaxCallback(data, statusText) {
         }
 
         $('#tableEditorContainer .navbar-brand').html(data.name);
-        $('#cmsbreadcrumb .breadcrumb-item:last').html(data.name);
+        $('#cmsbreadcrumb .breadcrumb-item:last a').html(data.breadcrumbName || data.name);
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }

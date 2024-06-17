@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\ExtranetBundle\Exception\PasswordGenerationFailedException;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
+use ChameleonSystem\ExtranetBundle\MessageCodes;
 use ChameleonSystem\ExtranetBundle\objects\ExtranetUserConstants;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -237,12 +238,18 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
             if (true === $bDataValid) {
                 $this->UpdateUserAddress(null, null, true);
-                // redirect to registration success page
-                if (!is_null($sSuccessURL)) {
-                    $this->RedirectToURL($sSuccessURL, true);
+
+                $oExtranetConf = TdbDataExtranet::GetInstance();
+                if (true === $oExtranetConf->fieldUserMustConfirmRegistration) {
+                    $oMsgManager = TCMSMessageManager::GetInstance(); // TODO check deprecation
+                    $oMsgManager->AddMessage(\TDataExtranetUser::FORM_DATA_NAME_USER, MessageCodes::WAIT_FOR_EMAIL_CONFIRM);
                 } else {
-                    $oExtranetConf = TdbDataExtranet::GetInstance();
-                    $this->RedirectToURL($oExtranetConf->GetLinkRegisterSuccessPage(), true);
+                    // redirect to registration success page
+                    if (!is_null($sSuccessURL)) {
+                        $this->RedirectToURL($sSuccessURL, true);
+                    } else {
+                        $this->RedirectToURL($oExtranetConf->GetLinkRegisterSuccessPage(), true);
+                    }
                 }
             }
         }
@@ -871,6 +878,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         if ($oUser->id == $sRequestUserKey && $oUser->IsLoggedIn() && !$oUser->IsConfirmedUser() && $oExtranetConfig->fieldUserMustConfirmRegistration) {
             $oUser->SendRegistrationNotification('registration-with-confirmation');
         }
+
         if ($bIsExternalCall) {
             $this->RedirectToURL($oExtranetConfig->GetLinkRegisterSuccessPage(true));
         }

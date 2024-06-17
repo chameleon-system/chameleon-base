@@ -1,4 +1,3 @@
-
 if (typeof CHAMELEON === "undefined" || !CHAMELEON) {
     var CHAMELEON = {};
 }
