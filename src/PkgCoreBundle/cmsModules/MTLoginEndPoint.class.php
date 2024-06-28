@@ -29,10 +29,6 @@ class MTLoginEndPoint extends TCMSModelBase
             $this->data['redirectParams'] = $this->global->GetUserData('redirectParams');
         } 
 
-        if ($this->global->CMSUserDefined()) {
-            $this->getRedirect()->redirectToActivePage([]);
-        }
-
         return $this->data;
     }
 
@@ -93,7 +89,9 @@ class MTLoginEndPoint extends TCMSModelBase
         $inputFilter = $this->getInputFilterUtilService();
         $redirectParamsEncoded = $inputFilter->getFilteredInput('redirectParams', '');
         if ('' === $redirectParamsEncoded) {
-            return;
+            // load the welcome page as target page
+            $homePageDef = $this->getSymfonyContainer()->get('chameleon_system_core.backend_controller');
+            $redirectParams['pagedef'] = $homePageDef;
         }
 
         $urlParams = urldecode($redirectParamsEncoded);
@@ -207,5 +205,10 @@ class MTLoginEndPoint extends TCMSModelBase
     private function getInputFilterUtilService(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getSymfonyContainer(): \Psr\Container\ContainerInterface
+    {
+        return ServiceLocator::get('service_container');
     }
 }
