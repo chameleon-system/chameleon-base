@@ -15,14 +15,8 @@ use ChameleonSystem\CoreBundle\Security\BackendAccessCheck;
 
 class ChameleonBackendController extends ChameleonController
 {
-    /**
-     * @var BackendAccessCheck
-     */
-    private $backendAccessCheck;
-    /**
-     * @var string
-     */
-    private $homePagedef;
+    private BackendAccessCheck $backendAccessCheck;
+    private string $homePagedef = 'welcome';
 
     /**
      * {@inheritdoc}

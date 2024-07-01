@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CmsStringUtilitiesBundle\Interfaces\UrlUtilityServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\UpdateCounterMigrationBundle\Exception\InvalidMigrationCounterException;
@@ -18,6 +17,22 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MTLoginEndPoint extends TCMSModelBase
 {
+
+    public function Init()
+    {
+        parent::Init();
+
+        $moduleFunction = $this->global->GetUserData('module_fnc');
+
+        if (is_array($moduleFunction) && 'Logout' === $moduleFunction['contentmodule']) {
+            return;
+        }
+
+        if (true === TCMSUser::CMSUserDefined()) {
+            $this->getRedirect()->redirectToActivePage([]);
+        }
+    }
+
     public function &Execute()
     {
         $this->data = parent::Execute();
@@ -71,11 +86,7 @@ class MTLoginEndPoint extends TCMSModelBase
         }
     }
 
-    /**
-     * @return string
-     * @psalm-suppress FalsableReturnStatement
-     */
-    private function getCurrentHashedUserPassword(string $username)
+    private function getCurrentHashedUserPassword(string $username): string
     {
         return $this->getDatabaseConnection()->fetchColumn('SELECT `crypted_pw` FROM `cms_user` WHERE `login` = :login LIMIT 1', array(
             'login' => $username,
@@ -89,9 +100,7 @@ class MTLoginEndPoint extends TCMSModelBase
         $inputFilter = $this->getInputFilterUtilService();
         $redirectParamsEncoded = $inputFilter->getFilteredInput('redirectParams', '');
         if ('' === $redirectParamsEncoded) {
-            // load the welcome page as target page
-            $homePageDef = $this->getSymfonyContainer()->get('chameleon_system_core.backend_controller');
-            $redirectParams['pagedef'] = $homePageDef;
+            $redirectParams['pagedef'] = '';
         }
 
         $urlParams = urldecode($redirectParamsEncoded);
@@ -99,7 +108,7 @@ class MTLoginEndPoint extends TCMSModelBase
     
         $this->getRedirect()->redirectToActivePage($this->filterRedirectParameter($redirectParams));
     }
-    
+
     protected function filterRedirectParameter(array $redirectParams): array
     {
         // Prevent redirecting to a page that was loaded in an iframe.

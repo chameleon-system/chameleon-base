@@ -93,7 +93,7 @@ class cmsCoreRedirect implements ICmsCoreRedirect
         } elseif (is_array($queryStringParameters)) {
             $parameters = $queryStringParameters;
         } else {
-            $parameters = array();
+            $parameters = [];
         }
 
         $excludeParameters = $this->getRequest()->query->keys();
