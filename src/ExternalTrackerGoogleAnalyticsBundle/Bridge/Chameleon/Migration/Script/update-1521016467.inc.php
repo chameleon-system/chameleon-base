@@ -4,5 +4,6 @@
     - Remove extension for MTPageMeta
 </div>
 <?php
+TCMSLogChange::requireBundleUpdates('ChameleonSystemExternalTrackerBundle', '1719923625');
 
 TCMSLogChange::deleteVirtualNonDbExtension(__LINE__, 'MTPageMetaCore', 'MTPkgExternalTrackerGoogleAnalytics_MTPageMetaCore');
