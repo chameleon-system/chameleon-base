@@ -57,8 +57,6 @@ class chameleon
 
         date_default_timezone_set(CMS_DEFAULT_TIME_ZONE);
 
-        require_once PATH_CORE_CONFIG.'/version.inc.php';
-
         if (true === $this->isInMaintenanceMode($requestType)) {
             $this->clearMaintenanceModeMarkerFileCache();
 

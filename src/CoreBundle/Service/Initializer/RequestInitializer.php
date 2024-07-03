@@ -40,21 +40,12 @@ class RequestInitializer
     public function initialize(Request $request)
     {
         // removed check for request type here. If we need it for something else here besides the setting via chameleon::boot, look here again
-        $this->defineVersion();
         $this->registerErrorHandler();
 
         $this->addStaticURLs();
         $this->addSchemeVariable($request);
         $this->sessionManager->boot();
         $this->transformParameters($request);
-    }
-
-    /**
-     * @return void
-     */
-    protected function defineVersion()
-    {
-        require_once PATH_CORE_CONFIG.'/version.inc.php';
     }
 
     /**
