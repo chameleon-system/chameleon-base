@@ -19,7 +19,7 @@ class TPkgComment extends TPkgCommentAutoParent
     public const URL_NAME_ID_PAGE = 'chameleon_system_comment_url_id_page';
     public const URL_NAME_JUMPER = 'chameleon_system_comment_url_jumper';
 
-    private const MESSAGE_CONSUMER_NAME = 'comments';
+    public const MESSAGE_CONSUMER_NAME = 'comments';
     private const URL_ACTION_PARAMETER = 'action';
 
     private const VIEW_PATH = 'pkgComment/views/db/TPkgComment';
