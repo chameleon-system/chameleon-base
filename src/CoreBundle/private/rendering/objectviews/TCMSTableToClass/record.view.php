@@ -474,7 +474,7 @@ $oFields->GoToStart();
           } ?>
 
             } else {
-                $sContent = $this->sqlData['name'];
+                $sContent = $this->sqlData['name'] ?? $this->sqlData['name'] ?? 'unknown' ;
             }
 
             if(!stristr($sContent,'<') && !stristr($sContent,'>')) {
