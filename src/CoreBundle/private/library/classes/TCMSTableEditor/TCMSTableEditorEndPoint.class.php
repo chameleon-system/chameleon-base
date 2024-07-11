@@ -1400,6 +1400,13 @@ class TCMSTableEditorEndPoint
             $isCopy = false;
         }
         if ($this->_WriteDataToDatabase($oFields, $this->oTable, true, $isCopy, false, $bCopyAllLanguages)) {
+            if (!$this->bPreventPostSaveHookOnFields) {
+                $oFields->GoToStart();
+                /** @var $oField TCMSField */
+                while ($oField = $oFields->Next()) {
+                    $oField->PostSaveHook($this->sId);
+                }
+            }
             $this->bIsDatabaseCopy = true;
             $this->OnAfterCopy();
         }
