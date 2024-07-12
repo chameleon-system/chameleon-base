@@ -199,13 +199,7 @@ class TGroupTableField
         return $cellValue;
     }
 
-    /**
-     * @param array<string, mixed> $row
-     * @param string $onClickEvent
-     *
-     * @return array
-     */
-    private function getLinkData(array $row, $onClickEvent)
+    private function getLinkData(array $row, ?string $onClickEvent): array
     {
         // Check for presence of a link field.
         $linkFields = null;
@@ -239,74 +233,61 @@ class TGroupTableField
         ];
     }
 
-    /**
-     * @param array<string, mixed> $row
-     * @param bool   $isTableHeader
-     * @param string $linkEvent
-     * @param string $style
-     * @param string $cellValue
-     *
-     * @return string
-     */
-    private function getCellHtml(array $row, $isTableHeader, $linkEvent, $style, $cellValue, $linkFields)
+    private function getCellHtml(array $row, bool $isTableHeader = false, ?string $linkEvent = '', string $style = '', string $cellValue = '', ?array $linkFields = []): string
     {
+        // for backwards compatibility
+        if (null === $linkFields) {
+            $linkFields = [];
+        }
+
+        $attributes = $this->getAttributes();
+        $attributes['data-table-name'] = $this->originalTable;
+        $attributes['data-field-name'] = $this->sOriginalField;
+        $additionalAttributes = $this->parseAttributesString($this->_inTDCallback());
+        foreach ($additionalAttributes as $key => $value) {
+            if (isset($attributes[$key])) {
+                // if key exists, add value to existing value
+                $attributes[$key] .= ' ' . $value;
+            } else {
+                $attributes[$key] = $value;
+            }
+        }
+
         $event = new DisplayListmanagerCellEvent($this, $row, $isTableHeader);
-        $event->setAttributes($this->getAttributes());
-        $event->setOnclickEvent($linkEvent);
+        $event->setAttributes($attributes);
+        $event->setOnclickEvent((string) $linkEvent);
         $event->setCssClasses(\explode(' ', $style));
         $event->setCellValue($cellValue);
 
         $this->getEventDispatcher()->dispatch($event, CoreEvents::DISPLAY_LISTMANAGER_CELL);
 
-        $tag = true === $event->isHeader() ? 'th' : 'td';
         $onclick = $event->getOnclickEvent();
 
-        $cellValue = $event->getCellValue();
-        if (null === $onclick && null !== $linkFields && 1 === \count($linkFields)) {
-            $cellValue = '<a href="'.$this->getDetailLinkURL($row, $linkFields[0]).'" target="_top" class="TGroupTableLink">'.$cellValue.'</a>';
-        }
-        if (null !== $onclick && '' !== $onclick) {
-            $onclick = "onclick=\"$onclick\"";
+        $cellValueWithDetailLink = $event->getCellValue();
+        if (1 === \count($linkFields)) {
+            $cellValueWithDetailLink = '<a href="'.$this->getDetailLinkURL($row, $linkFields[0]).'" target="_top" class="TGroupTableLink">'.$cellValue.'</a>';
         }
 
-        return \sprintf(
-            '<%s %s %s %s class="%s">%s</%s>',
-            $tag,
-            $this->formatAttributes($event->getAttributes()),
-            $onclick,
-            $this->_inTDCallback(),
-            \implode(' ', $event->getCssClasses()),
-            $cellValue,
-            $tag
-        );
+        $event->setCellValueWithDetailLink($cellValueWithDetailLink);
+
+        $viewRenderer = $this->getViewRenderer();
+        $viewRenderer->AddSourceObject('cellEvent', $event);
+
+        return $viewRenderer->Render('MTTableManager/listCell.html.twig', null, false);
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return string
-     */
-    private function formatAttributes(array $attributes)
+    private function parseAttributesString(string $attributesString): array
     {
-        $cell = '';
-        foreach ($attributes as $key => $value) {
-            if (null === $value || false === $value || '' === $value) {
-                continue;
-            }
-            $cell .= TGlobal::OutHTML($key);
-            if (true !== $value) {
-                $cell .= '="'.TGlobal::OutHTML($value).'"';
-            }
-            $cell .= ' ';
+        $attributesArray = [];
+        preg_match_all('/(\w+)\s*=\s*"([^"]*)"/', $attributesString, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $attributesArray[$match[1]] = $match[2];
         }
 
-        return $cell;
+        return $attributesArray;
     }
 
-    /**
-     * @return array
-     */
-    private function getAttributes()
+    private function getAttributes(): array
     {
         $attributes = [
             'align' => $this->align,
@@ -511,5 +492,10 @@ class TGroupTableField
     private function getInputFilterUtil()
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

@@ -1,0 +1,18 @@
+{# @var cellEvent \ChameleonSystem\CoreBundle\Event\DisplayListmanagerCellEvent  #}
+{# @var additionalAttributes array #}
+
+{% set tag = 'td' %}
+{% if cellEvent.isHeader %}
+    {% set tag = 'th' %}
+{% endif %}
+
+{% set tagAttributes = '' %}
+{% for key, value in cellEvent.attributes %}
+    {% if value is not empty %}
+        {% set tagAttributes = tagAttributes ~ ' ' ~ key|e('html_attr') ~ '="' ~ value|e('html_attr') ~ '"' %}
+    {% endif %}
+{% endfor %}
+
+<{{ tag }}{{ tagAttributes|raw }}{% if cellEvent.onclickEvent %} onclick="{{ cellEvent.onclickEvent|raw }}"{% endif %} {{ additionalAttributes|raw }}{% if cellEvent.cssClasses %} class="{{ cellEvent.cssClasses|join(' ') }}"{% endif %}>
+{{ cellEvent.cellValueWithDetailLink|raw }}
+</{{ tag }}>
