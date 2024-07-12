@@ -14,6 +14,6 @@
 {% endfor %}
 {% set tagAttributes = tagAttributes|trim %}
 
-<{{ tag }} {{ tagAttributes|raw }}{% if cellEvent.onclickEvent %} onclick="{{ cellEvent.onclickEvent|raw }}"{% endif %} {{ additionalAttributes|raw }}{% if cellEvent.cssClasses %} class="{{ cellEvent.cssClasses|join(' ') }}"{% endif %}>
+<{{ tag }}{{ tagAttributes|raw }}{% if cellEvent.onclickEvent %} onclick="{{ cellEvent.onclickEvent|raw }}"{% endif %} {{ additionalAttributes|raw }}{% if cellEvent.cssClasses %} class="{{ cellEvent.cssClasses|join(' ') }}"{% endif %}>
 {{ cellEvent.cellValueWithDetailLink|raw }}
 </{{ tag }}>
