@@ -283,6 +283,7 @@ class TGroupTableField
         foreach ($matches as $match) {
             $attributesArray[$match[1]] = $match[2];
         }
+
         return $attributesArray;
     }
 
@@ -493,7 +494,7 @@ class TGroupTableField
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
