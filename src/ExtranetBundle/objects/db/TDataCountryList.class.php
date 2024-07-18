@@ -13,17 +13,14 @@ class TDataCountryList extends TDataCountryListAutoParent
 {
     /**
      * {@inheritdoc}
-     *
-     * @psalm-suppress AssignmentToVoid, InvalidReturnStatement
-     * @FIXME `Load` is a void method. Saving the parent return value and returning in this method makes no sense.
      */
-    public function Load($sQuery, array $queryParameters = array(), array $queryParameterTypes = array())
+    public function Load($sQuery, array $queryParameters = array(), array $queryParameterTypes = array()): void
     {
-        $returnValue = parent::Load($sQuery, $queryParameters, $queryParameterTypes);
-        if (false === TGlobal::IsCMSMode()) {
-            $this->AddFilterString('`data_country`.`active`="1"');
+        parent::Load($sQuery, $queryParameters, $queryParameterTypes);
+        if (true === TGlobal::IsCMSMode()) {
+            return;
         }
 
-        return $returnValue;
+        $this->AddFilterString('`data_country`.`active`="1"');
     }
 }
