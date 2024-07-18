@@ -20,7 +20,9 @@ class TDataCountryList extends TDataCountryListAutoParent
     public function Load($sQuery, array $queryParameters = array(), array $queryParameterTypes = array())
     {
         $returnValue = parent::Load($sQuery, $queryParameters, $queryParameterTypes);
-        $this->AddFilterString('`data_country`.`active`="1"');
+        if (false === TGlobal::IsCMSMode()) {
+            $this->AddFilterString('`data_country`.`active`="1"');
+        }
 
         return $returnValue;
     }
