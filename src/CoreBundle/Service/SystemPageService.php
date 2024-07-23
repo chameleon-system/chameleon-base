@@ -73,18 +73,26 @@ class SystemPageService implements SystemPageServiceInterface
 
     public function getSystemPage($systemPageNameInternal, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
-        if ($this->systemPageCache[$systemPageNameInternal] ?? null) {
-            return $this->systemPageCache[$systemPageNameInternal];
-        }
-
         if (null === $portal) {
             $portal = $this->portalDomainService->getActivePortal();
         }
+
         if (null === $portal) {
             return null;
         }
+
         if (null === $language) {
             $language = $this->languageService->getActiveLanguage();
+        }
+
+        if (null === $language) {
+            $language = $this->languageService->getCmsBaseLanguage();
+        }
+
+        $cacheKey = $systemPageNameInternal.'_'.$portal->id.'_'.$language->id;
+
+        if ($this->systemPageCache[$cacheKey] ?? null) {
+            return $this->systemPageCache[$cacheKey];
         }
 
         $systemPageList = $this->dataAccess->loadAll($language->id);
@@ -92,7 +100,7 @@ class SystemPageService implements SystemPageServiceInterface
         foreach ($systemPageList as $systemPage) {
             if ($systemPageNameInternal === $systemPage->fieldNameInternal
                 && $portal->id === $systemPage->fieldCmsPortalId) {
-                $this->systemPageCache[$systemPageNameInternal] = $systemPage;
+                $this->systemPageCache[$cacheKey] = $systemPage;
 
                 return $systemPage;
             }
