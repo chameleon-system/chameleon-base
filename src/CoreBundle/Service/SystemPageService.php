@@ -89,19 +89,11 @@ class SystemPageService implements SystemPageServiceInterface
             $language = $this->languageService->getCmsBaseLanguage();
         }
 
-        $cacheKey = $systemPageNameInternal.'_'.$portal->id.'_'.$language->id;
-
-        if ($this->systemPageCache[$cacheKey] ?? null) {
-            return $this->systemPageCache[$cacheKey];
-        }
-
         $systemPageList = $this->dataAccess->loadAll($language->id);
         /** @var \TdbCmsPortalSystemPage $systemPage */
         foreach ($systemPageList as $systemPage) {
             if ($systemPageNameInternal === $systemPage->fieldNameInternal
                 && $portal->id === $systemPage->fieldCmsPortalId) {
-                $this->systemPageCache[$cacheKey] = $systemPage;
-
                 return $systemPage;
             }
         }
@@ -118,10 +110,6 @@ class SystemPageService implements SystemPageServiceInterface
 
     public function getSystemPageTree(string $systemPageNameInternal, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null): ?\TdbCmsTree
     {
-        if ($this->systemPageTreeCache[$systemPageNameInternal] ?? null) {
-            return $this->systemPageTreeCache[$systemPageNameInternal];
-        }
-
         $systemPage = $this->getSystemPage($systemPageNameInternal, $portal, $language);
         if (null === $systemPage) {
             throw new RouteNotFoundException("No system page was found with system name '$systemPageNameInternal'");
@@ -130,8 +118,6 @@ class SystemPageService implements SystemPageServiceInterface
         if (null === $tree) {
             throw new RouteNotFoundException("No tree node is assigned to the system page with system name '$systemPageNameInternal'");
         }
-
-        $this->systemPageTreeCache[$systemPageNameInternal] = $tree;
 
         return $tree;
     }
