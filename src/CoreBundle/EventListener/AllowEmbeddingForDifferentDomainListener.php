@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -20,15 +21,11 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class AllowEmbeddingForDifferentDomainListener
 {
-    /**
-     * @var CmsPortalDomainsDataAccessInterface
-     */
-    private $domainsDataAccess;
-
-    public function __construct(CmsPortalDomainsDataAccessInterface $domainsDataAccess)
-    {
-        $this->domainsDataAccess = $domainsDataAccess;
-    }
+    public function __construct(
+        private readonly CmsPortalDomainsDataAccessInterface $domainsDataAccess,
+        private readonly RequestInfoServiceInterface $requestInfoService
+    )
+    {}
 
     /**
      * @return void
@@ -50,12 +47,7 @@ class AllowEmbeddingForDifferentDomainListener
             return;
         }
 
-        header("X-Frame-Options: ALLOW-FROM $refererHost");
-    }
-
-    private function isPreviewMode(Request $request): bool
-    {
-        return 'true' === $request->get('__previewmode');
+        header("Content-Security-Policy: frame-ancestors $refererHost;");
     }
 
     private function getRefererHost(Request $request): ?string
@@ -80,5 +72,10 @@ class AllowEmbeddingForDifferentDomainListener
         $domainNames = $this->domainsDataAccess->getAllDomainNames();
 
         return true === \in_array($refererHost, $domainNames, true);
+    }
+
+    private function isPreviewMode(Request $request): bool
+    {
+        return $this->requestInfoService->isPreviewMode();
     }
 }

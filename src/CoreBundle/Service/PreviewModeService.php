@@ -8,7 +8,7 @@ use TTools;
 
 class PreviewModeService implements PreviewModeServiceInterface
 {
-    protected const COOKIE_NAME = 'preview_mode';
+    public const COOKIE_NAME = 'preview_mode';
 
     public function __construct(
         protected readonly string $hashingSecret,
@@ -29,7 +29,7 @@ class PreviewModeService implements PreviewModeServiceInterface
                     $previewToken = substr($cookieString, 0, $pos);
 
                     try {
-                        $previewTokenExists = 1 === (int) $this->connection->fetchOne("SELECT 1 FROM `cms_user` WHERE `preview_token` = ?", [$previewToken]);
+                        $previewTokenExists = $this->previewTokenExists($previewToken);
                     } catch (Exception) {
                         return false; // ignore if field not exists yet
                     }
@@ -65,5 +65,10 @@ class PreviewModeService implements PreviewModeServiceInterface
     protected function generateHash(string $toHash): string
     {
         return hash('md5', $toHash.$this->hashingSecret);
+    }
+
+    public function previewTokenExists(string $previewToken): bool
+    {
+        return 1 === (int)$this->connection->fetchOne("SELECT 1 FROM `cms_user` WHERE `preview_token` = ?", [$previewToken]);
     }
 }
