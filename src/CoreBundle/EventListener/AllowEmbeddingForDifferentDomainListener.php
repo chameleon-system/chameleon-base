@@ -34,7 +34,7 @@ class AllowEmbeddingForDifferentDomainListener
     {
         $request = $event->getRequest();
 
-        if (false === $this->isPreviewMode($request)) {
+        if (false === $this->requestInfoService->isPreviewMode()) {
             return;
         }
 
@@ -72,10 +72,5 @@ class AllowEmbeddingForDifferentDomainListener
         $domainNames = $this->domainsDataAccess->getAllDomainNames();
 
         return true === \in_array($refererHost, $domainNames, true);
-    }
-
-    private function isPreviewMode(Request $request): bool
-    {
-        return $this->requestInfoService->isPreviewMode();
     }
 }

@@ -164,7 +164,7 @@ class RequestInfoService implements RequestInfoServiceInterface
                  || 'true' === $request->query->get('preview')
                 );
 
-        return $this->isPreviewModeCache; 
+        return $this->isPreviewModeCache;
     }
 
     /**
@@ -228,11 +228,11 @@ class RequestInfoService implements RequestInfoServiceInterface
 
     private function checkTokenFromQueryParam(Request $request): bool
     {
-        $param = $request->query->get('previewToken');
-        if (null === $param) {
+        $previewToken = $request->query->get('previewToken');
+        if (null === $previewToken) {
             return false;
         }
 
-        return $this->getPreviewModeService()->previewTokenExists($param);
+        return $this->getPreviewModeService()->previewTokenExists($previewToken);
     }
 }
