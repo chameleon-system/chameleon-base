@@ -411,42 +411,40 @@ class TCMSListManagerEndPoint
      * any custom restrictions can be added to the query by overwriting this function.
      *
      * @return string
+     * @throws \Doctrine\DBAL\Exception
      */
     public function GetCustomRestriction()
     {
-        $query = '';
-
-        if (!empty($this->sRestrictionField) && !is_null($this->sRestriction)) {
-            $sourceID = $this->sRestriction;
-            $fieldname = $this->sRestrictionField;
-
-            if (false === str_ends_with($fieldname, '_mlt') && true === TTools::FieldExists($this->tableObj->sTableName, $fieldname)) {
-                return $this->CreateRestriction($this->sRestrictionField, "= '".MySqlLegacySupport::getInstance()->real_escape_string($sourceID)."'");
-            }
-
-            $mltTable = $this->GetMLTTableName();
-            $query = sprintf("SELECT `target_id` FROM %s WHERE `source_id` = :value", $this->getDatabaseConnection()->quoteIdentifier($mltTable));
-
-            $idList = $this->getDatabaseConnection()->fetchFirstColumn($query, ['value' => $this->sRestriction]);
-            if ([] === $idList) {
-                return '1=0';
-            }
-
-            $idListString = implode(',', array_map([$this->getDatabaseConnection(), 'quote'], $idList));
-            $quotedTableName = $this->getDatabaseConnection()->quoteIdentifier($this->oTableConf->sqlData['name']);
-
-            return " $quotedTableName.`id` IN ($idListString)";
+        if (true === empty($this->sRestrictionField) || null === $this->sRestriction) {
+            return '';
         }
 
-        return $query;
+        $sourceID = $this->sRestriction;
+        $fieldName = $this->sRestrictionField;
+        $foreignTableName = $this->oTableConf->sqlData['name'];
+        $connection = $this->getDatabaseConnection();
+
+        if (false === str_ends_with($fieldName, '_mlt') && true === TTools::FieldExists($foreignTableName, $fieldName)) {
+            return $this->CreateRestriction($this->sRestrictionField, '= '.$connection->quote($sourceID));
+        }
+
+        $mltTable = $this->GetMLTTableName();
+        $query = sprintf("SELECT `target_id` FROM %s WHERE `source_id` = :value", $connection->quoteIdentifier($mltTable));
+
+        $idList = $connection->fetchFirstColumn($query, ['value' => $this->sRestriction]);
+        if ([] === $idList) {
+            return '1=0';
+        }
+
+        $idListString = implode(',', array_map([$connection, 'quote'], $idList));
+        $quotedTableName = $connection->quoteIdentifier($foreignTableName);
+
+        return " $quotedTableName.`id` IN ($idListString)";
     }
 
     protected function GetMLTTableName()
     {
-        $sFieldMltName = $this->GetFieldMltName();
-        $sMLTTableName = substr($this->sRestrictionField, 0, -4).'_'.$sFieldMltName.'_mlt';
-
-        return $sMLTTableName;
+        return substr($this->sRestrictionField, 0, -4).'_'.$this->GetFieldMltName().'_mlt';
     }
 
     /**
@@ -457,20 +455,20 @@ class TCMSListManagerEndPoint
      */
     protected function GetFieldMltName()
     {
-        $sFieldMltName = $this->oTableConf->sqlData['name'];
-        if (array_key_exists('name', $this->tableObj->_postData)) {
-            $sPostFieldMltName = $this->tableObj->_postData['name'];
-            $mltFieldUtil = $this->getMltFieldUtil();
-            $sPostFieldMltName = $mltFieldUtil->cutMltExtension($sPostFieldMltName);
-            $cleanMltFieldName = $mltFieldUtil->cutMultiMltFieldNumber($sPostFieldMltName);
-            if ($cleanMltFieldName != $sFieldMltName) {
-                $sFieldMltName = $sPostFieldMltName.'_'.$sFieldMltName;
-            } else {
-                $sFieldMltName = $sPostFieldMltName;
-            }
+        $fieldMltName = $this->oTableConf->sqlData['name'];
+        $postFieldMltName = $this->tableObj->_postData['name'] ?? null;
+        if (null === $postFieldMltName) {
+            return $fieldMltName;
         }
 
-        return $sFieldMltName;
+        $mltFieldUtil = $this->getMltFieldUtil();
+        $postFieldMltName = $mltFieldUtil->cutMltExtension($postFieldMltName);
+        $cleanMltFieldName = $mltFieldUtil->cutMultiMltFieldNumber($postFieldMltName);
+        if ($cleanMltFieldName === $fieldMltName) {
+            return $postFieldMltName;
+        }
+
+        return $postFieldMltName.'_'.$fieldMltName;
     }
 
     public function GetTableAlias($query)
