@@ -436,8 +436,6 @@ class TCMSListManagerEndPoint
             $quotedTableName = $this->getDatabaseConnection()->quoteIdentifier($this->oTableConf->sqlData['name']);
 
             return " $quotedTableName.`id` IN ($idListString)";
-
-            //$query .= $this->CreateRestriction($this->sRestrictionField, "= '".MySqlLegacySupport::getInstance()->real_escape_string($sourceID)."'");
         }
 
         return $query;

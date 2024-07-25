@@ -108,29 +108,6 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
         return $query;
     }
 
-//    /**
-//     * @throws \Doctrine\DBAL\Exception
-//     */
-//    public function CreateRestriction($fieldname, $operatorAndValue)
-//    {
-//        if (false === str_ends_with($fieldname, '_mlt') && true === TTools::FieldExists($this->tableObj->sTableName, $fieldname)) {
-//            return parent::CreateRestriction($fieldname, $operatorAndValue);
-//        }
-//
-//        $mltTable = $this->GetMLTTableName();
-//        $query = sprintf("SELECT `target_id` FROM %s WHERE `source_id` %s", $this->getDatabaseConnection()->quoteIdentifier($mltTable), $operatorAndValue);
-//
-//        $idList = $this->getDatabaseConnection()->fetchFirstColumn($query, ['value' => $this->sRestriction]);
-//        if ([] === $idList) {
-//            return '1=0';
-//        }
-//
-//        $idListString = implode(',', array_map([$this->getDatabaseConnection(), 'quote'], $idList));
-//        $quotedTableName = $this->getDatabaseConnection()->quoteIdentifier($this->oTableConf->sqlData['name']);
-//
-//        return " $quotedTableName.`id` IN ($idListString)";
-//    }
-
     protected function AddRowPrefixFields()
     {
     }
