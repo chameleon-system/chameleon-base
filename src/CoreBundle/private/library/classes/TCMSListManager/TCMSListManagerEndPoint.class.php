@@ -433,7 +433,7 @@ class TCMSListManagerEndPoint
 
         $idList = $connection->fetchFirstColumn($query, ['value' => $this->sRestriction]);
         if ([] === $idList) {
-            return '1=0';
+            return '1=0'; // restrictions set, but no matches
         }
 
         $idListString = implode(',', array_map([$connection, 'quote'], $idList));
