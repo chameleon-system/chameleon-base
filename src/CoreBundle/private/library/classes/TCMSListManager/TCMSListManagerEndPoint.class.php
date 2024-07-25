@@ -424,7 +424,7 @@ class TCMSListManagerEndPoint
         $foreignTableName = $this->oTableConf->sqlData['name'];
         $connection = $this->getDatabaseConnection();
 
-        if (false === str_ends_with($fieldName, '_mlt') && true === TTools::FieldExists($foreignTableName, $fieldName)) {
+        if (false === str_ends_with($fieldName, '_mlt') && true === $this->getToolsService()::FieldExists($foreignTableName, $fieldName)) {
             return $this->CreateRestriction($this->sRestrictionField, '= '.$connection->quote($sourceID));
         }
 
@@ -630,5 +630,10 @@ class TCMSListManagerEndPoint
     protected function getMltFieldUtil()
     {
         return ServiceLocator::get('chameleon_system_core.util.mlt_field');
+    }
+
+    private function getToolsService(): TTools
+    {
+        return ServiceLocator::get('chameleon_system_core.tools');
     }
 }
