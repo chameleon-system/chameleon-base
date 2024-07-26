@@ -73,7 +73,7 @@ class TCMSTableConf extends TCMSRecord
             /** @var $oList TCMSListManagerFullGroupTable */
         }
 
-        if (false === $ignoreTableEditorRestrictions && $oGlobal->UserDataExists('sRestrictionField')) {
+        if (false === $ignoreTableEditorRestrictions && true === $oGlobal->UserDataExists('sRestrictionField')) {
             $oList->sRestrictionField = $oGlobal->GetUserData('sRestrictionField');
             $oList->sRestriction = $oGlobal->GetUserData('sRestriction');
         }
