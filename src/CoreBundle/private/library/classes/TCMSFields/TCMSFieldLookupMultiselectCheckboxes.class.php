@@ -244,7 +244,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
             $oTableConf->LoadFromField('name', $foreignTableName);
 
             /** @var $oTableList TCMSListManagerFullGroupTable */
-            $oTableList = &$oTableConf->GetListObject();
+            $oTableList = &$oTableConf->GetListObject(ignoreTableEditorRestrictions: true);
 
             $oTableList->sRestriction = null; // do not include the restriction - it is part of the parent table, not the mlt!
 

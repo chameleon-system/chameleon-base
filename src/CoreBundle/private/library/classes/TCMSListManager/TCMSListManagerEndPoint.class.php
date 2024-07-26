@@ -429,7 +429,11 @@ class TCMSListManagerEndPoint
         }
 
         $mltTable = $this->GetMLTTableName();
-        $query = sprintf("SELECT `target_id` FROM %s WHERE `source_id` = :value", $connection->quoteIdentifier($mltTable));
+        if (false === TGlobalBase::TableExists($mltTable)) {
+            return '1=0'; // mlt table does not exist, so the restriction is invalid
+        }
+
+        $query = sprintf("SELECT target_id FROM %s WHERE source_id = :value", $connection->quoteIdentifier($mltTable));
 
         $idList = $connection->fetchFirstColumn($query, ['value' => $this->sRestriction]);
         if ([] === $idList) {
@@ -439,7 +443,7 @@ class TCMSListManagerEndPoint
         $idListString = implode(',', array_map([$connection, 'quote'], $idList));
         $quotedTableName = $connection->quoteIdentifier($foreignTableName);
 
-        return " $quotedTableName.`id` IN ($idListString)";
+        return " $quotedTableName.id IN ($idListString)";
     }
 
     protected function GetMLTTableName()
