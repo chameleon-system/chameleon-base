@@ -1,3 +1,15 @@
 controllers:
   resource: ../../src/Controller/
   type: annotation
+
+#app_logout:
+#  path:
+#    /logout
+#  methods: GET
+
+# config/routes/security.yaml
+#app_logout:
+##_symfony_logout:
+#  #resource: security.route_loader.logout
+#  resource: \esono\pkgCmsRouting\CmsRouteLoader::.logout
+#  type: service
