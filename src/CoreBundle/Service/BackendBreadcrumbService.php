@@ -43,10 +43,12 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
             return null;
         }
 
-        $backendUser = \TCMSUser::GetActiveUser();
-        if (null === $backendUser || false === $backendUser->bLoggedIn) {
+        $cmsUser = $securityHelper->getUser();
+        if (null === $cmsUser) {
             return null;
         }
+
+        $backendUser = new \TCMSUser($cmsUser->getId());
 
         $breadCrumbHistory = $this->getBreadcrumbFromSession($backendUser);
 
