@@ -7,15 +7,20 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @deprecated since 7.1.34
- * use TCMSFieldGeoCoordinates instead to use OpenStreetMap instead of Google Maps
  */
 
-use ChameleonSystem\CoreBundle\Service\GoogleApiKeyProviderInterface;
-use ChameleonSystem\CoreBundle\Util\UrlUtil;
+namespace ChameleonSystem\CoreBundle\Field;
 
-class TCMSFieldGMapCoordinate extends TCMSField
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use TCMSField;
+use TCMSMessageManager;
+use TCMSTableEditorManager;
+use TGlobal;
+use ViewRenderer;
+
+class FieldGeoCoordinates extends TCMSField
 {
     /**
      * {@inheritdoc}
@@ -23,10 +28,10 @@ class TCMSFieldGMapCoordinate extends TCMSField
     public function GetSQL()
     {
         $returnVal = false;
-        $bLatitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_lat', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name.'_lat']));
-        $bLongitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_lng', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name.'_lng']));
+        $bLatitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name . '_lat', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name . '_lat']));
+        $bLongitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name . '_lng', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name . '_lng']));
         if (!empty($bLatitudePassed) && !empty($bLongitudePassed)) {
-            $returnVal = $this->oTableRow->sqlData[$this->name.'_lat'].'|'.$this->oTableRow->sqlData[$this->name.'_lng'];
+            $returnVal = $this->oTableRow->sqlData[$this->name . '_lat'] . '|' . $this->oTableRow->sqlData[$this->name . '_lng'];
         } else {
             $bCompleteDatePassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name, $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name]));
             if ($bCompleteDatePassed) {
@@ -64,10 +69,9 @@ class TCMSFieldGMapCoordinate extends TCMSField
         $viewRenderer->AddSourceObject('fieldValue', $this->_GetFieldValue());
         $viewRenderer->AddSourceObject('latitude', $lat);
         $viewRenderer->AddSourceObject('longitude', $lng);
-        $viewRenderer->AddSourceObject('googleMapsApiKey', $this->getGoogleMapsApiKey());
         $viewRenderer->AddSourceObject('isMandatoryField', $this->IsMandatoryField());
 
-        return $viewRenderer->Render('TCMSFieldGMapCoordinate/inputFieldsWithStaticMap.html.twig', null, false);
+        return $viewRenderer->Render('Fields/FieldGeoCoordinates/inputFieldsWithStaticMap.html.twig', null, false);
     }
 
     /**
@@ -126,38 +130,7 @@ class TCMSFieldGMapCoordinate extends TCMSField
      */
     public function RenderFieldMethodsString()
     {
-        $aMethodData = $this->GetFieldMethodBaseDataArray();
-        $aMethodData['sMethodName'] = '&'.$this->GetFieldMethodName('GoogleMap');
-        $aMethodData['sReturnType'] = 'TGoogleMap';
-        $aMethodData['sClassName'] = 'TGoogleMap';
-        $aMethodData['sClassSubType'] = 'TGoogleMap';
-        $aMethodData['sClassType'] = 'Core';
-        $aMethodData['aParameters']['sWidth'] = self::GetMethodParameterArray('string', "'300'", 'width of the google map');
-        $aMethodData['aParameters']['sHeight'] = self::GetMethodParameterArray('string', "'300'", 'height of the google map');
-        $aMethodData['aParameters']['sMapType'] = self::GetMethodParameterArray('string', "'ROADMAP'", 'Map type of the google map');
-        $aMethodData['aParameters']['iZoom'] = self::GetMethodParameterArray('string', '6', 'Zoom level of the map');
-        $aMethodData['aParameters']['bShowResizeBar'] = self::GetMethodParameterArray('boolean', 'false', 'show resize bar on map');
-        $aMethodData['aParameters']['bShowStreetViewControl'] = self::GetMethodParameterArray('boolean', 'true', 'show street view control on map');
-        $aMethodData['aParameters']['bHookMenuLinks'] = self::GetMethodParameterArray('boolean', 'false', 'hook menu links on map');
-        $aMethodData['aParameters']['apiKey'] = self::GetMethodParameterArray('string', "'".$this->getGoogleMapsApiKey()."'", '');
-        $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
-        $oViewParser->bShowTemplatePathAsHTMLHint = false;
-        $oViewParser->AddVarArray($aMethodData);
-
-        $sMethodCode = $oViewParser->RenderObjectView('getobject', 'TCMSFields/TCMSFieldGMapCoordinate');
-        $oViewParser->AddVar('sMethodCode', $sMethodCode);
-        $sCode = $oViewParser->RenderObjectView('method', 'TCMSFields/TCMSField');
-
-        return $sCode;
-    }
-
-    /**
-     * @return string|null
-     */
-    protected function getGoogleMapsApiKey()
-    {
-        return $this->getGoogleApiKeyProvider()->getMapsApiKey();
+        return '';
     }
 
     /**
@@ -166,10 +139,12 @@ class TCMSFieldGMapCoordinate extends TCMSField
     public function GetCMSHtmlFooterIncludes()
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/fields/TCMSFieldGMapCoordinate/TCMSFieldGMapCoordinate.js').'" type="text/javascript"></script>';
+        $includes[] = '<script src="' . TGlobal::GetStaticURLToWebLib('/fields/FieldGeoCoordinates/FieldGeoCoordinates.js') . '" type="text/javascript"></script>';
         $includes[] = '<script type="text/javascript">
 $(document).ready(function() {
-    CHAMELEON.CORE.TCMSFieldGMapCoordinate.init("'.TGlobal::OutJS($this->name).'","'.$this->getGoogleMapsBackendModuleUrl().'");
+    CHAMELEON.CORE.FieldGeoCoordinates.init("' . TGlobal::OutJS($this->name) . '","' . $this->getMapsBackendModuleUrl() . '");
+    CHAMELEON.CORE.FieldGeoCoordinates.wrongLatitude = "'.$this->getTranslator()->trans('chameleon_system_core.field_map_coordinates.wrong_latitude').'";
+    CHAMELEON.CORE.FieldGeoCoordinates.wrongLongitude = "'.$this->getTranslator()->trans('chameleon_system_core.field_map_coordinates.wrong_longitude').'";
 });
 </script>';
 
@@ -179,29 +154,17 @@ $(document).ready(function() {
     /**
      * @return string
      */
-    protected function getGoogleMapsBackendModuleUrl()
+    protected function getMapsBackendModuleUrl()
     {
-        $googleMapsApiKey = $this->getGoogleMapsApiKey();
-        if (null === $googleMapsApiKey) {
-            $googleMapsApiKey = '';
-        }
 
         $urlUtil = $this->getUrlUtil();
 
-        return $urlUtil->getArrayAsUrl(array(
-            'pagedef' => 'gmap',
-            '_pagedefType' => 'Core',
-            'googleMapsApiKey' => $googleMapsApiKey,
-        ), PATH_CMS_CONTROLLER.'?');
+        return $urlUtil->getArrayAsUrl([
+            'pagedef' => 'geoMap',
+            '_pagedefType' => 'Core'
+            ], PATH_CMS_CONTROLLER . '?');
     }
 
-    /**
-     * @return GoogleApiKeyProviderInterface
-     */
-    protected function getGoogleApiKeyProvider()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.google_api_key');
-    }
 
     /**
      * @return ViewRenderer
@@ -217,5 +180,10 @@ $(document).ready(function() {
     private function getUrlUtil()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.translator');
     }
 }

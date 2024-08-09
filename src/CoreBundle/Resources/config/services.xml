@@ -938,6 +938,11 @@
             <argument id="request_stack" type="service"/>
         </service>
 
+        <service id="chameleon_system_core.module.map_coordinates" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\MapCoordinates\MapCoordinates" shared="false">
+            <tag name="chameleon_system.module"/>
+            <argument id="chameleon_system_core.util.input_filter" type="service"/>
+        </service>
+
         <service id="chameleon_system_core.service.css_minifier" class="ChameleonSystem\CoreBundle\Service\CssMinifierService" public="true">
         </service>
 
