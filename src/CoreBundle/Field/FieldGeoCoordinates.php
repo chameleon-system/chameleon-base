@@ -28,13 +28,13 @@ class FieldGeoCoordinates extends TCMSField
     public function GetSQL()
     {
         $returnVal = false;
-        $bLatitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name . '_lat', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name . '_lat']));
-        $bLongitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name . '_lng', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name . '_lng']));
-        if (!empty($bLatitudePassed) && !empty($bLongitudePassed)) {
-            $returnVal = $this->oTableRow->sqlData[$this->name . '_lat'] . '|' . $this->oTableRow->sqlData[$this->name . '_lng'];
+        $latitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_lat', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name.'_lat']));
+        $longitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_lng', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name.'_lng']));
+        if (!empty($latitudePassed) && !empty($longitudePassed)) {
+            $returnVal = $this->oTableRow->sqlData[$this->name.'_lat'].'|'.$this->oTableRow->sqlData[$this->name.'_lng'];
         } else {
-            $bCompleteDatePassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name, $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name]));
-            if ($bCompleteDatePassed) {
+            $completeDatePassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name, $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name]));
+            if ($completeDatePassed) {
                 $returnVal = $this->oTableRow->sqlData[$this->name];
             }
         }
@@ -55,13 +55,13 @@ class FieldGeoCoordinates extends TCMSField
 
         $this->fieldCSSwidth = 200;
 
-        $aCoordinates = explode('|', $this->_GetFieldValue());
+        $coordinates = explode('|', $this->_GetFieldValue());
         $lat = '';
         $lng = '';
 
-        if (2 === count($aCoordinates)) {
-            $lat = $aCoordinates[0];
-            $lng = $aCoordinates[1];
+        if (2 === count($coordinates)) {
+            $lat = $coordinates[0];
+            $lng = $coordinates[1];
         }
 
         $viewRenderer = $this->getViewRenderer();
@@ -80,9 +80,8 @@ class FieldGeoCoordinates extends TCMSField
     public function _GetHTMLValue()
     {
         $html = parent::_GetHTMLValue();
-        $html = TGlobal::OutHTML($html);
 
-        return $html;
+        return TGlobal::OutHTML($html);
     }
 
     /**
@@ -90,25 +89,25 @@ class FieldGeoCoordinates extends TCMSField
      */
     public function DataIsValid()
     {
-        $bDataIsValid = parent::DataIsValid();
-        if ($bDataIsValid) {
-            $sSQLData = $this->ConvertPostDataToSQL();
+        $dataIsValid = parent::DataIsValid();
+        if ($dataIsValid) {
+            $sQLData = $this->ConvertPostDataToSQL();
 
-            if (!$this->IsMandatoryField() && ('|' == $sSQLData || '' == $sSQLData)) {
-                $bDataIsValid = true;
+            if (!$this->IsMandatoryField() && ('|' == $sQLData || '' == $sQLData)) {
+                $dataIsValid = true;
             } else {
                 $pattern = '/^-?([0-9](\.\d+)?|[1-7][0-9](\.\d+)?|8[0-4](\.\d+)?|85(\.00*)?)\|-?([0-9](\.\d+)?|[1-9][0-9](\.\d+)?|1[0-7][0-9](\.\d+)?|180(\.00*)?)$/';
-                if ($this->HasContent() && !preg_match($pattern, $sSQLData)) {
-                    $bDataIsValid = false;
-                    $oMessageManager = TCMSMessageManager::GetInstance();
-                    $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
-                    $sFieldTitle = $this->oDefinition->GetName();
-                    $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_GOOGLECOORDINATES_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                if ($this->HasContent() && !preg_match($pattern, $sQLData)) {
+                    $dataIsValid = false;
+                    $messageManager = TCMSMessageManager::GetInstance();
+                    $consumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
+                    $fieldTitle = $this->oDefinition->GetName();
+                    $messageManager->AddMessage($consumerName, 'TABLEEDITOR_FIELD_GOOGLECOORDINATES_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $fieldTitle]);
                 }
             }
         }
 
-        return $bDataIsValid;
+        return $dataIsValid;
     }
 
     /**
@@ -116,13 +115,13 @@ class FieldGeoCoordinates extends TCMSField
      */
     public function HasContent()
     {
-        $bHasContent = false;
-        $sContent = $this->ConvertPostDataToSQL();
-        if (!empty($sContent) || '|' == $sContent) {
-            $bHasContent = true;
+        $hasContent = false;
+        $content = $this->ConvertPostDataToSQL();
+        if (!empty($content) || '|' == $content) {
+            $hasContent = true;
         }
 
-        return $bHasContent;
+        return $hasContent;
     }
 
     /**
@@ -139,10 +138,10 @@ class FieldGeoCoordinates extends TCMSField
     public function GetCMSHtmlFooterIncludes()
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
-        $includes[] = '<script src="' . TGlobal::GetStaticURLToWebLib('/fields/FieldGeoCoordinates/FieldGeoCoordinates.js') . '" type="text/javascript"></script>';
+        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/fields/FieldGeoCoordinates/FieldGeoCoordinates.js').'" type="text/javascript"></script>';
         $includes[] = '<script type="text/javascript">
 $(document).ready(function() {
-    CHAMELEON.CORE.FieldGeoCoordinates.init("' . TGlobal::OutJS($this->name) . '","' . $this->getMapsBackendModuleUrl() . '");
+    CHAMELEON.CORE.FieldGeoCoordinates.init("'.TGlobal::OutJS($this->name).'","'.$this->getMapsBackendModuleUrl().'");
     CHAMELEON.CORE.FieldGeoCoordinates.wrongLatitude = "'.$this->getTranslator()->trans('chameleon_system_core.field_map_coordinates.wrong_latitude').'";
     CHAMELEON.CORE.FieldGeoCoordinates.wrongLongitude = "'.$this->getTranslator()->trans('chameleon_system_core.field_map_coordinates.wrong_longitude').'";
 });
@@ -151,33 +150,22 @@ $(document).ready(function() {
         return $includes;
     }
 
-    /**
-     * @return string
-     */
-    protected function getMapsBackendModuleUrl()
+    protected function getMapsBackendModuleUrl(): string
     {
-
         $urlUtil = $this->getUrlUtil();
 
         return $urlUtil->getArrayAsUrl([
             'pagedef' => 'geoMap',
-            '_pagedefType' => 'Core'
-            ], PATH_CMS_CONTROLLER . '?');
+            '_pagedefType' => 'Core',
+            ], PATH_CMS_CONTROLLER.'?');
     }
 
-
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
     }

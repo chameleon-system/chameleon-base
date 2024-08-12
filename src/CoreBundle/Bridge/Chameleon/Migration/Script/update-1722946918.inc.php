@@ -1,13 +1,13 @@
 <h1>Build #1722946918</h1>
 <h2>Date: 2024-08-06</h2>
 <div class="changelog">
-    - #64178: new field type "Maps-Koordinaten" with OpenStreetMap instead of Google Maps
+    - #64178: new field type "Geo-Koordinaten" with OpenStreetMap instead of Google Maps
 </div>
 <?php
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'de')
   ->setFields([
-      '049_trans' => 'Maps-Koordinaten',
+      '049_trans' => 'Geo-Koordinaten',
       'mysql_standard_value' => '',
       'force_auto_increment' => '0',
       'fieldclass' => '\ChameleonSystem\CoreBundle\Field\FieldGeoCoordinates',
@@ -62,7 +62,7 @@ TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
   ->setFields([
-      '049_trans' => 'Maps Coordination',
+      '049_trans' => 'Geo Coordination',
       'help_text' => '',
   ])
   ->setWhereEquals([
@@ -75,7 +75,7 @@ TCMSLogChange::update(__LINE__, $data);
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
     ->setFields([
         'classname' => 'chameleon_system_core.module.map_coordinates',
-        'name' => 'Map Koordinaten Backendmodul',
+        'name' => 'Geo Koordinaten Backendmodul',
         'description' => '',
         'icon_font_css_class' => '',
         'view_mapper_config' => 'standard=MapCoordinates/standard.html.twig',
@@ -94,7 +94,7 @@ TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
     ->setFields([
-        'name' => 'Map Coordinates Backendmodul',
+        'name' => 'Geo Coordinates Backendmodul',
     ])
     ->setWhereEquals([
         'id' => 'a692affe-4283-2dd3-5a1d-1733d7b95dc8',
