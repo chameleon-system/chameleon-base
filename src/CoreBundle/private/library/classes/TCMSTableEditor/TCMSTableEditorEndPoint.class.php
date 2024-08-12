@@ -2160,7 +2160,7 @@ class TCMSTableEditorEndPoint
      */
     public function GetHtmlHeadIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -2168,7 +2168,7 @@ class TCMSTableEditorEndPoint
      */
     public function GetHtmlFooterIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
