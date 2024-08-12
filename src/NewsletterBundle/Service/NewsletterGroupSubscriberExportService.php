@@ -18,9 +18,18 @@ class NewsletterGroupSubscriberExportService
             return [];
         }
 
+        $subscriberList = $this->getSubscriberByNewsletterGroup($newsletterGroupId);
+
+        $extranetGroupIds = $newsletterGroup->GetFieldDataExtranetGroupIdList();
+
+        return array_merge($subscriberList, $this->getSubscriberByExtranetGroupIds($extranetGroupIds));
+    }
+
+    protected function getSubscriberByNewsletterGroup(string $newsletterGroupId): array
+    {
+        $subscriberList = [];
         $exportFields = $this->getExportFields();
 
-        $subscriberList = [];
         $query = "SELECT 
                     `data_extranet_salutation`.`name` AS salutation,
                     `pkg_newsletter_user`.*
@@ -43,8 +52,15 @@ class NewsletterGroupSubscriberExportService
             $subscriberList[$newsletterSubscriber->sqlData['cmsident']] = $subscriberListItem;
         }
 
-        $extranetGroups = $newsletterGroup->GetFieldDataExtranetGroupIdList();
-        foreach ($extranetGroups as $extranetGroupId) {
+        return $subscriberList;
+    }#
+
+    protected function getSubscriberByExtranetGroupIds(array $extranetGroupIds): array
+    {
+        $subscriberList = [];
+        $exportFields = $this->getExportFields();
+
+        foreach ($extranetGroupIds as $extranetGroupId) {
             $query = "SELECT 
                         `data_extranet_salutation`.`name` AS salutation,
                         `pkg_newsletter_user`.*
