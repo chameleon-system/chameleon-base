@@ -49,6 +49,11 @@
                 <source>chameleon_system_newsletter.action.clear_queue</source>
                 <target>Clear sending queue</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_newsletter_group.action.export_subscriber">
+                <source>chameleon_system_newsletter_group.action.export_subscriber</source>
+                <target>Export Subscribers</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>
