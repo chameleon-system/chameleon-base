@@ -62,8 +62,43 @@ TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'en')
   ->setFields([
-      '049_trans' => 'Geo Coordination',
-      'help_text' => '',
+      '049_trans' => 'Geo Coordinates',
+      'help_text' => '<div class="field-name"><strong>Field Name:</strong> arbitrary</div>
+
+<div class="php-class"><strong>PHP Class:</strong>&nbsp;FieldGeoCoordinates extends TCMSField</div>
+
+<div>Creates two text fields for entering the geo-coordinates latitude and longitude.</div>
+
+<div>Additionally, a button is generated that opens a popup with an OpenStreet Maps map, where a search can be performed.</div>
+
+<div>&nbsp;</div>
+
+<div>Allows the entry of latitude and longitude manually or by searching and clicking on an OpenStreet Maps map.</div>
+
+<div>&nbsp;</div>
+
+<div>
+<ul>
+	<li class="parameter required head">Required Parameters:</li>
+	<li>
+	<ul>
+		<li class="parameter required">n/a</li>
+	</ul>
+	</li>
+	<li>&nbsp;</li>
+	<li class="parameter optional head">Optional Parameters:</li>
+	<li>
+	<ul>
+		<li class="parameter optional">n/a</li>
+	</ul>
+	</li>
+	<li>
+	<ul>
+	</ul>
+	</li>
+</ul>
+</div>
+',
   ])
   ->setWhereEquals([
       'id' => '343b02d4-f02c-c533-be6f-f063d62bc982',
