@@ -2,6 +2,7 @@ chameleon_system_autoclasses:
   legacy_table_export:
     - targetDir: '@ChameleonSystemDataAccessBundle/src/Entity/Core'
       configDir: '@ChameleonSystemDataAccessBundle/config/doctrine/Core'
+      metaConfigDir: '@ChameleonSystemDataAccessBundle/config/autoClass/Core'
       namespace: \ChameleonSystem\DataAccessBundle\Entity\Core
       tables:
       - pkg_run_frontend_action
@@ -31,6 +32,7 @@ chameleon_system_autoclasses:
       - cms_url_alias
       - cms_user
       - cms_usergroup
+      - cms_user_sso
       - data_atomic_lock
       - data_contact_topic
       - data_country
@@ -56,6 +58,7 @@ chameleon_system_autoclasses:
       - pkg_generic_table_export
     - targetDir: '@ChameleonSystemDataAccessBundle/src/Entity/CoreMenu'
       configDir: '@ChameleonSystemDataAccessBundle/config/doctrine/CoreMenu'
+      metaConfigDir: '@ChameleonSystemDataAccessBundle/config/autoClass/CoreMenu'
       namespace: \ChameleonSystem\DataAccessBundle\Entity\CoreMenu
       tables:
       - cms_menu_category
@@ -63,6 +66,7 @@ chameleon_system_autoclasses:
       - cms_menu_item
     - targetDir: '@ChameleonSystemDataAccessBundle/src/Entity/CorePagedef'
       configDir: '@ChameleonSystemDataAccessBundle/config/doctrine/CorePagedef'
+      metaConfigDir: '@ChameleonSystemDataAccessBundle/config/autoClass/CorePagedef'
       namespace: \ChameleonSystem\DataAccessBundle\Entity\CorePagedef
       tables:
       - cms_master_pagedef
@@ -76,6 +80,7 @@ chameleon_system_autoclasses:
       - cms_tpl_module_instance
     - targetDir: '@ChameleonSystemDataAccessBundle/src/Entity/CorePortal'
       configDir: '@ChameleonSystemDataAccessBundle/config/doctrine/CorePortal'
+      metaConfigDir: '@ChameleonSystemDataAccessBundle/config/autoClass/CorePortal'
       namespace: \ChameleonSystem\DataAccessBundle\Entity\CorePortal
       tables:
       - cms_portal
@@ -85,6 +90,7 @@ chameleon_system_autoclasses:
       - cms_division
     - targetDir: '@ChameleonSystemDataAccessBundle/src/Entity/CoreConfig'
       configDir: '@ChameleonSystemDataAccessBundle/config/doctrine/CoreConfig'
+      metaConfigDir: '@ChameleonSystemDataAccessBundle/config/autoClass/CoreConfig'
       namespace: \ChameleonSystem\DataAccessBundle\Entity\CoreConfig
       tables:
       - cms_config
@@ -94,6 +100,7 @@ chameleon_system_autoclasses:
       - cms_config_imagemagick
     - targetDir: '@ChameleonSystemDataAccessBundle/src/Entity/CoreMedia'
       configDir: '@ChameleonSystemDataAccessBundle/config/doctrine/CoreMedia'
+      metaConfigDir: '@ChameleonSystemDataAccessBundle/config/autoClass/CoreMedia'
       namespace: \ChameleonSystem\DataAccessBundle\Entity\CoreMedia
       tables:
       - cms_document
@@ -106,6 +113,7 @@ chameleon_system_autoclasses:
       - cms_media_tree
     - targetDir: '@ChameleonSystemDataAccessBundle/src/Entity/CoreModule'
       configDir: '@ChameleonSystemDataAccessBundle/config/doctrine/CoreModule'
+      metaConfigDir: '@ChameleonSystemDataAccessBundle/config/autoClass/CoreModule'
       namespace: \ChameleonSystem\DataAccessBundle\Entity\CoreModule
       tables:
       - module_customlist_config
@@ -119,6 +127,7 @@ chameleon_system_autoclasses:
       - cms_wizard_step
     - targetDir: '@ChameleonSystemDataAccessBundle/src/Entity/CoreTableConfiguration'
       configDir: '@ChameleonSystemDataAccessBundle/config/doctrine/CoreTableConfiguration'
+      metaConfigDir: '@ChameleonSystemDataAccessBundle/config/autoClass/CoreTableConfiguration'
       namespace: \ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration
       tables:
       - cms_tbl_conf
@@ -133,6 +142,7 @@ chameleon_system_autoclasses:
       - cms_field_type
     - targetDir: '@ChameleonSystemExtranetBundle/Entity'
       configDir: '@ChameleonSystemExtranetBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemExtranetBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\ExtranetBundle\Entity
       tables:
       - data_extranet
@@ -145,6 +155,7 @@ chameleon_system_autoclasses:
       - data_extranet_user_shop_article_history
     - targetDir: '@ChameleonSystemCommentBundle/Entity'
       configDir: '@ChameleonSystemCommentBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemCommentBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\CommentBundle\Entity
       tables:
       - pkg_comment
@@ -152,6 +163,7 @@ chameleon_system_autoclasses:
       - pkg_comment_type
     - targetDir: '@ChameleonSystemImageHotspotBundle/Entity'
       configDir: '@ChameleonSystemImageHotspotBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemImageHotspotBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\ImageHotspotBundle\Entity
       tables:
       - pkg_image_hotspot
@@ -160,6 +172,7 @@ chameleon_system_autoclasses:
       - pkg_image_hotspot_item_spot
     - targetDir: '@ChameleonSystemMultiModuleBundle/Entity'
       configDir: '@ChameleonSystemMultiModuleBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemMultiModuleBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\MultiModuleBundle\Entity
       tables:
       - pkg_multi_module_module_config
@@ -167,6 +180,7 @@ chameleon_system_autoclasses:
       - pkg_multi_module_set_item
     - targetDir: '@ChameleonSystemNewsletterBundle/Entity'
       configDir: '@ChameleonSystemNewsletterBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemNewsletterBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\NewsletterBundle\Entity
       tables:
       - pkg_newsletter_campaign
@@ -180,12 +194,14 @@ chameleon_system_autoclasses:
       - pkg_newsletter_user
     - targetDir: '@ChameleonSystemShopAffiliateBundle/Entity'
       configDir: '@ChameleonSystemShopAffiliateBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemShopAffiliateBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\ShopAffiliateBundle\Entity
       tables:
       - pkg_shop_affiliate
       - pkg_shop_affiliate_parameter
     - targetDir: '@ChameleonSystemShopPaymentIPNBundle/Entity'
       configDir: '@ChameleonSystemShopPaymentIPNBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemShopPaymentIPNBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\ShopPaymentIPNBundle\Entity
       tables:
       - pkg_shop_payment_ipn_message
@@ -194,6 +210,7 @@ chameleon_system_autoclasses:
       - pkg_shop_payment_ipn_trigger
     - targetDir: '@ChameleonSystemShopPaymentTransactionBundle/Entity'
       configDir: '@ChameleonSystemShopPaymentTransactionBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemShopPaymentTransactionBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\ShopPaymentTransactionBundle\Entity
       tables:
       - pkg_shop_payment_transaction
@@ -201,6 +218,7 @@ chameleon_system_autoclasses:
       - pkg_shop_payment_transaction_type
     - targetDir: '@ChameleonSystemShopBundle/Entity/Payment'
       configDir: '@ChameleonSystemShopBundle/Resources/config/doctrine/Payment'
+      metaConfigDir: '@ChameleonSystemShopBundle/Resources/config/autoClass/Payment'
       namespace: \ChameleonSystem\ShopBundle\Entity\Payment
       tables:
       - shop_payment_handler
@@ -210,11 +228,13 @@ chameleon_system_autoclasses:
       - shop_payment_method
     - targetDir: '@ChameleonSystemAmazonPaymentBundle/Entity'
       configDir: '@ChameleonSystemAmazonPaymentBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemAmazonPaymentBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\AmazonPaymentBundle\Entity
       tables:
       - amazon_payment_id_mapping
     - targetDir: '@ChameleonSystemShopRatingServiceBundle/Entity'
       configDir: '@ChameleonSystemShopRatingServiceBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemShopRatingServiceBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\ShopRatingServiceBundle\Entity
       tables:
       - pkg_shop_rating_service
@@ -224,6 +244,7 @@ chameleon_system_autoclasses:
       - pkg_shop_rating_service_widget_config
     - targetDir: '@ChameleonSystemShopWishlistBundle/Entity'
       configDir: '@ChameleonSystemShopWishlistBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemShopWishlistBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\ShopWishlistBundle\Entity
       tables:
       - pkg_shop_wishlist
@@ -232,12 +253,14 @@ chameleon_system_autoclasses:
       - pkg_shop_wishlist_order_item
     - targetDir: '@ChameleonSystemTrackViewsBundle/Entity'
       configDir: '@ChameleonSystemTrackViewsBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemTrackViewsBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\TrackViewsBundle\Entity
       tables:
       - pkg_track_object
       - pkg_track_object_history
     - targetDir: '@ChameleonSystemShopBundle/Entity/Product'
       configDir: '@ChameleonSystemShopBundle/Resources/config/doctrine/Product'
+      metaConfigDir: '@ChameleonSystemShopBundle/Resources/config/autoClass/Product'
       namespace: \ChameleonSystem\ShopBundle\Entity\Product
       tables:
       - shop_article
@@ -272,6 +295,7 @@ chameleon_system_autoclasses:
       - shop_variant_type_value
     - targetDir: '@ChameleonSystemShopBundle/Entity/ShopCore'
       configDir: '@ChameleonSystemShopBundle/Resources/config/doctrine/ShopCore'
+      metaConfigDir: '@ChameleonSystemShopBundle/Resources/config/autoClass/ShopCore'
       namespace: \ChameleonSystem\ShopBundle\Entity\ShopCore
       tables:
       - shop
@@ -302,6 +326,7 @@ chameleon_system_autoclasses:
       - shop_vat
     - targetDir: '@ChameleonSystemShopBundle/Entity/ProductList'
       configDir: '@ChameleonSystemShopBundle/Resources/config/doctrine/ProductList'
+      metaConfigDir: '@ChameleonSystemShopBundle/Resources/config/autoClass/ProductList'
       namespace: \ChameleonSystem\ShopBundle\Entity\ProductList
       tables:
       - shop_module_article_list
@@ -310,6 +335,7 @@ chameleon_system_autoclasses:
       - shop_module_articlelist_orderby
     - targetDir: '@ChameleonSystemShopBundle/Entity/ShopOrder'
       configDir: '@ChameleonSystemShopBundle/Resources/config/doctrine/ShopOrder'
+      metaConfigDir: '@ChameleonSystemShopBundle/Resources/config/autoClass/ShopOrder'
       namespace: \ChameleonSystem\ShopBundle\Entity\ShopOrder
       tables:
       - shop_order
@@ -327,6 +353,7 @@ chameleon_system_autoclasses:
       - shop_order_vat
     - targetDir: '@ChameleonSystemSearchBundle/Entity'
       configDir: '@ChameleonSystemSearchBundle/Resources/config/doctrine'
+      metaConfigDir: '@ChameleonSystemSearchBundle/Resources/autoClass/doctrine'
       namespace: \ChameleonSystem\SearchBundle\Entity
       tables:
       - shop_search_cache
@@ -340,6 +367,7 @@ chameleon_system_autoclasses:
       - shop_search_query
     - targetDir: '@ChameleonSystemShopBundle/Entity/ShopVoucher'
       configDir: '@ChameleonSystemShopBundle/Resources/config/doctrine/ShopVoucher'
+      metaConfigDir: '@ChameleonSystemShopBundle/Resources/config/autoClass/ShopVoucher'
       namespace: \ChameleonSystem\ShopBundle\Entity\ShopVoucher
       tables:
       - shop_voucher

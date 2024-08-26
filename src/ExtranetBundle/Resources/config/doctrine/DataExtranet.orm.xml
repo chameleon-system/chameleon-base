@@ -1,0 +1,194 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ExtranetBundle\Entity\DataExtranet" table="data_extranet">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="sessionlife" type="integer" column="sessionlife" nullable="false">
+            <options>
+                <option name="comment">Session lifetime (in seconds)</option>
+                <option name="default">3600</option>
+            </options>
+        </field>
+        <field name="fpwdTitle" type="string" column="fpwd_title" length="255" nullable="false">
+            <options>
+                <option name="comment">Title</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="noaccessTitle" type="string" column="noaccess_title" length="255" nullable="false">
+            <options>
+                <option name="comment">Title</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Portal configuration</option>
+            </options>
+        </many-to-one>
+        <field name="loginIsEmail" type="boolean" column="login_is_email" nullable="false">
+            <options>
+                <option name="comment">Login must be an email address</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="extranetSpotName" type="string" column="extranet_spot_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name of the spot where an extranet module is available</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-many field="dataExtranetGroupCollection"
+                      target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup">
+            <join-table name="data_extranet_data_extranet_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Automatically assign new customers to these groups</option>
+            </options>
+        </many-to-many>
+        <many-to-one field="nodeLogin" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="node_login_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Login</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="loginSuccessNode"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="login_success_node_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Login successful</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="nodeMyAccountCmsTree"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="node_my_account_cms_tree_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">My account</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="nodeRegister" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="node_register_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Registration</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="nodeConfirmRegistration"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="node_confirm_registration" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Confirm registration</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="nodeRegistrationSuccess"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="node_registration_success_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Registration successful</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="forgotPasswordTreenode"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="forgot_password_treenode_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Forgot password</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="accessRefusedNode"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="access_refused_node_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Access denied (not signed in)</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="groupRightDeniedNode"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="group_right_denied_node_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Access denied (group permissons)</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="logoutSuccessNode"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="logout_success_node_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Logout successful</option>
+            </options>
+        </many-to-one>
+        <field name="registrationSuccess" type="text" column="registration_success" nullable="false">
+            <options>
+                <option name="comment">Registration successful</option>
+            </options>
+        </field>
+        <field name="registrationFailed" type="text" column="registration_failed" nullable="false">
+            <options>
+                <option name="comment">Registration failed</option>
+            </options>
+        </field>
+        <field name="userMustConfirmRegistration" type="boolean" column="user_must_confirm_registration"
+               nullable="false">
+            <options>
+                <option name="comment">Users must confirm their registration</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="fpwdIntro" type="text" column="fpwd_intro" nullable="false">
+            <options>
+                <option name="comment">Header</option>
+            </options>
+        </field>
+        <field name="fpwdEnd" type="text" column="fpwd_end" nullable="false">
+            <options>
+                <option name="comment">Footer</option>
+            </options>
+        </field>
+        <field name="noaccessText" type="text" column="noaccess_text" nullable="false">
+            <options>
+                <option name="comment">Text</option>
+            </options>
+        </field>
+        <field name="communityPostRegistrationInfo" type="text" column="community_post_registration_info"
+               nullable="false">
+            <options>
+                <option name="comment">Text to be displayed after login to the community</option>
+            </options>
+        </field>
+        <field name="useSaveForgotPassword" type="boolean" column="use_save_forgot_password" nullable="false">
+            <options>
+                <option name="comment">Use forgot password, get new password method</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="loginAllowedNotConfirmedUser" type="boolean" column="login_allowed_not_confirmed_user"
+               nullable="false">
+            <options>
+                <option name="comment">Enable login for non-confirmed users</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="passwordChangeKeyTimeValidity" type="integer" column="password_change_key_time_validity"
+               nullable="false">
+            <options>
+                <option name="comment">Validity of the password change key (in hours)</option>
+                <option name="default">2</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

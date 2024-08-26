@@ -1,0 +1,108 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsDivision" table="cms_division">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal"
+                     inversed-by="cmsPortalDivisionsCollection">
+            <options>
+                <option name="comment">Belongs to portal / website</option>
+            </options>
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Area name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsTreeIdTree" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="cms_tree_id_tree" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Navigation node</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-column name="cms_language_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Area language</option>
+            </options>
+        </many-to-one>
+        <field name="images" type="simple_array" column="images" length="50" nullable="false">
+            <options>
+                <option name="comment">Images</option>
+                <option name="default">6,6,6,6,6,6,6,6,6,6</option>
+            </options>
+        </field>
+        <many-to-one field="backgroundImage"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="background_image" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Background image</option>
+            </options>
+        </many-to-one>
+        <field name="colorPrimaryHexcolor" type="string" column="color_primary_hexcolor" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Main color</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="colorSecondaryHexcolor" type="string" column="color_secondary_hexcolor" length="6"
+               nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Secondary color</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="colorTertiaryHexcolor" type="string" column="color_tertiary_hexcolor" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Tertiary color</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="menuDirection" type="string" column="menu_direction" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Menu direction</option>
+                <option name="default">Rechts</option>
+            </options>
+        </field>
+        <field name="keywords" type="text" column="keywords" nullable="false">
+            <options>
+                <option name="comment">Keywords</option>
+            </options>
+        </field>
+        <field name="ivwCode" type="string" column="ivw_code" length="255" nullable="false">
+            <options>
+                <option name="comment">IVW code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="menuStopLevel" type="integer" column="menu_stop_level" nullable="false">
+            <options>
+                <option name="comment">Stop hover menu at this level</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

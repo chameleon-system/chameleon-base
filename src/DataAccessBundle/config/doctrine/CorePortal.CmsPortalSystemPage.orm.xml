@@ -1,0 +1,44 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortalSystemPage"
+            table="cms_portal_system_page">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal"
+                     inversed-by="cmsPortalSystemPageCollection">
+            <options>
+                <option name="comment">Belongs to portal</option>
+            </options>
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsTree" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="cms_tree_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Page</option>
+            </options>
+        </many-to-one>
+        <field name="nameInternal" type="string" column="name_internal" length="255" nullable="false">
+            <options>
+                <option name="comment">System name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

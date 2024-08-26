@@ -2,9 +2,12 @@
 
 namespace ChameleonSystem\AutoclassesBundle\TableConfExport;
 
+use ChameleonSystem\AutoclassesBundle\TableConfExport\AutoClassConfigurationDataModel;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\AutoClassConfigurationDefinition;
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\CoreBundle\DataModel\TableConfigurationDataModel;
+use Symfony\Component\Yaml\Yaml;
 
 class TableConfExporter implements TableConfExporterInterface
 {
@@ -20,19 +23,37 @@ class TableConfExporter implements TableConfExporterInterface
         return $this->dataAccessCmsTblConf->getTableConfigurations();
     }
 
-    public function export(TableConfigurationDataModel $table, string $namespace, string $targetDir, string $mappingDir, array $tableNamespaceMapping): string
-    {
+    public function export(
+        TableConfigurationDataModel $table,
+        string $namespace,
+        string $targetDir,
+        string $mappingDir,
+        string $metaConfigDir,
+        array $tableNamespaceMapping
+    ): string {
 
 
         $tableConf = $this->autoclassesDataAccess->getTableConfigData()[$table->id] ?? null;
 
         if (null === $tableConf) {
-            throw new \Exception(sprintf("Unable to generate data class for table %s - no config found for table id %s", $table->name, $table->id));
+            throw new \Exception(
+                sprintf(
+                    "Unable to generate data class for table %s - no config found for table id %s",
+                    $table->name,
+                    $table->id
+                )
+            );
         }
 
         $fieldConfig = $this->autoclassesDataAccess->getFieldData()[$table->id] ?? null;
         if (null === $fieldConfig) {
-            throw new \Exception(sprintf("Unable to generate data class for table %s - no fields found for table id id %s", $table->name, $table->id));
+            throw new \Exception(
+                sprintf(
+                    "Unable to generate data class for table %s - no fields found for table id id %s",
+                    $table->name,
+                    $table->id
+                )
+            );
         }
         $fields = [];
         $dataModelPartsList = [];
@@ -71,16 +92,26 @@ class TableConfExporter implements TableConfExporterInterface
             $tableNamespaceMapping
         );
 
+        // todo: re-enable once we move to another admin that may need this data.
+        // $autoClassConfig = $this->generateAutoClassConfig($tableConf, $className, $fqn, $namespace);
+
         $mappingSubPathPos = strpos($mappingDir, '/config/doctrine');
-        $extension = substr($mappingDir, $mappingSubPathPos+strlen('/config/doctrine/'));
-        $mappingCleanPath = substr($mappingDir, 0, $mappingSubPathPos). '/config/doctrine';
+        $extension = substr($mappingDir, $mappingSubPathPos + strlen('/config/doctrine/'));
+        $mappingCleanPath = substr($mappingDir, 0, $mappingSubPathPos).'/config/doctrine';
         $mappingClass = $className;
         if ('' !== $extension && '/' !== $extension) {
-            $mappingClass = str_replace('/', '.', trim($extension, '/'). '/'. $className);
+            $mappingClass = str_replace('/', '.', trim($extension, '/').'/'.$className);
         }
 
-        file_put_contents($targetDir.'/'.$className.'.php', $dataModelCode);
-        file_put_contents($mappingCleanPath.'/'.$mappingClass.'.orm.xml', $dataModelMapping);
+        if (false === file_put_contents($targetDir.'/'.$className.'.php', $dataModelCode)) {
+            throw new \RuntimeException(sprintf("Failed to write data model code to file (%s).", $targetDir.'/'.$className.'.php'));
+        }
+        if (false === file_put_contents($mappingCleanPath.'/'.$mappingClass.'.orm.xml', $dataModelMapping)) {
+            throw new \RuntimeException(sprintf("Failed to write data model mapping to file (%s).", $mappingCleanPath.'/'.$mappingClass.'.orm.xml'));
+        }
+
+        // todo: re-enable once we move to another admin that may need this data.
+        //file_put_contents($metaConfigDir.'/'.$mappingClass.'.yaml', $autoClassConfig);
 
         return $fqn;
 
@@ -112,11 +143,17 @@ class TableConfExporter implements TableConfExporterInterface
         $snippetRenderer->clear();
         $snippetRenderer->setVar('table', $tableConf);
         $snippetRenderer->setVar('className', $className);
-        $snippetRenderer->setVar('fqn', ltrim($fqn , '\\'));
+        $snippetRenderer->setVar('fqn', ltrim($fqn, '\\'));
         $snippetRenderer->setVar('namespace', ltrim($namespace, '\\'));
         $snippetRenderer->setVar('fields', $fields);
-        $snippetRenderer->setVar('propertyMappings', array_map(static fn(DataModelParts $part) => $part->getMappingXml(), $propertyMappings));
-        $snippetRenderer->setVar('liveCycleCallbacks', array_map(static fn(DataModelParts $part) => $part->getLiveCycleCallbacks(), $propertyMappings));
+        $snippetRenderer->setVar(
+            'propertyMappings',
+            array_map(static fn(DataModelParts $part) => $part->getMappingXml(), $propertyMappings)
+        );
+        $snippetRenderer->setVar(
+            'liveCycleCallbacks',
+            array_map(static fn(DataModelParts $part) => $part->getLiveCycleCallbacks(), $propertyMappings)
+        );
 
         return $snippetRenderer->render();
     }
@@ -172,28 +209,68 @@ class TableConfExporter implements TableConfExporterInterface
 
     private function getFieldName(\TCMSField $field): string
     {
-        return $this->snakeToCamelCase($field->name);
+        return $this->snakeToPascalCase($field->name);
     }
 
-    private function snakeToCamelCase(string $string): string
+    private function snakeToPascalCase(string $string): string
     {
-        $camelCasedName = preg_replace_callback('/(^|_|\.)+(.)/', function ($match) {
+        $pascalCaseName = preg_replace_callback('/(^|_|\.)+(.)/', static function ($match) {
             return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
         }, $string);
 
-        return $camelCasedName;
-    }
-    public function snakeToPascalCase(string $string): string
-    {
-        return lcfirst($this->snakeToCamelCase($string));
+        return $pascalCaseName;
     }
 
-    private function indent(?string $string, int $indent):?string
+    private function indent(?string $string, int $indent): ?string
     {
         if (null === $string) {
             return null;
         }
 
         return str_replace("\n", "\n".str_repeat(' ', $indent), $string);
+    }
+
+    private function generateAutoClassConfig(
+        array $tableConf,
+        string $className,
+        string $fqn,
+        string $namespace
+    ): string {
+        $allTableExtensions = $this->autoclassesDataAccess->getTableExtensionData();
+        $extensionRows = $allTableExtensions[$tableConf['id']] ?? [];
+
+        $recordClassList = [];
+        foreach ($extensionRows as $extensionRow) {
+            if ('' === $extensionRow['name']) {
+                continue;
+            }
+            $recordClassList[] = $extensionRow['name'];
+        }
+        $listClassList = [];
+        foreach ($extensionRows as $extensionRow) {
+            if ('' === $extensionRow['name_list']) {
+                continue;
+            }
+            $listClassList[] = $extensionRow['name_list'];
+        }
+        $tableExtensionConfig = new AutoClassConfigurationDataModel(
+            name: $tableConf['name'],
+            record: new AutoClassConfigurationDefinition(
+                entryClass: sprintf('Tdb%s', $className),
+                exitClass: $tableConf['dbobject_extend_class'],
+                classList: $recordClassList
+            ),
+            list: new AutoClassConfigurationDefinition(
+                entryClass: sprintf('Tdb%sList', $className),
+                exitClass: 'TCMSRecordList',
+                classList: $listClassList
+            ),
+        );
+
+        $tableConfigArray = $tableExtensionConfig->asArray();
+        $configArray = [];
+        $configArray['chameleon_system_autoclasses']['table_class_mapping'] = $tableConfigArray;
+
+        return Yaml::dump($configArray);
     }
 }

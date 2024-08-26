@@ -1,0 +1,63 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsSmartUrlHandler" table="cms_smart_url_handler">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">PHP class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Path to smart URL handler class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">PHP class type</option>
+                <option name="default">Customer</option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <many-to-many field="cmsPortalCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-table name="cms_smart_url_handler_cms_portal_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Portal selection</option>
+            </options>
+        </many-to-many>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

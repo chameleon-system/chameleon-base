@@ -1,0 +1,58 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\MultiModuleBundle\Entity\PkgMultiModuleSetItem" table="pkg_multi_module_set_item">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Module name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="pkgMultiModuleSet"
+                     target-entity="\ChameleonSystem\MultiModuleBundle\Entity\PkgMultiModuleSet"
+                     inversed-by="pkgMultiModuleSetItemCollection">
+            <options>
+                <option name="comment">Belongs to set</option>
+            </options>
+            <join-column name="pkg_multi_module_set_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="cmsTplModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="cms_tpl_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Module instance</option>
+            </options>
+        </many-to-one>
+        <field name="sortOrder" type="integer" column="sort_order" nullable="false">
+            <options>
+                <option name="comment">Sorting</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="systemName" type="string" column="system_name" length="255" nullable="false">
+            <options>
+                <option name="comment">System name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="alternativeTabUrlForAjax"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="alternative_tab_url_for_ajax" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Alternative link for tabs</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

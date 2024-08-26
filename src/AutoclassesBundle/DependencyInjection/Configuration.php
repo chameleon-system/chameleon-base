@@ -9,7 +9,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('chameleon_system_data_access');
+        $treeBuilder = new TreeBuilder('chameleon_system_autoclasses');
         $root = $treeBuilder->getRootNode();
 
         $root
@@ -20,6 +20,11 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('targetDir')
                             ->end()
                             ->scalarNode('configDir')
+                                ->info('Path to the doctrine config folder')
+                            ->end()
+                            ->scalarNode('metaConfigDir')
+                                ->info('Path where meta data (such as the yaml export for the old Tdb chains) will be stored.')
+                                ->isRequired()
                             ->end()
                             ->scalarNode('namespace')
                             ->end()

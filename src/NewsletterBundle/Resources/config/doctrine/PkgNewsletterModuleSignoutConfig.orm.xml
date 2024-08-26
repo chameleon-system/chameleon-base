@@ -1,0 +1,76 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterModuleSignoutConfig"
+            table="pkg_newsletter_module_signout_config">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTplModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="cms_tpl_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to module instance</option>
+            </options>
+        </many-to-one>
+        <field name="signoutTitle" type="string" column="signout_title" length="255" nullable="false">
+            <options>
+                <option name="comment">Signout (title)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="signoutText" type="text" column="signout_text" nullable="false">
+            <options>
+                <option name="comment">Signout (text)</option>
+            </options>
+        </field>
+        <field name="signoutConfirmTitle" type="string" column="signout_confirm_title" length="255" nullable="false">
+            <options>
+                <option name="comment">Signout confirmation (title)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="signoutConfirmText" type="text" column="signout_confirm_text" nullable="false">
+            <options>
+                <option name="comment">Signout confirmation (text)</option>
+            </options>
+        </field>
+        <field name="signedoutTitle" type="string" column="signedout_title" length="255" nullable="false">
+            <options>
+                <option name="comment">Signed out (title)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="signedoutText" type="text" column="signedout_text" nullable="false">
+            <options>
+                <option name="comment">Signed out (text)</option>
+            </options>
+        </field>
+        <field name="noNewsletterSignedup" type="string" column="no_newsletter_signedup" length="255" nullable="false">
+            <options>
+                <option name="comment">No newsletter signed up for (title)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="noNewsletterSignedupText" type="text" column="no_newsletter_signedup_text" nullable="false">
+            <options>
+                <option name="comment">No newsletter signed up for (text)</option>
+            </options>
+        </field>
+        <field name="useDoubleOptOut" type="boolean" column="use_double_opt_out" nullable="false">
+            <options>
+                <option name="comment">Use double opt-out</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

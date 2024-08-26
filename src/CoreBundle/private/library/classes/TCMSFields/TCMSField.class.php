@@ -11,6 +11,7 @@
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+use ChameleonSystem\AutoclassesBundle\Utility\NamingConventionConverterInterface;
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
@@ -166,7 +167,7 @@ class TCMSField implements TCMSFieldVisitableInterface
 
 
 
-    protected function snakeToCamelCase(string $string): string
+    protected function snakeToPascalCase(string $string): string
     {
         $firstPart = substr($string, 0, strpos($string, '_'));
         if (is_numeric($firstPart)) {
@@ -181,9 +182,9 @@ class TCMSField implements TCMSFieldVisitableInterface
 
         return $camelCasedName;
     }
-    protected function snakeToPascalCase(string $string): string
+    protected function snakeToCamelCase(string $string): string
     {
-        return lcfirst($this->snakeToCamelCase($string));
+        return lcfirst($this->snakeToPascalCase($string));
     }
 
 

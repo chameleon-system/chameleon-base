@@ -1,0 +1,63 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsContentBox" table="cms_content_box">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="className" type="string" column="class_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Widget class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Widget class type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="classPath" type="string" column="class_path" length="255" nullable="false">
+            <options>
+                <option name="comment">Widget class subfolder</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="systemName" type="string" column="system_name" length="255" nullable="false">
+            <options>
+                <option name="comment">System name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="60" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="headlinecolHexcolor" type="string" column="headlinecol_hexcolor" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Headline color</option>
+                <option name="default">9CBBDE</option>
+            </options>
+        </field>
+        <field name="showInCol" type="string" column="show_in_col" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Display in column</option>
+                <option name="default">left</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

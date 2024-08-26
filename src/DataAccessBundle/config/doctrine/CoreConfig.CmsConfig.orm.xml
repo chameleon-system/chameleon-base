@@ -1,0 +1,210 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreConfig\CmsConfig" table="cms_config">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <one-to-many field="cmsConfigImagemagickCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreConfig\CmsConfigImagemagick"
+                     mapped-by="cmsConfig" orphan-removal="true">
+            <options>
+                <option name="comment">ImageMagick settings</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="uploaderChunkSize" type="integer" column="uploader_chunk_size" nullable="false">
+            <options>
+                <option name="comment">Chunk size for uploader in KB</option>
+                <option name="default">1024</option>
+            </options>
+        </field>
+        <many-to-one field="translationBaseLanguage"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-column name="translation_base_language_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Basic language (needed for field-based translations)</option>
+            </options>
+        </many-to-one>
+        <many-to-many field="cmsLanguageCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-table name="cms_config_cms_language_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Supported languages (needed for field-based translations)</option>
+            </options>
+        </many-to-many>
+        <one-to-many field="cmsConfigParameterCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreConfig\CmsConfigParameter"
+                     mapped-by="cmsConfig" orphan-removal="true">
+            <options>
+                <option name="comment">Configuration settings</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="cmsMessageManagerBackendMessageCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsMessageManagerBackendMessage"
+                     mapped-by="cmsConfig" orphan-removal="true">
+            <options>
+                <option name="comment">System messages / error codes</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="smtpServer" type="string" column="smtp_server" length="255" nullable="false">
+            <options>
+                <option name="comment">SMTP server</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="smtpUser" type="string" column="smtp_user" length="255" nullable="false">
+            <options>
+                <option name="comment">SMTP user</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="smtpPassword" type="string" column="smtp_password" length="255" nullable="false">
+            <options>
+                <option name="comment">SMTP password</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="smtpPort" type="integer" column="smtp_port" nullable="false">
+            <options>
+                <option name="comment">SMTP port</option>
+                <option name="default">25</option>
+            </options>
+        </field>
+        <one-to-many field="cmsConfigCmsmoduleExtensionsCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreConfig\CmsConfigCmsmoduleExtensions"
+                     mapped-by="cmsConfig" orphan-removal="true">
+            <options>
+                <option name="comment">CMS module extensions</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-one field="pkgCmsTheme" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsTheme">
+            <join-column name="pkg_cms_theme_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Backend Theme</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsConfigThemes"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreConfig\CmsConfigThemes">
+            <join-column name="cms_config_themes_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">CMS themes</option>
+            </options>
+        </many-to-one>
+        <field name="showTemplateEngine" type="boolean" column="show_template_engine" nullable="false">
+            <options>
+                <option name="comment">Show template engine</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Main portal</option>
+            </options>
+        </many-to-one>
+        <one-to-many field="cmsIpWhitelistCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsIpWhitelist" mapped-by="cmsConfig"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">Permitted IPs</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="maxDocumentUploadSize" type="integer" column="max_document_upload_size" nullable="false">
+            <options>
+                <option name="comment">Maximum file size of file uploads (in KB)</option>
+                <option name="default">409600</option>
+            </options>
+        </field>
+        <field name="additionalFilesToDeleteFromCache" type="text" column="additional_files_to_delete_from_cache"
+               nullable="false">
+            <options>
+                <option name="comment">Additional files to be deleted when clearing the cache</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="60" nullable="false">
+            <options>
+                <option name="comment">CMS owner</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="wysiwygeditorCssUrl" type="string" column="wysiwygeditor_css_url" length="255" nullable="false">
+            <options>
+                <option name="comment">WYSIWYG editor CSS file</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="maxImageUploadSize" type="integer" column="max_image_upload_size" nullable="false">
+            <options>
+                <option name="comment">Maximum image file size in kb</option>
+                <option name="default">1024</option>
+            </options>
+        </field>
+        <field name="updateServer" type="string" column="update_server" length="255" nullable="false">
+            <options>
+                <option name="comment">Update server</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="botlist" type="text" column="botlist" nullable="false">
+            <options>
+                <option name="comment">List of search engines</option>
+            </options>
+        </field>
+        <field name="shutdownWebsites" type="boolean" column="shutdown_websites" nullable="false">
+            <options>
+                <option name="comment">Turn off all websites</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="cronjobsEnabled" type="boolean" column="cronjobs_enabled" nullable="false">
+            <options>
+                <option name="comment">Cronjobs enabled</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="entryPerPage" type="integer" column="entry_per_page" nullable="false">
+            <options>
+                <option name="comment">Lines per page</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="databaseversion" type="integer" column="databaseversion" nullable="false">
+            <options>
+                <option name="comment">Database version</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="build" type="integer" column="build" nullable="false">
+            <options>
+                <option name="comment">Build no.</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

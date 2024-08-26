@@ -1,0 +1,56 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreConfig\CmsConfigImagemagick"
+            table="cms_config_imagemagick">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsConfig" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreConfig\CmsConfig"
+                     inversed-by="cmsConfigImagemagickCollection">
+            <options>
+                <option name="comment">Configuration</option>
+            </options>
+            <join-column name="cms_config_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="fromImageSize" type="integer" column="from_image_size" nullable="false">
+            <options>
+                <option name="comment">Is effective from this image size in pixel</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="forceJpeg" type="boolean" column="force_jpeg" nullable="false">
+            <options>
+                <option name="comment">Force JPEG. This extends to PNG.</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="quality" type="integer" column="quality" nullable="false">
+            <options>
+                <option name="comment">Quality</option>
+                <option name="default">100</option>
+            </options>
+        </field>
+        <field name="scharpen" type="boolean" column="scharpen" nullable="false">
+            <options>
+                <option name="comment">Sharpen</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="gamma" type="decimal" column="gamma" length="" nullable="false" precision="3" scale=",">
+            <options>
+                <option name="comment">Gamma correction</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

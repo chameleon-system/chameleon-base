@@ -1,0 +1,48 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsImageCropPreset" table="cms_image_crop_preset">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="width" type="integer" column="width" nullable="false">
+            <options>
+                <option name="comment">Width</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="height" type="integer" column="height" nullable="false">
+            <options>
+                <option name="comment">Height</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="systemName" type="string" column="system_name" length="255" nullable="false">
+            <options>
+                <option name="comment">System name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Sort</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

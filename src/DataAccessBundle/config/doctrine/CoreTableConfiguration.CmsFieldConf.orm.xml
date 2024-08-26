@@ -1,0 +1,156 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsFieldConf" table="cms_field_conf">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTblConf"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf"
+                     inversed-by="cmsFieldConfMltCollection">
+            <options>
+                <option name="comment">Belongs to Table</option>
+            </options>
+            <join-column name="cms_tbl_conf_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="80" nullable="false">
+            <options>
+                <option name="comment">Field name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="translation" type="string" column="translation" length="80" nullable="false">
+            <options>
+                <option name="comment">Translation</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsFieldType"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsFieldType">
+            <join-column name="cms_field_type_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Field type</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsTblFieldTab"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblFieldTab">
+            <join-column name="cms_tbl_field_tab" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to field-category / tab</option>
+            </options>
+        </many-to-one>
+        <field name="isrequired" type="boolean" column="isrequired" nullable="false">
+            <options>
+                <option name="comment">Mandatory field</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="fieldclass" type="string" column="fieldclass" length="255" nullable="false">
+            <options>
+                <option name="comment">PHP class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="fieldclassSubtype" type="string" column="fieldclass_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Field extension subtype</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">PHP class type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="modifier" type="string" column="modifier" length="18" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Display mode</option>
+                <option name="default">none</option>
+            </options>
+        </field>
+        <field name="fieldDefaultValue" type="string" column="field_default_value" length="255" nullable="false">
+            <options>
+                <option name="comment">Default value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="lengthSet" type="text" column="length_set" nullable="false">
+            <options>
+                <option name="comment">Field length, value list</option>
+            </options>
+        </field>
+        <field name="fieldtypeConfig" type="text" column="fieldtype_config" nullable="false">
+            <options>
+                <option name="comment">Field type configuration</option>
+            </options>
+        </field>
+        <field name="restrictToGroups" type="boolean" column="restrict_to_groups" nullable="false">
+            <options>
+                <option name="comment">Restrict field access</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-many field="cmsUsergroupCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUsergroup">
+            <join-table name="cms_field_conf_cms_usergroup_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Allowed user groups</option>
+            </options>
+        </many-to-many>
+        <field name="fieldWidth" type="integer" column="field_width" nullable="false">
+            <options>
+                <option name="comment">Input field width</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="helptext" type="text" column="049_helptext" nullable="false">
+            <options>
+                <option name="comment">Help text</option>
+            </options>
+        </field>
+        <field name="rowHexcolor" type="string" column="row_hexcolor" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Line color</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="isTranslatable" type="boolean" column="is_translatable" nullable="false">
+            <options>
+                <option name="comment">Multilanguage field (relevant when field-based translations are active)</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="validationRegex" type="string" column="validation_regex" length="255" nullable="false">
+            <options>
+                <option name="comment">Regular expression to validate the field</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

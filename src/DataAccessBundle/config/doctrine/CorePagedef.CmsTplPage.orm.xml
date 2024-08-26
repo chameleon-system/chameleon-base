@@ -1,0 +1,198 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplPage" table="cms_tpl_page">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="treePathSearchString" type="text" column="tree_path_search_string" nullable="false">
+            <options>
+                <option name="comment">Navigation path image for searches</option>
+            </options>
+        </field>
+        <many-to-one field="cmsMasterPagedef"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedef">
+            <join-column name="cms_master_pagedef_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Page template</option>
+            </options>
+        </many-to-one>
+        <one-to-many field="cmsTplPageCmsMasterPagedefSpotCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplPageCmsMasterPagedefSpot"
+                     mapped-by="cmsTplPage" orphan-removal="true">
+            <options>
+                <option name="comment">Spots</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Page name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="seoPattern" type="string" column="seo_pattern" length="255" nullable="false">
+            <options>
+                <option name="comment">SEO pattern</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to portal / website</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="primaryTreeIdHidden"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="primary_tree_id_hidden" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Primary navigation tree node</option>
+            </options>
+        </many-to-one>
+        <field name="images" type="simple_array" column="images" length="255" nullable="false">
+            <options>
+                <option name="comment">Page image</option>
+                <option name="default">1,1,1,1</option>
+            </options>
+        </field>
+        <many-to-one field="backgroundImage"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="background_image" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Background image</option>
+            </options>
+        </many-to-one>
+        <many-to-many field="cmsUsergroupCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUsergroup">
+            <join-table name="cms_tpl_page_cms_usergroup_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Additional authorized groups</option>
+            </options>
+        </many-to-many>
+        <many-to-one field="cmsUser" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser">
+            <join-column name="cms_user_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Created by</option>
+            </options>
+        </many-to-one>
+        <field name="usessl" type="boolean" column="usessl" nullable="false">
+            <options>
+                <option name="comment">Use SSL</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="extranetPage" type="boolean" column="extranet_page" nullable="false">
+            <options>
+                <option name="comment">Restrict access</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="accessNotConfirmedUser" type="boolean" column="access_not_confirmed_user" nullable="false">
+            <options>
+                <option name="comment">Enable access for non-confirmed users</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-many field="dataExtranetGroupCollection"
+                      target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup">
+            <join-table name="cms_tpl_page_data_extranet_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Restrict to the following extranet groups</option>
+            </options>
+        </many-to-many>
+        <field name="ivwCode" type="string" column="ivw_code" length="255" nullable="false">
+            <options>
+                <option name="comment">IVW page code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-column name="cms_language_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Content language</option>
+            </options>
+        </many-to-one>
+        <field name="metaDescription" type="string" column="meta_description" length="200" nullable="false">
+            <options>
+                <option name="comment">Short description</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="metaKeywords" type="text" column="meta_keywords" nullable="false">
+            <options>
+                <option name="comment">Search terms</option>
+            </options>
+        </field>
+        <field name="metaKeywordLanguage" type="string" column="meta_keyword_language" length="16" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Keyword language</option>
+                <option name="default">Deutsch</option>
+            </options>
+        </field>
+        <field name="metaAuthor" type="string" column="meta_author" length="255" nullable="false">
+            <options>
+                <option name="comment">Author</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="metaPublisher" type="string" column="meta_publisher" length="255" nullable="false">
+            <options>
+                <option name="comment">Publisher</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="metaPageTopic" type="string" column="meta_page_topic" length="255" nullable="false">
+            <options>
+                <option name="comment">Topic</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="metaPragma" type="string" column="meta_pragma" length="8" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Cacheable (pragma)</option>
+                <option name="default">no-cache</option>
+            </options>
+        </field>
+        <field name="metaRobots" type="string" column="meta_robots"
+               length="&#039;index, follow&#039;,&#039;index&#039;,&#039;noindex&#039;,&#039;follow&#039;,&#039;nofollow&#039;"
+               nullable="false">
+            <options>
+                <option name="comment">Robots</option>
+                <option name="default">index, follow</option>
+            </options>
+        </field>
+        <field name="metaRevisitAfter" type="integer" column="meta_revisit_after" nullable="false">
+            <options>
+                <option name="comment">Revisit</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

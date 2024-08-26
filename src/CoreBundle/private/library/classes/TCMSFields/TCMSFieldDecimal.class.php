@@ -33,11 +33,12 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
     {
         $parameters = [
             'source' => get_class($this),
-            'type' => 'float',
-            'docCommentType' => 'float',
+            // doctrine handles decimals as string
+            'type' => 'string',
+            'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($this->name),
-            'defaultValue' => sprintf('%s', (float)$this->oDefinition->sqlData['field_default_value']),
+            'defaultValue' => sprintf("'%s'", (string)$this->oDefinition->sqlData['field_default_value']),
             'allowDefaultValue' => true,
             'getterName' => 'get'. $this->snakeToPascalCase($this->name),
             'setterName' => 'set'. $this->snakeToPascalCase($this->name),

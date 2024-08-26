@@ -1,0 +1,61 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsImageCrop" table="cms_image_crop">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsMedia" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="cms_media_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Image</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsImageCropPreset"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsImageCropPreset">
+            <join-column name="cms_image_crop_preset_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Preset</option>
+            </options>
+        </many-to-one>
+        <field name="posX" type="integer" column="pos_x" nullable="false">
+            <options>
+                <option name="comment">X position of crop</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="posY" type="integer" column="pos_y" nullable="false">
+            <options>
+                <option name="comment">Y position of crop</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="width" type="integer" column="width" nullable="false">
+            <options>
+                <option name="comment"></option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="height" type="integer" column="height" nullable="false">
+            <options>
+                <option name="comment">Crop height</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

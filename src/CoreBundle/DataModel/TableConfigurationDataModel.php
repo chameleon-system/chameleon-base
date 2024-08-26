@@ -7,7 +7,7 @@ class TableConfigurationDataModel
     public function __construct(
         readonly public string $id,
         readonly public string $name,
-        readonly public string $cmsUsergroupId
+        readonly public ?string $cmsUsergroupId
     ) {
     }
 }

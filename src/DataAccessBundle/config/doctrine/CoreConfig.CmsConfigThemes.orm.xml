@@ -1,0 +1,37 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreConfig\CmsConfigThemes" table="cms_config_themes">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="type" type="string" column="type" length="8" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="directory" type="string" column="directory" length="255" nullable="false">
+            <options>
+                <option name="comment">Folder</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

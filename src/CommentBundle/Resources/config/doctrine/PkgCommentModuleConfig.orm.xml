@@ -1,0 +1,89 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\CommentBundle\Entity\PkgCommentModuleConfig" table="pkg_comment_module_config">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTplModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="cms_tpl_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to module instance</option>
+            </options>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Headline</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="pkgCommentType" target-entity="\ChameleonSystem\CommentBundle\Entity\PkgCommentType">
+            <join-column name="pkg_comment_type_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Type of comment</option>
+            </options>
+        </many-to-one>
+        <field name="introText" type="text" column="intro_text" nullable="false">
+            <options>
+                <option name="comment">Introductory text</option>
+            </options>
+        </field>
+        <field name="closingText" type="text" column="closing_text" nullable="false">
+            <options>
+                <option name="comment">Closing text</option>
+            </options>
+        </field>
+        <field name="numberOfCommentsPerPage" type="integer" column="number_of_comments_per_page" nullable="false">
+            <options>
+                <option name="comment">Comments per page</option>
+                <option name="default">20</option>
+            </options>
+        </field>
+        <field name="guestCanSeeComments" type="boolean" column="guest_can_see_comments" nullable="false">
+            <options>
+                <option name="comment">Visible comments for guests</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="guestCommentAllowed" type="boolean" column="guest_comment_allowed" nullable="false">
+            <options>
+                <option name="comment">Comments from guests allowed</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="commentOnDelete" type="string" column="comment_on_delete" length="255" nullable="false">
+            <options>
+                <option name="comment">Display if comment is deleted</option>
+                <option name="default">Dieser Kommentar wurde gelöscht</option>
+            </options>
+        </field>
+        <field name="newestOnTop" type="boolean" column="newest_on_top" nullable="false">
+            <options>
+                <option name="comment">Show new comments first</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="useSimpleReporting" type="boolean" column="use_simple_reporting" nullable="false">
+            <options>
+                <option name="comment">Use simple comment reporting function</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="showReportedComments" type="boolean" column="show_reported_comments" nullable="false">
+            <options>
+                <option name="comment">Show reported comments</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

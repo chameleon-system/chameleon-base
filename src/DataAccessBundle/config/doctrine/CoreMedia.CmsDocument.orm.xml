@@ -1,0 +1,96 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocument" table="cms_document">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="60" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="filename" type="string" column="filename" length="255" nullable="false">
+            <options>
+                <option name="comment">File name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <field name="private" type="boolean" column="private" nullable="false">
+            <options>
+                <option name="comment">Private</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="tokenProtected" type="boolean" column="token_protected" nullable="false">
+            <options>
+                <option name="comment">Time-limited download authorization</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="timeStamp" type="datetime" column="time_stamp" nullable="false">
+            <options>
+                <option name="comment">Last changed on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsUser" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser">
+            <join-column name="cms_user_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Last changed by</option>
+            </options>
+        </many-to-one>
+        <field name="hiddenImageWidth" type="integer" column="hidden_image_width" nullable="false">
+            <options>
+                <option name="comment">Image width</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="hiddenImageHeight" type="integer" column="hidden_image_height" nullable="false">
+            <options>
+                <option name="comment">Image height</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="counter" type="integer" column="counter" nullable="false">
+            <options>
+                <option name="comment">User downloads</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsDocumentTree"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocumentTree">
+            <join-column name="cms_document_tree_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Folder</option>
+            </options>
+        </many-to-one>
+        <field name="filesize" type="integer" column="filesize" nullable="false">
+            <options>
+                <option name="comment">File size</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="seoName" type="string" column="seo_name" length="255" nullable="false">
+            <options>
+                <option name="comment">SEO Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

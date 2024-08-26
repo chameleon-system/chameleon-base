@@ -1,0 +1,52 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsClassManager" table="pkg_cms_class_manager">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="nameOfEntryPoint" type="string" column="name_of_entry_point" length="255" nullable="false">
+            <options>
+                <option name="comment">Class names of the virtual entry class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="exitClass" type="string" column="exit_class" length="255" nullable="false">
+            <options>
+                <option name="comment">Terminate inheritance with this class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="exitClassSubtype" type="string" column="exit_class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">End item class: path</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="exitClassType" type="string" column="exit_class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">End item class: type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <one-to-many field="pkgCmsClassManagerExtensionCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsClassManagerExtension"
+                     mapped-by="pkgCmsClassManager" orphan-removal="true">
+            <options>
+                <option name="comment">Classes administered by the inheritance manager</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

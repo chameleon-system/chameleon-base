@@ -1,0 +1,51 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsThemeBlockLayout"
+            table="pkg_cms_theme_block_layout">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="pkgCmsThemeBlock"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsThemeBlock"
+                     inversed-by="pkgCmsThemeBlockLayoutCollection">
+            <options>
+                <option name="comment">Belongs to theme block</option>
+            </options>
+            <join-column name="pkg_cms_theme_block_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Descriptive name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="layoutFile" type="string" column="layout_file" length="255" nullable="false">
+            <options>
+                <option name="comment">Layout file (path)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="lessFile" type="string" column="less_file" length="255" nullable="false">
+            <options>
+                <option name="comment">Path to own LESS/CSS</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsMedia" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="cms_media_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Preview image</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

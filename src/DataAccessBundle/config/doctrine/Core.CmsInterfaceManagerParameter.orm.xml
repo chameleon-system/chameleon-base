@@ -1,0 +1,44 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsInterfaceManagerParameter"
+            table="cms_interface_manager_parameter">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsInterfaceManager"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsInterfaceManager"
+                     inversed-by="cmsInterfaceManagerParameterCollection">
+            <options>
+                <option name="comment">Belongs to interface</option>
+            </options>
+            <join-column name="cms_interface_manager_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="value" type="string" column="value" length="255" nullable="false">
+            <options>
+                <option name="comment">Value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

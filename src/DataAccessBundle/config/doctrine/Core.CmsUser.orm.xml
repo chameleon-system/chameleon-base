@@ -1,0 +1,211 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser" table="cms_user">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="login" type="string" column="login" length="255" nullable="false">
+            <options>
+                <option name="comment">Login</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="cryptedPw" type="string" column="crypted_pw" length="255" nullable="false">
+            <options>
+                <option name="comment">Password</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="firstname" type="string" column="firstname" length="60" nullable="false">
+            <options>
+                <option name="comment">First name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Last name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="email" type="string" column="email" length="255" nullable="false">
+            <options>
+                <option name="comment">Email address</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="images" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="images" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Image</option>
+            </options>
+        </many-to-one>
+        <field name="company" type="string" column="company" length="255" nullable="false">
+            <options>
+                <option name="comment">Company</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="department" type="string" column="department" length="255" nullable="false">
+            <options>
+                <option name="comment">Department</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="city" type="string" column="city" length="255" nullable="false">
+            <options>
+                <option name="comment">City</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="tel" type="string" column="tel" length="255" nullable="false">
+            <options>
+                <option name="comment">Telephone</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="fax" type="string" column="fax" length="255" nullable="false">
+            <options>
+                <option name="comment">Fax</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-column name="cms_language_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">CMS language</option>
+            </options>
+        </many-to-one>
+        <field name="languages" type="string" column="languages" length="255" nullable="false">
+            <options>
+                <option name="comment">Alternative languages</option>
+                <option name="default">de</option>
+            </options>
+        </field>
+        <many-to-many field="cmsUsergroupCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUsergroup">
+            <join-table name="cms_user_cms_usergroup_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">User groups</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsRoleCollection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_user_cms_role_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">User roles</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsPortalCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-table name="cms_user_cms_portal_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Portal / websites</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsLanguageCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-table name="cms_user_cms_language_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Editing languages</option>
+            </options>
+        </many-to-many>
+        <field name="cmsCurrentEditLanguage" type="string" column="cms_current_edit_language" length="4"
+               nullable="false">
+            <options>
+                <option name="comment">Current editing language</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="allowCmsLogin" type="boolean" column="allow_cms_login" nullable="false">
+            <options>
+                <option name="comment">Allow CMS login</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <one-to-many field="cmsUserSsoCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUserSso" mapped-by="cmsUser"
+                     orphan-removal="true">
+            <options>
+                <option name="comment">SSO IDs</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="taskShowCount" type="integer" column="task_show_count" nullable="false">
+            <options>
+                <option name="comment">Maximum displayed tasks</option>
+                <option name="default">5</option>
+            </options>
+        </field>
+        <field name="isSystem" type="boolean" column="is_system" nullable="false">
+            <options>
+                <option name="comment">Required by the system</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="showAsRightsTemplate" type="boolean" column="show_as_rights_template" nullable="false">
+            <options>
+                <option name="comment">Can be used as a rights template</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-many field="cmsMenuItemCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMenu\CmsMenuItem">
+            <join-table name="cms_user_cms_menu_item_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Used menu entries</option>
+            </options>
+        </many-to-many>
+        <field name="dateModified" type="datetime" column="date_modified" nullable="false">
+            <options>
+                <option name="comment">Last modified</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

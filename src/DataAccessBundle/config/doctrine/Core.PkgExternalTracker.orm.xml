@@ -1,0 +1,75 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\PkgExternalTracker" table="pkg_external_tracker">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="identifier" type="string" column="identifier" length="255" nullable="false">
+            <options>
+                <option name="comment">User / site code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="testIdentifier" type="string" column="test_identifier" length="255" nullable="false">
+            <options>
+                <option name="comment">User / site code in DEMO MODE</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="class" type="string" column="class" length="255" nullable="false">
+            <options>
+                <option name="comment">Class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Class subtype (path)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class type</option>
+                <option name="default">Customer</option>
+            </options>
+        </field>
+        <many-to-many field="cmsPortalCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-table name="pkg_external_tracker_cms_portal_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Portal selection</option>
+            </options>
+        </many-to-many>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

@@ -1,0 +1,77 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedefSpot"
+            table="cms_master_pagedef_spot">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsMasterPagedef"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedef"
+                     inversed-by="cmsMasterPagedefSpotCollection">
+            <options>
+                <option name="comment">Belongs to the CMS page template</option>
+            </options>
+            <join-column name="cms_master_pagedef_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="pkgCmsThemeBlock"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsThemeBlock"
+                     inversed-by="cmsMasterPagedefSpotCollection">
+            <options>
+                <option name="comment">Belongs to theme block</option>
+            </options>
+            <join-column name="pkg_cms_theme_block_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="model" type="string" column="model" length="255" nullable="false">
+            <options>
+                <option name="comment">Model (class name)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="view" type="string" column="view" length="255" nullable="false">
+            <options>
+                <option name="comment">Module view</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="static" type="boolean" column="static" nullable="false">
+            <options>
+                <option name="comment">Static</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <one-to-many field="cmsMasterPagedefSpotParameterCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedefSpotParameter"
+                     mapped-by="cmsMasterPagedefSpot" orphan-removal="true">
+            <options>
+                <option name="comment">Parameter</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="cmsMasterPagedefSpotAccessCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedefSpotAccess"
+                     mapped-by="cmsMasterPagedefSpot" orphan-removal="true">
+            <options>
+                <option name="comment">Spot restrictions</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

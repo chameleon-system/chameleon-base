@@ -1,0 +1,95 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedef" table="cms_master_pagedef">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <field name="layout" type="string" column="layout" length="255" nullable="false">
+            <options>
+                <option name="comment">Layout</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="cmsMasterPagedefSpotCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedefSpot"
+                     mapped-by="cmsMasterPagedef" orphan-removal="true">
+            <options>
+                <option name="comment">Spots</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-many field="pkgCmsThemeBlockCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsThemeBlock">
+            <join-table name="cms_master_pagedef_pkg_cms_theme_block_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Theme blocks</option>
+            </options>
+        </many-to-many>
+        <field name="actionPluginList" type="text" column="action_plugin_list" nullable="false">
+            <options>
+                <option name="comment">Action-Plugins</option>
+            </options>
+        </field>
+        <field name="restrictToPortals" type="boolean" column="restrict_to_portals" nullable="false">
+            <options>
+                <option name="comment">Restrict to certain portals only</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-many field="cmsPortalCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-table name="cms_master_pagedef_cms_portal_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">CMS module extension</option>
+            </options>
+        </many-to-many>
+        <field name="wysiwygCssUrl" type="string" column="wysiwyg_css_url" length="255" nullable="false">
+            <options>
+                <option name="comment">WYSIWYG CSS URL</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment"></option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>
