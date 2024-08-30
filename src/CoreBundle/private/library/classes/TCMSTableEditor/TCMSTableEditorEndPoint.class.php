@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
@@ -1513,9 +1514,6 @@ class TCMSTableEditorEndPoint
         $aPropertyFields = array();
         $oFields->GoToStart();
 
-        $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
-        $oMessageManager = TCMSMessageManager::GetInstance();
-
         $tableName = $this->oTableConf->sqlData['name'];
         $languageId = $this->oTableConf->GetLanguage();
 
@@ -1699,7 +1697,11 @@ class TCMSTableEditorEndPoint
 
         $bSaveSuccess = false;
         if (!empty($error)) {
-            $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_SAVE_ERROR', array('sqlError' => $error, 'sRecordID' => $this->sId, 'sTableID' => $this->sTableId));
+            $this->getFlashMessageService()->AddMessage(
+                TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+                'TABLEEDITOR_SAVE_ERROR',
+                ['sqlError' => $error, 'sRecordID' => $this->sId, 'sTableID' => $this->sTableId]
+            );
         } else {
             $bSaveSuccess = true;
         }
@@ -2570,5 +2572,10 @@ class TCMSTableEditorEndPoint
     private function getGuidCreationService(): GuidCreationServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.guid_creation');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }
