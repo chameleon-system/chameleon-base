@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="true" />
+
+        <service id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator"
+                 class="ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Breadcrumb\BreadcrumbGenerator" public="false">
+            <argument type="service" id="chameleon_system_core.active_page_service" />
+            <argument type="service" id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_standard_page_generator" />
+            <argument type="collection">
+
+            </argument>
+        </service>
+
+        <service id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_standard_page_generator"
+                 class="ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Breadcrumb\BreadcrumbStandardPageGenerator" public="false">
+            <argument type="service" id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator_utils" />
+            <argument type="service" id="chameleon_system_core.active_page_service" />
+        </service>
+
+        <service id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator_utils"
+                 class="ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Breadcrumb\BreadcrumbGeneratorUtils" public="false">
+            <argument type="service" id="chameleon_system_core.tree_service" />
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+        </service>
+
+        <service id="chameleon_system_breadcrumb.module.breadcrumb"
+                 class="ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Module\BreadcrumbModule" shared="false">
+            <argument type="service" id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator" />
+            <argument type="service" id="chameleon_system_core.active_page_service" />
+            <tag name="chameleon_system.module"/>
+        </service>
+    </services>
+
+</container>
