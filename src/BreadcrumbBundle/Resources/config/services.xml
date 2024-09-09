@@ -17,6 +17,7 @@
 
         <service id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_standard_page_generator"
                  class="ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Breadcrumb\BreadcrumbStandardPageGenerator" public="false">
+            <tag name="chameleon_system_breadcrumb.generator.breadcrumb_generator" order="999" />
             <argument type="service" id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator_utils" />
             <argument type="service" id="chameleon_system_core.active_page_service" />
         </service>
@@ -29,9 +30,14 @@
 
         <service id="chameleon_system_breadcrumb.module.breadcrumb"
                  class="ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Module\BreadcrumbModule" shared="false">
-            <argument type="service" id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator" />
+            <argument type="service" id="chameleon_system_breadcrumb.provider.breadcrumb_generator_provider" />
             <argument type="service" id="chameleon_system_core.active_page_service" />
             <tag name="chameleon_system.module"/>
+        </service>
+
+        <service id="chameleon_system_breadcrumb.provider.breadcrumb_generator_provider"
+                 class="ChameleonSystem\BreadcrumbBundle\Provider\BreadcrumbGeneratorProvider">
+            <argument key="$breadcrumbGeneratorList" type="collection"/>
         </service>
     </services>
 
