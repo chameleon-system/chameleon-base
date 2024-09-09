@@ -132,8 +132,9 @@ CHAMELEON.CORE.FieldGeoCoordinates =
         this.marker = null;
 
         if ('' !== lat && '' !== lng) {
+            const popupContent = `<strong>Position:</strong><br><br>Lat: ${lat}<br>Lng: ${lng}`;
             map = L.map(mapId).setView([lat, lng], 16);
-            this.marker = L.marker([lat, lng]).addTo(map).bindPopup(`Lat: ${lat}, Lng: ${lng}`).openPopup();
+            this.marker = L.marker([lat, lng]).addTo(map).bindPopup(popupContent).openPopup();
         } else {
             map = L.map(mapId).setView([51.1657, 10.4515], 6); // Mitte von Deutschland
         }
@@ -150,7 +151,8 @@ CHAMELEON.CORE.FieldGeoCoordinates =
             if (CHAMELEON.CORE.FieldGeoCoordinates.marker !== null) {
                 map.removeLayer(CHAMELEON.CORE.FieldGeoCoordinates.marker);
             }
-            CHAMELEON.CORE.FieldGeoCoordinates.marker = L.marker(e.latlng).addTo(map).bindPopup(`Lat: ${CHAMELEON.CORE.FieldGeoCoordinates.latitude}, Lng: ${CHAMELEON.CORE.FieldGeoCoordinates.longitude}`).openPopup();
+            const popupContent = `<strong>Position:</strong><br><br>Lat: ${CHAMELEON.CORE.FieldGeoCoordinates.latitude}<br>Lng: ${CHAMELEON.CORE.FieldGeoCoordinates.longitude}`;
+            CHAMELEON.CORE.FieldGeoCoordinates.marker = L.marker(e.latlng).addTo(map).bindPopup(popupContent).openPopup();
         });
 
         document.getElementById('btnFindAddress').addEventListener('click', function () {
