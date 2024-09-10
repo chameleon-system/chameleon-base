@@ -2,9 +2,7 @@
 
 namespace ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Module;
 
-use ChameleonSystem\BreadcrumbBundle\Interfaces\BreadcrumbGeneratorInterface;
 use ChameleonSystem\BreadcrumbBundle\Interfaces\BreadcrumbGeneratorProviderInterface;
-use ChameleonSystem\BreadcrumbBundle\Provider\BreadcrumbGeneratorProvider;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 final class BreadcrumbModule extends \MTPkgViewRendererAbstractModuleMapper
@@ -40,7 +38,7 @@ final class BreadcrumbModule extends \MTPkgViewRendererAbstractModuleMapper
         \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
         $activeBreadcrumbGenerator = null;
-        foreach($this->breadcrumbGeneratorProvider->getBreadcrumbGeneratorList() as $breadcrumbGenerator) {
+        foreach ($this->breadcrumbGeneratorProvider->getBreadcrumbGeneratorList() as $breadcrumbGenerator) {
             if (true === $breadcrumbGenerator->isActive()) {
                 $activeBreadcrumbGenerator = $breadcrumbGenerator;
                 break;
