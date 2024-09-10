@@ -20,7 +20,7 @@ final class BreadcrumbStandardPageGenerator implements BreadcrumbGeneratorInterf
         return true;
     }
 
-    public function generate(): ?BreadcrumbDataModel
+    public function generate(): BreadcrumbDataModel
     {
         $breadcrumb = new BreadcrumbDataModel();
 

@@ -8,5 +8,5 @@ interface BreadcrumbGeneratorInterface
 {
     public function isActive(): bool;
 
-    public function generate(): ?BreadcrumbDataModel;
+    public function generate(): BreadcrumbDataModel;
 }
