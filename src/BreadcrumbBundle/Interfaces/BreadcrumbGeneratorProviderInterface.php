@@ -2,10 +2,10 @@
 
 namespace ChameleonSystem\BreadcrumbBundle\Interfaces;
 
+use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbDataModel;
+
 interface BreadcrumbGeneratorProviderInterface
 {
-    /**
-     * @return BreadcrumbGeneratorInterface[]
-     */
-    public function getBreadcrumbGeneratorList(): array;
+
+    public function generateBreadcrumb(): ?BreadcrumbDataModel;
 }

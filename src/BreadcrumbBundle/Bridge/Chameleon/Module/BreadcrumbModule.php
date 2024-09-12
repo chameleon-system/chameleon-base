@@ -14,22 +14,14 @@ final class BreadcrumbModule extends \MTPkgViewRendererAbstractModuleMapper
         parent::__construct();
     }
 
+    /**
+     * _AllwayCache returns always false, because the Generator itself are providing
+     * a cache. therefore a cache in the module ist not needed
+     * @return false
+     */
     public function _AllowCache()
     {
         return false;
-    }
-
-    /**
-     * return an assoc array of parameters that describe the state of the module.
-     *
-     * @return array
-     */
-    public function _GetCacheParameters()
-    {
-        $cacheParameters = parent::_GetCacheParameters();
-        $cacheParameters['activePageId'] = $this->activePageService->getActivePage()->id;
-
-        return $cacheParameters;
     }
 
     public function Accept(
@@ -37,13 +29,7 @@ final class BreadcrumbModule extends \MTPkgViewRendererAbstractModuleMapper
         $bCachingEnabled,
         \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
-        $activeBreadcrumbGenerator = null;
-        foreach ($this->breadcrumbGeneratorProvider->getBreadcrumbGeneratorList() as $breadcrumbGenerator) {
-            if (true === $breadcrumbGenerator->isActive()) {
-                $activeBreadcrumbGenerator = $breadcrumbGenerator;
-                break;
-            }
-        }
-        $oVisitor->SetMappedValue('breadcrumb', $activeBreadcrumbGenerator->generate());
+        $breadcrumb = $this->breadcrumbGeneratorProvider->generateBreadcrumb();
+        $oVisitor->SetMappedValue('breadcrumb', $breadcrumb);
     }
 }

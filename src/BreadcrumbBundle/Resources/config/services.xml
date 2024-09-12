@@ -6,20 +6,12 @@
     <services>
         <defaults public="true" />
 
-        <service id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator"
-                 class="ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Breadcrumb\BreadcrumbGenerator" public="false">
-            <argument type="service" id="chameleon_system_core.active_page_service" />
-            <argument type="service" id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_standard_page_generator" />
-            <argument type="collection">
-
-            </argument>
-        </service>
-
         <service id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_standard_page_generator"
                  class="ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Breadcrumb\BreadcrumbStandardPageGenerator" public="false">
             <tag name="chameleon_system_breadcrumb.generator.breadcrumb_generator" order="999" />
             <argument type="service" id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator_utils" />
             <argument type="service" id="chameleon_system_core.active_page_service" />
+            <argument type="service" id="chameleon_system_core.cache" />
         </service>
 
         <service id="chameleon_system_breadcrumb.breadcrumb.breadcrumb_generator_utils"
