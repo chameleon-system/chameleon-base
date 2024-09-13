@@ -444,9 +444,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = '
-            <link  href="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper/cropper.css').'" rel="stylesheet">
+            <link  href="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.css').'" rel="stylesheet">
             <link  href="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/css/imageCropEditor.css').'" rel="stylesheet">
-            <script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper/cropper.js').'"></script>
+            <script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.js').'"></script>
         ';
 
         return $includes;

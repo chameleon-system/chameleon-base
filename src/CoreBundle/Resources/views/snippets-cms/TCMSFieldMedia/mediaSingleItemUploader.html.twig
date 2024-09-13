@@ -1,10 +1,10 @@
 {{ sHtmlHiddenFields|raw }}
 <div id="{{ sFieldName }}_posDummy"></div>
 <div class="row">
-    <div class="col-md-2 col-xs-4">{% include "TCMSFieldMedia/mediaSingleItem.html.twig"%}</div>
-    <div class="col-md-10 col-xs-8">
+    <div class="col-12 col-md-4 col-xl-3">{% include "TCMSFieldMedia/mediaSingleItem.html.twig"%}</div>
+    <div class="col-12 col-md-8 col-xl-9">
         <div class="row">
-            <div class="col-md-12">{{ sHtmlManageMediaButton|raw }}</div>
+            <div class="col-md-12 pt-2 pt-md-0">{{ sHtmlManageMediaButton|raw }}</div>
         </div>
         <div class="row">
             <div class="col-md-12">{% include "TCMSFieldMedia/mediaUploader.html.twig" %}</div>
