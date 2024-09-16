@@ -1,4 +1,5 @@
 <?php
+
 if (isset($data['oUser'])) {
     $sMainMenuText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')); ?>
     <nav aria-label="breadcrumb">

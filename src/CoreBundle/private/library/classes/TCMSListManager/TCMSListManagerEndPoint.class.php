@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -410,17 +411,68 @@ class TCMSListManagerEndPoint
      * any custom restrictions can be added to the query by overwriting this function.
      *
      * @return string
+     * @throws \Doctrine\DBAL\Exception
      */
     public function GetCustomRestriction()
     {
-        $query = '';
-
-        if (!empty($this->sRestrictionField) && !is_null($this->sRestriction)) {
-            $sourceID = $this->sRestriction;
-            $query .= $this->CreateRestriction($this->sRestrictionField, "= '".MySqlLegacySupport::getInstance()->real_escape_string($sourceID)."'");
+        if (true === empty($this->sRestrictionField) || null === $this->sRestriction) {
+            return '';
         }
 
-        return $query;
+        $sourceID = $this->sRestriction;
+        $fieldName = $this->sRestrictionField;
+        $foreignTableName = $this->oTableConf->sqlData['name'];
+        $connection = $this->getDatabaseConnection();
+
+        if (false === str_ends_with($fieldName, '_mlt') && true === $this->getToolsService()::FieldExists($foreignTableName, $fieldName)) {
+            return $this->CreateRestriction($this->sRestrictionField, '= '.$connection->quote($sourceID));
+        }
+
+        $mltTable = $this->GetMLTTableName();
+        if (false === TGlobalBase::TableExists($mltTable)) {
+            return '1=0'; // mlt table does not exist, so the restriction is invalid
+        }
+
+        $query = sprintf("SELECT target_id FROM %s WHERE source_id = :value", $connection->quoteIdentifier($mltTable));
+
+        $idList = $connection->fetchFirstColumn($query, ['value' => $this->sRestriction]);
+        if ([] === $idList) {
+            return '1=0'; // restrictions set, but no matches
+        }
+
+        $idListString = implode(',', array_map([$connection, 'quote'], $idList));
+        $quotedTableName = $connection->quoteIdentifier($foreignTableName);
+
+        return " $quotedTableName.id IN ($idListString)";
+    }
+
+    protected function GetMLTTableName()
+    {
+        return substr($this->sRestrictionField, 0, -4).'_'.$this->GetFieldMltName().'_mlt';
+    }
+
+    /**
+     * Returns the name of the MLt field without source table name.
+     * Postfix _mlt was filtered.
+     *
+     * @return string
+     */
+    protected function GetFieldMltName()
+    {
+        $fieldMltName = $this->oTableConf->sqlData['name'];
+        $postFieldMltName = $this->tableObj->_postData['name'] ?? null;
+        if (null === $postFieldMltName) {
+            return $fieldMltName;
+        }
+
+        $mltFieldUtil = $this->getMltFieldUtil();
+        $postFieldMltName = $mltFieldUtil->cutMltExtension($postFieldMltName);
+        $cleanMltFieldName = $mltFieldUtil->cutMultiMltFieldNumber($postFieldMltName);
+        if ($cleanMltFieldName === $fieldMltName) {
+            return $postFieldMltName;
+        }
+
+        return $postFieldMltName.'_'.$fieldMltName;
     }
 
     public function GetTableAlias($query)
@@ -574,5 +626,18 @@ class TCMSListManagerEndPoint
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    /**
+     * @return MltFieldUtil
+     */
+    protected function getMltFieldUtil()
+    {
+        return ServiceLocator::get('chameleon_system_core.util.mlt_field');
+    }
+
+    private function getToolsService(): TTools
+    {
+        return ServiceLocator::get('chameleon_system_core.tools');
     }
 }

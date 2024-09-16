@@ -17,23 +17,14 @@ use TGlobal;
 
 class BackendAccessCheck
 {
-    /**
-     * @var \TGlobal
-     */
-    private $global;
-    /**
-     * @var \ICmsCoreRedirect
-     */
-    private $redirect;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private \TGlobal $global;
+    private \ICmsCoreRedirect $redirect;
+    private RequestStack $requestStack;
 
     /**
      * @var array<string, string[]>
      */
-    private $ipRestrictedPageDefs = array();
+    private $ipRestrictedPageDefs = [];
 
     /**
      * @param TGlobal          $global
@@ -75,7 +66,7 @@ class BackendAccessCheck
             return;
         }
 
-        // redirect to login page if user not in session
+        // Redirect to login page if user is not in session.
         $this->checkLogin();
     }
 
@@ -86,7 +77,12 @@ class BackendAccessCheck
     {
         if (null === $this->global->oUser || !$this->global->oUser->ValidSessionKey()) {
             $this->checkLoginOnAjax();
-            $this->redirect->redirectToActivePage(array('pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout'));
+            
+            $this->redirect->redirectToActivePage(
+                ['pagedef' => 'login', 
+                    'module_fnc[contentmodule]' => 'Logout',
+                    'redirectParams' => $this->getCurrentParametersAsUrl()
+            ]);
         }
     }
 
@@ -110,13 +106,7 @@ class BackendAccessCheck
         }
     }
 
-    /**
-     * @param string $pagedef
-     * @param string $clientIp
-     *
-     * @return bool
-     */
-    private function pagedefIsAllowed($pagedef, $clientIp)
+    private function pagedefIsAllowed(string $pagedef, string $clientIp): bool
     {
         if (array_key_exists($pagedef, $this->ipRestrictedPageDefs)) {
             $allowedIps = $this->ipRestrictedPageDefs[$pagedef];
@@ -126,4 +116,9 @@ class BackendAccessCheck
 
         return false;
     }
+
+    private function getCurrentParametersAsUrl(): string
+    {
+        return \urlencode(\http_build_query($this->requestStack->getCurrentRequest()->query->all()));
+    }    
 }

@@ -35,30 +35,6 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
     }
 
     /**
-     * Returns the name of the MLt field without source table name.
-     * Postfix _mlt was filtered.
-     *
-     * @return string
-     */
-    protected function GetFieldMltName()
-    {
-        $sFieldMltName = $this->oTableConf->sqlData['name'];
-        if (array_key_exists('name', $this->tableObj->_postData)) {
-            $sPostFieldMltName = $this->tableObj->_postData['name'];
-            $mltFieldUtil = $this->getMltFieldUtil();
-            $sPostFieldMltName = $mltFieldUtil->cutMltExtension($sPostFieldMltName);
-            $cleanMltFieldName = $mltFieldUtil->cutMultiMltFieldNumber($sPostFieldMltName);
-            if ($cleanMltFieldName != $sFieldMltName) {
-                $sFieldMltName = $sPostFieldMltName.'_'.$sFieldMltName;
-            } else {
-                $sFieldMltName = $sPostFieldMltName;
-            }
-        }
-
-        return $sFieldMltName;
-    }
-
-    /**
      * Returns the mlt table name.
      *
      * @return string

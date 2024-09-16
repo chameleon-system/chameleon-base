@@ -9,57 +9,42 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\UpdateCounterMigrationBundle\Exception\InvalidMigrationCounterException;
 use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MTLoginEndPoint extends TCMSModelBase
 {
+
+    public function Init()
+    {
+        parent::Init();
+
+        $moduleFunction = $this->global->GetUserData('module_fnc');
+
+        if (is_array($moduleFunction) && 'Logout' === $moduleFunction['contentmodule']) {
+            return;
+        }
+
+        if (true === TCMSUser::CMSUserDefined()) {
+            $this->getRedirect()->redirectToActivePage([]);
+        }
+    }
+
     public function &Execute()
     {
         $this->data = parent::Execute();
 
-        $this->data['username'] = '';
-        $this->data['login'] = ''; // last logged in username
-        if ($this->global->UserDataExists('login')) {
-            $this->data['username'] = $this->global->GetUserData('login');
-            $this->data['login'] = $this->data['username'];
-        }
+        $this->data['username'] = $this->global->GetUserData('username');
 
         $this->data['redirectParams'] = '';
         if ($this->global->UserDataExists('redirectParams')) {
             $this->data['redirectParams'] = $this->global->GetUserData('redirectParams');
-        }
-
-        $this->data['validBrowser'] = false;
-        if (MTLogin::CheckBrowser()) {
-            $this->data['validBrowser'] = true;
-        } else {
-            $this->data['errmsg'] = TGlobal::Translate('chameleon_system_core.cms_module_login.error_unsupported_browser');
-        }
-
-        if ($this->global->CMSUserDefined()) {
-            /**
-             * @psalm-suppress UndefinedInterfaceMethod
-             * @FIXME The `HeaderRedirect` method only exists on 1 of the 2 interface implementations.
-             */
-            $this->controller->HeaderRedirect([]);
-        }
+        } 
 
         return $this->data;
-    }
-
-    /**
-     * @return bool
-     */
-    public static function CheckBrowser()
-    {
-        $validBrowser = true;
-        if (preg_match('/(?i)msie [6-8]/', $_SERVER['HTTP_USER_AGENT'])) { // Internet Explorer < 9.x
-            $validBrowser = false;
-        }
-
-        return $validBrowser;
     }
 
     protected function DefineInterface()
@@ -77,7 +62,6 @@ class MTLoginEndPoint extends TCMSModelBase
     public function Login()
     {
         $username = $this->global->GetUserData('username');
-        $sLastLoggedInUser = $this->global->GetUserData('login');
         $password = $this->global->GetUserData('password', array(), TCMSUserInput::FILTER_PASSWORD);
         $oUser = new TCMSUser();
         $translator = $this->getTranslator();
@@ -89,8 +73,7 @@ class MTLoginEndPoint extends TCMSModelBase
             if ($oUser->Login($username, $password)) {
                 $this->redirectOnPendingUpdates();
 
-                $bIsRefreshLogin = ($username == $sLastLoggedInUser);
-                $this->postLoginRedirect($bIsRefreshLogin);
+                $this->postLoginRedirect();
             } else {
                 sleep(5);
                 if ('' === $this->getCurrentHashedUserPassword($username)) {
@@ -103,53 +86,51 @@ class MTLoginEndPoint extends TCMSModelBase
         }
     }
 
-    /**
-     * @param string $username
-     *
-     * @return string
-     * @psalm-suppress FalsableReturnStatement
-     */
-    private function getCurrentHashedUserPassword($username)
+    private function getCurrentHashedUserPassword(string $username): string
     {
         return $this->getDatabaseConnection()->fetchColumn('SELECT `crypted_pw` FROM `cms_user` WHERE `login` = :login LIMIT 1', array(
             'login' => $username,
         ));
     }
 
-    /**
-     * @param bool $bIsRefreshLogin
-     *
-     * @return void
-     */
-    protected function postLoginRedirect($bIsRefreshLogin)
+    protected function postLoginRedirect(): void
     {
-        $aRedirectParams = [];
-
-        if ($bIsRefreshLogin) {
-            $sRedirectURL = $_SERVER['HTTP_REFERER'];
-            $aParams = TTools::GetURLArguments($sRedirectURL);
-            if (array_key_exists('redirectParams', $aParams)) {
-                $sParamString = $aParams['redirectParams'];
-                $aRedirectParamsTmp = explode('&', $sParamString);
-                if (count($aRedirectParamsTmp) > 0) {
-                    $aRedirectParams = array();
-                    foreach ($aRedirectParamsTmp as $sUrlPart) {
-                        $aParts = explode('=', $sUrlPart);
-                        if (2 == count($aParts)) {
-                            $aRedirectParams[$aParts[0]] = $aParts[1];
-                        } else {
-                            $aRedirectParams[$aParts[0]] = '';
-                        }
-                    }
-                }
-            }
+        $redirectParams = [];
+        
+        $inputFilter = $this->getInputFilterUtilService();
+        $redirectParamsEncoded = $inputFilter->getFilteredInput('redirectParams', '');
+        if ('' === $redirectParamsEncoded) {
+            $redirectParams['pagedef'] = '';
         }
 
-        /**
-         * @psalm-suppress UndefinedInterfaceMethod
-         * @FIXME The `HeaderRedirect` method only exists on 1 of the 2 interface implementations.
-         */
-        $this->controller->HeaderRedirect($aRedirectParams);
+        $urlParams = urldecode($redirectParamsEncoded);
+        parse_str($urlParams, $redirectParams);
+    
+        $this->getRedirect()->redirectToActivePage($this->filterRedirectParameter($redirectParams));
+    }
+
+    protected function filterRedirectParameter(array $redirectParams): array
+    {
+        // Prevent redirecting to a page that was loaded in an iframe.
+        if (array_key_exists('bIsLoadedFromIFrame', $redirectParams)) {
+            return [];
+        }
+        
+        $validRedirectParams = $this->getValidRedirectParameter();
+
+        return array_intersect_key($redirectParams, array_flip($validRedirectParams));
+    }
+    
+    protected function getValidRedirectParameter(): array
+    {
+        return [
+            'pagedef',
+            '_pagedefType',
+            'id',
+            '_rmhist',
+            '_histid',
+            'tableid'
+        ];
     }
 
     /**
@@ -188,15 +169,18 @@ class MTLoginEndPoint extends TCMSModelBase
     {
         TCMSUser::Logout();
 
+        $redirectParamsEncoded = $this->getInputFilterUtilService()->getFilteredGetInput('redirectParams');
+        
         if (!$noRedirect) {
-            $this->getRedirect()->redirect(PATH_CMS_CONTROLLER.'?pagedef=login');
+            $url = PATH_CMS_CONTROLLER.'?pagedef=login';
+            if (null !== $redirectParamsEncoded) {
+                $url.= '&redirectParams='.urlencode($redirectParamsEncoded);
+            }
+            $this->getRedirect()->redirect($url);
         }
     }
 
-    /**
-     * @return void
-     */
-    private function redirectOnPendingUpdates()
+    private function redirectOnPendingUpdates(): void
     {
         try {
             $needsRedirect = \count(TCMSUpdateManager::GetInstance()->getAllUpdateFilesToProcess()) > 0;
@@ -212,27 +196,28 @@ class MTLoginEndPoint extends TCMSModelBase
         }
     }
 
-    /**
-     * @return Connection
-     */
-    private function getDatabaseConnection()
+    private function getDatabaseConnection(): Connection
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
-    /**
-     * @return ICmsCoreRedirect
-     */
-    private function getRedirect()
+    private function getRedirect(): ICmsCoreRedirect
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslator()
+    private function getTranslator(): TranslatorInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
+    }
+    
+    private function getInputFilterUtilService(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getSymfonyContainer(): \Psr\Container\ContainerInterface
+    {
+        return ServiceLocator::get('service_container');
     }
 }

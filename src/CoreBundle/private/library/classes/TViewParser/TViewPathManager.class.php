@@ -10,6 +10,8 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 
 class TViewPathManager implements IViewPathManager
 {
@@ -89,12 +91,23 @@ class TViewPathManager implements IViewPathManager
         if (null === $sMappedPath) {
             $sMappedPath = PATH_CUSTOMER_FRAMEWORK.'/modules/';
         }
+        $baseModuleName = baseName(str_replace('\\', '/', $sModuleName));
         $sModuleName = str_replace('\\', '_', $sModuleName);
         // try to get it first from customer module path
         $sTemplatePath = $sMappedPath.$sModuleName.'/views/'.$sViewName.'.view.php';
         if (false === file_exists($sTemplatePath)) {
             $sViewFileName = $sModuleName.'/'.$sViewName.'.view.php';
             $sTemplatePath = $this->getTemplateFilePathFromTheme($sViewFileName, TPkgViewRendererSnippetDirectory::PATH_MODULES);
+            if (false === file_exists($sTemplatePath)) {
+                //maybe the view is from a bundle
+                $sMappedPath = str_replace('//', '/', $sMappedPath);
+                $templatePathBundle = $sMappedPath . $baseModuleName . '/views/' . $sViewName . '.view.php';
+                if (file_exists($templatePathBundle)) {
+                    return $templatePathBundle;
+                } else {
+                    $this->getLogger()->error(sprintf('View not found in path: %s or %s', $sTemplatePath, $templatePathBundle));
+                }
+            }
         }
         if (null !== $sTemplatePath) {
             return $sTemplatePath;
@@ -158,6 +171,154 @@ class TViewPathManager implements IViewPathManager
     }
 
     /**
+     * The path in the mono repo in chameleon is different from the path in the composer files of the
+     * individual packages. This is an unfortunate change and should not really concern the core.
+     * Renaming bundles again is a massiv amount of work and would re-introduce bad names. So we keep
+     * the mapping - In order to be able to remove the mapping `\TViewPathManager::getObjectPackageViewPath`
+     * needs to be deprecated - and replaced by a method that expects the bundle name instead of a path mapping
+     * @param string $privatePackageName
+     * @return string
+     */
+    private function mapChameleonPrivatePackageToMonoRepoPath(string $privatePackageName): string
+    {
+        return match($privatePackageName) {
+            'articleparagraphbundle' => 'article-paragraph',
+            'artificial-intelligence-bundle' => 'artificial-intelligence',
+            'chameleon-shop-theme-sell' => 'theme-sell',
+            'chameleon-standard-logging-bundle' => 'chameleon-standard-logging',
+            'ckeditor-bootstrap-bundle' => 'ckeditor-bootstrap',
+            'consent-management-bundle' => 'consent-management',
+            'country-based-pricing-bundle' => 'country-based-pricing',
+            'elastic-bundle' => 'elastic',
+            'elastic-integration-bundle' => 'elastic-integration',
+            'elastic-shop-integration-bundle' => 'elastic-shop-integration',
+            'externaltrackermatomo' => 'external-tracker-matomo',
+            'google-recaptcha-bundle' => 'google-recaptcha',
+            'google-tag-manager-bundle' => 'google-tag-manager',
+            'google-tag-manager-shop-bundle' => 'google-tag-manager-shop',
+            'id-rewrite-bundle' => 'id-rewrite',
+            'image-optimization-bundle' => 'image-optimization',
+            'import-bundle' => 'import',
+            'item-list-bundle' => 'item-list',
+            'keep-me-logged-in-bundle' => 'keep-me-logged-in',
+            'klarna-payments-bundle' => 'klarna-payments',
+            'legacy-translation-bundle' => 'legacy-translation',
+            'libri-bibliography-service-bundle' => 'libri-bibliography-service',
+            'login-security-bundle' => 'login-security',
+            'markdown-cms-bundle' => 'markdown-cms',
+            'meta-data-bundle' => 'meta-data',
+            'meta-tags-filter-bundle' => 'meta-tags-filter',
+            'open-graph-meta-data-article-bundle' => 'open-graph-meta-data-article',
+            'open-graph-meta-data-bundle' => 'open-graph-meta-data',
+            'paypal-checkout-bundle' => 'paypal-checkout',
+            'pkgactiveusercountry' => 'active-user-country',
+            'pkgaddressvalidationdhladdressfactory' => 'address-validation-dhl-address-factory',
+            'pkgarticle' => 'article',
+            'pkgarticlepkgshop' => 'article-pkg-shop',
+            'pkgarticlerights' => 'article-rights',
+            'pkgautoglossary' => 'auto-glossary',
+            'pkgautomaticmailevent' => 'automatic-mail-event',
+            'pkgcmsaddressvalidation' => 'cms-address-validation',
+            'pkgcmsbulksql' => 'cms-bulk-sql',
+            'pkgcmscachewarmer' => 'cms-cache-warmer',
+            'pkgcmscreditcheck' => 'cms-credit-check',
+            'pkgcmsform' => 'cms-form',
+            'pkgcmssimulation' => 'cms-simulation',
+            'pkgcmstranslationnotification' => 'cms-translation-notification',
+            'pkgconfigurableform' => 'configurable-form',
+            'pkgcustomsearch' => 'custom-search',
+            'pkgcustomsearchtrigger' => 'custom-search-trigger',
+            'pkgdarksite' => 'dark-site',
+            'pkgexternaltrackeradform' => 'external-tracker-adform',
+            'pkgexternaltrackeraffilinet' => 'external-tracker-affilinet',
+            'pkgexternaltrackerbilliger' => 'external-tracker-billiger',
+            'pkgexternaltrackercriteo' => 'external-tracker-criteo',
+            'pkgexternaltrackereconda' => 'external-tracker-econda',
+            'pkgexternaltrackerfashionde' => 'external-tracker-fashionde',
+            'pkgexternaltrackergoogleadwordsconversioncontact' => 'external-tracker-google-adwords-conversion-contact',
+            'pkgexternaltrackergoogleadwordsconversiontracker' => 'external-tracker-google-adwords-conversion-tracker',
+            'pkgexternaltrackergoogleadwordsremarketing' => 'external-tracker-google-adwords-remarketing',
+            'pkgexternaltrackergosquared' => 'external-tracker-go-squared',
+            'pkgexternaltrackerhurra' => 'external-tracker-hurra',
+            'pkgexternaltrackermoebelde' => 'external-tracker-moebel-de',
+            'pkgexternaltrackershoplupe' => 'external-tracker-shop-lupe',
+            'pkgexternaltrackershopping24' => 'external-tracker-shopping-24',
+            'pkgexternaltrackerveinteractive' => 'external-tracker-ve-interactive',
+            'pkgformwizard' => 'form-wizard',
+            'pkglikecount' => 'like-count',
+            'pkgmandrill' => 'mandrill',
+            'pkgmodulefeedbacktopic' => 'module-feedback-topic',
+            'pkgnameduserobjectbasket' => 'named-user-object-basket',
+            'pkgnewslettergoogleanalyticstracking' => 'newsletter-google-analytics-tracking',
+            'pkgnewsletterinxmail' => 'newsletter-inxmail',
+            'pkgnewslettermailchimp' => 'newsletter-mailchimp',
+            'pkgquerymanager' => 'query-manager',
+            'pkgremotepagetemplate' => 'remote-page-template',
+            'pkgserializetool' => 'serialize-tool',
+            'pkgshopaddressvalidation' => 'shop-address-validation',
+            'pkgshopaffiliatewebgains' => 'shop-affiliatewebgains',
+            'pkgshoparticlecountryblacklist' => 'shop-articlecountryblacklist',
+            'pkgshopbrandstores' => 'shop-brandstores',
+            'pkgshopbrandteaser' => 'shop-brandteaser',
+            'pkgshopbuyablevoucher' => 'shop-buyablevoucher',
+            'pkgshopcategorynestedset' => 'shop-categorynestedset',
+            'pkgshopchanneladvisor' => 'shop-channeladvisor',
+            'pkgshopchanneladvisorpkgshopcurrency' => 'shop-channeladvisorpkgshopcurrency',
+            'pkgshopcreditcheck' => 'shop-creditcheck',
+            'pkgshopcurrencyindividual' => 'shop-currencyindividual',
+            'pkgshopcustomercomment' => 'shop-customercomment',
+            'pkgshopgenericcrossselling' => 'shop-genericcrossselling',
+            'pkgshopgiveaway' => 'shop-giveaway',
+            'pkgshopgraduatedprices' => 'shop-graduatedprices',
+            'pkgshopgrossnetmanager' => 'shop-grossnetmanager',
+            'pkgshopmanufacturerdiscount' => 'shop-manufacturerdiscount',
+            'pkgshopordercomment' => 'shop-ordercomment',
+            'pkgshoporderoption' => 'shop-orderoption',
+            'pkgshoppaymentpayone' => 'shop-payment-payone',
+            'pkgshoppaymentpayonestoreduserpayment' => 'shop-payment-payone-stored-user-payment',
+            'pkgshoppermanentbasket' => 'shop-permanent-basket',
+            'pkgshopproductexportads2people' => 'shop-product-export-ads2people',
+            'pkgshopproductexportbilliger' => 'shop-product-export-billiger',
+            'pkgshopproductexportciao' => 'shop-product-export-ciao',
+            'pkgshopproductexportdooyoo' => 'shop-product-export-dooyoo',
+            'pkgshopproductexportgeizkragen' => 'shop-product-export-geizkragen',
+            'pkgshopproductexportgoogle' => 'shop-product-export-google',
+            'pkgshopproductexportidealo' => 'shop-product-export-idealo',
+            'pkgshopproductexportnextag' => 'shop-product-export-nextag',
+            'pkgshopproductexportpangora' => 'shop-product-export-pangora',
+            'pkgshopproductexportpreissuchmaschine' => 'shop-product-export-preissuchmaschine',
+            'pkgshopproductexportrakuten' => 'shop-product-export-rakuten',
+            'pkgshopproductexportsoquero' => 'shop-product-export-soquero',
+            'pkgshopproductexportstylelounge' => 'shop-product-export-stylelounge',
+            'pkgshopproductexportwebgains' => 'shop-product-export-webgains',
+            'pkgshopproductexportyatego' => 'shop-product-export-yatego',
+            'pkgshopproductexportyopi' => 'shop-product-export-yopi',
+            'pkgshopratingservicepkgshoparticlereview' => 'shop-rating-service-pkg-shop-article-review',
+            'pkgshopserviceitem' => 'shop-service-item',
+            'pkgshopshowcase' => 'shop-showcase',
+            'pkgshopstoreduserpayment' => 'shop-stored-user-payment',
+            'pkgshopuserrestrictedproducts' => 'shop-user-restricted-products',
+            'pkgsurvey' => 'survey',
+            'pkgtranslationservice' => 'translation-service',
+            'pkgtrustedshops' => 'trusted-shops',
+            'pkgtshoppaymenthandlerogone' => 'shop-payment-handler-ogone',
+            'pkguserobjectbasket' => 'user-object-basket',
+            'position-aware-discount-and-voucher-bundle' => 'position-aware-discount-and-voucher',
+            'product-shipping-cost-preview-bundle' => 'product-shipping-cost-preview',
+            'redis-bundle' => 'redis',
+            'responsive-images-bundle' => 'responsive-images',
+            'review-bundle' => 'review',
+            'shop-multi-warehouse-bundle' => 'shop-multi-warehouse',
+            'sitemap-bundle' => 'sitemap',
+            'symfony-customization-bundle' => 'symfony-customization',
+            'theme-extensions-bundle' => 'theme-extensions',
+            'theme-extensions-generator-bundle' => 'theme-extensions-generator',
+            'tracking-consent-bundle' => 'tracking-consent',
+            'translation-tools-bundle' => 'translation-tools',
+            default => $privatePackageName
+        };
+    }
+    /**
      * @param string $sViewName
      * @param string $sSubType
      * @param string $sType
@@ -176,7 +337,25 @@ class TViewPathManager implements IViewPathManager
             $parts[0] = \strtolower($parts[0]);
             $parts[0] = $this->getPackagePath($parts[0]);
             $sSubType = \implode('/', $parts);
+
+            if (false === is_dir($sPath.'/'.$sSubType)) {
+                // it must be a chameleon-system-private package.
+                $sPath = realpath(rtrim(ESONO_PACKAGES, '/'). '-private');
+                if (false === is_dir($sPath.'/'.$sSubType)) {
+                    // They were renamed if installed as mono repos -so we need to remap
+                    // fetch new package name
+                    $sSubType = \trim($sSubType, '/');
+                    $sSubType = \str_replace('//', '/', $sSubType);
+
+                    $parts = \explode('/', $sSubType);
+                    $parts[0] = \strtolower($parts[0]);
+                    $parts[0] = $this->mapChameleonPrivatePackageToMonoRepoPath($parts[0]);
+                    $sSubType = \implode('/', $parts);
+                    $sPath = realpath($sPath . '/monorepo/packages');
+                }
+            }
         }
+
         $sFilePath = $sSubType.'/'.$sViewName.'.view.php';
         $sTemplatePath = $sPath.'/'.$sFilePath;
 
@@ -358,4 +537,9 @@ class TViewPathManager implements IViewPathManager
         'pkgshopwishlist' => 'chameleon-shop/src/ShopWishlistBundle',
         'pkgtshoppaymenthandlersofortueberweisung' => 'chameleon-shop/src/ShopPaymentHandlerSofortueberweisungBundle',
     ];
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
+    }
 }

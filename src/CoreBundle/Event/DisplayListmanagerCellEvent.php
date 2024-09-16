@@ -18,140 +18,90 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class DisplayListmanagerCellEvent extends Event
 {
-    /**
-     * @var \TGroupTableField
-     */
-    private $tableCell;
-    /**
-     * @var array
-     */
-    private $rowData;
-    /**
-     * @var bool
-     */
-    private $isHeader;
-    /**
-     * @var array
-     */
-    private $attributes = [];
-    /**
-     * @var string
-     */
-    private $onclickEvent;
-    /**
-     * @var array
-     */
-    private $cssClasses = [];
-    /**
-     * @var string
-     */
-    private $cellValue = '';
+    private \TGroupTableField $tableCell;
+    private array $rowData;
+    private bool $isHeader;
+    private array $attributes = [];
+    private string $onclickEvent = '';
+    private array $cssClasses = [];
+    private string $cellValue = '';
+    private string $cellValueWithDetailLink = '';
 
     /**
      * @param \TGroupTableField $tableCell
      * @param array             $rowData
      * @param bool              $isHeader
      */
-    public function __construct(\TGroupTableField $tableCell, array $rowData, $isHeader)
+    public function __construct(\TGroupTableField $tableCell, array $rowData, bool $isHeader)
     {
         $this->tableCell = $tableCell;
         $this->rowData = $rowData;
         $this->isHeader = $isHeader;
     }
 
-    /**
-     * @return \TGroupTableField
-     */
-    public function getTableCell()
+    public function getTableCell(): \TGroupTableField
     {
         return $this->tableCell;
     }
 
-    /**
-     * @return array
-     */
-    public function getRowData()
+    public function getRowData(): array
     {
         return $this->rowData;
     }
 
-    /**
-     * @return bool
-     */
-    public function isHeader()
+    public function isHeader(): bool
     {
         return $this->isHeader;
     }
 
-    /**
-     * @return array
-     */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return void
-     */
-    public function setAttributes(array $attributes)
+    public function setAttributes(array $attributes): void
     {
         $this->attributes = $attributes;
     }
 
-    /**
-     * @return string
-     */
-    public function getOnclickEvent()
+    public function getOnclickEvent(): string
     {
         return $this->onclickEvent;
     }
 
-    /**
-     * @param string $onclickEvent
-     *
-     * @return void
-     */
-    public function setOnclickEvent($onclickEvent)
+    public function setOnclickEvent(string $onclickEvent): void
     {
         $this->onclickEvent = $onclickEvent;
     }
 
-    /**
-     * @return array
-     */
-    public function getCssClasses()
+    public function getCssClasses(): array
     {
         return $this->cssClasses;
     }
 
-    /**
-     * @param array $cssClasses
-     *
-     * @return void
-     */
-    public function setCssClasses(array $cssClasses)
+    public function setCssClasses(array $cssClasses): void
     {
         $this->cssClasses = $cssClasses;
     }
 
-    /**
-     * @return string
-     */
-    public function getCellValue()
+    public function getCellValue(): string
     {
         return $this->cellValue;
     }
 
-    /**
-     * @param string $cellValue
-     *
-     * @return void
-     */
-    public function setCellValue($cellValue)
+    public function setCellValue(string $cellValue): void
     {
         $this->cellValue = $cellValue;
     }
+
+    public function getCellValueWithDetailLink(): string
+    {
+        return $this->cellValueWithDetailLink;
+    }
+
+    public function setCellValueWithDetailLink(string $cellValueWithDetailLink): void
+    {
+        $this->cellValueWithDetailLink = $cellValueWithDetailLink;
+    }
+
 }

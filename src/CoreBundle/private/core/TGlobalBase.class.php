@@ -765,6 +765,11 @@ class TGlobalBase
      */
     public static function _GetLayoutRootPath($sType)
     {
+        $bundlePath = self::instance()->resolveBundlePath($sType);
+        if (null !== $bundlePath) {
+            return $bundlePath.'/Resources/rendering/layouts/';
+        }
+
         $rootPath = PATH_LAYOUTTEMPLATES;
         switch ($sType) {
             case 'Core':

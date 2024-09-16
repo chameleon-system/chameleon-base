@@ -1,0 +1,45 @@
+{% trans_default_domain constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND') %}
+
+<div class="row field{{ fieldName }}">
+    <div class="col-md-6 col-sm-4">
+        {% include 'userInput/form/hidden.html.twig' with {
+            'sName': fieldName,
+            'sFieldId': fieldName,
+            'sValue': fieldValue
+        }
+        %}
+        <div class="row">
+            <div class="col-md-12 form-group">
+                {% include 'userInput/form/text.html.twig' with {
+                    'sName': fieldName~'_lat',
+                    'sFieldId': fieldName~'_lat',
+                    'sValue': latitude,
+                    'sLabelText': 'chameleon_system_core.field_map_coordinates.latitude'|trans ~' (latitude)',
+                    'sInputClass': 'form-control form-control-sm fieldMapCoordinate',
+                    'bRequired': isMandatoryField
+                }
+                %}
+            </div>
+         </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                {% include 'userInput/form/text.html.twig' with {
+                    'sName': fieldName~'_lng',
+                    'sFieldId': fieldName~'_lng',
+                    'sValue': longitude,
+                    'sLabelText': 'chameleon_system_core.field_map_coordinates.longitude'|trans ~' (longitude)',
+                    'sInputClass': 'form-control form-control-sm fieldMapCoordinate',
+                    'bRequired': isMandatoryField
+                }
+                %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <button type="button" class="btn btn-sm btn-primary openOSM">
+                    <span class="btn-icon"><i class="fas fa-map-marked-alt"></i> {{'chameleon_system_core.field_map_coordinates.show_map'|trans}}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

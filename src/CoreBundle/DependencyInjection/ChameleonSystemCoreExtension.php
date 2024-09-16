@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\DependencyInjection;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
+use ChameleonSystem\CoreBundle\Interfaces\FieldExtensionInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -56,6 +57,7 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
         $this->addCacheConfig($container);
         $this->addMailerConfig($config['mailer'], $container);
         $this->addGoogleApiConfig($config['google_maps'], $container);
+        $this->addGeocoderConfig($config['geocoder'], $container);
         $this->addModuleExecutionConfig($config['module_execution'], $container);
         $this->configureSession($container);
         $this->addBackendConfig($config['backend'], $container);
@@ -63,6 +65,8 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
         $this->addResources($container);
 
         $this->configureResourceCollectorService($config['resource_collection'], $container);
+        
+        $container->registerForAutoconfiguration(FieldExtensionInterface::class)->addTag('chameleon_system_core.field_extension');
     }
 
     private function configureResourceCollectorService(
@@ -210,6 +214,16 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
         $args = $definition->getArguments();
         $args[0] = $googleApiConfig['api_key'];
         $definition->setArguments($args);
+    }
+
+    private function addGeocoderConfig(array $geocoderConfig, ContainerBuilder $container): void
+    {
+        $definition = $container->getDefinition('chameleon_system_core.geocoding.geocoder');
+        $definition->setArgument(0, $geocoderConfig['geo_json_endpoint']);
+
+        $container->setParameter('chameleon_system_core.geocoding.attribution.show', $geocoderConfig['attribution']['show']);
+        $container->setParameter('chameleon_system_core.geocoding.attribution.name', $geocoderConfig['attribution']['name']);
+        $container->setParameter('chameleon_system_core.geocoding.attribution.url', $geocoderConfig['attribution']['url']);
     }
 
     /**

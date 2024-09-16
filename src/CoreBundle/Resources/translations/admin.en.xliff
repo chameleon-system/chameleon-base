@@ -705,18 +705,22 @@
                 <target>Female</target>
             </trans-unit>
 
+            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
             <trans-unit id="chameleon_system_core.field_google_map.latitude">
                 <source>chameleon_system_core.field_google_map.latitude</source>
                 <target>Google Maps latitude</target>
             </trans-unit>
+           <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
             <trans-unit id="chameleon_system_core.field_google_map.longitude">
                 <source>chameleon_system_core.field_google_map.longitude</source>
                 <target>Google Maps longitude</target>
             </trans-unit>
+            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
             <trans-unit id="chameleon_system_core.field_google_map.show_map">
                 <source>chameleon_system_core.field_google_map.show_map</source>
                 <target>Show map</target>
             </trans-unit>
+            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
             <trans-unit id="chameleon_system_core.field_google_map.missing_api_key_error">
                 <source>chameleon_system_core.field_google_map.missing_api_key_error</source>
                 <target>There is no Google Maps API key configured.
@@ -724,6 +728,28 @@
                     Add the key to the config: chameleon_system_core: google_maps: api_key: "your API key"
                 </target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_core.field_map_coordinates.latitude">
+                <source>chameleon_system_core.field_map_coordinates.latitude</source>
+                <target>Maps latitude</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_map_coordinates.longitude">
+                <source>chameleon_system_core.field_map_coordinates.longitude</source>
+                <target>Maps longitude</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_map_coordinates.show_map">
+                <source>chameleon_system_core.field_map_coordinates.show_map</source>
+                <target>Show map</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_map_coordinates.wrong_latitude">
+                <source>chameleon_system_core.field_map_coordinates.wrong_latitude</source>
+                <target>The latitude field contains invalid characters or an invalid value. Values between -90 and 90 are permitted.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_map_coordinates.wrong_longitude">
+                <source>chameleon_system_core.field_map_coordinates.wrong_longitude</source>
+                <target>The longitude field contains invalid characters or an invalid value. Values between -180 and 180 are permitted.</target>
+            </trans-unit>
+
 
             <trans-unit id="chameleon_system_core.field_icon_list.select">
                 <source>chameleon_system_core.field_icon_list.select</source>
@@ -2285,21 +2311,59 @@
                 <target>List</target>
             </trans-unit>
 
+            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
             <trans-unit id="chameleon_system_core.google_map.coordinates">
                 <source>chameleon_system_core.google_map.coordinates</source>
                 <target>Coordinates</target>
             </trans-unit>
+            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
             <trans-unit id="chameleon_system_core.google_map.find_coordinates">
                 <source>chameleon_system_core.google_map.find_coordinates</source>
                 <target>Search</target>
             </trans-unit>
+            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
             <trans-unit id="chameleon_system_core.google_map.action_use_coordinates">
                 <source>chameleon_system_core.google_map.action_use_coordinates</source>
                 <target>Use</target>
             </trans-unit>
+            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
+            <trans-unit id="chameleon_system_core.google_map.geocoding_via">
+                <source>chameleon_system_core.google_map.geocoding_via</source>
+                <target>Searchresults via <![CDATA[<a href="%url%" target="_blank">%name%</a>]]></target>
+            </trans-unit>
+            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
             <trans-unit id="chameleon_system_core.google_map.address">
                 <source>chameleon_system_core.google_map.address</source>
                 <target>Address</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.map.coordinates">
+                <source>chameleon_system_core.map.coordinates</source>
+                <target>Coordinates</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.map.find_coordinates">
+                <source>chameleon_system_core.map.find_coordinates</source>
+                <target>Search</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.map.action_use_coordinates">
+                <source>chameleon_system_core.map.action_use_coordinates</source>
+                <target>Use</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.map.geocoding_via">
+                <source>chameleon_system_core.map.geocoding_via</source>
+                <target>Searchresults via <![CDATA[<a href="%url%" target="_blank">%name%</a>]]></target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.map.address">
+                <source>chameleon_system_core.map.address</source>
+                <target>enter Address</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.map.address_not_found">
+                <source>chameleon_system_core.map.address_not_found</source>
+                <target>Address not found</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.map.address_empty">
+                <source>chameleon_system_core.map.address_empty</source>
+                <target>Please enter an address</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.translation_exporter.error_not_logged_in">

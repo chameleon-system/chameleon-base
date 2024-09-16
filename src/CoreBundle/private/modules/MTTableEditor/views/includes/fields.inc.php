@@ -92,6 +92,7 @@ while ($oField = $data['oFields']->Next()) {
                     $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.nl2br(TGlobal::OutHTML($oField->oDefinition->sqlData['049_helptext'])).'</div>';
                 }
                 $sTmpFormTabsContent .= $oField->GetContent();
+                $sTmpFormTabsContent .= $oField->getFieldExtensionHtml();
                 $sTmpFormTabsContent .= '</div></div>';
             }
         }

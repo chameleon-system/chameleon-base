@@ -9,6 +9,11 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 7.1.34
+ * use MapCoordinates.php instead
+ */
+
 use Symfony\Component\HttpFoundation\Request;
 
 class CMSGMap extends TCMSModelBase

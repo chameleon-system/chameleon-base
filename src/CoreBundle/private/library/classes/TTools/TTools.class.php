@@ -1816,10 +1816,7 @@ class TTools
         return $bIsValid;
     }
 
-    /**
-     * @return Connection
-     */
-    private static function getDatabaseConnection()
+    private static function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
     }
@@ -1829,34 +1826,22 @@ class TTools
         return ServiceLocator::get('chameleon_system_core.response.response_variable_replacer');
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private static function getUrlUtil()
+    private static function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
-    /**
-     * @return ValidatorInterface
-     */
-    private static function getValidator()
+    private static function getValidator(): ValidatorInterface
     {
         return ServiceLocator::get('validator');
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private static function getActivePageService()
+    private static function getActivePageService(): ActivePageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return LanguageServiceInterface
-     */
-    private static function getLanguageService()
+    private static function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
     }

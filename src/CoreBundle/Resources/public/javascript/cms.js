@@ -324,8 +324,11 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
  * creates a ModalDialog without close button from iFrame
  */
 function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResizable) {
+    if (typeof height === 'undefined' || height < 300) {
+        height = window.innerHeight-150;
+    }
     url = CMSAddGlobalParametersToURL(url);
-    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="99%" height="100%" frameborder="0"></iframe>';
+    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="99%" height="100%" frameborder="0" data-modal-body-height='+height+'></iframe>';
     CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
@@ -333,8 +336,11 @@ function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResiz
  * creates a ModalDialog with close button from iFrame
  */
 function CreateModalIFrameDialogCloseButton(url, width, height, title, isDraggable, isResizable) {
+    if (typeof height === 'undefined' || height < 300) {
+        height = window.innerHeight-150;
+    }
     url = CMSAddGlobalParametersToURL(url);
-    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>';
+    var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="100%" height="100%" frameborder="0" data-modal-body-height='+height+'></iframe>';
     CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 

@@ -41,7 +41,7 @@ class DataModelConverter
         ksort($map);
         foreach ($map as $buildNumber => $path) {
             $class = new stdClass();
-            $class->fileName = $this->getPathFromDataModelFileName($path);
+            $class->fileName = $path;
             $class->buildNumber = $buildNumber;
             $class->bundleName = $dataModel->getBundleName();
             $classes[] = $class;
@@ -63,15 +63,5 @@ class DataModelConverter
         }
 
         return $oldModel;
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
-    private function getPathFromDataModelFileName($path)
-    {
-        return substr(realpath($path), strlen(realpath($this->basePath)) + 1);
     }
 }

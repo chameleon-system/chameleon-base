@@ -1748,7 +1748,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @return string
      */
-    public function ExportRowData($excludeFields = array())
+    public function ExportRowData($excludeFields = [])
     {
         $oTableConf = &$this->GetTableConf();
         $oFields = &$oTableConf->GetFields($this);
@@ -1759,9 +1759,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
         $sql = "INSERT INTO $quotedTableName ";
         $isFirst = true;
+        /** @var TCMSField $oField */
         while ($oField = $oFields->Next()) {
-            /** @var $oField TCMSField */
-            if ($this->isFieldExported($oField, $excludeFields)) {
+            if ($this->isFieldExportable($oField, $excludeFields, $this->sqlData)) {
                 $oField->data = $this->sqlData[$oField->name];
                 $sqlValue = $oField->GetSQL();
                 if (false !== $sqlValue) {
@@ -1826,17 +1826,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         return $sql;
     }
 
-    /**
-     * @param TCMSField $field
-     * @param array     $excludeFields
-     *
-     * @return bool
-     */
-    private function isFieldExported(TCMSField $field, array $excludeFields)
+    private function isFieldExportable(TCMSField $field, array $excludeFields, array $sqlData): bool
     {
-        return !in_array($field->name, $excludeFields)
+        return !in_array($field->name, $excludeFields, true)
             && !$field->isPropertyField
-            && !$field->isMLTField;
+            && !$field->isMLTField
+            && array_key_exists($field->name, $sqlData);
     }
 
     /**
@@ -2008,15 +2003,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
     /**
      * only called during autoClass generation, because the GetMLTTargetListOrderBy may not exist at this state.
-     *
-     * @param string $multiLinkFieldName
-     * @param string $multiLinkTableName
-     * @param string $targetTableName
-     * @param string $sourceTableName
-     *
-     * @return string
      */
-    private function getMltOrderByFallback($multiLinkFieldName, $multiLinkTableName, $targetTableName, $sourceTableName)
+    private function getMltOrderByFallback(string $multiLinkFieldName, string $multiLinkTableName, string $targetTableName, string $sourceTableName): string
     {
         $tableConfiguration = TdbCmsTblConf::GetNewInstance();
         $tableConfiguration->LoadFromField('name', $sourceTableName);
@@ -2067,15 +2055,11 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * @param string $sQuery
-     * @param array  $parameter
-     * @param array  $types
-     *
-     * @return Statement
+     * @throws \Doctrine\DBAL\Exception
      */
-    private function ExecuteSQLQueries($sQuery, array $parameter = array(), array $types = array())
+    private function ExecuteSQLQueries(string $query, array $parameter = [], array $types = []): Statement
     {
-        return $this->getDatabaseConnection()->executeQuery($sQuery, $parameter, $types);
+        return $this->getDatabaseConnection()->executeQuery($query, $parameter, $types);
     }
 
     /**
@@ -2209,26 +2193,17 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         return $mltFieldUtil;
     }
 
-    /**
-     * @return ChameleonSessionManagerInterface
-     */
-    private function getSessionManager()
+    private function getSessionManager(): ChameleonSessionManagerInterface
     {
         return ServiceLocator::get('chameleon_system_core.session.chameleon_session_manager');
     }
 
-    /**
-     * @return FieldTranslationUtil
-     */
-    private function getFieldTranslationUtil()
+    private function getFieldTranslationUtil(): FieldTranslationUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
-    /**
-     * @return string|null
-     */
-    private function getRequestStateHash()
+    private function getRequestStateHash(): ?string
     {
         static $stateHashProvider = null;
         if (null === $stateHashProvider) {

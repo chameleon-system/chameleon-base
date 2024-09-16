@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar;
 
+use ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\DataAccess\UserMenuItemDataAccessInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -41,10 +42,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      * @var ResponseVariableReplacerInterface
      */
     private $responseVariableReplacer;
-    /**
-     * @var MenuItemFactoryInterface
-     */
-    private $menuItemFactory;
 
     /**
      * @var TranslatorInterface
@@ -56,13 +53,18 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private $userMenuItemDataAccess;
 
+    /**
+     * @var MenuItemDataAccessInterface
+     */
+    private $menuItemDataAccess;
+
     public function __construct(
         UrlUtil $urlUtil,
         RequestStack $requestStack,
         InputFilterUtilInterface $inputFilterUtil,
         ResponseVariableReplacerInterface $responseVariableReplacer,
-        MenuItemFactoryInterface $menuItemFactory,
         TranslatorInterface $translator,
+        MenuItemDataAccessInterface $menuItemDataAccess,
         UserMenuItemDataAccessInterface $userMenuItemDataAccess
     ) {
         parent::__construct();
@@ -71,9 +73,9 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->requestStack = $requestStack;
         $this->inputFilterUtil = $inputFilterUtil;
         $this->responseVariableReplacer = $responseVariableReplacer;
-        $this->menuItemFactory = $menuItemFactory;
         $this->translator = $translator;
         $this->userMenuItemDataAccess = $userMenuItemDataAccess;
+        $this->menuItemDataAccess = $menuItemDataAccess;
     }
 
     /**
@@ -175,44 +177,9 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     private function getMenuItems(): array
     {
-        $activeUser = \TCMSUser::GetActiveUser();
-        if (null === $activeUser) {
-            return [];
-        }
+        $menuCategories = $this->menuItemDataAccess->getMenuCategories();
 
-        $menuCategories = [];
-        $menuItemMap = [];
-
-        $tdbCategoryList = \TdbCmsMenuCategoryList::GetList();
-        $tdbCategoryList->ChangeOrderBy([
-            '`cms_menu_category`.`position`' => 'ASC',
-        ]);
-        while (false !== $tdbCategory = $tdbCategoryList->Next()) {
-            $menuItems = [];
-            $tdbMenuItemList = $tdbCategory->GetFieldCmsMenuItemList();
-            $tdbMenuItemList->ChangeOrderBy([
-                '`cms_menu_item`.`cms_menu_category_id`' => 'ASC',
-                '`cms_menu_item`.`position`' => 'ASC',
-            ]);
-            while (false !== $tdbMenuItem = $tdbMenuItemList->Next()) {
-                $menuItem = $this->menuItemFactory->createMenuItem($tdbMenuItem);
-                if (null !== $menuItem) {
-                    $menuItems[] = $menuItem;
-
-                    $menuItemMap[$menuItem->getId()] = $menuItem;
-                }
-            }
-            if (\count($menuItems) > 0) {
-                $menuCategories[] = new MenuCategory(
-                    $tdbCategory->id,
-                    $tdbCategory->fieldName,
-                    $tdbCategory->fieldIconFontCssClass,
-                    $menuItems
-                );
-            }
-        }
-
-        $popularCategory = $this->getPopularMenuEntries($menuItemMap);
+        $popularCategory = $this->getPopularMenuEntries($menuCategories);
         if (null !== $popularCategory) {
             \array_unshift($menuCategories, $popularCategory);
         }
@@ -238,11 +205,23 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         return $openCategory;
     }
 
-    private function getPopularMenuEntries(array $menuItemMap): ?MenuCategory
+    /**
+     * @param MenuCategory[] $menuCategories
+     * @return MenuCategory|null
+     */
+    private function getPopularMenuEntries(array $menuCategories): ?MenuCategory
     {
         $activeUser = \TCMSUser::GetActiveUser();
         if (null === $activeUser) {
             return null;
+        }
+
+        $menuItemMap = [];
+
+        foreach ($menuCategories as $menuCategory) {
+            foreach ($menuCategory->getMenuItems() as $menuItem) {
+                $menuItemMap[$menuItem->getId()] = $menuItem;
+            }
         }
 
         $menuItemsClickedByUser = $this->userMenuItemDataAccess->getMenuItemIds($activeUser->id);

@@ -263,13 +263,12 @@ class QueryWriter
         fwrite($filePointer, $renderedQuery, strlen($renderedQuery));
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
+        /** @var ViewRenderer $viewRenderer */
         $viewRenderer = $this->container->get('chameleon_system_view_renderer.view_renderer');
         $viewRenderer->setShowHTMLHints(false);
+        $viewRenderer->setIsBackendMode();
 
         return $viewRenderer;
     }

@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
@@ -1400,6 +1401,13 @@ class TCMSTableEditorEndPoint
             $isCopy = false;
         }
         if ($this->_WriteDataToDatabase($oFields, $this->oTable, true, $isCopy, false, $bCopyAllLanguages)) {
+            if (false === $this->bPreventPostSaveHookOnFields) {
+                $oFields->GoToStart();
+                /** @var $oField TCMSField */
+                while ($oField = $oFields->Next()) {
+                    $oField->PostSaveHook($this->sId);
+                }
+            }
             $this->bIsDatabaseCopy = true;
             $this->OnAfterCopy();
         }
@@ -1505,9 +1513,6 @@ class TCMSTableEditorEndPoint
         $aMLTFields = array();
         $aPropertyFields = array();
         $oFields->GoToStart();
-
-        $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
-        $oMessageManager = TCMSMessageManager::GetInstance();
 
         $tableName = $this->oTableConf->sqlData['name'];
         $languageId = $this->oTableConf->GetLanguage();
@@ -1692,7 +1697,11 @@ class TCMSTableEditorEndPoint
 
         $bSaveSuccess = false;
         if (!empty($error)) {
-            $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_SAVE_ERROR', array('sqlError' => $error, 'sRecordID' => $this->sId, 'sTableID' => $this->sTableId));
+            $this->getFlashMessageService()->AddMessage(
+                TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+                'TABLEEDITOR_SAVE_ERROR',
+                ['sqlError' => $error, 'sRecordID' => $this->sId, 'sTableID' => $this->sTableId]
+            );
         } else {
             $bSaveSuccess = true;
         }
@@ -1853,11 +1862,7 @@ class TCMSTableEditorEndPoint
         $bAllowRecordReferenceDeletion = $oPropertyFieldObject->allowDeleteRecordReferences();
         $foreignKeyName = $oPropertyFieldObject->GetMatchingParentFieldName();
         if (false !== $foreignKeyName) {
-            $propertyTable = $oPropertyField->sqlData['field_default_value'];
-            if (empty($propertyTable)) { // connected property table name not set in default value, try fieldname itself
-                $propertyTable = $oPropertyField->sqlData['name'];
-            }
-
+            $propertyTable = $oPropertyFieldObject->GetPropertyTableName();
             $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($propertyTable).'` WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($foreignKeyName)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'";
 
             $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $propertyTable).'List';
@@ -2157,7 +2162,7 @@ class TCMSTableEditorEndPoint
      */
     public function GetHtmlHeadIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -2165,7 +2170,7 @@ class TCMSTableEditorEndPoint
      */
     public function GetHtmlFooterIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -2567,5 +2572,10 @@ class TCMSTableEditorEndPoint
     private function getGuidCreationService(): GuidCreationServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.guid_creation');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }

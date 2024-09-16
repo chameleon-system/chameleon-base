@@ -427,7 +427,9 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                     $columnField = array($db_alias => $dbfieldname);
                 }
                 $this->tableObj->AddColumn($columnField, $fieldConfig['align'], $this->getCellFormattingFunctionConfig($fieldConfig), $jsParas, 1, null, null, null, $originalField, $originalTable);
-                $this->tableObj->searchFields[$fieldConfig['name']] = 'full';
+                if ($this->isListFieldSearchable($fieldConfig)) {
+                    $this->tableObj->searchFields[$fieldConfig['name']] = 'full';
+                }
             }
         } else {
             $this->columnCount += 3;
@@ -462,6 +464,33 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
 
         $this->AddCustomColumns();
+    }
+
+    /**
+     * Determines if a specified list field is searchable.
+     *
+     * This method evaluates if a field is searchable by checking if it does not end with '_mlt' (indicating it's not a multi-link-table/one to many field)
+     * and verifying the field's existence in the database. It handles fields that may be aliases or virtual fields that only work with a callback method.
+     */
+    protected function isListFieldSearchable(array $fieldConfig): bool
+    {
+        $toolsService = $this->getToolsService();
+        $cleanSqlName = trim(str_replace('`', '', $fieldConfig['name']));
+        $tableName = $this->oTableConf->table;
+        $fieldName = $cleanSqlName;
+
+        if (str_contains($cleanSqlName, '.')) {
+            [$tableName, $fieldName] = explode('.', $cleanSqlName);
+        } elseif ($fieldConfig['cms_tbl_conf_id'] !== $this->oTableConf->id) {
+            $tblConf = TdbCmsTblConf::GetNewInstance();
+            if ($tblConf->Load($fieldConfig['cms_tbl_conf_id'])) {
+                $tableName = $tblConf->sqlData['name'];
+            } else {
+                return false;
+            }
+        }
+
+        return !str_ends_with($fieldName, '_mlt') && $toolsService::FieldExists($tableName, $fieldName, false);
     }
 
     /**
@@ -926,5 +955,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getToolsService(): TTools
+    {
+        return ServiceLocator::get('chameleon_system_core.tools');
     }
 }

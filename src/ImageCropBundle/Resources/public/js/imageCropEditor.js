@@ -1,5 +1,23 @@
 (function ($) {
+    var iframe = window.frameElement;
+    var imageContainer = document.querySelector('.snippetImageCropImageCropEditorImageCropEditor');
     var image = document.getElementById('imageToCrop');
+    var modalBodyHeight = iframe.getAttribute('data-modal-body-height');
+
+    if (modalBodyHeight) {
+        var offsetHeight = 32; //the modal-body padding
+        const cropPresetList = document.querySelector('.snippetImageCropImageCropEditorPresetList');
+        if (cropPresetList) {
+            offsetHeight = offsetHeight + cropPresetList.offsetHeight;
+        }
+        const cropEditForm = document.querySelector('.snippetImageCropImageCropEditorImageCropEditorForm');
+        if (cropEditForm) {
+            offsetHeight = offsetHeight + cropEditForm.offsetHeight + 24; //+margin-bottom
+        }
+        const remainingHeight = modalBodyHeight - offsetHeight - 30; //a little more space to remove the scrolling bar
+        imageContainer.style.maxHeight = remainingHeight + 'px';
+    }
+
     var config = {};
     if (undefined !== typeof image.dataset.cropperAspectRatio) {
         config.aspectRatio = image.dataset.cropperAspectRatio;
@@ -22,6 +40,7 @@
     }
     var cropper = new Cropper(image, {
         viewMode: 1,
+        dragMode: 'crop',
         aspectRatio: config.aspectRatio,
         rotatable: false,
         zoomable: false,
