@@ -1,0 +1,43 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsChangelogItem" table="pkg_cms_changelog_item">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="pkgCmsChangelogSet"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsChangelogSet"
+                     inversed-by="pkgCmsChangelogItemCollection">
+            <options>
+                <option name="comment">Changeset</option>
+            </options>
+            <join-column name="pkg_cms_changelog_set_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="cmsFieldConf"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsFieldConf">
+            <join-column name="cms_field_conf" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Changed field</option>
+            </options>
+        </many-to-one>
+        <field name="valueOld" type="text" column="value_old" nullable="false">
+            <options>
+                <option name="comment">Old value</option>
+            </options>
+        </field>
+        <field name="valueNew" type="text" column="value_new" nullable="false">
+            <options>
+                <option name="comment">New value</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

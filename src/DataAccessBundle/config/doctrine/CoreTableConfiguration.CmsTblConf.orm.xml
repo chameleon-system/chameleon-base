@@ -1,0 +1,405 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf" table="cms_tbl_conf">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">SQL table name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="dbobjectType" type="string" column="dbobject_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Database object type</option>
+                <option name="default">Customer</option>
+            </options>
+        </field>
+        <field name="translation" type="string" column="translation" length="255" nullable="false">
+            <options>
+                <option name="comment">Title</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="engine" type="string" column="engine" length="7" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">MySql Engine</option>
+                <option name="default">InnoDB</option>
+            </options>
+        </field>
+        <one-to-many field="cmsTblFieldTabCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblFieldTab"
+                     mapped-by="cmsTblConf" orphan-removal="true">
+            <options>
+                <option name="comment">Field category/tabs</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="listQuery" type="text" column="list_query" nullable="false">
+            <options>
+                <option name="comment">List query</option>
+            </options>
+        </field>
+        <many-to-one field="cmsContentBox" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsContentBox">
+            <join-column name="cms_content_box_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">View in category window</option>
+            </options>
+        </many-to-one>
+        <field name="onlyOneRecordTbl" type="boolean" column="only_one_record_tbl" nullable="false">
+            <options>
+                <option name="comment">Table contains only one record</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="isMultilanguage" type="boolean" column="is_multilanguage" nullable="false">
+            <options>
+                <option name="comment">Activate multi language</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="isWorkflow" type="boolean" column="is_workflow" nullable="false">
+            <options>
+                <option name="comment">Activate workflow</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="lockingActive" type="boolean" column="locking_active" nullable="false">
+            <options>
+                <option name="comment">Activate locking</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="changelogActive" type="boolean" column="changelog_active" nullable="false">
+            <options>
+                <option name="comment">Enable changelog</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="revisionManagementActive" type="boolean" column="revision_management_active" nullable="false">
+            <options>
+                <option name="comment">Enable revision management</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <one-to-many field="cmsFieldConfMltCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsFieldConf"
+                     mapped-by="cmsTblConf" orphan-removal="true">
+            <options>
+                <option name="comment">Record fields</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="propertyListFieldsCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblDisplayListFields"
+                     mapped-by="cmsTblConf" orphan-removal="true">
+            <options>
+                <option name="comment">List fields</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="propertyOrderFieldsCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblDisplayOrderfields"
+                     mapped-by="cmsTblConf" orphan-removal="true">
+            <options>
+                <option name="comment">Sort fields</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="nameColumn" type="string" column="name_column" length="255" nullable="false">
+            <options>
+                <option name="comment">Name field</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="nameColumnCallback" type="string" column="name_column_callback" length="255" nullable="false">
+            <options>
+                <option name="comment">Callback function for the name field</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="displayColumn" type="string" column="display_column" length="255" nullable="false">
+            <options>
+                <option name="comment">Display field</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="displayColumnCallback" type="string" column="display_column_callback" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Callback function for the display field</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="listGroupField" type="string" column="list_group_field" length="255" nullable="false">
+            <options>
+                <option name="comment">Group field</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="listGroupFieldHeader" type="string" column="list_group_field_header" length="255" nullable="false">
+            <options>
+                <option name="comment">Group field title</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="listGroupFieldColumn" type="string" column="list_group_field_column" length="255" nullable="false">
+            <options>
+                <option name="comment">Group field column name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="cmsTblListClassCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblListClass"
+                     mapped-by="cmsTblConf" orphan-removal="true">
+            <options>
+                <option name="comment">List views</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-one field="cmsTblListClass"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblListClass">
+            <join-column name="cms_tbl_list_class_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">List view default class</option>
+            </options>
+        </many-to-one>
+        <field name="tableEditorClass" type="string" column="table_editor_class" length="255" nullable="false">
+            <options>
+                <option name="comment">Table editor php class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="tableEditorClassSubtype" type="string" column="table_editor_class_subtype" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Path to table editor class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="tableEditorClassType" type="string" column="table_editor_class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <one-to-many field="cmsTblConfRestrictionsCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConfRestrictions"
+                     mapped-by="cmsTblConf" orphan-removal="true">
+            <options>
+                <option name="comment">List restrictions</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="showPreviewbutton" type="boolean" column="show_previewbutton" nullable="false">
+            <options>
+                <option name="comment">Show preview button in records</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTplPage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplPage">
+            <join-column name="cms_tpl_page_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Preview page</option>
+            </options>
+        </many-to-one>
+        <field name="renameOnCopy" type="boolean" column="rename_on_copy" nullable="false">
+            <options>
+                <option name="comment">Rename on copy</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-one field="cmsUsergroup" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUsergroup">
+            <join-column name="cms_usergroup_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Table belongs to group</option>
+            </options>
+        </many-to-one>
+        <many-to-many field="cmsRoleCollection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_tbl_conf_cms_role_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Rights - Create new record</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsRole1Collection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_tbl_conf_cms_role1_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Rights - Modify record</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsRole2Collection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_tbl_conf_cms_role2_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Rights - Delete record</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsRole3Collection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_tbl_conf_cms_role3_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Rights - Show all records</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsRole6Collection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_tbl_conf_cms_role6_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Rights – Show all records (readonly)</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsRole4Collection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_tbl_conf_cms_role4_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Rights - Create new language</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsRole5Collection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_tbl_conf_cms_role5_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Rights – Publish record via workflow</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsRole7Collection" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsRole">
+            <join-table name="cms_tbl_conf_cms_role7_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Right - Revision management</option>
+            </options>
+        </many-to-many>
+        <field name="notes" type="text" column="notes" nullable="false">
+            <options>
+                <option name="comment">Notes</option>
+            </options>
+        </field>
+        <field name="frontendAutoCacheClearEnabled" type="boolean" column="frontend_auto_cache_clear_enabled"
+               nullable="false">
+            <options>
+                <option name="comment">Execute via frontend cache trigger when writing</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="dbobjectExtendClass" type="string" column="dbobject_extend_class" length="255" nullable="false">
+            <options>
+                <option name="comment">Is derived from</option>
+                <option name="default">TCMSRecord</option>
+            </options>
+        </field>
+        <field name="dbobjectExtendSubtype" type="string" column="dbobject_extend_subtype" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Is extended from: Classtype</option>
+                <option name="default">dbobjects</option>
+            </options>
+        </field>
+        <field name="dbobjectExtendType" type="string" column="dbobject_extend_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Is extended from: Type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <one-to-many field="cmsTblExtensionCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblExtension"
+                     mapped-by="cmsTblConf" orphan-removal="true">
+            <options>
+                <option name="comment">Extensions</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="autoLimitResults" type="integer" column="auto_limit_results" nullable="false">
+            <options>
+                <option name="comment">Automatically limit list object to this number of entries</option>
+                <option name="default">-1</option>
+            </options>
+        </field>
+        <one-to-many field="cmsTblConfIndexCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConfIndex"
+                     mapped-by="cmsTblConf" orphan-removal="true">
+            <options>
+                <option name="comment">Index definitions</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="iconFontCssClass" type="string" column="icon_font_css_class" length="255" nullable="false">
+            <options>
+                <option name="comment">Icon Font CSS class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

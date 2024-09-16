@@ -1,0 +1,37 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsUserSso" table="cms_user_sso">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsUser" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser"
+                     inversed-by="cmsUserSsoCollection">
+            <options>
+                <option name="comment">Belongs to</option>
+            </options>
+            <join-column name="cms_user_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="type" type="string" column="type" length="255" nullable="false">
+            <options>
+                <option name="comment">SSO Service</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="ssoId" type="string" column="sso_id" length="255" nullable="false">
+            <options>
+                <option name="comment">SSO ID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

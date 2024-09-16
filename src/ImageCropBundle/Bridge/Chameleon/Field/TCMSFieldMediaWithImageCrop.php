@@ -11,8 +11,8 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field;
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -31,7 +31,6 @@ use TdbCmsLanguage;
 use TGlobal;
 use TViewParser;
 use ViewRenderer;
-use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * {@inheritdoc}
@@ -43,7 +42,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $lookupFieldDef = parent::getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
 
         $propertyName = $this->getFieldNameOfAdditionalField($this->name);
-        if (stringEndsWith($propertyName, '_id')) {
+        if (str_ends_with($propertyName, '_id')) {
             $propertyName = substr($propertyName, 0, -3);
         }
 
@@ -78,7 +77,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $lookupFieldMapping =  parent::getDoctrineDataModelXml($namespace, $tableNamespaceMapping);
 
         $propertyName = $this->getFieldNameOfAdditionalField($this->name);
-        if (stringEndsWith($propertyName, '_id')) {
+        if (str_ends_with($propertyName, '_id')) {
             $propertyName = substr($propertyName, 0, -3);
         }
 

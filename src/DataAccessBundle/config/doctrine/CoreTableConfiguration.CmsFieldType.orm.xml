@@ -1,0 +1,98 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsFieldType" table="cms_field_type">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="trans" type="string" column="049_trans" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="forceAutoIncrement" type="boolean" column="force_auto_increment" nullable="false">
+            <options>
+                <option name="comment">Auto increment</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">PHP class subtype</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="constname" type="string" column="constname" length="255" nullable="false">
+            <options>
+                <option name="comment">Field code name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="mysqlType" type="string" column="mysql_type" length="255" nullable="false">
+            <options>
+                <option name="comment">MySQL data type</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="lengthSet" type="string" column="length_set" length="255" nullable="false">
+            <options>
+                <option name="comment">MySQL field length or value list (ENUM)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="baseType" type="string" column="base_type" length="8" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Base type</option>
+                <option name="default">standard</option>
+            </options>
+        </field>
+        <field name="helpText" type="text" column="help_text" nullable="false">
+            <options>
+                <option name="comment">Help text</option>
+            </options>
+        </field>
+        <field name="mysqlStandardValue" type="string" column="mysql_standard_value" length="255" nullable="false">
+            <options>
+                <option name="comment">Default value</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="fieldclass" type="string" column="fieldclass" length="255" nullable="false">
+            <options>
+                <option name="comment">PHP class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">PHP class type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="containsImages" type="boolean" column="contains_images" nullable="false">
+            <options>
+                <option name="comment">Field contains images</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="indextype" type="string" column="indextype" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Field index</option>
+                <option name="default">none</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

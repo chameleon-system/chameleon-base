@@ -1,0 +1,61 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsThemeBlock" table="pkg_cms_theme_block">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Descriptive name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="systemName" type="string" column="system_name" length="255" nullable="false">
+            <options>
+                <option name="comment">System name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="cmsMasterPagedefSpotCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsMasterPagedefSpot"
+                     mapped-by="pkgCmsThemeBlock" orphan-removal="true">
+            <options>
+                <option name="comment">Spots</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="pkgCmsThemeBlockLayoutCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsThemeBlockLayout"
+                     mapped-by="pkgCmsThemeBlock" orphan-removal="true">
+            <options>
+                <option name="comment">Layouts</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-one field="pkgCmsThemeBlockLayout"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsThemeBlockLayout">
+            <join-column name="pkg_cms_theme_block_layout_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Default layout</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsMedia" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="cms_media_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Preview image</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

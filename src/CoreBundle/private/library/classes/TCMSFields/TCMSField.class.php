@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FieldExtensionRenderServiceInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
@@ -163,7 +161,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         return $snippetRenderer;
     }
 
-    protected function snakeToCamelCase(string $string): string
+    protected function snakeToPascalCase(string $string): string
     {
         $firstPart = substr($string, 0, strpos($string, '_'));
         if (is_numeric($firstPart)) {
@@ -178,10 +176,10 @@ class TCMSField implements TCMSFieldVisitableInterface
 
         return $camelCasedName;
     }
-    
-    protected function snakeToPascalCase(string $string): string
+
+    protected function snakeToCamelCase(string $string): string
     {
-        return lcfirst($this->snakeToCamelCase($string));
+        return lcfirst($this->snakeToPascalCase($string));
     }
 
     /**
@@ -282,9 +280,9 @@ class TCMSField implements TCMSFieldVisitableInterface
         if (true === $this->bReadOnlyMode) {
             return '';
         }
-        
+
         $fieldExtensionRenderService = $this->getFieldExtensionRenderService();
-        
+
         return $fieldExtensionRenderService->renderFieldExtension($this);
     }
 
@@ -443,7 +441,7 @@ class TCMSField implements TCMSFieldVisitableInterface
 
         $inputFieldFilterUtil = $this->getInputFilterUtil();
         $callingFieldExtension = $inputFieldFilterUtil->getFilteredInput('callingFieldExtension', '');
-        
+
         if ('' === $callingFieldExtension) {
             return 'Error: callingFieldExtension is empty';
         }

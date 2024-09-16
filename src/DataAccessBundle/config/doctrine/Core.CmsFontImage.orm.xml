@@ -1,0 +1,118 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsFontImage" table="cms_font_image">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="profileName" type="string" column="profile_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Profile name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="imgHeight" type="integer" column="img_height" nullable="false">
+            <options>
+                <option name="comment">Image height</option>
+                <option name="default">-1</option>
+            </options>
+        </field>
+        <field name="imgWidth" type="integer" column="img_width" nullable="false">
+            <options>
+                <option name="comment">Image width</option>
+                <option name="default">-1</option>
+            </options>
+        </field>
+        <field name="imgBackgroundColor" type="string" column="img_background_color" length="255" nullable="false">
+            <options>
+                <option name="comment">Image background color</option>
+                <option name="default">-1</option>
+            </options>
+        </field>
+        <field name="fontColor" type="string" column="font_color" length="255" nullable="false">
+            <options>
+                <option name="comment">Font color</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="fontSize" type="integer" column="font_size" nullable="false">
+            <options>
+                <option name="comment">Font size</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="fontWeight" type="string" column="font_weight" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Font width</option>
+                <option name="default">normal</option>
+            </options>
+        </field>
+        <field name="fontAlign" type="string" column="font_align" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Font alignment</option>
+                <option name="default">left</option>
+            </options>
+        </field>
+        <field name="fontVerticalAlign" type="string" column="font_vertical_align" length="6" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Font alignment vertical</option>
+                <option name="default">top</option>
+            </options>
+        </field>
+        <field name="fontFilename" type="string" column="font_filename" length="255" nullable="false">
+            <options>
+                <option name="comment">Font file</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="imgType" type="string" column="img_type" length="3" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Image type</option>
+                <option name="default">png</option>
+            </options>
+        </field>
+        <field name="imgBackgroundImg" type="boolean" column="img_background_img" nullable="false">
+            <options>
+                <option name="comment">With background image</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="backgroundImgFile" type="string" column="background_img_file" length="255" nullable="false">
+            <options>
+                <option name="comment">Background image file</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="textPositionX" type="integer" column="text_position_x" nullable="false">
+            <options>
+                <option name="comment">Text position X-axis</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="textPositionY" type="integer" column="text_position_y" nullable="false">
+            <options>
+                <option name="comment">Text position Y-axis</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

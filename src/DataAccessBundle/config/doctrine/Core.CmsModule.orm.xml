@@ -1,0 +1,90 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsModule" table="cms_module">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="60" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="uniquecmsname" type="string" column="uniquecmsname" length="255" nullable="false">
+            <options>
+                <option name="comment">CMS abbreviation</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsContentBox" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsContentBox">
+            <join-column name="cms_content_box_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Show in category window</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsUsergroup" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUsergroup">
+            <join-column name="cms_usergroup_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Module belongs to group</option>
+            </options>
+        </many-to-one>
+        <field name="module" type="string" column="module" length="255" nullable="false">
+            <options>
+                <option name="comment">Module page configuration</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="parameter" type="string" column="parameter" length="100" nullable="false">
+            <options>
+                <option name="comment">URL parameter</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="moduleLocation" type="string" column="module_location" length="255" nullable="false">
+            <options>
+                <option name="comment">Module type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="showAsPopup" type="boolean" column="show_as_popup" nullable="false">
+            <options>
+                <option name="comment">Open as popup</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="width" type="integer" column="width" nullable="false">
+            <options>
+                <option name="comment">Popup window width</option>
+                <option name="default">780</option>
+            </options>
+        </field>
+        <field name="height" type="integer" column="height" nullable="false">
+            <options>
+                <option name="comment">Popup window height</option>
+                <option name="default">650</option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="iconFontCssClass" type="string" column="icon_font_css_class" length="255" nullable="false">
+            <options>
+                <option name="comment">Icon Font CSS class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

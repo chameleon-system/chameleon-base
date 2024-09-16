@@ -1,0 +1,136 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterCampaign" table="pkg_newsletter_campaign">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="utmSource" type="string" column="utm_source" length="255" nullable="false">
+            <options>
+                <option name="comment">Campaign source (utm_source)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="utmMedium" type="string" column="utm_medium" length="255" nullable="false">
+            <options>
+                <option name="comment">Campaign medium (utm_medium)</option>
+                <option name="default">email</option>
+            </options>
+        </field>
+        <field name="utmContent" type="string" column="utm_content" length="255" nullable="false">
+            <options>
+                <option name="comment">Campaign content (utm_content)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="utmCampaign" type="string" column="utm_campaign" length="255" nullable="false">
+            <options>
+                <option name="comment">Campaign name (utm_campaign)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Newsletter title</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsTreeNode" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree">
+            <join-column name="cms_tree_node_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Newlsetter template page</option>
+            </options>
+        </many-to-one>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Newsletter queue active</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="subject" type="string" column="subject" length="255" nullable="false">
+            <options>
+                <option name="comment">Subject</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Portal</option>
+            </options>
+        </many-to-one>
+        <one-to-many field="pkgNewsletterQueueCollection"
+                     target-entity="\ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterQueue"
+                     mapped-by="pkgNewsletterCampaign" orphan-removal="true">
+            <options>
+                <option name="comment">Queue items</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="contentPlain" type="text" column="content_plain" nullable="false">
+            <options>
+                <option name="comment">Content text</option>
+            </options>
+        </field>
+        <field name="queueDate" type="datetime" column="queue_date" nullable="false">
+            <options>
+                <option name="comment">Desired shipping time</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sendStatistics" type="text" column="send_statistics" nullable="false">
+            <options>
+                <option name="comment">Send status</option>
+            </options>
+        </field>
+        <field name="sendStartDate" type="datetime" column="send_start_date" nullable="false">
+            <options>
+                <option name="comment">Start of shipping</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sendEndDate" type="datetime" column="send_end_date" nullable="false">
+            <options>
+                <option name="comment">End of shipping</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="generateUserDependingNewsletter" type="boolean" column="generate_user_depending_newsletter"
+               nullable="false">
+            <options>
+                <option name="comment">Generate user-specific newsletters</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-many field="pkgNewsletterGroupCollection"
+                      target-entity="\ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterGroup">
+            <join-table name="pkg_newsletter_campaign_pkg_newsletter_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Recipient list</option>
+            </options>
+        </many-to-many>
+        <field name="googleAnalyticsActive" type="boolean" column="google_analytics_active" nullable="false">
+            <options>
+                <option name="comment">Enable Google Analytics tagging</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

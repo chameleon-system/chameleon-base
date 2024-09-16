@@ -1,0 +1,83 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsUrlAlias" table="cms_url_alias">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal"
+                     inversed-by="cmsUrlAliasCollection">
+            <options>
+                <option name="comment">Belongs to portal</option>
+            </options>
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name / notes</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sourceUrl" type="string" column="source_url" length="255" nullable="false">
+            <options>
+                <option name="comment">Source</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="exactMatch" type="boolean" column="exact_match" nullable="false">
+            <options>
+                <option name="comment">Exact match of the source path</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="targetUrl" type="string" column="target_url" length="255" nullable="false">
+            <options>
+                <option name="comment">Target</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="ignoreParameter" type="text" column="ignore_parameter" nullable="false">
+            <options>
+                <option name="comment">Ignore these parameters</option>
+            </options>
+        </field>
+        <field name="parameterMapping" type="text" column="parameter_mapping" nullable="false">
+            <options>
+                <option name="comment">Parameter mapping</option>
+            </options>
+        </field>
+        <many-to-one field="cmsUser" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser">
+            <join-column name="cms_user_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Created by</option>
+            </options>
+        </many-to-one>
+        <field name="datecreated" type="datetime" column="datecreated" nullable="false">
+            <options>
+                <option name="comment">Creation date</option>
+                <option name="default">CURRENT_TIMESTAMP</option>
+            </options>
+        </field>
+        <field name="expirationDate" type="datetime" column="expiration_date" nullable="false">
+            <options>
+                <option name="comment">Expiry date</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Active</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

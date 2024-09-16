@@ -5,6 +5,8 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 $menuPrefix = TGlobal::OutHTML($data['sModuleSpotName']);
 $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+/** @var SecurityHelperAccess $securityHelper */
+$securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
 /**
  * @var $oModule          \TdbCmsTplModule
@@ -138,8 +140,6 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
             <?php
         }
 
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
             if ($oViews->Length() > 1 && $data['functionRights']['bInstanceChangeViewAllowed']) {

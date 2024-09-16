@@ -1,0 +1,33 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\MultiModuleBundle\Entity\PkgMultiModuleSet" table="pkg_multi_module_set">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name of the set</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="pkgMultiModuleSetItemCollection"
+                     target-entity="\ChameleonSystem\MultiModuleBundle\Entity\PkgMultiModuleSetItem"
+                     mapped-by="pkgMultiModuleSet" orphan-removal="true">
+            <options>
+                <option name="comment">Set consists of these modules</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

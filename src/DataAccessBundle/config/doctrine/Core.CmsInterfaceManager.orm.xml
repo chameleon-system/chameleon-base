@@ -1,0 +1,83 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsInterfaceManager" table="cms_interface_manager">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="systemname" type="string" column="systemname" length="255" nullable="false">
+            <options>
+                <option name="comment">System name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="class" type="string" column="class" length="255" nullable="false">
+            <options>
+                <option name="comment">Used class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classType" type="string" column="class_type" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class type</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Class subtype</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <one-to-many field="cmsInterfaceManagerParameterCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsInterfaceManagerParameter"
+                     mapped-by="cmsInterfaceManager" orphan-removal="true">
+            <options>
+                <option name="comment">Parameter</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="restrictToUserGroups" type="boolean" column="restrict_to_user_groups" nullable="false">
+            <options>
+                <option name="comment">Restrict to user groups</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-many field="cmsUsergroupCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUsergroup">
+            <join-table name="cms_interface_manager_cms_usergroup_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Available for the following groups</option>
+            </options>
+        </many-to-many>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

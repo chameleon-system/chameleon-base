@@ -1,0 +1,39 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterQueue" table="pkg_newsletter_queue">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="pkgNewsletterUser"
+                     target-entity="\ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterUser">
+            <join-column name="pkg_newsletter_user" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Newsletter subscriber</option>
+            </options>
+        </many-to-one>
+        <field name="dateSent" type="datetime" column="date_sent" nullable="false">
+            <options>
+                <option name="comment">Shipped on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="pkgNewsletterCampaign"
+                     target-entity="\ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterCampaign"
+                     inversed-by="pkgNewsletterQueueCollection">
+            <options>
+                <option name="comment">Newsletter</option>
+            </options>
+            <join-column name="pkg_newsletter_campaign_id" referenced-column-name="id"/>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

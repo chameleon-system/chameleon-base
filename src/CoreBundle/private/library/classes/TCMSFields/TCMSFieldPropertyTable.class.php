@@ -16,7 +16,6 @@ use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
-use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * presents a 1:n table (ie n records for the current table)
@@ -37,7 +36,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parentFieldName = $this->GetMatchingParentFieldName();
-        if (stringEndsWith($parentFieldName, '_id')) {
+        if (str_ends_with($parentFieldName, '_id')) {
             $parentFieldName = substr($parentFieldName, 0, -3);
         }
         $parameters = [
@@ -86,7 +85,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
 
         $parentFieldName = $this->GetMatchingParentFieldName();
-        if (stringEndsWith($parentFieldName, '_id')) {
+        if (str_ends_with($parentFieldName, '_id')) {
             $parentFieldName = substr($parentFieldName, 0, -3);
         }
         $parameters = [

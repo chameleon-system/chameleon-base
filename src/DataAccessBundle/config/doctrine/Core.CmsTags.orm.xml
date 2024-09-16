@@ -1,0 +1,36 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsTags" table="cms_tags">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Tag</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="urlname" type="string" column="urlname" length="255" nullable="false">
+            <options>
+                <option name="comment">URL name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="count" type="integer" column="count" nullable="false">
+            <options>
+                <option name="comment">Quantity</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

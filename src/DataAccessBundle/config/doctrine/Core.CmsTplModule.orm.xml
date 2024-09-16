@@ -1,0 +1,128 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsTplModule" table="cms_tpl_module">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="description" type="text" column="description" nullable="false">
+            <options>
+                <option name="comment">Description</option>
+            </options>
+        </field>
+        <field name="iconFontCssClass" type="string" column="icon_font_css_class" length="255" nullable="false">
+            <options>
+                <option name="comment">Icon font CSS class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="viewMapperConfig" type="text" column="view_mapper_config" nullable="false">
+            <options>
+                <option name="comment">View / mapper configuration</option>
+            </options>
+        </field>
+        <field name="mapperChain" type="text" column="mapper_chain" nullable="false">
+            <options>
+                <option name="comment">Mapper chain</option>
+            </options>
+        </field>
+        <field name="viewMapping" type="text" column="view_mapping" nullable="false">
+            <options>
+                <option name="comment">Translations of the views</option>
+            </options>
+        </field>
+        <field name="revisionManagementActive" type="boolean" column="revision_management_active" nullable="false">
+            <options>
+                <option name="comment">Enable revision management</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="isCopyAllowed" type="boolean" column="is_copy_allowed" nullable="false">
+            <options>
+                <option name="comment">Module contents are copied</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="showInTemplateEngine" type="boolean" column="show_in_template_engine" nullable="false">
+            <options>
+                <option name="comment">Show in template engine</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="position" type="integer" column="position" nullable="false">
+            <options>
+                <option name="comment">Position</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="isRestricted" type="boolean" column="is_restricted" nullable="false">
+            <options>
+                <option name="comment">Offer module to specific groups only</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-many field="cmsUsergroupCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUsergroup">
+            <join-table name="cms_tpl_module_cms_usergroup_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Allow for these groups</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="cmsPortalCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-table name="cms_tpl_module_cms_portal_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Display in portal</option>
+            </options>
+        </many-to-many>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Module name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-many field="cmsTblConfCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf">
+            <join-table name="cms_tpl_module_cms_tbl_conf_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Connected tables</option>
+            </options>
+        </many-to-many>
+        <field name="classname" type="string" column="classname" length="255" nullable="false">
+            <options>
+                <option name="comment">Class name / service ID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

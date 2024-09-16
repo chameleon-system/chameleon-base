@@ -1,0 +1,52 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblListClass"
+            table="cms_tbl_list_class">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Alias name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classSubtype" type="string" column="class_subtype" length="255" nullable="false">
+            <options>
+                <option name="comment">Path to list class</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="classlocation" type="string" column="classlocation" length="11" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Class folder</option>
+                <option name="default">Core</option>
+            </options>
+        </field>
+        <field name="classname" type="string" column="classname" length="255" nullable="false">
+            <options>
+                <option name="comment">Class name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsTblConf"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf"
+                     inversed-by="cmsTblListClassCollection">
+            <options>
+                <option name="comment">Belongs to</option>
+            </options>
+            <join-column name="cms_tbl_conf_id" referenced-column-name="id"/>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

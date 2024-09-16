@@ -1,0 +1,119 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterUser" table="pkg_newsletter_user">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="dataExtranetUser" target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser">
+            <join-column name="data_extranet_user_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to customer</option>
+            </options>
+        </many-to-one>
+        <many-to-many field="pkgNewsletterGroupCollection"
+                      target-entity="\ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterGroup">
+            <join-table name="pkg_newsletter_user_pkg_newsletter_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Subscriber of recipient lists</option>
+            </options>
+        </many-to-many>
+        <many-to-many field="pkgNewsletterConfirmationCollection"
+                      target-entity="\ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterConfirmation">
+            <join-table name="pkg_newsletter_user_pkg_newsletter_confirmation_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Confirmations</option>
+            </options>
+        </many-to-many>
+        <field name="email" type="string" column="email" length="255" nullable="false">
+            <options>
+                <option name="comment">Email address</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="dataExtranetSalutation"
+                     target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetSalutation">
+            <join-column name="data_extranet_salutation_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Write delete log</option>
+            </options>
+        </many-to-one>
+        <field name="firstname" type="string" column="firstname" length="255" nullable="false">
+            <options>
+                <option name="comment">First name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="lastname" type="string" column="lastname" length="255" nullable="false">
+            <options>
+                <option name="comment">Last name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="company" type="string" column="company" length="255" nullable="false">
+            <options>
+                <option name="comment">Company</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Portal</option>
+            </options>
+        </many-to-one>
+        <field name="signupDate" type="datetime" column="signup_date" nullable="false">
+            <options>
+                <option name="comment">Subscription date</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="optincode" type="string" column="optincode" length="255" nullable="false">
+            <options>
+                <option name="comment">Confirmation code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="optin" type="boolean" column="optin" nullable="false">
+            <options>
+                <option name="comment">Subscription confirmed</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="optinDate" type="datetime" column="optin_date" nullable="false">
+            <options>
+                <option name="comment">Confirmed on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="optoutcode" type="string" column="optoutcode" length="255" nullable="false">
+            <options>
+                <option name="comment">Unsubscription code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

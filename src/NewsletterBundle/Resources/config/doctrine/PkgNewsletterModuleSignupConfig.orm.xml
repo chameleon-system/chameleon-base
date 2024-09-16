@@ -1,0 +1,97 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterModuleSignupConfig"
+            table="pkg_newsletter_module_signup_config">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTplModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="cms_tpl_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to module instance</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="mainModuleInstance"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance">
+            <join-column name="main_module_instance_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to newsletter module</option>
+            </options>
+        </many-to-one>
+        <many-to-many field="pkgNewsletterGroupCollection"
+                      target-entity="\ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterGroup">
+            <join-table name="pkg_newsletter_module_signup_config_pkg_newsletter_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Subscription possible for</option>
+            </options>
+        </many-to-many>
+        <field name="useDoubleoptin" type="boolean" column="use_doubleoptin" nullable="false">
+            <options>
+                <option name="comment">Use double opt-in</option>
+                <option name="default">1</option>
+            </options>
+        </field>
+        <field name="signupHeadline" type="string" column="signup_headline" length="255" nullable="false">
+            <options>
+                <option name="comment">Signup (title)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="signupText" type="text" column="signup_text" nullable="false">
+            <options>
+                <option name="comment">Signup (text)</option>
+            </options>
+        </field>
+        <field name="confirmTitle" type="string" column="confirm_title" length="255" nullable="false">
+            <options>
+                <option name="comment">Confirmation (title)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="confirmText" type="text" column="confirm_text" nullable="false">
+            <options>
+                <option name="comment">Confirmation (text)</option>
+            </options>
+        </field>
+        <field name="signedupHeadline" type="string" column="signedup_headline" length="255" nullable="false">
+            <options>
+                <option name="comment">Successful subscription (title)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="signedupText" type="text" column="signedup_text" nullable="false">
+            <options>
+                <option name="comment">Successful subscription (text)</option>
+            </options>
+        </field>
+        <field name="nonewsignupTitle" type="string" column="nonewsignup_title" length="255" nullable="false">
+            <options>
+                <option name="comment">Signup not possible anymore (title)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="nonewsignupText" type="text" column="nonewsignup_text" nullable="false">
+            <options>
+                <option name="comment">Signup not possible anymore (text)</option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

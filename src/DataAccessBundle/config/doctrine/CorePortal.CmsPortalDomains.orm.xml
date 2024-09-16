@@ -1,0 +1,55 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortalDomains" table="cms_portal_domains">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal"
+                     inversed-by="cmsPortalDomainsCollection">
+            <options>
+                <option name="comment">Portal</option>
+            </options>
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+        </many-to-one>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Domain name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="sslname" type="string" column="sslname" length="255" nullable="false">
+            <options>
+                <option name="comment">SSL domain name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
+            <join-column name="cms_language_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Language</option>
+            </options>
+        </many-to-one>
+        <field name="isMasterDomain" type="boolean" column="is_master_domain" nullable="false">
+            <options>
+                <option name="comment">Primary domain of the portal</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="googleApiKey" type="string" column="google_api_key" length="255" nullable="false">
+            <options>
+                <option name="comment">Google API key</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

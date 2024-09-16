@@ -1,0 +1,107 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\DataMailProfile" table="data_mail_profile">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="idcode" type="string" column="idcode" length="255" nullable="false">
+            <options>
+                <option name="comment">ID code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="subject" type="string" column="subject" length="255" nullable="false">
+            <options>
+                <option name="comment">Subject</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="mailto" type="string" column="mailto" length="255" nullable="false">
+            <options>
+                <option name="comment">Recipient email address</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="mailtoName" type="string" column="mailto_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Recipient name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="mailfrom" type="string" column="mailfrom" length="255" nullable="false">
+            <options>
+                <option name="comment">Sender email address</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="mailfromName" type="string" column="mailfrom_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Sender name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="mailbcc" type="text" column="mailbcc" nullable="false">
+            <options>
+                <option name="comment">BCC</option>
+            </options>
+        </field>
+        <field name="body" type="text" column="body" nullable="false">
+            <options>
+                <option name="comment">Body</option>
+            </options>
+        </field>
+        <field name="bodyText" type="text" column="body_text" nullable="false">
+            <options>
+                <option name="comment">Body (text)</option>
+            </options>
+        </field>
+        <many-to-many field="attachmentCollection"
+                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocument">
+            <join-table name="data_mail_profile_attachment_cms_document_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Attach the following files to the email</option>
+            </options>
+        </many-to-many>
+        <field name="template" type="string" column="template" length="255" nullable="false">
+            <options>
+                <option name="comment">Template</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="templateText" type="string" column="template_text" length="255" nullable="false">
+            <options>
+                <option name="comment">Text template</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to portal</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

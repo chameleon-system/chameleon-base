@@ -11,7 +11,6 @@
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
-use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * field name in a table.

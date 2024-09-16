@@ -1,0 +1,64 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsChangelogSet" table="pkg_cms_changelog_set">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="modifyDate" type="datetime" column="modify_date" nullable="false">
+            <options>
+                <option name="comment">Change date</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsUser" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser">
+            <join-column name="cms_user" referenced-column-name="id"/>
+            <options>
+                <option name="comment">User who made the change</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsTblConf"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf">
+            <join-column name="cms_tbl_conf" referenced-column-name="id"/>
+            <options>
+                <option name="comment">The main table that was changed</option>
+            </options>
+        </many-to-one>
+        <field name="modifiedId" type="string" column="modified_id" length="255" nullable="false">
+            <options>
+                <option name="comment">ID of the changed data record</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="modifiedName" type="string" column="modified_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name of the changed data record</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="changeType" type="string" column="change_type" length="255" nullable="false">
+            <options>
+                <option name="comment">Type of change (INSERT, UPDATE, DELETE)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="pkgCmsChangelogItemCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\PkgCmsChangelogItem"
+                     mapped-by="pkgCmsChangelogSet" orphan-removal="true">
+            <options>
+                <option name="comment">Changes</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

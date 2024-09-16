@@ -1,0 +1,53 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\Core\CmsExportProfiles" table="cms_export_profiles">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Profile name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Editorial department</option>
+            </options>
+        </many-to-one>
+        <field name="exportType" type="string" column="export_type" length="4" nullable="false">
+            <options>
+                <option name="fixed">true</option>
+                <option name="comment">Export format</option>
+                <option name="default">TABs</option>
+            </options>
+        </field>
+        <many-to-one field="cmsTblConf"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf">
+            <join-column name="cms_tbl_conf_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Table</option>
+            </options>
+        </many-to-one>
+        <one-to-many field="cmsExportProfilesFieldsCollection"
+                     target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsExportProfilesFields"
+                     mapped-by="cmsExportProfiles" orphan-removal="true">
+            <options>
+                <option name="comment">Fields to be exported</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

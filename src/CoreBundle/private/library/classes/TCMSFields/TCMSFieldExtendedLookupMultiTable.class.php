@@ -16,7 +16,6 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\Common\Collections\Expr\Comparison;
-use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * Lookup to different tables.

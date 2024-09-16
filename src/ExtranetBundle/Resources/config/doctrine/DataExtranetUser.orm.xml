@@ -1,0 +1,336 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser" table="data_extranet_user">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="shop" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\Shop"
+                     inversed-by="dataExtranetUserCollection">
+            <options>
+                <option name="comment">Belongs to shop</option>
+            </options>
+            <join-column name="shop_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Belongs to portal</option>
+            </options>
+        </many-to-one>
+        <field name="customerNumber" type="integer" column="customer_number" nullable="false">
+            <options>
+                <option name="comment">Customer number</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Login</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="password" type="string" column="password" length="255" nullable="false">
+            <options>
+                <option name="comment">Password</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="passwordChangeKey" type="string" column="password_change_key" length="255" nullable="false">
+            <options>
+                <option name="comment">Password change key</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="passwordChangeTimeStamp" type="datetime" column="password_change_time_stamp" nullable="false">
+            <options>
+                <option name="comment">Date of the request to change password</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="dataExtranetSalutation"
+                     target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetSalutation">
+            <join-column name="data_extranet_salutation_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Name</option>
+            </options>
+        </many-to-one>
+        <field name="firstname" type="string" column="firstname" length="255" nullable="false">
+            <options>
+                <option name="comment">First name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="lastname" type="string" column="lastname" length="255" nullable="false">
+            <options>
+                <option name="comment">Last name</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="company" type="string" column="company" length="255" nullable="false">
+            <options>
+                <option name="comment">Company</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="street" type="string" column="street" length="255" nullable="false">
+            <options>
+                <option name="comment">Street</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="streetnr" type="string" column="streetnr" length="255" nullable="false">
+            <options>
+                <option name="comment">Street Number</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="postalcode" type="string" column="postalcode" length="255" nullable="false">
+            <options>
+                <option name="comment">Zip code</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="city" type="string" column="city" length="255" nullable="false">
+            <options>
+                <option name="comment">City</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="dataCountry" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\DataCountry">
+            <join-column name="data_country_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Country</option>
+            </options>
+        </many-to-one>
+        <field name="vatId" type="string" column="vat_id" length="255" nullable="false">
+            <options>
+                <option name="comment">USTID</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="telefon" type="string" column="telefon" length="255" nullable="false">
+            <options>
+                <option name="comment">Telephone</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="mobile" type="string" column="mobile" length="255" nullable="false">
+            <options>
+                <option name="comment">Mobile</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="addressAdditionalInfo" type="string" column="address_additional_info" length="255"
+               nullable="false">
+            <options>
+                <option name="comment">Address appendix</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="aliasName" type="string" column="alias_name" length="255" nullable="false">
+            <options>
+                <option name="comment">Alias</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="email" type="string" column="email" length="255" nullable="false">
+            <options>
+                <option name="comment">Email</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-many field="dataExtranetGroupCollection"
+                      target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup">
+            <join-table name="data_extranet_user_data_extranet_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Customer groups</option>
+            </options>
+        </many-to-many>
+        <field name="fax" type="string" column="fax" length="255" nullable="false">
+            <options>
+                <option name="comment">Fax</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="dataExtranetUserAddressCollection"
+                     target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUserAddress"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Addresses</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="sessionKey" type="string" column="session_key" length="32" nullable="false">
+            <options>
+                <option name="comment">Session key</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="loginTimestamp" type="integer" column="login_timestamp" nullable="false">
+            <options>
+                <option name="comment">Login timestamp</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="loginSalt" type="integer" column="login_salt" nullable="false">
+            <options>
+                <option name="comment">Login salt</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <one-to-many field="dataExtranetUserLoginHistoryCollection"
+                     target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUserLoginHistory"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Login process</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <many-to-one field="defaultBillingAddress"
+                     target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUserAddress">
+            <join-column name="default_billing_address_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Last billing address</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="defaultShippingAddress"
+                     target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUserAddress">
+            <join-column name="default_shipping_address_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Last used shipping address</option>
+            </options>
+        </many-to-one>
+        <field name="datecreated" type="datetime" column="datecreated" nullable="false">
+            <options>
+                <option name="comment">Date of subscription</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="confirmed" type="boolean" column="confirmed" nullable="false">
+            <options>
+                <option name="comment">Confirmed</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="tmpconfirmkey" type="string" column="tmpconfirmkey" length="32" nullable="false">
+            <options>
+                <option name="comment">Confirmation key</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="confirmedon" type="datetime" column="confirmedon" nullable="false">
+            <options>
+                <option name="comment">Confirmed on</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="regEmailSend" type="boolean" column="reg_email_send" nullable="false">
+            <options>
+                <option name="comment">Registration email sent</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <one-to-many field="shopUserPurchasedVoucherCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopVoucher\ShopUserPurchasedVoucher"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Bought vouchers</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopUserNoticeListCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopUserNoticeList"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Notice list</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopOrderCollection" target-entity="\ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Orders</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="dataExtranetUserShopArticleHistoryCollection"
+                     target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetUserShopArticleHistory"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Last viewed</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopSearchLogCollection" target-entity="\ChameleonSystem\SearchBundle\Entity\ShopSearchLog"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Searches executed by customer</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopSuggestArticleLogCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\ShopSuggestArticleLog"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Customer recommendations</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="shopArticleReviewCollection"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\Product\ShopArticleReview"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Reviews</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <one-to-many field="pkgShopWishlistCollection"
+                     target-entity="\ChameleonSystem\ShopWishlistBundle\Entity\PkgShopWishlist"
+                     mapped-by="dataExtranetUser" orphan-removal="true">
+            <options>
+                <option name="comment">Wish list</option>
+            </options>
+            <cascade-persist/>
+        </one-to-many>
+
+        <field name="birthdate" type="date" column="birthdate" nullable="false">
+            <options>
+                <option name="comment">Date of birth</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="pkgShopCurrency"
+                     target-entity="\ChameleonSystem\ShopBundle\Entity\ShopCore\PkgShopCurrency">
+            <join-column name="pkg_shop_currency_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Currency</option>
+            </options>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

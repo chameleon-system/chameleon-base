@@ -13,7 +13,6 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * picks a node from a tree.
@@ -24,7 +23,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $propertyName = $this->name;
-        if (stringEndsWith($propertyName, '_id')) {
+        if (str_ends_with($propertyName, '_id')) {
             $propertyName = substr($propertyName, 0, -3);
         }
 

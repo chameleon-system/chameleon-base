@@ -1,0 +1,93 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\NewsletterBundle\Entity\PkgNewsletterGroup" table="pkg_newsletter_group">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <many-to-one field="logoHeader" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia">
+            <join-column name="logo_header" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Logo header image of newsletter</option>
+            </options>
+        </many-to-one>
+        <field name="fromName" type="string" column="from_name" length="255" nullable="false">
+            <options>
+                <option name="comment">From (name)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="replyEmail" type="string" column="reply_email" length="255" nullable="false">
+            <options>
+                <option name="comment">Reply email address</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="name" type="string" column="name" length="255" nullable="false">
+            <options>
+                <option name="comment">Name of the recipient list</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="fromEmail" type="string" column="from_email" length="255" nullable="false">
+            <options>
+                <option name="comment">From (email address)</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="imprint" type="text" column="imprint" nullable="false">
+            <options>
+                <option name="comment">Imprint</option>
+            </options>
+        </field>
+        <many-to-one field="cmsPortal" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal">
+            <join-column name="cms_portal_id" referenced-column-name="id"/>
+            <options>
+                <option name="comment">Portal</option>
+            </options>
+        </many-to-one>
+        <field name="includeAllNewsletterUsers" type="boolean" column="include_all_newsletter_users" nullable="false">
+            <options>
+                <option name="comment">Send to all newsletter users</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="includeNewsletterUserNotAssignedToAnyGroup" type="boolean"
+               column="include_newsletter_user_not_assigned_to_any_group" nullable="false">
+            <options>
+                <option name="comment">Newsletter users without assignment to a newsletter group</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="includeAllNewsletterUsersWithNoExtranetAccount" type="boolean"
+               column="include_all_newsletter_users_with_no_extranet_account" nullable="false">
+            <options>
+                <option name="comment">Include all newsletter users WITHOUT extranet account in the list</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <many-to-many field="dataExtranetGroupCollection"
+                      target-entity="\ChameleonSystem\ExtranetBundle\Entity\DataExtranetGroup">
+            <join-table name="pkg_newsletter_group_data_extranet_group_mlt">
+                <join-columns>
+                    <join-column name="source_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="target_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <options>
+                <option name="comment">Send to users with following extranet groups</option>
+            </options>
+        </many-to-many>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>

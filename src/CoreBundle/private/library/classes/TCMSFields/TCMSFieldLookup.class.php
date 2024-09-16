@@ -16,7 +16,6 @@ use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
-use function PHPUnit\Framework\stringEndsWith;
 
 /**
  * ReloadOnChange=true.
@@ -54,7 +53,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $propertyName = $this->name;
-        if (stringEndsWith($propertyName, '_id')) {
+        if (str_ends_with($propertyName, '_id')) {
             $propertyName = substr($propertyName, 0, -3);
         }
 
@@ -85,7 +84,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
     protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
     {
         $propertyName = $this->name;
-        if (stringEndsWith($propertyName, '_id')) {
+        if (str_ends_with($propertyName, '_id')) {
             $propertyName = substr($propertyName, 0, -3);
         }
 

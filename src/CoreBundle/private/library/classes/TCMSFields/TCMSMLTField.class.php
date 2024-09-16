@@ -11,7 +11,6 @@
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
-use function PHPUnit\Framework\stringEndsWith;
 
 abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableInterface
 {
@@ -19,7 +18,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $propertyName = $this->name;
-        if (stringEndsWith($propertyName, '_mlt')) {
+        if (str_ends_with($propertyName, '_mlt')) {
             $propertyName = substr($propertyName, 0, -4);
         }
         $targetClass = $this->snakeToPascalCase($this->GetForeignTableName());
@@ -52,7 +51,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
     protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         $propertyName = $this->name;
-        if (stringEndsWith($propertyName, '_mlt')) {
+        if (str_ends_with($propertyName, '_mlt')) {
             $propertyName = substr($propertyName, 0, -4);
         }
 

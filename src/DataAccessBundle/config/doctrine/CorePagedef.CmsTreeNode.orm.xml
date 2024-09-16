@@ -1,0 +1,55 @@
+<doctrine-mapping xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTreeNode" table="cms_tree_node">
+        <id name="id" type="string" length="36" column="id" unique="true"/>
+        <field name="cmsident" type="integer" column="cmsident" unique="true">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="active" type="boolean" column="active" nullable="false">
+            <options>
+                <option name="comment">Create link</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="startDate" type="datetime" column="start_date" nullable="false">
+            <options>
+                <option name="comment">Activate connection from</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="endDate" type="datetime" column="end_date" nullable="false">
+            <options>
+                <option name="comment">Deactivate connection after</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <field name="tbl" type="string" column="tbl" length="255" nullable="false">
+            <options>
+                <option name="comment">Table of linked record</option>
+                <option name="default"></option>
+            </options>
+        </field>
+        <many-to-one field="contid" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplPage">
+            <join-column name="contid" referenced-column-name="id"/>
+            <options>
+                <option name="comment">ID of linked record</option>
+            </options>
+        </many-to-one>
+        <many-to-one field="cmsTree" target-entity="\ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree"
+                     inversed-by="cmsTreeNodeCollection">
+            <options>
+                <option name="comment">Navigation item</option>
+            </options>
+            <join-column name="cms_tree_id" referenced-column-name="id"/>
+        </many-to-one>
+        <lifecycle-callbacks>
+        </lifecycle-callbacks>
+
+    </entity>
+
+</doctrine-mapping>
