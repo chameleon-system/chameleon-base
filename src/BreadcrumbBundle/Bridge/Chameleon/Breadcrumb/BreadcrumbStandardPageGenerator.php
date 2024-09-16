@@ -7,6 +7,8 @@ use ChameleonSystem\BreadcrumbBundle\Interfaces\BreadcrumbGeneratorUtilsInterfac
 use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbDataModel;
 use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbItemDataModel;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\TreeService;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\Cache;
 
 final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
@@ -18,6 +20,7 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
     public function __construct(
         private readonly BreadcrumbGeneratorUtilsInterface $breadcrumbGeneratorUtils,
         private readonly ActivePageServiceInterface $activePageService,
+        private readonly TreeService $treeService,
         private readonly Cache $cache
     ) {
     }
@@ -37,21 +40,70 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
         $breadcrumb = new BreadcrumbDataModel();
 
         $activePage = $this->getActivePage();
-
+        $portal = $activePage->GetPortal();
         //Never show Breadcrumb on the HomePage
-        if($activePage->IsHomePage()){
+        if ($activePage->IsHomePage()) {
             return $breadcrumb;
         }
 
+        $this->attachBreadcrumbByCmsTree($breadcrumb, $activePage);
 
-
-        $breadcrumbItem = new BreadcrumbItemDataModel($activePage->GetName(), $activePage->GetRealURL());
-        $breadcrumb->add($breadcrumbItem);
         $this->breadcrumbGeneratorUtils->attachHomePageBreadcrumbItem($breadcrumb);
 
         $this->setCache($breadcrumb);
 
         return $breadcrumb;
+    }
+
+    private function attachBreadcrumbByCmsTree(BreadcrumbDataModel $breadcrumb, \TCMSActivePage $activePage): void
+    {
+        $portal = $activePage->GetPortal();
+        if(null === $portal){
+            return;
+        }
+
+        $stopNodes = $this->getStopNodes($portal);
+
+        $recordExists = true;
+        $oTreeNode = null;
+        $nodeId = $activePage->GetMainTreeId();
+
+        do {
+            $oTreeNode = $this->treeService->getById($nodeId);
+            if (null !== $oTreeNode) {
+                $breadcrumbItem = new BreadcrumbItemDataModel($oTreeNode->GetName(), $oTreeNode->getLink());
+                $breadcrumb->add($breadcrumbItem);
+                $nodeId = $oTreeNode->sqlData['parent_id'];
+            } else {
+                $recordExists = false;
+            }
+        } while ($recordExists && !in_array($nodeId, $stopNodes) && !in_array($oTreeNode->id, $stopNodes));
+        // now add the stop node as well... if a page is assigned to it...
+        if ($recordExists) {
+            $oTreeNode = $this->treeService->getById($nodeId);
+            if (null !== $oTreeNode) {
+                if (false !== $oTreeNode->GetLinkedPage()) {
+                    $breadcrumbItem = new BreadcrumbItemDataModel($oTreeNode->GetName(), $oTreeNode->getLink());
+                    $breadcrumb->add($breadcrumbItem);
+                }
+            }
+        }
+    }
+
+    private function getStopNodes(\TdbCmsPortal $portal): array{
+        $stopNodes = \TdbCmsDivision::GetStopNodes();
+
+        // add navi nodes as stop nodes...
+        $query = "SELECT `tree_node` FROM `cms_portal_navigation` WHERE `cms_portal_id` = '"
+            .\MySqlLegacySupport::getInstance()->real_escape_string($portal->id)."'";
+        $navis = \MySqlLegacySupport::getInstance()->query($query);
+        $naviStopNodes = [];
+        while ($navi = \MySqlLegacySupport::getInstance()->fetch_assoc($navis)) {
+            $naviStopNodes[] = $navi['tree_node'];
+        }
+
+        $stopNodes = array_merge($naviStopNodes, $stopNodes);
+        return $stopNodes;
     }
 
     protected function setCache(BreadcrumbDataModel $breadcrumb): void
@@ -74,7 +126,7 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
 
     protected function getFromCache(): ?BreadcrumbDataModel
     {
-        return $this->cache->Get($this->generateCacheKey());
+        return $this->cache->get($this->generateCacheKey());
     }
 
     private function getActivePage()
