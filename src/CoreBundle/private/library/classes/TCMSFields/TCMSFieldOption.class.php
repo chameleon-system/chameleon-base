@@ -88,7 +88,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
     {
         $this->GetOptions();
 
-        if (count($this->options) >= 3) {
+        if (count($this->options) > 3) {
             // show as select box
             $html = '<div>';
             $html .= '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm" data-select2-option=\'{"width": "100%"}\'>';
@@ -102,7 +102,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
                 if ($this->data == $key) {
                     $selected = ' selected="selected"';
                 }
-                $html .= '<option value="'.TGlobal::OutHTML($key)."\"{$selected}>".TGlobal::OutHTML($value)."</option>\n";
+                $html .= '<option value="' . TGlobal::OutHTML($key) . '"' . $selected . '>' . TGlobal::OutHTML($value) . '</option>' . "\n";
             }
             $html .= '</select>';
 
@@ -117,7 +117,8 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
             }
 
             if ($this->allowEmptySelection) {
-                $html .= '<label style="padding-right: 10px;"><input type="radio" class="radio" style="margin-right: 3px;" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name)."\" value=\"\"{$selected} /> ".TGlobal::Translate('chameleon_system_core.field_options.select_nothing')."</label>\n";
+                $html .= '<input class="btn-check" type="radio" id="' . TGlobal::OutHTML($this->name) . '" name="' . TGlobal::OutHTML($this->name) . '" value=""' . $selected . ' /> ';
+                $html .= '<label class="btn btn-outline-secondary" for="' . TGlobal::OutHTML($this->name) . '">' . TGlobal::Translate('chameleon_system_core.field_options.select_nothing') . '</label>' . "\n";
             }
 
             foreach ($this->options as $key => $value) {
@@ -125,7 +126,9 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
                 if ($this->data == $key) {
                     $selected = ' checked="checked"';
                 }
-                $html .= '<label style="padding-right: 10px;"><input type="radio" class="radio" style="margin-right: 3px;" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($key)."\"{$selected} /> ".TGlobal::OutHTML($value)."</label>\n";
+
+                $html .= '<input class="btn-check" type="radio" id="' . TGlobal::OutHTML($this->name).TGlobal::OutHTML($value) . '" name="' . TGlobal::OutHTML($this->name) . '" value="' . TGlobal::OutHTML($key) . '"' . $selected . ' /> ';
+                $html .= '<label class="btn btn-outline-primary" for="' . TGlobal::OutHTML($this->name).TGlobal::OutHTML($value) . '">' . TGlobal::OutHTML($value) . '</label>' . "\n";
             }
         }
 

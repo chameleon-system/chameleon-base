@@ -2,62 +2,54 @@
   "name": "customer",
   "version": "1.0.0",
   "description": "<p align=\"center\"><a href=\"https://chameleonsystem.com\" target=\"_blank\"><img src=\"https://demo.chameleon-system.de/chameleon/mediapool/8/ae/chameleon-logo_id3834.png\"></a><br /><span>The E-Business Platform</span></p>",
-  "main": "index.js",
-  "config": {
-    "srcdir": "./../public/themes/standard/src",
-    "outdir": "./../public/themes/standard",
-    "entry": "styles",
-    "out": "coreui-standalone",
-    "stylelintconfig": "./.stylelintrc.json",
-    "coreuidir": "./../../../../../../coreui/coreui",
-    "perfectscrollbardir": ""
-  },
+  "main": "webpack.config.js",
+  "homepage": "https://github.com/chameleon-system/chameleon-system#readme",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
   "dependencies": {
-    "browserslist": "^4.16.5",
-    "clean-css-cli": "^4.3.0",
+    "@coreui/coreui": "^4.3.2",
+    "simplebar": "^6.2.5",
+    "browserslist": "^3.2.8",
     "glob-parent": "^5.1.2",
     "hosted-git-info": "^2.8.9",
     "lodash": "^4.17.21",
     "path-parse": "^1.0.7",
-    "perfect-scrollbar": "^1.5.3",
-    "postcss": "^7.0.36",
+    "@popperjs/core": "^2.11.0",
     "tar": "^4.4.18",
-    "trim": "^0.0.3",
     "trim-newlines": "^3.0.1",
     "y18n": "^3.2.2",
     "yargs-parser": "^5.0.1"
   },
   "devDependencies": {
-    "node-sass": "^4.14.1",
-    "nodemon": "^1.19.4",
-    "path-parse": "^1.0.7",
-    "stylelint": "^10.1.0",
-    "stylelint-config-standard": "^18.3.0"
+    "css-loader": "^6.8.1",
+    "sass-loader": "^13.3.2",
+    "style-loader": "^3.3.3",
+    "stylelint-webpack-plugin": "^4.1.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "config": {
+    "outdir": "../public/themes/standard"
   },
   "scripts": {
-    "watch-css": "nodemon --watch ./../public/themes/standard/src/scss -e scss -x \"npm run css-no-lint\"",
-    "install-coreui": "cd $npm_package_config_coreuidir && npm install && npm run dist",
-    "install-perfect-scrollbar": "npm install perfect-scrollbar --save",
-    "cp-perfect-scrollbar-css-to-theme": "cp -f ./node_modules/perfect-scrollbar/css/perfect-scrollbar.css $npm_package_config_outdir/coreui/css/perfect-scrollbar.css",
-    "cp-perfect-scrollbar-js-to-theme": "cp -f ./node_modules/perfect-scrollbar/dist/* $npm_package_config_outdir/coreui/js/",
-    "cp-coreui-js-to-theme": "cp -f $npm_package_config_coreuidir/dist/js/* $npm_package_config_outdir/coreui/js",
-    "css-no-lint": "npm run css-compile && npm run css-minify",
-    "css": "npm run css-lint && npm run css-compile && npm run css-minify",
-    "css-lint": "stylelint --config $npm_package_config_stylelintconfig $npm_package_config_srcdir/scss/*.scss",
-    "css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --precision 6 $npm_package_config_srcdir/scss/$npm_package_config_entry.scss $npm_package_config_outdir/coreui/css/$npm_package_config_out.css",
-    "css-minify": "cleancss --level 1 --source-map --source-map-inline-sources --output $npm_package_config_outdir/coreui/css/$npm_package_config_out.min.css $npm_package_config_outdir/coreui/css/$npm_package_config_out.css",
-    "echo-msg": "echo \\\\033[32m \"Done!\"",
-    "build": "npm install && npm run install-coreui && npm run install-perfect-scrollbar && npm run cp-perfect-scrollbar-css-to-theme && npm run cp-coreui-js-to-theme && npm run cp-perfect-scrollbar-js-to-theme && npm run css && npm audit fix && npm run echo-msg"
+    "dev": "webpack --mode development",
+    "prod": "webpack --mode production",
+    "cp-simplebar-js-to-theme": "cp -f ./node_modules/simplebar/dist/simplebar.js $npm_package_config_outdir/coreui/js/",
+    "cp-simplebar-css-to-theme": "cp -f ./node_modules/simplebar/dist/simplebar.css $npm_package_config_outdir/coreui/css/",
+    "cp-coreui-js-to-theme": "cp -f ./node_modules/@coreui/coreui/dist/js/* $npm_package_config_outdir/coreui/js",
+    "copy": "npm run cp-coreui-js-to-theme && npm rum cp-simplebar-js-to-theme && npm run cp-simplebar-css-to-theme",
+    "build": "npm install && npm run prod && npm run copy"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chameleon-system/chameleon-system.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/chameleon-system/chameleon-system/issues"
   },
-  "homepage": "https://github.com/chameleon-system/chameleon-system#readme"
+  "engines": {
+    "node": "16"
+  }
 }

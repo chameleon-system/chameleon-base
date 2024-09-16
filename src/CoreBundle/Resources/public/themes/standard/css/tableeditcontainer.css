@@ -78,6 +78,14 @@
     margin-left: 0;
     margin-right: 0;
 }
+.table-editor-form-group .translation-badge {
+    position: relative;
+    top: -2px;
+}
+
+.form-check.form-check-inline {
+    display: inline-flex !important;
+}
 
 .checkbox-matrix {
     display: flex;
@@ -93,32 +101,13 @@
 }
 
 .checkboxDIV {
-    display: inline-flex;
-    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
     width: 250px;
     padding: 3px;
     border-bottom: 1px solid #C1BEBE;
     border-right: 1px solid #C1BEBE;
     margin: 0px 5px 5px 0px;
-}
-
-.checkboxDIV label {
-    font-weight: normal;
-    line-height: 25px;
-    flex: 1;
-}
-
-.checkboxDIV input[type="checkbox"] {
-    margin-right: 5px;
-
-    /* Overwrite from bootstrap: */
-    position: inherit;
-    margin-left: 0;
-    margin-top: 0;
-}
-
-.checkboxDIV .entry-edit {
-    margin-left: 5px;
 }
 
 .checkBoxHeaderActionLink {

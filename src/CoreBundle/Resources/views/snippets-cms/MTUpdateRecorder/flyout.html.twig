@@ -35,7 +35,7 @@
         <a
             class="nav-link dropdown-toggle {% if loggingActive %}text-danger{% endif %}"
             id="dbLoggerButton"
-            data-toggle="dropdown"
+            data-coreui-toggle="dropdown"
             href="#"
             role="button"
             aria-haspopup="true"
@@ -46,15 +46,17 @@
                 {{"chameleon_system_core.action.db_logger"|trans({}, 'admin') }}
             </span>
         </a>
-        <div class="dropdown-menu dropdown-menu-right" id="dbLoggerDropdown">
-            <div class="dropdown-item">
-                <form class="form-inline" action="" method="POST" accept-charset="UTF-8" id="UnixTimeStamp" onsubmit="return false;">
+        <div class="dropdown-menu dropdown-menu-end" id="dbLoggerDropdown">
+            <div class="px-3 py-2">
+                <form class="form-inline w-100" action="" method="POST" accept-charset="UTF-8" id="UnixTimeStamp" onsubmit="return false;">
                     <input type="hidden" name="module_fnc[{{ sModuleSpotName }}]" value="ExecuteAjaxCall"/>
                     <input type="hidden" name="_fnc" value="UpdateUnixTimeStamp"/>
                     <input type="hidden" id="timestampFormField" name="timestamp" value="" />
-                    <div class="input-group input-group-sm">
+                    <div class="input-group input-group-sm w-100">
                         <div class="form-control">{{ activeDbCounter }}-<span id="currentTimestamp">{{ currentUnixTimestamp }}</span>.inc.php</div>
-                        <input class="btn btn-sm input-group-append" type="button" value="{{ 'chameleon_system_core.action.new'|trans }}" onclick="PostAjaxForm('UnixTimeStamp', handleTimestampUpdate);return false;" />
+                        <button class="btn btn-light" type="button" onclick="PostAjaxForm('UnixTimeStamp', handleTimestampUpdate);return false;">
+                            {{ 'chameleon_system_core.action.new'|trans }}
+                        </button>
                     </div>
                 </form>
                 <form class="form-inline" action="" method="POST" accept-charset="UTF-8" id="ToggleRecording">

@@ -4,11 +4,6 @@ html {
     height: 100%;
 }
 
-/* overwrite min-height: 100vh; set from coreui */
-body.app {
-    min-height: 100%;
-}
-
 #cmscontainer .main {
     display: flex;
     flex-direction: column;
@@ -77,12 +72,8 @@ body.app {
     color: #098dba;
 }
 
-.dropdown-menu.dropdown-menu-right {
+.dropdown-menu.dropdown-menu-end {
     max-width: calc(100% - 8px);
-}
-
-.dropdown-menu .dropdown-item {
-    padding: 10px;
 }
 
 .dropdown-menu .dropdown-item.translation-sub {
@@ -183,7 +174,8 @@ legend {
     position: relative;
 }
 
-.typeahead.dropdown-menu-right {
+.typeahead.dropdown-menu-right,
+.typeahead.dropdown-menu-end {
     right: 8px;
 }
 
@@ -230,8 +222,9 @@ legend {
     padding: 5px;
 }
 
-#header-nav {
-    padding: 0;
+html:not([dir=rtl]) .wrapper {
+    padding-left: var(--cui-sidebar-occupy-start, 0);
+    padding-right: var(--cui-sidebar-occupy-end, 0);
 }
 
 #ToggleRecording {
@@ -240,7 +233,6 @@ legend {
 
 #dbLoggerDropdown {
     min-width: 260px;
-    padding-left: 10px;
 }
 
 .app-header .navbar-brand {
@@ -371,7 +363,7 @@ legend {
 .sidebar-filter-input-wrapper:before {
     position: absolute;
     left: 1.2em;
-    top: 1.1em;
+    top: 0.9em;
     content: "\f002";
     color: #576873;
 }

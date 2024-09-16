@@ -146,7 +146,7 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
         $aParam = array('pagedef' => 'tableeditorPopup', 'id' => $sRecordId, 'tableid' => $oCmsTblConf->id, 'position' => $position);
         $url = $this->urlUtil->getArrayAsUrl($aParam, PATH_CMS_CONTROLLER.'?', '&');
 
-        $js = "var width=1000;url = document.location.href;if(url.match('pagedef=tableeditorPopup'))width=800;CreateModalIFrameDialogCloseButton('".$url."',width,550);";
+        $js = "var width=1000;var url=document.location.href;if(url.match('pagedef=tableeditorPopup')){width=800;}CreateModalIFrameDialogCloseButton('".$url."',width,550);";
 
         return $js;
     }
