@@ -73,18 +73,20 @@ class SystemPageService implements SystemPageServiceInterface
 
     public function getSystemPage($systemPageNameInternal, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
-        if ($this->systemPageCache[$systemPageNameInternal] ?? null) {
-            return $this->systemPageCache[$systemPageNameInternal];
-        }
-
         if (null === $portal) {
             $portal = $this->portalDomainService->getActivePortal();
         }
+
         if (null === $portal) {
             return null;
         }
+
         if (null === $language) {
             $language = $this->languageService->getActiveLanguage();
+        }
+
+        if (null === $language) {
+            $language = $this->languageService->getCmsBaseLanguage();
         }
 
         $systemPageList = $this->dataAccess->loadAll($language->id);
@@ -92,8 +94,6 @@ class SystemPageService implements SystemPageServiceInterface
         foreach ($systemPageList as $systemPage) {
             if ($systemPageNameInternal === $systemPage->fieldNameInternal
                 && $portal->id === $systemPage->fieldCmsPortalId) {
-                $this->systemPageCache[$systemPageNameInternal] = $systemPage;
-
                 return $systemPage;
             }
         }
@@ -110,10 +110,6 @@ class SystemPageService implements SystemPageServiceInterface
 
     public function getSystemPageTree(string $systemPageNameInternal, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null): ?\TdbCmsTree
     {
-        if ($this->systemPageTreeCache[$systemPageNameInternal] ?? null) {
-            return $this->systemPageTreeCache[$systemPageNameInternal];
-        }
-
         $systemPage = $this->getSystemPage($systemPageNameInternal, $portal, $language);
         if (null === $systemPage) {
             throw new RouteNotFoundException("No system page was found with system name '$systemPageNameInternal'");
@@ -122,8 +118,6 @@ class SystemPageService implements SystemPageServiceInterface
         if (null === $tree) {
             throw new RouteNotFoundException("No tree node is assigned to the system page with system name '$systemPageNameInternal'");
         }
-
-        $this->systemPageTreeCache[$systemPageNameInternal] = $tree;
 
         return $tree;
     }

@@ -107,7 +107,7 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
         if (PATH_CMS_CONTROLLER_FRONTEND !== $request->getPathInfo()) {
             return false;
         }
-        if (false === $this->requestInfoService->isCmsTemplateEngineEditMode() && 'true' !== $this->requestStack->getCurrentRequest()->query->get('__previewmode')) {
+        if (false === $this->requestInfoService->isCmsTemplateEngineEditMode() && true === $this->requestInfoService->isPreviewMode()) {
             return false;
         }
 

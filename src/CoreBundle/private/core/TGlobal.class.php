@@ -107,10 +107,7 @@ class TGlobal extends TGlobalBase
         return parent::GetLanguageIdList();
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private static function getTranslator()
+    private static function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
     }

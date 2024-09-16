@@ -21,41 +21,13 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
 {
-    /**
-     * @var CsrfTokenManagerInterface
-     */
-    private $csrfTokenManager;
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
-     * @var bool
-     */
-    private $tokenEnabledInBackend;
-    /**
-     * @var bool
-     */
-    private $tokenEnabledInFrontend;
-
-    /**
-     * @param CsrfTokenManagerInterface   $csrfTokenManager
-     * @param RequestInfoServiceInterface $requestInfoService
-     * @param InputFilterUtilInterface    $inputFilterUtil
-     * @param bool                        $tokenEnabledInBackend
-     * @param bool                        $tokenEnabledInFrontend
-     */
-    public function __construct(CsrfTokenManagerInterface $csrfTokenManager, RequestInfoServiceInterface $requestInfoService, InputFilterUtilInterface $inputFilterUtil, $tokenEnabledInBackend = CMS_PROTECT_ALL_MODULE_FNC_CALLS_USING_TOKEN_IN_BACKEND, $tokenEnabledInFrontend = CMS_PROTECT_ALL_MODULE_FNC_CALLS_USING_TOKEN)
+    public function __construct(
+        private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly RequestInfoServiceInterface $requestInfoService,
+        private readonly InputFilterUtilInterface $inputFilterUtil,
+        private readonly bool $tokenEnabledInBackend = CMS_PROTECT_ALL_MODULE_FNC_CALLS_USING_TOKEN_IN_BACKEND,
+        private readonly bool $tokenEnabledInFrontend = CMS_PROTECT_ALL_MODULE_FNC_CALLS_USING_TOKEN)
     {
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->requestInfoService = $requestInfoService;
-        $this->inputFilterUtil = $inputFilterUtil;
-        $this->tokenEnabledInBackend = $tokenEnabledInBackend;
-        $this->tokenEnabledInFrontend = $tokenEnabledInFrontend;
     }
 
     /**
@@ -142,7 +114,9 @@ class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
             }
             $error = \preg_last_error();
             if ($error > 0) {
-                throw new TokenInjectionFailedException(sprintf('Error %s: %s', $error, \array_flip(\get_defined_constants(true)['pcre'])[$error]));
+                $errorName = $this->getRegeExErrorMessageByErrorCode($error);
+
+                throw new TokenInjectionFailedException(sprintf('Error %s: %s', $error, $errorName));
             }
         }
 
@@ -170,14 +144,9 @@ class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
     }
 
     /**
-     * @param string $format
-     * @param string $tokenValue
-     *
-     * @return array|string
-     *
      * @throws InvalidTokenFormatException
      */
-    private function getAuthenticityTokenAsParameter($format, $tokenValue)
+    private function getAuthenticityTokenAsParameter(string $format, string $tokenValue): array|string
     {
         $tokenId = AuthenticityTokenManagerInterface::TOKEN_ID;
         switch ($format) {
@@ -195,5 +164,18 @@ class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
                     $format
                 ));
         }
+    }
+
+    private function getRegeExErrorMessageByErrorCode(int $errorCode): string
+    {
+        $pcreConstants = \get_defined_constants(true)['pcre'];
+
+        $filteredConstants = array_filter($pcreConstants, function($value) {
+            return is_int($value) || is_string($value);
+        });
+
+        $flippedConstants = array_flip($filteredConstants);
+
+        return isset($flippedConstants[$errorCode]) ? $flippedConstants[$errorCode] : 'Unknown error';
     }
 }

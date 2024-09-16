@@ -6,11 +6,6 @@
         var width = $(window).width() - buffer;
 
         CreateModalIFrameDialogCloseButton(url, width, height, windowTitle);
-        $('#modal_dialog').dialog({
-            close: function (event, ui) {
-                CloseModalIFrameDialog();
-            }
-        });
     };
 
     window.imageCropResetButtonCallBack = function (evt, imageId) {

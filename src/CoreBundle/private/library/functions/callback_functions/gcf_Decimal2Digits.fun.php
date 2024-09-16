@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-function gcf_Decimal2Digits($field, $row, $fieldName)
+function gcf_Decimal2Digits(mixed $fieldValue, array $row, string $fieldName)
 {
-    $returnString = number_format($field, 2, ',', '.');
+    $returnString = number_format((float) $fieldValue, 2, ',', '.');
 
     return TGlobal::OutHTML($returnString);
 }

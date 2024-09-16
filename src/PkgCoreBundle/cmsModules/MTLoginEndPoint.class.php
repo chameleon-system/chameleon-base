@@ -10,12 +10,25 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\UpdateCounterMigrationBundle\Exception\InvalidMigrationCounterException;
-use Doctrine\DBAL\Connection;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MTLoginEndPoint extends TCMSModelBase
 {
+
+    public function Init()
+    {
+        parent::Init();
+
+        $moduleFunction = $this->global->GetUserData('module_fnc');
+
+        if (is_array($moduleFunction) && 'Logout' === $moduleFunction['contentmodule']) {
+            return;
+        }
+
+        if ($this->global->CMSUserDefined()) {
+            $this->getRedirectService()->redirectToActivePage([]);
+        }
+    }
+
     public function Execute()
     {
         $this->data = parent::Execute();
@@ -34,18 +47,8 @@ class MTLoginEndPoint extends TCMSModelBase
         return $this->data;
     }
 
-    private function getDatabaseConnection(): Connection
-    {
-        return ServiceLocator::get('database_connection');
-    }
-
     private function getRedirectService(): ICmsCoreRedirect
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
-    }
-
-    private function getTranslator(): TranslatorInterface
-    {
-        return ServiceLocator::get('translator');
     }
 }

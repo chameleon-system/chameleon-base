@@ -1,0 +1,7 @@
+.getGeoCoordinates {
+    max-width: 95%; //prevent horizontal scrolling
+}
+.getGeoCoordinates #show-osmap {
+    width: 100%;
+    height: 70vh;
+}

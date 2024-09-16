@@ -455,14 +455,17 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         $sTableName = '';
         $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
+        // may hold id or name
         if ($oCmsTblConf->Load($this->oTableRow->sqlData[$this->getTableFieldName()])) {
             $sTableName = $oCmsTblConf->fieldName;
+        } else {
+            $sTableName = $this->oTableRow->sqlData[$this->getTableFieldName()];
         }
 
         if (!empty($sTableName)) {
             $sQuery = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
                       SET `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName())."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."'
-                    WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->oTableRow->id)."'
+                    WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($iRecordId)."'
                  ";
             MySqlLegacySupport::getInstance()->query($sQuery);
 

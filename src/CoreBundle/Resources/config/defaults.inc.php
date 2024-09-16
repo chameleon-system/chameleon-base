@@ -6,6 +6,8 @@
  * -------------------------------------------------------------------------------------------------------------------.
  */
 
+require_once PATH_CORE_CONFIG.'/version.inc.php';
+
 /**
  * relative path to framework controller. The constant MUST be prefixed with a slash.
  * This value should normally not be changed.

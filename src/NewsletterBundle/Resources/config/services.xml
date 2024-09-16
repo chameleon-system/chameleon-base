@@ -47,5 +47,9 @@
             <argument type="service" id="chameleon_system_core.system_page_service" />
         </service>
 
+        <service id="chameleon_system_newsletter.service.newsletter_group_subscriber_export_service" class="ChameleonSystem\NewsletterBundle\Service\NewsletterGroupSubscriberExportService" public="true">
+            <argument id="database_connection" type="service"/>
+        </service>
+
     </services>
 </container>

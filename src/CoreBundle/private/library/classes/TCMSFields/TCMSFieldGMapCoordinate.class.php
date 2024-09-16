@@ -7,6 +7,9 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @deprecated since 7.1.34
+ * use TCMSFieldGeoCoordinates instead to use OpenStreetMap instead of Google Maps
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
