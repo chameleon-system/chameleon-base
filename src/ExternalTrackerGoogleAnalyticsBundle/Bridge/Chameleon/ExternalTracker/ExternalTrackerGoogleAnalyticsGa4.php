@@ -29,7 +29,7 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
      * visible in google analytics DebugView (Configure > DebugView in GA dashboard)
      * @var bool
      */
-    private $debugMode = false;
+    private bool $debugMode = false;
 
     public function GetPreBodyClosingCode(TPkgExternalTrackerState $state)
     {
@@ -85,7 +85,6 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
         return $portal->fieldGoogleAnalyticNumber;
     }
 
-
     /**
      * Add to basket and remove from basket use the same payload and only one of them can happen at a time, so they
      * are handled together.
@@ -134,7 +133,6 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
      */
     protected function getOrderCompleteEvent(TPkgExternalTrackerState $state): string
     {
-
         /** @var TdbShopOrder|false $orderEvent */
         $orderEvent = $state->GetEventData(TPkgExternalTrackerState::EVENT_PKG_SHOP_CREATE_ORDER);
         if (false === $orderEvent) {

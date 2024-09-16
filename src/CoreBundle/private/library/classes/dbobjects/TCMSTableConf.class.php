@@ -39,12 +39,13 @@ class TCMSTableConf extends TCMSRecord
      * @param string|null $listClassName
      * @param string      $listClassLocation DEPRECATED - default Core
      * @param string      $sListClassPath    DEPRECATED - default TCMSListManager
+     * @param bool        $ignoreTableEditorRestrictions do not set restriction given by params
      *
      * @return TCMSListManager
      *
      * @todo find usages and refactor calls
      */
-    public function GetListObject($listClassName = null, $listClassLocation = 'Core', $sListClassPath = 'TCMSListManager')
+    public function GetListObject($listClassName = null, $listClassLocation = 'Core', $sListClassPath = 'TCMSListManager', bool $ignoreTableEditorRestrictions = false)
     {
         /** @var $oGlobal TGlobal */
         $oGlobal = TGlobal::instance();
@@ -72,7 +73,7 @@ class TCMSTableConf extends TCMSRecord
             /** @var $oList TCMSListManagerFullGroupTable */
         }
 
-        if ($oGlobal->UserDataExists('sRestrictionField')) {
+        if (false === $ignoreTableEditorRestrictions && true === $oGlobal->UserDataExists('sRestrictionField')) {
             $oList->sRestrictionField = $oGlobal->GetUserData('sRestrictionField');
             $oList->sRestriction = $oGlobal->GetUserData('sRestriction');
         }

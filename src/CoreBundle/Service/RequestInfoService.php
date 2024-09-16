@@ -158,7 +158,7 @@ class RequestInfoService implements RequestInfoServiceInterface
         // todo: `__previewmode` should be the only way to enable this. Refactor all places where the preview attribute is set as `preview` instead of `__previewmode'
         // @note: preview mode laoding only via cookie is not possible, because this will kill all frontend logins
         $this->isPreviewModeCache = false === \TGlobal::IsCMSMode()
-            && true === $this->getPreviewModeService()->currentSessionHasPreviewAccess()
+            && true === $this->getPreviewModeService()->currentSessionHasPreviewAccess() || $this->checkTokenFromQueryParam($request)
             && (
                 'true' === $request->query->get('__previewmode')
                  || 'true' === $request->query->get('preview')
@@ -224,5 +224,15 @@ class RequestInfoService implements RequestInfoServiceInterface
     protected function getPreviewModeService(): PreviewModeServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.preview_mode_service');
+    }
+
+    private function checkTokenFromQueryParam(Request $request): bool
+    {
+        $previewToken = $request->query->get('previewToken');
+        if (null === $previewToken) {
+            return false;
+        }
+
+        return $this->getPreviewModeService()->previewTokenExists($previewToken);
     }
 }

@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @deprecated since 7.1.34
+ * use MapCoordinates.php instead
+ */
 /**
  * @var string $googleMapId
  * @var string $fieldName

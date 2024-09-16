@@ -1,4 +1,7 @@
 /**
+ * @deprecated since 7.1.34
+ * use FieldGeoCoordinates instead of TCMSFieldGMapCoordinate to use OpenStreetMap instead of Google Maps
+ *
  * @typedef {object} GeocodingResult
  * @property {string|null} name
  * @property {float} longitude

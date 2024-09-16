@@ -150,11 +150,10 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         $sLanguageId = null;
 
         // special rule: can be overwritten by previewLanguageId in __previewmode
-        /** @var string|null $previewMode */
-        $previewMode = $this->inputFilterUtil->getFilteredInput('__previewmode', null);
+        $previewMode = $this->isPreviewMode();
         /** @var string|null $previewLanguageId */
         $previewLanguageId = $this->getPreviewLanguageId();
-        if (null !== $previewMode && null !== $previewLanguageId) {
+        if (true === $previewMode && null !== $previewLanguageId) {
             return $previewLanguageId;
         }
 
@@ -368,8 +367,8 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         }
 
         //if we are not in preview mode, we don't do any further validations, because it's expensive
-        $previewMode = $this->inputFilterUtil->getFilteredInput('__previewmode');
-        if (null === $previewMode) {
+        $previewMode = $this->isPreviewMode();
+        if (false === $previewMode) {
             return null;
         }
 
@@ -408,5 +407,10 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             return false;
         }
         return true;
+    }
+
+    private function isPreviewMode(): bool
+    {
+        return $this->getRequestInfoService()->isPreviewMode();
     }
 }

@@ -297,6 +297,7 @@
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="12"/>
 
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
+            <argument type="service" id="chameleon_system_core.request_info_service" />
         </service>
 
         <service id="chameleon_system_core.request_type" synthetic="true" />
@@ -940,6 +941,11 @@
         <service id="chameleon_system_core.module.navigation_tree_single_select_wysiwyg" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg\NavigationTreeSingleSelectWysiwyg" parent="chameleon_system_core.module.navigation_tree_single_select" shared="false">
             <tag name="chameleon_system.module"/>
             <argument id="request_stack" type="service"/>
+        </service>
+
+        <service id="chameleon_system_core.module.map_coordinates" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\MapCoordinates\MapCoordinates" shared="false">
+            <tag name="chameleon_system.module"/>
+            <argument id="chameleon_system_core.util.input_filter" type="service"/>
         </service>
 
         <service id="chameleon_system_core.service.css_minifier" class="ChameleonSystem\CoreBundle\Service\CssMinifierService" public="true">
