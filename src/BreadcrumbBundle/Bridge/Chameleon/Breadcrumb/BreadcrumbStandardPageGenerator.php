@@ -11,7 +11,7 @@ use esono\pkgCmsCache\Cache;
 
 final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
 {
-    private const triggerTable = 'cms_tbl_page';
+    private const triggerTable = 'cms_tpl_page';
 
     private ?\TCMSActivePage $activePage = null;
 
@@ -30,7 +30,7 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
     public function generate(): BreadcrumbDataModel
     {
         $cacheResult = $this->getFromCache();
-        if(null !== $cacheResult){
+        if (null !== $cacheResult) {
             return $cacheResult;
         }
 
@@ -44,6 +44,7 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
 //        $this->breadcrumbGeneratorUtils->attachHomePageBreadcrumbItem($breadcrumb);
 
         $this->setCache($breadcrumb);
+
         return $breadcrumb;
     }
 
@@ -51,7 +52,7 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
     {
         $activePage = $this->getActivePage();
         $cacheParameter = ['table' => self::triggerTable];
-        if(null !== $activePage){
+        if (null !== $activePage) {
             $cacheParameter['id'] = $activePage->id;
         }
 
@@ -65,7 +66,8 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
         return 'breadcrumb_'.self::triggerTable.'_'.$activePage?->id;
     }
 
-    protected function getFromCache(): ?BreadcrumbDataModel{
+    protected function getFromCache(): ?BreadcrumbDataModel
+    {
         return $this->cache->Get($this->generateCacheKey());
     }
 
@@ -76,7 +78,6 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
             $activePage = $this->activePageService->getActivePage();
             $this->activePage = $activePage;
         }
-
 
         return $this->activePage;
     }

@@ -20,13 +20,14 @@ final class BreadcrumbGeneratorUtils implements BreadcrumbGeneratorUtilsInterfac
         BreadcrumbDataModel $breadcrumb,
         \TdbCmsTree $tree,
         $ignoreHiddenTree = true
-    ): void {
+    ): void
+    {
         if ($ignoreHiddenTree && $tree->fieldHidden) {
             return;
         }
 
         $link = $tree->getLink(true);
-        if (!$link) {
+        if (null === $link) {
             return;
         }
 
@@ -40,7 +41,7 @@ final class BreadcrumbGeneratorUtils implements BreadcrumbGeneratorUtilsInterfac
         $ignoreFirstTreeIfHidden = true
     ): void {
         $tree = $this->treeService->getById($treeId);
-        if (!$tree) {
+        if (null === $tree) {
             return;
         }
 
@@ -54,10 +55,11 @@ final class BreadcrumbGeneratorUtils implements BreadcrumbGeneratorUtilsInterfac
     public function attachHomePageBreadcrumbItem(BreadcrumbDataModel $breadcrumb): void
     {
         $portal = $this->portalDomainService->getActivePortal();
-
-        if (null !== $portal) {
-            $tree = $portal->GetPortalHomeNode();
-            $this->attachBreadcrumbItem($breadcrumb, $tree, false);
+        if (null === $portal) {
+            return;
         }
+
+        $tree = $portal->GetPortalHomeNode();
+        $this->attachBreadcrumbItem($breadcrumb, $tree, false);
     }
 }

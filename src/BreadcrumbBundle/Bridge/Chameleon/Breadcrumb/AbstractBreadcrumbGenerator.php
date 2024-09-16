@@ -18,8 +18,12 @@ abstract class AbstractBreadcrumbGenerator implements BreadcrumbGeneratorInterfa
     }
 
     abstract public function isActive(): bool;
+
     abstract public function generate(): BreadcrumbDataModel;
-    abstract protected function setCache(BreadcrumbDataModel $breadcrumb):void;
+
+    abstract protected function setCache(BreadcrumbDataModel $breadcrumb): void;
+
     abstract protected function getFromCache(): ?BreadcrumbDataModel;
+
     abstract protected function generateCacheKey(): string;
 }
