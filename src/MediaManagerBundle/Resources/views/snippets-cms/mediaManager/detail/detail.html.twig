@@ -37,9 +37,12 @@
                     </td>
                     <td>ID {{ mediaItem.id }} <i class="far fa-clipboard"></i></td>
                 </tr>
-                <tr>
+                <tr class="image-url-copy-button" data-image-url="{{ constant('URL_MEDIA_LIBRARY') | e("html_attr") }}{{ mediaItem.path | e("html_attr") }}" title="{{ 'chameleon_system_core.text.copy_image_url_to_clipboard' | trans | e("html_attr") }}">
                     <td><i class="far fa-file mr-2"></i></td>
-                    <td>{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}</td>
+                    <td>
+                        <input type="text" value="{{ mediaItem.path }}" class="border-0" style="width: 90%">
+                        <i class="far fa-clipboard"></i>
+                    </td>
                 </tr>
                 {% if mediaItem.dateChanged %}
                     <tr>
@@ -50,7 +53,7 @@
             </table>
         </div>
 
-        <div class="col-12 col-xl-7 edit-form">
+        <div class="col-12 col-xl-7 edit-form pr-0 pl-0">
             <iframe src="{{ tableEditorIframeUrl }}"></iframe>
         </div>
     </div>

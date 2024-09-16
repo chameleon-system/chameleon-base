@@ -1,0 +1,107 @@
+{#
+    description:
+    parameters:
+        ** sHeadLine
+        ** sText
+        ** sNewsletterLink
+        ** sModuleSpotName
+        ** sMessageGeneral
+        ** sMessageNewsletterList
+        ** sFieldNamesPrefix
+        ** aFieldSalutation must have following properies
+            ** sError
+            ** sValue
+            ** aValueList
+                ** sValue
+                ** sName
+        ** aFieldFirstName
+            ** sError
+            ** sValue
+        ** aFieldLastName
+            ** sError
+            ** sValue
+        ** aFieldEmail
+            ** sError
+            ** sValue
+        ** aGroupList where each item must have following properties
+            ** id
+            ** sName
+            ** sError
+            ** bIsChecked
+#}
+
+
+
+<div class="snippetPkgNewsletterSignOutSignOut">
+    {% include '/pkgNewsletter/signUp/headlineWithWYSIWYGText.html.twig' %}
+
+    <div class="form">
+        <form name="newNewsletterSignOut" accept-charset="utf-8" method="post" {% if sNewsletterLink %}action="{{ sNewsletterLink }}"{% endif %} class="form-horizontal">
+            <input type="hidden" name="module_fnc[{{ sModuleSpotName }}]" value="SignOut"/>
+
+            {% if sMessageGeneral %}
+                <div class="errortext">
+                    {{sMessageGeneral|raw}}
+                </div>
+            {% endif %}
+            {% if bShowEmailField == true%}
+                {% set aFieldEmailMapped = {
+                'sInputClass' : 'span4',
+                'sLabelText' : 'chameleon_system_newsletter.newsletter.unsubscribe_form_email'|trans,
+                'sName' : sFieldNamesPrefix~'[signoutmail]',
+                'bRequired' : true,
+                'sFieldId': "newsSignOutEMail",
+                'sError': aFieldEmail.sError,
+                'sValue' : aFieldEmail.sValue} %}
+                {% include "/common/userInput/form/text.html.twig" with aFieldEmailMapped%}
+            {% endif %}
+            {% if aGroupList|length > 0 %}
+                <div class="">{{ "chameleon_system_newsletter.newsletter.my_newsletters_headline"|trans }}</div>
+
+                {% if sMessageNewsletterList %}
+                    <div class="errortext">
+                        {{sMessageNewsletterList|raw}}
+                    </div>
+                {% endif %}
+
+                {% if aGroupList|length > 1 %}
+                    <div class="row">
+                        <div class="span4">
+                            {% set aFieldMapped = {'sLabelText' : 'chameleon_system_newsletter.newsletter.unsubscribe_form_unsubscribe_all'|trans,
+                            'sInputClass' : '',
+                            'sPlaceholder' : '',
+                            'sFieldId' : 'all',
+                            'sName' : sFieldNamesPrefix~'[newsletter][all]',
+                            'sError': aFieldAllNewsletter.sError,
+                            'sValue' : '1',
+                            'sFieldId': "newsSignOutAllNews",
+                            'sHelpText': '',
+                            'bIsChecked': aFieldAllNewsletter.bIsChecked,
+                            'sOnClick' : "CHAMELEON.Custom.pkgNewsletter.toggleSignUpGroups(this);"} %}
+                            {% include "/common/userInput/form/checkbox.html.twig" with aFieldMapped %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% for aGroup in aGroupList %}
+                    <div class="row">
+                        <div class="span4">
+                            {% set aFieldMapped = {'sLabelText' : aGroup.sName,
+                            'sInputClass' : 'newsletter_group',
+                            'sPlaceholder' : '',
+                            'sName' : sFieldNamesPrefix~'[newsletter][' ~ aGroup.id ~ ']',
+                            'sError': aGroup.sError,
+                            'sValue' : '1',
+                            'sFieldId': "newsSignOutNews"~aGroup.id,
+                            'sHelpText': '',
+                            'bIsChecked': aGroup.bIsChecked,
+                            'sOnClick' : "CHAMELEON.Custom.pkgNewsletter.toggleAllSignUpCheckbox(this);"} %}
+                            {% include "/common/userInput/form/checkbox.html.twig" with aFieldMapped %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% include "/common/userInput/buttonStandard.html.twig" with {sButtonText:"chameleon_system_newsletter.newsletter.unsubscribe_action_unsubscribe"|trans}%}
+        </form>
+    </div>
+</div>

@@ -129,7 +129,7 @@ class TCMSLogChange
     /**
      * returns the id of a field.
      *
-     * @param int    $tableId
+     * @param string $tableId
      * @param string $sFieldName
      *
      * @return string
@@ -1300,17 +1300,17 @@ class TCMSLogChange
         $databaseConnection = self::getDatabaseConnection();
 
         $nameFieldWithTranslationSuffix = self::getFieldTranslationUtil()->getTranslatedFieldName('cms_tbl_field_tab', 'name');
-        
+
         $query = "SELECT `position` FROM `cms_tbl_field_tab` WHERE `cms_tbl_conf_id` = :tableId AND (".$databaseConnection->quoteIdentifier($nameFieldWithTranslationSuffix)." = :preTabName OR `systemname` = :preTabName)";
         $pos = $databaseConnection->fetchColumn($query, [
-                'tableId' => $tableId, 
+                'tableId' => $tableId,
                 'preTabName' => $preTabSystemName
                 ]
         );
-        
+
         if (false === $pos) {
             self::addInfoMessage("Unable to position tab ".$tabSystemName." after ".$preTabSystemName." because ".$preTabSystemName." was not found", self::INFO_MESSAGE_LEVEL_ERROR);
-            
+
             return false;
         }
 
@@ -1319,11 +1319,11 @@ class TCMSLogChange
         $query = "UPDATE `cms_tbl_field_tab` SET `position` = `position`+1 WHERE `position` > ".$pos." AND `cms_tbl_conf_id` = ".$databaseConnection->quote($tableId);
         self::_RunQuery($query, __LINE__);
 
-        $query = "UPDATE `cms_tbl_field_tab` 
-                     SET `position` = ".$databaseConnection->quote(($pos + 1))." 
-                   WHERE 
+        $query = "UPDATE `cms_tbl_field_tab`
+                     SET `position` = ".$databaseConnection->quote(($pos + 1))."
+                   WHERE
                         (".$databaseConnection->quoteIdentifier($nameFieldWithTranslationSuffix)." = ".$databaseConnection->quote($tabSystemName)."
-                     OR `systemname` = ".$databaseConnection->quote($tabSystemName).") 
+                     OR `systemname` = ".$databaseConnection->quote($tabSystemName).")
                      AND `cms_tbl_conf_id` = ".$databaseConnection->quote($tableId);
         self::_RunQuery($query, __LINE__);
 

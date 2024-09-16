@@ -59,8 +59,6 @@
                 <source>chameleon_system_core.template_engine.module_chooser_close</source>
                 <target>Close</target>
             </trans-unit>
-
-
             <trans-unit id="chameleon_system_core.template_engine.slot">
                 <source>chameleon_system_core.template_engine.slot</source>
                 <target>Module slot</target>
@@ -2302,6 +2300,10 @@
                 <source>chameleon_system_core.google_map.action_use_coordinates</source>
                 <target>Use</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.google_map.geocoding_via">
+                <source>chameleon_system_core.google_map.geocoding_via</source>
+                <target>Searchresults via <![CDATA[<a href="%url%" target="_blank">%name%</a>]]></target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.google_map.address">
                 <source>chameleon_system_core.google_map.address</source>
                 <target>Address</target>
@@ -2352,11 +2354,14 @@
                 <source>chameleon_system_core.navigation_tree.cancel_selection</source>
                 <target>Cancel</target>
             </trans-unit>
-
             <trans-unit id="chameleon_system_core.record_list.sql_error">
                 <source>chameleon_system_core.record_list.sql_error</source>
                 <target>A database error occurred creating the record list. Most likely, this is a configuration error in table settings. The error has been logged.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_css_icon.select_icon">
+                <source>chameleon_system_core.field_css_icon.select_icon</source>
+                <target>Select Icon</target>
+            </trans-unit>            
         </body>
     </file>
 </xliff>

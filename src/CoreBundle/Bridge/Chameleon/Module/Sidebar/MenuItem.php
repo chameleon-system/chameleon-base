@@ -31,12 +31,18 @@ class MenuItem
      */
     private $id;
 
-    public function __construct(string $id, string $name, string $icon, string $url)
+    /**
+     * @var string|null
+     */
+    private $tableId;
+
+    public function __construct(string $id, string $name, string $icon, string $url, ?string $tableId = null)
     {
         $this->name = $name;
         $this->icon = $icon;
         $this->url = $url;
         $this->id = $id;
+        $this->tableId = $tableId;
     }
 
     public function getName(): string
@@ -57,5 +63,13 @@ class MenuItem
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string|null - the table id this menu entry points to - can be null (different menu entry)
+     */
+    public function getTableId(): ?string
+    {
+        return $this->tableId;
     }
 }

@@ -18,19 +18,13 @@ use Symfony\Component\Security\Core\Security;
 
 class BackendAccessCheck
 {
-    /**
-     * @var \ICmsCoreRedirect
-     */
-    private $redirect;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private \ICmsCoreRedirect $redirect;
+    private RequestStack $requestStack;
 
     /**
      * @var array<string, string[]>
      */
-    private $ipRestrictedPageDefs = array();
+    private $ipRestrictedPageDefs = [];
 
     /**
      * @param ICmsCoreRedirect $redirect
@@ -73,7 +67,7 @@ class BackendAccessCheck
             return;
         }
 
-        // redirect to login page if user not in session
+        // Redirect to login page if user is not in session.
         $this->checkLogin();
     }
 
@@ -110,13 +104,7 @@ class BackendAccessCheck
         }
     }
 
-    /**
-     * @param string $pagedef
-     * @param string $clientIp
-     *
-     * @return bool
-     */
-    private function pagedefIsAllowed($pagedef, $clientIp)
+    private function pagedefIsAllowed(string $pagedef, string $clientIp): bool
     {
         if (array_key_exists($pagedef, $this->ipRestrictedPageDefs)) {
             $allowedIps = $this->ipRestrictedPageDefs[$pagedef];
@@ -126,4 +114,9 @@ class BackendAccessCheck
 
         return false;
     }
+
+    private function getCurrentParametersAsUrl(): string
+    {
+        return \urlencode(\http_build_query($this->requestStack->getCurrentRequest()->query->all()));
+    }    
 }

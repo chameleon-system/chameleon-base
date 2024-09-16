@@ -276,6 +276,11 @@
                 <source>chameleon_system_media_manager.media_items.not_found_error_message</source>
                 <target>Fehler beim Laden der Medien.</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_core.text.copy_image_url_to_clipboard">
+                <source>chameleon_system_core.text.copy_image_url_to_clipboard</source>
+                <target>Kopiere Bild URL in die Zwischenablage</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

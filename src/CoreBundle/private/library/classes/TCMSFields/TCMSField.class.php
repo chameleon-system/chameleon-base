@@ -9,10 +9,8 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
-use ChameleonSystem\AutoclassesBundle\Utility\NamingConventionConverterInterface;
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\Interfaces\FieldExtensionRenderServiceInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -116,7 +114,7 @@ class TCMSField implements TCMSFieldVisitableInterface
 
     /**
      * array of methods that are allowed to be called via URL (ajax call)
-     * /cms?pagedef=tableeditor&id=30&tableid=239&sRestriction=28&sRestrictionField=module_matrix_id&_rmhist=false&module_fnc[contentmodule]=ExecuteAjaxCall&_fnc=Test&_fieldName=cms_tpl_module_instance_id.
+     * /cms?pagedef=tableeditor&id=30&tableid=239&sRestriction=28&sRestrictionField=module_matrix_id&_rmhist=false&module_fnc[contentmodule]=ExecuteAjaxCall&callFieldMethod=1&_fnc=Test&_fieldName=cms_tpl_module_instance_id.
      *
      * @var array
      */
@@ -148,8 +146,6 @@ class TCMSField implements TCMSFieldVisitableInterface
      */
     protected $bEncryptedData = false;
 
-
-
     protected function getDoctrineRenderer(string $viewName, array $parameter = []): \IPkgSnippetRenderer
     {
         /** @var TPkgSnippetRenderer $snippetRenderer */
@@ -164,8 +160,6 @@ class TCMSField implements TCMSFieldVisitableInterface
 
         return $snippetRenderer;
     }
-
-
 
     protected function snakeToPascalCase(string $string): string
     {
@@ -182,17 +176,18 @@ class TCMSField implements TCMSFieldVisitableInterface
 
         return $camelCasedName;
     }
+
     protected function snakeToCamelCase(string $string): string
     {
         return lcfirst($this->snakeToPascalCase($string));
     }
-
 
     /**
      * Sets methods that are allowed to be called via URL (ajax calls).
      */
     protected function DefineInterface()
     {
+        $this->methodCallAllowed[] = 'getValueForFieldExtension';
     }
 
     /**
@@ -220,7 +215,8 @@ class TCMSField implements TCMSFieldVisitableInterface
      */
     protected function _GetHiddenField()
     {
-        return sprintf('<input type="hidden" name="%1$s" id="%1$s" value="%2$s" />'."\n",
+        return sprintf(
+            '<input type="hidden" name="%1$s" id="%1$s" value="%2$s" />'."\n",
             TGlobal::OutHTML($this->name),
             TGlobal::OutHTML($this->data)
         );
@@ -277,6 +273,17 @@ class TCMSField implements TCMSFieldVisitableInterface
         $html .= 'FIELD TYPE NOT DEFINED';
 
         return $html;
+    }
+
+    public function getFieldExtensionHtml(): string
+    {
+        if (true === $this->bReadOnlyMode) {
+            return '';
+        }
+
+        $fieldExtensionRenderService = $this->getFieldExtensionRenderService();
+
+        return $fieldExtensionRenderService->renderFieldExtension($this);
     }
 
     /**
@@ -380,7 +387,18 @@ class TCMSField implements TCMSFieldVisitableInterface
      */
     public function GetCMSHtmlHeadIncludes()
     {
-        return array();
+        return $this->getHeadIncludesForFieldExtension();
+    }
+
+    protected function getHeadIncludesForFieldExtension(): array
+    {
+        if (true === $this->bReadOnlyMode) {
+            return [];
+        }
+
+        $fieldExtensionRenderService = $this->getFieldExtensionRenderService();
+
+        return $fieldExtensionRenderService->getHtmlHeadIncludes($this);
     }
 
     /**
@@ -392,7 +410,45 @@ class TCMSField implements TCMSFieldVisitableInterface
      */
     public function GetCMSHtmlFooterIncludes()
     {
-        return array();
+        return $this->getFooterIncludesForFieldExtension();
+    }
+
+    protected function getFooterIncludesForFieldExtension(): array
+    {
+        if (true === $this->bReadOnlyMode) {
+            return [];
+        }
+
+        $fieldExtensionRenderService = $this->getFieldExtensionRenderService();
+
+        return $fieldExtensionRenderService->getHtmlFooterIncludes($this);
+    }
+
+    /**
+     * You may load any data here from the same record or another.
+     * For example you could load the name + description of a product, generate AI based SEO tags
+     * and save them in the active field.
+     *
+     * This method is accesible via ajax call.
+     * Example:
+     * /cms?tableid={{tableId}}&pagedef=tableeditor&id={{recordId}}&module_fnc%5Bcontentmodule%5D=ExecuteAjaxCall&_fnc=getValueForFieldExtension&callFieldMethod=1&_fieldName={{fieldName}}&callingFieldExtension=ChameleonSystem\CoreBundle\Service\FieldExtensionExampleService
+     */
+    public function getValueForFieldExtension(): string
+    {
+        if (true === $this->bReadOnlyMode) {
+            return '';
+        }
+
+        $inputFieldFilterUtil = $this->getInputFilterUtil();
+        $callingFieldExtension = $inputFieldFilterUtil->getFilteredInput('callingFieldExtension', '');
+
+        if ('' === $callingFieldExtension) {
+            return 'Error: callingFieldExtension is empty';
+        }
+
+        $fieldExtensionRenderService = $this->getFieldExtensionRenderService();
+
+        return $fieldExtensionRenderService->getValueForFieldExtension($this, $callingFieldExtension);
     }
 
     /**
@@ -1632,26 +1688,17 @@ class TCMSField implements TCMSFieldVisitableInterface
         return $buttonItem;
     }
 
-    /**
-     * @return FlashMessageServiceInterface
-     */
-    private function getFlashMessageService()
+    private function getFlashMessageService(): FlashMessageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
-    /**
-     * @return TGlobal
-     */
-    private function getGlobal()
+    private function getGlobal(): TGlobal
     {
         return ServiceLocator::get('chameleon_system_core.global');
     }
 
-    /**
-     * @return InputFilterUtilInterface
-     */
-    private function getInputFilterUtil()
+    private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
@@ -1668,19 +1715,19 @@ class TCMSField implements TCMSFieldVisitableInterface
     {
         return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
     }
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslator()
+
+    private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getFieldExtensionRenderService(): FieldExtensionRenderServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.field_extension_render_service');
     }
 }

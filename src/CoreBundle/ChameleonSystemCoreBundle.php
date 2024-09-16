@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle;
 
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\AddBackendMainMenuItemProvidersPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\AddCronJobsPass;
+use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\AddFieldExtensions;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\AddMappersPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\AddUrlNormalizersPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\ChameleonModulePass;
@@ -45,5 +46,6 @@ class ChameleonSystemCoreBundle extends Bundle
         $container->addCompilerPass(new SetCsrfTokenStoragePass());
         $container->addCompilerPass(new CollectRequestStateElementProvidersPass());
         $container->addCompilerPass(new MakeLoggerPublicPass());
+        $container->addCompilerPass(new AddFieldExtensions());
     }
 }

@@ -208,14 +208,19 @@ class CMSTemplateEngine extends TCMSModelBase
             $params['sRestrictionField'] = $this->global->GetUserData('sRestrictionField');
         }
 
-        $breadcrumbTitle = TGlobal::Translate('chameleon_system_core.template_engine.breadcrumb_title_page').': '.$this->oPage->sqlData['name'];
+        $breadcrumbTitle = TGlobal::Translate('chameleon_system_core.template_engine.breadcrumb_title_page').': '.(trim($this->oPage->sqlData['name']) ?: TGlobal::Translate('chameleon_system_core.text.unnamed_record'));
 
         if ('preview_content' === $this->sMode || 'layout_selection' === $this->sMode || 'layoutlist' === $this->sMode) {
             return;
         }
 
         $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
-        $breadcrumb->AddItem($params, $breadcrumbTitle);
+        $breadcrumb->AddItem($params, $breadcrumbTitle, join('::', ['CMSTemplateEngine', 'removeHistoryEntry']));
+    }
+
+    public static function removeHistoryEntry(array $historyEntry, string $tableId, string $entryId, string $cmsTblConfId): bool
+    {
+        return $tableId === 'cms_tpl_page' && 'templateengine' === ($historyEntry['params']['pagedef'] ?? null) && $entryId === ($historyEntry['params']['id'] ?? null);
     }
 
     public function Execute()

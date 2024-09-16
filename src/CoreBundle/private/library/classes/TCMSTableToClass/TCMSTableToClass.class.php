@@ -361,6 +361,10 @@ class TCMSTableToClass
 
         $aOrderData = array();
         foreach ($tableOrderBy as $orderBy) {
+            // We skip the fields that are only relevant for sorting in the backend
+            if (array_key_exists('only_backend', $orderBy) && '1' === $orderBy['only_backend']){
+                continue;
+            }
             if ('`' === substr($orderBy['name'], 0, 1)) {
                 $aOrderData[] = sprintf('%s %s', $orderBy['name'], $orderBy['sort_order_direction']);
             } else {

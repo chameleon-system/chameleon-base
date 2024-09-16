@@ -166,60 +166,67 @@ class MTTableEditor extends TCMSModelBase
             $this->oTableManager->sRestrictionField = $oGlobal->GetUserData('sRestrictionField');
         }
         $sId = $this->sId;
-        $bIsCopy = false;
-        $aModuleFunctions = $oGlobal->GetUserData('module_fnc');
-        if (is_array($aModuleFunctions)
-            && array_key_exists('contentmodule', $aModuleFunctions)
-            && 'Copy' === $aModuleFunctions['contentmodule']) {
-            $bIsCopy = true;
-        }
         if ($this->oTableManager->Init($oGlobal->GetUserData('tableid'), $sId)) {
             /** @var $oConfig TdbCmsConfig */
             $oConfig = TCMSConfig::GetInstance();
             $oBaseLanguage = $oConfig->GetFieldTranslationBaseLanguage();
             $this->oBaseLanguage = $oBaseLanguage;
 
-            if ($this->IsOnlyOneRecordTableRequest()) {
+            $this->data['only_one_record_tbl'] = '0';
+            if (true === $this->IsOnlyOneRecordTableRequest()) {
                 $this->data['only_one_record_tbl'] = '1';
                 $this->oTableManager->oTableConf->sqlData['only_one_record_tbl'] = '1';
                 $this->oTableManager->oTableEditor->oTableConf->sqlData['only_one_record_tbl'] = '1';
-            } else {
-                $this->data['only_one_record_tbl'] = '0';
             }
             $this->bIsReadOnlyMode = $this->oTableManager->oTableEditor->IsRecordInReadOnlyMode();
-            $bUserHasReadOnlyRight = $this->oTableManager->oTableEditor->AllowReadOnly();
-
-            // check rights
-            $bIsReadOnlyRequest = $this->IsReadOnlyRequest();
-            if (empty($this->sId)) {
-                $bIsInsert = true;
-            } else {
-                $bIsInsert = false;
-            }
-            $bUserHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
-
-            if (!$bIsReadOnlyRequest && ((!$bUserHasEditRight && !$bIsInsert && !$this->bIsReadOnlyMode) || ($this->bIsReadOnlyMode && !$bUserHasReadOnlyRight))) {
-                /** @var RouterInterface $router */
-                $router = ServiceLocator::get('router');
-                $logout = $router->generate('app_logout');
-                $this->getRedirectService()->redirect($logout);
-            }
+            $this->handleUserRights();
 
             $this->data['oTabs'] = $this->GetTabsForTable();
-        } else { // record is missing - redirect to home
-            if (!$bIsCopy && !empty($this->sId) || empty($this->sId)) {
-                $sModuleName = get_class($this);
-                $sTableName = $this->oTableManager->oTableConf->GetName();
-                $sID = $this->sId;
-                if (empty($sID)) {
-                    $sID = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.no_id_set');
-                }
-                $this->data['errorMessage'] = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.error_record_missing', array('%id%' => $sID, '%tableName%' => $sTableName));
-                $this->SetTemplate($sModuleName, 'error');
-            }
+        } else { // record is missing - show error template
+            $this->handleMissingRecord();
         }
 
         $this->AddURLHistory();
+    }
+
+    protected function handleUserRights(): void
+    {
+        $userHasReadOnlyRight = $this->oTableManager->oTableEditor->AllowReadOnly();
+
+        // check rights
+        $isReadOnlyRequest = $this->IsReadOnlyRequest();
+        $isInsert = empty($this->sId);
+
+        $userHasEditRight = $this->oTableManager->oTableEditor->AllowEdit();
+
+        if (false === $isReadOnlyRequest && (false === $userHasEditRight && false === $isInsert && false === $this->bIsReadOnlyMode || true === $this->bIsReadOnlyMode && false === $userHasReadOnlyRight)) {
+            /** @var RouterInterface $router */
+            $router = ServiceLocator::get('router');
+            $logout = $router->generate('app_logout');
+            $this->getRedirectService()->redirect($logout);
+        }
+    }
+
+    protected function isCopy(): bool
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+        $moduleFunctions = $inputFilterUtil->getFilteredInput('module_fnc');
+
+        return 'Copy' === ($moduleFunctions['contentmodule'] ?? null);
+    }
+
+    protected function handleMissingRecord(): void
+    {
+        if (false === $this->isCopy() || true === empty($this->sId)) {
+            $moduleName = get_class($this);
+            $tableName = $this->oTableManager->oTableConf->GetName();
+            $id = $this->sId;
+            if (true === empty($id)) {
+                $id = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.no_id_set');
+            }
+            $this->data['errorMessage'] = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.error_record_missing', ['%id%' => $id, '%tableName%' => $tableName]);
+            $this->SetTemplate($moduleName, 'error');
+        }
     }
 
     /**
@@ -272,10 +279,7 @@ class MTTableEditor extends TCMSModelBase
                 $params = array_merge($params, $aAdditionalParams);
             }
 
-            $sRecordName = '';
-            if (null !== $this->oTableManager->oTableEditor->oTable) {
-                $sRecordName = $this->oTableManager->oTableEditor->oTable->GetName();
-            }
+            $sRecordName = $this->oTableManager->oTableEditor->oTable?->GetDisplayValue() ?? '';
             $breadcrumb->AddItem($params, $sRecordName);
         }
     }
@@ -705,9 +709,10 @@ class MTTableEditor extends TCMSModelBase
             $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
 
             if (false !== $oRecordData) {
-                $sName = '';
-                if (isset($this->oTableManager->oTableEditor->oTable) && null !== $this->oTableManager->oTableEditor->oTable) {
-                    $sName = $this->oTableManager->oTableEditor->oTable->GetName();
+                $table = true === isset($this->oTableManager->oTableEditor->oTable) ? $this->oTableManager->oTableEditor->oTable : null;
+                if (null !== $table) {
+                    $sName = $table->GetName();
+                    $oRecordData->breadcrumbName = $table->GetDisplayValue();
                 } elseif (isset($postData['name'])) {
                     $sName = $postData['name'];
                 }
@@ -831,6 +836,7 @@ class MTTableEditor extends TCMSModelBase
     public function Delete($bPreventRedirect = false)
     {
         $this->oTableManager->Delete();
+        // note: the symfony event listener `CleanupBreadcrumbAfterDeleteListener` removes all affected history entries, especially the current one at the top of the history stack
 
         if (!$bPreventRedirect) {
             $inputFilterUtil = $this->getInputFilterUtil();
@@ -865,7 +871,6 @@ class MTTableEditor extends TCMSModelBase
                         $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
                     }
 
-                    $breadcrumb->PopURL();
                     $this->getRedirectService()->redirectToActivePage($parameter);
                 } else {
                     /** @var $oRestrictionTableConf TCMSTableConf */
@@ -884,13 +889,9 @@ class MTTableEditor extends TCMSModelBase
                         $parameter['sourceRecordID'] = $sourceRecordId;
                     }
 
-                    $breadcrumb->PopURL();
                     $this->getRedirectService()->redirectToActivePage($parameter);
                 }
             } else {
-                // remove last item from url history
-                $breadcrumb->PopURL();
-
                 $parentURL = $breadcrumb->GetURL();
                 if (false === $parentURL) {
                     $parentURL = URL_CMS_CONTROLLER;

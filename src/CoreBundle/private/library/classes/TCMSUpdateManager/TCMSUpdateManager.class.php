@@ -224,8 +224,7 @@ class TCMSUpdateManager
             return $result;
         }
 
-        $fullUpdateFilePath = PATH_PROJECT_BASE.DIRECTORY_SEPARATOR.$sFileName;
-        $fullUpdateFilePath = TGlobal::ProtectedPath($fullUpdateFilePath);
+        $fullUpdateFilePath = $sFileName;
 
         $result->setResponseStatus(DatabaseMigrationConstants::RESPONSE_STATE_SUCCESS);
         ob_start();

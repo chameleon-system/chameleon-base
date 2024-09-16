@@ -10,13 +10,18 @@
  */
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\CoreEvents;
+use ChameleonSystem\CoreBundle\Event\BackendLoginEvent;
+use ChameleonSystem\CoreBundle\Event\BackendLogoutEvent;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
+use ChameleonSystem\CoreBundle\Service\PreviewModeServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpClient\Exception\RedirectionException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -154,6 +159,57 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
+     * login the user using the users username and password.
+     *
+     * @param string $sUsername
+     * @param string $sPassword
+     *
+     * @return bool
+     */
+    public function Login($sUsername, $sPassword)
+    {
+        $query = "SELECT * FROM `cms_user` WHERE `login` = '".MySqlLegacySupport::getInstance()->real_escape_string($sUsername)."' LIMIT 0,1";
+        if ($userRow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
+            $allowCMSLogin = false;
+            if (!array_key_exists('allow_cms_login', $userRow) || '1' == $userRow['allow_cms_login']) {
+                $allowCMSLogin = true;
+            }
+
+            if (false === TGlobal::IsCMSMode() || $allowCMSLogin) {
+                if ('' !== $userRow['crypted_pw'] && $this->getPasswordHashGenerator()->verify($sPassword, $userRow['crypted_pw'])) {
+                    $this->LoadFromRow($userRow);
+                    $this->SetAsActiveUser();
+                }
+            }
+        }
+        if ($this->bLoggedIn && TGlobal::IsCMSMode()) {
+            $_SESSION[self::GetSessionVarName('_user')] = $this->id;
+            $this->getAuthenticityTokenManager()->refreshToken();
+        }
+
+        try {
+            self::getPreviewModeService()->grantPreviewAccess($this->bLoggedIn, self::getCmsUserId());
+        } catch (RedirectionException $e) {
+            self::getPreviewModeService()->grantPreviewAccess(\TCMSUser::CMSUserDefined(), self::getCmsUserId());
+            throw $e;
+        }
+
+        // release old locks
+        $query = 'DELETE FROM `cms_lock` WHERE TIMESTAMPDIFF(MINUTE,`time_stamp`,CURRENT_TIMESTAMP()) >= '.RECORD_LOCK_TIMEOUT.'';
+        MySqlLegacySupport::getInstance()->query($query);
+
+        $eventDispatcher = self::getEventDispatcher();
+        $event = new BackendLoginEvent($this);
+        if ($this->bLoggedIn) {
+            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_SUCCESS);
+        } else {
+            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_FAILURE);
+        }
+
+        return $this->bLoggedIn;
+    }
+
+    /**
      * return true if the passed password matchs the version in the db.
      *
      * @param string $sSourcePwd
@@ -163,6 +219,57 @@ class TCMSUser extends TCMSRecord
     public function PasswordIsValid($sSourcePwd)
     {
         return $this->getPasswordHashGenerator()->verify($sSourcePwd, $this->sqlData['crypted_pw']);
+    }
+
+    /**
+     * login current user as active user.
+     *
+     * if login simulation is on ($bSimulateLogin) then the user login will not be written to the session
+     * the login only exists for during runtime of the script that initiates the user activation
+     *
+     * @param bool $bSimulateLogin
+     */
+    public function SetAsActiveUser($bSimulateLogin = false)
+    {
+        $this->_LoadAccessManager();
+        $this->bLoggedIn = true;
+        // add hash of user values
+        if ($bSimulateLogin) {
+            self::$oActiveUser = $this;
+        } else {
+            $_SESSION[self::GetSessionVarName('_USERSESSIONKEY')] = $this->GetUserSessionKey();
+            $_SESSION[self::GetSessionVarName('_user')] = $this->id;
+        }
+    }
+
+    /**
+     * logout the user and kill session cookie.
+     */
+    public static function Logout()
+    {
+        $user = static::GetActiveUser();
+        $sessionKeys = array_keys($_SESSION);
+        foreach ($sessionKeys as $key) {
+            if ('_usercms' == $key && !empty($_SESSION['_usercms'])) {
+                self::ReleaseOpenLocks($_SESSION['_usercms']);
+            }
+            unset($_SESSION[$key]);
+        }
+
+        unset($_SESSION['_listObjCache']);
+        $request = self::getRequest();
+        if (null !== $request) {
+            if (true === $request->hasSession()) {
+                $session = $request->getSession();
+                if (null === $session) {
+                    $session->clear();
+                }
+            }
+        }
+
+        self::getPreviewModeService()->grantPreviewAccess(false, self::getCmsUserId());
+
+        self::getEventDispatcher()->dispatch(new BackendLogoutEvent($user), CoreEvents::BACKEND_LOGOUT_SUCCESS);
     }
 
     /**
@@ -316,6 +423,13 @@ class TCMSUser extends TCMSRecord
         return $imageTag;
     }
 
+    protected static function getCmsUserId(): string
+    {
+        $user = \TCMSUser::GetActiveUser();
+
+        return $user?->id ?? '';
+    }
+
     /**
      * @return AuthenticityTokenManagerInterface
      */
@@ -343,5 +457,10 @@ class TCMSUser extends TCMSRecord
     private static function getRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    protected static function getPreviewModeService(): PreviewModeServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.preview_mode_service');
     }
 }

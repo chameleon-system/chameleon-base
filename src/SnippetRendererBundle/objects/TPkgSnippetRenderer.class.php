@@ -179,6 +179,10 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
 
             return $message;
         } catch (Error $e) {
+            $previousException = $e->getPrevious();
+            if (null !== $previousException) {
+                $e = $previousException;
+            }
             throw new TPkgSnippetRenderer_SnippetRenderingException(
                 sprintf("%s\nin file %s at line %s\n", $e->getMessage(), $e->getFile(), $e->getLine()),
                 $e->getCode(),

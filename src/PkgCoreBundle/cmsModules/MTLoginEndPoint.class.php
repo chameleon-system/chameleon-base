@@ -20,24 +20,12 @@ class MTLoginEndPoint extends TCMSModelBase
     {
         $this->data = parent::Execute();
 
-        $this->data['username'] = '';
-        $this->data['login'] = ''; // last logged in username
-        if ($this->global->UserDataExists('login')) {
-            $this->data['username'] = $this->global->GetUserData('login');
-            $this->data['login'] = $this->data['username'];
-        }
+        $this->data['username'] = $this->global->GetUserData('username');
 
         $this->data['redirectParams'] = '';
         if ($this->global->UserDataExists('redirectParams')) {
             $this->data['redirectParams'] = $this->global->GetUserData('redirectParams');
-        }
-
-        $this->data['validBrowser'] = false;
-        if (MTLogin::CheckBrowser()) {
-            $this->data['validBrowser'] = true;
-        } else {
-            $this->data['errmsg'] = TGlobal::Translate('chameleon_system_core.cms_module_login.error_unsupported_browser');
-        }
+        } 
 
         if ($this->global->CMSUserDefined()) {
             $this->getRedirectService()->redirectToActivePage([]);
@@ -46,58 +34,17 @@ class MTLoginEndPoint extends TCMSModelBase
         return $this->data;
     }
 
-    /**
-     * @return bool
-     */
-    public static function CheckBrowser()
-    {
-        $validBrowser = true;
-        if (preg_match('/(?i)msie [6-8]/', $_SERVER['HTTP_USER_AGENT'])) { // Internet Explorer < 9.x
-            $validBrowser = false;
-        }
-
-        return $validBrowser;
-    }
-
-    /**
-     * @return void
-     */
-    private function redirectOnPendingUpdates()
-    {
-        try {
-            $needsRedirect = \count(TCMSUpdateManager::GetInstance()->getAllUpdateFilesToProcess()) > 0;
-        } catch (InvalidMigrationCounterException $e) {
-            $needsRedirect = true;
-        }
-
-        if (true === $needsRedirect) {
-            $this->getRedirectService()->redirectToActivePage([
-                'pagedef' => 'CMSUpdateManager',
-                'module_fnc' => array($this->sModuleSpotName => 'RunUpdates'),
-            ]);
-        }
-    }
-
-    /**
-     * @return Connection
-     */
-    private function getDatabaseConnection()
+    private function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
     }
 
-    /**
-     * @return ICmsCoreRedirect
-     */
-    private function getRedirectService()
+    private function getRedirectService(): ICmsCoreRedirect
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslator()
+    private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
     }

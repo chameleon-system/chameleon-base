@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\SystemPageServiceInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
+/** @deprecated seems to be a newsletter subscription approach <i>without</i> double-opt-in, which is <b>not allowed</b> anymore */
 class TPkgNewsletterMapper_QuickSignup extends AbstractViewMapper
 {
     /**

@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -68,7 +69,7 @@ class RequestInfoService implements RequestInfoServiceInterface
         RequestStack $requestStack,
         PortalDomainServiceInterface $portalDomainService,
         LanguageServiceInterface $languageService,
-        UrlPrefixGeneratorInterface $urlPrefixGenerator
+        UrlPrefixGeneratorInterface $urlPrefixGenerator,
     ) {
         $this->requestStack = $requestStack;
         $this->languageService = $languageService;
@@ -94,6 +95,14 @@ class RequestInfoService implements RequestInfoServiceInterface
         $this->chameleonRequestType = (int) $request->attributes->get('chameleon.request_type');
 
         return $this->chameleonRequestType;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setChameleonRequestType(int $requestType): void
+    {
+        $this->chameleonRequestType = $requestType;
     }
 
     /**
@@ -147,8 +156,13 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         // todo: `__previewmode` should be the only way to enable this. Refactor all places where the preview attribute is set as `preview` instead of `__previewmode'
-        $this->isPreviewModeCache = false === \TGlobal::IsCMSMode() &&
-            ('true' === $request->query->get('__previewmode') || 'true' === $request->query->get('preview'));
+        // @note: preview mode laoding only via cookie is not possible, because this will kill all frontend logins
+        $this->isPreviewModeCache = false === \TGlobal::IsCMSMode()
+            && true === $this->getPreviewModeService()->currentSessionHasPreviewAccess()
+            && (
+                'true' === $request->query->get('__previewmode')
+                 || 'true' === $request->query->get('preview')
+                );
 
         return $this->isPreviewModeCache;
     }
@@ -205,5 +219,10 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         return $this->requestId;
+    }
+
+    protected function getPreviewModeService(): PreviewModeServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.preview_mode_service');
     }
 }

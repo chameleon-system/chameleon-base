@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 7.1.6
+ */
 class CMSiconList extends TCMSModelBase
 {
     public $iconName = null;

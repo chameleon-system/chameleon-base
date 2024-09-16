@@ -72,4 +72,9 @@ interface RequestInfoServiceInterface
      * @return string
      */
     public function getRequestId(): string;
+
+    /**
+     * @param $requestType int one of \ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface::REQUEST_TYPE_*
+     */
+    public function setChameleonRequestType(int $requestType): void;
 }

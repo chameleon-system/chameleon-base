@@ -40,6 +40,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
     const TICKETVARNAME = '_MTExtranetCoreUserTicketNewSystem';
 
+    public const FORM_DATA_NAME_USER = 'aUser';
+
     /**
      * the session data of the extranet user. used to validate the login session.
      *
@@ -91,6 +93,8 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      * @var array
      */
     protected $pageAccessCache = array();
+    
+    protected bool $callPostLoginHook = true;
 
     /**
      * @param string|null $id
@@ -116,6 +120,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
 
         trigger_error('no such property ('.$sPropertyName.') in TDataExtranetUser', E_USER_ERROR);
+    }
+    
+    public function setCallPostLoginHook(bool $callPostLoginHook): void
+    {
+        $this->callPostLoginHook = $callPostLoginHook;
     }
 
     /**
@@ -495,7 +504,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
 
         if (!empty($sPlainPassword)) {
             $this->isLoggedIn = $this->PerformLogin($sPlainPassword, $sLoginName);
-            if ($this->isLoggedIn) {
+            if ($this->isLoggedIn && true === $this->callPostLoginHook) {
                 $this->PostLoginHook();
             }
         }
@@ -595,12 +604,11 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     public function DirectLogin($sLoginName, $sPassword, $callPostLoginHook = false)
     {
+        $this->setCallPostLoginHook($callPostLoginHook);
+        
         $this->AllowEditByAll(true);
         $bWasLoggedIn = $this->Login($sLoginName, $sPassword);
         $this->AllowEditByAll(false);
-        if ($bWasLoggedIn && $callPostLoginHook) {
-            $this->PostLoginHook();
-        }
 
         return $bWasLoggedIn;
     }
@@ -623,7 +631,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
         if ($oUser->LoadFromFields($fields, true)) {
             $this->isLoggedIn = $this->SaveUserLogindata($sLoginName, $oUser->id);
-            if ($this->isLoggedIn) {
+            if ($this->isLoggedIn && true === $this->callPostLoginHook) {
                 $this->PostLoginHook();
             }
         }

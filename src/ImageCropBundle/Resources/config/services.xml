@@ -20,7 +20,7 @@
         </service>
 
         <service id="chameleon_system_image_crop.crop_image_service"
-                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Service\CropImageService">
+                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Service\CropImageService" public="true">
             <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
             <argument type="service" id="chameleon_system_image_crop.image_crop_preset_data_access"/>
             <argument type="service" id="chameleon_system_image_crop.image_crop_data_access"/>

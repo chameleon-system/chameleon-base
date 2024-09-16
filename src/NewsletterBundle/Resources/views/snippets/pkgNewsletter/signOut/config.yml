@@ -1,0 +1,6 @@
+js:
+  - /bundles/chameleonsystemnewsletter/js/chameleon.js
+  - /bundles/chameleonsystemnewsletter/js/signUp.js
+
+less:
+  - /bundles/chameleonsystemnewsletter/less/newsletterSignUp.less

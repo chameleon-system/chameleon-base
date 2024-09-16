@@ -145,9 +145,9 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             $html .= '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($sPropertyTableName).'" />';
             $html .= '<div class="card">
             <div class="card-header p-1">
-                <div class="card-action" 
-                data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'" 
-                id="mltListControllButton'.$sEscapedName.'" 
+                <div class="card-action"
+                data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'"
+                id="mltListControllButton'.$sEscapedName.'"
                 onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); '.$sOnClickEvent.'">
                 <i class="fas fa-eye"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_property.open_or_close_list')).'
                 </div>
@@ -542,6 +542,19 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         }
 
         return $bAllowDeleteRecordReferences;
+    }
+
+    /**
+    * Checks if its allowed to copy record references for property field.
+    */
+    public function allowCopyRecordReferences(): bool
+    {
+        $preventReferenceCopy = $this->oDefinition->GetFieldtypeConfigKey('preventReferenceCopy');
+        if ('true' === $preventReferenceCopy) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

@@ -1,12 +1,12 @@
+{# @var usage \ChameleonSystem\MediaManager\DataModel\MediaItemUsageDataModel #}
 <div class="img-usages">
     <div class="row usages-header pb-1 pt-1">
-        <div class="col-6 col-lg-3">{{ 'chameleon_system_media_manager.delete.usage_table_header_table' | trans }}</div>
-        <div class="col-6 col-lg-3">{{ 'chameleon_system_media_manager.delete.usage_table_header_id' | trans }}</div>
-        <div class="col-6 col-lg-3">{{ 'chameleon_system_media_manager.delete.usage_table_header_record_name' | trans }}</div>
-        <div class="col-6 col-lg-3">{{ 'chameleon_system_media_manager.delete.usage_table_header_field' | trans }}</div>
+        <div class="col-6 col-lg-3 "><strong>{{ 'chameleon_system_media_manager.delete.usage_table_header_table' | trans }}</strong></div>
+        <div class="col-6 col-lg-3"><strong>{{ 'chameleon_system_media_manager.delete.usage_table_header_id' | trans }}</strong></div>
+        <div class="col-6 col-lg-3"><strong>{{ 'chameleon_system_media_manager.delete.usage_table_header_record_name' | trans }}</strong></div>
+        <div class="col-6 col-lg-3"><strong>{{ 'chameleon_system_media_manager.delete.usage_table_header_field' | trans }}</strong></div>
     </div>
     {% for usage in usages %}
-        {# usage \ChameleonSystem\MediaManager\DataModel\MediaItemUsageDataModel #}
         <div class="row pt-1 pb-1 usage-item">
             <div class="col-6 col-lg-3">{{ usage.targetTableDescriptiveName }}</div>
             <div class="col-6 col-lg-3">{{ usage.targetRecordId }}</div>
