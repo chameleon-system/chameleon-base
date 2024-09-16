@@ -38,10 +38,16 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
 
         $activePage = $this->getActivePage();
 
-//        Do we need to create a breadcrumb for a normal page?
-//        $breadcrumbItem = new BreadcrumbItemDataModel($activePage->GetName(), $activePage->GetRealURL());
-//        $breadcrumb->add($breadcrumbItem);
-//        $this->breadcrumbGeneratorUtils->attachHomePageBreadcrumbItem($breadcrumb);
+        //Never show Breadcrumb on the HomePage
+        if($activePage->IsHomePage()){
+            return $breadcrumb;
+        }
+
+
+
+        $breadcrumbItem = new BreadcrumbItemDataModel($activePage->GetName(), $activePage->GetRealURL());
+        $breadcrumb->add($breadcrumbItem);
+        $this->breadcrumbGeneratorUtils->attachHomePageBreadcrumbItem($breadcrumb);
 
         $this->setCache($breadcrumb);
 
