@@ -17,7 +17,7 @@
             <a
                 id="navbarDropdownWebsites"
                 class="nav-link dropdown-toggle"
-                data-toggle="dropdown"
+                data-coreui-toggle="dropdown"
                 href="#"
                 role="button"
                 aria-haspopup="true"
@@ -28,7 +28,7 @@
                     {{ 'chameleon_system_core.cms_module_header.action_open_website'|trans }}
                 </span>
             </a>
-            <div class="dropdown-menu dropdown-menu-left">
+            <div class="dropdown-menu dropdown-menu-start">
             {% for aPortal in aPortalLinks %}
                 <a class="dropdown-item" href="{{ aPortal.url }}" target="_blank">
                     <i class="fas fa-globe"></i>

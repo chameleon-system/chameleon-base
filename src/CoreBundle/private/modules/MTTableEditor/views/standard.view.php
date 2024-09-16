@@ -4,7 +4,7 @@ require_once __DIR__.'/includes/rightClickMenu.inc.php';
 require __DIR__.'/includes/menuItems.inc.php';
 ?>
 <div class="card card-accent-primary mb-0" id="tableEditorContainer">
-    <div class="card-header p-1">
+    <div class="card-header p-0">
         <?php
         require_once __DIR__.'/includes/editorheader.inc.php';
         ?>

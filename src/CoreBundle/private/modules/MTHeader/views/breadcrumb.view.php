@@ -1,9 +1,10 @@
 <?php
     $sMainMenuText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')); ?>
-    <div id="cmsbreadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><i class="fas fa-home"></i>&nbsp;&nbsp;<a
-                        href="<?= PATH_CMS_CONTROLLER; ?>?_rmhist=true&amp;_histid=0"><?= $sMainMenuText; ?></a>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb my-0">
+            <li class="breadcrumb-item">
+              <i class="fas fa-home pe-3"></i>
+              <a href="<?= PATH_CMS_CONTROLLER; ?>?_rmhist=true&amp;_histid=0"><?= $sMainMenuText; ?></a>
             </li>
             <?php
     $maxCount = 8;
@@ -33,4 +34,6 @@
         }
     } ?>
         </ol>
-    </div>
+    </nav>
+    <?php
+}

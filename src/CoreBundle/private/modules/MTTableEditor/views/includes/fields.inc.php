@@ -42,18 +42,21 @@ while ($oField = $data['oFields']->Next()) {
 
                 $sTmpFormTabsContent .= '
                 <div class="form-group table-editor-form-group row" id="fieldname_'.TGlobal::OutHTML($oField->name).'">
-                    <div class="col-xl-3 col-sm-4 col-form-label">
+                    <div class="col-xl-3 col-sm-4 col-form-label d-flex justify-content-between align-items-start">
             ';
 
                 $oFieldConfig = TdbCmsFieldConf::GetNewInstance();
                 $oFieldConfig->Load($oField->oDefinition->id);
 
-                if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
-                    $sTmpFormTabsContent .= '<span class="float-right help-text-button" data-helptextId="'.TGlobal::OutHTML($oField->name).'">
-                        <i class="fas fa-info-circle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'"></i>
-                    </span>';
-                }
+                $sTmpFormTabsContent .= '<div>';
+                $sTmpFormTabsContent .= '<span'.$headlineColorStyle.'>'.$oFieldConfig->fieldTranslation.'</span>';
 
+                if ($oField->IsMandatoryField()) {
+                    $sTmpFormTabsContent .= '&nbsp;<span class="requiredfield">*<span>';
+                }
+                $sTmpFormTabsContent .= '</div>';
+
+                $sTmpFormTabsContent .= '<div class="d-flex">';
                 if (ACTIVE_TRANSLATION) {
                     $oFieldType = $oField->oDefinition->GetFieldType();
                     if ('1' === $oField->oDefinition->sqlData['is_translatable']) {
@@ -62,12 +65,12 @@ while ($oField = $data['oFields']->Next()) {
                             $sPrefix = $oBaseLanguage->fieldIso6391;
                         }
 
-                        $sTmpFormTabsContent .= '<span class="badge badge-secondary float-right translation-badge mr-1">'.$sPrefix."</span>\n";
+                        $sTmpFormTabsContent .= '<span class="badge badge-secondary translation-badge mr-1">'.$sPrefix."</span>\n";
 
                         // show icon if record is not translated yet (disabled for MLT fields)
                         if ($oFieldType->fieldBaseType = 'standard' && isset($oTable->sqlData[$oFieldConfig->fieldName.'__'.$sPrefix])) {
                             if ('' == $oTable->sqlData[$oFieldConfig->fieldName.'__'.$sPrefix]) {
-                                $sTmpFormTabsContent .= '<span class="badge badge-secondary translationStateIcon float-right mr-1 bg-danger">
+                                $sTmpFormTabsContent .= '<span class="badge badge-secondary translationStateIcon mr-1 bg-danger">
                                                               <i class="fas fa-language" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.not_translated')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.not_translated')).'"></i>
                                                          </span>';
                             }
@@ -75,13 +78,16 @@ while ($oField = $data['oFields']->Next()) {
                     }
                 }
 
-                $sTmpFormTabsContent .= '<span'.$headlineColorStyle.'>'.$oFieldConfig->fieldTranslation.'</span>';
-
-                if ($oField->IsMandatoryField()) {
-                    $sTmpFormTabsContent .= '&nbsp;<span class="requiredfield">*<span>';
+                if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
+                    $sTmpFormTabsContent .= '<span class="help-text-button" data-helptextId="'.TGlobal::OutHTML($oField->name).'">
+                        <i class="fas fa-info-circle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'"></i>
+                    </span>';
                 }
-                $sTmpFormTabsContent .= '</div>
-                <div class="col-xl-9 col-sm-8 col-form-content">';
+
+                $sTmpFormTabsContent .= '</div>';
+
+                $sTmpFormTabsContent .= '</div>';
+                $sTmpFormTabsContent .= '<div class="col-xl-9 col-sm-8 col-form-content">';
                 if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
                     $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.nl2br(TGlobal::OutHTML($oField->oDefinition->sqlData['049_helptext'])).'</div>';
                 }

@@ -4,8 +4,8 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 $oController = TGlobal::GetController();
 ?>
-<nav class="navbar navbar-light bg-light pl-2 pr-2 pt-0">
-    <span class="navbar-brand pt-2"><?php
+<nav class="navbar navbar-light px-2">
+    <span class="navbar-brand"><?php
         if ('' === $sRecordName) {
             $sRecordName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
         } else {
@@ -24,15 +24,15 @@ $oController = TGlobal::GetController();
         <div class="callout callout-info mt-0 mb-1"><strong class="text-muted">ID:</strong><br><strong class="h6">'.$data['id'].'</strong></div>';
         ?>
         <div>
-            <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button"
-                    data-toggle="popover"
-                    data-placement="bottom"
-                    data-content="<?= TGlobal::OutHTML($idsPopoverText); ?>"
+            <button class="btn btn-outline-info btn-sm mr-2" type="button" role="button"
+                    data-coreui-toggle="popover"
+                    data-coreui-placement="bottom"
+                    data-coreui-content="<?= TGlobal::OutHTML($idsPopoverText); ?>"
                     data-original-title="IDs"
             >
                 <i class="fas fa-database"></i> IDs
             </button>
-            <button class="entry-id-copy-button btn btn-outline-info btn-sm mt-2 mr-2"
+            <button class="entry-id-copy-button btn btn-outline-info btn-sm mr-2"
                     data-entry-id="<?= TGlobal::OutHTML($data['id']) ?>"
                     title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.text.copy_id_to_clipboard')) ?>"
             >
@@ -43,9 +43,9 @@ $oController = TGlobal::GetController();
         <?php
         if ('' !== $oTableDefinition->sqlData['notes']) {
             ?>
-            <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
-                    data-placement="bottom"
-                    data-content="<?= nl2br(TGlobal::OutHTML($oTableDefinition->sqlData['notes'])); ?>"
+            <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-coreui-toggle="popover"
+                    data-coreui-placement="bottom"
+                    data-coreui-content="<?= nl2br(TGlobal::OutHTML($oTableDefinition->sqlData['notes'])); ?>"
                     data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')); ?>">
                 <i class="fas fa-question-circle"></i> <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')); ?>
             </button>
@@ -64,9 +64,9 @@ $oController = TGlobal::GetController();
             }
 
             $sData .= '<div class="callout callout-danger mt-0 mb-1">'.$oCmsLock->GetDateField('time_stamp').'</div>'; ?>
-            <button class="btn btn-danger btn-sm mt-2 mr-2" type="button" role="button" data-toggle="popover"
-                    data-placement="bottom"
-                    data-content="<?= TGlobal::OutHTML($sData); ?>"
+            <button class="btn btn-danger btn-sm mt-2 mr-2" type="button" role="button" data-coreui-toggle="popover"
+                    data-coreui-placement="bottom"
+                    data-coreui-content="<?= TGlobal::OutHTML($sData); ?>"
                     data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.record_lock.locked_by')); ?>">
                 <i class="fas fa-user-lock"></i> <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')); ?>
             </button>
@@ -109,7 +109,7 @@ $oController = TGlobal::GetController();
             ], PATH_CMS_CONTROLLER.'?', '&');
             ?>
 
-            <div class="mt-2 typeahead-relative">
+            <div class="typeahead-relative">
                 <input id="quicklookuplist"
                        class="form-control"
                        placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.other_entries')); ?>"

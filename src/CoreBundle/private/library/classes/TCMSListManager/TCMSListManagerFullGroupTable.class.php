@@ -300,7 +300,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         // style of every field
         $this->tableObj->style->group = 'bg-secondary';
         $this->tableObj->style->groupSpacer = 'groupSpacer';
-        $this->tableObj->style->header = 'bg-primary';
+        $this->tableObj->style->header = 'bg-primary text-white';
         $this->tableObj->style->navigation = 'tblNav';
         $this->tableObj->style->filter = 'tblfilter';
         $this->tableObj->style->search = 'tblsearch';
