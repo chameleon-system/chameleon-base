@@ -58,7 +58,7 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
     private function attachBreadcrumbByCmsTree(BreadcrumbDataModel $breadcrumb, \TCMSActivePage $activePage): void
     {
         $portal = $activePage->GetPortal();
-        if(null === $portal){
+        if (null === $portal){
             return;
         }
 
