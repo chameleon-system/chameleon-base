@@ -10,7 +10,7 @@ the functions to generate a breadcrumb and handle the caching.
 
 ### Service-Tag
 Every generator that implements the Tag `chameleon_system_breadcrumb.generator.breadcrumb_generator` will be loaded
-by the `BreadrumbGeneratorProvider`. Within the tag you need the attribute `order` having an interger value to indicate
+by the `BreadrumbGeneratorProvider`. Within the tag you need the attribute `order` having an integer value to indicate
 the priority of the generator. The first one that return "true" will be used generator to generate the breadcrumb.
 
 ### Caching
