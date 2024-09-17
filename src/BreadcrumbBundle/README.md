@@ -14,5 +14,5 @@ by the `BreadrumbGeneratorProvider`. Within the tag you need the attribute `orde
 the priority of the generator. The first one that return "true" will be used generator to generate the breadcrumb.
 
 ### Caching
-Every Generator needs handle its own caching. The AbstractBreadcrumbGenerator provides
+Every Generator needs to handle its own caching. The AbstractBreadcrumbGenerator provides
 the necessary functions, that need to be implemented for caching.
