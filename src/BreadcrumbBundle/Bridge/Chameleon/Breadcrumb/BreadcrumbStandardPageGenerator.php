@@ -33,6 +33,7 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
     public function generate(): BreadcrumbDataModel
     {
         $cacheResult = $this->getFromCache();
+
         if (null !== $cacheResult) {
             return $cacheResult;
         }
@@ -41,7 +42,8 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
 
         $activePage = $this->getActivePage();
         $portal = $activePage->GetPortal();
-        //Never show Breadcrumb on the HomePage
+        
+        // Never show the Breadcrumb on the HomePage.
         if ($activePage->IsHomePage()) {
             return $breadcrumb;
         }
@@ -65,32 +67,33 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
         $stopNodes = $this->getStopNodes($portal);
 
         $recordExists = true;
-        $oTreeNode = null;
+        $treeNode = null;
         $nodeId = $activePage->GetMainTreeId();
 
         do {
-            $oTreeNode = $this->treeService->getById($nodeId);
-            if (null !== $oTreeNode) {
-                $breadcrumbItem = new BreadcrumbItemDataModel($oTreeNode->GetName(), $oTreeNode->getLink());
+            $treeNode = $this->treeService->getById($nodeId);
+            if (null !== $treeNode) {
+                $breadcrumbItem = new BreadcrumbItemDataModel($treeNode->GetName(), $treeNode->getLink());
                 $breadcrumb->add($breadcrumbItem);
-                $nodeId = $oTreeNode->sqlData['parent_id'];
+                $nodeId = $treeNode->sqlData['parent_id'];
             } else {
                 $recordExists = false;
             }
-        } while ($recordExists && !in_array($nodeId, $stopNodes) && !in_array($oTreeNode->id, $stopNodes));
+        } while ($recordExists && !in_array($nodeId, $stopNodes) && !in_array($treeNode->id, $stopNodes));
         // now add the stop node as well... if a page is assigned to it...
         if ($recordExists) {
-            $oTreeNode = $this->treeService->getById($nodeId);
-            if (null !== $oTreeNode) {
-                if (false !== $oTreeNode->GetLinkedPage()) {
-                    $breadcrumbItem = new BreadcrumbItemDataModel($oTreeNode->GetName(), $oTreeNode->getLink());
+            $treeNode = $this->treeService->getById($nodeId);
+            if (null !== $treeNode) {
+                if (false !== $treeNode->GetLinkedPage()) {
+                    $breadcrumbItem = new BreadcrumbItemDataModel($treeNode->GetName(), $treeNode->getLink());
                     $breadcrumb->add($breadcrumbItem);
                 }
             }
         }
     }
 
-    private function getStopNodes(\TdbCmsPortal $portal): array{
+    private function getStopNodes(\TdbCmsPortal $portal): array
+    {
         $stopNodes = \TdbCmsDivision::GetStopNodes();
 
         // add navi nodes as stop nodes...
@@ -98,11 +101,13 @@ final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
             .\MySqlLegacySupport::getInstance()->real_escape_string($portal->id)."'";
         $navis = \MySqlLegacySupport::getInstance()->query($query);
         $naviStopNodes = [];
+    
         while ($navi = \MySqlLegacySupport::getInstance()->fetch_assoc($navis)) {
             $naviStopNodes[] = $navi['tree_node'];
         }
 
         $stopNodes = array_merge($naviStopNodes, $stopNodes);
+        
         return $stopNodes;
     }
 
