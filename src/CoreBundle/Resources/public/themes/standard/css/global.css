@@ -379,16 +379,19 @@ legend {
 /**
 Bootstrap 4 addons.
  */
-@media (min-width: 992px) {
-    .modal-xl {
-        width: 90%;
-        max-width: 1140px;
-    }
 
-    .modal-xxl {
-        width: 90%;
-        max-width: 1900px;
-    }
+.modal-lg {
+    width: 85%;
+    max-width: 992px;
+}
+.modal-xl {
+    width: 90%;
+    max-width: 1140px;
+}
+
+.modal-xxl {
+    width: 90%;
+    max-width: 1900px;
 }
 
 .modal .modal-body {

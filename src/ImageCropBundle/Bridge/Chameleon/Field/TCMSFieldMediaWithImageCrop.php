@@ -14,6 +14,7 @@ namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
@@ -416,6 +417,12 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             $parameters[ImageCropEditorModule::URL_PARAM_PRESET_RESTRICTION] = implode(';', $restriction);
         }
 
+        $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        if (null !== $parentField && '' !== $parentField) {
+            $parentIFrame = $parentField . '_iframe';
+            $parameters[ImageCropEditorModule::URL_PARAM_PARENT_IFRAME] = $parentIFrame;
+        }
+
         return URL_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameters, '?', '&');
     }
 
@@ -487,5 +494,10 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     private function getFieldTranslationUtil(): FieldTranslationUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.field_translation');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

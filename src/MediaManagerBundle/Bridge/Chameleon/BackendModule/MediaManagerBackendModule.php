@@ -352,6 +352,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $configurationState->pickImageMode = $listState->isPickImageMode();
         if (true === $configurationState->pickImageMode) {
             $configurationState->pickImageCallback = $listState->getPickImageCallback();
+            $configurationState->parentIFrame = $listState->getParentIFrame();
             $configurationState->pickImageWithCrop = $listState->isPickImageWithCrop();
         }
 

@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+
 class TCMSMediaFieldUploadMapper extends AbstractViewMapper
 {
     /**
@@ -63,14 +66,28 @@ class TCMSMediaFieldUploadMapper extends AbstractViewMapper
     }
 
     /**
-     * @param string $sFieldName
+     * @param string $fieldName
      *
      * @return string
      */
-    public function getOpenUploadWindowJS($sFieldName)
+    public function getOpenUploadWindowJS($fieldName)
     {
-        $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($sFieldName)."');TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($sFieldName).'(document.cmseditform.'.TGlobal::OutHTML($sFieldName).'__cms_media_tree_id.value);';
+        $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        if (null !== $parentField && '' !== $parentField) {
+            $parentIFrame = $parentField . '_iframe';
+            $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($fieldName)."');
+                   saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
+                   TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($fieldName)."(document.cmseditform.".TGlobal::OutHTML($fieldName)."__cms_media_tree_id.value,'".TGlobal::OutHTML($parentIFrame)."');";
+        } else {
+            $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($fieldName)."');
+            TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($fieldName)."(document.cmseditform.".TGlobal::OutHTML($fieldName)."__cms_media_tree_id.value);";
+        }
 
         return $js;
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

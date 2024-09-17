@@ -72,6 +72,13 @@ class JavascriptPluginConfigurationState
     public $pickImageCallback = '';
 
     /**
+     * Javascript callback iFrame after picking an image.
+     *
+     * @var string
+     */
+    public $parentIFrame = '';
+
+    /**
      * Is it possible to pick crops of images too?
      *
      * @var bool

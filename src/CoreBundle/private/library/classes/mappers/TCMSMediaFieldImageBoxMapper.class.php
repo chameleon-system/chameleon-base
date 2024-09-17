@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\Interfaces\MediaManagerUrlGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
 {
@@ -116,11 +117,23 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
      */
     protected function _GetOpenWindowJSSetImage($position, $sFieldName, $sTableId, $sRecordId, $oImage)
     {
-        $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('parent._SetImage', false, $sFieldName, $sTableId, $sRecordId, $position);
-
-        $js = "var width=$(window).width() - 50; var height=$(window).height() - 100; saveCMSRegistryEntry('_currentFieldName','".$sFieldName."');saveCMSRegistryEntry('_currentPosition','".TGlobal::OutHTML(
-                $position
-            )."');CreateModalIFrameDialogCloseButton('".$url."',width,height,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title'))."');";
+        $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        if (null !== $parentField && '' !== $parentField) {
+            $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('_SetImage', false, $sFieldName, $sTableId, $sRecordId, $position);
+            $parentIFrame = $parentField . '_iframe';
+            $url .= '&parentIFrame=' . $parentIFrame;
+            $js = "var width=$(window).width() - 50;
+                   saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutJS($sFieldName)."');
+                   saveCMSRegistryEntry('_currentPosition','".TGlobal::OutJS($position)."');
+                   saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
+                   parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title'))."');";
+        } else {
+            $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('parent._SetImage', false, $sFieldName, $sTableId, $sRecordId, $position);
+            $js = "var width=$(window).width() - 50;
+                   saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutJS($sFieldName)."');
+                   saveCMSRegistryEntry('_currentPosition','".TGlobal::OutJS($position)."');
+                   parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title'))."');";
+        }
 
         return $js;
     }
@@ -146,7 +159,19 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
         $aParam = array('pagedef' => 'tableeditorPopup', 'id' => $sRecordId, 'tableid' => $oCmsTblConf->id, 'position' => $position);
         $url = $this->urlUtil->getArrayAsUrl($aParam, PATH_CMS_CONTROLLER.'?', '&');
 
-        $js = "var width=1000;url = document.location.href;if(url.match('pagedef=tableeditorPopup'))width=800;CreateModalIFrameDialogCloseButton('".$url."',width,550);";
+        $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        if (null !== $parentField && '' !== $parentField) {
+            $parentIFrame = $parentField . '_iframe';
+            $js = "var width=1000;
+                   url = document.location.href;
+                   saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
+                   parent.CreateModalIFrameDialogCloseButton('".$url."',width,550);";
+        } else {
+            $js = "var width=1000;
+                   url = document.location.href;
+                   if(url.match('pagedef=tableeditorPopup'))width=800;
+                   CreateModalIFrameDialogCloseButton('".$url."',width,550);";
+        }
 
         return $js;
     }
@@ -169,5 +194,10 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
     private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

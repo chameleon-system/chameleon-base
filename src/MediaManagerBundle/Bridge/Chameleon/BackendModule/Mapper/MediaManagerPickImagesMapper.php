@@ -46,6 +46,10 @@ class MediaManagerPickImagesMapper extends AbstractViewMapper
                 $listState->getPickImageCallback()
             );
             $oVisitor->SetMappedValue(
+                'parentIFrame',
+                $listState->getParentIFrame()
+            );
+            $oVisitor->SetMappedValue(
                 'pickImageWithCrop',
                 $listState->isPickImageWithCrop()
             );

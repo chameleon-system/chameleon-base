@@ -107,7 +107,7 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
         }
 
         $isPickImageMode = $this->isPickImageMode();
-        $state->setPickImageMode($isPickImageMode, $this->getPickImageCallback(), $this->isPickImageWithCrop());
+        $state->setPickImageMode($isPickImageMode, $this->getPickImageCallback(), $this->isPickImageWithCrop(), $this->getParentIFrame());
 
         $this->saveStateToSession($state);
 
@@ -196,6 +196,14 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
         return $this->inputFilterUtil->getFilteredInput(
             MediaManagerListState::URL_NAME_PICK_IMAGE_CALLBACK,
             '_SetImage'
+        );
+    }
+
+    private function getParentIFrame()
+    {
+        return $this->inputFilterUtil->getFilteredInput(
+            MediaManagerListState::URL_NAME_PARENT_IFRAME,
+            'parentIFrame'
         );
     }
 

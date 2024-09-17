@@ -205,9 +205,13 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
 
         $sHTML = <<<JAVASCRIPTCODE
 <script type="text/javascript">
-  function TCMSFieldPropertyTableCmsMediaOpenUploadWindow_{$this->name}(mediaTreeID) {
+  function TCMSFieldPropertyTableCmsMediaOpenUploadWindow_{$this->name}(mediaTreeID, parentIFrame='') {
     if(mediaTreeID != '') {
-      CreateModalIFrameDialogCloseButton('{$sURL}&treeNodeID=' + mediaTreeID);
+      if(parentIFrame != '') {
+        parent.CreateModalIFrameDialogCloseButton('{$sURL}&treeNodeID=' + mediaTreeID);
+      } else {
+        CreateModalIFrameDialogCloseButton('{$sURL}&treeNodeID=' + mediaTreeID);
+      }
     } else {
       toasterMessage('{$sErrorMessage}','ERROR');
     }
