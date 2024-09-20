@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 /**
  * The image pool.
  * /**/
@@ -188,6 +190,11 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
             'callback' => 'CMSFieldPropertyTableCmsMediaPostUploadHook_'.$this->name,
         );
         $aRequest['singleMode'] = '1';
+        $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        if (null !== $parentField && '' !== $parentField) {
+            $aRequest['parentIFrame'] = $parentField . '_iframe';
+        }
+
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aRequest);
         $sErrorMessage = TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_document.error_missing_target'));
         $oGlobal = TGlobal::instance();
@@ -198,6 +205,9 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
         $aParam['_fnc'] = 'connectImageObject';
         $aParam['callFieldMethod'] = '1';
         $aParam['_fieldName'] = $this->name;
+        if (null !== $parentField && '' !== $parentField) {
+            $aParam['parentIFrame'] = $parentField . '_iframe';
+        }
 
         $sConnectImageURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);
         $aParam['_fnc'] = 'getNewImageTag';
@@ -327,5 +337,10 @@ JAVASCRIPTCODE;
     public function toString()
     {
         return $this->data;
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

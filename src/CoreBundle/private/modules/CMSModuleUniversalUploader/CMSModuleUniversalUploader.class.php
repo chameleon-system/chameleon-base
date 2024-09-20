@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 class CMSModuleUniversalUploader extends TCMSModelBase
 {
@@ -183,6 +184,11 @@ class CMSModuleUniversalUploader extends TCMSModelBase
     private function getTranslator()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**

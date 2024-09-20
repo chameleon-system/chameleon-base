@@ -155,6 +155,7 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
         if (null !== $parentField && '' !== $parentField) {
             $parentIFrame = $parentField . '_iframe';
             $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');
+                   saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutHTML($parentIFrame)."');
                    TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value,'".TGlobal::OutJS($parentIFrame)."');";
         } else {
             $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');
@@ -184,6 +185,10 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
         if (!empty($singleMode)) {
             $aRequest['singleMode'] = '1';
         }
+        $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        if (null !== $parentField && '' !== $parentField) {
+            $aRequest['parentIFrame'] = $parentField . '_iframe';
+        }
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aRequest);
         $sErrorMessage = TGlobal::OutJS(
@@ -197,6 +202,9 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
         $aParam['_fnc'] = 'ConnectImageObject';
         $aParam['callFieldMethod'] = '1';
         $aParam['_fieldName'] = $this->name;
+        if (null !== $parentField && '' !== $parentField) {
+            $aParam['parentIFrame'] = $parentField . '_iframe';
+        }
 
         $sConnectImageURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);
 
