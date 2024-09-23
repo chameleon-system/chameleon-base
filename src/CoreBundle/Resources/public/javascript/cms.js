@@ -220,6 +220,10 @@ function LoadJQMDialog(width, height, dialogContent, hasCloseButton, title, isDr
 
 CHAMELEON.CORE.getModalSizeClassByPixel = function (width) {
 
+    if (window !== window.parent) {  //Modal is opened in an iFrame
+        return 'modal-xxl';
+    }
+
     if (typeof width === 'undefined') {
         return 'modal-xxl';
     }
@@ -367,10 +371,17 @@ function CreateMediaZoomDialogFromImageURL(imageURL, width, height) {
 /*
  * closes Modal Dialog
  */
-function CloseModalIFrameDialog() {
+function CloseModalIFrameDialog(parentIFrame = '') {
     $('#modalDialog .modal-body').html('&nbsp;');
     $('#modalDialog').modal('hide');
-    CHAMELEON.CORE.hideProcessingModal();
+    if (parentIFrame) {
+        var parentIFrameElement = parent.document.getElementById(parentIFrame);
+        if (parentIFrameElement) {
+            parentIFrameElement.contentWindow.CHAMELEON.CORE.hideProcessingModal();
+        }
+    } else {
+        CHAMELEON.CORE.hideProcessingModal();
+    }
 }
 
 function getRadioValue(rObj) {

@@ -33,6 +33,8 @@ class MediaManagerListState
 
     const URL_NAME_PICK_IMAGE_CALLBACK = 'pickImageCallback';
 
+    const URL_NAME_PARENT_IFRAME = 'parentIFrame';
+
     const URL_NAME_PICK_IMAGE_WITH_CROP = 'pickImageWithCrop';
 
     /**
@@ -144,11 +146,12 @@ class MediaManagerListState
      *
      * @return void
      */
-    public function setPickImageMode($isPickImageMode, $callback, $hasCrop)
+    public function setPickImageMode($isPickImageMode, $callback, $hasCrop, $parentIFrame)
     {
         $this->setStateParameter(self::URL_NAME_PICK_IMAGE_MODE, $isPickImageMode);
         if ($isPickImageMode) {
             $this->setStateParameter(self::URL_NAME_PICK_IMAGE_CALLBACK, $callback);
+            $this->setStateParameter(self::URL_NAME_PARENT_IFRAME, $parentIFrame);
             $this->setStateParameter(self::URL_NAME_PICK_IMAGE_WITH_CROP, $hasCrop);
         }
     }
@@ -246,6 +249,11 @@ class MediaManagerListState
     public function getPickImageCallback()
     {
         return $this->getStateParameter(self::URL_NAME_PICK_IMAGE_CALLBACK, '_SetImage');
+    }
+
+    public function getParentIFrame()
+    {
+        return $this->getStateParameter(self::URL_NAME_PARENT_IFRAME, 'parentIFrame');
     }
 
     /**
