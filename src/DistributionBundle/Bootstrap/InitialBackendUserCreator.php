@@ -161,7 +161,6 @@ class InitialBackendUserCreator
             'images' => '1',
             'cms_current_edit_language' => 'en',
             'allow_cms_login' => '1',
-            'cms_workflow_transaction_id' => '',
             'task_show_count' => '5',
             'is_system' => '1',
             'show_as_rights_template' => '1',
