@@ -232,7 +232,7 @@ class TCMSMessageManager
 
         if (empty($sConsumerName)) {
             foreach ($this->aMessages as $consumer => $messages) {
-                if (is_null($oMessages)) {
+                if (null === $oMessages) {
                     $oMessages = $messages;
                 } else {
                     $messages->GoToStart();
@@ -241,14 +241,14 @@ class TCMSMessageManager
                     }
                 }
 
-                if ($bRemove) {
+                if (true === $bRemove) {
                     unset($this->aMessages[$consumer]);
                 }
             }
         } else {
             if (array_key_exists($sConsumerName, $this->aMessages)) {
                 $oMessages = $this->aMessages[$sConsumerName];
-                if ($bRemove) {
+                if (true === $bRemove) {
                     unset($this->aMessages[$sConsumerName]);
                 }
             }
@@ -256,7 +256,7 @@ class TCMSMessageManager
 
         // add global parameters
         if (true === $includeGlobal && array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
-            if (is_null($oMessages)) {
+            if (null === $oMessages) {
                 $oMessages = $this->aMessages[self::GLOBAL_CONSUMER_NAME];
             } else {
                 $this->aMessages[self::GLOBAL_CONSUMER_NAME]->GoToStart();
@@ -264,7 +264,7 @@ class TCMSMessageManager
                     $oMessages->AddItem($oGlobalMessage);
                 }
             }
-            if ($bRemove) {
+            if (true === $bRemove) {
                 unset($this->aMessages[self::GLOBAL_CONSUMER_NAME]);
             }
         }
