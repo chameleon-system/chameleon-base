@@ -5,6 +5,8 @@
 </div>
 <?php
 
+TCMSLogChange::requireBundleUpdates('ChameleonSystemCoreBundle', 1708346253);
+
 $query = "SELECT pkg_cms_theme_id FROM cms_config";
 $themeId = TCMSLogChange::getDatabaseConnection()->fetchOne($query);
 

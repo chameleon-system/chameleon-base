@@ -5,6 +5,12 @@
 </div>
 <?php
 
+$tableExisis = TCMSLogChange::TableExists('cms_user_sso');
+if ($tableExisis) {
+    TCMSLogChange::getLogger()->info('Table cms_user_sso already exists. Skipping migration script.');
+    return;
+}
+
 $query ="CREATE TABLE `cms_user_sso` (
                   `id` CHAR( 36 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
                   `cmsident` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Key is used so that records can be easily identified in Chameleon',
