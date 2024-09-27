@@ -132,7 +132,7 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
             $js = "var width=$(window).width() - 50;
                    saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutJS($sFieldName)."');
                    saveCMSRegistryEntry('_currentPosition','".TGlobal::OutJS($position)."');
-                   parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title'))."');";
+                   CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title'))."');";
         }
 
         return $js;
@@ -162,15 +162,12 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
         if (null !== $parentField && '' !== $parentField) {
             $parentIFrame = $parentField . '_iframe';
-            $js = "var width=1000;
-                   url = document.location.href;
+            $js = "var width=$(window).width() - 50;
                    saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
-                   parent.CreateModalIFrameDialogCloseButton('".$url."',width,550);";
+                   parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');";
         } else {
-            $js = "var width=1000;
-                   url = document.location.href;
-                   if(url.match('pagedef=tableeditorPopup'))width=800;
-                   CreateModalIFrameDialogCloseButton('".$url."',width,550);";
+            $js = "var width=$(window).width() - 50;
+                   CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');";
         }
 
         return $js;
