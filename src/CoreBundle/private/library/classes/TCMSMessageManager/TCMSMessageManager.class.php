@@ -35,19 +35,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * NOTE: InjectMessageIntoString is called on the COMPLETE RENDERED PAGE. so you can add messages to your page
  * without having to worry about caching. just use the format described in the method InjectMessageIntoString
  *
-/**/
+ * /**/
 class TCMSMessageManager
 {
-    const SESSION_KEY_NAME = 'core/cmsmessagemanager';
-    const GLOBAL_CONSUMER_NAME = '_all';
-    const AUTO_CREATED_MARKER = '[TODO] ';
+    public const SESSION_KEY_NAME = 'core/cmsmessagemanager';
+    public const GLOBAL_CONSUMER_NAME = '_all';
+    public const AUTO_CREATED_MARKER = '[TODO] ';
 
     /**
      * array of all messages.
      *
      * @var array
      */
-    protected $aMessages = array();
+    protected $aMessages = [];
 
     /**
      * @param bool $bReload
@@ -59,7 +59,7 @@ class TCMSMessageManager
     public static function GetInstance($bReload = false)
     {
         $request = ServiceLocator::get('request_stack')->getCurrentRequest();
-        if ((null === $request) || ($request->getSession() !== null && false === $request->getSession()->isStarted())) {
+        if ((null === $request) || (null !== $request->getSession() && false === $request->getSession()->isStarted())) {
             return null;
         }
         if ($bReload) {
@@ -80,9 +80,9 @@ class TCMSMessageManager
      *
      * @param string $sConsumerName
      * @param string $sMessageCode
-     * @param array  $aMessageCodeParameters
+     * @param array $aMessageCodeParameters
      */
-    public function AddMessage($sConsumerName, $sMessageCode, $aMessageCodeParameters = array())
+    public function AddMessage($sConsumerName, $sMessageCode, $aMessageCodeParameters = [])
     {
         if (!array_key_exists($sConsumerName, $this->aMessages)) {
             $this->aMessages[$sConsumerName] = new TIterator();
@@ -97,7 +97,7 @@ class TCMSMessageManager
             $oMessage->SetLanguage($this->getLanguageService()->getActiveLanguageId());
 
             // try to load the message. if this fails, we create the message....
-            if (!$oMessage->LoadFromFields(array('name' => $sMessageCode, 'cms_portal_id' => $iPortalId))) {
+            if (!$oMessage->LoadFromFields(['name' => $sMessageCode, 'cms_portal_id' => $iPortalId])) {
                 // write message to table
                 // Note: we use the TCMSRecordWritable instead of the TCMSTableEditorManager, since this may happen in the front and backend... so we need to make sure anyone
                 // can write here...
@@ -108,7 +108,7 @@ class TCMSMessageManager
                 $sDescription = $this->GetDefaultDescription($sConsumerName, $aMessageCodeParameters);
                 $sErrorMessage = $this->GetDefaultMessage($sMessageCode);
 
-                $aPostData = array('cms_portal_id' => $iPortalId, 'name' => $sMessageCode, 'description' => $sDescription, 'message' => $sErrorMessage);
+                $aPostData = ['cms_portal_id' => $iPortalId, 'name' => $sMessageCode, 'description' => $sDescription, 'message' => $sErrorMessage];
                 if (null !== $oMessage->id) {
                     $aPostData['id'] = $oMessage->id;
                 }
@@ -128,7 +128,7 @@ class TCMSMessageManager
      * get description text for new created messages in the database.
      *
      * @param string $sConsumerName
-     * @param array  $aMessageCodeParameters
+     * @param array $aMessageCodeParameters
      *
      * @return string
      */
@@ -143,13 +143,13 @@ class TCMSMessageManager
         }
 
         $sDescription = TGlobal::Translate(
-                self::AUTO_CREATED_MARKER.'chameleon_system_core.cms_message_manager.auto_entry_description',
-                array(
-                    '%consumerName%' => $sConsumerName,
-                    '%createdDate%' => date('Y-m-d H:i:s'),
-                    '%parameter%' => print_r($aMessageCodeParameters, true),
-                )
-            );
+            self::AUTO_CREATED_MARKER.'chameleon_system_core.cms_message_manager.auto_entry_description',
+            [
+                '%consumerName%' => $sConsumerName,
+                '%createdDate%' => date('Y-m-d H:i:s'),
+                '%parameter%' => print_r($aMessageCodeParameters, true),
+            ]
+        );
         if (!empty($sCallingPage)) {
             $sDescription .= "\nWebPage: {$sCallingPage}";
         } else {
@@ -168,7 +168,7 @@ class TCMSMessageManager
      */
     protected function GetDefaultMessage($sMessageCode)
     {
-        return $this->getTranslator()->trans('chameleon_system_core.cms_message_manager.invalid_code', array('%messageCode%' => $sMessageCode), TranslationConstants::DOMAIN_BACKEND);
+        return $this->getTranslator()->trans('chameleon_system_core.cms_message_manager.invalid_code', ['%messageCode%' => $sMessageCode], TranslationConstants::DOMAIN_BACKEND);
     }
 
     /**
@@ -176,15 +176,15 @@ class TCMSMessageManager
      *
      * @param string $sConsumerName
      * @param string $sMessageCode
-     * @param array  $aMessageCodeParameters
+     * @param array $aMessageCodeParameters
      */
-    protected function AddBackendMessage($sConsumerName, $sMessageCode, $aMessageCodeParameters = array())
+    protected function AddBackendMessage($sConsumerName, $sMessageCode, $aMessageCodeParameters = [])
     {
         /** @var $oMessage TdbCmsMessageManagerBackendMessage */
         $oMessage = TdbCmsMessageManagerBackendMessage::GetNewInstance();
 
         // try to load the message. if this fails, we create the message....
-        if (!$oMessage->LoadFromFields(array('name' => $sMessageCode, 'cms_config_id' => 1))) {
+        if (!$oMessage->LoadFromFields(['name' => $sMessageCode, 'cms_config_id' => 1])) {
             // write message to table
             // Note: we use the TCMSRecordWritable instead of the TCMSTableEditorManager, since this may happen in the front and backend... so we need to make sure anyone
             // can write here...
@@ -196,17 +196,17 @@ class TCMSMessageManager
             $oGlobal = TGlobal::instance();
             $description = TGlobal::Translate(
                 self::AUTO_CREATED_MARKER.'chameleon_system_core.cms_message_manager.auto_entry_description',
-                array(
+                [
                     '%consumerName%' => $sConsumerName,
                     '%createdDate%' => date('Y-m-d H:i:s'),
                     '%parameter%' => print_r($aMessageCodeParameters, true),
-                )
+                ]
             );
             $description .= "\nCMSPage: ".$oGlobal->GetUserData('pagedef');
 
             $sErrorMessage = TGlobal::Translate('chameleon_system_core.cms_message_manager.invalid_code').'['.$sMessageCode.']';
 
-            $aPostData = array('cms_config_id' => 1, 'name' => $sMessageCode, 'description' => $description, 'message' => $sErrorMessage);
+            $aPostData = ['cms_config_id' => 1, 'name' => $sMessageCode, 'description' => $description, 'message' => $sErrorMessage];
 
             $oTmpTable->LoadFromRow($aPostData);
             $oTmpTable->Save();
@@ -222,32 +222,47 @@ class TCMSMessageManager
      * returns all messages for the consumer. Note that global messages will be added to
      * the end of the list.
      *
-     * @param string $sConsumerName
      * @param bool $bRemove
-     * @param bool $includeGlobal
      *
      * @return TIterator
      */
-    public function ConsumeMessages($sConsumerName, $bRemove = true, bool $includeGlobal = true)
+    public function ConsumeMessages(string $sConsumerName = '', $bRemove = true, bool $includeGlobal = true)
     {
         $oMessages = null;
-        if (array_key_exists($sConsumerName, $this->aMessages)) {
-            $oMessages = $this->aMessages[$sConsumerName];
-            if ($bRemove) {
-                unset($this->aMessages[$sConsumerName]);
+
+        if (empty($sConsumerName)) {
+            foreach ($this->aMessages as $consumer => $messages) {
+                if (null === $oMessages) {
+                    $oMessages = $messages;
+                } else {
+                    while (null !== ($oMessage = $messages->Next())) {
+                        $oMessages->AddItem($oMessage);
+                    }
+                }
+
+                if (true === $bRemove) {
+                    unset($this->aMessages[$consumer]);
+                }
+            }
+        } else {
+            if (array_key_exists($sConsumerName, $this->aMessages)) {
+                $oMessages = $this->aMessages[$sConsumerName];
+                if (true === $bRemove) {
+                    unset($this->aMessages[$sConsumerName]);
+                }
             }
         }
+
         // add global parameters
         if (true === $includeGlobal && array_key_exists(self::GLOBAL_CONSUMER_NAME, $this->aMessages)) {
-            if (is_null($oMessages)) {
+            if (null === $oMessages) {
                 $oMessages = $this->aMessages[self::GLOBAL_CONSUMER_NAME];
             } else {
-                $this->aMessages[self::GLOBAL_CONSUMER_NAME]->GoToStart();
-                while ($oGlobalMessage = $this->aMessages[self::GLOBAL_CONSUMER_NAME]->Next()) {
+                while (null !== ($oGlobalMessage = $this->aMessages[self::GLOBAL_CONSUMER_NAME]->Next())) {
                     $oMessages->AddItem($oGlobalMessage);
                 }
             }
-            if ($bRemove) {
+            if (true === $bRemove) {
                 unset($this->aMessages[self::GLOBAL_CONSUMER_NAME]);
             }
         }
@@ -261,12 +276,12 @@ class TCMSMessageManager
      * @param string $sConsumerName
      * @param string $sViewName
      * @param string $sViewType
-     * @param array  $aCallTimeVars
-     * @param bool   $bRemove
+     * @param array $aCallTimeVars
+     * @param bool $bRemove
      *
      * @return string
      */
-    public function RenderMessages($sConsumerName, $sViewName = null, $sViewType = null, $aCallTimeVars = array(), $bRemove = true)
+    public function RenderMessages($sConsumerName, $sViewName = null, $sViewType = null, $aCallTimeVars = [], $bRemove = true)
     {
         $sMsg = '';
         $oMessages = $this->ConsumeMessages($sConsumerName, $bRemove);
@@ -289,7 +304,7 @@ class TCMSMessageManager
     public function ClearMessages($sConsumerName = null)
     {
         if (is_null($sConsumerName)) {
-            $this->aMessages = array();
+            $this->aMessages = [];
         } elseif (array_key_exists($sConsumerName, $this->aMessages)) {
             unset($this->aMessages[$sConsumerName]);
         }
@@ -300,7 +315,6 @@ class TCMSMessageManager
      * are global messages.
      *
      * @param string $sConsumerName
-     * @param bool $includeGlobal
      *
      * @return bool
      */
@@ -358,6 +372,7 @@ class TCMSMessageManager
      * where viewName and classtype are optional (classtype = Core, Custom-Core, Customer).
      *
      * @example [{CMSMSG-myconsumer}]
+     *
      * @para string $sText
      *
      * @return string
@@ -375,7 +390,7 @@ class TCMSMessageManager
         }
         $matchString = '/\[\{CMSMSG-(.*?)(:(.*?))?(:(Core|Custom-Core|Customer))?\}\]/si';
 
-        return preg_replace_callback($matchString, array(&$this, 'InjectMessageIntoStringReplaceCallback'), $sText);
+        return preg_replace_callback($matchString, [&$this, 'InjectMessageIntoStringReplaceCallback'], $sText);
     }
 
     /**
@@ -416,7 +431,7 @@ class TCMSMessageManager
      */
     public function GetClassesForConsumer($sConsumerName, $sDivider = ' ')
     {
-        $aFieldClasses = array();
+        $aFieldClasses = [];
         if ($this->ConsumerHasMessages($sConsumerName)) {
             $oMessages = $this->ConsumeMessages($sConsumerName, false);
             while ($oMessage = $oMessages->Next()) {
@@ -437,18 +452,18 @@ class TCMSMessageManager
     }
 
     /**
-     * @param string $id         message ID to be translated
-     * @param string $type       one of the message types defined in cms.js:toasterMessage()
-     * @param array  $parameters for the message translation
-     * @param string $domain     for the message translation
+     * @param string $id message ID to be translated
+     * @param string $type one of the message types defined in cms.js:toasterMessage()
+     * @param array $parameters for the message translation
+     * @param string $domain for the message translation
      */
-    public function addBackendToasterMessage($id, $type = 'ERROR', array $parameters = array(), $domain = TranslationConstants::DOMAIN_BACKEND)
+    public function addBackendToasterMessage($id, $type = 'ERROR', array $parameters = [], $domain = TranslationConstants::DOMAIN_BACKEND)
     {
         $translator = $this->getTranslator();
         $message = $translator->trans($id, $parameters, $domain);
         $listener = new AddBackendToasterMessageListener($message, $type);
         $dispatcher = $this->getEventDispatcher();
-        $dispatcher->addListener(KernelEvents::RESPONSE, array($listener, 'addMessage'));
+        $dispatcher->addListener(KernelEvents::RESPONSE, [$listener, 'addMessage']);
     }
 
     /**
