@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TCMSFieldExtendedLookup extends TCMSFieldLookup
 {
     /**
-     * generates HTML of the field for the backend (Table Editor).
+     * Generates HTML of the field for the backend (Table Editor).
      *
      * @return string
      */
@@ -45,7 +45,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
     }
 
     /**
-     * generates the HTML for the "go to record" button.
+     * Generates the HTML for the "go to record" button.
      *
      * @return string
      */
@@ -199,6 +199,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
             'sRestriction' => $restrictionValue,
         ];
     }
+
     private function getFlashMessageService(): FlashMessageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.flash_messages');
@@ -212,7 +213,9 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
 
     /**
      * Returns field value in current record if token matches a known field. Otherwise, null will be returned.
+     * 
      * @param string $fieldToken - token in the form [{fieldName}]
+     * 
      * @return string|null
      */
     private function getFieldValueFromFieldToken(string $fieldToken): ?string
@@ -224,7 +227,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
     }
 
     /**
-     * returns the value of the field for the backend (Table Editor).
+     * Returns the value of the field for the backend (Table Editor).
      *
      * @return string
      */
@@ -237,14 +240,14 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
 
         $record = $this->getConnectedRecordObject();
         if (false !== $record) {
-            return $record->GetDisplayValue();
+            return $record->GetDisplayValue(-1);
         }
 
         return $translator->trans('chameleon_system_core.field_lookup.error_assigned_id_does_not_exists', array('%id%' => $this->data), 'admin');
     }
 
     /**
-     * return the new charset latin1 so that we get more memory
+     * Returns the new charset latin1 so that we get more memory
      * size for a record.
      *
      * @return string
@@ -254,10 +257,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         return ' CHARACTER SET latin1 COLLATE latin1_general_ci';
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslationService()
+    private function getTranslationService(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
     }
