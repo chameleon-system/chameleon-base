@@ -240,7 +240,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
 
         $record = $this->getConnectedRecordObject();
         if (false !== $record) {
-            return $record->GetDisplayValue(-1);
+            return $record->getDisplayTitle(-1);
         }
 
         return $translator->trans('chameleon_system_core.field_lookup.error_assigned_id_does_not_exists', array('%id%' => $this->data), 'admin');

@@ -451,11 +451,24 @@ $oFields->GoToStart();
      * Returns the name of the record modified to display it in breadcrumbs or anywhere.
      * You may add icons, prefixes or whatever here.
      *
+     * @deprecated use getDisplayTitle instead
+     * 
+     * @return string
+     */
+    public function GetDisplayValue()
+    {
+        return $this->getDisplayTitle();
+    }
+
+    /**
+     * Returns the name of the record modified to display it in breadcrumbs or anywhere.
+     * You may add icons, prefixes or whatever here.
+     *
      * @param int $textLength - set -1 if you want no limit
      *
      * @return string
      */
-    public function GetDisplayValue(int $textLength = 50)
+    public function getDisplayTitle(int $textLength = 50): string
     {
         $content = $this->GetFromInternalCache('recordDisplayName');
         if (null === $content) {
