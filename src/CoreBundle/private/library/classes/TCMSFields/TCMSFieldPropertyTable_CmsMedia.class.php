@@ -152,20 +152,12 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
     public function _GetOpenUploadWindowJS()
     {
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');";
-        if (null !== $parentField && '' !== $parentField) {
+        if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
             $parentIFrame = $parentField . '_iframe';
-            $js .= "var openFromParent = true;
-                    var selfIFrame = window.frameElement;
-                    if (selfIFrame && selfIFrame.parentNode?.classList.contains('modal-body')) {
-                        openFromParent = false;
-                    }
-                    if (openFromParent) {
-                        saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutHTML($parentIFrame)."');
-                        TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value,'".TGlobal::OutJS($parentIFrame)."');
-                    } else {
-                        TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value);
-                    }";
+            $js .= "saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutHTML($parentIFrame)."');
+                    TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value,'".TGlobal::OutJS($parentIFrame)."');";
         } else {
             $js .= "TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value);";
         }
@@ -196,6 +188,7 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
         if (null !== $parentField && '' !== $parentField) {
             $aRequest['parentIFrame'] = $parentField . '_iframe';
+            $aRequest['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         }
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aRequest);
@@ -212,6 +205,7 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
         $aParam['_fieldName'] = $this->name;
         if (null !== $parentField && '' !== $parentField) {
             $aParam['parentIFrame'] = $parentField . '_iframe';
+            $aParam['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         }
 
         $sConnectImageURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);

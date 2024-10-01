@@ -92,33 +92,11 @@ class UploaderParameterFromRequestService implements UploaderParameterServiceInt
 
         $callback = $this->inputFilterUtil->getFilteredInput('callback');
         $parentIFrame = $this->inputFilterUtil->getFilteredInput('parentIFrame');
+        $parentIsInModal = $this->inputFilterUtil->getFilteredInput('parentIsInModal', '');
 
         if (null !== $callback) {
-           if (null !== $parentIFrame && '' !== $parentIFrame && 'article_paragraph_iframe' !== $parentIFrame) {
+           if (null !== $parentIFrame && '' !== $parentIFrame && '' === $parentIsInModal) {
                $parameters->setUploadSuccessCallback("$(parent.document.getElementById('".$parentIFrame."')).prop('contentWindow').".$callback);
-
-//             @ToDo: unfortunately the code below doesn't work, so my ugly quick fix is to ask for the field-name "article_paragraph_iframe"
-//               Backgroung knowledge therefore:
-//               if the calling iFrame (parentIFrame) is running in a pop-up modal like the editing of an article_paragraph,
-//               another child iframe (here upload images from an image field) has to be opened as a modal within the current iframe document.
-//               Because one document always has only one modal with its id = "modalDialog"
-
-//               $parameters->setUploadSuccessCallback("
-//                    function() {
-//                    var iframe = $(parent.document.getElementById('" . $parentIFrame . "'));
-//                    if (iframe.length > 0) {
-//                        var parentEl = iframe.parent();
-//                        if (parentEl.length > 0 && parentEl.hasClass('modal-body')) {
-//                            parent." . $callback . "();
-//                        } else {
-//                            iframe.prop('contentWindow')." . $callback . "();
-//                        }
-//                    } else {
-//                        parent." . $callback . "();
-//                    }
-//                }
-//               ");
-
            } else {
                $parameters->setUploadSuccessCallback('parent.'.$callback);
            }

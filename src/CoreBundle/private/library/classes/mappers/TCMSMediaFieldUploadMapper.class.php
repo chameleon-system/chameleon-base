@@ -73,22 +73,12 @@ class TCMSMediaFieldUploadMapper extends AbstractViewMapper
     public function getOpenUploadWindowJS($fieldName)
     {
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($fieldName)."');";
-        if (null !== $parentField && '' !== $parentField) {
+        if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
             $parentIFrame = $parentField . '_iframe';
-            $js .= "var openFromParent = true;
-                    var selfIFrame = window.frameElement;
-                    if (selfIFrame && selfIFrame.parentNode?.classList.contains('modal-body')) {
-                        openFromParent = false;
-                    }
-                    if (openFromParent) {
-                        console.log('openFromParent');           
-                        saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
-                        TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($fieldName)."(document.cmseditform.".TGlobal::OutHTML($fieldName)."__cms_media_tree_id.value,'".TGlobal::OutHTML($parentIFrame)."');
-                    } else {
-                        console.log('not openFromParent');
-                        TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($fieldName)."(document.cmseditform.".TGlobal::OutHTML($fieldName)."__cms_media_tree_id.value);
-                    }";
+            $js .= "saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
+                    TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($fieldName)."(document.cmseditform.".TGlobal::OutHTML($fieldName)."__cms_media_tree_id.value,'".TGlobal::OutHTML($parentIFrame)."');";
         } else {
             $js .= "TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($fieldName)."(document.cmseditform.".TGlobal::OutHTML($fieldName)."__cms_media_tree_id.value);";
         }
