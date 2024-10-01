@@ -48,21 +48,32 @@ class ImageCropMediaFieldImageBoxMapper extends AbstractViewMapper
         $fieldName = $oVisitor->GetSourceObject('sFieldName');
         $position = $oVisitor->GetSourceObject('iPosition');
         $parentField = $this->inputFilterUtil->getFilteredGetInput('field');
+        $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('parent.setImageWithCrop', true);
+        $js = "
+            var width = $(window).width() - 50;
+            saveCMSRegistryEntry('_currentFieldName', '" . TGlobal::OutJS($fieldName) . "');
+            saveCMSRegistryEntry('_currentPosition', '" . TGlobal::OutJS($position) . "');
+        ";
+
         if (null !== $parentField && '' !== $parentField) {
-            $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('setImageWithCrop', true);
             $parentIFrame = $parentField . '_iframe';
-            $url .= '&parentIFrame=' . $parentIFrame;
-            $js = "var width=$(window).width() - 50;
-                   saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutJS($fieldName)."');
-                   saveCMSRegistryEntry('_currentPosition','".TGlobal::OutJS($position)."');
-                   saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
-                   parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0);";
+            $extensionUrl = '&parentIFrame=' . $parentIFrame;
+            $js .= "var url = '" . TGlobal::OutJS($url) . "';
+                    var openFromParent = true;
+                    var selfIFrame = window.frameElement;
+                    if (selfIFrame && selfIFrame.parentNode?.classList.contains('modal-body')) {
+                        openFromParent = false;
+                    }
+                    if (openFromParent) {
+                        url = url.replace('parent.setImageWithCrop', 'setImageWithCrop') + '" . TGlobal::OutJS($extensionUrl). "';
+                        saveCMSRegistryEntry('_parentIFrame','" . TGlobal::OutJS($parentIFrame) . "');
+                        parent.CreateModalIFrameDialogCloseButton(url,width,0);
+                    } else {
+                        CreateModalIFrameDialogCloseButton(url,width,0);
+                    }
+            ";
         } else {
-            $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('parent.setImageWithCrop', true);
-            $js = "var width=$(window).width() - 50;
-                   saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutJS($fieldName)."');
-                   saveCMSRegistryEntry('_currentPosition','".TGlobal::OutJS($position)."');
-                   CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0);";
+            $js .= "CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0);";
         }
 
         $oVisitor->SetMappedValue('sOpenWindowJSSetImage', $js);

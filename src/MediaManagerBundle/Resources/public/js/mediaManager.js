@@ -627,7 +627,7 @@
                 data: {
                     'pickImage': self.state.pickImageMode ? '1' : '0',
                     'pickImageCallback': self.state.pickImageMode ? self.state.pickImageCallback : null,
-                    'parentIFrame': self.state.IFrame ? self.state.parentIFrame : null,
+                    'parentIFrame': self.state.parentIFrame ? self.state.parentIFrame : null,
                     'pickImageWithCrop': self.state.pickImageMode && self.state.pickImageWithCrop ? '1' : '0',
                     'enableUsageSearch': self.state.deleteWithUsageSearch ? '1' : '0',
                 },

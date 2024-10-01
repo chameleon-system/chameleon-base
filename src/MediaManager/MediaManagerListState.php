@@ -253,7 +253,7 @@ class MediaManagerListState
 
     public function getParentIFrame()
     {
-        return $this->getStateParameter(self::URL_NAME_PARENT_IFRAME, 'parentIFrame');
+        return $this->getStateParameter(self::URL_NAME_PARENT_IFRAME, '');
     }
 
     /**

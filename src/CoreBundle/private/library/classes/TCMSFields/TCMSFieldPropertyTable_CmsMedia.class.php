@@ -152,14 +152,22 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
     public function _GetOpenUploadWindowJS()
     {
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');";
         if (null !== $parentField && '' !== $parentField) {
             $parentIFrame = $parentField . '_iframe';
-            $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');
-                   saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutHTML($parentIFrame)."');
-                   TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value,'".TGlobal::OutJS($parentIFrame)."');";
+            $js .= "var openFromParent = true;
+                    var selfIFrame = window.frameElement;
+                    if (selfIFrame && selfIFrame.parentNode?.classList.contains('modal-body')) {
+                        openFromParent = false;
+                    }
+                    if (openFromParent) {
+                        saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutHTML($parentIFrame)."');
+                        TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value,'".TGlobal::OutJS($parentIFrame)."');
+                    } else {
+                        TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value);
+                    }";
         } else {
-            $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');
-                   TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value);";
+            $js .= "TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value);";
         }
 
         return $js;

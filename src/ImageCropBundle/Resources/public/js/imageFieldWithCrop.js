@@ -6,14 +6,17 @@
         var width = $(window).width() - buffer;
 
         const urlParams = new URLSearchParams(new URL(url).search);
-        let parentIFrame ='';
-        if (urlParams.has('parentIFrame')) {
-            parentIFrame = urlParams.get('parentIFrame');
+
+        var openFromParent = urlParams.has('parentIFrame');
+        const selfIFrame = window.frameElement;
+
+        if (openFromParent && selfIFrame?.parentNode?.classList.contains('modal-body')) {
+            openFromParent = false;
         }
-        if ('' === parentIFrame) {
-            CreateModalIFrameDialogCloseButton(url, width, height, windowTitle);
-        } else {
+        if (openFromParent) {
             parent.CreateModalIFrameDialogCloseButton(url, width, height, windowTitle);
+        } else {
+            CreateModalIFrameDialogCloseButton(url, width, height, windowTitle);
         }
     };
 

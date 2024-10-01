@@ -203,7 +203,7 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
     {
         return $this->inputFilterUtil->getFilteredInput(
             MediaManagerListState::URL_NAME_PARENT_IFRAME,
-            'parentIFrame'
+            ''
         );
     }
 

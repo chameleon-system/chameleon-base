@@ -318,7 +318,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         }
 
         $parentIFrame = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PARENT_IFRAME);
-        if (null !== $fieldName) {
+        if (null !== $parentIFrame) {
             $parameters[self::URL_PARAM_PARENT_IFRAME] = $parentIFrame;
         }
 
