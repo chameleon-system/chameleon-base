@@ -193,6 +193,7 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
         if (null !== $parentField && '' !== $parentField) {
             $aRequest['parentIFrame'] = $parentField . '_iframe';
+            $aRequest['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         }
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aRequest);
@@ -207,6 +208,7 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
         $aParam['_fieldName'] = $this->name;
         if (null !== $parentField && '' !== $parentField) {
             $aParam['parentIFrame'] = $parentField . '_iframe';
+            $aParam['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         }
 
         $sConnectImageURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);

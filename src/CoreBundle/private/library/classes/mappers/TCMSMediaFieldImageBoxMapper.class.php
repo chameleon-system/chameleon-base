@@ -118,6 +118,7 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
     protected function _GetOpenWindowJSSetImage($position, $sFieldName, $sTableId, $sRecordId, $oImage)
     {
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('parent._SetImage', false, $sFieldName, $sTableId, $sRecordId, $position);
         $js = "
             var width = $(window).width() - 50;
@@ -125,24 +126,13 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
             saveCMSRegistryEntry('_currentPosition', '" . TGlobal::OutJS($position) . "');
         ";
 
-        if (null !== $parentField && '' !== $parentField) {
+        if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
             $parentIFrame = $parentField . '_iframe';
             $extensionUrl = '&parentIFrame=' . $parentIFrame;
-            $js .= "var url = '" . TGlobal::OutJS($url) . "';
-                var openFromParent = true;
-                var selfIFrame = window.frameElement;
-                if (selfIFrame && selfIFrame.parentNode?.classList.contains('modal-body')) {
-                    openFromParent = false;
-                }
-                if (openFromParent) {
+            $js .= "var url = '" . TGlobal::OutJS($url) . TGlobal::OutJS($extensionUrl) . "';
                     url = url.replace('parent._SetImage', '_SetImage');
-                    url = url.replace('parent.setImageWithCrop', 'setImageWithCrop') + '" . TGlobal::OutJS($extensionUrl). "';
                     saveCMSRegistryEntry('_parentIFrame', '" . TGlobal::OutJS($parentIFrame) . "');
-                    parent.CreateModalIFrameDialogCloseButton(url, width, 0, '" . TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title')) . "');
-                } else {
-                    CreateModalIFrameDialogCloseButton(url, width, 0, '" . TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title')) . "');
-                }
-            ";
+                    parent.CreateModalIFrameDialogCloseButton(url, width, 0, '" . TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title')) . "');";
         } else {
             $js .= "CreateModalIFrameDialogCloseButton('" . TGlobal::OutJS($url) . "', width, 0, '" . TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title')) . "');";
         }
@@ -172,20 +162,12 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
         $url = $this->urlUtil->getArrayAsUrl($aParam, PATH_CMS_CONTROLLER.'?', '&');
 
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         $js = "var width=$(window).width() - 50;";
-        if (null !== $parentField && '' !== $parentField) {
+        if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
             $parentIFrame = $parentField . '_iframe';
-            $js .= "var openFromParent = true;
-                    var selfIFrame = window.frameElement;
-                    if (selfIFrame && selfIFrame.parentNode?.classList.contains('modal-body')) {
-                        openFromParent = false;
-                    }
-                    if (openFromParent) {
-                        saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
-                        parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');
-                    } else {
-                        CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');
-                    }";
+            $js .= "saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
+                    parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');";
         } else {
             $js .= "CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');";
         }

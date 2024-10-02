@@ -48,6 +48,7 @@ class ImageCropMediaFieldImageBoxMapper extends AbstractViewMapper
         $fieldName = $oVisitor->GetSourceObject('sFieldName');
         $position = $oVisitor->GetSourceObject('iPosition');
         $parentField = $this->inputFilterUtil->getFilteredGetInput('field');
+        $isInModal = $this->inputFilterUtil->getFilteredGetInput('isInModal', '');
         $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('parent.setImageWithCrop', true);
         $js = "
             var width = $(window).width() - 50;
@@ -55,23 +56,13 @@ class ImageCropMediaFieldImageBoxMapper extends AbstractViewMapper
             saveCMSRegistryEntry('_currentPosition', '" . TGlobal::OutJS($position) . "');
         ";
 
-        if (null !== $parentField && '' !== $parentField) {
+        if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
             $parentIFrame = $parentField . '_iframe';
             $extensionUrl = '&parentIFrame=' . $parentIFrame;
-            $js .= "var url = '" . TGlobal::OutJS($url) . "';
-                    var openFromParent = true;
-                    var selfIFrame = window.frameElement;
-                    if (selfIFrame && selfIFrame.parentNode?.classList.contains('modal-body')) {
-                        openFromParent = false;
-                    }
-                    if (openFromParent) {
-                        url = url.replace('parent.setImageWithCrop', 'setImageWithCrop') + '" . TGlobal::OutJS($extensionUrl). "';
-                        saveCMSRegistryEntry('_parentIFrame','" . TGlobal::OutJS($parentIFrame) . "');
-                        parent.CreateModalIFrameDialogCloseButton(url,width,0);
-                    } else {
-                        CreateModalIFrameDialogCloseButton(url,width,0);
-                    }
-            ";
+            $js .= "var url = '" . TGlobal::OutJS($url) . TGlobal::OutJS($extensionUrl) . "';
+                    url = url.replace('parent.setImageWithCrop', 'setImageWithCrop');
+                    saveCMSRegistryEntry('_parentIFrame','" . TGlobal::OutJS($parentIFrame) . "');
+                    parent.CreateModalIFrameDialogCloseButton(url,width,0);";
         } else {
             $js .= "CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0);";
         }

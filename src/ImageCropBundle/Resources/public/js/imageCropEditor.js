@@ -65,7 +65,9 @@
         const urlParams = new URLSearchParams(currentURL);
         let parentIframeElement = null;
         let parentIframe = '';
-        if (urlParams.has('parentIFrame')) {
+        const parentIsInModal = urlParams.get('parentIsInModal');
+
+        if (urlParams.has('parentIFrame') && (null === parentIsInModal || '' === parentIsInModal)) {
             parentIframe = urlParams.get('parentIFrame');
             if ('' !== parentIframe) {
                 parentIframeElement = parent.document.getElementById(parentIframe);

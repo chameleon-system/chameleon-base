@@ -6,14 +6,9 @@
         var width = $(window).width() - buffer;
 
         const urlParams = new URLSearchParams(new URL(url).search);
+        const parentIsInModal = urlParams.get('parentIsInModal');
 
-        var openFromParent = urlParams.has('parentIFrame');
-        const selfIFrame = window.frameElement;
-
-        if (openFromParent && selfIFrame?.parentNode?.classList.contains('modal-body')) {
-            openFromParent = false;
-        }
-        if (openFromParent) {
+        if (true === urlParams.has('parentIFrame') && (null === parentIsInModal || '' === parentIsInModal)) {
             parent.CreateModalIFrameDialogCloseButton(url, width, height, windowTitle);
         } else {
             CreateModalIFrameDialogCloseButton(url, width, height, windowTitle);
