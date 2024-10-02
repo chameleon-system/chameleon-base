@@ -260,7 +260,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     {
         $includes = parent::getHtmlHeadIncludes();
         $includes[] = '<script type="text/javascript" src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemimagecrop/js/imageFieldWithCrop.js?v1'
+                '/bundles/chameleonsystemimagecrop/js/imageFieldWithCrop.js?v=1'
             ).'"></script>';
         $includes[] = '<link href="'.TGlobal::GetStaticURL(
                 '/bundles/chameleonsystemimagecrop/css/imageCropField.css'
