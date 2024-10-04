@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CmsRightVoter extends Voter
 {
-    protected function supports(string $attribute, $subject)
+    protected function supports(string $attribute, $subject): bool
     {
         if (null === $subject) {
             return false;
@@ -31,7 +31,7 @@ class CmsRightVoter extends Voter
     /**
      * @param RestrictedByCmsRightsInterface $subject
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $requiredRights = $subject->getPermittedRights($attribute);
 

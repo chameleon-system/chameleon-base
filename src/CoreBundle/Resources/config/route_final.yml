@@ -1,11 +1,11 @@
 cms_tpl_page_home:
   path: '/'
   defaults:
-    _controller: chameleon_system_core.tpl_page_controller:getPage
+    _controller: chameleon_system_core.tpl_page_controller::getPage
     pagePath: '/'
 
 cms_tpl_page:
   path: /{pagePath}
-  defaults: { _controller: chameleon_system_core.tpl_page_controller:getPage }
+  defaults: { _controller: chameleon_system_core.tpl_page_controller::getPage }
   requirements:
     pagePath: ".+"

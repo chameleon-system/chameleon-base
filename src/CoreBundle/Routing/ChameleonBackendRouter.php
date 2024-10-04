@@ -41,7 +41,7 @@ class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatch
     /**
      * {@inheritdoc}
      */
-    public function match($pathinfo)
+    public function match(string $pathinfo): array
     {
         $match = parent::match($pathinfo);
         if (is_array($match)) {
@@ -54,7 +54,7 @@ class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatch
     /**
      * {@inheritdoc}
      */
-    public function matchRequest(Request $request)
+    public function matchRequest(Request $request): array
     {
         $match = parent::matchRequest($request);
         if (is_array($match)) {

@@ -13,7 +13,7 @@ class TPKgCmsSession extends \Symfony\Component\HttpFoundation\Session\Session
 {
     private $sessionLockingEnabled = false;
 
-    public function start()
+    public function start(): bool
     {
         $result = parent::start();
         $this->postStartHook($this->all());
@@ -32,7 +32,7 @@ class TPKgCmsSession extends \Symfony\Component\HttpFoundation\Session\Session
      *
      * @return bool
      */
-    public function restartSessionWithWriteLock()
+    public function restartSessionWithWriteLock(): bool
     {
         if (false === $this->sessionLockingEnabled) {
             return true;
@@ -57,7 +57,7 @@ class TPKgCmsSession extends \Symfony\Component\HttpFoundation\Session\Session
     /**
      * discards content of session and reloads from storage without changing the session id.
      */
-    public function reloadSession()
+    public function reloadSession(): void
     {
         if (false === $this->sessionLockingEnabled) {
             return;
@@ -74,7 +74,7 @@ class TPKgCmsSession extends \Symfony\Component\HttpFoundation\Session\Session
     /**
      * @param bool $sessionLockingEnabled
      */
-    public function setSessionLockingEnabled($sessionLockingEnabled)
+    public function setSessionLockingEnabled($sessionLockingEnabled): void
     {
         $this->sessionLockingEnabled = $sessionLockingEnabled;
     }

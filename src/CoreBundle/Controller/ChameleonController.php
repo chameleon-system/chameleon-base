@@ -442,11 +442,11 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     private function getRequestedModuleFunctions(): array
     {
-        $moduleFunctions = $this->inputFilterUtil->getFilteredPostInput('module_fnc');
+        $moduleFunctions = $this->inputFilterUtil->getFilteredPostInputArray('module_fnc');
         if (false === \is_array($moduleFunctions)) {
             $moduleFunctions = [];
         }
-        $moduleFunctionsGet = $this->inputFilterUtil->getFilteredGetInput('module_fnc');
+        $moduleFunctionsGet = $this->inputFilterUtil->getFilteredGetInputArray('module_fnc');
         if (false === \is_array($moduleFunctionsGet)) {
             $moduleFunctionsGet = [];
         }

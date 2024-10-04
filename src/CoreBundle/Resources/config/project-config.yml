@@ -72,7 +72,7 @@ framework:
     cookie_lifetime: 7200
     gc_maxlifetime: 7200
   translator: { fallback: en }
-  error_controller: chameleon_system_core.controller.exception:showAction
+  error_controller: chameleon_system_core.controller.exception::showAction
 
 twig:
   debug:            "%kernel.debug%"

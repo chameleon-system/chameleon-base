@@ -57,6 +57,18 @@ class InputFilterUtil implements InputFilterUtilInterface
         return $this->filterValue($request->query->get($key, $default, $deep), $filter);
     }
 
+    public function getFilteredGetInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return $default;
+        }
+
+        $parameter = $request->query->all($key) ?? $default;
+
+        return $this->filterValue($parameter, $filter);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -68,6 +80,18 @@ class InputFilterUtil implements InputFilterUtilInterface
         }
 
         return $this->filterValue($request->request->get($key, $default, $deep), $filter);
+    }
+
+    public function getFilteredPostInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return $default;
+        }
+
+        $parameter = $request->request->all($key) ?? $default;
+
+        return $this->filterValue($parameter, $filter);
     }
 
     /**

@@ -62,7 +62,7 @@ class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFou
      *
      * @throws TPkgCmsSessionStorageLockException
      */
-    public function read($sSessionId)
+    public function read(string $sSessionId): string|false
     {
         if (false == $this->bRequireWriteLock || $this->oLockManager->GetLock($sSessionId, 60)) {
             return parent::read($sSessionId);
@@ -76,7 +76,7 @@ class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFou
         }
     }
 
-    public function write($sSessionId, $aSessionData)
+    public function write(string $sSessionId, string $aSessionData): bool
     {
         if (true === $this->bDisableSessionWrite) {
             return true;

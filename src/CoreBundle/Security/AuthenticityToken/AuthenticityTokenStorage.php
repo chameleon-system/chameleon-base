@@ -90,7 +90,7 @@ class AuthenticityTokenStorage implements ClearableTokenStorageInterface
      * @param string $token   The CSRF token
      * @return void
      */
-    public function setToken(string $tokenId, string $token)
+    public function setToken(string $tokenId, string $token): void
     {
         $session = $this->getSession();
         if (null === $session) {
@@ -102,7 +102,7 @@ class AuthenticityTokenStorage implements ClearableTokenStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function removeToken(string $tokenId)
+    public function removeToken(string $tokenId): ?string
     {
         $session = $this->getSession();
         if (null === $session) {
@@ -115,7 +115,7 @@ class AuthenticityTokenStorage implements ClearableTokenStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function hasToken(string $tokenId)
+    public function hasToken(string $tokenId): bool
     {
         $session = $this->getSession();
         if (null === $session) {

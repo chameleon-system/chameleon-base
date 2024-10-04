@@ -25,7 +25,7 @@ class ChameleonHttpKernel extends HttpKernel
     /**
      * {@inheritdoc}
      */
-    public function handle(Request $request, $type = HttpKernelInterface::MAIN_REQUEST, $catch = true)
+    public function handle(Request $request, $type = HttpKernelInterface::MAIN_REQUEST, bool $catch = true): \Symfony\Component\HttpFoundation\Response
     {
         if ('' !== $this->trustedProxies) {
             $aProxies = explode(',', $this->trustedProxies);
