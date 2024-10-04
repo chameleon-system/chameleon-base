@@ -22,6 +22,7 @@ use TdbCmsPortalList;
 /**
  * Generates Css from Less for all portals and writes it into appropriate files.
  */
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'chameleon_system:less:compile', description: 'Compiles LESS for all portals')]
 class CompileLessCommand extends Command
 {
     /**
@@ -48,11 +49,9 @@ class CompileLessCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('chameleon_system:less:compile')
             ->setDefinition(array(
                 new InputOption('minify-css', '', InputOption::VALUE_NONE, 'Minify output css'),
             ))
-            ->setDescription('Compiles LESS for all portals')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command compiles LESS for all portals:
 <info>php %command.full_name% --minify-css</info>
@@ -65,7 +64,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Compiling less...');
 

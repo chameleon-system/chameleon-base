@@ -14,7 +14,7 @@ class CmsLoginController extends AbstractController
     {
     }
 
-    #[Route('/cms/login', name: 'cms_login')]
+    #[\Symfony\Component\Routing\Attribute\Route('/cms/login', name: 'cms_login')]
     public function index(): Response
     {
         $googleLoginUrl = null;

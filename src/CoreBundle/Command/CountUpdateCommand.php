@@ -18,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Console command for counting updates that have not been executed yet.
  */
+#[\Symfony\Component\Console\Attribute\AsCommand(description: 'Prints the count of all pending updates', name: 'chameleon_system:update:count')]
 class CountUpdateCommand extends Command
 {
     /**
@@ -36,7 +37,6 @@ class CountUpdateCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Prints the count of all pending updates')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command prints the count of all pending updates.
 EOF
@@ -47,7 +47,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $updateManager = new \TCMSUpdateManager();
         $updateList = $updateManager->getAllUpdateFilesToProcess();

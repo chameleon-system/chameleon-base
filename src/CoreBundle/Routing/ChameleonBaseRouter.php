@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Routing;
 
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,7 +69,7 @@ abstract class ChameleonBaseRouter extends Router
     /**
      * {@inheritdoc}
      */
-    public function getRouteCollection()
+    public function getRouteCollection(): \Symfony\Component\Routing\RouteCollection
     {
         if (null === $this->collection) {
             $this->resource = $this->getRouterConfig();

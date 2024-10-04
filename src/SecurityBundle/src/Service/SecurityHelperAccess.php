@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class SecurityHelperAccess
 {
 
-    public function __construct(readonly private Security $security, readonly private FirewallMap $firewallMap)
+    public function __construct(readonly private \Symfony\Bundle\SecurityBundle\Security $security, readonly private FirewallMap $firewallMap)
     {
     }
 
@@ -30,7 +30,7 @@ class SecurityHelperAccess
         return $this->firewallMap->getFirewallConfig($request);
     }
 
-    public function getSecurity(): Security
+    public function getSecurity(): \Symfony\Bundle\SecurityBundle\Security
     {
         return $this->security;
     }

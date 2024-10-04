@@ -24,6 +24,7 @@ use TCMSUpdateManager;
 /**
  * Console command for executing updates.
  */
+#[\Symfony\Component\Console\Attribute\AsCommand(description: 'Runs Chameleon database updates', name: 'chameleon_system:update:run')]
 class RunUpdateCommand extends Command
 {
     /**
@@ -51,7 +52,6 @@ class RunUpdateCommand extends Command
     {
         $this
             ->setDefinition(array())
-            ->setDescription('Runs Chameleon database updates')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command runs Chameleon updates
 EOF
@@ -62,7 +62,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $updateManager = TCMSUpdateManager::GetInstance();
         $updateList = $updateManager->getAllUpdateFilesToProcess();

@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'chameleon_system:autoclasses:dump', description: 'Export the table configurations as doctrine data models')]
 class DumpTableConfCommand extends Command
 {
     public function __construct(
@@ -18,11 +19,9 @@ class DumpTableConfCommand extends Command
     }
     protected function configure(): void
     {
-        $this->setName('chameleon_system:autoclasses:dump')
-            ->setDescription('Export the table configurations as doctrine data models');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $tables = $this->tableConfExporter->getTables();
 

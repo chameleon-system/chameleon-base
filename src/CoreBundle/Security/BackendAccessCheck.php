@@ -30,7 +30,7 @@ class BackendAccessCheck
      * @param ICmsCoreRedirect $redirect
      * @param RequestStack     $requestStack
      */
-    public function __construct(ICmsCoreRedirect $redirect, RequestStack $requestStack, readonly private Security $security)
+    public function __construct(ICmsCoreRedirect $redirect, RequestStack $requestStack, readonly private \Symfony\Bundle\SecurityBundle\Security $security)
     {
         $this->redirect = $redirect;
         $this->requestStack = $requestStack;

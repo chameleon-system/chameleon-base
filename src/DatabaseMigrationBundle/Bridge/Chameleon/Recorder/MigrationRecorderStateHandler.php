@@ -19,7 +19,7 @@ class MigrationRecorderStateHandler
     /**
      * @param RequestStack $requestStack
      */
-    public function __construct(RequestStack $requestStack, readonly private Security $security)
+    public function __construct(RequestStack $requestStack, readonly private \Symfony\Bundle\SecurityBundle\Security $security)
     {
         $this->requestStack = $requestStack;
     }

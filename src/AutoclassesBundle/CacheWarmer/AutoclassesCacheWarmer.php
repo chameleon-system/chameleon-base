@@ -64,14 +64,14 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
         \ChameleonSystem\CoreBundle\ServiceLocator::setContainer($container);
     }
 
-    public function warmUp(string $cacheDirectory)
+    public function warmUp(string $cacheDirectory): array
     {
         $this->updateAllTables();
 
         return [];
     }
 
-    public function isOptional()
+    public function isOptional(): bool
     {
         return false;
     }

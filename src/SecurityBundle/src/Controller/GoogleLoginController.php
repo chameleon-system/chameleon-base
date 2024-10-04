@@ -22,7 +22,7 @@ class GoogleLoginController extends AbstractController
     {
     }
 
-    #[Route('/cms/google-login', name: 'connect_google_start')]
+    #[\Symfony\Component\Routing\Attribute\Route('/cms/google-login', name: 'connect_google_start')]
     public function connectAction(): Response
     {
         return $this->clientRegistry
@@ -35,7 +35,7 @@ class GoogleLoginController extends AbstractController
      * After going to google, you're redirected back here
      * note however, that the method itself will not be called. Instead, `\ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator::authenticate` will handle the request.
      */
-    #[Route(path: '/cms/google-check', name: 'connect_google_check')]
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/cms/google-check', name: 'connect_google_check')]
     public function connectCheckAction(Request $request, ClientRegistry $clientRegistry): Response
     {
         return new Response('nothing to do');

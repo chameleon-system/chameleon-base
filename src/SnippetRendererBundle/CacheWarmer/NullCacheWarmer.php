@@ -9,7 +9,7 @@ class NullCacheWarmer implements CacheWarmerInterface
     /**
      * {@inheritdoc}
      */
-    public function isOptional()
+    public function isOptional(): bool
     {
         return true;
     }
@@ -20,7 +20,7 @@ class NullCacheWarmer implements CacheWarmerInterface
      * @param string $cacheDir
      * @return void
      */
-    public function warmUp($cacheDir)
+    public function warmUp($cacheDir): array
     {
         // noop
     }

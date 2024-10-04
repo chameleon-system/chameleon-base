@@ -32,9 +32,9 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
      * @var RequestStack
      */
     private $requestStack;
-    private Security $security;
+    private \Symfony\Bundle\SecurityBundle\Security $security;
 
-    public function __construct(UploaderParameterServiceInterface $uploadParameterService, RequestStack $requestStack, Security $security)
+    public function __construct(UploaderParameterServiceInterface $uploadParameterService, RequestStack $requestStack, \Symfony\Bundle\SecurityBundle\Security $security)
     {
         $this->uploadParameterService = $uploadParameterService;
         $this->requestStack = $requestStack;

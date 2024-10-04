@@ -15,7 +15,7 @@ class BackendSession implements BackendSessionInterface
 
     public function __construct(
         readonly private RequestStack $requestStack,
-        readonly private Security $security,
+        readonly private \Symfony\Bundle\SecurityBundle\Security $security,
         readonly private Connection $connection,
         readonly private LanguageServiceInterface $languageService
     ) {

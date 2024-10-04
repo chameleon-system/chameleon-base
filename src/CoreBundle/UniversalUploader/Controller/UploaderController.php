@@ -40,7 +40,7 @@ class UploaderController
     public function __construct(
         UploaderPostHandlerServiceInterface $postHandlerService,
         SaveToMediaLibraryServiceInterface $saveToMediaLibraryService,
-        readonly private Security $security
+        readonly private \Symfony\Bundle\SecurityBundle\Security $security
     )
     {
         $this->postHandler = $postHandlerService;

@@ -71,7 +71,7 @@ class CmsRouteLoader extends Loader
      *
      * @throws LogicException
      */
-    public function load($resource, $type = null)
+    public function load(mixed $resource, $type = null)
     {
         $collection = new RouteCollection();
         if (!is_array($resource)) {

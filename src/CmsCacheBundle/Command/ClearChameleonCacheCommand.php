@@ -17,6 +17,7 @@ use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'chameleon_system:cache:clear', description: 'Clears the Chameleon cache.')]
 class ClearChameleonCacheCommand extends Command
 {
     /**
@@ -44,14 +45,12 @@ class ClearChameleonCacheCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('chameleon_system:cache:clear')
-            ->setDescription('Clears the Chameleon cache.');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (true === $this->cache->isActive()) {
             $this->cache->clearAll();
