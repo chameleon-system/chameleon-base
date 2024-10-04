@@ -1,1 +1,1 @@
-<?= $data['sTable'];
+<?php echo $data['sTable'];

@@ -1,1 +1,1 @@
-<?= $sTrackHTML;
+<?php echo $sTrackHTML;
