@@ -34,9 +34,8 @@ class GoogleLoginController extends AbstractController
     /**
      * After going to google, you're redirected back here
      * note however, that the method itself will not be called. Instead, `\ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator::authenticate` will handle the request.
-     *
-     * @Route("/cms/google-check", name="connect_google_check")
      */
+    #[Route(path: '/cms/google-check', name: 'connect_google_check')]
     public function connectCheckAction(Request $request, ClientRegistry $clientRegistry): Response
     {
         return new Response('nothing to do');
