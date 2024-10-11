@@ -11,6 +11,15 @@ It is recommended to follow these steps in the given order.
 You must change some code which was deprecated in previous Symfony versions and is now removed. Do this now with a working
 Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 
+# Specific changes
+
+- `Deprecated` tag in service xml files now needs to include a `package` and `version` attribute
+- Routes looking like `FoobarController:exampleAction` are no longer supported. Use `FoobarController::exampleAction` instead.
+- `InputFilterUtil` has two new methods: `getFilteredGetInputArray` and `getFilteredPostInputArray`. Use them if you expect the value to be an array instead of a scalar value.
+  - This is due to a change in symfony's ParameterBag, which does not support arrays on its `query.get` and `request.get` methods anymore. You now have to use the `all` method for expected arrays.
+  - If you are using the `InputFilterUtil` class, there is currently a fallback so the project won't crash immediately. However, this fallback will be removed in the future.
+- `AppKernel::registerBundles` now needs a return type.
+
 ### List Of Removed Or Changed Code
 
 - Configuration classes: TreeBuilder must be constructed with an argument. (search for new TreeBuilder())
