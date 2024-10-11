@@ -14,7 +14,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig extends AbstractViewM
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oObject', 'TdbPkgNewsletterModuleSignupConfig');
         $oRequirements->NeedsSourceObject('sStepName', '');
@@ -23,7 +23,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingupConfig extends AbstractViewM
     /**
      * {@inheritDoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oNewsletterModuleSignUpConfig TdbPkgNewsletterModuleSignupConfig */
         $oNewsletterModuleSignUpConfig = $oVisitor->GetSourceObject('oObject');

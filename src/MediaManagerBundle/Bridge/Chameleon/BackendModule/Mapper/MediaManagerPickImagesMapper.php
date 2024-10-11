@@ -22,7 +22,7 @@ class MediaManagerPickImagesMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('listState', MediaManagerListState::class);
     }
@@ -34,7 +34,7 @@ class MediaManagerPickImagesMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /**
          * @var $listState MediaManagerListState
          */

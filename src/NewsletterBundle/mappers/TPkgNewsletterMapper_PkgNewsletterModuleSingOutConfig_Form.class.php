@@ -14,7 +14,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oObject', 'TdbPkgNewsletterModuleSignoutConfig');
         $oRequirements->NeedsSourceObject('oNewsletterUser', 'TdbPkgNewsletterUser', TdbPkgNewsletterUser::GetInstanceForActiveUser());
@@ -26,7 +26,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
     /**
      * {@inheritDoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oMessageManager = TCMSMessageManager::GetInstance();
         $oVisitor->SetMappedValue('sModuleSpotName', $oVisitor->GetSourceObject('sModuleSpotName'));

@@ -29,6 +29,7 @@ class ChameleonTwigLoader extends FilesystemLoader
     public function __construct(TPkgViewRendererSnippetDirectoryInterface $snippetDirectory)
     {
         $this->snippetDirectory = $snippetDirectory;
+        parent::__construct();
     }
 
     /**

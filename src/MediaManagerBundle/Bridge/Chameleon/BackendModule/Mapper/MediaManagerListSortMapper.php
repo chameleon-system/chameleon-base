@@ -35,7 +35,7 @@ class MediaManagerListSortMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
     }
 
@@ -46,7 +46,7 @@ class MediaManagerListSortMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         $oVisitor->SetMappedValue('sortColumns', $this->sortColumnCollection->getSortColumns());
     }
 }

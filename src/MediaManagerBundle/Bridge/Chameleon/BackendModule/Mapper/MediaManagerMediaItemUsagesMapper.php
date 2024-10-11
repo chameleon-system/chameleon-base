@@ -45,7 +45,7 @@ class MediaManagerMediaItemUsagesMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('mediaItem', MediaItemDataModel::class);
     }
@@ -57,7 +57,7 @@ class MediaManagerMediaItemUsagesMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /**
          * @var $mediaItem MediaItemDataModel
          */

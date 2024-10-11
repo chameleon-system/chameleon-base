@@ -22,7 +22,7 @@ class ModuleChooserModuleListMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('moduleList', 'TdbCmsTplModuleList');
         $oRequirements->NeedsSourceObject('aPermittedModules', 'array', null, true);
@@ -35,7 +35,7 @@ class ModuleChooserModuleListMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var $permittedModules array */
         $permittedModules = $oVisitor->GetSourceObject('aPermittedModules');
 

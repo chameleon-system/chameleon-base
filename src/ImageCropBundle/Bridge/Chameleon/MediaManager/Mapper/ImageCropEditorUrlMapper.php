@@ -35,7 +35,7 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('mediaItem', MediaItemDataModel::class);
     }
@@ -47,7 +47,7 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /**
          * @var $mediaItem MediaItemDataModel
          */

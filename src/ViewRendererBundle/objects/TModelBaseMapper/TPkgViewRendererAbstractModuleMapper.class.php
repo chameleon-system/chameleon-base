@@ -14,7 +14,7 @@ abstract class TPkgViewRendererAbstractModuleMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('instanceID', 'string', null);
         $oRequirements->NeedsSourceObject('aModuleConfig', 'array');

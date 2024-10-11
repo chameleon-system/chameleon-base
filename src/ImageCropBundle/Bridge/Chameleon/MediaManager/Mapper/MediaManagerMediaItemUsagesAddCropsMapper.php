@@ -23,7 +23,7 @@ class MediaManagerMediaItemUsagesAddCropsMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('crops', 'array');
         $oRequirements->NeedsSourceObject('usages', 'array');
@@ -36,7 +36,7 @@ class MediaManagerMediaItemUsagesAddCropsMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /**
          * @var $crops  ImageCropDataModel[]
          * @var $usages MediaItemUsageDataModel[]

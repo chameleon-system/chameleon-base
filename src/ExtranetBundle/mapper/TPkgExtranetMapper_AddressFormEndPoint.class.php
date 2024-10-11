@@ -14,7 +14,7 @@ class TPkgExtranetMapper_AddressFormEndPoint extends AbstractPkgExtranetMapper_A
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('sCustomMSGConsumer');
@@ -24,7 +24,7 @@ class TPkgExtranetMapper_AddressFormEndPoint extends AbstractPkgExtranetMapper_A
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
         $oAddress = $oVisitor->GetSourceObject('oAddressObject');

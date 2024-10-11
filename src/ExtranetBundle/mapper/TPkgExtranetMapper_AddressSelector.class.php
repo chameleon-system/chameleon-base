@@ -16,7 +16,7 @@ class TPkgExtranetMapper_AddressSelector extends AbstractPkgExtranetMapper_Addre
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('bAddressTypeIsBilling');
@@ -27,7 +27,7 @@ class TPkgExtranetMapper_AddressSelector extends AbstractPkgExtranetMapper_Addre
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
         /** @var $oAddress TdbDataExtranetUserAddress */

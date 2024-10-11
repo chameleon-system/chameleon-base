@@ -44,7 +44,7 @@ class TPkgViewRendererConfigToLessMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $requirements)
+    public function GetRequirements(IMapperRequirementsRestricted $requirements): void
     {
         $requirements->NeedsSourceObject('inTemplateEngineMode', 'bool', false);
     }
@@ -52,7 +52,7 @@ class TPkgViewRendererConfigToLessMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $visitor, $cachingEnabled, IMapperCacheTriggerRestricted $cacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $visitor, $cachingEnabled, IMapperCacheTriggerRestricted $cacheTriggerManager): void
     {
         $compiledCssSource = $this->lessCompiler->getCompiledCssUrl($this->portalDomainService->getActivePortal());
         if (true === $visitor->GetSourceObject('inTemplateEngineMode')) {

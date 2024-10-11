@@ -54,7 +54,7 @@ class TMapper_ViewPortSwitch extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject(
             'oActivePAge',
@@ -70,7 +70,7 @@ class TMapper_ViewPortSwitch extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         $oActivePage = $oVisitor->GetSourceObject('oActivePAge');
         if (true === $this->viewPortManager->isDesktopViewPort()) {
             $sLinkText = $this->translator->trans('chameleon_system_core.mobile.mobile_version');

@@ -25,7 +25,7 @@ class ImageCropAccessRightsMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
     }
 
@@ -36,7 +36,7 @@ class ImageCropAccessRightsMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         $oVisitor->SetMappedValue('accessRightsCrop', $this->createAccessRightsModel('cms_image_crop'));
     }
 

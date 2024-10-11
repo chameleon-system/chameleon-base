@@ -48,7 +48,7 @@ class MediaManagerMediaItemCropsMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('mediaItem', MediaItemDataModel::class);
         $oRequirements->NeedsSourceObject('language', TdbCmsLanguage::class);
@@ -61,7 +61,7 @@ class MediaManagerMediaItemCropsMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /**
          * @var $mediaItem MediaItemDataModel
          * @var $language  TdbCmsLanguage

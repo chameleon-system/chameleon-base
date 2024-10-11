@@ -14,7 +14,7 @@ class TPkgViewRendererModuleLegacyMapper extends TPkgViewRendererAbstractModuleM
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('oModuleInstance', 'TModelBase');
@@ -24,7 +24,7 @@ class TPkgViewRendererModuleLegacyMapper extends TPkgViewRendererAbstractModuleM
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oModuleInstance TModelBase */
         $oModuleInstance = $oVisitor->GetSourceObject('oModuleInstance');

@@ -17,7 +17,7 @@ class TPkgExtranetMapper_Login extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('sSpotName');
         $oRequirements->NeedsSourceObject('sLoginSuccessURL', null, '');
@@ -31,7 +31,7 @@ class TPkgExtranetMapper_Login extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         // no field messages on login. Need only one overall message
         $aFieldUserName = array();

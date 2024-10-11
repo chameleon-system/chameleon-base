@@ -25,7 +25,7 @@ class TPkgMultiModuleMapper_Tabs extends AbstractViewMapper
      *
      * @return void
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('aSetItems', 'array'); // array of TdbPkgMultiModuleSetItem
         $oRequirements->NeedsSourceObject('sContent', 'string'); // active content
@@ -53,7 +53,7 @@ class TPkgMultiModuleMapper_Tabs extends AbstractViewMapper
      *
      * @return void
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $aTabHeaderList = array();
         $oVisitor->SetMappedValue('sContent', $oVisitor->GetSourceObject('sContent'));

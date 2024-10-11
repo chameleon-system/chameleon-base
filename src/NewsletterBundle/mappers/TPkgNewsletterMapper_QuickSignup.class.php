@@ -46,7 +46,7 @@ class TPkgNewsletterMapper_QuickSignup extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oPortal', 'TdbCmsPortal', null, true);
         $oRequirements->NeedsSourceObject('sModuleSpotName', '', 'spota');
@@ -55,7 +55,7 @@ class TPkgNewsletterMapper_QuickSignup extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oPortal = $oVisitor->GetSourceObject('oPortal');
         if (null === $oPortal) {

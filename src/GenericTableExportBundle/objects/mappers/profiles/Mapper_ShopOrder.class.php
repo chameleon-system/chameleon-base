@@ -27,7 +27,7 @@ class Mapper_ShopOrder extends AbstractViewMapper
      *
      * @return void
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('exportdata');
     }
@@ -53,7 +53,7 @@ class Mapper_ShopOrder extends AbstractViewMapper
      *
      * @return void
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oExportData TdbShopOrder */
         $oExportData = $oVisitor->GetSourceObject('exportdata');

@@ -47,7 +47,7 @@ class TCMSMediaFieldMapperDecorator implements \IViewMapper
     /**
      * {@inheritDoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $this->subject->Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
 
@@ -66,7 +66,7 @@ class TCMSMediaFieldMapperDecorator implements \IViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $this->subject->GetRequirements($oRequirements);
     }

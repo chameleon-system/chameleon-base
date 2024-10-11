@@ -14,7 +14,7 @@ class TPkgExtranetMapper_UserForm extends AbstractPkgExtranetMapper_User
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
         $oRequirements->NeedsSourceObject('sCustomMSGConsumer');
@@ -24,7 +24,7 @@ class TPkgExtranetMapper_UserForm extends AbstractPkgExtranetMapper_User
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oUser = $oVisitor->GetSourceObject('oUser');
         $aFieldList = array(

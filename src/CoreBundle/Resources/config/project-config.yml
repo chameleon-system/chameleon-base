@@ -71,8 +71,21 @@ framework:
     cookie_httponly: true
     cookie_lifetime: 7200
     gc_maxlifetime: 7200
+    cookie_secure: auto
+    handler_id: null
+  validation:
+    email_validation_mode: html5
+  php_errors:
+    log: "%kernel.debug%"
+  uid:
+    default_uuid_version: 7
+    time_based_uuid_version: 7
+  annotations:
+    enabled: false
   translator: { fallback: en }
   error_controller: chameleon_system_core.controller.exception::showAction
+  http_method_override: true
+  handle_all_throwables: true
 
 twig:
   debug:            "%kernel.debug%"

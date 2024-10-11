@@ -18,7 +18,7 @@ class MTFeedbackMapper_AdditionalFields extends MTFeedbackMapper_StandardForm
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
 
         /** @var $oFeedbackErrorList MTFeedbackErrors */
