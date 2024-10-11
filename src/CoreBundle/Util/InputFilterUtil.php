@@ -11,6 +11,8 @@
 
 namespace ChameleonSystem\CoreBundle\Util;
 
+use Psr\Cache\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -24,11 +26,17 @@ class InputFilterUtil implements InputFilterUtilInterface
     private $requestStack;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param RequestStack $requestStack
      */
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, LoggerInterface $logger)
     {
         $this->requestStack = $requestStack;
+        $this->logger = $logger;
     }
 
     /**
@@ -54,7 +62,12 @@ class InputFilterUtil implements InputFilterUtilInterface
             return $default;
         }
 
-        return $this->filterValue($request->query->get($key, $default, $deep), $filter);
+        try {
+            return $this->filterValue($request->query->get($key, $default, $deep), $filter);
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->warning('getFilteredGetInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredGetInputArray instead.', ['key' => $key, 'default' => $default, 'filter' => $filter]);
+            return $this->getFilteredGetInputArray($key, $default, $filter);
+        }
     }
 
     public function getFilteredGetInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER)
@@ -79,7 +92,13 @@ class InputFilterUtil implements InputFilterUtilInterface
             return $default;
         }
 
-        return $this->filterValue($request->request->get($key, $default, $deep), $filter);
+        try {
+            return $this->filterValue($request->request->get($key, $default, $deep), $filter);
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->warning('getFilteredPostInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredPostInputArray instead.', ['key' => $key, 'default' => $default, 'filter' => $filter]);
+            return $this->getFilteredPostInputArray($key, $default, $filter);
+        }
+
     }
 
     public function getFilteredPostInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER)

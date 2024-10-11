@@ -572,6 +572,7 @@
 
         <service id="chameleon_system_core.util.input_filter" class="ChameleonSystem\CoreBundle\Util\InputFilterUtil" public="true">
             <argument type="service" id="request_stack" />
+            <argument type="service" id="logger" />
         </service>
 
         <service id="chameleon_system_core.util.media_path_generator" class="ChameleonSystem\CoreBundle\Util\MediaPathGenerator" public="true">
