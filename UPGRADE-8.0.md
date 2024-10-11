@@ -109,6 +109,8 @@ https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
 
 ## Migrating to doctrine ORM
 First, make sure that all property tables have a matching parent key field in the target table. If not, add it.
+Add `ChameleonSystemDataAccessBundle` to your AppKernel.
+
 Then, run the following command to generate the doctrine entities:
 
 ```bash
