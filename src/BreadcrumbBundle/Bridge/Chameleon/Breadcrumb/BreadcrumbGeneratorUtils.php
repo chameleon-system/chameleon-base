@@ -8,11 +8,11 @@ use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbItemDataModel;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 
-final class BreadcrumbGeneratorUtils implements BreadcrumbGeneratorUtilsInterface
+class BreadcrumbGeneratorUtils implements BreadcrumbGeneratorUtilsInterface
 {
     public function __construct(
         private readonly TreeServiceInterface $treeService,
-        private readonly PortalDomainServiceInterface $portalDomainService
+        protected readonly PortalDomainServiceInterface $portalDomainService
     ) {
     }
 
