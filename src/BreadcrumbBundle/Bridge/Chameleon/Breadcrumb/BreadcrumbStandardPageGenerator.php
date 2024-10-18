@@ -11,7 +11,7 @@ use ChameleonSystem\CoreBundle\Service\TreeService;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\Cache;
 
-final class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
+class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
 {
     private const triggerTable = 'cms_tpl_page';
 
