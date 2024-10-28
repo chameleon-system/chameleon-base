@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Util;
 
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -64,7 +65,7 @@ class InputFilterUtil implements InputFilterUtilInterface
 
         try {
             return $this->filterValue($request->query->get($key, $default, $deep), $filter);
-        } catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException|BadRequestException $e) {
             $this->logger->warning('getFilteredGetInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredGetInputArray instead.', ['key' => $key, 'default' => $default, 'filter' => $filter]);
             return $this->getFilteredGetInputArray($key, $default, $filter);
         }
@@ -94,7 +95,7 @@ class InputFilterUtil implements InputFilterUtilInterface
 
         try {
             return $this->filterValue($request->request->get($key, $default, $deep), $filter);
-        } catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException|BadRequestException $e) {
             $this->logger->warning('getFilteredPostInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredPostInputArray instead.', ['key' => $key, 'default' => $default, 'filter' => $filter]);
             return $this->getFilteredPostInputArray($key, $default, $filter);
         }
