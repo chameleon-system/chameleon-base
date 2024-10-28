@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -1843,7 +1844,7 @@ class TTools
 
     private static function getValidator(): ValidatorInterface
     {
-        return ServiceLocator::get('validator');
+        return Validation::createValidator();
     }
 
     private static function getActivePageService(): ActivePageServiceInterface
