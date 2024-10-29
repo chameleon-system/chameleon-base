@@ -15,7 +15,7 @@ class AuthenticityTokenStorageMock implements TokenStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function getToken($tokenId)
+    public function getToken($tokenId): string
     {
         if (false === $this->hasToken($tokenId)) {
             throw new TokenNotFoundException('Token not found.');
@@ -35,7 +35,7 @@ class AuthenticityTokenStorageMock implements TokenStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function removeToken($tokenId)
+    public function removeToken($tokenId): ?string
     {
         unset($this->tokenList[$tokenId]);
     }
@@ -43,7 +43,7 @@ class AuthenticityTokenStorageMock implements TokenStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function hasToken($tokenId)
+    public function hasToken($tokenId): bool
     {
         return isset($this->tokenList[$tokenId]);
     }
