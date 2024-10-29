@@ -30,7 +30,7 @@ class SessionIdProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(LogRecord $record)
+    public function __invoke(array|LogRecord $record)
     {
         $request = $this->requestStack->getCurrentRequest();
 
@@ -44,7 +44,7 @@ class SessionIdProcessor implements ProcessorInterface
 
         $sessionId = $request->getSession()->getId();
 
-        if (true === \array_key_exists('extra', $record->toArray())) {
+        if (true === \array_key_exists('extra', $record)) {
             $record['extra']['session_id'] = $sessionId;
         } else {
             $record['extra'] = ['session_id' => $sessionId];
