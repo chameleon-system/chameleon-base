@@ -204,7 +204,10 @@ class TCMSConfig extends TCMSRecord
      */
     public function GetCustomerServerURL($pageId = null)
     {
-        $customerServerURL = _CUSTOMER_SERVER_URL;
+        $customerServerURL = '';
+        if (defined('_CUSTOMER_SERVER_URL')) {
+            $customerServerURL = _CUSTOMER_SERVER_URL;
+        }
 
         if (!is_null($pageId) && defined('_SET_CUSTOMER_SERVER_URL_USING_PORTAL') && _SET_CUSTOMER_SERVER_URL_USING_PORTAL == true) {
             $oPage = TCMSPage::GetPageObject($pageId);
