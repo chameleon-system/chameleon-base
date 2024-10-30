@@ -32,6 +32,7 @@ class RequestIdProcessor implements ProcessorInterface
      */
     public function __invoke(array|LogRecord $record)
     {
+        if ($record instanceof LogRecord) $record = $record->toArray();
         $requestId = $this->requestInfoService->getRequestId();
 
         if (true === \array_key_exists('extra', $record)) {

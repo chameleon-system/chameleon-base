@@ -32,6 +32,7 @@ class SessionIdProcessor implements ProcessorInterface
      */
     public function __invoke(array|LogRecord $record)
     {
+        if ($record instanceof LogRecord) $record = $record->toArray();
         $request = $this->requestStack->getCurrentRequest();
 
         if (null === $request) {
