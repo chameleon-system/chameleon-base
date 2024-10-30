@@ -30,12 +30,11 @@ class RequestIdProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(array|LogRecord $record)
+    public function __invoke(LogRecord $record)
     {
-        if ($record instanceof LogRecord) $record = $record->toArray();
         $requestId = $this->requestInfoService->getRequestId();
 
-        if (true === \array_key_exists('extra', $record)) {
+        if (true === \array_key_exists('extra', $record->toArray())) {
             $record['extra']['request_id'] = $requestId;
         } else {
             $record['extra'] = ['request_id' => $requestId];
