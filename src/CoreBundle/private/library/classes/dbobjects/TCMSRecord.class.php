@@ -218,7 +218,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                 $query = $this->GetQueryString($conditions);
 
                 $query .= ' LIMIT 1';
-                $this->sqlData = $this->ExecuteSQLQueries($query, array($id))->fetch(PDO::FETCH_ASSOC);
+                $this->sqlData = $this->ExecuteSQLQueries($query, array($id))->fetchAssociative();
                 $foundRecord = (false !== $this->sqlData && is_array($this->sqlData) && count($this->sqlData) > 0);
                 if ($foundRecord) {
                     if ($this->bAllowPostLoadHookExecution) {

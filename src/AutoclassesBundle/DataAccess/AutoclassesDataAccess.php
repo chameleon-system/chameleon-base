@@ -64,7 +64,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
                   ORDER BY `position` ASC';
         $statement = $this->connection->executeQuery($query);
         $fieldTypes = array();
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetchAssociative()) {
             $tableConfId = $row['cms_tbl_conf_id'];
             if (false === isset($data[$tableConfId])) {
                 $data[$tableConfId] = new TIterator();
@@ -146,7 +146,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
         $query = 'SELECT *
                   FROM `cms_tbl_conf`';
         $statement = $this->connection->executeQuery($query);
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetchAssociative()) {
             $data[$row['id']] = $row;
         }
 

@@ -285,6 +285,7 @@ class TIterator implements Iterator
      *
      * @return T|false
      */
+    #[\ReturnTypeWillChange]
     public function next(): mixed
     {
         $item = false;
