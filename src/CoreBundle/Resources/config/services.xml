@@ -199,10 +199,6 @@
             <tag name="kernel.event_subscriber" />
         </service>
 
-        <service id="chameleon_system_core.symfony_streamed_response_listener" class="Symfony\Component\HttpKernel\EventListener\StreamedResponseListener">
-            <tag name="kernel.event_subscriber" />
-        </service>
-
         <service id="chameleon_system_core.router.chameleon_base" class="ChameleonSystem\CoreBundle\Routing\ChameleonBaseRouter" parent="router.default" abstract="true">
             <call method="setRedirect">
                 <argument type="service" id="chameleon_system_core.redirect" />
