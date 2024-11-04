@@ -16,6 +16,10 @@
     <services>
         <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="true"/>
 
+        <service id="esono_customer.twig.version_extension" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\VersionExtension">
+            <tag name="twig.extension"/>
+        </service>
+
         <service id="chameleon_system_core.pdo" class="PDO" public="false">
             <factory service="database_connection" method="getWrappedConnection" />
             <deprecated>The %service_id% service is deprecated since Chameleon 6.3.0. Use database_connection::getWrappedConnection() instead instead.</deprecated>
