@@ -71,6 +71,10 @@ class TableEditorExtranetUser extends TCMSTableEditor
             return null;
         }
 
+        if (false === $this->hasUserAValidPassword($this->sId)) {
+            return null;
+        }
+
         $pagedef = $this->getInputFilterUtil()->getFilteredInput('pagedef');
         $urlData = [
             'module_fnc' => [$executingModulePointer->sModuleSpotName => 'LoginAsExtranetUser'],
@@ -116,7 +120,27 @@ class TableEditorExtranetUser extends TCMSTableEditor
             return;
         }
 
+        if (false === $this->hasUserAValidPassword($userId)) {
+            return;
+        }
+
         $this->redirectUserToTokenLoginOnPortal($userId, $portal);
+    }
+
+    /**
+     * Without a valid passwort cms users should not be able to log in as extranet users
+     * without having a password, the logged-in user can't process through the basket steps
+     * without any warning
+     */
+    private function hasUserAValidPassword(string $userId): bool
+    {
+        $extranetUser = TdbDataExtranetUser::GetNewInstance();
+
+        if (false === $extranetUser->Load($userId)) {
+            return false;
+        }
+
+        return '' !== $extranetUser->fieldPassword;
     }
 
     private function isBackendUserLoggedInWithPermission(string $permission): bool
