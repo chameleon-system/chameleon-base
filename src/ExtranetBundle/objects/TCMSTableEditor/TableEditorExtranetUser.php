@@ -71,7 +71,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
             return null;
         }
 
-        if (false === $this->hasUserAValidPassword($this->sId)) {
+        if (false === $this->hasUserAValidPassword()) {
             return null;
         }
 
@@ -120,7 +120,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
             return;
         }
 
-        if (false === $this->hasUserAValidPassword($userId)) {
+        if (false === $this->hasUserAValidPassword()) {
             return;
         }
 
@@ -132,15 +132,9 @@ class TableEditorExtranetUser extends TCMSTableEditor
      * without having a password, the logged-in user can't process through the basket steps
      * without any warning
      */
-    private function hasUserAValidPassword(string $userId): bool
+    private function hasUserAValidPassword(): bool
     {
-        $extranetUser = TdbDataExtranetUser::GetNewInstance();
-
-        if (false === $extranetUser->Load($userId)) {
-            return false;
-        }
-
-        return '' !== $extranetUser->fieldPassword;
+        return '' !== $this->oTable->fieldPassword;
     }
 
     private function isBackendUserLoggedInWithPermission(string $permission): bool
