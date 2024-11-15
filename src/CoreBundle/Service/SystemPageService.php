@@ -138,6 +138,7 @@ class SystemPageService implements SystemPageServiceInterface
         $pageRecord = $treeNodeRecord->GetLinkedPageObject();
 
         $pageDataModel = new PageDataModel();
+        $pageDataModel->setPageId($pageRecord->id);
         $pageDataModel->setPortalId($pageRecord->fieldCmsPortalId);
         $pageDataModel->setName($pageRecord->GetName());
         $pageDataModel->setPrimarytreeNodeId($treeNodeRecord->id);
