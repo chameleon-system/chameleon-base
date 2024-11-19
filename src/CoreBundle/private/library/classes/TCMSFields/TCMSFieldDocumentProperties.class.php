@@ -51,7 +51,7 @@ class TCMSFieldDocumentProperties extends TCMSField
           <td>
           '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.open_document'), $sShowDownloadURL, 'far fa-file', 'float-left', null, null, null, '_blank').'
           </td>
-          <td >
+          <td>
           '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.download'), $sDownloadURL, 'fas fa-download', 'float-left').'
           </td>
         </tr>';
@@ -59,12 +59,46 @@ class TCMSFieldDocumentProperties extends TCMSField
         $sDisplayType = $this->GetDisplayType();
         if ('readonly' != $sDisplayType && 'hidden' != $sDisplayType) {
             $html .= '<tr>
-              <td colspan="2">
+              <td>
               '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.replace'), 'javascript:OpenDocumentUploadWindow();', 'fas fa-file').'
+              </td>
+              <td>
+              '.$this->drawLinkCopyButton($oDownloadItem).'
               </td>
             </tr>
           </table>';
         }
+
+        return $html;
+    }
+
+    protected function drawLinkCopyButton(\TCMSDownloadFile $downloadItem): string
+    {
+        if ('1' === $this->oTableRow->sqlData['private']) {
+            return '';
+        }
+
+        $link = $downloadItem->GetPlainDownloadLink();
+
+        $showCopyLinkButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.show_copy_link'), 'javascript:toggleCopyLinkDialog(true)','fas fa-link', 'float-left');
+        $copyLinkButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_document.copy_link'), 'javascript:copyLinkTextToClipboard(); toggleCopyLinkDialog(false);','fas fa-copy', 'float-left');
+        $closeDialogButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.close'), 'javascript:toggleCopyLinkDialog(false)','fas fa-times', 'float-left');
+
+        $html = $showCopyLinkButton;
+        $html .= '
+            <div class="modal fade" id="link-copy-dialog" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-body m-1">
+                            <a href="'.TGlobal::OutHTML($link).'" target="_blank">'.TGlobal::OutHTML($link).'</a>
+                        </div>
+                        <div class="modal-footer">
+                            '.$closeDialogButton.'
+                            '.$copyLinkButton.'
+                        </div>
+                    </div>
+                </div>
+            </div>';
 
         return $html;
     }
@@ -98,8 +132,35 @@ class TCMSFieldDocumentProperties extends TCMSField
         CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');
       }
 
+      let copyLinkDialogModal = null;
+      
+      function toggleCopyLinkDialog(show) {
+        if (copyLinkDialogModal === null) {
+            const linkCopyDialog = document.getElementById('link-copy-dialog');
+            if (linkCopyDialog === null) {
+              return;
+            }
+            
+            copyLinkDialogModal = new bootstrap.Modal(linkCopyDialog);
+        }
+        
+        if (show) {
+            copyLinkDialogModal.show();
+        } else {
+            copyLinkDialogModal.hide();       
+        }
+      }
+      
+      async function copyLinkTextToClipboard() {
+        const link = document.getElementById('link-copy-dialog')?.querySelector('a');
+        if (link !== null) {
+          const text = link.getAttribute('href');
+          return await navigator.clipboard.writeText(text);
+        }
+      }
+      
       function _ReloadPage(serverData) {
-        if(serverData != false) {
+        if (serverData != false) {
           document.location.href=document.location.href;
         }
       }
