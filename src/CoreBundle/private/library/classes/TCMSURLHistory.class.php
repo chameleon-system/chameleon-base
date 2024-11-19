@@ -257,19 +257,25 @@ class TCMSURLHistory
     /**
      * Removing history entries concerning this table entry.
      */
-    public function removeEntries(string $tableId, string $entryId, string $cmsTblConfId): void
+    public function removeEntries(string $tableName, string $entryId): void
     {
+        try {
+            $cmsTblConfId = \TTools::GetCMSTableId($tableName);
+        } catch (\Exception $e) {
+            return;
+        }
+
         if ('' === $cmsTblConfId || '' === $entryId) {
             return;
         }
 
         $this->aHistory = array_values(
             array_filter($this->aHistory,
-                function (array $history) use ($tableId, $entryId, $cmsTblConfId) {
+                function (array $history) use ($tableName, $entryId, $cmsTblConfId) {
                     $filterCallback = $history['filterCallback'];
                     if (true === is_callable($filterCallback)) {
-                        /** @var $filterCallback callable(array $historyEntry, string $tableId, string $entryId, string $cmsTblConfId): bool */
-                        return false === $filterCallback($history, $tableId, $entryId, $cmsTblConfId);
+                        /** @var $filterCallback callable(array $historyEntry, string $tableName, string $entryId, string $cmsTblConfId): bool */
+                        return false === $filterCallback($history, $tableName, $entryId, $cmsTblConfId);
                     }
 
                     return false === ($cmsTblConfId === ($history['params']['tableid'] ?? null) && $entryId === ($history['params']['id'] ?? null));
