@@ -262,7 +262,7 @@ class TCMSURLHistory
         try {
             $cmsTblConfId = \TTools::GetCMSTableId($tableName);
         } catch (\Exception $e) {
-            $cmsTblConfId = '';
+            return;
         }
 
         if ('' === $cmsTblConfId || '' === $entryId) {
