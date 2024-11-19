@@ -15,7 +15,7 @@ class CleanupBreadcrumbAfterDeleteListener
     public function onRecordDelete(RecordChangeEvent $event): void
     {
         $breadcrumb = $this->breadcrumbService->getBreadcrumb();
-        if (null === $breadcrumb || true === empty($breadcrumb->aHistory ?? null)) {
+        if (null === $breadcrumb || true === empty($breadcrumb->aHistory)) {
             return;
         }
 
