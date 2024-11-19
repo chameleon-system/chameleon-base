@@ -903,9 +903,9 @@
             <argument id="database_connection" type="service"/>
         </service>
 
-        <service id="chameleon_system_core.event_listener.cleanup_breadcrumb_after_delete_listener" class="ChameleonSystem\CoreBundle\EventListener\CleanupBreadcrumbAfterDeleteListener">
+        <service id="chameleon_system_core.event_listener.cleanup_breadcrumb_after_delete_listener"
+                 class="ChameleonSystem\CoreBundle\EventListener\CleanupBreadcrumbAfterDeleteListener">
             <tag name="kernel.event_listener" event="chameleon_system_core.delete_record" method="onRecordDelete" />
-
             <argument type="service" id="chameleon_system_core.service.backend_breadcrumb"/>
         </service>
 
