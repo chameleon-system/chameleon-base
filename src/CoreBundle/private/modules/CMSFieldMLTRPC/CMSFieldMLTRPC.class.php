@@ -288,10 +288,8 @@ class CMSFieldMLTRPC extends TCMSModelBase
                         $sFieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.$oRecord->sqlData[$oListField->fieldDbAlias].'</td>';
                         $bFindShowField = true;
                     } else {
-                        if ($oListField->fieldUseCallback) {
-                            $sFieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.call_user_func($oListField->fieldCallbackFnc, $oRecord->sqlData[$oListField->fieldDbAlias], $oRecord->sqlData, $oListField->fieldTitle).'</td>';
-                            $bFindShowField = true;
-                        }
+                        $sFieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.call_user_func($oListField->fieldCallbackFnc, $oRecord->sqlData[$oListField->fieldDbAlias], $oRecord->sqlData, $oListField->fieldTitle).'</td>';
+                        $bFindShowField = true;
                     }
                 }
             }
