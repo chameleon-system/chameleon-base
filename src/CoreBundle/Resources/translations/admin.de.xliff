@@ -315,6 +315,14 @@
                 <source>chameleon_system_core.field_document.download</source>
                 <target>Herunterladen</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.show_copy_link">
+                <source>chameleon_system_core.field_document.show_copy_link</source>
+                <target>Link anzeigen / kopieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.copy_link">
+                <source>chameleon_system_core.field_document.copy_link</source>
+                <target>Link kopieren</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.field_document.right_click_download">
                 <source>chameleon_system_core.field_document.right_click_download</source>
                 <target>Rechte Maustaste - Ziel speichern unter</target>
