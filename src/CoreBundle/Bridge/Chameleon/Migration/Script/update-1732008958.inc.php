@@ -5,22 +5,20 @@
 </div>
 <?php
 
-$connection = TCMSLogChange::getDatabaseConnection();
-
-$position = $connection->fetchOne('SELECT MAX(`position`) FROM `cms_field_conf`');
-
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
         //'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_user'),
         //'name' => 'preview_token',
         //'translation' => 'Vorschau Token',
+        //'position' => 0, // is set below
         'modifier' => 'readonly',
         'fieldclass_subtype' => '',
         'class_type' => 'Core',
-        'position' => $position + 1,
     ])
     ->setWhereEquals([
         'id' => 'f492ced8-aa48-b9bb-a294-1c422c361913',
     ])
 ;
 TCMSLogChange::update(__LINE__, $data);
+
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_user'), 'preview_token', 'date_modified');
