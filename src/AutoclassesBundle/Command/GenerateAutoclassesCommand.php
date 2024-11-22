@@ -29,7 +29,7 @@ class GenerateAutoclassesCommand extends Command
 
     public function __construct(AutoclassesCacheWarmer $autoclassesCacheWarmer)
     {
-        parent::__construct('chameleon_system:autoclasses:generate');
+        parent::__construct();
         $this->autoclassesCacheWarmer = $autoclassesCacheWarmer;
     }
 
