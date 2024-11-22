@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Util;
 
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -40,9 +39,6 @@ class InputFilterUtil implements InputFilterUtilInterface
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilteredInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER)
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -53,9 +49,6 @@ class InputFilterUtil implements InputFilterUtilInterface
         return $this->filterValue($request->get($key, $default, $deep), $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilteredGetInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER)
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -83,9 +76,6 @@ class InputFilterUtil implements InputFilterUtilInterface
         return $this->filterValue($parameter, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilteredPostInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER)
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -114,9 +104,6 @@ class InputFilterUtil implements InputFilterUtilInterface
         return $this->filterValue($parameter, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filterValue($value, $filterClass)
     {
         if (null === $value) {
@@ -149,9 +136,6 @@ class InputFilterUtil implements InputFilterUtilInterface
         return $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilterObject($filterClass)
     {
         $aFilters = array();

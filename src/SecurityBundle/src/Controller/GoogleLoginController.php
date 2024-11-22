@@ -3,12 +3,10 @@
 namespace ChameleonSystem\SecurityBundle\Controller;
 
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GoogleLoginController extends AbstractController
 {
@@ -22,7 +20,7 @@ class GoogleLoginController extends AbstractController
     {
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route('/cms/google-login', name: 'connect_google_start')]
+    #[Route('/cms/google-login', name: 'connect_google_start')]
     public function connectAction(): Response
     {
         return $this->clientRegistry
@@ -30,12 +28,11 @@ class GoogleLoginController extends AbstractController
             ->redirect(self::GOOGLE_SCOPES, []);
     }
 
-
     /**
      * After going to google, you're redirected back here
      * note however, that the method itself will not be called. Instead, `\ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator::authenticate` will handle the request.
      */
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/cms/google-check', name: 'connect_google_check')]
+    #[Route(path: '/cms/google-check', name: 'connect_google_check')]
     public function connectCheckAction(Request $request, ClientRegistry $clientRegistry): Response
     {
         return new Response('nothing to do');

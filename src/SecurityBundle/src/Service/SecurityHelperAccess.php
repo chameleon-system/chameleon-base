@@ -3,10 +3,10 @@
 namespace ChameleonSystem\SecurityBundle\Service;
 
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
 use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class SecurityHelperAccess
 {
 
-    public function __construct(readonly private \Symfony\Bundle\SecurityBundle\Security $security, readonly private FirewallMap $firewallMap)
+    public function __construct(readonly private Security $security, readonly private FirewallMap $firewallMap)
     {
     }
 
@@ -30,7 +30,7 @@ class SecurityHelperAccess
         return $this->firewallMap->getFirewallConfig($request);
     }
 
-    public function getSecurity(): \Symfony\Bundle\SecurityBundle\Security
+    public function getSecurity(): Security
     {
         return $this->security;
     }
