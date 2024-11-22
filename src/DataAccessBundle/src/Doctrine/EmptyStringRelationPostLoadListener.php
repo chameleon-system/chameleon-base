@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 // exists with the id '' and try to load the related entity resulting in an exception when accessing the relation.
 class EmptyStringRelationPostLoadListener
 {
-
     public function postLoad(PostLoadEventArgs $event)
     {
         $metadata = $event->getObjectManager()->getClassMetadata($event->getObject()::class);
@@ -28,5 +27,4 @@ class EmptyStringRelationPostLoadListener
 
         return $event;
     }
-
 }

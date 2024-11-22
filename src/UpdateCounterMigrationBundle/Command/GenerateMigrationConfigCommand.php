@@ -12,11 +12,12 @@
 namespace ChameleonSystem\UpdateCounterMigrationBundle\Command;
 
 use ChameleonSystem\UpdateCounterMigrationBundle\Config\MigrationConfigGenerator;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[\Symfony\Component\Console\Attribute\AsCommand(description: 'Generates the configuration needed to migrate update counters', name: 'chameleon_system:update_counter_migration:generate_config')]
+#[AsCommand(description: 'Generates the configuration needed to migrate update counters', name: 'chameleon_system:update_counter_migration:generate_config')]
 class GenerateMigrationConfigCommand extends Command
 {
     /**
@@ -48,9 +49,6 @@ EOF
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $migrationConfigData = $this->migrationConfigGenerator->getMigrationConfigData();

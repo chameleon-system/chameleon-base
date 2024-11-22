@@ -13,6 +13,7 @@ namespace ChameleonSystem\ViewRendererBundle\Command;
 
 use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use ChameleonSystem\ViewRendererBundle\Service\ThemeService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,7 +23,7 @@ use TdbCmsPortalList;
 /**
  * Generates Css from Less for all portals and writes it into appropriate files.
  */
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'chameleon_system:less:compile', description: 'Compiles LESS for all portals')]
+#[AsCommand(name: 'chameleon_system:less:compile', description: 'Compiles LESS for all portals')]
 class CompileLessCommand extends Command
 {
     /**
@@ -61,9 +62,6 @@ EOF
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Compiling less...');
