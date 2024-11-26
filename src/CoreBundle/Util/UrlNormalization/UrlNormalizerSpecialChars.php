@@ -16,7 +16,7 @@ class UrlNormalizerSpecialChars implements UrlNormalizerInterface
     /**
      * @var array<string, string>
      */
-    private static $specialCharNormalization = array(
+    private static array $specialCharNormalization = [
         '®' => '',
         '™' => '',
         '€' => ' EUR',
@@ -114,7 +114,7 @@ class UrlNormalizerSpecialChars implements UrlNormalizerInterface
         'Þ' => '',
         '|' => '',
         '\\' => '',
-    );
+    ];
 
     /**
      * The third index in the search array is a special character. It looks like a space but it is a special space
@@ -123,7 +123,7 @@ class UrlNormalizerSpecialChars implements UrlNormalizerInterface
      *
      * @var string[]
      */
-    private static $specialCharToSpacerNormalization = array(
+    private static array $specialCharToSpacerNormalization = [
         '/',
         ' ',
         ' ',
@@ -131,7 +131,7 @@ class UrlNormalizerSpecialChars implements UrlNormalizerInterface
         '.',
         '&',
         '…',
-    );
+    ];
 
     /**
      * {@inheritdoc}
