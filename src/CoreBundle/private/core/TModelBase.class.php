@@ -248,9 +248,9 @@ class TModelBase
             header('HTTP/1.0 404 Not Found');
             exit();
         } else {
-            if (false === $this->AllowAccessWithoutAuthenticityToken($methodName)
-                && false === $this->getAuthenticityTokenManager()->isTokenValid()) {
-                return;
+            if (false === $this->AllowAccessWithoutAuthenticityToken($methodName) && false === $this->getAuthenticityTokenManager()->isTokenValid()) {
+                header('HTTP/1.0 401 Token invalid');
+                exit();
             }
             // call the _fnc method in the current module
             $functionResult = &$this->_CallMethod($methodName);
