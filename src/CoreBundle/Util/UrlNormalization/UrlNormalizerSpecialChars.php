@@ -130,6 +130,7 @@ class UrlNormalizerSpecialChars implements UrlNormalizerInterface
         ',',
         '.',
         '&',
+        '…',
     );
 
     /**
