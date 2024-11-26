@@ -264,6 +264,7 @@ class TModelBase
         if (true === $this->global->UserDataExists('sOutputMode') && true === in_array($this->global->GetUserData('sOutputMode'), $permittedOutputModes)) {
             $outputMode = $this->global->GetUserData('sOutputMode');
         }
+
         switch ($outputMode) {
             case 'Plain':
                 $this->_OutputForAjaxPlain($functionResult);
