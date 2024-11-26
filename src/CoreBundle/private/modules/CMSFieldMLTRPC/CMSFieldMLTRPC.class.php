@@ -238,9 +238,9 @@ class CMSFieldMLTRPC extends TCMSModelBase
     /**
      * write info line for all fields which should be in sort list as div.
      *
-     * @param TCMSListFieldList $oListFieldsList
+     * @param TdbCmsTblDisplayListFieldsList $oListFieldsList
      * @param TCMSRecord        $oRecord
-     * @param TCMSTblConf       $oTableConf
+     * @param TdbCmsTblConf       $oTableConf
      *
      * @return string
      */
@@ -269,41 +269,38 @@ class CMSFieldMLTRPC extends TCMSModelBase
     }
 
     /**
-     * Get all field values value as table.
+     * Get all field values as table.
      *
-     * @param TCMSListFieldList $oListFieldsList
+     * @param TdbCmsTblDisplayListFieldsList $oListFieldsList
      * @param TCMSRecord        $oRecord
-     * @param TCMSTblConf       $oTableConf
+     * @param TdbCmsTblConf       $oTableConf
      *
      * @return string
      */
     protected function ListFieldsToString($oListFieldsList, $oRecord, $oTableConf)
     {
-        $sFieldListString = '';
-        $bFindShowField = false;
-        if (!is_null($oListFieldsList) && $oListFieldsList->Length() > 0) {
-            while ($oListField = &$oListFieldsList->Next()) {
-                if ($oListField->fieldShowInSort) {
-                    if (empty($oListField->fieldCallbackFnc)) {
-                        $sFieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.$oRecord->sqlData[$oListField->fieldDbAlias].'</td>';
-                        $bFindShowField = true;
+        $fieldListString = '';
+        $fieldShown = false;
+        if (null !== $oListFieldsList && $oListFieldsList->Length() > 0) {
+            foreach ($oListFieldsList as $oListField) {
+                if (true === $oListField->fieldShowInSort) {
+                    $fieldShown = true;
+                    if ('' === $oListField->fieldCallbackFnc) {
+                        $fieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.$oRecord->sqlData[$oListField->fieldDbAlias].'</td>';
                     } else {
-                        if ($oListField->fieldUseCallback) {
-                            $sFieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.call_user_func($oListField->fieldCallbackFnc, $oRecord->sqlData[$oListField->fieldDbAlias], $oRecord->sqlData, $oListField->fieldTitle).'</td>';
-                            $bFindShowField = true;
-                        }
+                        $fieldListString .= '<td class="w-100 '.$oListField->fieldDbAlias.'">'.call_user_func($oListField->fieldCallbackFnc, $oRecord->sqlData[$oListField->fieldDbAlias], $oRecord->sqlData, $oListField->fieldTitle).'</td>';
                     }
                 }
             }
         }
 
-        if (false == $bFindShowField) {
-            $sFieldListString .= '<td class="w-100">'.$oRecord->GetName().'</td>';
+        if (false === $fieldShown) {
+            $fieldListString .= '<td class="w-100">'.$oRecord->GetName().'</td>';
         }
 
-        $sFieldListString .= '<td><i class="fas fa-arrows-alt-v pr-2 float-right"></i></td>';
+        $fieldListString .= '<td><i class="fas fa-arrows-alt-v pr-2 float-right"></i></td>';
 
-        return $sFieldListString;
+        return $fieldListString;
     }
 
     /**
