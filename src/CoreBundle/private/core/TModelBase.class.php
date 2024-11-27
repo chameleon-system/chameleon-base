@@ -152,9 +152,9 @@ class TModelBase
 
         $trace = debug_backtrace();
         trigger_error(sprintf('Undefined property via __get(): %s in %s on line %s',
-                $name,
-                $trace[0]['file'],
-                $trace[0]['line']),
+            $name,
+            $trace[0]['file'],
+            $trace[0]['line']),
             E_USER_NOTICE);
 
         return null;
@@ -240,35 +240,39 @@ class TModelBase
      */
     public function ExecuteAjaxCall()
     {
+        static $permittedOutputModes = ['Ajax', 'Plain'];
+
         $methodName = $this->global->GetUserData('_fnc');
-        if (empty($methodName)) {
-            if (_DEVELOPMENT_MODE) {
+        if ('' === $methodName || [] === $methodName) {
+            if (true === _DEVELOPMENT_MODE) {
                 trigger_error('Ajax call made, but no function passed via _fnc', E_USER_WARNING);
             }
             header('HTTP/1.0 404 Not Found');
             exit();
-        } else {
-            if (false === $this->AllowAccessWithoutAuthenticityToken($methodName)
-                && false === $this->getAuthenticityTokenManager()->isTokenValid()) {
-                return;
-            }
-            // call the _fnc method in the current module
-            $functionResult = &$this->_CallMethod($methodName);
+        }
 
-            $sOutputMode = 'Ajax';
-            $aPermittedOutputModes = array('Ajax', 'Plain');
-            if ($this->global->UserDataExists('sOutputMode') && in_array($this->global->GetUserData('sOutputMode'), $aPermittedOutputModes)) {
-                $sOutputMode = $this->global->GetUserData('sOutputMode');
-            }
-            switch ($sOutputMode) {
-                case 'Plain':
-                    $this->_OutputForAjaxPlain($functionResult);
-                    break;
-                case 'Ajax':
-                default:
-                    $this->_OutputForAjax($functionResult);
-                    break;
-            }
+        if (false === $this->AllowAccessWithoutAuthenticityToken($methodName) && false === $this->getAuthenticityTokenManager()->isTokenValid()) {
+            header('HTTP/1.0 401 Token invalid');
+            exit();
+        }
+
+        // call the _fnc method in the current module
+        $functionResult = &$this->_CallMethod($methodName);
+
+        $outputMode = 'Ajax';
+
+        if (true === $this->global->UserDataExists('sOutputMode') && true === in_array($this->global->GetUserData('sOutputMode'), $permittedOutputModes)) {
+            $outputMode = $this->global->GetUserData('sOutputMode');
+        }
+
+        switch ($outputMode) {
+            case 'Plain':
+                $this->_OutputForAjaxPlain($functionResult);
+                break;
+            case 'Ajax':
+            default:
+                $this->_OutputForAjax($functionResult);
+                break;
         }
     }
 
