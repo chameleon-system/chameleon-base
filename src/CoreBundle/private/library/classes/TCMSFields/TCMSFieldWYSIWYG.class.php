@@ -64,9 +64,9 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     public function GetReadOnly()
     {
         parent::GetReadOnly();
-        $html = $this->GetHTML();
+        $this->bReadOnlyMode = true;
 
-        return $html;
+        return $this->GetHTML();
     }
 
     /**
