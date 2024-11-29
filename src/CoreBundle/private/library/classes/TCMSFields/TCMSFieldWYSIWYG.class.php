@@ -389,14 +389,11 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         switch (CHAMELEON_WYSIWYG_LINE_ENDINGS) {
             case 'DIV':
                 return 'CKEDITOR.ENTER_DIV';
-                break;
             case 'BR':
                 return 'CKEDITOR.ENTER_BR';
-                break;
             case 'P':
             default:
                 return 'CKEDITOR.ENTER_P';
-                break;
         }
     }
 
