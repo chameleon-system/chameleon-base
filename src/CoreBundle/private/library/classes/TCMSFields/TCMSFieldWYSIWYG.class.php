@@ -29,7 +29,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 {
     private $sEditorHeight = '530px';
 
-    private $sEditorWidth = null;
+    private $sEditorWidth;
 
     public function GetHTML()
     {
@@ -41,7 +41,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         $oViewRenderer->AddSourceObject('aEditorSettings', $this->getEditorSettings());
         $sUserCssUrl = $this->getEditorCSSUrl();
         if ('' !== $sUserCssUrl) {
-            $aStyles = array();
+            $aStyles = [];
             try {
                 $aStyles = $this->getJSStylesSet($sUserCssUrl);
             } catch (Exception $e) {
@@ -64,9 +64,9 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     public function GetReadOnly()
     {
         parent::GetReadOnly();
-        $html = $this->GetHTML();
+        $this->bReadOnlyMode = true;
 
-        return $html;
+        return $this->GetHTML();
     }
 
     /**
@@ -74,7 +74,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     private function getDefaultEditorSettings()
     {
-        $aEditorSettings = array();
+        $aEditorSettings = [];
 
         $sReadOnlyMode = 'false';
         if ($this->bReadOnlyMode) {
@@ -156,12 +156,12 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     {
         $aIncludes = parent::GetCMSHtmlHeadIncludes();
         if (!is_array($aIncludes)) {
-            $aIncludes = array();
+            $aIncludes = [];
         }
         $aIncludes[] = '<script src="'.URL_CMS.'/components/ckEditor/ckeditor/ckeditor.js" type="text/javascript"></script>';
         $aIncludes[] = '<script type="text/javascript" src="'.TGlobal::GetStaticURL(
-                '/chameleon/blackbox/javascript/CKEditor/chameleon.ckeditor.js'
-            ).'"></script>';
+            '/chameleon/blackbox/javascript/CKEditor/chameleon.ckeditor.js'
+        ).'"></script>';
 
         return $aIncludes;
     }
@@ -227,8 +227,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * @param TCMSUser $oUser
-     * @param array    $aToolbar
+     * @param array $aToolbar
      *
      * @return array
      */
@@ -276,7 +275,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * @param array  $aToolbar
+     * @param array $aToolbar
      * @param string $sSectionName
      *
      * @return array
@@ -316,7 +315,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * @param array  $aToolbar
+     * @param array $aToolbar
      * @param string $sItemName
      *
      * @return array
@@ -389,14 +388,11 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         switch (CHAMELEON_WYSIWYG_LINE_ENDINGS) {
             case 'DIV':
                 return 'CKEDITOR.ENTER_DIV';
-                break;
             case 'BR':
                 return 'CKEDITOR.ENTER_BR';
-                break;
             case 'P':
             default:
                 return 'CKEDITOR.ENTER_P';
-                break;
         }
     }
 
@@ -443,7 +439,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     protected function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -451,7 +447,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     protected function getUrlUtilService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
     }
 
     /**
@@ -509,9 +505,9 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         }
 
         if (array_key_exists(
-                'cms_portal_id',
-                $this->oTableRow->sqlData
-            ) && !empty($this->oTableRow->sqlData['cms_portal_id'])
+            'cms_portal_id',
+            $this->oTableRow->sqlData
+        ) && !empty($this->oTableRow->sqlData['cms_portal_id'])
         ) {
             return TdbCmsPortal::GetNewInstance($this->oTableRow->sqlData['cms_portal_id']);
         }
@@ -525,9 +521,9 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     protected function getConnectedPageForCurrentRecord()
     {
         if (false === array_key_exists(
-                'cms_tpl_module_instance_id',
-                $this->oTableRow->sqlData
-            ) || '' === $this->oTableRow->sqlData['cms_tpl_module_instance_id']
+            'cms_tpl_module_instance_id',
+            $this->oTableRow->sqlData
+        ) || '' === $this->oTableRow->sqlData['cms_tpl_module_instance_id']
         ) {
             return null;
         }
@@ -592,7 +588,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     private function getUniqueStylesSetName($sUserCssUrl)
     {
-        return str_replace(array(':', '.', '/', '-'), '_', $sUserCssUrl);
+        return str_replace([':', '.', '/', '-'], '_', $sUserCssUrl);
     }
 
     /**
@@ -604,11 +600,11 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     private function getJSStylesSet($sUserCssUrl)
     {
-        $aStyles = array();
+        $aStyles = [];
 
         $aCustomCSSClasses = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
         foreach ($aCustomCSSClasses as $sClassName) {
-            $aStyle = array();
+            $aStyle = [];
             if ('@' == substr($sClassName, 0, 1)) {
                 continue;
             }
@@ -648,8 +644,8 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     {
         static $aStyleCache;
         if (!$aStyleCache) {
-            $aParameters = array('class' => 'CSSTree', 'cssurl' => $sUserCSSURL);
-            $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+            $aParameters = ['class' => 'CSSTree', 'cssurl' => $sUserCSSURL];
+            $cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
             $key = $cache->getKey($aParameters, false);
             $aStyleCache = $cache->get($key);
             if (null === $aStyleCache) {
@@ -731,6 +727,6 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     private function getCkeditorConfigProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.wysiwyg.ckeditor_config_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.wysiwyg.ckeditor_config_provider');
     }
 }
