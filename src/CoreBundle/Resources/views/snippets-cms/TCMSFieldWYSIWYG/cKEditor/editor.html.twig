@@ -2,15 +2,62 @@
     {% if couldNotLoadCustomCss %}
         <div class="alert alert-info">{{ 'chameleon_system_core.field_wysiwyg.custom_css_loading_error'|trans({'%url%': customCssUrl}) }}</div>
     {% endif %}
-    <textarea cols="80" id="{{ sEditorName }}" name="{{ sFieldName }}" rows="10">
-        {{ data|raw }}
-    </textarea>
+
+    <div class="card">
+        <div class="card-header p-1 d-flex align-items-center justify-content-between" id="{{ sEditorName }}header"
+             style="cursor: pointer;">
+            <span>Text Editor</span>
+            <i class="fas fa-chevron-down" id="{{ sEditorName }}ToggleIcon"></i>
+        </div>
+
+        <div class="card-body p-0">
+            <textarea cols="80" id="{{ sEditorName }}" name="{{ sFieldName }}" rows="10">
+                {{ data|raw }}
+            </textarea>
+        </div>
+    </div>
 
     <script type="text/javascript">
-        var editorStyleSets = '';
-        editorStyleSets = {{ aEditorSettings.stylesSet|raw }};
-        if (!(editorStyleSets in CKEDITOR.stylesSet.registered)) {
-            {% if aEditorSettings.stylesSet %}
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleIcon = document.getElementById('{{ sEditorName }}ToggleIcon');
+            const editorElement = document.getElementById('{{ sEditorName }}');
+            const editorInstanceName = '{{ sEditorName }}';
+            const editorHeightEmpty = 30;
+            const editorHeightFilled = 150;
+
+            let isExpanded = false;
+            const initialHeight = editorElement.value.trim() === '' ? editorHeightEmpty : editorHeightFilled;
+
+            var settingsSystem = {
+            {% for sSettingKey, sSettingValue in aEditorSettings %}
+            {{ sSettingKey|raw }}: {{ sSettingValue|raw }}{% if not loop.last %},{% endif %}
+            {% endfor %}
+        };
+
+            var settingsDefault = {
+                height: initialHeight,
+                on: {
+                    change: function (event) {
+                        const editor = event.editor;
+                        const instanceData = editor.getData();
+                        document.getElementById(editorInstanceName).value = instanceData;
+                    }
+                }
+            };
+
+            var settings = {};
+            $.extend(true, settings, settingsSystem, settingsDefault);
+
+            {% include 'TCMSFieldWYSIWYG/cKEditor/plugins.html.twig' %}
+
+            {% for extraPluginConfiguration in extraPluginsConfiguration %}
+            CKEDITOR.plugins.addExternal('{{ extraPluginConfiguration.name }}', '{{ extraPluginConfiguration.dir }}', '{{ extraPluginConfiguration.jsFile }}');
+            {% endfor %}
+
+            var editorStyleSets = '';
+            editorStyleSets = {{ aEditorSettings.stylesSet|raw }};
+            if (!(editorStyleSets in CKEDITOR.stylesSet.registered)) {
+                {% if aEditorSettings.stylesSet %}
                 CKEDITOR.stylesSet.add({{ aEditorSettings.stylesSet|raw }}, [
                     {% for style in aStyles %}
                     {
@@ -24,44 +71,34 @@
                 {% endif %}
             }
 
-            var settingsSystem = {
-                {% for sSettingKey, sSettingValue in aEditorSettings %}
-                    {{ sSettingKey|raw }}: {{ sSettingValue|raw }}{% if not loop.last %},{% endif %}
-                {% endfor %}
-            };
-            var settingsDefault = {
-                on: {
-                    change: function (event) {
-                        // copy data to text area
-                        var editor = event.editor,
-                                instanceName = editor.name,
-                                instanceData = editor.getData();
-                        $('#' + instanceName).val(instanceData);
-                    }
+            CHAMELEON.CORE.CKEditor.instantiate(editorInstanceName, settings);
+
+            document.getElementById('{{ sEditorName }}header').addEventListener('click', function () {
+                const editor = CKEDITOR.instances[editorInstanceName];
+                const toolbarHeight = 33 + CKEDITOR.instances[editorInstanceName].container.$.querySelector('.cke_top').offsetHeight || 50;
+                if (!isExpanded) {
+                    const fullHeight = 450 + toolbarHeight;
+                    editor.resize('100%', fullHeight);
+                    toggleIcon.classList.remove('fa-chevron-down');
+                    toggleIcon.classList.add('fa-chevron-up');
+                } else {
+                    const collapsedHeight = (editorElement.value.trim() === '' ? editorHeightEmpty : editorHeightFilled) + toolbarHeight;
+                    editor.resize('100%', `${collapsedHeight}`);
+                    toggleIcon.classList.remove('fa-chevron-up');
+                    toggleIcon.classList.add('fa-chevron-down');
                 }
-            };
-
-            var settings = {};
-
-            $.extend(true, settings, settingsSystem, settingsDefault);
-
-            {% include 'TCMSFieldWYSIWYG/cKEditor/plugins.html.twig' %}
-
-            //        var basePath = CKEDITOR.basePath;
-            //        basePath = basePath.substr(0, basePath.indexOf("ckeditor/"));
-            {% for extraPluginConfiguration in extraPluginsConfiguration %}
-            CKEDITOR.plugins.addExternal('{{ extraPluginConfiguration.name }}', '{{ extraPluginConfiguration.dir }}', '{{ extraPluginConfiguration.jsFile }}');
-            {% endfor %}
-
-            CHAMELEON.CORE.CKEditor.instantiate('{{ sEditorName }}', settings);
+                isExpanded = !isExpanded;
+            });
 
             CKEDITOR.on('instanceReady', function () {
                 if (CKEDITOR.lang.de) CKEDITOR.lang.de.common.browseServer = 'CMS Quelle wählen';
                 else if (CKEDITOR.lang.en) CKEDITOR.lang.en.common.browseServer = 'Select CMS Source';
 
-                document.addEventListener('tableEditorBeforeSaveEvent', function(e) {
-                    $('#{{ sEditorName }}').val(CKEDITOR.instances['{{ sEditorName }}'].getData());
+                document.addEventListener('tableEditorBeforeSaveEvent', function () {
+                    document.getElementById('{{ sEditorName }}').value = CKEDITOR.instances[editorInstanceName].getData();
                 });
             });
+        });
+
     </script>
 </div>
