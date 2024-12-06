@@ -16,44 +16,47 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * WYSIWYG text field.
  *
- * you may set the field config variable "disableButtons" in CMS field configuration
- * or global via constant: CHAMELEON_WYSIWYG_DISABLED_BUTTONS
+ * You may set the field config variable "disableButtons" in CMS field configuration
+ * or global via constant: CHAMELEON_WYSIWYG_DISABLED_BUTTONS.
  *
  * @see http://docs.cksource.com/CKEditor_3.x/Developers_Guide/Toolbar for detailed list
  *
- * it`s possible to overwrite the CSS URL by setting: css=[{portalurl}]/pathtowysiwyg.css
- * in field configuration
+ * It`s possible to overwrite the CSS URL by setting: css=[{portalurl}]/pathtowysiwyg.css
+ * in the field configuration.
  *
  * /**/
 class TCMSFieldWYSIWYG extends TCMSFieldText
 {
-    private $sEditorHeight = '530px';
+    private string $editorHeight = '450px';
 
-    private $sEditorWidth;
+    private ?string $editorWidth = null;
 
     public function GetHTML()
     {
         parent::GetHTML();
-        $oViewRenderer = new ViewRenderer();
-        $oViewRenderer->AddSourceObject('sEditorName', 'fieldcontent_'.$this->sTableName.'_'.$this->name);
-        $oViewRenderer->AddSourceObject('sFieldName', $this->name);
-        $oViewRenderer->AddSourceObject('extraPluginsConfiguration', $this->getExtraPluginsConfiguration());
-        $oViewRenderer->AddSourceObject('aEditorSettings', $this->getEditorSettings());
+        $viewRenderer = new ViewRenderer();
+        $viewRenderer->AddSourceObject('sEditorName', 'fieldcontent_'.$this->sTableName.'_'.$this->name);
+        $viewRenderer->AddSourceObject('sFieldName', $this->name);
+        $viewRenderer->AddSourceObject('extraPluginsConfiguration', $this->getExtraPluginsConfiguration());
+        $viewRenderer->AddSourceObject('aEditorSettings', $this->getEditorSettings());
         $sUserCssUrl = $this->getEditorCSSUrl();
         if ('' !== $sUserCssUrl) {
-            $aStyles = [];
+            $cssStyles = [];
             try {
-                $aStyles = $this->getJSStylesSet($sUserCssUrl);
+                $cssStyles = $this->getJSStylesSet($sUserCssUrl);
             } catch (Exception $e) {
-                $oViewRenderer->AddSourceObject('couldNotLoadCustomCss', true);
-                $oViewRenderer->AddSourceObject('customCssUrl', $sUserCssUrl);
+                $viewRenderer->AddSourceObject('couldNotLoadCustomCss', true);
+                $viewRenderer->AddSourceObject('customCssUrl', $sUserCssUrl);
             }
 
-            $oViewRenderer->AddSourceObject('aStyles', $aStyles);
+            $viewRenderer->AddSourceObject('cssStyles', $cssStyles);
         }
-        $oViewRenderer->AddSourceObject('data', $this->data);
+        $viewRenderer->AddSourceObject('data', $this->data);
+        $viewRenderer->AddSourceObject('editorHeight', (int) str_replace('px', '', $this->getEditorHeight()));
 
-        return $oViewRenderer->Render('TCMSFieldWYSIWYG/cKEditor/editor.html.twig', null, false);
+        $viewRenderer->AddSourceObject('isCalledInModal', $this->isCalledInModal());
+
+        return $viewRenderer->Render('TCMSFieldWYSIWYG/cKEditor/editor.html.twig', null, false);
     }
 
     /**
@@ -69,10 +72,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         return $this->GetHTML();
     }
 
-    /**
-     * @return array
-     */
-    private function getDefaultEditorSettings()
+    private function getDefaultEditorSettings(): array
     {
         $aEditorSettings = [];
 
@@ -166,40 +166,35 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         return $aIncludes;
     }
 
-    /**
-     * @param array $aToolbar
-     *
-     * @return string
-     */
-    private function convertToolbar($aToolbar)
+    private function convertToolbar(array $toolbarSections): string
     {
-        $sToolbar = '';
-        $iCount = 0;
-        foreach ($aToolbar as $mSection) {
-            ++$iCount;
-            if ($this->toolbarOptionIsValid($mSection)) {
-                $sToolbar .= '{ ';
-                $sToolbar .= "name: '".$mSection['name']."',";
-                $sToolbar .= 'items: [ ';
-                $iSubCount = 0;
-                foreach ($mSection['items'] as $sItem) {
-                    ++$iSubCount;
-                    $sToolbar .= "'".$sItem."'";
-                    if ($iSubCount < count($mSection['items'])) {
-                        $sToolbar .= ',';
+        $toolbar = '';
+        $count = 0;
+        foreach ($toolbarSections as $section) {
+            ++$count;
+            if ($this->toolbarOptionIsValid($section)) {
+                $toolbar .= '{ ';
+                $toolbar .= "name: '".$section['name']."',";
+                $toolbar .= 'items: [ ';
+                $subCount = 0;
+                foreach ($section['items'] as $sItem) {
+                    ++$subCount;
+                    $toolbar .= "'".$sItem."'";
+                    if ($subCount < count($section['items'])) {
+                        $toolbar .= ',';
                     }
                 }
-                $sToolbar .= ' ]';
-                $sToolbar .= ' }';
+                $toolbar .= ' ]';
+                $toolbar .= ' }';
             } else {
-                $sToolbar .= "'".$mSection."'";
+                $toolbar .= "'".$section."'";
             }
-            if ($iCount < count($aToolbar)) {
-                $sToolbar .= ',';
+            if ($count < count($toolbarSections)) {
+                $toolbar .= ',';
             }
         }
 
-        return '[ '.$sToolbar.' ]';
+        return '[ '.$toolbar.' ]';
     }
 
     /**
@@ -216,14 +211,9 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         return $aToolbar;
     }
 
-    /**
-     * @param array $aOption
-     *
-     * @return bool
-     */
-    private function toolbarOptionIsValid($aOption)
+    private function toolbarOptionIsValid(array|string $optionData): bool
     {
-        return is_array($aOption) && isset($aOption['name']) && isset($aOption['items']);
+        return is_array($optionData) && isset($optionData['name']) && isset($optionData['items']);
     }
 
     /**
@@ -335,12 +325,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         return $aToolbar;
     }
 
-    /**
-     * @param array $aDisabledPlugins
-     *
-     * @return string
-     */
-    private function convertDisabledPlugins($aDisabledPlugins)
+    private function convertDisabledPlugins(array $aDisabledPlugins): string
     {
         $sDisabledPlugins = '';
         $iCount = 0;
@@ -364,26 +349,21 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 
     /**
      * returns the ISO6391 language code of the current CMS user.
-     *
-     * @return string
      */
-    private function getLanguageCode()
+    private function getLanguageCode(): string
     {
-        /** @var $oUser TdbCmsUser */
-        $oUser = TdbCmsUser::GetActiveUser();
-        $oBackendLanguage = $oUser->GetFieldCmsLanguage();
+        $user = TdbCmsUser::GetActiveUser();
+        $backendLanguage = $user->GetFieldCmsLanguage();
 
-        return $oBackendLanguage->fieldIso6391;
+        return $backendLanguage->fieldIso6391;
     }
 
     /**
      * enterMode defines how line break will be handled by the editor, this is defined by CHAMELEON_WYSIWYG_LINE_ENDINGS constant
      * possible values are DIV, BR and P default (and highly recommended) is P
      * this values will be translated into CKEDITOR.ENTER_DIV, CKEDITOR.ENTER_BR, and CKEDITOR.ENTER_P.
-     *
-     * @return string
      */
-    private function getEnterMode()
+    private function getEnterMode(): string
     {
         switch (CHAMELEON_WYSIWYG_LINE_ENDINGS) {
             case 'DIV':
@@ -398,10 +378,8 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 
     /**
      * Loads a custom CSS file for the editor based on CMS config, portal, template or field configuration (in this order).
-     *
-     * @return string
      */
-    private function getEditorCSSUrl()
+    private function getEditorCSSUrl(): string
     {
         // load portal based CSS URL
         $portalCssUrl = $this->getPortalCssUrl();
@@ -457,11 +435,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     {
         $connectedPage = $this->getConnectedPageForCurrentRecord();
 
-        if (null === $connectedPage) {
-            return '';
-        }
-
-        if ('' === $connectedPage->fieldCmsMasterPagedefId) {
+        if (null === $connectedPage || '' === $connectedPage->fieldCmsMasterPagedefId) {
             return '';
         }
 
@@ -479,10 +453,8 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      * - https://www.fuu.baa/assets/myCustom.css
      * - [{portalurl}]/assets/myCustom.css
      * - /assets/my-portal-name.de/css/.
-     *
-     * @return string
      */
-    private function getPortalCssUrl()
+    private function getPortalCssUrl(): string
     {
         $portal = $this->getPortalForCurrentRecord();
 
@@ -542,12 +514,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         return $connectedPage;
     }
 
-    /**
-     * @param string $sPortalCssUrl
-     *
-     * @return string
-     */
-    private function getUserCssUrl($sPortalCssUrl)
+    private function getUserCssUrl(string $portalCssUrl): string
     {
         $fieldSpecificCustomCssUrl = $this->oDefinition->GetFieldtypeConfigKey('css');
         if (null === $fieldSpecificCustomCssUrl) {
@@ -555,10 +522,10 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         }
 
         if (false !== strpos($fieldSpecificCustomCssUrl, '[{portalurl}]')) {
-            if ('' !== $sPortalCssUrl && '.css' !== substr($sPortalCssUrl, -4)) {
+            if ('' !== $portalCssUrl && '.css' !== substr($portalCssUrl, -4)) {
                 // it doesn`t end with a CSS file, so it`s a prefix (e.g. /css/portalname/)
 
-                $fieldSpecificCustomCssUrl = str_replace('[{portalurl}]', $sPortalCssUrl, $fieldSpecificCustomCssUrl);
+                $fieldSpecificCustomCssUrl = str_replace('[{portalurl}]', $portalCssUrl, $fieldSpecificCustomCssUrl);
 
                 return $this->getUrlUtilService()->getAbsoluteUrl(
                     $fieldSpecificCustomCssUrl,
@@ -580,35 +547,27 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * transforms css file path to a usable stylesSet name.
-     *
-     * @param string $sUserCssUrl
-     *
-     * @return string
+     * Transforms css file path to a usable stylesSet name.
      */
-    private function getUniqueStylesSetName($sUserCssUrl)
+    private function getUniqueStylesSetName(string $userCssUrl): string
     {
-        return str_replace([':', '.', '/', '-'], '_', $sUserCssUrl);
+        return str_replace([':', '.', '/', '-'], '_', $userCssUrl);
     }
 
     /**
-     * parse user css file and translate the styles for usage in javascript array collection / map.
-     *
-     * @param string $sUserCssUrl
-     *
-     * @return array
+     * Parses user css file and translate the styles for usage in javascript array collection / map.
      */
-    private function getJSStylesSet($sUserCssUrl)
+    private function getJSStylesSet(string $sUserCssUrl): array
     {
         $aStyles = [];
 
         $aCustomCSSClasses = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
         foreach ($aCustomCSSClasses as $sClassName) {
             $aStyle = [];
-            if ('@' == substr($sClassName, 0, 1)) {
+            if ('@' === substr($sClassName, 0, 1)) {
                 continue;
             }
-            if ('.' == substr($sClassName, 0, 1)) {
+            if ('.' === substr($sClassName, 0, 1)) {
                 $sClassName = substr($sClassName, 1);
                 $aStyle['name'] = "'".$sClassName."'";
                 $aStyle['element'] = "['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li']";
@@ -684,7 +643,11 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     protected function getEditorHeight()
     {
-        return $this->sEditorHeight;
+        if (true === $this->isCalledInModal()) {
+            return '650';
+        }
+
+        return $this->editorHeight;
     }
 
     /**
@@ -692,18 +655,18 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     protected function getEditorWidth()
     {
-        if (null === $this->sEditorWidth) {
+        if (null === $this->editorWidth) {
             if (!empty($this->fieldCSSwidth)) {
-                $sEditorWidth = $this->fieldCSSwidth;
+                $editorWidth = $this->fieldCSSwidth;
             } else {
-                $sEditorWidth = '100%';
+                $editorWidth = '100%';
             }
-            $this->setEditorWidth($sEditorWidth);
+            $this->setEditorWidth($editorWidth);
 
-            return $sEditorWidth;
-        } else {
-            return $this->sEditorWidth;
+            return $editorWidth;
         }
+
+        return $this->editorWidth;
     }
 
     /**
@@ -711,7 +674,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     protected function setEditorHeight($sEditorHeight)
     {
-        $this->sEditorHeight = $sEditorHeight;
+        $this->editorHeight = $sEditorHeight;
     }
 
     /**
@@ -719,13 +682,15 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     protected function setEditorWidth($sEditorWidth)
     {
-        $this->sEditorWidth = $sEditorWidth;
+        $this->editorWidth = $sEditorWidth;
     }
 
-    /**
-     * @return CkEditorConfigProviderInterface
-     */
-    private function getCkeditorConfigProvider()
+    private function isCalledInModal(): bool
+    {
+        return '1' === $this->getCurrentRequest()->get('isInModal');
+    }
+
+    private function getCkeditorConfigProvider(): CkEditorConfigProviderInterface
     {
         return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.wysiwyg.ckeditor_config_provider');
     }

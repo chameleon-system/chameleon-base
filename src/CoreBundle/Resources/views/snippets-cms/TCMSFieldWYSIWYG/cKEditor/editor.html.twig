@@ -1,3 +1,16 @@
+{#
+    @var string sEditorName
+    @var string sFieldName
+    @var array extraPluginsConfiguration
+    @var array aEditorSettings
+    @var bool couldNotLoadCustomCss
+    @var string customCssUrl
+    @var array cssStyles
+    @var array data
+    @var int editorHeight
+    @var bool isCalledInModal
+#}
+
 <div>
     {% if couldNotLoadCustomCss %}
         <div class="alert alert-info">{{ 'chameleon_system_core.field_wysiwyg.custom_css_loading_error'|trans({'%url%': customCssUrl}) }}</div>
@@ -16,14 +29,20 @@
             </textarea>
         </div>
     </div>
-
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
             const toggleIcon = document.getElementById('{{ sEditorName }}ToggleIcon');
             const editorElement = document.getElementById('{{ sEditorName }}');
             const editorInstanceName = '{{ sEditorName }}';
+
+            {% if isCalledInModal %}
+            const editorHeightEmpty = {{ editorHeight }};
+            const editorHeightFilled = {{ editorHeight }};
+            {% else %}
             const editorHeightEmpty = 30;
             const editorHeightFilled = 150;
+            {% endif %}
+
 
             let isExpanded = false;
             const initialHeight = editorElement.value.trim() === '' ? editorHeightEmpty : editorHeightFilled;
@@ -59,7 +78,7 @@
             if (!(editorStyleSets in CKEDITOR.stylesSet.registered)) {
                 {% if aEditorSettings.stylesSet %}
                 CKEDITOR.stylesSet.add({{ aEditorSettings.stylesSet|raw }}, [
-                    {% for style in aStyles %}
+                    {% for style in cssStyles %}
                     {
                         name: {{ style.name|raw }},
                         element: {{ style.element|raw }},
@@ -77,7 +96,7 @@
                 const editor = CKEDITOR.instances[editorInstanceName];
                 const toolbarHeight = 33 + CKEDITOR.instances[editorInstanceName].container.$.querySelector('.cke_top').offsetHeight || 50;
                 if (!isExpanded) {
-                    const fullHeight = 450 + toolbarHeight;
+                    const fullHeight = {{ editorHeight }} + toolbarHeight;
                     editor.resize('100%', fullHeight);
                     toggleIcon.classList.remove('fa-chevron-down');
                     toggleIcon.classList.add('fa-chevron-up');
@@ -99,6 +118,5 @@
                 });
             });
         });
-
     </script>
 </div>
