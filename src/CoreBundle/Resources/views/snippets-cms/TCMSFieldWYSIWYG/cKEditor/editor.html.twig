@@ -48,7 +48,7 @@
             var settings = {};
             $.extend(true, settings, settingsSystem, settingsDefault);
 
-            {% include 'TCMSFieldWYSIWYG/cKEditor/plugins.html.twig' %}
+            {{ include( 'TCMSFieldWYSIWYG/cKEditor/plugins.html.twig' ) }}
 
             {% for extraPluginConfiguration in extraPluginsConfiguration %}
             CKEDITOR.plugins.addExternal('{{ extraPluginConfiguration.name }}', '{{ extraPluginConfiguration.dir }}', '{{ extraPluginConfiguration.jsFile }}');
