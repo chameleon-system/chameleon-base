@@ -35,13 +35,13 @@
             const editorElement = document.getElementById('{{ sEditorName }}');
             const editorInstanceName = '{{ sEditorName }}';
 
+            let editorHeightEmpty = 30;
+            let editorHeightFilled = 150;
             {% if isCalledInModal %}
-            const editorHeightEmpty = {{ editorHeight }};
-            const editorHeightFilled = {{ editorHeight }};
-            {% else %}
-            const editorHeightEmpty = 30;
-            const editorHeightFilled = 150;
+            editorHeightEmpty = {{ editorHeight }};
+            editorHeightFilled = {{ editorHeight }};
             {% endif %}
+
 
             let isExpanded = false;
             const initialHeight = editorElement.value.trim() === '' ? editorHeightEmpty : editorHeightFilled;
