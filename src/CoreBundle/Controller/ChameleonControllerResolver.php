@@ -52,11 +52,11 @@ class ChameleonControllerResolver extends ControllerResolver
      *
      * @return callable|false|null
      */
-    public function getController(Request $request)
+    public function getController(Request $request): callable|false
     {
         $controller = $request->attributes->get('_controller', null);
         if (null === $controller) {
-            return null;
+            return false;
         }
         if (is_object($controller)) {
             return $controller;

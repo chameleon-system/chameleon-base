@@ -27,7 +27,7 @@ class Mapper_ShopExtranetUser extends AbstractViewMapper
      *
      * @return void
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('exportdata');
         $oRequirements->NeedsSourceObject('sqlData');
@@ -72,7 +72,7 @@ class Mapper_ShopExtranetUser extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /** @var $oExportData TdbDataExtranetUser */
         $oExportData = $oVisitor->GetSourceObject('exportdata');
         $aBilling = array();

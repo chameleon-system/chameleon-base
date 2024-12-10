@@ -27,7 +27,7 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequence extends \Symfony\Comp
      *
      * @throws TPkgCmsSessionStorageLockException
      */
-    public function read($sSessionId)
+    public function read(string $sSessionId): string|false
     {
         $this->writeSequenceCounter = 0;
         $sSessionData = parent::read($sSessionId);
@@ -57,7 +57,7 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequence extends \Symfony\Comp
         return $this->getSequenceNumberFromPayload($aSessionData);
     }
 
-    public function write($sSessionId, $aSessionData)
+    public function write(string $sSessionId, string $aSessionData): bool
     {
         $storedWriteSequenceCounter = $this->getStoredWriteSequenceCounter($sSessionId);
 

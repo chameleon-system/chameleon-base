@@ -14,7 +14,7 @@ class TPkgCmsTheme_CmsPagedef extends TPkgCmsTheme_CmsPagedefAutoParent
     /**
      * {@inheritdoc}
      */
-    protected function LoadPageDefVars()
+    protected function LoadPageDefVars(): bool
     {
         if (false === parent::LoadPageDefVars()) {
             return false;

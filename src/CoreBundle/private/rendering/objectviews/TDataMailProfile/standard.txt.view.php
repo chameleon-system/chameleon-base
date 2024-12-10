@@ -1,1 +1,1 @@
-<?= $bodyText;
+<?php echo $bodyText;

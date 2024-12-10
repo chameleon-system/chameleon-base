@@ -21,7 +21,7 @@ class NullMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
     }
 
@@ -32,6 +32,6 @@ class NullMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
     }
 }

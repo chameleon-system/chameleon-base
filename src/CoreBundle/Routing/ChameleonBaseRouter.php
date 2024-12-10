@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
 
 abstract class ChameleonBaseRouter extends Router
 {
@@ -68,7 +69,7 @@ abstract class ChameleonBaseRouter extends Router
     /**
      * {@inheritdoc}
      */
-    public function getRouteCollection()
+    public function getRouteCollection(): RouteCollection
     {
         if (null === $this->collection) {
             $this->resource = $this->getRouterConfig();

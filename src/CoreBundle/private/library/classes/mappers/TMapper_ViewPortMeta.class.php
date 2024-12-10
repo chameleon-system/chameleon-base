@@ -31,7 +31,7 @@ class TMapper_ViewPortMeta extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
     }
 

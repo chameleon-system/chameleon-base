@@ -125,8 +125,8 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
         if (null === $this->aClassExtensionList) {
             $this->aClassExtensionList = array();
             $query = 'SELECT `class` FROM `pkg_cms_class_manager_extension` ORDER BY `cmsident`';
-            $tRes = $this->getDatabaseConnection()->query($query);
-            while ($aRow = $tRes->fetch(\PDO::FETCH_NUM)) {
+            $tRes = $this->getDatabaseConnection()->executeQuery($query);
+            while ($aRow = $tRes->fetchNumeric()) {
                 $this->aClassExtensionList[] = $aRow[0];
             }
         }
@@ -145,9 +145,9 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
             $this->aClassNameList = array();
             $query = 'SELECT `name_of_entry_point` FROM `pkg_cms_class_manager` ORDER BY `cmsident`';
             try {
-                $tRes = $this->getDatabaseConnection()->query($query);
+                $tRes = $this->getDatabaseConnection()->executeQuery($query);
 
-                while ($aRow = $tRes->fetch(\PDO::FETCH_NUM)) {
+                while ($aRow = $tRes->fetchNumeric()) {
                     $this->aClassNameList[] = $aRow[0];
                 }
             } catch (DBALException $e) {

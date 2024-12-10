@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Translation;
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use Symfony\Component\Translation\MessageCatalogueInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -48,7 +49,7 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
      * @param string|null $locale
      * @return string
      */
-    public function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    public function trans(string $id, array $parameters = array(), ?string $domain = null, ?string $locale = null): string
     {
         if (null === $domain) {
             static $isBackendMode = null;
@@ -74,8 +75,14 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     /**
      * {@inheritdoc}
      */
-    public function getCatalogue($locale = null)
+    public function getCatalogue(?string $locale = null): MessageCatalogueInterface
     {
         return $this->delegate->getCatalogue($locale);
     }
+
+    public function getCatalogues(): array
+    {
+        return $this->delegate->getCatalogues();
+    }
+
 }

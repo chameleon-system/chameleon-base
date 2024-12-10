@@ -14,7 +14,7 @@ abstract class AbstractTCMSMessageManagerMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oMessageType', 'TdbCmsMessageManagerMessageType');
         $oRequirements->NeedsSourceObject('sMessage');

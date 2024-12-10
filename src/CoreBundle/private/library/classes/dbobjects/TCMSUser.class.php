@@ -201,9 +201,9 @@ class TCMSUser extends TCMSRecord
         $eventDispatcher = self::getEventDispatcher();
         $event = new BackendLoginEvent($this);
         if ($this->bLoggedIn) {
-            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_SUCCESS);
+            $eventDispatcher->dispatch($event, 'chameleon_system_core.login_success');
         } else {
-            $eventDispatcher->dispatch($event, CoreEvents::BACKEND_LOGIN_FAILURE);
+            $eventDispatcher->dispatch($event, 'chameleon_system_core.login_failure');
         }
 
         return $this->bLoggedIn;
@@ -269,7 +269,7 @@ class TCMSUser extends TCMSRecord
 
         self::getPreviewModeService()->grantPreviewAccess(false, self::getCmsUserId());
 
-        self::getEventDispatcher()->dispatch(new BackendLogoutEvent($user), CoreEvents::BACKEND_LOGOUT_SUCCESS);
+        self::getEventDispatcher()->dispatch(new BackendLogoutEvent($user), 'chameleon_system_core.logout_success');
     }
 
     /**

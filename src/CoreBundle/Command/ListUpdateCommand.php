@@ -19,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Console command for listing updates that have not been executed yet.
  */
+#[\Symfony\Component\Console\Attribute\AsCommand(description: 'Lists all updates', name: 'chameleon_system:update:list')]
 class ListUpdateCommand extends Command
 {
     /**
@@ -38,7 +39,6 @@ class ListUpdateCommand extends Command
     {
         $this
             ->setDefinition(array())
-            ->setDescription('Lists all updates')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command lists Chameleon updates not executed yet
 EOF
@@ -49,7 +49,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $updateManager = new \TCMSUpdateManager();
         $updateList = $updateManager->getAllUpdateFilesToProcess();

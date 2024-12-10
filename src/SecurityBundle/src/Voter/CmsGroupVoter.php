@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class CmsGroupVoter extends Voter
 {
-    protected function supports(string $attribute, $subject)
+    protected function supports(string $attribute, $subject): bool
     {
         if (null === $subject) {
             return false;
@@ -28,7 +28,7 @@ class CmsGroupVoter extends Voter
     /**
      * @param RestrictedByCmsGroupInterface $subject
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $permittedGroups = $subject->getPermittedGroups($attribute);
 

@@ -67,10 +67,10 @@ class CropImageExtension extends AbstractExtension
     public function getFilters()
     {
         return array(
-            new TwigFilter('imageUrlWithCropFallbackPreset', array($this, 'imageUrlWithCropFallbackPreset')),
-            new TwigFilter('imageUrlWithCropFallbackSize', array($this, 'imageUrlWithCropFallbackSize')),
-            new TwigFilter('imageHasCropDataForPreset', array($this, 'imageHasCropDataForPreset')),
-            new TwigFilter('imageUrlWithCropSize', array($this, 'imageUrlWithCropSize')),
+            new TwigFilter('imageUrlWithCropFallbackPreset', $this->imageUrlWithCropFallbackPreset(...)),
+            new TwigFilter('imageUrlWithCropFallbackSize', $this->imageUrlWithCropFallbackSize(...)),
+            new TwigFilter('imageHasCropDataForPreset', $this->imageHasCropDataForPreset(...)),
+            new TwigFilter('imageUrlWithCropSize', $this->imageUrlWithCropSize(...)),
         );
     }
 

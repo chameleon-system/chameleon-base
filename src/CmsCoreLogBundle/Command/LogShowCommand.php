@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
  */
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'log:show', description: 'show log entries from database')]
 class LogShowCommand extends Command
 {
     /**
@@ -28,8 +29,6 @@ class LogShowCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('log:show')
-            ->setDescription('show log entries from database')
             ->addOption(
                 'channel',
                 'c',
@@ -88,7 +87,7 @@ class LogShowCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $infoStrings = array();
 

@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ChameleonSystem\CoreBundle\Exception\CronjobHandlingException;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(description: 'Enables the cron job execution', name: 'chameleon_system:cronjobs:enable')]
 class EnableCronjobsCommand extends Command
 {
     /**
@@ -39,7 +40,6 @@ class EnableCronjobsCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Enables the cron job execution')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command enables all cronjob execution.
 EOF
@@ -50,7 +50,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $this->cronjobEnablingService->enableCronjobExecution();

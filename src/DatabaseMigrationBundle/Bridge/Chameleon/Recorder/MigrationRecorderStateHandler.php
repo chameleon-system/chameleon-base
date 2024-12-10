@@ -4,10 +4,9 @@ namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder;
 
 use ChameleonSystem\DatabaseMigration\Constant\MigrationRecorderConstants;
 use ChameleonSystem\DatabaseMigration\Exception\AccessDeniedException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Security;
-use TCMSUser;
 
 class MigrationRecorderStateHandler
 {

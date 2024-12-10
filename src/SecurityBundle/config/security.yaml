@@ -1,6 +1,5 @@
 # config/packages/security.yaml
 security:
-  enable_authenticator_manager: true
   # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
   providers:
     # the name of your user provider can be anything

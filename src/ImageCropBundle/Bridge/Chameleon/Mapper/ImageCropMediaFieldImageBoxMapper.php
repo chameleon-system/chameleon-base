@@ -36,7 +36,7 @@ class ImageCropMediaFieldImageBoxMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('sFieldName', 'string');
         $oRequirements->NeedsSourceObject('iPosition', 'int');
@@ -49,7 +49,7 @@ class ImageCropMediaFieldImageBoxMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('parent.setImageWithCrop', true);
         $fieldName = $oVisitor->GetSourceObject('sFieldName');
         $position = $oVisitor->GetSourceObject('iPosition');

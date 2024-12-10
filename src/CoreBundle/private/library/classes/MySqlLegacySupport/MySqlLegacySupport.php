@@ -381,7 +381,7 @@ class MySqlLegacySupport
 
         $this->lastStatement = false;
         try {
-            $this->lastStatement = $this->databaseConnection->query($query);
+            $this->lastStatement = $this->databaseConnection->executeQuery($query);
             $this->lastError = null;
         } catch (DBALException $e) {
             $this->lastStatement = false;

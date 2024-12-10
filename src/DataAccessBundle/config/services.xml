@@ -7,6 +7,10 @@
     <services>
         <defaults autowire="true" autoconfigure="true"  />
         <prototype namespace="ChameleonSystem\DataAccessBundle\" resource="../src/*" exclude="../src/{Model,Entity,DependencyInjection}"/>
+
+        <service id="ChameleonSystem\DataAccessBundle\Doctrine\EmptyStringRelationPostLoadListener">
+            <tag name="doctrine.event_listener" event="postLoad" />
+        </service>
     </services>
 
 </container>

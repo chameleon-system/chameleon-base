@@ -14,6 +14,9 @@
     </parameters>
 
     <services>
+
+        <service id="Psr\Container\ContainerInterface" alias="service_container" public="true"/>
+
         <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="true"/>
 
         <service id="ChameleonSystem\CoreBundle\EventListener\ReleaseOldLocksOnLoginListener">
@@ -24,7 +27,7 @@
 
         <service id="chameleon_system_core.pdo" class="PDO" public="false">
             <factory service="database_connection" method="getWrappedConnection" />
-            <deprecated>The %service_id% service is deprecated since Chameleon 6.3.0. Use database_connection::getWrappedConnection() instead instead.</deprecated>
+            <deprecated package="CmsCoreLogBundle" version="8">The %service_id% service is deprecated since Chameleon 6.3.0. Use database_connection::getWrappedConnection() instead.</deprecated>
         </service>
 
         <service id="chameleon_system_core.sessionPdo" class="PDO">
@@ -196,10 +199,6 @@
             <tag name="kernel.event_subscriber" />
         </service>
 
-        <service id="chameleon_system_core.symfony_streamed_response_listener" class="Symfony\Component\HttpKernel\EventListener\StreamedResponseListener">
-            <tag name="kernel.event_subscriber" />
-        </service>
-
         <service id="chameleon_system_core.router.chameleon_base" class="ChameleonSystem\CoreBundle\Routing\ChameleonBaseRouter" parent="router.default" abstract="true">
             <call method="setRedirect">
                 <argument type="service" id="chameleon_system_core.redirect" />
@@ -302,7 +301,7 @@
 
         <service id="chameleon_system_core.request_type" synthetic="true" />
 
-        <service id="chameleon_system_core.security.backend_access_check" class="ChameleonSystem\CoreBundle\Security\BackendAccessCheck">
+        <service id="chameleon_system_core.security.backend_access_check" class="ChameleonSystem\CoreBundle\Security\BackendAccessCheck" public="true">
             <argument type="service" id="chameleon_system_core.redirect" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="security.helper" />
@@ -569,6 +568,7 @@
 
         <service id="chameleon_system_core.util.input_filter" class="ChameleonSystem\CoreBundle\Util\InputFilterUtil" public="true">
             <argument type="service" id="request_stack" />
+            <argument type="service" id="logger" />
         </service>
 
         <service id="chameleon_system_core.util.media_path_generator" class="ChameleonSystem\CoreBundle\Util\MediaPathGenerator" public="true">

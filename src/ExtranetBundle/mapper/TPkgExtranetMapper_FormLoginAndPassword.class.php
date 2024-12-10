@@ -23,7 +23,7 @@ class TPkgExtranetMapper_FormLoginAndPassword extends AbstractPkgExtranetMapper_
      *
      * @param IMapperRequirementsRestricted $oRequirements
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         parent::GetRequirements($oRequirements);
     }
@@ -47,7 +47,7 @@ class TPkgExtranetMapper_FormLoginAndPassword extends AbstractPkgExtranetMapper_
      * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oUser TdbDataExtranetUser */
         $oUser = $oVisitor->GetSourceObject('oUser');

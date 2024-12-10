@@ -25,7 +25,7 @@ abstract class AbstractPkgExtranetMapper_Address extends AbstractViewMapper
      *
      * @return void
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oAddressObject', 'TdbDataExtranetUserAddress');
     }
@@ -51,7 +51,7 @@ abstract class AbstractPkgExtranetMapper_Address extends AbstractViewMapper
      *
      * @return void
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         if ($bCachingEnabled) {
             /** @var $oAddress TdbDataExtranetUserAddress */

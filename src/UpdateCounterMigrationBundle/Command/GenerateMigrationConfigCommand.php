@@ -12,10 +12,12 @@
 namespace ChameleonSystem\UpdateCounterMigrationBundle\Command;
 
 use ChameleonSystem\UpdateCounterMigrationBundle\Config\MigrationConfigGenerator;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(description: 'Generates the configuration needed to migrate update counters', name: 'chameleon_system:update_counter_migration:generate_config')]
 class GenerateMigrationConfigCommand extends Command
 {
     /**
@@ -40,7 +42,6 @@ class GenerateMigrationConfigCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Generates the configuration needed to migrate update counters')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command generates the configuration values needed to update migration counters. Use the output of this command to configure the update counter migration:
 EOF
@@ -48,10 +49,7 @@ EOF
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $migrationConfigData = $this->migrationConfigGenerator->getMigrationConfigData();
         if (0 === count($migrationConfigData)) {

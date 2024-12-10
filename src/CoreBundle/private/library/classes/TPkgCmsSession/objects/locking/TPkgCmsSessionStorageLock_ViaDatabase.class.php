@@ -24,8 +24,8 @@ class TPkgCmsSessionStorageLock_ViaDatabase implements IPkgCmsSessionStorageLock
     {
         $bLocked = false;
         $query = 'SELECT GET_LOCK('.$this->getDatabaseConnection()->quote($sLockIdentifier).','.$iMaxTimeToWaitForLockInSeconds.')';
-        $tRes = $this->getDatabaseConnection()->query($query);
-        if ($aTmp = $tRes->fetch(\PDO::FETCH_NUM)) {
+        $tRes = $this->getDatabaseConnection()->executeQuery($query);
+        if ($aTmp = $tRes->fetchNumeric()) {
             if (isset($aTmp[0]) && '1' != $aTmp[0]) {
                 $bLocked = false;
             // unable to obtain lock... exit...
@@ -40,7 +40,7 @@ class TPkgCmsSessionStorageLock_ViaDatabase implements IPkgCmsSessionStorageLock
     public function ReleaseLock($sLockIdentifier)
     {
         $query = 'SELECT RELEASE_LOCK('.$this->getDatabaseConnection()->quote($sLockIdentifier).')';
-        $this->getDatabaseConnection()->query($query);
+        $this->getDatabaseConnection()->executeQuery($query);
     }
 
     public function AllowWriteAccess($sLockIdentifier)

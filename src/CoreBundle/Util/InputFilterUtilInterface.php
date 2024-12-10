@@ -54,6 +54,11 @@ interface InputFilterUtilInterface
     public function getFilteredGetInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER);
 
     /**
+     * getFilteredGetInputArray is the same as getFilteredGetInput that has to be used if the expected value is an array.
+     */
+    public function getFilteredGetInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER);
+
+    /**
      * Retrieves a value from user input (POST only) and filters it according to the given input filter.
      * The fetch semantics and the first three arguments are the same as for Symfony\Component\HttpFoundation\Request::request::get().
      *
@@ -69,6 +74,12 @@ interface InputFilterUtilInterface
      * @psalm-return string|TDefault
      */
     public function getFilteredPostInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER);
+
+    /**
+     * getFilteredPostInputArray is the same as getFilteredPostInput that has to be used if the expected value is an array.
+     */
+    public function getFilteredPostInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER);
+
 
     /**
      * Applies a filter to one or more values.

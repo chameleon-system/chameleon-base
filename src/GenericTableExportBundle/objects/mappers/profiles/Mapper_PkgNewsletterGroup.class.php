@@ -27,7 +27,7 @@ class Mapper_PkgNewsletterGroup extends AbstractViewMapper
      *
      * @return void
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('exportdata');
         $oRequirements->NeedsSourceObject('sqlData');
@@ -68,7 +68,7 @@ class Mapper_PkgNewsletterGroup extends AbstractViewMapper
      *
      * @return void
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oExportData TdbPkgNewsletterUser */
         $oExportData = $oVisitor->GetSourceObject('exportdata');

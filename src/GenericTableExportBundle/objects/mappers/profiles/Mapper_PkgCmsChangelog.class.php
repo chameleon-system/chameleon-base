@@ -17,7 +17,7 @@ class Mapper_PkgCmsChangelog extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('exportdata');
         $oRequirements->NeedsSourceObject('sqlData');
@@ -34,7 +34,7 @@ class Mapper_PkgCmsChangelog extends AbstractViewMapper
      *    LEFT OUTER JOIN pkg_cms_changelog_item AS ci ON cs.id = ci.pkg_cms_changelog_set_id
      *    ORDER BY cs.modify_date DESC
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oExportData TdbPkgNewsletterUser */
         $oExportData = $oVisitor->GetSourceObject('exportdata');

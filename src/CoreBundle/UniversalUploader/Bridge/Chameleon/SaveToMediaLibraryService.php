@@ -11,15 +11,13 @@
 
 namespace ChameleonSystem\CoreBundle\UniversalUploader\Bridge\Chameleon;
 
-use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\UniversalUploader\Exception\AccessDeniedException;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploadedFileDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderParameterServiceInterface;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
-use TdbCmsUser;
 
 class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
 {

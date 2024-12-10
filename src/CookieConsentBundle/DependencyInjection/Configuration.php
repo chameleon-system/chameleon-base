@@ -10,7 +10,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('chameleon_system_cookie_consent');
         $root = $treeBuilder->getRootNode();

@@ -166,8 +166,8 @@ class TPkgCmsVirtualClassManager
 
             try {
                 $rRes = $this->databaseConnection->executeQuery($query, array('nameOfEntryPoint' => $this->entryPoint));
-                $this->config = $rRes->fetch(\PDO::FETCH_ASSOC);
-            } catch (\Doctrine\DBAL\DBALException $e) {
+                $this->config = $rRes->fetchAssociative();
+            } catch (\Doctrine\DBAL\Exception $e) {
                 $this->config = null;
             }
         }
@@ -198,7 +198,7 @@ class TPkgCmsVirtualClassManager
                 ORDER BY `pkg_cms_class_manager_extension`.`position` ASC
                    ';
         $tRes = $this->databaseConnection->executeQuery($query, array('classManagerId' => $this->getConfigValue('id')));
-        while ($extension = $tRes->fetch(\PDO::FETCH_ASSOC)) {
+        while ($extension = $tRes->fetchAssociative()) {
             $aExtensionList[] = $extension;
         }
 

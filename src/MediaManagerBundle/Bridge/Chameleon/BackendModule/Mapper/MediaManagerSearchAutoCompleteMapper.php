@@ -37,7 +37,7 @@ class MediaManagerSearchAutoCompleteMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('searchTerm', 'string');
         $oRequirements->NeedsSourceObject('language', TdbCmsLanguage::class);
@@ -50,7 +50,7 @@ class MediaManagerSearchAutoCompleteMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         /**
          * @var $searchTerm string
          * @var $language   TdbCmsLanguage

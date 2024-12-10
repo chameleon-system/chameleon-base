@@ -13,8 +13,8 @@ namespace ChameleonSystem\CoreBundle\Security;
 
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use ICmsCoreRedirect;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
 
 class BackendAccessCheck
 {

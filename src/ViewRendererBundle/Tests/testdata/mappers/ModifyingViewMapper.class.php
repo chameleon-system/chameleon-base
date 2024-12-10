@@ -14,7 +14,7 @@ class ModifyingViewMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $iNeedThis = $oVisitor->GetSourceObject('title');
         if (null === $iNeedThis) {
@@ -27,7 +27,7 @@ class ModifyingViewMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('title');
     }

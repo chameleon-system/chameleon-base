@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog;
 
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
 
 class RequestIdProcessor implements ProcessorInterface
@@ -29,11 +30,11 @@ class RequestIdProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(array $record)
+    public function __invoke(LogRecord $record)
     {
         $requestId = $this->requestInfoService->getRequestId();
 
-        if (true === \array_key_exists('extra', $record)) {
+        if (true === \array_key_exists('extra', $record->toArray())) {
             $record['extra']['request_id'] = $requestId;
         } else {
             $record['extra'] = ['request_id' => $requestId];

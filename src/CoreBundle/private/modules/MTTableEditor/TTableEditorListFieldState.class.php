@@ -68,6 +68,16 @@ class TTableEditorListFieldState implements Serializable
     }
 
     /**
+     * Deprecation Notice:
+     * TTableEditorListFieldState implements the Serializable interface, which is deprecated.
+     * Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary)
+     */
+    public function __serialize()
+    {
+        return $this->serialize();
+    }
+
+    /**
      * (PHP 5 &gt;= 5.1.0)<br/>
      * Constructs the object.
      *
@@ -80,6 +90,16 @@ class TTableEditorListFieldState implements Serializable
     public function unserialize($serialized)
     {
         $this->states = unserialize($serialized);
+    }
+
+    /**
+     * Deprecation Notice:
+     * TTableEditorListFieldState implements the Serializable interface, which is deprecated.
+     * Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary)
+     */
+    public function __unserialize($serialized)
+    {
+        $this->unserialize($serialized);
     }
 
     /**

@@ -12,6 +12,7 @@
 namespace ChameleonSystem\AutoclassesBundle\Command;
 
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class GenerateAutoclassesCommand Creates autoclasses from the console.
  */
+#[AsCommand(description: 'Generates all autoclasses', name: 'chameleon_system:autoclasses:generate')]
 class GenerateAutoclassesCommand extends Command
 {
     /**
@@ -28,7 +30,7 @@ class GenerateAutoclassesCommand extends Command
 
     public function __construct(AutoclassesCacheWarmer $autoclassesCacheWarmer)
     {
-        parent::__construct('chameleon_system:autoclasses:generate');
+        parent::__construct();
         $this->autoclassesCacheWarmer = $autoclassesCacheWarmer;
     }
 
@@ -40,7 +42,6 @@ class GenerateAutoclassesCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Generates all autoclasses')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command (re-)generates all autoclasses:
 EOF
@@ -48,10 +49,7 @@ EOF
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Generating autoclasses...');
         $this->autoclassesCacheWarmer->updateAllTables();

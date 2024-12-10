@@ -18,7 +18,7 @@ class CmsTableObjectVoter extends Voter
     ) {
     }
 
-    protected function supports(string $attribute, $subject)
+    protected function supports(string $attribute, $subject): bool
     {
         if (false === ($subject instanceof \TCMSRecord)) {
             return false;
@@ -37,7 +37,7 @@ class CmsTableObjectVoter extends Voter
      * @param TokenInterface $token
      * @return bool|void
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var CmsUserModel|UserInterface $user */
         $user = $token->getUser();

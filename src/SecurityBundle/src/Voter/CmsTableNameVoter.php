@@ -15,7 +15,7 @@ class CmsTableNameVoter extends Voter
     {
     }
 
-    protected function supports(string $attribute, $subject)
+    protected function supports(string $attribute, $subject): bool
     {
         if (false === in_array($attribute, CmsPermissionAttributeConstants::TABLE_EDITOR_ACTIONS, true)) {
             return false;
@@ -34,7 +34,7 @@ class CmsTableNameVoter extends Voter
      * @param TokenInterface $token
      * @return bool|void
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var CmsUserModel|UserInterface $user */
         $user = $token->getUser();

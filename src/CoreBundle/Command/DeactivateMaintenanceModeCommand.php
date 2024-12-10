@@ -17,6 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(description: 'Deactivates the maintenance mode', name: 'chameleon_system:maintenance_mode:deactivate')]
 class DeactivateMaintenanceModeCommand extends Command
 {
     /**
@@ -39,7 +40,6 @@ class DeactivateMaintenanceModeCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Deactivates the maintenance mode')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command deactivates the maintenance mode.
 EOF
@@ -50,7 +50,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $this->maintenanceModeService->deactivate();

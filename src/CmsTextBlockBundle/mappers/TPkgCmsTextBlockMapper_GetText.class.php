@@ -14,7 +14,7 @@ class TPkgCmsTextBlockMapper_GetText extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('name', 'string'); // the system name of the text-object to load
         $oRequirements->NeedsSourceObject('maxwidth', 'int', 600); // the system name of the text-object to load
@@ -23,7 +23,7 @@ class TPkgCmsTextBlockMapper_GetText extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $sSystemName = $oVisitor->GetSourceObject('name');
         $oBlock = TdbPkgCmsTextBlock::GetInstanceFromSystemName($sSystemName);

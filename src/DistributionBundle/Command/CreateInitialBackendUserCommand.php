@@ -19,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Console command for creating backend users.
  */
+#[\Symfony\Component\Console\Attribute\AsCommand(description: 'Creates a backend user.', name: 'chameleon_system:bootstrap:create_initial_backend_user')]
 class CreateInitialBackendUserCommand extends Command
 {
     /**
@@ -41,7 +42,6 @@ class CreateInitialBackendUserCommand extends Command
     {
         $this
             ->setDefinition(array())
-            ->setDescription('Creates a backend user.')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command creates the initial Chameleon backend user, either by accepting arguments from the environment
 or interactively. The user created by this command is a basic stub that is minimally configured to be able to log into the backend.
@@ -57,7 +57,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initialBackendUserCreator->create($input, $output, $this->getHelper('question'));
 

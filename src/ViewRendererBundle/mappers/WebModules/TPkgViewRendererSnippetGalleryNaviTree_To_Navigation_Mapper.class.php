@@ -14,7 +14,7 @@ class TPkgViewRendererSnippetGalleryNaviTree_To_Navigation_Mapper extends Abstra
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('aTree', 'array');
         $oRequirements->NeedsSourceObject('sActiveRelativePath', 'string', '');
@@ -23,7 +23,7 @@ class TPkgViewRendererSnippetGalleryNaviTree_To_Navigation_Mapper extends Abstra
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $aTree array */
         $aTree = $oVisitor->GetSourceObject('aTree');

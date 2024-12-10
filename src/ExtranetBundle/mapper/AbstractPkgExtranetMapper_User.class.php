@@ -25,7 +25,7 @@ abstract class AbstractPkgExtranetMapper_User extends AbstractViewMapper
      *
      * @return void
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oUser', 'TdbDataExtranetUser', TdbDataExtranetUser::GetInstance(), true);
     }

@@ -27,7 +27,7 @@ class GenericTableExportMapper extends AbstractViewMapper
      *
      * @return void
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('exportdata');
     }
@@ -55,7 +55,7 @@ class GenericTableExportMapper extends AbstractViewMapper
      *
      * @return void
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oExportData = $oVisitor->GetSourceObject('exportdata');
         if (null === $oExportData) {

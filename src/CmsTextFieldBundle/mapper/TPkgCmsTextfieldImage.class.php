@@ -14,7 +14,7 @@ class TPkgCmsTextfieldImage extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('aTagProperties', 'array', array());
         $oRequirements->NeedsSourceObject('oImage', 'TCMSImage', null);
@@ -28,7 +28,7 @@ class TPkgCmsTextfieldImage extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /**
          * @var $oImage TCMSImage

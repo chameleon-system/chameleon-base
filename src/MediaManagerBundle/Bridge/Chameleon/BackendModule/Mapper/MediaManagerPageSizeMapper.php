@@ -44,7 +44,7 @@ class MediaManagerPageSizeMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
     }
 
@@ -55,7 +55,7 @@ class MediaManagerPageSizeMapper extends AbstractViewMapper
         IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
-    ) {
+    ): void {
         $oVisitor->SetMappedValue('pageSizes', $this->getPageSizes());
     }
 

@@ -4,10 +4,12 @@ namespace ChameleonSystem\AutoclassesBundle\Command;
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\LegacyTableExportConfig;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\TableConfExporterInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'chameleon_system:autoclasses:dump', description: 'Export the table configurations as doctrine data models')]
 class DumpTableConfCommand extends Command
 {
     public function __construct(
@@ -18,14 +20,11 @@ class DumpTableConfCommand extends Command
     }
     protected function configure(): void
     {
-        $this->setName('chameleon_system:autoclasses:dump')
-            ->setDescription('Export the table configurations as doctrine data models');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $tables = $this->tableConfExporter->getTables();
-
 
         $tableNamespaceMapping = $this->getTableNamespaceMapping();
         foreach ($tables as $table) {
@@ -80,6 +79,4 @@ class DumpTableConfCommand extends Command
 
         return $mapping;
     }
-
-
 }

@@ -17,6 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(description: 'Disables the cron job execution', name: 'chameleon_system:cronjobs:disable')]
 class DisableCronjobsCommand extends Command
 {
     /**
@@ -39,7 +40,6 @@ class DisableCronjobsCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Disables the cron job execution')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command disables all cronjob execution.
 EOF
@@ -50,7 +50,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $this->cronjobEnablingService->disableCronjobExecution();

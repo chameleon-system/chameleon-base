@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -25,7 +26,7 @@ class ChameleonHttpKernel extends HttpKernel
     /**
      * {@inheritdoc}
      */
-    public function handle(Request $request, $type = HttpKernelInterface::MAIN_REQUEST, $catch = true)
+    public function handle(Request $request, $type = HttpKernelInterface::MAIN_REQUEST, bool $catch = true): Response
     {
         if ('' !== $this->trustedProxies) {
             $aProxies = explode(',', $this->trustedProxies);

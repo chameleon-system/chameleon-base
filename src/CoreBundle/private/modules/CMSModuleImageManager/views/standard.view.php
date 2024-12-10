@@ -1,2 +1,2 @@
-<?= $data['jsonEncodedReturnData']
+<?php echo $data['jsonEncodedReturnData']
 ;

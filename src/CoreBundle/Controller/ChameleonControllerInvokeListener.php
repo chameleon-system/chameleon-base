@@ -34,7 +34,7 @@ class ChameleonControllerInvokeListener implements EventSubscriberInterface
         $this->container->set('chameleon_system_core.chameleon_controller', $event->getController());
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(ChameleonControllerEvents::INVOKE => 'onInvoke');
     }

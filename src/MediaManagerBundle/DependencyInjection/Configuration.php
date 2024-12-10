@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
      *
      * @throws RuntimeException
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('chameleon_system_media_manager');
         $root = $treeBuilder->getRootNode();

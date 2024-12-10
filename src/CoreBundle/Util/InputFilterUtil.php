@@ -11,6 +11,8 @@
 
 namespace ChameleonSystem\CoreBundle\Util;
 
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -24,16 +26,19 @@ class InputFilterUtil implements InputFilterUtilInterface
     private $requestStack;
 
     /**
-     * @param RequestStack $requestStack
+     * @var LoggerInterface
      */
-    public function __construct(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
+    private $logger;
 
     /**
-     * {@inheritdoc}
+     * @param RequestStack $requestStack
      */
+    public function __construct(RequestStack $requestStack, LoggerInterface $logger)
+    {
+        $this->requestStack = $requestStack;
+        $this->logger = $logger;
+    }
+
     public function getFilteredInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER)
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -44,9 +49,6 @@ class InputFilterUtil implements InputFilterUtilInterface
         return $this->filterValue($request->get($key, $default, $deep), $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilteredGetInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER)
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -54,12 +56,26 @@ class InputFilterUtil implements InputFilterUtilInterface
             return $default;
         }
 
-        return $this->filterValue($request->query->get($key, $default, $deep), $filter);
+        try {
+            return $this->filterValue($request->query->get($key, $default, $deep), $filter);
+        } catch (\InvalidArgumentException|BadRequestException $e) {
+            $this->logger->warning('getFilteredGetInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredGetInputArray instead.', ['key' => $key, 'default' => $default, 'filter' => $filter]);
+            return $this->getFilteredGetInputArray($key, $default, $filter);
+        }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function getFilteredGetInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return $default;
+        }
+
+        $parameter = $request->query->all($key) ?? $default;
+
+        return $this->filterValue($parameter, $filter);
+    }
+
     public function getFilteredPostInput($key, $default = null, $deep = false, $filter = TCMSUSERINPUT_DEFAULTFILTER)
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -67,12 +83,27 @@ class InputFilterUtil implements InputFilterUtilInterface
             return $default;
         }
 
-        return $this->filterValue($request->request->get($key, $default, $deep), $filter);
+        try {
+            return $this->filterValue($request->request->get($key, $default, $deep), $filter);
+        } catch (\InvalidArgumentException|BadRequestException $e) {
+            $this->logger->warning('getFilteredPostInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredPostInputArray instead.', ['key' => $key, 'default' => $default, 'filter' => $filter]);
+            return $this->getFilteredPostInputArray($key, $default, $filter);
+        }
+
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function getFilteredPostInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return $default;
+        }
+
+        $parameter = $request->request->all($key) ?? $default;
+
+        return $this->filterValue($parameter, $filter);
+    }
+
     public function filterValue($value, $filterClass)
     {
         if (null === $value) {
@@ -105,9 +136,6 @@ class InputFilterUtil implements InputFilterUtilInterface
         return $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilterObject($filterClass)
     {
         $aFilters = array();

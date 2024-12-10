@@ -14,7 +14,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig extends AbstractView
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('oObject', 'TdbPkgNewsletterModuleSignoutConfig');
         $oRequirements->NeedsSourceObject('sStepName', '');
@@ -23,7 +23,7 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig extends AbstractView
     /**
      * {@inheritDoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         /** @var $oNewsletterModuleSignOutConfig TdbPkgNewsletterModuleSignoutConfig */
         $oNewsletterModuleSignOutConfig = $oVisitor->GetSourceObject('oObject');

@@ -60,7 +60,7 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
     /**
      * {@inheritdoc}
      */
-    public function matchRequest(Request $request)
+    public function matchRequest(Request $request): array
     {
         $pagedefParamRoute = $this->getPagedefParamRoute($request);
         if (null !== $pagedefParamRoute) {

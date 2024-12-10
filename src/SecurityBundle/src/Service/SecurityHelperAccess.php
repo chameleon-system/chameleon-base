@@ -3,10 +3,10 @@
 namespace ChameleonSystem\SecurityBundle\Service;
 
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
 use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**

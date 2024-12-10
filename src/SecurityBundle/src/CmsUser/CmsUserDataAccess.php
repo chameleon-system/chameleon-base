@@ -6,6 +6,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -14,6 +15,13 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 {
     public function __construct(readonly private Connection $connection)
     {
+    }
+
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        // maybe this should look like this: But I cannot test this at this moment as this method needed to be added during a symfony upgrade
+        //$this->connection->update('cms_user', ['crypted_pw' => $newHashedPassword], ['id' => $user->getId()]);
+        throw new \RuntimeException('Not implemented');
     }
 
     public function refreshUser(UserInterface $user): CmsUserModel|UserInterface

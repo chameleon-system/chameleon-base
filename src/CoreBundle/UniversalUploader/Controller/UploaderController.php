@@ -16,9 +16,9 @@ use ChameleonSystem\CoreBundle\UniversalUploader\Bridge\Chameleon\UploaderConfig
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploadedFileDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderPostHandlerServiceInterface;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Symfony\Component\Security\Core\Security;
 use TdbCmsConfig;
 
 class UploaderController

@@ -17,6 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(description: 'Checks if any cron job is running', name: 'chameleon_system:cronjobs:state_check')]
 class GetCronjobsStateCommand extends Command
 {
     /**
@@ -39,7 +40,6 @@ class GetCronjobsStateCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Checks if any cron job is running')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command outputs "running" if a cron job is currently running. Otherwise "idle".
 EOF
@@ -50,7 +50,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             if (true === $this->cronjobStateService->isCronjobRunning()) {

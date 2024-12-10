@@ -5,9 +5,9 @@ namespace ChameleonSystem\CmsBackendBundle\BackendSession;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
 use Doctrine\DBAL\Connection;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Security;
 
 class BackendSession implements BackendSessionInterface
 {
@@ -119,6 +119,4 @@ class BackendSession implements BackendSessionInterface
 
         return $this->requestStack->getCurrentRequest()?->getSession();
     }
-
-
 }

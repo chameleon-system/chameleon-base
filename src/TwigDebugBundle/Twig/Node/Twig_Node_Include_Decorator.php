@@ -11,14 +11,14 @@
 
 namespace ChameleonSystem\TwigDebugBundle\Twig\Node;
 
+use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
 use Twig\Node\NodeOutputInterface;
 use Twig\Source;
-use Twig_Node_Include;
-use Twig_NodeOutputInterface;
 
+#[YieldReady]
 class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
 {
     /**
@@ -41,11 +41,11 @@ class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
     {
         $snippet = $this->original->getNode('expr')->hasAttribute('value') ? $snippet = $this->original->getNode('expr')->getAttribute('value') : null;
         if ($snippet) {
-            $compiler->write('echo "\n\n<!-- START INCLUDE '.$snippet.' -->\n\n";');
+            $compiler->write('yield "\n\n<!-- START INCLUDE '.$snippet.' -->\n\n";');
         }
         $this->original->compile($compiler);
         if ($snippet) {
-            $compiler->write('echo "\n\n<!-- END INCLUDE '.$snippet.' -->\n\n";');
+            $compiler->write('yield "\n\n<!-- END INCLUDE '.$snippet.' -->\n\n";');
         }
     }
 
