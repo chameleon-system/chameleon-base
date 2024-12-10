@@ -59,6 +59,8 @@ class DownloadLinkDataModel
      * @var bool
      */
     private $showFilename = true;
+    
+    private ?string $fileType;
 
     public function __construct(
         string $id,
@@ -153,5 +155,15 @@ class DownloadLinkDataModel
     public function setShowFilename(bool $showFilename): void
     {
         $this->showFilename = $showFilename;
+    }
+
+    public function getFileType(): ?string
+    {
+        return $this->fileType;
+    }
+
+    public function setFileType(?string $fileType): void
+    {
+        $this->fileType = $fileType;
     }
 }

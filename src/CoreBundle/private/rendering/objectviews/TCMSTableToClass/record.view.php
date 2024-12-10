@@ -3,7 +3,7 @@
  * @var $oTableConf TdbCmsTblConf
  * @var $cmsConfig  TdbCmsConfig|TCMSConfig
  */
-$translatableFields = array();
+$translatableFields = [];
 $oFields->GoToStart();
 while ($oField = $oFields->Next()) {
     if (is_a($oField, 'stdClass')) {
@@ -17,7 +17,7 @@ while ($oField = $oFields->Next()) {
 /**
 * THIS FILE IS CREATED BY CHAMELEON. DO NOT CHANGE IT BY HAND! IT WILL BE OVERWRITTEN BY
 * CHAMELEON ANYTIME A CHANGE IS MADE TO THE CONNECTED TABLE. IF YOU NEED TO MODIFY THE CLASS
-* YOU MUST USE ITS EXTENSION IN CMSDataObjects
+* YOU MUST ADD AN EXTENSION
 */
 
 /****************************************************************************
@@ -42,7 +42,7 @@ class <?=$sAutoClassName; ?> extends <?=$sParentClass; ?>
     );
 
     /**
-     * return the table id of the objects table conf object
+     * Returns the table id of the objects table conf object.
      *
      * @return string
      */
@@ -67,7 +67,8 @@ class <?=$sAutoClassName; ?> extends <?=$sParentClass; ?>
 if (isset($aTableConf['frontend_auto_cache_clear_enabled']) && '0' == $aTableConf['frontend_auto_cache_clear_enabled']) {
     ?>
     /**
-     * disabled because the frontend auto cache clear is disabled - these objects should not auto cache since their cache values are not auto disabled
+     * Disabled because the frontend auto cache clear is disabled - these objects should not auto cache since their cache values are not auto disabled.
+     *
      * @return boolean
     */
     public function GetEnableObjectCaching()
@@ -95,7 +96,7 @@ $oFields->GoToStart();
     /**
      * @return string
      */
-     protected function GetMltTableName($sFieldName,$sTableName,$bActiveRecordIsTarget=FALSE)
+     protected function GetMltTableName($sFieldName, $sTableName, $bActiveRecordIsTarget = false)
     {
         $sMLTTableName = '';
         if (substr($sTableName,-4)=='_mlt') {
@@ -116,8 +117,6 @@ $oFields->GoToStart();
     }
 
     /**
-     *
-     *
      * @return array
      */
      static public function GetMLTFieldToTableMapping()
@@ -125,7 +124,7 @@ $oFields->GoToStart();
         $aFieldMapping = array(
     <?php
 
-      $aMapping = array();
+      $aMapping = [];
       $oFields->GoToStart();
       while ($oField = $oFields->Next()) {
           $oFieldType = $oField->oDefinition->GetFieldType();
@@ -190,9 +189,6 @@ $oFields->GoToStart();
         else return false;
     }
 
-
-
-
     /**
      * return true if the field passed is marked as translatable (and field based translation is active)
      *
@@ -214,7 +210,7 @@ $oFields->GoToStart();
 <?php
 ?>
     /**
-     * factory creates a new instance and returns it.
+     * Factory creates a new instance and returns it.
      *
      * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
      * @param string $sLanguage - init with the language passed
@@ -279,7 +275,8 @@ $oFields->GoToStart();
   }
 ?>
 
-    protected function PostLoadHook() {
+    protected function PostLoadHook() 
+    {
         parent::PostLoadHook();
         $oLocal = null;
         foreach($this->sqlData as $key => $value) {
@@ -369,7 +366,7 @@ $oFields->GoToStart();
 ?>
 
     /**
-     * returns name string for the field
+     * Returns the name string for the field.
      *
      * @return string
      */
@@ -389,8 +386,8 @@ $oFields->GoToStart();
                 $sActiveLanguagePrefix = '';
                 $sAutoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS,$this->table);
                 $isMultiLanguageField = call_user_func(array($sAutoClassName,'CMSFieldIsTranslated'), $sNameColumn);
-                if($isMultiLanguageField ) {
-                    if(null === $this->GetLanguage()) {
+                if ($isMultiLanguageField ) {
+                    if (null === $this->GetLanguage()) {
                         $this->SetLanguage(self::getLanguageService()->getActiveLanguageId());
                     }
                     $sActiveLanguagePrefix = '__'.TGlobal::GetLanguagePrefix($this->GetLanguage());
@@ -456,40 +453,58 @@ $oFields->GoToStart();
     }
 
     /**
-     * returns the name of the record modified to display it in breadcrumbs or anywhere
-     * you may add icons, prefixes or whatever here
+     * Returns the name of the record modified to display it in breadcrumbs or anywhere.
+     * You may add icons, prefixes or whatever here.
      *
+     * @deprecated use getDisplayTitle instead
+     * 
      * @return string
      */
     public function GetDisplayValue()
     {
-        $sContent = $this->GetFromInternalCache('recordDisplayName');
-        if (is_null($sContent)) {
-            $sContent = '';
+        return $this->getDisplayTitle();
+    }
+
+    /**
+     * Returns the name of the record modified to display it in breadcrumbs or anywhere.
+     * You may add icons, prefixes or whatever here.
+     *
+     * @param int $textLength - set -1 if you want no limit
+     *
+     * @return string
+     */
+    public function getDisplayTitle(int $textLength = 50): string
+    {
+        $content = $this->GetFromInternalCache('recordDisplayName');
+        if (null === $content) {
+            $content = '';
             $displayColumn = '<?php echo $sDisplayColumnName; ?>';
             if (is_array($this->sqlData) && array_key_exists($displayColumn, $this->sqlData)) {
-                $sContent = $this->sqlData[$displayColumn];
+                $content = $this->sqlData[$displayColumn];
 <?php
           if (!empty($sDisplayColumnCallbackFunctionName)) {
               ?>
 
-                if (!function_exists('<?=$sDisplayColumnCallbackFunctionName; ?>')) TGlobal::LoadCallbackFunction('<?=$sDisplayColumnCallbackFunctionName; ?>');
-                $sContent = <?=$sDisplayColumnCallbackFunctionName; ?>($sContent, $this->sqlData, $displayColumn);
+                if (!function_exists('<?=$sDisplayColumnCallbackFunctionName; ?>')) {
+                    TGlobal::LoadCallbackFunction('<?=$sDisplayColumnCallbackFunctionName; ?>');
+                }
+
+                $content = <?=$sDisplayColumnCallbackFunctionName; ?>($content, $this->sqlData, $displayColumn);
 <?php
           } ?>
 
             } else {
-                $sContent = $this->sqlData['name'] ?? $this->sqlData['id'] ?? 'unknown' ;
+                $content = $this->sqlData['name'] ?? $this->sqlData['id'] ?? 'unknown' ;
             }
 
-            if(!stristr($sContent,'<') && !stristr($sContent,'>')) {
-                if(mb_strlen($sContent)>50) {
-                    $sContent = mb_substr($sContent,0,50)."...";
-                }
+            if (!str_contains($content, '<') && !str_contains($content, '>')
+                && $textLength > 0 && mb_strlen($content) > $textLength) {
+                $content = mb_substr($content,0,$textLength)."...";
             }
 
-            $this->SetInternalCache('recordDisplayName',$sContent);
+            $this->SetInternalCache('recordDisplayName',$content);
         }
-        return $sContent;
+
+        return $content;
     }
 }

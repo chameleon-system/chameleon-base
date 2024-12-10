@@ -1,0 +1,6 @@
+include:
+  - project: 'devops/gitlab-ci'
+    ref: 'main'
+    file:
+      - 'index.yaml'
+      - 'google-chat-notifications.yaml'

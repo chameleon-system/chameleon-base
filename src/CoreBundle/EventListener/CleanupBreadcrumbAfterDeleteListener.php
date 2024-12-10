@@ -7,24 +7,18 @@ use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 
 class CleanupBreadcrumbAfterDeleteListener
 {
-    /**
-     * @var BackendBreadcrumbServiceInterface
-     */
-    private $breadcrumbService;
-
-    public function __construct(BackendBreadcrumbServiceInterface $breadcrumbService)
-    {
-        $this->breadcrumbService = $breadcrumbService;
+    public function __construct(
+        private readonly BackendBreadcrumbServiceInterface $breadcrumbService,
+    ) {
     }
 
     public function onRecordDelete(RecordChangeEvent $event): void
     {
         $breadcrumb = $this->breadcrumbService->getBreadcrumb();
-
-        if (null === $breadcrumb) {
+        if (null === $breadcrumb || [] === $breadcrumb->aHistory) {
             return;
         }
 
-        $breadcrumb->removeEntries($event->getTableName(), $event->getRecordId(), $event->getCmsTblConfId());
+        $breadcrumb->removeEntries($event->getTableName(), $event->getRecordId());
     }
 }

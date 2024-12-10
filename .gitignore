@@ -2,3 +2,7 @@ composer.lock
 vendor/
 /src/CoreBundle/Resources/Theme/node_modules/
 .phpunit.result.cache
+
+# Code quality
+.php-cs.xml
+.php-twig.xml

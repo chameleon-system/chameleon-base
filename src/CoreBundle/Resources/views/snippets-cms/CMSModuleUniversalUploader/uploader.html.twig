@@ -123,8 +123,8 @@
                 $('#fileupload{{ moduleSpotName }}').chameleonJqueryFileUploader({
                     {% if singleMode %}singleMode: true,{% endif %}
                     {% if allowedFileTypes %}allowedFileTypes: ["{{ allowedFileTypes | join('","') | raw }}"],{% endif %}
-                    {% if uploadSuccessCallback %}fileUploadSuccessCallback: {{ uploadSuccessCallback }},{% endif %}
-                    {% if queueCompleteCallback %}queueCompleteCallback: {{ queueCompleteCallback }},{% endif %}
+                    {% if uploadSuccessCallback %}fileUploadSuccessCallback: {{ uploadSuccessCallback | raw }},{% endif %}
+                    {% if queueCompleteCallback %}queueCompleteCallback: {{ queueCompleteCallback | raw }},{% endif %}
                     chunkSize: {{ chunkSize * 1000 }},
                     maxUploadSize: {{ maxUploadSize * 1000 }},
                     uploadUrl: '{{ uploadUrl | escape('js') }}'

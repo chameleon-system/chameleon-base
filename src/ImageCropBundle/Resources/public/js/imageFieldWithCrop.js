@@ -5,7 +5,14 @@
         var height = $(window).height() - buffer;
         var width = $(window).width() - buffer;
 
-        CreateModalIFrameDialogCloseButton(url, width, height, windowTitle);
+        const urlParams = new URLSearchParams(new URL(url).search);
+        const parentIsInModal = urlParams.get('parentIsInModal');
+
+        if (true === urlParams.has('parentIFrame') && (null === parentIsInModal || '' === parentIsInModal)) {
+            parent.CreateModalIFrameDialogCloseButton(url, width, height, windowTitle);
+        } else {
+            CreateModalIFrameDialogCloseButton(url, width, height, windowTitle);
+        }
     };
 
     window.imageCropResetButtonCallBack = function (evt, imageId) {
@@ -22,7 +29,7 @@
         evt.preventDefault();
     };
 
-    window.imageCropEditorCallback = function (fieldName, cropId, imageId, urlToGetImage) {
+    window.imageCropEditorCallback = function (fieldName, cropId, imageId, urlToGetImage, parentIFrame = '') {
         $('#' + fieldName + '_image_crop_id').val(cropId);
         $('#' + fieldName + '_image_crop_id_reset_button').show();
         $.ajax({
@@ -38,7 +45,11 @@
                 $('#cmsimagefielditem_imagediv_' + fieldName + '0 img').attr('src', jsonData.imageUrl);
                 $('#label_' + fieldName + '_image_crop_id span').html(jsonData.cropName);
                 $('#' + fieldName + '_image_crop_id_reset_button').on('click', window.imageCropResetButtonCallBack);
-                CloseModalIFrameDialog();
+                if ('' !== parentIFrame) {
+                    parent.CloseModalIFrameDialog(parentIFrame);
+                } else {
+                    CloseModalIFrameDialog();
+                }
             },
             dataType: 'json'
         }).fail(function ($xhr) {

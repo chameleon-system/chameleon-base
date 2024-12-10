@@ -32,7 +32,7 @@ if (TGlobal::CMSUserDefined()) {
     <script src="<?= TGlobal::GetStaticURLToWebLib('/components/bootstrap3-typeahead/bootstrap3-typeahead.min.js'); ?>" type="text/javascript"></script>
     <script src="<?= TGlobal::GetStaticURLToWebLib('/javascript/jquery/jquery-form-4.2.2/jquery.form.min.js'); ?>"
             type="text/javascript"></script>
-    <script src="<?= TGlobal::GetStaticURLToWebLib('/javascript/cms.js'); ?>" type="text/javascript"></script>
+    <script src="<?= TGlobal::GetStaticURLToWebLib('/javascript/cms.v1.js'); ?>" type="text/javascript"></script>
     <?php // Scrollbar JS needs to be loaded before CoreUI?>
     <script src="<?= TGlobal::GetPathTheme(); ?>/coreui/js/coreui.bundle.js?v43" type="text/javascript"></script>
     <script src="<?= TGlobal::GetPathTheme(); ?>/coreui/js/coreui-utilities.min.js" type="text/javascript"></script>

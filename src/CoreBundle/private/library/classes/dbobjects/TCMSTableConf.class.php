@@ -250,42 +250,47 @@ class TCMSTableConf extends TCMSRecord
     }
 
     /**
-     * returns the TCMSField object of a field.
+     * Returns the TCMSField object of a field or null.
      *
      * @param string     $sFieldName
      * @param TCMSRecord $oTableRow
      * @param bool       $loadDefaults
      *
-     * @return TCMSField
+     * @return null|TCMSField
+     *
+     * @throws \Exception
      */
     public function GetField($sFieldName, $oTableRow, $loadDefaults = false)
     {
-        $oField = null;
-        /** @var $oFieldDef TCMSFieldDefinition */
-        $oFieldDef = $this->GetFieldDefinition($sFieldName);
-        if (!is_null($oFieldDef)) {
-            $oField = $oFieldDef->GetFieldObject();
-            $oField->sTableName = $this->sqlData['name'];
-            if (!is_null($oTableRow)) {
-                $oField->recordId = $oTableRow->id;
+        $field = null;
+        /** @var $fieldDefinition TCMSFieldDefinition */
+        $fieldDefinition = $this->GetFieldDefinition($sFieldName);
+
+        if (null === $fieldDefinition) {
+            throw new \Exception('Field definition not found for field: '.$sFieldName.' in table: '.$this->sqlData['name']);
+        } else {
+            $field = $fieldDefinition->GetFieldObject();
+            $field->sTableName = $this->sqlData['name'];
+            if (null !== $oTableRow) {
+                $field->recordId = $oTableRow->id;
             }
-            $oField->name = $oFieldDef->sqlData['name'];
+            $field->name = $fieldDefinition->sqlData['name'];
             if ($loadDefaults) {
-                $oField->data = $oFieldDef->sqlData['field_default_value'];
-            } elseif (null !== $oTableRow && is_array($oTableRow->sqlData) && array_key_exists($oField->name, $oTableRow->sqlData)) {
-                $data = $this->getDataForCurrentLanguage($oFieldDef, $oTableRow->sqlData);
+                $field->data = $fieldDefinition->sqlData['field_default_value'];
+            } elseif (null !== $oTableRow && is_array($oTableRow->sqlData) && array_key_exists($field->name, $oTableRow->sqlData)) {
+                $data = $this->getDataForCurrentLanguage($fieldDefinition, $oTableRow->sqlData);
 
                 if (null === $data) {
-                    $data = $oTableRow->sqlData[$oField->name];
+                    $data = $oTableRow->sqlData[$field->name];
                 }
 
-                $oField->data = $data;
+                $field->data = $data;
             }
-            $oField->oDefinition = $oFieldDef;
-            $oField->oTableRow = $oTableRow;
+            $field->oDefinition = $fieldDefinition;
+            $field->oTableRow = $oTableRow;
         }
 
-        return $oField;
+        return $field;
     }
 
     /**

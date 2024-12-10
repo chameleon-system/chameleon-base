@@ -108,6 +108,7 @@ function GoToRecordByHiddenIdWithTarget(tableID, fieldID, target) {
 function SetImageResponse(data, responseMessage) {
     var _currentFieldName = getCMSRegistryEntry('_currentFieldName');
     var _currentPosition = getCMSRegistryEntry('_currentPosition');
+    var _parentIFrame = getCMSRegistryEntry('_parentIFrame');
 
     if (data) {
         $('#cmseditform #' + _currentFieldName).val(data.fieldvalue);
@@ -122,7 +123,11 @@ function SetImageResponse(data, responseMessage) {
         initLightBox();
     }
 
-    CloseModalIFrameDialog();
+    if (_parentIFrame) {
+        parent.CloseModalIFrameDialog(_parentIFrame);
+    } else {
+        CloseModalIFrameDialog();
+    }
 }
 
 /*

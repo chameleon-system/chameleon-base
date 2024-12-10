@@ -224,7 +224,7 @@ class TGroupTableField
                 }
                 $linkEvent .= "'".$this->getLinkField($row, $linkField)."'";
             }
-            $linkEvent .= ');';
+            $linkEvent .= '); return false;';
         }
 
         return [
