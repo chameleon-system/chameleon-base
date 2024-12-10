@@ -349,6 +349,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $configurationState->pickImageMode = $listState->isPickImageMode();
         if (true === $configurationState->pickImageMode) {
             $configurationState->pickImageCallback = $listState->getPickImageCallback();
+            $configurationState->parentIFrame = $listState->getParentIFrame();
             $configurationState->pickImageWithCrop = $listState->isPickImageWithCrop();
         }
 
@@ -415,7 +416,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
             ).'"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/js/mediaManager.js'
+                '/bundles/chameleonsystemmediamanager/js/mediaManager.js?v=1'
             ).'"></script>';
 
         return $includes;

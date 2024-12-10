@@ -30,6 +30,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\VersionExtension;
 
 /**
  * fetches the cms header data.
@@ -144,7 +145,9 @@ class MTHeader extends TCMSModelBase
             $sBackendTitle .= $sCMSOwner.' - ';
         }
         if (isset($this->data['oUser'])) {
-            $sBackendTitle .= CMS_BACKEND_TITLE.' V. '.CMS_VERSION_MAJOR.'.'.CMS_VERSION_MINOR.' (IP: '.$_SERVER['SERVER_ADDR'].')';
+            $versionExtension = new VersionExtension();
+            $cmsVersion = $versionExtension->getCmsVersion();
+            $sBackendTitle .= CMS_BACKEND_TITLE.' V. '.$cmsVersion.' (IP: '.$_SERVER['SERVER_ADDR'].')';
         } else {
             $sBackendTitle .= CMS_BACKEND_TITLE;
         }

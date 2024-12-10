@@ -12,6 +12,10 @@
 /**
  * {@inheritdoc}
  */
+
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+
 class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
 {
     /**
@@ -147,7 +151,16 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
 
     public function _GetOpenUploadWindowJS()
     {
-        $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name).'(document.cmseditform.'.TGlobal::OutHTML($this->name).'__cms_media_tree_id.value);';
+        $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
+        $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');";
+        if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
+            $parentIFrame = $parentField . '_iframe';
+            $js .= "saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutHTML($parentIFrame)."');
+                    TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value,'".TGlobal::OutJS($parentIFrame)."');";
+        } else {
+            $js .= "TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value);";
+        }
 
         return $js;
     }
@@ -172,6 +185,11 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
         if (!empty($singleMode)) {
             $aRequest['singleMode'] = '1';
         }
+        $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        if (null !== $parentField && '' !== $parentField) {
+            $aRequest['parentIFrame'] = $parentField . '_iframe';
+            $aRequest['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
+        }
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aRequest);
         $sErrorMessage = TGlobal::OutJS(
@@ -185,6 +203,10 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
         $aParam['_fnc'] = 'ConnectImageObject';
         $aParam['callFieldMethod'] = '1';
         $aParam['_fieldName'] = $this->name;
+        if (null !== $parentField && '' !== $parentField) {
+            $aParam['parentIFrame'] = $parentField . '_iframe';
+            $aParam['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
+        }
 
         $sConnectImageURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParam);
 
@@ -192,9 +214,13 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
 
         $sHTML = <<<JAVASCRIPTCODE
 <script type="text/javascript">
-  function TCMSFieldPropertyTableCmsMediaOpenUploadWindow_{$this->name}(mediaTreeID) {
+  function TCMSFieldPropertyTableCmsMediaOpenUploadWindow_{$this->name}(mediaTreeID, parentIFrame = '') {
     if(mediaTreeID != '') {
-      CreateModalIFrameDialogCloseButton('{$sURL}&treeNodeID=' + mediaTreeID);
+        if(parentIFrame != '') {
+          parent.CreateModalIFrameDialogCloseButton('{$sURL}&treeNodeID=' + mediaTreeID);
+        } else {
+          CreateModalIFrameDialogCloseButton('{$sURL}&treeNodeID=' + mediaTreeID);
+        }
     } else {
       toasterMessage('{$sErrorMessage}','ERROR');
     }
@@ -553,5 +579,10 @@ JAVASCRIPTCODE;
     protected function GetAdditionalFormFieldsFrontend()
     {
         return array('name');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

@@ -24,6 +24,9 @@
             <argument type="service" id="database_connection" />
         </service>
 
+        <service id="esono_customer.twig.version_extension" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\VersionExtension">
+            <tag name="twig.extension"/>
+        </service>
 
         <service id="chameleon_system_core.pdo" class="PDO" public="false">
             <factory service="database_connection" method="getWrappedConnection" />
@@ -904,9 +907,9 @@
             <argument id="database_connection" type="service"/>
         </service>
 
-        <service id="chameleon_system_core.event_listener.cleanup_breadcrumb_after_delete_listener" class="ChameleonSystem\CoreBundle\EventListener\CleanupBreadcrumbAfterDeleteListener">
+        <service id="chameleon_system_core.event_listener.cleanup_breadcrumb_after_delete_listener"
+                 class="ChameleonSystem\CoreBundle\EventListener\CleanupBreadcrumbAfterDeleteListener">
             <tag name="kernel.event_listener" event="chameleon_system_core.delete_record" method="onRecordDelete" />
-
             <argument type="service" id="chameleon_system_core.service.backend_breadcrumb"/>
         </service>
 
@@ -978,6 +981,10 @@
         </service>
         <service id="chameleon_system_core.geocoding.geocoding_controller" class="ChameleonSystem\CoreBundle\Geocoding\GeocodingController" public="true">
             <argument type="service" id="chameleon_system_core.geocoding.geocoder" />
+        </service>
+
+        <service id="chameleon_system_core.service.css_class_extractor" class="ChameleonSystem\CoreBundle\Service\CssClassExtractor" public="true">
+            <argument type="service" id="database_connection"/>
         </service>
     </services>
 </container>

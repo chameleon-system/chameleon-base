@@ -227,6 +227,10 @@ function LoadJQMDialog(width, height, dialogContent, hasCloseButton, title, isDr
 
 CHAMELEON.CORE.getModalSizeClassByPixel = function (width) {
 
+    if (window !== window.parent) {  //Modal is opened in an iFrame
+        return 'modal-xxl';
+    }
+
     if (typeof width === 'undefined') {
         return 'modal-xl';
     }
@@ -298,6 +302,25 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
         modaldialogLabel.innerHTML = '';
     }
 
+    // set content after dialog is initialized
+    $('#modalDialog').on('shown.bs.modal', function () {
+        var $modalBody = $('#modalDialog .modal-body');
+        $modalBody.html(content);
+        var $iframe = $modalBody.find('iframe');
+        if ($iframe.length > 0) {
+            var iframeSrc = $iframe.attr('src');
+            if (iframeSrc !== undefined) {
+                if (iframeSrc.indexOf('?') > -1) {
+                    iframeSrc += '&';
+                } else {
+                    iframeSrc += '?';
+                }
+                iframeSrc += 'isInModal=1';
+                $iframe.attr('src', iframeSrc);
+            }
+        }
+    });
+
     if (typeof height === 'undefined' || height < 300) {
         height = window.innerHeight-150;
     }
@@ -325,7 +348,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
  */
 function CreateModalIFrameDialog(url, width, height, title, isDraggable, isResizable) {
     if (typeof height === 'undefined' || height < 300) {
-        height = window.innerHeight-150;
+        height = window.innerHeight - 150;
     }
     url = CMSAddGlobalParametersToURL(url);
     var dialogContent = '<iframe id="dialog_list_iframe" src="' + url + '" width="99%" height="100%" frameborder="0" data-modal-body-height='+height+'></iframe>';
@@ -379,15 +402,17 @@ function CreateMediaZoomDialogFromImageURL(imageURL, width, height) {
 /*
  * closes Modal Dialog
  */
-function CloseModalIFrameDialog() {
-    let modalBody = document.querySelector('#modalDialog .modal-body');
-    if (modalBody) {
-        modalBody.innerHTML = '&nbsp;';
-        if (typeof modalCoreui !== 'undefined') {
-            modalCoreui.hide();
+function CloseModalIFrameDialog(parentIFrame = '') {
+    $('#modalDialog .modal-body').html('&nbsp;');
+    $('#modalDialog').modal('hide');
+    if (parentIFrame) {
+        var parentIFrameElement = parent.document.getElementById(parentIFrame);
+        if (parentIFrameElement) {
+            parentIFrameElement.contentWindow.CHAMELEON.CORE.hideProcessingModal();
         }
+    } else {
+        CHAMELEON.CORE.hideProcessingModal();
     }
-    CHAMELEON.CORE.hideProcessingModal();
 }
 
 function getRadioValue(rObj) {

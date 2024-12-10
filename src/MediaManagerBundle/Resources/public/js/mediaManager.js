@@ -39,6 +39,7 @@
             sortColumn: null,
             pickImageMode: false,
             pickImageCallback: '',
+            parentIFrame: '',
             pickImageWithCrop: false
         };
 
@@ -358,6 +359,7 @@
                     'sr': state.sortColumn,
                     'pickImage': state.pickImageMode ? '1' : '0',
                     'pickImageCallback': state.pickImageMode ? state.pickImageCallback : null,
+                    'parentIFrame': state.parentIFrame ? state.parentIFrame : null,
                     'pickImageWithCrop': state.pickImageMode && state.pickImageWithCrop ? '1' : '0'
                 },
                 error: function (responseData) {
@@ -406,13 +408,14 @@
             if (typeof state.pickImageCallback === 'undefined' || null === state.pickImageCallback) {
                 state.pickImageCallback = defaults.pickImageCallback;
             }
+            if (typeof state.parentIFrame === 'undefined' || null === state.parentIFrame) {
+                state.parentIFrame = defaults.parentIFrame;
+            }
 
             return state;
         },
         listViewUpdated: function () {
             var self = this;
-
-
             var frameInEditor = $('iframe', self.editContainer);
             if (frameInEditor.length > 0) {
                 frameInEditor.on('load', function () {
@@ -467,6 +470,10 @@
             });
 
             $('.pick-image', self.editContainer).on('click', function (evt) {
+                if ('' !== self.state.parentIFrame) {
+                    var parentIframeElement = parent.document.getElementById(self.state.parentIFrame);
+                }
+
                 var mediaItemContainer = $(this).parents('.cms-media-item');
 
                 $.ajax({
@@ -480,7 +487,11 @@
                         self.showErrorFromAjaxResponse();
                     },
                     success: function (jsonData) {
-                        eval(self.sanitizeCallbackFunctionName(self.state.pickImageCallback) + '("' + mediaItemContainer.data('id') + '")');
+                        if (parentIframeElement && parentIframeElement.contentWindow) {
+                            eval('parentIframeElement.contentWindow.' + self.sanitizeCallbackFunctionName(self.state.pickImageCallback) + '("' + mediaItemContainer.data('id') + '")');
+                        } else {
+                            eval(self.sanitizeCallbackFunctionName(self.state.pickImageCallback) + '("' + mediaItemContainer.data('id') + '")');
+                        }
                     },
                     dataType: 'JSON'
                 });
@@ -616,6 +627,7 @@
                 data: {
                     'pickImage': self.state.pickImageMode ? '1' : '0',
                     'pickImageCallback': self.state.pickImageMode ? self.state.pickImageCallback : null,
+                    'parentIFrame': self.state.parentIFrame ? self.state.parentIFrame : null,
                     'pickImageWithCrop': self.state.pickImageMode && self.state.pickImageWithCrop ? '1' : '0',
                     'enableUsageSearch': self.state.deleteWithUsageSearch ? '1' : '0',
                 },
@@ -1204,6 +1216,13 @@
                 evt.preventDefault();
             });
             $('.pick-image', self.editContainer).on('click', function (evt) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const parentField = urlParams.get('parentField');
+                if (parentField) {
+                    const iFrameName = parentField + '_iframe';
+                    var siblingIframe = parent.document.getElementById(iFrameName);
+                }
+
                 var mediaItemContainer = $(this).parents('.cms-media-item');
 
                 $.ajax({
@@ -1217,7 +1236,11 @@
                         self.showErrorFromAjaxResponse();
                     },
                     success: function (jsonData) {
-                        eval(self.sanitizeCallbackFunctionName(self.state.pickImageCallback) + '("' + mediaItemContainer.data('id') + '")');
+                        if (siblingIframe && siblingIframe.contentWindow) {
+                            eval('siblingIframe.contentWindow.' + self.sanitizeCallbackFunctionName(self.state.pickImageCallback) + '("' + mediaItemContainer.data('id') + '")');
+                        } else {
+                            eval(self.sanitizeCallbackFunctionName(self.state.pickImageCallback) + '("' + mediaItemContainer.data('id') + '")');
+                        }
                     },
                     dataType: 'JSON'
                 });

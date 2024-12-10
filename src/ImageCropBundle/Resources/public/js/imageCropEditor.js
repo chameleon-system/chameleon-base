@@ -61,7 +61,23 @@
         callbackCmsImageId = image.dataset.callbackCmsImageId,
         callbackUrlToGetImage = image.dataset.callbackUrlToGetImage;
     if (undefined !== callbackFieldName && undefined !== callbackExistingCropId && undefined !== callbackCmsImageId && undefined !== callbackUrlToGetImage) {
-        parent.imageCropEditorCallback(callbackFieldName, callbackExistingCropId, callbackCmsImageId, callbackUrlToGetImage);
+        const currentURL = window.location.href;
+        const urlParams = new URLSearchParams(currentURL);
+        let parentIframeElement = null;
+        let parentIframe = '';
+        const parentIsInModal = urlParams.get('parentIsInModal');
+
+        if (urlParams.has('parentIFrame') && (null === parentIsInModal || '' === parentIsInModal)) {
+            parentIframe = urlParams.get('parentIFrame');
+            if ('' !== parentIframe) {
+                parentIframeElement = parent.document.getElementById(parentIframe);
+            }
+        }
+        if (null !== parentIframeElement) {
+            parentIframeElement.contentWindow.imageCropEditorCallback(callbackFieldName, callbackExistingCropId, callbackCmsImageId, callbackUrlToGetImage, parentIframe);
+        } else {
+            parent.imageCropEditorCallback(callbackFieldName, callbackExistingCropId, callbackCmsImageId, callbackUrlToGetImage);
+        }
     }
 
 })(jQuery);

@@ -313,6 +313,14 @@
                 <source>chameleon_system_core.field_document.download</source>
                 <target>Download</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.show_copy_link">
+                <source>chameleon_system_core.field_document.show_copy_link</source>
+                <target>Show / copy link</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_document.copy_link">
+                <source>chameleon_system_core.field_document.copy_link</source>
+                <target>Copy link</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.field_document.right_click_download">
                 <source>chameleon_system_core.field_document.right_click_download</source>
                 <target>Right click - save as</target>
@@ -483,6 +491,11 @@
                 <source>chameleon_system_core.field_media.select_dialog_title</source>
                 <target>Please choose an image</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_media.image_details_title">
+                <source>chameleon_system_core.field_media.image_details_title</source>
+                <target>Image details</target>
+            </trans-unit>
+
 
             <trans-unit id="chameleon_system_core.field_property_media.error_missing_target">
                 <source>chameleon_system_core.field_property_media.error_missing_target</source>

@@ -16,6 +16,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
@@ -323,7 +324,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     {
         $includes = parent::getHtmlHeadIncludes();
         $includes[] = '<script type="text/javascript" src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemimagecrop/js/imageFieldWithCrop.js'
+                '/bundles/chameleonsystemimagecrop/js/imageFieldWithCrop.js?v=1'
             ).'"></script>';
         $includes[] = '<link href="'.TGlobal::GetStaticURL(
                 '/bundles/chameleonsystemimagecrop/css/imageCropField.css'
@@ -480,6 +481,13 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             $parameters[ImageCropEditorModule::URL_PARAM_PRESET_RESTRICTION] = implode(';', $restriction);
         }
 
+        $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
+        $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
+        if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
+            $parentIFrame = $parentField . '_iframe';
+            $parameters[ImageCropEditorModule::URL_PARAM_PARENT_IFRAME] = $parentIFrame;
+        }
+
         return URL_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameters, '?', '&');
     }
 
@@ -556,5 +564,10 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     protected function getBackendSession(): BackendSessionInterface
     {
         return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+    }
+
+    private function getInputFilterUtil(): InputFilterUtilInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

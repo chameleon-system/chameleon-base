@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * static toolset.
  *
-/**/
+ * /**/
 class TTools
 {
     /**
@@ -55,7 +55,7 @@ class TTools
     {
         $sValue = trim($sValue);
         $sSuffix = strtolower(substr($sValue, strlen($sValue) - 1, 1));
-        if (!in_array($sSuffix, array('k', 'm', 'g'))) {
+        if (!in_array($sSuffix, ['k', 'm', 'g'])) {
             return (int) $sValue;
         }
         $iValue = (int) substr($sValue, 0, strlen($sValue) - 1);
@@ -93,10 +93,10 @@ class TTools
      * it will ONLY mark the substring between HTML Tags - so no Tags will be broken
      * The search is case in sensitive.
      *
-     * @param string $sKeyword      - the substring to mark
-     * @param string $sHTML         - the complete html string
+     * @param string $sKeyword - the substring to mark
+     * @param string $sHTML - the complete html string
      * @param string $sMarkingStart - start of marking
-     * @param string $sMarkingEnd   - end of marking
+     * @param string $sMarkingEnd - end of marking
      *
      * @return string
      */
@@ -125,7 +125,7 @@ class TTools
      * Allowed characters are 0-9, a-z, A-Z, underscore and hyphen.
      * The passed filename is treated as UTF-8.
      *
-     * @param string      $filename
+     * @param string $filename
      * @param string|null $forceExtension
      *
      * @return string
@@ -204,16 +204,16 @@ class TTools
     /**
      * fetches contents of a module.
      *
-     * @param string $sModule     - class name of the module
-     * @param string $sView       - view to use
-     * @param array  $aParameters - other parameters (like instanceID)
-     * @param string $sSpotName   - module spot name
+     * @param string $sModule - class name of the module
+     * @param string $sView - view to use
+     * @param array $aParameters - other parameters (like instanceID)
+     * @param string $sSpotName - module spot name
      *
      * @return string
      *
      * @throws ModuleException
      */
-    public static function CallModule($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
+    public static function CallModule($sModule, $sView, $aParameters = [], $sSpotName = 'tmpmodule')
     {
         $oModuleLoader = self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
         $oModuleLoader->InitModules($sSpotName);
@@ -224,19 +224,19 @@ class TTools
     /**
      * Fetches a new module loader instance.
      *
-     * @param string $sModule     - class name of the module
-     * @param string $sView       - view to use
-     * @param array  $aParameters - other parameters (like instanceID)
-     * @param string $sSpotName   - module spot name
+     * @param string $sModule - class name of the module
+     * @param string $sView - view to use
+     * @param array $aParameters - other parameters (like instanceID)
+     * @param string $sSpotName - module spot name
      *
      * @return TModuleLoader
      */
-    public static function GetModuleLoaderObject($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
+    public static function GetModuleLoaderObject($sModule, $sView, $aParameters = [], $sSpotName = 'tmpmodule')
     {
         $oModuleLoader = self::getSubModuleLoader();
-        $aModuleParameters = array('model' => $sModule, 'view' => $sView);
+        $aModuleParameters = ['model' => $sModule, 'view' => $sView];
         $aModuleParameters = array_merge($aModuleParameters, $aParameters);
-        $moduleList = array($sSpotName => $aModuleParameters);
+        $moduleList = [$sSpotName => $aModuleParameters];
         $oModuleLoader->LoadModules($moduleList);
 
         return $oModuleLoader;
@@ -245,14 +245,14 @@ class TTools
     /**
      * fetches module object.
      *
-     * @param string $sModule     - class name of the module
-     * @param string $sView       - view to use
-     * @param array  $aParameters - other parameters (like instanceID)
-     * @param string $sSpotName   - module spot name
+     * @param string $sModule - class name of the module
+     * @param string $sView - view to use
+     * @param array $aParameters - other parameters (like instanceID)
+     * @param string $sSpotName - module spot name
      *
      * @return TModelBase
      */
-    public static function GetModuleObject($sModule, $sView, $aParameters = array(), $sSpotName = 'tmpmodule')
+    public static function GetModuleObject($sModule, $sView, $aParameters = [], $sSpotName = 'tmpmodule')
     {
         $oModuleLoader = self::GetModuleLoaderObject($sModule, $sView, $aParameters, $sSpotName);
         $oModule = $oModuleLoader->GetPointerToModule($sSpotName);
@@ -270,10 +270,10 @@ class TTools
     public static function IsValidEMail($email)
     {
         $validator = self::getValidator();
-        $constraints = array(
+        $constraints = [
             new Email(),
             new NotBlank(),
-        );
+        ];
         $errors = $validator->validate($email, $constraints);
 
         if ($errors->count() > 0) {
@@ -322,7 +322,7 @@ class TTools
      *
      * @param string $sTableName
      * @param string $sFieldName
-     * @param bool   $bCheckFieldConfig - optional param, if set to true cms_field_conf will be searched for the field instead of SHOW FIELDS
+     * @param bool $bCheckFieldConfig - optional param, if set to true cms_field_conf will be searched for the field instead of SHOW FIELDS
      *
      * @return bool
      */
@@ -337,7 +337,7 @@ class TTools
                 $returnVal = true;
             }
         } else {
-            static $requestCache = array();
+            static $requestCache = [];
             if (array_key_exists($sTableName, $requestCache) && array_key_exists($sFieldName, $requestCache[$sTableName])) {
                 $returnVal = $requestCache[$sTableName][$sFieldName];
             } else {
@@ -348,7 +348,7 @@ class TTools
                 }
 
                 if (!array_key_exists($sTableName, $requestCache)) {
-                    $requestCache[$sTableName] = array();
+                    $requestCache[$sTableName] = [];
                 }
                 $requestCache[$sTableName][$sFieldName] = $returnVal;
             }
@@ -375,11 +375,11 @@ class TTools
      *
      * @param string $sEMail
      * @param string $sDisplayName
-     * @param array  $aLinkAttributes
+     * @param array $aLinkAttributes
      *
      * @return string
      */
-    public static function EncodeEMail($sEMail, $sDisplayName = null, $aLinkAttributes = array())
+    public static function EncodeEMail($sEMail, $sDisplayName = null, $aLinkAttributes = [])
     {
         static $oAntiSpam;
         if (!$oAntiSpam) {
@@ -398,8 +398,8 @@ class TTools
     /**
      * delete directory recursive (optional).
      *
-     * @param string $path      start path
-     * @param bool   $recursive delete recursive
+     * @param string $path start path
+     * @param bool $recursive delete recursive
      */
     public static function DelDir($path, $recursive = false)
     {
@@ -444,14 +444,14 @@ class TTools
      */
     public static function GetURLArguments($url)
     {
-        $args = array();
+        $args = [];
         $url = str_replace('&amp;', '&', $url);
         $processed_url = parse_url($url);
         if (isset($processed_url['query'])) {
             $query_string = $processed_url['query'];
             // split into arguments and values
             $query_string = explode('&', $query_string);
-            $args = array(); // return array
+            $args = []; // return array
 
             foreach ($query_string as $chunk) {
                 $chunk = explode('=', $chunk);
@@ -506,7 +506,7 @@ class TTools
      */
     public static function GetCMSFileTypes()
     {
-        $file_types_array = array();
+        $file_types_array = [];
         $query = 'SELECT * FROM `cms_filetype`';
         $result = MySqlLegacySupport::getInstance()->query($query);
 
@@ -520,8 +520,8 @@ class TTools
     /**
      * validates an ISO/mysql date format e.g. 2010-12-31.
      *
-     * @var string $sDate - date in ISO format e.g. 2010-12-31
-     * @var bool   $bCheckDateNotInFuture - if true the date should be a birthday and cant`t be in the future
+     * @var string - date in ISO format e.g. 2010-12-31
+     * @var bool - if true the date should be a birthday and cant`t be in the future
      *
      * @return bool
      */
@@ -551,7 +551,7 @@ class TTools
      */
     public static function GetZendDebugPostvarNames()
     {
-        $excludeArray = array('FRQSTR', 'ZDEDebuggerPresent', 'debug_host', 'debug_fastfile', 'debug_port', 'start_debug', 'send_sess_end', 'debug_jit', 'original_url', 'debug_stop', 'send_debug_header');
+        $excludeArray = ['FRQSTR', 'ZDEDebuggerPresent', 'debug_host', 'debug_fastfile', 'debug_port', 'start_debug', 'send_sess_end', 'debug_jit', 'original_url', 'debug_stop', 'send_debug_header'];
 
         return $excludeArray;
     }
@@ -589,7 +589,7 @@ class TTools
      * converts an array (even multidimensional) to URL parameters
      * for javascript calls, please use TTools::GetArrayAsURLForJavascript().
      *
-     * @param array  $aData
+     * @param array $aData
      * @param string $prefix
      *
      * @return string
@@ -612,7 +612,7 @@ class TTools
     public static function GetArrayAsFormInput($aData)
     {
         $sString = self::getUrlUtil()->getArrayAsUrl($aData);
-        $aForm = array();
+        $aForm = [];
         $aParts = explode('&amp;', $sString);
         foreach ($aParts as $sLine) {
             $aLineParts = explode('=', $sLine);
@@ -633,7 +633,7 @@ class TTools
      *
      * @static
      *
-     * @param array  $aData
+     * @param array $aData
      * @param string $prefix
      *
      * @return string
@@ -649,7 +649,7 @@ class TTools
      * calculates a faded hex colorcode.
      *
      * @param string $baseColor
-     * @param int    $opacity
+     * @param int $opacity
      *
      * @return string hex colorcode
      */
@@ -674,7 +674,7 @@ class TTools
      */
     public static function GenerateRandomPassword($iLength)
     {
-        $aPasswordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'), array('+', '-', '.'));
+        $aPasswordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'), ['+', '-', '.']);
         mt_srand((float) microtime() * 1000000);
         for ($i = 1; $i <= (count($aPasswordChars) * 2); ++$i) {
             $swap = mt_rand(0, count($aPasswordChars) - 1);
@@ -756,7 +756,7 @@ class TTools
         if (!empty($referrer)) {
             $aDomain = explode('/', $referrer);
 
-            $aSearchEngines = array(array('google', 'q'), array('alltheweb', 'query'), array('altavista', 'q'), array('aol', 'query'), array('excite', 'search'), array('hotbot', 'query'), array('lycos', 'query'), array('yahoo', 'p'), array('t-online', 'q'), array('msn', 'q'), array('netscape', 'search'));
+            $aSearchEngines = [['google', 'q'], ['alltheweb', 'query'], ['altavista', 'q'], ['aol', 'query'], ['excite', 'search'], ['hotbot', 'query'], ['lycos', 'query'], ['yahoo', 'p'], ['t-online', 'q'], ['msn', 'q'], ['netscape', 'search']];
 
             $keyword = '';
             for ($i = 0; $i < count($aSearchEngines); ++$i) {
@@ -768,7 +768,7 @@ class TTools
                 }
             }
 
-            $aReturnData = array('domain' => str_replace('www.', '', $aDomain[2]), 'keyword' => $keyword);
+            $aReturnData = ['domain' => str_replace('www.', '', $aDomain[2]), 'keyword' => $keyword];
         }
 
         return $aReturnData;
@@ -798,7 +798,7 @@ class TTools
      * checks if an URL is available.
      *
      * @param string $url
-     * @param int    $timeout
+     * @param int $timeout
      *
      * @return bool
      */
@@ -812,7 +812,7 @@ class TTools
         if (false === array_key_exists('scheme', $url_info)) {
             return false;
         }
-        if (false === in_array($url_info['scheme'], array('http', 'https'), true)) {
+        if (false === in_array($url_info['scheme'], ['http', 'https'], true)) {
             return false;
         }
 
@@ -832,11 +832,11 @@ class TTools
      * fetches the id for a tablename.
      *
      * @param string $tableName
-     * @param bool   $forceLoad - if true the local cache is ignored
+     * @param bool $forceLoad - if true the local cache is ignored
      *
      * @return string
      *
-     * @throws \InvalidArgumentException if no table was found for $tableName
+     * @throws InvalidArgumentException if no table was found for $tableName
      */
     public static function GetCMSTableId($tableName, $forceLoad = false)
     {
@@ -855,7 +855,7 @@ class TTools
             'tableName' => $tableName,
         ]);
         if (false === $tableId) {
-            throw new \InvalidArgumentException("Table $tableName not found.");
+            throw new InvalidArgumentException("Table $tableName not found.");
         }
         $tableIdCache[$tableName] = $tableId;
 
@@ -873,7 +873,7 @@ class TTools
     {
         static $aCodeList;
         if (!$aCodeList) {
-            $aCodeList = array(
+            $aCodeList = [
                 UPLOAD_ERR_INI_SIZE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_to_large'),
                 UPLOAD_ERR_FORM_SIZE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_to_large'),
                 UPLOAD_ERR_PARTIAL => TGlobal::Translate('chameleon_system_core.field_document.upload_error_interrupted'),
@@ -883,7 +883,7 @@ class TTools
                 ),
                 UPLOAD_ERR_CANT_WRITE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_unable_to_save_to_disc'),
                 UPLOAD_ERR_EXTENSION => TGlobal::Translate('chameleon_system_core.field_document.upload_error_invalid_file_extension'),
-            );
+            ];
         }
 
         $sError = '';
@@ -899,9 +899,9 @@ class TTools
     /**
      * return url required to call method sMethod on the currently executing module.
      *
-     * @param string $sMethod          - method name attached to module_fnc[spot]
-     * @param array  $aOtherParameters - any other parameters you want to add
-     * @param bool   $bUseFullURL      - set to true if you want urls with domain
+     * @param string $sMethod - method name attached to module_fnc[spot]
+     * @param array $aOtherParameters - any other parameters you want to add
+     * @param bool $bUseFullURL - set to true if you want urls with domain
      *
      * @return string
      */
@@ -914,13 +914,13 @@ class TTools
 
         $aParamList = $aOtherParameters;
         if (!array_key_exists('module_fnc', $aParamList)) {
-            $aParamList['module_fnc'] = array();
+            $aParamList['module_fnc'] = [];
         }
         $aParamList['module_fnc'][$sSpotName] = $sMethod;
         if ($bUseFullURL) {
-            return self::getActivePageService()->getLinkToActivePageAbsolute($aParamList, array('module_fnc'));
+            return self::getActivePageService()->getLinkToActivePageAbsolute($aParamList, ['module_fnc']);
         } else {
-            return self::getActivePageService()->getLinkToActivePageRelative($aParamList, array('module_fnc'));
+            return self::getActivePageService()->getLinkToActivePageRelative($aParamList, ['module_fnc']);
         }
     }
 
@@ -1010,7 +1010,7 @@ class TTools
      * used when formating a number: [{variable:number:decimalplaces}]
      * example [{costs:number:2}].
      *
-     * @param int    $length     - max length of the text
+     * @param int $length - max length of the text
      * @param string $sText
      * @param string $sAddToText - add to end of text if text is to long
      *
@@ -1039,7 +1039,7 @@ class TTools
      */
     public static function StringHasIDFormat($sStringToTest)
     {
-        //d547350e-1d3e-9254-e3dd-f305a902eeef
+        // d547350e-1d3e-9254-e3dd-f305a902eeef
         if (is_numeric($sStringToTest)) {
             return true;
         } elseif (36 === strlen($sStringToTest)) {
@@ -1052,8 +1052,10 @@ class TTools
     }
 
     /**
-     * loads CSS file from URL and returns an array of classnames
-     * tries to load the url from local path if the hostname is available in cms_portal_domains.
+     * Loads CSS file from URL and returns an array of classnames.
+     * Tries to load the url from local path if the hostname is available in cms_portal_domains.
+     *
+     * @deprecated Use service chameleon_system_core.service.css_class_extractor method: extractCssClasses() instead.
      *
      * @param string $userCSSURL
      *
@@ -1061,67 +1063,11 @@ class TTools
      */
     public static function GetClassNamesFromCSSFile($userCSSURL)
     {
-        if ('' === $userCSSURL) {
-            return array();
-        }
-
-        $filePath = $userCSSURL;
-
-        // try to load file from local
-        $urlParts = parse_url($userCSSURL);
-
-        $dbConnection = self::getDatabaseConnection();
-        $query = 'SELECT * 
-                        FROM `cms_portal_domains` 
-                       WHERE `name` = :hostname
-                          OR `sslname` = :hostname
-                       ';
-        $sqlStatement = $dbConnection->prepare($query);
-        $sqlStatement->execute(array('hostname' => $urlParts['host']));
-        if ($sqlStatement->rowCount() > 0) {
-            $sLocalPath = PATH_WEB.$urlParts['path'];
-            if (file_exists($sLocalPath)) {
-                $filePath = $sLocalPath;
-            }
-        }
-
-        $content = file_get_contents($filePath);
-
-        if ('' === $content) {
-            return array();
-        }
-
-        // drop comments /*??*/
-        do {
-            $stringPos = strpos($content, '/*');
-            if (false !== $stringPos) {
-                $content = substr($content, 0, $stringPos).substr($content, strpos($content, '*/') + 2);
-            }
-        } while (false !== $stringPos);
-
-        $cssClassesList = array();
-        $blocks = explode('}', $content);
-        foreach ($blocks as $blockIndex => $blockContent) {
-            $blockContent = substr($blockContent, 0, strpos($blockContent, '{'));
-            $blockContent = str_replace(array("\r\n", "\n\r", "\n", "\r"), array('', '', '', ''), $blockContent);
-            $blockContent = trim($blockContent);
-
-            $aBlockParts = explode(',', $blockContent);
-            foreach ($aBlockParts as $blockPart) {
-                $blockPart = trim($blockPart);
-                if (!in_array($blockPart, $cssClassesList) && !empty($blockPart)) {
-                    $cssClassesList[] = $blockPart;
-                }
-            }
-        }
-
-        return $cssClassesList;
+        return ServiceLocator::get('chameleon_system_core.service.css_class_extractor')->extractCssClasses($userCSSURL);
     }
 
     /**
      * serializes data and encodes it with base64 for database storage.
-     *
-     * @param mixed $data
      *
      * @return string
      */
@@ -1131,12 +1077,10 @@ class TTools
     }
 
     /**
-     * unserializes data that is encoded with base64
+     * deserializes data that is encoded with base64
      * includes fallback if data is not base64 encoded.
      *
      * @param string $data
-     *
-     * @return mixed
      */
     public static function mb_safe_unserialize($data)
     {
@@ -1231,7 +1175,7 @@ class TTools
      * if field based translation is active, then this will change the data in aField to
      * match the current language.
      *
-     * @param array         $aField     - array of a list field (cms_tbl_display_list_fields -> name and db_alias are relevant)
+     * @param array $aField - array of a list field (cms_tbl_display_list_fields -> name and db_alias are relevant)
      * @param TCMSTableConf $oTableConf - config object of the table
      *
      * @return array - array('name','direction')
@@ -1278,9 +1222,8 @@ class TTools
     }
 
     /**
-     * @param array    $field
      * @param string[] $translatableFields
-     * @param string   $activeLanguagePrefix
+     * @param string $activeLanguagePrefix
      *
      * @return bool
      */
@@ -1396,7 +1339,7 @@ class TTools
      */
     public static function RemoveUTF8HeaderBomFromString($str = '')
     {
-        if (substr($str, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
+        if (substr($str, 0, 3) == pack('CCC', 0xEF, 0xBB, 0xBF)) {
             $str = substr($str, 3);
         }
 
@@ -1406,7 +1349,7 @@ class TTools
     /**
      * Function deletes a existing array key which was defined in given path.
      *
-     * @param array  $aDataArray
+     * @param array $aDataArray
      * @param string $sDeleteArrayPath Path to delete in given array. (level1-level2-level3- for array("level1"=>array("level2"=>array("level3"=>test))))
      * @param string $sActiveArrayPath do not set this parameter manually on function call
      *
@@ -1432,6 +1375,7 @@ class TTools
      * removes whitespaces from all values of the array.
      *
      * @param array<array-key, string> $aData
+     *
      * @return array<array-key, string>
      */
     public static function TrimArrayValues($aData)
@@ -1450,10 +1394,10 @@ class TTools
      * write a message to a log file. the file is created if it does not exist.
      *
      * @param string $sMessage
-     * @param int    $sLogLevel     - 1=Error, 2=warning, 3=notice, 4=info
+     * @param int $sLogLevel - 1=Error, 2=warning, 3=notice, 4=info
      * @param string $sCallFromFile - file the log request is called from
-     * @param int    $iLineNumber   - line the log request is called from
-     * @param string $sLogFileName  - optional log file name (path is relative to PATH_CMS_CUSTOMER_DATA)
+     * @param int $iLineNumber - line the log request is called from
+     * @param string $sLogFileName - optional log file name (path is relative to PATH_CMS_CUSTOMER_DATA)
      *
      * @deprecated - use your own logger service (with appropriate channel) or 'logger' directly instead
      */
@@ -1489,10 +1433,10 @@ class TTools
      * write a message to a log file. WITHOUT additional user/env information.
      *
      * @param string $sMessage
-     * @param int    $sLogLevel     - 1=Error, 2=warning, 3=notice, 4=info
+     * @param int $sLogLevel - 1=Error, 2=warning, 3=notice, 4=info
      * @param string $sCallFromFile - file the log request is called from
-     * @param int    $iLineNumber   - line the log request is called from
-     * @param string $sLogFileName  - optional log file name (path is relative to PATH_CMS_CUSTOMER_DATA)
+     * @param int $iLineNumber - line the log request is called from
+     * @param string $sLogFileName - optional log file name (path is relative to PATH_CMS_CUSTOMER_DATA)
      *
      * @deprecated - use a logger service instead
      */
@@ -1509,7 +1453,7 @@ class TTools
      * @static
      *
      * @param array<string, string>|null $aVariables
-     * @param bool  $bEscapeViaOutHTML - set to true, if you want to pass each value through TGlobal::OutHTML
+     * @param bool $bEscapeViaOutHTML - set to true, if you want to pass each value through TGlobal::OutHTML
      *
      * @return array|null
      *
@@ -1519,7 +1463,7 @@ class TTools
     public static function AddStaticPageVariables($aVariables, $bEscapeViaOutHTML = false)
     {
         /** @var array<string, string> $aPageVars */
-        static $aPageVars = array();
+        static $aPageVars = [];
 
         if (is_array($aVariables)) {
             $responseVariableReplacer = self::getResponseVariableReplacer();
@@ -1540,7 +1484,7 @@ class TTools
      * checks if a record exists in table.
      *
      * @param string $sTableName
-     * @param array<string, string>  $aFieldsArray - array('fieldname'=>'fieldvalue')
+     * @param array<string, string> $aFieldsArray - array('fieldname'=>'fieldvalue')
      *
      * @return bool
      */
@@ -1599,18 +1543,20 @@ class TTools
      * @static
      *
      * @param string $string
-     * @param int    $format - 0: Returns the number of words, 1: Returns the words themselves, 2: Returns an array of words indexed by their position in the original string
+     * @param int $format - 0: Returns the number of words, 1: Returns the words themselves, 2: Returns an array of words indexed by their position in the original string
      * @param string $charlist
+     *
      * @psalm-param 0|1|2 $format
      *
      * @return array|int
+     *
      * @psalm-return ($format is 0 ? int : ($format is 1 ? string[] : ($format is 2 ? array<int, string> : 0)))
      */
     public static function str_word_count_utf8($string, $format = 0, $charlist = '')
     {
         $aSplit = preg_split("/[^'\-A-Za-z".$charlist.']+/u', $string, -1, PREG_SPLIT_NO_EMPTY);
         if (2 == $format) {
-            $aReturnArray = array();
+            $aReturnArray = [];
             $iPos = 0;
             foreach ($aSplit as $sString) {
                 $iPos = mb_strpos($string, $sString, $iPos, 'utf-8');
@@ -1632,8 +1578,8 @@ class TTools
      * validates a vat id for different countries
      * if no iso country code ($sCountry) or country id ($sCountryId) is passed the country of the active billing address will be used.
      *
-     * @param string      $sVatId
-     * @param string|null $sCountry   iso code (2 characters) e.g. de
+     * @param string $sVatId
+     * @param string|null $sCountry iso code (2 characters) e.g. de
      * @param string|null $sCountryId
      *
      * @return false|int
@@ -1665,7 +1611,7 @@ class TTools
             $sCountry = 'de';
         }
 
-        //remove all non alphanumeric characters
+        // remove all non alphanumeric characters
         $sVatId = preg_replace('/[^a-zA-Z0-9]+/', '', $sVatId);
         switch (strtolower($sCountry)) {
             case 'be':
@@ -1780,14 +1726,17 @@ class TTools
      * @static
      *
      * @template T
+     *
      * @param array{weight: numeric, value: T}[] $aArray
+     *
      * @return T
      */
     public static function GetWeightedRandomArrayValue($aArray)
     {
         shuffle($aArray);
-        usort($aArray, array('TTools', '_CompareByWeight'));
-        //$aArray = array_reverse($aArray);
+        usort($aArray, ['TTools', '_CompareByWeight']);
+
+        // $aArray = array_reverse($aArray);
         return $aArray[0]['value'];
     }
 
@@ -1807,7 +1756,7 @@ class TTools
         $iWeightA = $a['weight'];
         $iWeightB = $b['weight'];
 
-        return mt_rand(0, ($iWeightA + $iWeightB)) > $iWeightA ? 1 : -1;
+        return mt_rand(0, $iWeightA + $iWeightB) > $iWeightA ? 1 : -1;
     }
 
     /**

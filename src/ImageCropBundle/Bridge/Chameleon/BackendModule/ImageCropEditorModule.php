@@ -55,6 +55,8 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
     const URL_PARAM_CROP_ID = 'cropId';
 
+    const URL_PARAM_PARENT_IFRAME = 'parentIFrame';
+
     const MESSAGE_CONSUMER_NAME = 'imageCropEditor';
 
     /**
@@ -315,6 +317,11 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
             $parameters[self::URL_PARAM_FIELD_NAME] = $fieldName;
         }
 
+        $parentIFrame = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PARENT_IFRAME);
+        if (null !== $parentIFrame) {
+            $parameters[self::URL_PARAM_PARENT_IFRAME] = $parentIFrame;
+        }
+
         return $parameters;
     }
 
@@ -459,7 +466,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $includes = parent::GetHtmlFooterIncludes();
         $includes[] = '
-            <script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/js/imageCropEditor.js').'"></script>
+            <script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/js/imageCropEditor.js?v1').'"></script>
         ';
 
         return $includes;

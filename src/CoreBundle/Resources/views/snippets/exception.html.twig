@@ -1,12 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ status_code }} {{ status_text }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ status_code }} - {{ status_text }}</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #72c02c, #4a8b1c);
+            color: #ffffff;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .error-container {
+            text-align: center;
+        }
+
+        .error-title {
+            font-size: 12rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .error-text {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>{{ status_code }} {{ status_text }}</h1>
+<div class="error-container">
+    <div class="error-title">{{ status_code }}</div>
+    <p class="error-text">{{ status_text }}</p>
+</div>
 </body>
 </html>
