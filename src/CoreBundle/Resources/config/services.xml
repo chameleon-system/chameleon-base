@@ -978,5 +978,9 @@
         <service id="chameleon_system_core.geocoding.geocoding_controller" class="ChameleonSystem\CoreBundle\Geocoding\GeocodingController" public="true">
             <argument type="service" id="chameleon_system_core.geocoding.geocoder" />
         </service>
+
+        <service id="chameleon_system_core.service.css_class_extractor" class="ChameleonSystem\CoreBundle\Service\CssClassExtractor" public="true">
+            <argument type="service" id="database_connection"/>
+        </service>
     </services>
 </container>

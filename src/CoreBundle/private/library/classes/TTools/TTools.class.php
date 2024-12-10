@@ -1049,8 +1049,10 @@ class TTools
     }
 
     /**
-     * loads CSS file from URL and returns an array of classnames
-     * tries to load the url from local path if the hostname is available in cms_portal_domains.
+     * Loads CSS file from URL and returns an array of classnames.
+     * Tries to load the url from local path if the hostname is available in cms_portal_domains.
+     *
+     * @deprecated Use service chameleon_system_core.service.css_class_extractor method: extractCssClasses() instead.
      *
      * @param string $userCSSURL
      *
@@ -1058,61 +1060,7 @@ class TTools
      */
     public static function GetClassNamesFromCSSFile($userCSSURL)
     {
-        if ('' === $userCSSURL) {
-            return array();
-        }
-
-        $filePath = $userCSSURL;
-
-        // try to load file from local
-        $urlParts = parse_url($userCSSURL);
-
-        $dbConnection = self::getDatabaseConnection();
-        $query = 'SELECT * 
-                        FROM `cms_portal_domains` 
-                       WHERE `name` = :hostname
-                          OR `sslname` = :hostname
-                       ';
-        $sqlStatement = $dbConnection->prepare($query);
-        $sqlStatement->execute(array('hostname' => $urlParts['host']));
-        if ($sqlStatement->rowCount() > 0) {
-            $sLocalPath = PATH_WEB.$urlParts['path'];
-            if (file_exists($sLocalPath)) {
-                $filePath = $sLocalPath;
-            }
-        }
-
-        $content = file_get_contents($filePath);
-
-        if ('' === $content) {
-            return array();
-        }
-
-        // drop comments /*??*/
-        do {
-            $stringPos = strpos($content, '/*');
-            if (false !== $stringPos) {
-                $content = substr($content, 0, $stringPos).substr($content, strpos($content, '*/') + 2);
-            }
-        } while (false !== $stringPos);
-
-        $cssClassesList = array();
-        $blocks = explode('}', $content);
-        foreach ($blocks as $blockIndex => $blockContent) {
-            $blockContent = substr($blockContent, 0, strpos($blockContent, '{'));
-            $blockContent = str_replace(array("\r\n", "\n\r", "\n", "\r"), array('', '', '', ''), $blockContent);
-            $blockContent = trim($blockContent);
-
-            $aBlockParts = explode(',', $blockContent);
-            foreach ($aBlockParts as $blockPart) {
-                $blockPart = trim($blockPart);
-                if (!in_array($blockPart, $cssClassesList) && !empty($blockPart)) {
-                    $cssClassesList[] = $blockPart;
-                }
-            }
-        }
-
-        return $cssClassesList;
+        return ServiceLocator::get('chameleon_system_core.service.css_class_extractor')->extractCssClasses($userCSSURL);
     }
 
     /**
@@ -1128,7 +1076,7 @@ class TTools
     }
 
     /**
-     * unserializes data that is encoded with base64
+     * deserializes data that is encoded with base64
      * includes fallback if data is not base64 encoded.
      *
      * @param string $data
