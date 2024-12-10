@@ -9,8 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\CssClassExtractorInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\CoreBundle\Wysiwyg\CkEditorConfigProviderInterface;
+use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -417,7 +420,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     protected function getCurrentRequest()
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -425,7 +428,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     protected function getUrlUtilService()
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
     /**
@@ -559,39 +562,39 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     private function getJSStylesSet(string $sUserCssUrl): array
     {
-        $aStyles = [];
+        $styles = [];
 
         $aCustomCSSClasses = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
         foreach ($aCustomCSSClasses as $sClassName) {
-            $aStyle = [];
-            if ('@' === substr($sClassName, 0, 1)) {
+            $styleData = [];
+            if (str_starts_with($sClassName, '@')) {
                 continue;
             }
-            if ('.' === substr($sClassName, 0, 1)) {
+            if (str_starts_with($sClassName, '.')) {
                 $sClassName = substr($sClassName, 1);
-                $aStyle['name'] = "'".$sClassName."'";
-                $aStyle['element'] = "['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li']";
-                $aStyle['attributes']['class'] = "'".$sClassName."'";
+                $styleData['name'] = "'".$sClassName."'";
+                $styleData['element'] = "['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li']";
+                $styleData['attributes']['class'] = "'".$sClassName."'";
             } else {
                 // split tag type from css. note: we only allow one class!
                 $aClassParts = explode('.', $sClassName);
-                if (2 == count($aClassParts)) {
+                if (2 === count($aClassParts)) {
                     $sElement = $aClassParts[0];
                     $sElementSubParts = explode(' ', $sElement);
                     $sElement = $sElementSubParts[count($sElementSubParts) - 1];
                     $sClassName = $aClassParts[1];
-                    $aStyle['name'] = "'".$sClassName.'('.$sElement.")'";
-                    $aStyle['element'] = "'".$sElement."'";
-                    $aStyle['attributes']['class'] = "'".$sClassName."'";
+                    $styleData['name'] = "'".$sClassName.'('.$sElement.")'";
+                    $styleData['element'] = "'".$sElement."'";
+                    $styleData['attributes']['class'] = "'".$sClassName."'";
                 }
             }
 
-            if (count($aStyle) > 0) {
-                $aStyles[] = $aStyle;
+            if (count($styleData) > 0) {
+                $styles[] = $styleData;
             }
         }
 
-        return $aStyles;
+        return $styles;
     }
 
     /**
@@ -601,20 +604,20 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     protected function GetWYSIWYGCustomerStyles($sUserCSSURL)
     {
-        static $aStyleCache;
-        if (!$aStyleCache) {
+        static $styleCache;
+        if (!$styleCache) {
             $aParameters = ['class' => 'CSSTree', 'cssurl' => $sUserCSSURL];
-            $cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+            $cache = $this->getCache();
             $key = $cache->getKey($aParameters, false);
-            $aStyleCache = $cache->get($key);
-            if (null === $aStyleCache) {
-                $aStyles = TTools::GetClassNamesFromCSSFile($sUserCSSURL);
-                $aStyleCache = $aStyles;
-                $cache->set($key, $aStyleCache, null);
+            $styleCache = $cache->get($key);
+            if (null === $styleCache) {
+                $aStyles = $this->getCssClassExtractor()->extractCssClasses($sUserCSSURL);
+                $styleCache = $aStyles;
+                $cache->set($key, $styleCache, null);
             }
         }
 
-        return $aStyleCache;
+        return $styleCache;
     }
 
     /**
@@ -623,7 +626,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     public function _GetFieldWidth()
     {
-        if (0 != $this->oDefinition->sqlData['field_width']) {
+        if (0 !== $this->oDefinition->sqlData['field_width'] && '0' !== $this->oDefinition->sqlData['field_width']) {
             // max length
             $this->fieldCSSwidth = ($this->oDefinition->sqlData['field_width'] + 30).'px';
             $this->fieldWidth = $this->oDefinition->sqlData['field_width'];
@@ -692,6 +695,16 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
 
     private function getCkeditorConfigProvider(): CkEditorConfigProviderInterface
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.wysiwyg.ckeditor_config_provider');
+        return ServiceLocator::get('chameleon_system_core.wysiwyg.ckeditor_config_provider');
+    }
+
+    private function getCssClassExtractor(): CssClassExtractorInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.css_class_extractor');
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

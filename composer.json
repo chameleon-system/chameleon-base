@@ -36,7 +36,8 @@
         "symfony/polyfill-apcu": "~1.13.1",
         "symfony/symfony": "~4.4.13",
         "tedivm/jshrink": "~1.0",
-        "twig/twig": "^2.15 || ^3.0 <3.15"
+        "twig/twig": "^2.15 || ^3.0 <3.15",
+        "sabberworm/php-css-parser": "^8.7"
     },
     "require-dev": {
         "chameleon-system/code-style-config": "dev-master@dev",
