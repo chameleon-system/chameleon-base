@@ -1,10 +1,10 @@
-<footer class="app-footer">
+<footer class="footer px-4">
     <div>
         {% if activeUser %}
             <span>Chameleon V {{ '' | cms_version }}</span><span class="ml-2">(IP: {{ serverAddr }})</span>
         {% endif %}
     </div>
-    <div class="ml-auto">
+    <div class="ms-auto">
         <span>&copy;&nbsp;&nbsp;<a href="http://www.esono.de" target="_blank">ESONO AG</a>&nbsp;&nbsp;{{ "now"|date("Y") }}</span>
     </div>
 </footer>
