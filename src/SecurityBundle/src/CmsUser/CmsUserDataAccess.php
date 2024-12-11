@@ -64,7 +64,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
      * returns the user with the login equal to the $username passed, if that user is permitted to log into the cms backend.
      *  Throws a UserNotFoundException otherwise.
     */
-    public function loadUserByUsername(string $username)
+    public function loadUserByUsername(string $username): CmsUserModel|UserInterface
     {
         return $this->loadUserByIdentifier($username);
     }
@@ -79,7 +79,6 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
         return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
     }
-
 
     public function loadUserWithBackendLoginPermissionFromSSOID(string $ssoType, string $ssoId): ?CmsUserModel
     {
@@ -98,7 +97,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return $this->createUserFromRow($userRow);
     }
 
-    public function loadUserWithBackendLoginPermissionByEMail(string $email):?CmsUserModel
+    public function loadUserWithBackendLoginPermissionByEMail(string $email): ?CmsUserModel
     {
         $query = "SELECT * FROM `cms_user` WHERE `email` = :email AND `allow_cms_login` = '1' LIMIT 0,1";
         $userRow = $this->connection->fetchAssociative($query, ['email' => $email]);
