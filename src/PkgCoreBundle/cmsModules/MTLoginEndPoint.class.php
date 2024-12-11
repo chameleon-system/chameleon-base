@@ -11,6 +11,9 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
+/**
+ * @deprecated - moved to ChameleonSystemCmsBackendBundle
+ */
 class MTLoginEndPoint extends TCMSModelBase
 {
 
