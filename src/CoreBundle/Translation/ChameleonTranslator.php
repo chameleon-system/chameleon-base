@@ -23,10 +23,7 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
      * @var TranslatorInterface&TranslatorBagInterface
      */
     private $delegate;
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
+    private RequestInfoServiceInterface $requestInfoService;
 
     /**
      * @param TranslatorInterface&TranslatorBagInterface $delegate
