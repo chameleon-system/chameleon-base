@@ -16,50 +16,41 @@
         var _cms_controler = '{{ constant('PATH_CMS_CONTROLLER') | e('js') }}';
         var _cmsauthenticitytoken_parameter = '{{ authenticationTokenPlaceholderAsParameter | e('js') }}';
     </script>
-    <!--#CMSHEADERCODE#-->
-    <script src="{{ '/wysiwyg/functions.js'| cms_static_url_web_lib }}" type="text/javascript"></script>',
-    <link href="{{ '/css/cms_user_style/main.css'| cms_static_url_web_lib }}" rel="stylesheet" type="text/css" />',
-    <link href="{{ '/iconFonts/fileIconVectors/file-icon-square-o.css'| cms_static_url_web_lib }}" rel="stylesheet" type="text/css" />',
-
+    <script src="{{ '/wysiwyg/functions.js'| cms_static_url_web_lib }}" type="text/javascript"></script>
+    <link href="{{ '/css/cms_user_style/main.css'| cms_static_url_web_lib }}" rel="stylesheet" type="text/css" />
+    <link href="{{ '/iconFonts/fileIconVectors/file-icon-square-o.css'| cms_static_url_web_lib }}" rel="stylesheet" type="text/css" />
     <link href="{{ cmsGetPathTheme() }}/css/layout.css" rel="stylesheet" type="text/css"/>
     <link href="{{ '/bootstrap/css/bootstrap.min.css?v4.1.3' | cms_static_url_web_lib }}" media="screen"
           rel="stylesheet" type="text/css"/>
-    <link href="{{ cmsGetPathTheme() }}/coreui/css/coreui-standalone.min.css" media="screen" rel="stylesheet"
+    <link href="{{ cmsGetPathTheme() }}/coreui/coreuiTheme.css?v4.3.2" media="screen" rel="stylesheet"
           type="text/css"/>
     <link href="{{ cmsGetPathTheme() }}/css/global.css" rel="stylesheet" type="text/css"/>
 
     <link href="{{ cmsGetPathTheme() }}/images/favicon.ico" rel="shortcut icon" />
     <link href="{{ '/iconFonts/fontawesome-free-5.8.1/css/all.css' | cms_static_url_web_lib }}" media="screen" rel="stylesheet" type="text/css" />
     <link href="{{ '/iconFonts/fileIconVectors/file-icon-square-o.css' | cms_static_url_web_lib }}" media="screen" rel="stylesheet" type="text/css" />
-
-
 </head>
-<body class="app header-fixed">
-<header class="app-header navbar">{% block headerImage %}
+<body>
+<div class="wrapper d-flex flex-column min-vh-100 bg-light">
+<header class="header header-sticky mb-4">
+    {% block headerImage %}
         <span class="navbar-brand"><img src="{{ cmsGetPathTheme() }}/images/chameleon_logo_header.png" alt="" /></span>
-    {% endblock %}</header>
-<div id="cmscontainer" class="app-body">
-    <main class="main" id="cmscontentcontainer">
-        <div class="container-fluid content">
-            {% block body %}
-                <h1>{{ pageTitle }}</h1>
+    {% endblock %}
+    <div class="header-divider"></div>
+</header>
+<main class="body main">
+    <div class="container-fluid content px-0" id="cmscontentcontainer">
+        {% block body %}
+            <h1>{{ pageTitle }}</h1>
 
-                {% if user.isLoggedIn %}
-                    Hello {{ user.name }}!
-                {% endif %}
-            {% endblock %}
+            {% if user.isLoggedIn %}
+                Hello {{ user.name }}!
+            {% endif %}
+        {% endblock %}
+    </div>
+</main>
 
-        </div>
-    </main>
+{{ include('BackendFooter/standard.html.twig') }}
 </div>
-<footer class="app-footer">
-    <div>
-        <span>Chameleon V. {{ constant('CMS_VERSION_MAJOR') }}.{{ constant('CMS_VERSION_MINOR') }}</span>
-    </div>
-    <div class="ml-auto">
-        <span>&copy;&nbsp;&nbsp;<a href="http://www.esono.de"
-                                   target="_blank">ESONO AG</a>&nbsp;&nbsp;{{ date().format('Y') }}</span>
-    </div>
-</footer>
 </body>
 </html>

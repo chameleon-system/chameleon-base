@@ -24,7 +24,8 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="esono_customer.twig.version_extension" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\VersionExtension">
+        <service id="esono_customer.twig.version_extension" class="BackendTwigExtension">
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <tag name="twig.extension"/>
         </service>
 

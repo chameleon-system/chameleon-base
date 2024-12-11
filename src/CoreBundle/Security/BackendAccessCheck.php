@@ -24,7 +24,7 @@ class BackendAccessCheck
     /**
      * @var array<string, string[]>
      */
-    private $ipRestrictedPageDefs = [];
+    private array $ipRestrictedPageDefs = [];
 
     /**
      * @param ICmsCoreRedirect $redirect

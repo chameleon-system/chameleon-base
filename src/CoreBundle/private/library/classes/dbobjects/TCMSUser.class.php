@@ -77,12 +77,12 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * return active user
-     * in frontend it returns always NULL because of performance reasons
-     * you don`t get a WWW-user object!
+     * Returns the active backend user.
+     * In the frontend it returns always NULL because of performance reasons
+     * You don`t get a WWW-user object!
      *
      * @return TdbCmsUser|null
-     * @deprecated 8.0 - use symfony security service
+     * @deprecated 8.0 - use symfony security service instead
      */
     public static function GetActiveUser()
     {
@@ -105,7 +105,6 @@ class TCMSUser extends TCMSRecord
         self::$oActiveUser->bLoggedIn = true;
 
         return self::$oActiveUser;
-
     }
 
     public static function GetSessionVarName($sName)

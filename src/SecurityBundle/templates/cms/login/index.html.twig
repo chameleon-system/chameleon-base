@@ -10,7 +10,7 @@
                     </div>
                     <div class="card-body">
                         {% if error %}
-                            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            <div class="alert alert-warning">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                         {% endif %}
                         <form name="cmsform"  action="{{ path('cms_login') }}" method="post">
                             <fieldset>
