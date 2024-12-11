@@ -286,6 +286,7 @@
         <service id="chameleon_system_core.listener.template_engine_access" class="ChameleonSystem\CoreBundle\EventListener\TemplateEngineAccessListener">
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="security.helper" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="-250" />
         </service>
 
