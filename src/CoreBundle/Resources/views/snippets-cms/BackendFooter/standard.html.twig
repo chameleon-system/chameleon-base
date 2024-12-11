@@ -3,7 +3,7 @@
         {% set userLogggedIn = '' | cms_user_logged_in %}
         {% if userLogggedIn %}
             <span>Chameleon V. {{ '' | cms_version }}</span><span class="ml-2">(IP: {{ '' | server_address }})</span>
-        {% endif %}<span class="ml-2">(IP: {{ '' | server_address }})</span>
+        {% endif %}
     </div>
     <div class="ms-auto">
         <span>&copy;&nbsp;&nbsp;<a href="https://www.esono.de" target="_blank">ESONO AG</a>&nbsp;&nbsp;{{ "now"|date("Y") }}</span>
