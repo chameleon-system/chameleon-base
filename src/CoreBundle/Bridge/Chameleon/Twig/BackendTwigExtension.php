@@ -5,7 +5,7 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class BackendTwigExtension extends AbstractExtension
 {
@@ -13,18 +13,18 @@ class BackendTwigExtension extends AbstractExtension
     {
     }
 
-    public function getFilters()
+    public function getFunctions()
     {
         return [
-            new TwigFilter('cms_version', [$this, 'getCmsVersion']),
-            new TwigFilter('server_address', [$this, 'getServerAddress']),
-            new TwigFilter('cms_user_logged_in', [$this, 'isCmsBackendUserLoggedIn']),
+            new TwigFunction('cms_version', [$this, 'getCmsVersion']),
+            new TwigFunction('server_address', [$this, 'getServerAddress']),
+            new TwigFunction('cms_user_logged_in', [$this, 'isCmsBackendUserLoggedIn']),
         ];
     }
 
     public function getCmsVersion(): string
     {
-        $composerLockFile = PATH_PROJECT_BASE.'composer.lock';
+        $composerLockFile = PATH_PROJECT_BASE . 'composer.lock';
         $packageName = 'chameleon-system/chameleon-base';
 
         if (file_exists($composerLockFile)) {

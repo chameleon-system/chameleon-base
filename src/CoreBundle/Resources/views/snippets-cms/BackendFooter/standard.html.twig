@@ -1,8 +1,8 @@
 <footer class="footer px-4">
     <div>
-        {% set userLogggedIn = '' | cms_user_logged_in %}
+        {% set userLogggedIn = cms_user_logged_in() %}
         {% if userLogggedIn %}
-            <span>Chameleon V. {{ '' | cms_version }}</span><span class="ml-2">(IP: {{ '' | server_address }})</span>
+            <span>Chameleon V. {{ cms_version() }}</span><span class="ml-2">(IP: {{ server_address() }})</span>
         {% endif %}
     </div>
     <div class="ms-auto">
