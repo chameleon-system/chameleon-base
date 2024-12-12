@@ -17,27 +17,24 @@ use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
 use ChameleonSystem\CoreBundle\Service\Initializer\LanguageServiceInitializerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TdbCmsConfig;
-use TdbCmsLanguage;
 
 class LanguageService implements LanguageServiceInterface
 {
-    private ?TdbCmsLanguage $activeLanguage = null;
+    private ?\TdbCmsLanguage $activeLanguage = null;
     /**
      * Holds the fallback language in case we don't have a request (Console, ...). We hereby add a state to the service,
      * but the service isn't really stateless anyway because it uses the request to store our active language.
      */
-    private ?TdbCmsLanguage $fallbackLanguage = null;
+    private ?\TdbCmsLanguage $fallbackLanguage = null;
     private bool $isInitializing = false;
-    private ?TdbCmsLanguage $cmsBaseLanguage = null;
+    private ?\TdbCmsLanguage $cmsBaseLanguage = null;
 
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly LanguageServiceInitializerInterface $languageServiceInitializer,
         private readonly DataAccessCmsLanguageInterface $dataAccessCmsLanguage
-    )
-    {
+    ) {
     }
 
     /**
@@ -45,7 +42,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function getCmsBaseLanguageId()
     {
-        return TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
+        return \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
     }
 
     /**
@@ -175,7 +172,7 @@ class LanguageService implements LanguageServiceInterface
         if (null === $languageId) {
             return;
         }
-        /** @var ?TdbCmsLanguage $originalLanguage */
+        /** @var ?\TdbCmsLanguage $originalLanguage */
         $originalLanguage = $this->activeLanguage;
         $newLanguage = $this->dataAccessCmsLanguage->getLanguage($languageId, $languageId);
 
@@ -185,7 +182,7 @@ class LanguageService implements LanguageServiceInterface
 
         $newLanguage->SetLanguage($languageId);
         $this->activeLanguage = $newLanguage;
-        /**
+        /*
          * Reload language after setting it as active language so that translated fields are displayed in the correct language.
          */
         $this->activeLanguage->LoadFromRow($this->activeLanguage->sqlData);
@@ -218,7 +215,7 @@ class LanguageService implements LanguageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function setFallbackLanguage(TdbCmsLanguage $fallbackLanguage)
+    public function setFallbackLanguage(\TdbCmsLanguage $fallbackLanguage)
     {
         $this->fallbackLanguage = $fallbackLanguage;
     }
