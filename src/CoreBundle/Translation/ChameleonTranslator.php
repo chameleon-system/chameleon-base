@@ -39,13 +39,6 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
         $this->requestInfoService = $requestInfoService;
     }
 
-    /**
-     * @param string $id
-     * @param array $parameters
-     * @param string|null $domain
-     * @param string|null $locale
-     * @return string
-     */
     public function trans(string $id, array $parameters = array(), ?string $domain = null, ?string $locale = null): string
     {
         if (null === $domain) {
