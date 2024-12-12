@@ -172,7 +172,6 @@ class LanguageService implements LanguageServiceInterface
         if (null === $languageId) {
             return;
         }
-        /** @var ?\TdbCmsLanguage $originalLanguage */
         $originalLanguage = $this->activeLanguage;
         $newLanguage = $this->dataAccessCmsLanguage->getLanguage($languageId, $languageId);
 
