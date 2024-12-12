@@ -15,37 +15,37 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LocaleChangedEvent extends Event
 {
-    /**
-     * @var string|null
-     */
-    private $originalLocal;
-    /**
-     * @var string|null
-     */
-    private $newLocal;
+    private ?string $originalLocal = null;
+    private ?string $newLocal = null;
 
-    /**
-     * @param string|null $newLocal
-     * @param string|null $originalLocal
-     */
-    public function __construct($newLocal, $originalLocal = null)
+    public function __construct(?string $newLocal, ?string $originalLocal = null)
     {
         $this->newLocal = $newLocal;
         $this->originalLocal = $originalLocal;
     }
 
     /**
-     * @return string|null
+     * @deprecated use getNewLocale instead
      */
-    public function getNewLocal()
+    public function getNewLocal(): ?string
+    {
+        return $this->newLocal;
+    }
+
+    public function getNewLocale(): ?string
     {
         return $this->newLocal;
     }
 
     /**
-     * @return string|null
+     * @deprecated use getOriginalLocale instead
      */
-    public function getOriginalLocal()
+    public function getOriginalLocal(): ?string
+    {
+        return $this->originalLocal;
+    }
+
+    public function getOriginalLocale(): ?string
     {
         return $this->originalLocal;
     }
