@@ -348,7 +348,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     }
 
     /**
-     * We need to load these service lazy, because they depend on the language service.
+     * We need to load these services lazy, because they depend on the language service.
      */
     private function getPortalDomainService(): PortalDomainServiceInterface
     {
