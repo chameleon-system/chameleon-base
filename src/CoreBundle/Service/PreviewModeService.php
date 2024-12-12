@@ -49,7 +49,7 @@ class PreviewModeService implements PreviewModeServiceInterface
     {
         try {
             if (false === $previewGranted) {
-                setcookie(self::COOKIE_NAME, '', time() - 3600, '/', false, true);
+                setcookie(self::COOKIE_NAME, '', time() - 3600, '/', '', false, true);
                 $this->connection->update('cms_user', ['preview_token' => ''], ['id' => $cmsUserId]);
 
                 return;

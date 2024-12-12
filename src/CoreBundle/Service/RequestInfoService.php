@@ -156,7 +156,7 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         // todo: `__previewmode` should be the only way to enable this. Refactor all places where the preview attribute is set as `preview` instead of `__previewmode'
-        // @note: preview mode laoding only via cookie is not possible, because this will kill all frontend logins
+        // @note: preview mode loading only via cookie is not possible, because this will kill all frontend logins
         $this->isPreviewModeCache = false === \TGlobal::IsCMSMode()
             && true === $this->getPreviewModeService()->currentSessionHasPreviewAccess() || $this->checkTokenFromQueryParam($request)
             && (
