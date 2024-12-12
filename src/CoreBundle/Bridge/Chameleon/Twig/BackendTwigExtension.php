@@ -24,7 +24,7 @@ class BackendTwigExtension extends AbstractExtension
 
     public function getCmsVersion(): string
     {
-        $composerLockFile = PATH_PROJECT_BASE . 'composer.lock';
+        $composerLockFile = PATH_PROJECT_BASE.'composer.lock';
         $packageName = 'chameleon-system/chameleon-base';
 
         if (file_exists($composerLockFile)) {
