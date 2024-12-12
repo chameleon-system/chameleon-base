@@ -16,7 +16,6 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
  */
 class MTLoginEndPoint extends TCMSModelBase
 {
-
     public function Init()
     {
         parent::Init();
@@ -41,7 +40,7 @@ class MTLoginEndPoint extends TCMSModelBase
         $this->data['redirectParams'] = '';
         if ($this->global->UserDataExists('redirectParams')) {
             $this->data['redirectParams'] = $this->global->GetUserData('redirectParams');
-        } 
+        }
 
         if ($this->global->CMSUserDefined()) {
             $this->getRedirectService()->redirectToActivePage([]);

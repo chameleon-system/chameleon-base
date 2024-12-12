@@ -29,8 +29,8 @@ class TemplateEngineAccessListener
         readonly private RequestInfoServiceInterface $requestInfoService,
         readonly private SecurityHelperAccess $securityHelperAccess,
         readonly private Security $security
-    )
-    {}
+    ) {
+    }
 
     /**
      * @return void
@@ -47,7 +47,7 @@ class TemplateEngineAccessListener
 
         if ('backend' !== $firewallName) {
             // ignore frontend requests (such as access to the less files)
-            return ;
+            return;
         }
 
         if (false === $this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {

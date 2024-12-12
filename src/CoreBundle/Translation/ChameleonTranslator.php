@@ -27,19 +27,18 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
 
     /**
      * @param TranslatorInterface&TranslatorBagInterface $delegate
-     * @param RequestInfoServiceInterface $requestInfoService
      */
     public function __construct(TranslatorInterface $delegate, RequestInfoServiceInterface $requestInfoService)
     {
         if (!$delegate instanceof TranslatorBagInterface) {
             throw new \LogicException('The translator must implement both TranslatorInterface and TranslatorBagInterface');
         }
-        /** @psalm-suppress InvalidPropertyAssignmentValue */
+        /* @psalm-suppress InvalidPropertyAssignmentValue */
         $this->delegate = $delegate;
         $this->requestInfoService = $requestInfoService;
     }
 
-    public function trans(string $id, array $parameters = array(), ?string $domain = null, ?string $locale = null): string
+    public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         if (null === $domain) {
             static $isBackendMode = null;
@@ -74,5 +73,4 @@ class ChameleonTranslator implements TranslatorInterface, TranslatorBagInterface
     {
         return $this->delegate->getCatalogues();
     }
-
 }

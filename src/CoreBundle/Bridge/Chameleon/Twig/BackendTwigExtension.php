@@ -9,10 +9,8 @@ use Twig\TwigFilter;
 
 class BackendTwigExtension extends AbstractExtension
 {
-
     public function __construct(private readonly SecurityHelperAccess $securityHelper)
     {
-
     }
 
     public function getFilters()

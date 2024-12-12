@@ -53,9 +53,9 @@ class InitializeRequestListener
         if (\file_exists(PATH_WEB.'/maintenance.php')) {
             require PATH_WEB.'/maintenance.php';
 
-            exit();
+            exit;
         }
 
-        die('Sorry! This page is down for maintenance.');
+        exit('Sorry! This page is down for maintenance.');
     }
 }

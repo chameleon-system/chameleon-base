@@ -7,11 +7,10 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Provides access to the private security helper
+ * Provides access to the private security helper.
  */
 class SecurityHelperAccess
 {
-
     public function __construct(readonly private Security $security)
     {
     }
@@ -21,7 +20,7 @@ class SecurityHelperAccess
         return $this->security;
     }
 
-    public function getUser(): null|UserInterface|CmsUserModel
+    public function getUser(): UserInterface|CmsUserModel|null
     {
         return $this->security->getUser();
     }
@@ -31,6 +30,7 @@ class SecurityHelperAccess
         if (null === $this->security->getUser()) {
             return false;
         }
+
         return $this->security->isGranted($attributes, $subject);
     }
 }

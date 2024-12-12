@@ -12,7 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Security;
 
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
-use ICmsCoreRedirect;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -26,11 +25,7 @@ class BackendAccessCheck
      */
     private array $ipRestrictedPageDefs = [];
 
-    /**
-     * @param ICmsCoreRedirect $redirect
-     * @param RequestStack     $requestStack
-     */
-    public function __construct(ICmsCoreRedirect $redirect, RequestStack $requestStack, readonly private Security $security)
+    public function __construct(\ICmsCoreRedirect $redirect, RequestStack $requestStack, readonly private Security $security)
     {
         $this->redirect = $redirect;
         $this->requestStack = $requestStack;
@@ -56,7 +51,7 @@ class BackendAccessCheck
     {
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
-            return ;
+            return;
         }
 
         if (!$request->attributes->has('pagedef')) {
@@ -80,7 +75,7 @@ class BackendAccessCheck
             return;
         }
         $this->checkLoginOnAjax();
-        $this->redirect->redirectToActivePage(array('pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout'));
+        $this->redirect->redirectToActivePage(['pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout']);
     }
 
     /**
@@ -96,11 +91,11 @@ class BackendAccessCheck
         }
         $aModuleFNC = $request->get('module_fnc');
         if (is_array($aModuleFNC) && array_key_exists('contentmodule', $aModuleFNC) && 'ExecuteAjaxCall' === $aModuleFNC['contentmodule']) {
-            $aParameters = array('pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout');
-            $sLocation = PATH_CMS_CONTROLLER.'?' . http_build_query($aParameters);
-            $aJson = array('logedoutajax', $sLocation);
+            $aParameters = ['pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout'];
+            $sLocation = PATH_CMS_CONTROLLER.'?'.http_build_query($aParameters);
+            $aJson = ['logedoutajax', $sLocation];
             echo json_encode($aJson);
-            exit();
+            exit;
         }
     }
 
@@ -118,5 +113,5 @@ class BackendAccessCheck
     private function getCurrentParametersAsUrl(): string
     {
         return \urlencode(\http_build_query($this->requestStack->getCurrentRequest()->query->all()));
-    }    
+    }
 }

@@ -26,8 +26,6 @@ use Doctrine\DBAL\Exception;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TdbCmsConfig;
-use TdbCmsPortal;
 
 class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 {
@@ -61,6 +59,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 
     /**
      * @return string|null
+     *
      * @throws \Exception
      */
     private function determineLanguageForCmsTemplateEngineMode()
@@ -108,8 +107,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
      * + domain.
      *
      * special rule: can be overwritten by previewLanguageId in __previewmode
-     *
-     * @param Request $request
      *
      * @return string|null
      *
@@ -163,18 +160,15 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             return $sLanguageId;
         }
 
-        return TdbCmsConfig::GetInstance()?->fieldTranslationBaseLanguageId;
+        return \TdbCmsConfig::GetInstance()?->fieldTranslationBaseLanguageId;
     }
 
     /**
-     * @param Request      $request
-     * @param TdbCmsPortal $activePortal
-     *
      * @return string|null
      *
      * @throws InvalidLanguageException
      */
-    private function getLanguageFromUri(Request $request, TdbCmsPortal $activePortal)
+    private function getLanguageFromUri(Request $request, \TdbCmsPortal $activePortal)
     {
         $sRelativePath = $request->getPathInfo();
         $sRelativePath = substr($sRelativePath, 1); // remove "/";
@@ -195,7 +189,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     }
 
     /**
-     * @param TdbCmsPortal $activePortal
      * @param string $languageCode
      *
      * @return string|null
@@ -203,13 +196,13 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
      * @throws InvalidLanguageException if the language was found, but is not available in the frontend in the $activePortal
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    public function getLanguageFromPersistence(TdbCmsPortal $activePortal, $languageCode)
+    public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, $languageCode)
     {
         $query = $this->getLanguageQuery();
         $statement = $this->databaseConnection->prepare($query);
-        $statement->execute(array(
+        $statement->execute([
             'languageCode' => $languageCode,
-        ));
+        ]);
         $theLanguage = null;
         $languageFound = false;
         while ($row = $statement->fetch()) {
@@ -245,8 +238,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     /**
      * the fallback language is either the one set by the portal, or the one set in cms_config.translation_base_language_id.
      *
-     * @return string
-     *
      * @throws \Exception if no fallback language is found
      */
     private function getFallbackLanguage(): string
@@ -268,7 +259,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             }
         }
 
-        $config = TdbCmsConfig::GetInstance();
+        $config = \TdbCmsConfig::GetInstance();
 
         if (null === $config) {
             return '';
@@ -299,7 +290,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             return null;
         }
 
-        //if we are not in preview mode, we don't do any further validations, because it's expensive
+        // if we are not in preview mode, we don't do any further validations, because it's expensive
         $previewMode = $this->isPreviewMode();
         if (false === $previewMode) {
             return null;
@@ -339,6 +330,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         if (false === $result) {
             return false;
         }
+
         return true;
     }
 
