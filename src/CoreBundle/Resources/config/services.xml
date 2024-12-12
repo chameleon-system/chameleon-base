@@ -106,6 +106,11 @@
             <argument type="service" id="chameleon_system_core.request_info_service"/>
         </service>
 
+        <service id="chameleon_system_core.event_listener.cms_locale_sync_listener" class="ChameleonSystem\CoreBundle\EventListener\CmsLocaleSyncListener">
+            <argument type="service" id="translation.locale_switcher" />
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <service id="chameleon_system_core.session.chameleon_session_manager" class="ChameleonSystem\CoreBundle\Session\ChameleonSessionManager" public="true">
             <argument type="service" id="request_stack" />
             <argument type="service" id="database_connection" />
