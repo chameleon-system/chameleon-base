@@ -4,7 +4,6 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
-use TTools;
 
 class PreviewModeService implements PreviewModeServiceInterface
 {
@@ -17,7 +16,7 @@ class PreviewModeService implements PreviewModeServiceInterface
     public function __construct(
         private readonly string $hashingSecret,
         private readonly Connection $connection,
-        private readonly TTools $tools,
+        private readonly \TTools $tools,
         private readonly array $sessionOptions,
     ) {
     }
@@ -79,6 +78,6 @@ class PreviewModeService implements PreviewModeServiceInterface
 
     public function previewTokenExists(string $previewToken): bool
     {
-        return 1 === (int)$this->connection->fetchOne("SELECT 1 FROM `cms_user` WHERE `preview_token` = ?", [$previewToken]);
+        return 1 === (int) $this->connection->fetchOne('SELECT 1 FROM `cms_user` WHERE `preview_token` = ?', [$previewToken]);
     }
 }

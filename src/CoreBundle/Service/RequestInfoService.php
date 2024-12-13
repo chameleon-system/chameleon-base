@@ -33,7 +33,7 @@ class RequestInfoService implements RequestInfoServiceInterface
     private $portalDomainService;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $pathInfoWithoutPortalAndLanguagePrefix;
     /**
@@ -59,12 +59,7 @@ class RequestInfoService implements RequestInfoServiceInterface
      * @var bool|null
      */
     private $isPreviewModeCache;
-    /**
-     * @param RequestStack                 $requestStack
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param LanguageServiceInterface     $languageService
-     * @param UrlPrefixGeneratorInterface  $urlPrefixGenerator
-     */
+
     public function __construct(
         RequestStack $requestStack,
         PortalDomainServiceInterface $portalDomainService,
@@ -162,7 +157,7 @@ class RequestInfoService implements RequestInfoServiceInterface
             && (
                 'true' === $request->query->get('__previewmode')
                  || 'true' === $request->query->get('preview')
-                );
+            );
 
         return $this->isPreviewModeCache;
     }
