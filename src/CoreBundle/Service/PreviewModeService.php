@@ -15,10 +15,10 @@ class PreviewModeService implements PreviewModeServiceInterface
      * @param array<string, mixed> $sessionOptions
      */
     public function __construct(
-        protected readonly string $hashingSecret,
-        protected readonly Connection $connection,
-        protected readonly TTools $tools,
-        protected readonly array $sessionOptions,
+        private readonly string $hashingSecret,
+        private readonly Connection $connection,
+        private readonly TTools $tools,
+        private readonly array $sessionOptions,
     ) {
     }
 
