@@ -17,12 +17,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TCMSPagedef;
-use TCMSUserInput;
-use TdbCmsMasterPagedef;
-use TGlobal;
-use TModuleLoader;
-use TPkgViewRendererConfigToLessMapper;
 
 class ChameleonFrontendController extends ChameleonController
 {
@@ -31,7 +25,7 @@ class ChameleonFrontendController extends ChameleonController
      */
     private $container;
     /**
-     * @var TPkgViewRendererConfigToLessMapper
+     * @var \TPkgViewRendererConfigToLessMapper
      */
     private $configToLessMapper;
 
@@ -42,10 +36,10 @@ class ChameleonFrontendController extends ChameleonController
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
-        TModuleLoader $moduleLoader,
+        \TModuleLoader $moduleLoader,
         $viewPathManager,
         ContainerInterface $container,
-        TPkgViewRendererConfigToLessMapper $configToLessMapper
+        \TPkgViewRendererConfigToLessMapper $configToLessMapper
     ) {
         parent::__construct($requestStack, $eventDispatcher, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
         $this->container = $container; // for ViewRenderer instantiation
@@ -61,8 +55,8 @@ class ChameleonFrontendController extends ChameleonController
         $activePage = $this->activePageService->getActivePage();
 
         if (null === $activePage) {
-            throw new NotFoundHttpException('No active page was found. At this point, this is most likely 
-                caused by a missing request attribute named "pagedef" specifying a valid page ID. If the caller of this 
+            throw new NotFoundHttpException('No active page was found. At this point, this is most likely
+                caused by a missing request attribute named "pagedef" specifying a valid page ID. If the caller of this
                 method does not know which pagedef to set, throw a NotFoundHttpException instead.');
         }
 
@@ -78,18 +72,18 @@ class ChameleonFrontendController extends ChameleonController
      */
     public function GetPagedefObject(string $pagedef)
     {
-        //check if the pagedef exists in the database... if it does, use it. if not, use the file
+        // check if the pagedef exists in the database... if it does, use it. if not, use the file
         $oPageDefinitionFile = null;
 
         $inputFilterUtil = $this->getInputFilterUtil();
         $requestMasterPageDef = $inputFilterUtil->getFilteredInput('__masterPageDef', false);
 
-        if ($requestMasterPageDef && TGlobal::CMSUserDefined()) {
+        if ($requestMasterPageDef && \TGlobal::CMSUserDefined()) {
             // load master pagedef...
-            $oPageDefinitionFile = TdbCmsMasterPagedef::GetNewInstance();
+            $oPageDefinitionFile = \TdbCmsMasterPagedef::GetNewInstance();
             $oPageDefinitionFile->Load($inputFilterUtil->getFilteredInput('id'));
         } else {
-            $oPageDefinitionFile = new TCMSPagedef($pagedef);
+            $oPageDefinitionFile = new \TCMSPagedef($pagedef);
 
             if (null === $oPageDefinitionFile->iMasterPageDefId || empty($oPageDefinitionFile->iMasterPageDefId)) {
                 $oPageDefinitionFile->sqlData = false;
@@ -105,7 +99,7 @@ class ChameleonFrontendController extends ChameleonController
     protected function _GetCustomHeaderData($bAsArray = false)
     {
         $sCustomData = parent::_GetCustomHeaderData($bAsArray);
-        $aNewLines = array();
+        $aNewLines = [];
         if ($bAsArray) {
             $aNewLines = $sCustomData;
         } else {
@@ -116,7 +110,7 @@ class ChameleonFrontendController extends ChameleonController
             // should be moved into an event listener (CoreEvents::GLOBAL_HTML_HEADER_INCLUDE)
             $oViewRenderer = $this->container->get('chameleon_system_view_renderer.view_renderer');
             $oViewRenderer->AddMapper($this->configToLessMapper);
-            $oViewRenderer->AddSourceObject('inTemplateEngineMode', ('true' === $this->getInputFilterUtil()->getFilteredInput('__modulechooser', false)));
+            $oViewRenderer->AddSourceObject('inTemplateEngineMode', 'true' === $this->getInputFilterUtil()->getFilteredInput('__modulechooser', false));
             $aNewLines[] = $oViewRenderer->Render('head-includes/less.html.twig');
         }
 
@@ -131,7 +125,8 @@ class ChameleonFrontendController extends ChameleonController
      * {@inheritdoc}
      *
      * @param string $layoutTemplate - name of the layout template
-     * @return null|string
+     *
+     * @return string|null
      */
     protected function LoadLayoutTemplate($layoutTemplate)
     {
@@ -148,7 +143,7 @@ class ChameleonFrontendController extends ChameleonController
         $request = $this->getRequest();
         $aNonSeoParameter = $request->query->keys();
 
-        $referrerPageId = $this->getInputFilterUtil()->getFilteredInput('refererPageId', null, false, TCMSUserInput::FILTER_FILENAME);
+        $referrerPageId = $this->getInputFilterUtil()->getFilteredInput('refererPageId', null, false, \TCMSUserInput::FILTER_FILENAME);
         $this->activePageService->setActivePage($pagedef, $referrerPageId);
 
         $aAllParameter = $request->query->keys();

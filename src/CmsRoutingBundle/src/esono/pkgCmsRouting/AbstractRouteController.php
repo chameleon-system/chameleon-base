@@ -11,10 +11,10 @@
 
 namespace esono\pkgCmsRouting;
 
-use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
-use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 abstract class AbstractRouteController implements RouteControllerInterface

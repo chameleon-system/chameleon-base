@@ -15,7 +15,6 @@ use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TModuleLoader;
 
 /**
  * Interface ChameleonControllerInterface defines a Chameleon controller which is responsible for
@@ -47,7 +46,6 @@ interface ChameleonControllerInterface
     /**
      * Setter for a cache service to be used by the controller.
      *
-     * @param CacheInterface $cache
      * @return void
      */
     public function setCache(CacheInterface $cache);
@@ -56,6 +54,7 @@ interface ChameleonControllerInterface
      * Adds a text line that is to be added to the header of the output page automatically.
      *
      * @param string $line
+     *
      * @return void
      */
     public function AddHTMLHeaderLine($line);
@@ -64,9 +63,10 @@ interface ChameleonControllerInterface
      * Adds a text line that is to be added to the footer of the output page automatically.
      *
      * @param string $line
+     *
      * @return void
      */
     public function AddHTMLFooterLine($line);
 
-    public function getModuleLoader(): TModuleLoader;
+    public function getModuleLoader(): \TModuleLoader;
 }
