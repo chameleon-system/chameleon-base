@@ -11,19 +11,9 @@ use TModuleLoader;
 
 class ModuleExecutionStrategySubRequest implements ModuleExecutionStrategyInterface
 {
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
+    private CacheInterface $cache;
+    private KernelInterface $kernel;
 
-    /**
-     * @param CacheInterface  $cache
-     * @param KernelInterface $kernel
-     */
     public function __construct(CacheInterface $cache, KernelInterface $kernel)
     {
         $this->cache = $cache;
