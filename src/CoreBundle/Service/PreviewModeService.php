@@ -8,16 +8,12 @@ use Doctrine\DBAL\Exception;
 class PreviewModeService implements PreviewModeServiceInterface
 {
     public const COOKIE_NAME = 'preview_mode';
-    private const DEFAULT_PREVIEW_COOKIE_LIFETIME = 3 * 86400; // 3 days
+    private const PREVIEW_COOKIE_LIFETIME = 3 * 86400; // 3 days
 
-    /**
-     * @param array<string, mixed> $sessionOptions
-     */
     public function __construct(
         private readonly string $hashingSecret,
         private readonly Connection $connection,
         private readonly \TTools $tools,
-        private readonly array $sessionOptions,
     ) {
     }
 
@@ -60,15 +56,10 @@ class PreviewModeService implements PreviewModeServiceInterface
             }
             $token = $this->tools::GetUUID();
             $this->connection->update('cms_user', ['preview_token' => $token], ['id' => $cmsUserId]);
-            setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token), time() + $this->getSessionLifetime(), '/', '', false, true);
+            setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token), time() + self::PREVIEW_COOKIE_LIFETIME, '/', '', false, true);
         } catch (Exception) {
             // ignore if field not exists yet
         }
-    }
-
-    protected function getSessionLifetime(): int
-    {
-        return $this->sessionOptions['cookie_lifetime'] ?? self::DEFAULT_PREVIEW_COOKIE_LIFETIME;
     }
 
     protected function generateHash(string $toHash): string

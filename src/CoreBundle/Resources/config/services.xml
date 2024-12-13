@@ -344,7 +344,6 @@
             <argument type="string">%secret%</argument>
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_core.tools"/>
-            <argument>%session.storage.options%</argument>
         </service>
 
         <service id="chameleon_system_core.service_initializer.portal_domain_service" class="ChameleonSystem\CoreBundle\Service\Initializer\PortalDomainServiceInitializer" public="false">
