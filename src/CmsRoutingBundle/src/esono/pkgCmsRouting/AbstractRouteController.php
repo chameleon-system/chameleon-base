@@ -19,37 +19,13 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 abstract class AbstractRouteController implements RouteControllerInterface
 {
-    /** @var PortalDomainServiceInterface $portalDomainService */
-    protected $portalDomainService;
-    /** @var LanguageServiceInterface $languageService */
-    protected $languageService;
-    /**
-     * @var UrlPrefixGeneratorInterface
-     */
-    protected $urlPrefixGenerator;
-    /**
-     * @var UrlUtil
-     */
-    protected $urlUtil;
-    /**
-     * @var RoutingUtilInterface
-     */
-    protected $routingUtil;
-
-    /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param LanguageServiceInterface     $languageService
-     * @param UrlPrefixGeneratorInterface  $urlPrefixGenerator
-     * @param UrlUtil                      $urlUtil
-     * @param RoutingUtilInterface         $routingUtil
-     */
-    public function __construct(PortalDomainServiceInterface $portalDomainService, LanguageServiceInterface $languageService, UrlPrefixGeneratorInterface $urlPrefixGenerator, UrlUtil $urlUtil, RoutingUtilInterface $routingUtil)
+    public function __construct(
+        protected readonly PortalDomainServiceInterface $portalDomainService,
+        protected readonly LanguageServiceInterface $languageService,
+        protected readonly UrlPrefixGeneratorInterface $urlPrefixGenerator,
+        protected readonly UrlUtil $urlUtil,
+        protected readonly RoutingUtilInterface $routingUtil)
     {
-        $this->portalDomainService = $portalDomainService;
-        $this->languageService = $languageService;
-        $this->urlPrefixGenerator = $urlPrefixGenerator;
-        $this->urlUtil = $urlUtil;
-        $this->routingUtil = $routingUtil;
     }
 
     /**
@@ -69,8 +45,8 @@ abstract class AbstractRouteController implements RouteControllerInterface
 
         if (mb_strtolower($diff) === mb_strtolower($prefix)) {
             return ($diff.$relativeURL) === $prefixedURL;
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

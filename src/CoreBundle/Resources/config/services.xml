@@ -26,6 +26,7 @@
 
         <service id="esono_customer.twig.version_extension" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\BackendTwigExtension">
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="chameleon_system_core.moduleloader"/>
             <tag name="twig.extension"/>
         </service>
 
@@ -167,9 +168,6 @@
             <call method="setRequestInfoService">
                 <argument type="service" id="chameleon_system_core.request_info_service" />
             </call>
-            <call method="setRedirect">
-                <argument type="service" id="chameleon_system_core.redirect" />
-            </call>
             <call method="setInputFilterUtil">
                 <argument type="service" id="chameleon_system_core.util.input_filter" />
             </call>
@@ -209,9 +207,6 @@
         </service>
 
         <service id="chameleon_system_core.router.chameleon_base" class="ChameleonSystem\CoreBundle\Routing\ChameleonBaseRouter" parent="router.default" abstract="true">
-            <call method="setRedirect">
-                <argument type="service" id="chameleon_system_core.redirect" />
-            </call>
             <call method="setUrlUtil">
                 <argument type="service" id="chameleon_system_core.util.url" />
             </call>
@@ -451,17 +446,8 @@
             <call method="setMainController">
                 <argument type="service" id="chameleon_system_core.frontend_controller" />
             </call>
-            <call method="setTreeNodeService">
-                <argument type="service" id="chameleon_system_core.tree_node_service" />
-            </call>
-            <call method="setTreeService">
-                <argument type="service" id="chameleon_system_core.tree_service" />
-            </call>
             <call method="setRedirect">
                 <argument type="service" id="chameleon_system_core.redirect" />
-            </call>
-            <call method="setRequestStack">
-                <argument type="service" id="request_stack" />
             </call>
             <call method="setPageService">
                 <argument type="service" id="chameleon_system_core.page_service" />
@@ -531,16 +517,12 @@
         <service id="chameleon_system_core.updatemanager.update_filter_service" class="ChameleonSystem\CoreBundle\UpdateManager\UpdateFilterService" public="true">
         </service>
 
-        <service id="chameleon_system_core.controller_proxy_disabled_autoflushing" class="ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController" public="true">
-            <argument type="service" id="chameleon_system_core.frontend_controller" />
-        </service>
-
         <service id="chameleon_system_core.controller.exception" class="ChameleonSystem\CoreBundle\Controller\ExceptionController" public="true">
             <argument type="service" id="chameleon_system_core.http_kernel"/>
             <argument>error_controller</argument>
             <argument type="service" id="twig.error_renderer.html"/>
             <call method="setMainController">
-                <argument type="service" id="chameleon_system_core.controller_proxy_disabled_autoflushing" />
+                <argument type="service" id="chameleon_system_core.frontend_controller" />
             </call>
             <call method="setPortalDomainService">
                 <argument type="service" id="chameleon_system_core.portal_domain_service" />

@@ -96,10 +96,6 @@ class ChameleonFrontendController extends ChameleonController
             }
         }
 
-        if (false === $oPageDefinitionFile->sqlData) {
-            $oPageDefinitionFile = parent::GetPagedefObject($pagedef);
-        }
-
         return $oPageDefinitionFile;
     }
 

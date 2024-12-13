@@ -21,32 +21,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
 {
-    /**
-     * @var ChameleonControllerInterface
-     */
-    private $controller;
-
-    /**
-     * @var TreeNodeServiceInterface
-     */
-    private $treeNodeService;
-
-    /**
-     * @var TreeServiceInterface
-     */
-    private $treeService;
-    /**
-     * @var ICmsCoreRedirect
-     */
-    private $redirect;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var PageServiceInterface
-     */
-    private $pageService;
+    private ChameleonControllerInterface $controller;
+    private ICmsCoreRedirect $redirect;
+    private ?PageServiceInterface $pageService = null;
 
     /**
      * @param Request $request
@@ -130,21 +107,12 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
         return null;
     }
 
-    /**
-     * @param string $pagedef
-     *
-     * @return string
-     */
-    private function getCanonicalUrl($pagedef)
+    private function getCanonicalUrl(string $pagedef): string
     {
         return $this->urlUtil->getRelativeUrl($this->pageService->getLinkToPageRelative($pagedef));
     }
 
-    /**
-     * @param Request $request
-     * @param string  $canonicalUrl
-     */
-    private function redirectToCanonicalUrl(Request $request, $canonicalUrl)
+    private function redirectToCanonicalUrl(Request $request, string $canonicalUrl)
     {
         $pathInfo = $request->getPathInfo();
         $requestUri = $request->getRequestUri();
@@ -162,42 +130,12 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
         $this->controller = $controller;
     }
 
-    /**
-     * @param TreeNodeServiceInterface $treeNodeService
-     */
-    public function setTreeNodeService($treeNodeService)
-    {
-        $this->treeNodeService = $treeNodeService;
-    }
-
-    /**
-     * @param TreeServiceInterface $treeService
-     */
-    public function setTreeService($treeService)
-    {
-        $this->treeService = $treeService;
-    }
-
-    /**
-     * @param ICmsCoreRedirect $redirect
-     */
     public function setRedirect(ICmsCoreRedirect $redirect)
     {
         $this->redirect = $redirect;
     }
 
-    /**
-     * @param RequestStack $requestStack
-     */
-    public function setRequestStack(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
-
-    /**
-     * @param PageServiceInterface $pageService
-     */
-    public function setPageService($pageService)
+    public function setPageService(PageServiceInterface $pageService)
     {
         $this->pageService = $pageService;
     }

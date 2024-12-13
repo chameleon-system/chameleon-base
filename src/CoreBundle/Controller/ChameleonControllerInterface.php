@@ -15,6 +15,7 @@ use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use TModuleLoader;
 
 /**
  * Interface ChameleonControllerInterface defines a Chameleon controller which is responsible for
@@ -67,16 +68,5 @@ interface ChameleonControllerInterface
      */
     public function AddHTMLFooterLine($line);
 
-    /**
-     * Flushes all buffered content to the browser. If true is passed for $enableAutoFlush, content will
-     * automatically be flushed for each module from this call on. Note that implementations may decide not to flush or
-     * disable content buffering altogether, so don't rely too heavily on the assumption that flushing is only
-     * controlled by this method.
-     *
-     * @param bool $enableAutoFlush
-     * @return void
-     *
-     * @deprecated since 7.2.0 - early flushing should not be used
-     */
-    public function FlushContentToBrowser($enableAutoFlush = false);
+    public function getModuleLoader(): TModuleLoader;
 }
