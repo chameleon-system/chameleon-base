@@ -30,9 +30,11 @@ function gcf_CMSUserWithImage($name, $row, $fieldName)
         }
     }
 
-    $name = $name.', '.$row['firstname'];
+    if ('' !== $row['firstname']) {
+        $name .= ', ' . $row['firstname'];
+    }
 
-    $returnVal = "<div>{$imageTag}".TGlobal::OutHTML($name).'<div class="cleardiv">&nbsp;</div></div>';
+    $returnVal = "{$imageTag}".TGlobal::OutHTML($name);
 
     return $returnVal;
 }
