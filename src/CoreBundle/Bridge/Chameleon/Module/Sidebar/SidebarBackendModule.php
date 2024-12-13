@@ -140,7 +140,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
         $oConfig = \TdbCmsConfig::GetInstance();
-        $logoUrl =  $oConfig->GetThemeURL().'/images/chameleon_logo_header.png';
+        $logoUrl =  $oConfig->GetThemeURL().'/images/chameleon_logo.svg';
         $visitor->SetMappedValue('logoUrl', $logoUrl);
 
         if (true === $cachingEnabled) {
