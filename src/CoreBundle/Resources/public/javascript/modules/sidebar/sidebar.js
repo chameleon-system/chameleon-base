@@ -33,9 +33,6 @@
             });
 
             this.$baseElement.on("keyup", this.handleKeyEvent.bind(this));
-
-            this.$filterElement.focus();
-
             this.handleScrollPosition();
         },
         restoreOpenState: function() {
@@ -142,7 +139,6 @@
             // Toggle category or activate link?
             if ("Enter" === evt.key) {
                 if ($activeElement.hasClass("nav-group")) {
-                    debugger;
                     // @ToDo: this doesn't really work yet!!!!
                     this.toggleCategory($activeElement, true);
                 } else {

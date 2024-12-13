@@ -10,12 +10,13 @@
         </a>
     </div>
 
-    <p class="sidebar-filter-input-wrapper fas position-relative">
+    <div class="sidebar-filter-input-wrapper position-relative">
+        <i class="search-icon fas fa-search"></i>
         <input type="text"
             class="sidebar-filter-input form-control"
             placeholder="{{ 'chameleon_system_core.sidebar.filter_menu'|trans }}"
             autocomplete="off"/>
-    </p>
+    </div>
 
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
         {% for category in menuItems %}
