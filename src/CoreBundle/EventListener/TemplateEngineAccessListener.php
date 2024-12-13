@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -26,9 +27,10 @@ class TemplateEngineAccessListener
 {
     public function __construct(
         readonly private RequestInfoServiceInterface $requestInfoService,
-        readonly private SecurityHelperAccess $security
-    )
-    {}
+        readonly private SecurityHelperAccess $securityHelperAccess,
+        readonly private Security $security
+    ) {
+    }
 
     /**
      * @return void
@@ -45,10 +47,10 @@ class TemplateEngineAccessListener
 
         if ('backend' !== $firewallName) {
             // ignore frontend requests (such as access to the less files)
-            return ;
+            return;
         }
 
-        if (false === $this->security->isGranted(CmsUserRoleConstants::CMS_USER)) {
+        if (false === $this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             throw new AccessDeniedException('Template engine requested without permission.');
         }
     }

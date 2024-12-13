@@ -10,7 +10,6 @@
  */
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
-use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\BackendLoginEvent;
 use ChameleonSystem\CoreBundle\Event\BackendLogoutEvent;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
@@ -26,23 +25,22 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * the user manager class for the cms.
-/**/
+ * /**/
 class TCMSUser extends TCMSRecord
 {
     /**
      * set to true if the user logged in.
      *
-     * @var bool
      * @deprecated since 8.0.0 - no longer used
      */
-    public $bLoggedIn = false;
+    public bool $bLoggedIn = false;
 
     /**
      * holds the user object singleton.
      *
      * @var TCMSUser
      */
-    private static $oActiveUser = null;
+    private static $oActiveUser;
 
     public function __construct($id = null)
     {
@@ -58,8 +56,8 @@ class TCMSUser extends TCMSRecord
         if (null === $groups) {
             return false;
         }
-        while($group = $groups->next()) {
-            if ($group->sqlData['name'] === 'cms_admin') {
+        while ($group = $groups->next()) {
+            if ('cms_admin' === $group->sqlData['name']) {
                 return true;
             }
         }
@@ -77,20 +75,22 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * return active user
-     * in frontend it returns always NULL because of performance reasons
-     * you don`t get a WWW-user object!
+     * Returns the active backend user.
+     * In the frontend it returns always NULL because of performance reasons
+     * You don`t get a WWW-user object!
      *
      * @return TdbCmsUser|null
-     * @deprecated 8.0 - use symfony security service
+     *
+     * @deprecated 8.0 - use symfony security service instead
      */
     public static function GetActiveUser()
     {
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $user = $securityHelper->getUser();
-        if (null === $user || false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER) || false ===($user instanceof CmsUserModel)) {
+        if (null === $user || false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER) || false === ($user instanceof CmsUserModel)) {
             self::$oActiveUser = null;
+
             return null;
         }
 
@@ -98,14 +98,13 @@ class TCMSUser extends TCMSRecord
             return self::$oActiveUser;
         }
 
-        /** @var CmsUserModel $user */
+        /* @var CmsUserModel $user */
         self::$oActiveUser = TdbCmsUser::GetNewInstance();
         self::$oActiveUser->Load($user->getId());
 
         self::$oActiveUser->bLoggedIn = true;
 
         return self::$oActiveUser;
-
     }
 
     public static function GetSessionVarName($sName)
@@ -128,7 +127,7 @@ class TCMSUser extends TCMSRecord
      */
     public function GetUserPortalRootNodes()
     {
-        $aId = array();
+        $aId = [];
         $oPortals = $this->GetMLT('cms_portal_mlt', 'TCMSPortal');
         while ($oPortal = $oPortals->Next()) {
             if (TCMSTreeNode::TREE_ROOT_ID != $oPortal->sqlData['main_node_tree']) {
@@ -190,7 +189,7 @@ class TCMSUser extends TCMSRecord
         try {
             self::getPreviewModeService()->grantPreviewAccess($this->bLoggedIn, self::getCmsUserId());
         } catch (RedirectionException $e) {
-            self::getPreviewModeService()->grantPreviewAccess(\TCMSUser::CMSUserDefined(), self::getCmsUserId());
+            self::getPreviewModeService()->grantPreviewAccess(TCMSUser::CMSUserDefined(), self::getCmsUserId());
             throw $e;
         }
 
@@ -290,6 +289,7 @@ class TCMSUser extends TCMSRecord
      * returns the current edit language in iso6391 format e.g. de,en,fr etc.
      *
      * @return string
+     *
      * @deprecated since 8.0 use service \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
      */
     public function GetCurrentEditLanguage($bReset = false)
@@ -299,6 +299,7 @@ class TCMSUser extends TCMSRecord
         if (true === $bReset) {
             $sessionService->resetCurrentEditLanguage();
         }
+
         return $sessionService->getCurrentEditLanguageIso6391();
     }
 
@@ -314,7 +315,7 @@ class TCMSUser extends TCMSRecord
 
         if (!is_null($activePortalID)) {
             $oCmsPortal = TdbCmsPortal::GetNewInstance();
-            /** @var $oCmsPortal TdbCmsPortal */
+            /* @var $oCmsPortal TdbCmsPortal */
             $oCmsPortal->Load($activePortalID);
         }
 
@@ -376,6 +377,7 @@ class TCMSUser extends TCMSRecord
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
+     *
      * @deprecated 8.0 use \ChameleonSystem\CmsBackendBundle\BackendSession\BackendSession
      */
     public function SetCurrentEditLanguage($language = null)
@@ -384,6 +386,7 @@ class TCMSUser extends TCMSRecord
         $sessionService = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
         if (null === $language) {
             $sessionService->resetCurrentEditLanguage();
+
             return;
         }
 
@@ -393,8 +396,8 @@ class TCMSUser extends TCMSRecord
     /**
      * returns the default user icon or the custom user image as square thumbnail.
      *
-     * @param bool $bWithZoom         - adds the thickbox/lightbox zoom <a> tag
-     * @param int  $iThumbWidthHeight -  width/height if square thumbnail
+     * @param bool $bWithZoom - adds the thickbox/lightbox zoom <a> tag
+     * @param int $iThumbWidthHeight -  width/height if square thumbnail
      *
      * @return string
      */
@@ -404,10 +407,10 @@ class TCMSUser extends TCMSRecord
         $sImageID = $this->sqlData['images'];
         if ($sImageID >= 1000 || !is_numeric($sImageID)) {
             $oImage = new TCMSImage();
-            /** @var $oImage TCMSImage */
+            /* @var $oImage TCMSImage */
             $oImage->Load($sImageID);
             $oThumbnail = $oImage->GetSquareThumbnail($iThumbWidthHeight);
-            /** @var $oThumbnail TCMSImage */
+            /* @var $oThumbnail TCMSImage */
             if ($bWithZoom) {
                 $oBigThumbnail = $oImage->GetThumbnail(400, 400);
             }
@@ -425,7 +428,7 @@ class TCMSUser extends TCMSRecord
 
     protected static function getCmsUserId(): string
     {
-        $user = \TCMSUser::GetActiveUser();
+        $user = TCMSUser::GetActiveUser();
 
         return $user?->id ?? '';
     }

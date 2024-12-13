@@ -26,43 +26,14 @@ use Doctrine\DBAL\Exception;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TdbCmsConfig;
-use TdbCmsPortal;
 
-/**
- * Class LanguageServiceInitializer.
- */
 class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 {
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var Container
-     */
-    private $container;
-    /**
-     * @var Connection
-     */
-    private $databaseConnection;
-
-    /**
-     * @param InputFilterUtilInterface $inputFilterUtil
-     * @param RequestStack             $requestStack
-     * @param Container                $container
-     * @param Connection               $databaseConnection
-     */
-    public function __construct(InputFilterUtilInterface $inputFilterUtil, RequestStack $requestStack, Container $container, Connection $databaseConnection)
+    public function __construct(private readonly InputFilterUtilInterface $inputFilterUtil,
+        private readonly RequestStack $requestStack,
+        private readonly Container $container,
+        private readonly Connection $databaseConnection)
     {
-        $this->inputFilterUtil = $inputFilterUtil;
-        $this->requestStack = $requestStack;
-        $this->container = $container;
-        $this->databaseConnection = $databaseConnection;
     }
 
     /**
@@ -88,6 +59,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 
     /**
      * @return string|null
+     *
      * @throws \Exception
      */
     private function determineLanguageForCmsTemplateEngineMode()
@@ -105,10 +77,9 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     }
 
     /**
-     * @return string|null
      * @throws \Exception
      */
-    private function determineLanguageDefault()
+    private function determineLanguageDefault(): ?string
     {
         $languageId = null;
         if ($this->getRequestInfoService()->isChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_BACKEND)) {
@@ -136,8 +107,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
      * + domain.
      *
      * special rule: can be overwritten by previewLanguageId in __previewmode
-     *
-     * @param Request $request
      *
      * @return string|null
      *
@@ -191,27 +160,15 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             return $sLanguageId;
         }
 
-        $config = TdbCmsConfig::GetInstance();
-        if (property_exists(
-                $config,
-                'fieldTranslationBaseLanguageId'
-            ) && '' !== $config->fieldTranslationBaseLanguageId
-        ) {
-            return $config->fieldTranslationBaseLanguageId;
-        }
-
-        throw new \Exception('fallback language requested, but none defined. Please set your fallback language in the cms_config table (field translation_base_language)');
+        return \TdbCmsConfig::GetInstance()?->fieldTranslationBaseLanguageId;
     }
 
     /**
-     * @param Request      $request
-     * @param TdbCmsPortal $activePortal
-     *
      * @return string|null
      *
      * @throws InvalidLanguageException
      */
-    private function getLanguageFromUri(Request $request, TdbCmsPortal $activePortal)
+    private function getLanguageFromUri(Request $request, \TdbCmsPortal $activePortal)
     {
         $sRelativePath = $request->getPathInfo();
         $sRelativePath = substr($sRelativePath, 1); // remove "/";
@@ -232,20 +189,20 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     }
 
     /**
-     * @param TdbCmsPortal $activePortal
-     * @param string       $languageCode
+     * @param string $languageCode
      *
      * @return string|null
      *
      * @throws InvalidLanguageException if the language was found, but is not available in the frontend in the $activePortal
+     * @throws \Doctrine\DBAL\Driver\Exception
      */
-    public function getLanguageFromPersistence(TdbCmsPortal $activePortal, $languageCode)
+    public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, $languageCode)
     {
         $query = $this->getLanguageQuery();
         $statement = $this->databaseConnection->prepare($query);
-        $statement->execute(array(
+        $statement->execute([
             'languageCode' => $languageCode,
-        ));
+        ]);
         $theLanguage = null;
         $languageFound = false;
         while ($row = $statement->fetch()) {
@@ -269,10 +226,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         return $theLanguage;
     }
 
-    /**
-     * @return string
-     */
-    private function getLanguageQuery()
+    private function getLanguageQuery(): string
     {
         return 'SELECT pl.`source_id` as portal_id, l.`id` as language_id, l.`active_for_front_end`
                   FROM `cms_portal_cms_language_mlt` AS pl
@@ -284,11 +238,9 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     /**
      * the fallback language is either the one set by the portal, or the one set in cms_config.translation_base_language_id.
      *
-     * @return string
-     *
      * @throws \Exception if no fallback language is found
      */
-    private function getFallbackLanguage()
+    private function getFallbackLanguage(): string
     {
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         if (null !== $activePortal) {
@@ -307,12 +259,13 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             }
         }
 
-        $config = TdbCmsConfig::GetInstance();
-        if (property_exists($config, 'fieldTranslationBaseLanguageId') && '' !== $config->fieldTranslationBaseLanguageId) {
-            return $config->fieldTranslationBaseLanguageId;
+        $config = \TdbCmsConfig::GetInstance();
+
+        if (null === $config) {
+            return '';
         }
 
-        throw new \Exception('Fallback language requested, but none defined. Please set your fallback language in the cms_config table (field translation_base_language)');
+        return $config->fieldTranslationBaseLanguageId;
     }
 
     /**
@@ -328,35 +281,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     }
 
     /**
-     * @return PortalDomainServiceInterface
-     */
-    private function getPortalDomainService()
-    {
-        return $this->container->get('chameleon_system_core.portal_domain_service');
-    }
-
-    /**
-     * @return RequestInfoServiceInterface
-     */
-    private function getRequestInfoService()
-    {
-        return $this->container->get('chameleon_system_core.request_info_service');
-    }
-
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
-    {
-        return $this->container->get('chameleon_system_core.active_page_service');
-    }
-
-    private function getPageService(): PageServiceInterface
-    {
-        return $this->container->get('chameleon_system_core.page_service');
-    }
-
-    /**
      * @throws \Exception
      */
     private function getPreviewLanguageId(): ?string
@@ -366,14 +290,14 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             return null;
         }
 
-        //if we are not in preview mode, we don't do any further validations, because it's expensive
+        // if we are not in preview mode, we don't do any further validations, because it's expensive
         $previewMode = $this->isPreviewMode();
         if (false === $previewMode) {
             return null;
         }
 
-        //because the portal might not support the requested preview language, we need to check if the language is valid
-        //since we are somewhere in the backend we need to extract the portal/language from the page
+        // because the portal might not support the requested preview language, we need to check if the language is valid
+        // since we are somewhere in the backend we need to extract the portal/language from the page
         $pageDef = $this->inputFilterUtil->getFilteredInput('pagedef');
         $page = $this->getPageService()->getById($pageDef);
         if (null === $page) {
@@ -406,11 +330,35 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         if (false === $result) {
             return false;
         }
+
         return true;
     }
 
     private function isPreviewMode(): bool
     {
         return $this->getRequestInfoService()->isPreviewMode();
+    }
+
+    /**
+     * We need to load these services lazy, because they depend on the language service.
+     */
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return $this->container->get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return $this->container->get('chameleon_system_core.request_info_service');
+    }
+
+    private function getActivePageService(): ActivePageServiceInterface
+    {
+        return $this->container->get('chameleon_system_core.active_page_service');
+    }
+
+    private function getPageService(): PageServiceInterface
+    {
+        return $this->container->get('chameleon_system_core.page_service');
     }
 }

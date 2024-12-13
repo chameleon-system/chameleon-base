@@ -20,7 +20,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         // maybe this should look like this: But I cannot test this at this moment as this method needed to be added during a symfony upgrade
-        //$this->connection->update('cms_user', ['crypted_pw' => $newHashedPassword], ['id' => $user->getId()]);
+        // $this->connection->update('cms_user', ['crypted_pw' => $newHashedPassword], ['id' => $user->getId()]);
         throw new \RuntimeException('Not implemented');
     }
 
@@ -63,30 +63,29 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     /**
      * returns the user with the login equal to the $username passed, if that user is permitted to log into the cms backend.
      *  Throws a UserNotFoundException otherwise.
-    */
-    public function loadUserByUsername(string $username)
+     */
+    public function loadUserByUsername(string $username): CmsUserModel|UserInterface
     {
         return $this->loadUserByIdentifier($username);
     }
 
     private function userHasBeenModified(CmsUserModel $user): bool
     {
-        $query = "SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId";
+        $query = 'SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId';
         $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
         if (false === $dateModified) {
             return true;
         }
 
-        return ($user->getDateModified()->format('Y-m-d H:i:s') < $dateModified);
+        return $user->getDateModified()->format('Y-m-d H:i:s') < $dateModified;
     }
-
 
     public function loadUserWithBackendLoginPermissionFromSSOID(string $ssoType, string $ssoId): ?CmsUserModel
     {
-        $query = "SELECT `cms_user`.* 
+        $query = "SELECT `cms_user`.*
                     FROM `cms_user`
               INNER JOIN `cms_user_sso` ON `cms_user`.`id` = `cms_user_sso`.`cms_user_id`
-                   WHERE `cms_user_sso`.`type` = :ssoType 
+                   WHERE `cms_user_sso`.`type` = :ssoType
                      AND `cms_user_sso`.`sso_id` = :ssoId
                      AND `cms_user`.`allow_cms_login` = '1' LIMIT 0,1";
         $userRow = $this->connection->fetchAssociative($query, ['ssoType' => $ssoType, 'ssoId' => $ssoId]);
@@ -98,7 +97,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return $this->createUserFromRow($userRow);
     }
 
-    public function loadUserWithBackendLoginPermissionByEMail(string $email):?CmsUserModel
+    public function loadUserWithBackendLoginPermissionByEMail(string $email): ?CmsUserModel
     {
         $query = "SELECT * FROM `cms_user` WHERE `email` = :email AND `allow_cms_login` = '1' LIMIT 0,1";
         $userRow = $this->connection->fetchAssociative($query, ['email' => $email]);
@@ -111,17 +110,15 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     }
 
     /**
-     * @param array $userRow
-     * @return CmsUserModel
      * @throws \Doctrine\DBAL\Exception
      */
     public function createUserFromRow(array $userRow): CmsUserModel
     {
         $roleRows = $this->connection->fetchAllAssociative(
-            "SELECT `cms_role`.* 
+            'SELECT `cms_role`.*
                      FROM `cms_role`
                INNER JOIN `cms_user_cms_role_mlt` ON `cms_role`.`id` = `cms_user_cms_role_mlt`.`target_id`
-                    WHERE `cms_user_cms_role_mlt`.`source_id` = :userId",
+                    WHERE `cms_user_cms_role_mlt`.`source_id` = :userId',
             ['userId' => $userRow['id']]
         );
         $roles = array_reduce($roleRows, static function (array $carry, array $row) {
@@ -131,13 +128,12 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         }, []);
         $roles[CmsUserRoleConstants::CMS_USER_FAKE_ID] = CmsUserRoleConstants::CMS_USER;
 
-
         $userRightRows = $this->connection->fetchAllAssociative(
-            "SELECT `cms_right`.`id`, `cms_right`.`name`
+            'SELECT `cms_right`.`id`, `cms_right`.`name`
                      FROM `cms_right`
                INNER JOIN `cms_role_cms_right_mlt` ON `cms_right`.`id` = `cms_role_cms_right_mlt`.`target_id`
                INNER JOIN `cms_user_cms_role_mlt` ON `cms_role_cms_right_mlt`.`source_id` = `cms_user_cms_role_mlt`.`target_id`
-                    WHERE `cms_user_cms_role_mlt`.`source_id` = :userId",
+                    WHERE `cms_user_cms_role_mlt`.`source_id` = :userId',
             ['userId' => $userRow['id']]
         );
 
@@ -148,10 +144,10 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         }, []);
 
         $userGroupRows = $this->connection->fetchAllAssociative(
-            "SELECT `cms_usergroup`.`id`, `cms_usergroup`.`internal_identifier`
+            'SELECT `cms_usergroup`.`id`, `cms_usergroup`.`internal_identifier`
                      FROM `cms_usergroup`
                INNER JOIN `cms_user_cms_usergroup_mlt` ON `cms_user_cms_usergroup_mlt`.`target_id` = `cms_usergroup`.`id`
-                    WHERE `cms_user_cms_usergroup_mlt`.`source_id` = :userId",
+                    WHERE `cms_user_cms_usergroup_mlt`.`source_id` = :userId',
             ['userId' => $userRow['id']]
         );
 
@@ -162,10 +158,10 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         }, []);
 
         $userPortalRows = $this->connection->fetchAllAssociative(
-            "SELECT `cms_portal`.`id`, `cms_portal`.`external_identifier`
+            'SELECT `cms_portal`.`id`, `cms_portal`.`external_identifier`
                      FROM `cms_portal`
                INNER JOIN `cms_user_cms_portal_mlt` ON `cms_user_cms_portal_mlt`.`target_id` = `cms_portal`.`id`
-                    WHERE `cms_user_cms_portal_mlt`.`source_id` = :userId",
+                    WHERE `cms_user_cms_portal_mlt`.`source_id` = :userId',
             ['userId' => $userRow['id']]
         );
 
@@ -175,11 +171,11 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             return $carry;
         }, []);
 
-        $query = "SELECT `cms_language`.*
+        $query = 'SELECT `cms_language`.*
                     FROM `cms_language`
               INNER JOIN `cms_user_cms_language_mlt` ON `cms_user_cms_language_mlt`.`target_id` = `cms_language`.`id`
                    WHERE `cms_user_cms_language_mlt`.`source_id` = :userId
-                    ";
+                    ';
         $languagesRows = $this->connection->fetchAllAssociative($query, ['userId' => $userRow['id']]);
 
         $languagesRows = array_reduce($languagesRows, static function (array $carry, array $row) {
@@ -204,7 +200,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             $userRow['email'],
             $userRow['cms_language_id'],
             array_map(
-                static fn(string $languageIsoCode) => trim($languageIsoCode),
+                static fn (string $languageIsoCode) => trim($languageIsoCode),
                 explode(',', $userRow['languages'])
             ),
             '' !== $userRow['cms_current_edit_language'] ? $userRow['cms_current_edit_language'] : null,
@@ -221,7 +217,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     public function createUser(CmsUserModel $user): CmsUserModel|UserInterface
     {
         $this->connection->beginTransaction();
-        try{
+        try {
             $this->connection->insert('cms_user', [
                 'id' => $user->getId(),
                 'login' => $user->getUserIdentifier(),
@@ -233,7 +229,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
                 'crypted_pw' => '-',
                 'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
                 'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
-                'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
+                'languages' => implode(', ', $user->getAvailableLanguagesIsoCodes()),
             ]);
             foreach ($user->getSsoIds() as $ssoId) {
                 $ssoData = [
@@ -280,14 +276,13 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         $this->connection->commit();
 
         return $this->loadUserByIdentifier($user->getUserIdentifier());
-
     }
 
     public function updateUser(CmsUserModel $user): CmsUserModel|UserInterface
     {
         $this->connection->beginTransaction();
 
-        try{
+        try {
             $this->connection->update('cms_user', [
                 'login' => $user->getUserIdentifier(),
                 'firstname' => $user->getFirstName(),
@@ -297,8 +292,8 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
                 'cms_language_id' => $user->getCmsLanguageId(),
                 'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
                 'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
-                'languages' => implode(', ',$user->getAvailableLanguagesIsoCodes()),
-            ], ['id' => $user->getId(),]);
+                'languages' => implode(', ', $user->getAvailableLanguagesIsoCodes()),
+            ], ['id' => $user->getId()]);
 
             $idList = [];
             foreach ($user->getSsoIds() as $ssoId) {

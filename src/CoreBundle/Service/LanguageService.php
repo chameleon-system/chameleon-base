@@ -11,71 +11,30 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
-use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsLanguageInterface;
 use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
 use ChameleonSystem\CoreBundle\Service\Initializer\LanguageServiceInitializerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TCMSUser;
-use TdbCmsConfig;
-use TdbCmsLanguage;
 
-/**
- * Class LanguageService.
- */
 class LanguageService implements LanguageServiceInterface
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var TdbCmsLanguage
-     */
-    private $activeLanguage;
+    private ?\TdbCmsLanguage $activeLanguage = null;
     /**
      * Holds the fallback language in case we don't have a request (Console, ...). We hereby add a state to the service,
      * but the service isn't really stateless anyway because it uses the request to store our active language.
-     *
-     * @var TdbCmsLanguage|null
      */
-    private $fallbackLanguage;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
-     * @var LanguageServiceInitializerInterface
-     */
-    private $languageServiceInitializer;
-    /**
-     * @var bool
-     */
-    private $isInitializing = false;
-    /**
-     * @var DataAccessCmsLanguageInterface
-     */
-    private $dataAccessCmsLanguage;
+    private ?\TdbCmsLanguage $fallbackLanguage = null;
+    private bool $isInitializing = false;
+    private ?\TdbCmsLanguage $cmsBaseLanguage = null;
 
-    /**
-     * @var TdbCmsLanguage|null
-     */
-    private $cmsBaseLanguage;
-
-    /**
-     * @param RequestStack                        $requestStack
-     * @param EventDispatcherInterface            $eventDispatcher
-     * @param LanguageServiceInitializerInterface $languageServiceInitializer
-     * @param DataAccessCmsLanguageInterface      $dataAccessCmsLanguage
-     */
-    public function __construct(RequestStack $requestStack, EventDispatcherInterface $eventDispatcher, LanguageServiceInitializerInterface $languageServiceInitializer, DataAccessCmsLanguageInterface $dataAccessCmsLanguage)
-    {
-        $this->requestStack = $requestStack;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->languageServiceInitializer = $languageServiceInitializer;
-        $this->dataAccessCmsLanguage = $dataAccessCmsLanguage;
+    public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly LanguageServiceInitializerInterface $languageServiceInitializer,
+        private readonly DataAccessCmsLanguageInterface $dataAccessCmsLanguage
+    ) {
     }
 
     /**
@@ -83,7 +42,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function getCmsBaseLanguageId()
     {
-        return TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
+        return \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
     }
 
     /**
@@ -213,12 +172,16 @@ class LanguageService implements LanguageServiceInterface
         if (null === $languageId) {
             return;
         }
-        /** @var TdbCmsLanguage $originalLanguage */
         $originalLanguage = $this->activeLanguage;
         $newLanguage = $this->dataAccessCmsLanguage->getLanguage($languageId, $languageId);
+
+        if (null === $newLanguage) {
+            return;
+        }
+
         $newLanguage->SetLanguage($languageId);
         $this->activeLanguage = $newLanguage;
-        /**
+        /*
          * Reload language after setting it as active language so that translated fields are displayed in the correct language.
          */
         $this->activeLanguage->LoadFromRow($this->activeLanguage->sqlData);
@@ -251,7 +214,7 @@ class LanguageService implements LanguageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function setFallbackLanguage(TdbCmsLanguage $fallbackLanguage)
+    public function setFallbackLanguage(\TdbCmsLanguage $fallbackLanguage)
     {
         $this->fallbackLanguage = $fallbackLanguage;
     }

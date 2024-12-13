@@ -24,7 +24,8 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="esono_customer.twig.version_extension" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\VersionExtension">
+        <service id="esono_customer.twig.version_extension" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\BackendTwigExtension">
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <tag name="twig.extension"/>
         </service>
 
@@ -103,6 +104,11 @@
             <argument type="service" id="chameleon_system_core.service_initializer.request" />
             <argument type="service" id="chameleon_system_core.maintenance_mode_service"/>
             <argument type="service" id="chameleon_system_core.request_info_service"/>
+        </service>
+
+        <service id="chameleon_system_core.event_listener.cms_locale_sync_listener" class="ChameleonSystem\CoreBundle\EventListener\CmsLocaleSyncListener">
+            <argument type="service" id="translation.locale_switcher" />
+            <tag name="kernel.event_subscriber"/>
         </service>
 
         <service id="chameleon_system_core.session.chameleon_session_manager" class="ChameleonSystem\CoreBundle\Session\ChameleonSessionManager" public="true">
@@ -285,6 +291,7 @@
         <service id="chameleon_system_core.listener.template_engine_access" class="ChameleonSystem\CoreBundle\EventListener\TemplateEngineAccessListener">
             <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="security.helper" />
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="-250" />
         </service>
 

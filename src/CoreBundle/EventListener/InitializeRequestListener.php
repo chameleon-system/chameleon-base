@@ -18,29 +18,11 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class InitializeRequestListener
 {
-    /**
-     * @var RequestInitializer
-     */
-    private $requestInitializer;
-
-    /**
-     * @var MaintenanceModeServiceInterface
-     */
-    private $maintenanceModeService;
-
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
-
     public function __construct(
-        RequestInitializer $requestInitializer,
-        MaintenanceModeServiceInterface $maintenanceModeService,
-        RequestInfoServiceInterface $requestInfoService
+        private readonly RequestInitializer $requestInitializer,
+        private readonly MaintenanceModeServiceInterface $maintenanceModeService,
+        private readonly RequestInfoServiceInterface $requestInfoService
     ) {
-        $this->requestInitializer = $requestInitializer;
-        $this->maintenanceModeService = $maintenanceModeService;
-        $this->requestInfoService = $requestInfoService;
     }
 
     /**
@@ -71,9 +53,9 @@ class InitializeRequestListener
         if (\file_exists(PATH_WEB.'/maintenance.php')) {
             require PATH_WEB.'/maintenance.php';
 
-            exit();
+            exit;
         }
 
-        die('Sorry! This page is down for maintenance.');
+        exit('Sorry! This page is down for maintenance.');
     }
 }

@@ -20,8 +20,6 @@
         </service>
 
         <service id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" public="true">
-            <argument type="service" key="$firewallMap" id="security.firewall.map" />
-
         </service>
 
         <service id="ChameleonSystem\SecurityBundle\Voter\UserHasRightVoter">

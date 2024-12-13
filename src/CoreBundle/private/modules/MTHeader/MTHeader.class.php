@@ -10,8 +10,8 @@
  */
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\BackendTwigExtension;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
-use ChameleonSystem\CoreBundle\SanityCheck\MessageCheckOutput;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
@@ -30,11 +30,10 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\VersionExtension;
 
 /**
  * fetches the cms header data.
-/**/
+ * /**/
 class MTHeader extends TCMSModelBase
 {
     /**
@@ -59,7 +58,6 @@ class MTHeader extends TCMSModelBase
 
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-
 
         $this->data['table_id_cms_tpl_page'] = TTools::GetCMSTableId('cms_tpl_page');
         if (stristr($this->viewTemplate, 'title.view.php')) {
@@ -108,8 +106,6 @@ class MTHeader extends TCMSModelBase
             $this->data['logoutUrl'] = $router->generate('app_logout');
         }
 
-
-
         return $this->data;
     }
 
@@ -145,7 +141,7 @@ class MTHeader extends TCMSModelBase
             $sBackendTitle .= $sCMSOwner.' - ';
         }
         if (isset($this->data['oUser'])) {
-            $versionExtension = new VersionExtension();
+            $versionExtension = new BackendTwigExtension();
             $cmsVersion = $versionExtension->getCmsVersion();
             $sBackendTitle .= CMS_BACKEND_TITLE.' V. '.$cmsVersion.' (IP: '.$_SERVER['SERVER_ADDR'].')';
         } else {
@@ -201,7 +197,7 @@ class MTHeader extends TCMSModelBase
      */
     protected function GetCustomNavigationItems()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -210,7 +206,7 @@ class MTHeader extends TCMSModelBase
     protected function GetPortalQuickLinks()
     {
         $oCmsPortalList = $this->GetPortalList();
-        $aPortalLinks = array();
+        $aPortalLinks = [];
 
         if (null !== $oCmsPortalList) {
             $activeLanguage = $this->getLanguageService()->getActiveLanguage();
@@ -222,12 +218,12 @@ class MTHeader extends TCMSModelBase
                     } else {
                         $language = $portal->GetFieldCmsLanguage();
                     }
-                    $sURL = $this->getPageService()->getLinkToPortalHomePageAbsolute(array(), $portal, $language);
+                    $sURL = $this->getPageService()->getLinkToPortalHomePageAbsolute([], $portal, $language);
                     $sName = trim($portal->fieldTitle);
                     if (empty($sName)) {
                         $sName = $portal->GetName();
                     }
-                    $aPortalLinks[$portal->id] = array('name' => $sName, 'url' => $sURL);
+                    $aPortalLinks[$portal->id] = ['name' => $sName, 'url' => $sURL];
                 }
             } catch (Exception $e) {
                 $this->getFlashMessages()->addBackendToasterMessage('chameleon_system_core.cms_module_header.error_generate_portal_links');
@@ -260,7 +256,7 @@ class MTHeader extends TCMSModelBase
             $aUserPortalID = null !== $portalList ? array_keys($portalList) : [];
             if (count($aUserPortalID) > 0) {
                 $databaseConnection = $this->getDatabaseConnection();
-                $idListString = implode(',', array_map(array($databaseConnection, 'quote'), $aUserPortalID));
+                $idListString = implode(',', array_map([$databaseConnection, 'quote'], $aUserPortalID));
                 $sQuery = "SELECT * FROM `cms_portal` WHERE `cms_portal`.`id` IN ($idListString)";
                 $oCmsPortalList = TdbCmsPortalList::GetList($sQuery);
             }
@@ -344,7 +340,7 @@ class MTHeader extends TCMSModelBase
 
             parse_str($urlParts['query'], $params);
 
-            $_params = array();
+            $_params = [];
             $_params['pagedef'] = $params['pagedef'];
             $_params['tableid'] = $params['tableid'];
             $_params['id'] = $params['id'];
@@ -392,7 +388,7 @@ class MTHeader extends TCMSModelBase
     /**
      *  delete the file in directory PATH_OUTBOX that is defined in \private\config\advanced_config.inc.php.
      *
-     * @var string $sDir - is sub directory in PATH_OUTBOX that will be cleared
+     * @var string - is sub directory in PATH_OUTBOX that will be cleared
      */
     protected function ClearOutBox($sDir)
     {
@@ -553,7 +549,7 @@ class MTHeader extends TCMSModelBase
     protected function GetEditLanguagesHTML()
     {
         $html = '';
-        $editLanguages = array();
+        $editLanguages = [];
         $currentLanguage = '';
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
@@ -570,7 +566,7 @@ class MTHeader extends TCMSModelBase
             $aAvailableLanguageIds = $oAvailableLanguages->GetIdList();
             $availableEditLanguages = $securityHelper->getUser()?->getAvailableEditLanguages();
             if (null !== $availableEditLanguages && count($availableEditLanguages) > 0) {
-                $languageIdListString = implode(', ', array_map(fn(string $languageId) => $this->getDatabaseConnection()->quote($languageId), array_values($availableEditLanguages)));
+                $languageIdListString = implode(', ', array_map(fn (string $languageId) => $this->getDatabaseConnection()->quote($languageId), array_values($availableEditLanguages)));
             } else {
                 $languageIdListString = "'-1'";
             }
@@ -670,7 +666,7 @@ class MTHeader extends TCMSModelBase
             $includes[] = '
       <script type="text/javascript">
         $(document).ready(function() {
-          setTimeout("window.location = \''.PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('pagedef' => 'login', 'module_fnc' => array('contentmodule' => 'Logout'))).'\'",'.$sessionTimeout.');
+          setTimeout("window.location = \''.PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(['pagedef' => 'login', 'module_fnc' => ['contentmodule' => 'Logout']]).'\'",'.$sessionTimeout.');
         });
       </script>';
         }
