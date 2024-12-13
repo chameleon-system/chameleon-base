@@ -1,0 +1,30 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 250" width="400" height="100">
+	<title>Chameleon Tagged Oneline Inv-ai</title>
+	<defs>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="m116.18 43.29c44.54 0 80.66 36.12 80.66 80.66 0 44.54-36.12 80.67-80.66 80.67-44.54 0-80.67-36.13-80.67-80.67 0-44.54 36.13-80.66 80.67-80.66zm-60.16 80.66c0 33.22 26.94 60.16 60.16 60.16 19.27 0 36.42-9.07 47.43-23.16 3.26-8.9-0.41-15.25-5.13-18.92-6.07-4.71-15.17-4.98-19.78-0.52-5.23 6.69-13.37 11-22.52 11-15.77 0-28.56-12.79-28.56-28.56 0-15.77 12.79-28.55 28.56-28.55 7.88 0 15.02 3.19 20.19 8.36q0.51 0.52 1 1.06c7.58 7.49 17.17 5.21 22.53-1.04 4.17-4.87 5-12.13 1.89-19.04-11.03-12.82-27.37-20.95-45.61-20.95-33.22 0-60.16 26.94-60.16 60.16zm43.31 0c0 9.3 7.54 16.85 16.85 16.85 9.3 0 16.84-7.55 16.84-16.85 0-9.3-7.54-16.84-16.84-16.84-9.31 0-16.85 7.54-16.85 16.84z"/>
+		</clipPath>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp2">
+			<path d="m35.51 204.62v-161.33h161.33v161.33z"/>
+		</clipPath>
+		<image width="204" height="202" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADKCAMAAADepV/dAAAAAXNSR0IB2cksfwAAAJZQTFRF/v7+hcNChsRCh8RCiMRCicRBisVCi8VCjMVBjcZBjsZBj8ZBkMdBkcdBksdBk8hAlMhBlchBlslAl8lAmMlAmclBmspAm8pAnMpAnctAnstAn8tAoMxAocw/os0/o80/pM0+pc4+pc4/ps4/p84+qM8+qc8+qs8+q9A9rNA9rdA9rtA9r9E9sNE9sdE9stI8s9I8tNI8kYAehgAAAiRJREFUeJztz+lWDgAYReG+IkNEpmTIVCGZ7v8ijJkiCZkJkSn8eG/hrHX2etd5rmDvwVAjA3eA0qDNz79+M8PuDI2/mYGqmRF3hsZWZqBqZps7Q+NPZqBqZrs7Q+N3ZqBqZtSdofErM1A1s8OdofEzM1A1s9OdofEjM1A1s8udobGZGaia2e3O0PieGaiaGXNnaHzLDFTN7HFnaGxkBqpm9rozNL5mBqpmxt0ZGl8yA1Uz+9wZGp8zA1Uz+90ZGuuZgaqZCXeGxqfMQNXMAXeGxsfMQNXMQXeGxofMQNXMIXeGxvvMQNXMYXeGxrvMQNXMEXeGxtvMQNXMpDtD401moGrmqDtD43VmoGpmyp2h8SozUDVzzJ2hsZYZqJo57s7QeJkZqIYzJ9wZGi8yA5UZqpo56c7QeJ4ZqMxQZYaq4cy0O0NjNTNQDWdOuTM0nmUGKjNUNXPanaGxkhmolX4zZ9wZGk/7zZx1Z2gs95s5587QeJIZqMxQ1cyMO0PjcWagGs7MujM0ljID1XBmzp2h8SgzUJmhqpnz7gyNh5mBajhzwZ2h8SAzUA1nLrozNO5nBqrhzLw7Q+NeZqAyQ1Uzl9wZGouZgWo4s+DO0LibGaiGM5fdGRp3MgPVcOaKO0PjdmagMkNVM1fdGRq3MgPVcOaaO0PjZmagGs5cd2do3MgMVGaoMkOVGarMUGWGKjNUmaHKDFVmqDJDlRmqzFA1nOnjP06fx8uJ+5Z4AAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+		.s0 { fill: #f9fbfb } 
+		.s1 { fill: #333d3f } 
+		.s2 { fill: #b4d23c } 
+	</style>
+	<g id="Type Compound">
+		<path id="Title Holder" class="s0" aria-label="CHAMELEON"  d="m330.1 139.7v15.2q-5.2 2.8-10.9 4.1-5.7 1.4-11.9 1.4-18.4 0-29.2-10.2-10.7-10.4-10.7-28 0-17.7 10.7-28 10.8-10.3 29.2-10.3 6.2 0 11.9 1.4 5.7 1.4 10.9 4.1v15.3q-5.3-3.6-10.4-5.3-5.2-1.7-10.8-1.7-10.2 0-16 6.5-5.9 6.5-5.9 18 0 11.4 5.9 17.9 5.8 6.6 16 6.6 5.6 0 10.8-1.7 5.1-1.7 10.4-5.3zm18.3 19.3v-73.7h19v28.1h28.1v-28.1h19v73.7h-19v-31.3h-28.1v31.3zm136.6 0l-4.7-13.4h-29.7l-4.7 13.4h-19.1l27.3-73.7h22.7l27.3 73.7zm-19.5-56.5l-10.1 29.4h20.2zm50.9 56.4v-73.7h24.2l16.8 39.5 16.9-39.5h24.1v73.7h-17.9v-53.9l-17 39.8h-12.1l-17-39.8v53.9zm103.2 0v-73.7h51.3v14.4h-32.3v13.7h30.4v14.4h-30.4v16.9h33.4v14.3zm71.6 0v-73.7h19.1v59.4h33.4v14.3zm66.9 0v-73.7h51.4v14.4h-32.3v13.7h30.3v14.4h-30.3v16.9h33.3v14.3zm105.4-61.3q-8.7 0-13.5 6.5-4.8 6.4-4.8 18 0 11.6 4.8 18.1 4.8 6.4 13.5 6.4 8.7 0 13.5-6.4 4.8-6.5 4.8-18.1 0-11.6-4.8-18-4.8-6.5-13.5-6.5zm0-13.7q17.7 0 27.8 10.1 10.1 10.2 10.1 28.1 0 17.9-10.1 28.1-10.1 10.2-27.8 10.2-17.8 0-27.9-10.2-10.1-10.2-10.1-28.1 0-17.9 10.1-28.1 10.1-10.1 27.9-10.1zm54.8 75v-73.7h21.2l26.9 50.6v-50.6h18v73.7h-21.3l-26.8-50.5v50.5z"/>
+	</g>
+	<g id="Eye Compound">
+		<g id="&lt;Clip Group&gt;" clip-path="url(#cp1)">
+			<g id="&lt;Clip Group&gt;" clip-path="url(#cp2)">
+				<use id="&lt;Image&gt;" href="#img1" transform="matrix(.814,0,0,-0.814,33.682,206.406)"/>
+			</g>
+		</g>
+		<path id="&lt;Path&gt;" class="s1" d="m116.2 107.1c9.3 0 16.8 7.5 16.8 16.9 0 9.3-7.5 16.8-16.8 16.8-9.3 0-16.9-7.5-16.9-16.8 0-9.4 7.6-16.9 16.9-16.9z"/>
+		<path id="&lt;Path&gt;" class="s2" d="m91.2 35.5c-36.8 5-74.2 36-75.6 88.5 0.2 50 36.5 78.7 69 85.8-32.5-17.7-57.5-39.7-59.4-84.8 0.8-45.7 29.8-75.1 66-89.5z"/>
+		<path id="&lt;Path&gt;" class="s2" d="m141.6 35.5c36.7 5 74.2 36 75.6 88.5-0.2 50-36.6 78.7-69 85.8 32.5-17.7 57.5-39.7 59.3-84.8-0.7-45.7-29.7-75.1-65.9-89.5z"/>
+	</g>
+</svg>
