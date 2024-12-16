@@ -709,14 +709,6 @@
             <argument type="service" id="request_stack"/>
         </service>
 
-        <service id="chameleon_system_core.event_listener.rehash_backend_user_password_listener" class="ChameleonSystem\CoreBundle\EventListener\RehashBackendUserPasswordListener">
-            <argument type="service" id="chameleon_system_core.util.input_filter"/>
-            <argument type="service" id="chameleon_system_core.security.password.password_hash_generator"/>
-            <argument type="service" id="database_connection"/>
-            <argument type="service" id="chameleon_system_core.global"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.login_success" method="rehashPassword" />
-        </service>
-
         <service id="chameleon_system_core.mapper_loader" class="ChameleonSystem\CoreBundle\MapperLoader\MapperLoader" public="true">
             <argument /> <!-- Will be set by AddMappersPass. -->
         </service>

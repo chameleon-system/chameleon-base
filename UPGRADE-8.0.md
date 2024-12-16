@@ -118,6 +118,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `CMS_VERSION_MAJOR` removed - use the Twig filter `cms_version` instead
 - `CMS_VERSION_MINOR` removed - use the Twig filter `cms_version` instead
 - `SidebarBackendModule::toggleCategoryOpenState` removed
+- `BackendLoginEvent` and `BackendLogoutEvent` removed - use `Symfony\Component\Security\Http\Event\LoginSuccessEvent` and `Symfony\Component\Security\Http\Event\LogoutEvent` instead
 
 
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
