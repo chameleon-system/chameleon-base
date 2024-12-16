@@ -275,14 +275,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @deprecated since 8.0.0 - use saveActiveCategory
-     */
-    protected function toggleCategoryOpenState(): void
-    {
-        $this->saveActiveCategory();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function GetHtmlHeadIncludes()
