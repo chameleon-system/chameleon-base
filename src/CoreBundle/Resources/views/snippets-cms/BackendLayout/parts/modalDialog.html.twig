@@ -1,0 +1,23 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        saveCMSRegistryEntry('dialogCloseButtonText', '{{ "chameleon_system_core.action.close"|trans|json_encode }}');
+    });
+</script>
+
+<div class="modal" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingDialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="alert alert-warning mb-0" role="alert">
+                <div class="lds-ring float-left mr-1">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="pt-2">
+                    <strong>{{ 'chameleon_system_core.text.wait'|trans|nl2br }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

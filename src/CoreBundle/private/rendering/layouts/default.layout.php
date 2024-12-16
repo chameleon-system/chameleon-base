@@ -5,7 +5,7 @@ $authenticityTokenManager = ServiceLocator::get('chameleon_system_core.security.
 
 $viewRender = new ViewRenderer();
 $viewRender->AddSourceObject('cmsauthenticitytokenParameter', $authenticityTokenManager->getTokenPlaceholderAsParameter());
-echo $viewRender->Render('BackendLayout/layout.html.twig');
+echo $viewRender->Render('BackendLayout/default.html.twig');
 
 // message garbage collection
 // dirty hack to prevent message shown on wrong table editor or table list instance

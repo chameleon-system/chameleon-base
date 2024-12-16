@@ -1,66 +1,7 @@
 @import "cms_user_style/main.css";
 
-html {
-    height: 100%;
-}
-
-#cmscontainer .main {
-    display: flex;
-    flex-direction: column;
-}
-
-#cmscontainer .main .content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-#cmscontainer .main .content #tableEditorContainer {
-    flex: 1;
-}
-
-#cmscontainer .main .content #tableEditorContainer .tableeditcontainer {
-    height: 100%;
-}
-
-#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform {
-    height: 100%;
-}
-
-#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform #tabs-wrapper {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-#cmscontainer .main .content #tableEditorContainer .tableeditcontainer #cmseditform #tabs-wrapper .tab-content {
-    flex: 1;
-}
-
-#cmscontainer .main > .content > .card {
-    margin-top: 30px;
-}
-
 [data-table-function-bar] + .card {
     margin-top: 0 !important;
-}
-
-@media (max-width: 991px) {
-    #cmscontainer .main .container-fluid {
-        padding: 10px;
-    }
-
-    #cmscontainer .main .breadcrumb {
-        margin-bottom: 0;
-    }
-
-    #cmscontainer .main .content .card {
-        margin-bottom: 0;
-    }
-
-    #cmscontainer .main .content .card {
-        margin-top: 0;
-    }
 }
 
 #cmsbreadcrumb .breadcrumb {

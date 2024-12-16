@@ -1,3 +1,5 @@
+<!--isn't used anywhere (no pagedef has this layout) -->
+
 <?php
 $bodyAttributes = 'style="background-color:#fff;"';
 

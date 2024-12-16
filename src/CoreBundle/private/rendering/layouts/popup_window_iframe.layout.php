@@ -1,15 +1,6 @@
 <?php
-$bodyAttributes = ' style="background-color: #fff;"';
-
-require_once dirname(__FILE__).'/includes/cms_head_data.inc.php';
-?>
-<div style="margin-right: 2px; margin-bottom: 2px;">
-    <?php
-    $modules->GetModule('contentmodule');
-    ?>
-</div>
-<?php
-require_once PATH_LAYOUTTEMPLATES.'/includes/cms_footer_data.inc.php';
-?>
-</body>
-</html>
+use ChameleonSystem\CoreBundle\ServiceLocator;
+$authenticityTokenManager = ServiceLocator::get('chameleon_system_core.security.authenticity_token.authenticity_token_manager');
+$viewRender = new ViewRenderer();
+$viewRender->AddSourceObject('cmsauthenticitytokenParameter', $authenticityTokenManager->getTokenPlaceholderAsParameter());
+echo $viewRender->Render('BackendLayout/popup_window_iframe.html.twig');

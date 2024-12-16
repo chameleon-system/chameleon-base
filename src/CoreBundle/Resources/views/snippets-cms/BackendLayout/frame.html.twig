@@ -1,0 +1,20 @@
+{% set bg = 'bg-transparent' %}
+{% extends 'BackendLayout/base.html.twig' %}
+
+{% block header %}
+{% endblock %}
+
+{% block main %}
+    <main>
+        {{ module('contentmodule') }}
+    </main>
+{% endblock %}
+
+{% block backendFooter %}
+{% endblock %}
+{% block modalDialog %}
+    {{ parent() }}
+{% endblock %}
+{% block footer_includes %}
+    {{ parent() }}
+{% endblock %}
