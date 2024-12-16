@@ -25,7 +25,7 @@ class LocaleChangedEvent extends Event
     }
 
     /**
-     * @deprecated use getNewLocale instead
+     * @deprecated in 8.0.0 - use getNewLocale instead
      */
     public function getNewLocal(): ?string
     {
@@ -38,7 +38,7 @@ class LocaleChangedEvent extends Event
     }
 
     /**
-     * @deprecated use getOriginalLocale instead
+     * @deprecated in 8.0.0 - use getOriginalLocale instead
      */
     public function getOriginalLocal(): ?string
     {

@@ -15,15 +15,6 @@ class RecordChangeEvent extends Event
         $this->recordId = $recordId;
     }
 
-    /**
-     * @return string
-     * @deprecated use `self::getTableName()` instead
-     */
-    public function getTableId()
-    {
-        return $this->tableName;
-    }
-
     public function getTableName(): string
     {
         return $this->tableName;
