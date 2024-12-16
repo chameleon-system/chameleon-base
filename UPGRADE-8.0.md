@@ -113,6 +113,9 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface::FlushContentToBrowser()` removed
 - `\TModuleLoader::SetEnableAutoFlush()` removed
 - `\TModuleLoader::getModuleESIPath()` removed
+- `\TCMSChangeLogArchiver` removed - use `\ChameleonSystem\CmsChangeLogBundle\DataAccess\CmsChangeLogDataAccess::deleteOlderThan()` instead
+- `ChameleonSystem\CoreBundle\Event\RecordChangeEvent:getTableId` removed - use `getTableName` instead
+
 
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
   https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.0.md
