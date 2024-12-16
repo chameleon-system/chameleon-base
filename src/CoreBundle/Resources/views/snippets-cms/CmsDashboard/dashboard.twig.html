@@ -1,0 +1,11 @@
+<div>{{greeting}}</div>
+<h2>Available Modules</h2>
+{% for module in availableModules %}
+    <p>{{module.name}}: {{module.description}} [{{module.id}}]</p>
+{% endfor %}
+<hr />
+
+
+{% for module in renderedModules %}
+<div>{{ module.content | raw}}</div>
+{% endfor %}
