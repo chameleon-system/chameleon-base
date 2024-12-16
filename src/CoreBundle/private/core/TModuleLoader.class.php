@@ -22,55 +22,24 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * loads CMS backend modules.
-/**/
+ * /**/
 class TModuleLoader
 {
-    const ESIMODULE_DIVIDER = '_esimodule_';
+    public const ESIMODULE_DIVIDER = '_esimodule_';
 
     /**
      * @var TModelBase[]
      */
-    public $modules = array(); //an array of all model classes.
-    /**
-     * @var ChameleonControllerInterface
-     */
-    protected $controller; // a pointer to the controller of the framework
-    /**
-     * @var bool
-     */
-    private $bEnableAutoFlush = false;
-    /**
-     * @var array
-     */
-    private $aModuleCacheData = array();
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var ModuleResolverInterface
-     */
-    protected $moduleResolver;
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-    /**
-     * @var IViewPathManager
-     */
-    private $viewPathManager;
-    /**
-     * @var TGlobalBase
-     */
-    private $global;
-    /**
-     * @var ModuleExecutionStrategyInterface
-     */
-    private $moduleExecutionStrategy;
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
+    public array $modules = []; // an array of all model classes.
+    protected ChameleonControllerInterface $controller; // a pointer to the controller of the framework
+    private array $aModuleCacheData = [];
+    private RequestStack $requestStack;
+    protected ModuleResolverInterface $moduleResolver;
+    private CacheInterface $cache;
+    private IViewPathManager $viewPathManager;
+    private TGlobalBase $global;
+    private ModuleExecutionStrategyInterface $moduleExecutionStrategy;
+    private RequestInfoServiceInterface $requestInfoService;
 
     public function __construct(
         RequestStack $requestStack,
@@ -121,20 +90,10 @@ class TModuleLoader
     }
 
     /**
-     * @param bool $bEnableAutoFlush
-     *
-     * @deprecated since 7.2.0 - early flushing should not be used
-     */
-    public function SetEnableAutoFlush($bEnableAutoFlush)
-    {
-        $this->bEnableAutoFlush = $bEnableAutoFlush;
-    }
-
-    /**
      * creates and stores all models listed by name in the moduleList parameter.
      * For each model it sets the view also passed via the moduleList parameter.
      *
-     * @param array       $moduleList
+     * @param array $moduleList
      * @param string|null $templateLanguage
      */
     public function LoadModules($moduleList, $templateLanguage = null)
@@ -149,8 +108,8 @@ class TModuleLoader
     /**
      * create an instance of the requested Module and initialize it using the config data.
      *
-     * @param string      $name             name of the module "spot" (name from the pagedef)
-     * @param array       $config
+     * @param string $name name of the module "spot" (name from the pagedef)
+     * @param array $config
      * @param string|null $templateLanguage
      *
      * @return TModelBase
@@ -253,7 +212,7 @@ class TModuleLoader
     public function GetPermittedFunctions()
     {
         reset($this->modules);
-        $aFunctions = array();
+        $aFunctions = [];
         foreach ($this->modules as $spotName => $module) {
             $aTmpFunctions = $this->modules[$spotName]->methodCallAllowed;
             $aFunctions = array_merge($aFunctions, $aTmpFunctions);
@@ -270,7 +229,7 @@ class TModuleLoader
      */
     public function GetHtmlHeadIncludes()
     {
-        $aHeadData = array();
+        $aHeadData = [];
         reset($this->modules);
         foreach ($this->modules as $spotName => $module) {
             $aModulHeadData = $this->modules[$spotName]->GetHtmlHeadIncludes();
@@ -289,7 +248,7 @@ class TModuleLoader
     public function GetHtmlFooterIncludes()
     {
         reset($this->modules);
-        $aFooterData = array();
+        $aFooterData = [];
         foreach ($this->modules as $spotName => $module) {
             $aModuleFooterData = $this->modules[$spotName]->GetHtmlFooterIncludes();
             $aFooterData = array_merge($aFooterData, $aModuleFooterData);
@@ -313,11 +272,11 @@ class TModuleLoader
     /**
      * executes and renders the requested module.
      *
-     * @param string      $spotName        - spot name to fetch
-     * @param bool        $bReturnString   - normally the result is echoed. if set to true, the result will be returned as a string instead
+     * @param string $spotName - spot name to fetch
+     * @param bool $bReturnString - normally the result is echoed. if set to true, the result will be returned as a string instead
      * @param string|null $sCustomWrapping - specify custom wrapping. the string [{content}] will be replaced by the module content
      *                                     note: the wrapping is only added if the module is not empty
-     * @param bool        $bAllowAutoWrap  - set to false if RENDER_DIV_WITH_MODULE_AND_VIEW_NAME_ON_MODULE_LOAD is active and you want to suppress the auto div
+     * @param bool $bAllowAutoWrap - set to false if RENDER_DIV_WITH_MODULE_AND_VIEW_NAME_ON_MODULE_LOAD is active and you want to suppress the auto div
      *
      * @return string|null
      *
@@ -353,9 +312,9 @@ class TModuleLoader
             }
 
             $this->logModuleException($e, $spotName);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if (_DEVELOPMENT_MODE) {
-                throw new ModuleExecutionFailedException(sprintf('Error in module execution: %s in file: %s on line: %d',$e->getMessage(), $e->getFile(), $e->getLine()), 0, $e);
+                throw new ModuleExecutionFailedException(sprintf('Error in module execution: %s in file: %s on line: %d', $e->getMessage(), $e->getFile(), $e->getLine()), 0, $e);
             }
 
             $this->logModuleException($e, $spotName);
@@ -383,18 +342,13 @@ class TModuleLoader
 
         echo $sContent;
 
-        if ($this->bEnableAutoFlush) {
-            $this->controller->FlushContentToBrowser();
-        }
-
         return null;
     }
 
     /**
-     * @param \Exception $e
-     * @param string     $spotName
+     * @param string $spotName
      */
-    private function logModuleException(\Exception $e, $spotName)
+    private function logModuleException(Exception $e, $spotName)
     {
         $subject = 'Error-Notification '.$_SERVER['HTTP_HOST'].': '.$e->getMessage().' '.md5($e->getFile().$e->getLine().$_SERVER['REQUEST_URI']);
         $date = date('Y-m-d H:i:s');
@@ -417,49 +371,9 @@ class TModuleLoader
     }
 
     /**
-     * @param TModelBase $module
-     * @param string     $spotName
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - no longer used. The ESI path is still relevant in
-     * \ChameleonSystem\CoreBundle\ModuleService\ModuleExecutionStrategySubRequest (if the bundle is configured to use
-     * the subrequest module execution strategy).
-     */
-    public function getModuleESIPath(TModelBase $module, $spotName)
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        $sBaseUrl = $request->getPathInfo();
-
-        if ('/' === substr($sBaseUrl, -1)) {
-            $sBaseUrl = substr($sBaseUrl, 0, -1);
-        }
-
-        $aParts = array(
-            $sBaseUrl,
-            self::ESIMODULE_DIVIDER,
-            $spotName,
-        );
-        if (isset($module->aModuleConfig['instanceID']) && null !== $module->aModuleConfig['instanceID'] && '' !== $module->aModuleConfig['instanceID']) {
-            $aParts[] = $module->aModuleConfig['instanceID'];
-        }
-        // add hash on parameters since they are always relevant
-        $param = $request->query->all();
-        $post = $request->request->all();
-        if (is_array($post) && count($post) > 0) {
-            $param = array_merge_recursive($param, $post);
-        }
-        if (count($param) > 0) {
-            $aParts[] = $this->cache->getKey($param);
-        }
-
-        return  implode('/', $aParts);
-    }
-
-    /**
      * Call a module function directly from the layout.
      *
-     * @param string $sSpotName     - spot (module) on which to call the function
+     * @param string $sSpotName - spot (module) on which to call the function
      * @param string $sFunctionName - function to call
      */
     public function CallModuleFunction($sSpotName, $sFunctionName)
@@ -475,7 +389,7 @@ class TModuleLoader
      * Call a public (ie from web-callable) function.
      *
      * @param string $sModuleSpotName - the spot name
-     * @param string $sMethod         - function to call
+     * @param string $sMethod - function to call
      */
     public function CallPublicModuleFunction($sModuleSpotName, $sMethod)
     {
@@ -514,7 +428,7 @@ class TModuleLoader
      */
     public function GetModulesOfType($type)
     {
-        $pointerArray = array();
+        $pointerArray = [];
         foreach ($this->modules as $moduleKey => $module) {
             if (is_subclass_of($this->modules[$moduleKey], $type) || 0 == strcasecmp(get_class($this->modules[$moduleKey]), $type)) {
                 $pointerArray[] = $this->modules[$moduleKey];

@@ -56,7 +56,7 @@ class ChameleonBackendController extends ChameleonController
         if ($oCMSConfig && $oCMSConfig->CurrentIpIsWhiteListed()) {
             $this->accessCheckHook();
         } else {
-            // TODO
+            // @TODO - add a proper error message
         }
     }
 

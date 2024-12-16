@@ -52,7 +52,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
   - replace `->fetchAssoc` with `->fetchAssociative(`
 -  `framework.session.cookie_samesite: lax` added to `src/CoreBundle/Resources/config/project-config.yaml`
 - translation files moved to `translations/` (from `src/Resources/translations/` or `src/Resources/<BundleName>/translations/`) in
-  the project or a bundle. Inside bundles `Resources/translations/` ist still supported but no longer recommended.
+  the project or a bundle. Inside bundles `Resources/translations/` it is still supported but no longer recommended.
 - `kernel.root_dir` (was the `app` folder) has been removed. Use `%kernel.project_dir%` instead (is the project root folder). So `%kernel.root_dir%` becomes `%kernel.project_dir%/app/`
 - replace `RequestStack::getMasterRequest()` with `RequestStack::getMainRequest()`
 - replace `KernelEvent::isMasterRequest()` with `KernelEvent::isMainRequest()`
@@ -65,6 +65,8 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - Add `var/` and remove `app/cache/*` and `!app/cache/.gitkeep` from your .gitignore. Delte the `app/cache` folder.
 - Twig File-Loader requires templates to be in the Form `@BundleName/path/to/file/relative/to/Resources/views/.html.twig` where `@BundleName` is the name without `Bundle`.
   This is used in debug data collectors - so search for `<tag name="data_collector"`. Example `<tag name="data_collector" template="@ChameleonSystemElastic/Profiler/layout.html.twig" id="chameleon_system_elastic.search" priority="20"/>`
+- the event `chameleon_system_core.filter_content` was removed because it was only used if flushing was enabled. `You may use kernel.response` instead.
+  Search for `CoreEvents::FILTER_CONTENT`.
 - `\TPkgCustomSearchResultItemList::AddCacheParameters` removed
 - `\TPkgCustomSearchResultItemList::AddClearCacheTriggers` removed
 - `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
@@ -104,8 +106,25 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TPkgImageHotspotItem::AddClearCacheTriggers` removed
 - `\TShopVariantDisplayHandler::AddClearCacheTriggers` removed
 - `\ChameleonSystem\core\DatabaseAccessLayer\EntityList::__construct` no longer accepts `null` for the two last parameters (`$queryParameters` and `$queryParameterTypes`))
-This list might not be complete. Also take a look at the official Symfony migration documentation:
-https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.0.md
+- `\ChameleonSystem\CoreBundle\Controller\ChameleonController::$moduleLoader` removed
+- `\ChameleonSystem\CoreBundle\Controller\ChameleonController::getBlockAutoFlushToBrowser()` removed
+- `\ChameleonSystem\CoreBundle\Controller\ChameleonController::PreOutputCallbackFunction()` removed
+- `\ChameleonSystem\CoreBundle\Controller\ChameleonController::SetBlockAutoFlushToBrowser()` removed
+- `\ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface::FlushContentToBrowser()` removed
+- `\TModuleLoader::SetEnableAutoFlush()` removed
+- `\TModuleLoader::getModuleESIPath()` removed
+
+- This list might not be complete. Also take a look at the official Symfony migration documentation:
+  https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.0.md
+
+## Services
+
+- \ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController
+
+## Constants
+
+- CHAMELEON_ENABLE_FLUSHING
+
 
 ## Migrating to doctrine ORM
 First, make sure that all property tables have a matching parent key field in the target table. If not, add it.

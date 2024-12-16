@@ -6,24 +6,12 @@ use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use TModelBase;
-use TModuleLoader;
 
 class ModuleExecutionStrategySubRequest implements ModuleExecutionStrategyInterface
 {
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
+    private CacheInterface $cache;
+    private KernelInterface $kernel;
 
-    /**
-     * @param CacheInterface  $cache
-     * @param KernelInterface $kernel
-     */
     public function __construct(CacheInterface $cache, KernelInterface $kernel)
     {
         $this->cache = $cache;
@@ -33,7 +21,7 @@ class ModuleExecutionStrategySubRequest implements ModuleExecutionStrategyInterf
     /**
      * {@inheritdoc}
      */
-    public function execute(Request $request, TModelBase $module, $spotName, $isLegacyModule)
+    public function execute(Request $request, \TModelBase $module, $spotName, $isLegacyModule)
     {
         $esiPath = $this->getModuleESIPath($request, $module, $spotName);
         $moduleRequest = $request->duplicate();
@@ -45,13 +33,11 @@ class ModuleExecutionStrategySubRequest implements ModuleExecutionStrategyInterf
     }
 
     /**
-     * @param Request    $request
-     * @param TModelBase $module
-     * @param string     $spotName
+     * @param string $spotName
      *
      * @return string
      */
-    private function getModuleESIPath(Request $request, TModelBase $module, $spotName)
+    private function getModuleESIPath(Request $request, \TModelBase $module, $spotName)
     {
         $sBaseUrl = $request->getPathInfo();
 
@@ -61,7 +47,7 @@ class ModuleExecutionStrategySubRequest implements ModuleExecutionStrategyInterf
 
         $aParts = [
             $sBaseUrl,
-            TModuleLoader::ESIMODULE_DIVIDER,
+            \TModuleLoader::ESIMODULE_DIVIDER,
             $spotName,
         ];
         if (isset($module->aModuleConfig['instanceID']) && null !== $module->aModuleConfig['instanceID'] && '' !== $module->aModuleConfig['instanceID']) {

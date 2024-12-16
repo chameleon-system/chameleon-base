@@ -13,8 +13,8 @@ namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
-use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
 use ChameleonSystem\CoreBundle\Event\FilterContentEvent;
+use ChameleonSystem\CoreBundle\Event\HtmlIncludeEvent;
 use ChameleonSystem\CoreBundle\Interfaces\ResourceCollectorInterface;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
@@ -22,24 +22,12 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use ErrorException;
 use esono\pkgCmsCache\CacheInterface;
-use ICmsCoreRedirect;
-use IViewPathManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TCMSPageDefinitionFile;
-use TGlobal;
-use TModelBase;
-use TModuleLoader;
-use TPkgCmsActionPluginManager;
-use TPkgCmsCoreLayoutPluginManager;
-use TPkgCmsEvent;
-use TPkgCmsEventManager;
-use TTools;
 
 abstract class ChameleonController implements ChameleonControllerInterface
 {
@@ -56,38 +44,23 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected $cache;
     /**
-     * @var TGlobal
+     * @var \TGlobal
      */
     protected $global;
 
-    protected TModuleLoader $moduleLoader;
+    protected \TModuleLoader $moduleLoader;
 
     /**
      * @var array
-     *
-     * @deprecated since 6.3.0 - not used anymore
      */
-    protected $postRenderVariables;
+    protected $aHeaderIncludes = [];
     /**
      * @var array
      */
-    protected $aHeaderIncludes = array();
+    protected $aFooterIncludes = [];
+
     /**
-     * @var array
-     */
-    protected $aFooterIncludes = array();
-    /**
-     * @var string
-     *
-     * @deprecated since 6.3.0 - not used anymore
-     */
-    protected $sGeneratedPage;
-    /**
-     * @var bool
-     */
-    private $bBlockAutoFlushToBrowser = false;
-    /**
-     * @var IViewPathManager
+     * @var \IViewPathManager
      */
     protected $viewPathManager;
 
@@ -101,12 +74,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @var RequestInfoServiceInterface
      */
     private $requestInfoService;
-    /**
-     * @var ICmsCoreRedirect
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
-     */
-    protected $redirect;
+
     /**
      * @var InputFilterUtilInterface
      */
@@ -128,8 +96,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
-        TModuleLoader $moduleLoader,
-        IViewPathManager $viewPathManager = null
+        \TModuleLoader $moduleLoader,
+        ?\IViewPathManager $viewPathManager = null
     ) {
         $this->requestStack = $requestStack;
         $this->moduleLoader = $moduleLoader;
@@ -139,23 +107,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
     }
 
-    /**
-     * @throws \Exception
-     * @deprecated should be removed after 7.2.0, catches cases of accessing public property 'moduleLoader'
-     */
-    public function __get(string $name)
-    {
-        if ('moduleLoader' === $name) {
-            @trigger_error('The modifier of property \ChameleonSystem\CoreBundle\Controller\ChameleonController::moduleLoader was restricted, use ChameleonController::getModuleLoader() instead', E_USER_DEPRECATED);
-
-            return $this->moduleLoader;
-        }
-
-        throw new \Exception(sprintf('Unknown getter "%s"', $name));
-    }
-
-    // this getter may be added to the ChameleonControllerInterface
-    public function getModuleLoader(): TModuleLoader
+    public function getModuleLoader(): \TModuleLoader
     {
         return $this->moduleLoader;
     }
@@ -183,35 +135,13 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @param TGlobal $global
+     * @param \TGlobal $global
      *
      * @return void
      */
     public function setGlobal($global)
     {
         $this->global = $global;
-    }
-
-    /**
-     * @param bool $bBlockAutoFlushToBrowser
-     *
-     * @return void
-     *
-     * @deprecated since 7.2.0 - early flushing should not be used
-     */
-    public function SetBlockAutoFlushToBrowser($bBlockAutoFlushToBrowser)
-    {
-        $this->bBlockAutoFlushToBrowser = $bBlockAutoFlushToBrowser;
-    }
-
-    /**
-     * @return bool
-     *
-     * @deprecated since 7.2.0 - early flushing should not be used
-     */
-    public function getBlockAutoFlushToBrowser()
-    {
-        return $this->bBlockAutoFlushToBrowser;
     }
 
     /**
@@ -241,14 +171,14 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @return Response
      *
-     * @throws ErrorException
+     * @throws \ErrorException
      * @throws NotFoundHttpException
      */
     protected function GeneratePage($pagedef)
     {
         $pagedefData = $this->getPagedefData($pagedef);
-        if (false === $pagedefData) {
-            return new Response('<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: invalid page definition: '.TGlobal::OutHTML($pagedef).'</div>', Response::HTTP_NOT_FOUND);
+        if (null === $pagedefData) {
+            return new Response('<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: invalid page definition: '.\TGlobal::OutHTML($pagedef).'</div>', Response::HTTP_NOT_FOUND);
         }
 
         $this->moduleLoader->LoadModules($pagedefData['moduleList']);
@@ -258,14 +188,14 @@ abstract class ChameleonController implements ChameleonControllerInterface
         }
         reset($this->moduleLoader->modules);
 
-        $this->InitializeModules();
+        $this->moduleLoader->InitModules();
         $this->ExecuteModuleMethod($this->moduleLoader);
 
         $templatePath = $this->LoadLayoutTemplate($pagedefData['sLayoutFile']);
         if (false === file_exists($templatePath)) {
-            $sErrorMessage = '<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: Invalid template: '.TGlobal::OutHTML($templatePath).' ('.TGlobal::OutHTML($pagedefData['sLayoutFile']).")</div>\n";
-            /** @noinspection CallableInLoopTerminationConditionInspection */
-            /** @noinspection SuspiciousLoopInspection */
+            $sErrorMessage = '<div style="background-color: #ffcccc; color: #900; border: 2px solid #c00; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; font-weight: bold; font-size: 11px; min-height: 40px; display: block;">Error: Invalid template: '.\TGlobal::OutHTML($templatePath).' ('.\TGlobal::OutHTML($pagedefData['sLayoutFile']).")</div>\n";
+            /* @noinspection CallableInLoopTerminationConditionInspection */
+            /* @noinspection SuspiciousLoopInspection */
             for ($i = 0; ob_get_level() > $i; ++$i) {
                 ob_end_flush();
             }
@@ -277,8 +207,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $modules = $this->moduleLoader;
         /** @noinspection PhpUnusedLocalVariableInspection */
         /** @noinspection OnlyWritesOnParameterInspection */
-        $pluginManager = new TPkgCmsCoreLayoutPluginManager($modules);
-        $layoutFile = TGlobal::ProtectedPath($templatePath, '.layout.php');
+        $pluginManager = new \TPkgCmsCoreLayoutPluginManager($modules);
+        $layoutFile = \TGlobal::ProtectedPath($templatePath, '.layout.php');
 
         $level = ob_get_level();
 
@@ -289,7 +219,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         if (ob_get_level() !== $level) {
             echo $sPageContent;
-            throw new ErrorException("There was a problem with output buffering - someone in ({$layoutFile}) changed the buffer output level.", 0, E_USER_ERROR, __FILE__, __LINE__);
+            throw new \ErrorException("There was a problem with output buffering - someone in ({$layoutFile}) changed the buffer output level.", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
 
         $sPageContent = $this->PreOutputCallbackFunction($sPageContent);
@@ -297,19 +227,14 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return new Response($sPageContent);
     }
 
-    /**
-     * @param string $pagedef
-     *
-     * @return array|bool
-     */
-    private function getPagedefData($pagedef)
+    private function getPagedefData(string $pagedef): ?array
     {
         $pagedefData = $this->dataAccessCmsMasterPagedef->get($pagedef);
         if (null === $pagedefData) {
-            return false;
+            return null;
         }
 
-        return             [
+        return [
             'moduleList' => $pagedefData->getModuleList(),
             'sLayoutFile' => $pagedefData->getLayoutFile(),
         ];
@@ -324,67 +249,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * return the page definition object. by default, this is file based, but may be page based (template engine).
-     *
-     * @return TCMSPageDefinitionFile|false
-     *
-     * @deprecated since 6.2.10 - use chameleon_system_core.data_access_cms_master_pagedef_file or chameleon_system_core.data_access_cms_master_pagedef_database instead
-     */
-    public function GetPagedefObject(string $pagedef)
-    {
-        /** @var $oPageDefinitionFile TCMSPageDefinitionFile */
-        $oPageDefinitionFile = new TCMSPageDefinitionFile();
-        $fullPageDefPath = $this->PageDefinitionFile($pagedef);
-        $pagePath = substr($fullPageDefPath, 0, -strlen($pagedef.'.pagedef.php'));
-
-        if (!$oPageDefinitionFile->Load($pagedef, $pagePath)) {
-            $oPageDefinitionFile = false;
-        }
-
-        return $oPageDefinitionFile;
-    }
-
-    /**
-     * returns the full path to a page definition file given the page definition name.
-     *
-     * @param string $pagedef - name of the pagedef
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.10 - not necessary anymore / do not use
-     */
-    protected function PageDefinitionFile($pagedef)
-    {
-        // we can select a location using a get parameter (_pagedefType). it may be one of: Core, Custom-Core, and Customer
-        if (null === $pagedefType = $this->inputFilterUtil->getFilteredInput('_pagedefType')) {
-            $pagedefType = 'Core';
-        }
-        $path = $this->global->_GetPagedefRootPath($pagedefType);
-
-        return $path.'/'.$pagedef.'.pagedef.php';
-    }
-
-    /**
-     * call the init function on all modules.
-     *
-     * @return void
-     */
-    protected function InitializeModules()
-    {
-        reset($this->moduleLoader->modules);
-
-        foreach ($this->moduleLoader->modules as $spotName => $module) {
-            $this->global->SetExecutingModulePointer($this->moduleLoader->modules[$spotName]);
-            $this->moduleLoader->modules[$spotName]->Init();
-            $tmp = null;
-
-            /** @psalm-suppress NullArgument */
-            $this->global->SetExecutingModulePointer($tmp);
-        }
-        reset($this->moduleLoader->modules);
-    }
-
-    /**
      * a page can execute any number of functions in any module. which functions
      * to execute, in which module, needs to be passed via POST or GET through
      * the variable module_fnc. This function will fetch the contents of that
@@ -392,7 +256,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * function exists within the specified module it will be called. order of
      * execution is the same as the order in module_fnc array.
      *
-     * @param TModuleLoader $modulesObject
+     * @param \TModuleLoader $modulesObject
      *
      * @return void
      */
@@ -411,7 +275,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             }
             if (array_key_exists($spotName, $modulesObject->modules)) {
                 /**
-                 * @var TModelBase $module
+                 * @var \TModelBase $module
                  */
                 $module = $modulesObject->modules[$spotName];
                 if ($this->isModuleMethodCallAllowed($module, $method)) {
@@ -419,13 +283,13 @@ abstract class ChameleonController implements ChameleonControllerInterface
                     $module->_CallMethod($method);
                     $tmp = null;
 
-                    /** @psalm-suppress NullArgument */
+                    /* @psalm-suppress NullArgument */
                     $this->global->SetExecutingModulePointer($tmp);
                 }
             } else {
                 $oActivePage = $this->activePageService->getActivePage();
                 if ($oActivePage) {
-                    $oActionPluginManager = new TPkgCmsActionPluginManager($oActivePage);
+                    $oActionPluginManager = new \TPkgCmsActionPluginManager($oActivePage);
                     if ($oActionPluginManager->actionPluginExists($spotName)) {
                         $oActionPluginManager->callAction($spotName, $method, $this->global->GetUserData());
                     }
@@ -437,8 +301,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * Returns all module function definitions of the request specified by either POST or GET
      * in the form 'spot name' => 'method name'. POST has precedence (first in the array).
-     *
-     * @return array
      */
     private function getRequestedModuleFunctions(): array
     {
@@ -457,12 +319,11 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @param TModelBase $module
-     * @param string     $method
+     * @param string $method
      *
      * @return bool
      */
-    private function isModuleMethodCallAllowed(TModelBase $module, $method)
+    private function isModuleMethodCallAllowed(\TModelBase $module, $method)
     {
         return true === $this->authenticityTokenManager->isTokenValid()
             || true === $module->AllowAccessWithoutAuthenticityToken($method);
@@ -480,10 +341,10 @@ abstract class ChameleonController implements ChameleonControllerInterface
         if (null === $pagedefType = $this->inputFilterUtil->getFilteredInput('_pagedefType')) {
             $pagedefType = 'Core';
         }
-        $path = TGlobal::_GetLayoutRootPath($pagedefType);
+        $path = \TGlobal::_GetLayoutRootPath($pagedefType);
         $pagedefPath = $path.'/'.$layoutTemplate.'.layout.php';
         if (!file_exists($pagedefPath)) {
-            $path = TGlobal::_GetLayoutRootPath('Core');
+            $path = \TGlobal::_GetLayoutRootPath('Core');
             $pagedefPath = $path.'/'.$layoutTemplate.'.layout.php';
         }
 
@@ -495,15 +356,15 @@ abstract class ChameleonController implements ChameleonControllerInterface
      *
      * @param string $sPageContent the contents of the output buffer
      *
-     * @deprecated since 7.2.0 - you may use of symfony's "kernel.response" event
+     * @deprecated since 7.1.0 - you may use of symfony's "kernel.response" event
      *
      * @return string
      */
     public function PreOutputCallbackFunction($sPageContent)
     {
         static $bHeaderParsed = false;
-        TPkgCmsEventManager::GetInstance()->NotifyObservers(
-            TPkgCmsEvent::GetNewInstance($this, TPkgCmsEvent::CONTEXT_CORE, TPkgCmsEvent::NAME_PRE_OUTPUT_CALLBACK_FUNCTION, array('sPageContent' => $sPageContent)));
+        \TPkgCmsEventManager::GetInstance()->NotifyObservers(
+            \TPkgCmsEvent::GetNewInstance($this, \TPkgCmsEvent::CONTEXT_CORE, \TPkgCmsEvent::NAME_PRE_OUTPUT_CALLBACK_FUNCTION, ['sPageContent' => $sPageContent]));
 
         if (!$bHeaderParsed) {
             // parse and replace header includes, call resource collection
@@ -519,7 +380,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             }
         }
 
-        if (TGlobal::CMSUserDefined()) {
+        if (\TGlobal::CMSUserDefined()) {
             if ('true' === $this->inputFilterUtil->getFilteredInput('esdisablelinks')) {
                 $sPattern = "/<a([^>]+)href=[']([^']*)[']/Uusi";
                 $sReplacePatter = '<a$1href="javascript:var tmp=false;"';
@@ -579,7 +440,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $event = new FilterContentEvent($sPageContent);
         $this->eventDispatcher->dispatch($event, CoreEvents::FILTER_CONTENT);
         $sPageContent = $event->getContent();
-        $this->sGeneratedPage .= $sPageContent;
 
         return $sPageContent;
     }
@@ -635,12 +495,13 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * @param bool $bAsArray
      *
      * @return string|string[]
+     *
      * @psalm-return ($bAsArray is true ? string[] : string)
      */
     protected function _GetCustomHeaderData($bAsArray = false)
     {
-        TPkgCmsEventManager::GetInstance()->NotifyObservers(
-            TPkgCmsEvent::GetNewInstance($this, TPkgCmsEvent::CONTEXT_CORE, TPkgCmsEvent::NAME_GET_CUSTOM_HEADER_DATA));
+        \TPkgCmsEventManager::GetInstance()->NotifyObservers(
+            \TPkgCmsEvent::GetNewInstance($this, \TPkgCmsEvent::CONTEXT_CORE, \TPkgCmsEvent::NAME_GET_CUSTOM_HEADER_DATA));
 
         $event = new HtmlIncludeEvent();
         /** @var HtmlIncludeEvent $event */
@@ -660,7 +521,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function splitHeaderDataIntoJSandOther($aResourceArray)
     {
-        $aData = array('js' => array(), 'other' => array());
+        $aData = ['js' => [], 'other' => []];
         foreach ($aResourceArray as $sLine) {
             // is .js file? true if it contains <script
             if (false !== stripos($sLine, '<script ') || false !== stripos($sLine, '<script>')) {
@@ -674,13 +535,11 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * wrapper for _GetCustomFooterData - the method caches the result of _GetCustomFooterData
+     * Wrapper for _GetCustomFooterData - the method caches the result of _GetCustomFooterData
      * we moved the cache to this method since children of the controller overwrite the method GetCustomFooterData
      * and would each have to implement caching if we had kept caching there.
-     *
-     * @return string
      */
-    private function getHTMLFooterDataAsString()
+    private function getHTMLFooterDataAsString(): string
     {
         static $footerData = null;
         if (null === $footerData) {
@@ -699,8 +558,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
      */
     protected function _GetCustomFooterData()
     {
-        TPkgCmsEventManager::GetInstance()->NotifyObservers(
-            TPkgCmsEvent::GetNewInstance($this, TPkgCmsEvent::CONTEXT_CORE, TPkgCmsEvent::NAME_GET_CUSTOM_FOOTER_DATA));
+        \TPkgCmsEventManager::GetInstance()->NotifyObservers(
+            \TPkgCmsEvent::GetNewInstance($this, \TPkgCmsEvent::CONTEXT_CORE, \TPkgCmsEvent::NAME_GET_CUSTOM_FOOTER_DATA));
 
         $event = new HtmlIncludeEvent();
 
@@ -720,52 +579,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     protected function runExternalResourceCollectorOnPageContent($sPageContent)
     {
         return $this->resourceCollector->CollectExternalResources($sPageContent);
-    }
-
-    /**
-     * return an array of variables to search/replace in the rendered page
-     * use this hook to add vars that should never be cached.
-     *
-     * @return array
-     *
-     * @deprecated since 6.3.0 - no longer used. To add custom variables use ResponseVariableReplacerInterface::addVariable() instead of
-     *             overwriting this method.
-     */
-    protected function GetPostRenderVariables()
-    {
-        if (null === $this->postRenderVariables) {
-            $this->postRenderVariables = TTools::AddStaticPageVariables(null);
-            $this->postRenderVariables[AuthenticityTokenManagerInterface::TOKEN_ID] = $this->authenticityTokenManager->getStoredToken();
-
-            $this->postRenderVariables['CMS-PROTOCOL'] = $this->getRequest()->getScheme();
-        }
-
-        return $this->postRenderVariables;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * This method will do nothing if CHAMELEON_ENABLE_FLUSHING is set to false in the config file.
-     */
-    public function FlushContentToBrowser($bEnableAutoFlush = false)
-    {
-        if (false === CHAMELEON_ENABLE_FLUSHING && !TGlobal::IsCMSMode()) {
-            return;
-        }
-        if (true === $this->bBlockAutoFlushToBrowser) {
-            return;
-        }
-        $sPageContent = ob_get_clean();
-        if (!empty($sPageContent)) {
-            $sPageContent = $this->PreOutputCallbackFunction($sPageContent);
-            echo $sPageContent;
-        }
-        flush();
-        ob_start();
-        if ($bEnableAutoFlush) {
-            $this->moduleLoader->SetEnableAutoFlush(true);
-        }
     }
 
     /**
@@ -792,7 +605,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * outputs the final generated webpage.
      *
      * @param string $sContent
-     * @param bool   $bContentLoadedFromCache
+     * @param bool $bContentLoadedFromCache
      *
      * @return mixed|string
      */
@@ -819,8 +632,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * performs a header redirect to a specified URL.
      *
-     * @param string $url                    - relative URL or full URL with http:// to which we want to redirect
-     * @param bool   $bAllowOnlyRelativeURLs - strips scheme from URL and adds current HOST - default false
+     * @param string $url - relative URL or full URL with http:// to which we want to redirect
+     * @param bool $bAllowOnlyRelativeURLs - strips scheme from URL and adds current HOST - default false
      *
      * @deprecated use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect') instead
      *
@@ -840,8 +653,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @param ActivePageServiceInterface $activePageService
-     *
      * @return void
      */
     public function setActivePageService(ActivePageServiceInterface $activePageService)
@@ -905,18 +716,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @param ICmsCoreRedirect $redirect
-     *
-     * @deprecated since 6.1.9 - no longer used in this class.
-     *
-     * @return void
-     */
-    public function setRedirect($redirect)
-    {
-        $this->redirect = $redirect;
-    }
-
-    /**
      * @return InputFilterUtilInterface
      */
     protected function getInputFilterUtil()
@@ -925,8 +724,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
     }
 
     /**
-     * @param InputFilterUtilInterface $inputFilterUtil
-     *
      * @return void
      */
     public function setInputFilterUtil(InputFilterUtilInterface $inputFilterUtil)
@@ -944,7 +741,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         $this->responseVariableReplacer = $responseVariableReplacer;
     }
 
-    private function getRedirectService(): ICmsCoreRedirect
+    private function getRedirectService(): \ICmsCoreRedirect
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
     }

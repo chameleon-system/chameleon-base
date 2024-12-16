@@ -24,10 +24,7 @@ abstract class ChameleonBaseRouter extends Router
      * @var string
      */
     protected $environment;
-    /**
-     * @var \ICmsCoreRedirect
-     */
-    protected $redirect;
+
     /**
      * @var UrlUtil
      */
@@ -53,18 +50,6 @@ abstract class ChameleonBaseRouter extends Router
 
     abstract protected function generateCacheDirPath(string $baseCacheDir): string;
 
-    /**
-     * @param string $newURL
-     * @param bool $permanently
-     *
-     * @deprecated use chameleon_system_core.redirect::redirect() instead
-     *
-     * @return never
-     */
-    public function redirect($newURL, $permanently = false)
-    {
-        $this->redirect->redirect($newURL, $permanently ? Response::HTTP_MOVED_PERMANENTLY : Response::HTTP_FOUND);
-    }
 
     /**
      * {@inheritdoc}
@@ -119,16 +104,6 @@ abstract class ChameleonBaseRouter extends Router
         $this->urlUtil->addAuthenticityTokenToUrlStringIfRequired($url, $parameters, '&');
 
         return $url;
-    }
-
-    /**
-     * @param \ICmsCoreRedirect $redirect
-     *
-     * @return void
-     */
-    public function setRedirect(\ICmsCoreRedirect $redirect)
-    {
-        $this->redirect = $redirect;
     }
 
     /**

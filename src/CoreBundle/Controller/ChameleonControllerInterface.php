@@ -46,7 +46,6 @@ interface ChameleonControllerInterface
     /**
      * Setter for a cache service to be used by the controller.
      *
-     * @param CacheInterface $cache
      * @return void
      */
     public function setCache(CacheInterface $cache);
@@ -55,6 +54,7 @@ interface ChameleonControllerInterface
      * Adds a text line that is to be added to the header of the output page automatically.
      *
      * @param string $line
+     *
      * @return void
      */
     public function AddHTMLHeaderLine($line);
@@ -63,20 +63,10 @@ interface ChameleonControllerInterface
      * Adds a text line that is to be added to the footer of the output page automatically.
      *
      * @param string $line
+     *
      * @return void
      */
     public function AddHTMLFooterLine($line);
 
-    /**
-     * Flushes all buffered content to the browser. If true is passed for $enableAutoFlush, content will
-     * automatically be flushed for each module from this call on. Note that implementations may decide not to flush or
-     * disable content buffering altogether, so don't rely too heavily on the assumption that flushing is only
-     * controlled by this method.
-     *
-     * @param bool $enableAutoFlush
-     * @return void
-     *
-     * @deprecated since 7.2.0 - early flushing should not be used
-     */
-    public function FlushContentToBrowser($enableAutoFlush = false);
+    public function getModuleLoader(): \TModuleLoader;
 }
