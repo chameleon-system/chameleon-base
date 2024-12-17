@@ -241,8 +241,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
         $fileManager->put(
             $targetFile,
             $targetFile,
-            null,
-            true // we have a local copy - so we only want to push the change to remote server
+            null
         );
     }
 

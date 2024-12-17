@@ -15,11 +15,10 @@ interface IPkgCmsFileManager
      * @param string   $sSource
      * @param string   $sTarget
      * @param int|null $chmod
-     * @param bool     $remoteOnly @deprecated since 6.2.0 - cluster file handling is no longer available.
      *
      * @return bool|null
      */
-    public function put($sSource, $sTarget, $chmod = null, $remoteOnly = false);
+    public function put($sSource, $sTarget, $chmod = null);
 
     /**
      * @param string $source

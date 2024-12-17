@@ -279,7 +279,7 @@ class TCMSTableToClass
             if (fwrite($fp, $sClassString)) {
                 fclose($fp);
 
-                $this->filemanager->put($sFile, $sFile, 0777, true);
+                $this->filemanager->put($sFile, $sFile, 0777);
             }
         }
     }

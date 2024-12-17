@@ -14,7 +14,7 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
     /**
      * {@inheritdoc}
      */
-    public function put($sSource, $sTarget, $chmod = null, $remoteOnly = false)
+    public function put($sSource, $sTarget, $chmod = null)
     {
         // only do something when we are local
         if (!$remoteOnly) {
