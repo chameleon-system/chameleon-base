@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            {% block title %}
+                <title>{{ constant('CMS_BACKEND_TITLE') }}</title>
+            {% endblock %}
+            {% block head_meta_data %}
+                {{ include('BackendLayout/parts/head-meta-data.html.twig') }}
+            {% endblock %}
+
+            {% block head_constants %}
+                {{ include('BackendLayout/parts/head-js-constants.html.twig') }}
+            {% endblock %}
+
+            <!--#CMSHEADERCODE#-->
+            {% block head_includes %}
+                {{ include('BackendLayout/parts/head-includes.html.twig') }}
+            {% endblock %}
+        {% endblock %}
+    </head>
+    <body{% if bodyClass is defined %} class="{{ bodyClass }}"{% endif %}{% if bodyAttributes is defined %} {{ bodyAttributes }}{% endif %}>
+        {% block body %}
+            {% block sidebar %}
+            {% endblock %}
+
+            {% if bg is not defined %}
+                {% set bg = 'bg-light' %}
+            {% endif %}
+            <div class="wrapper d-flex flex-column min-vh-100 {{ bg }}">
+                {% block header %}
+                    <header class="header bg-dark">
+                        {% block header_image %}
+                            <span class="header-brand"><img class="img-fluid" src="{{ cmsGetPathTheme() }}/images/chameleon_logo.svg" alt="" /></span>
+                        {% endblock %}
+                    </header>
+                {% endblock %}
+                {% block main %}
+                    <main class="flex-grow-1 d-flex align-items-center justify-content-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-11 col-sm-9 col-md-8 col-lg-6 col-xl-4">
+                                    {% block main_content %}
+                                        {% if (pageTitle is defined and '' != pageTitle) or user.isLoggedIn %}
+                                            <div class="card">
+                                                {% if pageTitle is defined and '' != pageTitle %}
+                                                    <div class="card-header">
+                                                        <h4>{{ pageTitle }}</h4>
+                                                    </div>
+                                                {% endif %}
+                                                {% if user.isLoggedIn %}
+                                                    <div class="card-body">
+                                                        Hello {{ user.name }}!
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                {% endblock %}
+                {% block backend_footer %}
+                    {{ include('BackendFooter/standard.html.twig') }}
+                {% endblock %}
+                {% block modal_dialog %}
+                    {{ include('BackendLayout/parts/modal-dialog.html.twig') }}
+                {% endblock %}
+                {% block footer_includes %}
+                    {{ include('BackendLayout/parts/footer-default-includes.html.twig') }}
+                {% endblock %}
+            </div>
+        {% endblock %}
+    </body>
+</html>

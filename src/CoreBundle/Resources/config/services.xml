@@ -922,6 +922,7 @@
             <argument id="chameleon_system_core.global" type="service"/>
             <argument type="service" id="chameleon_system_core.util.field_translation"/>
             <argument type="service" id="chameleon_system_cms_backend.backend_session"/>
+            <argument type="service" id="database_connection"/>
         </service>
 
         <service id="chameleon_system_core.module.navigation_tree_single_select_wysiwyg" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg\NavigationTreeSingleSelectWysiwyg" parent="chameleon_system_core.module.navigation_tree_single_select" shared="false">

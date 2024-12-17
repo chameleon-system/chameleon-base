@@ -4,13 +4,16 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig;
 
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use TModuleLoader;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class BackendTwigExtension extends AbstractExtension
 {
-    public function __construct(private readonly SecurityHelperAccess $securityHelper)
-    {
+    public function __construct(
+        private readonly SecurityHelperAccess $securityHelper,
+        private readonly TModuleLoader $moduleLoader
+    ){
     }
 
     public function getFunctions()
@@ -19,6 +22,10 @@ class BackendTwigExtension extends AbstractExtension
             new TwigFunction('cms_version', [$this, 'getCmsVersion']),
             new TwigFunction('server_address', [$this, 'getServerAddress']),
             new TwigFunction('cms_user_logged_in', [$this, 'isCmsBackendUserLoggedIn']),
+            new TwigFunction('module', [$this, 'module'], ['is_safe' => ['html']]),
+            new TwigFunction('static_url', ['TGlobal', 'GetStaticURL']),
+            new TwigFunction('static_url_to_weblib', ['TGlobal', 'GetStaticURLToWebLib']),
+            new TwigFunction('path_theme', ['TGlobal', 'GetPathTheme']),
         ];
     }
 
@@ -48,5 +55,10 @@ class BackendTwigExtension extends AbstractExtension
     public function isCmsBackendUserLoggedIn(): bool
     {
         return $this->securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
+    }
+
+    public function module(string $name, bool $returnString = true, ?string $customWrapping = null, bool $allowAutoWrap = false): ?string
+    {
+        return $this->moduleLoader->GetModule($name, $returnString, $customWrapping, $allowAutoWrap);
     }
 }

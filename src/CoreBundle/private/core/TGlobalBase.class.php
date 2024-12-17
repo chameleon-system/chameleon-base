@@ -820,23 +820,30 @@ class TGlobalBase
      *
      * @return string - empty string if current language is base language
      */
-    public static function GetLanguagePrefix($sLanguageId = null)
+    public static function GetLanguagePrefix(?string $sLanguageId = null): string
     {
-        static $sBaseLanguageId = null;
-        if (null === $sBaseLanguageId) {
-            $oCmsConfig = TdbCmsConfig::GetInstance();
-            $sBaseLanguageId = $oCmsConfig->fieldTranslationBaseLanguageId;
+        static $baseLanguageId = null;
+        if (null === $baseLanguageId) {
+            $baseLanguageId = 22;
+
+            $cmsConfig = TdbCmsConfig::GetInstance();
+
+            if (null !== $cmsConfig) {
+                $baseLanguageId = $cmsConfig->fieldTranslationBaseLanguageId;
+            }
         }
         $languageService = self::getLanguageService();
         if (null === $sLanguageId) {
             $sLanguageId = $languageService->getActiveLanguageId();
         }
 
-        if ($sLanguageId === $sBaseLanguageId) {
+        if ($sLanguageId === $baseLanguageId) {
             return '';
         }
 
-        return $languageService->getLanguageIsoCode($sLanguageId);
+        $languageIsoCode = $languageService->getLanguageIsoCode($sLanguageId);
+
+        return $languageIsoCode ?? '';
     }
 
     /**

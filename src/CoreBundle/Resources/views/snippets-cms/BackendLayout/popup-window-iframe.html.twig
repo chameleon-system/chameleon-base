@@ -1,0 +1,22 @@
+{% set bg = 'bg-white' %}
+{% extends 'BackendLayout/base.html.twig' %}
+
+{% block header %}
+{% endblock %}
+
+{% block main %}
+    <main>
+        <div class="mb-1 mr-1">
+            {{ module('contentmodule') }}
+        </div>
+    </main>
+{% endblock %}
+
+{% block backend_footer %}
+{% endblock %}
+{% block modal_dialog %}
+    {{ parent() }}
+{% endblock %}
+{% block footer_includes %}
+    {{ parent() }}
+{% endblock %}
