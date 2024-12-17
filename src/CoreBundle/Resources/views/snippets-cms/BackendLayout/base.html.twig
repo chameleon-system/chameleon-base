@@ -48,7 +48,7 @@
                                                         <h4>{{ pageTitle }}</h4>
                                                     </div>
                                                 {% endif %}
-                                                {% if user.isLoggedIn %}
+                                                {% if cms_user_logged_in() %}
                                                     <div class="card-body">
                                                         Hello {{ user.name }}!
                                                     </div>
@@ -65,7 +65,9 @@
                     {{ include('BackendFooter/standard.html.twig') }}
                 {% endblock %}
                 {% block modal_dialog %}
-                    {{ include('BackendLayout/parts/modal-dialog.html.twig') }}
+                    {% if cms_user_logged_in() %}
+                        {{ include('BackendLayout/parts/modal-dialog.html.twig') }}
+                    {% endif %}
                 {% endblock %}
                 {% block footer_includes %}
                     {{ include('BackendLayout/parts/footer-default-includes.html.twig') }}
