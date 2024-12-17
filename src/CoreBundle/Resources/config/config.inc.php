@@ -7,9 +7,8 @@ if (!defined('_FRAMEWORK_CONFIG_LOADED')) {
     define('_FRAMEWORK_CONFIG_LOADED', true);
 
     /**
-     * CMS backend title bar text
-     * feel free to overwrite this in your config
-     * CMS_VERSION_MAJOR and MINOR is added in MTHeader module to the backend title if logged in.
+     * CMS backend title bar text.
+     * Feel free to overwrite this in your config.
      */
     if (!defined('CMS_BACKEND_TITLE')) {
         define('CMS_BACKEND_TITLE', 'Chameleon CMS ');

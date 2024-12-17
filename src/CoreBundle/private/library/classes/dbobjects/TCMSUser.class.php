@@ -10,8 +10,6 @@
  */
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
-use ChameleonSystem\CoreBundle\Event\BackendLoginEvent;
-use ChameleonSystem\CoreBundle\Event\BackendLogoutEvent;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\Service\PreviewModeServiceInterface;
@@ -197,14 +195,6 @@ class TCMSUser extends TCMSRecord
         $query = 'DELETE FROM `cms_lock` WHERE TIMESTAMPDIFF(MINUTE,`time_stamp`,CURRENT_TIMESTAMP()) >= '.RECORD_LOCK_TIMEOUT.'';
         MySqlLegacySupport::getInstance()->query($query);
 
-        $eventDispatcher = self::getEventDispatcher();
-        $event = new BackendLoginEvent($this);
-        if ($this->bLoggedIn) {
-            $eventDispatcher->dispatch($event, 'chameleon_system_core.login_success');
-        } else {
-            $eventDispatcher->dispatch($event, 'chameleon_system_core.login_failure');
-        }
-
         return $this->bLoggedIn;
     }
 
@@ -267,8 +257,6 @@ class TCMSUser extends TCMSRecord
         }
 
         self::getPreviewModeService()->grantPreviewAccess(false, self::getCmsUserId());
-
-        self::getEventDispatcher()->dispatch(new BackendLogoutEvent($user), 'chameleon_system_core.logout_success');
     }
 
     /**
