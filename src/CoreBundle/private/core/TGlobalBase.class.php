@@ -26,7 +26,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  * side) should inherit from this. this class provides the basic functionality
  * such as class factory, get/post filtering, etc.
  *
-/**/
+ * /**/
 class TGlobalBase
 {
     /**
@@ -48,7 +48,7 @@ class TGlobalBase
      *
      * @var array
      */
-    protected $aRewriteParameter = array();
+    protected $aRewriteParameter = [];
 
     /**
      * used to cache any data that may be needed globally
@@ -56,23 +56,23 @@ class TGlobalBase
      *
      * @var array
      */
-    public $_dataCache = array();
+    public $_dataCache = [];
 
     /**
      * holds the current executing module object.
      *
      * @var TModelBase
      */
-    protected $oExecutingModuleObject = null;
+    protected $oExecutingModuleObject;
 
-    protected $aFileList = array();
+    protected $aFileList = [];
 
     /**
      * config class of the HTMLPurifier XSS filter.
      *
      * @var HTMLPurifier_Config
      */
-    public $oHTMLPurifyConfig = null;
+    public $oHTMLPurifyConfig;
 
     /** @var RequestStack */
     private $requestStack;
@@ -178,8 +178,8 @@ class TGlobalBase
     /**
      * returns the static path to the given file in the blackbox directory.
      *
-     * @param string $sFilePath    - the relative url of the file in relation to the blackbox directory
-     * @param bool   $bForceNonSSL - used to force urls to non SSL
+     * @param string $sFilePath - the relative url of the file in relation to the blackbox directory
+     * @param bool $bForceNonSSL - used to force urls to non SSL
      *
      * @return string
      */
@@ -196,7 +196,7 @@ class TGlobalBase
         static $aStaticURLPrefix = null;
         if (null === $aStaticURLPrefix) {
             if (strpos(URL_STATIC, ',')) {
-                $aStaticURLPrefix = array();
+                $aStaticURLPrefix = [];
                 $aStaticURLs = explode(',', URL_STATIC);
                 foreach ($aStaticURLs as $sKey => $sURL) {
                     $sURL = trim($sURL);
@@ -225,7 +225,7 @@ class TGlobalBase
 
         $aStaticURLPrefix = TGlobal::GetStaticURLPrefix();
         if (!is_array($aStaticURLPrefix)) {
-            $aStaticURLPrefix = array($aStaticURLPrefix);
+            $aStaticURLPrefix = [$aStaticURLPrefix];
         }
         $sPrefix = substr($sURL, 0, strpos($sURL, '}]', 2) + 2);
         $sURL = substr($sURL, strlen($sPrefix));
@@ -245,8 +245,8 @@ class TGlobalBase
      * URLs for different content types (images from CDN, JS library from code.google.com, CSS from local)
      * you can check the path or file type to solve this.
      *
-     * @param string $sFilePath    - the relative url to get a static server
-     * @param bool   $bForceNonSSL - used to force urls to non SSL
+     * @param string $sFilePath - the relative url to get a static server
+     * @param bool $bForceNonSSL - used to force urls to non SSL
      *
      * @return string
      */
@@ -330,11 +330,13 @@ class TGlobalBase
     public function GetLanguageIdList()
     {
         $oCMSConfig = TdbCmsConfig::GetInstance();
+
         return [$oCMSConfig->fieldTranslationBaseLanguageId];
     }
 
     /**
      * checks if active CMS user session is available.
+     *
      * @deprecated use SecurityHelperAccess::class
      *
      * @return bool
@@ -343,6 +345,7 @@ class TGlobalBase
     {
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         return $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
     }
 
@@ -350,7 +353,7 @@ class TGlobalBase
      * escapes a string (htmlentities/ENT_QUOTES, "=", "\").
      *
      * @param string $nonEscapedString
-     * @param bool   $bDoubleEncode
+     * @param bool $bDoubleEncode
      *
      * @return string
      */
@@ -362,10 +365,10 @@ class TGlobalBase
         $sEscapedHTML = htmlentities($nonEscapedString, ENT_QUOTES, 'UTF-8', $bDoubleEncode);
 
         if ('' === $sEscapedHTML && '' !== $nonEscapedString) {
-            //there is an error converting an "non-utf8" string!
+            // there is an error converting an "non-utf8" string!
             $trace = debug_backtrace();
             trigger_error('OutHTML() failed to convert the text: '.$nonEscapedString.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_NOTICE);
-            //$sEscapedHTML = self::TryConvertTextToUtf8($nonEscapedString);
+            // $sEscapedHTML = self::TryConvertTextToUtf8($nonEscapedString);
         }
 
         $sEscapedHTML = str_replace('=', '&#61;', $sEscapedHTML);
@@ -427,14 +430,14 @@ class TGlobalBase
      * returns the value of variable $name or if missing the whole array filtered by $excludeArray.
      *
      * @param string $name
-     * @param array  $excludeArray
+     * @param array $excludeArray
      * @param string $sFilterClass - form: classname;path;type|classname;path;type
      *
      * @return mixed - string or array
      *
      * @deprecated - use InputFilterUtilInterface::getFiltered*Input() instead
      */
-    public function GetUserData($name = null, $excludeArray = array(), $sFilterClass = TCMSUSERINPUT_DEFAULTFILTER)
+    public function GetUserData($name = null, $excludeArray = [], $sFilterClass = TCMSUSERINPUT_DEFAULTFILTER)
     {
         $outputData = '';
         $request = $this->getRequest();
@@ -442,7 +445,7 @@ class TGlobalBase
             if (null !== $name) { // get value for key
                 $outputData = $this->inputFilterUtil->getFilteredInput($name, '', false, $sFilterClass);
             } else {
-                $outputData = array();
+                $outputData = [];
 
                 $aSource = $request->query->keys();
                 foreach ($aSource as $key) {
@@ -467,13 +470,13 @@ class TGlobalBase
      * returns the raw (unfiltered) value of variable $name or if missing the whole array filtered by $excludeArray.
      *
      * @param string $name
-     * @param array  $excludeArray
+     * @param array $excludeArray
      *
      * @return mixed - string or array
      *
      * @deprecated - use \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest() instead
      */
-    public function GetRawUserData($name = null, $excludeArray = array())
+    public function GetRawUserData($name = null, $excludeArray = [])
     {
         return $this->GetUserData($name, $excludeArray, TCMSUserInput::FILTER_NONE);
     }
@@ -482,7 +485,6 @@ class TGlobalBase
      * Save variable to userData.
      *
      * @param string $sArrayKeyName
-     * @param mixed  $Value
      *
      * @deprecated - use \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest() instead
      */
@@ -701,7 +703,6 @@ class TGlobalBase
     /**
      * returns the path to page layout definition files based on "_pagedefType" URL parameter.
      *
-     *
      * @param string $sType - Core, Custom-Core, Customer
      *
      * @return string
@@ -809,7 +810,7 @@ class TGlobalBase
         $databaseConnection = self::getDatabaseConnection();
         $quotedDatabaseName = $databaseConnection->quoteIdentifier($databaseConnection->getDatabase());
         $query = "SHOW TABLES FROM $quotedDatabaseName LIKE :tableName";
-        $tRes = $databaseConnection->executeQuery($query, array('tableName' => $sTableName));
+        $tRes = $databaseConnection->executeQuery($query, ['tableName' => $sTableName]);
 
         return $tRes->rowCount() > 0;
     }
@@ -941,12 +942,12 @@ class TGlobalBase
     /**
      * fallback for renamed/deprecated methods.
      *
-     * @param string $name      - name of the method case sensitive
-     * @param array  $arguments
+     * @param string $name - name of the method case sensitive
+     * @param array $arguments
      */
     public function __call($name, $arguments)
     {
-        $aBackwardsCompatMethods = array();
+        $aBackwardsCompatMethods = [];
         $aBackwardsCompatMethods['GetuserData'] = 'GetUserData';
         $aBackwardsCompatMethods['userDataExists'] = 'UserDataExists';
 
@@ -1025,7 +1026,7 @@ class TGlobalBase
     public function __sleep()
     {
         // avoid $requestStack being serialized
-        return array();
+        return [];
     }
 
     /**
