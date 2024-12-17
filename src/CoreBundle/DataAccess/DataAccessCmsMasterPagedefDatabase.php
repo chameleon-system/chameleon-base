@@ -4,42 +4,33 @@ namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use TCMSPagedef;
 use TdbCmsMasterPagedef;
-use TGlobal;
 
 class DataAccessCmsMasterPagedefDatabase implements DataAccessCmsMasterPagedefInterface
 {
-    /**
-     * @var DataAccessCmsMasterPagedefInterface
-     */
-    private $fallbackLoader;
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-
-    public function __construct(DataAccessCmsMasterPagedefInterface $fallbackLoader, InputFilterUtilInterface $inputFilterUtil)
+    public function __construct(
+        private readonly DataAccessCmsMasterPagedefInterface $fallbackLoader,
+        private readonly InputFilterUtilInterface $inputFilterUtil,
+        private readonly SecurityHelperAccess $securityHelperAccess)
     {
-        $this->fallbackLoader = $fallbackLoader;
-        $this->inputFilterUtil = $inputFilterUtil;
     }
 
     public function get(string $id): ?CmsMasterPagdef
     {
         //check if the pagedef exists in the database... if it does, use it. if not, use the file
-        $oPageDefinitionFile = null;
-
         $requestMasterPageDef = 'true' === $this->inputFilterUtil->getFilteredInput('__masterPageDef');
 
-        if (true === $requestMasterPageDef && true ===  TGlobal::CMSUserDefined()) {
+        if (true === $requestMasterPageDef && true === $this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             // load master pagedef...
             $oPageDefinitionFile = TdbCmsMasterPagedef::GetNewInstance();
             $oPageDefinitionFile->Load($this->inputFilterUtil->getFilteredInput('id'));
         } else {
             $oPageDefinitionFile = new TCMSPagedef($id);
 
-            if (null === $oPageDefinitionFile->iMasterPageDefId || empty($oPageDefinitionFile->iMasterPageDefId)) {
+            if (empty($oPageDefinitionFile->iMasterPageDefId)) {
                 $oPageDefinitionFile->sqlData = false;
             }
         }

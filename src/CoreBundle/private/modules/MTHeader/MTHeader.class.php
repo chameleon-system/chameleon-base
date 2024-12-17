@@ -56,8 +56,7 @@ class MTHeader extends TCMSModelBase
     {
         parent::Execute();
 
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         $this->data['table_id_cms_tpl_page'] = TTools::GetCMSTableId('cms_tpl_page');
         if (stristr($this->viewTemplate, 'title.view.php')) {
@@ -247,8 +246,7 @@ class MTHeader extends TCMSModelBase
     protected function GetPortalList()
     {
         $oCmsPortalList = null;
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
         $user = $securityHelper->getUser();
         $portalList = $user?->getPortals();
 
@@ -294,8 +292,7 @@ class MTHeader extends TCMSModelBase
      */
     protected function CheckNavigationRights()
     {
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         $this->data['showCacheButton'] = $securityHelper->isGranted('CMS_RIGHT_FLUSH_CMS_CACHE');
     }
@@ -303,8 +300,7 @@ class MTHeader extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         if ($securityHelper->isGranted('CMS_RIGHT_FLUSH_CMS_CACHE')) {
             $this->methodCallAllowed[] = 'ClearCache';
@@ -551,8 +547,7 @@ class MTHeader extends TCMSModelBase
         $html = '';
         $editLanguages = [];
         $currentLanguage = '';
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             /** @var BackendSessionInterface $backendSession */
@@ -654,7 +649,9 @@ class MTHeader extends TCMSModelBase
     {
         $includes = parent::GetHtmlFooterIncludes();
 
-        if (false === TGlobal::CMSUserDefined()) {
+        $securityHelperAccess = $this->getSecurityHelperAccess();
+
+        if (false === $securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return $includes;
         }
 
@@ -768,5 +765,10 @@ class MTHeader extends TCMSModelBase
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
+    }
+
+    private function getSecurityHelperAccess(): SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
     }
 }

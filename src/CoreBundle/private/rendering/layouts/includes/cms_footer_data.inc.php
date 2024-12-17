@@ -1,5 +1,7 @@
 <?php
-if (TGlobal::CMSUserDefined()) {
+$securityHelperAccess = \ChameleonSystem\CoreBundle\ServiceLocator::get(\ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess::class);
+
+if ($securityHelperAccess->isGranted(\ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants::CMS_USER)) {
     ?>
     <script type="text/javascript">
         $(document).ready(function () {

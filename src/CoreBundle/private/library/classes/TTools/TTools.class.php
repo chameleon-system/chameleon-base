@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\Corebundle\Util\UrlUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 /**
  * static toolset.
@@ -367,7 +369,9 @@ class TTools
         $oGlobal = TGlobal::instance();
         $requestModuleChooser = ($oGlobal->UserDataExists('__modulechooser') && ('true' == $oGlobal->GetUserData('__modulechooser')));
 
-        return $requestModuleChooser && TGlobal::CMSUserDefined();
+        $securityHelperAccess = self::getSecurityHelperAccess();
+
+        return $requestModuleChooser && $securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER);
     }
 
     /**
@@ -1123,8 +1127,7 @@ class TTools
      */
     public static function IsRecordLocked($sTableID, $sRecordID)
     {
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = self::getSecurityHelperAccess();
         $userId = $securityHelper->getUser()?->getId();
         if (null === $userId) {
             $userId = '';
@@ -1814,5 +1817,10 @@ class TTools
     private static function getLogger(): LoggerInterface
     {
         return ServiceLocator::get('logger');
+    }
+
+    private static function getSecurityHelperAccess(): SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
     }
 }

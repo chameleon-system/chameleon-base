@@ -99,7 +99,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSUser::Logout` removed
 - `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
 - `\TCMSTableEditorCMSUser::SwitchToUser` removed - switch user by using Symfony impersonate.
-- `\TCMSUser::CMSUserDefined` removed - is `isGranted(\ChameleonSystem\SecurityBundle\CmsUser\UserRoles::CMS_USER)`
+- `\TCMSUser::CMSUserDefined` removed - use  `ServiceLocator::get(SecurityHelperAccess::class)->isGranted(\ChameleonSystem\SecurityBundle\CmsUser\UserRoles::CMS_USER)` instead
 - `\TCMSUser::ValidSessionKey` removed
 - `\TCMSUser::GetUserSessionKey` removed
 - `\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface::getActiveEditLanguage` removed. Use `\ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface::getCurrentEditLanguageIso6391` 

@@ -12,6 +12,8 @@
 namespace ChameleonSystem\CoreBundle\Controller;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -20,14 +22,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ChameleonFrontendController extends ChameleonController
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-    /**
-     * @var \TPkgViewRendererConfigToLessMapper
-     */
-    private $configToLessMapper;
+    private ContainerInterface $container;
+    private \TPkgViewRendererConfigToLessMapper $configToLessMapper;
+    private SecurityHelperAccess $securityHelperAccess;
 
     /**
      * @param \IViewPathManager $viewPathManager
@@ -37,11 +34,13 @@ class ChameleonFrontendController extends ChameleonController
         EventDispatcherInterface $eventDispatcher,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         \TModuleLoader $moduleLoader,
+        SecurityHelperAccess $securityHelperAccess,
         $viewPathManager,
         ContainerInterface $container,
         \TPkgViewRendererConfigToLessMapper $configToLessMapper
     ) {
-        parent::__construct($requestStack, $eventDispatcher, $dataAccessCmsMasterPagedef, $moduleLoader, $viewPathManager);
+        parent::__construct($requestStack, $eventDispatcher, $dataAccessCmsMasterPagedef, $moduleLoader, $securityHelperAccess, $viewPathManager);
+        $this->securityHelperAccess = $securityHelperAccess;
         $this->container = $container; // for ViewRenderer instantiation
         $this->configToLessMapper = $configToLessMapper;
     }
@@ -78,14 +77,14 @@ class ChameleonFrontendController extends ChameleonController
         $inputFilterUtil = $this->getInputFilterUtil();
         $requestMasterPageDef = $inputFilterUtil->getFilteredInput('__masterPageDef', false);
 
-        if ($requestMasterPageDef && \TGlobal::CMSUserDefined()) {
+        if ($this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             // load master pagedef...
             $oPageDefinitionFile = \TdbCmsMasterPagedef::GetNewInstance();
             $oPageDefinitionFile->Load($inputFilterUtil->getFilteredInput('id'));
         } else {
             $oPageDefinitionFile = new \TCMSPagedef($pagedef);
 
-            if (null === $oPageDefinitionFile->iMasterPageDefId || empty($oPageDefinitionFile->iMasterPageDefId)) {
+            if (empty($oPageDefinitionFile->iMasterPageDefId)) {
                 $oPageDefinitionFile->sqlData = false;
             }
         }
@@ -116,9 +115,9 @@ class ChameleonFrontendController extends ChameleonController
 
         if ($bAsArray) {
             return $aNewLines;
-        } else {
-            return implode("\n", $aNewLines);
         }
+
+        return implode("\n", $aNewLines);
     }
 
     /**
@@ -141,6 +140,11 @@ class ChameleonFrontendController extends ChameleonController
         parent::handleRequest($pagedef);
 
         $request = $this->getRequest();
+
+        if (null === $request) {
+            return;
+        }
+
         $aNonSeoParameter = $request->query->keys();
 
         $referrerPageId = $this->getInputFilterUtil()->getFilteredInput('refererPageId', null, false, \TCMSUserInput::FILTER_FILENAME);

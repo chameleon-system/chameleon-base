@@ -16,15 +16,12 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function put($sSource, $sTarget, $chmod = null)
     {
-        // only do something when we are local
-        if (!$remoteOnly) {
-            $ret = rename($sSource, $sTarget);
-            if (null !== $chmod) {
-                $this->chmod($sTarget, $chmod);
-            }
-
-            return $ret;
+        $ret = rename($sSource, $sTarget);
+        if (null !== $chmod) {
+            $this->chmod($sTarget, $chmod);
         }
+
+        return $ret;
     }
 
     /**

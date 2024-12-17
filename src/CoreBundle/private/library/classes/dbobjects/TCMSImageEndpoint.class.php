@@ -12,6 +12,10 @@
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsMedia;
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 /**
  * handles images and thumbnails of table cms_media including external videos.
@@ -20,17 +24,10 @@ class TCMSImageEndpoint
 {
     /**
      * holds the sql record.
-     *
-     * @var array
      */
-    public $aData = array();
+    public array $aData = array();
 
-    /**
-     * id of the image.
-     *
-     * @var string
-     */
-    public $id = null;
+    public ?string $id = null;
 
     /**
      * caches the image type (gif, jpg, png...).
@@ -288,7 +285,7 @@ class TCMSImageEndpoint
 
         if ($this->IsExternalMovie()) {
             $sImageURL = $this->aData['external_video_thumbnail'];
-            $oRequest = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+            $oRequest = ServiceLocator::get('request_stack')->getCurrentRequest();
             if ($oRequest->isSecure()) {
                 $sImageURL = str_replace('http://', 'https://', $sImageURL);
             }
@@ -1637,7 +1634,8 @@ class TCMSImageEndpoint
                 $thumbTag = '<img class="'.TGlobal::OutHTML($sCSSClass).'" src="'.$oThumb->GetFullURL()."\" width=\"{$oThumb->aData['width']}\" height=\"{$oThumb->aData['height']}\" alt=\"".TGlobal::OutHTML($caption).'" title="'.TGlobal::OutHTML($caption).'" />';
                 $showZoom = ($this->aData['width'] > $oThumb->aData['width'] || $this->aData['height'] > $oThumb->aData['height']);
                 if ($this->useLightBox && $showZoom) {
-                    if (TGlobal::CMSUserDefined() && $oGlobal->IsCMSMode()) {
+                    $securityHelperAccess = $this->getSecurityHelperAccess();
+                    if ($securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER) && $oGlobal->IsCMSMode()) {
                         $returnString = '<div class="cmsimage"><img class=\"'.TGlobal::OutHTML($sCSSClass).'\" width="'.$oThumb->aData['width'].'" height="'.$oThumb->aData['height'].'" onclick="CreateMediaZoomDialogFromImageURL(\''.$oZoomThumb->GetFullURL().'\',\''.$oZoomThumb->aData['width'].'\',\''.$oZoomThumb->aData['height'].'\');event.cancelBubble=true;return false;" style="padding: 3px;" id="cmsimage_'.$this->id.'" src="'.$oThumb->GetFullURL().'" />';
                         if ($this->IsExternalMovie() && empty($sEmbedCode)) {
                             $returnString .= '<div class="videoprocessing">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.text.wait_for_processing')).'</div>';
@@ -1858,7 +1856,7 @@ class TCMSImageEndpoint
      */
     protected function getFileType($id)
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_file_types')->getFileType($id);
+        return ServiceLocator::get('chameleon_system_core.database_access_layer_file_types')->getFileType($id);
     }
 
     /**
@@ -1899,7 +1897,7 @@ class TCMSImageEndpoint
     {
         static $mediaDataAccessService;
         if (null === $mediaDataAccessService) {
-            $mediaDataAccessService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_media');
+            $mediaDataAccessService = ServiceLocator::get('chameleon_system_core.database_access_layer_media');
         }
 
         return $mediaDataAccessService;
@@ -2224,35 +2222,28 @@ class TCMSImageEndpoint
     {
     }
 
-    /**
-     * @return UrlNormalizationUtil
-     */
-    private function getUrlNormalizationUtil()
+    private function getUrlNormalizationUtil(): UrlNormalizationUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 
-    /**
-     * @return \ChameleonSystem\CoreBundle\Util\FieldTranslationUtil
-     */
-    private function getFieldTranslationUtil()
+    private function getFieldTranslationUtil(): FieldTranslationUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private function getPortalDomainService()
+    private function getPortalDomainService(): PortalDomainServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private static function getFileManager()
+    private static function getFileManager(): IPkgCmsFileManager
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.filemanager');
+        return ServiceLocator::get('chameleon_system_core.filemanager');
+    }
+
+    private function getSecurityHelperAccess():SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
     }
 }
