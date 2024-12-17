@@ -14,44 +14,38 @@ namespace ChameleonSystem\ViewRendererBundle\objects;
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceHelperFactoryInterface;
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceInterface;
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceResponseInterface;
-use Exception;
-use IMapperCacheTrigger;
-use IViewMapper;
-use MapperException;
-use MapperVisitor;
-use MapperVisitorRestrictedProxy;
 
 class DataMappingService implements DataMappingServiceInterface
 {
     /**
-     * @var IViewMapper[]
+     * @var \IViewMapper[]
      */
-    private $mappers = array();
+    private $mappers = [];
 
     /**
      * @var list<array<string, string>|null>
      */
-    private $transformations = array();
+    private $transformations = [];
 
     /**
      * @var list<string|null>
      */
-    private $mapToArray = array();
+    private $mapToArray = [];
 
     /**
      * @var array<string, mixed>
      */
-    private $sourceObjects = array();
+    private $sourceObjects = [];
 
     /**
-     * @var MapperVisitor
+     * @var \MapperVisitor
      */
-    private $mapperVisitor = null;
+    private $mapperVisitor;
 
     /**
-     * @var IMapperCacheTrigger
+     * @var \IMapperCacheTrigger
      */
-    private $cacheTriggerCollector = null;
+    private $cacheTriggerCollector;
 
     /**
      * @var DataMappingServiceInterface[]
@@ -72,7 +66,7 @@ class DataMappingService implements DataMappingServiceInterface
      */
     public function reset()
     {
-        $this->sourceObjects = array();
+        $this->sourceObjects = [];
         $this->cacheTriggerCollector = null;
     }
 
@@ -100,7 +94,7 @@ class DataMappingService implements DataMappingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function addMapper(IViewMapper $oMapper, $transformations = null, $mapToArray = null)
+    public function addMapper(\IViewMapper $oMapper, $transformations = null, $mapToArray = null)
     {
         $this->mappers[] = $oMapper;
         $this->transformations[] = $transformations;
@@ -156,7 +150,8 @@ class DataMappingService implements DataMappingServiceInterface
 
     /**
      * @return void
-     * @throws MapperException
+     *
+     * @throws \MapperException
      */
     private function executeMapperChain()
     {
@@ -170,17 +165,16 @@ class DataMappingService implements DataMappingServiceInterface
     }
 
     /**
-     * @param IViewMapper $mapper
-     * @param array<string, string>|null  $aMapperTransformations
-     * @param string|null  $aMapperMapToArrayTransformations
+     * @param array<string, string>|null $aMapperTransformations
+     * @param string|null $aMapperMapToArrayTransformations
      *
      * @return void
      *
-     * @throws MapperException
+     * @throws \MapperException
      */
     private function executeMapper(
-        IViewMapper $mapper,
-        array $aMapperTransformations = null,
+        \IViewMapper $mapper,
+        ?array $aMapperTransformations = null,
         $aMapperMapToArrayTransformations = null
     ) {
         $this->applyMapperRequirementsToVisitor($mapper);
@@ -188,22 +182,20 @@ class DataMappingService implements DataMappingServiceInterface
         $this->mapperVisitor->setMapToArray($aMapperMapToArrayTransformations);
 
         try {
-            $mapper->Accept(new MapperVisitorRestrictedProxy($this->mapperVisitor), true, new \MapperCacheTriggerRestrictedProxy($this->cacheTriggerCollector));
-        } catch (MapperException $e) {
+            $mapper->Accept(new \MapperVisitorRestrictedProxy($this->mapperVisitor), true, new \MapperCacheTriggerRestrictedProxy($this->cacheTriggerCollector));
+        } catch (\MapperException $e) {
             $message = 'Mapper: '.get_class($mapper).' Error: '.$e->getMessage();
-            throw new MapperException($message, $e->getCode(), $e);
-        } catch (Exception $e) {
-            $message = 'Mapper: '.get_class($mapper).' Unexpected error: '.$e->getMessage();
-            throw new MapperException($message, $e->getCode(), $e);
+            throw new \MapperException($message, $e->getCode(), $e);
+        } catch (\Exception $e) {
+            $message = 'Mapper: '.get_class($mapper).' Unexpected error: '.$e->getMessage().' in file:'.$e->getFile().' on line:'.$e->getLine();
+            throw new \MapperException($message, $e->getCode(), $e);
         }
     }
 
     /**
-     * @param IViewMapper $mapper
-     *
      * @return void
      */
-    private function applyMapperRequirementsToVisitor(IViewMapper $mapper)
+    private function applyMapperRequirementsToVisitor(\IViewMapper $mapper)
     {
         $oRequirements = $this->helperFactory->createRequirementsVisitor();
         $mapper->GetRequirements(new \MapperRequirementsRestrictedProxy($oRequirements));
@@ -249,11 +241,11 @@ class DataMappingService implements DataMappingServiceInterface
     }
 
     /**
-     * @return class-string<IViewMapper>[]
+     * @return class-string<\IViewMapper>[]
      */
     public function getMapperNameList()
     {
-        $mapperList = array();
+        $mapperList = [];
         reset($this->mappers);
         foreach ($this->mappers as $mapper) {
             $mapperList[] = get_class($mapper);

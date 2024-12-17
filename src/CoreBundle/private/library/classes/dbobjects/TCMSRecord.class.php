@@ -25,6 +25,7 @@ use Doctrine\DBAL\Driver\Statement;
  *
  * This method is implemented in every inheriting Tdb class.
  * See also: CoreBundle/private/rendering/objectviews/TCMSTableToClass/record.view.php
+ *
  * @method static static GetNewInstance()
  */
 class TCMSRecord implements IPkgCmsSessionPostWakeupListener
@@ -36,43 +37,41 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @var string
      */
-    public $table = null;
+    public $table;
 
     /**
      * assoc array holding the sql data row.
      *
      * @var array<string, mixed>
      */
-    public $sqlData = array();
+    public $sqlData = [];
 
     /**
      * id of table record (complex id string) - use fieldCmsIdent if you want an auto increment.
      *
      * @var string
      */
-    public $id = null;
+    public $id;
 
     /**
      * if the record has translations, then iLanguageId can
      * be used to specify the language to use (set via public function: SetLanguage(id).
-     *
-     * @var int
      */
-    protected $iLanguageId = null;
+    protected ?string $iLanguageId = null;
 
     /**
      * used internally to cache results.
      *
      * @var array
      */
-    protected $aResultCache = array();
+    protected $aResultCache = [];
 
     /**
      * holds the table config object.
      *
      * @var TCMSTableConf
      */
-    public $_oTableConf = null;
+    public $_oTableConf;
 
     /**
      * sets the state of field based translation overload fallback
@@ -80,7 +79,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @var bool|null
      */
-    private $bFieldBasedTranslationFallbackActive = null;
+    private $bFieldBasedTranslationFallbackActive;
 
     /**
      * can be set to false using $this->DisablePostLoadHook(true);.
@@ -94,10 +93,10 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @var bool
      */
-    protected $bEnableObjectCaching = null;
+    protected $bEnableObjectCaching;
 
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $databaseConnection;
 
@@ -176,14 +175,14 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * set the language of the record to fetch. Make sure to call this function
+     * Sett the language of the record to fetch. Make sure to call this function
      * before calling anything else!
      *
-     * @param string $iLanguageId - id from table: cms_language
+     * @param string|null $languageId - id from table: cms_language
      */
-    public function SetLanguage($iLanguageId)
+    public function SetLanguage(?string $languageId)
     {
-        $this->iLanguageId = $iLanguageId;
+        $this->iLanguageId = $languageId;
     }
 
     /**
@@ -212,13 +211,13 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             } else {
                 $this->id = $id;
 
-                $conditions = array();
+                $conditions = [];
 
                 $conditions[] = sprintf('`%s`.`id` = ?', $this->table);
                 $query = $this->GetQueryString($conditions);
 
                 $query .= ' LIMIT 1';
-                $this->sqlData = $this->ExecuteSQLQueries($query, array($id))->fetchAssociative();
+                $this->sqlData = $this->ExecuteSQLQueries($query, [$id])->fetchAssociative();
                 $foundRecord = (false !== $this->sqlData && is_array($this->sqlData) && count($this->sqlData) > 0);
                 if ($foundRecord) {
                     if ($this->bAllowPostLoadHookExecution) {
@@ -239,7 +238,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * this method will return a query string to restrict to the id value of this record.
      *
      * @param string $sTableName - name of the table on which the restriction acts
-     * @param string $iIdValue   - this MUST be the id value
+     * @param string $iIdValue - this MUST be the id value
      *
      * @return string
      */
@@ -277,7 +276,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     {
         $bRecordLoaded = false;
         if (!empty($sField) && !empty($sValue)) {
-            $aFields = array($sField => $sValue);
+            $aFields = [$sField => $sValue];
             $bRecordLoaded = $this->LoadFromFieldsWithCaching($aFields, false);
         }
 
@@ -294,24 +293,20 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     protected function GetCacheRelatedTables($id)
     {
-        $aCacheRelatedTables = array(array('table' => $this->table, 'id' => $id));
-
-        return $aCacheRelatedTables;
+        return [['table' => $this->table, 'id' => $id]];
     }
 
     /**
      * the elements that define a unique instance of the item (used by the LoadWithCaching method).
      *
-     * @param string $sFieldName  - field name used to load the record (eg: id)
+     * @param string $sFieldName - field name used to load the record (eg: id)
      * @param string $sFieldValue - the field value
      *
      * @return array
      */
     protected function GetCacheParameters($sFieldName, $sFieldValue)
     {
-        $aCacheKeys = array('sTableName' => $this->table, 'sFieldName' => $sFieldName, 'sFieldValue' => $sFieldValue, 'iLanguageId' => $this->iLanguageId, 'sObjectName' => get_class($this));
-
-        return $aCacheKeys;
+        return ['sTableName' => $this->table, 'sFieldName' => $sFieldName, 'sFieldValue' => $sFieldValue, 'iLanguageId' => $this->iLanguageId, 'sObjectName' => get_class($this)];
     }
 
     /**
@@ -335,13 +330,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         if (count($conditions) > 0) {
             $conditionString = sprintf(' WHERE (%s)', implode(') AND (', $conditions));
         }
-        $query = sprintf(
+
+        return sprintf(
             'SELECT * FROM %s %s',
             $cache[$this->table],
             $conditionString
         );
-
-        return $query;
     }
 
     /**
@@ -359,16 +353,16 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             return false;
         }
 
-        return $this->LoadFromFields(array(
+        return $this->LoadFromFields([
             $field => $value,
-        ));
+        ]);
     }
 
     /**
      * load data from more than one field.
      *
      * @param array $fieldData - assoc array in the form: fieldname=>value,...
-     * @param bool  $binary    - use binary compare
+     * @param bool $binary - use binary compare
      *
      * @return bool
      */
@@ -378,7 +372,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         if ($this->GetEnableObjectCaching()) {
             return $this->LoadFromFieldsWithCaching($fieldData, $binary);
         }
-        $conditions = array();
+        $conditions = [];
         $databaseConnection = $this->getDatabaseConnection();
         $languageService = self::getLanguageService();
         if (null !== $this->iLanguageId) {
@@ -420,7 +414,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * caches result.
      *
      * @param array $aFieldData - assoc array in the form: fieldname=>value,...
-     * @param bool  $bBinary    - use binary compare
+     * @param bool $bBinary - use binary compare
      *
      * @return bool
      */
@@ -435,7 +429,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $aKey['bFieldBasedTranslationFallbackActive'] = $this->isFieldBasedTranslationFallbackActive();
         $aKey['languageID'] = $this->iLanguageId;
         $sKey = TCacheManager::GetKey($aKey);
-        //check local cache first
+        // check local cache first
         $aData = null;
         if (false == TCacheManagerRuntimeCache::KeyExists($sKey)) {
             $bObjectCaching = $this->GetEnableObjectCaching();
@@ -532,10 +526,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $this->PostWakeUpHook();
     }
 
-    /**
-     * @param TdbCmsLanguage $language
-     */
-    private function reloadTranslatedFields(TdbCmsLanguage $language)
+    private function reloadTranslatedFields(TdbCmsLanguage $language): void
     {
         if (!is_array($this->sqlData)) {
             return;
@@ -562,7 +553,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function getTranslatableFields()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -573,17 +564,17 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * used when formating a number: [{variable:number:decimalplaces}]
      * example [{costs:number:2}].
      *
-     * @param string $fieldName           - field name
-     * @param int    $width               - max image width within the text
-     * @param bool   $includeClearDiv     - include a clear div at the end of the text block
-     * @param array  $aCustomVariables    - any custom variables you want to replace
-     * @param array  $aEffects            - See method TCMSImage::GetThumbnailPointer for available effects
-     * @param int    $iMaxImageZoomWidth  - max width of zoomed images
-     * @param int    $iMaxImageZoomHeight - max height of zoomed images
+     * @param string $fieldName - field name
+     * @param int $width - max image width within the text
+     * @param bool $includeClearDiv - include a clear div at the end of the text block
+     * @param array $aCustomVariables - any custom variables you want to replace
+     * @param array $aEffects - See method TCMSImage::GetThumbnailPointer for available effects
+     * @param int $iMaxImageZoomWidth - max width of zoomed images
+     * @param int $iMaxImageZoomHeight - max height of zoomed images
      *
      * @return string
      */
-    public function GetTextField($fieldName, $width = 1200, $includeClearDiv = true, $aCustomVariables = null, $aEffects = array(), $iMaxImageZoomWidth = -1, $iMaxImageZoomHeight = -1)
+    public function GetTextField($fieldName, $width = 1200, $includeClearDiv = true, $aCustomVariables = null, $aEffects = [], $iMaxImageZoomWidth = -1, $iMaxImageZoomHeight = -1)
     {
         $cacheName = '_textField'.$fieldName.$width.md5(serialize($aCustomVariables).serialize($aEffects));
         $sContent = $this->GetFromInternalCache($cacheName);
@@ -604,7 +595,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns wysiwyg field contents as plaintext without HTML and by given length.
      *
      * @param string $fieldName - textfield to return
-     * @param int    $length    - max length of the text
+     * @param int $length - max length of the text
      *
      * @return string - the cutted plain text
      */
@@ -636,12 +627,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * used when formating a number: [{variable:number:decimalplaces}]
      * example [{costs:number:2}]
      *
-     * @param string $fieldName        - field name
-     * @param int    $width            - max image width within the text
-     * @param bool   $includeClearDiv  - include a clear div at the end of the text block
-     * @param array  $aCustomVariables - any custom variables you want to replace
-     * @param bool   $bClearThickBox   - remove all a href with class thickbox
-     * @param bool   $bClearScriptTags - clear all script tags
+     * @param string $fieldName - field name
+     * @param int $width - max image width within the text
+     * @param bool $includeClearDiv - include a clear div at the end of the text block
+     * @param array $aCustomVariables - any custom variables you want to replace
+     * @param bool $bClearThickBox - remove all a href with class thickbox
+     * @param bool $bClearScriptTags - clear all script tags
      *
      * @return string
      */
@@ -651,7 +642,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $sContent = $this->GetFromInternalCache($cacheName);
         if (is_null($sContent)) {
             $oTextField = new TCMSTextField();
-            /** @var $oTextField TCMSTextField */
+            /* @var $oTextField TCMSTextField */
             $oTextField->content = $this->sqlData[$fieldName];
             $sContent = $oTextField->GetTextForExternalUsage($width, $includeClearDiv, $aCustomVariables, $bClearThickBox, $bClearScriptTags);
             $this->SetInternalCache($cacheName, $sContent);
@@ -664,19 +655,19 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns content of moduleinstance given by field sFieldName.
      *
      * @param string $sFieldName
-     * @param array  $aAdditionalModuleParameters - will be available in the called module in $this->aModuleConfig
-     * @param string $sModuleSpotName             - optional
+     * @param array $aAdditionalModuleParameters - will be available in the called module in $this->aModuleConfig
+     * @param string $sModuleSpotName - optional
      *
      * @return string - generated module HTML
      */
-    public function GetModuleInstanceField($sFieldName, $aAdditionalModuleParameters = array(), $sModuleSpotName = 'tmpmodule')
+    public function GetModuleInstanceField($sFieldName, $aAdditionalModuleParameters = [], $sModuleSpotName = 'tmpmodule')
     {
         $moduleInstanceId = $this->sqlData[$sFieldName];
         if ('' === $moduleInstanceId || '0' === $moduleInstanceId) {
             return '';
         }
         $oModuleInstance = new TCMSTPLModuleInstance();
-        /** @var $oModuleInstance TCMSTPLModuleInstance */
+        /* @var $oModuleInstance TCMSTPLModuleInstance */
         $oModuleInstance->Load($moduleInstanceId);
 
         return $oModuleInstance->Render($aAdditionalModuleParameters, $sModuleSpotName, $this->sqlData[$sFieldName.'_view']);
@@ -735,12 +726,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         return $recordName;
     }
 
-    /**
-     * @param string $nameColumn
-     *
-     * @return string|null
-     */
-    private function getNameFromQuery($nameColumn)
+    private function getNameFromQuery(string $nameColumn): ?string
     {
         $listQuery = $this->_oTableConf->sqlData['list_query'];
 
@@ -775,7 +761,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $this->GetTableConf();
             if (!is_null($this->_oTableConf->id)) {
                 $displayColumn = $this->_oTableConf->GetDisplayColumn();
-                if ((is_array($this->sqlData) && isset($this->sqlData[$displayColumn]))) {
+                if (is_array($this->sqlData) && isset($this->sqlData[$displayColumn])) {
                     $prefix = TGlobal::GetLanguagePrefix();
                     if ('' !== $prefix && isset($this->sqlData[$displayColumn.'__'.$prefix])) {
                         $displayColumn = $displayColumn.'__'.$prefix;
@@ -867,7 +853,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns iterator of images.
      *
      * @param string $fieldName
-     * @param bool   $includeDummyImages
+     * @param bool $includeDummyImages
      *
      * @return TIterator
      */
@@ -884,7 +870,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             foreach ($idlist as $id) {
                 if (!is_numeric($id) || $id >= 1000 || $includeDummyImages) {
                     $oImage = new TCMSImage();
-                    /** @var $oImage TCMSImage */
+                    /* @var $oImage TCMSImage */
                     $oImage->Load($id);
                     $oImages->AddItem($oImage);
                 }
@@ -899,9 +885,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * returns TCMSImage object for given image nr. (NOT id!) in multiple images, field.
      *
-     * @param int    $imagePos
+     * @param int $imagePos
      * @param string $fieldName
-     * @param bool   $includeDummyImage
+     * @param bool $includeDummyImage
      *
      * @return TCMSImage|null - null, if no image is set
      */
@@ -935,7 +921,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      *Gets the cms media id from image field with given image position.
      *
-     * @param int    $iImagePos
+     * @param int $iImagePos
      * @param string $sFieldName
      *
      * @return string|bool
@@ -956,7 +942,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * returns the E-Mail encoded so that it can not be harvested by a spambot.
      *
-     * @param string $sFieldName   - field name
+     * @param string $sFieldName - field name
      * @param string $sDisplayText - link text to show instead of email address
      *
      * @return string
@@ -969,9 +955,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * returns a list of connected downloads.
      *
-     * @param string $sDownloadField   - name of the field that connects the downloads
-     * @param array  $allowedFileTypes - optional array of file extensions the record list will be filtered by
-     * @param bool   $bOrderByPosition - set this to true if you want to use the MLT table entry_sort field
+     * @param string $sDownloadField - name of the field that connects the downloads
+     * @param array $allowedFileTypes - optional array of file extensions the record list will be filtered by
+     * @param bool $bOrderByPosition - set this to true if you want to use the MLT table entry_sort field
      *
      * @return TdbCmsDocumentList
      */
@@ -984,7 +970,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $quotedId = $databaseConnection->quote($this->id);
 
         if (!is_null($allowedFileTypes) && is_array($allowedFileTypes) && count($allowedFileTypes) > 0) {
-            $fileExtensions = array();
+            $fileExtensions = [];
             foreach ($allowedFileTypes as $fileExtension) {
                 $fileExtensions[] = $databaseConnection->quote($fileExtension);
             }
@@ -1011,9 +997,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             }
         }
 
-        $oCmsDocumentList = TdbCmsDocumentList::GetList($sQuery);
-
-        return $oCmsDocumentList;
+        return TdbCmsDocumentList::GetList($sQuery);
     }
 
     /**
@@ -1025,12 +1009,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @param string $sFieldName
      * @param string $sClassName
-     * @param string $sOrderBy           - added after an "order by" sql statement
-     * @param string $sClassSubType      - specify what type of class sClassName is
-     * @param string $sClassType         - specify if the class is core, custom-core, or customer
+     * @param string $sOrderBy - added after an "order by" sql statement
+     * @param string $sClassSubType - specify what type of class sClassName is
+     * @param string $sClassType - specify if the class is core, custom-core, or customer
      * @param string $sListAutoClassName - set if you want an auto class
-     * @param bool   $bForceLoad         - set to true if you dont want that your list comes (and also is written - after load) into internal cache
-     * @param string $sTargetTableName   - name of the target table needed to generate the mlt table name. if not set function have to load the mlt field object to generate the mlt table name(lower performance).
+     * @param bool $bForceLoad - set to true if you dont want that your list comes (and also is written - after load) into internal cache
+     * @param string $sTargetTableName - name of the target table needed to generate the mlt table name. if not set function have to load the mlt field object to generate the mlt table name(lower performance).
      *
      * @return TCMSRecordList
      */
@@ -1076,7 +1060,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                 if (is_null($sListAutoClassName)) {
                     $oMLTFields = new TCMSRecordList($sClassName, $fTable, $query, $this->iLanguageId);
                 } else {
-                    $oMLTFields = call_user_func(array($sListAutoClassName, 'GetList'), $query);
+                    $oMLTFields = call_user_func([$sListAutoClassName, 'GetList'], $query);
                 }
 
                 if (false === $bForceLoad) {
@@ -1097,9 +1081,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * if parameter $bActiveRecordIsTarget is true the parameter $sTableName have to contain the source table name.
      * if parameter $bActiveRecordIsTarget is false the parameter $sTableName have to contain the target table name.
      *
-     * @param string $sFieldName            name of the mlt field
-     * @param string $sTableName            name of the table
-     * @param bool   $bActiveRecordIsTarget
+     * @param string $sFieldName name of the mlt field
+     * @param string $sTableName name of the table
+     * @param bool $bActiveRecordIsTarget
      *
      * @return string
      */
@@ -1139,7 +1123,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * in given table.
      *
      * @param string $sFieldIdName
-     * @param bool   $sTableName
+     * @param bool $sTableName
      *
      * @return TCMSField|null
      */
@@ -1188,7 +1172,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     public function GetMLTSourceRecords($sSourceTableName, $sSourceFieldName, $sOrderBy = '', $sClassName = 'TCMSRecord', $sClassSubType = 'dbobjects', $sClassType = 'Core')
     {
         $sCacheName = 'mltField'.$sSourceFieldName.'_'.$sClassName.'_'.$sOrderBy.'_'.$sClassSubType.'_'.$sClassType;
-        $oMLTFields = $this->GetFromInternalCache($sCacheName);
         $oMLTFields = null;
         if (is_null($oMLTFields)) {
             $fTable = $this->table;
@@ -1221,13 +1204,13 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-    /**
+     * /**
      * returns true if the record is connected using an MLT
      * returns false if not connected or no MLT exists.
      *
      * @param string $sSourceTableName
-     * @param int    $iSourceID           - THIS MUST BE THE ID FIELD OF THE THE SOURCE TABLE (NOT THE cmsident)
-     * @param string $sMLTTable           - option: overwrite the table info to use $sMLTTable instead for the connection check
+     * @param int $iSourceID - THIS MUST BE THE ID FIELD OF THE THE SOURCE TABLE (NOT THE cmsident)
+     * @param string $sMLTTable - option: overwrite the table info to use $sMLTTable instead for the connection check
      * @param string $sMLTSourceFieldName If source table has more then one mlt connection to the active object table the you can specify with the mlt source field name
      *
      * @return bool
@@ -1263,15 +1246,15 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * Returns List of all connected mlt tables.
      *
-     * @param string $sSourceTableName    name of the source table
+     * @param string $sSourceTableName name of the source table
      * @param string $sMLTSourceFieldName If source table has more then one mlt connection to the active object table the you can specify with the mlt source field name
-     * @param string $sMLTTable           option: overwrite the table info to use $sMLTTable instead for the connected mlt tables
+     * @param string $sMLTTable option: overwrite the table info to use $sMLTTable instead for the connected mlt tables
      *
      * @return array
      */
     protected function GetConnectedMLTTableNameList($sSourceTableName, $sMLTSourceFieldName = '', $sMLTTable = null)
     {
-        $aMLTTableNameList = array();
+        $aMLTTableNameList = [];
         if (is_null($sMLTTable)) {
             $sQuery = "SELECT `cms_field_conf`.`name` as sFieldName  FROM `cms_field_conf`
                     INNER JOIN `cms_field_type` ON `cms_field_type`.`id` = `cms_field_conf`.`cms_field_type_id`
@@ -1302,8 +1285,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * (use isConnected if you need the information the other way around - ie you want to know if this
      * record is connected to via mlt from some other table).
      *
-     * @param string $sMLTField        - mlt field in this table
-     * @param int    $iTargetID        - target id to check
+     * @param string $sMLTField - mlt field in this table
+     * @param int $iTargetID - target id to check
      * @param string $sTargetTableName - name of the target table needed to generate the mlt table name. if not set function have to load the mlt field object to generate the mlt table name(lower performance).
      *
      * @return bool
@@ -1349,9 +1332,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns the target_id list of the connected mlt field. if this is a multi-language table
      * then we will always return the parent language records!
      *
-     * @param string         $sTableName    name of the target table or source table
-     * @param string|null    $sMLTFieldName name of the mlt field
-     * @param TCMSField|null $oField        Field object form the mlt field. If not set function will load ist for given field name
+     * @param string $sTableName name of the target table or source table
+     * @param string|null $sMLTFieldName name of the mlt field
+     * @param TCMSField|null $oField Field object form the mlt field. If not set function will load ist for given field name
      *
      * @return string[]
      */
@@ -1377,8 +1360,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $query = 'SELECT `'.$selectField."` FROM $quotedMltTableName";
             $query .= ' WHERE `'.$lookupField.'` = :lookupFieldValue';
 
-            $aMatches = array();
-            $res = $this->ExecuteSQLQueries($query, array('lookupFieldValue' => $this->id));
+            $aMatches = [];
+            $res = $this->ExecuteSQLQueries($query, ['lookupFieldValue' => $this->id]);
             while ($match = $res->fetch(PDO::FETCH_ASSOC)) {
                 $aMatches[] = $match[$selectField];
             }
@@ -1392,9 +1375,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns the target_id list of the connected mlt field. if this is a multi-language table
      * then we will always return the parent language records!
      *
-     * @param string    $table      - name of the target table or source table or the field name if the field name contains targettable_mlt
-     * @param string    $sFieldName - name of the mlt field. If field not exists in objects table the function interprets given table as source table
-     * @param TCMSField $oField     - target field object to check file type
+     * @param string $table - name of the target table or source table or the field name if the field name contains targettable_mlt
+     * @param string $sFieldName - name of the mlt field. If field not exists in objects table the function interprets given table as source table
+     * @param TCMSField $oField - target field object to check file type
      *
      * @return string[] - all target_ids of the mlt table that connected the the record
      */
@@ -1408,7 +1391,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns the connected entry for a lookup field
      * $sClassName is the class used to hold the Items.
      *
-     * @param string            $sFieldName
+     * @param string $sFieldName
      * @param string|array|null $sClassName - default string null - assumes an array like array('sClassName'=>'TCMSRecord','sClassSubType'=>'dbobjects','sClassType'=>'Core')
      *
      * @return TCMSRecord
@@ -1459,12 +1442,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $foreignTable = substr($sFieldName, 0, -3);
 
             $cacheName = $foreignTable.'_'.$this->iLanguageId.'_'.$this->sqlData[$sFieldName];
-            static $internalCache = array();
+            static $internalCache = [];
             if (array_key_exists($cacheName, $internalCache)) {
                 $oLookupRecord = $internalCache[$cacheName];
             } else {
                 $oRecord = new $sClassName();
-                /** @var $oRecord TCMSRecord */
+                /* @var $oRecord TCMSRecord */
                 $oRecord->SetLanguage($this->iLanguageId);
                 $oRecord->table = $foreignTable;
                 $oRecord->Load($this->sqlData[$sFieldName]);
@@ -1483,10 +1466,10 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns a record list for the specified property.
      *
      * @param string $sFieldName
-     * @param string $sClassName                    - default string TCMSRecord
-     * @param string $sOrderBy                      - CAUTION! The parameter needs to be MySQL escaped; default cmsident ASC
-     * @param array  $aFilterConditions             - default null - array of fieldname as key and filter condition as value that will be added to the query
-     *                                              - may also be a string - in that case it will just be added to the query as "AND ($condition)"
+     * @param string $sClassName - default string TCMSRecord
+     * @param string $sOrderBy - CAUTION! The parameter needs to be MySQL escaped; default cmsident ASC
+     * @param array $aFilterConditions - default null - array of fieldname as key and filter condition as value that will be added to the query
+     *                                 - may also be a string - in that case it will just be added to the query as "AND ($condition)"
      * @param string $sParentFieldNameInTargetTable - set if the lookup field is not named TABLENAME_id
      *
      * @return TCMSRecordList
@@ -1495,11 +1478,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function GetProperties($sFieldName, $sClassName = null, $sOrderBy = '`cmsident`', $aFilterConditions = null, $sParentFieldNameInTargetTable = null)
     {
-        $oPropertyList = null;
         if (false === $this->sqlData) {
-            $oPropertyList = new TCMSRecordList();
-
-            return $oPropertyList;
+            return new TCMSRecordList();
         }
         $sListClassName = 'TCMSRecordList';
         /** @var $oFieldConfig TCMSFieldPropertyTable */
@@ -1571,7 +1551,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $query .= ' ORDER BY '.$sOrderBy;
 
             $oPropertyList = new $sListClassName();
-            /** @var $oPropertyList TCMSRecordList */
+            /* @var $oPropertyList TCMSRecordList */
             $oPropertyList->sTableName = $targetTableName;
             $oPropertyList->SetLanguage($this->iLanguageId);
             $oPropertyList->sTableObject = $sClassName;
@@ -1589,13 +1569,13 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns an array of ids with the connected properties for field sFieldName.
      *
      * @param string $sFieldName
-     * @param string $sOrderBy   - field name to sort the result
+     * @param string $sOrderBy - field name to sort the result
      *
      * @return array
      */
     public function GetPropertiesIdList($sFieldName, $sOrderBy = 'cmsident')
     {
-        $aIdList = array();
+        $aIdList = [];
         $sCacheName = 'propertyField_'.$sFieldName.'__idlist';
         $oPropertyList = $this->GetFromInternalCache($sCacheName);
         if (is_null($oPropertyList)) {
@@ -1630,7 +1610,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * returns the tree node attached to this record, or null if nothing is attached.
      *
-     *
      * @deprecated use function in TCMSActivePage
      * @see TCMSActivePage::GetTreeNode()
      *
@@ -1664,14 +1643,13 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns true if the table exists.
      *
      * @param string $tableName
-     * @param bool   $bEnableCache - default true
+     * @param bool $bEnableCache - default true
      *
      * @return bool
      */
     public static function TableExists($tableName, $bEnableCache = true)
     {
-        static $aTableExistsLookup = array();
-        $bTableExists = false;
+        static $aTableExistsLookup = [];
         if ($bEnableCache && is_array($aTableExistsLookup) && isset($aTableExistsLookup[$tableName])) {
             $bTableExists = $aTableExistsLookup[$tableName];
         } else {
@@ -1694,11 +1672,11 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public static function FieldExists($tableName, $sFieldName)
     {
-        static $aFieldExistsLookup = array();
+        static $aFieldExistsLookup = [];
         $bExists = false;
         if (!empty($tableName) && !empty($sFieldName)) {
             $sStaticCacheKey = $tableName.'_'.$sFieldName;
-            if ((is_array($aFieldExistsLookup) && isset($aFieldExistsLookup[$sStaticCacheKey]))) {
+            if (is_array($aFieldExistsLookup) && isset($aFieldExistsLookup[$sStaticCacheKey])) {
                 $bExists = $aFieldExistsLookup[$sStaticCacheKey];
             } else {
                 if (self::TableExists($tableName)) {
@@ -1723,7 +1701,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     protected function GetFromInternalCache($varName)
     {
         $resultPointer = null;
-        if ((is_array($this->aResultCache) && isset($this->aResultCache[$varName]))) {
+        if (is_array($this->aResultCache) && isset($this->aResultCache[$varName])) {
             $resultPointer = $this->aResultCache[$varName];
         }
 
@@ -1734,7 +1712,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * saves object in class internal cache.
      *
      * @param string $varName - key name
-     * @param mixed  $content
      */
     protected function SetInternalCache($varName, $content)
     {
@@ -1791,7 +1768,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $sql .= 'SET @recordId'.$this->table."='{$sNewId}';\n";
 
         // now add mlt data
-        $oFieldDefinitions = $oTableConf->GetFieldDefinitions(array('CMSFIELD_MULTITABLELIST', 'CMSFIELD_MULTITABLELIST_CHECKBOXES'));
+        $oFieldDefinitions = $oTableConf->GetFieldDefinitions(['CMSFIELD_MULTITABLELIST', 'CMSFIELD_MULTITABLELIST_CHECKBOXES']);
         while ($oFieldDef = $oFieldDefinitions->Next()) {
             /** @var $oFieldDef TCMSFieldDefinition */
             $tableName = $this->table.'_'.$oFieldDef->sqlData['name'];
@@ -1803,7 +1780,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             }
         }
         // now insert property records
-        $oFieldDefinitions = $oTableConf->GetFieldDefinitions(array('CMSFIELD_PROPERTY'));
+        $oFieldDefinitions = $oTableConf->GetFieldDefinitions(['CMSFIELD_PROPERTY']);
         $quotedSqlDataTableName = $databaseConnection->quoteIdentifier($oTableConf->sqlData['name'].'_id');
         while ($oFieldDef = $oFieldDefinitions->Next()) {
             /** @var $oFieldDef TCMSFieldDefinition */
@@ -1838,6 +1815,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      * returns true if the passed item is the same as this item.
      *
      * @template T of TCMSRecord
+     *
      * @param T $oItem
      *
      * @return bool
@@ -1904,7 +1882,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function GetRequiredFields()
     {
-        $requiredFields = array();
+        $requiredFields = [];
         $tableConf = $this->GetTableConf();
         $fields = $tableConf->GetFieldDefinitions();
         $fields->GoToStart();
@@ -1925,7 +1903,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function GetObjectPropertiesAsArray()
     {
-        $aData = array();
+        $aData = [];
         $aPropertyList = TTools::GetPublicProperties($this);
         $sClassName = get_class($this);
         foreach ($aPropertyList as $sPropName) {
@@ -1949,7 +1927,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function GetSQLWithTablePrefix($sPrefix = '')
     {
-        $aTmpData = array();
+        $aTmpData = [];
         reset($this->sqlData);
         if (empty($sPrefix)) {
             $sPrefix = $this->table;
@@ -1967,7 +1945,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     protected function ClearInternalCache()
     {
-        $this->aResultCache = array();
+        $this->aResultCache = [];
     }
 
     /**
@@ -1989,7 +1967,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
         $sourceObjectName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sSourceTableName);
         if (true === method_exists($sourceObjectName, 'GetMLTTargetListOrderBy')) {
-            $sOrderBy = call_user_func(array($sourceObjectName, 'GetMLTTargetListOrderBy'), $sMLTFieldName);
+            $sOrderBy = call_user_func([$sourceObjectName, 'GetMLTTargetListOrderBy'], $sMLTFieldName);
         } else {
             $sOrderBy = $this->getMltOrderByFallback($sMLTFieldName, $sMLTTableName, $sTargetTableName, $sSourceTableName);
         }
@@ -2055,7 +2033,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Doctrine\DBAL\Exception
      */
     private function ExecuteSQLQueries(string $query, array $parameter = [], array $types = []): Statement
     {
@@ -2121,9 +2099,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         return $bVal;
     }
 
-    /**
-     * @param Connection $connection
-     */
     public function setDatabaseConnection(Connection $connection)
     {
         $this->databaseConnection = $connection;
@@ -2225,11 +2200,11 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             return null;
         }
 
-        if (false === is_callable(array($tdbClassName, $cellFormattingFunctionName))) {
+        if (false === is_callable([$tdbClassName, $cellFormattingFunctionName])) {
             return null;
         }
 
-        return array($tdbClassName, $cellFormattingFunctionName);
+        return [$tdbClassName, $cellFormattingFunctionName];
     }
 
     public static function callBackUuid(string $id)
