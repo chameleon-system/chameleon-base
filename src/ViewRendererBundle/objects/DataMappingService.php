@@ -193,7 +193,7 @@ class DataMappingService implements DataMappingServiceInterface
             $message = 'Mapper: '.get_class($mapper).' Error: '.$e->getMessage();
             throw new MapperException($message, $e->getCode(), $e);
         } catch (Exception $e) {
-            $message = 'Mapper: '.get_class($mapper).' Unexpected error: '.$e->getMessage();
+            $message = 'Mapper: '.get_class($mapper).' Unexpected error: '.$e->getMessage().' in file:'.$e->getFile().' on line:'.$e->getLine();
             throw new MapperException($message, $e->getCode(), $e);
         }
     }

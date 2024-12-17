@@ -11,25 +11,12 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
-use TdbCmsLanguage;
-
 class DataAccessCmsLanguageRequestLevelCacheDecorator implements DataAccessCmsLanguageInterface
 {
-    /**
-     * @var DataAccessCmsLanguageInterface
-     */
-    private $subject;
-    /**
-     * @var array
-     */
-    private $cache = array();
+    private array $cache = [];
 
-    /**
-     * @param DataAccessCmsLanguageInterface $subject
-     */
-    public function __construct(DataAccessCmsLanguageInterface $subject)
+    public function __construct(private readonly DataAccessCmsLanguageInterface $subject)
     {
-        $this->subject = $subject;
     }
 
     /**
@@ -43,7 +30,7 @@ class DataAccessCmsLanguageRequestLevelCacheDecorator implements DataAccessCmsLa
             if (null === $languageRaw) {
                 return null;
             }
-            $language = TdbCmsLanguage::GetNewInstance();
+            $language = \TdbCmsLanguage::GetNewInstance();
             $language->SetLanguage($targetLanguageId);
             $language->LoadFromRow($languageRaw);
             $this->cache[$key] = $language;
@@ -84,7 +71,7 @@ class DataAccessCmsLanguageRequestLevelCacheDecorator implements DataAccessCmsLa
             $this->cache[$key] = $language;
         }
         /**
-         * @var TdbCmsLanguage $language
+         * @var \TdbCmsLanguage $language
          */
         $language = $this->cache[$key];
         if ($targetLanguageId !== $language->GetLanguage()) {
