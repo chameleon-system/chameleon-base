@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use esono\pkgCmsCache\CacheInterface;
@@ -34,14 +33,11 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 
     public function getBreadcrumb(): ?\TCMSURLHistory
     {
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-
-        if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
+        if (false === $this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return null;
         }
 
-        $cmsUser = $securityHelper->getUser();
+        $cmsUser = $this->securityHelperAccess->getUser();
         if (null === $cmsUser) {
             return null;
         }
@@ -53,9 +49,9 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
         if (false === $breadCrumbHistory->paramsParameterExists()) {
             if (true === $this->cache->isActive()) {
                 return $this->resetCache($backendUser);
-            } else {
-                return $this->resetSession();
             }
+
+            return $this->resetSession();
         }
 
         return $this->getBreadcrumbFromSession($backendUser);
@@ -107,7 +103,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
     /**
      * creates new empty breadcrumb in cache.
      */
-    private function resetCache(\TCMSUser $backendUser, string $key = null): \TCMSURLHistory
+    private function resetCache(\TCMSUser $backendUser, ?string $key = null): \TCMSURLHistory
     {
         $this->history = new \TCMSURLHistory();
         $this->setOnChangeCallback();
@@ -121,9 +117,18 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
         $this->history->setOnChangeCallback([$this, 'setCacheValue']);
     }
 
-    public function setCacheValue(\TCMSUser $backendUser = null, string $key = null): void
+    public function setCacheValue(?\TCMSUser $backendUser = null, ?string $key = null): void
     {
-        $backendUser ??= \TCMSUser::GetActiveUser();
+        if (null === $backendUser) {
+            $cmsUser = $this->securityHelperAccess->getUser();
+
+            if (null === $cmsUser) {
+                return;
+            }
+
+            $backendUser = new \TCMSUser($cmsUser->getId());
+        }
+
         $key ??= $this->getUserCacheKey($backendUser);
         $this->cache->set($key, $this->history, ['cms_user' => $backendUser->id], self::USER_BREADCRUMB_CACHE_TTL);
     }

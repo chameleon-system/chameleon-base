@@ -29,56 +29,16 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     private const DISPLAY_STATE_SESSION_KEY = 'chameleonSidebarBackendModuleDisplayState';
     private const POPULAR_CATEGORY_ID = '0000000-0000-0001-0000-000000000001';
 
-    /**
-     * @var UrlUtil
-     */
-    private $urlUtil;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
-     * @var ResponseVariableReplacerInterface
-     */
-    private $responseVariableReplacer;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var UserMenuItemDataAccessInterface
-     */
-    private $userMenuItemDataAccess;
-
-    /**
-     * @var MenuItemDataAccessInterface
-     */
-    private $menuItemDataAccess;
-
     public function __construct(
-        UrlUtil $urlUtil,
-        RequestStack $requestStack,
-        InputFilterUtilInterface $inputFilterUtil,
-        ResponseVariableReplacerInterface $responseVariableReplacer,
-        TranslatorInterface $translator,
-        MenuItemDataAccessInterface $menuItemDataAccess,
-        UserMenuItemDataAccessInterface $userMenuItemDataAccess
+        private readonly UrlUtil $urlUtil,
+        private readonly RequestStack $requestStack,
+        private readonly InputFilterUtilInterface $inputFilterUtil,
+        private readonly ResponseVariableReplacerInterface $responseVariableReplacer,
+        private readonly TranslatorInterface $translator,
+        private readonly MenuItemDataAccessInterface $menuItemDataAccess,
+        private readonly UserMenuItemDataAccessInterface $userMenuItemDataAccess
     ) {
         parent::__construct();
-
-        $this->urlUtil = $urlUtil;
-        $this->requestStack = $requestStack;
-        $this->inputFilterUtil = $inputFilterUtil;
-        $this->responseVariableReplacer = $responseVariableReplacer;
-        $this->translator = $translator;
-        $this->userMenuItemDataAccess = $userMenuItemDataAccess;
-        $this->menuItemDataAccess = $menuItemDataAccess;
     }
 
     /**
@@ -110,7 +70,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         } else {
             $value = '';
         }
-        
+
         $this->responseVariableReplacer->addVariable('sidebarDisplayState', $value);
         $foo = \TGlobal::OutHTML($this->getOpenCategory());
         $this->responseVariableReplacer->addVariable('sidebarOpenCategoryId', $foo);
@@ -140,7 +100,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $visitor->SetMappedValue('menuItems', $this->getMenuItems());
 
         $oConfig = \TdbCmsConfig::GetInstance();
-        $logoUrl =  $oConfig->GetThemeURL().'/images/chameleon_logo.svg';
+        $logoUrl = $oConfig->GetThemeURL().'/images/chameleon_logo.svg';
         $visitor->SetMappedValue('logoUrl', $logoUrl);
 
         if (true === $cachingEnabled) {
@@ -161,8 +121,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      * parameters of the AJAX call to its own, which leads to the sidebar action being called on form submits).
      * Similar problems are expected for other modules, so we use a dummy page that is both always present and contains
      * no other modules.
-     *
-     * @return string
      */
     private function getBaseUri(): string
     {
@@ -207,7 +165,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $openCategory = $session->get(self::OPEN_CATEGORIES_SESSION_KEY, '');
 
-        //Compatibility with version 7.x, because it was an array
+        // Compatibility with version 7.x, because it was an array
         if (is_array($openCategory) && !empty($openCategory)) {
             return reset($openCategory);
         }
@@ -217,7 +175,6 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param MenuCategory[] $menuCategories
-     * @return MenuCategory|null
      */
     private function getPopularMenuEntries(array $menuCategories): ?MenuCategory
     {
@@ -307,7 +264,7 @@ class SidebarBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
-            return ;
+            return;
         }
 
         $userId = $securityHelper->getUser()?->getId();
