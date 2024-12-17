@@ -37,18 +37,6 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
     }
 
     /**
-     * @param array  $aCacheTableInfos
-     * @param string $sTableName
-     * @param string $sRecordId
-     *
-     * @return array
-     */
-    final public function SetCacheTableInfos($aCacheTableInfos = array(), $sTableName = '', $sRecordId = '')
-    {
-        return array();
-    }
-
-    /**
      * {@inheritdoc}
      */
     final public function _GetCacheTableInfos()
