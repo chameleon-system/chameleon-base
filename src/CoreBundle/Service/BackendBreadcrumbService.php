@@ -15,7 +15,6 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use esono\pkgCmsCache\CacheInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * manages the history object (also called "breadcrumb"), uses a cache and session object as fallback (esp. in development mode).
@@ -28,8 +27,8 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
     protected ?\TCMSURLHistory $history = null;
 
     public function __construct(
-        /** @deprecated 7.1.6 - not used, could be removed */
-        RequestStack $requestStack
+        private readonly CacheInterface $cache,
+        private readonly SecurityHelperAccess $securityHelperAccess
     ) {
     }
 
@@ -52,7 +51,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
         $breadCrumbHistory = $this->getBreadcrumbFromSession($backendUser);
 
         if (false === $breadCrumbHistory->paramsParameterExists()) {
-            if (true === $this->getCache()->isActive()) {
+            if (true === $this->cache->isActive()) {
                 return $this->resetCache($backendUser);
             } else {
                 return $this->resetSession();
@@ -68,10 +67,10 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
             return $this->history;
         }
 
-        if (true === $this->getCache()->isActive()) {
+        if (true === $this->cache->isActive()) {
             $key = $this->getUserCacheKey($backendUser);
 
-            $this->history = $this->getCache()->get($key);
+            $this->history = $this->cache->get($key);
             if (null !== $this->history) {
                 // callback is locally not assigned yet
                 $this->setOnChangeCallback();
@@ -98,7 +97,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 
     private function getUserCacheKey(\TCMSUser $backendUser): string
     {
-        return $this->getCache()->getKey([
+        return $this->cache->getKey([
             'class' => __CLASS__,
             'method' => __METHOD__,
             'cms_user_id' => $backendUser->id,
@@ -126,11 +125,6 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
     {
         $backendUser ??= \TCMSUser::GetActiveUser();
         $key ??= $this->getUserCacheKey($backendUser);
-        $this->getCache()->set($key, $this->history, ['cms_user' => $backendUser->id], self::USER_BREADCRUMB_CACHE_TTL);
-    }
-
-    private function getCache(): CacheInterface
-    {
-        return ServiceLocator::get('chameleon_system_cms_cache.cache');
+        $this->cache->set($key, $this->history, ['cms_user' => $backendUser->id], self::USER_BREADCRUMB_CACHE_TTL);
     }
 }
