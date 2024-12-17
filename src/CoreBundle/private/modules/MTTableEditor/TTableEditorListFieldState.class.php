@@ -14,11 +14,11 @@
  * holds the state of all list fields in cms backed (which list was opened, which closed)
  * note: access class as service cmsPkgCore.tableEditorListFieldState (\ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.tableEditorListFieldState')).
  */
-class TTableEditorListFieldState implements Serializable
+class TTableEditorListFieldState
 {
-    const STATE_OPEN = 1;
-    const STATE_CLOSED = 0;
-    private $states = array();
+    public const STATE_OPEN = 1;
+    public const STATE_CLOSED = 0;
+    private $states = [];
 
     public function getState($tableName, $field)
     {
@@ -33,7 +33,7 @@ class TTableEditorListFieldState implements Serializable
     {
         $state = intval($state);
         if (!isset($this->states[$tableName])) {
-            $this->states[$tableName] = array();
+            $this->states[$tableName] = [];
         }
         $this->states[$tableName][$field] = $state;
 
@@ -54,52 +54,16 @@ class TTableEditorListFieldState implements Serializable
         $_SESSION['tableEditorListFieldState'] = serialize($this);
     }
 
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * String representation of object.
-     *
-     * @see http://php.net/manual/en/serializable.serialize.php
-     *
-     * @return string the string representation of the object or null
-     */
-    public function serialize()
+    public function __serialize(): array
     {
-        return serialize($this->states);
+        return [
+            'states' => $this->states,
+        ];
     }
 
-    /**
-     * Deprecation Notice:
-     * TTableEditorListFieldState implements the Serializable interface, which is deprecated.
-     * Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary)
-     */
-    public function __serialize()
+    public function __unserialize(array $data): void
     {
-        return $this->serialize();
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Constructs the object.
-     *
-     * @see http://php.net/manual/en/serializable.unserialize.php
-     *
-     * @param string $serialized <p>
-     *                           The string representation of the object.
-     *                           </p>
-     */
-    public function unserialize($serialized)
-    {
-        $this->states = unserialize($serialized);
-    }
-
-    /**
-     * Deprecation Notice:
-     * TTableEditorListFieldState implements the Serializable interface, which is deprecated.
-     * Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary)
-     */
-    public function __unserialize($serialized)
-    {
-        $this->unserialize($serialized);
+        $this->states = $data['states'];
     }
 
     /**

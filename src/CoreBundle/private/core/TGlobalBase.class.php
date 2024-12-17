@@ -319,34 +319,17 @@ class TGlobalBase
         // however we MAY be viewing it through the cms template engine. so in that
         // case we still need to return false.
         // grab an instance of TGlobal to find out :)
-        $oGlobal = TGlobal::instance();
-        if ('true' == $oGlobal->GetUserData('__modulechooser') && self::CMSUserDefined()) {
-            return true;
-        } else {
+        $currentRequest = self::getCurrentRequest();
+
+        if (null === $currentRequest) {
             return false;
         }
-    }
 
-    public function GetLanguageIdList()
-    {
-        $oCMSConfig = TdbCmsConfig::GetInstance();
+        if ('true' === $currentRequest->get('__modulechooser', false) && self::getSecurityHelperAccess()->isGranted(CmsUserRoleConstants::CMS_USER)) {
+            return true;
+        }
 
-        return [$oCMSConfig->fieldTranslationBaseLanguageId];
-    }
-
-    /**
-     * checks if active CMS user session is available.
-     *
-     * @deprecated use SecurityHelperAccess::class
-     *
-     * @return bool
-     */
-    public static function CMSUserDefined()
-    {
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-
-        return $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
+        return false;
     }
 
     /**
@@ -1029,35 +1012,28 @@ class TGlobalBase
         return [];
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private static function getPortalDomainService()
+    private static function getPortalDomainService(): PortalDomainServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return LanguageServiceInterface
-     */
-    private static function getLanguageService()
+    private static function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    /**
-     * @return Request|null
-     */
-    private static function getCurrentRequest()
+    private static function getCurrentRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
-    /**
-     * @return Connection
-     */
-    private static function getDatabaseConnection()
+    private static function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
+    }
+
+    private static function getSecurityHelperAccess(): SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
     }
 }

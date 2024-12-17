@@ -22,6 +22,8 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,80 +33,38 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 abstract class ChameleonController implements ChameleonControllerInterface
 {
-    /**
-     * @var AuthenticityTokenManagerInterface
-     */
-    private $authenticityTokenManager;
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
-    /**
-     * @var CacheInterface
-     */
-    protected $cache;
-    /**
-     * @var \TGlobal
-     */
-    protected $global;
-
+    private AuthenticityTokenManagerInterface $authenticityTokenManager;
+    protected RequestStack $requestStack;
+    protected CacheInterface $cache;
+    protected \TGlobal $global;
     protected \TModuleLoader $moduleLoader;
-
-    /**
-     * @var array
-     */
-    protected $aHeaderIncludes = [];
-    /**
-     * @var array
-     */
-    protected $aFooterIncludes = [];
-
-    /**
-     * @var \IViewPathManager
-     */
-    protected $viewPathManager;
-
-    /** @var ActivePageServiceInterface */
-    protected $activePageService;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
-
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
-     * @var ResourceCollectorInterface
-     */
-    private $resourceCollector;
-    /**
-     * @var DataAccessCmsMasterPagedefInterface
-     */
-    private $dataAccessCmsMasterPagedef;
-    /**
-     * @var ResponseVariableReplacerInterface
-     */
-    private $responseVariableReplacer;
+    protected array $aHeaderIncludes = [];
+    protected array $aFooterIncludes = [];
+    protected ?\IViewPathManager $viewPathManager;
+    protected ActivePageServiceInterface $activePageService;
+    private EventDispatcherInterface $eventDispatcher;
+    private RequestInfoServiceInterface $requestInfoService;
+    private InputFilterUtilInterface $inputFilterUtil;
+    private ResourceCollectorInterface $resourceCollector;
+    private DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef;
+    private ResponseVariableReplacerInterface $responseVariableReplacer;
+    private SecurityHelperAccess $securityHelperAccess;
 
     public function __construct(
         RequestStack $requestStack,
         EventDispatcherInterface $eventDispatcher,
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         \TModuleLoader $moduleLoader,
+        SecurityHelperAccess $securityHelperAccess,
         ?\IViewPathManager $viewPathManager = null
     ) {
         $this->requestStack = $requestStack;
-        $this->moduleLoader = $moduleLoader;
-        $this->moduleLoader->setController($this);
-        $this->viewPathManager = $viewPathManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->dataAccessCmsMasterPagedef = $dataAccessCmsMasterPagedef;
+        $this->moduleLoader = $moduleLoader;
+        $this->securityHelperAccess = $securityHelperAccess;
+        $this->viewPathManager = $viewPathManager;
+        $this->moduleLoader->setController($this);
     }
 
     public function getModuleLoader(): \TModuleLoader
@@ -380,7 +340,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             }
         }
 
-        if (\TGlobal::CMSUserDefined()) {
+        if ($this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             if ('true' === $this->inputFilterUtil->getFilteredInput('esdisablelinks')) {
                 $sPattern = "/<a([^>]+)href=[']([^']*)[']/Uusi";
                 $sReplacePatter = '<a$1href="javascript:var tmp=false;"';

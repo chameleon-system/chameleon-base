@@ -12,14 +12,13 @@
 interface IPkgCmsFileManager
 {
     /**
-     * @param string   $sSource
-     * @param string   $sTarget
+     * @param string $sSource
+     * @param string $sTarget
      * @param int|null $chmod
-     * @param bool     $remoteOnly @deprecated since 6.2.0 - cluster file handling is no longer available.
      *
      * @return bool|null
      */
-    public function put($sSource, $sTarget, $chmod = null, $remoteOnly = false);
+    public function put($sSource, $sTarget, $chmod = null);
 
     /**
      * @param string $source
@@ -68,7 +67,7 @@ interface IPkgCmsFileManager
 
     /**
      * @param string $file
-     * @param int    $mode
+     * @param int $mode
      *
      * @return bool
      */
@@ -76,8 +75,8 @@ interface IPkgCmsFileManager
 
     /**
      * @param string $path
-     * @param int    $mode      @deprecated since 6.0.0 - file permissions are handled externally.
-     * @param bool   $recursive
+     * @param int $mode @deprecated since 6.0.0 - file permissions are handled externally.
+     * @param bool $recursive
      *
      * @return bool
      */
@@ -92,7 +91,7 @@ interface IPkgCmsFileManager
 
     /**
      * @param string $path
-     * @param bool   $recursive
+     * @param bool $recursive
      *
      * @return void
      */
@@ -101,7 +100,7 @@ interface IPkgCmsFileManager
     /**
      * @param string $filename
      * @param string $mode
-     * @param null   $use_include_path
+     * @param null $use_include_path
      *
      * @return resource|bool
      */
@@ -109,7 +108,7 @@ interface IPkgCmsFileManager
 
     /**
      * @param resource $handle
-     * @param string   $string
+     * @param string $string
      * @param int|null $length
      *
      * @return int|bool
@@ -124,7 +123,7 @@ interface IPkgCmsFileManager
     public function fclose($handle);
 
     /**
-     * @param string                $filename
+     * @param string $filename
      * @param string|array|resource $data
      *
      * @return int|bool

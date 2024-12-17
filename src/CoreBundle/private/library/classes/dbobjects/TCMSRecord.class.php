@@ -166,15 +166,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSRecord()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-    /**
      * Sett the language of the record to fetch. Make sure to call this function
      * before calling anything else!
      *

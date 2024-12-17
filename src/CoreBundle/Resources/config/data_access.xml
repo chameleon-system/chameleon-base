@@ -121,6 +121,7 @@
                  id="chameleon_system_core.data_access_cms_master_pagedef_database" public="false">
             <argument id="chameleon_system_core.data_access_cms_master_pagedef_file" type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
+            <argument id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" type="service"/>
         </service>
 
         <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefCacheDecorator"

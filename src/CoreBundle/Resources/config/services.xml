@@ -5,9 +5,6 @@
 
     <parameters>
         <parameter key="vendor_dir">%kernel.project_dir%/vendor</parameter>
-        <parameter key="chameleon_system_core.pdo.mysql_attr_init_command" type="constant">\PDO::MYSQL_ATTR_INIT_COMMAND</parameter> <!-- deprecated since 6.3.0 - no longer used -->
-        <parameter key="chameleon_system_core.pdo.mysql_attr_compression_name" type="constant">\PDO::MYSQL_ATTR_COMPRESS</parameter> <!-- deprecated since 6.3.0 - see below -->
-        <parameter key="chameleon_system_core.pdo.enable_mysql_compression">false</parameter> <!-- deprecated since 6.3.0 - use the configuration key "doctrine: dbal: options: 1006: 1" instead -->
         <parameter key="chameleon_system_core.database.estimation_lower_limit">0</parameter>
         <parameter key="chameleon_system_core.controller_invoke_listener.class">ChameleonSystem\CoreBundle\Controller\ChameleonControllerInvokeListener</parameter>
         <parameter key="chameleon_system_core.tpl_page_controller.class">TPkgCmsRouteControllerCmsTplPage</parameter>
@@ -148,9 +145,11 @@
             <argument type="service" id="chameleon_system_core.global" />
             <argument />  <!-- Module execution strategy will be set by ChameleonSystemCoreExtension -->
             <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
         </service>
-        <service id="chameleon_system_core.usermoduleloader" class="TUserModuleLoader" parent="chameleon_system_core.moduleloader" public="true" />
+        <service id="chameleon_system_core.usermoduleloader" class="TUserModuleLoader" parent="chameleon_system_core.moduleloader" public="true">
 
+        </service>
         <service id="chameleon_system_core.subusermoduleloader" parent="chameleon_system_core.usermoduleloader" shared="false" public="true" />
 
         <service id="chameleon_system_core.base_controller" abstract="true">
@@ -185,6 +184,7 @@
         <service id="chameleon_system_core.frontend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonFrontendController" parent="chameleon_system_core.base_controller" public="true">
             <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_database" />
             <argument type="service" id="chameleon_system_core.usermoduleloader" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <argument type="service" id="chameleon_system_core.viewPathManager" />
             <argument type="service" id="service_container" />
             <argument type="service" id="chameleon_system_view_renderer.mapper.config_to_less" />
@@ -193,6 +193,7 @@
         <service id="chameleon_system_core.backend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonBackendController" parent="chameleon_system_core.base_controller" public="true">
             <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_file" />
             <argument type="service" id="chameleon_system_core.moduleloader" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <call method="setBackendAccessCheck">
                 <argument type="service" id="chameleon_system_core.security.backend_access_check" />
             </call>
