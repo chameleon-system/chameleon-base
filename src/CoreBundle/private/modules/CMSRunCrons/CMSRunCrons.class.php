@@ -11,8 +11,8 @@
 
 use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactoryInterface;
-use ChameleonSystem\CoreBundle\SanityCheck\CronJobDataAccess;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\DataAccess\CronJobDataAccess;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
@@ -27,7 +27,7 @@ class CMSRunCrons extends TModelBase
 {
     public function Execute()
     {
-        $dataAccess = new CronJobDataAccess();
+        $dataAccess = $this->getCronjobDataAccess();
         $dataAccess->refreshTimestampOfLastCronJobCall();
         set_time_limit(CMS_MAX_EXECUTION_TIME_IN_SECONDS_FOR_CRONJOBS);
         $this->data = parent::Execute();
@@ -168,10 +168,7 @@ class CMSRunCrons extends TModelBase
         $this->data['sMessageOutput'] = $errorMessage;
     }
 
-    /**
-     * @return CronJobFactoryInterface
-     */
-    private function getCronjobFactory()
+    private function getCronjobFactory(): CronJobFactoryInterface
     {
         return ServiceLocator::get('chameleon_system_core.cronjob.cronjob_factory');
     }
@@ -194,5 +191,10 @@ class CMSRunCrons extends TModelBase
     private function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
+    }
+
+    private function getCronjobDataAccess(): CronJobDataAccess
+    {
+        return ServiceLocator::get('chameleon_system_core.data_access.cron_job_data_access');
     }
 }
