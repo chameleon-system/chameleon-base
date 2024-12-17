@@ -13,7 +13,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 /**
  * all user modules need to be derived from this class, or one of its children.
-/**/
+ * /**/
 class TUserModelBaseCore extends TModelBase
 {
     /**
@@ -21,14 +21,14 @@ class TUserModelBaseCore extends TModelBase
      *
      * @var string|null
      */
-    public $instanceID = null;
+    public $instanceID;
 
     /**
      * holds the language shortname of the template (example: de, en, ...).
      *
      * @var string|null
      */
-    public $templateLanguage = null;
+    public $templateLanguage;
 
     public function __sleep()
     {
@@ -80,11 +80,11 @@ class TUserModelBaseCore extends TModelBase
 
     private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     private function getViewRendererSnippetDirectory(): TPkgViewRendererSnippetDirectoryInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
     }
 }

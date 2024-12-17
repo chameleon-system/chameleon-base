@@ -20,7 +20,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      *
      * @var array
      */
-    protected $aUploadData = null;
+    protected $aUploadData;
 
     /**
      * prevents is_uploaded_file() check
@@ -37,7 +37,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      *  array('name'=>'testfile.jpg','type'=>'application/octet-stream','tmp_name'=>'/tmp/php7Sv9yk','error'=>0,'size'=>77105)
      *
      * @param array $aData
-     * @param bool  $bAllowSaveOfNotUploadedFiles - set to true if the upload data is not from an upload (for example when the images come from a zip)
+     * @param bool $bAllowSaveOfNotUploadedFiles - set to true if the upload data is not from an upload (for example when the images come from a zip)
      */
     public function SetUploadData($aData, $bAllowSaveOfNotUploadedFiles = false)
     {
@@ -50,7 +50,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
         if (is_null($tableid)) {
             // get table id of cms_media
             $oTableConf = new TCMSRecord();
-            /** @var $oTableConf TCMSRecord */
+            /* @var $oTableConf TCMSRecord */
             $oTableConf->table = 'cms_tbl_conf';
             $oTableConf->LoadFromField('name', $this->GetTableName());
             $tableid = $oTableConf->sqlData['id'];
@@ -116,7 +116,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
                 if (!empty($sAllowedFileTypesFromExternal)) {
                     $sAllowedFileTypesFromExternal = strtoupper($sAllowedFileTypesFromExternal);
                     $sAllowedFileTypesFromExternal = str_replace(',', ', ', $sAllowedFileTypesFromExternal);
-                    throw new Exception(TGlobal::Translate('chameleon_system_core.cms_module_universal_uploader.error_type_not_allowed', array('%sFileType%' => strtoupper($fileExtension), 'sAllowedFileTypesFromExternal' => $sAllowedFileTypesFromExternal)), -270);
+                    throw new Exception(TGlobal::Translate('chameleon_system_core.cms_module_universal_uploader.error_type_not_allowed', ['%sFileType%' => strtoupper($fileExtension), 'sAllowedFileTypesFromExternal' => $sAllowedFileTypesFromExternal]), -270);
                 } else {
                     throw new Exception(TGlobal::Translate('chameleon_system_core.cms_module_universal_uploader.error_type_not_supported').': '.strtoupper($fileExtension), -270);
                 }
@@ -131,7 +131,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      *
      * @return bool
@@ -146,7 +146,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
                 $this->MoveFile(
                     $this->aUploadData['tmp_name'],
                     $this->GetTargetFileName(),
-                    (false === $this->bAllowSaveOfNotUploadedFiles)
+                    false === $this->bAllowSaveOfNotUploadedFiles
                 );
             } catch (Exception $e) {
                 // This cleanup is problematic since it fails on updates and the file may have made it to some of the servers.
@@ -191,9 +191,9 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      * trys to move an uploaded file to target directory
      * if the move failes it deletes the database record.
      *
-     * @param string $sourceFile          full path to source file
-     * @param string $targetFile          full path to target file
-     * @param bool   $treatAsUploadedFile will use move_uploaded_file to move the file
+     * @param string $sourceFile full path to source file
+     * @param string $targetFile full path to target file
+     * @param bool $treatAsUploadedFile will use move_uploaded_file to move the file
      *
      * @throws Exception
      */
@@ -343,6 +343,6 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      */
     protected function getFileManager()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.filemanager');
+        return ServiceLocator::get('chameleon_system_core.filemanager');
     }
 }

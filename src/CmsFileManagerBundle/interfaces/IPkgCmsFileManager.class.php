@@ -12,8 +12,8 @@
 interface IPkgCmsFileManager
 {
     /**
-     * @param string   $sSource
-     * @param string   $sTarget
+     * @param string $sSource
+     * @param string $sTarget
      * @param int|null $chmod
      *
      * @return bool|null
@@ -67,7 +67,7 @@ interface IPkgCmsFileManager
 
     /**
      * @param string $file
-     * @param int    $mode
+     * @param int $mode
      *
      * @return bool
      */
@@ -75,8 +75,8 @@ interface IPkgCmsFileManager
 
     /**
      * @param string $path
-     * @param int    $mode      @deprecated since 6.0.0 - file permissions are handled externally.
-     * @param bool   $recursive
+     * @param int $mode @deprecated since 6.0.0 - file permissions are handled externally.
+     * @param bool $recursive
      *
      * @return bool
      */
@@ -91,7 +91,7 @@ interface IPkgCmsFileManager
 
     /**
      * @param string $path
-     * @param bool   $recursive
+     * @param bool $recursive
      *
      * @return void
      */
@@ -100,7 +100,7 @@ interface IPkgCmsFileManager
     /**
      * @param string $filename
      * @param string $mode
-     * @param null   $use_include_path
+     * @param null $use_include_path
      *
      * @return resource|bool
      */
@@ -108,7 +108,7 @@ interface IPkgCmsFileManager
 
     /**
      * @param resource $handle
-     * @param string   $string
+     * @param string $string
      * @param int|null $length
      *
      * @return int|bool
@@ -123,7 +123,7 @@ interface IPkgCmsFileManager
     public function fclose($handle);
 
     /**
-     * @param string                $filename
+     * @param string $filename
      * @param string|array|resource $data
      *
      * @return int|bool

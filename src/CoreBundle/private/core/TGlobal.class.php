@@ -10,13 +10,12 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TGlobal extends TGlobalBase
 {
-    const MODE_BACKEND = 0;
-    const MODE_FRONTEND = 1;
+    public const MODE_BACKEND = 0;
+    public const MODE_FRONTEND = 1;
 
     private static $mode = self::MODE_FRONTEND;
 
@@ -37,26 +36,26 @@ class TGlobal extends TGlobalBase
 
     public function GetWebuserLoginData()
     {
-        return array('loginName' => 'www', 'password' => 'www');
+        return ['loginName' => 'www', 'password' => 'www'];
     }
 
     /**
      * Translates the given message.
      *
-     * @param string      $id         The message id (may also be an object that can be cast to string)
-     * @param array       $parameters An array of parameters for the message
-     * @param string|null $domain     The domain for the message or null to use the default
-     * @param string|null $locale     The locale or null to use the default
-     *
-     * @throws InvalidArgumentException If the locale contains invalid characters
+     * @param string $id The message id (may also be an object that can be cast to string)
+     * @param array $parameters An array of parameters for the message
+     * @param string|null $domain The domain for the message or null to use the default
+     * @param string|null $locale The locale or null to use the default
      *
      * @return string The translated string
      *
+     * @throws InvalidArgumentException If the locale contains invalid characters
+     *
      * @deprecated deprecated since 6.1.0 - please use the "translator" service
      */
-    public static function Translate($id, $parameters = array(), $domain = null, $locale = null)
+    public static function Translate($id, $parameters = [], $domain = null, $locale = null)
     {
-        return self::getTranslator()->trans($id, is_array($parameters) ? $parameters : array(), $domain, $locale);
+        return self::getTranslator()->trans($id, is_array($parameters) ? $parameters : [], $domain, $locale);
     }
 
     /**
@@ -64,14 +63,14 @@ class TGlobal extends TGlobalBase
      * the data is unfiltered.
      *
      * @param string $name
-     * @param array  $excludeArray
+     * @param array $excludeArray
      * @param string $sFilterClass - form: classname;path;type|classname;path;type
      *
      * @return mixed - string or array
      *
      * @deprecated since 6.2.0 - use InputFilterUtilInterface::getFiltered*Input() instead.
      */
-    public function GetUserData($name = null, $excludeArray = array(), $sFilterClass = TCMSUSERINPUT_DEFAULTFILTER)
+    public function GetUserData($name = null, $excludeArray = [], $sFilterClass = TCMSUSERINPUT_DEFAULTFILTER)
     {
         if (self::MODE_BACKEND === self::$mode) {
             $sFilterClass = '';

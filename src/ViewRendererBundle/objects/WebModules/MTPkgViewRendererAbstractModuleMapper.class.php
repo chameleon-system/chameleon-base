@@ -41,7 +41,7 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
      */
     final public function _GetCacheTableInfos()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
         $aHeadIncludes = parent::GetHtmlHeadIncludes();
         $sViewName = $this->aModuleConfig['view'];
         /** @var $dbAccessLayer ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsTPlModule* */
-        $dbAccessLayer = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
+        $dbAccessLayer = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
         if (!isset($this->aModuleConfig['model'])) {
             throw new ErrorException(
                 'unable to run GetHtmlHeadIncludes for '.get_class(

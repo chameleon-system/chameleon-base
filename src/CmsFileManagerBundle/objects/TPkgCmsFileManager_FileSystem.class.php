@@ -112,7 +112,7 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
         try {
             return mkdir($path, 0777, $recursive);
         } catch (Exception $e) {
-            throw new Exception(sprintf("Cannot create folder %s.", $path), $e->getCode(), $e);
+            throw new Exception(sprintf('Cannot create folder %s.', $path), $e->getCode(), $e);
         }
     }
 
@@ -135,7 +135,7 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
         }
         $files = glob($path.'/*');
         if (false === $files && is_dir($path) && is_readable($path) && is_writable($path)) {
-            $files = array(); //fix for debian systems, which don't return an empty array, but false, when they find an empty folder.
+            $files = []; // fix for debian systems, which don't return an empty array, but false, when they find an empty folder.
         }
         foreach ($files as $file) {
             if (is_dir($file) && $recursive) {

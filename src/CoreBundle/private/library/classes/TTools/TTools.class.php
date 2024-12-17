@@ -26,7 +26,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 /**
  * static toolset.
  *
@@ -1193,7 +1192,7 @@ class TTools
         $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
         $sActiveLanguage = $backendSession->getCurrentEditLanguageId();
-        if (($sActiveLanguage != $oCmsConfig->sqlData['translation_base_language_id'])) {
+        if ($sActiveLanguage != $oCmsConfig->sqlData['translation_base_language_id']) {
             $sActiveLanguagePrefix = TGlobal::GetLanguagePrefix($sActiveLanguage);
             $aTranslatableFields = $oCmsConfig->GetListOfTranslatableFields();
 

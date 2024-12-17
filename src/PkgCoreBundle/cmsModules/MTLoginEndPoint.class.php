@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
-
 /**
  * @deprecated since 8.0.0 - moved to ChameleonSystemCmsBackendBundle
  */
