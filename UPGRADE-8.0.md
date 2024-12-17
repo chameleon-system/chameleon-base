@@ -74,7 +74,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSTableEditorPortal::linkPortalToUser` now takes the user id instead of the user
 - `\TPkgShopPaymentTransactionContextEndPoint::getCmsUser` was removed
 - `\TGlobalBase::$aLangaugeIds` removed
-- `\TGlobal::GetLanguageIdList` deprecated
+- `\TGlobal::GetLanguageIdList` removed - use `SecurityHelperAccess::getUser()?->getAvailableEditLanguages()` instead
 - `\TCMSUser::GetSessionVarName` removed
 - `\MTLoginEndPoint::Login` removed
 - `\TCMSUser::Login` removed

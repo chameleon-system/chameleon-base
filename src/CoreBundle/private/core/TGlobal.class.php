@@ -80,33 +80,6 @@ class TGlobal extends TGlobalBase
         return parent::GetUserData($name, $excludeArray, $sFilterClass);
     }
 
-    /**
-     * returns a list of all language ids the current user is allowed to edit.
-     *
-     * @return array
-     * @deprecated 7.2 fetch the edit languages from SecurityHelperAccess::getUser()?->getAvailableEditLanguages()
-     */
-    public function GetLanguageIdList()
-    {
-        if (self::MODE_BACKEND === self::$mode) {
-            // get security helper
-            /** @var SecurityHelperAccess $securityHelper */
-            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-            $languages = $securityHelper->getUser()?->getAvailableEditLanguages();
-            if (null === $languages) {
-               $languages = [];
-            } else {
-                $languages = array_keys($languages);
-            }
-            if (0 === count($languages)) {
-                $languages = [TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId];
-            }
-            return $languages;
-        }
-
-        return parent::GetLanguageIdList();
-    }
-
     private static function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');

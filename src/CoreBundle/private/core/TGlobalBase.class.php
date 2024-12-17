@@ -320,17 +320,11 @@ class TGlobalBase
         // case we still need to return false.
         // grab an instance of TGlobal to find out :)
         $oGlobal = TGlobal::instance();
-        if ('true' == $oGlobal->GetUserData('__modulechooser') && self::CMSUserDefined()) {
+        if ('true' === $oGlobal->GetUserData('__modulechooser') && self::CMSUserDefined()) {
             return true;
-        } else {
-            return false;
         }
-    }
 
-    public function GetLanguageIdList()
-    {
-        $oCMSConfig = TdbCmsConfig::GetInstance();
-        return [$oCMSConfig->fieldTranslationBaseLanguageId];
+        return false;
     }
 
     /**
