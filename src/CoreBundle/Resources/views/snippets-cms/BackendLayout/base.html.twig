@@ -5,17 +5,17 @@
             {% block title %}
                 <title>{{ constant('CMS_BACKEND_TITLE') }}</title>
             {% endblock %}
-            {% block head_metaData %}
-                {{ include('BackendLayout/parts/head_metaData.html.twig') }}
+            {% block head_meta_data %}
+                {{ include('BackendLayout/parts/head-meta-data.html.twig') }}
             {% endblock %}
 
             {% block head_constants %}
-                {{ include('BackendLayout/parts/head_js_constants.html.twig') }}
+                {{ include('BackendLayout/parts/head-js-constants.html.twig') }}
             {% endblock %}
 
             <!--#CMSHEADERCODE#-->
             {% block head_includes %}
-                {{ include('BackendLayout/parts/head_includes.html.twig') }}
+                {{ include('BackendLayout/parts/head-includes.html.twig') }}
             {% endblock %}
         {% endblock %}
     </head>
@@ -30,7 +30,7 @@
             <div class="wrapper d-flex flex-column min-vh-100 {{ bg }}">
                 {% block header %}
                     <header class="header bg-dark">
-                        {% block headerImage %}
+                        {% block header_image %}
                             <span class="header-brand"><img class="img-fluid" src="{{ cmsGetPathTheme() }}/images/chameleon_logo.svg" alt="" /></span>
                         {% endblock %}
                     </header>
@@ -40,7 +40,7 @@
                         <div class="container">
                             <div class="row justify-content-center">
                                 <div class="col-11 col-sm-9 col-md-8 col-lg-6 col-xl-4">
-                                    {% block mainContent %}
+                                    {% block main_content %}
                                         {% if (pageTitle is defined and '' != pageTitle) or user.isLoggedIn %}
                                             <div class="card">
                                                 {% if pageTitle is defined and '' != pageTitle %}
@@ -61,14 +61,14 @@
                         </div>
                     </main>
                 {% endblock %}
-                {% block backendFooter %}
+                {% block backend_footer %}
                     {{ include('BackendFooter/standard.html.twig') }}
                 {% endblock %}
-                {% block modalDialog %}
-                    {{ include('BackendLayout/parts/modalDialog.html.twig') }}
+                {% block modal_dialog %}
+                    {{ include('BackendLayout/parts/modal-dialog.html.twig') }}
                 {% endblock %}
                 {% block footer_includes %}
-                    {{ include('BackendLayout/parts/footer_default_includes.html.twig') }}
+                    {{ include('BackendLayout/parts/footer-default-includes.html.twig') }}
                 {% endblock %}
             </div>
         {% endblock %}

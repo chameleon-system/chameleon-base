@@ -5,5 +5,5 @@ $authenticityTokenManager = ServiceLocator::get('chameleon_system_core.security.
 
 $viewRender = new ViewRenderer();
 $viewRender->AddSourceObject('cmsauthenticitytokenParameter', $authenticityTokenManager->getTokenPlaceholderAsParameter());
-echo $viewRender->Render('BackendLayout/templateengineplain.html.twig');
+echo $viewRender->Render('BackendLayout/templateengine-plain.html.twig');
 
