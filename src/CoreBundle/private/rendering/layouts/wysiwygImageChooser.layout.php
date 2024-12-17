@@ -1,15 +1,9 @@
-<?php include dirname(__FILE__).'/includes/cms_head_data.inc.php'; ?>
-<!--#CMSHEADERCODE#-->
-<script src="<?=URL_CMS; ?>/javascript/wysiwygImage.js" type="text/javascript"></script>
-</head>
-<body>
-<div class="dialog_content">
-    <?php
-    $modules->GetModule('content');
-    ?>
-</div>
- <?php
-require dirname(__FILE__).'/includes/cms_footer_data.inc.php';
-?>
-</body>
-</html>
+<?php
+
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
+$authenticityTokenManager = ServiceLocator::get('chameleon_system_core.security.authenticity_token.authenticity_token_manager');
+
+$viewRender = new ViewRenderer();
+$viewRender->AddSourceObject('cmsauthenticitytokenParameter', $authenticityTokenManager->getTokenPlaceholderAsParameter());
+echo $viewRender->Render('BackendLayout/wysiwyg-image-chooser.html.twig');

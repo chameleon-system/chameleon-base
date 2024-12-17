@@ -1,0 +1,27 @@
+{% extends 'BackendLayout/base.html.twig' %}
+
+{% block sidebar %}
+    {{ module('sidebar') }}
+{% endblock %}
+
+{% block header %}
+    <header class="header header-sticky mb-4">
+        <div class="container-fluid">
+            {{ module('headerimage') }}
+        </div>
+        <div class="header-divider"></div>
+        <div class="container-fluid">
+            {{ module('breadcrumb') }}
+        </div>
+    </header>
+{% endblock %}
+
+{% block main %}
+    <main class="flex-grow-1 px-3">
+        <div class="container-fluid content px-0">
+            {% block main_module %}
+                {{ module('contentmodule') }}
+            {% endblock %}
+        </div>
+    </main>
+{% endblock %}

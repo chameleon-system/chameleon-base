@@ -1,0 +1,19 @@
+{% set bodyClass = 'bg-white' %}
+{% extends 'BackendLayout/base.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+    <script src="{{ static_url_to_weblib('/javascript/wysiwygImage.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+    <main>
+        {{ module('content') }}
+    </main>
+    {% block modal_dialog %}
+        {{ parent() }}
+    {% endblock %}
+    {% block footer_includes %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
