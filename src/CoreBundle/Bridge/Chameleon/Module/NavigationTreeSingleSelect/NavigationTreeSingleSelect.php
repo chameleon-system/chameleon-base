@@ -103,9 +103,7 @@ class NavigationTreeSingleSelect extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         $this->restrictedNodes = $this->getPortalNavigationStartNodes();
-        /** @var BackendSessionInterface $backendSession */
-        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
-        $activeLanguageIsoCode = $backendSession->getCurrentEditLanguageIso6391();
+        $activeLanguageIsoCode = $this->backendSession->getCurrentEditLanguageIso6391();
 
         $activeLanguageId = null !== $activeLanguageIsoCode
             ? $this->dbConnection->fetchFirstColumn(
