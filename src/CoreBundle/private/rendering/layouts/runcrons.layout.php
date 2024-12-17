@@ -1,17 +1,8 @@
 <?php
-header('Content-Type: text/html; charset=UTF-8');
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Cronjobs</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="<?=TGlobal::GetPathTheme(); ?>/css/layout.css" rel="stylesheet" type="text/css"/>
-    <link href="<?=TGlobal::GetStaticURLToWebLib('/bootstrap/css/bootstrap.min.css?v4.1.3'); ?>" media="screen" rel="stylesheet" type="text/css" />
-    <link href="<?=TGlobal::GetPathTheme(); ?>/coreui/css/coreuiTheme.css?v43" media="screen" rel="stylesheet" type="text/css" />
-    <link href="<?=TGlobal::GetPathTheme(); ?>/css/global.css" rel="stylesheet" type="text/css"/>
-</head>
-<body style="background-color: transparent;">
-<?php $modules->GetModule('main'); ?>
-</body>
-</html>
+
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
+$authenticityTokenManager = ServiceLocator::get('chameleon_system_core.security.authenticity_token.authenticity_token_manager');
+$viewRender = new ViewRenderer();
+$viewRender->AddSourceObject('cmsauthenticitytokenParameter', $authenticityTokenManager->getTokenPlaceholderAsParameter());
+echo $viewRender->Render('BackendLayout/runcrons.html.twig');
