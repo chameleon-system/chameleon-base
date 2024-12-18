@@ -8,7 +8,6 @@ interface BackendSessionInterface
 
     public function getCurrentEditLanguageId(): string;
 
-
     public function setCurrentEditLanguageIso6391(string $language): void;
 
     public function resetCurrentEditLanguage(): void;

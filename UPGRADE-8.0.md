@@ -94,7 +94,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TAccessManagerGroups` removed.
 - `\TAccessManagerPermissions` removed.
 - `\TAccessManagerPortals` removed.
-- `\TAccessManagerRoles` removed.
+- `\TAccessManagerRoles` removed. @todo remove in article-right bundle
 - `\MTLoginEndPoint::Logout` removed (logout works by redirecting to the logout url)
 - `\TCMSUser::Logout` removed
 - `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
@@ -121,7 +121,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `BackendLoginEvent` and `BackendLogoutEvent` removed - use `Symfony\Component\Security\Http\Event\LoginSuccessEvent` and `Symfony\Component\Security\Http\Event\LogoutEvent` instead
 - `TPkgDependencyInjection` removed - use `ChameleonSystem\CoreBundle\ServiceLocator` instead.
 - `TPkgCmsFileManager_FileSystem` and `IPkgCmsFileManager` are deprecated now. Use `Symfony\Component\Filesystem\Filesystem` instead.
-
+- `MTPkgExternalTracker_MTShopArticleCatalogCore` removed
 
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
   https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.0.md

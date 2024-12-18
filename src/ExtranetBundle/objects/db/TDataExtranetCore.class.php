@@ -16,18 +16,12 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 class TDataExtranetCore extends TDataExtranetCoreAutoParent
 {
-    /**
-     * set to true, if the content in internal cache has changed.
-     *
-     * @var bool
-     */
-    protected $bInternalCacheMarkedAsDirty = true;
+    public const URL_PARAMETER_CHANGE_PASSWORD = 'pwchangekey';
 
     /**
-     * @deprecated - This was only used by the forgot password email which does not include login name anymore.
+     * set to true, if the content in internal cache has changed.
      */
-    const URL_PARAMETER_LOGINNAME = 'loginname';
-    const URL_PARAMETER_CHANGE_PASSWORD = 'pwchangekey';
+    protected bool $bInternalCacheMarkedAsDirty = true;
 
     /**
      * Fetches the instance for the current portal.
@@ -135,7 +129,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     {
         return $this->GetLinkForNode($this->fieldNodeConfirmRegistration, $bForcePortal);
     }
-    
+
     public function getLinkLoginSuccessPage(bool $forcePortal = false): ?string
     {
         return $this->GetLinkForNode($this->fieldLoginSuccessNodeId, $forcePortal);
@@ -148,7 +142,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
      */
     public function GetLinkLogout($sSpotName)
     {
-        $aAdditionalParams = array('module_fnc['.$sSpotName.']' => 'Logout');
+        $aAdditionalParams = ['module_fnc['.$sSpotName.']' => 'Logout'];
 
         return self::getActivePageService()->getActivePage()->GetRealURLPlain($aAdditionalParams);
     }
@@ -166,7 +160,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * return link to node id.
      *
-     * @param int  $iNodeId
+     * @param int $iNodeId
      * @param bool $bForcePortal - include domain?
      *
      * @return string|null
@@ -208,12 +202,12 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     public function GetConfirmRegistrationURL($sConfimKey)
     {
         $link = $this->GetLinkConfirmRegistrationPage(true);
-        $data = array(
-            'module_fnc' => array(
+        $data = [
+            'module_fnc' => [
                 $this->fieldExtranetSpotName => 'ConfirmUser',
-                ),
+                ],
             'key' => $sConfimKey,
-        );
+        ];
         $urlUtil = static::getUrlUtil();
         $link .= $urlUtil->getArrayAsUrl($data, '?', '&');
         $link = $urlUtil->removeAuthenticityTokenFromUrl($link);
@@ -234,10 +228,10 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     {
         $node = new TdbCmsTree();
         $node->Load($this->sqlData['forgot_password_treenode_id']);
-        $data = array(
-            'module_fnc' => array($spotName => 'ChangeForgotPassword'),
+        $data = [
+            'module_fnc' => [$spotName => 'ChangeForgotPassword'],
             self::URL_PARAMETER_CHANGE_PASSWORD => $key,
-        );
+        ];
         $link = static::getTreeService()->getLinkToPageForTreeAbsolute($node, $data);
         $link = static::getUrlUtil()->removeAuthenticityTokenFromUrl($link);
 
@@ -245,17 +239,18 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     }
 
     /**
-     * return cache trigger for the object
+     * return cache trigger for the object.
+     *
      * @return array{table: string, id: string}[]
      */
     public function GetCacheTrigger()
     {
         $aTrigger = $this->GetFromInternalCache('aCacheTrigger');
         if (null === $aTrigger) {
-            $aTrigger = array();
-            $aTrigger[] = array('table' => $this->table, 'id' => $this->id);
-            $aTrigger[] = array('table' => 'cms_tree', 'id' => '');
-            $aTrigger[] = array('table' => 'cms_portal', 'id' => '');
+            $aTrigger = [];
+            $aTrigger[] = ['table' => $this->table, 'id' => $this->id];
+            $aTrigger[] = ['table' => 'cms_tree', 'id' => ''];
+            $aTrigger[] = ['table' => 'cms_portal', 'id' => ''];
             $this->SetInternalCache('aCacheTrigger', $aTrigger);
         }
 
@@ -271,7 +266,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     {
         static $sKey = null;
         if (null === $sKey) {
-            $aKey = array('class' => __CLASS__, 'ident' => 'objectInstance');
+            $aKey = ['class' => __CLASS__, 'ident' => 'objectInstance'];
             $oActivePage = self::getActivePageService()->getActivePage();
             if ($oActivePage) {
                 $aKey['iLanguageId'] = self::getLanguageService()->getActiveLanguageId();
@@ -287,10 +282,10 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
     /**
      * {@inheritdoc}
      *
-     * @return void
-     *
      * @param string $varName
-     * @param array{table: string, id: string}[]|null|string $content
+     * @param array{table: string, id: string}[]|string|null $content
+     *
+     * @return void
      */
     protected function SetInternalCache($varName, $content)
     {

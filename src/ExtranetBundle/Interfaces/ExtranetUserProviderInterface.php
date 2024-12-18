@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\ExtranetBundle\Interfaces;
 
-use TdbDataExtranetUser;
-
 /**
  * Provides the active extranet user.
  */
@@ -25,9 +23,9 @@ interface ExtranetUserProviderInterface
      * object is returned). Returns null if not even an uninitialized user can be returned, e.g. if there is no session
      * available.
      *
-     * @return TdbDataExtranetUser|null
+     * @return \TdbDataExtranetUser|null
      *
-     * @deprecated null is now never returned (always an empty user then) and that option will be removed from the interface in future versions
+     * null is now never returned (always an empty user then) and that option will be removed from the interface in future versions
      */
     public function getActiveUser();
 
