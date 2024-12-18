@@ -1,6 +1,5 @@
 <?php
 if (
-    TCMSLogChange::AllowTransaction(1, 'dbversionPkgShopServiceItemGiftcard', 'DB-Update Counter für das pkgShopServiceItemGiftcard-Package') &&
     !TCMSLogChange::RecordExists('pkg_shop_service_type', 'system_name', 'card')
 ) {
     TCMSLogChange::RunUpdate('pkgShopServiceItem/pkgShopServiceItem-updates'); ?>
