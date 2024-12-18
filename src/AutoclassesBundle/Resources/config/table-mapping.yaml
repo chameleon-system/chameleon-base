@@ -226,12 +226,6 @@ chameleon_system_autoclasses:
       - shop_payment_handler_group_config
       - shop_payment_handler_parameter
       - shop_payment_method
-    - targetDir: '@ChameleonSystemAmazonPaymentBundle/Entity'
-      configDir: '@ChameleonSystemAmazonPaymentBundle/Resources/config/doctrine'
-      metaConfigDir: '@ChameleonSystemAmazonPaymentBundle/Resources/autoClass/doctrine'
-      namespace: \ChameleonSystem\AmazonPaymentBundle\Entity
-      tables:
-      - amazon_payment_id_mapping
     - targetDir: '@ChameleonSystemShopRatingServiceBundle/Entity'
       configDir: '@ChameleonSystemShopRatingServiceBundle/Resources/config/doctrine'
       metaConfigDir: '@ChameleonSystemShopRatingServiceBundle/Resources/autoClass/doctrine'

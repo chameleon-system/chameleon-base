@@ -245,7 +245,6 @@ class UpdateCounterVersionMigrator
         'pkgshopnewslettersignupwithorder' => 'shopnewslettersignupwithorderbundle',
         'pkgshoporderstatus' => 'shoporderstatusbundle',
         'pkgshoporderviaphone' => 'shoporderviaphonebundle',
-        'pkgshoppaymentamazon' => 'amazonpaymentbundle',
         'pkgshoppaymentipn' => 'shoppaymentipnbundle',
         'pkgshoppaymenttransaction' => 'shoppaymenttransactionbundle',
         'pkgshopprimarynavigation' => 'shopprimarynavigationbundle',

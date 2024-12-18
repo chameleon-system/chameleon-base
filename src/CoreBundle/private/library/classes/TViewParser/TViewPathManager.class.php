@@ -528,7 +528,6 @@ class TViewPathManager implements IViewPathManager
         'pkgshopnewslettersignupwithorder' => 'chameleon-shop/src/ShopNewsletterSignupWithOrderBundle',
         'pkgshoporderstatus' => 'chameleon-shop/src/ShopOrderStatusBundle',
         'pkgshoporderviaphone' => 'chameleon-shop/src/ShopOrderViaPhoneBundle',
-        'pkgshoppaymentamazon' => 'chameleon-shop/src/AmazonPaymentBundle',
         'pkgshoppaymentipn' => 'chameleon-shop/src/ShopPaymentIPNBundle',
         'pkgshoppaymenttransaction' => 'chameleon-shop/src/ShopPaymentTransactionBundle',
         'pkgshopprimarynavigation' => 'chameleon-shop/src/ShopPrimaryNavigationBundle',
