@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\DeleteMediaEvent;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\CacheInterface;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class TCMSTableEditorMedia extends TCMSTableEditorFiles
 {
@@ -21,7 +22,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
         return 'cms_media';
     }
 
-    public function DatabaseCopy($languageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = false)
+    public function DatabaseCopy($languageCopy = false, $aOverloadedFields = [], $bCopyAllLanguages = false)
     {
         $iFileId = $this->sId;
         $oImage = new TCMSImage();
@@ -73,10 +74,10 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
                         $isValid = true;
                     } else {
                         throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_files.error_file_to_large',
-                            array(
+                            [
                                 '%size%' => TCMSLocal::GetActive()->FormatNumber($this->aUploadData['size'], 0),
                                 '%allowed%' => TCMSLocal::GetActive()->FormatNumber($imageUploadMaxSize, 0),
-                            )
+                            ]
                         ), -240);
                     }
                 }
@@ -103,7 +104,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
         // reduce allowed filetypes to external configured types
         $aAllowedFileTypesFinal = $aAllowedFileTypes;
         if (!empty($sAllowedFileTypesFromExternal)) {
-            $aAllowedFileTypesFinal = array();
+            $aAllowedFileTypesFinal = [];
             $aAllowedFileTypesFromExternal = explode(',', $sAllowedFileTypesFromExternal);
             foreach ($aAllowedFileTypesFromExternal as $sFileType) {
                 $sFileType = strtolower($sFileType);
@@ -165,21 +166,21 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
         if (!$isValid) {
             if ($bProportionExactMatch) {
                 throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_media.error_requires_exact_dimension',
-                        array(
-                            '%width%' => $iMediaWidth,
-                            '%height%' => $iMediaHeight,
-                            '%maxWidth%' => $iMaxUploadWidth,
-                            '%maxHeight%' => $iMaxUploadHeight,
-                        )
-                        ), -240);
+                    [
+                        '%width%' => $iMediaWidth,
+                        '%height%' => $iMediaHeight,
+                        '%maxWidth%' => $iMaxUploadWidth,
+                        '%maxHeight%' => $iMaxUploadHeight,
+                    ]
+                ), -240);
             } else {
                 throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_media.error_invalid_dimensions',
-                        array(
-                            '%width%' => $iMediaWidth,
-                            '%height%' => $iMediaHeight,
-                            '%maxWidth%' => $iMaxUploadWidth,
-                            '%maxHeight%' => $iMaxUploadHeight,
-                        )), -240);
+                    [
+                        '%width%' => $iMediaWidth,
+                        '%height%' => $iMediaHeight,
+                        '%maxWidth%' => $iMaxUploadWidth,
+                        '%maxHeight%' => $iMaxUploadHeight,
+                    ]), -240);
             }
         }
 
@@ -190,7 +191,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
      * checks uploaded file for right filetype.
      *
      * @param string $filePath
-     * @param array  $allowedFileTypes
+     * @param array $allowedFileTypes
      *
      * @return bool
      */
@@ -275,8 +276,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
     /**
      * here you can modify, clean or filter data before saving.
      *
-     *
-     * @var array $postData
+     * @var array
      *
      * @return array
      */
@@ -369,7 +369,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
                         $targetPath = PATH_MEDIA_LIBRARY.'/'.$sNewName;
                         if (true === \is_readable($sourcePath) && true === \is_file($sourcePath)) {
                             $this->CreateSubPathInImagePath();
-                            $this->getFileManager()->move($sourcePath, $targetPath);
+                            $this->getFileManager()->rename($sourcePath, $targetPath, true);
                         }
                     }
                 }
@@ -391,7 +391,9 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
     {
         $sFullPath = $this->GetTargetDirectory();
         if (!is_dir($sFullPath) && !file_exists($sFullPath)) {
-            if (!$this->getFileManager()->mkdir($sFullPath, 0777, true)) {
+            try {
+                $this->getFileManager()->mkdir($sFullPath);
+            } catch (IOExceptionInterface $exception) {
                 TTools::WriteLogEntry('could not create image subdir: '.$sFullPath, 1, __FILE__, __LINE__);
             }
         }
@@ -460,7 +462,12 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
 
         $imagePath = $oImage->GetFullLocalPath();
         if (file_exists($imagePath) && !is_dir($imagePath)) {
-            $bDeleteSuccess = $this->getFileManager()->delete($imagePath);
+            try {
+                $this->getFileManager()->remove($imagePath);
+            } catch (IOExceptionInterface $exception) {
+                $bDeleteSuccess = false;
+            }
+
             $oImage->ClearThumbnails();
         }
 

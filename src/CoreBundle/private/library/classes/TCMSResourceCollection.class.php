@@ -18,26 +18,25 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * this class can manage resource collection creation.
-/**/
+ * This class can manage resource collection creation.
+ *
+ * */
 class TCMSResourceCollection implements ResourceCollectorInterface
 {
     /**
      * base path of server ($_SERVER['DOCUMENT_ROOT']).
      */
-    private $sBasePath = null;
+    private $sBasePath;
 
     /**
      * @var string|null current absolute css path
      */
-    protected $sCurrentCSSPath = null;
+    protected $sCurrentCSSPath;
 
-    /**
-     * @var IPkgCmsFileManager
-     */
-    private $cmsFileManager;
+    private Filesystem $cmsFileManager;
 
     /**
      * @var PortalDomainServiceInterface
@@ -63,14 +62,14 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     private $cssMinifierService;
 
     public function __construct(
-        ?IPkgCmsFileManager $cmsFileManager = null,
+        ?Filesystem $cmsFileManager = null,
         ?PortalDomainServiceInterface $portalDomainService = null,
         ?EventDispatcherInterface $eventDispatcher = null,
         ?CssMinifierServiceInterface $cssMinifierService = null,
         string $assetUrl = URL_OUTBOX.'static',
         string $assetPath = PATH_OUTBOX.'/static'
     ) {
-        $this->cmsFileManager = $cmsFileManager ?? ServiceLocator::get('chameleon_system_core.filemanager');
+        $this->cmsFileManager = $cmsFileManager ?? new Filesystem();
         $this->portalDomainService = $portalDomainService ?? ServiceLocator::get('chameleon_system_core.portal_domain_service');
         $this->eventDispatcher = $eventDispatcher ?? ServiceLocator::get('event_dispatcher');
         $this->cssMinifierService = $cssMinifierService ?? ServiceLocator::get('chameleon_system_core.service.css_minifier');
@@ -144,7 +143,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $matchString = '/<!--#CMSRESOURCEIGNORE#-->(.+?)<!--#ENDCMSRESOURCEIGNORE#-->/si';
         $sReworkContent = preg_replace_callback(
             $matchString,
-            array($this, 'CollectExternalResourcesCommentsCallback'),
+            [$this, 'CollectExternalResourcesCommentsCallback'],
             $sReworkContent
         );
 
@@ -152,7 +151,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $matchString = '/<!--(.+?)-->/si';
         $sReworkContent = preg_replace_callback(
             $matchString,
-            array($this, 'CollectExternalResourcesCommentsCallback'),
+            [$this, 'CollectExternalResourcesCommentsCallback'],
             $sReworkContent
         );
 
@@ -160,27 +159,25 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>(?!\\s*?<!--(.*?)#GLOBALRESOURCECOLLECTION#)/i";
         $sReworkContent = preg_replace_callback(
             $matchString,
-            array($this, 'CollectExternalResourcesCSSCallback'),
+            [$this, 'CollectExternalResourcesCSSCallback'],
             $sReworkContent
         );
         $aCSS = $this->StaticContentCollector('css');
-
 
         // create resource collection for static global css
         $matchString = "/<link([^>]+?)href=[\"]([^'\"]+?).css([\?][^[:space:]]+)?[\"]([^>]*?)>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
         $sReworkContent = preg_replace_callback(
             $matchString,
-            array($this, 'CollectExternalResourcesCSSCallback'),
+            [$this, 'CollectExternalResourcesCSSCallback'],
             $sReworkContent
         );
         $aGlobalCSS = $this->StaticContentCollector('cssglobal');
-
 
         // repeat for js
         $matchString = "/<script([^>]+?)src=[\"]([^'\"]+?).js([\?][^[:space:]]+)?[\"]([^>]*?)><\/script>(?!\\s*?<!--(.*?)#GLOBALRESOURCECOLLECTION#)/i";
         $sReworkContent = preg_replace_callback(
             $matchString,
-            array($this, 'CollectExternalResourcesJSCallback'),
+            [$this, 'CollectExternalResourcesJSCallback'],
             $sReworkContent
         );
         $aJS = $this->StaticContentCollector('js');
@@ -193,11 +190,10 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             $sMinifyStatus = 'false';
         }
 
-
         $matchString = "/<script([^>]+?)src=[\"]([^'\"]+?).js([\?][^[:space:]]+)?[\"]([^>]*?)><\/script>\\s*(<!--.*?#GLOBALRESOURCECOLLECTION#.?-->)/i";
         $sReworkContent = preg_replace_callback(
             $matchString,
-            array($this, 'CollectExternalResourcesJSCallback'),
+            [$this, 'CollectExternalResourcesJSCallback'],
             $sReworkContent
         );
         $aJSGlobal = $this->StaticContentCollector('jsglobal');
@@ -310,10 +306,10 @@ class TCMSResourceCollection implements ResourceCollectorInterface
                 $sPageContent = str_replace('<!--#CMSHEADERCODE-COMPACT-JS-AND-CSS#-->', $sPreHeadText, $sPageContent);
             }
             if ($bCSSTagFound) {
-                $sPageContent = str_replace('<!--#CMSHEADERCODE-COMPACT-CSS#-->', ($sCompressLinkCSSGlobal.$sCompressLinkCSS), $sPageContent);
+                $sPageContent = str_replace('<!--#CMSHEADERCODE-COMPACT-CSS#-->', $sCompressLinkCSSGlobal.$sCompressLinkCSS, $sPageContent);
             }
             if ($bJSTagFound) {
-                $sPageContent = str_replace('<!--#CMSHEADERCODE-COMPACT-JS#-->', ($sCompressLinkJsGlobal.$sCompressLinkJs), $sPageContent);
+                $sPageContent = str_replace('<!--#CMSHEADERCODE-COMPACT-JS#-->', $sCompressLinkJsGlobal.$sCompressLinkJs, $sPageContent);
             }
         }
         // re-insert comments
@@ -330,7 +326,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      * Write resource collection file for css containing all included css files.
      *
      * @param string $sFileMD5
-     * @param array  $aCSS
+     * @param array $aCSS
      *
      * @return bool
      */
@@ -343,7 +339,12 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             if (!file_exists($sCSSStaticPath.$sFileMD5)) {
                 $bTargetDirectoryIsWritable = true;
                 if (!is_dir($sCSSStaticPath)) {
-                    $bTargetDirectoryIsWritable = $this->cmsFileManager->mkdir($sCSSStaticPath, 0777, true);
+                    try {
+                        $this->cmsFileManager->mkdir($sCSSStaticPath);
+                        $bTargetDirectoryIsWritable = true;
+                    } catch (Exception $e) {
+                        $bTargetDirectoryIsWritable = false;
+                    }
                 }
 
                 if ($bTargetDirectoryIsWritable) {
@@ -364,7 +365,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
                         $sCSSFile = TGlobal::ResolveStaticURL($sCSSFile);
                         $aStaticURLs = TGlobal::GetStaticURLPrefix();
                         if (!is_array($aStaticURLs)) {
-                            $aStaticURLs = array($aStaticURLs);
+                            $aStaticURLs = [$aStaticURLs];
                         }
                         foreach ($aStaticURLs as $sStaticURL) {
                             if (!empty($sStaticURL)) {
@@ -397,7 +398,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
                         }
                     }
 
-                    $this->cmsFileManager->file_put_contents($sCSSStaticPath.$sFileMD5, $sContent);
+                    file_put_contents($sCSSStaticPath.$sFileMD5, $sContent);
                 }
             }
         }
@@ -409,7 +410,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      * Write resource collection file for JS containing all included JS files.
      *
      * @param string $sFileJSMD5
-     * @param array  $aJS
+     * @param array $aJS
      *
      * @return bool
      */
@@ -422,7 +423,11 @@ class TCMSResourceCollection implements ResourceCollectorInterface
             if (!file_exists($sJSStaticPath.$sFileJSMD5)) {
                 $bTargetDirectoryIsWritable = true;
                 if (!is_dir($sJSStaticPath)) {
-                    $bTargetDirectoryIsWritable = $this->cmsFileManager->mkdir($sJSStaticPath, 0777, true);
+                    try {
+                        $this->cmsFileManager->mkdir($sJSStaticPath);
+                    } catch (Exception $e) {
+                        $bTargetDirectoryIsWritable = false;
+                    }
                 }
 
                 if ($bTargetDirectoryIsWritable) {
@@ -440,7 +445,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
                         $sJSFile = TGlobal::ResolveStaticURL($sJSFile);
                         $aStaticURLs = TGlobal::GetStaticURLPrefix();
                         if (!is_array($aStaticURLs)) {
-                            $aStaticURLs = array($aStaticURLs);
+                            $aStaticURLs = [$aStaticURLs];
                         }
                         foreach ($aStaticURLs as $sStaticURL) {
                             if (!empty($sStaticURL)) {
@@ -466,7 +471,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
                         }
                     }
                     $sContent = $this->dispatchJSMinifyEvent($sContent);
-                    $this->cmsFileManager->file_put_contents($sJSStaticPath.$sFileJSMD5, $sContent);
+                    file_put_contents($sJSStaticPath.$sFileJSMD5, $sContent);
                 }
             }
         }
@@ -490,7 +495,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     /**
      * returns absolute URL of current CSS file (strips filename).
      *
-     * @param string $sFile   full file URL
+     * @param string $sFile full file URL
      *
      * @return string path of a file
      */
@@ -511,7 +516,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      */
     protected function CollectExternalResourcesCommentsCallback($aMatch)
     {
-        static $aProtectedComments = array('#CMSHEADERCODE-COMPACT-JS-AND-CSS#', '#CMSHEADERCODE-JS#', '#CMSHEADERCODE-CSS#', '#CMSHEADERCODE#', '#CMSHEADERCODE-COMPACT-JS#', '#CMSHEADERCODE-COMPACT-CSS#', '#GLOBALRESOURCECOLLECTION#');
+        static $aProtectedComments = ['#CMSHEADERCODE-COMPACT-JS-AND-CSS#', '#CMSHEADERCODE-JS#', '#CMSHEADERCODE-CSS#', '#CMSHEADERCODE#', '#CMSHEADERCODE-COMPACT-JS#', '#CMSHEADERCODE-COMPACT-CSS#', '#GLOBALRESOURCECOLLECTION#'];
         if (is_array($aMatch) && count($aMatch) > 1 && in_array(trim($aMatch[1]), $aProtectedComments)) {
             return $aMatch[0];
         }
@@ -526,16 +531,16 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     }
 
     /**
-     * @param string      $sType
+     * @param string $sType
      * @param string|null $sFile
      *
      * @return array
      */
     protected function StaticContentCollector($sType, $sFile = null)
     {
-        static $aContent = array();
+        static $aContent = [];
         if (!array_key_exists($sType, $aContent)) {
-            $aContent[$sType] = array();
+            $aContent[$sType] = [];
         }
         if (!is_null($sFile)) {
             $iIndex = count($aContent[$sType]);
@@ -549,16 +554,16 @@ class TCMSResourceCollection implements ResourceCollectorInterface
 
     /**
      * @param string $sAbsoluteCSSFileURL current path of the css file
-     * @param string $sContent            content of the css file
+     * @param string $sContent content of the css file
      *
      * @return string
      */
     protected function ProcessCSSRecursive($sAbsoluteCSSFileURL, $sContent)
     {
-        //replace the relative url path in css file by absolute, something like [absoluter-path-CSS]/../images/foo.jpg
+        // replace the relative url path in css file by absolute, something like [absoluter-path-CSS]/../images/foo.jpg
         $sTemp = $this->ReplaceRelativePath($sAbsoluteCSSFileURL, $sContent);
 
-        //replace "@import css filename" via insert css content from that css file
+        // replace "@import css filename" via insert css content from that css file
         $sNewCss = $this->ImportCSSContent($sTemp);
         if ($sNewCss === $sTemp) {
             return $sNewCss;
@@ -571,7 +576,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      * replace the relative url path in css file with absolute path.
      *
      * @param string $sAbsoluteCSSFileURL current path of the css file
-     * @param string $sContent            content of the css file
+     * @param string $sContent content of the css file
      *
      * @return mixed|string content in which relative url is replaced with absolute url
      */
@@ -584,20 +589,20 @@ class TCMSResourceCollection implements ResourceCollectorInterface
          * from e.g. background-image.
          */
         $sRegExp = "/url\([[:space:]]*[\"|\']{0,1}(\.{0,2}\S+)[[:space:]]*[\"|\']{0,1}\)/is";
-        $sNewContent = preg_replace_callback($sRegExp, array($this, 'ReplaceRealPathCallback'), $sContent);
+        $sNewContent = preg_replace_callback($sRegExp, [$this, 'ReplaceRealPathCallback'], $sContent);
 
         /**
          * replaces src=..
          * from progid:DXImageTransform.Microsoft.AlphaImageLoader(src=..).
          */
         $sRegExp = "/src=[[:space:]]*[\"|\']{0,1}(\.{0,2}\S+)[[:space:]]*[\"|\']{0,1}/is";
-        $sNewContent = preg_replace_callback($sRegExp, array($this, 'ReplaceRealPathCallback'), $sNewContent);
+        $sNewContent = preg_replace_callback($sRegExp, [$this, 'ReplaceRealPathCallback'], $sNewContent);
 
         /**
          * replaces css @import ..
          */
         $sRegExp = "/@import [[:space:]]*\"(\.{0,2}\S+)[[:space:]]*\"/is";
-        $sNewContent = preg_replace_callback($sRegExp, array($this, 'ReplaceRealPathCallback'), $sNewContent);
+        $sNewContent = preg_replace_callback($sRegExp, [$this, 'ReplaceRealPathCallback'], $sNewContent);
 
         return $sNewContent;
     }
@@ -653,9 +658,9 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      */
     protected function ImportCSSContent($sContent)
     {
-        //@import url("print.css") print, @import "<name>" <media>;
+        // @import url("print.css") print, @import "<name>" <media>;
         $sRegExp = "#@import\s*(url\(){0,1}\s*\"(\s*\S+\s*)\"(.*)\;#";
-        $sNewContent = preg_replace_callback($sRegExp, array($this, 'ReplaceCSSImportCallback'), $sContent);
+        $sNewContent = preg_replace_callback($sRegExp, [$this, 'ReplaceCSSImportCallback'], $sContent);
 
         return $sNewContent;
     }
@@ -664,7 +669,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      * callback for function ImportCSSContent that opens the replaced css files
      * and fetch the content from it.
      *
-     * @var array $aMatch
+     * @var array
      *
      * @return string $sCSS css content
      */
@@ -675,7 +680,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $sCSSFile = TGlobal::ResolveStaticURL($sCSSFile);
         $aStaticURLs = TGlobal::GetStaticURLPrefix();
         if (!is_array($aStaticURLs)) {
-            $aStaticURLs = array($aStaticURLs);
+            $aStaticURLs = [$aStaticURLs];
         }
         foreach ($aStaticURLs as $sStaticURL) {
             if (!empty($sStaticURL)) {
@@ -755,7 +760,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
      * Test whether collecting resource is allowed. Resource is only allowed if
      * it is from local or static.
      *
-     * @var string $sResource
+     * @var string
      *
      * @return true if resource ist allowed
      */
@@ -772,7 +777,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     /**
      * Test for Static URL.
      *
-     * @var string $sResource
+     * @var string
      *
      * @return true if resource is static url
      */
@@ -785,7 +790,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
         $bIsStatic = false;
         $aStaticURLs = TGlobal::GetStaticURLPrefix();
         if (!is_array($aStaticURLs)) {
-            $aStaticURLs = array($aStaticURLs);
+            $aStaticURLs = [$aStaticURLs];
         }
         foreach ($aStaticURLs as $sStaticURL) {
             if (!empty($sStaticURL)) {
@@ -802,7 +807,7 @@ class TCMSResourceCollection implements ResourceCollectorInterface
     /**
      * Test for local resource.
      *
-     * @var string $sResource
+     * @var string
      *
      * @return bool - true if the resource is in local
      */

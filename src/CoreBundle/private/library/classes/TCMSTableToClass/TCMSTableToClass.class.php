@@ -11,33 +11,34 @@
 
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * used to create a class based on a table definition.
- * /**/
+ * used to create an ORM class based on a table definition.
+ **/
 class TCMSTableToClass
 {
     /**
-     * table conf to convert.
-     *
-     * @var array
+     * Table configuration to convert.
      */
-    protected $aTableConf;
+    protected array $aTableConf = [];
 
     public const PREFIX_CLASS = 'Tdb';
     public const PREFIX_CLASS_AUTO = 'TAdb';
     public const PREFIX_CLASS_AUTO_CUSTOM = 'TACdb';
     public const PREFIX_PROPERTY = 'field';
-    /**
-     * @var IPkgCmsFileManager
-     */
-    private $filemanager;
-    /**
-     * @var string
-     */
-    private $cachedir;
+    private Filesystem $filemanager;
+    private ?string $cachedir;
     private AutoclassesDataAccessInterface $autoClassesDataAccess;
     private Connection $databaseConnection;
+
+    public function __construct(Filesystem $filemanager, string $cachedir, AutoclassesDataAccessInterface $autoClassesDataAccess, Connection $databaseConnection)
+    {
+        $this->filemanager = $filemanager;
+        $this->cachedir = $cachedir;
+        $this->autoClassesDataAccess = $autoClassesDataAccess;
+        $this->databaseConnection = $databaseConnection;
+    }
 
     /**
      * @param string $tableConfId
@@ -150,11 +151,11 @@ class TCMSTableToClass
             // need to delete the old class
             $sFile = realpath($this->GetClassRootPath($sType).'/CMSAutoDataObjects').'/'.self::GetClassName(self::PREFIX_CLASS_AUTO, $sOldName).'.class.php';
             if (file_exists($sFile)) {
-                $this->filemanager->unlink($sFile);
+                $this->filemanager->remove($sFile);
             }
             $sFile = realpath($this->GetClassRootPath($sType).'/CMSAutoDataObjects').'/'.self::GetClassName(self::PREFIX_CLASS_AUTO, $sOldName).'List.class.php';
             if (file_exists($sFile)) {
-                $this->filemanager->unlink($sFile);
+                $this->filemanager->remove($sFile);
             }
         }
     }
@@ -185,21 +186,21 @@ class TCMSTableToClass
         $aData = $this->GetClassData();
         $sBaseClassFile = realpath($this->GetClassRootPath().$aData['sAutoClassSubtype']).'/'.$aData['sAutoClassName'].'.class.php';
         if (file_exists($sBaseClassFile)) {
-            $this->filemanager->unlink($sBaseClassFile);
+            $this->filemanager->remove($sBaseClassFile);
         }
 
         $sBaseClassFile = realpath($this->GetClassRootPath().$aData['sAutoClassSubtype']).'/'.$aData['sAutoClassName'].'List.class.php';
         if (file_exists($sBaseClassFile)) {
-            $this->filemanager->unlink($sBaseClassFile);
+            $this->filemanager->remove($sBaseClassFile);
         }
 
         $sFile = realpath($this->GetClassRootPath($aData['sClassType']).$aData['sClassSubtype']).'/'.$aData['sClassName'].'.class.php';
         if (file_exists($sFile)) {
-            $this->filemanager->unlink($sFile);
+            $this->filemanager->remove($sFile);
         }
         $sFile = realpath($this->GetClassRootPath($aData['sClassType']).$aData['sClassSubtype']).'/'.$aData['sClassName'].'List.class.php';
         if (file_exists($sFile)) {
-            $this->filemanager->unlink($sFile);
+            $this->filemanager->remove($sFile);
         }
     }
 
@@ -234,8 +235,6 @@ class TCMSTableToClass
         if ($fp = fopen($sBaseClassFile, 'wb')) {
             if (fwrite($fp, $sAutoClassString)) {
                 fclose($fp);
-
-                $this->filemanager->put($sBaseClassFile, $sBaseClassFile, 0777, true);
             }
         }
 
@@ -247,8 +246,6 @@ class TCMSTableToClass
         if ($fp = fopen($sBaseListClassFile, 'wb')) {
             if (fwrite($fp, $sAutoClassString)) {
                 fclose($fp);
-
-                $this->filemanager->put($sBaseListClassFile, $sBaseListClassFile, 0777, true);
             }
         }
     }
@@ -271,14 +268,12 @@ class TCMSTableToClass
         $sClassString = $oViewParser->RenderObjectView('recordCustom'.$sPostFix, 'TCMSTableToClass');
 
         if (file_exists($sOldFile)) {
-            $this->filemanager->unlink($sOldFile);
+            $this->filemanager->remove($sOldFile);
         }
 
         if ($fp = fopen($sFile, 'wb')) {
             if (fwrite($fp, $sClassString)) {
                 fclose($fp);
-
-                $this->filemanager->put($sFile, $sFile, 0777);
             }
         }
     }
@@ -596,16 +591,5 @@ class TCMSTableToClass
         } else {
             return [];
         }
-    }
-
-    /**
-     * @param string $cachedir
-     */
-    public function __construct(IPkgCmsFileManager $filemanager, $cachedir, AutoclassesDataAccessInterface $autoClassesDataAccess, Connection $databaseConnection)
-    {
-        $this->filemanager = $filemanager;
-        $this->cachedir = $cachedir;
-        $this->autoClassesDataAccess = $autoClassesDataAccess;
-        $this->databaseConnection = $databaseConnection;
     }
 }

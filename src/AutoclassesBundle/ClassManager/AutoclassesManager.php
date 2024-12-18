@@ -19,7 +19,7 @@ use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TableClas
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TPkgCmsClassManager;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\LegacyTableExportConfig;
 use Doctrine\DBAL\Connection;
-use IPkgCmsFileManager;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * {@inheritdoc}
@@ -29,27 +29,19 @@ class AutoclassesManager implements AutoclassesManagerInterface
     /**
      * @var TPkgCoreAutoClassHandler_AbstractBase[]
      */
-    private $handlerList = array();
+    private array $handlerList = [];
     /**
      * to prevent infinite recursion we push each class being processed onto the callstack - and pop it back out when it has been generated.
-     *
-     * @var array
      */
-    private $callStack = array();
+    private array $callStack = [];
 
-    /**
-     * @param Connection         $databaseConnection
-     * @param IPkgCmsFileManager $filemanager
-     */
     public function __construct(
         Connection $databaseConnection,
-        IPkgCmsFileManager $filemanager,
+        Filesystem $filemanager,
         \TPkgCmsVirtualClassManager $virtualClassManager,
         AutoclassesDataAccessInterface $autoClassDataAccess,
         private readonly LegacyTableExportConfig $legacyTableExportConfig
-    )
-    {
-
+    ) {
         // todo generate classes from doctrine/legacy table config
         $this->registerHandler(new TPkgCoreAutoClassHandler_TableClass($databaseConnection, $filemanager, $autoClassDataAccess));
         $this->registerHandler(new TPkgCoreAutoClassHandler_TPkgCmsClassManager($databaseConnection, $filemanager, $virtualClassManager));

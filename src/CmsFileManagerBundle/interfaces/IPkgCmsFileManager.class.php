@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 8.0.0 - use symfony filesystem component instead
+ */
 interface IPkgCmsFileManager
 {
     /**
@@ -35,13 +38,6 @@ interface IPkgCmsFileManager
      * @return bool
      */
     public function copy($source, $target);
-
-    /**
-     * @param string $sPath
-     *
-     * @return string|null
-     */
-    public function get($sPath);
 
     /**
      * @param string $file
@@ -73,14 +69,7 @@ interface IPkgCmsFileManager
      */
     public function chmod($file, $mode);
 
-    /**
-     * @param string $path
-     * @param int $mode @deprecated since 6.0.0 - file permissions are handled externally.
-     * @param bool $recursive
-     *
-     * @return bool
-     */
-    public function mkdir($path, $mode = 0777, $recursive = false);
+    public function mkdir(string $path, bool $recursive = false): bool;
 
     /**
      * @param string $path

@@ -13,12 +13,17 @@ namespace ChameleonSystem\AutoclassesBundle\Handler;
 
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use Doctrine\DBAL\Connection;
-use IPkgCmsFileManager;
-use TCMSTableToClass;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_AbstractBase
 {
     private AutoclassesDataAccessInterface $autoClassesDataAccess;
+
+    public function __construct(Connection $databaseConnection, Filesystem $filemanager, AutoclassesDataAccessInterface $autoClassesDataAccess)
+    {
+        parent::__construct($databaseConnection, $filemanager);
+        $this->autoClassesDataAccess = $autoClassesDataAccess;
+    }
 
     /**
      * {@inheritdoc}
@@ -29,7 +34,7 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
         if (null === $tableConfId) {
             return;
         }
-        $oClassWriter = new TCMSTableToClass($this->filemanager, $targetDir, $this->autoClassesDataAccess, $this->getDatabaseConnection());
+        $oClassWriter = new \TCMSTableToClass($this->filemanager, $targetDir, $this->autoClassesDataAccess, $this->getDatabaseConnection());
         if ($oClassWriter->Load($tableConfId)) {
             $oClassWriter->Update($sClassName);
         }
@@ -42,10 +47,10 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
      */
     private function getTableConfIdForClassName($className)
     {
-        if (TCMSTableToClass::PREFIX_CLASS === substr($className, 0, strlen(TCMSTableToClass::PREFIX_CLASS))) {
-            $tableName = substr($className, strlen(TCMSTableToClass::PREFIX_CLASS));
-        } elseif (TCMSTableToClass::PREFIX_CLASS_AUTO === substr($className, 0, strlen(TCMSTableToClass::PREFIX_CLASS_AUTO))) {
-            $tableName = substr($className, strlen(TCMSTableToClass::PREFIX_CLASS_AUTO));
+        if (\TCMSTableToClass::PREFIX_CLASS === substr($className, 0, strlen(\TCMSTableToClass::PREFIX_CLASS))) {
+            $tableName = substr($className, strlen(\TCMSTableToClass::PREFIX_CLASS));
+        } elseif (\TCMSTableToClass::PREFIX_CLASS_AUTO === substr($className, 0, strlen(\TCMSTableToClass::PREFIX_CLASS_AUTO))) {
+            $tableName = substr($className, strlen(\TCMSTableToClass::PREFIX_CLASS_AUTO));
         }
 
         $tableName = preg_replace('/([[:upper:]])/', '_$1', $tableName);
@@ -66,13 +71,6 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
             return $tableConfId;
         }
     }
-
-    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager, AutoclassesDataAccessInterface $autoClassesDataAccess)
-    {
-        parent::__construct($databaseConnection, $filemanager);
-        $this->autoClassesDataAccess = $autoClassesDataAccess;
-    }
-
 
     /**
      * @param string $tableName
@@ -100,7 +98,7 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
      */
     public function getClassNameFromKey($sKey)
     {
-        return TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sKey);
+        return \TCMSTableToClass::GetClassName(\TCMSTableToClass::PREFIX_CLASS, $sKey);
     }
 
     /**
@@ -112,19 +110,19 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
      */
     public function canHandleClass($sClassName)
     {
-        $bIsTdbObject = (TCMSTableToClass::PREFIX_CLASS == substr(
+        $bIsTdbObject = (\TCMSTableToClass::PREFIX_CLASS == substr(
             $sClassName,
             0,
-            strlen(TCMSTableToClass::PREFIX_CLASS)
+            strlen(\TCMSTableToClass::PREFIX_CLASS)
         ));
         if (true === $bIsTdbObject) {
             return true;
         }
 
-        $bIsTAdbObject = (TCMSTableToClass::PREFIX_CLASS_AUTO == substr(
+        $bIsTAdbObject = (\TCMSTableToClass::PREFIX_CLASS_AUTO == substr(
             $sClassName,
             0,
-            strlen(TCMSTableToClass::PREFIX_CLASS_AUTO)
+            strlen(\TCMSTableToClass::PREFIX_CLASS_AUTO)
         ));
         if (true === $bIsTAdbObject) {
             return true;
@@ -141,7 +139,7 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
     public function getClassNameList()
     {
         if (null === $this->aClassNameList) {
-            $this->aClassNameList = array();
+            $this->aClassNameList = [];
             $query = 'SELECT `name` FROM `cms_tbl_conf` ORDER BY `cmsident`';
             $tRes = $this->getDatabaseConnection()->query($query);
             while ($aRow = $tRes->fetch(\PDO::FETCH_NUM)) {
@@ -151,6 +149,4 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
 
         return $this->aClassNameList;
     }
-
-
 }

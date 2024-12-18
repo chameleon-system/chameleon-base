@@ -10,6 +10,7 @@
  */
 
 use esono\pkgCmsCache\CacheInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
 {
@@ -38,7 +39,7 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
@@ -61,9 +62,6 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
 
     /**
      * updates the image seo path.
-     *
-     * @param TdbCmsMediaTree $oNodeToUpdate
-     * @param string          $sRootPath
      */
     protected function UpdatePathCache($nodeToUpdate, $rootPath)
     {
@@ -74,8 +72,8 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
         // and repeat for every child
 
         $realMediaLibraryPath = realpath(PATH_OUTBOX_MEDIA_LIBRARY_SEO_LINKS);
-        if (false == $realMediaLibraryPath) {
-            $fileManager->mkdir(PATH_OUTBOX_MEDIA_LIBRARY_SEO_LINKS, 0777, true);
+        if (false === $realMediaLibraryPath) {
+            $fileManager->mkdir(PATH_OUTBOX_MEDIA_LIBRARY_SEO_LINKS);
             $realMediaLibraryPath = realpath(PATH_OUTBOX_MEDIA_LIBRARY_SEO_LINKS);
         }
 
@@ -109,9 +107,9 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
         if (CMS_MEDIA_ENABLE_SEO_URLS) {
             if (!empty($oldServerPath) && is_dir($oldServerPath)) {
                 if (!is_dir($newServerPath) && !file_exists($newServerPath)) {
-                    $fileManager->move($oldServerPath, $newServerPath);
+                    $fileManager->rename($oldServerPath, $newServerPath);
                 } else {
-                    $fileManager->rmdir($oldServerPath);
+                    $fileManager->remove($oldServerPath);
                 }
             } elseif (!empty($newServerPath) && !is_dir($newServerPath) && !file_exists($newServerPath)) {
                 // need to create the dir... every dir contains a symlink to the mediapool
@@ -156,10 +154,10 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
     /**
      * @param string $id
      *
+     * @return void
+     *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
-     *
-     * @return void
      */
     protected function updateCache($id)
     {
@@ -174,7 +172,7 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
             }
         } else {
             /** @var CacheInterface $cache */
-            $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+            $cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
             $cache->clearAll();
         }
     }
@@ -199,8 +197,8 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
                     $sRealMediaLibraryPath = realpath(PATH_OUTBOX_MEDIA_LIBRARY_SEO_LINKS);
                     $sRelativePath = substr($sPath, strlen($sRealMediaLibraryPath));
                     if (!empty($sRelativePath) && is_dir($sPath)) {
-                        $fileManager->unlink($sPath.'/i');
-                        $fileManager->rmdir($sPath);
+                        $fileManager->remove($sPath.'/i');
+                        $fileManager->remove($sPath);
                     }
                 }
             }
@@ -217,7 +215,7 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
     protected function DeleteFolderItems($sFolderId)
     {
         $oMediaTableConf = new TCMSTableConf();
-        /** @var $oMediaTableConf TCMSTableConf */
+        /* @var $oMediaTableConf TCMSTableConf */
         $oMediaTableConf->LoadFromField('name', 'cms_media');
 
         // call delete for all images...
@@ -225,18 +223,15 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
         $tImages = MySqlLegacySupport::getInstance()->query($query);
         while ($aImage = MySqlLegacySupport::getInstance()->fetch_assoc($tImages)) {
             $oMediaEditor = new TCMSTableEditorManager();
-            /** @var $oMediaEditor TCMSTableEditorManager */
+            /* @var $oMediaEditor TCMSTableEditorManager */
             $oMediaEditor->Init($oMediaTableConf->id);
             $oMediaEditor->Delete($aImage['id']);
             unset($oMediaEditor);
         }
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getFileManager()
+    private function getFileManager(): Filesystem
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
     }
 }

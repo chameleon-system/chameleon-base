@@ -27,6 +27,7 @@ use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -445,10 +446,10 @@ class MTHeader extends TCMSModelBase
 
         // always clear cache dir as well
         $oldCache = realpath($cacheDir).'-'.time();
-        $fileManager->move($cacheDir, $oldCache);
+        $fileManager->rename($cacheDir, $oldCache);
         $fileManager->mkdir($cacheDir);
         $fileManager->mkdir($cacheDir.'/raw');
-        $fileManager->deldir($oldCache, true);
+        $fileManager->remove($oldCache, true);
     }
 
     /**
@@ -732,9 +733,9 @@ class MTHeader extends TCMSModelBase
         return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    private function getFileManager(): IPkgCmsFileManager
+    private function getFileManager(): Filesystem
     {
-        return ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
     }
 
     private function getCache(): CacheInterface

@@ -33,7 +33,7 @@
 
         <service id="chameleon_system_autoclasses.auto_class_manager" class="ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManager" public="false">
             <argument type="service" id="database_connection" />
-            <argument type="service" id="chameleon_system_core.filemanager" />
+            <argument type="service" id="filesystem" />
             <argument type="service" id="chameleon_system_cms_class_manager.manager"/>
             <argument type="service" id="chameleon_system_autoclasses.data_access.autoclasses"/>
             <argument type="service" id="ChameleonSystem\AutoclassesBundle\TableConfExport\LegacyTableExportConfig"/>
@@ -53,7 +53,7 @@
             <argument type="service" id="chameleon_system_autoclasses.auto_class_manager" />
             <argument type="service" id="chameleon_system_autoclasses.autoclasses_db_adapter" />
             <argument type="service" id="chameleon_system_autoclasses.autoclasses_map_generator" />
-            <argument type="service" id="chameleon_system_core.filemanager" />
+            <argument type="service" id="filesystem" />
             <argument>%chameleon_system_autoclasses.cache_warmer.autoclasses_dir%</argument>
             <argument type="service" id="service_container" />
         </service>
