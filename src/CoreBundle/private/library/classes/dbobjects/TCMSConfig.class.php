@@ -20,16 +20,16 @@ class TCMSConfig extends TCMSRecord
      *
      * @var \TdbCmsConfigCmsmoduleExtensions[]
      */
-    private $aCMSModuleExtensions = array();
+    private $aCMSModuleExtensions = [];
 
     /**
      * initialized imageMagick object.
      *
      * @var imageMagick
      */
-    protected $oImageMagick = null;
+    protected $oImageMagick;
 
-    private $aConfigValues = null;
+    private $aConfigValues;
 
     public function __construct()
     {
@@ -53,7 +53,7 @@ class TCMSConfig extends TCMSRecord
     protected function getCmsModuleExtension($moduleName)
     {
         if (null === $this->aCMSModuleExtensions) {
-            $this->aCMSModuleExtensions = array();
+            $this->aCMSModuleExtensions = [];
             $moduleExtensions = TdbCmsConfigCmsmoduleExtensionsList::GetListForCmsConfigId($this->id);
             while ($moduleExtension = $moduleExtensions->Next()) {
                 $this->aCMSModuleExtensions[$moduleExtension->fieldName] = $moduleExtension;
@@ -73,7 +73,7 @@ class TCMSConfig extends TCMSRecord
     protected function GetCacheRelatedTables($id)
     {
         $aCacheRelatedTables = parent::GetCacheRelatedTables($id);
-        $aCacheRelatedTables[] = array('table' => 'cms_config_cmsmodule_extensions', 'id' => '');
+        $aCacheRelatedTables[] = ['table' => 'cms_config_cmsmodule_extensions', 'id' => ''];
 
         return $aCacheRelatedTables;
     }
@@ -266,8 +266,8 @@ class TCMSConfig extends TCMSRecord
      * return config parameter.
      *
      * @param string $sSystemName
-     * @param bool   $bRefresh         forces refresh of static config array
-     * @param bool   $bSuppressWarning prevents triggering an error if the key does not exist
+     * @param bool $bRefresh forces refresh of static config array
+     * @param bool $bSuppressWarning prevents triggering an error if the key does not exist
      *
      * @return string|null
      */
@@ -319,7 +319,7 @@ class TCMSConfig extends TCMSRecord
      *
      * @param string $sSystemName
      * @param string $sValue
-     * @param bool   $addIfNotExists
+     * @param bool $addIfNotExists
      */
     public function SetConfigParameter($sSystemName, $sValue, $addIfNotExists = false)
     {
@@ -357,9 +357,7 @@ class TCMSConfig extends TCMSRecord
     {
         $sImageMagickVersion = $this->GetFromInternalCache('_imageMagickVersion');
         if (is_null($sImageMagickVersion)) {
-            $sImageMagickVersion = false;
             $oImageMagick = new imageMagick();
-            $oImageMagick->setFileManager(ServiceLocator::get('chameleon_system_core.filemanager'));
             $oImageMagick->Init();
             $sImageMagickVersion = $oImageMagick->GetImageMagickVersion();
             $this->oImageMagick = $oImageMagick;
@@ -411,7 +409,7 @@ class TCMSConfig extends TCMSRecord
     {
         $aLanguages = $this->GetFromInternalCache('aFieldBasedTranslationLanguageArray');
         if (is_null($aLanguages)) {
-            $aLanguages = array();
+            $aLanguages = [];
             $oLanguages = $this->GetMLT('cms_language_mlt', 'TdbCmsLanguage', '', 'CMSDataObjects', 'Core');
             while ($oLang = $oLanguages->Next()) {
                 if ($oLang->id != $this->sqlData['translation_base_language_id']) {
@@ -435,12 +433,12 @@ class TCMSConfig extends TCMSRecord
     {
         $aTranslatableFields = $this->GetFromInternalCache('aListOfTranslatbleFields');
         if (is_null($aTranslatableFields)) {
-            $aCacheKey = array('class' => 'TCMSConfig', 'method' => 'GetListOfTranslatbleFields', 'comment' => 'listOfTranslatableFields');
-            $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+            $aCacheKey = ['class' => 'TCMSConfig', 'method' => 'GetListOfTranslatbleFields', 'comment' => 'listOfTranslatableFields'];
+            $cache = ServiceLocator::get('chameleon_system_core.cache');
             $sKey = $cache->getKey($aCacheKey, false);
             $aTranslatableFields = $cache->get($sKey);
             if (null === $aTranslatableFields) {
-                $aTranslatableFields = array();
+                $aTranslatableFields = [];
                 $sQuery = "SELECT `cms_field_conf`.`name`, `cms_tbl_conf`.`name` AS _tableName
                        FROM `cms_field_conf`
                  INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
@@ -449,13 +447,13 @@ class TCMSConfig extends TCMSRecord
                 $tRes = MySqlLegacySupport::getInstance()->query($sQuery);
                 while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
                     if (!array_key_exists($aRow['_tableName'], $aTranslatableFields)) {
-                        $aTranslatableFields[$aRow['_tableName']] = array();
+                        $aTranslatableFields[$aRow['_tableName']] = [];
                     }
                     $aTranslatableFields[$aRow['_tableName']][] = $aRow['name'];
                 }
-                $aCacheTrigger = array();
-                $aCacheTrigger[] = array('table' => 'cms_tbl_conf', 'id' => '');
-                $aCacheTrigger[] = array('table' => 'cms_field_conf', 'id' => '');
+                $aCacheTrigger = [];
+                $aCacheTrigger[] = ['table' => 'cms_tbl_conf', 'id' => ''];
+                $aCacheTrigger[] = ['table' => 'cms_field_conf', 'id' => ''];
                 $cache->set($sKey, $aTranslatableFields, $aCacheTrigger);
             }
             $this->SetInternalCache('aListOfTranslatbleFields', $aTranslatableFields);
@@ -479,17 +477,17 @@ class TCMSConfig extends TCMSRecord
         static $aBotList = null;
         $bIsBot = false;
         if (null === $aBotList) {
-            $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
-            $key = $cache->getKey(array('class' => __CLASS__, 'method' => 'RequestIsInBotList'), false);
+            $cache = ServiceLocator::get('chameleon_system_core.cache');
+            $key = $cache->getKey(['class' => __CLASS__, 'method' => 'RequestIsInBotList'], false);
             $aBotList = $cache->get($key);
             if (null === $aBotList) {
                 $aBotList = explode("\n", TdbCmsConfig::GetInstance()->fieldBotlist);
-                $cache->set($key, $aBotList, array(array('table' => 'cms_config', 'id' => null)));
+                $cache->set($key, $aBotList, [['table' => 'cms_config', 'id' => null]]);
             }
         }
 
         $sAgent = '';
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ServiceLocator::get('request_stack')->getCurrentRequest();
         if (null !== $request) {
             $sAgent = mb_strtolower($request->server->get('HTTP_USER_AGENT'));
         }
@@ -514,7 +512,7 @@ class TCMSConfig extends TCMSRecord
      */
     public function CurrentIpIsWhiteListed()
     {
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ServiceLocator::get('request_stack')->getCurrentRequest();
         $sUserIpAddress = $request->getClientIp();
 
         $bUserIsWhiteListed = true;
@@ -524,7 +522,7 @@ class TCMSConfig extends TCMSRecord
 
         if ($oIpWhiteList->Length() > 0) {
             $bUserIsWhiteListed = false;
-            //first check the white list configured in the backend (cms settings)
+            // first check the white list configured in the backend (cms settings)
             while ($oIP = $oIpWhiteList->Next() && false === $bUserIsWhiteListed) {
                 $bUserIsWhiteListed = $this->CheckIP($oIP->fieldIp, $sUserIpAddress);
             }
@@ -534,7 +532,7 @@ class TCMSConfig extends TCMSRecord
             }
         }
 
-        //user is still not allowed? check config constant
+        // user is still not allowed? check config constant
         if (defined('CMS_ALLOWED_IP') && CMS_ALLOWED_IP != '') {
             if (!$this->CheckIP(CMS_ALLOWED_IP, $sUserIpAddress)) {
                 trigger_error('Non WhiteListed user with IP '.$sUserIpAddress.' tried to pass', E_USER_ERROR);
@@ -631,7 +629,7 @@ class TCMSConfig extends TCMSRecord
     private function fillConfigValuesCache($refreshIfPresent = false)
     {
         if ($refreshIfPresent || is_null($this->aConfigValues)) {
-            $this->aConfigValues = array();
+            $this->aConfigValues = [];
             $query = "SELECT * FROM `cms_config_parameter` WHERE `cms_config_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
             $res = MySqlLegacySupport::getInstance()->query($query);
             while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($res)) {

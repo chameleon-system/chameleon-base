@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TCMSTableEditorFiles extends TCMSTableEditor
 {
@@ -234,15 +235,6 @@ class TCMSTableEditorFiles extends TCMSTableEditor
                 }
             }
         }
-
-        // ok, file is now in the correct location on our local server - since there may be cluster server, we need to also push the file there
-        $fileManager = $this->getFileManager();
-
-        $fileManager->put(
-            $targetFile,
-            $targetFile,
-            null
-        );
     }
 
     protected function PrepareDataForSave($postData)
@@ -338,11 +330,8 @@ class TCMSTableEditorFiles extends TCMSTableEditor
         return $this->oMenuItems;
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    protected function getFileManager()
+    protected function getFileManager(): Filesystem
     {
-        return ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
     }
 }

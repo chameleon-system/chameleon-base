@@ -355,6 +355,8 @@
             <argument type="service" id="chameleon_system_core.tools"/>
         </service>
 
+        <service class="ChameleonSystem\CoreBundle\Service\RegistryService" id="chameleon_system_core.service.registry_service" public="true"/>
+
         <service id="chameleon_system_core.service_initializer.portal_domain_service" class="ChameleonSystem\CoreBundle\Service\Initializer\PortalDomainServiceInitializer" public="false">
             <argument type="service" id="chameleon_system_core.util.input_filter" />
             <argument type="service" id="service_container" />
@@ -783,7 +785,7 @@
         </service>
 
         <service id="chameleon_system_core.resource_collector" class="TCMSResourceCollection" shared="false">
-            <argument type="service" id="chameleon_system_core.filemanager"/>
+            <argument type="service" id="filesystem"/>
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="chameleon_system_core.service.css_minifier"/>

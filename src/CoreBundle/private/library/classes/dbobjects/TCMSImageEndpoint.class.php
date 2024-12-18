@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * handles images and thumbnails of table cms_media including external videos.
@@ -104,7 +105,7 @@ class TCMSImageEndpoint
      * @param string $sCmsMediaCategoryId
      * @param string|null $sDescription
      * @param string|null $sPreviewImageId
-     * @param IPkgCmsFileManager|null $filemanager
+     * @param ?Filesystem $filemanager
      *
      * @return TCMSImage
      */
@@ -128,14 +129,19 @@ class TCMSImageEndpoint
                 if ($imgFileP = @fopen($oFile->sPath, 'rb')) {
                     $imgFileContent = stream_get_contents($imgFileP);
                     $tmpFileName = $cachePath.'/'.$sImgName;
-                    $newFile = $filemanager->fopen($tmpFileName, 'wb');
-                    $filemanager->fwrite($newFile, $imgFileContent);
-                    $filemanager->fclose($newFile);
+                    $newFile = fopen($tmpFileName, 'wb');
+                    fwrite($newFile, $imgFileContent);
+                    fclose($newFile);
                     fclose($imgFileP);
                     $bTargetCreated = true;
                 }
             } elseif (file_exists($oFile->sPath)) {
-                $bTargetCreated = $filemanager->copy($oFile->sPath, $tmpFileName);
+                try {
+                    $filemanager->copy($oFile->sPath, $tmpFileName);
+                    $bTargetCreated = true;
+                } catch (IOExceptionInterface $exception) {
+                    $bTargetCreated = false;
+                }
             }
             if ($bTargetCreated) {
                 $aImageInfos = getimagesize($tmpFileName);
@@ -161,7 +167,7 @@ class TCMSImageEndpoint
                     $oEditor->oTableEditor->SetUploadData($FileArray, true);
                     $oEditor->Save($FileArray);
                     if (!$oFile->bIsHTTPResource) {
-                        $filemanager->move($tmpFileName.'.tmp', $tmpFileName);
+                        $filemanager->rename($tmpFileName.'.tmp', $tmpFileName);
                     }
                     $sImageId = $oEditor->oTableEditor->oTable->id;
                 } catch (Exception $e) {
@@ -452,7 +458,7 @@ class TCMSImageEndpoint
                 }
                 $sPath .= $thumbPathExtension;
                 if (!is_dir($sPath)) {
-                    self::getFileManager()->mkdir($sPath, 0777, true);
+                    self::getFileManager()->mkdir($sPath);
                 }
                 $sPath .= '/';
             }
@@ -1992,7 +1998,7 @@ class TCMSImageEndpoint
                 while (false !== ($file = readdir($handle))) {
                     // somename-XxY-IDxxx-
                     if (false !== strpos($file, $sPatter)) {
-                        $filemanager->unlink($sDir.'/'.$file);
+                        $filemanager->remove($sDir.'/'.$file);
                     }
                 }
                 closedir($handle);
@@ -2224,9 +2230,9 @@ class TCMSImageEndpoint
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    private static function getFileManager(): IPkgCmsFileManager
+    private static function getFileManager(): Filesystem
     {
-        return ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
     }
 
     private function getSecurityHelperAccess(): SecurityHelperAccess

@@ -229,7 +229,6 @@ class UpdateCounterVersionMigrator
         'pkgtrackviews' => 'trackviewsbundle',
         'pkgurlalias' => 'urlaliasbundle',
         'pkgviewrenderer' => 'viewrendererbundle',
-
         'pkgcmsnavigationpkgshop' => 'cmsnavigationpkgshopbundle',
         'pkgextranetregistrationguest' => 'extranetregistrationguestbundle',
         'pkgimagehotspot' => 'imagehotspotbundle',
@@ -245,7 +244,6 @@ class UpdateCounterVersionMigrator
         'pkgshopnewslettersignupwithorder' => 'shopnewslettersignupwithorderbundle',
         'pkgshoporderstatus' => 'shoporderstatusbundle',
         'pkgshoporderviaphone' => 'shoporderviaphonebundle',
-        'pkgshoppaymentamazon' => 'amazonpaymentbundle',
         'pkgshoppaymentipn' => 'shoppaymentipnbundle',
         'pkgshoppaymenttransaction' => 'shoppaymenttransactionbundle',
         'pkgshopprimarynavigation' => 'shopprimarynavigationbundle',

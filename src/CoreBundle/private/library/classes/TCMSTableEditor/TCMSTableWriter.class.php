@@ -13,11 +13,12 @@ use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use Doctrine\DBAL\DBALException;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * manages creation and deletion of tables.
  *
-/**/
+ * /**/
 class TCMSTableWriter extends TCMSTableEditor
 {
     /**
@@ -25,11 +26,11 @@ class TCMSTableWriter extends TCMSTableEditor
      *
      * @var string
      */
-    protected $_sqlTableName = null;
+    protected $_sqlTableName;
 
-    protected $sOldTblName = null;
+    protected $sOldTblName;
 
-    protected $aOldData = null;
+    protected $aOldData;
 
     /**
      * @var string|null
@@ -102,7 +103,7 @@ class TCMSTableWriter extends TCMSTableEditor
         $sTableName = preg_replace('/[^a-z-_0-9]/', '', $sTableName); // allow only characters allowed by MYSQL
 
         // filter mysql reserved words
-        $aReservedMySQLWords = array('ACCESSIBLE', 'ADD', 'ALL', 'ALTER', 'ANALYZE', 'AND', 'AS', 'ASC', 'ASENSITIVE', 'BEFORE', 'BETWEEN', 'BIGINT', 'BINARY', 'BLOB', 'BOTH', 'BY', 'CALL', 'CASCADE', 'CASE', 'CHANGE', 'CHAR', 'CHARACTER', 'CHECK', 'COLLATE', 'COLUMN', 'CONDITION', 'CONSTRAINT', 'CONTINUE', 'CONVERT', 'CREATE', 'CROSS', 'CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP', 'CURRENT_USER', 'CURSOR', 'DATABASE', 'DATABASES', 'DAY_HOUR', 'DAY_MICROSECOND', 'DAY_MINUTE', 'DAY_SECOND', 'DEC', 'DECIMAL', 'DECLARE', 'DEFAULT', 'DELAYED', 'DELETE', 'DESC', 'DESCRIBE', 'DETERMINISTIC', 'DISTINCT', 'DISTINCTROW', 'DIV', 'DOUBLE', 'DROP', 'DUAL', 'EACH', 'ELSE', 'ELSEIF', 'ENCLOSED', 'ESCAPED', 'EXISTS', 'EXIT', 'EXPLAIN', 'FALSE', 'FETCH', 'FLOAT', 'FLOAT4', 'FLOAT8', 'FOR', 'FORCE', 'FOREIGN', 'FROM', 'FULLTEXT', 'GENERAL', 'GRANT', 'GROUP', 'HAVING', 'HIGH_PRIORITY', 'HOUR_MICROSECOND', 'HOUR_MINUTE', 'HOUR_SECOND', 'IF', 'IGNORE', 'IGNORE_SERVER_IDS', 'IN', 'INDEX', 'INFILE', 'INNER', 'INOUT', 'INSENSITIVE', 'INSERT', 'INT', 'INT1', 'INT2', 'INT3', 'INT4', 'INT8', 'INTEGER', 'INTERVAL', 'INTO', 'IS', 'ITERATE', 'JOIN', 'KEY', 'KEYS', 'KILL', 'LEADING', 'LEAVE', 'LEFT', 'LIKE', 'LIMIT', 'LINEAR', 'LINES', 'LOAD', 'LOCALTIME', 'LOCALTIMESTAMP', 'LOCK', 'LONG', 'LONGBLOB', 'LONGTEXT', 'LOOP', 'LOW_PRIORITY', 'MASTER_HEARTBEAT_PERIOD', 'MASTER_SSL_VERIFY_SERVER_CERT', 'MATCH', 'MAXVALUE', 'MEDIUMBLOB', 'MEDIUMINT', 'MEDIUMTEXT', 'MIDDLEINT', 'MINUTE_MICROSECOND', 'MINUTE_SECOND', 'MOD', 'MODIFIES', 'NATURAL', 'NOT', 'NO_WRITE_TO_BINLOG', 'NULL', 'NUMERIC', 'ON', 'OPTIMIZE', 'OPTION', 'OPTIONALLY', 'OR', 'ORDER', 'OUT', 'OUTER', 'OUTFILE', 'PRECISION', 'PRIMARY', 'PROCEDURE', 'PURGE', 'RANGE', 'READ', 'READS', 'READ_WRITE', 'REAL', 'REFERENCES', 'REGEXP', 'RELEASE', 'RENAME', 'REPEAT', 'REPLACE', 'REQUIRE', 'RESIGNAL', 'RESTRICT', 'RETURN', 'REVOKE', 'RIGHT', 'RLIKE', 'SCHEMA', 'SCHEMAS', 'SECOND_MICROSECOND', 'SELECT', 'SENSITIVE', 'SEPARATOR', 'SET', 'SHOW', 'SIGNAL', 'SLOW[b]', 'SMALLINT', 'SPATIAL', 'SPECIFIC', 'SQL', 'SQLEXCEPTION', 'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT', 'SQL_CALC_FOUND_ROWS', 'SQL_SMALL_RESULT', 'SSL', 'STARTING', 'STRAIGHT_JOIN', 'TABLE', 'TERMINATED', 'THEN', 'TINYBLOB', 'TINYINT', 'TINYTEXT', 'TO', 'TRAILING', 'TRIGGER', 'TRUE', 'UNDO', 'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE', 'USE', 'USING', 'UTC_DATE', 'UTC_TIME', 'UTC_TIMESTAMP', 'VALUES', 'VARBINARY', 'VARCHAR', 'VARCHARACTER', 'VARYING', 'WHEN', 'WHERE', 'WHILE', 'WITH', 'WRITE', 'XOR', 'YEAR_MONTH', 'ZEROFILL', 'GENERAL', 'IGNORE_SERVER_IDS', 'MASTER_HEARTBEAT_PERIOD', 'MAXVALUE', 'RESIGNAL', 'SIGNAL', 'SLOW');
+        $aReservedMySQLWords = ['ACCESSIBLE', 'ADD', 'ALL', 'ALTER', 'ANALYZE', 'AND', 'AS', 'ASC', 'ASENSITIVE', 'BEFORE', 'BETWEEN', 'BIGINT', 'BINARY', 'BLOB', 'BOTH', 'BY', 'CALL', 'CASCADE', 'CASE', 'CHANGE', 'CHAR', 'CHARACTER', 'CHECK', 'COLLATE', 'COLUMN', 'CONDITION', 'CONSTRAINT', 'CONTINUE', 'CONVERT', 'CREATE', 'CROSS', 'CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP', 'CURRENT_USER', 'CURSOR', 'DATABASE', 'DATABASES', 'DAY_HOUR', 'DAY_MICROSECOND', 'DAY_MINUTE', 'DAY_SECOND', 'DEC', 'DECIMAL', 'DECLARE', 'DEFAULT', 'DELAYED', 'DELETE', 'DESC', 'DESCRIBE', 'DETERMINISTIC', 'DISTINCT', 'DISTINCTROW', 'DIV', 'DOUBLE', 'DROP', 'DUAL', 'EACH', 'ELSE', 'ELSEIF', 'ENCLOSED', 'ESCAPED', 'EXISTS', 'EXIT', 'EXPLAIN', 'FALSE', 'FETCH', 'FLOAT', 'FLOAT4', 'FLOAT8', 'FOR', 'FORCE', 'FOREIGN', 'FROM', 'FULLTEXT', 'GENERAL', 'GRANT', 'GROUP', 'HAVING', 'HIGH_PRIORITY', 'HOUR_MICROSECOND', 'HOUR_MINUTE', 'HOUR_SECOND', 'IF', 'IGNORE', 'IGNORE_SERVER_IDS', 'IN', 'INDEX', 'INFILE', 'INNER', 'INOUT', 'INSENSITIVE', 'INSERT', 'INT', 'INT1', 'INT2', 'INT3', 'INT4', 'INT8', 'INTEGER', 'INTERVAL', 'INTO', 'IS', 'ITERATE', 'JOIN', 'KEY', 'KEYS', 'KILL', 'LEADING', 'LEAVE', 'LEFT', 'LIKE', 'LIMIT', 'LINEAR', 'LINES', 'LOAD', 'LOCALTIME', 'LOCALTIMESTAMP', 'LOCK', 'LONG', 'LONGBLOB', 'LONGTEXT', 'LOOP', 'LOW_PRIORITY', 'MASTER_HEARTBEAT_PERIOD', 'MASTER_SSL_VERIFY_SERVER_CERT', 'MATCH', 'MAXVALUE', 'MEDIUMBLOB', 'MEDIUMINT', 'MEDIUMTEXT', 'MIDDLEINT', 'MINUTE_MICROSECOND', 'MINUTE_SECOND', 'MOD', 'MODIFIES', 'NATURAL', 'NOT', 'NO_WRITE_TO_BINLOG', 'NULL', 'NUMERIC', 'ON', 'OPTIMIZE', 'OPTION', 'OPTIONALLY', 'OR', 'ORDER', 'OUT', 'OUTER', 'OUTFILE', 'PRECISION', 'PRIMARY', 'PROCEDURE', 'PURGE', 'RANGE', 'READ', 'READS', 'READ_WRITE', 'REAL', 'REFERENCES', 'REGEXP', 'RELEASE', 'RENAME', 'REPEAT', 'REPLACE', 'REQUIRE', 'RESIGNAL', 'RESTRICT', 'RETURN', 'REVOKE', 'RIGHT', 'RLIKE', 'SCHEMA', 'SCHEMAS', 'SECOND_MICROSECOND', 'SELECT', 'SENSITIVE', 'SEPARATOR', 'SET', 'SHOW', 'SIGNAL', 'SLOW[b]', 'SMALLINT', 'SPATIAL', 'SPECIFIC', 'SQL', 'SQLEXCEPTION', 'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT', 'SQL_CALC_FOUND_ROWS', 'SQL_SMALL_RESULT', 'SSL', 'STARTING', 'STRAIGHT_JOIN', 'TABLE', 'TERMINATED', 'THEN', 'TINYBLOB', 'TINYINT', 'TINYTEXT', 'TO', 'TRAILING', 'TRIGGER', 'TRUE', 'UNDO', 'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE', 'USE', 'USING', 'UTC_DATE', 'UTC_TIME', 'UTC_TIMESTAMP', 'VALUES', 'VARBINARY', 'VARCHAR', 'VARCHARACTER', 'VARYING', 'WHEN', 'WHERE', 'WHILE', 'WITH', 'WRITE', 'XOR', 'YEAR_MONTH', 'ZEROFILL', 'GENERAL', 'IGNORE_SERVER_IDS', 'MASTER_HEARTBEAT_PERIOD', 'MAXVALUE', 'RESIGNAL', 'SIGNAL', 'SLOW'];
         if (in_array(strtoupper($sTableName), $aReservedMySQLWords)) {
             $sTableName = $sTableName.'_mysql_res_name';
         }
@@ -121,7 +122,7 @@ class TCMSTableWriter extends TCMSTableEditor
                 /** @var $oMessageManager TCMSMessageManager */
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_TABLE_ALREADY_EXISTS', array('sTableName' => $sOriginalTableNameFromPost, 'sNewTableName' => $sTableName));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_TABLE_ALREADY_EXISTS', ['sTableName' => $sOriginalTableNameFromPost, 'sNewTableName' => $sTableName]);
             }
         }
 
@@ -139,7 +140,7 @@ class TCMSTableWriter extends TCMSTableEditor
 
         // reset table list cache
         if (array_key_exists('_listObjCache', $_SESSION)) {
-            $_SESSION['_listObjCache'] = array();
+            $_SESSION['_listObjCache'] = [];
         }
 
         $this->getAutoclassesCacheWarmer()->updateTableById($this->sId);
@@ -151,9 +152,6 @@ class TCMSTableWriter extends TCMSTableEditor
     }
 
     /**
-     * @param string $oldTableName
-     * @param string $newTableName
-     *
      * @throws DBALException
      */
     private function changeTableName(string $oldTableName, string $newTableName): void
@@ -171,16 +169,13 @@ class TCMSTableWriter extends TCMSTableEditor
         );
         $databaseConnection->executeQuery($query);
 
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($aQuery);
 
         $this->_RenameRelatedTables($oldTableName, $newTableName);
     }
 
     /**
-     * @param string $tableName
-     * @param string $oldTableComment
-     *
      * @throws DBALException
      */
     private function changeTableComment(string $tableName, string $oldTableComment): void
@@ -196,7 +191,7 @@ class TCMSTableWriter extends TCMSTableEditor
         $query = sprintf('ALTER TABLE %s COMMENT %s', $databaseConnection->quoteIdentifier($tableName), $databaseConnection->quote($newTableComment));
         $databaseConnection->executeQuery($query);
 
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -227,7 +222,7 @@ class TCMSTableWriter extends TCMSTableEditor
                            WHERE `cms_tbl_conf`.`id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sId)."'
                              AND (`cms_field_type`.`base_type` = 'mlt' OR `cms_field_type`.`constname` = 'CMSFIELD_DOCUMENTS')";
             $oFieldDefinitionList = TdbCmsFieldConfList::GetList($sQuery);
-            $aQuery = array();
+            $aQuery = [];
             while ($oFieldDefinition = $oFieldDefinitionList->Next()) {
                 $oMLTField = $oFieldDefinition->GetFieldObject();
                 $oMLTField->sTableName = $sOldTableName;
@@ -270,7 +265,7 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * Changes given mlt field config sql data array for new table name.
      *
-     * @param array  $aFieldConfigSqlData sql data of cms_field_conf
+     * @param array $aFieldConfigSqlData sql data of cms_field_conf
      * @param string $sOldTableName
      * @param string $sNewTableName
      *
@@ -305,7 +300,7 @@ class TCMSTableWriter extends TCMSTableEditor
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sDisplayName = 'SQL Export';
         $oMenuItem->sIcon = 'fas fa-file-export';
-        $aParams = array();
+        $aParams = [];
         $aParams['pagedef'] = 'tableeditor';
         $aParams['tableid'] = $this->oTableConf->id;
         $aParams['id'] = $this->oTable->id;
@@ -348,7 +343,7 @@ class TCMSTableWriter extends TCMSTableEditor
         } else {
             // save the table name to a class variable so it can be used
             // in the _OverwriteDefaults function
-            $aQuery = array(new LogChangeDataModel($query));
+            $aQuery = [new LogChangeDataModel($query)];
             TCMSLogChange::WriteTransaction($aQuery);
 
             $this->_sqlTableName = $sTableName;
@@ -396,7 +391,7 @@ class TCMSTableWriter extends TCMSTableEditor
         if (!empty($sErrorMessage)) {
             trigger_error('SQL Error: '.$sErrorMessage, E_USER_WARNING);
         }
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -426,7 +421,7 @@ class TCMSTableWriter extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    public function DatabaseCopy($languageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = false)
+    public function DatabaseCopy($languageCopy = false, $aOverloadedFields = [], $bCopyAllLanguages = false)
     {
         // we do not allow tables to be copied... so no code here
     }
@@ -514,7 +509,7 @@ class TCMSTableWriter extends TCMSTableEditor
             $query = sprintf('ALTER TABLE %s ENGINE %s', $databaseConnection->quoteIdentifier($tableName), $newEngine);
             $databaseConnection->executeQuery($query);
 
-            TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($query)));
+            TCMSLogChange::WriteTransaction([new LogChangeDataModel($query)]);
 
             $newTableEngine = $this->getRealTableEngine($tableName);
             $this->SaveField('engine', $newTableEngine, false);
@@ -529,12 +524,9 @@ class TCMSTableWriter extends TCMSTableEditor
         return ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getFileManager()
+    private function getFileManager(): Filesystem
     {
-        return ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
     }
 
     /**
@@ -544,8 +536,9 @@ class TCMSTableWriter extends TCMSTableEditor
     {
         return ServiceLocator::getParameter('chameleon_system_autoclasses.cache_warmer.autoclasses_dir');
     }
-    private function getAutoclassDataAccess(): \ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface
+
+    private function getAutoclassDataAccess(): ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
+        return ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
     }
 }

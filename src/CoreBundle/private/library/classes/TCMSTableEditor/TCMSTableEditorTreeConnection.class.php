@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Event\ChangeNavigationTreeConnectionEvent;
+use ChameleonSystem\CoreBundle\Service\RegistryService;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TCMSTableEditorTreeConnection extends TCMSTableEditor
 {
@@ -63,24 +65,25 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
         $oGlobal = TGlobal::instance();
         $bPreventTemplateEngineRedirect = false;
         $sPreventTemplateEngineRedirect = $oGlobal->GetUserData('preventTemplateEngineRedirect');
-        if (!empty($sPreventTemplateEngineRedirect) && '1' == $sPreventTemplateEngineRedirect) {
+        if (!empty($sPreventTemplateEngineRedirect) && '1' === $sPreventTemplateEngineRedirect) {
             $bPreventTemplateEngineRedirect = true;
         }
 
         if (!empty($this->oTable->fieldContid) && !$bPreventTemplateEngineRedirect && !$this->bPreventPageCopy) {
             $sPageID = $this->oTable->fieldContid;
 
+            $registryService = $this->getRegistryService();
+
             // Get Page Id if page was copied in previous copy
             // if page was not copied before copy page
-            $sCopyPageId = TCMSRegistry::Get($sPageID);
+            $sCopyPageId = $registryService->get($sPageID);
             if (is_null($sCopyPageId)) {
                 $this->SetCopyTreeConnectionModeInSession();
                 $iTableID = TTools::GetCMSTableId('cms_tpl_page');
                 $oTableEditor = new TCMSTableEditorManager();
-                /** @var $oTableEditor TCMSTableEditorManager */
                 $oTableEditor->Init($iTableID, $sPageID);
                 $sCopiedPortalId = TCMSTableEditorPortal::GetCopiedPortalId();
-                $aPageOncopyOverwriteParameter = array();
+                $aPageOncopyOverwriteParameter = [];
                 if ($sCopiedPortalId) {
                     $aPageOncopyOverwriteParameter['cms_portal_id'] = $sCopiedPortalId;
                 }
@@ -95,7 +98,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
                 }
                 $sNewPageID = $oRecordData->id;
                 $this->SaveField('contid', $sNewPageID);
-                TCMSRegistry::Set($sPageID, $sNewPageID);
+                $registryService->set($sPageID, $sNewPageID);
                 TCMSTableEditorPage::UpdateCmsListNaviCache($sNewPageID);
                 $this->UnSetCopyTreeConnectionModeInSession();
             } else {
@@ -156,7 +159,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
 
         $oGlobal = TGlobal::instance();
         $oFields->GoToStart();
-        while (($oField = $oFields->Next())) {
+        while ($oField = $oFields->Next()) {
             /** @var $oField TCMSField */
             if ('tbl' == $oField->oDefinition->sqlData['name']) {
                 $this->SaveField($oField->oDefinition->sqlData['name'], 'cms_tpl_page');
@@ -263,7 +266,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
         $oMenuItem->sItemKey = 'BackToList';
         $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_tree_connection.action_show_list');
         $oMenuItem->sIcon = 'far fa-list-alt';
-        $oMenuItem->sOnClick = "location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tablemanagerframe', 'id' => $this->oTableConf->sqlData['id'], 'sRestrictionField' => 'cms_tree_id', 'sRestriction' => $this->oTable->sqlData['cms_tree_id']))."'";
+        $oMenuItem->sOnClick = "location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'tablemanagerframe', 'id' => $this->oTableConf->sqlData['id'], 'sRestrictionField' => 'cms_tree_id', 'sRestriction' => $this->oTable->sqlData['cms_tree_id']])."'";
         $this->oMenuItems->AddItemToStart($oMenuItem);
     }
 
@@ -309,5 +312,10 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
 
         $event = new ChangeNavigationTreeConnectionEvent($deletedTreeConnection);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_NAVIGATION_TREE_CONNECTION);
+    }
+
+    private function getRegistryService(): RegistryService
+    {
+        return ServiceLocator::get('chameleon_system_core.service.registry_service');
     }
 }

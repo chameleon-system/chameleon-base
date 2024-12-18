@@ -9,43 +9,31 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TCMSFile
 {
     /**
      * full image path.
-     *
-     * @var string
      */
-    public $sPath = null;
+    public ?string $sPath = null;
 
-    public $sDir = '';
-    public $sFileName = '';
-    public $sExtension = '';
-    public $dSizeByte = 0;
-    public $sCreated = '';
-
-    public $aMatches = array();
+    public string $sDir = '';
+    public string $sFileName = '';
+    public string $sExtension = '';
+    public int $dSizeByte = 0;
+    public string $sCreated = '';
+    public array $aMatches = [];
 
     /**
      * set to true if the file is on a remote server (ie http:// url is given).
-     *
-     * @var bool
      */
-    public $bIsHTTPResource = false;
+    public bool $bIsHTTPResource = false;
 
-    /**
-     * return instance for file.
-     *
-     * @param string $sPath
-     *
-     * @return TCMSFile
-     */
-    public static function GetInstance($sPath)
+    public static function GetInstance(string $sPath): TCMSFile
     {
         $oItem = new self();
-        /** @var $oItem TCMSFile */
         if (!$oItem->Load($sPath)) {
             $oItem = false;
         }
@@ -64,7 +52,13 @@ class TCMSFile
     {
         $sTarget = realpath($this->sDir.'/'.$sNewName);
 
-        return $this->getFileManager()->move($this->sDir.'/'.$this->sFileName, $sTarget);
+        try {
+            $this->getFileManager()->rename($this->sDir.'/'.$this->sFileName, $sTarget);
+
+            return true;
+        } catch (IOExceptionInterface $exception) {
+            return false;
+        }
     }
 
     /**
@@ -154,7 +148,7 @@ class TCMSFile
     public function IsValidCMSImage()
     {
         $allowedFileTypes = TCMSImage::GetAllowedMediaTypes();
-        $bValidType = (in_array($this->sExtension, $allowedFileTypes));
+        $bValidType = in_array($this->sExtension, $allowedFileTypes);
 
         if ($this->bIsHTTPResource) {
             $bIsRGB = true;
@@ -205,11 +199,8 @@ class TCMSFile
     {
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getFileManager()
+    private function getFileManager(): Filesystem
     {
-        return ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
     }
 }
