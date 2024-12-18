@@ -229,7 +229,6 @@ class UpdateCounterVersionMigrator
         'pkgtrackviews' => 'trackviewsbundle',
         'pkgurlalias' => 'urlaliasbundle',
         'pkgviewrenderer' => 'viewrendererbundle',
-
         'pkgcmsnavigationpkgshop' => 'cmsnavigationpkgshopbundle',
         'pkgextranetregistrationguest' => 'extranetregistrationguestbundle',
         'pkgimagehotspot' => 'imagehotspotbundle',
