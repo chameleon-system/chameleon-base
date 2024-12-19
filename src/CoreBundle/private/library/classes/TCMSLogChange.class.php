@@ -1365,7 +1365,7 @@ class TCMSLogChange
 
     public static function UpdateVirtualNonDbClasses()
     {
-        $filemanager = ServiceLocator::get('chameleon_system_core.filemanager');
+        $filemanager = ServiceLocator::get('filesystem');
         $virtualClassManager = ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         $classCacheWarmer = ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
         $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filemanager, $virtualClassManager);
