@@ -21,23 +21,24 @@ class TCMSListDownloadFiles extends TCMSRecordList
      *
      * @var string|null
      */
-    protected $_sSourceTableName = null;
+    protected $_sSourceTableName;
 
     /**
      * @var string|null
      */
-    protected $_sRecordID = null;
+    protected $_sRecordID;
 
     /**
      * @var string|null
      */
-    protected $_sourceField = null;
+    protected $_sourceField;
 
     /**
      * @TODO This property never seems to get written to.
+     *
      * @var mixed|null
      */
-    protected $allowedFileTypes = null;
+    protected $allowedFileTypes;
 
     public function __construct()
     {
@@ -45,18 +46,10 @@ class TCMSListDownloadFiles extends TCMSRecordList
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSListDownloadFiles()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-    /**
      * @param string|null $sourceTable
      * @param string|null $sourceField
      * @param string|null $sourceRecordID
+     *
      * @return void
      */
     public function Init($sourceTable, $sourceField, $sourceRecordID)
@@ -69,7 +62,7 @@ class TCMSListDownloadFiles extends TCMSRecordList
     /**
      * {@inheritdoc}
      */
-    public function Load($sQuery = null, array $queryParameters = array(), array $queryParameterTypes = array())
+    public function Load($sQuery = null, array $queryParameters = [], array $queryParameterTypes = [])
     {
         if (is_null($sQuery)) {
             $sQuery = $this->_GetQuery();

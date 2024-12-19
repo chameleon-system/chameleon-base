@@ -44,16 +44,6 @@ class Html2Text
         $this->iMaxColumns = $aMaxColumns;
     }
 
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function Html2Text()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-
     function convert()
     {
         $this->iHtmlParser = new HtmlParser($this->iHtmlText);

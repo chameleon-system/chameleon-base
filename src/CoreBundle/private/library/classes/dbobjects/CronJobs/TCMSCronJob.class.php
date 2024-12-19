@@ -35,15 +35,6 @@ class TCMSCronJob extends TCMSRecord
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSCronJob()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-    /**
      * getter for $this->sMessageOutput.
      *
      * @return string
@@ -62,16 +53,6 @@ class TCMSCronJob extends TCMSRecord
     public function AddMessageOutput($sMessage)
     {
         $this->sMessageOutput .= $sMessage."\n";
-    }
-
-    /**
-     * @return IPkgCmsCoreLog
-     *
-     * @deprecated since 6.3.0 - use getCronjobLogger() instead
-     */
-    protected function getLogger()
-    {
-        return ServiceLocator::get('cmsPkgCore.logChannel.cronjobs');
     }
 
     protected function getCronjobLogger(): LoggerInterface
@@ -151,7 +132,7 @@ class TCMSCronJob extends TCMSRecord
                 $sMessage,
                 [
                     'fullMessage' => $error->getMessage(),
-                    'trace'       => $error->getTraceAsString(),
+                    'trace' => $error->getTraceAsString(),
                 ]
             );
         }
@@ -164,21 +145,19 @@ class TCMSCronJob extends TCMSRecord
     }
 
     /**
-     * @return CronJobScheduleDataModel
-     *
      * @throws InvalidArgumentException
      */
     private function getSchedule(): CronJobScheduleDataModel
     {
         $lastPlannedExecution = null;
         if ('' !== $this->sqlData['last_execution']) {
-            $lastPlannedExecution = \DateTime::createFromFormat(
+            $lastPlannedExecution = DateTime::createFromFormat(
                 'Y-m-d H:i:s',
                 $this->sqlData['last_execution']
             );
         }
 
-        $executeEveryNMinutes = (int)$this->sqlData['execute_every_n_minutes'];
+        $executeEveryNMinutes = (int) $this->sqlData['execute_every_n_minutes'];
 
         if (0 === $executeEveryNMinutes) {
             throw new InvalidArgumentException(
@@ -192,7 +171,7 @@ class TCMSCronJob extends TCMSRecord
 
         return new CronJobScheduleDataModel(
             $executeEveryNMinutes,
-            (int)$this->sqlData['unlock_after_n_minutes'],
+            (int) $this->sqlData['unlock_after_n_minutes'],
             '1' === $this->sqlData['lock'],
             $lastPlannedExecution
         );
@@ -207,7 +186,7 @@ class TCMSCronJob extends TCMSRecord
         try {
             $schedule = $this->getSchedule();
         } catch (InvalidArgumentException $e) {
-            $this->getLogger()->error($e->getMessage(), __FILE__, __LINE__);
+            $this->getCronjobLogger()->error($e->getMessage(), __FILE__, __LINE__);
 
             return;
         }
@@ -219,7 +198,7 @@ class TCMSCronJob extends TCMSRecord
         $this->getDatabaseConnection()->update(
             $this->table,
             [
-                'last_execution'      => $plannedExecutionTime->format('Y-m-d H:i:s'),
+                'last_execution' => $plannedExecutionTime->format('Y-m-d H:i:s'),
                 'real_last_execution' => $now->format('Y-m-d H:i:s'),
             ],
             ['id' => $this->id]
@@ -228,7 +207,7 @@ class TCMSCronJob extends TCMSRecord
 
     protected function UpdateLastExecutionOnStart()
     {
-        $now = new \DateTime('now');
+        $now = new DateTime('now');
 
         $this->getDatabaseConnection()->update(
             $this->table,
@@ -250,14 +229,14 @@ class TCMSCronJob extends TCMSRecord
         try {
             $schedule = $this->getSchedule();
         } catch (InvalidArgumentException $e) {
-            $this->getLogger()->error($e->getMessage(), __FILE__, __LINE__);
+            $this->getCronjobLogger()->error($e->getMessage(), __FILE__, __LINE__);
 
             return false;
         }
 
         $requiresExecution = $scheduler->requiresExecution($schedule);
         if (true === $requiresExecution && true === $this->isLocked()) {
-            $this->getLogger()->warning(
+            $this->getCronjobLogger()->warning(
                 sprintf(
                     'Cron job "%s" (%s) was force unlocked due to it being locked for longer than its unlock_after_n_minutes value',
                     $this->sqlData['name'],

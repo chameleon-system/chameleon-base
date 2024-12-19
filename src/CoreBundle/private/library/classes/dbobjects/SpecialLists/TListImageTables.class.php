@@ -21,21 +21,12 @@ class TListImageTables extends TCMSRecordList
         parent::__construct($sTableObject = 'TCMSTableConf', 'cms_tbl_conf', $this->_GetQuery());
     }
 
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TListImageTables()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
     protected function _GetQuery()
     {
         $imageFieldTypes = TCMSFieldDefinition::GetImageFieldTypes();
 
         $databaseConnection = $this->getDatabaseConnection();
-        $imageFieldTypeString = implode(',', array_map(array($databaseConnection, 'quote'), $imageFieldTypes));
+        $imageFieldTypeString = implode(',', array_map([$databaseConnection, 'quote'], $imageFieldTypes));
 
         $query = "
         SELECT DISTINCT `cms_tbl_conf`.*

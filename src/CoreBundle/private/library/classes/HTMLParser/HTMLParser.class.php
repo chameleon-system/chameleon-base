@@ -30,7 +30,7 @@ define('NODE_TYPE_DONE', 5);
  */
 class HtmlParser
 {
-    use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+    use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 
     /**
      * Field iNodeType.
@@ -75,21 +75,12 @@ class HtmlParser
     {
         $this->iHtmlText = $aHtmlText;
         $this->iHtmlTextLength = mb_strlen($aHtmlText);
-        $this->iNodeAttributes = array();
+        $this->iNodeAttributes = [];
         $this->setTextIndex(0);
 
-        $this->BOE_ARRAY = array(' ', "\t", "\r", "\n", '=');
-        $this->B_ARRAY = array(' ', "\t", "\r", "\n");
-        $this->BOS_ARRAY = array(' ', "\t", "\r", "\n", '/');
-    }
-
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function HTMLParser()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
+        $this->BOE_ARRAY = [' ', "\t", "\r", "\n", '='];
+        $this->B_ARRAY = [' ', "\t", "\r", "\n"];
+        $this->BOS_ARRAY = [' ', "\t", "\r", "\n", '/'];
     }
 
     /**
@@ -114,7 +105,7 @@ class HtmlParser
 
     public function clearAttributes()
     {
-        $this->iNodeAttributes = array();
+        $this->iNodeAttributes = [];
     }
 
     public function readTag()
@@ -153,6 +144,7 @@ class HtmlParser
                         $this->iNodeName = 'Comment';
                         $this->iNodeValue = '<'.$name.$rest;
                         $comment = true;
+
                         // Already skipped end of tag
                         return true;
                     }
@@ -196,7 +188,7 @@ class HtmlParser
 
     public function skipBlanksInTag()
     {
-        return '' != ($this->skipInTag($this->B_ARRAY));
+        return '' != $this->skipInTag($this->B_ARRAY);
     }
 
     public function skipToBlanksOrEqualsInTag()

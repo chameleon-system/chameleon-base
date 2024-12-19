@@ -24,22 +24,12 @@ class TCMSTableConf extends TCMSRecord
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSTableConf()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-
-    /**
      * returns objects that manages the list display.
      *
      * @param string|null $listClassName
-     * @param string      $listClassLocation DEPRECATED - default Core
-     * @param string      $sListClassPath    DEPRECATED - default TCMSListManager
-     * @param bool        $ignoreTableEditorRestrictions do not set restriction given by params
+     * @param string $listClassLocation DEPRECATED - default Core
+     * @param string $sListClassPath DEPRECATED - default TCMSListManager
+     * @param bool $ignoreTableEditorRestrictions do not set restriction given by params
      *
      * @return TCMSListManager
      *
@@ -57,20 +47,20 @@ class TCMSTableConf extends TCMSRecord
         } elseif ('cms_media' == $this->sqlData['name']) {
             if ($oGlobal->UserDataExists('sRestrictionField') && '_mlt' == substr($oGlobal->GetUserData('sRestrictionField'), -4)) {
                 $oList = new TCMSListManagerImagedatabaseMLT();
-            /** @var $oList TCMSListManagerImagedatabaseMLT */
+            /* @var $oList TCMSListManagerImagedatabaseMLT */
             } else {
                 $oList = new TCMSListManagerImagedatabase();
-                /** @var $oList TCMSListManagerImagedatabase */
+                /* @var $oList TCMSListManagerImagedatabase */
             }
         } elseif ('cms_tpl_page' == $this->sqlData['name']) {
             $oList = new TCMSListManagerWebpages();
-        /** @var $oList TCMSListManagerFullGroupTable */
+        /* @var $oList TCMSListManagerFullGroupTable */
         } elseif ($oGlobal->UserDataExists('sRestrictionField') && '_mlt' == substr($oGlobal->GetUserData('sRestrictionField'), -4)) {
             $oList = new TCMSListManagerMLT();
-        /** @var $oList TCMSListManagerMLT */
+        /* @var $oList TCMSListManagerMLT */
         } else {
             $oList = new TCMSListManagerFullGroupTable();
-            /** @var $oList TCMSListManagerFullGroupTable */
+            /* @var $oList TCMSListManagerFullGroupTable */
         }
 
         if (false === $ignoreTableEditorRestrictions && true === $oGlobal->UserDataExists('sRestrictionField')) {
@@ -155,14 +145,14 @@ class TCMSTableConf extends TCMSRecord
      * will be initialized with the default values from the database...
      *
      * @param TCMSRecord $oTableRow
-     * @param bool       $loadDefaults
-     * @param bool       $bDoNotUseAutoObjects - set to true if you want to prevent the class from using auto objects
+     * @param bool $loadDefaults
+     * @param bool $bDoNotUseAutoObjects - set to true if you want to prevent the class from using auto objects
      *
      * @return TIterator
      */
     public function GetFields($oTableRow, $loadDefaults = false, $bDoNotUseAutoObjects = false)
     {
-        $oFieldDefinition = $this->GetFieldDefinitions(array(), $bDoNotUseAutoObjects);
+        $oFieldDefinition = $this->GetFieldDefinitions([], $bDoNotUseAutoObjects);
         $oFields = new TIterator();
         while ($oFieldDef = $oFieldDefinition->next()) {
             /** @var $oFieldDef TdbCmsFieldConf|TCMSFieldDefinition */
@@ -221,9 +211,6 @@ class TCMSTableConf extends TCMSRecord
 
     /**
      * @param TdbCmsFieldConf|TCMSFieldDefinition $fieldDefinition
-     * @param array                               $sqlData
-     *
-     * @return mixed
      */
     private function getDataForCurrentLanguage($fieldDefinition, array $sqlData)
     {
@@ -252,13 +239,13 @@ class TCMSTableConf extends TCMSRecord
     /**
      * Returns the TCMSField object of a field or null.
      *
-     * @param string     $sFieldName
+     * @param string $sFieldName
      * @param TCMSRecord $oTableRow
-     * @param bool       $loadDefaults
+     * @param bool $loadDefaults
      *
-     * @return null|TCMSField
+     * @return TCMSField|null
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function GetField($sFieldName, $oTableRow, $loadDefaults = false)
     {
@@ -267,7 +254,7 @@ class TCMSTableConf extends TCMSRecord
         $fieldDefinition = $this->GetFieldDefinition($sFieldName);
 
         if (null === $fieldDefinition) {
-            throw new \Exception('Field definition not found for field: '.$sFieldName.' in table: '.$this->sqlData['name']);
+            throw new Exception('Field definition not found for field: '.$sFieldName.' in table: '.$this->sqlData['name']);
         } else {
             $field = $fieldDefinition->GetFieldObject();
             $field->sTableName = $this->sqlData['name'];
@@ -298,11 +285,11 @@ class TCMSTableConf extends TCMSRecord
      * (aFieldTypes = `constname` in cms_field_type).
      *
      * @param array $aFieldTypes
-     * @param bool  $bDoNotUseAutoObjects - set to true if you want to prevent the class from using auto objects
+     * @param bool $bDoNotUseAutoObjects - set to true if you want to prevent the class from using auto objects
      *
      * @return TCMSRecordList|TdbCmsFieldConfList
      */
-    public function GetFieldDefinitions($aFieldTypes = array(), $bDoNotUseAutoObjects = false)
+    public function GetFieldDefinitions($aFieldTypes = [], $bDoNotUseAutoObjects = false)
     {
         $cacheName = '_oFieldDefinition'.serialize($aFieldTypes);
         if ($bDoNotUseAutoObjects) {
@@ -314,7 +301,7 @@ class TCMSTableConf extends TCMSRecord
             $quotedId = $databaseConnection->quote($this->id);
 
             if (count($aFieldTypes) > 0) {
-                $fieldTypeString = implode(',', array_map(array($databaseConnection, 'quote'), $aFieldTypes));
+                $fieldTypeString = implode(',', array_map([$databaseConnection, 'quote'], $aFieldTypes));
                 $query = "SELECT `cms_field_conf`.*
                       FROM `cms_field_conf`
                 INNER JOIN `cms_field_type` ON `cms_field_conf`.`cms_field_type_id` = `cms_field_type`.`id`
@@ -372,7 +359,7 @@ class TCMSTableConf extends TCMSRecord
     public function GetFieldDefinition($fieldName)
     {
         $cacheName = $fieldName.'_'.$this->id;
-        static $internalCache = array();
+        static $internalCache = [];
         if (array_key_exists($cacheName, $internalCache)) {
             $fieldDefinition = $internalCache[$cacheName];
         } else {
@@ -465,7 +452,7 @@ class TCMSTableConf extends TCMSRecord
      */
     public function ExportTable()
     {
-        static $aExportedTables = array();
+        static $aExportedTables = [];
         $sql = '';
         if (!in_array($this->sqlData['name'], $aExportedTables)) {
             $aExportedTables[] = $this->sqlData['name'];
@@ -480,7 +467,7 @@ class TCMSTableConf extends TCMSRecord
 
             $oFields = $this->GetFields($this, true);
             while ($oField = $oFields->Next()) {
-                /** @var $oField TCMSField */
+                /* @var $oField TCMSField */
                 $sql .= $oField->CreateFieldDefinition(true, $oField);
                 $sql .= $oField->CreateFieldIndex(true);
                 $sql .= $oField->CreateRelatedTables(true);
@@ -491,12 +478,12 @@ class TCMSTableConf extends TCMSRecord
 
             // get property tables
             // now insert property records
-            $oFieldDefinitions = $this->GetFieldDefinitions(array('CMSFIELD_PROPERTY'));
+            $oFieldDefinitions = $this->GetFieldDefinitions(['CMSFIELD_PROPERTY']);
             while ($oFieldDef = $oFieldDefinitions->Next()) {
                 /** @var $oFieldDef TCMSFieldDefinition */
                 $tableName = $oFieldDef->sqlData['field_default_value'];
                 $oPropertyTableConf = new self();
-                /** @var $oPropertyTableConf TCMSTableConf */
+                /* @var $oPropertyTableConf TCMSTableConf */
                 $oPropertyTableConf->LoadFromField('name', $tableName);
                 $sql .= $oPropertyTableConf->ExportTable();
             }
@@ -518,7 +505,7 @@ class TCMSTableConf extends TCMSRecord
             return null;
         }
 
-        /** @var \TCMSRecord $tdb */
+        /** @var TCMSRecord $tdb */
         $tdb = $tdbName::GetNewInstance();
 
         if (null === $recordID) {

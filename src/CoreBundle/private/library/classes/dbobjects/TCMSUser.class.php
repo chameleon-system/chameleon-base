@@ -64,15 +64,6 @@ class TCMSUser extends TCMSRecord
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSUser()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-    /**
      * Returns the active backend user.
      * In the frontend it returns always NULL because of performance reasons
      * You don`t get a WWW-user object!

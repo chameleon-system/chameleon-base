@@ -88,7 +88,8 @@
         "symfony/yaml": "^6.4",
         "knpuniversity/oauth2-client-bundle": "^2.11",
         "league/oauth2-google": "^4.0",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "algo26-matthias/idna-convert": "^4.0"
     },
     "require-dev": {
         "symfony/stopwatch": "^6.4",

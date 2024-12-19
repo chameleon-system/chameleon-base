@@ -16,22 +16,12 @@ class TCMSMediaManagerTreeNode extends TCMSTreeNode
      *
      * @var TdbCmsMediaTreeList
      */
-    public $oChildren = null;
+    public $oChildren;
 
     public function __construct($id = null)
     {
         parent::__construct($id, 'cms_media_tree');
     }
-
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSMediaManagerTreeNode()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
 
     /**
      * {@inheritdoc}
