@@ -87,6 +87,6 @@ class TCacheManagerRuntimeCache
 
     public static function GetKey($aKey)
     {
-        return ServiceLocator::get('chameleon_system_core.util.hash_array')->hash32(implode('', $aKey));
+        return ServiceLocator::get('chameleon_system_core.util.hash_array')->hash32($aKey);
     }
 }

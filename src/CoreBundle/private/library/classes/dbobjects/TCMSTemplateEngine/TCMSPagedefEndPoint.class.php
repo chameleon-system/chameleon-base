@@ -353,9 +353,4 @@ class TCMSPagedefEndPoint extends TCMSPage
     {
         return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
-
-    private function getCacheService(): CacheInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.cache');
-    }
 }
