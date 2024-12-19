@@ -663,7 +663,7 @@ class TModelBase
     {
         $response = new Response();
         if (true === $this->_AllowCache()) {
-            $cache = $this->getCache();
+            $cache = $this->getCacheService();
             $cacheKey = $cache->getKey($this->_GetCacheParameters());
             $cachedContent = $cache->get($cacheKey);
             if (null !== $cachedContent) {
@@ -728,7 +728,7 @@ class TModelBase
         try {
             $sContent = $oRenderer->Render($sViewPathReference, $oLegacySnippetRenderer, true);
             if (true === $this->_AllowCache()) {
-                $cache = $this->getCache();
+                $cache = $this->getCacheService();
                 $cacheKey = $cache->getKey($this->_GetCacheParameters());
                 $cache->set($cacheKey, $sContent, $oRenderer->getPostRenderMapperCacheTrigger(), 0);
             }
@@ -781,7 +781,7 @@ class TModelBase
         $response->setMaxAge(ServiceLocator::getParameter('chameleon_system_core.cache.default_max_age_in_seconds'));
         $response->setPublic();
 
-        $cache = $this->getCache();
+        $cache = $this->getCacheService();
         $cacheKey = $cache->getKey($this->_GetCacheParameters());
         $eTag = md5($cacheKey.'-NODE:'.gethostname()); //add hostname to handle multi-server setup
         $response->setEtag($eTag);
@@ -813,7 +813,7 @@ class TModelBase
         if (0 === count($cacheTrigger)) {
             return;
         }
-        $this->getCache()->set(md5($response->getEtag()), true, $cacheTrigger, 0); // we do not pass a time argument, as we want the key to expire only via call or cms backend
+        $this->getCacheService()->set(md5($response->getEtag()), true, $cacheTrigger, 0); // we do not pass a time argument, as we want the key to expire only via call or cms backend
     }
 
     public function __toString()
@@ -821,18 +821,12 @@ class TModelBase
         return get_class($this);
     }
 
-    /**
-     * @return \ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface
-     */
-    private function getAuthenticityTokenManager()
+    private function getAuthenticityTokenManager(): \ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface
     {
         return ServiceLocator::get('chameleon_system_core.security.authenticity_token.authenticity_token_manager');
     }
 
-    /**
-     * @return CacheInterface
-     */
-    private function getCache()
+    protected function getCacheService(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');
     }
