@@ -62,7 +62,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
     {
         parent::PostSaveHook($oFields, $oPostTable);
         // update cache
-        TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+        $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $this->sId);
     }
 
     /**

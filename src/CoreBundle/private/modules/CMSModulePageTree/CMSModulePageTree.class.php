@@ -586,7 +586,7 @@ class CMSModulePageTree extends TCMSModelBase
                 }
 
                 // update cache
-                TCacheManager::PerformeTableChange($this->treeTable, $iNodeID);
+                $this->getCacheService()->callTrigger($this->treeTable, $iNodeID);
                 $this->UpdateSubtreePathCache($iNodeID);
 
                 $returnVal = true;

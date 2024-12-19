@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -360,8 +361,9 @@ class TCMSImageEndpoint
             static $aLocalCache = [];
             $aKeys = ['class' => __CLASS__, 'method' => 'GetImageUrlPathPrefix', 'cms_media_tree_id' => $this->aData['cms_media_tree_id']];
             $sPath = '';
-            $sKey = TCacheManager::GetKey($aKeys);
-            if (false == array_key_exists($sKey, $aLocalCache)) {
+            $cache = $this->getCacheService();
+            $sKey = $cache->getKey($aKeys);
+            if (false === array_key_exists($sKey, $aLocalCache)) {
                 if (!array_key_exists('cms_media_tree_id', $this->aData) || empty($this->aData['cms_media_tree_id'])) {
                     // use the first root category id
                     $query = "SELECT `id` FROM `cms_media_tree` WHERE `parent_id`='' LIMIT 0,1";
@@ -2238,5 +2240,10 @@ class TCMSImageEndpoint
     private function getSecurityHelperAccess(): SecurityHelperAccess
     {
         return ServiceLocator::get(SecurityHelperAccess::class);
+    }
+
+    private function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

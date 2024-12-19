@@ -11,7 +11,7 @@
 
 /**
  * cleanup old url alias entries.
-/**/
+ * /**/
 class TCMSCronJob_DeleteOldCmsUrlAliasEntries extends TdbCmsCronjobs
 {
     /**
@@ -25,7 +25,7 @@ class TCMSCronJob_DeleteOldCmsUrlAliasEntries extends TdbCmsCronjobs
         MySqlLegacySupport::getInstance()->query($query);
         $iAffected = MySqlLegacySupport::getInstance()->affected_rows();
         if ($iAffected > 0) {
-            TCacheManager::PerformeTableChange('cms_url_alias');
+            $this->getCacheService()->callTrigger('cms_url_alias');
         }
     }
 }

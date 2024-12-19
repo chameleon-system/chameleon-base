@@ -65,7 +65,7 @@ class TCMSTableEditorPortalNavigation extends TCMSTableEditor
                  WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oNode->id)."'
                ";
         MySqlLegacySupport::getInstance()->query($query);
-        TCacheManager::PerformeTableChange('cms_tree', $iNodeId);
+        $this->getCacheService()->callTrigger('cms_tree', $iNodeId);
         $oChildren = $oNode->GetChildren();
         while ($oChild = $oChildren->Next()) {
             /** @var $oChild TCMSTreeNode */

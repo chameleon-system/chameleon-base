@@ -13,7 +13,7 @@ parameters:
   chameleon_system_core.cache.memcache_port2: 11212
   chameleon_system_core.cache.memcache_use_fallback: false # use fallback cache if memcache rejects the content (because it is full for example)
   chameleon_system_core.cache.memcache_use_lazy_cache_write: true
-  chameleon_system_core.cache.memcache_max_cache_item_live_time_in_seconds: 2592000 # defines the number of seconds a cache item is valid - max = 30 days. use 0 if you do not want the items to expire. defaults to 30 days. note: this should be an upper limit. Ff the cache manager TCacheManager is passed a value greater than this constant, then that value will be used instead
+  chameleon_system_core.cache.memcache_max_cache_item_live_time_in_seconds: 2592000 # defines the number of seconds a cache item is valid - max = 30 days. use 0 if you do not want the items to expire. defaults to 30 days. note: this should be an upper limit. If the cache manager is passed a value greater than this constant, then that value will be used instead
   chameleon_system_core.cache.memcache_sessions_server1: false # set memcached server if you want to use a memcached for session management. IMPORTANT: this should NOT be the same as the memcached server for cache (a cache flush would clear all sessions otherwise)
   chameleon_system_core.cache.memcache_sessions_port1: 11211
   chameleon_system_core.cache.memcache_sessions_server2: false # second server

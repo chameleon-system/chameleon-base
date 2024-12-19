@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -77,13 +78,11 @@ class TCMSModelBase extends TModelBase
 
     /**
      * outputs the ajax call result.
-     *
-     * @param mixed $functionResult
      */
     protected function OutPutAjaxCallResult($functionResult)
     {
         $sOutputMode = 'Ajax';
-        $aPermittedOutputModes = array('Ajax', 'Plain');
+        $aPermittedOutputModes = ['Ajax', 'Plain'];
         if ($this->global->UserDataExists('sOutputMode') && in_array($this->global->GetUserData('sOutputMode'), $aPermittedOutputModes)) {
             $sOutputMode = $this->global->GetUserData('sOutputMode');
         }
@@ -151,19 +150,18 @@ class TCMSModelBase extends TModelBase
         return array_merge($includes, $includes);
     }
 
-    /**
-     * @return RouterInterface
-     */
-    private function getBackendRouter()
+    private function getBackendRouter(): RouterInterface
     {
         return ServiceLocator::get('chameleon_system_core.router.chameleon_backend');
     }
 
-    /**
-     * @return Request|null
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    protected function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

@@ -43,7 +43,7 @@ class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
         $oTableEditor->Init($sDocumentTreeTableEditorID, $directoryID);
         $oTableEditor->Delete($directoryID);
         // update cache
-        TCacheManager::PerformeTableChange($this->treeTable, $directoryID);
+        $this->getCacheService()->callTrigger($this->treeTable, $directoryID);
         $this->UpdateSubtreePathCache($directoryID);
 
         return json_encode(true);

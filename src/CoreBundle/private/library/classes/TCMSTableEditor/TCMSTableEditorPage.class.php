@@ -57,7 +57,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $oTableEditor->Init($iTableID, $oCmsTreeNode->id);
             $oTableEditor->Delete($oCmsTreeNode->id);
         }
-        TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+        $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $this->sId);
     }
 
     /**

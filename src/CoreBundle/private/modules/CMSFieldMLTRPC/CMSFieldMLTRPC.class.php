@@ -376,7 +376,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
 
         $pos = 0;
         $aQuery = array();
-        TCacheManager::PerformeTableChange($sTargetTable, $sSourcerecordId);
+        $this->getCacheService()->callTrigger($sTargetTable, $sSourcerecordId);
         $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
         foreach ($aPosOrder as $id) {
             ++$pos;
@@ -385,7 +385,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
                          WHERE `source_id` = '{$sSourcerecordId}'
                            AND `target_id` = '{$id}'";
             MySqlLegacySupport::getInstance()->query($updateQuery);
-            TCacheManager::PerformeTableChange($tableSQLName, $id);
+            $this->getCacheService()->callTrigger($tableSQLName, $id);
 
             $migrationQueryData = new MigrationQueryData($sMltTableName, $editLanguage->fieldIso6391);
             $migrationQueryData

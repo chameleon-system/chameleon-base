@@ -225,7 +225,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         parent::PostInsertHook($iRecordId);
 
         if (!empty($this->data)) {
-            TCacheManager::PerformeTableChange($this->GetConnectedTableName(), $this->data);
+            $this->getCacheService()->callTrigger($this->GetConnectedTableName(), $this->data);
         }
     }
 
@@ -239,7 +239,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         parent::PostSaveHook($iRecordId);
 
         if (!empty($this->data)) {
-            TCacheManager::PerformeTableChange($this->GetConnectedTableName(), $this->data);
+            $this->getCacheService()->callTrigger($this->GetConnectedTableName(), $this->data);
         }
     }
 

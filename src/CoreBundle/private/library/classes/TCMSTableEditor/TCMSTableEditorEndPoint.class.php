@@ -28,6 +28,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use esono\pkgCmsCache\CacheInterface;
 
 /**
  * manages saving, inserting, and deleting data from a table.
@@ -935,7 +936,7 @@ class TCMSTableEditorEndPoint
             ;
             $aQuery[] = new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_DELETE);
             TCMSLogChange::WriteTransaction($aQuery);
-            TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+            $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $this->sId);
         }
     }
 
@@ -1013,7 +1014,7 @@ class TCMSTableEditorEndPoint
                 ;
                 $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_INSERT));
                 TCMSLogChange::WriteTransaction($aQuery);
-                TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+                $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $this->sId);
             }
         }
     }
@@ -1075,7 +1076,7 @@ class TCMSTableEditorEndPoint
                     MySqlLegacySupport::getInstance()->query($sUpdateQuery);
                 }
             }
-            TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+            $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $this->sId);
         }
     }
 
@@ -1193,7 +1194,7 @@ class TCMSTableEditorEndPoint
             $sCacheTriggerID = md5($sCacheTriggerID);
         }
 
-        TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $sCacheTriggerID);
+        $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $sCacheTriggerID);
 
         $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $this->sId);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::INSERT_RECORD);
@@ -1460,7 +1461,7 @@ class TCMSTableEditorEndPoint
             $sCacheTriggerID = md5($sCacheTriggerID);
         }
 
-        TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $sCacheTriggerID);
+        $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $sCacheTriggerID);
     }
 
     /**
@@ -1651,7 +1652,7 @@ class TCMSTableEditorEndPoint
                 );
             }
 
-            TCacheManager::PerformeTableChange($tableName, $this->sId);
+            $this->getCacheService()->callTrigger($tableName, $this->sId);
         } else {
             // we need this because we use a redirect later and would not see the error message
             TTools::WriteLogEntrySimple('SQL Error: '.$error, 1, __FILE__, __LINE__);
@@ -1868,7 +1869,7 @@ class TCMSTableEditorEndPoint
     protected function DeleteRecordReferences()
     {
         $this->DeleteRecordReferencesFromSource();
-        TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+        $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $this->sId);
         $this->DeleteConnectedRecordReferences();
     }
 
@@ -2566,5 +2567,10 @@ class TCMSTableEditorEndPoint
     private function getFlashMessageService(): FlashMessageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.flash_messages');
+    }
+
+    protected function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

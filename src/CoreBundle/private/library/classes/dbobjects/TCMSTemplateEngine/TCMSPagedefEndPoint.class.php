@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use esono\pkgCmsCache\CacheInterface;
 
 class TCMSPagedefEndPoint extends TCMSPage
 {
@@ -241,8 +242,10 @@ class TCMSPagedefEndPoint extends TCMSPage
                 $oTableEditor->Save($aPostData);
             }
         }
-        TCacheManager::PerformeTableChange('cms_tpl_page_cms_master_pagedef_spot');
-        TCacheManager::PerformeTableChange('cms_tpl_page', $this->id);
+
+        $cache = $this->getCacheService();
+        $cache->callTrigger('cms_tpl_page_cms_master_pagedef_spot');
+        $cache->callTrigger('cms_tpl_page', $this->id);
     }
 
     /**
@@ -341,10 +344,7 @@ class TCMSPagedefEndPoint extends TCMSPage
         }
     }
 
-    /**
-     * @return InputFilterUtilInterface
-     */
-    private function getInputFilterUtil()
+    private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
@@ -352,5 +352,10 @@ class TCMSPagedefEndPoint extends TCMSPage
     private function getRequestInfoService(): RequestInfoServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.request_info_service');
+    }
+
+    private function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }
