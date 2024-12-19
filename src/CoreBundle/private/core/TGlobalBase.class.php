@@ -888,11 +888,6 @@ class TGlobalBase
 
     public static function SortClassList($a, $b)
     {
-        if ('IDNConvert' == $a) {
-            $a = 'idna_convert';
-        } elseif ('IDNConvert' == $b) {
-            $b = 'idna_convert';
-        }
         if (is_subclass_of($a, $b)) {
             return 1;
         } elseif (is_subclass_of($b, $a)) {

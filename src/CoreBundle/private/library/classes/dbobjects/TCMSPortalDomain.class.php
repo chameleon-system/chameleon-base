@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Algo26\IdnaConvert\ToIdn;
+
 class TCMSPortalDomain extends TCMSRecord
 {
     public function __construct($id = null, $iLanguage = null)
@@ -21,10 +23,9 @@ class TCMSPortalDomain extends TCMSRecord
      */
     public function GetName()
     {
-        $sName = parent::GetName();
-        $sName = self::ConvertFromIDN($sName);
+        $domainName = parent::GetName();
 
-        return $sName;
+        return self::ConvertFromIDN($domainName);
     }
 
     /**
@@ -64,24 +65,24 @@ class TCMSPortalDomain extends TCMSRecord
         return $this->sqlData['sslname'];
     }
 
-    public static function ConvertFromIDN($sString)
+    public static function ConvertFromIDN($domain)
     {
-        static $IDN;
-        if (!$IDN) {
-            $IDN = new idna_convert();
+        static $idnConverter;
+        if (!$idnConverter) {
+            $idnConverter = new ToUnicode();
         }
 
-        return trim($IDN->decode(($sString), 'utf8'));
+        return trim($idnConverter->convert($domain));
     }
 
-    public static function ConvertToIDN($sString)
+    public static function ConvertToIDN($domain)
     {
-        static $IDN;
-        if (!$IDN) {
-            $IDN = new idna_convert();
+        static $idnConverter;
+        if (!$idnConverter) {
+            $idnConverter = new ToIdn();
         }
 
-        return trim($IDN->encode($sString, 'utf8'));
+        return trim($idnConverter->convert($domain));
     }
 
     public function GetDomainParts()
