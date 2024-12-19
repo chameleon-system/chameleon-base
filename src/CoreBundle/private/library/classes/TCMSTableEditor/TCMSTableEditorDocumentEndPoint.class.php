@@ -184,7 +184,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             $oTableManager->AllowEditByAll(true);
             $oTableManager->SaveField('seo_name', $sSeoName);
 
-            TCacheManager::PerformeTableChange('cms_document', $documentID);
+            $this->getCacheService()->callTrigger('cms_document', $documentID);
         }
     }
 
@@ -386,7 +386,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      */
     protected static function GetCacheGetKey($sTableName, $sFieldName)
     {
-        return TCacheManager::GetKey([$sTableName => $sFieldName]);
+        return ServiceLocator::get('chameleon_system_core.cache')->getKey([$sTableName => $sFieldName]);
     }
 
     /**

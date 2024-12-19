@@ -19,6 +19,7 @@ use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
+use esono\pkgCmsCache\CacheInterface;
 
 /**
  * holds one record of a table.
@@ -239,7 +240,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * same as Load, except that the result is cached using TCacheManager (it makes sense to use this
+     * same as Load, except that the result is cached using a cache (it makes sense to use this
      * function if the PostLoadHook is expensive). After the first load the item will be cached as a singleton
      * so multiple loads within the same php process will not require any additional database operations.
      *
@@ -419,10 +420,10 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $aKey['__binary'] = $bBinary;
         $aKey['bFieldBasedTranslationFallbackActive'] = $this->isFieldBasedTranslationFallbackActive();
         $aKey['languageID'] = $this->iLanguageId;
-        $sKey = TCacheManager::GetKey($aKey);
+        $sKey = TCacheManagerRuntimeCache::GetKey($aKey);
         // check local cache first
         $aData = null;
-        if (false == TCacheManagerRuntimeCache::KeyExists($sKey)) {
+        if (false === TCacheManagerRuntimeCache::KeyExists($sKey)) {
             $bObjectCaching = $this->GetEnableObjectCaching();
             $this->SetEnableObjectCaching(false);
             $bRecordLoaded = $this->LoadFromFields($aFieldData, $bBinary);
@@ -2207,5 +2208,10 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         }
 
         return $uuid;
+    }
+
+    protected function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

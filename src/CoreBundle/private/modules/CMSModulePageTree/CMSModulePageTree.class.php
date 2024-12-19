@@ -32,14 +32,14 @@ class CMSModulePageTree extends TCMSModelBase
      *
      * @var string
      */
-    protected $iRootNode = null;
+    protected $iRootNode;
 
     /**
      * the root node object.
      *
      * @var TCMSTreeNode
      */
-    protected $oRootNode = null;
+    protected $oRootNode;
 
     /**
      * the mysql tablename of the tree.
@@ -54,14 +54,14 @@ class CMSModulePageTree extends TCMSModelBase
      *
      * @var array
      */
-    protected $aRestrictedNodes = array();
+    protected $aRestrictedNodes = [];
 
     /**
      * array of all currently open tree nodes.
      *
      * @var array
      */
-    protected $aOpenTreeNodes = array();
+    protected $aOpenTreeNodes = [];
 
     /**
      * count of portals in this CMS
@@ -148,7 +148,7 @@ class CMSModulePageTree extends TCMSModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('SetConnection', 'MoveNode', 'DeleteNode', 'GetSubTree', 'GetTransactionDetails');
+        $externalFunctions = ['SetConnection', 'MoveNode', 'DeleteNode', 'GetSubTree', 'GetTransactionDetails'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -228,8 +228,8 @@ class CMSModulePageTree extends TCMSModelBase
     /**
      * forms an indicator icon with an optional link.
      *
-     * @param string      $iconUrl
-     * @param string      $iconIdentifier
+     * @param string $iconUrl
+     * @param string $iconIdentifier
      * @param string|null $linkUrl
      *
      * @return string
@@ -244,6 +244,7 @@ class CMSModulePageTree extends TCMSModelBase
         if (null === $linkUrl) {
             return $spanSnippet;
         }
+
         // Return span wrapped in link from supplied url.
         return $anchorSnippet;
     }
@@ -251,10 +252,10 @@ class CMSModulePageTree extends TCMSModelBase
     /**
      * get children of current tree node.
      *
-     * @param string     $iParentID
+     * @param string $iParentID
      * @param TdbCmsTree $oParentTreeNode
-     * @param int        $level
-     * @param bool       $allowAjax
+     * @param int $level
+     * @param bool $allowAjax
      */
     protected function RenderTree($iParentID = null, $oParentTreeNode = null, $level = 0, $allowAjax = true)
     {
@@ -316,7 +317,7 @@ class CMSModulePageTree extends TCMSModelBase
         $sPageTag = '';
         $sPrimaryPageID = $oParentTreeNode->GetLinkedPage(true);
 
-        $aPages = array();
+        $aPages = [];
 
         $bCurrentPageIsConnectedToThisNode = false;
         $oConnectedPages = $oParentTreeNode->GetAllLinkedPages();
@@ -407,7 +408,7 @@ class CMSModulePageTree extends TCMSModelBase
             if ($level >= $iMaxLevel && $allowAjax && !$lastStateOpen) {
                 $this->data['sTreeHTML'] .= ' class="ajax">\n';
 
-                $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'GetSubTree', 'tableid' => $this->data['treeTableID'], 'sOutputMode' => 'Plain', 'nodeID' => $iParentID));
+                $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'CMSModulePageTreePlain', 'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'], '_fnc' => 'GetSubTree', 'tableid' => $this->data['treeTableID'], 'sOutputMode' => 'Plain', 'nodeID' => $iParentID]);
                 if (isset($this->data['dataID'])) {
                     $ajaxURL .= '&id='.$this->data['dataID'];
                 }
@@ -441,7 +442,7 @@ class CMSModulePageTree extends TCMSModelBase
 
         $oPortalList = TdbCmsPortalList::GetList(null, $backendSession->getCurrentEditLanguageId());
 
-        $aRestrictedNodes = array();
+        $aRestrictedNodes = [];
         while ($oPortal = $oPortalList->Next()) {
             $aRestrictedNodes[] = $oPortal->fieldMainNodeTree;
             $oNavigationList = $oPortal->GetFieldPropertyNavigationsList();
@@ -470,14 +471,14 @@ class CMSModulePageTree extends TCMSModelBase
 
             $portalIdSql = '';
             if (null !== $portalIds && count($portalIds) > 0) {
-                $portalIdSql = implode(', ', array_map(fn(string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portalIds)));
+                $portalIdSql = implode(', ', array_map(fn (string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portalIds)));
             }
 
             $query = 'SELECT * FROM `cms_portal`';
             if ('' !== $portalIdSql) {
                 $query .= ' WHERE `id` NOT IN ('.$portalIdSql.')';
             }
-            $aPortalExcludeList = array();
+            $aPortalExcludeList = [];
             $portalRes = MySqlLegacySupport::getInstance()->query($query);
             while ($portal = MySqlLegacySupport::getInstance()->fetch_assoc($portalRes)) {
                 if (!empty($portal['main_node_tree'])) {
@@ -491,7 +492,7 @@ class CMSModulePageTree extends TCMSModelBase
         if (count($aPortalExcludeList) > 0) {
             $databaseConnection = $this->getDatabaseConnection();
             $quotedTableName = $databaseConnection->quoteIdentifier($this->treeTable);
-            $portalExcludeListString = implode(',', array_map(array($databaseConnection, 'quote'), $aPortalExcludeList));
+            $portalExcludeListString = implode(',', array_map([$databaseConnection, 'quote'], $aPortalExcludeList));
             $sPortalCondition .= " AND $quotedTableName.`id` NOT IN ($portalExcludeListString)";
         }
 
@@ -535,7 +536,7 @@ class CMSModulePageTree extends TCMSModelBase
     {
         $returnVal = false;
         if ($this->global->UserDataExists('tableid') && $this->global->UserDataExists('nodeID') && $this->global->UserDataExists('parentNodeID') && $this->global->UserDataExists('position')) {
-            $updatedNodes = array();
+            $updatedNodes = [];
             $iTableID = $this->global->GetUserData('tableid');
             $iNodeID = $this->global->GetUserData('nodeID');
             $iParentNodeID = $this->global->GetUserData('parentNodeID');
@@ -586,7 +587,7 @@ class CMSModulePageTree extends TCMSModelBase
                 }
 
                 // update cache
-                TCacheManager::PerformeTableChange($this->treeTable, $iNodeID);
+                $this->getCacheService()->callTrigger($this->treeTable, $iNodeID);
                 $this->UpdateSubtreePathCache($iNodeID);
 
                 $returnVal = true;
@@ -673,7 +674,7 @@ class CMSModulePageTree extends TCMSModelBase
         $parameters = parent::_GetCacheParameters();
 
         if (!is_array($parameters)) {
-            $parameters = array();
+            $parameters = [];
         }
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
@@ -694,22 +695,22 @@ class CMSModulePageTree extends TCMSModelBase
     {
         $aTableTriggerList = parent::_GetCacheTableInfos();
         if (!is_array($aTableTriggerList)) {
-            $aTableTriggerList = array();
+            $aTableTriggerList = [];
         }
 
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
-        $aTableTriggerList[] = array('table' => 'cms_user', 'id' => $securityHelper->getUser()?->getId());
-        $aTableTriggerList[] = array('table' => 'cms_user_cms_language_mlt', 'id' => '');
-        $aTableTriggerList[] = array('table' => 'cms_user_cms_portal_mlt', 'id' => '');
-        $aTableTriggerList[] = array('table' => 'cms_user_cms_role_mlt', 'id' => '');
-        $aTableTriggerList[] = array('table' => 'cms_user_cms_usergroup_mlt', 'id' => '');
-        $aTableTriggerList[] = array('table' => 'cms_user_cms_usergroup_mlt', 'id' => '');
-        $aTableTriggerList[] = array('table' => 'cms_user_cms_usergroup_mlt', 'id' => '');
-        $aTableTriggerList[] = array('table' => 'cms_role_cms_right_mlt', 'id' => '');
-        $aTableTriggerList[] = array('table' => 'cms_tree', 'id' => '');
-        $aTableTriggerList[] = array('table' => 'cms_tree_node', 'id' => '');
+        $aTableTriggerList[] = ['table' => 'cms_user', 'id' => $securityHelper->getUser()?->getId()];
+        $aTableTriggerList[] = ['table' => 'cms_user_cms_language_mlt', 'id' => ''];
+        $aTableTriggerList[] = ['table' => 'cms_user_cms_portal_mlt', 'id' => ''];
+        $aTableTriggerList[] = ['table' => 'cms_user_cms_role_mlt', 'id' => ''];
+        $aTableTriggerList[] = ['table' => 'cms_user_cms_usergroup_mlt', 'id' => ''];
+        $aTableTriggerList[] = ['table' => 'cms_user_cms_usergroup_mlt', 'id' => ''];
+        $aTableTriggerList[] = ['table' => 'cms_user_cms_usergroup_mlt', 'id' => ''];
+        $aTableTriggerList[] = ['table' => 'cms_role_cms_right_mlt', 'id' => ''];
+        $aTableTriggerList[] = ['table' => 'cms_tree', 'id' => ''];
+        $aTableTriggerList[] = ['table' => 'cms_tree_node', 'id' => ''];
 
         return $aTableTriggerList;
     }
@@ -719,7 +720,7 @@ class CMSModulePageTree extends TCMSModelBase
         $command = <<<COMMAND
 TCMSLogChange::initializeNestedSet('{$this->treeTable}', 'parent_id', 'entry_sort');
 COMMAND;
-        TCMSLogChange::WriteSqlTransactionWithPhpCommands('update nested set for table '.$this->treeTable, array($command));
+        TCMSLogChange::WriteSqlTransactionWithPhpCommands('update nested set for table '.$this->treeTable, [$command]);
     }
 
     /**

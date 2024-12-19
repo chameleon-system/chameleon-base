@@ -115,7 +115,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     {
         static $aPathCache = [];
         $aKey = $this->GetCacheIdentKeyParameters(['method' => 'GetPath', 'aStopNodes' => $aStopNodes, 'language' => $this->GetLanguage()]);
-        $sKey = TCacheManager::GetKey($aKey);
+        $sKey = TCacheManagerRuntimeCache::GetKey($aKey);
         if (!array_key_exists($sKey, $aPathCache)) {
             $aPath = [];
             if (!is_array($aStopNodes)) {
@@ -689,7 +689,6 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
             $sPath = '/'.$sPath;
         }
         $oTableConf = $this->GetTableConf();
-        /** @var TCMSTableEditorManager $oChildEditor */
         $oChildEditor = new TCMSTableEditorManager();
         $languageId = null === $this->iLanguageId ? null : (string) $this->iLanguageId;
         $oChildEditor->Init($oTableConf->id, $this->id, $languageId);
@@ -697,7 +696,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
         $oChildEditor->SaveField('pathcache', $sPath);
         $oChildEditor->AllowEditByAll(false);
         unset($oChildEditor);
-        TCacheManager::PerformeTableChange($oTableConf->fieldName, $this->id);
+        $this->getCacheService()->callTrigger($oTableConf->fieldName, $this->id);
         $oChildren = $this->GetChildren(true);
         /** @var $oChild TCMSTreeNode */
         while ($oChild = $oChildren->Next()) {

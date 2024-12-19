@@ -166,7 +166,7 @@ class TCMSTableEditorMediaTree extends TCMSTableEditorTreeShared
         $oImageList = TdbCmsMediaList::GetList("SELECT * FROM cms_media WHERE `cms_media_tree_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($id)."'");
         if ($oImageList->Length() <= 10) { // the next block is VERY slow... only use if there are less then 10 images. otherwise we clear the complete cache
             while ($oImage = $oImageList->Next()) {
-                TCacheManager::PerformeTableChange('cms_media', $oImage->id);
+                $this->getCacheService()->callTrigger('cms_media', $oImage->id);
                 $oImageEditor = TTools::GetTableEditorManager('cms_media');
                 $oImageEditor->oTableEditor->ClearCacheOfObjectsUsingImage($oImage->id);
             }

@@ -18,13 +18,13 @@ use Doctrine\DBAL\Connection;
  */
 class CMSModulePageTreeRPC extends TCMSModelBase
 {
-    public $rpcData = null;
+    public $rpcData;
     public $treeTable = 'cms_tree';
     public $treeContentTable = 'cms_tree_node';
     public $contentTable = 'cms_tpl_page';
     public $dbObjectCLass = 'TCMSTreeNode';
-    public $onTitleClickCallBackFnc = null;
-    public $actualPageID = null;
+    public $onTitleClickCallBackFnc;
+    public $actualPageID;
 
     public function Execute()
     {
@@ -61,7 +61,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('getChildren', 'removeNode', 'move');
+        $externalFunctions = ['getChildren', 'removeNode', 'move'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -82,12 +82,12 @@ class CMSModulePageTreeRPC extends TCMSModelBase
                  {$sPortalCondition}
                  ORDER BY entry_sort";
 
-        $childrensArray = array();
+        $childrensArray = [];
 
         $oTreeNodes = new TCMSRecordList($this->dbObjectCLass, null, $query);
 
         while ($oTreeNode = $oTreeNodes->Next()) {
-            /** @var $oTreeNode TCMSTreeNode */
+            /* @var $oTreeNode TCMSTreeNode */
             $childrensArray[] = $this->_nodeProperties($oTreeNode);
         }
 
@@ -105,8 +105,8 @@ class CMSModulePageTreeRPC extends TCMSModelBase
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $portalIds = $securityHelper->getUser()?->getPortals();
         $sPortalList = '';
-        if (null !== $portalIds && count($portalIds) >0) {
-            $sPortalList = implode(', ', array_map(fn(string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portalIds)));
+        if (null !== $portalIds && count($portalIds) > 0) {
+            $sPortalList = implode(', ', array_map(fn (string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portalIds)));
         }
 
         $query = 'SELECT `main_node_tree` FROM `cms_portal`';
@@ -114,11 +114,11 @@ class CMSModulePageTreeRPC extends TCMSModelBase
             $query .= ' WHERE `id` NOT IN ('.$sPortalList.')';
         }
         $portalMainNodes = $this->getDatabaseConnection()->fetchAllAssociative($query);
-        $aPortalExcludeList = array_map(fn($row) => $this->getDatabaseConnection()->quote($row['main_node_tree']), $portalMainNodes);
+        $aPortalExcludeList = array_map(fn ($row) => $this->getDatabaseConnection()->quote($row['main_node_tree']), $portalMainNodes);
 
         $sPortalCondition = '';
         if (count($aPortalExcludeList) > 0) {
-            $sPortalCondition .= " AND T.`id` NOT IN (".implode(', ', $aPortalExcludeList).")";
+            $sPortalCondition .= ' AND T.`id` NOT IN ('.implode(', ', $aPortalExcludeList).')';
         }
 
         return $sPortalCondition;
@@ -131,7 +131,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
      */
     public function _nodeProperties($oTreeNode)
     {
-        $child = array();
+        $child = [];
 
         // on navigation trees we need to highlight entries where a page is already connected
         if (!is_null($this->contentTable) && 'cms_tpl_page' == $this->contentTable) {
@@ -208,11 +208,11 @@ class CMSModulePageTreeRPC extends TCMSModelBase
 
         // delete the portal tree
         $oTreeTableConf = new TCMSTableConf();
-        /** @var $oTreeTableConf TCMSTableConf */
+        /* @var $oTreeTableConf TCMSTableConf */
         $oTreeTableConf->LoadFromField('name', 'cms_tree');
 
         $oTreeEditor = new TCMSTableEditorManager();
-        /** @var $oTreeEditor TCMSTableEditorManager */
+        /* @var $oTreeEditor TCMSTableEditorManager */
         $oTreeEditor->Init($oTreeTableConf->id, $target_id);
         $oTreeEditor->Delete($target_id);
 
@@ -274,7 +274,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
         $this->getNestedSetHelper()->updateNode($node);
         $this->writeSqlLog();
         // update cache
-        TCacheManager::PerformeTableChange($this->treeTable, $nodeID);
+        $this->getCacheService()->callTrigger($this->treeTable, $nodeID);
         $this->UpdateSubtreePathCache($nodeID);
 
         return json_encode(true);
@@ -295,16 +295,16 @@ class CMSModulePageTreeRPC extends TCMSModelBase
         $command = <<<COMMAND
 TCMSLogChange::initializeNestedSet('{$this->treeTable}', 'parent_id', 'entry_sort');
 COMMAND;
-        TCMSLogChange::WriteSqlTransactionWithPhpCommands('update nested set for table '.$this->treeTable, array($command));
+        TCMSLogChange::WriteSqlTransactionWithPhpCommands('update nested set for table '.$this->treeTable, [$command]);
     }
 
     /**
-     * @return \ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface
+     * @return ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperInterface
      */
     protected function getNestedSetHelper()
     {
         /** @var $factory \ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface */
-        $factory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
+        $factory = ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
 
         return $factory->createNestedSetHelper($this->treeTable, 'parent_id', 'entry_sort');
     }
@@ -314,6 +314,6 @@ COMMAND;
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 }

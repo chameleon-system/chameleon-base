@@ -758,7 +758,7 @@
         </service>
 
         <service class="ChameleonSystem\CoreBundle\RequestState\HashCalculationLock" id="chameleon_system_core.request_state.hash_calculation_lock"/>
-        <service class="ChameleonSystem\CoreBundle\Util\Hash" id="chameleon_system_core.util.hash_array"/>
+        <service class="ChameleonSystem\CoreBundle\Util\Hash" id="chameleon_system_core.util.hash_array" public="true"/>
         <service class="ChameleonSystem\CoreBundle\RequestState\RequestStateHashProvider" id="chameleon_system_core.request_state_hash_provider" public="true">
             <argument id="chameleon_system_core.util.hash_array" type="service"/>
             <argument id="chameleon_system_core.request_state.hash_calculation_lock" type="service" />

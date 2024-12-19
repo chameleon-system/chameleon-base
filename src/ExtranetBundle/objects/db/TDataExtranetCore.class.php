@@ -273,7 +273,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
                 $aKey['sPortalId'] = $oActivePage->GetPortal()->id;
             }
 
-            $sKey = TCacheManager::GetKey($aKey);
+            $sKey = TCacheManagerRuntimeCache::GetKey($aKey);
         }
 
         return $sKey;

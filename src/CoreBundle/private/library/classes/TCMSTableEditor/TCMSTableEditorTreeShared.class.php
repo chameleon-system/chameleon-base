@@ -55,14 +55,14 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
         // update cache
-        TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+        $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $this->sId);
     }
 
     /**
@@ -182,7 +182,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
      *
      * @return object TCMSstdClass
      */
-    public function GetObjectShortInfo($postData = array())
+    public function GetObjectShortInfo($postData = [])
     {
         $oRecordData = parent::GetObjectShortInfo($postData);
         $oRecordData->parentID = $this->oTable->sqlData['parent_id'];

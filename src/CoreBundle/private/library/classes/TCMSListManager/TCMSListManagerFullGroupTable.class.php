@@ -63,7 +63,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         // table is not in cache, load it
         if (null === $cachedTableObj) {
             $this->CreateTableObj(); // also calls PostCreateTableObjectHook();
-            $this->tableObj->orderList = array();
+            $this->tableObj->orderList = [];
             $this->AddFields();
             $this->AddSortInformation();
             $this->AddTableGrouping();
@@ -153,7 +153,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return Symfony\Component\HttpFoundation\Request
      */
     protected function getRequest()
     {
@@ -167,7 +167,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      */
     public function GetListCacheKey()
     {
-        return TCacheManager::GetKey($this->GetCacheParameters());
+        return TCacheManagerRuntimeCache::GetKey($this->GetCacheParameters());
     }
 
     /**
@@ -182,10 +182,9 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         /** @var BackendSessionInterface $backendSession */
         $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
-
         $request = $this->getRequest();
 
-        $aCacheParameters = array('class' => get_class($this),
+        $aCacheParameters = ['class' => get_class($this),
             'table' => $this->oTableConf->sqlData['name'],
             'userid' => $securityHelper->getUser()?->getId(),
             'sRestriction' => $this->sRestriction,
@@ -193,7 +192,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             'field' => $request->get('field'),
             'pagedef' => $request->get('pagedef'),
             'sCurrentEditLanguageIsoCode' => $backendSession->getCurrentEditLanguageIso6391(),
-        );
+        ];
 
         return $aCacheParameters;
     }
@@ -224,14 +223,14 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         if ($tableInUserGroup) {
             $portalIds = $securityHelper->getUser()?->getPortals();
             if (null === $portalIds) {
-                $portalIds = array();
+                $portalIds = [];
             }
             $portalRestriction = implode(', ', array_map(fn ($id) => $this->getDatabaseConnection()->quote($id), array_keys($portalIds)));
             /* Check for Export Profiles */
             if (!empty($portalRestriction)) {
                 $query = "SELECT EXISTS (SELECT 1 FROM `cms_export_profiles` WHERE `cms_tbl_conf_id` = :tableId AND `cms_portal_id` IN ({$portalRestriction}))";
                 $hasExportProfile = $this->getDatabaseConnection()->fetchOne($query, ['tableId' => $this->oTableConf->sqlData['id']]);
-                if (1 === (int)$hasExportProfile) {
+                if (1 === (int) $hasExportProfile) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.export');
                     $oMenuItem->sIcon = 'far fa-save';
@@ -243,14 +242,14 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                         $sListClass = $oListClass->sqlData['classname'];
                     }
 
-                    $aParameters = array(
+                    $aParameters = [
                         'pagedef' => 'CMSTableExport',
                         '_pagedefType' => 'Core',
                         'tableID' => $this->oTableConf->id,
                         'tableCmsIdentID' => $this->oTableConf->sqlData['cmsident'],
                         'listClass' => $sListClass,
                         'listCacheKey' => $this->GetListCacheKey(),
-                    );
+                    ];
 
                     $js = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParameters)."',0,0,'".TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.action.export'))."');";
 
@@ -286,7 +285,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $this->tableObj->Init($postData);
         $this->tableObj->setLanguageId($backendSession->getCurrentEditLanguageId());
         $this->tableObj->sTableName = $this->oTableConf->sqlData['name'];
-        $this->tableObj->orderList = array();
+        $this->tableObj->orderList = [];
         $this->tableObj->formActionType = 'GET';
         $this->tableObj->listName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
         $this->tableObj->onClick = $this->_GetRecordClickJavaScriptFunctionName();
@@ -328,7 +327,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
     protected function AddRowCallback()
     {
-        $this->tableObj->rowCallback = array($this, 'CallBackRowStyling');
+        $this->tableObj->rowCallback = [$this, 'CallBackRowStyling'];
     }
 
     /**
@@ -363,16 +362,16 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 ORDER BY `position`
                ';
 
-        return $connection->fetchAllAssociative($query, array(
+        return $connection->fetchAllAssociative($query, [
             'id' => $tableConfigurationId,
-        ));
+        ]);
     }
 
     /**
      * Retrieves the list field configuration for a single field in a given table configuration by id.
      *
-     * @param int    $tableConfigurationId Table configuration id
-     * @param string $field                Field query string (e.g. `cms_tbl_conf`.`translation`)
+     * @param int $tableConfigurationId Table configuration id
+     * @param string $field Field query string (e.g. `cms_tbl_conf`.`translation`)
      *
      * @return array|null Field configuration records
      */
@@ -385,10 +384,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 ORDER BY `position`
                ';
         try {
-            return $connection->fetchAllAssociative($query, array(
+            return $connection->fetchAllAssociative($query, [
                 'id' => $tableConfigurationId,
                 'field' => $field,
-            ));
+            ]);
         } catch (DBALException $e) {
             return null;
         }
@@ -405,12 +404,12 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         $listFieldsConfig = $this->getDisplayListFieldsConfig($this->oTableConf->id);
 
-        $this->tableObj->searchFields = array();
+        $this->tableObj->searchFields = [];
 
         // add locking column if locking is active
         if ('1' == $this->oTableConf->sqlData['locking_active']) {
-            $this->tableObj->AddHeaderField(array('Locking' => TGlobal::Translate('chameleon_system_core.list.column_name_lock')), 'left', null, 1, false, 30);
-            $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackLockingStatus'), $jsParas, 1);
+            $this->tableObj->AddHeaderField(['Locking' => TGlobal::Translate('chameleon_system_core.list.column_name_lock')], 'left', null, 1, false, 30);
+            $this->tableObj->AddColumn('id', 'left', [$this, 'CallBackLockingStatus'], $jsParas, 1);
             ++$this->columnCount;
         }
 
@@ -433,11 +432,11 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                     $fieldConfig['width'] = false;
                 }
                 $sTranslatedField = $fieldConfig['title'];
-                $this->tableObj->AddHeaderField(array($fieldConfig['name'] => $sTranslatedField), $fieldConfig['align'], null, 1, $allowSort, $fieldConfig['width']);
+                $this->tableObj->AddHeaderField([$fieldConfig['name'] => $sTranslatedField], $fieldConfig['align'], null, 1, $allowSort, $fieldConfig['width']);
                 $db_alias = trim($fieldConfig['db_alias']);
                 $columnField = $dbfieldname;
                 if ('' !== $db_alias) {
-                    $columnField = array($db_alias => $dbfieldname);
+                    $columnField = [$db_alias => $dbfieldname];
                 }
                 $this->tableObj->AddColumn($columnField, $fieldConfig['align'], $this->getCellFormattingFunctionConfig($fieldConfig), $jsParas, 1, null, null, null, $originalField, $originalTable);
                 if ($this->isListFieldSearchable($fieldConfig)) {
@@ -448,21 +447,21 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $this->columnCount += 3;
             $name = $this->oTableConf->GetNameColumn();
             $callback = $this->oTableConf->GetNameFieldCallbackFunction();
-            $this->tableObj->AddHeaderField(array('id' => 'ID'), 'left', null, 1, $allowSort, false);
+            $this->tableObj->AddHeaderField(['id' => 'ID'], 'left', null, 1, $allowSort, false);
             $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_cmsident');
-            $this->tableObj->AddHeaderField(array('cmsident' => $sTranslatedField), 'left', null, 1, $allowSort, false);
+            $this->tableObj->AddHeaderField(['cmsident' => $sTranslatedField], 'left', null, 1, $allowSort, false);
             $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_name');
-            $this->tableObj->AddHeaderField(array($name => $sTranslatedField), 'left', null, 1, $allowSort);
+            $this->tableObj->AddHeaderField([$name => $sTranslatedField], 'left', null, 1, $allowSort);
 
-            $this->tableObj->AddColumn('id', 'left', array('TCMSRecord', 'callBackUuid'), $jsParas, 1);
+            $this->tableObj->AddColumn('id', 'left', ['TCMSRecord', 'callBackUuid'], $jsParas, 1);
             $this->tableObj->AddColumn('cmsident', 'left', null, $jsParas, 1);
             $originalField = $name;
-            $aNameColumnData = $this->TransformFieldForTranslations(array('db_alias' => $name, 'name' => $name));
+            $aNameColumnData = $this->TransformFieldForTranslations(['db_alias' => $name, 'name' => $name]);
             $dbfieldname = trim($aNameColumnData['name']);
             $db_alias = trim($aNameColumnData['db_alias']);
             $columnField = $dbfieldname;
             if (!empty($db_alias)) {
-                $columnField = array($db_alias => $dbfieldname);
+                $columnField = [$db_alias => $dbfieldname];
             }
 
             $this->tableObj->AddColumn($columnField, 'left', $callback, $jsParas, 1, null, 'title', null, $originalField);
@@ -507,8 +506,6 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     }
 
     /**
-     * @param array $cellConfig
-     *
      * @return array|string|null - returns the types TGroupTable::AddColumn allows for the callback parameter: null, array('object','callbackName'), callbackNameString
      */
     protected function getCellFormattingFunctionConfig(array $cellConfig)
@@ -561,7 +558,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
     protected function _GetRecordClickJavaScriptParameters()
     {
-        $jsParas = array('id');
+        $jsParas = ['id'];
 
         return $jsParas;
     }
@@ -570,16 +567,16 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     {
         ++$this->columnCount;
         $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_actions');
-        $this->tableObj->AddHeaderField(array('id' => $sTranslatedField.'&nbsp;&nbsp;'), 'right', null, 1, false, false);
-        $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackFunctionBlock'), null, 1);
+        $this->tableObj->AddHeaderField(['id' => $sTranslatedField.'&nbsp;&nbsp;'], 'right', null, 1, false, false);
+        $this->tableObj->AddColumn('id', 'left', [$this, 'CallBackFunctionBlock'], null, 1);
     }
 
     protected function AddRowPrefixFields()
     {
         ++$this->columnCount;
         $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
-        $this->tableObj->AddHeaderField(array('id' => '<input onclick="ChangeListMarking(this.checked,\''.$sFormName.'\');" type="checkbox" name="aInputIdList[checkall]" value="true" />'), 'center', null, 1, false, 10);
-        $this->tableObj->AddColumn('id', 'center', array($this, 'CallBackDrawListItemSelectbox'), null, 1);
+        $this->tableObj->AddHeaderField(['id' => '<input onclick="ChangeListMarking(this.checked,\''.$sFormName.'\');" type="checkbox" name="aInputIdList[checkall]" value="true" />'], 'center', null, 1, false, 10);
+        $this->tableObj->AddColumn('id', 'center', [$this, 'CallBackDrawListItemSelectbox'], null, 1);
     }
 
     /**
@@ -608,10 +605,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         if (empty($columnCount)) {
             $columnCount = $this->columnCount;
         }
-        $this->tableObj->AddGroupField(array($list_group_field_column => $groupField), 'left', null, null, $columnCount);
+        $this->tableObj->AddGroupField([$list_group_field_column => $groupField], 'left', null, null, $columnCount);
         $this->tableObj->showGroupSelectorText = $this->oTableConf->fieldListGroupFieldHeader;
         $this->tableObj->showAllGroupsText = '['.TGlobal::Translate('chameleon_system_core.list.group_show_all').']';
-        $tmpArray = array($list_group_field_column => 'ASC');
+        $tmpArray = [$list_group_field_column => 'ASC'];
         $this->tableObj->orderList = array_merge($tmpArray, $this->tableObj->orderList);
     }
 
@@ -639,9 +636,9 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         $sListCacheKey = $this->GetListCacheKey();
         if (!array_key_exists('_listObjCache', $_SESSION)) {
-            $_SESSION['_listObjCache'] = array();
+            $_SESSION['_listObjCache'] = [];
         }
-        $objectInSession = (array_key_exists($sListCacheKey, $_SESSION['_listObjCache']));
+        $objectInSession = array_key_exists($sListCacheKey, $_SESSION['_listObjCache']);
 
         $objectChangeRequest = (isset($postdata['_listName']) && $postdata['_listName'] == 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident']);
         if (array_key_exists('_sort_order', $postdata) && !empty($postdata['_sort_order']) && $objectChangeRequest) {
@@ -666,12 +663,12 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $fieldList = MySqlLegacySupport::getInstance()->query($query);
 
             while ($field = MySqlLegacySupport::getInstance()->fetch_assoc($fieldList)) {
-                $aTmpField = $this->TransformFieldForTranslations(array('name' => $field['name'], 'db_alias' => ''));
+                $aTmpField = $this->TransformFieldForTranslations(['name' => $field['name'], 'db_alias' => '']);
                 $this->tableObj->orderList[$aTmpField['name']] = $field['sort_order_direction'];
             }
         }
 
-        //remove anything that is translated and not in current edit language #25819
+        // remove anything that is translated and not in current edit language #25819
         if (isset($this->tableObj->orderList) && is_array($this->tableObj->orderList) && count($this->tableObj->orderList) > 0) {
             /** @var BackendSessionInterface $backendSession */
             $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
@@ -680,7 +677,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             foreach ($this->tableObj->orderList as $fullFieldName => $sortDirection) {
                 $fieldNameParts = explode('.', $fullFieldName);
                 $cleanFieldNamePart = trim(array_pop($fieldNameParts), '`');
-                $matches = array();
+                $matches = [];
                 if (preg_match('@.*__([a-z][a-z])@', $cleanFieldNamePart, $matches)) {
                     $languageIdentifier = $matches[1];
                     if ($languageIdentifier !== $editLanguage) {
@@ -727,7 +724,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * returns HTML.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
@@ -762,13 +759,13 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * Forms function item elements depending on user permissions.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return array
      */
     protected function getRowFunctionItems($id, $row)
     {
-        $items = array();
+        $items = [];
 
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
@@ -778,11 +775,11 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $items['edit'] = $this->CallBackFunctionBlockEditButton($id, $row);
         }
 
-        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW,$fieldName)) {
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $fieldName)) {
             $items['copy'] = $this->CallBackFunctionBlockCopyButton($id, $row);
         }
 
-        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE,$fieldName)) {
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $fieldName)) {
             $items['delete'] = $this->CallBackFunctionBlockDeleteButton($id, $row);
         }
 
@@ -827,7 +824,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * Renders a button to delete records from the list view.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
@@ -842,14 +839,14 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * Returns a preview image with zoom on click.
      *
      * @param string $path
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
     public function CallBackImageWithZoom($path, $row)
     {
         $oImage = new TCMSImage();
-        /** @var $oImage TCMSImage */
+        /* @var $oImage TCMSImage */
         $oImage->Load($row['id']);
         $image = '';
 
@@ -872,7 +869,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * returns a checkbox field for image file selection with javascript onlick.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
@@ -887,7 +884,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * returns the document filename croped to 25 chars max.
      *
      * @param string $filename
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
@@ -905,7 +902,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * returns the document filesize.
      *
      * @param string $fileSize
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
@@ -920,7 +917,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * returns checkbox field for multiple file selections.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      * @param string $sFieldName
      *
      * @return string
@@ -941,7 +938,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      * returns a CSS class that styles the row.
      *
      * @param string $sRecordID
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */

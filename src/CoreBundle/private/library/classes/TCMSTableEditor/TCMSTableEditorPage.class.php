@@ -10,7 +10,6 @@
  */
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
-use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TCMSTableEditorPage extends TCMSTableEditor
@@ -18,7 +17,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
     /**
      * this is the root node of all page trees.
      */
-    const ROOT_NODE_ID = 99;
+    public const ROOT_NODE_ID = 99;
 
     protected function DeleteRecordReferences()
     {
@@ -53,17 +52,17 @@ class TCMSTableEditorPage extends TCMSTableEditor
         $oCmsTreeNodeList = TdbCmsTreeNodeList::GetList($query);
         /** @var $oCmsTreeNodeList TdbCmsTreeNodeList */
         while ($oCmsTreeNode = $oCmsTreeNodeList->Next()) {
-            /** @var $oCmsTreeNode TdbCmsTreeNode */
+            /* @var $oCmsTreeNode TdbCmsTreeNode */
             $oTableEditor->Init($iTableID, $oCmsTreeNode->id);
             $oTableEditor->Delete($oCmsTreeNode->id);
         }
-        TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+        $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $this->sId);
     }
 
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
@@ -96,10 +95,10 @@ class TCMSTableEditorPage extends TCMSTableEditor
             /** @var $oTableEditor TCMSTableEditorManager */
             $iTableID = TTools::GetCMSTableId('cms_tree_node');
             while ($oCmsTreeNode = $oCmsTreeNodeList->Next()) {
-                /** @var $oCmsTreeNode TdbCmsTreeNode */
+                /* @var $oCmsTreeNode TdbCmsTreeNode */
                 $oTableEditor->Init($iTableID, $oCmsTreeNode->id);
                 $oTableEditor->oTableEditor->bPreventPageCopy = true;
-                $oTableEditor->DatabaseCopy(false, array(), $this->bIsCopyAllLanguageValues);
+                $oTableEditor->DatabaseCopy(false, [], $this->bIsCopyAllLanguageValues);
                 $oTableEditor->SaveField('contid', $this->sId);
             }
         }
@@ -237,10 +236,10 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $fullHTMLTrees = self::GetNavigationBreadCrumbs($oCmsTplPage->id);
 
             // we don`t want to use a table editor here, to prevent a workflow transaction with ALL pages
-            $statement->execute(array(
+            $statement->execute([
                 'treePathSearchString' => $fullHTMLTrees,
                 'id' => $oCmsTplPage->id,
-            ));
+            ]);
         }
     }
 
@@ -267,18 +266,18 @@ class TCMSTableEditorPage extends TCMSTableEditor
     }
 
     /**
-     * @return \ChameleonSystem\CoreBundle\Util\FieldTranslationUtil
+     * @return ChameleonSystem\CoreBundle\Util\FieldTranslationUtil
      */
     private static function getFieldTranslationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
     /**
-     * @return \Doctrine\DBAL\Connection
+     * @return Doctrine\DBAL\Connection
      */
     private static function getDbConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 }
