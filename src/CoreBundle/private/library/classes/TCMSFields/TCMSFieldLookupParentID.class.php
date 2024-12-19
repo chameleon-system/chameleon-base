@@ -21,12 +21,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * that can be used to jump to the parent record (assuming the user has the right permissions)
  * by setting bAllowEdit=true you can activate the right to select a different parent
  * note: all items will be made available.
-/**/
+ * /**/
 class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransformableInterface
 {
     private function isOneToOneConnection(): bool
     {
-        $query = "SELECT `only_one_record_tbl` from `cms_tbl_conf` WHERE `name` = :tableName";
+        $query = 'SELECT `only_one_record_tbl` from `cms_tbl_conf` WHERE `name` = :tableName';
         $onlyOneRecord = $this->getDatabaseConnection()->fetchOne(
             $query,
             ['tableName' => $this->sTableName]
@@ -35,10 +35,10 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
             return true;
         }
 
-        $query = "SELECT `cms_field_conf`.`fieldtype_config`
+        $query = 'SELECT `cms_field_conf`.`fieldtype_config`
                             FROM `cms_field_conf`
                             INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
-                            WHERE `cms_tbl_conf`.`name` = :tableName AND `cms_field_conf`.`name` = :fieldName";
+                            WHERE `cms_tbl_conf`.`name` = :tableName AND `cms_field_conf`.`name` = :fieldName';
         $fieldConfigRow = $this->getDatabaseConnection()->fetchAssociative(
             $query,
             ['tableName' => $this->GetConnectedTableName(), 'fieldName' => $this->getOwningFieldName()]
@@ -72,9 +72,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
             ),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
-
         ];
-
 
         $hasOwner = null !== $this->getOwningFieldName();
         $viewName = 'mapping/many-to-one-owned.xml.twig';
@@ -110,7 +108,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         $owningTableConf->LoadFromField('name', $owningTable);
 
         $fields = $owningTableConf->GetFields(new TCMSRecord());
-        /** @var $field TCMSField */
+        /* @var $field TCMSField */
         $fields->GoToStart();
         while ($field = $fields->Next()) {
             if (false === ($field instanceof TCMSFieldPropertyTable)) {
@@ -123,12 +121,12 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
             if ($field->GetMatchingParentFieldName() !== $this->name) {
                 continue;
             }
+
             return $field->name;
         }
 
         return null;
     }
-
 
     /**
      * @return string
@@ -138,7 +136,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         $translator = $this->getTranslator();
 
         if (empty($this->data)) {
-            return '<div class="form-content-simple">'.$translator->trans('chameleon_system_core.field_lookup.nothing_selected', array(), 'admin').'</div>';
+            return '<div class="form-content-simple">'.$translator->trans('chameleon_system_core.field_lookup.nothing_selected', [], 'admin').'</div>';
         }
 
         $html = $this->_GetHiddenField();
@@ -147,7 +145,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         $item = new TCMSRecord();
         $item->table = $tblName;
         if (false === $item->Load($this->data)) {
-            $html .= '<div class="alert alert-warning">'.$translator->trans('chameleon_system_core.field_lookup.error_assigned_id_does_not_exists', array('%id%' => $this->data), 'admin').'</div>';
+            $html .= '<div class="alert alert-warning">'.$translator->trans('chameleon_system_core.field_lookup.error_assigned_id_does_not_exists', ['%id%' => $this->data], 'admin').'</div>';
 
             return $html;
         }
@@ -207,11 +205,11 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         $oTableConf = TdbCmsTblConf::GetNewInstance();
         $oTableConf->LoadFromField('name', $foreignTableName);
 
-        $sLinkParams = array(
+        $sLinkParams = [
             'pagedef' => $this->getInputFilterUtil()->getFilteredGetInput('pagedef', 'tableeditor'),
             'tableid' => $oTableConf->id,
             'id' => urlencode($this->data),
-        );
+        ];
         $sLink = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($sLinkParams);
 
         return $sLink;

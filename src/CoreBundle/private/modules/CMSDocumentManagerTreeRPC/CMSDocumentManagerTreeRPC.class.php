@@ -11,7 +11,7 @@
 
 /**
  * Treemanagement Module for the CMS Navigation tree.
-/**/
+ * /**/
 class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
 {
     /**
@@ -39,7 +39,7 @@ class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
         }
         $sDocumentTreeTableEditorID = TTools::GetCMSTableId($this->treeTable);
         $oTableEditor = new TCMSTableEditorManager();
-        /** @var $oTableEditor TCMSTableEditorManager */
+        /* @var $oTableEditor TCMSTableEditorManager */
         $oTableEditor->Init($sDocumentTreeTableEditorID, $directoryID);
         $oTableEditor->Delete($directoryID);
         // update cache
@@ -54,7 +54,7 @@ class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
      */
     public function _nodeProperties($oTreeNode)
     {
-        $child = array();
+        $child = [];
 
         $name = $oTreeNode->sqlData['name'];
         if (empty($name)) {
