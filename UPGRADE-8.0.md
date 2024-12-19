@@ -127,6 +127,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `TextBlockLookup::getHeadlineFormTextBlock` removed - use `TextBlockLookup::getHeadlineFromTextBlock` instead
 - `DatabaseAccessLayerCmsTplPage` removed
 - `idna_convert` removed - use the bundle `algo26-matthias/idna-convert` instead (ToUnicode and ToIdn)
+- `TCacheManager` removed - use `ChameleonSystem\CoreBundle\Service\CacheService` search for `TCachemanager::`
 
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
   https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.0.md
