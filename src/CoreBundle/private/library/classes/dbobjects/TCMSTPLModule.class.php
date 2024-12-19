@@ -34,16 +34,6 @@ class TCMSTPLModule extends TCMSRecord
         parent::__construct($table, $id);
     }
 
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSTPLModule()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-
     public function isLegacy()
     {
         return 0 === $this->getViewMapperConfig()->getConfigCount();

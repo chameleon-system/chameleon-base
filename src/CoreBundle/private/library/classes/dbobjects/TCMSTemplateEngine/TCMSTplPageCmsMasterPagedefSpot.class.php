@@ -20,16 +20,6 @@ class TCMSTplPageCmsMasterPagedefSpot extends TCMSRecord
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSTplPageCmsMasterPagedefSpot()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-
-    /**
      * returns if model and view are allowed for spot.
      *
      * @param string $sModel

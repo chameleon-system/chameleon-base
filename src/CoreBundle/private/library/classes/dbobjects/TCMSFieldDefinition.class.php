@@ -28,16 +28,6 @@ class TCMSFieldDefinition extends TCMSRecord
         parent::__construct('cms_field_conf', $id);
     }
 
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSFieldDefinition()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-
     public function isVirtualField()
     {
         $type = $this->GetFieldType();

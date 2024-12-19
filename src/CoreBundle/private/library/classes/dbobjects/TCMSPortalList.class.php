@@ -26,15 +26,6 @@ class TCMSPortalList extends TCMSRecordList
         parent::__construct($sTableObject, $sTableName, $sQuery);
     }
 
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSPortalList()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
     public function GetTreeNodes()
     {
         if (is_null($this->_aNodeIds)) {

@@ -35,15 +35,6 @@ class TCMSCronJob extends TCMSRecord
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSCronJob()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-    /**
      * getter for $this->sMessageOutput.
      *
      * @return string
@@ -62,16 +53,6 @@ class TCMSCronJob extends TCMSRecord
     public function AddMessageOutput($sMessage)
     {
         $this->sMessageOutput .= $sMessage."\n";
-    }
-
-    /**
-     * @return IPkgCmsCoreLog
-     *
-     * @deprecated since 6.3.0 - use getCronjobLogger() instead
-     */
-    protected function getLogger()
-    {
-        return ServiceLocator::get('cmsPkgCore.logChannel.cronjobs');
     }
 
     protected function getCronjobLogger(): LoggerInterface
@@ -207,7 +188,7 @@ class TCMSCronJob extends TCMSRecord
         try {
             $schedule = $this->getSchedule();
         } catch (InvalidArgumentException $e) {
-            $this->getLogger()->error($e->getMessage(), __FILE__, __LINE__);
+            $this->getCronjobLogger()->error($e->getMessage(), __FILE__, __LINE__);
 
             return;
         }
@@ -250,14 +231,14 @@ class TCMSCronJob extends TCMSRecord
         try {
             $schedule = $this->getSchedule();
         } catch (InvalidArgumentException $e) {
-            $this->getLogger()->error($e->getMessage(), __FILE__, __LINE__);
+            $this->getCronjobLogger()->error($e->getMessage(), __FILE__, __LINE__);
 
             return false;
         }
 
         $requiresExecution = $scheduler->requiresExecution($schedule);
         if (true === $requiresExecution && true === $this->isLocked()) {
-            $this->getLogger()->warning(
+            $this->getCronjobLogger()->warning(
                 sprintf(
                     'Cron job "%s" (%s) was force unlocked due to it being locked for longer than its unlock_after_n_minutes value',
                     $this->sqlData['name'],

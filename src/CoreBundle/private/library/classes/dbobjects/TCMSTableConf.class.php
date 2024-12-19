@@ -24,16 +24,6 @@ class TCMSTableConf extends TCMSRecord
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSTableConf()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-
-    /**
      * returns objects that manages the list display.
      *
      * @param string|null $listClassName

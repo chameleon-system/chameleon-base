@@ -1601,9 +1601,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * returns the tree node attached to this record, or null if nothing is attached.
      *
-     * @deprecated use function in TCMSActivePage
-     * @see TCMSActivePage::GetTreeNode()
-     *
      * @return TCMSTreeNode
      */
     public function GetTreeNode()

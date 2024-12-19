@@ -45,15 +45,6 @@ class TCMSListDownloadFiles extends TCMSRecordList
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSListDownloadFiles()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-    /**
      * @param string|null $sourceTable
      * @param string|null $sourceField
      * @param string|null $sourceRecordID

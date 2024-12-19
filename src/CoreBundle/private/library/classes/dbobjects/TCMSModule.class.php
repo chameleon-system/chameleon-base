@@ -20,15 +20,6 @@ class TCMSModule extends TCMSRecord
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSModule()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-    /**
      * returns the url including optional javascript for popups.
      *
      * @return string

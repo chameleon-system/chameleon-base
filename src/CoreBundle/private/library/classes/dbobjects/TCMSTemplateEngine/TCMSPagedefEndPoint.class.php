@@ -88,8 +88,6 @@ class TCMSPagedefEndPoint extends TCMSPage
      * @param int $iPageId
      *
      * @return TCMSPagedef
-     *
-     * @deprecated
      */
     public static function GetCachedInstance($iPageId)
     {

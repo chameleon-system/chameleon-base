@@ -41,16 +41,6 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSTreeNode()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-
-    /**
      * @param string $name
      *
      * @return mixed

@@ -24,16 +24,6 @@ class TCMSMediaManagerTreeNode extends TCMSTreeNode
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSMediaManagerTreeNode()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-
-    /**
      * {@inheritdoc}
      */
     public function GetChildren($includeHidden = false, $languageId = null)

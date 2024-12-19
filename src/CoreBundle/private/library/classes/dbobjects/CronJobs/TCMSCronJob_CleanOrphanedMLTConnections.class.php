@@ -11,11 +11,6 @@
 
 class TCMSCronJob_CleanOrphanedMLTConnections extends TdbCmsCronjobs
 {
-    /**
-     * @deprecated since 6.3.0 - not used anymore
-     */
-    const MLT_DELETE_LOG_FILE = 'mlt_delete_log';
-
     protected function _ExecuteCron()
     {
         //get all fields which represent a mlt connection
