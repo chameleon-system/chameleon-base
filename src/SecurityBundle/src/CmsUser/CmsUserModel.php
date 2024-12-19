@@ -142,14 +142,6 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @deprecated since Symfony 5.3
-     */
-    public function getUsername(): string
-    {
-        return $this->getUserIdentifier();
-    }
-
-    /**
      * @return array<string>
      */
     public function getAvailableLanguagesIsoCodes(): array
