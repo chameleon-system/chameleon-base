@@ -84,15 +84,6 @@ class HtmlParser
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function HTMLParser()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-    /**
      * Method parse.
      * Parses the next node. Returns false only if
      * the end of the HTML text has been reached.
