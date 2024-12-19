@@ -87,7 +87,7 @@ class TCMSPortalDomain extends TCMSRecord
 
     public function GetDomainParts()
     {
-        $aDomainParts = array();
+        $aDomainParts = [];
         $sDomainName = $this->GetName();
         $lastDotPos = strrpos($sDomainName, '.');
         $topLevelDomain = substr($sDomainName, $lastDotPos);

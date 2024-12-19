@@ -16,7 +16,7 @@ class TCMSMediaManagerTreeNode extends TCMSTreeNode
      *
      * @var TdbCmsMediaTreeList
      */
-    public $oChildren = null;
+    public $oChildren;
 
     public function __construct($id = null)
     {

@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  * important note!
  * this db object belongs to cms_tree NOT cms_tree_node table.
  *
-/**/
+ * /**/
 class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
 {
     /**
@@ -33,7 +33,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      *
      * @var array
      */
-    private $_cache = array();
+    private $_cache = [];
 
     public function __construct($id = null, $table = 'cms_tree')
     {
@@ -42,8 +42,6 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
 
     /**
      * @param string $name
-     *
-     * @return mixed
      */
     public function __get($name)
     {
@@ -69,7 +67,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     /**
      * returns the children of the node.
      *
-     * @param bool   $includeHidden - also include hidden menuitems in the list
+     * @param bool $includeHidden - also include hidden menuitems in the list
      * @param string $languageId
      *
      * @return TdbCmsTreeList
@@ -115,13 +113,13 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     public function GetPath($aStopNodes = null)
     {
-        static $aPathCache = array();
-        $aKey = $this->GetCacheIdentKeyParameters(array('method' => 'GetPath', 'aStopNodes' => $aStopNodes, 'language' => $this->GetLanguage()));
+        static $aPathCache = [];
+        $aKey = $this->GetCacheIdentKeyParameters(['method' => 'GetPath', 'aStopNodes' => $aStopNodes, 'language' => $this->GetLanguage()]);
         $sKey = TCacheManager::GetKey($aKey);
         if (!array_key_exists($sKey, $aPathCache)) {
-            $aPath = array();
+            $aPath = [];
             if (!is_array($aStopNodes)) {
-                $aStopNodes = array($aStopNodes);
+                $aStopNodes = [$aStopNodes];
             }
             if (!empty($this->sqlData['parent_id']) && !in_array($this->sqlData['id'], $aStopNodes)) {
                 $oParentNode = self::getTreeService()->getById($this->sqlData['parent_id'], $this->GetLanguage());
@@ -174,9 +172,9 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      * returns the path to the current node relative to the Navigation to which it belongs
      * as a text string separated by $sSeparator.
      *
-     * @param string $sSeparator                  - string used to separate items
-     * @param bool   $bDropFirstItem              - set to true if you don't want to include the first item in the list (this is often the navigation entry point)
-     * @param bool   $bDisableLowerCaseConversion
+     * @param string $sSeparator - string used to separate items
+     * @param bool $bDropFirstItem - set to true if you don't want to include the first item in the list (this is often the navigation entry point)
+     * @param bool $bDisableLowerCaseConversion
      *
      * @return string
      */
@@ -185,7 +183,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
         $sPath = '';
         $oBreadCrumb = $this->GetBreadcrumb($bDropFirstItem);
         while ($oNode = $oBreadCrumb->Next()) {
-            /** @var $oNode TCMSTreeNode */
+            /* @var $oNode TCMSTreeNode */
             if (!empty($sPath)) {
                 $sPath .= $sSeparator;
             }
@@ -234,11 +232,11 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     public function GetLinkAttributes()
     {
-        $aKey = $this->GetCacheIdentKeyParameters(array('method' => 'GetLinkAttributes'));
+        $aKey = $this->GetCacheIdentKeyParameters(['method' => 'GetLinkAttributes']);
         $sKey = TCacheManagerRuntimeCache::GetKey($aKey);
         $aLinkAttributes = TCacheManagerRuntimeCache::GetContents($sKey);
         if (false === $aLinkAttributes) {
-            $aLinkAttributes = array();
+            $aLinkAttributes = [];
 
             $aLinkAttributes['href'] = $this->getLink();
 
@@ -270,7 +268,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      *
      * @return array
      */
-    protected function GetCacheIdentKeyParameters($aAdditionalKeys = array())
+    protected function GetCacheIdentKeyParameters($aAdditionalKeys = [])
     {
         $aKey = $aAdditionalKeys;
         $aKey['class'] = __CLASS__;
@@ -287,7 +285,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     public function GetLinkAttributesAsString()
     {
         $aAtr = $this->GetLinkAttributes();
-        $aRet = array();
+        $aRet = [];
         foreach ($aAtr as $sKey => $sVal) {
             $aRet[] = $sKey.'="'.$sVal.'"';
         }
@@ -350,7 +348,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
           ORDER BY cms_tree.lft DESC
              LIMIT 1
         ';
-        $portal = $this->getDatabaseConnection()->fetchAssociative($query, array('lft' => $this->sqlData['lft'], 'rgt' => $this->sqlData['rgt']));
+        $portal = $this->getDatabaseConnection()->fetchAssociative($query, ['lft' => $this->sqlData['lft'], 'rgt' => $this->sqlData['rgt']]);
         if (false === $portal) {
             return null;
         }
@@ -361,15 +359,13 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
     /**
      * returns url to the node IF a page is connected to the node.
      *
-     * @param bool                $absolute           set to true to include the domain in the link
-     * @param string|null         $anchor
-     * @param array               $optionalParameters
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
+     * @param bool $absolute set to true to include the domain in the link
+     * @param string|null $anchor
+     * @param array $optionalParameters
      *
      * @return string
      */
-    public function getLink($absolute = false, $anchor = null, $optionalParameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function getLink($absolute = false, $anchor = null, $optionalParameters = [], ?TdbCmsPortal $portal = null, ?TdbCmsLanguage $language = null)
     {
         $treeNodeService = self::getTreeService();
         try {
@@ -471,7 +467,8 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
               ";
 
         $oCmsTplPageList = TdbCmsTplPageList::GetList($query);
-        /** @var $oCmsTplPageList TdbCmsTplPageList */
+
+        /* @var $oCmsTplPageList TdbCmsTplPageList */
         return $oCmsTplPageList;
     }
 
@@ -511,7 +508,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
             // load a module instance
             if (!empty($this->sqlData['cms_tpl_module_instance_id'])) {
                 $oModuleInstance = new TCMSTPLModuleInstance();
-                /** @var $oModuleInstance TCMSTPLModuleInstance */
+                /* @var $oModuleInstance TCMSTPLModuleInstance */
                 $oModuleInstance->Load($this->sqlData['cms_tpl_module_instance_id']);
                 $oModuleInstance->Init('tmpSpot', 'standard');
                 $this->_cache['moduleNavigation'] = $oModuleInstance->RenderNavigation();
@@ -694,7 +691,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
         $oTableConf = $this->GetTableConf();
         /** @var TCMSTableEditorManager $oChildEditor */
         $oChildEditor = new TCMSTableEditorManager();
-        $languageId = null === $this->iLanguageId ? null : (string)$this->iLanguageId;
+        $languageId = null === $this->iLanguageId ? null : (string) $this->iLanguageId;
         $oChildEditor->Init($oTableConf->id, $this->id, $languageId);
         $oChildEditor->AllowEditByAll(true);
         $oChildEditor->SaveField('pathcache', $sPath);
@@ -762,7 +759,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 
     /**
@@ -770,7 +767,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -778,7 +775,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -786,6 +783,6 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

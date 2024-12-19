@@ -16,7 +16,7 @@
  */
 class TCMSPortalList extends TCMSRecordList
 {
-    public $_aNodeIds = null;
+    public $_aNodeIds;
 
     public function __construct()
     {
@@ -33,7 +33,7 @@ class TCMSPortalList extends TCMSRecordList
             // current record pos
             $tmpPointer = $this->getItemPointer();
             $this->GoToStart();
-            $this->_aNodeIds = array();
+            $this->_aNodeIds = [];
             while ($oItem = $this->Next()) {
                 $oTreeNode = $oItem->GetTreeNode();
                 if (!is_null($oTreeNode)) {

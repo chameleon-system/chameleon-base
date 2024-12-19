@@ -73,7 +73,7 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
     /**
      * @var Environment
      */
-    private $twigEnvironment = null;
+    private $twigEnvironment;
 
     /**
      * @var Environment
@@ -101,7 +101,7 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
      * @param int $iSourceType
      * @param string $sSource - the snippet source (or path to a file containing it)
      *
-     * @return \TPkgSnippetRenderer
+     * @return TPkgSnippetRenderer
      */
     public static function GetNewInstance($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING)
     {
@@ -150,7 +150,7 @@ class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
         }
 
         try {
-            if ($this->getSourceType() !== IPkgSnippetRenderer::SOURCE_TYPE_STRING) {
+            if (IPkgSnippetRenderer::SOURCE_TYPE_STRING !== $this->getSourceType()) {
                 // use the normal file-only Twig environment
 
                 $content = $this->twigEnvironment->render($this->getSource(), $this->getVars());

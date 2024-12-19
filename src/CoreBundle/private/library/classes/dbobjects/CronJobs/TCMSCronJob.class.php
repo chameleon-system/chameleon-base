@@ -132,7 +132,7 @@ class TCMSCronJob extends TCMSRecord
                 $sMessage,
                 [
                     'fullMessage' => $error->getMessage(),
-                    'trace'       => $error->getTraceAsString(),
+                    'trace' => $error->getTraceAsString(),
                 ]
             );
         }
@@ -145,21 +145,19 @@ class TCMSCronJob extends TCMSRecord
     }
 
     /**
-     * @return CronJobScheduleDataModel
-     *
      * @throws InvalidArgumentException
      */
     private function getSchedule(): CronJobScheduleDataModel
     {
         $lastPlannedExecution = null;
         if ('' !== $this->sqlData['last_execution']) {
-            $lastPlannedExecution = \DateTime::createFromFormat(
+            $lastPlannedExecution = DateTime::createFromFormat(
                 'Y-m-d H:i:s',
                 $this->sqlData['last_execution']
             );
         }
 
-        $executeEveryNMinutes = (int)$this->sqlData['execute_every_n_minutes'];
+        $executeEveryNMinutes = (int) $this->sqlData['execute_every_n_minutes'];
 
         if (0 === $executeEveryNMinutes) {
             throw new InvalidArgumentException(
@@ -173,7 +171,7 @@ class TCMSCronJob extends TCMSRecord
 
         return new CronJobScheduleDataModel(
             $executeEveryNMinutes,
-            (int)$this->sqlData['unlock_after_n_minutes'],
+            (int) $this->sqlData['unlock_after_n_minutes'],
             '1' === $this->sqlData['lock'],
             $lastPlannedExecution
         );
@@ -200,7 +198,7 @@ class TCMSCronJob extends TCMSRecord
         $this->getDatabaseConnection()->update(
             $this->table,
             [
-                'last_execution'      => $plannedExecutionTime->format('Y-m-d H:i:s'),
+                'last_execution' => $plannedExecutionTime->format('Y-m-d H:i:s'),
                 'real_last_execution' => $now->format('Y-m-d H:i:s'),
             ],
             ['id' => $this->id]
@@ -209,7 +207,7 @@ class TCMSCronJob extends TCMSRecord
 
     protected function UpdateLastExecutionOnStart()
     {
-        $now = new \DateTime('now');
+        $now = new DateTime('now');
 
         $this->getDatabaseConnection()->update(
             $this->table,

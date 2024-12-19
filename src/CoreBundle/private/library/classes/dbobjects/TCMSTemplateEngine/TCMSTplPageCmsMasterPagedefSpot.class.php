@@ -11,7 +11,7 @@
 
 /**
  * holds a record from the "cms_tpl_page_cms_master_pagedef_spot" table.
-/**/
+ * /**/
 class TCMSTplPageCmsMasterPagedefSpot extends TCMSRecord
 {
     public function __construct($table = null, $id = null)

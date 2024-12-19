@@ -91,7 +91,7 @@ class TCMSPagedefEndPoint extends TCMSPage
      */
     public static function GetCachedInstance($iPageId)
     {
-        static $aPageCache = array();
+        static $aPageCache = [];
         if (!array_key_exists($iPageId, $aPageCache)) {
             $aPageCache[$iPageId] = null;
             $oTCMSPagedef = new TCMSPagedef();
@@ -149,10 +149,10 @@ class TCMSPagedefEndPoint extends TCMSPage
      * updates a module within the pagedef. Make sure to call save after calling
      * this function if you want to commit the changes to the page definition.
      *
-     * @param string $spotName   - name of the spot in the module list
-     * @param string $model      - the class to be used as the module
-     * @param string $view       - name of the view to use
-     * @param int    $instanceID - module instance id (optional)
+     * @param string $spotName - name of the spot in the module list
+     * @param string $model - the class to be used as the module
+     * @param string $view - name of the view to use
+     * @param int $instanceID - module instance id (optional)
      */
     public function UpdateModule($spotName, $model, $view, $instanceID = null)
     {
@@ -183,7 +183,7 @@ class TCMSPagedefEndPoint extends TCMSPage
             reset($this->aModuleList);
 
             $iTableID = TTools::GetCMSTableId('cms_tpl_page_cms_master_pagedef_spot');
-            $moduleFnc = $this->getInputFilterUtil()->getFilteredInput('module_fnc', array());
+            $moduleFnc = $this->getInputFilterUtil()->getFilteredInput('module_fnc', []);
 
             ksort($this->aModuleList);
             $databaseConnection = $this->getDatabaseConnection();
@@ -206,13 +206,13 @@ class TCMSPagedefEndPoint extends TCMSPage
                     $instanceId = '';
                 }
 
-                $aPostData = array(
+                $aPostData = [
                     'cms_tpl_page_id' => $this->id,
                     'cms_master_pagedef_spot_id' => $spot->id,
                     'cms_tpl_module_instance_id' => $instanceId,
                     'view' => $spot->GetParameter('view'),
                     'model' => $model,
-                );
+                ];
 
                 // check if pagedef spot exists in source template configuration and update it
                 if (null === $this->aOldDynamicModules || false === isset($this->aOldDynamicModules[$sSpotName])) {
@@ -226,10 +226,10 @@ class TCMSPagedefEndPoint extends TCMSPage
                           WHERE `cms_tpl_page_id` = :id
                           AND `cms_master_pagedef_spot_id` = :spotId';
 
-                $recordID = $databaseConnection->fetchColumn($query, array(
+                $recordID = $databaseConnection->fetchColumn($query, [
                     'id' => $this->id,
                     'spotId' => $sSpotID,
-                ));
+                ]);
                 if (false !== $recordID) { // instance exists... force an update
                     $aPostData['id'] = $recordID;
                 }
@@ -258,7 +258,7 @@ class TCMSPagedefEndPoint extends TCMSPage
         }
 
         // now convert list to use the old spotname=>array('param'=>'val',...) format
-        $aModuleData = array();
+        $aModuleData = [];
         foreach ($moduleList as $sSpotName => $spot) {
             $aModuleData[$sSpotName] = $spot->GetParameters();
         }
@@ -329,7 +329,7 @@ class TCMSPagedefEndPoint extends TCMSPage
     protected function removeEmptyDynamicSpots()
     {
         // drop empty spots if we are in frontend mode
-        $isTemplateEnginePagedef = ('templateengine' === $this->getInputFilterUtil()->getFilteredInput('pagedef', '')); //e.g. changing layouts
+        $isTemplateEnginePagedef = ('templateengine' === $this->getInputFilterUtil()->getFilteredInput('pagedef', '')); // e.g. changing layouts
 
         if (true === \is_array($this->aModuleList) && false === $isTemplateEnginePagedef && false === $this->getRequestInfoService()->isCmsTemplateEngineEditMode()) {
             reset($this->aModuleList);
@@ -346,7 +346,7 @@ class TCMSPagedefEndPoint extends TCMSPage
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     private function getRequestInfoService(): RequestInfoServiceInterface

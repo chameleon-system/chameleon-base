@@ -12,7 +12,7 @@
 /**
  * holds one restriction for a given table (defined in table conf. will be applied by the
  * listmanager to restrict the records shown).
-/**/
+ * */
 class TCMSTableConfRestriction extends TCMSRecord
 {
     public function __construct($id = null, $iLanguageId = null)

@@ -26,7 +26,7 @@ class TListImageTables extends TCMSRecordList
         $imageFieldTypes = TCMSFieldDefinition::GetImageFieldTypes();
 
         $databaseConnection = $this->getDatabaseConnection();
-        $imageFieldTypeString = implode(',', array_map(array($databaseConnection, 'quote'), $imageFieldTypes));
+        $imageFieldTypeString = implode(',', array_map([$databaseConnection, 'quote'], $imageFieldTypes));
 
         $query = "
         SELECT DISTINCT `cms_tbl_conf`.*

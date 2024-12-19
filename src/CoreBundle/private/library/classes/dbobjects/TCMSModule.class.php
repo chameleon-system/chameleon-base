@@ -11,7 +11,7 @@
 
 /**
  * holds a record from the "cms_tpl_module" table.
-/**/
+ * /**/
 class TCMSModule extends TCMSRecord
 {
     public function __construct($table = null, $id = null)

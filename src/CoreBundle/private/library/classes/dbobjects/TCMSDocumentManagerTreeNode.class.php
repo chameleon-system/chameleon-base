@@ -16,7 +16,7 @@ class TCMSDocumentManagerTreeNode extends TCMSTreeNode
      *
      * @var TdbCmsDocumentTreeList
      */
-    public $oChildren = null;
+    public $oChildren;
 
     public function __construct($id = null)
     {

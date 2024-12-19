@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * holds a record from the "cms_tpl_module_instance" table.
-/**/
+ * /**/
 class TCMSTPLModuleInstance extends TCMSRecord
 {
     /**
@@ -23,21 +23,21 @@ class TCMSTPLModuleInstance extends TCMSRecord
      *
      * @var TModuleLoader
      */
-    protected $oModuleLoader = null;
+    protected $oModuleLoader;
 
     /**
      * module record.
      *
      * @var TCMSTPLModule
      */
-    protected $oModule = null;
+    protected $oModule;
 
     /**
      * the name of the spot the module instance is set.
      *
      * @var string
      */
-    protected $sSpotName = null;
+    protected $sSpotName;
 
     public function __construct($id = null)
     {
@@ -47,11 +47,11 @@ class TCMSTPLModuleInstance extends TCMSRecord
     /**
      * init module.
      *
-     * @param string $sSpotName   - spot name
-     * @param string $sView       - view to use
-     * @param array  $aParameters - additional parameters
+     * @param string $sSpotName - spot name
+     * @param string $sView - view to use
+     * @param array $aParameters - additional parameters
      */
-    public function Init($sSpotName, $sView, $aParameters = array())
+    public function Init($sSpotName, $sView, $aParameters = [])
     {
         $this->sSpotName = $sSpotName;
         $this->GetModuleLoader($sView, $aParameters);
@@ -139,15 +139,15 @@ class TCMSTPLModuleInstance extends TCMSRecord
     /**
      * renders the module for the actual instance and returns a html string.
      *
-     * @param array  $aAdditionalModuleParameters
+     * @param array $aAdditionalModuleParameters
      * @param string $sModuleSpotName
      * @param string $sView
      *
      * @return string
      */
-    public function Render($aAdditionalModuleParameters = array(), $sModuleSpotName = 'tmpmodule', $sView = '')
+    public function Render($aAdditionalModuleParameters = [], $sModuleSpotName = 'tmpmodule', $sView = '')
     {
-        $dbAccessLayer = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
+        $dbAccessLayer = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
         $oModule = $dbAccessLayer->loadFromId($this->sqlData['cms_tpl_module_id']);
 
         // now create instance of TModuleLoader...
@@ -191,7 +191,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
      */
     public function GetModuleColorEditState()
     {
-        $aModuleStateCodeColorList = array('ne' => 'EB3335', 'na' => 'FAA11C', 'ea' => '78C043');
+        $aModuleStateCodeColorList = ['ne' => 'EB3335', 'na' => 'FAA11C', 'ea' => '78C043'];
         $sModuleState = $this->GetModuleEditState();
 
         return $aModuleStateCodeColorList[$sModuleState];
@@ -206,7 +206,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
      */
     public function GetModuleConnectedTableColorEditState($oModuleConnectedTable)
     {
-        $aModuleStateCodeColorList = array('ne' => 'EB3335', 'na' => 'FAA11C', 'ea' => '78C043');
+        $aModuleStateCodeColorList = ['ne' => 'EB3335', 'na' => 'FAA11C', 'ea' => '78C043'];
         $sModuleState = $this->UpdateModuleEditStateForConnectedTable('', $oModuleConnectedTable);
 
         return $aModuleStateCodeColorList[$sModuleState];
@@ -222,11 +222,11 @@ class TCMSTPLModuleInstance extends TCMSRecord
     public function GetModuleEditState($bReturnTranslatedText = false)
     {
         $translator = $this->getTranslator();
-        $aModuleStateCodeList = array(
-            'ne' => $translator->trans('chameleon_system_core.template_engine.module_edit_state_new', array(), TranslationConstants::DOMAIN_BACKEND),
-            'na' => $translator->trans('chameleon_system_core.template_engine.module_edit_state_partial', array(), TranslationConstants::DOMAIN_BACKEND),
-            'ea' => $translator->trans('chameleon_system_core.template_engine.module_edit_state_completed', array(), TranslationConstants::DOMAIN_BACKEND),
-        );
+        $aModuleStateCodeList = [
+            'ne' => $translator->trans('chameleon_system_core.template_engine.module_edit_state_new', [], TranslationConstants::DOMAIN_BACKEND),
+            'na' => $translator->trans('chameleon_system_core.template_engine.module_edit_state_partial', [], TranslationConstants::DOMAIN_BACKEND),
+            'ea' => $translator->trans('chameleon_system_core.template_engine.module_edit_state_completed', [], TranslationConstants::DOMAIN_BACKEND),
+        ];
         $sModuleState = 'na';
         $oInstanceModule = $this->GetFieldCmsTplModule();
         if (!is_object($oInstanceModule)) {
@@ -265,7 +265,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $oConnectedTableConf->sqlData['name']).'List';
         $Query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($oConnectedTableConf->sqlData['name']).'`
                         WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($oConnectedTableConf->sqlData['name'])."`.`cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
-        $oRecordList = call_user_func_array(array($sClassName, 'GetList'), array($Query, null, false, true, true));
+        $oRecordList = call_user_func_array([$sClassName, 'GetList'], [$Query, null, false, true, true]);
         if (is_object($oRecordList) && $oRecordList->Length() > 0) {
             $HasConnectedTableInstanceRecord = true;
         }
@@ -276,7 +276,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
     /**
      * Update the module instance edit state for given module connected table.
      *
-     * @param string     $sModuleState
+     * @param string $sModuleState
      * @param TCMSRecord $oModuleConnectedTable
      *
      * @return string
@@ -320,6 +320,6 @@ class TCMSTPLModuleInstance extends TCMSRecord
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }
