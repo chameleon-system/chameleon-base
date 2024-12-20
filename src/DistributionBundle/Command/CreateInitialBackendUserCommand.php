@@ -11,7 +11,9 @@
 
 namespace ChameleonSystem\DistributionBundle\Command;
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DistributionBundle\Bootstrap\InitialBackendUserCreator;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -59,8 +61,32 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->initialBackendUserCreator->create($input, $output, $this->getHelper('question'));
+        $userId = $this->initialBackendUserCreator->create($input, $output, $this->getHelper('question'));
+
+        $this->updateDefaultCmsUserIdFieldsWithNewUserId($userId);
 
         return 0;
+    }
+
+    private function updateDefaultCmsUserIdFieldsWithNewUserId(string $userId): void
+    {
+        $dbConnection = $this->getDatabaseConnection();
+
+        $query = "SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE COLUMN_NAME = 'cms_user_id'";
+
+        $tables = $dbConnection->fetchAllAssociative($query);
+
+        foreach ($tables as $table) {
+            $updateQuery = sprintf("UPDATE `%s` SET `cms_user_id` = '%s' WHERE `cms_user_id` = '1'", $table['TABLE_NAME'], $userId);
+
+            $dbConnection->executeQuery($updateQuery);
+        }
+    }
+
+    private function getDatabaseConnection(): Connection
+    {
+        return ServiceLocator::get('database_connection');
     }
 }
