@@ -972,5 +972,9 @@
         <service id="chameleon_system_core.service.css_class_extractor" class="ChameleonSystem\CoreBundle\Service\CssClassExtractor" public="true">
             <argument type="service" id="database_connection"/>
         </service>
+
+        <service class="ChameleonSystem\CoreBundle\Service\FileSystemWrapper" id="chameleon_system_core.service.file_system_wrapper" public="true">
+            <argument type="service" id="filesystem"/>
+        </service>
     </services>
 </container>

@@ -12,31 +12,24 @@
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use esono\pkgCmsCache\CacheInterface;
 
 class TCMSPagedefEndPoint extends TCMSPage
 {
     /**
      * name of the Template (shown to the user).
-     *
-     * @var string
      */
-    public $templateName;
+    public string $templateName = '';
 
     /**
      * a short text describing the layout to the user.
-     *
-     * @var string
      */
-    public $templateDescription;
+    public string $templateDescription = '';
 
     /**
      * name of the layout to use (comes from the master pagedef).
      * example: mylayout (not mylayout.layout.php).
-     *
-     * @var string
      */
-    public $layoutTemplate;
+    public string $layoutTemplate = '';
 
     /**
      * array of all dynamic modules.
@@ -46,7 +39,7 @@ class TCMSPagedefEndPoint extends TCMSPage
      *
      * @var TCMSMasterPagedefSpot[]
      */
-    public $aModuleList;
+    public array $aModuleList = [];
 
     /**
      * array of all dynamic modules.
@@ -58,29 +51,23 @@ class TCMSPagedefEndPoint extends TCMSPage
      *
      * @var TCMSMasterPagedefSpot[]
      */
-    protected $aOldDynamicModules;
+    protected array $aOldDynamicModules = [];
 
     /**
      * list of the static modules - they always come from the master pagedef
      * 'spotname'=>oSpot.
-     *
-     * @var array
      */
-    public $aStaticModuleList;
+    public array $aStaticModuleList = [];
 
     /**
      * id of the master pagedef.
-     *
-     * @var string
      */
-    public $iMasterPageDefId;
+    public ?string $iMasterPageDefId;
 
     /**
      * the masterpagedef object.
-     *
-     * @var TCMSMasterPagedef
      */
-    protected $oMasterPagedef;
+    protected ?TCMSMasterPagedef $oMasterPagedef = null;
 
     /**
      * if object is found in cache, then we return it from cache, else we create
