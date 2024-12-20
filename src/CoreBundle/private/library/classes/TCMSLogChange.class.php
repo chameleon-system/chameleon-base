@@ -1356,7 +1356,7 @@ class TCMSLogChange
      */
     public static function FieldChangeMultiLanguageSetting($sTableName, $sFieldName, $sSetting)
     {
-        if (true == $sSetting) { // non-strict comparison intended.
+        if (true === $sSetting) { // non-strict comparison intended.
             self::makeFieldMultilingual($sTableName, $sFieldName);
         } else {
             self::makeFieldMonolingual($sTableName, $sFieldName);
@@ -1365,10 +1365,10 @@ class TCMSLogChange
 
     public static function UpdateVirtualNonDbClasses()
     {
-        $filemanager = ServiceLocator::get('filesystem');
+        $filesystemWrapper = ServiceLocator::get('chameleon_system_core.service.file_system_wrapper');
         $virtualClassManager = ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         $classCacheWarmer = ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
-        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filemanager, $virtualClassManager);
+        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filesystemWrapper->getFileSystemService(), $virtualClassManager);
         $oList = TdbPkgCmsClassManagerList::GetList();
         while ($oItem = $oList->Next()) {
             $oAutoTableWriter->create($oItem->fieldNameOfEntryPoint, null);
