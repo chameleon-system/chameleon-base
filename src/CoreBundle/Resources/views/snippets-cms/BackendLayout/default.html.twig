@@ -1,17 +1,17 @@
 {% extends 'BackendLayout/base.html.twig' %}
 
 {% block sidebar %}
-    {{ module('sidebar') }}
+    {{ backend_module('sidebar') }}
 {% endblock %}
 
 {% block header %}
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
-            {{ module('headerimage') }}
+            {{ backend_module('headerimage') }}
         </div>
         <div class="header-divider"></div>
         <div class="container-fluid">
-            {{ module('breadcrumb') }}
+            {{ backend_module('breadcrumb') }}
         </div>
     </header>
 {% endblock %}
@@ -20,7 +20,7 @@
     <main class="flex-grow-1 px-3">
         <div class="container-fluid content px-0">
             {% block main_module %}
-                {{ module('contentmodule') }}
+                {{ backend_module('contentmodule') }}
             {% endblock %}
         </div>
     </main>
