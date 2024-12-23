@@ -25,50 +25,38 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**/
 class CMSModuleChooser extends TCMSModelBase
 {
-    public $bMasterPagedefRequest = false;
+    public bool $bMasterPagedefRequest = false;
 
     /**
      * the module instance data.
-     *
-     * @var TdbCmsTplModuleInstance
      */
-    protected $oModuleInstance = null;
+    protected ?TdbCmsTplModuleInstance $oModuleInstance = null;
 
     /**
      * the module of the module instance.
-     *
-     * @var TdbCmsTplModule
      */
-    protected $oModule = null;
+    protected ?TdbCmsTplModule $oModule = null;
 
     /**
      * holds a pointer to the original model. we need this so that the delete, update, insert
      * functions can trigger the correct response...
-     *
-     * @var TUserCustomModelBase
      */
-    public $oCustomerModelObject = null;
+    public ?TModelBase $oCustomerModelObject = null;
 
     /**
      * instance id of the module of this spot.
-     *
-     * @var string
      */
-    public $instanceID = null;
+    public ?string $instanceID = null;
 
     /**
      * access via GetCmsTplPageCmsMasterPagedefSpot.
-     *
-     * @var TdbCmsTplPageCmsMasterPagedefSpot
      */
-    private $oCmsTplPageCmsMasterPagedefSpot = null;
+    private ?TdbCmsTplPageCmsMasterPagedefSpot $oCmsTplPageCmsMasterPagedefSpot = null;
 
     /**
      * is true if the page is locked by a user.
-     *
-     * @var bool
      */
-    protected $bPageIsLockedByUser = false;
+    protected bool $bPageIsLockedByUser = false;
 
     /**
      * called before the execute method, and before any external functions gets called, but
@@ -437,7 +425,6 @@ class CMSModuleChooser extends TCMSModelBase
      */
     public function NewInstance()
     {
-        /** @var $oPage TCMSPage */
         $oPage = new TCMSPage();
         $sPageId = $this->global->GetUserData('pagedef');
         $oPage->Load($sPageId);
