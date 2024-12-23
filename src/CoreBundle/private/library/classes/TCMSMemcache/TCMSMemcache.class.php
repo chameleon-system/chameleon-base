@@ -9,23 +9,15 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\TCMSMemcache\FalseValueCacheEntry;
 
 class TCMSMemcache
 {
     /**
-     * holds memcache instance depending on what is available - for now only memcached.
-     *
-     * @var Memcached|null
-     */
-    protected $oMemcache = null;
-
-    /**
      * enable or disable logging - log messages are written into normal log file (e.g. chameleon.log by default).
-     *
-     * @var bool
      */
-    protected $bLogging = false;
+    protected bool $bLogging = false;
 
     /**
      * this array describes what we want to log
@@ -37,32 +29,16 @@ class TCMSMemcache
      * 'flush'
      * by default you only should enable flush - believe me ... only enable other methods for debugging purposes
      * otherwise you chameleon.log will be spammed.
-     *
-     * @var array
      */
-    protected $aLoggingMethods = array('flush');
+    protected array $aLoggingMethods = ['flush'];
+    private bool $lastGetRequestReturnedNoMatch = false;
+    private int $timeout;
 
-    /**
-     * @var bool
-     */
-    private $lastGetRequestReturnedNoMatch = false;
-    /**
-     * @var int
-     */
-    private $timeout;
-
-    /**
-     * @param string $memcacheClass @deprecated since 6.2.0 - only Memcached is supported.
-     * @param int    $timeout
-     * @param array  $serverList
-     */
-    public function __construct($memcacheClass, $timeout, array $serverList)
+    public function __construct(int $timeout, array $serverList)
     {
         $this->timeout = $timeout;
 
-        $this->Init($memcacheClass);
-
-        $serversToUseList = array();
+        $serversToUseList = [];
         foreach ($serverList as $server) {
             if (false !== $server['host']) {
                 $serversToUseList[] = $server;
@@ -70,21 +46,6 @@ class TCMSMemcache
         }
         $this->SetServer($serversToUseList);
         $this->PostInit();
-    }
-
-    /**
-     * searches for the memcache class that should be used.
-     *
-     * if you think you have connection issues when using memcached lib
-     * use some of the following methods for debugging after the addServer method was executed
-     * $this->oMemcache->getResultCode(); - should be 0
-     * $this->oMemcache->getResultMessage(); - should be success
-     * $this->oMemcache->getStats(); - should be an array with server information
-     *
-     * @param string $memcacheClass @deprecated since 6.2.0 - only Memcached is supported.
-     */
-    public function Init($memcacheClass = 'auto')
-    {
     }
 
     /**
@@ -110,7 +71,7 @@ class TCMSMemcache
             return;
         }
         $this->oMemcache = new Memcached();
-        $this->oMemcache->setOption(\Memcached::OPT_CONNECT_TIMEOUT, $this->timeout);
+        $this->oMemcache->setOption(Memcached::OPT_CONNECT_TIMEOUT, $this->timeout);
         if (count($aServer) > 1) {
             $iWeight = 100 / count($aServer);
             foreach ($aServer as $aServerInfo) {
@@ -137,7 +98,7 @@ class TCMSMemcache
      */
     public static function GetCacheInstance()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_cache.memcache_cache');
+        return ServiceLocator::get('chameleon_system_cms_cache.memcache_cache');
     }
 
     /**
@@ -149,15 +110,14 @@ class TCMSMemcache
      */
     public static function GetSessionInstance()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_cache.memcache_session');
+        return ServiceLocator::get('chameleon_system_cms_cache.memcache_session');
     }
 
     /**
      * writes a value for given key into memcache.
      *
      * @param string $sKey
-     * @param mixed  $mValue
-     * @param int    $iExpire - 0 means never expire
+     * @param int $iExpire - 0 means never expire
      *
      * @return bool
      */
@@ -191,8 +151,7 @@ class TCMSMemcache
      * tries to replace a value for given key in memcache.
      *
      * @param string $sKey
-     * @param mixed  $mValue
-     * @param int    $iExpire - 0 means never expire
+     * @param int $iExpire - 0 means never expire
      *
      * @return bool
      */
@@ -273,7 +232,7 @@ class TCMSMemcache
         return $this->oMemcache;
     }
 
-    private function processBeforeWrite($value)
+    private function processBeforeWrite(mixed $value): mixed
     {
         if (false === $value) {
             $value = new FalseValueCacheEntry();
@@ -282,7 +241,7 @@ class TCMSMemcache
         return $value;
     }
 
-    private function processPostRead($value)
+    private function processPostRead(mixed $value): mixed
     {
         $this->lastGetRequestReturnedNoMatch = false;
         if ($value instanceof FalseValueCacheEntry) {
@@ -295,10 +254,7 @@ class TCMSMemcache
         return $value;
     }
 
-    /**
-     * @return bool
-     */
-    public function getLastGetRequestReturnedNoMatch()
+    public function getLastGetRequestReturnedNoMatch(): bool
     {
         return $this->lastGetRequestReturnedNoMatch;
     }

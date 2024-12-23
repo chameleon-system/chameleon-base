@@ -82,26 +82,19 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
     }
 
     /**
-     * @return array
-     *
      * @throws InvalidPortalDomainException
      */
     private function determinePortalAndDomainForCmsTemplateEngineMode(PortalDomainServiceInterface $portalDomainService): array
     {
         $previewLanguageID = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
 
-        $portal = $this->getActivePageService()->getActivePage()->GetPortal();
+        $portal = $this->getActivePageService()->getActivePage()?->GetPortal();
         $domain = $portalDomainService->getPrimaryDomain($portal->id, $previewLanguageID);
 
-        return array($portal, $domain);
+        return [$portal, $domain];
     }
 
     /**
-     * @param Request                      $request
-     * @param PortalDomainServiceInterface $portalDomainService
-     *
-     * @return array
-     *
      * @throws InvalidPortalDomainException
      */
     private function determinePortalAndDomainDefault(Request $request, PortalDomainServiceInterface $portalDomainService): array
@@ -135,7 +128,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
                         $previewLanguageId = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
                         $domain = $portalDomainService->getPrimaryDomain($portal->id, $previewLanguageId);
 
-                        return array($portal, $domain);
+                        return [$portal, $domain];
                     }
                 }
             }
@@ -157,14 +150,14 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
             }
         }
 
-        $aKey = array(
+        $aKey = [
             'class' => __CLASS__,
             'method' => 'setPortalAndDomainFromRequest',
             'host' => $sName,
             'prefix' => $prefix,
             'userIsSignedIntoCMSBackend' => $isUserSignedInToBackend,
             'bTemplateEngineEditMode' => false,
-        );
+        ];
 
         $cache = $this->getCache();
         $sKey = $cache->getKey($aKey, false);
@@ -174,13 +167,13 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
             $portal = $aResultData['portal'];
             $domain = $aResultData['domain'];
 
-            return array($portal, $domain);
+            return [$portal, $domain];
         }
 
-        $aResultData = array(
+        $aResultData = [
             'portal' => null,
             'domain' => null,
-        );
+        ];
 
         $domainList = $this->cmsPortalDomainsDataAccess->getDomainDataByName($sName);
 
@@ -225,16 +218,16 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         $cache->set(
             $sKey,
             $aResultData,
-            array(
-                array('table' => 'cms_portal', 'id' => null),
-                array('table' => 'cms_portal_domains', 'id' => null),
-            )
+            [
+                ['table' => 'cms_portal', 'id' => null],
+                ['table' => 'cms_portal_domains', 'id' => null],
+            ]
         );
 
         $portal = $aResultData['portal'];
         $domain = $aResultData['domain'];
 
-        return array($portal, $domain);
+        return [$portal, $domain];
     }
 
     private function getRequestInfoService(): RequestInfoServiceInterface

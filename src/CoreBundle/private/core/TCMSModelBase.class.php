@@ -28,9 +28,8 @@ class TCMSModelBase extends TModelBase
         // if this is an ajax call, then prevent the object from being added to the history
         $allowHistory = false === $this->_UserMadeAjaxCall();
         $suppressHistoryCommand = (in_array('_suppressHistory', $this->aModuleConfig) && true == $this->aModuleConfig['_suppressHistory']);
-        $allowHistory = $allowHistory && false === $suppressHistoryCommand;
 
-        return $allowHistory;
+        return $allowHistory && false === $suppressHistoryCommand;
     }
 
     /**
@@ -81,12 +80,12 @@ class TCMSModelBase extends TModelBase
      */
     protected function OutPutAjaxCallResult($functionResult)
     {
-        $sOutputMode = 'Ajax';
-        $aPermittedOutputModes = ['Ajax', 'Plain'];
-        if ($this->global->UserDataExists('sOutputMode') && in_array($this->global->GetUserData('sOutputMode'), $aPermittedOutputModes)) {
-            $sOutputMode = $this->global->GetUserData('sOutputMode');
+        $outputMode = 'Ajax'; // JSON is the default output mode
+        $permittedOutputModes = ['Ajax', 'Plain'];
+        if ($this->global->UserDataExists('sOutputMode') && in_array($this->global->GetUserData('sOutputMode'), $permittedOutputModes)) {
+            $outputMode = $this->global->GetUserData('sOutputMode');
         }
-        switch ($sOutputMode) {
+        switch ($outputMode) {
             case 'Plain':
                 $this->_OutputForAjaxPlain($functionResult);
                 break;

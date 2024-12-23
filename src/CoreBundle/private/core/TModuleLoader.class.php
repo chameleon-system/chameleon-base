@@ -258,9 +258,8 @@ class TModuleLoader
             $aFooterData = array_merge($aFooterData, $aModuleFooterData);
         }
         reset($this->modules);
-        $aFooterData = array_unique($aFooterData);
 
-        return $aFooterData;
+        return array_unique($aFooterData);
     }
 
     /**
@@ -418,11 +417,9 @@ class TModuleLoader
     {
         if (array_key_exists($sModuleSpotName, $this->modules)) {
             return $this->modules[$sModuleSpotName];
-        } else {
-            $found = false;
-
-            return $found;
         }
+
+        return false;
     }
 
     /**
