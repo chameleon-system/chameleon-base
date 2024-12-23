@@ -90,7 +90,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
     {
         $previewLanguageID = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
 
-        $portal = $this->getActivePageService()->getActivePage()->GetPortal();
+        $portal = $this->getActivePageService()->getActivePage()?->GetPortal();
         $domain = $portalDomainService->getPrimaryDomain($portal->id, $previewLanguageID);
 
         return array($portal, $domain);

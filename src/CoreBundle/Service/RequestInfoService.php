@@ -19,52 +19,20 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestInfoService implements RequestInfoServiceInterface
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
-    /**
-     * @var PortalDomainServiceInterface
-     */
-    private $portalDomainService;
-
-    /**
-     * @var null|string
-     */
-    private $pathInfoWithoutPortalAndLanguagePrefix;
-    /**
-     * @var UrlPrefixGeneratorInterface
-     */
-    private $urlPrefixGenerator;
-    /**
-     * @var string|null
-     */
-    private $requestId;
+    private RequestStack $requestStack;
+    private LanguageServiceInterface $languageService;
+    private PortalDomainServiceInterface $portalDomainService;
+    private ?string $pathInfoWithoutPortalAndLanguagePrefix = null;
+    private UrlPrefixGeneratorInterface $urlPrefixGenerator;
+    private ?string $requestId = null;
 
     /**
      * Cache of request type.
-     *
-     * @var int|null
      */
-    private $chameleonRequestType;
-    /**
-     * @var bool|null
-     */
-    private $isCmsTemplateEngineEditModeCache;
-    /**
-     * @var bool|null
-     */
-    private $isPreviewModeCache;
-    /**
-     * @param RequestStack                 $requestStack
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param LanguageServiceInterface     $languageService
-     * @param UrlPrefixGeneratorInterface  $urlPrefixGenerator
-     */
+    private ?int $chameleonRequestType = null;
+    private ?bool $isCmsTemplateEngineEditModeCache = null;
+    private ?bool $isPreviewModeCache = null;
+
     public function __construct(
         RequestStack $requestStack,
         PortalDomainServiceInterface $portalDomainService,
@@ -155,14 +123,13 @@ class RequestInfoService implements RequestInfoServiceInterface
             return false;
         }
 
-        // todo: `__previewmode` should be the only way to enable this. Refactor all places where the preview attribute is set as `preview` instead of `__previewmode'
-        // @note: preview mode laoding only via cookie is not possible, because this will kill all frontend logins
         $this->isPreviewModeCache = false === \TGlobal::IsCMSMode()
-            && true === $this->getPreviewModeService()->currentSessionHasPreviewAccess() || $this->checkTokenFromQueryParam($request)
             && (
+                true === $this->getPreviewModeService()->currentSessionHasPreviewAccess() || $this->checkTokenFromQueryParam($request)
+            ) && (
                 'true' === $request->query->get('__previewmode')
                  || 'true' === $request->query->get('preview')
-                );
+            );
 
         return $this->isPreviewModeCache;
     }
@@ -185,6 +152,11 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         $request = $this->getRequest();
+
+        if (null === $request) {
+            return '';
+        }
+
         $fullPath = $request->getPathInfo();
 
         $activePortal = $this->portalDomainService->getActivePortal();
@@ -200,7 +172,7 @@ class RequestInfoService implements RequestInfoServiceInterface
             return $fullPath;
         }
 
-        if (0 === strpos($fullPath, $prefixToCut)) {
+        if (str_starts_with($fullPath, $prefixToCut)) {
             $this->pathInfoWithoutPortalAndLanguagePrefix = substr($fullPath, strlen($prefixToCut));
         } else {
             $this->pathInfoWithoutPortalAndLanguagePrefix = $fullPath;
