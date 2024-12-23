@@ -61,7 +61,7 @@ class TModelBase
     /**
      * this is set automatically when the class is restored from session.
      */
-    private bool  $bIsWakingUp = false;
+    private bool $bIsWakingUp = false;
 
     /**
      * if this is true (and config enables automatically wrapping of div container for spots)
