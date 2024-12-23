@@ -33,8 +33,8 @@ class TUserModuleLoader extends TModuleLoader
             return null;
         }
 
-        $isModuleChooserRequest = $request->query->get('__modulechooser');
-        $isMasterPagedefRequest = $request->query->get('__masterPageDef');
+        $isModuleChooserRequest = $request->get('__modulechooser');
+        $isMasterPagedefRequest = $request->get('__masterPageDef', false);
 
         $requestModuleChooser = 'true' === $isModuleChooserRequest;
         $forceStatic = (array_key_exists('static', $config) && true === $config['static']);

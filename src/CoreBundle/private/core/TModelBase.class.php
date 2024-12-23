@@ -25,36 +25,24 @@ class TModelBase
 {
     /**
      * the view template path to load (without .view.php ending).
-     *
-     * @var string
      */
     public $viewTemplate;
 
     /**
      * array of module configuration data from pagedef.
-     *
-     * @var array
      */
-    public $aModuleConfig = [];
+    public array $aModuleConfig = [];
 
     /**
      * name of the spot e.g. spota.
-     *
-     * @var string
      */
-    public $sModuleSpotName = '';
-
-    /**
-     * @var bool
-     */
-    public $hasError = false;
+    public string $sModuleSpotName = '';
+    public bool $hasError = false;
 
     /**
      * the data that will be available to module template views.
-     *
-     * @var array
      */
-    public $data = [];
+    public array $data = [];
 
     /**
      * pointer to the controller.
@@ -63,38 +51,30 @@ class TModelBase
      */
     protected ?ChameleonControllerInterface $controller = null;
 
-    private $allowedMethodCallsInitialized = false;
+    private bool $allowedMethodCallsInitialized = false;
 
     /**
      * An array of all methods from the class which may be called via http requests.
-     *
-     * @var array
      */
     public $methodCallAllowed = [];
 
     /**
      * this is set automatically when the class is restored from session.
-     *
-     * @var bool
      */
-    private $bIsWakingUp = false;
+    private bool  $bIsWakingUp = false;
 
     /**
      * if this is true (and config enables automatically wrapping of div container for spots)
      * the module loader will generate a div with id="spotname" and class="moduleclass moduleview"
      * by default its false - you can overwrite this explicit for each module you need.
-     *
-     * @var bool
      */
     protected $bAllowHTMLDivWrapping = false;
 
     /**
      * this array is filled in TModuleLoader if the module was loaded from cache
      * if it is null, you should call $this->_GetCacheTableInfos().
-     *
-     * @var array - null by default
      */
-    public $aCacheTrigger;
+    public ?array $aCacheTrigger;
 
     /**
      * @param ChameleonControllerInterface $controller
@@ -391,9 +371,7 @@ class TModelBase
     public function _CallMethod($sMethodName, $aMethodParameter = [])
     {
         if (true === $this->isMethodCallAllowed($sMethodName)) {
-            $functionResult = call_user_func_array([$this, $sMethodName], $aMethodParameter);
-
-            return $functionResult;
+            return call_user_func_array([$this, $sMethodName], $aMethodParameter);
         }
 
         if (_DEVELOPMENT_MODE) {
@@ -405,12 +383,7 @@ class TModelBase
         }
     }
 
-    /**
-     * @param string $methodName
-     *
-     * @return bool
-     */
-    private function isMethodCallAllowed($methodName)
+    private function isMethodCallAllowed(string $methodName): bool
     {
         if (false === $this->allowedMethodCallsInitialized) {
             $this->DefineInterface();
@@ -522,9 +495,7 @@ class TModelBase
      */
     protected function SpotHasMessages()
     {
-        $oMessageManager = TCMSMessageManager::GetInstance();
-
-        return $oMessageManager->ConsumerHasMessages($this->sModuleSpotName);
+        return TCMSMessageManager::GetInstance()->ConsumerHasMessages($this->sModuleSpotName);
     }
 
     /**
@@ -736,10 +707,7 @@ class TModelBase
         return $this->injectPostRenderVariables($response);
     }
 
-    /**
-     * @return Response
-     */
-    private function injectPostRenderVariables(Response $response)
+    private function injectPostRenderVariables(Response $response): Response
     {
         $postRenderVariables = $this->GetPostRenderVariables();
         if (null === $postRenderVariables || 0 === count($postRenderVariables)) {
@@ -797,7 +765,7 @@ class TModelBase
         $this->getCacheService()->set(md5($response->getEtag()), true, $cacheTrigger, 0); // we do not pass a time argument, as we want the key to expire only via call or cms backend
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return get_class($this);
     }
