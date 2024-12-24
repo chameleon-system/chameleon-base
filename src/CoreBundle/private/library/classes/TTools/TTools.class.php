@@ -669,59 +669,33 @@ class TTools
     }
 
     /**
-     * generates a random password by $iLength.
-     *
-     * @param int $iLength
-     *
-     * @return string
+     * Generates a random password by $length.
      */
-    public static function GenerateRandomPassword($iLength)
+    public static function GenerateRandomPassword(int $length = 10, ?array $passwordChars = null): string
     {
-        $aPasswordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'), ['+', '-', '.']);
-        mt_srand((float) microtime() * 1000000);
-        for ($i = 1; $i <= (count($aPasswordChars) * 2); ++$i) {
-            $swap = mt_rand(0, count($aPasswordChars) - 1);
-            $tmp = $aPasswordChars[$swap];
-            $aPasswordChars[$swap] = $aPasswordChars[0];
-            $aPasswordChars[0] = $tmp;
+        if (null === $passwordChars) {
+            $passwordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'), ['+', '-', '.']);
         }
 
-        return substr(implode('', $aPasswordChars), 0, $iLength);
+        mt_srand((float) microtime() * 1000000);
+        for ($i = 1; $i <= (count($passwordChars) * 2); ++$i) {
+            $swap = mt_rand(0, count($passwordChars) - 1);
+            $tmp = $passwordChars[$swap];
+            $passwordChars[$swap] = $passwordChars[0];
+            $passwordChars[0] = $tmp;
+        }
+
+        return substr(implode('', $passwordChars), 0, $length);
     }
 
     /**
      * generates a voucher code by $iLength.
-     *
-     * @param int $iLength
-     *
-     * @return string
      */
-    public static function GenerateVaoucherCode($iLength)
+    public static function GenerateVoucherCode(int $length): string
     {
-        trigger_error('Methode is deprecated. Use GenerateVoucherCode instead', E_USER_WARNING);
+        $passwordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'));
 
-        return self::GenerateVoucherCode($iLength);
-    }
-
-    /**
-     * generates a voucher code by $iLength.
-     *
-     * @param int $iLength
-     *
-     * @return string
-     */
-    public static function GenerateVoucherCode($iLength)
-    {
-        $aPasswordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'));
-        mt_srand((float) microtime() * 1000000);
-        for ($i = 1; $i <= (count($aPasswordChars) * 2); ++$i) {
-            $swap = mt_rand(0, count($aPasswordChars) - 1);
-            $tmp = $aPasswordChars[$swap];
-            $aPasswordChars[$swap] = $aPasswordChars[0];
-            $aPasswordChars[0] = $tmp;
-        }
-
-        return substr(implode('', $aPasswordChars), 0, $iLength);
+        return self::GenerateRandomPassword($length, $passwordChars);
     }
 
     /**
@@ -736,7 +710,7 @@ class TTools
         $syllable_array = explode(',', $syllables);
         srand((float) microtime() * 1000000);
         for ($count = 1; $count <= 4; ++$count) {
-            if (1 == rand() % 10) {
+            if (1 === rand() % 10) {
                 $makepass .= sprintf('%0.0f', (rand() % 50) + 1);
             } else {
                 $makepass .= sprintf('%s', $syllable_array[rand() % 62]);

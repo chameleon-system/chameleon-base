@@ -19,44 +19,44 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TPkgCmsCoreSendToHost
 {
-    const METHOD_GET = 'GET';
-    const METHOD_HEAD = 'HEAD';
-    const METHOD_POST = 'POST';
+    public const METHOD_GET = 'GET';
+    public const METHOD_HEAD = 'HEAD';
+    public const METHOD_POST = 'POST';
 
     /**
      * @var array<string, mixed>
      */
-    private $aConfig = array();
+    private $aConfig = [];
 
     /**
      * @var string|null
      */
-    private $lastRequest = null;
+    private $lastRequest;
 
     /**
      * @var string|null
      */
-    private $lastResponseHeader = null;
+    private $lastResponseHeader;
 
     /**
      * @var array<string, string|non-empty-list<string>>
      */
-    private $lastResponseHeaderVariables = null;
+    private $lastResponseHeaderVariables;
 
     /**
      * @var int|null
      */
-    private $lastResponseCode = null;
+    private $lastResponseCode;
 
     /**
      * @var string|null
      */
-    private $lastResponseCodeRaw = null;
+    private $lastResponseCodeRaw;
 
     /**
      * @var string|null
      */
-    private $lastResponseBody = null;
+    private $lastResponseBody;
 
     /**
      * @var bool
@@ -130,7 +130,7 @@ class TPkgCmsCoreSendToHost
             $this->lastResponseCode = intval(trim($aResponseCodeParts[1]));
         }
 
-        $this->lastResponseHeaderVariables = array();
+        $this->lastResponseHeaderVariables = [];
 
         while (false !== ($buffer = fgets($rHeader))) {
             $sLine = trim($buffer);
@@ -139,7 +139,7 @@ class TPkgCmsCoreSendToHost
             $sHeaderVarValue = trim(substr($sLine, $iSplit));
             if (isset($this->lastResponseHeaderVariables[$sHeaderVarName])) {
                 if (!is_array($this->lastResponseHeaderVariables[$sHeaderVarName])) {
-                    $this->lastResponseHeaderVariables[$sHeaderVarName] = array($this->lastResponseHeaderVariables[$sHeaderVarName]);
+                    $this->lastResponseHeaderVariables[$sHeaderVarName] = [$this->lastResponseHeaderVariables[$sHeaderVarName]];
                 }
                 $this->lastResponseHeaderVariables[$sHeaderVarName][] = $sHeaderVarValue;
             } else {
@@ -159,11 +159,13 @@ class TPkgCmsCoreSendToHost
     public function getLastResponseHeaderVariable($sVarName)
     {
         if (null === $this->lastResponseHeaderVariables) {
-            $this->lastResponseHeaderVariables = array();
+            $this->lastResponseHeaderVariables = [];
 
             /**
              * @psalm-suppress UndefinedClass
+             *
              * @var resource $rHeader
+             *
              * @see https://github.com/chameleon-system/chameleon-system/issues/772
              */
             $rHeader = TPkgCmsStringUtilities::getStringStream($this->getLastResponseHeader());
@@ -177,7 +179,7 @@ class TPkgCmsCoreSendToHost
                 $sHeaderVarValue = trim(substr($sHeaderLine, $iSplit));
                 if (isset($this->lastResponseHeaderVariables[$sHeaderVarName])) {
                     if (!is_array($this->lastResponseHeaderVariables[$sHeaderVarName])) {
-                        $this->lastResponseHeaderVariables[$sHeaderVarName] = array($this->lastResponseHeaderVariables[$sHeaderVarName]);
+                        $this->lastResponseHeaderVariables[$sHeaderVarName] = [$this->lastResponseHeaderVariables[$sHeaderVarName]];
                     }
                     $this->lastResponseHeaderVariables[$sHeaderVarName][] = $sHeaderVarValue;
                 } else {
@@ -195,7 +197,6 @@ class TPkgCmsCoreSendToHost
 
     /**
      * @param string $key
-     * @param mixed $val
      *
      * @return void
      */
@@ -214,10 +215,10 @@ class TPkgCmsCoreSendToHost
         if (true !== $bUseSSL && false !== $bUseSSL) {
             throw new TPkgCmsException_Log(
                 'setUseSSL called with invalid value',
-                array(
+                [
                      'context' => $this,
                      'param' => $bUseSSL,
-                ), 1);
+                ], 1);
         }
         $this->setConfigVar('useSSL', $bUseSSL);
 
@@ -282,10 +283,10 @@ class TPkgCmsCoreSendToHost
         if (false === is_array($aPayload)) {
             throw new TPkgCmsException_Log(
                 'setPayload called with invalid value',
-                array(
+                [
                      'context' => $this,
                      'param' => $aPayload,
-                ), 1);
+                ], 1);
         }
         $this->setConfigVar('payload', $aPayload);
 
@@ -303,7 +304,7 @@ class TPkgCmsCoreSendToHost
         $this->lastResponseHeader = null;
         $this->lastResponseBody = null;
 
-        $aData = $this->getConfigVar('payload', array());
+        $aData = $this->getConfigVar('payload', []);
         $data = TTools::GetArrayAsURL($aData);
         $data = str_replace('&amp;', '&', $data);
         $path = $this->getConfigVar('path', '/');
@@ -368,19 +369,19 @@ class TPkgCmsCoreSendToHost
             fclose($fp);
         } else {
             throw new TPkgCmsException_Log("Error connecting to {$sfSockURL} on port {$sPort}",
-                array(
+                [
                      'context' => $this,
                      'errorNr' => $sConnectionError,
                      'errorMessage' => $sConnectionErrorMessage,
-                ),
+                ],
                 1
             );
         }
-        $sHeader = substr($buf, 0, (strpos($buf, "\r\n\r\n") + 4));
+        $sHeader = substr($buf, 0, strpos($buf, "\r\n\r\n") + 4);
         if (self::METHOD_HEAD === $method) {
             $sResponse = '';
         } else {
-            $sResponse = substr($buf, (strpos($buf, "\r\n\r\n") + 4));
+            $sResponse = substr($buf, strpos($buf, "\r\n\r\n") + 4);
             if (false !== strpos(strtolower($sHeader), 'transfer-encoding: chunked')) {
                 $fp = 0;
                 $outData = '';
@@ -414,8 +415,6 @@ class TPkgCmsCoreSendToHost
 
     /**
      * @param string $key
-     * @param mixed $default
-     * @return mixed
      */
     private function getConfigVar($key, $default = null)
     {
@@ -467,6 +466,7 @@ class TPkgCmsCoreSendToHost
 
     /**
      * @param string $sMethod (must be one of TPkgCmsCoreSendToHost::METHOD_*)
+     *
      * @psalm-param self::METHOD_* $sMethod
      *
      * @return $this
@@ -482,10 +482,10 @@ class TPkgCmsCoreSendToHost
             default:
                 throw new TPkgCmsException_Log(
                     'setMethod called with invalid value',
-                    array(
+                    [
                          'context' => $this,
                          'param' => $sMethod,
-                    ), 1);
+                    ], 1);
                 break;
         }
         $this->setConfigVar('method', $sMethod);
@@ -503,10 +503,10 @@ class TPkgCmsCoreSendToHost
         if (true !== $bAgent && false !== $bAgent) {
             throw new TPkgCmsException_Log(
                 'setSendUserAgent called with invalid value',
-                array(
+                [
                      'context' => $this,
                      'param' => $bAgent,
-                ), 1);
+                ], 1);
         }
         $this->setConfigVar('sendUserAgent', $bAgent);
 
@@ -532,34 +532,9 @@ class TPkgCmsCoreSendToHost
      */
     public function setTimeout($iTimeout)
     {
-        $iTimeout = intval($iTimeout);
+        $iTimeout = (int) $iTimeout;
 
         $this->setConfigVar('timeout', $iTimeout);
-
-        return $this;
-    }
-
-    /**
-     * When enabled, all transactions will be written to /logs/sendtohost.log"
-     * otherweise we only write them to the log in log level 4.
-     *
-     * @param bool $logRequest
-     *
-     * @return $this
-     *
-     * @deprecated since 6.3.0 - not supported anymore: Logging is always enabled
-     */
-    public function setLogRequest($logRequest)
-    {
-        if (true !== $logRequest && false !== $logRequest) {
-            throw new TPkgCmsException_Log(
-                'setLogRequest called with invalid value',
-                array(
-                     'context' => $this,
-                     'param' => $logRequest,
-                ), 1);
-        }
-        $this->logRequest = $logRequest;
 
         return $this;
     }
@@ -573,7 +548,7 @@ class TPkgCmsCoreSendToHost
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLastResponseCodeRaw()
     {

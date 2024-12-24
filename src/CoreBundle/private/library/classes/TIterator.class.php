@@ -13,9 +13,11 @@
  * manages lists of data, provided methods to move forward and back in the list.
  *
  * @template T
+ *
  * @implements Iterator<int, T>
  *
  * Dynamic properties introduced by __get and __set
+ *
  * @property T[] $_items
  * @property int $_itemPointer
  */
@@ -27,7 +29,7 @@ class TIterator implements Iterator
      *
      * @var T[]
      */
-    protected $_items = array();
+    protected $_items = [];
 
     public function __get($sParameter)
     {
@@ -36,13 +38,13 @@ class TIterator implements Iterator
 
             return $this->getItemPointer();
         }
-        if ('_items' == $sParameter) {
+        if ('_items' === $sParameter) {
             trigger_error("Notice: do not access _items directly!\n".TTools::GetFormattedDebug(), E_USER_NOTICE);
 
             return $this->_items;
-        } else {
-            trigger_error("Property {$sParameter} does not exist in ".__CLASS__.' on line '.__LINE__, E_USER_NOTICE);
         }
+
+        trigger_error("Property {$sParameter} does not exist in ".__CLASS__.' on line '.__LINE__, E_USER_NOTICE);
     }
 
     public function __set($sParameter, $sValue)
@@ -53,7 +55,7 @@ class TIterator implements Iterator
 
             return;
         }
-        if ('_items' == $sParameter) {
+        if ('_items' === $sParameter) {
             trigger_error("Notice: do not access _items directly!\n".TTools::GetFormattedDebug(), E_USER_NOTICE);
             $this->_items = $sValue;
         } else {
@@ -63,6 +65,7 @@ class TIterator implements Iterator
 
     /**
      * delete the list.
+     *
      * @return void
      */
     public function Destroy()
@@ -71,13 +74,14 @@ class TIterator implements Iterator
             unset($this->_items[$i]);
         }
         $this->setItemPointer(0);
-        $this->_items = array();
+        $this->_items = [];
     }
 
     /**
      * Adds an item to the end of the list.
      *
      * @param T $item
+     *
      * @return void
      */
     public function AddItem($item)
@@ -90,6 +94,7 @@ class TIterator implements Iterator
      * pointing at the current elemement UNLESS that is the first element.
      *
      * @param T $item
+     *
      * @return void
      */
     public function AddItemToStart($item)
@@ -102,6 +107,7 @@ class TIterator implements Iterator
 
     /**
      * @param callable(T, T):int $callback
+     *
      * @return void
      */
     public function usort($callback)
@@ -112,7 +118,7 @@ class TIterator implements Iterator
     /**
      * remove an element from the list. works only if the item is an object.
      *
-     * @param string $propertyName  - class property
+     * @param string $propertyName - class property
      * @param string $propertyValue - value of the property
      *
      * @return bool
@@ -128,7 +134,7 @@ class TIterator implements Iterator
                 if (is_object($oItem) && property_exists($oItem, $propertyName) && $oItem->$propertyName == $propertyValue) {
                     $found = true;
                     $removedPointer = $this->getItemPointer() - 1;
-                    //        	  unset($this->_items[$removedPointer]);
+                    //              unset($this->_items[$removedPointer]);
                 }
             }
             if ($found && array_key_exists($this->getItemPointer(), $this->_items)) {
@@ -153,9 +159,9 @@ class TIterator implements Iterator
      * searches for ONE item with the property and returns a pointer to the FIRST matching element found
      * returns false if no item is found.
      *
-     * @param string $propertyName  - property name (must be public in the items
+     * @param string $propertyName - property name (must be public in the items
      * @param string $propertyValue - property value
-     * @param bool   $bIgnoreCase   - do a case insenstive compare
+     * @param bool $bIgnoreCase - do a case insenstive compare
      *
      * @return T|false
      */
@@ -215,7 +221,7 @@ class TIterator implements Iterator
      * searches for items with the property and returns a TIterator of all found items
      * returns false if no items are found.
      *
-     * @param string $propertyName  - property name (must be public in the items
+     * @param string $propertyName - property name (must be public in the items
      * @param string $propertyValue - property value
      *
      * @return TIterator<T>
@@ -285,7 +291,7 @@ class TIterator implements Iterator
      *
      * @return T|false
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function next(): mixed
     {
         $item = false;
@@ -343,7 +349,7 @@ class TIterator implements Iterator
      */
     public function IsLast()
     {
-        return ($this->Length()) == $this->getItemPointer();
+        return $this->Length() == $this->getItemPointer();
     }
 
     /**
@@ -353,7 +359,7 @@ class TIterator implements Iterator
      */
     public function GoToEnd()
     {
-        $this->setItemPointer(($this->Length() - 1));
+        $this->setItemPointer($this->Length() - 1);
     }
 
     /**
@@ -423,5 +429,4 @@ class TIterator implements Iterator
     {
         $this->setItemPointer(0);
     }
-
 }
