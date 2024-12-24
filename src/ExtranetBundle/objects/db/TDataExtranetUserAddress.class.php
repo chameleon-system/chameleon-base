@@ -11,24 +11,24 @@
 
 class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
 {
-    const VIEW_PATH = 'pkgExtranet/views/db/TDataExtranetUserAddress';
-    const MSG_FORM_FIELD = 'tdataextranetuseraddressform';
-    const FORM_DATA_NAME_BILLING = 'aUserAddressBilling';
-    const FORM_DATA_NAME_SHIPPING = 'aUserAddressShipping';
+    public const VIEW_PATH = 'pkgExtranet/views/db/TDataExtranetUserAddress';
+    public const MSG_FORM_FIELD = 'tdataextranetuseraddressform';
+    public const FORM_DATA_NAME_BILLING = 'aUserAddressBilling';
+    public const FORM_DATA_NAME_SHIPPING = 'aUserAddressShipping';
 
     /**
      * salutation.
      *
      * @var TdbDataExtranetSalutation
      */
-    protected $oSalutation = null;
+    protected $oSalutation;
 
     /**
      * country.
      *
      * @var TdbDataCountry
      */
-    protected $oCountry = null;
+    protected $oCountry;
 
     /**
      * returns salutation.
@@ -79,7 +79,7 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
         $oGlobal = TGlobal::instance();
         /** @var $oUser TdbDataExtranetUser */
         $oUser = TdbDataExtranetUser::GetInstance();
-        $aPostData = array();
+        $aPostData = [];
 
         if ($oGlobal->UserDataExists(self::FORM_DATA_NAME_BILLING) || $oGlobal->UserDataExists(self::FORM_DATA_NAME_SHIPPING)) {
             if ($this->id == $oUser->fieldDefaultBillingAddressId && $oGlobal->UserDataExists(self::FORM_DATA_NAME_BILLING)) {
@@ -95,14 +95,14 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
     /**
      * used to display the user (including edit forms for user data).
      *
-     * @param string $sViewName         - the view to use
-     * @param string $sViewType         - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars     - place any custom vars that you want to pass through the call here
-     * @param bool   $bAutoLoadPostData - this is deprecated and should default to false in later versions
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param bool $bAutoLoadPostData - this is deprecated and should default to false in later versions
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array(), $bAutoLoadPostData = true)
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [], $bAutoLoadPostData = false)
     {
         $sHTML = '';
         $oView = new TViewParser();
@@ -116,14 +116,14 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
         $oView->AddVarArray($aOtherParameters);
 
         $aPostData = $this->GetPostData();
-        //get post data
+        // get post data
         if ($bAutoLoadPostData && is_array($aPostData) && count($aPostData) > 0) {
-            //copy original values
+            // copy original values
             $aOriginalSqlData = $this->sqlData;
-            //overwrite original data with post data and reload the object
+            // overwrite original data with post data and reload the object
             $this->LoadFromRow(array_merge($aOriginalSqlData, $aPostData));
             $sHTML = $oView->RenderObjectPackageView($sViewName, self::VIEW_PATH, $sViewType);
-            //reset to original values
+            // reset to original values
             $this->LoadFromRow($aOriginalSqlData);
         } else {
             $sHTML = $oView->RenderObjectPackageView($sViewName, self::VIEW_PATH, $sViewType);
@@ -143,7 +143,7 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -240,7 +240,7 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
                 } // default is 255 chars
                 if (mb_strlen($this->sqlData[$oField->fieldName]) > $iLength) {
                     if ('' != $sFormDataName) {
-                        $oMsgManager->AddMessage($sFormDataName.'-'.$oField->fieldName, 'ERROR-USER-FIELD-TO-LONG', array('iLengthAllowed' => $iLength, 'iUserLength' => mb_strlen($this->sqlData[$oField->fieldName])));
+                        $oMsgManager->AddMessage($sFormDataName.'-'.$oField->fieldName, 'ERROR-USER-FIELD-TO-LONG', ['iLengthAllowed' => $iLength, 'iUserLength' => mb_strlen($this->sqlData[$oField->fieldName])]);
                     }
                     $bIsValid = false;
                 }
@@ -261,7 +261,7 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
     public function LoadFromRowProtected($aRow)
     {
         $aData = $this->sqlData;
-        $aProtected = array('id', 'data_extranet_user_id');
+        $aProtected = ['id', 'data_extranet_user_id'];
         foreach ($aRow as $sFieldName => $sValue) {
             if (!in_array($sFieldName, $aProtected)) {
                 $aData[$sFieldName] = $sValue;

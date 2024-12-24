@@ -24,47 +24,22 @@ use Twig\Source;
  */
 class TwigStringLoader implements LoaderInterface
 {
-    /**
-     * @param string $name
-     * @return string
-     */
-    public function getSource($name)
-    {
-        @trigger_error(sprintf('Calling "getSource" on "%s" is deprecated since 1.27. Use getSourceContext() instead.', get_class($this)), E_USER_DEPRECATED);
-
-        return $name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function getSourceContext($name): Source
+    public function getSourceContext(string $name): Source
     {
         return new Source($name, $name);
     }
 
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function exists($name)
+    public function exists(string $name): bool
     {
         return true;
     }
 
-    /**
-     * @param string $name
-     */
-    public function getCacheKey($name): string
+    public function getCacheKey(string $name): string
     {
         return $name;
     }
 
-    /**
-     * @param string $name
-     * @param int $time
-     */
-    public function isFresh($name, $time): bool
+    public function isFresh(string $name, int $time): bool
     {
         return true;
     }
