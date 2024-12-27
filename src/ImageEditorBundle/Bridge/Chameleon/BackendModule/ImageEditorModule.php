@@ -65,10 +65,10 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $includes = parent::GetHtmlFooterIncludes();
 
         $includes[] = '
-            <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/css/imageEditor.css').'" rel="stylesheet">
-            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/lodash.min.js').'"></script>
-            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerbot-image-editor.min.js').'"></script>;
-            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerobot.js').'"></script>';
+            <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/css/imageEditor.css').'?v=1" rel="stylesheet">
+            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/lodash.min.js').'?v=1"></script>
+            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerbot-image-editor.min.js').'?v=1"></script>;
+            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerobot.js').'?v=1"></script>';
 
         return $includes;
     }

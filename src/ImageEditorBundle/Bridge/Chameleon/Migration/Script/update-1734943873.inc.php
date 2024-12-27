@@ -1,7 +1,7 @@
 <h1>update - Build #1734943873</h1>
 <h2>Date: 2024-12-23</h2>
 <div class="changelog">
-    add image editor backend module<br/>
+    - #65211: add image editor backend module<br/>
 </div>
 <?php
 $backendModuleId = TCMSLogChange::createUnusedRecordId('cms_tpl_module');
