@@ -1,4 +1,5 @@
-<div>
+<div class="card">
+    <div class="card-body">
     <?php if (count($data['aMessages']) > 0) {
     ?>
     <div>
@@ -45,4 +46,5 @@
             />
         </div>
     </form>
+    </div>
 </div>

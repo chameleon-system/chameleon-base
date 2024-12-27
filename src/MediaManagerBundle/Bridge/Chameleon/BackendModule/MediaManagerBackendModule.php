@@ -410,7 +410,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
             ).'"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
                 '/bundles/chameleonsystemmediamanager/lib/Split.js/split.js'
-            ).'"></script>';
+            ).'?v=2"></script>';
         $includes[] = '<script src="'.TGlobal::GetStaticURL(
                 '/bundles/chameleonsystemmediamanager/lib/Jeditable/jquery.jeditable.js'
             ).'"></script>';

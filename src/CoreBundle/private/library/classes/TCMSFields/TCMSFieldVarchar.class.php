@@ -91,7 +91,7 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
             $html .= sprintf(' %s="%s"', TGlobal::OutHTML($key), TGlobal::OutHTML($value));
         }
         $html .= sprintf(' value="%s"', $this->_GetHTMLValue());
-        $html .= ' /><span class="input-group-append"><span class="input-group-text charCounter alert alert-warning mb-0">
+        $html .= ' /><span class="input-group-append"><span class="input-group-text charCounter alert alert-info mb-0">
               <span id="'.TGlobal::OutHTML($this->name).'Count" class="mr-1">'.$count."</span> <i class=\"fas fa-text-width\"></i></span>
             </span>
         </div>

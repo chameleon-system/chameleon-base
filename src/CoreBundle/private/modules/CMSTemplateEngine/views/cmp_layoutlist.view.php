@@ -22,7 +22,7 @@ $previewLanguageId = $backendSession->getCurrentEditLanguageId();
 </form>
 <div class="p-2 mb-4">
 
-    <div class="font-weight-bold mb-2"><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout'); ?></div>
+    <div class="h4 mb-3"><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout'); ?>:</div>
     <?php
     while ($oPageLayout = $data['oMasterDefs']->Next()) {
         /** @var $oPageLayout TdbCmsMasterPagedef */
@@ -38,23 +38,25 @@ $previewLanguageId = $backendSession->getCurrentEditLanguageId();
         ];
         $url = $urlUtil->getArrayAsUrl($urlParameters, URL_WEB_CONTROLLER.'?', '&'); ?>
 
-        <div class="card <?php if ($bIsActiveLayout) {
+        <div class="card mb-3 <?php if ($bIsActiveLayout) {
             ?>text-white bg-success<?php
-        } ?>">
+        } else {
+            ?>bg-light<?php
+        }?>">
             <div class="card-header p-2">
-                <span class="card-title mb-0"><?=TGlobal::OutHTML($oPageLayout->sqlData['name']); ?></span>
+                <span class="card-title font-weight-bold mb-0"><?=TGlobal::OutHTML($oPageLayout->sqlData['name']); ?></span>
                 <?php if (true === $bIsActiveLayout) {
             ?>
-                <span class="badge badge-pill badge-light float-right"><?=TGlobal::Translate('chameleon_system_core.template_engine.active'); ?></span>
+                <span class="badge badge-pill float-right"><?=TGlobal::Translate('chameleon_system_core.template_engine.active'); ?></span>
                 <?php
         } ?>
             </div>
             <div class="card-body p-2">
                 <div class="callout mt-0 mb-1 <?php
                 if (false === $bIsActiveLayout) {
-                    ?>callout-success<?php
+                    ?>callout-info<?php
                 } ?>">
-                    <small class="text-muted"><?=TGlobal::Translate('chameleon_system_core.template_engine.spot_count'); ?></small><br>
+                    <span><?=TGlobal::Translate('chameleon_system_core.template_engine.spot_count'); ?></span>
                     <strong class="h6"><?=$oPageLayout->NumberOfDynamicModules(); ?></strong>
                 </div>
                 <div class="card-text">
