@@ -238,7 +238,7 @@ class TCMSMessageManager
                 if (null === $oMessages) {
                     $oMessages = $messages;
                 } else {
-                    while (null !== ($oMessage = $messages->Next())) {
+                    while (false !== ($oMessage = $messages->Next())) {
                         $oMessages->AddItem($oMessage);
                     }
                 }
@@ -261,7 +261,7 @@ class TCMSMessageManager
             if (null === $oMessages) {
                 $oMessages = $this->aMessages[self::GLOBAL_CONSUMER_NAME];
             } else {
-                while (null !== ($oGlobalMessage = $this->aMessages[self::GLOBAL_CONSUMER_NAME]->Next())) {
+                while (false !== ($oGlobalMessage = $this->aMessages[self::GLOBAL_CONSUMER_NAME]->Next())) {
                     $oMessages->AddItem($oGlobalMessage);
                 }
             }
