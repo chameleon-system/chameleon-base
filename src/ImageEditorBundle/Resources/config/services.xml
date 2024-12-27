@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="chameleon_system_image_editor.bridge_chameleon_backend_module.image_editor_module"
+                 class="ChameleonSystem\ImageEditorBundle\Bridge\Chameleon\BackendModule\ImageEditorModule" shared="false">
+            <tag name="chameleon_system.module"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="chameleon_system_cms_backend.backend_session"/>
+            <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.flash_messages"/>
+        </service>
+
+        <service id="chameleon_system_image_editor.bridge_chameleon_media_manager_extension.media_manager_image_editor_extension"
+                 class="ChameleonSystem\ImageEditorBundle\Bridge\Chameleon\MediaManager\Extension\MediaManagerImageEditorExtension">
+            <tag name="chameleon_system_media_manager.extension"/>
+        </service>
+
+        <service id="chameleon_system_image_editor.bridge_chameleon_media_manager_mapper.image_editor_mapper"
+                 class="ChameleonSystem\ImageEditorBundle\Bridge\Chameleon\MediaManager\Mapper\ImageEditorMapper">
+            <tag name="chameleon_system.mapper"/>
+            <argument type="service" id="chameleon_system_core.util.url"/>
+        </service>
+    </services>
+</container>
