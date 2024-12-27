@@ -20,22 +20,22 @@ class DataMappingService implements DataMappingServiceInterface
     /**
      * @var \IViewMapper[]
      */
-    private $mappers = [];
+    private array $mappers = [];
 
     /**
      * @var list<array<string, string>|null>
      */
-    private $transformations = [];
+    private array $transformations = [];
 
     /**
      * @var list<string|null>
      */
-    private $mapToArray = [];
+    private array $mapToArray = [];
 
     /**
      * @var array<string, mixed>
      */
-    private $sourceObjects = [];
+    private array $sourceObjects = [];
 
     /**
      * @var \MapperVisitor
@@ -50,11 +50,8 @@ class DataMappingService implements DataMappingServiceInterface
     /**
      * @var DataMappingServiceInterface[]
      */
-    private $mappingServices;
-    /**
-     * @var DataMappingServiceHelperFactoryInterface
-     */
-    private $helperFactory;
+    private ?array $mappingServices = null;
+    private DataMappingServiceHelperFactoryInterface $helperFactory;
 
     public function __construct(DataMappingServiceHelperFactoryInterface $helperFactory)
     {
@@ -222,14 +219,9 @@ class DataMappingService implements DataMappingServiceInterface
         return $this->mapToArray[$mapperIndex];
     }
 
-    /**
-     * @return DataMappingServiceResponseInterface
-     */
-    private function createMapperResponse()
+    private function createMapperResponse(): DataMappingServiceResponseInterface
     {
-        $responseFactory = new DataMappingServiceResponseFactory();
-
-        return $responseFactory->createResponse($this->mapperVisitor, $this->cacheTriggerCollector);
+        return (new DataMappingServiceResponseFactory())->createResponse($this->mapperVisitor, $this->cacheTriggerCollector);
     }
 
     /**

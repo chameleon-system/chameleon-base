@@ -11,90 +11,42 @@
 
 class ViewMapperConfig implements ViewMapperConfigInterface
 {
-    /**
-     * @var array
-     */
-    private $aMapperConfig = array();
+    private array $mapperConfig = [];
 
-    /**
-     * @param string $config
-     */
-    public function __construct($config)
+    public function __construct(string $config)
     {
-        $aConfig = explode("\n", $config);
-        foreach ($aConfig as $sConfigLine) {
-            $sConfigLine = trim($sConfigLine);
-            if (true === empty($sConfigLine)) {
-                continue;
-            }
-            $aTmpParts = explode('=', $sConfigLine);
-            $sViewName = trim($aTmpParts[0]);
-            $this->aMapperConfig[$sViewName] = array();
-            if (1 === count($aTmpParts)) {
+        $configLines = explode("\n", $config);
+
+        foreach ($configLines as $line) {
+            $line = trim($line);
+
+            if (empty($line)) {
                 continue;
             }
 
-            $aTmpConfig = explode(';', trim($aTmpParts[1]));
-            $this->aMapperConfig[$sViewName]['snippet'] = trim($aTmpConfig[0]);
-            $this->aMapperConfig[$sViewName]['aMapper'] = array();
-            if (isset($aTmpConfig[1])) {
-                $this->aMapperConfig[$sViewName]['aMapper'] = explode(',', trim($aTmpConfig[1]));
-                foreach ($this->aMapperConfig[$sViewName]['aMapper'] as $sKey => $sMapperConfig) {
-                    $this->aMapperConfig[$sViewName]['aMapper'][$sKey] = array();
-                    $arrayMapperPos = strpos($sMapperConfig, '{');
-                    $varMapperPos = strpos($sMapperConfig, '[');
-                    $this->aMapperConfig[$sViewName]['aMapper'][$sKey]['arrayMapping'] = null;
-                    $this->aMapperConfig[$sViewName]['aMapper'][$sKey]['varMapping'] = array();
-                    if (false === $arrayMapperPos && false === $varMapperPos) {
-                        $this->aMapperConfig[$sViewName]['aMapper'][$sKey]['name'] = trim($sMapperConfig);
-                    } else {
-                        $arrayMapperPos = false === $arrayMapperPos ? PHP_INT_MAX : $arrayMapperPos;
-                        $varMapperPos = false === $varMapperPos ? PHP_INT_MAX : $varMapperPos;
-                        $splitPos = min($arrayMapperPos, $varMapperPos);
-                        $this->aMapperConfig[$sViewName]['aMapper'][$sKey]['name'] = trim(substr($sMapperConfig, 0, $splitPos));
-                        $mappings = array();
-                        preg_match_all('/\[(.*?)\]/', $sMapperConfig, $mappings);
-                        if (2 === count($mappings)) {
-                            foreach ($mappings[1] as $mapping) {
-                                $mappingParts = explode('->', $mapping);
-                                $this->aMapperConfig[$sViewName]['aMapper'][$sKey]['varMapping'][$mappingParts[0]] = $mappingParts[1];
-                            }
-                        }
-                        $mappings = array();
-                        preg_match_all('/\{(.*?)\}/', $sMapperConfig, $mappings);
-                        if (2 === count($mappings)) {
-                            foreach ($mappings[1] as $mapping) {
-                                $this->aMapperConfig[$sViewName]['aMapper'][$sKey]['arrayMapping'] = $mapping;
-                            }
-                        }
-                    }
-                }
-            }
+            $this->processConfigLine($line);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAsString()
+    public function getAsString(): string
     {
-        $lines = array();
-        reset($this->aMapperConfig);
-        foreach ($this->aMapperConfig as $config => $configData) {
+        $lines = [];
+        reset($this->mapperConfig);
+        foreach ($this->mapperConfig as $config => $configData) {
             if (false === isset($configData['snippet'])) {
                 $lines[] = $config;
                 continue;
             }
 
             $line = $config.'='.$configData['snippet'];
-            if (count($configData['aMapper']) > 0) {
-                $mapper = array();
-                foreach ($configData['aMapper'] as $key => $mapperConfig) {
+            if (count($configData['mappers']) > 0) {
+                $mapper = [];
+                foreach ($configData['mappers'] as $key => $mapperConfig) {
                     $mapperString = $mapperConfig['name'];
                     if (null !== $mapperConfig['arrayMapping']) {
                         $mapperString .= '{'.$mapperConfig['arrayMapping'].'}';
                     }
-                    $varMapping = array();
+                    $varMapping = [];
                     foreach ($mapperConfig['varMapping'] as $varKey => $varTarget) {
                         $varMapping[] = '['.$varKey.'->'.$varTarget.']';
                     }
@@ -116,7 +68,7 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function getConfigs()
     {
-        return array_keys($this->aMapperConfig);
+        return array_keys($this->mapperConfig);
     }
 
     /**
@@ -124,17 +76,17 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function getMappersForConfig($configname)
     {
-        if (!array_key_exists($configname, $this->aMapperConfig)) {
+        if (!array_key_exists($configname, $this->mapperConfig)) {
             return null;
         }
 
-        $aMappers = array();
-        foreach ($this->aMapperConfig[$configname]['aMapper'] as $mapper) {
-            $aMappers[] = $mapper['name'];
+        $mappers = [];
+        foreach ($this->mapperConfig[$configname]['mappers'] as $mapper) {
+            $mappers[] = $mapper['name'];
         }
-        reset($this->aMapperConfig[$configname]['aMapper']);
+        reset($this->mapperConfig[$configname]['mappers']);
 
-        return $aMappers;
+        return $mappers;
     }
 
     /**
@@ -142,11 +94,11 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function getSnippetForConfig($configname)
     {
-        if (!array_key_exists($configname, $this->aMapperConfig)) {
+        if (!array_key_exists($configname, $this->mapperConfig)) {
             return null;
         }
 
-        return $this->aMapperConfig[$configname]['snippet'];
+        return $this->mapperConfig[$configname]['snippet'];
     }
 
     /**
@@ -154,17 +106,17 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function getTransformationsForMapper($configname, $mappername)
     {
-        if (!array_key_exists($configname, $this->aMapperConfig)) {
+        if (!array_key_exists($configname, $this->mapperConfig)) {
             return null;
         }
-        foreach ($this->aMapperConfig[$configname]['aMapper'] as $mapper) {
+        foreach ($this->mapperConfig[$configname]['mappers'] as $mapper) {
             if ($mappername === $mapper['name']) {
-                reset($this->aMapperConfig[$configname]['aMapper']);
+                reset($this->mapperConfig[$configname]['mappers']);
 
                 return $mapper['varMapping'];
             }
         }
-        reset($this->aMapperConfig[$configname]['aMapper']);
+        reset($this->mapperConfig[$configname]['mappers']);
 
         return null;
     }
@@ -174,18 +126,18 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function getArrayMappingForMapper($configname, $mappername)
     {
-        if (!array_key_exists($configname, $this->aMapperConfig)) {
+        if (!array_key_exists($configname, $this->mapperConfig)) {
             return null;
         }
 
-        foreach ($this->aMapperConfig[$configname]['aMapper'] as $mapper) {
+        foreach ($this->mapperConfig[$configname]['mappers'] as $mapper) {
             if ($mappername === $mapper['name']) {
-                reset($this->aMapperConfig[$configname]['aMapper']);
+                reset($this->mapperConfig[$configname]['mappers']);
 
                 return $mapper['arrayMapping'];
             }
         }
-        reset($this->aMapperConfig[$configname]['aMapper']);
+        reset($this->mapperConfig[$configname]['mappers']);
 
         return null;
     }
@@ -195,7 +147,7 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function getPlainParsedConfig()
     {
-        return $this->aMapperConfig;
+        return $this->mapperConfig;
     }
 
     /**
@@ -203,7 +155,7 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function getConfigCount()
     {
-        return count($this->aMapperConfig);
+        return count($this->mapperConfig);
     }
 
     /**
@@ -211,33 +163,33 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function addMapper($config, $mapper, $placeAfterMapper = null)
     {
-        if (false === isset($this->aMapperConfig[$config])) {
+        if (false === isset($this->mapperConfig[$config])) {
             return false;
         }
         if (false === is_array($mapper)) {
-            $mapper = array(
+            $mapper = [
                 'arrayMapping' => null,
-                'varMapping' => array(),
+                'varMapping' => [],
                 'name' => $mapper,
-            );
+            ];
         }
         if (null === $placeAfterMapper) {
-            $this->aMapperConfig[$config]['aMapper'][] = $mapper;
+            $this->mapperConfig[$config]['mappers'][] = $mapper;
         } else {
             $bFound = false;
-            $newMapperConfig = array();
-            foreach ($this->aMapperConfig[$config]['aMapper'] as $key => $tmpMapperData) {
+            $newMapperConfig = [];
+            foreach ($this->mapperConfig[$config]['mappers'] as $key => $tmpMapperData) {
                 $newMapperConfig[] = $tmpMapperData;
                 if ($placeAfterMapper === $tmpMapperData['name']) {
                     $newMapperConfig[] = $mapper;
                     $bFound = true;
                 }
             }
-            reset($this->aMapperConfig[$config]['aMapper']);
+            reset($this->mapperConfig[$config]['mappers']);
             if (false === $bFound) {
                 $newMapperConfig[] = $mapper;
             }
-            $this->aMapperConfig[$config]['aMapper'] = $newMapperConfig;
+            $this->mapperConfig[$config]['mappers'] = $newMapperConfig;
         }
 
         return true;
@@ -248,21 +200,21 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function removeMapper($config, $mapper)
     {
-        if (false === isset($this->aMapperConfig[$config])) {
+        if (false === isset($this->mapperConfig[$config])) {
             return false;
         }
 
         $bFound = false;
-        $newMapperConfig = array();
-        foreach ($this->aMapperConfig[$config]['aMapper'] as $key => $tmpMapperData) {
+        $newMapperConfig = [];
+        foreach ($this->mapperConfig[$config]['mappers'] as $key => $tmpMapperData) {
             if ($mapper !== $tmpMapperData['name']) {
                 $newMapperConfig[] = $tmpMapperData;
             } else {
                 $bFound = true;
             }
         }
-        reset($this->aMapperConfig[$config]['aMapper']);
-        $this->aMapperConfig[$config]['aMapper'] = $newMapperConfig;
+        reset($this->mapperConfig[$config]['mappers']);
+        $this->mapperConfig[$config]['mappers'] = $newMapperConfig;
 
         return $bFound;
     }
@@ -272,24 +224,24 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function replaceMapper($oldMapper, $newMapper, $config = null)
     {
-        if (null !== $config && false === isset($this->aMapperConfig[$config])) {
+        if (null !== $config && false === isset($this->mapperConfig[$config])) {
             return false;
         }
 
         $found = false;
         if (null === $config) {
-            $configsToChange = $this->aMapperConfig;
+            $configsToChange = $this->mapperConfig;
         } else {
             $configsToChange = [
-                $config => $this->aMapperConfig[$config],
+                $config => $this->mapperConfig[$config],
             ];
         }
         foreach ($configsToChange as $configName => $configToChange) {
-            $newMapperConfig = array();
-            if (false === isset($configToChange['aMapper'])) {
+            $newMapperConfig = [];
+            if (false === isset($configToChange['mappers'])) {
                 continue;
             }
-            foreach ($configToChange['aMapper'] as $key => $originalMapperData) {
+            foreach ($configToChange['mappers'] as $key => $originalMapperData) {
                 if ($oldMapper === $originalMapperData['name']) {
                     $newMapperData = $originalMapperData;
                     $newMapperData['name'] = $newMapper;
@@ -299,7 +251,7 @@ class ViewMapperConfig implements ViewMapperConfigInterface
                     $newMapperConfig[] = $originalMapperData;
                 }
             }
-            $this->aMapperConfig[$configName]['aMapper'] = $newMapperConfig;
+            $this->mapperConfig[$configName]['mappers'] = $newMapperConfig;
         }
 
         return $found;
@@ -310,7 +262,7 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function changeSnippet($config, $newSnippet)
     {
-        $this->aMapperConfig[$config]['snippet'] = $newSnippet;
+        $this->mapperConfig[$config]['snippet'] = $newSnippet;
     }
 
     /**
@@ -318,22 +270,115 @@ class ViewMapperConfig implements ViewMapperConfigInterface
      */
     public function addConfig($config, $snippetName, $mapperChain)
     {
-        $this->aMapperConfig[$config] = array(
+        $this->mapperConfig[$config] = [
             'snippet' => $snippetName,
-            'aMapper' => array(),
-        );
+            'mappers' => [],
+        ];
         if (false === is_array($mapperChain)) {
-            $mapperChain = array($mapperChain);
+            $mapperChain = [$mapperChain];
         }
         /**
          * @var array $mapperChain
          */
         foreach ($mapperChain as $mapperName) {
-            $this->aMapperConfig[$config]['aMapper'][] = array(
+            $this->mapperConfig[$config]['mappers'][] = [
                 'arrayMapping' => null,
-                'varMapping' => array(),
+                'varMapping' => [],
                 'name' => $mapperName,
-            );
+            ];
         }
+    }
+
+    private function processConfigLine(string $line): void
+    {
+        $parts = explode('=', $line);
+        $viewName = trim($parts[0]);
+        $this->mapperConfig[$viewName] = [];
+
+        if (1 === count($parts)) {
+            return;
+        }
+
+        $this->parseViewConfig($viewName, trim($parts[1]));
+    }
+
+    private function parseViewConfig(string $viewName, string $config): void
+    {
+        $configParts = explode(';', $config);
+        $this->mapperConfig[$viewName]['snippet'] = trim($configParts[0]);
+        $this->mapperConfig[$viewName]['mappers'] = [];
+
+        if (!isset($configParts[1])) {
+            return;
+        }
+
+        $mappers = $this->cleanMappers(explode(',', trim($configParts[1])));
+
+        foreach ($mappers as $key => $mapperConfig) {
+            $this->mapperConfig[$viewName]['mappers'][$key] = $this->parseMapperConfig($mapperConfig);
+        }
+    }
+
+    private function cleanMappers(array $mappers): array
+    {
+        return array_filter($mappers, static function ($mapper) {
+            return '' !== trim($mapper);
+        });
+    }
+
+    private function parseMapperConfig(string $mapperConfig): array
+    {
+        $mapperConfig = rtrim($mapperConfig, ',');
+        $arrayMapping = null;
+        $varMapping = [];
+
+        $arrayPos = strpos($mapperConfig, '{');
+        $varPos = strpos($mapperConfig, '[');
+
+        if (false === $arrayPos && false === $varPos) {
+            return [
+                'name' => trim($mapperConfig),
+                'arrayMapping' => $arrayMapping,
+                'varMapping' => $varMapping,
+            ];
+        }
+
+        $splitPos = min(false === $arrayPos ? PHP_INT_MAX : $arrayPos, false === $varPos ? PHP_INT_MAX : $varPos);
+        $name = trim(substr($mapperConfig, 0, $splitPos));
+
+        $varMapping = $this->extractMappings($mapperConfig, '/\[(.*?)\]/');
+        $arrayMapping = $this->extractSingleMapping($mapperConfig, '/\{(.*?)\}/');
+
+        return [
+            'name' => $name,
+            'arrayMapping' => $arrayMapping,
+            'varMapping' => $varMapping,
+        ];
+    }
+
+    private function extractMappings(string $config, string $pattern): array
+    {
+        preg_match_all($pattern, $config, $matches);
+        $mappings = [];
+
+        if (2 === count($matches)) {
+            foreach ($matches[1] as $mapping) {
+                $parts = explode('->', $mapping);
+                $mappings[$parts[0]] = $parts[1];
+            }
+        }
+
+        return $mappings;
+    }
+
+    private function extractSingleMapping(string $config, string $pattern): ?string
+    {
+        preg_match_all($pattern, $config, $matches);
+
+        if (2 === count($matches) && !empty($matches[1])) {
+            return $matches[1][0];
+        }
+
+        return null;
     }
 }

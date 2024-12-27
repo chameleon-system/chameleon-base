@@ -11,10 +11,7 @@
 
 interface ViewMapperConfigInterface
 {
-    /**
-     * @return string
-     */
-    public function getAsString();
+    public function getAsString(): string;
 
     /**
      * @return string[]
