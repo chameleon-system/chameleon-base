@@ -317,7 +317,8 @@ class TModuleLoader
             $this->logModuleException($e, $spotName);
         } catch (Exception $e) {
             if (_DEVELOPMENT_MODE) {
-                throw new ModuleExecutionFailedException(sprintf('Error in module execution: %s in file: %s on line: %d', $e->getMessage(), $e->getFile(), $e->getLine()), 0, $e);
+                $moduleName = get_class($module);
+                throw new ModuleExecutionFailedException(sprintf('Error in module "'.$moduleName.'" at spot '.$module->sModuleSpotName.' execution: %s in file: %s on line: %d', $e->getMessage(), $e->getFile(), $e->getLine()), 0, $e);
             }
 
             $this->logModuleException($e, $spotName);
