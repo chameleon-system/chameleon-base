@@ -31,8 +31,8 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
  * $oHTMLList->AddDefaultOrderBy('description','ASC');
  * $oHTMLList->Init($oMedia,5);
  * echo $oHTMLList->Render('standard');
-
-/**/
+ *
+ * /**/
 class THTMLTable
 {
     /**
@@ -40,14 +40,14 @@ class THTMLTable
      *
      * @var int
      */
-    public $iPageSize = null;
+    public $iPageSize;
 
     /**
      * auto generated key used to identify the list.
      *
      * @var string
      */
-    public $sListIdentKey = null;
+    public $sListIdentKey;
 
     /**
      * set to true if you want to show the global search form.
@@ -75,28 +75,28 @@ class THTMLTable
      *
      * @var array
      */
-    protected $aGlobalSearchFormView = array('sViewName' => 'global-search-filter', 'sViewType' => 'Core');
+    protected $aGlobalSearchFormView = ['sViewName' => 'global-search-filter', 'sViewType' => 'Core'];
 
     /**
      * the data for the table.
      *
      * @var TCMSRecordList
      */
-    protected $oRecordList = null;
+    protected $oRecordList;
 
     /**
      * the current order by information. Has the form [field]=>direction (always use full db name for "field").
      *
      * @var array
      */
-    protected $aOrderByFields = array();
+    protected $aOrderByFields = [];
 
     /**
      * iterator of columns.
      *
      * @var TIterator
      */
-    protected $oColumns = null;
+    protected $oColumns;
 
     /**
      * current page (starting at page 1).
@@ -110,14 +110,14 @@ class THTMLTable
      *
      * @var array
      */
-    protected $aSearchData = null;
+    protected $aSearchData;
 
     /**
      * search term that is used to search through all columns.
      *
      * @var string
      */
-    protected $sGlobalSearchTerm = null;
+    protected $sGlobalSearchTerm;
 
     /**
      * holds a list of actions that can be performed on user selected records on the page. if at least one
@@ -125,20 +125,20 @@ class THTMLTable
      *
      * @var array
      */
-    protected $aActions = array();
+    protected $aActions = [];
 
     /**
      * the method within the item object to use for a css class for a row.
      *
      * @var string
      */
-    protected $sRowCSSMethodName = null;
+    protected $sRowCSSMethodName;
 
-    const URL_PARAM_PAGE = 'ipage';
-    const URL_PARAM_SEARCH = 'search';
-    const URL_PARAM_SEARCH_GLOBAL = 'gsearch';
-    const URL_PARAM_ORDER = 'order';
-    const URL_PARAM_CHANGE_PAGE_SIZE = 'iPageSize';
+    public const URL_PARAM_PAGE = 'ipage';
+    public const URL_PARAM_SEARCH = 'search';
+    public const URL_PARAM_SEARCH_GLOBAL = 'gsearch';
+    public const URL_PARAM_ORDER = 'order';
+    public const URL_PARAM_CHANGE_PAGE_SIZE = 'iPageSize';
 
     /**
      * set the method called on each row on the item to fetch a css class for that row.
@@ -175,7 +175,7 @@ class THTMLTable
         $this->oColumns = new TIterator();
 
         // add header includes (css/js)
-        $oController = TGlobal::GetController();
+        $oController = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller');
         $oController->AddHTMLHeaderLine('<link href="'.URL_USER_CMS_PUBLIC.'/blackbox/classes/THTMLTable/default.css" rel="stylesheet" type="text/css" />');
 
         $sLine = '<script src="'.URL_USER_CMS_PUBLIC.'/blackbox/classes/THTMLTable/THTMLTable.js" type="text/javascript"></script>';
@@ -185,7 +185,7 @@ class THTMLTable
     /**
      * add an action to the list.
      *
-     * @param string $sMethod      - method to call on the modul holding the list
+     * @param string $sMethod - method to call on the modul holding the list
      * @param string $sDisplayName - display name of the method
      */
     public function AddAction($sMethod, $sDisplayName)
@@ -226,10 +226,10 @@ class THTMLTable
      * initialize object using oRecordList.
      *
      * @param TCMSRecordList $oRecordList
-     * @param int            $iPageSize
-     * @param array          $aCacheTriggerTables - any tables that should trigger a cache clear other than the one passed via oRecordList
+     * @param int $iPageSize
+     * @param array $aCacheTriggerTables - any tables that should trigger a cache clear other than the one passed via oRecordList
      */
-    public function Init($oRecordList, $iPageSize = 20, $aCacheTriggerTables = array())
+    public function Init($oRecordList, $iPageSize = 20, $aCacheTriggerTables = [])
     {
         $this->iPageSize = $iPageSize;
         $this->oRecordList = $oRecordList;
@@ -262,7 +262,7 @@ class THTMLTable
         if (array_key_exists(self::URL_PARAM_ORDER, $aStateData)) {
             $this->aOrderByFields = $aStateData[self::URL_PARAM_ORDER];
             if (!is_array($this->aOrderByFields)) {
-                $this->aOrderByFields = array();
+                $this->aOrderByFields = [];
             }
         }
 
@@ -280,7 +280,7 @@ class THTMLTable
      * to change these values using get/post.
      *
      * @param string $sFieldAlias
-     * @param string $sDirection  - must be ASC or DESC
+     * @param string $sDirection - must be ASC or DESC
      */
     public function AddDefaultOrderBy($sFieldAlias, $sDirection)
     {
@@ -314,7 +314,7 @@ class THTMLTable
             $this->oColumns->GoToStart();
         }
 
-        $aFilter = array();
+        $aFilter = [];
         while ($oColumn = $this->oColumns->Next()) {
             /** @var $oColumn THTMLTableColumn */
             $sTmpFilter = $oColumn->GetFilterQueryString();
@@ -331,7 +331,7 @@ class THTMLTable
 
         // now ad global search param (if it exists)
         if (!empty($this->sGlobalSearchTerm)) {
-            $aFilter = array();
+            $aFilter = [];
             while ($oColumn = $this->oColumns->Next()) {
                 /** @var $oColumn THTMLTableColumn */
                 $sTmpFilter = $oColumn->GetFilterQueryString($this->sGlobalSearchTerm);
@@ -374,7 +374,7 @@ class THTMLTable
      */
     public function GetOrderByURL($oColumn, $sDirection)
     {
-        $aOrderByChange = array();
+        $aOrderByChange = [];
 
         $iOrderKey = '';
         if (array_key_exists($oColumn->sColumnAlias, $this->aOrderByFields)) {
@@ -390,7 +390,7 @@ class THTMLTable
             $boverwrite = false;
         }
 
-        return $this->GetURL(array(self::URL_PARAM_ORDER => $aOrderByChange), $boverwrite);
+        return $this->GetURL([self::URL_PARAM_ORDER => $aOrderByChange], $boverwrite);
     }
 
     /**
@@ -402,10 +402,10 @@ class THTMLTable
      */
     public function GetFilterURL($oColumn)
     {
-        $aSearchData = array();
+        $aSearchData = [];
         $aSearchData[$oColumn->sColumnAlias] = '';
 
-        return $this->GetURL(array(self::URL_PARAM_SEARCH => $aSearchData));
+        return $this->GetURL([self::URL_PARAM_SEARCH => $aSearchData]);
     }
 
     /**
@@ -415,7 +415,7 @@ class THTMLTable
      */
     public function GetGlobalSearchBaseURL()
     {
-        return $this->GetURL(array(self::URL_PARAM_CHANGE_PAGE_SIZE => '', self::URL_PARAM_SEARCH_GLOBAL => ''));
+        return $this->GetURL([self::URL_PARAM_CHANGE_PAGE_SIZE => '', self::URL_PARAM_SEARCH_GLOBAL => '']);
     }
 
     /**
@@ -527,7 +527,7 @@ class THTMLTable
             $iPage = 1;
         }
 
-        return $this->GetURL(array(self::URL_PARAM_PAGE => $iPage));
+        return $this->GetURL([self::URL_PARAM_PAGE => $iPage]);
     }
 
     /**
@@ -537,9 +537,9 @@ class THTMLTable
      *
      * @return string
      */
-    public function GetURL($aChangeParameters = array(), $bOverwrite = false)
+    public function GetURL($aChangeParameters = [], $bOverwrite = false)
     {
-        $aParams = array(self::URL_PARAM_ORDER => $this->aOrderByFields, self::URL_PARAM_PAGE => $this->iCurrentPage, self::URL_PARAM_SEARCH => $this->aSearchData, self::URL_PARAM_CHANGE_PAGE_SIZE => $this->iPageSize, self::URL_PARAM_SEARCH_GLOBAL => $this->sGlobalSearchTerm);
+        $aParams = [self::URL_PARAM_ORDER => $this->aOrderByFields, self::URL_PARAM_PAGE => $this->iCurrentPage, self::URL_PARAM_SEARCH => $this->aSearchData, self::URL_PARAM_CHANGE_PAGE_SIZE => $this->iPageSize, self::URL_PARAM_SEARCH_GLOBAL => $this->sGlobalSearchTerm];
 
         foreach ($aChangeParameters as $sKey => $sNewParam) {
             if (is_array($sNewParam)) {
@@ -552,7 +552,7 @@ class THTMLTable
                         } elseif (is_array($aParams[$sKey])) {
                             $aParams[$sKey][$sSubKey] = $sSubParamValue;
                         } elseif (!is_array($aParams[$sKey])) {
-                            $aParams[$sKey] = array($sSubKey => $sSubParamValue);
+                            $aParams[$sKey] = [$sSubKey => $sSubParamValue];
                         }
                     }
                 }
@@ -582,7 +582,7 @@ class THTMLTable
 
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParams);
         } else {
-            $sURL = $this->getActivePageService()->getLinkToActivePageRelative(array($this->sListIdentKey => $aParams));
+            $sURL = $this->getActivePageService()->getLinkToActivePageRelative([$this->sListIdentKey => $aParams]);
         }
 
         return $sURL;
@@ -603,7 +603,7 @@ class THTMLTable
      *
      * @return string
      */
-    public function RenderGlobalSearchForm($aCallTimeVars = array())
+    public function RenderGlobalSearchForm($aCallTimeVars = [])
     {
         return $this->Render($this->aGlobalSearchFormView['sViewName'], $this->aGlobalSearchFormView['sViewType'], $aCallTimeVars);
     }
@@ -611,13 +611,13 @@ class THTMLTable
     /**
      * used to display an article.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
@@ -656,7 +656,7 @@ class THTMLTable
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -664,6 +664,6 @@ class THTMLTable
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

@@ -122,7 +122,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     {
         $aHTMLHeadIncludes = $this->GetHTMLHeadIncludes();
         foreach ($aHTMLHeadIncludes as $sLine) {
-            $oController = TGlobal::GetController();
+            $oController = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller');
             $oController->AddHTMLHeaderLine($sLine);
         }
     }
@@ -134,7 +134,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     {
         $aIncludes = $this->GetPreBodyClosingCode();
         foreach ($aIncludes as $sLine) {
-            $oController = TGlobal::GetController();
+            $oController = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller');
             $oController->AddHTMLFooterLine($sLine);
         }
     }
