@@ -1,6 +1,7 @@
 
 .snippetMediaManagerBackendModuleStandard {
     background: #fff;
+    height: 100vh;
 }
 
 .snippetMediaManagerBackendModuleStandard:after {

@@ -232,7 +232,7 @@ class TFullGroupTable extends TGroupTable
      *
      * @var string
      */
-    protected $tableCSS = 'table table-sm table-striped table-hover TCMSListManagerFullGroupTable';
+    protected $tableCSS = 'table table-sm table-hover TCMSListManagerFullGroupTable';
 
     public function __construct($postData = array())
     {
