@@ -44,13 +44,6 @@ class TGlobalBase
     public static $PATH_TO_WEB_LIBRARY = 'chameleon/blackbox';
 
     /**
-     * a copy of all rewrite parameter - these parameters will be excluded from the GetRealURL request (since they are part of the url anyway).
-     *
-     * @var array
-     */
-    protected $aRewriteParameter = [];
-
-    /**
      * used to cache any data that may be needed globally
      * (like a list of portals, etc).
      *
@@ -65,7 +58,7 @@ class TGlobalBase
      */
     protected $oExecutingModuleObject;
 
-    protected $aFileList = [];
+    protected array $aFileList = [];
 
     /**
      * config class of the HTMLPurifier XSS filter.
@@ -74,16 +67,9 @@ class TGlobalBase
      */
     public $oHTMLPurifyConfig;
 
-    /** @var RequestStack */
-    private $requestStack;
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
+    private RequestStack $requestStack;
+    private InputFilterUtilInterface $inputFilterUtil;
+    private KernelInterface $kernel;
 
     public function __construct(RequestStack $requestStack, InputFilterUtilInterface $inputFilterUtil, KernelInterface $kernel)
     {
@@ -99,17 +85,10 @@ class TGlobalBase
 
     public function __get($sParameterName)
     {
-        if ('userData' === $sParameterName) {
-            $trace = debug_backtrace();
-            trigger_error('userData is no longer available - use \ChameleonSystem\CoreBundle\ServiceLocator::get("request_stack")->getCurrentRequest() instead in '.$trace[1]['file'].' on line '.$trace[1]['line'], E_USER_ERROR);
+        $trace = debug_backtrace();
+        trigger_error('Undefined property via __get(): '.$sParameterName.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_NOTICE);
 
-            return null;
-        } else {
-            $trace = debug_backtrace();
-            trigger_error('Undefined property via __get(): '.$sParameterName.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_NOTICE);
-
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -143,18 +122,6 @@ class TGlobalBase
     public function GetExecutingModulePointer()
     {
         return $this->oExecutingModuleObject;
-    }
-
-    /**
-     * return a pointer to the controller running the show.
-     *
-     * @return ChameleonControllerInterface
-     *
-     * @deprecated Use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller') instead
-     */
-    public static function GetController()
-    {
-        return ServiceLocator::get('chameleon_system_core.chameleon_controller');
     }
 
     /**
@@ -569,25 +536,6 @@ class TGlobalBase
     }
 
     /**
-     * @param bool $bReset
-     * @param bool $bAdd
-     *
-     * @return int
-     */
-    public static function CountCalls($bReset = false, $bAdd = false)
-    {
-        static $iCount = 0;
-        if ($bReset) {
-            $iCount = 0;
-        }
-        if ($bAdd) {
-            ++$iCount;
-        }
-
-        return $iCount;
-    }
-
-    /**
      * returns the root path to the classes directory.
      *
      * @param string $sSubType
@@ -600,14 +548,14 @@ class TGlobalBase
         $rootPath = PATH_LIBRARY.'/classes';
         switch ($sType) {
             case 'Custom-Core':
-                if ('core' == $sSubType) {
+                if ('core' === $sSubType) {
                     $rootPath = PATH_CORE_CUSTOM;
                 } else {
                     $rootPath = PATH_LIBRARY_CUSTOM.'/classes';
                 }
                 break;
             case 'Customer':
-                if ('core' == $sSubType) {
+                if ('core' === $sSubType) {
                     $rootPath = PATH_CORE_CUSTOMER;
                 } else {
                     $rootPath = PATH_LIBRARY_CUSTOMER.'/classes';
@@ -658,7 +606,7 @@ class TGlobalBase
      */
     public function getModuleRootPath($type)
     {
-        $bundlePath = self::instance()->resolveBundlePath($type);
+        $bundlePath = $this->resolveBundlePath($type);
         if (null !== $bundlePath) {
             return $bundlePath.'/objects/BackendModules/';
         }
@@ -844,29 +792,6 @@ class TGlobalBase
         $languageIsoCode = $languageService->getLanguageIsoCode($sLanguageId);
 
         return $languageIsoCode ?? '';
-    }
-
-    /**
-     * set the rewrite parameter array - note: this will be called by the rewrite manager - so you never need
-     * to call this directly yourself.
-     *
-     * @param array $aParameter
-     */
-    public function SetRewriteParameter($aParameter)
-    {
-        $this->aRewriteParameter = $aParameter;
-    }
-
-    // -----------------------------------------------------------------------
-
-    /**
-     * return the rewrite parameter.
-     *
-     * @return array
-     */
-    public function GetRewriteParameter()
-    {
-        return $this->aRewriteParameter;
     }
 
     /**

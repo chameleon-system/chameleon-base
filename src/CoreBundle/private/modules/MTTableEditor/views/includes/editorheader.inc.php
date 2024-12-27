@@ -2,7 +2,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
-$oController = TGlobal::GetController();
+$oController = ServiceLocator::get('chameleon_system_core.chameleon_controller');
 ?>
 <nav class="navbar navbar-light px-2">
     <span class="navbar-brand"><?php
