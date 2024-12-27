@@ -154,7 +154,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 $("#postalcode").blur(function () {
                     var myTmpVar = $(this).val();
                 <?php
-                $aAjaxParam = array('module_fnc' => array(TdbShop::GetInstance()->fieldShopCentralHandlerSpotName => 'ExecuteAjaxCall'), '_fnc' => 'GetCityByPostalcode', 'plz' => '');
+                $aAjaxParam = array('module_fnc' => array(\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()->fieldShopCentralHandlerSpotName => 'ExecuteAjaxCall'), '_fnc' => 'GetCityByPostalcode', 'plz' => '');
                 $sAjaxLink = '?'.str_replace('&amp;', '&', TTools::GetArrayAsURL($aAjaxParam));
                 echo "var url = '$sAjaxLink' + myTmpVar;";
                 ?>
@@ -187,7 +187,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
     <td>
         <?php
         $oCountries = TdbDataCountryList::GetList();
-        $oShop = TdbShop::GetInstance();
+        $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
         $iCountryId = $oUserAddress->fieldDataCountryId;
         if (is_null($iCountryId) || $iCountryId < 1) {
             $iCountryId = $oShop->fieldDataCountryId;

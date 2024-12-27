@@ -511,7 +511,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $oUser->Save();
             $oBillingAddress = $oUser->GetBillingAddress(true);
 
-            $oShop = TdbShop::GetInstance();
+            $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             if ($oShop->fieldSyncProfileDataWithBillingData) {
                 $oUser->SetUserBaseDataUsingAddress($oBillingAddress);
             }
