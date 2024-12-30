@@ -1366,10 +1366,6 @@
                 <source>chameleon_system_core.cms_module_update.show_all</source>
                 <target>Alle Updates anzeigen</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_update.select_single_update">
-                <source>chameleon_system_core.cms_module_update.select_single_update</source>
-                <target>Einzelnes Update ausführen (NUR ZU TESTZWECKEN)</target>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_update.updating_all_table_objects">
                 <source>chameleon_system_core.cms_module_update.updating_all_table_objects</source>
                 <target>Alle Tabellen-Objekte werden neu geschrieben ...</target>

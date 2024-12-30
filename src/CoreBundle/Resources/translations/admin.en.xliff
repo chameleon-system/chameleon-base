@@ -1368,10 +1368,6 @@
                 <source>chameleon_system_core.cms_module_update.show_all</source>
                 <target>Show all updates</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_update.select_single_update">
-                <source>chameleon_system_core.cms_module_update.select_single_update</source>
-                <target>Run single update (FOR DEBUGGING PURPOSES ONLY!)</target>
-            </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_update.updating_all_table_objects">
                 <source>chameleon_system_core.cms_module_update.updating_all_table_objects</source>
                 <target>Writing table objects to file system ...</target>

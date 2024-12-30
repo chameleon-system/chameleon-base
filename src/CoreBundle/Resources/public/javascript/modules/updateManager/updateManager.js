@@ -159,7 +159,6 @@ CHAMELEON.UPDATE_MANAGER = {
 
         $(this.config.sRunUpdatesButtonId).bind('click', function (event) {
             event.preventDefault();
-            $('#ajaxTimeoutSelect').attr('disabled', 'disabled');
 
             $(this).attr("disabled", "disabled");
             $(self.config.sGoBackButtonId).bind('click',function (event) {
@@ -178,7 +177,7 @@ CHAMELEON.UPDATE_MANAGER = {
 
         // set the ajax timeout
         $.ajaxSetup({
-            timeout: (1000 * 60 * $('#ajaxTimeoutSelect').val())
+            timeout: (1000 * 60 * 120)
         });
 
         // wait some seconds so the DOM can update
