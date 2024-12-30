@@ -14,13 +14,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * shows the CMS Document Manager component.
-/**/
+ * /**/
 class CMSDocumentManager extends TCMSModelBase
 {
-    protected $tableID = null;
-    protected $recordID = null;
-    protected $documentID = null;
-    protected $fieldName = null;
+    protected $tableID;
+    protected $recordID;
+    protected $documentID;
+    protected $fieldName;
 
     /**
      * the SQL table name that holds the tree.
@@ -34,7 +34,7 @@ class CMSDocumentManager extends TCMSModelBase
      *
      * @var TCMSTreeWidget
      */
-    protected $oTreeWidget = null;
+    protected $oTreeWidget;
 
     public function Init()
     {
@@ -104,7 +104,7 @@ class CMSDocumentManager extends TCMSModelBase
         $sPageDef = $this->global->GetUserData('pagedef');
         $oTreeWidget->Init($this->sTreeTable, $sPageDef, $this->sModuleSpotName);
         $oTreeWidget->SetContextMenuView('contextMenuAssets');
-        $oTreeWidget->SetRootNodeName(TGlobal::Translate('chameleon_system_core.document_manager.root_node_name'));
+        $oTreeWidget->SetRootNodeName(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.root_node_name'));
 
         return $oTreeWidget;
     }
@@ -130,7 +130,7 @@ class CMSDocumentManager extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('MoveNode', 'RenameNode', 'GetChildren', 'DeleteNode', 'GetWYSIWYGDocumentHTML', 'PasteFiles', 'assignConnection', 'removeConnection', 'DeleteFile', 'CheckConnectionsAndDelete', 'CheckDirItemsConnectionsAndDelete');
+        $externalFunctions = ['MoveNode', 'RenameNode', 'GetChildren', 'DeleteNode', 'GetWYSIWYGDocumentHTML', 'PasteFiles', 'assignConnection', 'removeConnection', 'DeleteFile', 'CheckConnectionsAndDelete', 'CheckDirItemsConnectionsAndDelete'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -141,9 +141,9 @@ class CMSDocumentManager extends TCMSModelBase
      */
     public function GetWYSIWYGDocumentHTML()
     {
-        $aReturnData = array();
+        $aReturnData = [];
 
-        $aItems = array();
+        $aItems = [];
         if ($this->global->UserDataExists('idList')) {
             $sIdList = $this->global->GetUserData('idList');
             if (',' == substr($sIdList, -1)) {
@@ -176,19 +176,19 @@ class CMSDocumentManager extends TCMSModelBase
       var assignedSelectedFiles = new Array(); // selected files of a list
       var _actualRowID = null;
 
-      var messageNewFolder = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_new_folder')).'\';
-      var messageFileDeleted = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_removed_documents')).'\';
-      var messageNoFolderChoosen = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_missing_folder_name')).'\';
-      var messageUploadSuccess = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_upload_success')).'\';
-      var messageUploadError = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_upload_error')).'\';
-      var messageUploadMore = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_upload_additional_files')).'\';
-      var messageErrorNoUploadData = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_no_file_selected')).'\';
-      var messageUploadNotAllowedHere = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_no_upload_to_primary_folder_allowed')).'\';
-      var messageUploadButtonTitle = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_upload')).'\';
-      var messageChooseFolderNow = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_select_target_folder')).'\';
-      var messageErrorMoveNoFiles = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_no_files_selected_for_move')).'\';
-      var messageErrorPasteNoFiles = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_no_files_selected_for_insert')).'\';
-      var messageUploadSuccessSingle = \''.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.document_manager.msg_upload_single_file_success')).'\';
+      var messageNewFolder = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_new_folder')).'\';
+      var messageFileDeleted = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_removed_documents')).'\';
+      var messageNoFolderChoosen = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_missing_folder_name')).'\';
+      var messageUploadSuccess = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_upload_success')).'\';
+      var messageUploadError = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_upload_error')).'\';
+      var messageUploadMore = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_upload_additional_files')).'\';
+      var messageErrorNoUploadData = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_no_file_selected')).'\';
+      var messageUploadNotAllowedHere = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_no_upload_to_primary_folder_allowed')).'\';
+      var messageUploadButtonTitle = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_upload')).'\';
+      var messageChooseFolderNow = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_select_target_folder')).'\';
+      var messageErrorMoveNoFiles = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_no_files_selected_for_move')).'\';
+      var messageErrorPasteNoFiles = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_no_files_selected_for_insert')).'\';
+      var messageUploadSuccessSingle = \''.TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.msg_upload_single_file_success')).'\';
       </script>';
 
         $aTreeIncludes = $this->oTreeWidget->GetHtmlHeadIncludes();
@@ -222,7 +222,7 @@ class CMSDocumentManager extends TCMSModelBase
                     }
                 }
             }
-            $returnData = array();
+            $returnData = [];
             $returnData['nodeID'] = $treeNodeID;
 
             return $returnData;
@@ -239,7 +239,7 @@ class CMSDocumentManager extends TCMSModelBase
         $returnVal = false;
         if (!empty($this->tableID) && !empty($this->recordID) && $this->global->UserDataExists('documentIDs')) {
             $documentIDs = $this->global->GetUserData('documentIDs');
-            $returnVal = array();
+            $returnVal = [];
             $returnVal['documentIDs'] = $documentIDs;
             $returnVal['fieldName'] = $this->fieldName;
 
@@ -248,7 +248,7 @@ class CMSDocumentManager extends TCMSModelBase
 
             // save base record
             $oTableEditor = new TCMSTableEditorManager();
-            /** @var $oTableEditor TCMSTableEditorManager */
+            /* @var $oTableEditor TCMSTableEditorManager */
             $oTableEditor->Init($this->tableID, $this->recordID);
 
             foreach ($aDocumentIds as $documentID) {
@@ -270,14 +270,14 @@ class CMSDocumentManager extends TCMSModelBase
         $returnVal = false;
         if (!empty($this->tableID) && !empty($this->recordID) && $this->global->UserDataExists('documentIDs')) {
             $documentIDs = $this->global->GetUserData('documentIDs');
-            $returnVal = array();
+            $returnVal = [];
             $returnVal['documentIDs'] = $documentIDs;
             $returnVal['fieldName'] = $this->fieldName;
             $aDocumentIds = explode(',', $documentIDs);
 
             // save base record
             $oTableEditor = new TCMSTableEditorManager();
-            /** @var $oTableEditor TCMSTableEditorManager */
+            /* @var $oTableEditor TCMSTableEditorManager */
             $oTableEditor->Init($this->tableID, $this->recordID);
 
             foreach ($aDocumentIds as $documentID) {
@@ -331,7 +331,7 @@ class CMSDocumentManager extends TCMSModelBase
         $foundConnectionsHTML = '';
         if (is_array($aFoundConnections) && count($aFoundConnections) > 0) {
             $oFile = new TCMSDownloadFile();
-            /** @var $oFile TCMSDownloadFile */
+            /* @var $oFile TCMSDownloadFile */
             $oFile->Load($sFileId);
             if ($bInfoOnFileDelete) {
                 $sTitle = 'chameleon_system_core.document_manager.delete_document';
@@ -343,9 +343,9 @@ class CMSDocumentManager extends TCMSModelBase
             $foundConnectionsHTML = '
         <div class="card">
             <div class="card-header">
-                '.TGlobal::Translate($sTitle, array(
+                '.TGlobal::Translate($sTitle, [
                     '%id%' => $sFileId,
-                )).'
+                ]).'
             </div>
             <div class="card-body">
                 <div>
@@ -386,7 +386,7 @@ class CMSDocumentManager extends TCMSModelBase
             }
             $foundConnectionsHTML .= '
                 </table>
-                      
+
                      ';
             if ($bInfoOnFileDelete) {
                 $foundConnectionsHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.confirm_delete_with_connections'), "javascript:SendDelete('".$sFileId."');", 'far fa-check-circle').'
@@ -407,21 +407,21 @@ class CMSDocumentManager extends TCMSModelBase
      */
     public function CheckConnectionsAndDelete()
     {
-        $returnVal = array();
+        $returnVal = [];
         $bDoNotDelete = false;
         $aTableBlackList = null;
         if ($this->global->UserDataExists('documentIDs')) {
             $aFileIDs = explode(',', $this->global->GetUserData('documentIDs'));
             if ($this->global->UserDataExists('bDoNotDelete') && true == $this->global->GetUserData('bDoNotDelete')) {
                 $bDoNotDelete = true;
-                $aTableBlackList = array('pkg_custom_search', 'pkg_custom_search_result_item');
+                $aTableBlackList = ['pkg_custom_search', 'pkg_custom_search_result_item'];
             }
             $iTableID = TTools::GetCMSTableId('cms_document');
             $oTableEditor = new TCMSTableEditorManager();
-            /** @var $oTableEditor TCMSTableEditorDocument */
+            /* @var $oTableEditor TCMSTableEditorDocument */
             foreach ($aFileIDs as $fileID) {
                 $oTableEditor->Init($iTableID, $fileID);
-                $aFoundConnections = $oTableEditor->HandleExternalFunctionCall('FetchConnections', array($fileID, $aTableBlackList));
+                $aFoundConnections = $oTableEditor->HandleExternalFunctionCall('FetchConnections', [$fileID, $aTableBlackList]);
                 $sFileConnectionInfoHtml = $this->RenderFileConnectionInfo($aFoundConnections, $fileID, !$bDoNotDelete);
                 if (!empty($sFileConnectionInfoHtml)) {
                     $returnVal[] = $sFileConnectionInfoHtml;
@@ -454,7 +454,7 @@ class CMSDocumentManager extends TCMSModelBase
         if (!is_null($fileID) && !empty($fileID) && TTools::RecordExists('cms_document', 'id', $fileID)) {
             $iTableID = TTools::GetCMSTableId('cms_document');
             $oTableEditor = new TCMSTableEditorManager();
-            /** @var $oTableEditor TCMSTableEditorDocument */
+            /* @var $oTableEditor TCMSTableEditorDocument */
             $oTableEditor->Init($iTableID, $fileID);
             $oTableEditor->Delete($fileID);
             $returnVal = true;
@@ -535,6 +535,6 @@ class CMSDocumentManager extends TCMSModelBase
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }

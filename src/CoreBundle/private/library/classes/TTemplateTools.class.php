@@ -15,12 +15,12 @@
 class TTemplateTools
 {
     /**
-     * @param string      $sName
+     * @param string $sName
      * @param string|null $sValue
-     * @param int         $iWidth
-     * @param string      $sOtherAttributes
-     * @param string      $sType
-     * @param bool        $bEmptyOnClick
+     * @param int $iWidth
+     * @param string $sOtherAttributes
+     * @param string $sType
+     * @param bool $bEmptyOnClick
      *
      * @return string
      */
@@ -38,8 +38,8 @@ class TTemplateTools
             $sClass = '';
         }
         $sXHTML = '<input '.$sClass.' '.$sEmptyField.' onfocus="this.select();" '.$sOtherAttributes.' type="'.$sType.'" style="width: '.($iWidth - 21).'px;" value="'.TGlobal::OutHTML(
-                $sValue
-            ).'" name="'.$sName.'" />';
+            $sValue
+        ).'" name="'.$sName.'" />';
 
         return $sXHTML;
     }
@@ -52,16 +52,16 @@ class TTemplateTools
      * would be fine.
      *
      * @param string $sName
-     * @param array  $aValues
-     * @param int    $iWidth
-     * @param int    $iSelected        - selected value
-     * @param array  $aOtherParameters - any other parameters you want to set in the <select>
-     *                                 tag (parameters are not encoded for html output - so make
-     *                                 sure you do this if necessary
+     * @param array $aValues
+     * @param int $iWidth
+     * @param int $iSelected - selected value
+     * @param array $aOtherParameters - any other parameters you want to set in the <select>
+     *                                tag (parameters are not encoded for html output - so make
+     *                                sure you do this if necessary
      *
      * @return string
      */
-    public static function SelectField($sName, $aValues, $iWidth = 200, $iSelected = null, $aOtherParameters = array())
+    public static function SelectField($sName, $aValues, $iWidth = 200, $iSelected = null, $aOtherParameters = [])
     {
         $sXHTML = '<select class="userinput" name="'.$sName.'" style="width: '.$iWidth.'px;">'."\n";
         $iCounter = 0;
@@ -80,12 +80,12 @@ class TTemplateTools
     }
 
     /**
-     * @param string         $sName
+     * @param string $sName
      * @param TCMSRecordList $oList
-     * @param string         $sValue
-     * @param int            $iWidth
-     * @param string         $sSelectParameters
-     * @param string         $sInitialValue
+     * @param string $sValue
+     * @param int $iWidth
+     * @param string $sSelectParameters
+     * @param string $sInitialValue
      *
      * @return string
      */
@@ -106,8 +106,8 @@ class TTemplateTools
                 $sSelected = 'selected="selected"';
             }
             $sXHTML .= '<option value="'.TGlobal::OutHTML($oItem->id)."\" {$sSelected}>".TGlobal::OutHTML(
-                    $oItem->GetName()
-                )."</option>\n";
+                $oItem->GetName()
+            )."</option>\n";
         }
         $sXHTML .= "\t\t".'</select>'."\n";
 
@@ -140,7 +140,7 @@ class TTemplateTools
      */
     public static function OpenDynamicBox($bDefaultOpen = true)
     {
-        static $aIdList = array();
+        static $aIdList = [];
         $iId = md5(rand());
         while (in_array($iId, $aIdList)) {
             $iId = md5(rand());
@@ -148,15 +148,15 @@ class TTemplateTools
         $aIdList[] = $iId;
         echo '<div class="dynamicBlock" id="dynamicBlock'.$iId.'">';
         echo '<a href="javascript:void(0);" class="actionLinkHide" onclick="$(\'#dynamicBlock'.$iId.' .dynamicBlockContent\').hide();$(this).hide();$(\'#dynamicBlock'.$iId.' .actionLinkShow\').show()">'.TGlobal::OutHTML(
-                TGlobal::Translate('chameleon_system_core.template_tool.hide_dynamic_box')
-            ).' <img src="/static/images/icons/arrow_square_downwards_op.png" alt="'.TGlobal::OutHTML(
-                TGlobal::Translate('chameleon_system_core.template_tool.hide_dynamic_box')
-            ).'" border="0"></a>';
+            ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_tool.hide_dynamic_box')
+        ).' <img src="/static/images/icons/arrow_square_downwards_op.png" alt="'.TGlobal::OutHTML(
+            ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_tool.hide_dynamic_box')
+        ).'" border="0"></a>';
         echo '<a href="javascript:void(0);" class="actionLinkShow" onclick="$(\'#dynamicBlock'.$iId.' .dynamicBlockContent\').show();$(this).hide();$(\'#dynamicBlock'.$iId.' .actionLinkHide\').show()">'.TGlobal::OutHTML(
-                TGlobal::Translate('chameleon_system_core.template_tool.show_dynamic_box')
-            ).' <img src="/static/images/icons/arrow_square_op.png" alt="'.TGlobal::OutHTML(
-                TGlobal::Translate('chameleon_system_core.template_tool.show_dynamic_box')
-            ).'" border="0"></a>';
+            ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_tool.show_dynamic_box')
+        ).' <img src="/static/images/icons/arrow_square_op.png" alt="'.TGlobal::OutHTML(
+            ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_tool.show_dynamic_box')
+        ).'" border="0"></a>';
         echo '
         <script type="text/javascript">
           /* <![CDATA[ */
@@ -188,10 +188,10 @@ class TTemplateTools
     {
         echo '<script type="text/javascript">/* <![CDATA[ */';
         echo 'document.write("<a href=\"javascript:void(0);\" class=\"'.$sClass.'\" onclick=\"'.$sOnClick.';return false;\">'.TGlobal::OutHTML(
-                $sText
-            ).'<\/a>");';
+            $sText
+        ).'<\/a>");';
         echo '/* ]]> */ </script><noscript><input type="submit" class="submitbutton" value="'.TGlobal::OutHTML(
-                $sText
-            ).'" /></noscript>';
+            $sText
+        ).'" /></noscript>';
     }
 }

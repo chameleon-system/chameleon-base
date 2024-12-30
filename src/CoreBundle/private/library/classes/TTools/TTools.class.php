@@ -851,7 +851,7 @@ class TTools
         static $aCodeList;
         if (!$aCodeList) {
             $aCodeList = [
-                UPLOAD_ERR_INI_SIZE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_to_large'),
+                UPLOAD_ERR_INI_SIZE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
                 UPLOAD_ERR_FORM_SIZE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_to_large'),
                 UPLOAD_ERR_PARTIAL => TGlobal::Translate('chameleon_system_core.field_document.upload_error_interrupted'),
                 UPLOAD_ERR_NO_FILE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_no_file'),

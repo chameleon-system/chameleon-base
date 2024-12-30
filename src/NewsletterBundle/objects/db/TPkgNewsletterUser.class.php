@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
 {
-    const URL_USER_ID_PARAMETER = 'TPkgNewsletterUserId';
+    public const URL_USER_ID_PARAMETER = 'TPkgNewsletterUserId';
 
     /**
      * Get newsletter user for given email and active portal.
@@ -33,7 +33,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $portal = self::getPortalDomainServiceStatic()->getActivePortal();
         $newsletterUser = TdbPkgNewsletterUser::GetNewInstance();
         if (!is_null($portal)) {
-            if (!$newsletterUser->LoadFromFields(array('email' => $sEmail, 'cms_portal_id' => $portal->id))) {
+            if (!$newsletterUser->LoadFromFields(['email' => $sEmail, 'cms_portal_id' => $portal->id])) {
                 $newsletterUser = null;
             }
         } else {
@@ -66,8 +66,8 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
                 $newsletterUserLoaded = false;
                 $newsletterLoadedOnlyFromEMail = false;
                 if (!is_null($oPortal)) {
-                    if (!$newsletterUser->LoadFromFields(array('data_extranet_user_id' => $user->id, 'cms_portal_id' => $oPortal->id))) {
-                        if ($newsletterUser->LoadFromFields(array('email' => $user->GetUserEMail(), 'cms_portal_id' => $oPortal->id))) {
+                    if (!$newsletterUser->LoadFromFields(['data_extranet_user_id' => $user->id, 'cms_portal_id' => $oPortal->id])) {
+                        if ($newsletterUser->LoadFromFields(['email' => $user->GetUserEMail(), 'cms_portal_id' => $oPortal->id])) {
                             $newsletterLoadedOnlyFromEMail = true;
                         }
                     } else {
@@ -114,7 +114,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     public function CompareNewsletterLists($oAvailableNewsletterList)
     {
-        $availableForUserList = array();
+        $availableForUserList = [];
         while ($availableNewsletter = $oAvailableNewsletterList->Next()) {
             if (!$this->HasConnection('pkg_newsletter_group_mlt', $availableNewsletter->id)) {
                 $availableForUserList[$availableNewsletter->id] = $availableNewsletter;
@@ -174,7 +174,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
                 $oNewsletterConfirmation->AllowEditByAll();
                 $oNewsletterConfirmation->Save();
                 $oNewsletterConfirmation->AllowEditByAll(false);
-                $aNewsletterGroupIdList = array($oNewsletterConfirmation->sqlData['pkg_newsletter_group_id']);
+                $aNewsletterGroupIdList = [$oNewsletterConfirmation->sqlData['pkg_newsletter_group_id']];
                 $this->AddNewsletterGroupConnection($aNewsletterGroupIdList, true);
             }
         }
@@ -189,9 +189,9 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     public function GetLinkConfirmRegistration($oNewsletterConfig = null)
     {
-        $linkParams = array(
+        $linkParams = [
             'optincode' => $this->sqlData['optincode'],
-        );
+        ];
         if (is_null($oNewsletterConfig)) {
             try {
                 return $this->getSystemPageService()->getLinkToSystemPageAbsolute('newsletterconfirm', $linkParams);
@@ -210,11 +210,11 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
 
     /**
      * @param string $sModuleInstanceId
-     * @param array  $aLinkParams
+     * @param array $aLinkParams
      *
      * @return string
      */
-    public function GetNewsletterModuleLink($sModuleInstanceId, $aLinkParams = array())
+    public function GetNewsletterModuleLink($sModuleInstanceId, $aLinkParams = [])
     {
         $portal = self::getPortalDomainServiceStatic()->getActivePortal();
         $moduleInstance = TdbCmsTplModuleInstance::GetNewInstance();
@@ -254,7 +254,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * Get link for page where newsletter sign out module was configured at.
      *
      * @param string $sPkgNewsletterGroupId
-     * @param array  $aURLParameter
+     * @param array $aURLParameter
      *
      * @return string
      */
@@ -272,22 +272,22 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * Get link parameter for unsubscribe link.
      *
      * @param string $sPkgNewsletterGroupId
-     * @param string|false   $sUnsubscribeCode      if given, add opt-out-key to link (use with new newsletter module).O
-     *                                      Otherwise generate link for old newsletter module.
+     * @param string|false $sUnsubscribeCode if given, add opt-out-key to link (use with new newsletter module).O
+     *                                       Otherwise generate link for old newsletter module.
      *
      * @return array<string, mixed>
      */
     protected function GetUnsubscribeLinkParameter($sPkgNewsletterGroupId, $sUnsubscribeCode = false)
     {
         if (false === $sUnsubscribeCode) {
-            $params = array(
-                MTPkgNewsletterSignoutCore::URL_PARAM_DATA => array(
+            $params = [
+                MTPkgNewsletterSignoutCore::URL_PARAM_DATA => [
                     MTPkgNewsletterSignoutCore::URL_PARAM_NEWSLETTER_USER_ID => $this->id,
                     MTPkgNewsletterSignoutCore::URL_PARAM_GROUP_ID => $sPkgNewsletterGroupId,
-                ),
-            );
+                ],
+            ];
         } else {
-            $params = array('optoutcode' => $sUnsubscribeCode);
+            $params = ['optoutcode' => $sUnsubscribeCode];
         }
 
         return $params;
@@ -297,7 +297,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * Get unsubscribe link with opt-out-code to unsubscribe user without double opt-out-email.
      *
      * @param string|array $sPkgNewsletterGroupId
-     * @param bool         $bUnsubscribeCodeForAll
+     * @param bool $bUnsubscribeCodeForAll
      *
      * @return string
      */
@@ -307,7 +307,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         if (false === $bUnsubscribeCodeForAll) {
             $newsletterConfirmationList = $this->GetFieldPkgNewsletterConfirmationList();
             if (is_array($sPkgNewsletterGroupId)) {
-                $unsubscribeCode = array();
+                $unsubscribeCode = [];
                 while ($oNewsletterConfirmation = $newsletterConfirmationList->Next()) {
                     if (in_array($oNewsletterConfirmation->fieldPkgNewsletterGroupId, $sPkgNewsletterGroupId)) {
                         $unsubscribeCode[] = $this->SetOptOutCodeToConfirmation($oNewsletterConfirmation);
@@ -415,7 +415,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     protected function getFieldWhitelistForLoadByRow()
     {
-        $allowList = array('email', 'data_extranet_salutation_id', 'lastname', 'firstname', 'cms_portal_id', 'company');
+        $allowList = ['email', 'data_extranet_salutation_id', 'lastname', 'firstname', 'cms_portal_id', 'company'];
 
         return $allowList;
     }
@@ -486,9 +486,9 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         }
 
         if (is_null($salutation)) {
-            $data['sFullName'] = implode(' ', array($this->fieldFirstname, $this->fieldLastname));
+            $data['sFullName'] = implode(' ', [$this->fieldFirstname, $this->fieldLastname]);
         } else {
-            $data['sFullName'] = implode(' ', array($salutation->GetName(), $this->fieldFirstname, $this->fieldLastname));
+            $data['sFullName'] = implode(' ', [$salutation->GetName(), $this->fieldFirstname, $this->fieldLastname]);
         }
         $mail->AddDataArray($data);
         if (empty($data['sFullName'])) {
@@ -498,7 +498,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $mail->SendUsingObjectView('emails', 'Customer');
     }
 
-    //------ Functions for new newslettermodule--------------------------------
+    // ------ Functions for new newslettermodule--------------------------------
 
     /**
      * after updating a confirmation save new opt-in code to newsletter user.
@@ -539,16 +539,16 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     /**
      * save one confirmation for each chosen newsletter group and updates mlt connections from newsletter user to confirmation.
      *
-     * @param array                              $aNewsletterList   list with newslettergroupids
+     * @param array $aNewsletterList list with newslettergroupids
      * @param TdbPkgNewsletterModuleSignupConfig $oNewsletterConfig
      *
      * @return bool $bDoConfirmationUpdate true = add or update a confirmation , false = no add/update
      */
     public function SaveNewsletterConfirmations($aNewsletterList, $oNewsletterConfig = null)
     {
-        $updateNewsletterGroupIdList = array();
+        $updateNewsletterGroupIdList = [];
         $newsletterConfirmationList = $this->GetFieldPkgNewsletterConfirmationList();
-        //Get the length here because length uses lazy loading and CreateConfirmation can change the length.
+        // Get the length here because length uses lazy loading and CreateConfirmation can change the length.
         $confirmationListCount = $newsletterConfirmationList->Length();
         $doConfirmationUpdate = false;
         foreach ($aNewsletterList as $newsletterGroupId) {
@@ -613,7 +613,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * by default none confirmed confirmation will be created.
      *
      * @param string $sNewsletterId
-     * @param bool   $bCreateConfirmed
+     * @param bool $bCreateConfirmed
      *
      * @return TdbPkgNewsletterConfirmation $oNewsletterConfirmation
      */
@@ -657,10 +657,10 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     public function ConfirmSignupNew($aNewData = null)
     {
         $wasSignedUp = false;
-        $this->aResultCache = array();
+        $this->aResultCache = [];
         $confirmationList = $this->GetFieldPkgNewsletterConfirmationList();
         if (!is_null($confirmationList) && $confirmationList->Length() > 0) {
-            $newsletterGroupIdList = array();
+            $newsletterGroupIdList = [];
             while ($confirmation = $confirmationList->Next()) {
                 if ('1' != $confirmation->sqlData['confirmation']) {
                     $confirmation->sqlData['confirmation_date'] = date('Y-m-d H:i:s');
@@ -752,7 +752,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     public function RemoveNewsletterGroupConnection($aNewsletterGroupSignOutList)
     {
-        $newNewsletterGroupIdList = array();
+        $newNewsletterGroupIdList = [];
         $signedInNewsletterGroupIdList = $this->GetMLTIdList('pkg_newsletter_group', 'pkg_newsletter_group_mlt');
         foreach ($signedInNewsletterGroupIdList as $sNewsletterGroupId) {
             if (!in_array($sNewsletterGroupId, $aNewsletterGroupSignOutList)) {
@@ -777,7 +777,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     public function RemoveConfirmationConnection($aNewsletterGroupSignOutList)
     {
-        $newNewsletterConfirmationIdList = array();
+        $newNewsletterConfirmationIdList = [];
         $signedInConfirmationList = $this->GetFieldPkgNewsletterConfirmationList();
         while ($signedInConfirmation = $signedInConfirmationList->Next()) {
             if (!in_array($signedInConfirmation->fieldPkgNewsletterGroupId, $aNewsletterGroupSignOutList)) {
@@ -817,9 +817,9 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $data['linkblock'] = $this->GenerateLinkBlock($link);
         $data['link'] = $this->GenerateLinkBlock($link, false);
         if (is_null($salutation)) {
-            $data['sFullName'] = implode(' ', array($this->fieldFirstname, $this->fieldLastname));
+            $data['sFullName'] = implode(' ', [$this->fieldFirstname, $this->fieldLastname]);
         } else {
-            $data['sFullName'] = implode(' ', array($salutation->GetName(), $this->fieldFirstname, $this->fieldLastname));
+            $data['sFullName'] = implode(' ', [$salutation->GetName(), $this->fieldFirstname, $this->fieldLastname]);
         }
         $mail->AddDataArray($data);
         if (empty($data['sFullName'])) {
@@ -834,7 +834,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * generate link-block for email to confirm a sign-out.
      *
      * @param array $aLinks (Key is used as linkname and value is the real link)
-     * @param bool  $bHtml  generate html code or text code
+     * @param bool $bHtml generate html code or text code
      *
      * @return string $sLinkBlock return all links as string
      */
@@ -860,12 +860,12 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
     protected function GetOptOutConfirmationLink()
     {
         $confirmationList = $this->GetFieldPkgNewsletterConfirmationList();
-        $link = array();
-        $aParameter = array('optoutcode' => $this->SetOptOutCodeToNewsletterUser());
+        $link = [];
+        $aParameter = ['optoutcode' => $this->SetOptOutCodeToNewsletterUser()];
         if ($confirmationList->Length() > 1) {
-            $link[TGlobal::Translate('chameleon_system_newsletter.action.unsubscribe_all')] = $this->getActivePageService()->getLinkToActivePageAbsolute($aParameter).'  ';
+            $link[ServiceLocator::get('translator')->trans('chameleon_system_newsletter.action.unsubscribe_all')] = $this->getActivePageService()->getLinkToActivePageAbsolute($aParameter).'  ';
         } elseif ($confirmationList->Length() < 1) {
-            $link[TGlobal::Translate('chameleon_system_newsletter.action.unsubscribe')] = $this->getActivePageService()->getLinkToActivePageAbsolute($aParameter).'  ';
+            $link[ServiceLocator::get('translator')->trans('chameleon_system_newsletter.action.unsubscribe')] = $this->getActivePageService()->getLinkToActivePageAbsolute($aParameter).'  ';
         }
         while ($confirmation = $confirmationList->Next()) {
             $newsletterGroup = TdbPkgNewsletterGroup::GetNewInstance();
@@ -885,9 +885,9 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      */
     public function GetOptOutConfirmationLinkForConfirmation($oConfirmation)
     {
-        return $this->getActivePageService()->getLinkToActivePageAbsolute(array(
+        return $this->getActivePageService()->getLinkToActivePageAbsolute([
             'optoutcode' => $this->SetOptOutCodeToConfirmation($oConfirmation),
-        ));
+        ]);
     }
 
     /**
@@ -936,7 +936,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * Sign out Newsletter.
      *
      * @param array $aNewsletterGroupSignOutList if is only a string then the signout came from old singout module so confirmed is set to true
-     * @param bool  $bConfirmSignOut             sign out was confirmed -> delete all confirmations with newslettergroups in $aNewsletterGroupSignOutList
+     * @param bool $bConfirmSignOut sign out was confirmed -> delete all confirmations with newslettergroups in $aNewsletterGroupSignOutList
      *
      * @return bool
      */
@@ -945,9 +945,9 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $signedOut = true;
         $user = TdbDataExtranetUser::GetInstance();
         if (!is_array($aNewsletterGroupSignOutList)) {
-            $aNewsletterGroupSignOutList = array($aNewsletterGroupSignOutList);
+            $aNewsletterGroupSignOutList = [$aNewsletterGroupSignOutList];
         }
-        if ((!$user->IsLoggedIn() && !$bConfirmSignOut)) {
+        if (!$user->IsLoggedIn() && !$bConfirmSignOut) {
             $signedOut = $this->SendDoubleOptOutMail();
         } else {
             $noDeleteNewsletterUser = $this->RemoveNewsletterGroupConnection($aNewsletterGroupSignOutList);
@@ -985,7 +985,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      *
      * @return void
      */
-    public function SendSignOutConfirmation($aNewsletterGroupSignOutList = array())
+    public function SendSignOutConfirmation($aNewsletterGroupSignOutList = [])
     {
         $mail = TdbDataMailProfile::GetProfile('newsletter-sign-out-confirmation');
         $data = $this->sqlData;
@@ -1001,31 +1001,31 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $data['signoutinfo'] = '';
         $data['polite-signoutinfo'] = '';
         if (is_array($aNewsletterGroupSignOutList) && count($aNewsletterGroupSignOutList) > 0) {
-            $data['signoutinfo'] .= TGlobal::Translate('chameleon_system_newsletter.text.group_unsubscribe_info').' <br />';
-            $data['polite-signoutinfo'] .= TGlobal::Translate('chameleon_system_newsletter.text.group_unsubscribe_info_formal').' <br />';
+            $data['signoutinfo'] .= ServiceLocator::get('translator')->trans('chameleon_system_newsletter.text.group_unsubscribe_info').' <br />';
+            $data['polite-signoutinfo'] .= ServiceLocator::get('translator')->trans('chameleon_system_newsletter.text.group_unsubscribe_info_formal').' <br />';
             $oNewsletterGroup = TdbPkgNewsletterGroup::GetNewInstance();
             foreach ($aNewsletterGroupSignOutList as $sNewsletterGroupID) {
                 $oNewsletterGroup->Load($sNewsletterGroupID);
                 $data['signoutinfo'] .= $oNewsletterGroup->GetName().'<br />';
                 $data['polite-signoutinfo'] .= $oNewsletterGroup->GetName().'<br />';
             }
-            //$aData['signoutinfo'] .= implode('<br />', $aNewsletterGroupSignOutList);
+            // $aData['signoutinfo'] .= implode('<br />', $aNewsletterGroupSignOutList);
         }
         $groupList = $this->GetSignedInNewsletterList();
         $groupList->GoToStart();
         $hasGroups = false;
         if ($groupList->Length() != count($aNewsletterGroupSignOutList)) {
             while ($oGroup = $groupList->Next()) {
-                $data['signoutinfo'] .= '<br />'.TGlobal::Translate('chameleon_system_newsletter.text.list_of_subscribed_groups').' <br/>';
-                $data['polite-signoutinfo'] .= '<br />'.TGlobal::Translate('chameleon_system_newsletter.text.list_of_subscribed_groups_polite').' <br/>';
+                $data['signoutinfo'] .= '<br />'.ServiceLocator::get('translator')->trans('chameleon_system_newsletter.text.list_of_subscribed_groups').' <br/>';
+                $data['polite-signoutinfo'] .= '<br />'.ServiceLocator::get('translator')->trans('chameleon_system_newsletter.text.list_of_subscribed_groups_polite').' <br/>';
                 $data['signoutinfo'] .= $oGroup->GetName().'<br />';
                 $data['polite-signoutinfo'] .= $oGroup->GetName().'<br />';
                 $hasGroups = true;
             }
         }
         if (!$hasGroups) {
-            $data['signoutinfo'] .= TGlobal::Translate('chameleon_system_newsletter.text.unsubscribed');
-            $data['polite-signoutinfo'] .= TGlobal::Translate('chameleon_system_newsletter.text.unsubscribed_polite');
+            $data['signoutinfo'] .= ServiceLocator::get('translator')->trans('chameleon_system_newsletter.text.unsubscribed');
+            $data['polite-signoutinfo'] .= ServiceLocator::get('translator')->trans('chameleon_system_newsletter.text.unsubscribed_polite');
         }
         $mail->AddDataArray($data);
         $mail->ChangeToAddress($this->fieldEmail, $this->fieldEmail);
@@ -1042,7 +1042,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
         $oFoundNewsletterUser = TdbPkgNewsletterUser::GetNewInstance();
         $oPortal = self::getPortalDomainServiceStatic()->getActivePortal();
         if (!is_null($oPortal)) {
-            $oFoundNewsletterUser->LoadFromFields(array('email' => $this->fieldEmail, 'cms_portal_id' => $oPortal->id));
+            $oFoundNewsletterUser->LoadFromFields(['email' => $this->fieldEmail, 'cms_portal_id' => $oPortal->id]);
         } else {
             $oFoundNewsletterUser->LoadFromField('email', $this->fieldEmail);
         }

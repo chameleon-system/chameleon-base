@@ -29,8 +29,8 @@ class CMSUserRightsOverview extends TModelBase
     {
         $sRightsOverview = '';
         $oCmsUserList = TdbCmsUserList::GetList();
-        /** @var $oCmsUserList TdbCmsUserList */
-        $oCmsUserList->ChangeOrderBy(array('`cms_user`.`name`' => 'ASC'));
+        /* @var $oCmsUserList TdbCmsUserList */
+        $oCmsUserList->ChangeOrderBy(['`cms_user`.`name`' => 'ASC']);
         $count = 0;
         while ($oCmsUser = $oCmsUserList->Next()) {
             /** @var $oCmsUser TdbCmsUser */
@@ -41,10 +41,10 @@ class CMSUserRightsOverview extends TModelBase
             $sRightsOverview .= '<h1'.$sPageBreak.'>'.$oCmsUser->GetName()."</h1>\n";
             ++$count;
 
-            $sRightsOverview .= '<h2>'.TGlobal::Translate('chameleon_system_core.cms_module_cms_user_rights_overview.portal')."</h2>\n";
+            $sRightsOverview .= '<h2>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_cms_user_rights_overview.portal')."</h2>\n";
             $oPortals = $oCmsUser->GetFieldCmsPortalList();
             while ($oPortal = $oPortals->Next()) {
-                /** @var $oPortal TdbCmsPortal */
+                /* @var $oPortal TdbCmsPortal */
                 $sRightsOverview .= $oPortal->GetName().', ';
             }
 
@@ -53,32 +53,32 @@ class CMSUserRightsOverview extends TModelBase
             }
 
             // Groups
-            $aGroupIDs = array();
-            $sRightsOverview .= '<h2>'.TGlobal::Translate('chameleon_system_core.cms_module_cms_user_rights_overview.groups')."</h2>\n";
+            $aGroupIDs = [];
+            $sRightsOverview .= '<h2>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_cms_user_rights_overview.groups')."</h2>\n";
             $oGroups = $oCmsUser->GetFieldCmsUsergroupList();
             while ($oGroup = $oGroups->Next()) {
-                /** @var $oGroup TdbCmsUserGroup */
+                /* @var $oGroup TdbCmsUserGroup */
                 $sRightsOverview .= $oGroup->GetName().', ';
                 $aGroupIDs[] = $oGroup->id;
             }
 
             $databaseConnection = $this->getDatabaseConnection();
-            $groupIdListString = implode(',', array_map(array($databaseConnection, 'quote'), $aGroupIDs));
+            $groupIdListString = implode(',', array_map([$databaseConnection, 'quote'], $aGroupIDs));
 
             if (', ' == substr($sRightsOverview, -2)) {
                 $sRightsOverview = substr($sRightsOverview, 0, -2);
             }
 
             // Roles
-            $aRights = array();
+            $aRights = [];
             $sRightsOverview .= "<table>
           <tr>
             <td>\n";
-            $sRightsOverview .= '<h2>'.TGlobal::Translate('chameleon_system_core.cms_module_cms_user_rights_overview.rolls').'</h2>
+            $sRightsOverview .= '<h2>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_cms_user_rights_overview.rolls').'</h2>
            ';
             $oRoles = $oCmsUser->GetFieldCmsRoleList();
             while ($oRole = $oRoles->Next()) {
-                /** @var $oRole TdbCmsRole */
+                /* @var $oRole TdbCmsRole */
                 $sRightsOverview .= '<strong>'.$oRole->GetName().'</strong>';
                 $quotedRoleId = $databaseConnection->quote($oRole->id);
 
@@ -105,7 +105,7 @@ class CMSUserRightsOverview extends TModelBase
                     $sRightsOverview .= '<table style="margin-left: 10px;">
             <tr>
               <td>
-                <u>'.TGlobal::Translate('chameleon_system_core.cms_module_cms_user_rights_overview.permission_create_new').'</u><br />
+                <u>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_cms_user_rights_overview.permission_create_new').'</u><br />
               ';
                     $sRightsOverview .= $sTableRight;
                     $sRightsOverview .= '</td>
@@ -130,7 +130,7 @@ class CMSUserRightsOverview extends TModelBase
                     $sRightsOverview .= '<table style="margin-left: 10px;">
             <tr>
               <td>
-                <u>'.TGlobal::Translate('chameleon_system_core.cms_module_cms_user_rights_overview.permission_edit').'</u><br />
+                <u>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_cms_user_rights_overview.permission_edit').'</u><br />
               ';
                     $sRightsOverview .= $sTableRight;
                     $sRightsOverview .= '</td>
@@ -155,7 +155,7 @@ class CMSUserRightsOverview extends TModelBase
                     $sRightsOverview .= '<table style="margin-left: 10px;">
             <tr>
               <td>
-                <u>'.TGlobal::Translate('chameleon_system_core.cms_module_cms_user_rights_overview.permission_delete').'</u><br />
+                <u>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_cms_user_rights_overview.permission_delete').'</u><br />
               ';
                     $sRightsOverview .= $sTableRight;
                     $sRightsOverview .= '</td>
@@ -180,7 +180,7 @@ class CMSUserRightsOverview extends TModelBase
                     $sRightsOverview .= '<table style="margin-left: 10px;">
             <tr>
               <td>
-                <u>'.TGlobal::Translate('chameleon_system_core.cms_module_cms_user_rights_overview.permission_change_all').'</u><br />
+                <u>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_cms_user_rights_overview.permission_change_all').'</u><br />
               ';
                     $sRightsOverview .= $sTableRight;
                     $sRightsOverview .= '</td>
@@ -205,7 +205,7 @@ class CMSUserRightsOverview extends TModelBase
                     $sRightsOverview .= '<table style="margin-left: 10px;">
             <tr>
               <td>
-                <u>'.TGlobal::Translate('chameleon_system_core.cms_module_cms_user_rights_overview.permission_translate').'</u><br />
+                <u>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_cms_user_rights_overview.permission_translate').'</u><br />
               ';
                     $sRightsOverview .= $sTableRight;
                     $sRightsOverview .= '</td>
@@ -222,7 +222,7 @@ class CMSUserRightsOverview extends TModelBase
                 $sRightsOverview = substr($sRightsOverview, 0, -2);
             }
 
-            $sRightsOverview .= '<h2>'.TGlobal::Translate('chameleon_system_core.cms_module_cms_user_rights_overview.headline')."</h2>\n";
+            $sRightsOverview .= '<h2>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_cms_user_rights_overview.headline')."</h2>\n";
             foreach ($aRights as $sRight) {
                 $sRightsOverview .= $sRight.', ';
             }
@@ -244,6 +244,6 @@ class CMSUserRightsOverview extends TModelBase
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
     }
 }

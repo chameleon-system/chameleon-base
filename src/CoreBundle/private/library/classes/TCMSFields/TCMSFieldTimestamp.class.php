@@ -14,10 +14,9 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 
 /**
  * a timestamp.
-/**/
+ * /**/
 class TCMSFieldTimestamp extends TCMSField implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
@@ -28,8 +27,8 @@ class TCMSFieldTimestamp extends TCMSField implements DoctrineTransformableInter
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => 'null',
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -54,20 +53,19 @@ class TCMSFieldTimestamp extends TCMSField implements DoctrineTransformableInter
         ])->render();
     }
 
-
     public function GetHTML()
     {
         $newdate = $this->ConvertPostDataToSQL();
         $html = '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($newdate).'" />';
 
-        $variablesArray = array();
+        $variablesArray = [];
         if (!empty($this->data)) {
             $valArray = explode(' ', $this->data);
             $dateArray = explode('-', $valArray[0]);
             $timeArray = explode(':', $valArray[1]);
 
             $variablesArray['%timestamp%'] = TGlobal::OutHTML($dateArray[2].'.'.$dateArray[1].'.'.$dateArray[0].' '.$timeArray[0].':'.$timeArray[1].':'.$timeArray[2]);
-            $html .= TGlobal::Translate('chameleon_system_core.field_timestamp.last_change', $variablesArray);
+            $html .= ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_timestamp.last_change', $variablesArray);
         } else {
             $year = date('Y');
             $month = date('m');
@@ -77,7 +75,7 @@ class TCMSFieldTimestamp extends TCMSField implements DoctrineTransformableInter
             $seconds = date('s');
 
             $variablesArray['%timestamp%'] = "{$day}.{$month}.{$year} {$hour}:{$minutes}:{$seconds}";
-            $html .= TGlobal::Translate('chameleon_system_core.field_timestamp.will_be_set_to', $variablesArray);
+            $html .= ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_timestamp.will_be_set_to', $variablesArray);
         }
 
         return $html;
@@ -86,8 +84,6 @@ class TCMSFieldTimestamp extends TCMSField implements DoctrineTransformableInter
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
-     *
-     * @return mixed
      */
     public function ConvertPostDataToSQL()
     {

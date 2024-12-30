@@ -21,10 +21,9 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
  * - optional you can set a comma seperated list of file extensions that you want to list via param: "filetypes=jpg,png,gif"
  * - if no filetypes are set it will list only directories
  *
-/**/
+ * /**/
 class TCMSFieldLookupDirectory extends TCMSField implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
@@ -35,8 +34,8 @@ class TCMSFieldLookupDirectory extends TCMSField implements DoctrineTransformabl
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -67,7 +66,7 @@ class TCMSFieldLookupDirectory extends TCMSField implements DoctrineTransformabl
         $this->GetOptions();
 
         $html = '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" class=\"form-control form-control-sm\">\n";
-        $chooseMessage = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
+        $chooseMessage = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected');
         $html .= '<option value="">'.TGlobal::OutHTML($chooseMessage)."</option>\n";
         $html .= '<option value="">'.TGlobal::OutHTML('-------------------------------------------')."</option>\n";
 
@@ -89,10 +88,10 @@ class TCMSFieldLookupDirectory extends TCMSField implements DoctrineTransformabl
      */
     public function GetOptions()
     {
-        $this->options = array();
+        $this->options = [];
 
         // get fieldtypes from field config
-        $aFileTypes = array();
+        $aFileTypes = [];
         $sFileTypes = $this->oDefinition->GetFieldtypeConfigKey('filetypes');
         if (!empty($sFileTypes)) {
             if (stristr($sFileTypes, ',')) {
@@ -115,7 +114,7 @@ class TCMSFieldLookupDirectory extends TCMSField implements DoctrineTransformabl
                         // we need to check for fileExtensions
                         if (count($aFileTypes) > 0) {
                             if (is_file($sDirectory.'/'.$file)) {
-                                $extension = mb_substr($file, (mb_strrpos($file, '.') ? mb_strrpos($file, '.') + 1 : mb_strlen($file)), mb_strlen($file));
+                                $extension = mb_substr($file, mb_strrpos($file, '.') ? mb_strrpos($file, '.') + 1 : mb_strlen($file), mb_strlen($file));
                                 $extension = strtolower($extension);
                                 if (in_array($extension, $aFileTypes)) {
                                     $formattedFileName = $this->FormatFileName($file);

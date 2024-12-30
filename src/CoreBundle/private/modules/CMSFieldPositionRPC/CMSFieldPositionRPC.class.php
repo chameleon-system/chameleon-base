@@ -22,7 +22,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('GetSortElements', 'SavePosChange');
+        $externalFunctions = ['GetSortElements', 'SavePosChange'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -42,7 +42,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
         $bRestrictedFieldIsMLTConnection = false;
 
         $oFieldConf = TdbCmsFieldConf::GetNewInstance();
-        $oFieldConf->LoadFromFields(array('name' => $sFieldName, 'cms_tbl_conf_id' => $sTableID));
+        $oFieldConf->LoadFromFields(['name' => $sFieldName, 'cms_tbl_conf_id' => $sTableID]);
         $sPermanentRestrictionField = $oFieldConf->GetFieldtypeConfigKey('sPermanentRestrictionField');
 
         if ($sPermanentRestrictionField) {
@@ -56,7 +56,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
 
         $sHTML = "<ul id=\"posList\" class=\"list-group\">\n";
 
-        $sHTML .= $this->GetListItems($sTableSQLName, $sRecordID, $sFieldName, $sRestrictionField, $sRestriction, ('cms_field_conf' == $sTableSQLName));
+        $sHTML .= $this->GetListItems($sTableSQLName, $sRecordID, $sFieldName, $sRestrictionField, $sRestriction, 'cms_field_conf' == $sTableSQLName);
 
         $sHTML .= "</ul>\n";
 
@@ -91,7 +91,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
 
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableSQLName).'List';
         /** @var $oPositionList TCMSRecordList */
-        $oPositionList = call_user_func_array(array($sClassName, 'GetList'), array($sQuery, null, false, true, true));
+        $oPositionList = call_user_func_array([$sClassName, 'GetList'], [$sQuery, null, false, true, true]);
 
         /** @var $oPositionRow TCMSRecord */
         while ($oPositionRow = $oPositionList->Next()) {
@@ -130,14 +130,14 @@ class CMSFieldPositionRPC extends TCMSModelBase
 
         if ((array_key_exists('cms_tbl_field_tab', $oPositionRow->sqlData) && $oPositionRow->sqlData['cms_tbl_field_tab'] != $sTabId) || true === $bFirst) {
             if (true === $bFirst) {
-                $sTabName = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.tab_default');
+                $sTabName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.tab_default');
                 $bFirst = false;
             } else {
                 $sTabId = $oPositionRow->sqlData['cms_tbl_field_tab'];
                 $oTab = TdbCmsTblFieldTab::GetNewInstance($sTabId);
                 $sTabName = $oTab->GetName();
             }
-            $sHTML = '<li id="item'.$sTabId.'" rel="0" class="list-group-item list-group-item-dark disabled" style="background-color:#8ab9ff; color#000000; font-weight:bold;"> '.TGlobal::Translate('chameleon_system_core.field_mltrpc.tab', array('%tab%' => $sTabName)).'</li> ';
+            $sHTML = '<li id="item'.$sTabId.'" rel="0" class="list-group-item list-group-item-dark disabled" style="background-color:#8ab9ff; color#000000; font-weight:bold;"> '.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_mltrpc.tab', ['%tab%' => $sTabName]).'</li> ';
         }
 
         return $sHTML;

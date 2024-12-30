@@ -32,7 +32,7 @@ class TCMSMediaFieldMapper extends AbstractViewMapper
         $sHtmlHiddenFields = $oVisitor->GetSourceObject('sHtmlHiddenFields');
         $sRecordId = $oVisitor->GetSourceObject('sRecordId');
         $sTableId = $oVisitor->GetSourceObject('sTableId');
-        $sHTMLManageMediaButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.link.open_media_manager'), "javascript:loadMediaManager('".$sRecordId."','".$sTableId."','".$sFieldName."');", 'far fa-image');
+        $sHTMLManageMediaButton = TCMSRender::DrawButton(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.link.open_media_manager'), "javascript:loadMediaManager('".$sRecordId."','".$sTableId."','".$sFieldName."');", 'far fa-image');
         $oVisitor->SetMappedValue('sHtmlManageMediaButton', $sHTMLManageMediaButton);
         $oVisitor->SetMappedValue('sFieldName', $sFieldName);
         $oVisitor->SetMappedValue('sRecordId', $sRecordId);

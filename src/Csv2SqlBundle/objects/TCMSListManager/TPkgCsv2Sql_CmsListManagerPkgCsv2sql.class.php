@@ -32,14 +32,14 @@ class TPkgCsv2Sql_CmsListManagerPkgCsv2sql extends TCMSListManagerFullGroupTable
         parent::GetCustomMenuItems();
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'ProcessImport';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_csv2sql.action.run_import');
+        $oMenuItem->sDisplayName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_csv2sql.action.run_import');
         $oMenuItem->sIcon = 'fas fa-upload';
 
-        $aCallParams = array('pagedef' => 'tablemanager', //tableeditor
-            //'id'=>$this->sId,
-            //'tableid'=>$this->oTableConf->id,
-            'id' => $this->oTableConf->id, 'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'), '_fnc' => 'ProcessImport', //'_noModuleFunction'=>'true' // use for TCMSTableEditor!
-            'callListManagerMethod' => true, );
+        $aCallParams = ['pagedef' => 'tablemanager', // tableeditor
+            // 'id'=>$this->sId,
+            // 'tableid'=>$this->oTableConf->id,
+            'id' => $this->oTableConf->id, 'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'], '_fnc' => 'ProcessImport', // '_noModuleFunction'=>'true' // use for TCMSTableEditor!
+            'callListManagerMethod' => true, ];
         $sCallURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aCallParams);
         $oMenuItem->sOnClick = "GetAjaxCall('{$sCallURL}', TPkgCsv2SqlShowInfo);";
         $this->oMenuItems->AddItem($oMenuItem);

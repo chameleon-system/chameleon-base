@@ -668,7 +668,7 @@ class TCMSTreeNode extends TCMSRecord implements ICmsLinkableObject
                 $path .= "</li>\n";
             }
         } else {
-            $path .= '<li class="breadcrumb-item">'.TGlobal::Translate('chameleon_system_core.error.tree_path_nothing_assigned').'</li>';
+            $path .= '<li class="breadcrumb-item">'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.error.tree_path_nothing_assigned').'</li>';
         }
 
         $path .= '</ol>';

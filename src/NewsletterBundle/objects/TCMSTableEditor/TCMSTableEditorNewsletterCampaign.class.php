@@ -15,10 +15,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 {
-    /**
-     * @var int
-     */
-    protected $iSubscribersAddedToQueue = 0;
+    protected int $iSubscribersAddedToQueue = 0;
 
     /**
      * gets called after save if all posted data was valid.
@@ -200,7 +197,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
         $oRecordData = parent::GetObjectShortInfo($postData);
 
         if (array_key_exists('active', $postData) && '1' == $postData['active']) {
-            $oRecordData->message = TGlobal::Translate('chameleon_system_newsletter.text.queue_ready', ['%count%' => $this->iSubscribersAddedToQueue]);
+            $oRecordData->message = ServiceLocator::get('translator')->trans('chameleon_system_newsletter.text.queue_ready', ['%count%' => $this->iSubscribersAddedToQueue]);
         }
 
         return $oRecordData;
@@ -227,7 +224,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
         if ($this->AllowDeletingCampaignQueue()) {
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'DeleteCampaignQueue';
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_newsletter.action.clear_queue');
+            $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_newsletter.action.clear_queue');
             $oMenuItem->sIcon = 'fas fa-user-slash';
 
             $oGlobal = TGlobal::instance();

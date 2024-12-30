@@ -20,15 +20,15 @@ class TPkgCmsTextBlockCmsPortal extends TPkgCmsTextBlockCmsPortalAutoParent
      */
     public function GetPortalCmsTextBlockArray($iWidth = 600)
     {
-        $key = array('class' => __CLASS__, 'method' => 'GetPortalCmsTextBlockArray', 'id' => $this->id, 'width' => $iWidth);
-        $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        $key = ['class' => __CLASS__, 'method' => 'GetPortalCmsTextBlockArray', 'id' => $this->id, 'width' => $iWidth];
+        $cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
         $cacheKey = $cache->getKey($key);
         $aTextBlockArray = $cache->get($cacheKey);
 
         if (null === $aTextBlockArray) {
             $oTextBlockList = $this->GetPortalCmsTextBlockList();
             $aTextBlockArray = $oTextBlockList->GetRenderedTextBlockArray($iWidth);
-            $trigger = array(array('table' => 'pkg_cms_text_block', 'id' => null));
+            $trigger = [['table' => 'pkg_cms_text_block', 'id' => null]];
             $cache->set($cacheKey, $aTextBlockArray, $trigger);
         }
 
@@ -55,7 +55,7 @@ class TPkgCmsTextBlockCmsPortal extends TPkgCmsTextBlockCmsPortalAutoParent
      * Get single text block by system name.
      *
      * @param string $sSystemName
-     * @param int    $iWidth
+     * @param int $iWidth
      *
      * @return string
      */
@@ -66,9 +66,9 @@ class TPkgCmsTextBlockCmsPortal extends TPkgCmsTextBlockCmsPortalAutoParent
             // try to load from cache
             $oTextBlock = TdbPkgCmsTextBlock::GetInstanceFromSystemName($sSystemName, $this->id);
             if ($oTextBlock) {
-                $sTextBlockText = $oTextBlock->Render('standard', 'Customer', array('iWidth' => $iWidth));
+                $sTextBlockText = $oTextBlock->Render('standard', 'Customer', ['iWidth' => $iWidth]);
             } else {
-                $sTextBlockText = TGlobal::Translate('chameleon_system_cms_text_block.error.not_found', array('%name%' => $sSystemName));
+                $sTextBlockText = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_text_block.error.not_found', ['%name%' => $sSystemName]);
             }
             $this->SetInternalCache(sha1($this->id.'_PortalTextBlockText'.$iWidth.$sSystemName), $sTextBlockText);
         }

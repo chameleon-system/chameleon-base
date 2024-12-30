@@ -6,6 +6,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
+ * @var array $data
  * @var UrlUtil $urlUtil
  */
 $urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
@@ -22,10 +23,10 @@ $previewLanguageId = $backendSession->getCurrentEditLanguageId();
 </form>
 <div class="p-2 mb-4">
 
-    <div class="h4 mb-3"><?=TGlobal::Translate('chameleon_system_core.template_engine.headline_layout'); ?>:</div>
+    <div class="h4 mb-3"><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.headline_layout'); ?>:</div>
     <?php
+    /** @var TdbCmsMasterPagedef $oPageLayout */
     while ($oPageLayout = $data['oMasterDefs']->Next()) {
-        /** @var $oPageLayout TdbCmsMasterPagedef */
         $bIsActiveLayout = ($data['sActivePageDef'] === $oPageLayout->id);
         $layoutItemClass = true === $bIsActiveLayout ? 'layoutitemactive' : '';
 
@@ -47,7 +48,7 @@ $previewLanguageId = $backendSession->getCurrentEditLanguageId();
                 <span class="card-title font-weight-bold mb-0"><?=TGlobal::OutHTML($oPageLayout->sqlData['name']); ?></span>
                 <?php if (true === $bIsActiveLayout) {
             ?>
-                <span class="badge badge-pill float-right"><?=TGlobal::Translate('chameleon_system_core.template_engine.active'); ?></span>
+                <span class="badge badge-pill float-right"><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.active'); ?></span>
                 <?php
         } ?>
             </div>
@@ -56,7 +57,7 @@ $previewLanguageId = $backendSession->getCurrentEditLanguageId();
                 if (false === $bIsActiveLayout) {
                     ?>callout-info<?php
                 } ?>">
-                    <span><?=TGlobal::Translate('chameleon_system_core.template_engine.spot_count'); ?></span>
+                    <span><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.spot_count'); ?></span>
                     <strong class="h6"><?=$oPageLayout->NumberOfDynamicModules(); ?></strong>
                 </div>
                 <div class="card-text">
@@ -68,8 +69,8 @@ $previewLanguageId = $backendSession->getCurrentEditLanguageId();
                 ?>
             <div class="card-footer p-2">
                 <div class="btn-group button-element">
-                    <div class="button-item"><?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:console.log('".$url."');parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?></div>
-                    <div class="button-item"><?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_use_page_template'), "javascript:document.setpagedef.sourcepagedef.value='".TGlobal::OutHTML($oPageLayout->id)."';document.setpagedef.submit();", 'far fa-check-circle'); ?></div>
+                    <div class="button-item"><?=TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.action_preview_template'), "javascript:console.log('".$url."');parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?></div>
+                    <div class="button-item"><?=TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.action_use_page_template'), "javascript:document.setpagedef.sourcepagedef.value='".TGlobal::OutHTML($oPageLayout->id)."';document.setpagedef.submit();", 'far fa-check-circle'); ?></div>
                 </div>
             </div>
             <?php
@@ -77,7 +78,7 @@ $previewLanguageId = $backendSession->getCurrentEditLanguageId();
                 ?>
             <div class="card-footer p-2 bg-success">
                 <div class="btn-group button-element">
-                    <div class="button-item"><?=TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?></div>
+                    <div class="button-item"><?=TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.action_preview_template'), "javascript:parent.document.getElementById('userwebpageiframe').src='".$url."';", 'far fa-eye'); ?></div>
                 </div>
             </div>
             <?php

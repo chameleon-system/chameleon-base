@@ -13,7 +13,7 @@ use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 
 /**
  * mapper adds a login/register link or a my account link to a navi.
-/**/
+ * /**/
 class TPkgCmsNavigation_LoginMapper extends AbstractViewMapper
 {
     /**
@@ -21,7 +21,7 @@ class TPkgCmsNavigation_LoginMapper extends AbstractViewMapper
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
-        $oRequirements->NeedsSourceObject('aTree', 'array', array());
+        $oRequirements->NeedsSourceObject('aTree', 'array', []);
     }
 
     /**
@@ -40,8 +40,8 @@ class TPkgCmsNavigation_LoginMapper extends AbstractViewMapper
 
         if ($user->IsLoggedIn()) {
             $oNodeLogout = new TPkgCmsNavigationNode();
-            $oNodeLogout->sLink = '?'.TTools::GetArrayAsURL(array('module_fnc['.$oExtranet->fieldExtranetSpotName.']' => 'Logout'));
-            $oNodeLogout->sTitle = TGlobal::Translate('chameleon_system_cms_navigation.action.logout');
+            $oNodeLogout->sLink = '?'.TTools::GetArrayAsURL(['module_fnc['.$oExtranet->fieldExtranetSpotName.']' => 'Logout']);
+            $oNodeLogout->sTitle = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_navigation.action.logout');
             $oNodeLogout->setDisableSubmenu(true);
             $aTree[] = $oNodeLogout;
 
@@ -68,6 +68,6 @@ class TPkgCmsNavigation_LoginMapper extends AbstractViewMapper
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 }

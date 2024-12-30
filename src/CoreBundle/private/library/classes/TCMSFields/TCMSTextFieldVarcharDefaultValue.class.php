@@ -17,7 +17,7 @@ class TCMSTextFieldVarcharDefaultValue extends TCMSFieldVarchar
         $sHTML .= '
         <label>
           <input id="UpdateRecordsWithOldDefaultValue" type="checkbox" name="UpdateRecordsWithOldDefaultValue" value="1" />
-          '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_varchar_default_value.update_all', array('%sOldValue%' => $this->_GetHTMLValue()))).'
+          '.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_varchar_default_value.update_all', ['%sOldValue%' => $this->_GetHTMLValue()])).'
         </label>
       ';
 

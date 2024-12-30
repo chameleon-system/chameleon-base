@@ -30,10 +30,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
      */
     protected $oActiveComment;
 
-    /**
-     * @var bool
-     */
-    protected $bSuppressRedirectAfterAction = false;
+    protected bool $bSuppressRedirectAfterAction = false;
 
     /**
      * Initialize the module
@@ -624,7 +621,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
             $oFeed->SetFeedTitle($oActiveItem->GetName());
             $i = $oComments->Length();
             while ($oComment = $oComments->Next()) {
-                $oComment->sqlData['name'] = TGlobal::Translate('chameleon_system_comment.text.rss_feed_comment_name', ['%number%' => $i]);
+                $oComment->sqlData['name'] = ServiceLocator::get('translator')->trans('chameleon_system_comment.text.rss_feed_comment_name', ['%number%' => $i]);
                 $oFeed->AddItem($oComment->sqlData);
                 --$i;
             }
