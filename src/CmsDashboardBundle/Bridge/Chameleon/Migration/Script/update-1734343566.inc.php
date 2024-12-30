@@ -13,7 +13,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
             'description' => '',
             'icon_list' => 'image.gif',
             'classname' => 'chameleon_system_cms_dashboard.backend_module.dashboard',
-            'view_mapper_config' => 'dashboard=CmsDashboard/dashboard.twig.html',
+            'view_mapper_config' => 'dashboard=CmsDashboard/dashboard.html.twig',
             'mapper_chain' => '',
             'view_mapping' => '',
             'revision_management_active' => '0',
