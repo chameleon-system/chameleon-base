@@ -50,7 +50,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
             data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'" 
             id="mltListControllButton'.$sEscapedName.'" 
             onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(\''.$sEscapedName.'_iframe\',\''.$this->GetSelectListURL().'\');">
-            <i class="fas fa-eye"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.open_or_close_list')).'
+            <i class="fas fa-eye"></i> '.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.open_or_close_list')).'
             </div>
         </div>
         <div class="card-body p-0">

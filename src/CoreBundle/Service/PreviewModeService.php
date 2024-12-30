@@ -4,16 +4,16 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
-use TTools;
 
 class PreviewModeService implements PreviewModeServiceInterface
 {
     public const COOKIE_NAME = 'preview_mode';
+    private const PREVIEW_COOKIE_LIFETIME = 3 * 86400; // 3 days
 
     public function __construct(
-        protected readonly string $hashingSecret,
-        protected readonly Connection $connection,
-        protected readonly TTools $tools,
+        private readonly string $hashingSecret,
+        private readonly Connection $connection,
+        private readonly \TTools $tools,
     ) {
     }
 
@@ -49,14 +49,14 @@ class PreviewModeService implements PreviewModeServiceInterface
     {
         try {
             if (false === $previewGranted) {
-                setcookie(self::COOKIE_NAME, '', time() - 3600, '/', false, true);
+                setcookie(self::COOKIE_NAME, '', time() - 3600, '/', '', false, true);
                 $this->connection->update('cms_user', ['preview_token' => ''], ['id' => $cmsUserId]);
 
                 return;
             }
             $token = $this->tools::GetUUID();
             $this->connection->update('cms_user', ['preview_token' => $token], ['id' => $cmsUserId]);
-            setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token), time() + 86400, '/', '', false, true);
+            setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token), time() + self::PREVIEW_COOKIE_LIFETIME, '/', '', false, true);
         } catch (Exception) {
             // ignore if field not exists yet
         }
@@ -69,6 +69,6 @@ class PreviewModeService implements PreviewModeServiceInterface
 
     public function previewTokenExists(string $previewToken): bool
     {
-        return 1 === (int)$this->connection->fetchOne("SELECT 1 FROM `cms_user` WHERE `preview_token` = ?", [$previewToken]);
+        return 1 === (int) $this->connection->fetchOne('SELECT 1 FROM `cms_user` WHERE `preview_token` = ?', [$previewToken]);
     }
 }

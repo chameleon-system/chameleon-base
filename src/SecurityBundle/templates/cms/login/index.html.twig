@@ -1,15 +1,15 @@
 {% extends 'BackendLayout/base.html.twig' %}
 
-{% block mainContent %}
+{% block main_content %}
     <div class="card">
         <div class="card-header">
             <h4>Login</h4>
         </div>
         <div class="card-body">
             {% if error %}
-                <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
-            <form name="cmsform"  action="{{ path('cms_login') }}" method="post">
+            <form name="cmsform" action="{{ path('cms_login') }}" method="post">
                 <fieldset>
                     <div class="form-group">
                         <div class="input-group">
@@ -30,4 +30,9 @@
             </form>
         </div>
     </div>
+{% endblock %}
+
+{% block modalDialog %}
+{% endblock %}
+{% block footer_includes %}
 {% endblock %}

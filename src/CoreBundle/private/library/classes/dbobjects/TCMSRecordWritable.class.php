@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * an extension of the TCMSRecord that allows inserting, updating and deleting records
@@ -27,7 +28,7 @@ use Psr\Log\LoggerInterface;
  * If the record has an owner, then only the owner will be allowed to change the record, unless
  * a change is allowed by all (by calling AllowEditByAll(true)
  *
-/**/
+ * /**/
 class TCMSRecordWritable extends TCMSRecord
 {
     /**
@@ -42,7 +43,7 @@ class TCMSRecordWritable extends TCMSRecord
      *
      * @var TDataExtranetUser
      */
-    protected $oOwner = null;
+    protected $oOwner;
 
     /**
      * set to false if you want to prevent the class from triggering cache changes.
@@ -128,7 +129,7 @@ class TCMSRecordWritable extends TCMSRecord
             $oFields = $oTableConf->GetFields($this, true, true);
             $this->sqlData['lastmodified'] = date('Y-m-d H:i:s');
 
-            $aQueryFieldStrings = array();
+            $aQueryFieldStrings = [];
             /** @var $oField TCMSField */
             while ($oField = $oFields->Next()) {
                 if (true === $oField->oDefinition->isVirtualField()) {
@@ -237,7 +238,7 @@ class TCMSRecordWritable extends TCMSRecord
             $this->PreSaveHook($bIsNew);
 
             $bIsFirst = true;
-            /** @var $oField TCMSField */
+            /* @var $oField TCMSField */
             foreach ($aFields as $sFieldName => $sVal) {
                 if ($bIsFirst) {
                     $query .= ' SET ';
@@ -379,7 +380,7 @@ class TCMSRecordWritable extends TCMSRecord
 
         $portal = $this->getPortalDomainService()->getActivePortal();
         if (null !== $portal) {
-            $this->getRedirect()->redirect(self::getPageService()->getLinkToPortalHomePageAbsolute(array(), $portal));
+            $this->getRedirect()->redirect(self::getPageService()->getLinkToPortalHomePageAbsolute([], $portal));
         }
     }
 
@@ -432,7 +433,7 @@ class TCMSRecordWritable extends TCMSRecord
      * Convert fields (like Date, etc...).
      *
      * @param TCMSFieldDefinition $oField
-     * @param string              $sVal
+     * @param string $sVal
      *
      * @return string
      */
@@ -564,8 +565,8 @@ class TCMSRecordWritable extends TCMSRecord
     /**
      * update mlt with new values.
      *
-     * @param string $sFieldName       - the mlt field name
-     * @param array  $aTargetKeyIdList - new target ids
+     * @param string $sFieldName - the mlt field name
+     * @param array $aTargetKeyIdList - new target ids
      */
     public function UpdateMLT($sFieldName, $aTargetKeyIdList, $bNoDelete = false)
     {
@@ -578,7 +579,7 @@ class TCMSRecordWritable extends TCMSRecord
             $query = "INSERT INTO `{$sMLTTable}` (`source_id`, `target_id`) VALUES ";
 
             $iEscapedId = MySqlLegacySupport::getInstance()->real_escape_string($this->id);
-            $aQItems = array();
+            $aQItems = [];
             foreach ($aTargetKeyIdList as $iTargetId) {
                 $aQItems[] = "('{$iEscapedId}','".MySqlLegacySupport::getInstance()->real_escape_string($iTargetId)."')";
                 if ($bNoDelete) {
@@ -598,7 +599,7 @@ class TCMSRecordWritable extends TCMSRecord
      * deletes one or all images of an image field (all if iPos == null).
      *
      * @param string $sFieldName
-     * @param int    $iPos
+     * @param int $iPos
      */
     public function DeleteImages($sFieldName, $iPos = null)
     {
@@ -620,14 +621,14 @@ class TCMSRecordWritable extends TCMSRecord
 
         $images = explode(',', $this->sqlData[$sFieldName]);
         if (false === is_array($images)) {
-            $images = array($this->sqlData[$sFieldName]);
+            $images = [$this->sqlData[$sFieldName]];
         }
 
         $fieldTableConf = $this->GetTableConf();
         $fieldConf = $fieldTableConf->GetFieldDefinition($sFieldName);
         $defaultImageIds = explode(',', $fieldConf->sqlData['field_default_value']);
         if (!is_array($defaultImageIds)) {
-            $defaultImageIds = array($defaultImageIds);
+            $defaultImageIds = [$defaultImageIds];
         }
 
         $mediaTableConf = TdbCmsTblConf::GetNewInstance();
@@ -678,13 +679,12 @@ class TCMSRecordWritable extends TCMSRecord
      *         [size] => 77105
      *     )
      *
-     *
-     * @param array  $aFileData     - the $_FILE data
-     * @param string $sFileName     - the file name for the image
-     * @param string $sFieldName    - the field to update
-     * @param int    $iPos          - the position in the field
-     * @param bool   $isNotUpload   - set to true if you want to save images without uploading them (ie when unpacking a zip)
-     * @param bool   $bKeepOriginal - set to true if you want to keep the original file
+     * @param array $aFileData - the $_FILE data
+     * @param string $sFileName - the file name for the image
+     * @param string $sFieldName - the field to update
+     * @param int $iPos - the position in the field
+     * @param bool $isNotUpload - set to true if you want to save images without uploading them (ie when unpacking a zip)
+     * @param bool $bKeepOriginal - set to true if you want to keep the original file
      *
      * @return bool
      */
@@ -694,7 +694,7 @@ class TCMSRecordWritable extends TCMSRecord
         if ($this->AllowEdit()) {
             $aImagePlacing = explode(',', $this->sqlData[$sFieldName]);
             if (!is_array($aImagePlacing)) {
-                $aImagePlacing = array($aImagePlacing);
+                $aImagePlacing = [$aImagePlacing];
             }
             if (!array_key_exists($iPos, $aImagePlacing)) {
                 $aImagePlacing[$iPos] = 0;
@@ -708,7 +708,7 @@ class TCMSRecordWritable extends TCMSRecord
             $oMediaManagerEditor->Init($oMediaTableConf->id);
             $oMediaManagerEditor->SetUploadData($aFileData, $isNotUpload);
 
-            $aData = array('name' => $sFileName, 'description' => $sFileName, 'metatags' => $sFileName, 'cms_media_tree_id' => $iMediaCategoryId);
+            $aData = ['name' => $sFileName, 'description' => $sFileName, 'metatags' => $sFileName, 'cms_media_tree_id' => $iMediaCategoryId];
             // make a copy of the file...
 
             $filemanager = $this->getFileManager();
@@ -719,7 +719,7 @@ class TCMSRecordWritable extends TCMSRecord
             }
             $oMediaManagerEditor->Save($aData);
             if ($bKeepOriginal) {
-                $filemanager->move($aFileData['tmp_name'].$sUid, $aFileData['tmp_name']);
+                $filemanager->rename($aFileData['tmp_name'].$sUid, $aFileData['tmp_name']);
             }
             $aImagePlacing[$iPos] = $oMediaManagerEditor->sId;
 
@@ -746,14 +746,14 @@ class TCMSRecordWritable extends TCMSRecord
      *         [size] => 77105
      *     )
      *
-     * @param array  $aFileData            - file data
-     * @param string $sFileName            - file name to use
-     * @param string $sFieldName           - field name to which we want to save the data
-     * @param int    $iDocumentCategoryId  - category into which we upload
-     * @param bool   $bIsPrivate           - private or public file
-     * @param string $sDescription         - optional description
-     * @param bool   $bFileIsNotFromUpload - set this to true if the file was not stored via default post file upload (e.g. local FTP file, or from URL)
-     * @param string $sDocumentID          - if a cms_document ID is set the document will be replaced/updated instead of inserted
+     * @param array $aFileData - file data
+     * @param string $sFileName - file name to use
+     * @param string $sFieldName - field name to which we want to save the data
+     * @param int $iDocumentCategoryId - category into which we upload
+     * @param bool $bIsPrivate - private or public file
+     * @param string $sDescription - optional description
+     * @param bool $bFileIsNotFromUpload - set this to true if the file was not stored via default post file upload (e.g. local FTP file, or from URL)
+     * @param string $sDocumentID - if a cms_document ID is set the document will be replaced/updated instead of inserted
      *
      * @return bool
      */
@@ -777,7 +777,7 @@ class TCMSRecordWritable extends TCMSRecord
                 if (is_null($sDescription)) {
                     $sDescription = $sFileName;
                 }
-                $aData = array('id' => $sDocumentID, 'name' => $sFileName, 'description' => $sDescription, 'cms_document_tree_id' => $iDocumentCategoryId, 'private' => $sPrivate);
+                $aData = ['id' => $sDocumentID, 'name' => $sFileName, 'description' => $sDescription, 'cms_document_tree_id' => $iDocumentCategoryId, 'private' => $sPrivate];
                 $oDocumentManagerEditor->Save($aData);
                 if (!is_null($oDocumentManagerEditor->sId)) {
                     $bUploadOK = true;
@@ -818,13 +818,13 @@ class TCMSRecordWritable extends TCMSRecord
     /**
      * import one file from URL to document manager and connect via mlt.
      *
-     * @param string      $sFileURL
-     * @param string      $sFileName           - file name to use
-     * @param string      $sFieldName          - field name to which we want to save the data
-     * @param int         $iDocumentCategoryId - category into which we upload
-     * @param bool        $bIsPrivate          - private or public file
-     * @param string      $sDescription        - optional description
-     * @param string|null $sDocumentID         - if a cms_document ID is set the document will be replaced/updated instead of inserted
+     * @param string $sFileURL
+     * @param string $sFileName - file name to use
+     * @param string $sFieldName - field name to which we want to save the data
+     * @param int $iDocumentCategoryId - category into which we upload
+     * @param bool $bIsPrivate - private or public file
+     * @param string $sDescription - optional description
+     * @param string|null $sDocumentID - if a cms_document ID is set the document will be replaced/updated instead of inserted
      *
      * @internal param array $aFileData - file data
      *
@@ -847,17 +847,16 @@ class TCMSRecordWritable extends TCMSRecord
             if (!empty($sFileContent)) {
                 $sTempDir = CMS_TMP_DIR;
                 $sTmpFileName = tempnam($sTempDir, 'chameleonFileImport_');
-                $fileManager = $this->getFileManager();
 
-                if ($handle = $fileManager->fopen($sTmpFileName, 'wb')) {
+                if ($handle = fopen($sTmpFileName, 'wb')) {
                     $bFileImportSuccess = false;
-                    if ($fileManager->fwrite($handle, $sFileContent)) {
-                        $fileManager->fclose($handle);
+                    if (fwrite($handle, $sFileContent)) {
+                        fclose($handle);
                         $bFileImportSuccess = true;
                     }
 
                     if ($bFileImportSuccess) {
-                        $aFileData = array();
+                        $aFileData = [];
                         $aFileData['name'] = $sFileNameFromURL;
                         $aFileData['type'] = 'application/octet-stream';
                         $aFileData['tmp_name'] = $sTmpFileName;
@@ -873,7 +872,7 @@ class TCMSRecordWritable extends TCMSRecord
         return $bUploadOK;
     }
 
-    protected function UpdateCacheTrigger($sRecordId, $aOldData = array())
+    protected function UpdateCacheTrigger($sRecordId, $aOldData = [])
     {
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->table);
         if (class_exists($sClassName) && method_exists($sClassName, 'isFrontendAutoCacheClearEnabled')) {
@@ -897,7 +896,7 @@ class TCMSRecordWritable extends TCMSRecord
 
         // if the records has parent fields, we need to trigger a cache clear on all the owning records
         $oTableConf = $this->GetTableConf();
-        $oParentFields = $oTableConf->GetFieldDefinitions(array('CMSFIELD_PROPERTY_PARENT_ID'));
+        $oParentFields = $oTableConf->GetFieldDefinitions(['CMSFIELD_PROPERTY_PARENT_ID']);
         while ($oParentField = $oParentFields->Next()) {
             $oParentFieldObject = $oTableConf->GetField($oParentField->sqlData['name'], $this);
             $sConnectedTable = $oParentFieldObject->GetConnectedTableName();
@@ -922,12 +921,9 @@ class TCMSRecordWritable extends TCMSRecord
         return ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getFileManager()
+    private function getFileManager(): Filesystem
     {
-        return ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
     }
 
     /**

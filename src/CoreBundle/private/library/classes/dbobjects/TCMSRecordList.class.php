@@ -20,6 +20,7 @@ use Doctrine\DBAL\Connection;
  * provide a simply and quick to use class to fetch a collection of records.
  *
  * @template T extends TCMSRecord
+ *
  * @extends TIterator<T>
  */
 class TCMSRecordList extends TIterator
@@ -30,9 +31,10 @@ class TCMSRecordList extends TIterator
      * class name used for each record.
      *
      * @var string
+     *
      * @psalm-var class-string<T>
      */
-    public $sTableObject = null;
+    public $sTableObject;
 
     /**
      * if the record has translations, then iLanguageId can
@@ -40,28 +42,28 @@ class TCMSRecordList extends TIterator
      *
      * @var int
      */
-    protected $iLanguageId = null;
+    protected $iLanguageId;
 
     /**
      * query used to fetch the data.
      *
      * @var string
      */
-    protected $sQuery = null;
+    protected $sQuery;
 
     /**
      * table name of the sql object (optional - only required if sTableObject is set).
      *
      * @var string
      */
-    public $sTableName = null;
+    public $sTableName;
 
     /**
      * holds a list of all ids of the current record set.
      *
      * @var array
      */
-    protected $_aIdList = null;
+    protected $_aIdList;
 
     /**
      * the number of records to show. if set to -1, then all records starting @iStartAtRecordNumber
@@ -110,7 +112,7 @@ class TCMSRecordList extends TIterator
     /**
      * limit the result set to this number of records (-1 = no restriction).
      *
-     * @var int $iLimitResultSet
+     * @var int
      */
     protected $iLimitResultSet = -1;
 
@@ -130,13 +132,15 @@ class TCMSRecordList extends TIterator
     protected $estimationLowerLimit;
 
     /**
-     * PDO style parameters
+     * PDO style parameters.
+     *
      * @var array
      */
     private $queryParameters;
 
     /**
-     * PDO style parameters types
+     * PDO style parameters types.
+     *
      * @var array
      */
     private $queryParameterTypes;
@@ -151,6 +155,7 @@ class TCMSRecordList extends TIterator
 
     /**
      * @param int $itemPointer
+     *
      * @return void
      */
     protected function setItemPointer($itemPointer)
@@ -165,7 +170,7 @@ class TCMSRecordList extends TIterator
     protected function getEstimationLowerLimit()
     {
         if (null === $this->estimationLowerLimit) {
-            $this->estimationLowerLimit = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.database.estimation_lower_limit');
+            $this->estimationLowerLimit = ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.database.estimation_lower_limit');
         }
 
         return $this->estimationLowerLimit;
@@ -173,6 +178,7 @@ class TCMSRecordList extends TIterator
 
     /**
      * @param int $lowerLimit
+     *
      * @return void
      */
     protected function setEstimationLowerLimit($lowerLimit)
@@ -212,11 +218,11 @@ class TCMSRecordList extends TIterator
             array_push($aReturnValues, "\0TCMSRecordList\0queryParameters");
             array_push($aReturnValues, "\0TCMSRecordList\0queryParameterTypes");
 
-            //array_push($aProperties, "\0TCMSRecordList\0_items");
+            // array_push($aProperties, "\0TCMSRecordList\0_items");
 
             return $aReturnValues;
         } else {
-            $returnValues = array(
+            $returnValues = [
                 'sTableObject',
                 'iLanguageId',
                 'sQuery',
@@ -225,7 +231,7 @@ class TCMSRecordList extends TIterator
                 'iStartAtRecordNumber',
                 'iNumberOfRecordsFound',
                 'bJustRestoredFromSession',
-            );
+            ];
 
             array_push($returnValues, "\0TCMSRecordList\0queryParameters");
             array_push($returnValues, "\0TCMSRecordList\0queryParameterTypes");
@@ -243,6 +249,7 @@ class TCMSRecordList extends TIterator
      * change the order by of the list.
      *
      * @param array<string, string> $aOrderInfo - must be of the form `table`.`field` => ASC/DESC or fieldalias=>ASC/DESC - fields MUST be quoted!
+     *
      * @psalm-param array<string, 'ASC'|'DESC'>
      */
     public function ChangeOrderBy($aOrderInfo)
@@ -257,7 +264,7 @@ class TCMSRecordList extends TIterator
      */
     protected function getQueryModifierOrderByService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.query_modifier.order_by');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.query_modifier.order_by');
     }
 
     /**
@@ -325,7 +332,7 @@ class TCMSRecordList extends TIterator
     {
         $this->resetEntityList();
 
-        $this->_items = array();
+        $this->_items = [];
         $this->_aIdList = null;
         $this->sLastQueryRun = '';
         $this->iNumberOfRecordsFound = -1;
@@ -349,19 +356,11 @@ class TCMSRecordList extends TIterator
     }
 
     /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSRecordList()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
-    /**
      * set the language of the record to fetch. Make sure to call this function
      * before calling anything else!
      *
      * @param string $iLanguageId - id from table: cms_language
+     *
      * @return void
      */
     public function SetLanguage($iLanguageId)
@@ -468,7 +467,7 @@ class TCMSRecordList extends TIterator
     {
         $bPointerMoved = false;
         if ($this->iNumberOfRecordsToShow > 0) {
-            $iNewStartRecord = ($iPage * $this->GetPageSize()); //$this->iStartAtRecordNumber - $this->iNumberOfRecordsToShow;
+            $iNewStartRecord = ($iPage * $this->GetPageSize()); // $this->iStartAtRecordNumber - $this->iNumberOfRecordsToShow;
             if ($iNewStartRecord <= $this->Length()) {
                 $bPointerMoved = $this->SetPagingInfo($iNewStartRecord, $this->iNumberOfRecordsToShow);
             }
@@ -484,7 +483,7 @@ class TCMSRecordList extends TIterator
      *
      * returns false if the page request is invalid AND the list will show 0 records!
      *
-     * @param int $iStartRecord     - at what record to start (first record = 0)
+     * @param int $iStartRecord - at what record to start (first record = 0)
      * @param int $iNumberOfRecords - number of records to show (-1 = all)
      *
      * @return bool
@@ -531,12 +530,12 @@ class TCMSRecordList extends TIterator
 
     /**
      * @param string $sQuery
-     * @param array  $queryParameters     - PDO style parameters
-     * @param array  $queryParameterTypes - PDO style parameter types
+     * @param array $queryParameters - PDO style parameters
+     * @param array $queryParameterTypes - PDO style parameter types
      *
      * @return void
      */
-    public function Load($sQuery, array $queryParameters = array(), array $queryParameterTypes = array())
+    public function Load($sQuery, array $queryParameters = [], array $queryParameterTypes = [])
     {
         $this->sQuery = $sQuery;
         $this->queryParameters = $queryParameters;
@@ -748,7 +747,7 @@ class TCMSRecordList extends TIterator
     protected function getEntityList()
     {
         if (null === $this->entityList) {
-            $this->entityList = new EntityList($this->getDatabaseConnection(), $this->sQuery, $this->getQueryParameters()??[], $this->getQueryParameterTypes()??[]);
+            $this->entityList = new EntityList($this->getDatabaseConnection(), $this->sQuery, $this->getQueryParameters() ?? [], $this->getQueryParameterTypes() ?? []);
         }
 
         return $this->entityList;
@@ -779,7 +778,7 @@ class TCMSRecordList extends TIterator
         } else {
             $oElement = new $this->sTableObject();
         }
-        /** @var $oElement T */
+        /* @var $oElement T */
         $oElement->SetLanguage($this->iLanguageId);
         $oElement->LoadFromRow($aData);
 
@@ -794,15 +793,16 @@ class TCMSRecordList extends TIterator
      * - An empty string if not ids exist and `$bReturnAsCommaSeparatedString=false` was specified
      * - A comma separated string of ids if `$bReturnAsCommaSeparatedString=true` was specified
      *
-     * @param string $sFieldName                    - the name of the field from which we want the values
-     * @param bool   $bReturnAsCommaSeparatedString - set this to true if you need the id list for a query e.g. WHERE `related_record_id` IN ('1','2','abcd-234')
+     * @param string $sFieldName - the name of the field from which we want the values
+     * @param bool $bReturnAsCommaSeparatedString - set this to true if you need the id list for a query e.g. WHERE `related_record_id` IN ('1','2','abcd-234')
      *
      * @return string[]|string - returns array or string (empty string if no records found)
+     *
      * @psalm-return ($bReturnAsCommaSeparatedString is true ? string : string[]|'')
      */
     public function GetIdList($sFieldName = 'id', $bReturnAsCommaSeparatedString = false)
     {
-        $idList = array();
+        $idList = [];
         $currentPosition = $this->getEntityList()->getCurrentPosition();
         $this->getEntityList()->rewind();
         foreach ($this->getEntityList() as $itemData) {
@@ -911,8 +911,8 @@ class TCMSRecordList extends TIterator
      * all results, not just your current page.
      *
      * @param string $sFieldName
-     * @param callable(string, string, array<string, string>): void  $aCallbackMethodToEvaluate - allows you to pass a callback array(object, method) to return the true value for the field
-     *                                          the callback is passed the field name, the value and an array of all the row
+     * @param callable(string, string, array<string, string>): void $aCallbackMethodToEvaluate - allows you to pass a callback array(object, method) to return the true value for the field
+     *                                                                                         the callback is passed the field name, the value and an array of all the row
      *
      * @return array
      */
@@ -920,7 +920,7 @@ class TCMSRecordList extends TIterator
     {
         // todo
 
-        $aResult = array();
+        $aResult = [];
         $iPointer = $this->getEntityList()->getCurrentPosition();
         $this->getEntityList()->rewind();
         $entityList = clone $this->getEntityList();
@@ -980,6 +980,7 @@ class TCMSRecordList extends TIterator
      * Set or change the active list limit.
      *
      * @param int $iNewListLimit
+     *
      * @return void
      */
     public function SetActiveListLimit($iNewListLimit)
@@ -1050,7 +1051,7 @@ class TCMSRecordList extends TIterator
      * backend list manager queries.
      *
      * @param TCMSListManager $oListManager
-     * @param string          $sQuery       - the query from TCMSListManager
+     * @param string $sQuery - the query from TCMSListManager
      *
      * @return string
      */
@@ -1131,8 +1132,6 @@ class TCMSRecordList extends TIterator
     }
 
     /**
-     * @param Connection $connection
-     *
      * @return void
      */
     public function setDatabaseConnection(Connection $connection)
@@ -1149,15 +1148,15 @@ class TCMSRecordList extends TIterator
             return $this->databaseConnection;
         }
 
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
     }
 
     /**
-     * @return \ChameleonSystem\CoreBundle\Util\FieldTranslationUtil
+     * @return ChameleonSystem\CoreBundle\Util\FieldTranslationUtil
      */
     protected static function getFieldTranslationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
     /**
@@ -1165,11 +1164,9 @@ class TCMSRecordList extends TIterator
      * The strange name is to avoid naming conflicts with subclasses (PHP shows a strange behavior: Subclasses cannot
      * define a non-static method with the same name as a static method in the super-class. This is the case even when
      * the methods are private).
-     *
-     * @return LanguageServiceInterface
      */
     protected static function getMyLanguageService(): LanguageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 }

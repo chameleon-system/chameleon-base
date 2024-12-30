@@ -22,27 +22,28 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MTExtranetCoreEndPoint extends TUserCustomModelBase
 {
-    const MSG_CONSUMER_NAME = '_mtextranetcore';
-    const MSG_CONSUMER_FORMNAME = '_mtextranetcoreform';
+    public const MSG_CONSUMER_NAME = '_mtextranetcore';
+    public const MSG_CONSUMER_FORMNAME = '_mtextranetcoreform';
 
-    const FIELD_BLACKLIST_TYPE_USER = 'user';
-    const FIELD_BLACKLIST_TYPE_ADDRESS = 'address';
+    public const FIELD_BLACKLIST_TYPE_USER = 'user';
+    public const FIELD_BLACKLIST_TYPE_ADDRESS = 'address';
 
     /**
      * @var array<string, string[]>
+     *
      * @psalm-var array<self::FIELD_BLACKLIST_TYPE_*, string[]>
      */
-    private static $fieldBlacklist = array(
-        self::FIELD_BLACKLIST_TYPE_USER => array('id', 'isadmin', 'data_extranet_group_mlt', 'cms_portal_id', 'session_key', 'login_salt', 'datecreated', 'confirmed', 'confirmedon', 'reg_email_send'),
-        self::FIELD_BLACKLIST_TYPE_ADDRESS => array(),
-    );
+    private static $fieldBlacklist = [
+        self::FIELD_BLACKLIST_TYPE_USER => ['id', 'isadmin', 'data_extranet_group_mlt', 'cms_portal_id', 'session_key', 'login_salt', 'datecreated', 'confirmed', 'confirmedon', 'reg_email_send'],
+        self::FIELD_BLACKLIST_TYPE_ADDRESS => [],
+    ];
 
     /**
      * messages for this spot.
      *
      * @var TIterator
      */
-    protected $oMessages = null;
+    protected $oMessages;
     /**
      * set to true if a login attempt failed.
      *
@@ -93,7 +94,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('Register', 'UpdateUser', 'UpdateUserPasswordRequired', 'UpdateUserAddress', 'Login', 'Logout', 'SendPassword', 'ConfirmUser');
+        $externalFunctions = ['Register', 'UpdateUser', 'UpdateUserPasswordRequired', 'UpdateUserAddress', 'Login', 'Logout', 'SendPassword', 'ConfirmUser'];
         $externalFunctions[] = 'SelectBillingAddress';
         $externalFunctions[] = 'SelectShippingAddress';
         $externalFunctions[] = 'DeleteBillingAddress';
@@ -112,7 +113,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     public function Init()
     {
         parent::Init();
-        /**
+        /*
          * Load any messages for this spot.
          */
         $this->oMessages = null;
@@ -242,7 +243,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 $oExtranetConf = TdbDataExtranet::GetInstance();
                 if (true === $oExtranetConf->fieldUserMustConfirmRegistration) {
                     $oMsgManager = TCMSMessageManager::GetInstance(); // TODO check deprecation
-                    $oMsgManager->AddMessage(\TDataExtranetUser::FORM_DATA_NAME_USER, MessageCodes::WAIT_FOR_EMAIL_CONFIRM);
+                    $oMsgManager->AddMessage(TDataExtranetUser::FORM_DATA_NAME_USER, MessageCodes::WAIT_FOR_EMAIL_CONFIRM);
                 } else {
                     // redirect to registration success page
                     if (!is_null($sSuccessURL)) {
@@ -261,9 +262,9 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     /**
      * Updates the user's billing/shipping address.
      *
-     * @param string|null $sSuccessURL   - redirect on success (can also be passed via POST)
-     * @param string|null $sFailureURL   - redirect on failure (can also be passed via POST)
-     * @param bool        $bInternalCall - if set to true the redirect URLs will be ignored
+     * @param string|null $sSuccessURL - redirect on success (can also be passed via POST)
+     * @param string|null $sFailureURL - redirect on failure (can also be passed via POST)
+     * @param bool $bInternalCall - if set to true the redirect URLs will be ignored
      *
      * @return bool
      */
@@ -279,7 +280,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         $bDataValid = true;
         $anyAddressChanged = false;
 
-        //TODO bring the shop stuff in extension
+        // TODO bring the shop stuff in extension
         if (class_exists('TdbDataExtranetUserAddress', false)) {
             // get billing address...
             $aBillingAddress = $this->GetFilteredUserData(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING, self::FIELD_BLACKLIST_TYPE_ADDRESS);
@@ -334,9 +335,9 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * Deletes a billing address.
      *
      * @param string $selectedAddressId
-     * @param string $sSuccessURL       - redirect on success (can also be passed via get/post)
-     * @param string $sFailureURL       - redirect on failure (can also be passed via get/post)
-     * @param bool   $bInternalCall     - if set to true the redirect urls will be ignored
+     * @param string $sSuccessURL - redirect on success (can also be passed via get/post)
+     * @param string $sFailureURL - redirect on failure (can also be passed via get/post)
+     * @param bool $bInternalCall - if set to true the redirect urls will be ignored
      *
      * @return bool
      */
@@ -355,7 +356,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
         if (is_null($sSuccessURL)) {
             if ($this->global->UserDataExists('sSuccessURL')) {
-                $sSuccessURL = $this->global->GetUserData('sSuccessURL', array(), TCMSUserInput::FILTER_URL);
+                $sSuccessURL = $this->global->GetUserData('sSuccessURL', [], TCMSUserInput::FILTER_URL);
             }
             if (empty($sSuccessURL)) {
                 $sSuccessURL = null;
@@ -363,7 +364,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         }
         if (is_null($sFailureURL)) {
             if ($this->global->UserDataExists('sFailureURL')) {
-                $sFailureURL = $this->global->GetUserData('sFailureURL', array(), TCMSUserInput::FILTER_URL);
+                $sFailureURL = $this->global->GetUserData('sFailureURL', [], TCMSUserInput::FILTER_URL);
             }
             if (empty($sFailureURL)) {
                 $sFailureURL = null;
@@ -375,7 +376,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             // make sure the user has that address
             $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
             /** @var $oAdr TdbDataExtranetUserAddress */
-            if ($oAdr->LoadFromFields(array('data_extranet_user_id' => $oUser->id, 'id' => $selectedAddressId))) {
+            if ($oAdr->LoadFromFields(['data_extranet_user_id' => $oUser->id, 'id' => $selectedAddressId])) {
                 if ($oAdr->id === $oUser->GetBillingAddress()->id) {
                 } else {
                     $bDataValid = true;
@@ -408,9 +409,9 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * Deletes a shipping address.
      *
      * @param string|null $selectedAddressId
-     * @param string|null $sSuccessURL       - redirect on success (can also be passed via POST)
-     * @param string|null $sFailureURL       - redirect on failure (can also be passed via POST)
-     * @param bool        $bInternalCall     - if set to true the redirect URLs will be ignored
+     * @param string|null $sSuccessURL - redirect on success (can also be passed via POST)
+     * @param string|null $sFailureURL - redirect on failure (can also be passed via POST)
+     * @param bool $bInternalCall - if set to true the redirect URLs will be ignored
      *
      * @return bool
      */
@@ -439,7 +440,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             // make sure the user has that address
             $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
             /** @var $oAdr TdbDataExtranetUserAddress */
-            if ($oAdr->LoadFromFields(array('data_extranet_user_id' => $oUser->id, 'id' => $selectedAddressId))) {
+            if ($oAdr->LoadFromFields(['data_extranet_user_id' => $oUser->id, 'id' => $selectedAddressId])) {
                 if ($oAdr->id != $oUser->GetBillingAddress()->id) {
                     $bDataValid = true;
                     $oCurrentShipping = $oUser->GetShippingAddress();
@@ -472,7 +473,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      *
      * @param string|null $selectedAddressId - new billing address - can also be set via GET/POST
      * @param string|null $sRedirectToURL
-     * @param bool        $bInternalCall     - if set to true the redirect URLs will be ignored
+     * @param bool $bInternalCall - if set to true the redirect URLs will be ignored
      *
      * @return void
      */
@@ -497,7 +498,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 // create a new address, and set it
                 $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
                 $oLocal = TCMSLocal::GetActive();
-                $aData = array('name' => 'neue Addresse (angelegt am '.$oLocal->FormatDate(date('Y-m-d')).')');
+                $aData = ['name' => 'neue Addresse (angelegt am '.$oLocal->FormatDate(date('Y-m-d')).')'];
                 $oAdr->LoadFromRowProtected($aData);
                 $oAdr->Save();
                 $iNewBillingAddressId = $oAdr->id;
@@ -511,7 +512,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $oUser->Save();
             $oBillingAddress = $oUser->GetBillingAddress(true);
 
-            $oShop = TdbShop::GetInstance();
+            $oShop = ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
             if ($oShop->fieldSyncProfileDataWithBillingData) {
                 $oUser->SetUserBaseDataUsingAddress($oBillingAddress);
             }
@@ -534,7 +535,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      *
      * @param string|null $selectedAddressId - new billing address - can also be set via GET/POST
      * @param string|null $sRedirectToURL
-     * @param bool        $bInternalCall     - if set to true the redirect URLs will be ignored
+     * @param bool $bInternalCall - if set to true the redirect URLs will be ignored
      *
      * @return void
      */
@@ -560,7 +561,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 $oAdr = TdbDataExtranetUserAddress::GetNewInstance();
                 /** @var $oAdr TdbDataExtranetUserAddress */
                 $oLocal = TCMSLocal::GetActive();
-                $aData = array('name' => 'neue Addresse (angelegt am '.$oLocal->FormatDate(date('Y-m-d')).')');
+                $aData = ['name' => 'neue Addresse (angelegt am '.$oLocal->FormatDate(date('Y-m-d')).')'];
                 $oAdr->LoadFromRowProtected($aData);
                 $oAdr->Save();
                 $iNewShippingAddressId = $oAdr->id;
@@ -600,7 +601,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $oUser = $this->getExtranetUserProvider()->getActiveUser();
 
             $oTmpAdr = TdbDataExtranetUserAddress::GetNewInstance();
-            /** @var $oTmpAdr TdbDataExtranetUserAddress */
+            /* @var $oTmpAdr TdbDataExtranetUserAddress */
             $oTmpAdr->LoadFromRowProtected($aBillingAddress);
             if ($oTmpAdr->ValidateData(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING)) {
                 $oUser->UpdateBillingAddress($aBillingAddress);
@@ -609,7 +610,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
                 // if the billing address has an id, then update the user as well to point to that address
                 if (!is_null($oBillingAdr->id)) {
-                    $oUser->SaveFieldsFast(array('default_billing_address_id' => $oBillingAdr->id));
+                    $oUser->SaveFieldsFast(['default_billing_address_id' => $oBillingAdr->id]);
                 }
             }
         }
@@ -631,7 +632,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $oUser = $this->getExtranetUserProvider()->getActiveUser();
 
             $oTmpAdr = TdbDataExtranetUserAddress::GetNewInstance();
-            /** @var $oTmpAdr TdbDataExtranetUserAddress */
+            /* @var $oTmpAdr TdbDataExtranetUserAddress */
             $oTmpAdr->LoadFromRowProtected($aAddress);
             if ($oTmpAdr->ValidateData(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING)) {
                 $bUpdateOk = $oUser->UpdateShippingAddress($aAddress);
@@ -659,9 +660,9 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * Updates the user's base data.
      * If you want to change a user's login or password, please use ChangeUserEmail() and ChangeUserPassword() instead.
      *
-     * @param string|null $sSuccessURL       - redirect on success (can also be passed via POST)
-     * @param string|null $sFailureURL       - redirect on failure (can also be passed via POST)
-     * @param bool        $bPasswordRequired
+     * @param string|null $sSuccessURL - redirect on success (can also be passed via POST)
+     * @param string|null $sFailureURL - redirect on failure (can also be passed via POST)
+     * @param bool $bPasswordRequired
      *
      * @return void
      */
@@ -918,7 +919,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $this->data['bLoginError'] = true;
             $this->bLoginAttemptedFailed = true;
             $oExtranetConfig = TdbDataExtranet::GetInstance();
-            $aParams = array('forgotPwdLinkStart' => '<a href="'.$oExtranetConfig->GetLinkForgotPasswordPage().'">', 'forgotPwdLinkEnd' => '</a>');
+            $aParams = ['forgotPwdLinkStart' => '<a href="'.$oExtranetConfig->GetLinkForgotPasswordPage().'">', 'forgotPwdLinkEnd' => '</a>'];
             $oMessage = TCMSMessageManager::GetInstance();
             $loginName = $inputFilterUtil->getFilteredPostInput(ExtranetUserConstants::LOGIN_FORM_FIELD_LOGIN_NAME);
             $loginUser = $oUser->GetValidatedLoginUser($loginName);
@@ -953,11 +954,11 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         $extranetConfig = TdbDataExtranet::GetInstance();
 
         $redirectURL = $extranetConfig->getLinkLoginSuccessPage();
-        
+
         if (null === $redirectURL) {
             $redirectURL = $extranetConfig->GetLinkMyAccountPage();
         }
-        
+
         $this->RedirectToURL($redirectURL, true);
     }
 
@@ -1050,7 +1051,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
 
         if (is_array($sentData) && array_key_exists('password', $sentData) && array_key_exists('password2', $sentData) && array_key_exists('name', $sentData)) {
             // process password change form
-            $aData = array('password' => $sentData['password'], 'password2' => $sentData['password2']);
+            $aData = ['password' => $sentData['password'], 'password2' => $sentData['password2']];
             $oUser = $oUser->GetValidatedLoginUser($sentData['name']);
             if (null !== $oUser && $passwordHashGenerator->verify($sToken, $oUser->fieldPasswordChangeKey)) {
                 if ($oUser->IsPasswordChangeKeyValid()) {
@@ -1117,7 +1118,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     {
         $aData = parent::_GetCacheTableInfos();
         if (!is_array($aData)) {
-            $aData = array();
+            $aData = [];
         }
         $oActivePage = $this->getActivePageService()->getActivePage();
         $iPageId = '';
@@ -1125,14 +1126,14 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         if (!is_null($oActivePage)) {
             $iPageId = $oActivePage->id;
         }
-        $aData[] = array('table' => 'cms_tpl_page', 'id' => $iPageId);
-        $aData[] = array('table' => 'cms_tpl_page_cms_usergroup_mlt', 'id' => '');
-        $aData[] = array('table' => 'cms_tpl_page_data_extranet_group_mlt', 'id' => '');
-        $aData[] = array('table' => 'data_extranet_group', 'id' => '');
-        $aData[] = array('table' => 'data_extranet_user', 'id' => '');
-        $aData[] = array('table' => 'data_extranet', 'id' => '');
-        $aData[] = array('table' => 'data_extranet_user_address', 'id' => '');
-        $aData[] = array('table' => 'data_extranet_user_data_extranet_group_mlt', 'id' => '');
+        $aData[] = ['table' => 'cms_tpl_page', 'id' => $iPageId];
+        $aData[] = ['table' => 'cms_tpl_page_cms_usergroup_mlt', 'id' => ''];
+        $aData[] = ['table' => 'cms_tpl_page_data_extranet_group_mlt', 'id' => ''];
+        $aData[] = ['table' => 'data_extranet_group', 'id' => ''];
+        $aData[] = ['table' => 'data_extranet_user', 'id' => ''];
+        $aData[] = ['table' => 'data_extranet', 'id' => ''];
+        $aData[] = ['table' => 'data_extranet_user_address', 'id' => ''];
+        $aData[] = ['table' => 'data_extranet_user_data_extranet_group_mlt', 'id' => ''];
 
         return $aData;
     }
@@ -1183,11 +1184,11 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             }
 
             // use proper filter for fields
-            $aFilterList = array(
-                TCMSUserInput::FILTER_DEFAULT => array('name', 'email'),
-                TCMSUserInput::FILTER_PASSWORD => array('password', 'password2'),
-            );
-            $aUnfiltered = $inputFilterUtil->getFilteredPostInput($sInputArrayName, array(), false, TCMSUserInput::FILTER_DEFAULT);
+            $aFilterList = [
+                TCMSUserInput::FILTER_DEFAULT => ['name', 'email'],
+                TCMSUserInput::FILTER_PASSWORD => ['password', 'password2'],
+            ];
+            $aUnfiltered = $inputFilterUtil->getFilteredPostInput($sInputArrayName, [], false, TCMSUserInput::FILTER_DEFAULT);
             foreach ($aFilterList as $sFilterClass => $aFields) {
                 foreach ($aFields as $sFieldName) {
                     if (array_key_exists($sFieldName, $aUnfiltered)) {
@@ -1209,12 +1210,12 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      *
      * @return array
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function getFieldBlackList($blacklistType = self::FIELD_BLACKLIST_TYPE_USER)
     {
         if (!isset(self::$fieldBlacklist[$blacklistType])) {
-            throw new \InvalidArgumentException('Invalid field blacklist type: '.$blacklistType);
+            throw new InvalidArgumentException('Invalid field blacklist type: '.$blacklistType);
         }
 
         return self::$fieldBlacklist[$blacklistType];
@@ -1224,7 +1225,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      * Redirects to a URL. Redirect is only allowed if $this->bPreventRedirects is false.
      *
      * @param string $sURL
-     * @param bool   $bAllowOnlyRelativeURLs
+     * @param bool $bAllowOnlyRelativeURLs
      *
      * @return void
      */
@@ -1448,7 +1449,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         if (empty($sUserEmail)) {
             $bIsValid = false;
             $this->data['bError'] = true;
-            $this->data['sErrorMsg'] = TGlobal::Translate('chameleon_system_extranet.send_password.email_required');
+            $this->data['sErrorMsg'] = ServiceLocator::get('translator')->trans('chameleon_system_extranet.send_password.email_required');
         }
 
         $oExtranetConfig = TdbDataExtranet::GetInstance();
@@ -1456,7 +1457,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $bIsValid = false;
 
             $this->data['bError'] = true;
-            $this->data['sErrorMsg'] = TGlobal::Translate('chameleon_system_extranet.send_password.email_invalid');
+            $this->data['sErrorMsg'] = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_extranet.send_password.email_invalid');
         }
 
         return $bIsValid;

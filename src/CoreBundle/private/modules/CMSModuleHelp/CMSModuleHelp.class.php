@@ -19,16 +19,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CMSModuleHelp extends TCMSModelBase
 {
-    protected $listParams = null;
-    protected $oTableManager = null;
+    protected $listParams;
+    protected $oTableManager;
 
     /**
      * TCMSTableConf object of table based on "tableID".
      *
      * @var TCMSTableConf
      */
-    protected $oTableConf = null;
-    protected $oTableList = null;
+    protected $oTableConf;
+    protected $oTableList;
 
     public function Execute()
     {
@@ -53,7 +53,7 @@ class CMSModuleHelp extends TCMSModelBase
     {
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        $aTableBlackList = array();
+        $aTableBlackList = [];
 
         $translator = $this->getTranslator();
 
@@ -70,8 +70,7 @@ class CMSModuleHelp extends TCMSModelBase
         /** @var $oTable TdbCmsTblConf */
         while ($oTable = $oTableList->Next()) {
             if (!in_array($oTable->fieldName, $aTableBlackList)) {
-
-                if ($securityHelper->isGranted(\ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $oTable->fieldName)) {
+                if ($securityHelper->isGranted(ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $oTable->fieldName)) {
                     $sTableHTML .= '<tr class="table-primary">
                                         <td colspan="2">
                                         <div class="d-flex align-items-baseline">
@@ -101,7 +100,7 @@ class CMSModuleHelp extends TCMSModelBase
                     // get base Data first
                     $sTableHTML .= '<tr>
                                        <td colspan="2">
-                                            <h3>'.TGlobal::Translate('chameleon_system_core.cms_module_help_text.header_tables').'</h3>
+                                            <h3>'.ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_help_text.header_tables').'</h3>
                                        </td>
                                     </tr>';
                     $sQuery = "SELECT * FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".$oTable->id."' AND `cms_tbl_field_tab` = ''";

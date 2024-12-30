@@ -11,57 +11,35 @@
 
 namespace ChameleonSystem\AutoclassesBundle\CacheWarmer;
 
-use ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface;
 use ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesManagerInterface;
-use IPkgCmsFileManager;
+use ChameleonSystem\AutoclassesBundle\ClassManager\AutoclassesMapGeneratorInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class AutoclassesCacheWarmer implements CacheWarmerInterface
 {
-    /**
-     * @var AutoclassesDatabaseAdapterInterface
-     */
-    private $databaseAdapter;
-    /**
-     * @var AutoclassesManagerInterface
-     */
-    private $autoClassManager;
-    /**
-     * @var AutoclassesMapGeneratorInterface
-     */
-    private $autoclassesMapGenerator;
-    /**
-     * @var IPkgCmsFileManager
-     */
-    private $fileManager;
-    /**
-     * @var string
-     */
-    private $cacheDir;
+    private AutoclassesDatabaseAdapterInterface $databaseAdapter;
+    private AutoclassesManagerInterface $autoClassManager;
+    private AutoclassesMapGeneratorInterface $autoclassesMapGenerator;
+    private Filesystem $fileManager;
+    private string $cacheDir;
 
-    /**
-     * @param AutoclassesManagerInterface         $autoClassManager
-     * @param AutoclassesDatabaseAdapterInterface $databaseAdapter
-     * @param AutoclassesMapGeneratorInterface    $autoclassesMapGenerator
-     * @param IPkgCmsFileManager                  $filemanager
-     * @param string                              $cacheDir
-     */
     public function __construct(
         AutoclassesManagerInterface $autoClassManager,
         AutoclassesDatabaseAdapterInterface $databaseAdapter,
         AutoclassesMapGeneratorInterface $autoclassesMapGenerator,
-        IPkgCmsFileManager $filemanager,
-        $cacheDir,
+        Filesystem $filemanager,
+        string $cacheDir,
         ContainerInterface $container
-    )
-    {
+    ) {
         $this->autoClassManager = $autoClassManager;
         $this->databaseAdapter = $databaseAdapter;
         $this->autoclassesMapGenerator = $autoclassesMapGenerator;
         $this->fileManager = $filemanager;
         $this->cacheDir = $cacheDir;
-        \ChameleonSystem\CoreBundle\ServiceLocator::setContainer($container);
+        ServiceLocator::setContainer($container);
     }
 
     public function warmUp(string $cacheDirectory): array
@@ -115,7 +93,7 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
             $autoclassesExistedBefore = true;
         }
         $tableClasses = $this->getTableClassNamesToLoad();
-        foreach (array('virtualClasses', 'tableClasses') as $type) {
+        foreach (['virtualClasses', 'tableClasses'] as $type) {
             foreach ($tableClasses[$type] as $class) {
                 $this->autoClassManager->create($class, $targetDir);
             }
@@ -138,7 +116,7 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
         $tempCacheDir .= DIRECTORY_SEPARATOR;
 
         if (file_exists($tempCacheDir)) {
-            $this->fileManager->deldir($tempCacheDir, true);
+            $this->fileManager->remove($tempCacheDir);
         }
         mkdir($tempCacheDir, 0777, true);
 
@@ -154,11 +132,11 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
     {
         $oldCacheDir = $this->getOldCacheDir();
         if (file_exists($oldCacheDir)) {
-            $this->fileManager->deldir($oldCacheDir, true);
+            $this->fileManager->remove($oldCacheDir);
         }
-        $this->fileManager->move($this->cacheDir, $oldCacheDir);
-        $this->fileManager->move($targetDir, $this->cacheDir);
-        $this->fileManager->deldir($oldCacheDir, true);
+        $this->fileManager->rename($this->cacheDir, $oldCacheDir, true);
+        $this->fileManager->rename($targetDir, $this->cacheDir, true);
+        $this->fileManager->remove($oldCacheDir);
     }
 
     /**
@@ -182,7 +160,7 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
         // get all table classes
         $result = $this->databaseAdapter->getTableClassList();
 
-        $convertedList = array();
+        $convertedList = [];
         foreach ($result as $bareClassName) {
             $classNames = $this->getClassListForTableName($bareClassName);
             $convertedList = array_merge($convertedList, $classNames);
@@ -190,7 +168,7 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
 
         $result2 = $this->databaseAdapter->getVirtualClassList();
 
-        $convertedList = array('virtualClasses' => $result2, 'tableClasses' => $convertedList);
+        $convertedList = ['virtualClasses' => $result2, 'tableClasses' => $convertedList];
 
         return $convertedList;
     }
@@ -216,7 +194,7 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
      */
     private function getClassListForTableName($bareClassName)
     {
-        $list = array();
+        $list = [];
         $realClassName = $this->convertToCamelCase($bareClassName);
         $list[] = 'Tdb'.$realClassName;
         $list[] = 'TAdb'.$realClassName;
@@ -238,25 +216,24 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
         }
         $classData = $this->autoclassesMapGenerator->generateAutoclassesMap($targetDir);
         $filePath = $targetDir.'autoloader.chameleon.txt';
-        $file = $this->fileManager->fopen($filePath, 'wb');
+        $file = fopen($filePath, 'wb');
         $this->writeClassmap($file, $classData);
-        $this->fileManager->fclose($file);
+        fclose($file);
 
         return $filePath;
     }
 
     /**
      * @param resource $file
-     * @param array    $classData
      *
      * @return void
      */
     private function writeClassmap($file, array $classData)
     {
-        $this->fileManager->fwrite($file, '<?php return array(');
+        fwrite($file, '<?php return array(');
         foreach ($classData as $class => $path) {
-            $this->fileManager->fwrite($file, "'$class'=>'$path',");
+            fwrite($file, "'$class'=>'$path',");
         }
-        $this->fileManager->fwrite($file, ');');
+        fwrite($file, ');');
     }
 }

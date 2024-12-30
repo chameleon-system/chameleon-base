@@ -8,7 +8,7 @@ require dirname(__FILE__).'/form-basket-guest.view.php';
 ?>
 <table>
     <tr>
-        <th><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_extranet.form.password')); ?><span class="required">*</span></th>
+        <th><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_extranet.form.password')); ?><span class="required">*</span></th>
         <td>
             <?=TTemplateTools::InputField('aUser[password]', '', 300, '', 'password'); ?>
             <?php
@@ -19,7 +19,7 @@ require dirname(__FILE__).'/form-basket-guest.view.php';
         </td>
     </tr>
     <tr>
-        <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_extranet.form.validate_password')); ?></th>
+        <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_extranet.form.validate_password')); ?></th>
         <td>
             <?=TTemplateTools::InputField('aUser[password2]', '', 300, '', 'password'); ?>
             <?php

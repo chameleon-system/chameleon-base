@@ -75,14 +75,12 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         );
     }
 
-
     protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         $preventReferenceDelete = $this->oDefinition->GetFieldtypeConfigKey('preventReferenceDeletion') ?? 'false';
         $enableCascadeRemove = 'false' === $preventReferenceDelete;
 
         $oneToOneRelation = $this->isOneToOneConnection();
-
 
         $parentFieldName = $this->GetMatchingParentFieldName();
         if (str_ends_with($parentFieldName, '_id')) {
@@ -116,18 +114,18 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
     public function GetHTML()
     {
         /** @var TTableEditorListFieldState $stateContainer */
-        $stateContainer = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
+        $stateContainer = ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
 
         $inputFilterUtil = $this->getInputFilterUtil();
 
-        $aStateURL = array(
+        $aStateURL = [
             'pagedef' => $inputFilterUtil->getFilteredInput('pagedef'),
             'tableid' => $inputFilterUtil->getFilteredInput('tableid'),
             'id' => $inputFilterUtil->getFilteredInput('id'),
             'fieldname' => $this->name,
-            'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'),
+            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
             '_fnc' => 'changeListFieldState',
-        );
+        ];
         $sStateURL = '?'.TTools::GetArrayAsURLForJavascript($aStateURL);
 
         $html = '';
@@ -149,7 +147,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
                 data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'"
                 id="mltListControllButton'.$sEscapedName.'"
                 onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); '.$sOnClickEvent.'">
-                <i class="fas fa-eye"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_property.open_or_close_list')).'
+                <i class="fas fa-eye"></i> '.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.field_property.open_or_close_list')).'
                 </div>
             </div>
             <div class="card-body p-0">
@@ -182,10 +180,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         $sPropertyTableName = $this->GetPropertyTableName();
         $sOwningField = $this->GetMatchingParentFieldName();
         $oForeignTableConf = new TCMSTableConf();
-        /** @var $oForeignTableConf TCMSTableConf */
+        /* @var $oForeignTableConf TCMSTableConf */
         $oForeignTableConf->LoadFromField('name', $sPropertyTableName);
 
-        $aEditorRequest = array('pagedef' => 'tablemanagerframe', 'id' => $oForeignTableConf->id, 'sRestrictionField' => $sOwningField, 'sRestriction' => $this->recordId, 'bIsLoadedFromIFrame' => 1, 'field' => $this->name);
+        $aEditorRequest = ['pagedef' => 'tablemanagerframe', 'id' => $oForeignTableConf->id, 'sRestrictionField' => $sOwningField, 'sRestriction' => $this->recordId, 'bIsLoadedFromIFrame' => 1, 'field' => $this->name];
         if ('true' == $this->oDefinition->GetFieldtypeConfigKey('bOnlyOneRecord') || '1' == $oForeignTableConf->sqlData['only_one_record_tbl']) {
             $aEditorRequest['bOnlyOneRecord'] = 'true';
             $databaseConnection = $this->getDatabaseConnection();
@@ -212,6 +210,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         $oForeignTableConf = new TCMSTableConf();
         $sPropertyTableName = $this->GetPropertyTableName();
         $oForeignTableConf->LoadFromField('name', $sPropertyTableName);
+
         return 'true' === $this->oDefinition->GetFieldtypeConfigKey('bOnlyOneRecord') || '1' === $oForeignTableConf->sqlData['only_one_record_tbl'];
     }
 
@@ -256,10 +255,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
             $migrationQueryData = new MigrationQueryData($tableName, $editLanguageIsoCode);
             $migrationQueryData
-                ->setWhereEquals(array(
+                ->setWhereEquals([
                     $targetField => $this->recordId,
-                ));
-            $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_DELETE));
+                ]);
+            $aQuery = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_DELETE)];
             TCMSLogChange::WriteTransaction($aQuery);
         }
         parent::DeleteFieldDefinition();
@@ -287,7 +286,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             $aMethodData['sCallMethodName'] = 'GetListFor'.TCMSTableToClass::GetClassName('', $sOwningField);
 
             $oViewParser = new TViewParser();
-            /** @var $oViewParser TViewParser */
+            /* @var $oViewParser TViewParser */
             $oViewParser->bShowTemplatePathAsHTMLHint = false;
             $oViewParser->AddVarArray($aMethodData);
 
@@ -410,11 +409,11 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
      */
     protected function GetRecordsConnectedArrayFrontend()
     {
-        $aData = array();
+        $aData = [];
         $sForeignTableName = $this->GetPropertyTableNameFrontend();
         $iCounter = 0;
         if (is_array($this->data) && count($this->data) > 0) {
-            //we assume data was already posted
+            // we assume data was already posted
             foreach ($this->data as $aRow) {
                 if (is_array($aRow)) {
                     $aData[$iCounter] = $aRow;
@@ -471,7 +470,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         }
         $sForeignTableName = $this->GetPropertyTableNameFrontend();
         if (!empty($sForeignTableName) && TTools::FieldExists($sForeignTableName, $this->sTableName.'_id')) {
-            $aConnectedRecordIdsToDelete = array();
+            $aConnectedRecordIdsToDelete = [];
             if (!empty($this->oTableRow->id)) {
                 $sSql = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sForeignTableName).'`
                       WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'_id'."`='".MySqlLegacySupport::getInstance()->real_escape_string($this->oTableRow->id)."'";
@@ -483,7 +482,7 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             if (is_array($this->data) && count($this->data) > 0) {
                 foreach ($this->data as $aRow) {
                     $sRecordId = null;
-                    if (array_key_exists('id', $aRow) && TTools::RecordExistsArray($sForeignTableName, array('id' => $aRow['id'], $this->sTableName.'_id' => $sId))) {
+                    if (array_key_exists('id', $aRow) && TTools::RecordExistsArray($sForeignTableName, ['id' => $aRow['id'], $this->sTableName.'_id' => $sId])) {
                         unset($aConnectedRecordIdsToDelete[$aRow['id']]);
                         $sRecordId = $aRow['id'];
                     } else {
@@ -545,8 +544,8 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
     }
 
     /**
-    * Checks if its allowed to copy record references for property field.
-    */
+     * Checks if its allowed to copy record references for property field.
+     */
     public function allowCopyRecordReferences(): bool
     {
         $preventReferenceCopy = $this->oDefinition->GetFieldtypeConfigKey('preventReferenceCopy');
@@ -562,6 +561,6 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

@@ -225,7 +225,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         if (false === empty($this->data)) {
             $html .= '<div class="col-12 pt-2 col-lg-4 pt-lg-0">';
             $html .= TCMSRender::DrawButton(
-                TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'),
+                \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.switch_to'),
                 $this->getSelectedEntryLink($this->data),
                 'far fa-edit'
             );

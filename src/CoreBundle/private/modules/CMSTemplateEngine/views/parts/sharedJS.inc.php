@@ -10,7 +10,7 @@ if (array_key_exists('copyState', $data) && 'copied' == $data['copyState']) {
     } ?>
 <script type="text/javascript">
     $(document).ready(function () {
-        toasterMessage('<?=$sTmpName; ?><?=TGlobal::Translate('chameleon_system_core.template_engine.msg_copy_success'); ?>', 'MESSAGE');
+        toasterMessage('<?=$sTmpName; ?><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.msg_copy_success'); ?>', 'MESSAGE');
     });
 </script>
 <?php
@@ -22,11 +22,11 @@ $rowCount = 0;
     var sCurrentRecordName = '<?=TGlobal::OutJS($oTable->GetName()); ?>';
 
     function DeleteRecord() {
-        var sConfirmText = '<?=TGlobal::Translate('chameleon_system_core.action.confirm_delete'); ?>';
+        var sConfirmText = '<?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.confirm_delete'); ?>';
         if (sCurrentRecordName != '') {
             sConfirmText += "\n \"" + sCurrentRecordName + '"';
         } else {
-            sConfirmText += "\n \"<?=TGlobal::Translate('chameleon_system_core.text.unnamed_record'); ?>\"";
+            sConfirmText += "\n \"<?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record'); ?>\"";
         }
         if (confirm(sConfirmText)) {
             CHAMELEON.CORE.showProcessingModal();

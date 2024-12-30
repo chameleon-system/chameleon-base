@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\ModuleService\ModuleExecutionStrategyInterface;
 use ChameleonSystem\CoreBundle\ModuleService\ModuleResolverInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -33,13 +34,14 @@ class TModuleLoader
     public array $modules = []; // an array of all model classes.
     protected ChameleonControllerInterface $controller; // a pointer to the controller of the framework
     private array $aModuleCacheData = [];
-    private RequestStack $requestStack;
+    protected RequestStack $requestStack;
     protected ModuleResolverInterface $moduleResolver;
     private CacheInterface $cache;
     private IViewPathManager $viewPathManager;
     private TGlobalBase $global;
     private ModuleExecutionStrategyInterface $moduleExecutionStrategy;
-    private RequestInfoServiceInterface $requestInfoService;
+    protected RequestInfoServiceInterface $requestInfoService;
+    protected SecurityHelperAccess $securityHelperAccess;
 
     public function __construct(
         RequestStack $requestStack,
@@ -48,7 +50,8 @@ class TModuleLoader
         CacheInterface $cache,
         TGlobalBase $global,
         ModuleExecutionStrategyInterface $moduleExecutionStrategy,
-        RequestInfoServiceInterface $requestInfoService
+        RequestInfoServiceInterface $requestInfoService,
+        SecurityHelperAccess $securityHelperAccess
     ) {
         $this->requestStack = $requestStack;
         $this->moduleResolver = $moduleResolver;
@@ -57,6 +60,7 @@ class TModuleLoader
         $this->global = $global;
         $this->moduleExecutionStrategy = $moduleExecutionStrategy;
         $this->requestInfoService = $requestInfoService;
+        $this->securityHelperAccess = $securityHelperAccess;
     }
 
     /**
@@ -254,9 +258,8 @@ class TModuleLoader
             $aFooterData = array_merge($aFooterData, $aModuleFooterData);
         }
         reset($this->modules);
-        $aFooterData = array_unique($aFooterData);
 
-        return $aFooterData;
+        return array_unique($aFooterData);
     }
 
     /**
@@ -314,7 +317,8 @@ class TModuleLoader
             $this->logModuleException($e, $spotName);
         } catch (Exception $e) {
             if (_DEVELOPMENT_MODE) {
-                throw new ModuleExecutionFailedException(sprintf('Error in module execution: %s in file: %s on line: %d', $e->getMessage(), $e->getFile(), $e->getLine()), 0, $e);
+                $moduleName = get_class($module);
+                throw new ModuleExecutionFailedException(sprintf('Error in module "'.$moduleName.'" at spot '.$module->sModuleSpotName.' execution: %s in file: %s on line: %d', $e->getMessage(), $e->getFile(), $e->getLine()), 0, $e);
             }
 
             $this->logModuleException($e, $spotName);
@@ -414,11 +418,9 @@ class TModuleLoader
     {
         if (array_key_exists($sModuleSpotName, $this->modules)) {
             return $this->modules[$sModuleSpotName];
-        } else {
-            $found = false;
-
-            return $found;
         }
+
+        return false;
     }
 
     /**

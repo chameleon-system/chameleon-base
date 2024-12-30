@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+
 /**
  * overwrite the module loader so we can set the instance of the module as well.
-/**/
+ * /**/
 class TUserModuleLoader extends TModuleLoader
 {
     /**
@@ -22,18 +24,32 @@ class TUserModuleLoader extends TModuleLoader
      */
     protected function _SetModuleConfigData($name, $config, $templateLanguage = null)
     {
-        $tmpModel = null;
         // depending on the request we may need to change the model to a "pick the module" instance
         // we do this if the request came from the cms, and an url parameter is present.
-        $global = TGlobal::instance();
-        $requestModuleChooser = ($global->UserDataExists('__modulechooser') && ('true' == $global->GetUserData('__modulechooser')));
+
+        $request = $this->requestStack->getCurrentRequest();
+
+        if (null === $request) {
+            return null;
+        }
+
+        $isModuleChooserRequest = $request->get('__modulechooser');
+        $isMasterPagedefRequest = $request->get('__masterPageDef', false);
+
+        $requestModuleChooser = 'true' === $isModuleChooserRequest;
         $forceStatic = (array_key_exists('static', $config) && true === $config['static']);
-        if (!$forceStatic && $requestModuleChooser && TGlobal::CMSUserDefined() && self::ClassIsCustomModule($config['model'])) {
+
+        if (!$forceStatic && $requestModuleChooser && $this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER) && self::ClassIsCustomModule($config['model'])) {
             // need to check if the module has been overwritten using the cms config.
-            $oCMSConfig = TdbCmsConfig::GetInstance();
+            $cmsConfig = TdbCmsConfig::GetInstance();
+
+            if (null === $cmsConfig) {
+                return null;
+            }
+
             $sModuleClassName = 'CMSModuleChooser';
 
-            $sMappedClassName = $oCMSConfig->GetRealModuleClassName($sModuleClassName);
+            $sMappedClassName = $cmsConfig->GetRealModuleClassName($sModuleClassName);
             if (false !== $sMappedClassName) {
                 $sModuleClassName = $sMappedClassName;
             }
@@ -44,15 +60,15 @@ class TUserModuleLoader extends TModuleLoader
                 $tmpModel->oCustomerModelObject->instanceID = $config['instanceID'];
             }
             $tmpModel->viewTemplate = PATH_CORE_MODULES.'CMSModuleChooser/views/standard.view.php';
-            $tmpModel->bMasterPagedefRequest = ($global->UserDataExists('__masterPageDef') && ('true' == $global->GetUserData('__masterPageDef')));
+            $tmpModel->bMasterPagedefRequest = $isMasterPagedefRequest;
             $tmpModel->sModuleSpotName = $name;
             $tmpModel->aModuleConfig = $config;
             if (!is_null($templateLanguage) && property_exists($tmpModel, 'templateLanguage')) {
                 $tmpModel->templateLanguage = $templateLanguage;
             }
         } else {
-            $tmpModel = parent::_SetModuleConfigData($name, $config, $templateLanguage);
             /** @var $tmpModel TUserModelBase */
+            $tmpModel = parent::_SetModuleConfigData($name, $config, $templateLanguage);
         }
         if (array_key_exists('instanceID', $config)) {
             $tmpModel->instanceID = $config['instanceID'];

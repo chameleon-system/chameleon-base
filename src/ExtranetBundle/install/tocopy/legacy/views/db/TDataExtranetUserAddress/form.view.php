@@ -16,7 +16,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
         <input type="hidden" name="<?=$sAddressName.'[id]'; ?>" value="<?=TGlobal::OutHTML($oUserAddress->id); ?>"/>
         <table summary="">
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Anrede')); ?><span class="required">*</span></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Anrede')); ?><span class="required">*</span></th>
                 <td>
                     <?php
                     $oSalutationList = TdbDataExtranetSalutationList::GetList();
@@ -37,7 +37,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 </td>
             </tr>
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Vorname')); ?><span class="required">*</span></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Vorname')); ?><span class="required">*</span></th>
                 <td>
                     <?=TTemplateTools::InputField($sAddressName.'[firstname]', $oUserAddress->fieldFirstname, 310); ?>
                     <?php
@@ -48,7 +48,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 </td>
             </tr>
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Name')); ?><span class="required">*</span></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Name')); ?><span class="required">*</span></th>
                 <td>
                     <?=TTemplateTools::InputField($sAddressName.'[lastname]', $oUserAddress->fieldLastname, 310); ?>
                     <?php
@@ -59,7 +59,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 </td>
             </tr>
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Firma')); ?></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Firma')); ?></th>
                 <td><?=TTemplateTools::InputField($sAddressName.'[company]', $oUserAddress->fieldCompany, 300); ?>
                     <?php
                     if ($oMessageManager->ConsumerHasMessages($sAddressName.'-company')) {
@@ -69,7 +69,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 </td>
             </tr>
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Adresszusatz')); ?></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Adresszusatz')); ?></th>
                 <td><?=TTemplateTools::InputField($sAddressName.'[address_additional_info]', $oUserAddress->fieldAddressAdditionalInfo, 310); ?>
                     <?php
                     if ($oMessageManager->ConsumerHasMessages($sAddressName.'-address_additional_info')) {
@@ -80,7 +80,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
             </tr>
 
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Straße, Nr.')); ?><span class="required">*</span></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Straße, Nr.')); ?><span class="required">*</span></th>
                 <td>
                     <div style="float:left; width: 240px;">
                         <?=TTemplateTools::InputField($sAddressName.'[street]', $oUserAddress->fieldStreet, 270); ?>
@@ -94,7 +94,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 </td>
             </tr>
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('PLZ')); ?><span class="required">*</span></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('PLZ')); ?><span class="required">*</span></th>
                 <td>
                     <?=TTemplateTools::InputField($sAddressName.'[postalcode]', $oUserAddress->fieldPostalcode, 310, 'id="postalcode"'); ?>
                     <?php
@@ -105,7 +105,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 </td>
             </tr>
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Ort')); ?><span class="required">*</span></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Ort')); ?><span class="required">*</span></th>
                 <td>
                     <?=TTemplateTools::InputField($sAddressName.'[city]', $oUserAddress->fieldCity, 310, 'id="city"'); ?>
                     <?php
@@ -116,11 +116,11 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 </td>
             </tr>
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Land')); ?><span class="required">*</span></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Land')); ?><span class="required">*</span></th>
                 <td>
                     <?php
                     $oCountries = TdbDataCountryList::GetList();
-                    $oShop = TdbShop::GetInstance();
+                    $oShop = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop();
                     $iCountryId = $oUserAddress->fieldDataCountryId;
                     if (is_null($iCountryId) || $iCountryId < 1) {
                         $iCountryId = $oShop->fieldDataCountryId;
@@ -134,7 +134,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 </td>
             </tr>
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Telefon')); ?></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Telefon')); ?></th>
                 <td><?=TTemplateTools::InputField($sAddressName.'[telefon]', $oUserAddress->fieldTelefon, 310); ?>
                     <?php
                     if ($oMessageManager->ConsumerHasMessages($sAddressName.'-telefon')) {
@@ -144,7 +144,7 @@ $sAddressName = TGlobal::OutHTML($sAddressName);
                 </td>
             </tr>
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('Fax')); ?></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Fax')); ?></th>
                 <td><?=TTemplateTools::InputField($sAddressName.'[fax]', $oUserAddress->fieldFax); ?>
                     <?php
                     if ($oMessageManager->ConsumerHasMessages($sAddressName.'-fax')) {

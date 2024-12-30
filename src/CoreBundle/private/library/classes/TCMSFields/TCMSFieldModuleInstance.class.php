@@ -97,9 +97,9 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     {
         $oTableConf = new TCMSTableConf();
         $oTableConf->LoadFromField('name', 'cms_tpl_module_instance');
-        $html = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.select_instance'), 'javascript:'.$this->_GetOpenWindowJS($oTableConf).'', 'far fa-check-square', 'float-left');
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.reset_spot'), "javascript:ResetModuleInstance('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."')", 'fas fa-undo', 'float-left button-spacing');
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.create_or_edit_instance'), '#', 'fas fa-plus', 'float-left button-spacing', null, $this->name.'NewInstanceButton');
+        $html = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_instance'), 'javascript:'.$this->_GetOpenWindowJS($oTableConf).'', 'far fa-check-square', 'float-left');
+        $html .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.reset_spot'), "javascript:ResetModuleInstance('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."')", 'fas fa-undo', 'float-left button-spacing');
+        $html .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.create_or_edit_instance'), '#', 'fas fa-plus', 'float-left button-spacing', null, $this->name.'NewInstanceButton');
 
         return $html;
     }
@@ -133,7 +133,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
 
             $returnValue = $oRecord->GetDisplayValue();
         } else {
-            $returnValue = TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected');
+            $returnValue = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected');
         }
 
         return $returnValue;

@@ -48,19 +48,19 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         /** @var $oMenuItem TCMSTableEditorMenuItem */
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'editpagetree';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_portal.action_edit_tree');
+        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.action_edit_tree');
         $oMenuItem->sIcon = 'fas fa-sitemap';
-        $oMenuItem->sOnClick = "javascript:var navId = '".TGlobal::OutHTML($this->oTable->sqlData['main_node_tree'])."';if (document.cmseditform.main_node_tree) navId = document.cmseditform.main_node_tree.value; if (navId>0 || (navId != '' && navId != '0')) CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=navigationTreePlain&table=cms_tpl_page&noassign=1&rootID='+navId+'&isInIframe=1', 0,0,'".TGlobal::Translate('chameleon_system_core.cms_module_page_tree.headline')."'); else alert('".TGlobal::Translate('chameleon_system_core.table_editor_portal.error_navigation_node_required')."');";
+        $oMenuItem->sOnClick = "javascript:var navId = '".TGlobal::OutHTML($this->oTable->sqlData['main_node_tree'])."';if (document.cmseditform.main_node_tree) navId = document.cmseditform.main_node_tree.value; if (navId>0 || (navId != '' && navId != '0')) CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=navigationTreePlain&table=cms_tpl_page&noassign=1&rootID='+navId+'&isInIframe=1', 0,0,'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_page_tree.headline')."'); else alert('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.error_navigation_node_required')."');";
         $this->oMenuItems->AddItem($oMenuItem);
 
         // Add language activator
         if (true === $this->allowShowActivateLanguageButton()) {
             $sFunction = 'ActivateLanguage';
-            $sText = TGlobal::Translate('chameleon_system_core.table_editor_portal.action_tmp_enable_inactive_language_for_me');
+            $sText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.action_tmp_enable_inactive_language_for_me');
             $sPostFunction = 'OpenPageWithActiveLanguages';
             if (true === $this->oTable->GetActivateAllPortalLanguages()) {
                 $sFunction = 'DeActivateLanguage';
-                $sText = TGlobal::Translate('chameleon_system_core.table_editor_portal.action_disable_tmp_enabled_languages');
+                $sText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.action_disable_tmp_enabled_languages');
                 $sPostFunction = 'ReloadActivePage';
             }
             $oMenuItem = new TCMSTableEditorMenuItem();

@@ -60,9 +60,9 @@ class TCMSFieldTimezone extends TCMSField implements DoctrineTransformableInterf
         $html = '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name)."\" class=\"form-control form-control-sm\" style=\"width: 80px; display: inline;\">\n";
         $html .= '<option value=""';
         if ('' == $value) {
-            $html .= ' selected>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected'))."</option>\n";
+            $html .= ' selected>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected'))."</option>\n";
         } else {
-            $html .= '>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected'))."</option>\n";
+            $html .= '>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected'))."</option>\n";
         }
         $html .= '<option value="+12"';
         if ('+12' == $value) {

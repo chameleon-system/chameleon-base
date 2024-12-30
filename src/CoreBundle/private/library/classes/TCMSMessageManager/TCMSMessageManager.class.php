@@ -145,7 +145,7 @@ class TCMSMessageManager
             $sCallingPage = $activePageService->getLinkToActivePageRelative();
         }
 
-        $sDescription = TGlobal::Translate(
+        $sDescription = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
             self::AUTO_CREATED_MARKER.'chameleon_system_core.cms_message_manager.auto_entry_description',
             [
                 '%consumerName%' => $sConsumerName,
@@ -197,7 +197,7 @@ class TCMSMessageManager
             $oTmpTable->AllowEditByAll(true);
 
             $oGlobal = TGlobal::instance();
-            $description = TGlobal::Translate(
+            $description = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                 self::AUTO_CREATED_MARKER.'chameleon_system_core.cms_message_manager.auto_entry_description',
                 [
                     '%consumerName%' => $sConsumerName,
@@ -207,7 +207,7 @@ class TCMSMessageManager
             );
             $description .= "\nCMSPage: ".$oGlobal->GetUserData('pagedef');
 
-            $sErrorMessage = TGlobal::Translate('chameleon_system_core.cms_message_manager.invalid_code').'['.$sMessageCode.']';
+            $sErrorMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_message_manager.invalid_code').'['.$sMessageCode.']';
 
             $aPostData = ['cms_config_id' => 1, 'name' => $sMessageCode, 'description' => $description, 'message' => $sErrorMessage];
 
@@ -238,7 +238,7 @@ class TCMSMessageManager
                 if (null === $oMessages) {
                     $oMessages = $messages;
                 } else {
-                    while (null !== ($oMessage = $messages->Next())) {
+                    while (false !== ($oMessage = $messages->Next())) {
                         $oMessages->AddItem($oMessage);
                     }
                 }
@@ -261,7 +261,7 @@ class TCMSMessageManager
             if (null === $oMessages) {
                 $oMessages = $this->aMessages[self::GLOBAL_CONSUMER_NAME];
             } else {
-                while (null !== ($oGlobalMessage = $this->aMessages[self::GLOBAL_CONSUMER_NAME]->Next())) {
+                while (false !== ($oGlobalMessage = $this->aMessages[self::GLOBAL_CONSUMER_NAME]->Next())) {
                     $oMessages->AddItem($oGlobalMessage);
                 }
             }

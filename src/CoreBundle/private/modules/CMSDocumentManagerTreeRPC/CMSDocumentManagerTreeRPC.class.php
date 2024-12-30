@@ -11,7 +11,7 @@
 
 /**
  * Treemanagement Module for the CMS Navigation tree.
-/**/
+ **/
 class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
 {
     /**
@@ -39,11 +39,11 @@ class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
         }
         $sDocumentTreeTableEditorID = TTools::GetCMSTableId($this->treeTable);
         $oTableEditor = new TCMSTableEditorManager();
-        /** @var $oTableEditor TCMSTableEditorManager */
+        /* @var $oTableEditor TCMSTableEditorManager */
         $oTableEditor->Init($sDocumentTreeTableEditorID, $directoryID);
         $oTableEditor->Delete($directoryID);
         // update cache
-        TCacheManager::PerformeTableChange($this->treeTable, $directoryID);
+        $this->getCacheService()->callTrigger($this->treeTable, $directoryID);
         $this->UpdateSubtreePathCache($directoryID);
 
         return json_encode(true);
@@ -54,11 +54,11 @@ class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
      */
     public function _nodeProperties($oTreeNode)
     {
-        $child = array();
+        $child = [];
 
         $name = $oTreeNode->sqlData['name'];
         if (empty($name)) {
-            $name = '['.TGlobal::Translate('chameleon_system_core.text.unnamed_record').']';
+            $name = '['.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record').']';
         }
 
         $child['title'] = '<span class="">'.TGlobal::OutHTML($name).'</span>';

@@ -9,21 +9,35 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
+
+/**
+ * @deprecated since 8.0.0 - use symfony filesystem component instead
+ */
 class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
 {
+    private Filesystem $symfonyFileSystem;
+
+    public function __construct()
+    {
+        $this->symfonyFileSystem = new Filesystem();
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function put($sSource, $sTarget, $chmod = null, $remoteOnly = false)
+    public function put($sSource, $sTarget, $chmod = null)
     {
-        // only do something when we are local
-        if (!$remoteOnly) {
-            $ret = rename($sSource, $sTarget);
+        try {
+            $this->symfonyFileSystem->rename($sSource, $sTarget, true);
             if (null !== $chmod) {
                 $this->chmod($sTarget, $chmod);
             }
 
-            return $ret;
+            return true;
+        } catch (IOExceptionInterface $exception) {
+            return false;
         }
     }
 
@@ -40,35 +54,17 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function copy($source, $target)
     {
-        if (is_link($source)) {
-            return symlink(readlink($source), $target);
-        }
-        if (is_file($source)) {
-            return copy($source, $target);
-        }
-        if (!file_exists($target)) {
-            mkdir($target);
-        }
-        $dir = dir($source);
-        $retValue = true;
-        while (false !== $element = $dir->read()) {
-            if ('.' === $element || '..' === $element) {
-                continue;
+        try {
+            if (is_dir($source)) {
+                $this->symfonyFileSystem->mirror($source, $target);
+            } else {
+                $this->symfonyFileSystem->copy($source, $target, true);
             }
-            $subRetValue = $this->copy($source.DIRECTORY_SEPARATOR.$element, $target.DIRECTORY_SEPARATOR.$element);
-            $retValue = $subRetValue && $retValue;
+
+            return true;
+        } catch (IOExceptionInterface $exception) {
+            return false;
         }
-        $dir->close();
-
-        return $retValue;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get($sPath)
-    {
-        // TODO: Implement get() method.
     }
 
     /**
@@ -76,7 +72,13 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function delete($file)
     {
-        return $this->unlink($file);
+        try {
+            $this->symfonyFileSystem->remove($file);
+
+            return true;
+        } catch (IOExceptionInterface $exception) {
+            return false;
+        }
     }
 
     /**
@@ -84,7 +86,7 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function unlink($file)
     {
-        return unlink($file);
+        return $this->delete($file);
     }
 
     /**
@@ -92,7 +94,13 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function symlink($target, $link)
     {
-        return symlink($target, $link);
+        try {
+            $this->symfonyFileSystem->symlink($target, $link, true);
+
+            return true;
+        } catch (IOExceptionInterface $exception) {
+            return false;
+        }
     }
 
     /**
@@ -100,22 +108,23 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function chmod($file, $mode)
     {
-        return chmod($file, $mode);
+        try {
+            $this->symfonyFileSystem->chmod($file, $mode);
+
+            return true;
+        } catch (IOExceptionInterface $exception) {
+            return false;
+        }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function mkdir($path, $mode = 0777, $recursive = false)
+    public function mkdir(string $path, bool $recursive = false): bool
     {
-        if (0777 !== $mode) {
-            trigger_error('File permissions are handled by the administrator. Do not try to set the mode by hand.', E_USER_DEPRECATED);
-        }
-
         try {
-            return mkdir($path, 0777, $recursive);
-        } catch (Exception $e) {
-            throw new Exception(sprintf("Cannot create folder %s.", $path), $e->getCode(), $e);
+            $this->symfonyFileSystem->mkdir($path);
+
+            return true;
+        } catch (IOExceptionInterface $exception) {
+            return false;
         }
     }
 
@@ -124,7 +133,7 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function rmdir($path)
     {
-        return rmdir($path);
+        return $this->delete($path);
     }
 
     /**
@@ -132,22 +141,17 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function deldir($path, $recursive = false)
     {
-        $path = realpath($path);
-        if (false === $path || false === is_dir($path)) {
-            return;
+        if ($recursive) {
+            return $this->delete($path);
         }
-        $files = glob($path.'/*');
-        if (false === $files && is_dir($path) && is_readable($path) && is_writable($path)) {
-            $files = array(); //fix for debian systems, which don't return an empty array, but false, when they find an empty folder.
+
+        try {
+            $this->symfonyFileSystem->remove($path);
+
+            return true;
+        } catch (IOExceptionInterface $exception) {
+            return false;
         }
-        foreach ($files as $file) {
-            if (is_dir($file) && $recursive) {
-                $this->deldir($file, $recursive);
-            } else {
-                $this->unlink($file);
-            }
-        }
-        $this->rmdir($path);
     }
 
     /**
@@ -155,11 +159,7 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function fopen($filename, $mode, $use_include_path = null)
     {
-        if (null === $use_include_path) {
-            return fopen($filename, $mode); // don't ask
-        }
-
-        return fopen($filename, $mode, $use_include_path);
+        return fopen($filename, $mode, $use_include_path ?? false);
     }
 
     /**
@@ -167,11 +167,7 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function fwrite($handle, $string, $length = null)
     {
-        if (null === $length) {
-            return fwrite($handle, $string); // I said don't ask!
-        }
-
-        return fwrite($handle, $string, $length);
+        return fwrite($handle, $string, $length ?? strlen($string));
     }
 
     /**
@@ -187,6 +183,12 @@ class TPkgCmsFileManager_FileSystem implements IPkgCmsFileManager
      */
     public function file_put_contents($filename, $data)
     {
-        return file_put_contents($filename, $data);
+        try {
+            file_put_contents($filename, $data);
+
+            return true;
+        } catch (Exception $exception) {
+            return false;
+        }
     }
 }

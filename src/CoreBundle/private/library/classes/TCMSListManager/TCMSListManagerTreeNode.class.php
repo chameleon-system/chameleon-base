@@ -78,7 +78,7 @@ class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
 
                 // add new button
                 $oMenuItem = new TCMSTableEditorMenuItem();
-                $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.new');
+                $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.new');
                 $oMenuItem->sIcon = 'fas fa-plus';
                 $oMenuItem->sItemKey = 'new';
 
@@ -102,7 +102,7 @@ class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
         parent::AddCustomColumns();
 
         $jsParas = $this->_GetRecordClickJavaScriptParameters();
-        $this->tableObj->AddHeaderField(array('active' => TGlobal::Translate('chameleon_system_core.record.is_active')), 'left', null, 1, false, 100);
+        $this->tableObj->AddHeaderField(array('active' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.record.is_active')), 'left', null, 1, false, 100);
         $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackActivationStatus'), $jsParas, 1);
         ++$this->columnCount;
     }
@@ -121,24 +121,24 @@ class TCMSListManagerTreeNode extends TCMSListManagerFullGroupTable
         $oTree->Load($row['cms_tree_id']);
         $oCurrentActiveTreeConnection = $oTree->GetActivePageTreeConnectionForTree();
 
-        $html = '<i class="fas fa-unlink" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_disabled')).'"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_disabled'));
+        $html = '<i class="fas fa-unlink" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_tree_node.state_disabled')).'"></i> '.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_tree_node.state_disabled'));
         if (false !== $oCurrentActiveTreeConnection && $oCurrentActiveTreeConnection->id == $row['id']) {
             if ('1' == $row['active']) {
-                $html = '<i class="fas fa-check-square text-success" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_and_live')).'"></i>';
+                $html = '<i class="fas fa-check-square text-success" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_tree_node.state_active_and_live')).'"></i>';
             } else {
-                $html = '<i class="far fa-trash-alt text-danger" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_but_not_live')).'"></i>';
+                $html = '<i class="far fa-trash-alt text-danger" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_tree_node.state_active_but_not_live')).'"></i>';
             }
         } else {
             if ('1' == $row['active']) {
-                $html = '<i class="far fa-trash-alt text-danger" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list_tree_node.state_active_but_not_live')).'"></i>';
+                $html = '<i class="far fa-trash-alt text-danger" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_tree_node.state_active_but_not_live')).'"></i>';
             }
         }
 
         if ('0000-00-00 00:00:00' !== $row['start_date']) {
-            $html .= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_tree_node.date_starting_on')).' '.$row['start_date'].'<br />';
+            $html .= TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_tree_node.date_starting_on')).' '.$row['start_date'].'<br />';
         }
         if ('0000-00-00 00:00:00' !== $row['end_date']) {
-            $html .= ' '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_tree_node.date_ending_on')).' '.$row['end_date'];
+            $html .= ' '.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_tree_node.date_ending_on')).' '.$row['end_date'];
         }
 
         return $html;

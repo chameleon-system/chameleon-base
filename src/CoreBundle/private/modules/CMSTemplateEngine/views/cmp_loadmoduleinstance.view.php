@@ -13,7 +13,7 @@ $sLoadCopy = (isset($bLoadCopy) && '1' == $bLoadCopy) ? ('&bLoadCopy='.$bLoadCop
     function LoadModuleInstanceCallback(data) {
        if (data) {
            if (data.bIsTableLocked){
-               alert('<?=TGlobal::Translate('chameleon_system_core.template_engine.error_instance_locked'); ?>');
+               alert('<?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.error_instance_locked'); ?>');
            } else{
                $("#chooseModuleViewDialog").replaceWith(data.html);
                if (data.bOpenDialog){
@@ -23,7 +23,7 @@ $sLoadCopy = (isset($bLoadCopy) && '1' == $bLoadCopy) ? ('&bLoadCopy='.$bLoadCop
                }
            }
        } else {
-           alert('<?=TGlobal::Translate('chameleon_system_core.template_engine.ajax_error'); ?>');
+           alert('<?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.ajax_error'); ?>');
        }
     }
 </script>

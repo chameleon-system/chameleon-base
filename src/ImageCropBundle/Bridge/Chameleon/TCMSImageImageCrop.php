@@ -11,12 +11,7 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon;
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystemImageCropBundleBridgeChameleonTCMSImageImageCropAutoParent;
-use IPkgCmsFileManager;
-use TCMSImage;
-
-class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTCMSImageImageCropAutoParent
+class TCMSImageImageCrop extends \ChameleonSystemImageCropBundleBridgeChameleonTCMSImageImageCropAutoParent
 {
     /**
      * @param int $targetWidth
@@ -26,7 +21,7 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
      * @param int $x
      * @param int $y
      *
-     * @return TCMSImage|null
+     * @return \TCMSImage|null
      */
     public function getCroppedImage($targetWidth, $targetHeight, $cropWidth, $cropHeight, $x = 0, $y = 0)
     {
@@ -91,12 +86,12 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
     }
 
     /**
-     * @param int    $targetWidth
-     * @param int    $targetHeight
-     * @param int    $cropWidth
-     * @param int    $cropHeight
-     * @param int    $x
-     * @param int    $y
+     * @param int $targetWidth
+     * @param int $targetHeight
+     * @param int $cropWidth
+     * @param int $cropHeight
+     * @param int $x
+     * @param int $y
      * @param string $thumbPath
      * @param string $originalExtension
      *
@@ -138,18 +133,9 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
     {
         $imageMagick = new ImageCropImageMagick();
         $imageMagick->GetImageMagickVersion();
-        $imageMagick->setFileManager($this->getPrivateFileManager());
         $imageMagick->Init();
 
         return $imageMagick;
-    }
-
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getPrivateFileManager()
-    {
-        return ServiceLocator::get('chameleon_system_core.filemanager');
     }
 
     /**
@@ -168,18 +154,18 @@ class TCMSImageImageCrop extends ChameleonSystemImageCropBundleBridgeChameleonTC
         $resizeWidth = $thumbDummy->aData['width'];
         $resizeHeight = $thumbDummy->aData['height'];
 
-        return array('width' => $resizeWidth, 'height' => $resizeHeight);
+        return ['width' => $resizeWidth, 'height' => $resizeHeight];
     }
 
     /**
      * @param string $targetThumbPath
-     * @param int    $targetWidth
-     * @param int    $targetHeight
-     * @param int    $cropWidth
-     * @param int    $cropHeight
-     * @param int    $x
-     * @param int    $y
-     * @param int    $jpgQuality
+     * @param int $targetWidth
+     * @param int $targetHeight
+     * @param int $cropWidth
+     * @param int $cropHeight
+     * @param int $x
+     * @param int $y
+     * @param int $jpgQuality
      *
      * @return void
      */

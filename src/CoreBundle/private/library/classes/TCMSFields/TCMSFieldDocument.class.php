@@ -17,10 +17,9 @@ class TCMSFieldDocument extends TCMSFieldLookup
     {
         $this->oTableConf = $this->oTableRow->GetTableConf();
 
-        $currentFile = TGlobal::Translate('chameleon_system_core.field_document.nothing_selected');
+        $currentFile = ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.nothing_selected');
         if (!empty($this->data)) {
             $oCmsDocument = TdbCmsDocument::GetNewInstance();
-            /** @var $oCmsDocument TdbCmsDocument */
             if ($oCmsDocument->Load($this->data)) {
                 $currentFile = $oCmsDocument->getDownloadHtmlTag();
             }
@@ -32,7 +31,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
         $viewRenderer->AddSourceObject('currentFile', $currentFile);
 
         $viewRenderer->AddSourceObject('onClickDocument', $this->_GetOpenWindowJS());
-        $onClickReset = "_ResetDocument('".TGlobal::OutHTML($this->name)."', '".TGlobal::Translate('chameleon_system_core.field_document.nothing_selected')."','".TGlobal::OutHTML($this->oDefinition->sqlData['field_default_value'])."')";
+        $onClickReset = "_ResetDocument('".TGlobal::OutHTML($this->name)."', '".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.nothing_selected')."','".TGlobal::OutHTML($this->oDefinition->sqlData['field_default_value'])."')";
         $viewRenderer->AddSourceObject('onClickReset', $onClickReset);
         $viewRenderer->AddSourceObject('onClickNewFile', $this->_GetOpenUploadWindowJS());
 
@@ -44,7 +43,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
 
     public function _GetOpenWindowJS()
     {
-        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSDocumentSelect', 'documentfieldname' => $this->name, 'tableid' => $this->oTableConf->id, 'id' => $this->recordId));
+        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'CMSDocumentSelect', 'documentfieldname' => $this->name, 'tableid' => $this->oTableConf->id, 'id' => $this->recordId]);
         $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');";
 
         return $js;
@@ -74,7 +73,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
         if(documentTreeID !== '') {
           CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."' + documentTreeID);
         } else {
-          toasterMessage('".TGlobal::Translate('chameleon_system_core.field_document.error_missing_target').".','ERROR');
+          toasterMessage('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.error_missing_target').".','ERROR');
         }
       }
       </script>";

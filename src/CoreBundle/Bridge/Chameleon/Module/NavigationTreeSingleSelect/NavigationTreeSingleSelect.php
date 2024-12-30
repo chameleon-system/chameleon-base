@@ -14,110 +14,42 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingl
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use MTPkgViewRendererAbstractModuleMapper;
+use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use TGlobal;
-use TTools;
 
-class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
+class NavigationTreeSingleSelect extends \MTPkgViewRendererAbstractModuleMapper
 {
     /**
-     * The mysql tablename of the tree.
-     *
-     * @var string
+     * The mysql table name of the tree.
      */
-    private $treeTable = 'cms_tree';
-
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var UrlUtil
-     */
-    private $urlUtil;
-    /**
-     * @var BackendTreeNodeFactory
-     */
-    private $backendTreeNodeFactory;
-
-    /**
-     * @var string
-     */
-    protected $activeNodeId;
-
-    /**
-     * @var bool
-     */
-    private $isPortalSelectMode;
-
-    /**
-     * @var bool
-     */
-    private $isPortalHomeNodeSelectMode;
-
-    /**
-     * @var bool
-     */
-    private $isSelectModeForPage;
+    private string $treeTable = 'cms_tree';
+    protected string $activeNodeId;
+    private bool $isPortalSelectMode = false;
+    private bool $isPortalHomeNodeSelectMode = false;
+    private bool $isSelectModeForPage = false;
 
     /**
      * Nodes that should not be assignable or that should have only a
      * restricted context menu.
-     *
-     * @var array
      */
-    protected $restrictedNodes = [];
-
-    /**
-     * @var TTools
-     */
-    private $tools;
-
-    /**
-     * @var TGlobal
-     */
-    private $global;
-
-    /**
-     * @var FieldTranslationUtil
-     */
-    private $fieldTranslationUtil;
-
-    /**
-     * @var \TdbCmsLanguage
-     */
-    private $editLanguage;
+    protected array $restrictedNodes = [];
+    private ?\TdbCmsLanguage $editLanguage;
 
     public function __construct(
-        InputFilterUtilInterface $inputFilterUtil,
-        UrlUtil $urlUtil,
-        BackendTreeNodeFactory $backendTreeNodeFactory,
-        TranslatorInterface $translator,
-        TTools $tools,
-        TGlobal $global,
-        FieldTranslationUtil $fieldTranslationUtil,
-        BackendSessionInterface $backendSession
+        private readonly InputFilterUtilInterface $inputFilterUtil,
+        private readonly UrlUtil $urlUtil,
+        private readonly BackendTreeNodeFactory $backendTreeNodeFactory,
+        private readonly TranslatorInterface $translator,
+        private readonly \TTools $tools,
+        private readonly \TGlobal $global,
+        private readonly FieldTranslationUtil $fieldTranslationUtil,
+        private readonly BackendSessionInterface $backendSession,
+        private readonly Connection $dbConnection
     ) {
-        $this->inputFilterUtil = $inputFilterUtil;
-        $this->urlUtil = $urlUtil;
-        $this->backendTreeNodeFactory = $backendTreeNodeFactory;
-        $this->translator = $translator;
-        $this->tools = $tools;
-        $this->global = $global;
-        $this->fieldTranslationUtil = $fieldTranslationUtil;
-        $this->editLanguage = \TdbCmsLanguage::GetNewInstance($backendSession->getCurrentEditLanguageId());
+        $this->editLanguage = \TdbCmsLanguage::GetNewInstance($this->backendSession->getCurrentEditLanguageId());
     }
 
     /**
@@ -170,12 +102,14 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         }
 
         $this->restrictedNodes = $this->getPortalNavigationStartNodes();
-        /** @var BackendSessionInterface $backendSession */
-        $backendSession = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_backend.backend_session');
-        $activeLanguageIsoCode = $backendSession->getCurrentEditLanguageIso6391();
+        $activeLanguageIsoCode = $this->backendSession->getCurrentEditLanguageIso6391();
 
-        $activeLanguageId = null !== $activeLanguageIsoCode ? ServiceLocator::get('database_connection')->fetchFirstColumn("select `id` from `cms_language` where `iso_6391` = :isoCode", ['isoCode' => $activeLanguageIsoCode]) : false;
-
+        $activeLanguageId = null !== $activeLanguageIsoCode
+            ? $this->dbConnection->fetchFirstColumn(
+                'SELECT `id` FROM `cms_language` WHERE `iso_6391` = :isoCode',
+                ['isoCode' => $activeLanguageIsoCode]
+            )[0] ?? false
+            : false;
 
         $rootTreeId = $this->getPortalTreeRootNodeId();
         if ('' !== $rootTreeId) {
@@ -241,11 +175,15 @@ class NavigationTreeSingleSelect extends MTPkgViewRendererAbstractModuleMapper
         if ('' === $rootTreeId) {
             return [];
         }
-        /** @var BackendSessionInterface $backendSession */
-        $backendSession = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_backend.backend_session');
-        $activeLanguageIsoCode = $backendSession->getCurrentEditLanguageIso6391();
 
-        $activeLanguageId = null !== $activeLanguageIsoCode ? $this->dbConnection->fetchFirstColumn("select `id` from `cms_language` where `iso_6391` = :isoCode", ['isoCode' => $activeLanguageIsoCode]) : false;
+        $activeLanguageIsoCode = $this->backendSession->getCurrentEditLanguageIso6391();
+
+        $activeLanguageId = null !== $activeLanguageIsoCode
+            ? $this->dbConnection->fetchFirstColumn(
+                'SELECT `id` FROM `cms_language` WHERE `iso_6391` = :isoCode',
+                ['isoCode' => $activeLanguageIsoCode]
+            )[0] ?? false
+            : false;
 
         $rootNode = new \TdbCmsTree();
         if (false !== $activeLanguageId) {

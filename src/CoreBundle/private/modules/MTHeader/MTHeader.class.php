@@ -27,6 +27,7 @@ use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -56,8 +57,7 @@ class MTHeader extends TCMSModelBase
     {
         parent::Execute();
 
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         $this->data['table_id_cms_tpl_page'] = TTools::GetCMSTableId('cms_tpl_page');
         if (stristr($this->viewTemplate, 'title.view.php')) {
@@ -247,8 +247,7 @@ class MTHeader extends TCMSModelBase
     protected function GetPortalList()
     {
         $oCmsPortalList = null;
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
         $user = $securityHelper->getUser();
         $portalList = $user?->getPortals();
 
@@ -294,8 +293,7 @@ class MTHeader extends TCMSModelBase
      */
     protected function CheckNavigationRights()
     {
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         $this->data['showCacheButton'] = $securityHelper->isGranted('CMS_RIGHT_FLUSH_CMS_CACHE');
     }
@@ -303,8 +301,7 @@ class MTHeader extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         if ($securityHelper->isGranted('CMS_RIGHT_FLUSH_CMS_CACHE')) {
             $this->methodCallAllowed[] = 'ClearCache';
@@ -449,10 +446,10 @@ class MTHeader extends TCMSModelBase
 
         // always clear cache dir as well
         $oldCache = realpath($cacheDir).'-'.time();
-        $fileManager->move($cacheDir, $oldCache);
+        $fileManager->rename($cacheDir, $oldCache);
         $fileManager->mkdir($cacheDir);
         $fileManager->mkdir($cacheDir.'/raw');
-        $fileManager->deldir($oldCache, true);
+        $fileManager->remove($oldCache, true);
     }
 
     /**
@@ -551,8 +548,7 @@ class MTHeader extends TCMSModelBase
         $html = '';
         $editLanguages = [];
         $currentLanguage = '';
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             /** @var BackendSessionInterface $backendSession */
@@ -654,7 +650,9 @@ class MTHeader extends TCMSModelBase
     {
         $includes = parent::GetHtmlFooterIncludes();
 
-        if (false === TGlobal::CMSUserDefined()) {
+        $securityHelperAccess = $this->getSecurityHelperAccess();
+
+        if (false === $securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return $includes;
         }
 
@@ -735,9 +733,9 @@ class MTHeader extends TCMSModelBase
         return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    private function getFileManager(): IPkgCmsFileManager
+    private function getFileManager(): Filesystem
     {
-        return ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
     }
 
     private function getCache(): CacheInterface
@@ -768,5 +766,10 @@ class MTHeader extends TCMSModelBase
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
+    }
+
+    private function getSecurityHelperAccess(): SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
     }
 }

@@ -25,36 +25,24 @@ class TModelBase
 {
     /**
      * the view template path to load (without .view.php ending).
-     *
-     * @var string
      */
-    public $viewTemplate = null;
+    public $viewTemplate;
 
     /**
      * array of module configuration data from pagedef.
-     *
-     * @var array
      */
-    public $aModuleConfig = array();
+    public array $aModuleConfig = [];
 
     /**
      * name of the spot e.g. spota.
-     *
-     * @var string
      */
-    public $sModuleSpotName = '';
-
-    /**
-     * @var bool
-     */
-    public $hasError = false;
+    public string $sModuleSpotName = '';
+    public bool $hasError = false;
 
     /**
      * the data that will be available to module template views.
-     *
-     * @var array
      */
-    public $data = array();
+    public array $data = [];
 
     /**
      * pointer to the controller.
@@ -63,41 +51,30 @@ class TModelBase
      */
     protected ?ChameleonControllerInterface $controller = null;
 
-    /**
-     * @var $bool
-     */
-    private $allowedMethodCallsInitialized = false;
+    private bool $allowedMethodCallsInitialized = false;
 
     /**
      * An array of all methods from the class which may be called via http requests.
-     *
-     * @var array
      */
-    public $methodCallAllowed = array();
+    public $methodCallAllowed = [];
 
     /**
      * this is set automatically when the class is restored from session.
-     *
-     * @var bool
      */
-    private $bIsWakingUp = false;
+    private bool $bIsWakingUp = false;
 
     /**
      * if this is true (and config enables automatically wrapping of div container for spots)
      * the module loader will generate a div with id="spotname" and class="moduleclass moduleview"
      * by default its false - you can overwrite this explicit for each module you need.
-     *
-     * @var bool
      */
     protected $bAllowHTMLDivWrapping = false;
 
     /**
      * this array is filled in TModuleLoader if the module was loaded from cache
      * if it is null, you should call $this->_GetCacheTableInfos().
-     *
-     * @var array - null by default
      */
-    public $aCacheTrigger = null;
+    public ?array $aCacheTrigger;
 
     /**
      * @param ChameleonControllerInterface $controller
@@ -128,7 +105,7 @@ class TModelBase
 
     public function __sleep()
     {
-        return array('viewTemplate', 'aModuleConfig', 'sModuleSpotName');
+        return ['viewTemplate', 'aModuleConfig', 'sModuleSpotName'];
     }
 
     public function __construct()
@@ -160,12 +137,11 @@ class TModelBase
 
     /**
      * @param string $name
-     * @param mixed  $value
      */
     public function __set($name, $value)
     {
         if ('global' !== $name) {
-            throw new \LogicException('Invalid property: '.$name);
+            throw new LogicException('Invalid property: '.$name);
         }
 
         $this->global = $value;
@@ -178,6 +154,7 @@ class TModelBase
 
     /**
      * Called before any external functions get called, but after the constructor.
+     *
      * @return void
      */
     public function Init()
@@ -246,12 +223,12 @@ class TModelBase
                 trigger_error('Ajax call made, but no function passed via _fnc', E_USER_WARNING);
             }
             header('HTTP/1.0 404 Not Found');
-            exit();
+            exit;
         }
 
         if (false === $this->AllowAccessWithoutAuthenticityToken($methodName) && false === $this->getAuthenticityTokenManager()->isTokenValid()) {
             header('HTTP/1.0 401 Token invalid');
-            exit();
+            exit;
         }
 
         // call the _fnc method in the current module
@@ -287,7 +264,7 @@ class TModelBase
      */
     public function GetHtmlHeadIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -303,7 +280,7 @@ class TModelBase
      */
     public function GetHtmlFooterIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -311,7 +288,7 @@ class TModelBase
      * it`s possible to set a callback function via GET/POST 'callback' as wrapper.
      *
      * @param string $content
-     * @param bool   $bPreventPreOutputInjection - disable the pre output variable injection (messages, vars, authenticity token...)
+     * @param bool $bPreventPreOutputInjection - disable the pre output variable injection (messages, vars, authenticity token...)
      */
     protected function _OutputForAjaxPlain($content, $bPreventPreOutputInjection = false)
     {
@@ -361,7 +338,6 @@ class TModelBase
 
     /**
      * @param object|array|string $content
-     * @param string              $contentType
      */
     private function outputForAjaxAndExit($content, string $contentType): void
     {
@@ -370,7 +346,7 @@ class TModelBase
         while (@ob_end_clean()) {
         }
         header(sprintf('Content-Type: %s', $contentType));
-        //never index ajax responses
+        // never index ajax responses
         header('X-Robots-Tag: noindex, nofollow', true);
 
         // allow using a JS callback function
@@ -389,17 +365,13 @@ class TModelBase
     /**
      * call a method of this module. validates request.
      *
-     * @param string $sMethodName      - name of the function
+     * @param string $sMethodName - name of the function
      * @param mixed[] $aMethodParameter - parameters to pass to the method
-     *
-     * @return mixed
      */
-    public function _CallMethod($sMethodName, $aMethodParameter = array())
+    public function _CallMethod($sMethodName, $aMethodParameter = [])
     {
         if (true === $this->isMethodCallAllowed($sMethodName)) {
-            $functionResult = call_user_func_array(array($this, $sMethodName), $aMethodParameter);
-
-            return $functionResult;
+            return call_user_func_array([$this, $sMethodName], $aMethodParameter);
         }
 
         if (_DEVELOPMENT_MODE) {
@@ -407,16 +379,11 @@ class TModelBase
         } else {
             trigger_error('Ajax call made ['.TGlobal::OutHTML($sMethodName).'] in ['.get_class($this).'], but either that function may not be called or it does not exist', E_USER_WARNING);
             header('HTTP/1.0 404 Not Found');
-            exit();
+            exit;
         }
     }
 
-    /**
-     * @param string $methodName
-     *
-     * @return bool
-     */
-    private function isMethodCallAllowed($methodName)
+    private function isMethodCallAllowed(string $methodName): bool
     {
         if (false === $this->allowedMethodCallsInitialized) {
             $this->DefineInterface();
@@ -429,7 +396,7 @@ class TModelBase
      * set the view template of the model.
      *
      * @param string $modelName - directory name of the module
-     * @param string $name      - template filename in directory "views" without ".view.php"
+     * @param string $name - template filename in directory "views" without ".view.php"
      */
     protected function SetTemplate($modelName, $name)
     {
@@ -475,9 +442,9 @@ class TModelBase
      */
     public function GetPostRenderVariables()
     {
-        return array(
+        return [
             'sModuleSpotName' => TGlobal::OutHTML($this->sModuleSpotName),
-        );
+        ];
     }
 
     /**
@@ -518,7 +485,7 @@ class TModelBase
      */
     public function _GetCacheTableInfos()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -528,9 +495,7 @@ class TModelBase
      */
     protected function SpotHasMessages()
     {
-        $oMessageManager = TCMSMessageManager::GetInstance();
-
-        return $oMessageManager->ConsumerHasMessages($this->sModuleSpotName);
+        return TCMSMessageManager::GetInstance()->ConsumerHasMessages($this->sModuleSpotName);
     }
 
     /**
@@ -542,21 +507,21 @@ class TModelBase
      *                                           but its value will be null
      *                                           - if you pass a string, the matching value will be returned - or null if it is not found
      * @param string|array $defaultValueOrValues - if this is set, the defined value will be returned for fields in which we did not find a match
-     * @param string       $sFilter
+     * @param string $sFilter
      *
      * @return string|array
      */
     protected function GetUserInput($parameterNameOrNames = null, $defaultValueOrValues = null, $sFilter = null)
     {
-        static $aInputList = array();
+        static $aInputList = [];
         if (!array_key_exists($this->sModuleSpotName, $aInputList)) {
-            $aInputList[$this->sModuleSpotName] = $this->global->GetUserData($this->sModuleSpotName, array(), 'TCMSUserInputFilter;TCMSUserInput/filter;Core');
+            $aInputList[$this->sModuleSpotName] = $this->global->GetUserData($this->sModuleSpotName, [], 'TCMSUserInputFilter;TCMSUserInput/filter;Core');
             if (!is_array($aInputList[$this->sModuleSpotName])) {
-                $aInputList[$this->sModuleSpotName] = array();
+                $aInputList[$this->sModuleSpotName] = [];
             }
         }
 
-        $aResults = array();
+        $aResults = [];
         if (is_null($parameterNameOrNames)) {
             $aResults = $aInputList[$this->sModuleSpotName];
             // now add all defaults
@@ -652,8 +617,7 @@ class TModelBase
     }
 
     /**
-     * @param Request $request
-     * @param bool    $isLegacyModule
+     * @param bool $isLegacyModule
      *
      * @return Response
      *
@@ -663,7 +627,7 @@ class TModelBase
     {
         $response = new Response();
         if (true === $this->_AllowCache()) {
-            $cache = $this->getCache();
+            $cache = $this->getCacheService();
             $cacheKey = $cache->getKey($this->_GetCacheParameters());
             $cachedContent = $cache->get($cacheKey);
             if (null !== $cachedContent) {
@@ -714,7 +678,6 @@ class TModelBase
                 );
             }
 
-
             $mapperChains = $oModule->getMapperChains();
             foreach ($mapperChains as $mapperChainName => $mapperChainClasses) {
                 $oRenderer->addMapperChain($mapperChainName, $mapperChainClasses);
@@ -728,11 +691,11 @@ class TModelBase
         try {
             $sContent = $oRenderer->Render($sViewPathReference, $oLegacySnippetRenderer, true);
             if (true === $this->_AllowCache()) {
-                $cache = $this->getCache();
+                $cache = $this->getCacheService();
                 $cacheKey = $cache->getKey($this->_GetCacheParameters());
                 $cache->set($cacheKey, $sContent, $oRenderer->getPostRenderMapperCacheTrigger(), 0);
             }
-        } catch (\TPkgSnippetRenderer_SnippetRenderingException $e) {
+        } catch (TPkgSnippetRenderer_SnippetRenderingException $e) {
             if (_DEVELOPMENT_MODE) {
                 $sContent = 'ERROR: '.$e->getMessage().' in '.$e->getFile().' LINE '.$e->getLine();
             }
@@ -744,12 +707,7 @@ class TModelBase
         return $this->injectPostRenderVariables($response);
     }
 
-    /**
-     * @param Response $response
-     *
-     * @return Response
-     */
-    private function injectPostRenderVariables(Response $response)
+    private function injectPostRenderVariables(Response $response): Response
     {
         $postRenderVariables = $this->GetPostRenderVariables();
         if (null === $postRenderVariables || 0 === count($postRenderVariables)) {
@@ -764,9 +722,6 @@ class TModelBase
     }
 
     /**
-     * @param Request  $request
-     * @param Response $response
-     *
      * @return Response
      */
     protected function setResponseCacheHeader(Request $request, Response $response)
@@ -781,9 +736,9 @@ class TModelBase
         $response->setMaxAge(ServiceLocator::getParameter('chameleon_system_core.cache.default_max_age_in_seconds'));
         $response->setPublic();
 
-        $cache = $this->getCache();
+        $cache = $this->getCacheService();
         $cacheKey = $cache->getKey($this->_GetCacheParameters());
-        $eTag = md5($cacheKey.'-NODE:'.gethostname()); //add hostname to handle multi-server setup
+        $eTag = md5($cacheKey.'-NODE:'.gethostname()); // add hostname to handle multi-server setup
         $response->setEtag($eTag);
 
         return $response;
@@ -791,9 +746,6 @@ class TModelBase
 
     /**
      * called after the response is generated - will set the default headers.
-     *
-     * @param Request  $request
-     * @param Response $response
      *
      * @return Response
      */
@@ -804,35 +756,26 @@ class TModelBase
 
     /**
      * hook allowing post render modification of the response. will only be called if the response is not returned from cache.
-     *
-     * @param Request  $request
-     * @param Response $response
      */
     protected function writeETagValidationKey(Request $request, Response $response, array $cacheTrigger)
     {
         if (0 === count($cacheTrigger)) {
             return;
         }
-        $this->getCache()->set(md5($response->getEtag()), true, $cacheTrigger, 0); // we do not pass a time argument, as we want the key to expire only via call or cms backend
+        $this->getCacheService()->set(md5($response->getEtag()), true, $cacheTrigger, 0); // we do not pass a time argument, as we want the key to expire only via call or cms backend
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return get_class($this);
     }
 
-    /**
-     * @return \ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface
-     */
-    private function getAuthenticityTokenManager()
+    private function getAuthenticityTokenManager(): ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface
     {
         return ServiceLocator::get('chameleon_system_core.security.authenticity_token.authenticity_token_manager');
     }
 
-    /**
-     * @return CacheInterface
-     */
-    private function getCache()
+    protected function getCacheService(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');
     }
@@ -840,8 +783,6 @@ class TModelBase
     /**
      * Returns the current controller. For modules that are defined as services the controller is NOT set as property of
      * each module, so we need to get it from the service container.
-     *
-     * @return ChameleonControllerInterface
      */
     private function getController(): ChameleonControllerInterface
     {
@@ -852,10 +793,7 @@ class TModelBase
         return ServiceLocator::get('chameleon_system_core.chameleon_controller');
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }

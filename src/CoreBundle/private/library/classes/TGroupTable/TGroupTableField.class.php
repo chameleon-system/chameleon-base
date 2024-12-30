@@ -443,7 +443,7 @@ class TGroupTableField
             } else {
                 $cellValue = $this->EscapeCellValue($row[$this->sOriginalField]);
             }
-            $cellValue .= ' <i class="fas fa-language" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.default_language')).'"></i>';
+            $cellValue .= ' <i class="fas fa-language" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.default_language')).'"></i>';
         }
 
         return $cellValue;

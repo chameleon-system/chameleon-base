@@ -74,7 +74,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSTableEditorPortal::linkPortalToUser` now takes the user id instead of the user
 - `\TPkgShopPaymentTransactionContextEndPoint::getCmsUser` was removed
 - `\TGlobalBase::$aLangaugeIds` removed
-- `\TGlobal::GetLanguageIdList` deprecated
+- `\TGlobal::GetLanguageIdList` removed - use `SecurityHelperAccess::getUser()?->getAvailableEditLanguages()` instead
 - `\TCMSUser::GetSessionVarName` removed
 - `\MTLoginEndPoint::Login` removed
 - `\TCMSUser::Login` removed
@@ -94,12 +94,12 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TAccessManagerGroups` removed.
 - `\TAccessManagerPermissions` removed.
 - `\TAccessManagerPortals` removed.
-- `\TAccessManagerRoles` removed.
+- `\TAccessManagerRoles` removed. @todo remove in article-right bundle
 - `\MTLoginEndPoint::Logout` removed (logout works by redirecting to the logout url)
 - `\TCMSUser::Logout` removed
 - `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
 - `\TCMSTableEditorCMSUser::SwitchToUser` removed - switch user by using Symfony impersonate.
-- `\TCMSUser::CMSUserDefined` removed - is `isGranted(\ChameleonSystem\SecurityBundle\CmsUser\UserRoles::CMS_USER)`
+- `\TCMSUser::CMSUserDefined` removed - use  `ServiceLocator::get(SecurityHelperAccess::class)->isGranted(\ChameleonSystem\SecurityBundle\CmsUser\UserRoles::CMS_USER)` instead
 - `\TCMSUser::ValidSessionKey` removed
 - `\TCMSUser::GetUserSessionKey` removed
 - `\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface::getActiveEditLanguage` removed. Use `\ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface::getCurrentEditLanguageIso6391` 
@@ -113,6 +113,28 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface::FlushContentToBrowser()` removed
 - `\TModuleLoader::SetEnableAutoFlush()` removed
 - `\TModuleLoader::getModuleESIPath()` removed
+- `\TCMSChangeLogArchiver` removed - use `\ChameleonSystem\CmsChangeLogBundle\DataAccess\CmsChangeLogDataAccess::deleteOlderThan()` instead
+- `ChameleonSystem\CoreBundle\Event\RecordChangeEvent:getTableId` removed - use `getTableName` instead
+- `CMS_VERSION_MAJOR` removed - use the Twig filter `cms_version` instead
+- `CMS_VERSION_MINOR` removed - use the Twig filter `cms_version` instead
+- `SidebarBackendModule::toggleCategoryOpenState` removed
+- `BackendLoginEvent` and `BackendLogoutEvent` removed - use `Symfony\Component\Security\Http\Event\LoginSuccessEvent` and `Symfony\Component\Security\Http\Event\LogoutEvent` instead
+- `TPkgDependencyInjection` removed - use `ChameleonSystem\CoreBundle\ServiceLocator` instead.
+- `TPkgCmsFileManager_FileSystem` and `IPkgCmsFileManager` are deprecated now. Use `Symfony\Component\Filesystem\Filesystem` instead.
+- `MTPkgExternalTracker_MTShopArticleCatalogCore` removed
+- `TextBlockLookup::getText` removed - use `TextBlockLookup::getRenderedText` instead
+- `TextBlockLookup::getTextFromTextBlock` removed - use `TextBlockLookup::getRenderedTextFromTextBlock` instead
+- `TextBlockLookup::getHeadlineFormTextBlock` removed - use `TextBlockLookup::getHeadlineFromTextBlock` instead
+- `DatabaseAccessLayerCmsTplPage` removed
+- `idna_convert` removed - use the bundle `algo26-matthias/idna-convert` instead (ToUnicode and ToIdn)
+- `TCacheManager` removed - use `ChameleonSystem\CoreBundle\Service\CacheService` search for `TCachemanager::`
+- `TPkgCmsCoreSendToHost::setLogRequest` removed
+- `TGlobalBase::CountCalls` / `TGlobal::CountCalls` removed
+- `TGlobalBase::GetRewriteParameter` / `TGlobal::GetRewriteParameter` removed
+- `TGlobalBase::GetController()` / `TGlobal::GetController` removed removed - use `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller')` instead
+- We want to get rid of `TGlobal::Translate`. Search and replace: 
+  - `\TGlobal::Translate(` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(`
+  - `TGlobal::Translate(` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(`
 
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
   https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.0.md

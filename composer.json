@@ -18,6 +18,7 @@
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
         "ext-tidy": "*",
+        "ext-memcached": "*",
         "bassjobsen/bootstrap-3-typeahead": "~4.0",
         "ckeditor/ckeditor": "4.6.2",
         "dmhendricks/file-icon-vectors": "~1.0",
@@ -88,7 +89,8 @@
         "symfony/yaml": "^6.4",
         "knpuniversity/oauth2-client-bundle": "^2.11",
         "league/oauth2-google": "^4.0",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "algo26-matthias/idna-convert": "^4.0"
     },
     "require-dev": {
         "symfony/stopwatch": "^6.4",

@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\DataModel\DownloadLinkDataModel;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,35 +22,24 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TCMSDownloadFileEndPoint extends TCMSRecord
 {
-    protected $_cacheParameter = array();
-    protected $_outboxFolder = null;
+    protected $_cacheParameter = [];
+    protected $_outboxFolder;
 
     /**
      * SEO filename used in outbox folder for symlinks.
      *
      * @var string|null
      */
-    protected $sSEOFileName = null;
+    protected $sSEOFileName;
 
     /**
      * full SEO URL path to symlink in outbox folder.
-     *
-     * @var string|null
      */
-    public $fileURL = null;
+    public ?string $fileURL = null;
 
     public function __construct($id = null)
     {
         parent::__construct('cms_document', $id);
-    }
-
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSDownloadFileEndPoint()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**
@@ -104,7 +94,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
 
         $fullPath = PATH_OUTBOX.'/public/'.$this->sqlData['cms_document_tree_id'].'/';
         if (!is_dir($fullPath)) {
-            $filemanager->mkdir($fullPath, 0777, true);
+            $filemanager->mkdir($fullPath);
         }
         $targetFile = $this->GetRealPath();
 
@@ -113,13 +103,10 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
             // trigger error only in live mode because sometimes files are missing in the development environment
             trigger_error('Error: Download source ['.$targetFile.'] does not exist, or is not readable!', E_USER_NOTICE);
         } else {
-            $filemanager->unlink($fullPath.'/'.$sSEOTargetFileName);
+            $filemanager->remove($fullPath.'/'.$sSEOTargetFileName);
             if (!file_exists($fullPath.'/'.$sSEOTargetFileName)) {
-                if ($filemanager->symlink($targetFile, $fullPath.'/'.$sSEOTargetFileName)) {
-                    $this->fileURL = URL_OUTBOX.'/public/'.$this->sqlData['cms_document_tree_id'].'/'.$sSEOTargetFileName;
-                } else {
-                    trigger_error('Error: Unable to create SymLink ['.$targetFile.'] -> ['.$fullPath.'/'.$sSEOTargetFileName.']', E_USER_WARNING);
-                }
+                $filemanager->symlink($targetFile, $fullPath.'/'.$sSEOTargetFileName);
+                $this->fileURL = URL_OUTBOX.'/public/'.$this->sqlData['cms_document_tree_id'].'/'.$sSEOTargetFileName;
             }
         }
     }
@@ -133,7 +120,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
         if ($oImageType) {
             $symLink = PATH_OUTBOX.'/public/'.$this->sqlData['cms_document_tree_id'].'/'.$this->GetTargetFileName();
             if (file_exists($symLink)) {
-                $this->getFileManager()->unlink($symLink);
+                $this->getFileManager()->remove($symLink);
             }
         }
     }
@@ -169,7 +156,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
             return $this->_cacheParameter['downloadHtmlTag'];
         }
 
-        $viewRenderer = new \ViewRenderer();
+        $viewRenderer = new ViewRenderer();
 
         $downloadUrl = $this->GetPlainDownloadLink($isWysiwygBackendLink);
 
@@ -223,9 +210,9 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
     /**
      * returns full URL to the file.
      *
-     * @param bool                     $dummyLink     - prevent output of download url
-     * @param bool                     $bCreateToken  - @deprecated if a download needs a token set this in database
-     * @param bool                     $bRelativeURL  - if set to true, the method will return the URL as relative URl without domain e.g. /chameleon/outbox/.../filename.pdf
+     * @param bool $dummyLink - prevent output of download url
+     * @param bool $bCreateToken - @deprecated if a download needs a token set this in database
+     * @param bool $bRelativeURL - if set to true, the method will return the URL as relative URl without domain e.g. /chameleon/outbox/.../filename.pdf
      * @param TdbDataExtranetUser|null $oExtranetUser (you may set a specific user to get a token with user binding)
      *
      * @return string
@@ -281,11 +268,11 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
     public function getBackendDownloadLink($bAsDownload)
     {
         $oTableConf = $this->GetTableConf();
-        $aParams = array();
+        $aParams = [];
         $aParams['pagedef'] = 'tableeditor';
         $aParams['id'] = $this->id;
         $aParams['tableid'] = $oTableConf->id;
-        $aParams['module_fnc'] = array('contentmodule' => 'downloadDocument');
+        $aParams['module_fnc'] = ['contentmodule' => 'downloadDocument'];
         $aParams['callFieldMethod'] = '1';
         $aParams['_noModuleFunction'] = 'true';
         $aParams['asDownload'] = '0';
@@ -373,7 +360,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
 
         $oTableEditor = new TCMSTableEditorManager();
         $iTableID = TTools::GetCMSTableId('cms_document_security_hash');
-        /** @var $oTableEditor TCMSTableEditor */
+        /* @var $oTableEditor TCMSTableEditor */
         $oTableEditor->Init($iTableID);
         $oTableEditor->AllowEditByAll(true);
         $oRes = $oTableEditor->Save($aData);
@@ -388,14 +375,14 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
     /**
      * returns an array with post data for save in token database table.
      *
-     * @param bool                     $bCreateTokenWithUserBinding
+     * @param bool $bCreateTokenWithUserBinding
      * @param TdbDataExtranetUser|null $oExtranetUser
      *
      * @return array
      */
     protected function getDocumentSecurityHashTokenData($bCreateTokenWithUserBinding = false, $oExtranetUser = null)
     {
-        $aData = array();
+        $aData = [];
         $aData['token'] = TTools::GetUUID();
 
         if (!is_null($oExtranetUser)) { // force user binding
@@ -593,31 +580,20 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
      */
     public function getETag()
     {
-        $sETag = md5(implode($this->sqlData));
-
-        return $sETag;
+        return md5(implode($this->sqlData));
     }
 
-    /**
-     * @return Request
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private function getFileManager()
+    private function getFileManager(): Filesystem
     {
-        return ServiceLocator::get('chameleon_system_cms_file_manager.file_manager');
+        return new Filesystem();
     }
 
-    /**
-     * @return UrlNormalizationUtil
-     */
-    private function getUrlNormalizationUtil()
+    private function getUrlNormalizationUtil(): UrlNormalizationUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }

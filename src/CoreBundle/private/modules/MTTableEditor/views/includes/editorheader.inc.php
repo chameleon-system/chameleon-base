@@ -2,12 +2,12 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
-$oController = TGlobal::GetController();
+$oController = ServiceLocator::get('chameleon_system_core.chameleon_controller');
 ?>
 <nav class="navbar navbar-light px-2">
     <span class="navbar-brand"><?php
         if ('' === $sRecordName) {
-            $sRecordName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
+            $sRecordName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
         } else {
             $length = 100;
             $sRecordName = strip_tags($sRecordName);
@@ -34,7 +34,7 @@ $oController = TGlobal::GetController();
             </button>
             <button class="entry-id-copy-button btn btn-outline-info btn-sm mr-2"
                     data-entry-id="<?= TGlobal::OutHTML($data['id']) ?>"
-                    title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.text.copy_id_to_clipboard')) ?>"
+                    title="<?= TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.copy_id_to_clipboard')) ?>"
             >
                 <i class="far fa-clipboard"></i>
             </button>
@@ -46,8 +46,8 @@ $oController = TGlobal::GetController();
             <button class="btn btn-outline-info btn-sm mt-2 mr-2" type="button" role="button" data-coreui-toggle="popover"
                     data-coreui-placement="bottom"
                     data-coreui-content="<?= nl2br(TGlobal::OutHTML($oTableDefinition->sqlData['notes'])); ?>"
-                    data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')); ?>">
-                <i class="fas fa-question-circle"></i> <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')); ?>
+                    data-original-title="<?= TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.field_help')); ?>">
+                <i class="fas fa-question-circle"></i> <?= TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.field_help')); ?>
             </button>
             <?php
         }
@@ -55,20 +55,20 @@ $oController = TGlobal::GetController();
         if ($oCmsLock) {
             $oLockUser = $oCmsLock->GetFieldCmsUser();
             /** @var $oLockUser TdbCmsUser */
-            $sData = '<div class="callout callout-danger mt-0 mb-1"><strong class="text-muted">'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_name').': </strong><br><strong class="h6">'.TGlobal::OutHTML($oLockUser->GetName()).'</strong></div>';
+            $sData = '<div class="callout callout-danger mt-0 mb-1"><strong class="text-muted">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.record_lock.lock_owner_name').': </strong><br><strong class="h6">'.TGlobal::OutHTML($oLockUser->GetName()).'</strong></div>';
             if (!empty($oLockUser->fieldEmail)) {
-                $sData .= '<div class="callout callout-danger mt-0 mb-1"><strong class="text-muted">'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_mail').': </strong><br><strong class="h6"><a href="mailto:'.TGlobal::OutHTML($oLockUser->fieldEmail).'">'.TGlobal::OutHTML($oLockUser->fieldEmail).'</a></strong></div>';
+                $sData .= '<div class="callout callout-danger mt-0 mb-1"><strong class="text-muted">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.record_lock.lock_owner_mail').': </strong><br><strong class="h6"><a href="mailto:'.TGlobal::OutHTML($oLockUser->fieldEmail).'">'.TGlobal::OutHTML($oLockUser->fieldEmail).'</a></strong></div>';
             }
             if (!empty($oLockUser->fieldTel)) {
-                $sData .= '<div class="callout callout-danger mt-0 mb-1"><strong class="text-muted">'.TGlobal::Translate('chameleon_system_core.record_lock.lock_owner_phone').': </strong><br><strong class="h6"><a href="tel:'.TGlobal::OutHTML($oLockUser->fieldEmail).'">'.TGlobal::OutHTML($oLockUser->fieldTel).'</a></strong></div>';
+                $sData .= '<div class="callout callout-danger mt-0 mb-1"><strong class="text-muted">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.record_lock.lock_owner_phone').': </strong><br><strong class="h6"><a href="tel:'.TGlobal::OutHTML($oLockUser->fieldEmail).'">'.TGlobal::OutHTML($oLockUser->fieldTel).'</a></strong></div>';
             }
 
             $sData .= '<div class="callout callout-danger mt-0 mb-1">'.$oCmsLock->GetDateField('time_stamp').'</div>'; ?>
             <button class="btn btn-danger btn-sm mt-2 mr-2" type="button" role="button" data-coreui-toggle="popover"
                     data-coreui-placement="bottom"
                     data-coreui-content="<?= TGlobal::OutHTML($sData); ?>"
-                    data-original-title="<?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.record_lock.locked_by')); ?>">
-                <i class="fas fa-user-lock"></i> <?= TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')); ?>
+                    data-original-title="<?= TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.record_lock.locked_by')); ?>">
+                <i class="fas fa-user-lock"></i> <?= TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.header_lock')); ?>
             </button>
             <?php
         }
@@ -112,7 +112,7 @@ $oController = TGlobal::GetController();
             <div class="typeahead-relative">
                 <input id="quicklookuplist"
                        class="form-control"
-                       placeholder="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.other_entries')); ?>"
+                       placeholder="<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.other_entries')); ?>"
                        autocomplete="off"
                        data-source-url="<?= $sAjaxURL; ?>"
                        data-record-url="<?= $recordUrl ?>"

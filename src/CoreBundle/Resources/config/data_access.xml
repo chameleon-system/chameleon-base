@@ -14,6 +14,8 @@
             <argument type="service" id="chameleon_system_cms_cache.cache" />
         </service>
 
+        <service id="chameleon_system_core.data_access.cron_job_data_access" class="ChameleonSystem\CoreBundle\DataAccess\CronJobDataAccess" public="true" />
+
         <!-- cms_portal_domains -->
 
         <service id="chameleon_system_core.data_access_cms_portal_domains" class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccess" public="true">
@@ -119,6 +121,7 @@
                  id="chameleon_system_core.data_access_cms_master_pagedef_database" public="false">
             <argument id="chameleon_system_core.data_access_cms_master_pagedef_file" type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
+            <argument id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" type="service"/>
         </service>
 
         <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefCacheDecorator"

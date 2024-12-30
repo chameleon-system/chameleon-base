@@ -15,15 +15,12 @@ use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 {
-    /**
-     * @var int
-     */
-    protected $iSubscribersAddedToQueue = 0;
+    protected int $iSubscribersAddedToQueue = 0;
 
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      *
      * @return void
@@ -53,7 +50,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
                 $iNewsletterGroup = $oNewsletterGroup->id;
 
                 $oPkgNewsletterGroup = TdbPkgNewsletterGroup::GetNewInstance();
-                /** @var $oPkgNewsletterGroup TdbPkgNewsletterGroup */
+                /* @var $oPkgNewsletterGroup TdbPkgNewsletterGroup */
                 $oPkgNewsletterGroup->Load($iNewsletterGroup);
 
                 $this->AddUsersToTmpTable($oPkgNewsletterGroup);
@@ -82,7 +79,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
                 ";
             MySqlLegacySupport::getInstance()->query($query);
 
-            //remove users without signup acception
+            // remove users without signup acception
             $query = "DELETE `_tmp_pkg_newsletter_queue`.*
                    FROM `_tmp_pkg_newsletter_queue`
              INNER JOIN `pkg_newsletter_user` ON `_tmp_pkg_newsletter_queue`.`pkg_newsletter_user` = `pkg_newsletter_user`.`id`
@@ -100,7 +97,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
             MySqlLegacySupport::getInstance()->query($query);
             $this->iSubscribersAddedToQueue = MySqlLegacySupport::getInstance()->affected_rows();
             $this->setNewsletterQueueCount();
-            TCacheManager::PerformeTableChange('pkg_newsletter_queue');
+            $this->getCacheService()->callTrigger('pkg_newsletter_queue');
         }
     }
 
@@ -182,7 +179,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
                 MySqlLegacySupport::getInstance()->query($query);
             }
         }
-        TCacheManager::PerformeTableChange('pkg_newsletter_queue');
+        $this->getCacheService()->callTrigger('pkg_newsletter_queue');
     }
 
     /**
@@ -195,12 +192,12 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
      *
      * @return TCMSstdClass
      */
-    public function GetObjectShortInfo($postData = array())
+    public function GetObjectShortInfo($postData = [])
     {
         $oRecordData = parent::GetObjectShortInfo($postData);
 
         if (array_key_exists('active', $postData) && '1' == $postData['active']) {
-            $oRecordData->message = TGlobal::Translate('chameleon_system_newsletter.text.queue_ready', array('%count%' => $this->iSubscribersAddedToQueue));
+            $oRecordData->message = ServiceLocator::get('translator')->trans('chameleon_system_newsletter.text.queue_ready', ['%count%' => $this->iSubscribersAddedToQueue]);
         }
 
         return $oRecordData;
@@ -227,13 +224,13 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
         if ($this->AllowDeletingCampaignQueue()) {
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'DeleteCampaignQueue';
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_newsletter.action.clear_queue');
+            $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_newsletter.action.clear_queue');
             $oMenuItem->sIcon = 'fas fa-user-slash';
 
             $oGlobal = TGlobal::instance();
             $oExecutingModulePointer = $oGlobal->GetExecutingModulePointer();
 
-            $aURLData = array('module_fnc' => array($oExecutingModulePointer->sModuleSpotName => 'ExecuteAjaxCall'), '_fnc' => 'DeleteCampaignQueue', '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id);
+            $aURLData = ['module_fnc' => [$oExecutingModulePointer->sModuleSpotName => 'ExecuteAjaxCall'], '_fnc' => 'DeleteCampaignQueue', '_noModuleFunction' => 'true', 'pagedef' => $oGlobal->GetUserData('pagedef'), 'id' => $this->sId, 'tableid' => $this->oTableConf->id];
             $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aURLData);
             $sJS = "GetAjaxCall('{$sURL}', DisplayAjaxMessage);";
             $oMenuItem->sOnClick = $sJS;
@@ -243,9 +240,6 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 
     /**
      * create a number of vouchers in the shop_voucher table.
-     *
-     * @param string $sCode             - the code to use. if empty, a random unique code will be generated
-     * @param int    $iNumberOfVouchers - number of vouchers to create (will fetch this from user input if null given)
      *
      * @return string
      */
@@ -262,13 +256,13 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
                    WHERE `pkg_newsletter_queue`.`pkg_newsletter_campaign_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sId)."'
                  ";
             $tRes = MySqlLegacySupport::getInstance()->query($query);
-            TCacheManager::PerformeTableChange('pkg_newsletter_queue');
+            $this->getCacheService()->callTrigger('pkg_newsletter_queue');
             if ($tRes) {
                 $sMessage = MySqlLegacySupport::getInstance()->affected_rows().' Warteschlangeneinträge gelöscht';
             } else {
                 $sMessage = 'Fehler beim Löschen der Warteschlange';
             }
-            $this->SaveFields(array('send_statistics' => '', 'send_start_date' => '0000-00-00 00:00:00', 'send_end_date' => '0000-00-00 00:00:00'));
+            $this->SaveFields(['send_statistics' => '', 'send_start_date' => '0000-00-00 00:00:00', 'send_end_date' => '0000-00-00 00:00:00']);
         }
 
         return $sMessage;
@@ -290,7 +284,7 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
             $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
             $bUserIsInCodeTableGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $oTargetTableConf->fieldName);
-            $bHasNewPermissionOnTargetTable = ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, 'pkg_newsletter_campaign'));
+            $bHasNewPermissionOnTargetTable = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, 'pkg_newsletter_campaign');
             $bAllowDeletingCampaignQueue = ($bUserIsInCodeTableGroup && $bHasNewPermissionOnTargetTable);
         }
 

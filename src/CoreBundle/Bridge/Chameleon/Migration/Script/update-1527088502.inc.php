@@ -54,7 +54,6 @@ $bundles = [
     'pkgshopnewslettersignupwithorder' => 'ShopNewsletterSignupWithOrderBundle',
     'pkgshoporderstatus' => 'ShopOrderStatusBundle',
     'pkgshoporderviaphone' => 'ShopOrderViaPhoneBundle',
-    'pkgshoppaymentamazon' => 'AmazonPaymentBundle',
     'pkgshoppaymentipn' => 'ShopPaymentIPNBundle',
     'pkgshoppaymenttransaction' => 'ShopPaymentTransactionBundle',
     'pkgshopprimarynavigation' => 'ShopPrimaryNavigationBundle',

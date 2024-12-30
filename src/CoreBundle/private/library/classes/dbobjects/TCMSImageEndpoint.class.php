@@ -9,9 +9,15 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
-use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsMedia;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use esono\pkgCmsCache\CacheInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * handles images and thumbnails of table cms_media including external videos.
@@ -20,31 +26,24 @@ class TCMSImageEndpoint
 {
     /**
      * holds the sql record.
-     *
-     * @var array
      */
-    public $aData = array();
+    public array $aData = [];
 
-    /**
-     * id of the image.
-     *
-     * @var string
-     */
-    public $id = null;
+    public ?string $id = null;
 
     /**
      * caches the image type (gif, jpg, png...).
      *
      * @var string
      */
-    public $_imageType = null;
+    public $_imageType;
 
     /**
      * caches the image size.
      *
      * @var string
      */
-    public $_fileSize = null;
+    public $_fileSize;
 
     /**
      * add lightbox tag.
@@ -79,7 +78,7 @@ class TCMSImageEndpoint
      *
      * @var string
      */
-    public $uniqueID = null;
+    public $uniqueID;
 
     /**
      * if this static property is set to true the image urls will be forced to http even on https websites.
@@ -103,11 +102,11 @@ class TCMSImageEndpoint
     /**
      * create a new image from the oFile Object.
      *
-     * @param TCMSFile                $oFile
-     * @param string                  $sCmsMediaCategoryId
-     * @param string|null             $sDescription
-     * @param string|null             $sPreviewImageId
-     * @param IPkgCmsFileManager|null $filemanager
+     * @param TCMSFile $oFile
+     * @param string $sCmsMediaCategoryId
+     * @param string|null $sDescription
+     * @param string|null $sPreviewImageId
+     * @param ?Filesystem $filemanager
      *
      * @return TCMSImage
      */
@@ -123,7 +122,7 @@ class TCMSImageEndpoint
         $oImage = TdbCmsMedia::GetNewInstance();
         if (!$oImage->LoadFromField('metatags', $oFile->sPath)) {
             $cachePath = PATH_CMS_CUSTOMER_DATA.'/mediaImport/';
-            $sImgName = $oFile->sFileName; //$aImgLinkParts[count($aImgLinkParts)-1];
+            $sImgName = $oFile->sFileName; // $aImgLinkParts[count($aImgLinkParts)-1];
             $tmpFileName = $cachePath.'/'.$sImgName;
 
             $bTargetCreated = false;
@@ -131,19 +130,24 @@ class TCMSImageEndpoint
                 if ($imgFileP = @fopen($oFile->sPath, 'rb')) {
                     $imgFileContent = stream_get_contents($imgFileP);
                     $tmpFileName = $cachePath.'/'.$sImgName;
-                    $newFile = $filemanager->fopen($tmpFileName, 'wb');
-                    $filemanager->fwrite($newFile, $imgFileContent);
-                    $filemanager->fclose($newFile);
+                    $newFile = fopen($tmpFileName, 'wb');
+                    fwrite($newFile, $imgFileContent);
+                    fclose($newFile);
                     fclose($imgFileP);
                     $bTargetCreated = true;
                 }
             } elseif (file_exists($oFile->sPath)) {
-                $bTargetCreated = $filemanager->copy($oFile->sPath, $tmpFileName);
+                try {
+                    $filemanager->copy($oFile->sPath, $tmpFileName);
+                    $bTargetCreated = true;
+                } catch (IOExceptionInterface $exception) {
+                    $bTargetCreated = false;
+                }
             }
             if ($bTargetCreated) {
                 $aImageInfos = getimagesize($tmpFileName);
                 $iImageSize = filesize($tmpFileName);
-                $FileArray = array('name' => $sImgName, 'type' => $aImageInfos[3], 'tmp_name' => $tmpFileName, 'error' => 0, 'size' => $iImageSize);
+                $FileArray = ['name' => $sImgName, 'type' => $aImageInfos[3], 'tmp_name' => $tmpFileName, 'error' => 0, 'size' => $iImageSize];
                 if (!is_null($sDescription)) {
                     $FileArray['description'] = $sDescription;
                 }
@@ -159,12 +163,12 @@ class TCMSImageEndpoint
                     }
                     $iTableID_Media = TTools::GetCMSTableId('cms_media');
                     $oEditor = new TCMSTableEditorManager();
-                    /** @var $oEditor TCMSTableEditorManager */
+                    /* @var $oEditor TCMSTableEditorManager */
                     $oEditor->Init($iTableID_Media, null);
                     $oEditor->oTableEditor->SetUploadData($FileArray, true);
                     $oEditor->Save($FileArray);
                     if (!$oFile->bIsHTTPResource) {
-                        $filemanager->move($tmpFileName.'.tmp', $tmpFileName);
+                        $filemanager->rename($tmpFileName.'.tmp', $tmpFileName);
                     }
                     $sImageId = $oEditor->oTableEditor->oTable->id;
                 } catch (Exception $e) {
@@ -180,7 +184,7 @@ class TCMSImageEndpoint
         $oImageObject = null;
         if (!is_null($sImageId)) {
             $oImageObject = new TCMSImage();
-            /** @var $oImageObject TCMSImage */
+            /* @var $oImageObject TCMSImage */
             $oImageObject->Load($sImageId);
         }
 
@@ -288,7 +292,7 @@ class TCMSImageEndpoint
 
         if ($this->IsExternalMovie()) {
             $sImageURL = $this->aData['external_video_thumbnail'];
-            $oRequest = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+            $oRequest = ServiceLocator::get('request_stack')->getCurrentRequest();
             if ($oRequest->isSecure()) {
                 $sImageURL = str_replace('http://', 'https://', $sImageURL);
             }
@@ -354,11 +358,12 @@ class TCMSImageEndpoint
     protected function GetImageUrlPathPrefix()
     {
         if (CMS_MEDIA_ENABLE_SEO_URLS) {
-            static $aLocalCache = array();
-            $aKeys = array('class' => __CLASS__, 'method' => 'GetImageUrlPathPrefix', 'cms_media_tree_id' => $this->aData['cms_media_tree_id']);
+            static $aLocalCache = [];
+            $aKeys = ['class' => __CLASS__, 'method' => 'GetImageUrlPathPrefix', 'cms_media_tree_id' => $this->aData['cms_media_tree_id']];
             $sPath = '';
-            $sKey = TCacheManager::GetKey($aKeys);
-            if (false == array_key_exists($sKey, $aLocalCache)) {
+            $cache = $this->getCacheService();
+            $sKey = $cache->getKey($aKeys);
+            if (false === array_key_exists($sKey, $aLocalCache)) {
                 if (!array_key_exists('cms_media_tree_id', $this->aData) || empty($this->aData['cms_media_tree_id'])) {
                     // use the first root category id
                     $query = "SELECT `id` FROM `cms_media_tree` WHERE `parent_id`='' LIMIT 0,1";
@@ -429,7 +434,7 @@ class TCMSImageEndpoint
      */
     protected function GetLocalMediaDirectory($bThumbs = false)
     {
-        static $cache = array();
+        static $cache = [];
         $isNotFound = !isset($this->aData['id']) || '-1' == $this->aData['id'];
         $key = $bThumbs ? 'thumb' : 'nothumb';
         $key = $key.':'.($isNotFound ? 'found' : 'notfound');
@@ -455,7 +460,7 @@ class TCMSImageEndpoint
                 }
                 $sPath .= $thumbPathExtension;
                 if (!is_dir($sPath)) {
-                    self::getFileManager()->mkdir($sPath, 0777, true);
+                    self::getFileManager()->mkdir($sPath);
                 }
                 $sPath .= '/';
             }
@@ -469,16 +474,16 @@ class TCMSImageEndpoint
     /**
      * creates a thumbnail of fixed size with base image centered with border.
      *
-     * @param int    $width
-     * @param int    $height
-     * @param int    $padding
-     * @param string $bgcolor                 - hexadecimal 0-9 a-f
-     * @param array  $aEffects
-     * @param bool   $bStretchImageToFullsize
+     * @param int $width
+     * @param int $height
+     * @param int $padding
+     * @param string $bgcolor - hexadecimal 0-9 a-f
+     * @param array $aEffects
+     * @param bool $bStretchImageToFullsize
      *
      * @return TCMSImage
      */
-    public function GetCenteredFixedSizeThumbnail($width, $height, $padding = 0, $bgcolor = 'ffffff', $aEffects = array(), $bStretchImageToFullsize = false)
+    public function GetCenteredFixedSizeThumbnail($width, $height, $padding = 0, $bgcolor = 'ffffff', $aEffects = [], $bStretchImageToFullsize = false)
     {
         $oThumb = null;
         // load connected image file if one exists
@@ -625,21 +630,21 @@ class TCMSImageEndpoint
                 }
             }
         }
-        //loop through image pixels and modify alpha for each
+        // loop through image pixels and modify alpha for each
         for ($x = 0; $x < $w; ++$x) {
             for ($y = 0; $y < $h; ++$y) {
-                //get current alpha value (represents the TANSPARENCY!)
+                // get current alpha value (represents the TANSPARENCY!)
                 $colorxy = imagecolorat($src_im, $x, $y);
                 $alpha = ($colorxy >> 24) & 0xFF;
-                //calculate new alpha
+                // calculate new alpha
                 if (127 !== $minalpha) {
                     $alpha = 127 + 127 * $pct * ($alpha - 127) / (127 - $minalpha);
                 } else {
                     $alpha += 127 * $pct;
                 }
-                //get the color index with new alpha
+                // get the color index with new alpha
                 $alphacolorxy = imagecolorallocatealpha($src_im, ($colorxy >> 16) & 0xFF, ($colorxy >> 8) & 0xFF, $colorxy & 0xFF, $alpha);
-                //set pixel with the new color + opacity
+                // set pixel with the new color + opacity
                 if (!imagesetpixel($src_im, $x, $y, $alphacolorxy)) {
                     return false;
                 }
@@ -731,18 +736,9 @@ class TCMSImageEndpoint
     /**
      * Creates an reflection effect for a given image resource.
      *
-     * @param resource $rImageSource: The image resource (e.g. created via
-     *                                imagecreatefromjpeg)
-     * @param int      $iPercentage:  The percentage of the height of the
-     *                                original image where the reflection effect should take place. For
-     *                                example: if you put in 50 (50%) here, you'll get an mirrored reflection
-     *                                that is 50% as high as your original image. So if your original image
-     *                                was 100 pixel high - your image including mirrored reflection (which
-     *                                will be returned will now be 150 pixel. The higher the percentage,
-     *                                the longer the alpha gradient.
-     * @param bool     $bImageline    - renders a line for the
-     * @param int      $iAlphaStart   (possible values 0-126)
-     * @param int      $iAlphaEnd     (possible values 1-127)
+     * @param bool $bImageline - renders a line for the
+     * @param int $iAlphaStart (possible values 0-126)
+     * @param int $iAlphaEnd (possible values 1-127)
      *
      * @return resource
      */
@@ -847,7 +843,7 @@ class TCMSImageEndpoint
                     }
 
                     $destX = (($iImageSourceWidth / 2) - ($iImageWaterMarkWidth / 2));
-                    $destY = (($iImageSourceHeight - (round($iImageSourceHeight / 10) + $iImageWaterMarkHeight)));
+                    $destY = ($iImageSourceHeight - (round($iImageSourceHeight / 10) + $iImageWaterMarkHeight));
                     imagecopyresampled($rImageSource, $rImageWatermark, $destX, $destY, 0, 0, $iImageWaterMarkWidth, $iImageWaterMarkHeight, $iImageWaterMarkWidthOriginal, $iImageWaterMarkHeightOriginal);
                 }
             }
@@ -860,8 +856,8 @@ class TCMSImageEndpoint
      * returns a png image with rounded corners.
      *
      * @param resource $rImageSource
-     * @param int      $iCornerRadius
-     * @param string   $sBackgroundColor - hex color
+     * @param int $iCornerRadius
+     * @param string $sBackgroundColor - hex color
      *
      * @return resource
      */
@@ -917,14 +913,10 @@ class TCMSImageEndpoint
      * $oThumb->aData['width'] / $oThumb->aData['height'].
      *
      * @param TCMSImage $oThumb
-     * @param array     $aEffects: submit a list of effects to apply to the thumbnail.
-     *                             available effects are:
-     *                             - reflect => array(bImageline=>true) // second parameter tells the effect if it should render a tiny black line between image and reflection or not
-     *                             - round => array(iCornerRadius=>20, sBackgroundColor=>FFFFFF) // second parameter is the radius in pixel, third parameter is background-color in hex
      *
      * @return false|GdImage|resource
      */
-    public function GetThumbnailPointer($oThumb, $aEffects = array())
+    public function GetThumbnailPointer($oThumb, $aEffects = [])
     {
         $aEffects = $this->ApplyEffectHook($aEffects, $oThumb);
         // now we need to resize the current image
@@ -1044,16 +1036,16 @@ class TCMSImageEndpoint
         $path = $this->GetLocalMediaDirectory().$this->aData['path'];
         $size = getimagesize($path);
 
-        return array('x' => $size[0], 'y' => $size[1]);
+        return ['x' => $size[0], 'y' => $size[1]];
     }
 
     /**
      * calculates the new dimensions for the thumbnail.
      *
      * @param TCMSImage $oThumb
-     * @param int       $maxWidth
-     * @param int       $maxHeight
-     * @param bool      $bStretchImageToFullsize
+     * @param int $maxWidth
+     * @param int $maxHeight
+     * @param bool $bStretchImageToFullsize
      *
      * @return bool
      */
@@ -1072,11 +1064,11 @@ class TCMSImageEndpoint
         }
         $widthConstraint = 0;
         if ($maxWidth > 0) {
-            $widthConstraint = (($this->aData['width'] / $maxWidth));
+            $widthConstraint = ($this->aData['width'] / $maxWidth);
         }
         $heightConstraint = 0;
         if ($maxHeight > 0) {
-            $heightConstraint = (($this->aData['height'] / $maxHeight));
+            $heightConstraint = ($this->aData['height'] / $maxHeight);
         }
 
         if (false == $bStretchImageToFullsize && $this->aData['width'] <= $maxWidth && $this->aData['height'] <= $maxHeight) {
@@ -1116,14 +1108,14 @@ class TCMSImageEndpoint
      * to null.
      * will return the path to the thumbnail.
      *
-     * @param int   $maxWidth
-     * @param int   $maxHeight       - defaults to 2000 so maxWidth value is enough info for resizing
-     * @param bool  $usePreviewImage - if set to true then the thumbnail will be generated using the image under cms_media_id
-     * @param string[] $aEffects       submit a list of effects to apply to the thumbnail. {@see GetThumbnailPointer} for available effects
+     * @param int $maxWidth
+     * @param int $maxHeight - defaults to 2000 so maxWidth value is enough info for resizing
+     * @param bool $usePreviewImage - if set to true then the thumbnail will be generated using the image under cms_media_id
+     * @param string[] $aEffects submit a list of effects to apply to the thumbnail. {@see GetThumbnailPointer} for available effects
      *
      * @return TCMSImage
      */
-    public function GetThumbnail($maxWidth, $maxHeight = 2000, $usePreviewImage = true, $aEffects = array())
+    public function GetThumbnail($maxWidth, $maxHeight = 2000, $usePreviewImage = true, $aEffects = [])
     {
         $oThumb = null;
 
@@ -1175,11 +1167,11 @@ class TCMSImageEndpoint
 
                         // check if the thumbnail exists
                         if (!file_exists($thumbPath)) {
-                            //define what image effects are supported by imagemagick
-                            $aSupportedEffectsUsingImageMagick = array('round');
+                            // define what image effects are supported by imagemagick
+                            $aSupportedEffectsUsingImageMagick = ['round'];
 
                             $bAllImageMagickEffectsSupported = true;
-                            //check if all needed effects are supported by imagemagic
+                            // check if all needed effects are supported by imagemagic
                             foreach ($aEffects as $sEffectName => $aEffectParams) {
                                 if (!is_array($aEffectParams)) {
                                     $sEffectName = $aEffectParams;
@@ -1267,8 +1259,8 @@ class TCMSImageEndpoint
      * the description is used for the filename for SEO reasons and is cutted by 150 chars
      * non allowed characters are stripped.
      *
-     * @param int    $iThumbWidth
-     * @param int    $iThumbHeight
+     * @param int $iThumbWidth
+     * @param int $iThumbHeight
      * @param string $sEffectFileNamePart
      * @param string $sOriginalExtension
      *
@@ -1298,9 +1290,9 @@ class TCMSImageEndpoint
      * creates the thumbnail.
      *
      * @param resource $image_p
-     * @param string   $sOriginalExtension
-     * @param string   $thumbPath
-     * @param array    $aEffects
+     * @param string $sOriginalExtension
+     * @param string $thumbPath
+     * @param array $aEffects
      */
     protected function CreateThumbnail($image_p, $sOriginalExtension, $thumbPath, $aEffects, $oThumb = null)
     {
@@ -1343,11 +1335,11 @@ class TCMSImageEndpoint
      *
      * @param string $sSourceFilePath
      * @param string $sTargetFilePath
-     * @param int    $iThumbWidth
-     * @param int    $iThumbHeight
-     * @param array  $aEffects
+     * @param int $iThumbWidth
+     * @param int $iThumbHeight
+     * @param array $aEffects
      */
-    protected function ResizeImageUsingImageMagick($sSourceFilePath, $sTargetFilePath, $iThumbWidth, $iThumbHeight, $aEffects = array())
+    protected function ResizeImageUsingImageMagick($sSourceFilePath, $sTargetFilePath, $iThumbWidth, $iThumbHeight, $aEffects = [])
     {
         $oImageMagick = $this->GetImageMagicObject();
         $oImageMagick->LoadImage($sSourceFilePath, $this);
@@ -1406,8 +1398,8 @@ class TCMSImageEndpoint
      * returns thumbnail object forced to the given
      * dimensions (by trim, not by distort).
      *
-     * @param int  $iMaxWidth
-     * @param int  $iMaxHeight
+     * @param int $iMaxWidth
+     * @param int $iMaxHeight
      * @param bool $bCenter
      *
      * @return TCMSImage
@@ -1431,8 +1423,8 @@ class TCMSImageEndpoint
                 }
             }
 
-            $widthConstraint = (($this->aData['width'] / $iMaxWidth));
-            $heightConstraint = (($this->aData['height'] / $iMaxHeight));
+            $widthConstraint = ($this->aData['width'] / $iMaxWidth);
+            $heightConstraint = ($this->aData['height'] / $iMaxHeight);
 
             $x = 0;
             $y = 0;
@@ -1571,15 +1563,15 @@ class TCMSImageEndpoint
     /**
      * returns a html image tag of a thumbnail.
      *
-     * @param int    $maxThumbWidth  - max width of the thumbnail
-     * @param int    $maxThumbHeight - max height of the thumbnail
-     * @param int    $maxZoomWidth   - max width of the full size image
-     * @param int    $maxZoomHeight  - max height of the full size image
-     * @param string $sCSSClass      - optional CSS class for the image tag
-     * @param string $sNameOfSeries  - name of the image series (needed for back/forward buttons of lightbox)
+     * @param int $maxThumbWidth - max width of the thumbnail
+     * @param int $maxThumbHeight - max height of the thumbnail
+     * @param int $maxZoomWidth - max width of the full size image
+     * @param int $maxZoomHeight - max height of the full size image
+     * @param string $sCSSClass - optional CSS class for the image tag
+     * @param string $sNameOfSeries - name of the image series (needed for back/forward buttons of lightbox)
      * @param string $caption
-     * @param bool   $bForceSquare   - default: false, forces an thumbnail to be square format
-     * @param string $sZoomHTMLTag   - is included in the <a> tag if zoom is shown (you can use this to overlay a zoom symbol
+     * @param bool $bForceSquare - default: false, forces an thumbnail to be square format
+     * @param string $sZoomHTMLTag - is included in the <a> tag if zoom is shown (you can use this to overlay a zoom symbol
      *
      * @return string
      */
@@ -1637,10 +1629,11 @@ class TCMSImageEndpoint
                 $thumbTag = '<img class="'.TGlobal::OutHTML($sCSSClass).'" src="'.$oThumb->GetFullURL()."\" width=\"{$oThumb->aData['width']}\" height=\"{$oThumb->aData['height']}\" alt=\"".TGlobal::OutHTML($caption).'" title="'.TGlobal::OutHTML($caption).'" />';
                 $showZoom = ($this->aData['width'] > $oThumb->aData['width'] || $this->aData['height'] > $oThumb->aData['height']);
                 if ($this->useLightBox && $showZoom) {
-                    if (TGlobal::CMSUserDefined() && $oGlobal->IsCMSMode()) {
+                    $securityHelperAccess = $this->getSecurityHelperAccess();
+                    if ($securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER) && $oGlobal->IsCMSMode()) {
                         $returnString = '<div class="cmsimage"><img class=\"'.TGlobal::OutHTML($sCSSClass).'\" width="'.$oThumb->aData['width'].'" height="'.$oThumb->aData['height'].'" onclick="CreateMediaZoomDialogFromImageURL(\''.$oZoomThumb->GetFullURL().'\',\''.$oZoomThumb->aData['width'].'\',\''.$oZoomThumb->aData['height'].'\');event.cancelBubble=true;return false;" style="padding: 3px;" id="cmsimage_'.$this->id.'" src="'.$oThumb->GetFullURL().'" />';
                         if ($this->IsExternalMovie() && empty($sEmbedCode)) {
-                            $returnString .= '<div class="videoprocessing">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.text.wait_for_processing')).'</div>';
+                            $returnString .= '<div class="videoprocessing">'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.text.wait_for_processing')).'</div>';
                         }
                         $returnString .= '</div>';
                     } else {
@@ -1685,9 +1678,9 @@ class TCMSImageEndpoint
      * does not handle zoom images and other media types
      * use GetThumbnailTag instead.
      *
-     * @param TCMSImage $oImage    - default NULL = $this
-     * @param string    $sCaption
-     * @param string    $sCSSClass
+     * @param TCMSImage $oImage - default NULL = $this
+     * @param string $sCaption
+     * @param string $sCSSClass
      *
      * @return string
      */
@@ -1858,7 +1851,7 @@ class TCMSImageEndpoint
      */
     protected function getFileType($id)
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_file_types')->getFileType($id);
+        return ServiceLocator::get('chameleon_system_core.database_access_layer_file_types')->getFileType($id);
     }
 
     /**
@@ -1882,7 +1875,7 @@ class TCMSImageEndpoint
         } else {
             $size = $this->_fileSize;
             $i = 0;
-            $iec = array('b', 'kb', 'MB', 'GB');
+            $iec = ['b', 'kb', 'MB', 'GB'];
             while (($size / 1024) > 1) {
                 $size = $size / 1024;
                 ++$i;
@@ -1899,7 +1892,7 @@ class TCMSImageEndpoint
     {
         static $mediaDataAccessService;
         if (null === $mediaDataAccessService) {
-            $mediaDataAccessService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_media');
+            $mediaDataAccessService = ServiceLocator::get('chameleon_system_core.database_access_layer_media');
         }
 
         return $mediaDataAccessService;
@@ -1944,8 +1937,8 @@ class TCMSImageEndpoint
      * returns a thumbnail image tag for use in CMS backend context (wysiwyg)
      * img tag includes properties: cmsmedia, cmsshowfull, cmsshowcaption.
      *
-     * @param int  $width
-     * @param int  $height
+     * @param int $width
+     * @param int $height
      * @param bool $showCaption
      * @param bool $showFull
      *
@@ -2005,9 +1998,9 @@ class TCMSImageEndpoint
                 $sPatter = '-ID'.$this->aData['cmsident'].'-';
                 $filemanager = self::getFileManager();
                 while (false !== ($file = readdir($handle))) {
-                    //somename-XxY-IDxxx-
+                    // somename-XxY-IDxxx-
                     if (false !== strpos($file, $sPatter)) {
-                        $filemanager->unlink($sDir.'/'.$file);
+                        $filemanager->remove($sDir.'/'.$file);
                     }
                 }
                 closedir($handle);
@@ -2042,15 +2035,15 @@ class TCMSImageEndpoint
 
     protected function UnsharpMask($img, $amount = 40, $radius = 0.2, $threshold = 2)
     {
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        ////
-        ////                  Unsharp Mask for PHP - version 2.1
-        ////
-        ////    Unsharp mask algorithm by Torstein Hønsi 2003-06.
-        ////             thoensi_at_netcom_dot_no.
-        ////               Please leave this notice.
-        ////
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+        // //////////////////////////////////////////////////////////////////////////////////////////////
+        // //
+        // //                  Unsharp Mask for PHP - version 2.1
+        // //
+        // //    Unsharp mask algorithm by Torstein Hønsi 2003-06.
+        // //             thoensi_at_netcom_dot_no.
+        // //               Please leave this notice.
+        // //
+        // /////////////////////////////////////////////////////////////////////////////////////////////
 
         // $img is an image that is already created within php using
         // imgcreatetruecolor. No url! $img must be a truecolor image.
@@ -2083,10 +2076,10 @@ class TCMSImageEndpoint
         //    2    4    2
         //    1    2    1
         //
-        //////////////////////////////////////////////////
+        // ////////////////////////////////////////////////
 
         if (function_exists('imageconvolution')) { // PHP >= 5.1
-            $matrix = array(array(1, 2, 1), array(2, 4, 2), array(1, 2, 1));
+            $matrix = [[1, 2, 1], [2, 4, 2], [1, 2, 1]];
             imagecopy($imgBlur, $img, 0, 0, 0, 0, $w, $h);
             imageconvolution($imgBlur, $matrix, 16, 0);
         } else {
@@ -2224,35 +2217,33 @@ class TCMSImageEndpoint
     {
     }
 
-    /**
-     * @return UrlNormalizationUtil
-     */
-    private function getUrlNormalizationUtil()
+    private function getUrlNormalizationUtil(): UrlNormalizationUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 
-    /**
-     * @return \ChameleonSystem\CoreBundle\Util\FieldTranslationUtil
-     */
-    private function getFieldTranslationUtil()
+    private function getFieldTranslationUtil(): FieldTranslationUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private function getPortalDomainService()
+    private function getPortalDomainService(): PortalDomainServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    private static function getFileManager()
+    private static function getFileManager(): Filesystem
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
+    }
+
+    private function getSecurityHelperAccess(): SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
+    }
+
+    private function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

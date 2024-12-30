@@ -27,7 +27,7 @@ class TPkgComment extends TPkgCommentAutoParent
     /**
      * @var string[]
      */
-    protected $aActionModes = array('edit', 'recomment');
+    protected $aActionModes = ['edit', 'recomment'];
 
     /**
      * Returns the active comment.
@@ -54,13 +54,13 @@ class TPkgComment extends TPkgCommentAutoParent
      * return TdbPkgComment - or a child of that class (if the fields class, class_subtype and class_type have been set).
      *
      * @param string $sId
-     * @param bool   $bReload
+     * @param bool $bReload
      *
      * @return TdbPkgComment|null
      */
     public static function GetInstanceFromId($sId, $bReload = false)
     {
-        static $aInstance = array();
+        static $aInstance = [];
         $sInstanceIdent = 'x'.$sId;
         if ($bReload) {
             $aInstance[$sInstanceIdent] = null;
@@ -134,7 +134,7 @@ class TPkgComment extends TPkgCommentAutoParent
      * note: You can use this function only if the view was rendered from module MTPkgCommentCore
      *
      * @param bool|int $iCommentPage
-     * @param bool     $bUseFullURL
+     * @param bool $bUseFullURL
      *
      * @return bool|string
      */
@@ -146,11 +146,11 @@ class TPkgComment extends TPkgCommentAutoParent
             $aUrlData[self::URL_ACTION_PARAMETER] = $this->aActionModes[1];
             $activePageService = $this->getActivePageService();
             if (true === $bUseFullURL) {
-                $url = $activePageService->getLinkToActivePageAbsolute($aUrlData, array('module_fnc'));
+                $url = $activePageService->getLinkToActivePageAbsolute($aUrlData, ['module_fnc']);
             } else {
-                $url = $activePageService->getLinkToActivePageRelative($aUrlData, array('module_fnc'));
+                $url = $activePageService->getLinkToActivePageRelative($aUrlData, ['module_fnc']);
             }
-            $url .= '#'.$this->getUrlNormalizationUtil()->normalizeUrl(TGlobal::Translate(self::URL_NAME_JUMPER));
+            $url .= '#'.$this->getUrlNormalizationUtil()->normalizeUrl(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(self::URL_NAME_JUMPER));
         }
 
         return $url;
@@ -161,7 +161,7 @@ class TPkgComment extends TPkgCommentAutoParent
      * and comment was written from logged in user else returns false.
      *
      * @param bool|int $iCommentPage
-     * @param bool     $bUseFullURL
+     * @param bool $bUseFullURL
      *
      * @return bool|string
      */
@@ -173,11 +173,11 @@ class TPkgComment extends TPkgCommentAutoParent
             $aUrlData[self::URL_ACTION_PARAMETER] = $this->aActionModes[0];
             $activePageService = $this->getActivePageService();
             if (true === $bUseFullURL) {
-                $url = $activePageService->getLinkToActivePageAbsolute($aUrlData, array('module_fnc'));
+                $url = $activePageService->getLinkToActivePageAbsolute($aUrlData, ['module_fnc']);
             } else {
-                $url = $activePageService->getLinkToActivePageRelative($aUrlData, array('module_fnc'));
+                $url = $activePageService->getLinkToActivePageRelative($aUrlData, ['module_fnc']);
             }
-            $url .= '#'.$this->getUrlNormalizationUtil()->normalizeUrl(TGlobal::Translate(self::URL_NAME_JUMPER));
+            $url .= '#'.$this->getUrlNormalizationUtil()->normalizeUrl(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(self::URL_NAME_JUMPER));
         }
 
         return $url;
@@ -215,10 +215,10 @@ class TPkgComment extends TPkgCommentAutoParent
      */
     public function GetURLToReportComment($iCommentPage = false, $bUseFullURL = false)
     {
-        $aUrlData = array();
+        $aUrlData = [];
         $aUrlData['commentid'] = $this->id;
         if (is_numeric($iCommentPage)) {
-            $aUrlData[TGlobal::Translate(self::URL_NAME_ID_PAGE)] = $iCommentPage;
+            $aUrlData[ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(self::URL_NAME_ID_PAGE)] = $iCommentPage;
         }
         $sUrl = TTools::GetExecuteMethodOnCurrentModuleURL('ReportComment', $aUrlData, $bUseFullURL);
 
@@ -284,10 +284,10 @@ class TPkgComment extends TPkgCommentAutoParent
      */
     protected function GetCommentURLData($iCommentPage = false)
     {
-        $aUrlData = array();
-        $aUrlData[TGlobal::Translate(self::URL_NAME_ID)] = $this->id;
+        $aUrlData = [];
+        $aUrlData[ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(self::URL_NAME_ID)] = $this->id;
         if (is_numeric($iCommentPage)) {
-            $aUrlData[TGlobal::Translate(self::URL_NAME_ID_PAGE)] = $iCommentPage;
+            $aUrlData[ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(self::URL_NAME_ID_PAGE)] = $iCommentPage;
         }
 
         return $aUrlData;
@@ -324,12 +324,12 @@ class TPkgComment extends TPkgCommentAutoParent
     /**
      * render the list using a given view.
      *
-     * @param string $sViewName     - view name
-     * @param array  $aCallTimeVars - optional parameters passed from the calling method to the view
+     * @param string $sViewName - view name
+     * @param array $aCallTimeVars - optional parameters passed from the calling method to the view
      *
      * @return string
      */
-    public function Render($sViewName, $aCallTimeVars = array())
+    public function Render($sViewName, $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView = $this->GetAdditionalViewVariables($oView, $sViewName, $aCallTimeVars);
@@ -340,17 +340,18 @@ class TPkgComment extends TPkgCommentAutoParent
 
     /**
      * @param string $sViewName
+     *
      * @return string[][]
      */
     protected function GetCacheTrigger($sViewName)
     {
-        $aClearCacheParameter = array();
-        $aClearCacheParameter[] = array('table' => 'pkg_comment', 'id' => $this->id);
-        $aClearCacheParameter[] = array('table' => 'data_extranet_user', 'id' => $this->fieldDataExtranetUserId);
+        $aClearCacheParameter = [];
+        $aClearCacheParameter[] = ['table' => 'pkg_comment', 'id' => $this->id];
+        $aClearCacheParameter[] = ['table' => 'data_extranet_user', 'id' => $this->fieldDataExtranetUserId];
         if ('report' !== $sViewName) {
             $oChildCommentList = $this->GetChildComments();
             while ($oChildComment = $oChildCommentList->Next()) {
-                $aClearCacheParameter[] = array('table' => 'pkg_comment', 'id' => $oChildComment->id);
+                $aClearCacheParameter[] = ['table' => 'pkg_comment', 'id' => $oChildComment->id];
             }
             $oChildCommentList->GoToStart();
         }
@@ -382,7 +383,7 @@ class TPkgComment extends TPkgCommentAutoParent
         }
         $oView->AddVar('oComment', $this);
         $oCommentUser = TdbDataExtranetUser::GetNewInstance();
-        /** @var $oCommentUser TdbDataExtranetUser */
+        /* @var $oCommentUser TdbDataExtranetUser */
         $oCommentUser->Load($this->fieldDataExtranetUserId);
         $oView->AddVar('oCommentUser', $oCommentUser);
 
@@ -407,7 +408,7 @@ class TPkgComment extends TPkgCommentAutoParent
             if ($aTable = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
                 $sTableName = $aTable['name'];
                 $sObjectName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableName);
-                $oCommentedObject = call_user_func(array($sObjectName, 'GetNewInstance'));
+                $oCommentedObject = call_user_func([$sObjectName, 'GetNewInstance']);
                 if (false == $oCommentedObject->Load($this->fieldItemId)) {
                     $oCommentedObject = false;
                 }
@@ -423,7 +424,7 @@ class TPkgComment extends TPkgCommentAutoParent
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -431,6 +432,6 @@ class TPkgComment extends TPkgCommentAutoParent
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }

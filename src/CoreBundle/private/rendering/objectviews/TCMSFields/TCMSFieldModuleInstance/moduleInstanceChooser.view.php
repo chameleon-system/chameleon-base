@@ -11,7 +11,7 @@ $menuPrefix = $oField->name;
 ?>
 <h2>
     <?php
-    echo TGlobal::Translate('chameleon_system_core.template_engine.module_view').': ';
+    echo \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.module_view').': ';
     echo '<span id="'.$oField->name.'CurrentView">'.$oField->oTableRow->sqlData[$oField->name.'_view'].'</span>';
     ?>
 </h2>
@@ -30,7 +30,7 @@ $menuPrefix = $oField->name;
     function Rename(fieldName, instanceName) {
         var sNewName = '';
         var defaultValue = instanceName;
-        sNewName = window.prompt('<?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.template_engine.prompt_instance_name')); ?>:', defaultValue);
+        sNewName = window.prompt('<?=TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.prompt_instance_name')); ?>:', defaultValue);
         if (sNewName != null && sNewName != defaultValue) {
             GetAjaxCall('<?=$sAjaxURL; ?>&_fieldName=' + fieldName + '&_fnc=RenameInstance&sName=' + escape(sNewName), RenameFinal);
         }
@@ -56,7 +56,7 @@ $menuPrefix = $oField->name;
 
     function CreateModuleInstance(fieldName, moduleID, sView) {
         $('#cmsModuleMenu').hide('fast');
-        sNewName = window.prompt('<?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.template_engine.prompt_instance_name')); ?>:', '<?=$sRecordName; ?>');
+        sNewName = window.prompt('<?=TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.prompt_instance_name')); ?>:', '<?=$sRecordName; ?>');
         GetAjaxCall('<?=$sAjaxURL; ?>&_fieldName=' + fieldName + '&_fnc=CreateNewInstance&moduleID=' + moduleID + '&sName=' + escape(sNewName) + '&sView=' + escape(sView), CreateModuleInstanceFinal);
     }
 
@@ -68,7 +68,7 @@ $menuPrefix = $oField->name;
     }
 
     function DeleteModuleInstance(fieldName, moduleInstanceId) {
-        if (window.confirm('<?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.action.confirm_delete')); ?>')) {
+        if (window.confirm('<?=TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.confirm_delete')); ?>')) {
             $('#cmsModuleMenu').hide('fast');
             GetAjaxCall('<?=$sAjaxURL; ?>&_fieldName=' + fieldName + '&_fnc=DeleteInstance&moduleInstanceId=' + moduleInstanceId, DeleteModuleInstanceFinal);
         }
@@ -77,12 +77,12 @@ $menuPrefix = $oField->name;
     function DeleteModuleInstanceFinal(data, statusText) {
         CloseModalIFrameDialog();
         if (data && typeof(data) == 'object') {
-            var message = '<h1><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_module_instance.error')); ?></h1><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.template_engine.error_delete_still_used')); ?><br /><br />';
+            var message = '<h1><?=TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_module_instance.error')); ?></h1><?=TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.error_delete_still_used')); ?><br /><br />';
 
             for (var i = 0; i < data.length; i++) {
                 message += '<div style="padding-bottom: 10px;">';
                 message += data[i].tree;
-                message += '<a href="<?=$sPageEditURL; ?>&id=' + data[i].id + '" target="_parent" class="btn btn-danger"><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_page_tree.action_edit_page')); ?></a><hr width="95%" />';
+                message += '<a href="<?=$sPageEditURL; ?>&id=' + data[i].id + '" target="_parent" class="btn btn-danger"><?=TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_page_tree.action_edit_page')); ?></a><hr width="95%" />';
                 message += '</div>';
             }
             CreateModalIFrameDialogFromContent(message);
@@ -97,7 +97,7 @@ $menuPrefix = $oField->name;
 
         $(document).ready(function(){
             var container = '<div id="cmsModuleMenu" style="display: none;">';
-            container += '<div class="moduleMenuHeader"><a href="#" onclick="jQuery(\'#cmsModuleMenu\').hide(\'fast\');"><?=TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.action.close')); ?></a></div>';
+            container += '<div class="moduleMenuHeader"><a href="#" onclick="jQuery(\'#cmsModuleMenu\').hide(\'fast\');"><?=TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.close')); ?></a></div>';
             container += '<a class="scrolltop" href="#">&nbsp;</a>';
             container += '<div id="menuWrapper">&nbsp;</div>';
             container += '<a href="#" class="scrollbottom">&nbsp;</a>';
@@ -164,7 +164,7 @@ if (!is_null($oField->oModuleInstance)) {
                     echo ' class="hasChildren" onclick="openMenuLevel(this);return false"';
                 } else { // edit table
                     echo " onclick=\"EditTable('".TGlobal::OutJS($oRelatedTable->id)."','".TGlobal::OutJS($oField->oModuleInstance->id)."','');return false;\"";
-                } ?>><i class="fas fa-edit"></i> <?=TGlobal::Translate('chameleon_system_core.link.edit'); ?></a>
+                } ?>><i class="fas fa-edit"></i> <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.link.edit'); ?></a>
                 <ul>
                     <?php while ($oTmpRelatedTable = $oRelatedTables->Next()) {
                     $sJS = " onclick=\"EditTable('".TGlobal::OutJS($oTmpRelatedTable->id)."','".TGlobal::OutJS(urlencode($oField->oModuleInstance->id))."','');return false;\"";
@@ -182,7 +182,7 @@ if (!is_null($oField->oModuleInstance)) {
             <?php
             if (\count($viewMappings) > 1) {
                 ?>
-                <li><a href="#;" class="hasChildren" onclick="openMenuLevel(this);return false;"><i class="fas fa-desktop"></i> <?=TGlobal::Translate('chameleon_system_core.template_engine.action_change_template'); ?></a>
+                <li><a href="#;" class="hasChildren" onclick="openMenuLevel(this);return false;"><i class="fas fa-desktop"></i> <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.action_change_template'); ?></a>
                     <?php
                     echo "<ul>\n";
                 $viewCount = 0;
@@ -196,10 +196,10 @@ if (!is_null($oField->oModuleInstance)) {
                 <?php
             } ?>
             <li><a href="#"
-                   onclick="Rename('<?=TGlobal::OutJS($oField->name); ?>','<?=TGlobal::OutJS($oField->oModuleInstance->sqlData['name']); ?>');return false;"><i class="fab fa-fonticons"></i> <?=TGlobal::Translate('chameleon_system_core.template_engine.slot_rename'); ?></a>
+                   onclick="Rename('<?=TGlobal::OutJS($oField->name); ?>','<?=TGlobal::OutJS($oField->oModuleInstance->sqlData['name']); ?>');return false;"><i class="fab fa-fonticons"></i> <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.slot_rename'); ?></a>
             </li>
             <li><a href="#"
-                   onclick="DeleteModuleInstance('<?=TGlobal::OutJS($oField->name); ?>','<?=TGlobal::OutJS($oField->oModuleInstance->id); ?>');return false;"><i class="fas fa-file-excel"></i> <?=TGlobal::Translate('chameleon_system_core.template_engine.action_delete_instance_content'); ?></a>
+                   onclick="DeleteModuleInstance('<?=TGlobal::OutJS($oField->name); ?>','<?=TGlobal::OutJS($oField->oModuleInstance->id); ?>');return false;"><i class="fas fa-file-excel"></i> <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.action_delete_instance_content'); ?></a>
             </li>
             <?php
         }
@@ -210,7 +210,7 @@ if (!is_null($oField->oModuleInstance)) {
     <?php
     if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
         ?>
-      <li><a href="#" class="hasChildren" onclick="openMenuLevel(this);return false;"><i class="fas fa-plus"></i> <?=TGlobal::Translate('chameleon_system_core.template_engine.action_create_module_instance'); ?></a>
+      <li><a href="#" class="hasChildren" onclick="openMenuLevel(this);return false;"><i class="fas fa-plus"></i> <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.action_create_module_instance'); ?></a>
         <ul>
         <?php
         while ($oModule = $oModuleList->Next()) {

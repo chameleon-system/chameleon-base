@@ -339,7 +339,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
 
         if (strlen($sTitle) < 1) {
             $activePortal = $this->getPortalDomainService()->getActivePortal();
-            $sTitle = TGlobal::Translate('chameleon_system_core.page_meta_core.no_title');
+            $sTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.page_meta_core.no_title');
             $sBreadcrumb = '';
             if (null !== $activePortal) {
                 $this->data['oActivePortal'] = $activePortal;
@@ -430,7 +430,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     protected function _GetActivePageURL()
     {
         if (null === $this->getPortalDomainService()->getActivePortal()) {
-            $url = TGlobal::Translate('chameleon_system_core.page_meta_core.no_url');
+            $url = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.page_meta_core.no_url');
         } else {
             $url = $this->getActivePageService()->getLinkToActivePageRelative();
         }

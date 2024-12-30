@@ -19,8 +19,8 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class TCMSPortal extends TCMSRecord
 {
-    public $_rootNode = null;
-    public $_aCache = array();
+    public $_rootNode;
+    public $_aCache = [];
 
     /**
      * you should use the factory GetPagePortal to create the portal (if the page is known).
@@ -30,15 +30,6 @@ class TCMSPortal extends TCMSRecord
     public function __construct($id = null)
     {
         parent::__construct('cms_portal', $id);
-    }
-
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSPortal()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**
@@ -61,9 +52,9 @@ class TCMSPortal extends TCMSRecord
         }
         if (!$aStopNodes || !array_key_exists($key, $aStopNodes)) {
             if (!isset($aStopNodes)) {
-                $aStopNodes = array();
+                $aStopNodes = [];
             }
-            $aStopNodes[$key] = array();
+            $aStopNodes[$key] = [];
             $query = 'SELECT `main_node_tree`
                     FROM `cms_portal`
                  ';
@@ -88,9 +79,9 @@ class TCMSPortal extends TCMSRecord
         }
         if (!$aNaviNodeIds || !array_key_exists($key, $aNaviNodeIds)) {
             if (!$aNaviNodeIds) {
-                $aNaviNodeIds = array();
+                $aNaviNodeIds = [];
             }
-            $aNaviNodeIds[$key] = array();
+            $aNaviNodeIds[$key] = [];
             if (!is_null($this->id)) {
                 $query = "SELECT `tree_node` FROM `cms_portal_navigation` WHERE `cms_portal_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'";
                 $navis = MySqlLegacySupport::getInstance()->query($query);
@@ -130,7 +121,7 @@ class TCMSPortal extends TCMSRecord
         static $aPortalList;
         if (!$aPortalList || !isset($aPortalList[$sDomainName])) {
             if (!is_array($aPortalList)) {
-                $aPortalList = array();
+                $aPortalList = [];
             }
             $aPortalList[$sDomainName] = null;
             $query = "SELECT `cms_portal_domains`.*
@@ -140,7 +131,7 @@ class TCMSPortal extends TCMSRecord
                       OR `cms_portal_domains`.`sslname` = '".MySqlLegacySupport::getInstance()->real_escape_string($sDomainName)."'
                    ORDER BY `cms_portal`.`sort_order` ASC";
             $portalDomains = MySqlLegacySupport::getInstance()->query($query);
-            $aPortalIdList = array();
+            $aPortalIdList = [];
             while ($domain = MySqlLegacySupport::getInstance()->fetch_assoc($portalDomains)) {
                 $aPortalIdList[] = new self($domain['cms_portal_id']);
             }
@@ -230,7 +221,7 @@ class TCMSPortal extends TCMSRecord
     public function GetPortalPageId()
     {
         $oHomeNode = new TCMSTreeNode();
-        /** @var $oHomeNode TCMSTreeNode */
+        /* @var $oHomeNode TCMSTreeNode */
         $oHomeNode->LoadWithCaching($this->sqlData['home_node_id']);
 
         return $oHomeNode->GetLinkedPage();
@@ -262,10 +253,10 @@ class TCMSPortal extends TCMSRecord
     /**
      * Returns the name of the primary domain for this portal.
      *
-     * @param bool   $bStripWWW  - set this to true if you need the plain domain name without www. subdomain (like for e-mails)
+     * @param bool $bStripWWW - set this to true if you need the plain domain name without www. subdomain (like for e-mails)
      * @param string $languageId
-     * @param bool   $secure     If true, the SSL name of the domain will be returned. If the SSL name is not set, the default
-     *                           domain name will be returned.
+     * @param bool $secure If true, the SSL name of the domain will be returned. If the SSL name is not set, the default
+     *                     domain name will be returned.
      *
      * @return string $sDomainHost
      *
@@ -311,7 +302,7 @@ class TCMSPortal extends TCMSRecord
             $sPath = '';
             if (!empty($this->sqlData['pkg_cms_theme_id'])) {
                 $oWebTheme = TdbPkgCmsTheme::GetNewInstance();
-                /** @var $oWebTheme TdbPkgCmsTheme */
+                /* @var $oWebTheme TdbPkgCmsTheme */
                 $oWebTheme->Load($this->sqlData['pkg_cms_theme_id']);
                 if (defined('PATH_WEB_THEMES_PRIVATE') && !empty($oWebTheme->fieldDirectory)) {
                     $sPath = PATH_WEB_THEMES_PRIVATE.$oWebTheme->fieldDirectory;
@@ -388,18 +379,18 @@ class TCMSPortal extends TCMSRecord
      * Note: the links will be cached to reduce load.
      *
      * @param string $sSystemPageName
-     * @param array  $aParameters      - optional parameters to add to the link
-     * @param bool   $bForcePortalLink - set to true if you want to include the portal domain (http://..../) part in the link.
+     * @param array $aParameters - optional parameters to add to the link
+     * @param bool $bForcePortalLink - set to true if you want to include the portal domain (http://..../) part in the link.
      * @param string $sAnchorName
      *
      * @return string
      *
      * @deprecated since 6.1.0 - use chameleon_system_core.system_page_service::getLinkToSystemPage*() instead
      */
-    public function GetLinkToSystemPage($sSystemPageName, $aParameters = array(), $bForcePortalLink = false, $sAnchorName = '')
+    public function GetLinkToSystemPage($sSystemPageName, $aParameters = [], $bForcePortalLink = false, $sAnchorName = '')
     {
         if (null === $aParameters) {
-            $aParameters = array();
+            $aParameters = [];
         }
         try {
             if ($bForcePortalLink) {
@@ -423,20 +414,19 @@ class TCMSPortal extends TCMSRecord
      * always returns relative url of the requested link
      * so the protocol and domain will be cut off if original link (from GetLinkToSystemPage) contains them.
      *
-     * @param string         $sSystemPageName
-     * @param array          $aParameters     - optional parameters to add to the link
-     * @param string         $sAnchorName     - set name to jump to within the page
-     * @param TdbCmsLanguage $language
+     * @param string $sSystemPageName
+     * @param array $aParameters - optional parameters to add to the link
+     * @param string $sAnchorName - set name to jump to within the page
      *
      * @return string
      *
      * @deprecated since 6.1.0 - use system_page_service::getLinkToSystemPageRelative() instead (might need to enforce the
      *                          relative URL afterwards)
      */
-    public function getLinkToSystemPageRelative($sSystemPageName, $aParameters = array(), $sAnchorName = '', TdbCmsLanguage $language = null)
+    public function getLinkToSystemPageRelative($sSystemPageName, $aParameters = [], $sAnchorName = '', ?TdbCmsLanguage $language = null)
     {
         if (null === $aParameters) {
-            $aParameters = array();
+            $aParameters = [];
         }
         try {
             $link = $this->getSystemPageService()->getLinkToSystemPageRelative($sSystemPageName, $aParameters, $this, $language);
@@ -456,12 +446,11 @@ class TCMSPortal extends TCMSRecord
     /**
      * Returns the page ID of the first found page connected to a system page tree node.
      *
-     * @param string              $systemPageName
-     * @param TdbCmsLanguage|null $language
+     * @param string $systemPageName
      *
      * @return string|bool|null - returns null or false if no page was found
      */
-    public function GetSystemPageId($systemPageName, TdbCmsLanguage $language = null)
+    public function GetSystemPageId($systemPageName, ?TdbCmsLanguage $language = null)
     {
         $systemPage = $this->getSystemPageService()->getSystemPage($systemPageName, $this, $language);
         if (null === $systemPage) {
@@ -481,15 +470,15 @@ class TCMSPortal extends TCMSRecord
      * the system pages are defined through the shop config in the table cms_portal_system_page
      * Note: the links will be cached to reduce load.
      *
-     * @param string $sLinkText        - the text to display in the link - no OutHTML will be called - so make sure to escape the incoming text
+     * @param string $sLinkText - the text to display in the link - no OutHTML will be called - so make sure to escape the incoming text
      * @param string $sSystemPageName
-     * @param array  $aParameters      - optional parameters to add to the link
-     * @param bool   $bForcePortalLink - set to true if you want to include the portal domain (http://..../) part in the link.
-     * @param int    $width
-     * @param int    $height
-     * @param bool   $bGetOnlyJSCode
-     * @param string $sCSSClass        - additional css class to add to the link
-     * @param string $sAnchorName      - set name to jump to within the page*
+     * @param array $aParameters - optional parameters to add to the link
+     * @param bool $bForcePortalLink - set to true if you want to include the portal domain (http://..../) part in the link.
+     * @param int $width
+     * @param int $height
+     * @param bool $bGetOnlyJSCode
+     * @param string $sCSSClass - additional css class to add to the link
+     * @param string $sAnchorName - set name to jump to within the page*
      *
      * @return string
      */
@@ -513,14 +502,13 @@ class TCMSPortal extends TCMSRecord
     /**
      * return the node for the system page with the name sSystemPageName. see GetLinkToSystemPage for details.
      *
-     * @param string         $sSystemPageName
-     * @param TdbCmsLanguage $language
+     * @param string $sSystemPageName
      *
      * @return string|null
      *
      * @deprecated since 6.1.0 - use system_page_service::getSystemPage()->fieldCmsTreeId instead
      */
-    public function GetSystemPageNodeId($sSystemPageName, TdbCmsLanguage $language = null)
+    public function GetSystemPageNodeId($sSystemPageName, ?TdbCmsLanguage $language = null)
     {
         $systemPage = $this->getSystemPageService()->getSystemPage($sSystemPageName, $this, $language);
         if (null === $systemPage) {
@@ -539,8 +527,8 @@ class TCMSPortal extends TCMSRecord
      */
     protected function GetSystemPageLinkList($bForcePortalLink)
     {
-        static $aSystemPages = array();
-        static $aSystemPagesWithPortal = array();
+        static $aSystemPages = [];
+        static $aSystemPagesWithPortal = [];
 
         $languageIdentifier = '-';
         $language = self::getLanguageService()->getActiveLanguage();
@@ -549,11 +537,11 @@ class TCMSPortal extends TCMSRecord
         }
         if ((!isset($aSystemPages[$languageIdentifier]) && !$bForcePortalLink) || (!isset($aSystemPagesWithPortal[$languageIdentifier]) && $bForcePortalLink)) {
             $cache = $this->getCache();
-            $aCacheKeyParams = array('class' => __CLASS__, 'method' => 'GetSystemPageLinkList', 'name' => 'systemportalpagelinks', 'forceportal' => $bForcePortalLink, 'language' => $languageIdentifier);
+            $aCacheKeyParams = ['class' => __CLASS__, 'method' => 'GetSystemPageLinkList', 'name' => 'systemportalpagelinks', 'forceportal' => $bForcePortalLink, 'language' => $languageIdentifier];
             $sKey = $cache->getKey($aCacheKeyParams);
             $aTmpList = $cache->get($sKey);
             if (null === $aTmpList) {
-                $aTmpList = array();
+                $aTmpList = [];
                 $oPages = $this->GetProperties('cms_portal_system_page', 'TdbCmsPortalSystemPage');
                 $treeService = self::getTreeService();
                 while ($oSystemPage = $oPages->Next()) {
@@ -562,11 +550,11 @@ class TCMSPortal extends TCMSRecord
                     if (null !== $oNode) {
                         try {
                             if ($bForcePortalLink) {
-                                $sLink = $treeService->getLinkToPageForTreeAbsolute($oNode, array(), $language);
+                                $sLink = $treeService->getLinkToPageForTreeAbsolute($oNode, [], $language);
                             } else {
-                                $sLink = $treeService->getLinkToPageForTreeRelative($oNode, array(), $language);
+                                $sLink = $treeService->getLinkToPageForTreeRelative($oNode, [], $language);
                             }
-                            $aTmpList[$oSystemPage->fieldNameInternal] = array('link' => $sLink, 'nodeId' => $oNode->id);
+                            $aTmpList[$oSystemPage->fieldNameInternal] = ['link' => $sLink, 'nodeId' => $oNode->id];
                         } catch (RouteNotFoundException $e) {
                             $this->getLogger()->warning(
                                 sprintf('Error while generating link for system page %s: %s', $oSystemPage->fieldNameInternal, $e->getMessage())
@@ -574,7 +562,7 @@ class TCMSPortal extends TCMSRecord
                         }
                     }
                 }
-                $aCacheClearKeys = array(array('table' => 'cms_portal_system_page', 'id' => ''), array('table' => 'cms_tree', 'id' => ''));
+                $aCacheClearKeys = [['table' => 'cms_portal_system_page', 'id' => ''], ['table' => 'cms_tree', 'id' => '']];
                 $cache->set($sKey, $aTmpList, $aCacheClearKeys);
             }
             if ($bForcePortalLink) {
@@ -647,7 +635,7 @@ class TCMSPortal extends TCMSRecord
         $sCachePostFix = $bActivateAllPortalLanguages ? 'active' : 'all';
         $aLanguages = $this->GetFromInternalCache('aFieldBasedTranslationLanguageArray'.$sCachePostFix);
         if (is_null($aLanguages)) {
-            $aLanguages = array();
+            $aLanguages = [];
             $oLanguages = $this->GetMLT('cms_language_mlt', 'TdbCmsLanguage', '', 'CMSDataObjects', 'Core');
             while ($oLang = $oLanguages->Next()) {
                 if ($oLang->id != $this->sqlData['cms_language_id'] && (true === $bActivateAllPortalLanguages || true === $oLang->fieldActiveForFrontEnd)) {
@@ -747,8 +735,6 @@ class TCMSPortal extends TCMSRecord
 
     /**
      * Get session variable to de and activate front end languages.
-     *
-     * @param bool $bValue
      */
     public function GetActivateAllPortalLanguages()
     {
@@ -765,7 +751,7 @@ class TCMSPortal extends TCMSRecord
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
     /**
@@ -773,7 +759,7 @@ class TCMSPortal extends TCMSRecord
      */
     private function getCache()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_cache.cache');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_cache.cache');
     }
 
     /**
@@ -781,7 +767,7 @@ class TCMSPortal extends TCMSRecord
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
     }
 
     /**
@@ -789,11 +775,11 @@ class TCMSPortal extends TCMSRecord
      */
     private static function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
     }
 }

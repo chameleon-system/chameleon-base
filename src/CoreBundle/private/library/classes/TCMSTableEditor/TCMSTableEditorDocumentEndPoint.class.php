@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
 {
@@ -51,7 +52,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             return false;
         }
 
-        /**
+        /*
          * user can download document if:
          * - he is the owner
          * - OR
@@ -98,11 +99,11 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     /**
      * {@inheritdoc}
      */
-    public function DatabaseCopy($languageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = false)
+    public function DatabaseCopy($languageCopy = false, $aOverloadedFields = [], $bCopyAllLanguages = false)
     {
         $iFileId = $this->sId;
         $oDocument = new TCMSDownloadFile();
-        /** @var $oDocument TCMSDownloadFile */
+        /* @var $oDocument TCMSDownloadFile */
         $oDocument->Load($iFileId);
         $sFile = $oDocument->GetRealPath();
         parent::DatabaseCopy($languageCopy, $aOverloadedFields, $bCopyAllLanguages);
@@ -183,16 +184,16 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             $oTableManager->AllowEditByAll(true);
             $oTableManager->SaveField('seo_name', $sSeoName);
 
-            TCacheManager::PerformeTableChange('cms_document', $documentID);
+            $this->getCacheService()->callTrigger('cms_document', $documentID);
         }
     }
 
     /**
      * saves only one field of a record (like the edit-on-click WYSIWYG).
      *
-     * @param string $sFieldName           the fieldname to save to
-     * @param string $sFieldContent        the content to save
-     * @param bool   $bTriggerPostSaveHook - if set to true, the PostSaveHook method will be called at the end of the call
+     * @param string $sFieldName the fieldname to save to
+     * @param string $sFieldContent the content to save
+     * @param bool $bTriggerPostSaveHook - if set to true, the PostSaveHook method will be called at the end of the call
      *
      * @return TCMSstdClass
      */
@@ -253,8 +254,8 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      * returns an multidimensional array of all fields with matching values in all
      * tables that contain the document given by the document id $fileID.
      *
-     * @param string $fileID          - an image id (from the table cms_document)
-     * @param array  $aTableBlackList - if set true, it means
+     * @param string $fileID - an image id (from the table cms_document)
+     * @param array $aTableBlackList - if set true, it means
      *
      * @return array
      */
@@ -271,11 +272,11 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      */
     protected function GetDownloadRefFromWysiwygFields($aTableBlackList = null)
     {
-        $aDownloadRefFromWysiwygFields = array();
+        $aDownloadRefFromWysiwygFields = [];
         $sMaskTableInBlackList = '';
         if (!empty($aTableBlackList)) {
             $databaseConnection = $this->getDatabaseConnection();
-            $tableBlacklistString = implode(',', array_map(array($databaseConnection, 'quote'), $aTableBlackList));
+            $tableBlacklistString = implode(',', array_map([$databaseConnection, 'quote'], $aTableBlackList));
             $sMaskTableInBlackList = " AND  `cms_tbl_conf`.`name` NOT IN ($tableBlacklistString)";
         }
 
@@ -307,7 +308,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
                 foreach ($aFields as $field => $value) {
                     /** @var $oTableRecordList TCMSRecordList */
                     $oTableRecordList = $value;
-                    /** @var $oRecord TCMSRecord */
+                    /* @var $oRecord TCMSRecord */
                     while ($oTableRecord = $oTableRecordList->Next()) {
                         $sWysiwygText = $this->RemoveDownloadFromWysiwygText($oTableRecord->sqlData[$field]);
                         if (strlen($oTableRecord->sqlData[$field]) != strlen($sWysiwygText)) {
@@ -327,11 +328,11 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      */
     public function GetMltConnectedRecordReferences($aTableBlackList = null)
     {
-        $aMltConnectedRecordReferences = array();
+        $aMltConnectedRecordReferences = [];
         $sMaskTableInBlackList = '';
         if (!empty($aTableBlackList)) {
             $databaseConnection = $this->getDatabaseConnection();
-            $tableBlacklistString = implode(',', array_map(array($databaseConnection, 'quote'), $aTableBlackList));
+            $tableBlacklistString = implode(',', array_map([$databaseConnection, 'quote'], $aTableBlackList));
             $sMaskTableInBlackList = " AND  `cms_tbl_conf`.`name` NOT IN ($tableBlacklistString)";
         }
         $Select = "SELECT `cms_field_conf`.`name` AS fieldname , `cms_tbl_conf`.`name` AS tablename FROM `cms_field_type`
@@ -366,13 +367,13 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
         $quotedTableName = $databaseConnection->quoteIdentifier($sTableName);
         $quotedMltTableName = $databaseConnection->quoteIdentifier($sMltTableName);
         $quotedId = $databaseConnection->quote($this->sId);
-        $Select = "SELECT $quotedTableName.* 
+        $Select = "SELECT $quotedTableName.*
                    FROM $quotedMltTableName
                    INNER JOIN $quotedTableName ON $quotedTableName.`id` = $quotedMltTableName.`source_id`
                    WHERE $quotedMltTableName.`target_id` = $quotedId";
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableName).'List';
 
-        return call_user_func(array($sClassName, 'GetList'), $Select);
+        return call_user_func([$sClassName, 'GetList'], $Select);
     }
 
     /**
@@ -385,7 +386,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      */
     protected static function GetCacheGetKey($sTableName, $sFieldName)
     {
-        return TCacheManager::GetKey(array($sTableName => $sFieldName));
+        return ServiceLocator::get('chameleon_system_core.cache')->getKey([$sTableName => $sFieldName]);
     }
 
     /**
@@ -397,8 +398,8 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      */
     public function GetCacheTrigger($sTableName)
     {
-        $aTrigger = array();
-        $aTrigger[] = array('table' => $sTableName, 'id' => '');
+        $aTrigger = [];
+        $aTrigger[] = ['table' => $sTableName, 'id' => ''];
 
         return $aTrigger;
     }
@@ -445,13 +446,13 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
                    FROM $quotedTableName
                    WHERE
                     (
-                      ($quotedFieldName LIKE '%class=\"cmsdownloaditem%' OR $quotedFieldName LIKE '%class=\"wysiwyg_cmsdownloaditem%') 
+                      ($quotedFieldName LIKE '%class=\"cmsdownloaditem%' OR $quotedFieldName LIKE '%class=\"wysiwyg_cmsdownloaditem%')
                       AND ($quotedFieldName LIKE '%cmsdocument=\"$quotedId\"%' OR $quotedFieldName LIKE '%cmsdocument_$quotedId%')
                     )
                    OR $quotedFieldName LIKE '%[\{$quotedId,dl%'";
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableName).'List';
 
-        return call_user_func(array($sClassName, 'GetList'), $Select);
+        return call_user_func([$sClassName, 'GetList'], $Select);
     }
 
     /**
@@ -463,12 +464,12 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      */
     protected function RemoveDownloadFromWysiwygText($sWysiwygText)
     {
-        //parse downloads for wysiwyg with style <div><span class="cmsdownloaditem"><a title="title" target="_blank" href="...">Title</a></span>[63 kb]</div>
+        // parse downloads for wysiwyg with style <div><span class="cmsdownloaditem"><a title="title" target="_blank" href="...">Title</a></span>[63 kb]</div>
         $matchString = "/<span([^>]+?)cmsdocument=[\"]([^'\"]+?)[\"]([^>]*?)><a([^>]+?)href=['\"]([^'\"]*?)['\"]([^>]*?)>([^<]*?)<\\/a>\\s*<span([^>]*?)>([^<]*?)<\\/span><\\/span>/si";
-        $sWysiwygText = preg_replace_callback($matchString, array($this, '_callback_download_link_processor'), $sWysiwygText);
-        //parse downloads for wysiwyg downloads with style <span class="wysiwyg_cmsdownloaditem cmsdocument_13">[ico]title[kb]</span>
+        $sWysiwygText = preg_replace_callback($matchString, [$this, '_callback_download_link_processor'], $sWysiwygText);
+        // parse downloads for wysiwyg downloads with style <span class="wysiwyg_cmsdownloaditem cmsdocument_13">[ico]title[kb]</span>
         $matchStringForNewDownloadLinks = '#<span class="(wysiwyg_cmsdownloaditem)\scmsdocument_(.+?)">(.*\\s*.*\\s*.*)</span>#';
-        $sWysiwygText = preg_replace_callback($matchStringForNewDownloadLinks, array($this, '_callback_download_link_processor'), $sWysiwygText);
+        $sWysiwygText = preg_replace_callback($matchStringForNewDownloadLinks, [$this, '_callback_download_link_processor'], $sWysiwygText);
 
         return $sWysiwygText;
     }
@@ -531,7 +532,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     {
         $sResult = '';
         $itemId = $aMatch[2];
-        $oItem = new TCMSDownloadFile(); /*@var $oItem TCMSDownloadFile */
+        $oItem = new TCMSDownloadFile(); /* @var $oItem TCMSDownloadFile */
         if ($oItem->Load($itemId)) {
             $bHideSize = true;
             $bHideName = false;
@@ -591,7 +592,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             // edit
             if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                 $oMenuItem = new TCMSTableEditorMenuItem();
-                $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save_and_return');
+                $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.save_and_return');
                 $oMenuItem->sIcon = 'far fa-save';
                 $oMenuItem->sOnClick = 'SaveViaAjaxCustomCallback(postSaveHook, true);';
                 $this->oMenuItems->AddItem($oMenuItem);
@@ -599,7 +600,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
 
             // usage
             $oMenuItem = new TCMSTableEditorMenuItem();
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor_document.action_use');
+            $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_document.action_use');
             $oMenuItem->sItemKey = 'usage';
             $oMenuItem->sIcon = 'far fa-list-alt';
             $oMenuItem->sOnClick = "GetUsages('".$this->oTable->id."', 'document');";
@@ -616,12 +617,12 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
     /**
      * {@inheritdoc}
      */
-    public function GetObjectShortInfo($postData = array())
+    public function GetObjectShortInfo($postData = [])
     {
         $oRecordData = parent::GetObjectShortInfo();
 
         $oDownloadFile = new TCMSDownloadFile();
-        /** @var $oDownloadFile TCMSDownloadFile */
+        /* @var $oDownloadFile TCMSDownloadFile */
         $oDownloadFile->Load($this->sId);
         $sDownLoadFileHTML = $oDownloadFile->getDownloadHtmlTag();
         $oRecordData->downloadHTML = $sDownLoadFileHTML;
@@ -650,7 +651,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
               assignedDocumentHTML += data.downloadHTML;
               assignedDocumentHTML += '</td>';
               assignedDocumentHTML += '<td>';
-              assignedDocumentHTML += '<button class=\"btn btn-danger btn-sm\" type=\"button\" onclick=\"if(confirm(\'".TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove_confirm')."?\')){removeDocument(parent._fieldName,data.id,parent._recordID,parent._tableID)};\"><i class=\"far fa-trash-alt mr-2\"></i>".TGlobal::Translate('chameleon_system_core.table_editor_document.action_remove')."';
+              assignedDocumentHTML += '<button class=\"btn btn-danger btn-sm\" type=\"button\" onclick=\"if(confirm(\'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_document.action_remove_confirm')."?\')){removeDocument(parent._fieldName,data.id,parent._recordID,parent._tableID)};\"><i class=\"far fa-trash-alt mr-2\"></i>".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_document.action_remove')."';
               assignedDocumentHTML += '</td>';
               assignedDocumentHTML += '</tr>';
               assignedDocumentHTML += '</table>';
@@ -663,6 +664,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
       </script>
       ";
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />'; // we need this for the list of usages
+
         return $aIncludes;
     }
 
@@ -670,7 +672,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      * deletes a document from harddisk.
      *
      * @param string $fileID
-     * @param bool   $bWorkflowOnly - deprecated - remove only the file from workflow temp directory
+     * @param bool $bWorkflowOnly - deprecated - remove only the file from workflow temp directory
      *
      * @return bool
      */
@@ -691,7 +693,12 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
 
             $filePath = PATH_CMS_CUSTOMER_DATA.'/'.$filename;
             if (file_exists($filePath)) {
-                $bDeleteSuccess = $this->getFileManager()->unlink($filePath);
+                try {
+                    $this->getFileManager()->remove($filePath);
+                    $bDeleteSuccess = true;
+                } catch (IOExceptionInterface $exception) {
+                    $bDeleteSuccess = false;
+                }
             }
         }
 
@@ -703,6 +710,6 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

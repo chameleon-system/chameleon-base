@@ -193,7 +193,7 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aRequest);
         $sErrorMessage = TGlobal::OutJS(
-            TGlobal::Translate('chameleon_system_core.field_property_media.error_missing_target')
+            \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.error_missing_target')
         );
         $oGlobal = TGlobal::instance();
 
@@ -283,9 +283,9 @@ JAVASCRIPTCODE;
         }
 
         if (empty($oTableEditor->oTableEditor->sId)) {
-            $sReturn = TGlobal::Translate('chameleon_system_core.field_property_media.error_creating');
+            $sReturn = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.error_creating');
         } else {
-            $sReturn = TGlobal::Translate('chameleon_system_core.field_property_media.created');
+            $sReturn = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.created');
         }
 
         return $sReturn;

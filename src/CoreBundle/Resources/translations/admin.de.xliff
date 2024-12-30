@@ -595,17 +595,6 @@
                 <source>chameleon_system_core.field_options.select_nothing</source>
                 <target>keine Auswahl</target>
             </trans-unit>
-            <trans-unit id="chameleon_system_core.field_options.option_value_true">
-                <source>chameleon_system_core.field_options.option_value_true</source>
-                <target>Ja</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.field_options.option_value_false">
-                <source>chameleon_system_core.field_options.option_value_false</source>
-                <target>Nein</target>
-                <note>@deprecated since 6.3.0 - no longer used.</note>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_core.field_page_tree_node.primary_node">
                 <source>chameleon_system_core.field_page_tree_node.primary_node</source>
                 <target>Hauptnavigationspunkt</target>
@@ -717,30 +706,6 @@
             <trans-unit id="chameleon_system_core.field_gender.female">
                 <source>chameleon_system_core.field_gender.female</source>
                 <target>Weiblich</target>
-            </trans-unit>
-
-            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
-            <trans-unit id="chameleon_system_core.field_google_map.latitude">
-                <source>chameleon_system_core.field_google_map.latitude</source>
-                <target>Google Maps Breitengrad</target>
-            </trans-unit>
-            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
-            <trans-unit id="chameleon_system_core.field_google_map.longitude">
-                <source>chameleon_system_core.field_google_map.longitude</source>
-                <target>Google Maps Längengrad</target>
-            </trans-unit>
-            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
-            <trans-unit id="chameleon_system_core.field_google_map.show_map">
-                <source>chameleon_system_core.field_google_map.show_map</source>
-                <target>Karte anzeigen</target>
-            </trans-unit>
-            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
-            <trans-unit id="chameleon_system_core.field_google_map.missing_api_key_error">
-                <source>chameleon_system_core.field_google_map.missing_api_key_error</source>
-                <target>Sie haben keinen Google Maps API Key konfiguriert.
-                    Bitte generieren Sie einen API Key in der Google Cloud Console und setzen Sie alle relevanten Domains auf die Whitelist.
-                    Tragen Sie den Key in die Config ein: chameleon_system_core: google_maps: api_key: "Ihr API Key"
-                </target>
             </trans-unit>
 
            <trans-unit id="chameleon_system_core.field_map_coordinates.latitude">
@@ -1002,47 +967,6 @@
                 <target>Navigationsverwaltung</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.not_translated">
-                <source>chameleon_system_core.cms_module_page_tree.not_translated</source>
-                <target>Nicht übersetzt</target>
-                <note>@deprecated since 6.3.8 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.node_has_no_page">
-                <source>chameleon_system_core.cms_module_page_tree.node_has_no_page</source>
-                <target>Diesem Navigationspunkt ist keine Seite zugewiesen</target>
-                <note>@deprecated since 6.3.8 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.confirm_delete">
-                <source>chameleon_system_core.cms_module_page_tree.confirm_delete</source>
-                <target>Möchten Sie den Navigationpunkt "%nodeName%" inkl. aller Unterpunkte wirklich löschen?</target>
-                <note>@deprecated since 6.3.8 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.connect_page">
-                <source>chameleon_system_core.cms_module_page_tree.action_connect_page</source>
-                <target>Seite verbinden</target>
-                <note>@deprecated since 6.3.8 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.connected_pages">
-                <source>chameleon_system_core.cms_module_page_tree.connected_pages</source>
-                <target>Verbundene Seiten</target>
-                <note>@deprecated since 6.3.8 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_page">
-                <source>chameleon_system_core.cms_module_page_tree.action_edit_page</source>
-                <target>Seite editieren</target>
-                <note>@deprecated since 6.3.8 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.action_edit_node">
-                <source>chameleon_system_core.cms_module_page_tree.action_edit_node</source>
-                <target>Navigation editieren</target>
-                <note>@deprecated since 6.3.8 - no longer used.</note>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page">
-                <source>chameleon_system_core.cms_module_page_tree.legend_connected_to_selected_page</source>
-                <target>Seite mit verknüpftem Navigationspunkt</target>
-                <note>@deprecated since 6.3.8 - no longer used.</note>
-            </trans-unit>
-
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_header">
                 <source>chameleon_system_core.cms_module_page_tree.legend_header</source>
                 <target>Legende</target>
@@ -1059,11 +983,6 @@
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_folder">
                 <source>chameleon_system_core.cms_module_page_tree.legend_folder</source>
                 <target>Ordner / Verzeichnis</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_hidden">
-                <source>chameleon_system_core.cms_module_page_tree.legend_hidden</source>
-                <target>Navigationspunkt versteckt</target>
-                <note>@deprecated since 6.3.10 - no longer used, use "chameleon_system_core.cms_module_page_tree.legend_node_hidden" instead</note>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_node_hidden">
                 <source>chameleon_system_core.cms_module_page_tree.legend_node_hidden</source>
@@ -1446,10 +1365,6 @@
             <trans-unit id="chameleon_system_core.cms_module_update.show_all">
                 <source>chameleon_system_core.cms_module_update.show_all</source>
                 <target>Alle Updates anzeigen</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_core.cms_module_update.select_single_update">
-                <source>chameleon_system_core.cms_module_update.select_single_update</source>
-                <target>Einzelnes Update ausführen (NUR ZU TESTZWECKEN)</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.cms_module_update.updating_all_table_objects">
                 <source>chameleon_system_core.cms_module_update.updating_all_table_objects</source>
@@ -2325,32 +2240,6 @@
             <trans-unit id="chameleon_system_core.table_editor_tree_connection.action_show_list">
                 <source>chameleon_system_core.table_editor_tree_connection.action_show_list</source>
                 <target>Liste</target>
-            </trans-unit>
-
-            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
-            <trans-unit id="chameleon_system_core.google_map.coordinates">
-                <source>chameleon_system_core.google_map.coordinates</source>
-                <target>Koordinaten</target>
-            </trans-unit>
-            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
-            <trans-unit id="chameleon_system_core.google_map.find_coordinates">
-                <source>chameleon_system_core.google_map.find_coordinates</source>
-                <target>Suchen</target>
-            </trans-unit>
-            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
-            <trans-unit id="chameleon_system_core.google_map.action_use_coordinates">
-                <source>chameleon_system_core.google_map.action_use_coordinates</source>
-                <target>Übernehmen</target>
-            </trans-unit>
-            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
-            <trans-unit id="chameleon_system_core.google_map.geocoding_via">
-                <source>chameleon_system_core.google_map.geocoding_via</source>
-                <target>Suchresultate durch <![CDATA[<a href="%url%" target="_blank">%name%</a>]]></target>
-            </trans-unit>
-            <!-- field Google Maps coordinates is deprecated since 7.1.34 -->
-            <trans-unit id="chameleon_system_core.google_map.address">
-                <source>chameleon_system_core.google_map.address</source>
-                <target>Adresse</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.map.find_coordinates">

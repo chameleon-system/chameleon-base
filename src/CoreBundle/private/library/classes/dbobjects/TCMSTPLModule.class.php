@@ -11,7 +11,7 @@
 
 /**
  * holds a record from the "cms_tpl_module" table.
-/**/
+ * /**/
 class TCMSTPLModule extends TCMSRecord
 {
     /**
@@ -19,30 +19,20 @@ class TCMSTPLModule extends TCMSRecord
      *
      * @var TIterator
      */
-    private $_oViews = null;
+    private $_oViews;
 
     /**
      * if set, it will be used to restricted the views returned by GetViews.
      *
      * @var array
      */
-    public $aPermittedViews = null;
+    public $aPermittedViews;
 
     public function __construct($id = null)
     {
         $table = 'cms_tpl_module';
         parent::__construct($table, $id);
     }
-
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TCMSTPLModule()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
-    }
-
 
     public function isLegacy()
     {
@@ -100,8 +90,8 @@ class TCMSTPLModule extends TCMSRecord
 
         // get default view location (view folder in the module directory - or theme if defined)
         $defaultViewLocation = PATH_CUSTOMER_FRAMEWORK_MODULES.'/'.$this->sqlData['classname'].'/views/';
-        /** @var \ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface $portalDomainService */
-        $portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        /** @var ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface $portalDomainService */
+        $portalDomainService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
         $activePortal = $portalDomainService->getActivePortal();
         if (!is_null($activePortal)) {
             $sThemePath = $activePortal->GetThemeBaseModuleViewsPath();
@@ -110,7 +100,7 @@ class TCMSTPLModule extends TCMSRecord
             }
         }
 
-        $modulePathList = array();
+        $modulePathList = [];
 
         if (true === is_dir($defaultViewLocation)) {
             $modulePathList[] = $defaultViewLocation;
@@ -132,10 +122,10 @@ class TCMSTPLModule extends TCMSRecord
             return $this->_oViews;
         }
 
-        $finder = new \Symfony\Component\Finder\Finder();
+        $finder = new Symfony\Component\Finder\Finder();
         $finder->files()->in($modulePathList)->depth('== 0')->name('*.view.php')->sortByName();
-        /** @var \Symfony\Component\Finder\SplFileInfo $file */
-        $viewsFound = array();
+        /** @var Symfony\Component\Finder\SplFileInfo $file */
+        $viewsFound = [];
         foreach ($finder as $file) {
             $viewName = $file->getBasename('.view.php');
             // include every view only once
@@ -156,7 +146,7 @@ class TCMSTPLModule extends TCMSRecord
      */
     public function GetViewMapping()
     {
-        $aViewMapping = array();
+        $aViewMapping = [];
         $views = $this->GetViews();
         $views->GoToStart();
         while ($view = $views->next()) {
@@ -214,7 +204,7 @@ class TCMSTPLModule extends TCMSRecord
         if (false !== $this->sqlData && \array_key_exists('view_mapper_config', $this->sqlData)) {
             $viewMapperConfig = $this->sqlData['view_mapper_config'];
         } else {
-            throw new \Exception(sprintf('module with ID: %s not found',$this->id));
+            throw new Exception(sprintf('module with ID: %s not found', $this->id));
         }
         $viewMapperConfig = new ViewMapperConfig($viewMapperConfig);
         $this->SetInternalCache('viewMapperConfig', $viewMapperConfig);
@@ -237,7 +227,7 @@ class TCMSTPLModule extends TCMSRecord
      */
     public function getMapperChainConfig()
     {
-        $config = new \ModuleMapperChainConfig();
+        $config = new ModuleMapperChainConfig();
         $config->loadFromString($this->sqlData['mapper_chain']);
 
         return $config;
@@ -248,6 +238,6 @@ class TCMSTPLModule extends TCMSRecord
      */
     private function getViewRendererSnippetDirectory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
     }
 }

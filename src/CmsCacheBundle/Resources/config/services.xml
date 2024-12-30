@@ -18,7 +18,6 @@
         </service>
 
         <service id="chameleon_system_cms_cache.memcache_base" class="TCMSMemcache" abstract="true">
-            <argument>Memcached</argument>
             <argument>%chameleon_system_core.cache.memcached_timeout_in_milliseconds%</argument>
         </service>
 

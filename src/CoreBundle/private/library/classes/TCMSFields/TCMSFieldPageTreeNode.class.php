@@ -30,8 +30,8 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     {
         $primaryPath = $this->GetHTMLPrimaryTree();
         $additionalPaths = $this->GetHTMLSecondaryTree();
-        $selectPrimaryTreeNodeButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_primary_node'), "javascript:loadTreeNodeSelection('".TGlobal::OutJS($this->name)."',document.cmseditform.".TGlobalBase::OutHTML($this->name).'.value);', 'fas fa-check');
-        $selectAdditionalTreeNodesButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes'), 'javascript:openFullTree();', 'fas fa-check-double');
+        $selectPrimaryTreeNodeButton = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_primary_node'), "javascript:loadTreeNodeSelection('".TGlobal::OutJS($this->name)."',document.cmseditform.".TGlobalBase::OutHTML($this->name).'.value);', 'fas fa-check');
+        $selectAdditionalTreeNodesButton = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_secondary_nodes'), 'javascript:openFullTree();', 'fas fa-check-double');
 
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('fieldName', $this->name);
@@ -92,7 +92,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     {
         // If no tree node was supplied and rendering empty paths was requested, return fallback.
         if (null === $tree) {
-            return TGlobal::Translate('chameleon_system_core.field_page_tree_node.no_node_assigned');
+            return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.no_node_assigned');
         }
         // Retrieve portal through referenced linked page.
         $path = $tree->GetTextPathToNode('/', false, true);
@@ -292,9 +292,9 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
             }
-            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=".TGlobal::OutJS($this->treeNodeSelectModulePagedef)."&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID + '&currentPageId=".$this->oTableRow->id."', 0, 0, '".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_primary_node')."');
+            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=".TGlobal::OutJS($this->treeNodeSelectModulePagedef)."&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID + '&currentPageId=".$this->oTableRow->id."', 0, 0, '".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_primary_node')."');
           } else {
-            toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
+            toasterMessage('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
           }
         }
 
@@ -306,16 +306,16 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#cms_portal_id').remove();
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
-              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
-              toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
+              toasterMessage('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }
           } else {
             var portalID = document.getElementById('cms_portal_id').value;
             if(portalID != '0' && portalID != '') {
-              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".TGlobal::Translate('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
-              toasterMessage('".TGlobal::Translate('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
+              toasterMessage('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }
           }
         }

@@ -31,7 +31,7 @@ $oModulePointer = $oGlobal->GetExecutingModulePointer();
                     <?php if ($oComment->fieldMarkAsReported) {
                                 ?>
                         <div
-                            class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_comment.text.marked_as_inappropriate')); ?></div>
+                            class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.text.marked_as_inappropriate')); ?></div>
                         <?php
                             } else {
                                 ?>
@@ -40,7 +40,7 @@ $oModulePointer = $oGlobal->GetExecutingModulePointer();
                         <?php if ($sReportCommentURL && $bAllowReportComment) {
                                     ?>
                             <div class="notification <?=$sCmsIdent; ?>"><a
-                                href="<?=$sReportCommentURL; ?>"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_comment.action.mark_as_inappropriate')); ?></a>
+                                href="<?=$sReportCommentURL; ?>"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.mark_as_inappropriate')); ?></a>
                             </div>
                             <?php
                                 } ?>
@@ -50,7 +50,7 @@ $oModulePointer = $oGlobal->GetExecutingModulePointer();
                         } else {
                             ?>
                     <div
-                        class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_comment.text.is_deleted_comment')); ?></div>
+                        class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.text.is_deleted_comment')); ?></div>
                     <?php
                         } ?>
                 </div>

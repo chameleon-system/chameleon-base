@@ -22,10 +22,9 @@ use Doctrine\Common\Collections\Expr\Comparison;
  */
 class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 {
-    const TABLE_NAME_FIELD_SUFFIX = '_table_name';
+    public const TABLE_NAME_FIELD_SUFFIX = '_table_name';
 
-    const FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
-
+    public const FIELD_SYSTEM_NAME = 'CMSFIELD_EXTENDEDMULTITABLELIST';
 
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
@@ -41,8 +40,8 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -63,8 +62,8 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'propertyName' => $this->snakeToCamelCase($this->getTableFieldName()),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->getTableFieldName()),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->getTableFieldName()),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->getTableFieldName()),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->getTableFieldName()),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -77,8 +76,6 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         );
 
         return $idField->merge($tableNameField);
-
-
     }
 
     protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
@@ -90,7 +87,6 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'length' => '' === $this->oDefinition->sqlData['length_set'] ? 255 : $this->oDefinition->sqlData['length_set'],
             'comment' => $this->oDefinition->sqlData['translation'],
             'default' => $this->oDefinition->sqlData['field_default_value'],
-
         ])->render();
 
         $tableNameMapping = $this->getDoctrineRenderer('mapping/string.xml.twig', [
@@ -100,11 +96,9 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             'length' => '255',
             'comment' => $this->oDefinition->sqlData['translation'],
             'default' => $this->oDefinition->sqlData['field_default_value'],
-
         ])->render();
 
-        return $idMapping. "\n" .$tableNameMapping;
-
+        return $idMapping."\n".$tableNameMapping;
     }
 
     /**
@@ -174,7 +168,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $aTables = $this->GetAllowedTables();
         if (count($aTables) > 0) {
             $aTableDisplayNames = $this->GetTableDisplayNames();
-            $sHTML .= '<div style="float:left;padding:2px 10px 0 0">'.TGlobal::Translate('chameleon_system_core.field_lookup.select_item').': </div>';
+            $sHTML .= '<div style="float:left;padding:2px 10px 0 0">'.ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.select_item').': </div>';
             foreach ($aTables as $sTableName) {
                 $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
                 $oCmsTblConf->LoadFromField('name', $sTableName);
@@ -184,13 +178,13 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                 }
                 /** @var SecurityHelperAccess $securityHelper */
                 $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-                if (!$oCmsTblConf->fieldOnlyOneRecordTbl && ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $sTableName))) {
+                if (!$oCmsTblConf->fieldOnlyOneRecordTbl && $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $sTableName)) {
                     $sHTML .= TCMSRender::DrawButton($sTableDisplayName, 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf).';', 'fas fa-th-list');
                     $sHTML .= '<input type="hidden" name="'.TGlobal::OutHTML('aTableNames['.$oCmsTblConf->id).']" id="'.TGlobal::OutHTML('aTableNames['.$oCmsTblConf->id).']" value="'.TGlobal::OutHTML($oCmsTblConf->fieldTranslation).'" />'."\n";
                 }
             }
             $sHTML .= '<div>';
-            $sHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:resetExtendedMultiTableListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected'))."');", 'fas fa-undo');
+            $sHTML .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.reset'), "javascript:resetExtendedMultiTableListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected'))."');", 'fas fa-undo');
             $sHTML .= '</div>';
         } else {
             $sHTML = parent::GetExtendedListButtons();
@@ -214,16 +208,16 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         $js = parent::_GetOpenWindowJS($oPopupTableConf);
 
-        $aParams = array(
+        $aParams = [
             'pagedef' => 'extendedLookupList',
             'id' => $oPopupTableConf->id,
             'fieldName' => $this->name,
             'field' => $this->name,
             'sourceTblConfId' => $this->oDefinition->fieldCmsTblConfId,
-        );
+        ];
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParams);
-        $sWindowTitle = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
+        $sWindowTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected');
 
         $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."',0,0,'".$sWindowTitle."');return false;";
 
@@ -245,7 +239,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             }
             reset($aTables);
         } else {
-            $aTables = array();
+            $aTables = [];
         }
 
         return $aTables;
@@ -266,9 +260,9 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             }
             $aTables = $this->GetAllowedTables();
             if (count($aTableDisplayNames) != count($aTables)) {
-                $aTableDisplayNames = array();
+                $aTableDisplayNames = [];
             } else {
-                $aTableMapping = array();
+                $aTableMapping = [];
                 foreach ($aTables as $sKey => $sTableName) {
                     $aTableMapping[$sTableName] = $aTableDisplayNames[$sKey];
                 }
@@ -276,7 +270,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                 reset($aTableDisplayNames);
             }
         } else {
-            $aTableDisplayNames = array();
+            $aTableDisplayNames = [];
         }
 
         return $aTableDisplayNames;
@@ -292,14 +286,14 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $sReturnValue = '';
         $sTableName = $this->GetConnectedTableName();
         if (!empty($this->data) && !empty($sTableName)) {
-            $oRecord = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableName), 'GetNewInstance'));
+            $oRecord = call_user_func([TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableName), 'GetNewInstance']);
             if ($oRecord->Load($this->data)) {
                 $oCmsTblConf = TdbCmsTblConf::GetNewInstance();
                 $oCmsTblConf->LoadFromField('name', $sTableName);
                 $sReturnValue = $oCmsTblConf->fieldTranslation.' - '.$oRecord->GetDisplayValue();
             }
         } else {
-            $sReturnValue = TGlobal::Translate('chameleon_system_core.field_lookup.nothing_selected');
+            $sReturnValue = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected');
         }
 
         return $sReturnValue;
@@ -347,7 +341,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             if (!empty($sTypes)) {
                 $sTables = '('.$sTables.') ';
             }
-            $aParameters = array('sExpectedObject' => array('description' => 'can be a TdbClassName '.$sTypes.'or table name '.$sTables.'of the expected returned object ', 'default' => '', 'sType' => 'string'));
+            $aParameters = ['sExpectedObject' => ['description' => 'can be a TdbClassName '.$sTypes.'or table name '.$sTables.'of the expected returned object ', 'default' => '', 'sType' => 'string']];
             $aMethodData['aParameters'] = $aParameters;
             $aMethodData['sOriginalMethodName'] = $aMethodData['sMethodName'];
             $aMethodData['sMethodName'] = $this->GetFieldMethodName().'ForObjectType';
@@ -357,9 +351,9 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             $oViewParser->AddVar('sMethodCode', $sMethodCode);
             $sCode .= $oViewParser->RenderObjectView('method', 'TCMSFields/TCMSField');
 
-            $aMethodData['aParameters'] = array();
+            $aMethodData['aParameters'] = [];
             $aMethodData['aFieldData']['sFieldFullName'] = 'Zugehöriger Tabellenname für das Feld "'.$aMethodData['aFieldData']['sFieldFullName'].'" ('.MySqlLegacySupport::getInstance()->real_escape_string($this->name).')';
-            $aMethodData['aMethodDescription'] = array();
+            $aMethodData['aMethodDescription'] = [];
             $aMethodData['sMethodName'] = $this->GetFieldMethodName().'ObjectType';
             $aMethodData['sReturnType'] = 'string - the Tdb classname for the object of the connected record';
             $oViewParser->AddVarArray($aMethodData);
@@ -395,7 +389,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
         $aMethodData = $this->GetFieldMethodBaseDataArray();
         $sInputName = 'i'.ucfirst(TCMSTableToClass::ConvertToClassString($this->name));
-        $aParameters = array($sInputName => array('description' => 'ID for the record in: '.$sTableForMethodParameterDocumentation, 'default' => '', 'sType' => 'int'), 'iLanguageId' => array('description' => 'set language id for list - if null, the default language will be used instead', 'default' => 'null', 'sType' => 'int'));
+        $aParameters = [$sInputName => ['description' => 'ID for the record in: '.$sTableForMethodParameterDocumentation, 'default' => '', 'sType' => 'int'], 'iLanguageId' => ['description' => 'set language id for list - if null, the default language will be used instead', 'default' => 'null', 'sType' => 'int']];
         $aMethodData['aParameters'] = $aParameters;
 
         $sMethodName = 'GetListFor'.TCMSTableToClass::ConvertToClassString($this->name);
@@ -413,7 +407,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $aMethodData['aFieldData']['sFieldFullName'] = 'Return all records belonging to the '.$sTableForMethodParameterDocumentation;
 
         $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
+        /* @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $oViewParser->AddVarArray($aMethodData);
 
@@ -428,8 +422,8 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      * changes an existing field definition (alter table)
      * changes the hidden field fieldName_table_name that stores the table name of the connected record.
      *
-     * @param string     $sOldName
-     * @param string     $sNewName
+     * @param string $sOldName
+     * @param string $sNewName
      * @param array|null $postData
      */
     public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
@@ -440,7 +434,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                       CHANGE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName($sOldName)).'`
                              `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName($sNewName))."` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'Zugehöriger Tabellenname für das Feld \"".MySqlLegacySupport::getInstance()->real_escape_string($sNewName)."\":'";
         MySqlLegacySupport::getInstance()->query($sQuery);
-        $aQuery = array(new LogChangeDataModel($sQuery));
+        $aQuery = [new LogChangeDataModel($sQuery)];
 
         TCMSLogChange::WriteTransaction($aQuery);
     }
@@ -472,14 +466,14 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
             $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
             $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguageIsoCode);
             $migrationQueryData
-                ->setFields(array(
+                ->setFields([
                     $this->getTableFieldName() => $sTableName,
-                ))
-                ->setWhereEquals(array(
+                ])
+                ->setWhereEquals([
                     'id' => $this->oTableRow->id,
-                ))
+                ])
             ;
-            $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE));
+            $aQuery = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE)];
 
             TCMSLogChange::WriteTransaction($aQuery);
         }
@@ -498,7 +492,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                         DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName()).'` ';
 
         MySqlLegacySupport::getInstance()->query($query);
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -508,7 +502,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
      */
     public function ChangeFieldTypePreHook()
     {
-        //get the table name and clear the records that doesn't match the new target table
+        // get the table name and clear the records that doesn't match the new target table
         $sTableName = $this->GetConnectedTableName();
         $sQuery = 'UPDATE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
                     SET `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name)."` = ''
@@ -518,16 +512,16 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
         $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguageIsoCode);
         $migrationQueryData
-            ->setFields(array($this->name => ''))
-            ->setWhereExpressions(array(new Comparison($this->getTableFieldName().'', Comparison::NEQ, $sTableName)));
+            ->setFields([$this->name => ''])
+            ->setWhereExpressions([new Comparison($this->getTableFieldName().'', Comparison::NEQ, $sTableName)]);
 
-        TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE)));
+        TCMSLogChange::WriteTransaction([new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE)]);
 
         $sQuery = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
                         DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName().'').'` ';
 
         MySqlLegacySupport::getInstance()->query($sQuery);
-        $aQuery = array(new LogChangeDataModel($sQuery));
+        $aQuery = [new LogChangeDataModel($sQuery)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -541,7 +535,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                          ADD `'.MySqlLegacySupport::getInstance()->real_escape_string($this->getTableFieldName())."` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'Zugehöriger Tabellenname für das Feld \"".MySqlLegacySupport::getInstance()->real_escape_string($this->name)."\":'";
 
         MySqlLegacySupport::getInstance()->query($sQuery);
-        $aQuery = array(new LogChangeDataModel($sQuery));
+        $aQuery = [new LogChangeDataModel($sQuery)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -566,7 +560,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
     {
         $queryDump = parent::CreateFieldIndex($returnDDL);
 
-        $indexFields = array($this->getTableFieldName(), $this->name);
+        $indexFields = [$this->getTableFieldName(), $this->name];
 
         if (true === $returnDDL) {
             $queryDump .= $this->getIndexQuery($this->name.'_combined', 'INDEX', $indexFields).";\n";

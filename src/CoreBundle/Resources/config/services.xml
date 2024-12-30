@@ -5,9 +5,6 @@
 
     <parameters>
         <parameter key="vendor_dir">%kernel.project_dir%/vendor</parameter>
-        <parameter key="chameleon_system_core.pdo.mysql_attr_init_command" type="constant">\PDO::MYSQL_ATTR_INIT_COMMAND</parameter> <!-- deprecated since 6.3.0 - no longer used -->
-        <parameter key="chameleon_system_core.pdo.mysql_attr_compression_name" type="constant">\PDO::MYSQL_ATTR_COMPRESS</parameter> <!-- deprecated since 6.3.0 - see below -->
-        <parameter key="chameleon_system_core.pdo.enable_mysql_compression">false</parameter> <!-- deprecated since 6.3.0 - use the configuration key "doctrine: dbal: options: 1006: 1" instead -->
         <parameter key="chameleon_system_core.database.estimation_lower_limit">0</parameter>
         <parameter key="chameleon_system_core.controller_invoke_listener.class">ChameleonSystem\CoreBundle\Controller\ChameleonControllerInvokeListener</parameter>
         <parameter key="chameleon_system_core.tpl_page_controller.class">TPkgCmsRouteControllerCmsTplPage</parameter>
@@ -148,9 +145,11 @@
             <argument type="service" id="chameleon_system_core.global" />
             <argument />  <!-- Module execution strategy will be set by ChameleonSystemCoreExtension -->
             <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
         </service>
-        <service id="chameleon_system_core.usermoduleloader" class="TUserModuleLoader" parent="chameleon_system_core.moduleloader" public="true" />
+        <service id="chameleon_system_core.usermoduleloader" class="TUserModuleLoader" parent="chameleon_system_core.moduleloader" public="true">
 
+        </service>
         <service id="chameleon_system_core.subusermoduleloader" parent="chameleon_system_core.usermoduleloader" shared="false" public="true" />
 
         <service id="chameleon_system_core.base_controller" abstract="true">
@@ -185,6 +184,7 @@
         <service id="chameleon_system_core.frontend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonFrontendController" parent="chameleon_system_core.base_controller" public="true">
             <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_database" />
             <argument type="service" id="chameleon_system_core.usermoduleloader" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <argument type="service" id="chameleon_system_core.viewPathManager" />
             <argument type="service" id="service_container" />
             <argument type="service" id="chameleon_system_view_renderer.mapper.config_to_less" />
@@ -193,6 +193,7 @@
         <service id="chameleon_system_core.backend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonBackendController" parent="chameleon_system_core.base_controller" public="true">
             <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_file" />
             <argument type="service" id="chameleon_system_core.moduleloader" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <call method="setBackendAccessCheck">
                 <argument type="service" id="chameleon_system_core.security.backend_access_check" />
             </call>
@@ -353,6 +354,8 @@
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_core.tools"/>
         </service>
+
+        <service class="ChameleonSystem\CoreBundle\Service\RegistryService" id="chameleon_system_core.service.registry_service" public="true"/>
 
         <service id="chameleon_system_core.service_initializer.portal_domain_service" class="ChameleonSystem\CoreBundle\Service\Initializer\PortalDomainServiceInitializer" public="false">
             <argument type="service" id="chameleon_system_core.util.input_filter" />
@@ -709,14 +712,6 @@
             <argument type="service" id="request_stack"/>
         </service>
 
-        <service id="chameleon_system_core.event_listener.rehash_backend_user_password_listener" class="ChameleonSystem\CoreBundle\EventListener\RehashBackendUserPasswordListener">
-            <argument type="service" id="chameleon_system_core.util.input_filter"/>
-            <argument type="service" id="chameleon_system_core.security.password.password_hash_generator"/>
-            <argument type="service" id="database_connection"/>
-            <argument type="service" id="chameleon_system_core.global"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.login_success" method="rehashPassword" />
-        </service>
-
         <service id="chameleon_system_core.mapper_loader" class="ChameleonSystem\CoreBundle\MapperLoader\MapperLoader" public="true">
             <argument /> <!-- Will be set by AddMappersPass. -->
         </service>
@@ -763,7 +758,7 @@
         </service>
 
         <service class="ChameleonSystem\CoreBundle\RequestState\HashCalculationLock" id="chameleon_system_core.request_state.hash_calculation_lock"/>
-        <service class="ChameleonSystem\CoreBundle\Util\Hash" id="chameleon_system_core.util.hash_array"/>
+        <service class="ChameleonSystem\CoreBundle\Util\Hash" id="chameleon_system_core.util.hash_array" public="true"/>
         <service class="ChameleonSystem\CoreBundle\RequestState\RequestStateHashProvider" id="chameleon_system_core.request_state_hash_provider" public="true">
             <argument id="chameleon_system_core.util.hash_array" type="service"/>
             <argument id="chameleon_system_core.request_state.hash_calculation_lock" type="service" />
@@ -790,7 +785,7 @@
         </service>
 
         <service id="chameleon_system_core.resource_collector" class="TCMSResourceCollection" shared="false">
-            <argument type="service" id="chameleon_system_core.filemanager"/>
+            <argument type="service" id="filesystem"/>
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="chameleon_system_core.service.css_minifier"/>
@@ -885,7 +880,8 @@
         </service>
 
         <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService" public="true">
-            <argument type="service" id="request_stack"/>
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
         </service>
 
         <service id="chameleon_system_core.service.main_menu_migrator" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Migration\Service\MainMenuMigrator" public="true">
@@ -928,6 +924,7 @@
             <argument id="chameleon_system_core.global" type="service"/>
             <argument type="service" id="chameleon_system_core.util.field_translation"/>
             <argument type="service" id="chameleon_system_cms_backend.backend_session"/>
+            <argument type="service" id="database_connection"/>
         </service>
 
         <service id="chameleon_system_core.module.navigation_tree_single_select_wysiwyg" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg\NavigationTreeSingleSelectWysiwyg" parent="chameleon_system_core.module.navigation_tree_single_select" shared="false">
@@ -974,6 +971,10 @@
 
         <service id="chameleon_system_core.service.css_class_extractor" class="ChameleonSystem\CoreBundle\Service\CssClassExtractor" public="true">
             <argument type="service" id="database_connection"/>
+        </service>
+
+        <service class="ChameleonSystem\CoreBundle\Service\FileSystemWrapper" id="chameleon_system_core.service.file_system_wrapper" public="true">
+            <argument type="service" id="filesystem"/>
         </service>
     </services>
 </container>

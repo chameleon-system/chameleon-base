@@ -85,7 +85,7 @@ $aColors = array('#5E98FF', '#807D9A', '#92C1F0', '#A2ACB3', '#7ADEFF'); //color
     <div class="cleardiv">&nbsp;</div>
     <br/>
     <span class="legend-square"
-          style="background-color:<?=$sMainBarColor; ?>"></span> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.report.total')); ?><br/>
+          style="background-color:<?=$sMainBarColor; ?>"></span> <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.report.total')); ?><br/>
     <?php
     if (count($aColorSubcategory) > 0) {
         foreach ($aColorSubcategory as $aRealColorSubcategory) {

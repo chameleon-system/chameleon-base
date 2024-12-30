@@ -10,28 +10,27 @@
  */
 
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use esono\pkgCmsCache\CacheInterface;
 
 class MTPkgCommentCore extends TUserCustomModelBase
 {
     /**
      * @var TdbPkgCommentModuleConfig
      */
-    private $oModConf = null;
+    private $oModConf;
 
     /**
      * @var TCMSRecord
      */
-    private $oActiveCommentTypeItem = null;
+    private $oActiveCommentTypeItem;
 
     /**
      * @var TdbPkgComment|null
      */
-    protected $oActiveComment = null;
+    protected $oActiveComment;
 
-    /**
-     * @var bool
-     */
-    protected $bSuppressRedirectAfterAction = false;
+    protected bool $bSuppressRedirectAfterAction = false;
 
     /**
      * Initialize the module
@@ -46,6 +45,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
 
     /**
      * @param TdbPkgCommentModuleConfig $oModuleConfiguration
+     *
      * @return void
      */
     public function SetModuleConfig($oModuleConfiguration)
@@ -67,6 +67,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
 
     /**
      * @param bool $bSuppressRedirectAfterAction
+     *
      * @return void
      */
     public function SetSuppressRedirectAfterAction($bSuppressRedirectAfterAction)
@@ -161,10 +162,11 @@ class MTPkgCommentCore extends TUserCustomModelBase
      */
     public function WriteComment($sCommentId = null)
     {
+        $cache = $this->getCacheService();
         $oUser = TdbDataExtranetUser::GetInstance();
         $oModuleConfig = $this->GetConfig();
         $oGlobal = TGlobal::instance();
-        $aData = array();
+        $aData = [];
         $aData['comment'] = $oGlobal->GetUserData('commentsavetext');
         if ($oModuleConfig) {
             $aData['pkg_comment_type_id'] = $oModuleConfig->fieldPkgCommentTypeId;
@@ -198,12 +200,11 @@ class MTPkgCommentCore extends TUserCustomModelBase
             $oTableManager->AllowEditByAll(false);
             $oNewCommentObject = TdbPkgComment::GetNewInstance($oNewComment->id);
 
-            TCacheManager::PerformeTableChange('pkg_comment_module_config', $oModuleConfig->id);
-
+            $cache->callTrigger('pkg_comment_module_config', $oModuleConfig->id);
             $this->CommentSaveSuccessHook($oNewCommentObject, $aData);
         }
         $iPage = $oGlobal->GetUserData(TdbPkgComment::URL_NAME_ID_PAGE);
-        $aAddURLParameter = array();
+        $aAddURLParameter = [];
         if (!empty($iPage)) {
             $aAddURLParameter[TdbPkgComment::URL_NAME_ID_PAGE] = $iPage;
         }
@@ -236,6 +237,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
      * you have custom fields for you comment you need to fill.
      *
      * @param array<string, mixed> $aData
+     *
      * @return array<string, mixed>
      */
     protected function AddCustomDataToCommentBeforeSave($aData)
@@ -322,10 +324,16 @@ class MTPkgCommentCore extends TUserCustomModelBase
      */
     public function DeleteComment()
     {
+        $cache = $this->getCacheService();
         $oActiveComment = $this->GetActiveComment();
         $oGlobal = TGlobal::instance();
         if (!is_null($oActiveComment) && $this->EditCommentIsAllowed()) {
             $oModuleConfig = $this->GetConfig();
+
+            if (null === $oModuleConfig) {
+                return false;
+            }
+
             $oTableManager = TTools::GetTableEditorManager('pkg_comment', $oActiveComment->id);
             if (!empty($oModuleConfig->fieldCommentOnDelete)) {
                 $oActiveComment->sqlData['comment'] = $oModuleConfig->fieldCommentOnDelete;
@@ -337,22 +345,22 @@ class MTPkgCommentCore extends TUserCustomModelBase
                 $oTableManager->AllowDeleteByAll(true);
                 $oTableManager->Delete();
                 $oTableManager->AllowDeleteByAll(false);
-                TCacheManager::PerformeTableChange('pkg_comment_module_Config', $oModuleConfig->id);
+                $cache->callTrigger('pkg_comment_module_Config', $oModuleConfig->id);
             }
 
             $oMessageManager = TCMSMessageManager::GetInstance();
             $oMessageManager->AddMessage(TdbPkgComment::MESSAGE_CONSUMER_NAME.$oActiveComment->fieldItemId, 'deletecomment');
             $iPage = $oGlobal->GetUserData(TdbPkgComment::URL_NAME_ID_PAGE);
-            $aAddURLParameter = array();
+            $aAddURLParameter = [];
             if (!empty($iPage)) {
                 $aAddURLParameter[TdbPkgComment::URL_NAME_ID_PAGE] = $iPage;
             }
             $this->RedirectToItemPage($aAddURLParameter);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -364,7 +372,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
     public function ReportComment()
     {
         $oGlobal = TGlobal::instance();
-        $aData = array();
+        $aData = [];
         $aData['reporttext'] = $oGlobal->GetUserData('reporttext');
         $aData['commentid'] = $oGlobal->GetUserData('commentid');
         $bSendReport = $this->ValidateReportData($aData);
@@ -382,7 +390,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
             $oMessageManager->AddMessage(TdbPkgComment::MESSAGE_CONSUMER_NAME.$aData['commentid'], 'commentreport');
         }
         $iPage = $oGlobal->GetUserData(TdbPkgComment::URL_NAME_ID_PAGE);
-        $aAddURLParameter = array();
+        $aAddURLParameter = [];
         if (!empty($iPage)) {
             $aAddURLParameter[TdbPkgComment::URL_NAME_ID_PAGE] = $iPage;
         }
@@ -447,7 +455,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
      *
      * @return void
      */
-    protected function RedirectToItemPage($aAddParameter = array())
+    protected function RedirectToItemPage($aAddParameter = [])
     {
         if (!$this->bSuppressRedirectAfterAction) {
             $oActivePage = $this->getActivePageService()->getActivePage();
@@ -468,7 +476,7 @@ class MTPkgCommentCore extends TUserCustomModelBase
         $oMail = TdbDataMailProfile::GetProfile('reportcomment');
         if (is_null($oMail)) {
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage(MTExtranetCore::MSG_CONSUMER_NAME, 'ERROR-MAIL-PROFILE-NOT-DEFINED', array('name' => 'registration'));
+            $oMsgManager->AddMessage(MTExtranetCore::MSG_CONSUMER_NAME, 'ERROR-MAIL-PROFILE-NOT-DEFINED', ['name' => 'registration']);
         } else {
             $oReportUser = TdbDataExtranetUser::GetInstance();
             if ($oReportUser->fieldLastname || $oReportUser->fieldFirstname) {
@@ -496,11 +504,12 @@ class MTPkgCommentCore extends TUserCustomModelBase
      */
     public function RespondToComment()
     {
+        $cache = $this->getCacheService();
         $oUser = TdbDataExtranetUser::GetInstance();
         $oMessageManager = TCMSMessageManager::GetInstance();
         $oGlobal = TGlobal::instance();
         $oModuleConfig = $this->GetConfig();
-        $aData = array();
+        $aData = [];
         $aData['comment'] = $oGlobal->GetUserData('commentsavetext');
         $aData['pkg_comment_type_id'] = $oGlobal->GetUserData('commenttypeid');
         $aData['pkg_comment_id'] = $oGlobal->GetUserData('sresponseid');
@@ -521,11 +530,11 @@ class MTPkgCommentCore extends TUserCustomModelBase
                 TdbPkgComActivityFeedObject::AddActivity($oNewCommentObject);
             }
 
-            TCacheManager::PerformeTableChange('pkg_comment_module_Config', $oModuleConfig->id);
+            $cache->callTrigger('pkg_comment_module_Config', $oModuleConfig->id);
             $oMessageManager->AddMessage(TdbPkgComment::MESSAGE_CONSUMER_NAME.$oNewComment->id, 'commentsave');
         }
         $iPage = $oGlobal->GetUserData(TdbPkgComment::URL_NAME_ID_PAGE);
-        $aAddURLParameter = array();
+        $aAddURLParameter = [];
         if (!empty($iPage)) {
             $aAddURLParameter[TdbPkgComment::URL_NAME_ID_PAGE] = $iPage;
         }
@@ -607,12 +616,12 @@ class MTPkgCommentCore extends TUserCustomModelBase
         if ($oComments->Length() > 0) {
             $oActiveItem = $this->GetActiveComment();
             $oFeed = new TCMSRssHandler();
-            /** @var $oFeed TCMSRssHandler* */
-            $oFeed->AddItemMappingArray(array('comment' => 'summary', 'created_timestamp' => 'updated'));
+            /* @var $oFeed TCMSRssHandler* */
+            $oFeed->AddItemMappingArray(['comment' => 'summary', 'created_timestamp' => 'updated']);
             $oFeed->SetFeedTitle($oActiveItem->GetName());
             $i = $oComments->Length();
             while ($oComment = $oComments->Next()) {
-                $oComment->sqlData['name'] = TGlobal::Translate('chameleon_system_comment.text.rss_feed_comment_name', array('%number%' => $i));
+                $oComment->sqlData['name'] = ServiceLocator::get('translator')->trans('chameleon_system_comment.text.rss_feed_comment_name', ['%number%' => $i]);
                 $oFeed->AddItem($oComment->sqlData);
                 --$i;
             }
@@ -650,19 +659,18 @@ class MTPkgCommentCore extends TUserCustomModelBase
         return $this->oActiveCommentTypeItem;
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return ICmsCoreRedirect
-     */
-    private function getRedirect()
+    private function getRedirect(): ICmsCoreRedirect
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
+    }
+
+    private function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

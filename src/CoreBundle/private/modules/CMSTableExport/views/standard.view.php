@@ -7,7 +7,7 @@
     <input type="hidden" name="listClass" value="<?=$data['listClass']; ?>"/>
     <input type="hidden" name="listCacheKey" value="<?=$data['listCacheKey']; ?>"/>
 
-    <div style="float: left; line-height: 20px;"><?=TGlobal::Translate('chameleon_system_core.cms_module_table_export.form_select_profile'); ?>:
+    <div style="float: left; line-height: 20px;"><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_export.form_select_profile'); ?>:
         &nbsp;</div>
     <div style="float: left;">
         <select name="cms_export_profile_id" class="form-control form-control-sm">
@@ -17,7 +17,7 @@
         </select>
     </div>
     <div style="float: left; padding-left: 10px;">
-        <input type="button" class="btn btn-primary btn-sm" value="<?=TGlobal::Translate('chameleon_system_core.cms_module_table_export.action_generate'); ?>" onclick="forceFileDownloadForm('exportForm');" />
+        <input type="button" class="btn btn-primary btn-sm" value="<?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_export.action_generate'); ?>" onclick="forceFileDownloadForm('exportForm');" />
     </div>
     <div class="clearfix"></div>
 </form>

@@ -268,7 +268,7 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
 
         $this->tableObj->showGroupSelector = false;
         $this->tableObj->AddGroupField(array($list_group_field_column => $groupField), 'left', null, null, $this->columnCount);
-        $this->tableObj->showAllGroupsText = '['.TGlobal::Translate('chameleon_system_core.list.group_show_all').']';
+        $this->tableObj->showAllGroupsText = '['.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
         $tmpArray = array($list_group_field_column => 'ASC');
         $this->tableObj->orderList = array_merge($tmpArray, $this->tableObj->orderList);
     }

@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
-
 class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
 {
     // export path after CustomerData path (cmsdata)
@@ -24,8 +22,6 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      *
      * @param null $sId
      * @param bool $bUtf8Decode
-     *
-     * @return mixed
      */
     public function WriteExport($sId = null, $bUtf8Decode = false)
     {
@@ -38,7 +34,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      * sId defines the record to export or null to export whole list
      *
      * @param string|null $sId
-     * @param bool        $bUtf8Decode
+     * @param bool $bUtf8Decode
      *
      * @return bool $bSuccess
      */
@@ -54,15 +50,11 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
 
         $exportFilePath = $this->getExportFilePath($sId);
 
-        // please please please don't do it like that. This is a very very rare moment, where it is necessary due to missing infrastructure.
-        /** @var IPkgCmsFileManager $fileManager */
-        $fileManager = ServiceLocator::get('chameleon_system_core.filemanager');
-
-        if ($pFile = $fileManager->fopen($exportFilePath, 'wb')) {
-            if ($fileManager->fwrite($pFile, $sOutput)) {
+        if ($pFile = fopen($exportFilePath, 'wb')) {
+            if (fwrite($pFile, $sOutput)) {
                 $bSuccess = true;
             }
-            $fileManager->fclose($pFile);
+            fclose($pFile);
         } else {
             trigger_error("Can't open '{$exportFilePath}' for writing - check directory and rights", E_USER_WARNING);
         }
@@ -71,7 +63,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
     }
 
     /**
-     * @param null|string $sId
+     * @param string|null $sId
      *
      * @return string
      */
@@ -89,7 +81,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      * sId defines the record to export or null to export whole list
      *
      * @param string|null $sId
-     * @param bool        $bUtf8Decode
+     * @param bool $bUtf8Decode
      *
      * @return never
      */
@@ -111,7 +103,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
         header('Cache-Control: private', false);
         header('Content-Type: '.$sContentType);
         header('Content-Disposition: attachment; filename="'.$sFileName.'"');
-//        header('Content-Transfer-Encoding: binary');
+        //        header('Content-Transfer-Encoding: binary');
         header('Content-Length: '.strlen($sOutput)); // provide file size
         echo $sOutput;
         exit(0);
@@ -120,7 +112,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
     /**
      * Builds the file name for the current export, based on the configuration given by the user.
      *
-     * @param null|string $sId
+     * @param string|null $sId
      *
      * @return string
      */
@@ -139,7 +131,6 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      * returns the content type that maps to the file extension of the given file name
      * or false if file type could not be found in cms database.
      *
-     * @param string $fileExtension
      * @param string $sFileName
      *
      * @return int|false - id of file type... false if file type wasn't found
@@ -183,12 +174,12 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
                     $sRestriction = $this->fieldRestriction;
                 }
 
-                if ($sTableName && $oData = call_user_func(array($sTableName.'List', 'GetList'), $sRestriction)) {
+                if ($sTableName && $oData = call_user_func([$sTableName.'List', 'GetList'], $sRestriction)) {
                     /** @var $oData TCMSRecordList */
                     $sOutput = $this->RenderList($oData);
                 }
             } else {
-                if ($sTableName && $oData = call_user_func(array($sTableName, 'GetNewInstance'), $sId)) {
+                if ($sTableName && $oData = call_user_func([$sTableName, 'GetNewInstance'], $sId)) {
                     $sOutput = $this->Render($oData, $this->GetViewName());
                 }
             }
@@ -198,9 +189,9 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
     }
 
     /**
-     * @return string
-     *
      * @param string $sHeaderViewPath
+     *
+     * @return string
      */
     protected function RenderHeader($sHeaderViewPath)
     {
@@ -216,7 +207,7 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      * Renders an export view for given data and view path.
      *
      * @param TCMSRecord $oExportData
-     * @param string     $sViewPath
+     * @param string $sViewPath
      *
      * @return string $sOutput
      */

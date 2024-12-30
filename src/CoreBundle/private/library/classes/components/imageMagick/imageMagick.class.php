@@ -12,11 +12,11 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use esono\pkgCmsCache\CacheInterface;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class imageMagick
 {
-    private ?IPkgCmsFileManager $fileManager = null;
-
     /**
      * application directory of imageMagick.
      */
@@ -107,14 +107,14 @@ class imageMagick
      *
      * @var int
      */
-    protected $iThumbWidth = null;
+    protected $iThumbWidth;
 
     /**
      * height of the current thumbnail.
      *
      * @var int
      */
-    protected $iThumbHeight = null;
+    protected $iThumbHeight;
 
     /**
      * check if the tmp dir already exists - if not create one.
@@ -126,12 +126,15 @@ class imageMagick
         if (file_exists(CMS_TMP_DIR) && is_dir(CMS_TMP_DIR)) {
             $this->sTempDir = CMS_TMP_DIR;
         } else { // try to create a temp directory and use this instead
-            if ($this->fileManager->mkdir(CMS_TMP_DIR)) {
+            $symfonyFileSystem = new Filesystem();
+            try {
+                $symfonyFileSystem->mkdir(CMS_TMP_DIR);
                 $this->sTempDir = CMS_TMP_DIR;
+            } catch (IOExceptionInterface $exception) {
             }
         }
 
-        //image magick params
+        // image magick params
 
         // -quality value = JPEG/MIFF/PNG compression level.
         if (defined('IMAGEMAGICK_IMG_QUALITY') && is_numeric(IMAGEMAGICK_IMG_QUALITY)) {
@@ -236,8 +239,7 @@ class imageMagick
     /**
      * loads the source image and copies it to the temp folder.
      *
-     * @param string    $sFilePath - path to the source image
-     * @param TCMSImage $oImage
+     * @param string $sFilePath - path to the source image
      */
     public function LoadImage(string $sFilePath, ?TCMSImage $oImage = null)
     {
@@ -283,8 +285,6 @@ class imageMagick
 
     /**
      * returns a temporary filename with hostname + uid as prefix.
-     *
-     * @return string
      */
     protected function GetTempFileName(string $sFilePath, string $suffix = ''): string
     {
@@ -446,7 +446,7 @@ class imageMagick
         $returnVal = false;
         if (!$this->bHasErrors) {
             if ($this->bUsePHPLibrary) {
-                $this->oIMagick->resizeImage($iWidth, $iHeight, \Imagick::FILTER_LANCZOS, 1);
+                $this->oIMagick->resizeImage($iWidth, $iHeight, Imagick::FILTER_LANCZOS, 1);
                 $this->oIMagick->writeImage($this->sTempDir.'/'.$this->sTempFileName);
                 $this->oIMagick->destroy();
             } else {
@@ -558,8 +558,8 @@ class imageMagick
     /**
      * Crop the image to the specified width and height.
      *
-     * @param int  $iWidth  the desired width of the cropped image
-     * @param int  $iHeight the desired height of the cropped image
+     * @param int $iWidth the desired width of the cropped image
+     * @param int $iHeight the desired height of the cropped image
      * @param bool $bCenter (Optional) Whether to center the crop. Default is true.
      *
      * @return bool true if the image was successfully cropped, false otherwise
@@ -653,9 +653,14 @@ class imageMagick
             }
 
             if (!$this->bHasErrors) {
-                $returnVal = $this->fileManager->put($this->sTempDir.'/'.$this->sTempFileName, $sTargetFile);
-                if (!$returnVal) {
-                    $this->fileManager->unlink($this->sTempDir.'/'.$this->sTempFileName);
+                $symfonyFileSystem = new Filesystem();
+                try {
+                    $symfonyFileSystem->rename($this->sTempDir.'/'.$this->sTempFileName, $sTargetFile, true);
+                } catch (IOExceptionInterface $exception) {
+                    try {
+                        $symfonyFileSystem->remove($this->sTempDir.'/'.$this->sTempFileName);
+                    } catch (IOExceptionInterface $exception) {
+                    }
                 }
             }
         }
@@ -666,15 +671,15 @@ class imageMagick
     /**
      * Adds a reflection to the image.
      *
-     * @param bool $bImageline            Draws a imageline for seperating the original
-     *                                    image and the reflection
-     * @param int  $iReflectionPercentage The percentage of the height of the
-     *                                    original image where the reflection effect should take place. For
-     *                                    example: if you put in 50 (50%) here, you'll get an mirrored reflection
-     *                                    that is 50% as high as your original image. So if your original image
-     *                                    was 100 pixel high - your image including mirrored reflection (which
-     *                                    will be returned will now be 150 pixel. The higher the percentage,
-     *                                    the longer the alpha gradient.
+     * @param bool $bImageline Draws a imageline for seperating the original
+     *                         image and the reflection
+     * @param int $iReflectionPercentage The percentage of the height of the
+     *                                   original image where the reflection effect should take place. For
+     *                                   example: if you put in 50 (50%) here, you'll get an mirrored reflection
+     *                                   that is 50% as high as your original image. So if your original image
+     *                                   was 100 pixel high - your image including mirrored reflection (which
+     *                                   will be returned will now be 150 pixel. The higher the percentage,
+     *                                   the longer the alpha gradient.
      */
     public function AddReflection(bool $bImageline = true, int $iReflectionPercentage): bool
     {
@@ -700,7 +705,7 @@ class imageMagick
             $sNewFileName = str_replace(['.gif', '.jpeg', '.jpg'], '.png', $this->sSourceFile);
             $sNewTmpFileName = $this->sTempDir.'/'.$this->GetTempFileName($sNewFileName, 'reflect');
 
-            //$command = $this->sImageMagickDir."convert ".escapeshellarg($sOldTmpFileName)." -alpha on \( +clone -flip -channel A -evaluate multiply .35 +channel \) -append -size ".escapeshellarg($iOriginalImageWidth)."x".escapeshellarg($iHeightWithReflection)." xc:transparent +swap -gravity North -geometry +0+5 -composite ".escapeshellarg($sNewTmpFileName);
+            // $command = $this->sImageMagickDir."convert ".escapeshellarg($sOldTmpFileName)." -alpha on \( +clone -flip -channel A -evaluate multiply .35 +channel \) -append -size ".escapeshellarg($iOriginalImageWidth)."x".escapeshellarg($iHeightWithReflection)." xc:transparent +swap -gravity North -geometry +0+5 -composite ".escapeshellarg($sNewTmpFileName);
             $command = $this->sImageMagickDir.'convert '.escapeshellarg($sOldTmpFileName)." -alpha on \( +clone -flip -size ".escapeshellarg($iOriginalImageWidth.'x'.$iHeightReflection)." gradient:gray40-black -alpha off -compose CopyOpacity -composite \) -append -gravity North -crop ".escapeshellarg($iOriginalImageWidth.'x'.$iHeightWithReflection)."+0-5\! -background transparent -compose Over -flatten -auto-orient ".escapeshellarg($sNewTmpFileName);
 
             exec($command, $returnarray, $returnvalue);
@@ -723,7 +728,7 @@ class imageMagick
     public function AddRoundedCorners(int $iRadius): bool
     {
         $returnVal = false;
-        if ($this->bUsePHPLibrary) { //library version
+        if ($this->bUsePHPLibrary) { // library version
             exit('rounded corners using Imagick php extension is not ready yet');
         } else { // shell version
             $sOldTmpFileName = $this->sTempDir.'/'.$this->sTempFileName;
@@ -751,15 +756,15 @@ class imageMagick
     /**
      * Convert a tiff image to a jpg image.
      *
-     * @param string $sJPGPath       if is not set then save jgp image in same dir like the tiff image
-     * @param array  $aColorProfiles - array of filenames pointing to the color profile(s) that should be used for converting
-     *                               Important: They are used for converting only and dropped afterwards. This does NOT make your resulting image
-     *                               have color profiles
+     * @param string $sJPGPath if is not set then save jgp image in same dir like the tiff image
+     * @param array $aColorProfiles - array of filenames pointing to the color profile(s) that should be used for converting
+     *                              Important: They are used for converting only and dropped afterwards. This does NOT make your resulting image
+     *                              have color profiles
      */
     public function ConvertTiffToJpg(string $sTiffPath, string $sTiffFileName, string $sJPGPath = '', array $aColorProfiles = []): bool
     {
         $returnVal = false;
-        if ($this->bUsePHPLibrary) { //library version
+        if ($this->bUsePHPLibrary) { // library version
             exit('converting .tiff to .jpg using Imagick php extension is not ready yet');
         } else { // shell version
             if ('/' == substr($sTiffPath, strlen($sTiffPath) - 1)) {
@@ -803,11 +808,6 @@ class imageMagick
         }
 
         return $returnVal;
-    }
-
-    public function setFileManager(IPkgCmsFileManager $fileManager): void
-    {
-        $this->fileManager = $fileManager;
     }
 
     private function getCache(): CacheInterface

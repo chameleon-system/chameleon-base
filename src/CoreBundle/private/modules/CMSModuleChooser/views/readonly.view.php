@@ -30,15 +30,15 @@ $menuPrefix = TGlobal::OutHTML($data['sModuleSpotName']);
                 <i class="<?=TGlobal::OutHTML($iconFontCssClass); ?>"></i> <?=TGlobal::OutHTML($oModule->sqlData['name']); ?>
             </div>
         </div>
-        <div class="moduleInfo"><strong><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.template_engine.module_view')); ?>
+        <div class="moduleInfo"><strong><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.module_view')); ?>
             :</strong> <?=TGlobal::OutHTML(str_replace('_', ' ', $sViewName)); ?></div>
-        <div class="moduleInfo"><strong><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.template_engine.slot_content')); ?>
+        <div class="moduleInfo"><strong><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.slot_content')); ?>
             : </strong><?=TGlobal::OutHTML($oModuleInstance->sqlData['name']); ?></div>
         <?php
         } else {
             ?>
         <div style="background-color: #63c2de">
-            <div class="moduleType"><i class="fas fa-cube"></i> <?php echo TGlobal::Translate('chameleon_system_core.template_engine.slot_is_empty'); ?></div>
+            <div class="moduleType"><i class="fas fa-cube"></i> <?php echo \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.slot_is_empty'); ?></div>
         </div>
         <?php
         } ?>

@@ -33,7 +33,7 @@ class TCMSFieldDuration extends TCMSFieldNumber
         $iSeconds = $this->_GetHTMLValue();
         $aFields = $this->IntToField($iSeconds);
         $html = $this->_GetHiddenField();
-        $html .= TGlobal::OutHTML($aFields['hours'].':'.$aFields['minutes'].':'.$aFields['seconds'].' '.TGlobal::Translate('chameleon_system_core.field.time_format'));
+        $html .= TGlobal::OutHTML($aFields['hours'].':'.$aFields['minutes'].':'.$aFields['seconds'].' '.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field.time_format'));
 
         return $html;
     }

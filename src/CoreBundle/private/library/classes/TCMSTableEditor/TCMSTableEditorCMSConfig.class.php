@@ -33,12 +33,12 @@ class TCMSTableEditorCMSConfig extends TCMSTableEditor
         parent::GetCustomMenuItems();
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'updateTranslationFields';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.table_editor.regenerate_translatable_fields');
+        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor.regenerate_translatable_fields');
         $oMenuItem->sIcon = 'fas fa-font';
 
         $sCallURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tableeditor', 'id' => $this->sId, 'tableid' => $this->oTableConf->id, 'module_fnc' => array('contentmodule' => 'UpdateTranslationFields'), '_noModuleFunction' => 'true'));
 
-        $oMenuItem->sOnClick = "if (confirm('".TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.table_editor.regenerate_translatable_fields_confirm'))."')) document.location.href='{$sCallURL}';";
+        $oMenuItem->sOnClick = "if (confirm('".TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor.regenerate_translatable_fields_confirm'))."')) document.location.href='{$sCallURL}';";
         $this->oMenuItems->AddItem($oMenuItem);
     }
 

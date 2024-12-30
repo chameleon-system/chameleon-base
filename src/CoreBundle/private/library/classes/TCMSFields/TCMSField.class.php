@@ -20,6 +20,7 @@ use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
+use esono\pkgCmsCache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSField implements TCMSFieldVisitableInterface
@@ -118,7 +119,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      *
      * @var array
      */
-    protected $methodCallAllowed = array();
+    protected $methodCallAllowed = [];
 
     /**
      * the current record data (includes workflow data).
@@ -135,7 +136,7 @@ class TCMSField implements TCMSFieldVisitableInterface
     protected $bReadOnlyMode = false;
 
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $databaseConnection;
 
@@ -146,13 +147,13 @@ class TCMSField implements TCMSFieldVisitableInterface
      */
     protected $bEncryptedData = false;
 
-    protected function getDoctrineRenderer(string $viewName, array $parameter = []): \IPkgSnippetRenderer
+    protected function getDoctrineRenderer(string $viewName, array $parameter = []): IPkgSnippetRenderer
     {
         /** @var TPkgSnippetRenderer $snippetRenderer */
         $snippetRenderer = clone ServiceLocator::get('chameleon_system_snippet_renderer.snippet_renderer');
         $snippetRenderer->InitializeSource(
             sprintf('ChameleonSystemAutoclasses/%s', $viewName),
-            \IPkgSnippetRenderer::SOURCE_TYPE_FILE
+            IPkgSnippetRenderer::SOURCE_TYPE_FILE
         );
         foreach ($parameter as $key => $value) {
             $snippetRenderer->setVar($key, $value);
@@ -166,9 +167,8 @@ class TCMSField implements TCMSFieldVisitableInterface
         $firstPart = substr($string, 0, strpos($string, '_'));
         if (is_numeric($firstPart)) {
             // fields/tablenames may not start with a number
-            $string = substr($string, strpos($string, '_')+1);
+            $string = substr($string, strpos($string, '_') + 1);
         }
-
 
         $camelCasedName = preg_replace_callback('/(^|_|\.)+(.)/', function ($match) {
             return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
@@ -315,13 +315,13 @@ class TCMSField implements TCMSFieldVisitableInterface
 
         $tableConf = $this->oTableRow->GetTableConf();
         $this->_GetFieldWidth();
-        $url = PATH_CMS_CONTROLLER.'?'.$urlUtil->getArrayAsUrl(array(
+        $url = PATH_CMS_CONTROLLER.'?'.$urlUtil->getArrayAsUrl([
             'id' => $this->recordId,
             'tableid' => $tableConf->id,
             'pagedef' => 'tableeditorfield',
             '_fnc' => 'editfield',
             '_fieldName' => $this->name,
-        ));
+        ]);
         $openWindow = sprintf("CreateModalIFrameDialog('%s',%s,%s,'%s');",
             $url,
             $this->GetEditOnClickDialogWidth(),
@@ -464,8 +464,6 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * returns the field value for database storage
      * overwrite this method to modify data before save.
-     *
-     * @return mixed
      */
     public function GetSQL()
     {
@@ -475,8 +473,6 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * returns the field value for database storage
      * overwrite this method to modify data on save.
-     *
-     * @return mixed
      */
     public function GetSQLOnCopy()
     {
@@ -497,8 +493,6 @@ class TCMSField implements TCMSFieldVisitableInterface
      * returns the field value for database storage on database copy state
      * use this method to handle copy without post data
      * overwrite this method to modify data before save.
-     *
-     * @return mixed
      */
     public function GetDatabaseCopySQL()
     {
@@ -508,8 +502,6 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
-     *
-     * @return mixed
      */
     public function ConvertPostDataToSQL()
     {
@@ -519,7 +511,6 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * gets called in TCMSTableEditor::_WriteDataToDatabase before GetSQL
      * the field will only be written to the database if this function returned true.
-     *
      *
      * @return bool
      */
@@ -553,8 +544,8 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * changes an existing field definition (alter table).
      *
-     * @param string     $oldName
-     * @param string     $newName
+     * @param string $oldName
+     * @param string $newName
      * @param array|null $postData
      *
      * @return void
@@ -606,7 +597,7 @@ class TCMSField implements TCMSFieldVisitableInterface
             $this->UpdateFieldDefaultValue($field_default_value, $newName, $updateExistingRecords);
         }
 
-        $transaction = array(new LogChangeDataModel($query));
+        $transaction = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($transaction);
     }
 
@@ -615,9 +606,9 @@ class TCMSField implements TCMSFieldVisitableInterface
      *
      * @param string $fieldDefaultValue
      * @param string $fieldName
-     * @param bool   $updateExistingRecords
+     * @param bool $updateExistingRecords
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws Doctrine\DBAL\DBALException
      */
     protected function UpdateFieldDefaultValue($fieldDefaultValue, $fieldName, $updateExistingRecords = false)
     {
@@ -642,13 +633,12 @@ class TCMSField implements TCMSFieldVisitableInterface
         $connection->query($updateQuery);
     }
 
-
     /**
      * update default value of a field with associated workflow.
      *
      * @param string $fieldDefaultValue
      * @param string $fieldName
-     * @param bool   $updateExistingRecords
+     * @param bool $updateExistingRecords
      */
     protected function UpdateWorkflowFieldDefaultValue($fieldDefaultValue, $fieldName, $updateExistingRecords = false)
     {
@@ -673,7 +663,7 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * create a new field definition (alter table).
      *
-     * @param bool      $returnDDL
+     * @param bool $returnDDL
      * @param TCMSField $oField
      *
      * @return string
@@ -699,7 +689,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $query = 'ALTER TABLE '.$quotedTableName.'
                         ADD '.$quotedName.' '.$this->_GetSQLDefinition($fieldData);
         if (!$returnDDL) {
-            $aQuery = array(new LogChangeDataModel($query));
+            $aQuery = [new LogChangeDataModel($query)];
             TCMSLogChange::WriteTransaction($aQuery);
             $connection->query($query);
         }
@@ -753,7 +743,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $dropIndexQuery = 'ALTER TABLE '.$quotedTableName.' DROP INDEX '.$connection->quoteIdentifier($indexName);
         $connection->query($dropIndexQuery);
 
-        $transaction = array(new LogChangeDataModel($dropIndexQuery));
+        $transaction = [new LogChangeDataModel($dropIndexQuery)];
         TCMSLogChange::WriteTransaction($transaction);
 
         return true;
@@ -816,7 +806,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $quotedFields = $quotedIndexName;
 
         if (0 !== count($fields)) {
-            $quotedFields = implode(',',array_map(array($connection,'quoteIdentifier'), $fields));
+            $quotedFields = implode(',', array_map([$connection, 'quoteIdentifier'], $fields));
         }
 
         return 'ALTER TABLE '.$quotedTableName.' ADD '.$indexType.' '.$quotedIndexName.' ('.$quotedFields.')';
@@ -833,7 +823,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $query = $this->getIndexQuery($indexName, $indexType, $fields);
 
         $connection->query($query);
-        $transaction = array(new LogChangeDataModel($query));
+        $transaction = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($transaction);
     }
 
@@ -942,7 +932,7 @@ class TCMSField implements TCMSFieldVisitableInterface
                        DROP '.$connection->quoteIdentifier($this->name).' ';
 
         $connection->query($query);
-        $transaction = array(new LogChangeDataModel($query));
+        $transaction = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($transaction);
     }
 
@@ -958,7 +948,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      * Checks if is allowed to create related tables for the field after the field was saved.
      * Overwrite this for your field if your field has own CreateRelatedTables function.
      *
-     * @param array $aOldFieldData    contains old field data
+     * @param array $aOldFieldData contains old field data
      * @param array $aOldFieldTypeRow contains old field definition
      * @param array $aNewFieldTypeRow contains new field definition
      *
@@ -973,7 +963,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      * Checks if is allowed to delete related tables for the field before the field will be saved.
      * Overwrite this for your field if your field has own CreateRelatedTables function.
      *
-     * @param array $aNewFieldData    contains old field data
+     * @param array $aNewFieldData contains old field data
      * @param array $aOldFieldTypeRow contains old field definition
      * @param array $aNewFieldTypeRow contains new field definition
      *
@@ -988,7 +978,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      * Checks if is allowed to rename related tables for the field before the field will be saved.
      * Overwrite this for your field if your field has own CreateRelatedTables function.
      *
-     * @param array $aNewFieldData    contains old field data
+     * @param array $aNewFieldData contains old field data
      * @param array $aOldFieldTypeRow contains old field definition
      * @param array $aNewFieldTypeRow contains new field definition
      *
@@ -1003,7 +993,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      * Renames existing related table.
      *
      * @param array $newFieldData
-     * @param bool  $returnDDL
+     * @param bool $returnDDL
      *
      * @return string|null
      */
@@ -1151,14 +1141,14 @@ class TCMSField implements TCMSFieldVisitableInterface
      */
     protected function GetFieldWriterData()
     {
-        $fieldNotesDesc = array();
+        $fieldNotesDesc = [];
         $fieldNotes = trim($this->oDefinition->sqlData['049_helptext']);
         if (!empty($fieldNotes)) {
             $fieldNotes = wordwrap($fieldNotes, 80);
             $fieldNotesDesc = explode("\n", $fieldNotes);
         }
 
-        $aData = array(
+        $aData = [
             'sFieldFullName' => $this->oDefinition->sqlData['translation'],
             'aFieldDesc' => $fieldNotesDesc,
             'sFieldType' => 'string',
@@ -1169,7 +1159,7 @@ class TCMSField implements TCMSFieldVisitableInterface
             'oDefinition' => $this->oDefinition,
             'sTableName' => $this->sTableName,
             'databaseConnection' => $this->getDatabaseConnection(),
-        );
+        ];
 
         return $aData;
     }
@@ -1183,11 +1173,11 @@ class TCMSField implements TCMSFieldVisitableInterface
      */
     public static function GetMethodParameterArray($type, $default, $description)
     {
-        return array(
+        return [
             'sType' => $type,
             'description' => $description,
             'default' => $default,
-        );
+        ];
     }
 
     /**
@@ -1209,15 +1199,15 @@ class TCMSField implements TCMSFieldVisitableInterface
     protected function GetFieldMethodBaseDataArray()
     {
         $aFieldData = $this->GetFieldWriterData();
-        $aMethodData = array(
+        $aMethodData = [
             'aMethodDescription' => $aFieldData['aFieldDesc'],
-            'aParameters' => array(),
+            'aParameters' => [],
             'sReturnType' => '',
             'sVisibility' => 'public',
             'sMethodName' => '',
             'sMethodCode' => '',
             'aFieldData' => $aFieldData,
-        );
+        ];
 
         return $aMethodData;
     }
@@ -1236,7 +1226,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $oTableConf = $this->oTableRow->GetTableConf();
 
         if (!is_array($aParams)) {
-            $aParams = array();
+            $aParams = [];
         }
 
         $aParams['pagedef'] = 'tableeditor';
@@ -1245,7 +1235,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $aParams['sRestriction'] = $inputFilterUtil->getFilteredInput('sRestriction');
         $aParams['sRestrictionField'] = $inputFilterUtil->getFilteredInput('sRestrictionField');
         $aParams['_rmhist'] = 'false';
-        $aParams['module_fnc'] = array('contentmodule' => 'ExecuteAjaxCall');
+        $aParams['module_fnc'] = ['contentmodule' => 'ExecuteAjaxCall'];
         $aParams['callFieldMethod'] = '1';
 
         return PATH_CMS_CONTROLLER.'?'.$urlUtil->getArrayAsUrl($aParams, '', '&');
@@ -1279,7 +1269,7 @@ class TCMSField implements TCMSFieldVisitableInterface
                 $this->getFlashMessageService()->addMessage(
                     $sConsumerName,
                     'TABLEEDITOR_FIELD_NOT_VALID',
-                    array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle)
+                    ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]
                 );
             }
         }
@@ -1302,7 +1292,7 @@ class TCMSField implements TCMSFieldVisitableInterface
             $this->getFlashMessageService()->AddMessage(
                 $consumerName,
                 'TABLEEDITOR_FIELD_IS_MANDATORY',
-                array('sFieldName' => $this->name, 'sFieldTitle' => $fieldTitle)
+                ['sFieldName' => $this->name, 'sFieldTitle' => $fieldTitle]
             );
         }
 
@@ -1393,7 +1383,7 @@ class TCMSField implements TCMSFieldVisitableInterface
     protected function LoadCurrentDataFromDatabase()
     {
         $className = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->sTableName);
-        $record = call_user_func_array(array($className, 'GetNewInstance'), array());
+        $record = call_user_func_array([$className, 'GetNewInstance'], []);
         $record->Load($this->recordId);
         $this->oRecordFromDB = $record;
     }
@@ -1418,7 +1408,7 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * called after record is saved in frontend.
      *
-     * @param string      $id   - ID of the record saved
+     * @param string $id - ID of the record saved
      * @param TPkgCmsForm $form
      */
     public function PkgCmsFormPostSaveHook($id, $form)
@@ -1431,8 +1421,6 @@ class TCMSField implements TCMSFieldVisitableInterface
      * important: this is called weather data is valid or not!
      *
      * @param TPkgCmsForm $form
-     *
-     * @return mixed
      */
     public function PkgCmsFormTransformFormDataBeforeSave($form)
     {
@@ -1442,11 +1430,11 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * Renders the form fields input for frontend.
      *
-     * @param bool        $bFieldHasError
-     * @param bool        $bWrapFieldClassDiv
-     * @param string      $sViewName
-     * @param string      $sViewType
-     * @param array       $aAdditionalVars
+     * @param bool $bFieldHasError
+     * @param bool $bWrapFieldClassDiv
+     * @param string $sViewName
+     * @param string $sViewType
+     * @param array $aAdditionalVars
      * @param string|null $sViewSubType
      *
      * @return string
@@ -1456,7 +1444,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $bWrapFieldClassDiv = false,
         $sViewName = 'standard',
         $sViewType = 'Core',
-        $aAdditionalVars = array(),
+        $aAdditionalVars = [],
         $sViewSubType = null
     ) {
         $oView = new TViewParser();
@@ -1487,7 +1475,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      */
     protected function GetAdditionalViewData()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -1497,7 +1485,7 @@ class TCMSField implements TCMSFieldVisitableInterface
      */
     public function getHtmlHeadIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -1536,9 +1524,6 @@ class TCMSField implements TCMSFieldVisitableInterface
     {
     }
 
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     */
     public function setDatabaseConnection(Connection $connection)
     {
         $this->databaseConnection = $connection;
@@ -1558,8 +1543,6 @@ class TCMSField implements TCMSFieldVisitableInterface
 
     /**
      * @param TCMSFieldVisitorInterface $visitor
-     *
-     * @return mixed
      */
     public function accept($visitor)
     {
@@ -1729,5 +1712,10 @@ class TCMSField implements TCMSFieldVisitableInterface
     private function getFieldExtensionRenderService(): FieldExtensionRenderServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.field_extension_render_service');
+    }
+
+    protected function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

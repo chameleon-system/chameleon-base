@@ -21,46 +21,7 @@ class TCMSURLHistory
     /**
      * @var callable|null
      */
-    private $onChangeCallback = null;
-
-    public function __get($name)
-    {
-        if ('index' === $name) {
-            @trigger_error('The property TCMSURLHistory::$index is deprecated.', E_USER_DEPRECATED);
-
-            return $this->getHistoryCount();
-        }
-
-        $trace = debug_backtrace();
-        trigger_error(sprintf('Undefined property via __get(): %s in %s on line %s',
-            $name,
-            $trace[0]['file'],
-            $trace[0]['line']),
-            E_USER_NOTICE);
-
-        return null;
-    }
-
-    public function __set($name, $val)
-    {
-        if ('index' === $name) {
-            @trigger_error('The property TCMSURLHistory::$index is deprecated.', E_USER_DEPRECATED);
-        }
-
-        $trace = debug_backtrace();
-        trigger_error(sprintf('Undefined property via __set(): %s in %s on line %s',
-            $name,
-            $trace[0]['file'],
-            $trace[0]['line']),
-            E_USER_NOTICE);
-
-        $this->update();
-    }
-
-    public function __isset($name)
-    {
-        return 'index' === $name;
-    }
+    private $onChangeCallback;
 
     /**
      * adds item to the breadcrumb array.
@@ -79,12 +40,12 @@ class TCMSURLHistory
         }
 
         // add the new item
-        $this->aHistory[] = array(
+        $this->aHistory[] = [
             'name' => $name,
             'url' => $this->EncodeParameters($aParameter),
             'params' => $aParameter,
-            'filterCallback' => $filterCallback ??  '',
-        );
+            'filterCallback' => $filterCallback ?? '',
+        ];
 
         $this->update();
     }
@@ -163,12 +124,12 @@ class TCMSURLHistory
         $return = $this->aHistory;
 
         if ($withRemoveParameter) {
-            $return = array();
+            $return = [];
             foreach ($this->aHistory as $key => $item) {
-                $_item = array(
+                $_item = [
                     'name' => $item['name'],
                     'params' => $item['params'],
-                );
+                ];
                 $_item['params']['_histid'] = $key;
                 $_item['url'] = $this->EncodeParameters($_item['params']);
                 $return[] = $_item;
@@ -180,7 +141,7 @@ class TCMSURLHistory
 
     /**
      * @param array $aParameters
-     * @param bool  $returnWithFragment
+     * @param bool $returnWithFragment
      *
      * @return string
      */
@@ -210,6 +171,7 @@ class TCMSURLHistory
      * removes all history entries with higher index than the given one.
      *
      * @param int $id
+     *
      * @note you can use "array_splice($this->aHistory, $id + 1);"
      */
     public function Clear($id)
@@ -260,8 +222,8 @@ class TCMSURLHistory
     public function removeEntries(string $tableName, string $entryId): void
     {
         try {
-            $cmsTblConfId = \TTools::GetCMSTableId($tableName);
-        } catch (\Exception $e) {
+            $cmsTblConfId = TTools::GetCMSTableId($tableName);
+        } catch (Exception $e) {
             return;
         }
 
@@ -274,7 +236,7 @@ class TCMSURLHistory
                 function (array $history) use ($tableName, $entryId, $cmsTblConfId) {
                     $filterCallback = $history['filterCallback'];
                     if (true === is_callable($filterCallback)) {
-                        /** @var $filterCallback callable(array $historyEntry, string $tableName, string $entryId, string $cmsTblConfId): bool */
+                        /* @var $filterCallback callable(array $historyEntry, string $tableName, string $entryId, string $cmsTblConfId): bool */
                         return false === $filterCallback($history, $tableName, $entryId, $cmsTblConfId);
                     }
 

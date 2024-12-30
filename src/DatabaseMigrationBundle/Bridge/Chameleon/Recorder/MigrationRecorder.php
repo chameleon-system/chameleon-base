@@ -14,11 +14,8 @@ namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder;
 use ChameleonSystem\DatabaseMigration\Constant\MigrationRecorderConstants;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use Doctrine\DBAL\Connection;
-use MapperException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use TPkgSnippetRenderer_SnippetRenderingException;
-use ViewRenderer;
 
 class MigrationRecorder
 {
@@ -44,11 +41,7 @@ class MigrationRecorder
     private $logFilePath;
 
     /**
-     * @param ContainerInterface $container
-     * @param Connection         $databaseConnection
-     * @param QueryWriter        $queryWriter
-     * @param LoggerInterface    $logger
-     * @param string             $logFilePath
+     * @param string $logFilePath
      */
     public function __construct(ContainerInterface $container, Connection $databaseConnection, QueryWriter $queryWriter, LoggerInterface $logger, $logFilePath)
     {
@@ -60,15 +53,12 @@ class MigrationRecorder
     }
 
     /**
-     * @param string $activeTrackName @deprecated since 6.2.0 - a fixed name is used now.
-     * @param string $buildNumber
-     *
      * @return resource
      *
-     * @throws MapperException
-     * @throws TPkgSnippetRenderer_SnippetRenderingException
+     * @throws \MapperException
+     * @throws \TPkgSnippetRenderer_SnippetRenderingException
      */
-    public function startTransation($activeTrackName, $buildNumber)
+    public function startTransaction(string $buildNumber)
     {
         $counterName = MigrationRecorderConstants::MIGRATION_SCRIPT_NAME;
 
@@ -93,14 +83,14 @@ class MigrationRecorder
                 sprintf('File %s is not writable (check path constant: PATH_CMS_CHANGE_LOG, and missing rights for file writes).', $sLogFileName)
             );
 
-            exit(); // we want to break the ajax call to get the warning
+            exit; // we want to break the ajax call to get the warning
         }
 
         return $filePointer;
     }
 
     /**
-     * @param resource             $filePointer
+     * @param resource $filePointer
      * @param LogChangeDataModel[] $dataModels
      *
      * @return void
@@ -121,9 +111,9 @@ class MigrationRecorder
         $this->databaseConnection->exec('UNLOCK TABLES');
     }
 
-    private function getViewRenderer(): ViewRenderer
+    private function getViewRenderer(): \ViewRenderer
     {
-        /** @var ViewRenderer $viewRenderer */
+        /** @var \ViewRenderer $viewRenderer */
         $viewRenderer = $this->container->get('chameleon_system_view_renderer.view_renderer');
         $viewRenderer->setShowHTMLHints(false);
         $viewRenderer->setIsBackendMode();

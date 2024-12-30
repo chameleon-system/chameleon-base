@@ -26,7 +26,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  * side) should inherit from this. this class provides the basic functionality
  * such as class factory, get/post filtering, etc.
  *
-/**/
+ * /**/
 class TGlobalBase
 {
     /**
@@ -44,46 +44,32 @@ class TGlobalBase
     public static $PATH_TO_WEB_LIBRARY = 'chameleon/blackbox';
 
     /**
-     * a copy of all rewrite parameter - these parameters will be excluded from the GetRealURL request (since they are part of the url anyway).
-     *
-     * @var array
-     */
-    protected $aRewriteParameter = array();
-
-    /**
      * used to cache any data that may be needed globally
      * (like a list of portals, etc).
      *
      * @var array
      */
-    public $_dataCache = array();
+    public $_dataCache = [];
 
     /**
      * holds the current executing module object.
      *
      * @var TModelBase
      */
-    protected $oExecutingModuleObject = null;
+    protected $oExecutingModuleObject;
 
-    protected $aFileList = array();
+    protected array $aFileList = [];
 
     /**
      * config class of the HTMLPurifier XSS filter.
      *
      * @var HTMLPurifier_Config
      */
-    public $oHTMLPurifyConfig = null;
+    public $oHTMLPurifyConfig;
 
-    /** @var RequestStack */
-    private $requestStack;
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
+    private RequestStack $requestStack;
+    private InputFilterUtilInterface $inputFilterUtil;
+    private KernelInterface $kernel;
 
     public function __construct(RequestStack $requestStack, InputFilterUtilInterface $inputFilterUtil, KernelInterface $kernel)
     {
@@ -99,17 +85,10 @@ class TGlobalBase
 
     public function __get($sParameterName)
     {
-        if ('userData' === $sParameterName) {
-            $trace = debug_backtrace();
-            trigger_error('userData is no longer available - use \ChameleonSystem\CoreBundle\ServiceLocator::get("request_stack")->getCurrentRequest() instead in '.$trace[1]['file'].' on line '.$trace[1]['line'], E_USER_ERROR);
+        $trace = debug_backtrace();
+        trigger_error('Undefined property via __get(): '.$sParameterName.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_NOTICE);
 
-            return null;
-        } else {
-            $trace = debug_backtrace();
-            trigger_error('Undefined property via __get(): '.$sParameterName.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_NOTICE);
-
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -146,18 +125,6 @@ class TGlobalBase
     }
 
     /**
-     * return a pointer to the controller running the show.
-     *
-     * @return ChameleonControllerInterface
-     *
-     * @deprecated Use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller') instead
-     */
-    public static function GetController()
-    {
-        return ServiceLocator::get('chameleon_system_core.chameleon_controller');
-    }
-
-    /**
      * returns the base URL of the current backend theme
      * uses GetStaticURL to return optional static domain.
      *
@@ -178,8 +145,8 @@ class TGlobalBase
     /**
      * returns the static path to the given file in the blackbox directory.
      *
-     * @param string $sFilePath    - the relative url of the file in relation to the blackbox directory
-     * @param bool   $bForceNonSSL - used to force urls to non SSL
+     * @param string $sFilePath - the relative url of the file in relation to the blackbox directory
+     * @param bool $bForceNonSSL - used to force urls to non SSL
      *
      * @return string
      */
@@ -196,7 +163,7 @@ class TGlobalBase
         static $aStaticURLPrefix = null;
         if (null === $aStaticURLPrefix) {
             if (strpos(URL_STATIC, ',')) {
-                $aStaticURLPrefix = array();
+                $aStaticURLPrefix = [];
                 $aStaticURLs = explode(',', URL_STATIC);
                 foreach ($aStaticURLs as $sKey => $sURL) {
                     $sURL = trim($sURL);
@@ -225,7 +192,7 @@ class TGlobalBase
 
         $aStaticURLPrefix = TGlobal::GetStaticURLPrefix();
         if (!is_array($aStaticURLPrefix)) {
-            $aStaticURLPrefix = array($aStaticURLPrefix);
+            $aStaticURLPrefix = [$aStaticURLPrefix];
         }
         $sPrefix = substr($sURL, 0, strpos($sURL, '}]', 2) + 2);
         $sURL = substr($sURL, strlen($sPrefix));
@@ -245,8 +212,8 @@ class TGlobalBase
      * URLs for different content types (images from CDN, JS library from code.google.com, CSS from local)
      * you can check the path or file type to solve this.
      *
-     * @param string $sFilePath    - the relative url to get a static server
-     * @param bool   $bForceNonSSL - used to force urls to non SSL
+     * @param string $sFilePath - the relative url to get a static server
+     * @param bool $bForceNonSSL - used to force urls to non SSL
      *
      * @return string
      */
@@ -319,38 +286,24 @@ class TGlobalBase
         // however we MAY be viewing it through the cms template engine. so in that
         // case we still need to return false.
         // grab an instance of TGlobal to find out :)
-        $oGlobal = TGlobal::instance();
-        if ('true' == $oGlobal->GetUserData('__modulechooser') && self::CMSUserDefined()) {
-            return true;
-        } else {
+        $currentRequest = self::getCurrentRequest();
+
+        if (null === $currentRequest) {
             return false;
         }
-    }
 
-    public function GetLanguageIdList()
-    {
-        $oCMSConfig = TdbCmsConfig::GetInstance();
-        return [$oCMSConfig->fieldTranslationBaseLanguageId];
-    }
+        if ('true' === $currentRequest->get('__modulechooser', false) && self::getSecurityHelperAccess()->isGranted(CmsUserRoleConstants::CMS_USER)) {
+            return true;
+        }
 
-    /**
-     * checks if active CMS user session is available.
-     * @deprecated use SecurityHelperAccess::class
-     *
-     * @return bool
-     */
-    public static function CMSUserDefined()
-    {
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        return $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
+        return false;
     }
 
     /**
      * escapes a string (htmlentities/ENT_QUOTES, "=", "\").
      *
      * @param string $nonEscapedString
-     * @param bool   $bDoubleEncode
+     * @param bool $bDoubleEncode
      *
      * @return string
      */
@@ -362,10 +315,10 @@ class TGlobalBase
         $sEscapedHTML = htmlentities($nonEscapedString, ENT_QUOTES, 'UTF-8', $bDoubleEncode);
 
         if ('' === $sEscapedHTML && '' !== $nonEscapedString) {
-            //there is an error converting an "non-utf8" string!
+            // there is an error converting an "non-utf8" string!
             $trace = debug_backtrace();
             trigger_error('OutHTML() failed to convert the text: '.$nonEscapedString.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_NOTICE);
-            //$sEscapedHTML = self::TryConvertTextToUtf8($nonEscapedString);
+            // $sEscapedHTML = self::TryConvertTextToUtf8($nonEscapedString);
         }
 
         $sEscapedHTML = str_replace('=', '&#61;', $sEscapedHTML);
@@ -427,14 +380,14 @@ class TGlobalBase
      * returns the value of variable $name or if missing the whole array filtered by $excludeArray.
      *
      * @param string $name
-     * @param array  $excludeArray
+     * @param array $excludeArray
      * @param string $sFilterClass - form: classname;path;type|classname;path;type
      *
      * @return mixed - string or array
      *
      * @deprecated - use InputFilterUtilInterface::getFiltered*Input() instead
      */
-    public function GetUserData($name = null, $excludeArray = array(), $sFilterClass = TCMSUSERINPUT_DEFAULTFILTER)
+    public function GetUserData($name = null, $excludeArray = [], $sFilterClass = TCMSUSERINPUT_DEFAULTFILTER)
     {
         $outputData = '';
         $request = $this->getRequest();
@@ -442,7 +395,7 @@ class TGlobalBase
             if (null !== $name) { // get value for key
                 $outputData = $this->inputFilterUtil->getFilteredInput($name, '', false, $sFilterClass);
             } else {
-                $outputData = array();
+                $outputData = [];
 
                 $aSource = $request->query->keys();
                 foreach ($aSource as $key) {
@@ -467,13 +420,13 @@ class TGlobalBase
      * returns the raw (unfiltered) value of variable $name or if missing the whole array filtered by $excludeArray.
      *
      * @param string $name
-     * @param array  $excludeArray
+     * @param array $excludeArray
      *
      * @return mixed - string or array
      *
      * @deprecated - use \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest() instead
      */
-    public function GetRawUserData($name = null, $excludeArray = array())
+    public function GetRawUserData($name = null, $excludeArray = [])
     {
         return $this->GetUserData($name, $excludeArray, TCMSUserInput::FILTER_NONE);
     }
@@ -482,7 +435,6 @@ class TGlobalBase
      * Save variable to userData.
      *
      * @param string $sArrayKeyName
-     * @param mixed  $Value
      *
      * @deprecated - use \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest() instead
      */
@@ -584,25 +536,6 @@ class TGlobalBase
     }
 
     /**
-     * @param bool $bReset
-     * @param bool $bAdd
-     *
-     * @return int
-     */
-    public static function CountCalls($bReset = false, $bAdd = false)
-    {
-        static $iCount = 0;
-        if ($bReset) {
-            $iCount = 0;
-        }
-        if ($bAdd) {
-            ++$iCount;
-        }
-
-        return $iCount;
-    }
-
-    /**
      * returns the root path to the classes directory.
      *
      * @param string $sSubType
@@ -615,14 +548,14 @@ class TGlobalBase
         $rootPath = PATH_LIBRARY.'/classes';
         switch ($sType) {
             case 'Custom-Core':
-                if ('core' == $sSubType) {
+                if ('core' === $sSubType) {
                     $rootPath = PATH_CORE_CUSTOM;
                 } else {
                     $rootPath = PATH_LIBRARY_CUSTOM.'/classes';
                 }
                 break;
             case 'Customer':
-                if ('core' == $sSubType) {
+                if ('core' === $sSubType) {
                     $rootPath = PATH_CORE_CUSTOMER;
                 } else {
                     $rootPath = PATH_LIBRARY_CUSTOMER.'/classes';
@@ -673,7 +606,7 @@ class TGlobalBase
      */
     public function getModuleRootPath($type)
     {
-        $bundlePath = self::instance()->resolveBundlePath($type);
+        $bundlePath = $this->resolveBundlePath($type);
         if (null !== $bundlePath) {
             return $bundlePath.'/objects/BackendModules/';
         }
@@ -700,7 +633,6 @@ class TGlobalBase
 
     /**
      * returns the path to page layout definition files based on "_pagedefType" URL parameter.
-     *
      *
      * @param string $sType - Core, Custom-Core, Customer
      *
@@ -809,7 +741,7 @@ class TGlobalBase
         $databaseConnection = self::getDatabaseConnection();
         $quotedDatabaseName = $databaseConnection->quoteIdentifier($databaseConnection->getDatabase());
         $query = "SHOW TABLES FROM $quotedDatabaseName LIKE :tableName";
-        $tRes = $databaseConnection->executeQuery($query, array('tableName' => $sTableName));
+        $tRes = $databaseConnection->executeQuery($query, ['tableName' => $sTableName]);
 
         return $tRes->rowCount() > 0;
     }
@@ -836,46 +768,30 @@ class TGlobalBase
      *
      * @return string - empty string if current language is base language
      */
-    public static function GetLanguagePrefix($sLanguageId = null)
+    public static function GetLanguagePrefix(?string $sLanguageId = null): string
     {
-        static $sBaseLanguageId = null;
-        if (null === $sBaseLanguageId) {
-            $oCmsConfig = TdbCmsConfig::GetInstance();
-            $sBaseLanguageId = $oCmsConfig->fieldTranslationBaseLanguageId;
+        static $baseLanguageId = null;
+        if (null === $baseLanguageId) {
+            $baseLanguageId = 22;
+
+            $cmsConfig = TdbCmsConfig::GetInstance();
+
+            if (null !== $cmsConfig) {
+                $baseLanguageId = $cmsConfig->fieldTranslationBaseLanguageId;
+            }
         }
         $languageService = self::getLanguageService();
         if (null === $sLanguageId) {
             $sLanguageId = $languageService->getActiveLanguageId();
         }
 
-        if ($sLanguageId === $sBaseLanguageId) {
+        if ($sLanguageId === $baseLanguageId) {
             return '';
         }
 
-        return $languageService->getLanguageIsoCode($sLanguageId);
-    }
+        $languageIsoCode = $languageService->getLanguageIsoCode($sLanguageId);
 
-    /**
-     * set the rewrite parameter array - note: this will be called by the rewrite manager - so you never need
-     * to call this directly yourself.
-     *
-     * @param array $aParameter
-     */
-    public function SetRewriteParameter($aParameter)
-    {
-        $this->aRewriteParameter = $aParameter;
-    }
-
-    // -----------------------------------------------------------------------
-
-    /**
-     * return the rewrite parameter.
-     *
-     * @return array
-     */
-    public function GetRewriteParameter()
-    {
-        return $this->aRewriteParameter;
+        return $languageIsoCode ?? '';
     }
 
     /**
@@ -897,11 +813,6 @@ class TGlobalBase
 
     public static function SortClassList($a, $b)
     {
-        if ('IDNConvert' == $a) {
-            $a = 'idna_convert';
-        } elseif ('IDNConvert' == $b) {
-            $b = 'idna_convert';
-        }
         if (is_subclass_of($a, $b)) {
             return 1;
         } elseif (is_subclass_of($b, $a)) {
@@ -934,12 +845,12 @@ class TGlobalBase
     /**
      * fallback for renamed/deprecated methods.
      *
-     * @param string $name      - name of the method case sensitive
-     * @param array  $arguments
+     * @param string $name - name of the method case sensitive
+     * @param array $arguments
      */
     public function __call($name, $arguments)
     {
-        $aBackwardsCompatMethods = array();
+        $aBackwardsCompatMethods = [];
         $aBackwardsCompatMethods['GetuserData'] = 'GetUserData';
         $aBackwardsCompatMethods['userDataExists'] = 'UserDataExists';
 
@@ -1018,38 +929,31 @@ class TGlobalBase
     public function __sleep()
     {
         // avoid $requestStack being serialized
-        return array();
+        return [];
     }
 
-    /**
-     * @return PortalDomainServiceInterface
-     */
-    private static function getPortalDomainService()
+    private static function getPortalDomainService(): PortalDomainServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
-    /**
-     * @return LanguageServiceInterface
-     */
-    private static function getLanguageService()
+    private static function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
-    /**
-     * @return Request|null
-     */
-    private static function getCurrentRequest()
+    private static function getCurrentRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
-    /**
-     * @return Connection
-     */
-    private static function getDatabaseConnection()
+    private static function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
+    }
+
+    private static function getSecurityHelperAccess(): SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
     }
 }

@@ -42,11 +42,11 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         $html = '<input type="hidden" name="'.$sEscapedNameField.'[x]" value="-" id="'.$sEscapedNameField.'[]" />
       <div class="card">
         <div class="card-header p-1">
-          <a href="javascript:markCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink"><i class="fas fa-check pr-2"></i>'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all').'</a>
-          <a href="javascript:invertCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-random pr-2"></i>'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>';
+          <a href="javascript:markCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink"><i class="fas fa-check pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all').'</a>
+          <a href="javascript:invertCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-random pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>';
 
         if (true === $this->isRecordCreationAllowed($foreignTableName)) {
-            $html .= '<a href="javascript:document.cmseditform.tableid.value=\''.TGlobal::OutJS($oTargetTableConf->sqlData['id']).'\';ExecutePostCommand(\'Insert\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-plus pr-2"></i>'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.new').'</a>';
+            $html .= '<a href="javascript:document.cmseditform.tableid.value=\''.TGlobal::OutJS($oTargetTableConf->sqlData['id']).'\';ExecutePostCommand(\'Insert\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-plus pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.new').'</a>';
         }
         $urlUtil = $this->getUrlUtil();
         $bShowCustomsort = $this->oDefinition->GetFieldtypeConfigKey('bAllowCustomSortOrder');
@@ -60,7 +60,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
                 'sRestrictionField' => $this->sTableName.'_mlt',
             ), PATH_CMS_CONTROLLER.'?', '&');
 
-            $html .= '<a href="javascript:parent.CreateModalIFrameDialogCloseButton(\''.$sSortUrl.'\',0,0,\''.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.sort').'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-sort-amount-down pr-2"></i>'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.sort').'</a>';
+            $html .= '<a href="javascript:parent.CreateModalIFrameDialogCloseButton(\''.$sSortUrl.'\',0,0,\''.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.sort').'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-sort-amount-down pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.sort').'</a>';
         }
         $html .= '
         </div>

@@ -85,7 +85,7 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
             date_default_timezone_set('UTC');
             $oLocal = TdbCmsLocals::GetActive();
             $sFormatedDateTime = $oLocal->FormatDate(date('Y-m-d H:i:s'));
-            $sCurrentUTCTime = '&nbsp;&nbsp;&nbsp;<strong>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_date_time.current_utc')).': '.$sFormatedDateTime.'</strong>';
+            $sCurrentUTCTime = '&nbsp;&nbsp;&nbsp;<strong>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.current_utc')).': '.$sFormatedDateTime.'</strong>';
             date_default_timezone_set($sServerDateTimeZoneSetting);
         }
 
@@ -96,7 +96,7 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
     {
         $currentDate = $this->_GetHTMLValue();
         if ('0000-00-00 00:00:00' == $currentDate) {
-            $html = TGlobal::Translate('chameleon_system_core.field_date_time.not_set');
+            $html = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.not_set');
         } else {
             $aDateParts = explode(' ', $currentDate);
             $date = $aDateParts[0];
@@ -116,7 +116,7 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
             if (!empty($sUTCDateTime)) {
                 $html .= '<strong>UTC</strong>&nbsp;&nbsp;';
             }
-            $html .= TGlobal::OutHTML($date.' '.$hour.':'.$minutes.' '.TGlobal::Translate('chameleon_system_core.field_date_time.time'));
+            $html .= TGlobal::OutHTML($date.' '.$hour.':'.$minutes.' '.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.time'));
             if (!empty($sUTCDateTime)) {
                 $html .= $sUTCDateTime;
             }

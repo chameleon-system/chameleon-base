@@ -20,11 +20,11 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
  */
 class CMSFieldMLTRPC extends TCMSModelBase
 {
-    public $rpcData = null;
-    public $mltTable = null;
-    public $sourceTable = null;
-    public $sourceID = null;
-    public $targetID = null;
+    public $rpcData;
+    public $mltTable;
+    public $sourceTable;
+    public $sourceID;
+    public $targetID;
 
     public function Init()
     {
@@ -54,7 +54,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('assignConnection', 'removeConnection', 'GetSortElements', 'SavePosChange');
+        $externalFunctions = ['assignConnection', 'removeConnection', 'GetSortElements', 'SavePosChange'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -184,7 +184,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $oListManager = $oTableConf->GetListObject($listClass);
         $sQuery = $oListManager->FilterQuery();
         $oPositionList = new TCMSRecordList('TCMSRecord', $sTableSQLName, $sQuery);
-        $oPositionList->ChangeOrderBy(array("`{$sMltTableName}`.`entry_sort`" => 'ASC'));
+        $oPositionList->ChangeOrderBy(["`{$sMltTableName}`.`entry_sort`" => 'ASC']);
 
         $count = 0;
         while ($oPositionRow = $oPositionList->Next()) {
@@ -217,9 +217,9 @@ class CMSFieldMLTRPC extends TCMSModelBase
     /**
      * get record data row as string.
      *
-     * @param string     $sTableSQLName
+     * @param string $sTableSQLName
      * @param TCMSRecord $oRecord
-     * @param int        $sCount
+     * @param int $sCount
      *
      * @return string
      */
@@ -241,8 +241,8 @@ class CMSFieldMLTRPC extends TCMSModelBase
      * write info line for all fields which should be in sort list as div.
      *
      * @param TdbCmsTblDisplayListFieldsList $oListFieldsList
-     * @param TCMSRecord        $oRecord
-     * @param TdbCmsTblConf       $oTableConf
+     * @param TCMSRecord $oRecord
+     * @param TdbCmsTblConf $oTableConf
      *
      * @return string
      */
@@ -264,7 +264,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
             }
         }
         if (false == $bFindShowField) {
-            $sFieldListString .= '<th scope="col">'.TGlobal::Translate('chameleon_system_core.field_mltrpc.name').'</th>';
+            $sFieldListString .= '<th scope="col">'.ServiceLocator::get('translator')->trans('chameleon_system_core.field_mltrpc.name').'</th>';
         }
 
         return $sFieldListString;
@@ -274,8 +274,8 @@ class CMSFieldMLTRPC extends TCMSModelBase
      * Get all field values as table.
      *
      * @param TdbCmsTblDisplayListFieldsList $oListFieldsList
-     * @param TCMSRecord        $oRecord
-     * @param TdbCmsTblConf       $oTableConf
+     * @param TCMSRecord $oRecord
+     * @param TdbCmsTblConf $oTableConf
      *
      * @return string
      */
@@ -328,7 +328,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $javascript = '<script type="text/javascript">
       $(document).ready(function() {
         $("#posList").sortable({
-          smooth:	false,
+          smooth:    false,
           tolerance: "fit",
           containment: "document",
           axis: "y",
@@ -375,8 +375,8 @@ class CMSFieldMLTRPC extends TCMSModelBase
         $sTargetTable = $this->global->GetUserData('sTargetTable');
 
         $pos = 0;
-        $aQuery = array();
-        TCacheManager::PerformeTableChange($sTargetTable, $sSourcerecordId);
+        $aQuery = [];
+        $this->getCacheService()->callTrigger($sTargetTable, $sSourcerecordId);
         $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
         foreach ($aPosOrder as $id) {
             ++$pos;
@@ -385,17 +385,17 @@ class CMSFieldMLTRPC extends TCMSModelBase
                          WHERE `source_id` = '{$sSourcerecordId}'
                            AND `target_id` = '{$id}'";
             MySqlLegacySupport::getInstance()->query($updateQuery);
-            TCacheManager::PerformeTableChange($tableSQLName, $id);
+            $this->getCacheService()->callTrigger($tableSQLName, $id);
 
             $migrationQueryData = new MigrationQueryData($sMltTableName, $editLanguage->fieldIso6391);
             $migrationQueryData
-                ->setFields(array(
+                ->setFields([
                     'entry_sort' => $pos,
-                ))
-                ->setWhereEquals(array(
+                ])
+                ->setWhereEquals([
                     'source_id' => $sSourcerecordId,
                     'target_id' => $id,
-                ))
+                ])
             ;
             $aQuery[] = new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE);
         }
@@ -410,16 +410,17 @@ class CMSFieldMLTRPC extends TCMSModelBase
      */
     protected function getMltFieldUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.mlt_field');
+        return ServiceLocator::get('chameleon_system_core.util.mlt_field');
     }
 
     /**
-     * @return \ChameleonSystem\CoreBundle\Service\LanguageServiceInterface
+     * @return ChameleonSystem\CoreBundle\Service\LanguageServiceInterface
      */
     private function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
+
     private function getBackendSession(): BackendSessionInterface
     {
         return ServiceLocator::get('chameleon_system_cms_backend.backend_session');

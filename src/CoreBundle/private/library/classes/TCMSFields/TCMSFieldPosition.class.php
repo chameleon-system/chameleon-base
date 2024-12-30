@@ -83,7 +83,7 @@ class TCMSFieldPosition extends TCMSField implements DoctrineTransformableInterf
             $restrictionValue = '';
         }
 
-        $html = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_position.change'), "javascript:loadPositionList('".TGlobal::OutJS($this->oTableConf->id)."','".TGlobal::OutJS($this->sTableName)."','".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->recordId)."','".TGlobal::OutJS($restrictionValue)."','".TGlobal::OutJS($restrictionField)."');", 'fas fa-sort');
+        $html = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_position.change'), "javascript:loadPositionList('".TGlobal::OutJS($this->oTableConf->id)."','".TGlobal::OutJS($this->sTableName)."','".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->recordId)."','".TGlobal::OutJS($restrictionValue)."','".TGlobal::OutJS($restrictionField)."');", 'fas fa-sort');
         $html .= '<span id="'.TGlobal::OutHTML($this->name).'_dummy"></span>
       <input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data)."\" />\n";
 

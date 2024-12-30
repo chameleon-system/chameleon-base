@@ -13,9 +13,7 @@ class TCMSFieldNewsletterCampaignStatistics extends TCMSFieldText
 {
     public function GetHTML()
     {
-        $html = $this->GetReadOnly();
-
-        return $html;
+        return $this->GetReadOnly();
     }
 
     /**
@@ -27,24 +25,24 @@ class TCMSFieldNewsletterCampaignStatistics extends TCMSFieldText
     {
         $sShowData = $this->data;
         if ('' == $sShowData) {
-            $sShowData = TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.no_queue');
+            $sShowData = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.field_campaign_stats.no_queue');
             $html = '<div class="alert alert-info"><i class="fas fa-minus-circle"></i> '.TGlobal::OutHTML($sShowData).'</div>';
         } else {
-            $sShowData = TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.subscriber_count').': '.$sShowData;
+            $sShowData = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.field_campaign_stats.subscriber_count').': '.$sShowData;
             $iAlreadySentCont = $this->getAlreadySentCount();
             $iToSendCount = $this->data - $iAlreadySentCont;
             if (0 == $iToSendCount) {
-                $html = '<i class="far fa-check-square"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.queue_processed')).'<br />';
+                $html = '<i class="far fa-check-square"></i> '.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.field_campaign_stats.queue_processed')).'<br />';
             } else {
                 if (0 == $iAlreadySentCont) {
-                    $html = '<i class="far fa-clock"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.queue_not_started')).'<br />';
+                    $html = '<i class="far fa-clock"></i> '.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.field_campaign_stats.queue_not_started')).'<br />';
                 } else {
-                    $html = '<i class="fas fa-clock"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.queue_processing')).'<br />';
+                    $html = '<i class="fas fa-clock"></i> '.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.field_campaign_stats.queue_processing')).'<br />';
                 }
             }
             $html .= '<i class="fas fa-link"></i> '.TGlobal::OutHTML($sShowData).'<br>';
-            $html .= '<i class="fas fa-plus-circle"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.already_sent').': '.$this->getAlreadySentCount()).'<br>';
-            $html .= '<i class="fas fa-play-circle"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_newsletter.field_campaign_stats.still_to_process', array('%count%' => $iToSendCount))).'<br />';
+            $html .= '<i class="fas fa-plus-circle"></i> '.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.field_campaign_stats.already_sent').': '.$this->getAlreadySentCount()).'<br>';
+            $html .= '<i class="fas fa-play-circle"></i> '.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.field_campaign_stats.still_to_process', ['%count%' => $iToSendCount])).'<br />';
         }
 
         return $html;

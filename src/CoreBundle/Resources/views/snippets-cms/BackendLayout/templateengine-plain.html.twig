@@ -1,0 +1,20 @@
+{% set bodyClass = 'bg-white' %}
+{% extends 'BackendLayout/base.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+    <link href="{{ path_theme() }}/css/table.css" rel="stylesheet" type="text/css"/>
+    <script src="{{ static_url_to_weblib('/javascript/table.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+    <main>
+        {{ backend_module('templateengine') }}
+    </main>
+    {% block modal_dialog %}
+        {{ parent() }}
+    {% endblock %}
+    {% block footer_includes %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}

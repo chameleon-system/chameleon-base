@@ -43,10 +43,10 @@ $sSortUrl = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($sortUrlParameters);
                         <div class="button-item col-12 col-sm-6 col-md-4 col-lg-auto">
                             <?php
                             $oViewRenderer = new ViewRenderer();
-                            $oViewRenderer->AddSourceObject('sTitle', TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_connect_records'));
+                            $oViewRenderer->AddSourceObject('sTitle', \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.action_connect_records'));
                             $oViewRenderer->AddSourceObject('sItemKey', 'chooseItems');
                             $oViewRenderer->AddSourceObject('sCSSClass', 'btn btn-sm btn-success');
-                            $oViewRenderer->AddSourceObject('sOnClick', "parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."',0,0,'".TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_connect_records')."');");
+                            $oViewRenderer->AddSourceObject('sOnClick', "parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."',0,0,'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.action_connect_records')."');");
                             $oViewRenderer->AddSourceObject('sIcon', 'fas fa-link');
                             $oViewRenderer->AddSourceObject('sButtonStyle', '');
                             echo $oViewRenderer->Render('MTTableEditor/singleMenuButton.html.twig', null, false);
@@ -64,10 +64,10 @@ $sSortUrl = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($sortUrlParameters);
                         <div class="button-item col-12 col-sm-6 col-md-4 col-lg-auto">
                             <?php if (!empty($data['bShowCustomSort'])) {
                                 $oViewRenderer = new ViewRenderer();
-                                $oViewRenderer->AddSourceObject('sTitle', TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_sort_connections'));
+                                $oViewRenderer->AddSourceObject('sTitle', \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.action_sort_connections'));
                                 $oViewRenderer->AddSourceObject('sItemKey', 'sortItems');
                                 $oViewRenderer->AddSourceObject('sCSSClass', 'btn btn-sm btn-info');
-                                $oViewRenderer->AddSourceObject('sOnClick', "parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sSortUrl)."',0,0,'".TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.action_sort_connections')."');");
+                                $oViewRenderer->AddSourceObject('sOnClick', "parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sSortUrl)."',0,0,'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.action_sort_connections')."');");
                                 $oViewRenderer->AddSourceObject('sIcon', 'fas fa-sort-amount-down');
                                 $oViewRenderer->AddSourceObject('sButtonStyle', '');
                                 echo $oViewRenderer->Render('MTTableEditor/singleMenuButton.html.twig', null, false);

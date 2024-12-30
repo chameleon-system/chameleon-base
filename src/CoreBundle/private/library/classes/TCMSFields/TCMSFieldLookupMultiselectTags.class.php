@@ -82,7 +82,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 
         if ($this->bShowSuggestions) {
             $html .= '<p id="'.TGlobal::OutHTML($this->name).'_suggestions" class="mt-2 tagSuggestions">
-<span class="label">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_tag.suggestions')).': </span>
+<span class="label">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_tag.suggestions')).': </span>
 <span class="tagSuggestionList"></span>
 </p>';
         }

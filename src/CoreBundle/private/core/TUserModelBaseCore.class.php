@@ -13,7 +13,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 /**
  * all user modules need to be derived from this class, or one of its children.
-/**/
+ * /**/
 class TUserModelBaseCore extends TModelBase
 {
     /**
@@ -21,14 +21,14 @@ class TUserModelBaseCore extends TModelBase
      *
      * @var string|null
      */
-    public $instanceID = null;
+    public $instanceID;
 
     /**
      * holds the language shortname of the template (example: de, en, ...).
      *
      * @var string|null
      */
-    public $templateLanguage = null;
+    public $templateLanguage;
 
     public function __sleep()
     {
@@ -65,19 +65,6 @@ class TUserModelBaseCore extends TModelBase
     }
 
     /**
-     * Set arry of cache table infos or one cache table info to module intern cache table infos.
-     *
-     * @param array  $aCacheTableInfos
-     * @param string $sTableName
-     * @param string $sRecordId
-     *
-     * @deprecated
-     */
-    public function SetCacheTableInfos($aCacheTableInfos = array(), $sTableName = '', $sRecordId = '')
-    {
-    }
-
-    /**
      * Use this method to retrieve resources from snippet packages.
      * This is necessary, should you use an instance of ViewRenderer in your module's old style view.php
      * Here you have to include the resources of the package in your HTMLHeadIncludes by hand.
@@ -91,19 +78,13 @@ class TUserModelBaseCore extends TModelBase
         return $this->getViewRendererSnippetDirectory()->getResourcesForSnippetPackage($sSnippetPath);
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return TPkgViewRendererSnippetDirectoryInterface
-     */
-    private function getViewRendererSnippetDirectory()
+    private function getViewRendererSnippetDirectory(): TPkgViewRendererSnippetDirectoryInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
     }
 }

@@ -29,7 +29,7 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
     public function _AddFunctionColumn()
     {
         ++$this->columnCount;
-        $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_actions');
+        $sTranslatedField = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.column_name_actions');
         $this->tableObj->AddHeaderField(array('id' => $sTranslatedField.'&nbsp;&nbsp;'), 'right', null, 1, false, 100);
         $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackMLTFunctionBlock'), null, 1);
     }
@@ -109,7 +109,7 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
      */
     public function CallBackMLTFunctionBlock($id, $row)
     {
-        return '<i class="fas fa-unlink action" onclick="deleteConnection(\''.TGlobal::OutJS($row['id']).'\');" title="'.TGlobal::Translate('chameleon_system_core.action.remove_connection').'"></i>';
+        return '<i class="fas fa-unlink action" onclick="deleteConnection(\''.TGlobal::OutJS($row['id']).'\');" title="'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.remove_connection').'"></i>';
     }
 
     /**

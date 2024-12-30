@@ -12,76 +12,58 @@
 /**
  * read and write page definition files.
  *
- * @deprecated - but used in the backend in the moment
-/**/
+ * used in the backend
+ */
 class TCMSPageDefinitionFile
 {
     /**
      * name of the Template (shown to the user).
-     *
-     * @var string
      */
-    public $templateName;
+    public string $templateName;
 
     /**
      * a short text describing the layout to the user.
-     *
-     * @var string
      */
-    public $templateDescription;
+    public string $templateDescription;
     /**
      * the language code of the layout (iso6391 - see table cms_language).
-     *
-     * @var string
      */
-    public $templateLanguage;
+    public string $templateLanguage;
 
     /**
      * if the page makes use of a master pagedef file, then this var holds the master pagedef name
      * with no extension. example: layout (not layout.pagedef.php).
-     *
-     * @var string
      */
-    public $sMasterPageDefinitionName;
+    public string $sMasterPageDefinitionName = '';
 
     /**
      * name of the layout to use (if a masterpagedef is given, then the layout from the master
      * is used).
      * example: layout (not layout.layout.php).
-     *
-     * @var string
      */
-    public $layoutTemplate;
+    public string $layoutTemplate;
 
     /**
      * array of the modules. form:
      * 'spotname'=>array(''=>'',...),'spot2'=>array(''=>'',...),...
-     *
-     * @var array
      */
-    public $moduleList;
+    public array $moduleList = [];
 
     /**
      * list of the static modules (when a master pagedef is present, then these will always be selected
      * from the master)
      * 'spotname'=>array(''=>'',...),'spot2'=>array(''=>'',...),...
-     *
-     * @var array
      */
-    public $staticModuleList;
+    public array $staticModuleList = [];
 
     /**
      * name of the pagedef (without the .pagedef.php).
-     *
-     * @var string
      */
-    protected $sPageDef;
+    protected string $sPageDef;
     /**
      * name of the master pagedef if present.
-     *
-     * @var string
      */
-    protected $sMasterPageDef;
+    protected string $sMasterPageDef;
 
     /**
      * the path to the pagedef. if not set
@@ -90,28 +72,6 @@ class TCMSPageDefinitionFile
      * @var string
      */
     protected $sPageDefPath = PATH_CUSTOMER_PAGEDEFINITIONS;
-
-    /**
-     * create a new CUSTOMER pagedef (save is also executed).
-     *
-     * @param string $masterPagedefName - name of the master
-     * @param string $targetPagdef      - name of the pagedef that we want to write
-     * @param array  $aModuleList       - the module list
-     */
-    public function Create($masterPagedefName, $targetPagdef, $aModuleList = null)
-    {
-        $this->LoadMasterPageDefVars($masterPagedefName);
-        $this->sPageDef = $targetPagdef;
-        if (is_array($aModuleList)) {
-            if (!is_array($this->moduleList)) {
-                $this->moduleList = array();
-            }
-            foreach ($aModuleList as $key => $value) {
-                $this->moduleList[$key] = $value;
-            }
-        }
-        $this->Save();
-    }
 
     /**
      * Load the page def given by sPagedef. This function assumes that we are
@@ -136,54 +96,23 @@ class TCMSPageDefinitionFile
      * updates a module within the pagedef. Make sure to call save after calling
      * this function if you want to commit the changes to the file.
      *
-     * @param string $spotName   - name of the spot in the module list
-     * @param string $model      - the class to be used as the model
-     * @param string $view       - name of the view to use
-     * @param int    $instanceID - module instance id (optional)
+     * @param string $spotName - name of the spot in the module list
+     * @param string $model - the class to be used as the model
+     * @param string $view - name of the view to use
+     * @param int $instanceID - module instance id (optional)
      */
     public function UpdateModule($spotName, $model, $view, $instanceID = null)
     {
-        if (null === $this->moduleList) {
-            $this->moduleList = array();
-        }
         if (!array_key_exists($spotName, $this->moduleList)) {
-            $this->moduleList[$spotName] = array(
+            $this->moduleList[$spotName] = [
                 'model' => 'MTEmpty',
                 'view' => 'standard',
                 'instanceID' => null,
-            );
+            ];
         }
         $this->moduleList[$spotName]['model'] = $model;
         $this->moduleList[$spotName]['view'] = $view;
         $this->moduleList[$spotName]['instanceID'] = $instanceID;
-    }
-
-    /**
-     * commit the current pagedef state to the pagedef file.
-     *
-     * @deprecated
-     */
-    public function Save()
-    {
-        $pageFile = $this->sPageDefPath.'/'.$this->sPageDef.'.pagedef.php';
-        $_moduleListString = '';
-        $_isFirst = true;
-        foreach ($this->moduleList as $_spotname => $_config) {
-            if ($_isFirst) {
-                $_isFirst = false;
-            } else {
-                $_moduleListString .= ",\n";
-            }
-            $_moduleListString .= "    '{$_spotname}' => ";
-            // write parameters...
-            $sModuleConfigData = TTools::ArrayToString($_config);
-
-            $_moduleListString .= $sModuleConfigData;
-        }
-        $_newPageDef = "<?php\n"."  \$sMasterPageDefinitionName = '{$this->sMasterPageDefinitionName}';\n"."\n"."  // modules...\n"."  \$moduleList = array(\n".$_moduleListString."\n"."  );\n"."\n"."  // this line needs to be included... do not touch\n"."  if (!is_array(\$moduleList)) \$layoutTemplate = '';\n";
-        $fp = fopen($pageFile, 'wb');
-        fwrite($fp, $_newPageDef, mb_strlen($_newPageDef));
-        fclose($fp);
     }
 
     /**

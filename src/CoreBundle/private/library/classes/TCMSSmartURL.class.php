@@ -18,18 +18,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * maps urls to pagedefs, and pagedefs to pages.
-/**/
+ * /**/
 class TCMSSmartURL
 {
-    private static $additionalCacheKeys = null;
+    private static $additionalCacheKeys;
 
     /**
      * If inactive language was set via language prefix. Show page only if inactive
      * languages was activated in cms.
      *
      * You can activate inactive languages in cms -> portals/websites
-     *
-     * @param Request $request
      */
     protected static function HandleTemporaryActivatedLanguages(Request $request)
     {
@@ -42,7 +40,7 @@ class TCMSSmartURL
             $oConfig = TdbCmsConfig::GetInstance();
             $oBaseLanguage = $oConfig->GetFieldTranslationBaseLanguage();
 
-            $url = self::getPageService()->getLinkToPortalHomePageAbsolute(array(), $oPortal, $oBaseLanguage);
+            $url = self::getPageService()->getLinkToPortalHomePageAbsolute([], $oPortal, $oBaseLanguage);
             self::getRedirect()->redirect($url);
         }
     }
@@ -50,7 +48,7 @@ class TCMSSmartURL
     /**
      * @param array $aAdditionalCacheKeys
      */
-    public static function setAdditionalCacheKeys($aAdditionalCacheKeys = array())
+    public static function setAdditionalCacheKeys($aAdditionalCacheKeys = [])
     {
         self::$additionalCacheKeys = $aAdditionalCacheKeys;
     }
@@ -58,8 +56,6 @@ class TCMSSmartURL
     /**
      * converts the user request to the real pagedef behind that call. function
      * also protects pages from cross portal calls.
-     *
-     * @param Request $request
      *
      * @return string
      *
@@ -78,7 +74,7 @@ class TCMSSmartURL
         if ($oGlobal->UserDataExists('pagedef')) {
             $pagedef = $oGlobal->GetUserData('pagedef');
         } else {
-            $aCustomURLParameters = array();
+            $aCustomURLParameters = [];
             // need to check for pagedef again since TCMSSmartURLData may have set it
             if ($oGlobal->UserDataExists('pagedef')) {
                 $pagedef = $oGlobal->GetUserData('pagedef');
@@ -92,7 +88,6 @@ class TCMSSmartURL
                 throw new NotFoundHttpException();
             }
 
-            $oGlobal->SetRewriteParameter($aCustomURLParameters);
             foreach ($aCustomURLParameters as $key => $value) {
                 $request->query->set($key, $value);
             }
@@ -134,8 +129,7 @@ class TCMSSmartURL
      * execute all custom handlers untill a pagedef is found. if none is found, return false
      * the custom handler which found a pagedef can return custom cache triggers.
      *
-     * @param Symfony\Component\HttpFoundation\Request $request
-     * @param array                                    $aCustomURLParameters
+     * @param array $aCustomURLParameters
      *
      * @return int
      */
@@ -207,7 +201,7 @@ class TCMSSmartURL
             $oURLData = TCMSSmartURLData::GetActive();
             $aAllParamNames = array_keys($oURLData->aParameters);
             $aInvalidGetParams = explode('|', INVALID_GET_PARAMS);
-            $aFinalParameters = array();
+            $aFinalParameters = [];
             foreach ($aAllParamNames as $key => $value) {
                 if (in_array(strtolower($value), $aInvalidGetParams)) {
                     $bParamFound = true;
@@ -217,8 +211,8 @@ class TCMSSmartURL
             }
 
             if ($bParamFound) {
-                //$oActivePage = TCMSActivePage::GetInstance();
-                //$iPageId = $oActivePage->id;
+                // $oActivePage = TCMSActivePage::GetInstance();
+                // $iPageId = $oActivePage->id;
                 $sUrlWithoutParams = substr($oURLData->sOriginalURL, 0, strpos($oURLData->sOriginalURL, '?'));
 
                 if (count($aFinalParameters) > 0) {
@@ -236,7 +230,7 @@ class TCMSSmartURL
      */
     private static function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -244,7 +238,7 @@ class TCMSSmartURL
      */
     private static function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -252,7 +246,7 @@ class TCMSSmartURL
      */
     private static function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
     }
 
     /**
@@ -260,6 +254,6 @@ class TCMSSmartURL
      */
     private static function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

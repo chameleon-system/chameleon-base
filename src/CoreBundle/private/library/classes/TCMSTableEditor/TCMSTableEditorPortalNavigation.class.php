@@ -26,7 +26,7 @@ class TCMSTableEditorPortalNavigation extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
@@ -46,7 +46,7 @@ class TCMSTableEditorPortalNavigation extends TCMSTableEditor
         $oCmsTreeList = TdbCmsTreeList::GetList($query);
         /** @var $oCmsTreeList TdbCmsTreeList */
         while ($oCmsTree = $oCmsTreeList->Next()) {
-            /** @var $oCmsTree TdbCmsTree */
+            /* @var $oCmsTree TdbCmsTree */
             $this->UpdateSubtreePathCache($oCmsTree->id);
         }
     }
@@ -57,7 +57,7 @@ class TCMSTableEditorPortalNavigation extends TCMSTableEditor
     protected function UpdateSubtreePathCache($iNodeId)
     {
         $oNode = new TCMSTreeNode();
-        /** @var $oNode TCMSTreeNode */
+        /* @var $oNode TCMSTreeNode */
         $oNode->Load($iNodeId);
         $sPath = $oNode->GetTextPathToNode();
         $query = "UPDATE `cms_tree`
@@ -65,10 +65,10 @@ class TCMSTableEditorPortalNavigation extends TCMSTableEditor
                  WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oNode->id)."'
                ";
         MySqlLegacySupport::getInstance()->query($query);
-        TCacheManager::PerformeTableChange('cms_tree', $iNodeId);
+        $this->getCacheService()->callTrigger('cms_tree', $iNodeId);
         $oChildren = $oNode->GetChildren();
         while ($oChild = $oChildren->Next()) {
-            /** @var $oChild TCMSTreeNode */
+            /* @var $oChild TCMSTreeNode */
             $this->UpdateSubtreePathCache($oChild->id);
         }
     }

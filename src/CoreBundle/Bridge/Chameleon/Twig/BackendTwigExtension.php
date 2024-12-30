@@ -22,7 +22,7 @@ class BackendTwigExtension extends AbstractExtension
             new TwigFunction('cms_version', [$this, 'getCmsVersion']),
             new TwigFunction('server_address', [$this, 'getServerAddress']),
             new TwigFunction('cms_user_logged_in', [$this, 'isCmsBackendUserLoggedIn']),
-            new TwigFunction('module', [$this, 'module'], ['is_safe' => ['html']]),
+            new TwigFunction('backend_module', [$this, 'module'], ['is_safe' => ['html']]),
             new TwigFunction('static_url', ['TGlobal', 'GetStaticURL']),
             new TwigFunction('static_url_to_weblib', ['TGlobal', 'GetStaticURLToWebLib']),
             new TwigFunction('path_theme', ['TGlobal', 'GetPathTheme']),

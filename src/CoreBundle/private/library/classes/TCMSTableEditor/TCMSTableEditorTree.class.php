@@ -61,7 +61,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $this->writeSqlLog();
 
         $insertedNode = new TdbCmsTree($this->sId);
-        $event = new ChangeNavigationTreeNodeEvent(array($insertedNode));
+        $event = new ChangeNavigationTreeNodeEvent([$insertedNode]);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_NAVIGATION_TREE_NODE);
     }
 
@@ -73,7 +73,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $fieldTranslationUtil = $this->getFieldTranslationUtil();
         $translatedUrlnameFieldName = $fieldTranslationUtil->getTranslatedFieldName($this->oTableConf->fieldName, 'urlname');
 
-        $updatedNodes = array();
+        $updatedNodes = [];
         $updatedNodes[] = new TdbCmsTree($this->sId);
         $oFields->GoToStart();
         $urlname = '';
@@ -98,7 +98,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $this->writeSqlLog();
 
         // update cache
-        TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+        $this->getCacheService()->callTrigger(this->oTableConf->sqlData['name'], $this->sId);
 
         $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_NODE);
@@ -126,7 +126,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
     {
         $oParentNode = $oNode->GetParentNode();
         if ($oParentNode && false === $oParentNode->fieldHidden) {
-            TCacheManager::PerformeTableChange($oParentNode->table, $oParentNode->id);
+            $this->getCacheService()->callTrigger($oParentNode->table, $oParentNode->id);
         } else {
             $this->SaveParentToTriggerNavigationCache($oParentNode);
         }
@@ -135,11 +135,11 @@ class TCMSTableEditorTree extends TCMSTableEditor
     /**
      * cache the tree path to each node of the given subtree.
      *
-     * @var string $sNodeId
+     * @var string
      */
     public function UpdateSubtreePathCache($sNodeId)
     {
-        $updatedNodes = array();
+        $updatedNodes = [];
         $oNode = $this->oTable;
         if (!empty($sNodeId) && $sNodeId != $this->oTable->id) {
             $oNode = TdbCmsTree::GetNewInstance();
@@ -158,7 +158,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    public function DatabaseCopy($bLanguageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = true)
+    public function DatabaseCopy($bLanguageCopy = false, $aOverloadedFields = [], $bCopyAllLanguages = true)
     {
         $this->SetCopyTreeModeInSession();
         $result = parent::DatabaseCopy(
@@ -183,7 +183,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $oPageConnections = TdbCmsTreeNodeList::GetList($sQuery);
         while ($oPageConnection = $oPageConnections->Next()) {
             $oTreeManager = TTools::GetTableEditorManager('cms_tree_node', $oPageConnection->id);
-            $oTreeManager->DatabaseCopy(false, array('cms_tree_id' => $this->sId), $this->bIsCopyAllLanguageValues);
+            $oTreeManager->DatabaseCopy(false, ['cms_tree_id' => $this->sId], $this->bIsCopyAllLanguageValues);
         }
         $this->getNestedSetHelper()->initializeTree();
         $this->writeSqlLog();
@@ -246,7 +246,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
                 // edit
                 if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
-                    $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save');
+                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.save');
                     $oMenuItem->sIcon = 'far fa-save';
                     $oMenuItem->sOnClick = 'SaveTreeNodeAjax();';
                     $this->oMenuItems->AddItem($oMenuItem);
@@ -322,7 +322,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
     {
         $this->getNestedSetHelper()->deleteNode($this->oTable->id);
 
-        $deletedNodes = array();
+        $deletedNodes = [];
 
         $oNode = new TdbCmsTree();
         $oNode->Load($sId);
@@ -354,7 +354,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
-    public function GetObjectShortInfo($postData = array())
+    public function GetObjectShortInfo($postData = [])
     {
         $oRecordData = parent::GetObjectShortInfo();
 
@@ -384,7 +384,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $command = <<<COMMAND
 TCMSLogChange::initializeNestedSet('{$this->oTable->table}', 'parent_id', 'entry_sort');
 COMMAND;
-        TCMSLogChange::WriteSqlTransactionWithPhpCommands('update nested set for table '.$this->oTable->table, array($command));
+        TCMSLogChange::WriteSqlTransactionWithPhpCommands('update nested set for table '.$this->oTable->table, [$command]);
     }
 
     private function getFieldTranslationUtil(): FieldTranslationUtil
@@ -397,17 +397,13 @@ COMMAND;
      */
     protected function getNestedSetHelper()
     {
-        /** @var $factory \ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactoryInterface */
-        $factory = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
+        $factory = ServiceLocator::get('chameleon_system_core.table_editor_nested_set_helper_factory');
 
         return $factory->createNestedSetHelper($this->oTable->table, 'parent_id', 'entry_sort');
     }
 
-    /**
-     * @return UrlNormalizationUtil
-     */
-    private function getUrlNormalizationUtil()
+    private function getUrlNormalizationUtil(): UrlNormalizationUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }

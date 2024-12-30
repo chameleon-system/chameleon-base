@@ -10,35 +10,35 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * used to create a class based on a table definition.
-/**/
+ * used to create an ORM class based on a table definition.
+ **/
 class TCMSTableToClass
 {
     /**
-     * table conf to convert.
-     *
-     * @var array
+     * Table configuration to convert.
      */
-    protected $aTableConf;
+    protected array $aTableConf = [];
 
-    const PREFIX_CLASS = 'Tdb';
-    const PREFIX_CLASS_AUTO = 'TAdb';
-    const PREFIX_CLASS_AUTO_CUSTOM = 'TACdb';
-    const PREFIX_PROPERTY = 'field';
-    /**
-     * @var IPkgCmsFileManager
-     */
-    private $filemanager;
-    /**
-     * @var string
-     */
-    private $cachedir;
+    public const PREFIX_CLASS = 'Tdb';
+    public const PREFIX_CLASS_AUTO = 'TAdb';
+    public const PREFIX_CLASS_AUTO_CUSTOM = 'TACdb';
+    public const PREFIX_PROPERTY = 'field';
+    private Filesystem $filemanager;
+    private ?string $cachedir;
     private AutoclassesDataAccessInterface $autoClassesDataAccess;
     private Connection $databaseConnection;
+
+    public function __construct(Filesystem $filemanager, string $cachedir, AutoclassesDataAccessInterface $autoClassesDataAccess, Connection $databaseConnection)
+    {
+        $this->filemanager = $filemanager;
+        $this->cachedir = $cachedir;
+        $this->autoClassesDataAccess = $autoClassesDataAccess;
+        $this->databaseConnection = $databaseConnection;
+    }
 
     /**
      * @param string $tableConfId
@@ -63,14 +63,14 @@ class TCMSTableToClass
 
     /**
      * @param string $sOldName
-     * @param array  $aOldData
+     * @param array $aOldData
      */
-    public function Update($sOldName = '', $aOldData = array())
+    public function Update($sOldName = '', $aOldData = [])
     {
         // overwrite the auto class
         $this->WriteAutoClass();
         $aData = $this->GetClassData();
-        $aCurrentExtensionClass = array(
+        $aCurrentExtensionClass = [
             'sExtendsClassName' => $aData['sAutoClassName'],
             'sExtendsClassSubType' => $aData['sAutoClassSubtype'],
             'sExtendsClassType' => $aData['sAutoClassType'],
@@ -78,7 +78,7 @@ class TCMSTableToClass
             'sExtendsClassNameList' => $aData['sAutoClassName'].'List',
             'sExtendsClassSubTypeList' => $aData['sAutoClassSubtype'],
             'sExtendsClassTypeList' => $aData['sAutoClassType'],
-        );
+        ];
         // write inbetween classes
 
         $extensionData = $this->getTableExtensionData($this->aTableConf['id']);
@@ -109,26 +109,26 @@ class TCMSTableToClass
         }
 
         // now create stub
-        $aStubData = array(
+        $aStubData = [
             'sTableName' => $aData['sTableDBName'],
             'sClassName' => $aData['sClassName'],
             'sClassSubType' => $aData['sClassSubtype'],
             'sClassType' => $aData['sClassType'],
             'sExtendsClassName' => $aCurrentExtensionClass['sExtendsClassName'],
             'sExtendsClassSubType' => $aCurrentExtensionClass['sExtendsClassSubType'],
-            'sExtendsClassType' => $aCurrentExtensionClass['sExtendsClassType'], );
+            'sExtendsClassType' => $aCurrentExtensionClass['sExtendsClassType'], ];
 
-        $aStubOldData = array(
+        $aStubOldData = [
             'sClassName' => $aStubData['sClassName'],
             'sClassSubType' => $aStubData['sClassSubType'],
             'sClassType' => $aStubData['sClassType'],
-        );
+        ];
         if (is_array($aOldData) && count($aOldData) > 0) {
-            $aStubOldData = array(
+            $aStubOldData = [
                 'sClassName' => self::GetClassName(self::PREFIX_CLASS, $aOldData['name']),
                 'sClassSubType' => 'CMSDataObjects',
                 'sClassType' => $aOldData['dbobject_type'],
-            );
+            ];
         }
 
         $this->WriteStubClass($aStubData, $aStubOldData);
@@ -151,11 +151,11 @@ class TCMSTableToClass
             // need to delete the old class
             $sFile = realpath($this->GetClassRootPath($sType).'/CMSAutoDataObjects').'/'.self::GetClassName(self::PREFIX_CLASS_AUTO, $sOldName).'.class.php';
             if (file_exists($sFile)) {
-                $this->filemanager->unlink($sFile);
+                $this->filemanager->remove($sFile);
             }
             $sFile = realpath($this->GetClassRootPath($sType).'/CMSAutoDataObjects').'/'.self::GetClassName(self::PREFIX_CLASS_AUTO, $sOldName).'List.class.php';
             if (file_exists($sFile)) {
-                $this->filemanager->unlink($sFile);
+                $this->filemanager->remove($sFile);
             }
         }
     }
@@ -171,7 +171,7 @@ class TCMSTableToClass
         if (isset($data[$targetTableConfId])) {
             return $data[$targetTableConfId];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -186,21 +186,21 @@ class TCMSTableToClass
         $aData = $this->GetClassData();
         $sBaseClassFile = realpath($this->GetClassRootPath().$aData['sAutoClassSubtype']).'/'.$aData['sAutoClassName'].'.class.php';
         if (file_exists($sBaseClassFile)) {
-            $this->filemanager->unlink($sBaseClassFile);
+            $this->filemanager->remove($sBaseClassFile);
         }
 
         $sBaseClassFile = realpath($this->GetClassRootPath().$aData['sAutoClassSubtype']).'/'.$aData['sAutoClassName'].'List.class.php';
         if (file_exists($sBaseClassFile)) {
-            $this->filemanager->unlink($sBaseClassFile);
+            $this->filemanager->remove($sBaseClassFile);
         }
 
         $sFile = realpath($this->GetClassRootPath($aData['sClassType']).$aData['sClassSubtype']).'/'.$aData['sClassName'].'.class.php';
         if (file_exists($sFile)) {
-            $this->filemanager->unlink($sFile);
+            $this->filemanager->remove($sFile);
         }
         $sFile = realpath($this->GetClassRootPath($aData['sClassType']).$aData['sClassSubtype']).'/'.$aData['sClassName'].'List.class.php';
         if (file_exists($sFile)) {
-            $this->filemanager->unlink($sFile);
+            $this->filemanager->remove($sFile);
         }
     }
 
@@ -235,8 +235,6 @@ class TCMSTableToClass
         if ($fp = fopen($sBaseClassFile, 'wb')) {
             if (fwrite($fp, $sAutoClassString)) {
                 fclose($fp);
-
-                $this->filemanager->put($sBaseClassFile, $sBaseClassFile, 0777, true);
             }
         }
 
@@ -248,8 +246,6 @@ class TCMSTableToClass
         if ($fp = fopen($sBaseListClassFile, 'wb')) {
             if (fwrite($fp, $sAutoClassString)) {
                 fclose($fp);
-
-                $this->filemanager->put($sBaseListClassFile, $sBaseListClassFile, 0777, true);
             }
         }
     }
@@ -257,8 +253,8 @@ class TCMSTableToClass
     /**
      * update a new inbetween class...
      *
-     * @param array  $aData    - array('sTableName'=>'','sClassName'=>'', 'sClassSubType'=>'', 'sClassType'=>'', 'sExtendsClassName'=>'', 'sExtendsClassSubType'=>'', 'sExtendsClassType'=>'')
-     * @param array  $aOldData - array('sClassName'=>'', 'sClassSubType'=>'', 'sClassType'=>'')
+     * @param array $aData - array('sTableName'=>'','sClassName'=>'', 'sClassSubType'=>'', 'sClassType'=>'', 'sExtendsClassName'=>'', 'sExtendsClassSubType'=>'', 'sExtendsClassType'=>'')
+     * @param array $aOldData - array('sClassName'=>'', 'sClassSubType'=>'', 'sClassType'=>'')
      * @param string $sPostFix
      */
     protected function WriteStubClass($aData, $aOldData, $sPostFix = '')
@@ -272,14 +268,12 @@ class TCMSTableToClass
         $sClassString = $oViewParser->RenderObjectView('recordCustom'.$sPostFix, 'TCMSTableToClass');
 
         if (file_exists($sOldFile)) {
-            $this->filemanager->unlink($sOldFile);
+            $this->filemanager->remove($sOldFile);
         }
 
         if ($fp = fopen($sFile, 'wb')) {
             if (fwrite($fp, $sClassString)) {
                 fclose($fp);
-
-                $this->filemanager->put($sFile, $sFile, 0777, true);
             }
         }
     }
@@ -313,7 +307,7 @@ class TCMSTableToClass
         /** @var $oFields TIterator */
         $oFields = $this->getFields($this->aTableConf['id']);
 
-        $aData = array(
+        $aData = [
             'sClassName' => self::GetClassName(self::PREFIX_CLASS, $this->aTableConf['name']),
             'sClassType' => $this->aTableConf['dbobject_type'],
             'sClassSubtype' => 'CMSDataObjects',
@@ -340,7 +334,7 @@ class TCMSTableToClass
             'sParentClassType' => $this->aTableConf['dbobject_extend_type'],
             'aTableConf' => $this->aTableConf,
             'databaseConnection' => $this->databaseConnection,
-        );
+        ];
 
         $aData['isTableWithActiveWorkflow'] = false;
         $aData['sDisplayColumnName'] = $this->getDisplayColumnName();
@@ -355,14 +349,14 @@ class TCMSTableToClass
         }
 
         // add default query, and sorting...
-        $aData['sCMSListQuery'] = "SELECT `{$aData['sTableDBName']}`.*\n"."                          FROM `{$aData['sTableDBName']}`\n".'                         WHERE [{sFilterConditions}]';
+        $aData['sCMSListQuery'] = "SELECT `{$aData['sTableDBName']}`.*\n                          FROM `{$aData['sTableDBName']}`\n".'                         WHERE [{sFilterConditions}]';
 
         $tableOrderBy = $this->getTableOrderBy($this->aTableConf['id']);
 
-        $aOrderData = array();
+        $aOrderData = [];
         foreach ($tableOrderBy as $orderBy) {
             // We skip the fields that are only relevant for sorting in the backend
-            if (array_key_exists('only_backend', $orderBy) && '1' === $orderBy['only_backend']){
+            if (array_key_exists('only_backend', $orderBy) && '1' === $orderBy['only_backend']) {
                 continue;
             }
             if ('`' === substr($orderBy['name'], 0, 1)) {
@@ -384,8 +378,8 @@ class TCMSTableToClass
         $sAutoChainingStub = '';
         $sAutoChainingListStub = '';
         if (count($extensionData) > 0) {
-            $aExtensionChain = array();
-            $aExtensionChainList = array();
+            $aExtensionChain = [];
+            $aExtensionChainList = [];
 
             foreach ($extensionData as $extension) {
                 if ('' !== $extension['name']) {
@@ -442,7 +436,7 @@ class TCMSTableToClass
      */
     private function getGlobalData()
     {
-        $data = array();
+        $data = [];
 
         $data['cmsConfig'] = $this->autoClassesDataAccess->getConfig();
 
@@ -461,7 +455,7 @@ class TCMSTableToClass
         if (isset($data[$targetTableConfId])) {
             return $data[$targetTableConfId];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -475,11 +469,11 @@ class TCMSTableToClass
 
     protected function GetTableProperties()
     {
-        $aProperties = array();
+        $aProperties = [];
         $oFields = $this->getFields($this->aTableConf['id']);
         $oFields->GoToStart();
         while ($oField = $oFields->Next()) {
-            /** @var $oField TCMSField */
+            /* @var $oField TCMSField */
             $aProperties[] = $oField->RenderFieldPropertyString();
         }
 
@@ -538,7 +532,7 @@ class TCMSTableToClass
     public function GetClassRootPath($sType = null)
     {
         $path = $this->cachedir;
-        foreach (array('CMSDataObjects', 'CMSAutoDataObjects') as $subdir) {
+        foreach (['CMSDataObjects', 'CMSAutoDataObjects'] as $subdir) {
             if (!file_exists($path.$subdir)) {
                 mkdir($path.$subdir, 0777, true);
             }
@@ -548,15 +542,15 @@ class TCMSTableToClass
     }
 
     /**
-     * @param array  $aChain
+     * @param array $aChain
      * @param string $sAutoClass
-     * @param bool   $bIsListClass
+     * @param bool $bIsListClass
      *
      * @return string
      */
     protected function GetAutoChainingStub($aChain, $sAutoClass, $bIsListClass)
     {
-        $aClass = array();
+        $aClass = [];
         $sVirtualNamField = 'virtual_item_class_name';
         if ($bIsListClass) {
             $sVirtualNamField = 'virtual_item_class_list_name';
@@ -595,19 +589,7 @@ class TCMSTableToClass
         if (true === isset($data[$tableConfId])) {
             return $data[$tableConfId];
         } else {
-            return array();
+            return [];
         }
-    }
-
-    /**
-     * @param IPkgCmsFileManager $filemanager
-     * @param string             $cachedir
-     */
-    public function __construct(IPkgCmsFileManager $filemanager, $cachedir, AutoclassesDataAccessInterface $autoClassesDataAccess, Connection $databaseConnection)
-    {
-        $this->filemanager = $filemanager;
-        $this->cachedir = $cachedir;
-        $this->autoClassesDataAccess = $autoClassesDataAccess;
-        $this->databaseConnection = $databaseConnection;
     }
 }

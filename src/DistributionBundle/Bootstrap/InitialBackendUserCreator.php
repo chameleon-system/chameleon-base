@@ -51,7 +51,7 @@ class InitialBackendUserCreator
         $this->passwordHashGenerator = $passwordHashGenerator;
     }
 
-    public function create(InputInterface $input, OutputInterface $output, QuestionHelper $questionHelper): void
+    public function create(InputInterface $input, OutputInterface $output, QuestionHelper $questionHelper): string
     {
         $query = "SELECT 1 FROM `cms_user` WHERE `login` != 'www' LIMIT 1";
         $hasUser = $this->databaseConnection->fetchColumn($query);
@@ -62,7 +62,7 @@ class InitialBackendUserCreator
         $name = $this->getUsername($questionHelper, $input, $output);
         $password = $this->getPassword($questionHelper, $input, $output);
 
-        $this->doCreate($name, $password);
+        return $this->doCreate($name, $password);
     }
 
     private function getUsername(QuestionHelper $questionHelper, InputInterface $input, OutputInterface $output): string
@@ -129,13 +129,15 @@ class InitialBackendUserCreator
         return (int) $minimumLength;
     }
 
-    private function doCreate(string $name, string $password): void
+    private function doCreate(string $name, string $password): string
     {
         $userId = \TTools::GetUUID();
 
         $this->addUser($userId, $name, $password);
         $this->addUserRoles($userId);
         $this->addUserGroups($userId);
+
+        return $userId;
     }
 
     private function addUser(string $userId, string $name, string $password): void

@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -27,9 +28,8 @@ class TCMSModelBase extends TModelBase
         // if this is an ajax call, then prevent the object from being added to the history
         $allowHistory = false === $this->_UserMadeAjaxCall();
         $suppressHistoryCommand = (in_array('_suppressHistory', $this->aModuleConfig) && true == $this->aModuleConfig['_suppressHistory']);
-        $allowHistory = $allowHistory && false === $suppressHistoryCommand;
 
-        return $allowHistory;
+        return $allowHistory && false === $suppressHistoryCommand;
     }
 
     /**
@@ -77,17 +77,15 @@ class TCMSModelBase extends TModelBase
 
     /**
      * outputs the ajax call result.
-     *
-     * @param mixed $functionResult
      */
     protected function OutPutAjaxCallResult($functionResult)
     {
-        $sOutputMode = 'Ajax';
-        $aPermittedOutputModes = array('Ajax', 'Plain');
-        if ($this->global->UserDataExists('sOutputMode') && in_array($this->global->GetUserData('sOutputMode'), $aPermittedOutputModes)) {
-            $sOutputMode = $this->global->GetUserData('sOutputMode');
+        $outputMode = 'Ajax'; // JSON is the default output mode
+        $permittedOutputModes = ['Ajax', 'Plain'];
+        if ($this->global->UserDataExists('sOutputMode') && in_array($this->global->GetUserData('sOutputMode'), $permittedOutputModes)) {
+            $outputMode = $this->global->GetUserData('sOutputMode');
         }
-        switch ($sOutputMode) {
+        switch ($outputMode) {
             case 'Plain':
                 $this->_OutputForAjaxPlain($functionResult);
                 break;
@@ -151,19 +149,18 @@ class TCMSModelBase extends TModelBase
         return array_merge($includes, $includes);
     }
 
-    /**
-     * @return RouterInterface
-     */
-    private function getBackendRouter()
+    private function getBackendRouter(): RouterInterface
     {
         return ServiceLocator::get('chameleon_system_core.router.chameleon_backend');
     }
 
-    /**
-     * @return Request|null
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
+    }
+
+    protected function getCacheService(): CacheInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

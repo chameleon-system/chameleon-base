@@ -19,7 +19,7 @@ class TCMSFieldURL extends TCMSFieldVarchar
         $html = parent::GetHTML();
         $html .= "<div style=\"padding-top: 3px;\">\n";
 
-        $buttonTitle = TGlobal::Translate('chameleon_system_core.field_url.open');
+        $buttonTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_url.open');
         $html .= TCMSRender::DrawButton($buttonTitle, "javascript:CreateModalIFrameDialogCloseButton(document.getElementById('".TGlobal::OutHTML($this->name)."').value,0,0,'".$buttonTitle."')", 'fas fa-globe-americas', 'urlZoom');
 
         $html .= "</div>\n";

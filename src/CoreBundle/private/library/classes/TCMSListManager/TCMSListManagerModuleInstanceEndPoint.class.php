@@ -43,7 +43,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
 
         ++$this->columnCount;
 
-        $siteText = TGlobal::Translate('chameleon_system_core.list_module_instance.column_name_pages');
+        $siteText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_module_instance.column_name_pages');
         $this->tableObj->AddHeaderField(array('id' => $siteText.'&nbsp;&nbsp;'), 'left', null, 1, false);
         $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackTemplateEngineInstancePages'), $jsParas, 1);
     }
@@ -177,7 +177,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         while ($oCmsTplPage = $oCmsTplPageList->Next()) {
             $path = $this->getBreadcrumbsFromPaths($oCmsTplPage->fieldTreePathSearchString);
             if (empty($path)) {
-                $path = TGlobal::Translate('chameleon_system_core.list_module_instance.no_usages_found_in_navigation_node');
+                $path = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_module_instance.no_usages_found_in_navigation_node');
             }
             $pageString .= '<div class="font-weight-bold">'.TGlobal::OutHTML($oCmsTplPage->fieldName).' (ID '.TGlobal::OutHTML($oCmsTplPage->id).'):</div>
             <div>'.$path.'</div>';

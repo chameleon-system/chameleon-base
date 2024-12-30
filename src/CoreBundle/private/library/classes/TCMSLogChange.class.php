@@ -37,10 +37,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class TCMSLogChange
 {
-    const INFO_MESSAGE_LEVEL_INFO = 'INFO';
-    const INFO_MESSAGE_LEVEL_ERROR = 'ERROR';
-    const INFO_MESSAGE_LEVEL_WARNING = 'WARNING';
-    const INFO_MESSAGE_LEVEL_TODO = 'TODO';
+    public const INFO_MESSAGE_LEVEL_INFO = 'INFO';
+    public const INFO_MESSAGE_LEVEL_ERROR = 'ERROR';
+    public const INFO_MESSAGE_LEVEL_WARNING = 'WARNING';
+    public const INFO_MESSAGE_LEVEL_TODO = 'TODO';
 
     /**
      * @param string $bundleName
@@ -61,7 +61,7 @@ class TCMSLogChange
     {
         if (self::getMigrationRecorderStateHandler()->isDatabaseLoggingActive()) {
             $migrationRecorder = self::getMigrationRecorder();
-            $filePointer = $migrationRecorder->startTransation(null, self::getCurrentBuildNumber());
+            $filePointer = $migrationRecorder->startTransaction(self::getCurrentBuildNumber());
             $migrationRecorder->writeQueries($filePointer, $dataModels);
             $migrationRecorder->endTransaction($filePointer);
         }
@@ -70,14 +70,14 @@ class TCMSLogChange
     /**
      * write a database change to the change log.
      *
-     * @param string $sName       - name of the transaction
-     * @param array  $phpCommands - queries to write
+     * @param string $sName - name of the transaction
+     * @param array $phpCommands - queries to write
      */
     public static function WriteSqlTransactionWithPhpCommands($sName, array $phpCommands)
     {
         if (self::getMigrationRecorderStateHandler()->isDatabaseLoggingActive()) {
             $migrationRecorder = self::getMigrationRecorder();
-            $filePointer = $migrationRecorder->startTransation(null, self::getCurrentBuildNumber());
+            $filePointer = $migrationRecorder->startTransaction(self::getCurrentBuildNumber());
             fwrite($filePointer, "/* {$sName} */\n");
             foreach ($phpCommands as $command) {
                 fwrite($filePointer, $command."\n");
@@ -87,10 +87,7 @@ class TCMSLogChange
         }
     }
 
-    /**
-     * @return string
-     */
-    private static function getCurrentBuildNumber()
+    private static function getCurrentBuildNumber(): string
     {
         return self::getMigrationRecorderStateHandler()->getCurrentBuildNumber();
     }
@@ -99,7 +96,7 @@ class TCMSLogChange
      * returns true if the transactionnr is bigger than the databaseversion of the database
      * sets the database version to the new transaction Nr.
      *
-     * @param int    $buildNumber
+     * @param int $buildNumber
      * @param string $bundleName
      * @param string $counterDescription was used to create new counters @deprecated since 6.2.0 - no longer used.
      *
@@ -107,6 +104,7 @@ class TCMSLogChange
      *
      * @deprecated since 6.2.0 - no longer required. Updates are executed if and only if they did not run before, so no
      * further manual check is required.
+     * (do not remove yet, because it is used in many bundle updates)
      */
     public static function AllowTransaction($buildNumber, $bundleName, $counterDescription = '')
     {
@@ -117,7 +115,7 @@ class TCMSLogChange
      * fetches the id for a tablename.
      *
      * @param string $sTableName
-     * @param bool   $bForceLoad
+     * @param bool $bForceLoad
      *
      * @return int
      */
@@ -192,7 +190,7 @@ class TCMSLogChange
      * adds a Message to Update-Manager.
      *
      * @param string $sMessage The Message to show
-     * @param string $sLevel   (optional) use one of TCMSLogChange::INFO_MESSAGE_LEVEL_*
+     * @param string $sLevel (optional) use one of TCMSLogChange::INFO_MESSAGE_LEVEL_*
      */
     public static function addInfoMessage($sMessage, $sLevel = self::INFO_MESSAGE_LEVEL_INFO)
     {
@@ -271,9 +269,9 @@ class TCMSLogChange
     {
         $query = 'SELECT `name` FROM cms_tbl_conf WHERE `id` = :tableConfId';
 
-        return self::getDatabaseConnection()->fetchColumn($query, array(
+        return self::getDatabaseConnection()->fetchColumn($query, [
             'tableConfId' => $tableId,
-        ));
+        ]);
     }
 
     /**
@@ -285,17 +283,17 @@ class TCMSLogChange
     {
         $query = 'SELECT `constname` FROM cms_field_type WHERE `id` = :fieldConfId';
 
-        return self::getDatabaseConnection()->fetchColumn($query, array(
+        return self::getDatabaseConnection()->fetchColumn($query, [
             'fieldConfId' => $fieldId,
-        ));
+        ]);
     }
 
     /**
      * executes a log query.
      *
      * @param string $query
-     * @param int    $line
-     * @param bool   $bInsertId - add id to statement if it is an insert without id
+     * @param int $line
+     * @param bool $bInsertId - add id to statement if it is an insert without id
      *
      * @return Statement
      *
@@ -360,12 +358,12 @@ class TCMSLogChange
     }
 
     /**
-     * @param int    $line
+     * @param int $line
      * @param string $sql
-     * @param array  $parameter - parameter list (indexed or named)
-     * @param array  $types     - if nothing is passed, then string type is assumed
+     * @param array $parameter - parameter list (indexed or named)
+     * @param array $types - if nothing is passed, then string type is assumed
      */
-    public static function RunQuery($line, $sql, array $parameter = array(), array $types = null)
+    public static function RunQuery($line, $sql, array $parameter = [], ?array $types = null)
     {
         $db = ServiceLocator::get('database_connection');
 
@@ -402,7 +400,7 @@ class TCMSLogChange
     /**
      * moves a field behind a given fieldname.
      *
-     * @param int    $tableId
+     * @param int $tableId
      * @param string $fieldName
      * @param string $afterThisField name of the field after which to place the passed field
      */
@@ -422,7 +420,7 @@ class TCMSLogChange
         self::_RunQuery($query, __LINE__);
 
         $fieldID = self::GetTableFieldId($tableId, $fieldName);
-        $query = "UPDATE `cms_field_conf` SET `position` = '".MySqlLegacySupport::getInstance()->real_escape_string(($pos + 1))."' WHERE `id` = '{$fieldID}'";
+        $query = "UPDATE `cms_field_conf` SET `position` = '".MySqlLegacySupport::getInstance()->real_escape_string($pos + 1)."' WHERE `id` = '{$fieldID}'";
         self::_RunQuery($query, __LINE__);
     }
 
@@ -491,7 +489,7 @@ class TCMSLogChange
         $databaseConnection = self::getDatabaseConnection();
 
         $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-        $sourceMenu = $databaseConnection->fetchAssociative($query, array('systemName' => $mainMenuCategorySystemName));
+        $sourceMenu = $databaseConnection->fetchAssociative($query, ['systemName' => $mainMenuCategorySystemName]);
 
         if (false === $sourceMenu) {
             $message = sprintf('Could not place main menu category: %s, because this category is missing.', $mainMenuCategorySystemName);
@@ -504,7 +502,7 @@ class TCMSLogChange
 
         if (null !== $afterThisMainMenuCategory) {
             $query = 'SELECT * FROM `cms_menu_category` WHERE `system_name` = :systemName';
-            $targetMenu = $databaseConnection->fetchAssociative($query, array('systemName' => $afterThisMainMenuCategory));
+            $targetMenu = $databaseConnection->fetchAssociative($query, ['systemName' => $afterThisMainMenuCategory]);
 
             if (false === $targetMenu) {
                 $message = sprintf('Could not place main menu category: %s, behind %s because the target category is missing.', $mainMenuCategorySystemName, $afterThisMainMenuCategory);
@@ -517,10 +515,10 @@ class TCMSLogChange
         }
 
         $query = 'UPDATE `cms_menu_category` SET `position` = `position`+1 WHERE `position` >= :newPosition';
-        $databaseConnection->executeQuery($query, array('newPosition' => $newPosition));
+        $databaseConnection->executeQuery($query, ['newPosition' => $newPosition]);
 
         $query = 'UPDATE `cms_menu_category` SET `position` = :newPosition WHERE `id` = :sourceId';
-        $databaseConnection->executeQuery($query, array('newPosition' => $newPosition, 'sourceId' => $sourceMenu['id']));
+        $databaseConnection->executeQuery($query, ['newPosition' => $newPosition, 'sourceId' => $sourceMenu['id']]);
     }
 
     /**
@@ -652,9 +650,9 @@ class TCMSLogChange
      * 5 = publish record using workflow (deprecated since 6.2.0 - do not use)
      * 6 = show all records
      *
-     * @param string     $sRoleName
-     * @param string     $sTableName
-     * @param bool       $bResetRoles  - indicates if all other roles will be kicked and the new role has the exclusive right
+     * @param string $sRoleName
+     * @param string $sTableName
+     * @param bool $bResetRoles - indicates if all other roles will be kicked and the new role has the exclusive right
      * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6, default = false
      */
     public static function SetTableRolePermissions($sRoleName, $sTableName, $bResetRoles = false, $aPermissions = false)
@@ -674,28 +672,28 @@ class TCMSLogChange
 
                 if ($bResetRoles) {
                     $query = "DELETE FROM $quotedRoleTableName WHERE `source_id` = $quotedTableId";
-                    self::RunQuery(__LINE__, $query, array());
+                    self::RunQuery(__LINE__, $query, []);
                 }
 
                 /** @noinspection SuspiciousAssignmentsInspection */
                 $query = "INSERT IGNORE INTO $quotedRoleTableName SET `source_id` = $quotedTableId, `target_id` = $quotedRoleId";
-                self::RunQuery(__LINE__, $query, array());
+                self::RunQuery(__LINE__, $query, []);
             }
         } else {
             if ($bResetRoles) {
                 $query = "DELETE FROM `cms_tbl_conf_cms_role_mlt` WHERE `source_id` = $quotedTableId";
-                self::RunQuery(__LINE__, $query, array());
+                self::RunQuery(__LINE__, $query, []);
             } else {
                 $query = "DELETE FROM `cms_tbl_conf_cms_role_mlt` WHERE `source_id` = $quotedTableId AND `target_id` = $quotedRoleId";
-                self::RunQuery(__LINE__, $query, array());
+                self::RunQuery(__LINE__, $query, []);
             }
             for ($i = 1; $i < 7; ++$i) {
                 if ($bResetRoles) {
                     $query = 'DELETE FROM `cms_tbl_conf_cms_role'.$i."_mlt` WHERE `source_id` = $quotedTableId";
-                    self::RunQuery(__LINE__, $query, array());
+                    self::RunQuery(__LINE__, $query, []);
                 } else {
                     $query = 'DELETE FROM `cms_tbl_conf_cms_role'.$i."_mlt` WHERE `source_id` = $quotedTableId AND `target_id` = $quotedRoleId";
-                    self::RunQuery(__LINE__, $query, array());
+                    self::RunQuery(__LINE__, $query, []);
                 }
             }
         }
@@ -815,10 +813,10 @@ class TCMSLogChange
                        WHERE `cms_tbl_conf_id` = :tableId
                          AND `systemname` = :tabSystemName';
         $tableId = self::GetTableId($tableName);
-        self::getDatabaseConnection()->executeQuery($query, array(
+        self::getDatabaseConnection()->executeQuery($query, [
             'tableId' => $tableId,
             'tabSystemName' => $tabSystemName,
-        ));
+        ]);
     }
 
     /**
@@ -830,7 +828,7 @@ class TCMSLogChange
     {
         $query = 'SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_field_tab` = :tabId';
 
-        return self::getDatabaseConnection()->fetchNumeric($query, array('tabId' => $tabId));
+        return self::getDatabaseConnection()->fetchNumeric($query, ['tabId' => $tabId]);
     }
 
     /**
@@ -900,8 +898,7 @@ class TCMSLogChange
      *
      * @deprecated since 7.0.13 - use TCMSLogChange::getMessageTypeIdBySystemName() instead.
      *
-     * @param string $sMessageTypeName
-     * @param string $languageIso - default is "DE" for backwards compatibility reasons.
+     * @param string $languageIso - default is "DE" for backwards compatibility reasons
      *
      * @return string
      */
@@ -913,7 +910,7 @@ class TCMSLogChange
 
         $language = self::getLanguageService()->getLanguageFromIsoCode(\strtolower($languageIso));
 
-        $messageType = \TdbCmsMessageManagerMessageType::GetNewInstance();
+        $messageType = TdbCmsMessageManagerMessageType::GetNewInstance();
         if (null !== $language) {
             $messageType->SetLanguage($language->id);
         }
@@ -926,9 +923,6 @@ class TCMSLogChange
 
     /**
      * The available default system names are: unknown, notice, warning, error, error_striking.
-     *
-     * @param string $messageTypeName
-     * @return string|null
      */
     public static function getMessageTypeIdBySystemName(string $messageTypeName): ?string
     {
@@ -943,13 +937,13 @@ class TCMSLogChange
     /**
      * Inserts a portal based frontend message if it doesn't exist already or updates an existing autogenerated or empty message.
      *
-     * @param string      $sIdentifierName
-     * @param string      $sMessage
-     * @param string      $sMessageTypeId
-     * @param string      $sDescription
-     * @param string      $sPortalID
-     * @param string      $sMessageLocationType
-     * @param string      $sMessageView
+     * @param string $sIdentifierName
+     * @param string $sMessage
+     * @param string $sMessageTypeId
+     * @param string $sDescription
+     * @param string $sPortalID
+     * @param string $sMessageLocationType
+     * @param string $sMessageView
      * @param string|null $language
      *
      * @throws DBALException
@@ -961,11 +955,11 @@ class TCMSLogChange
         }
         $connection = static::getDatabaseConnection();
 
-        $fields = array(
+        $fields = [
             'description' => $sDescription,
             'message' => $sMessage,
             'cms_message_manager_message_type_id' => $sMessageTypeId,
-        );
+        ];
         if (TCMSRecord::FieldExists('cms_message_manager_message', 'message_location_type')) {
             $fields['message_location_type'] = $sMessageLocationType;
         }
@@ -974,7 +968,7 @@ class TCMSLogChange
         }
 
         $existsCheckQuery = 'SELECT * FROM `cms_message_manager_message` WHERE `name` = :name';
-        $existsCheckArray = [ 'name' => $sIdentifierName, ];
+        $existsCheckArray = ['name' => $sIdentifierName];
 
         if ('' !== $sPortalID) {
             $existsCheckQuery .= ' AND `cms_portal_id` = :portalId';
@@ -993,9 +987,9 @@ class TCMSLogChange
             }
             $fields['cms_portal_id'] = $row['cms_portal_id'];
             $data->setFields($fields);
-            $data->setWhereEquals(array(
+            $data->setWhereEquals([
                 'id' => $row['id'],
-            ));
+            ]);
             static::update(__LINE__, $data);
         } else { // not found... insert it
             $fields['name'] = $sIdentifierName;
@@ -1020,7 +1014,6 @@ class TCMSLogChange
     }
 
     /**
-     * @param array  $row
      * @param string $languageCode
      *
      * @return bool
@@ -1040,15 +1033,15 @@ class TCMSLogChange
     /**
      * Inserts a backend message if it doesn't already exist, or updates an existing autogenerated message.
      *
-     * @param string          $identifierName
-     * @param string          $message
-     * @param string          $messageTypeId
-     * @param string          $description
-     * @param int|string|null $language       The language for which to insert or update the message. This should be the
-     *                                        two-letter ISO-639-1 language code (e.g. "en"). To ensure backwards compatibility,
-     *                                        it is also possible to pass a Chameleon language ID. If you do not pass any
-     *                                        language value, the system's base language is used. This is not recommended though,
-     *                                        because it may produce different values on different systems.
+     * @param string $identifierName
+     * @param string $message
+     * @param string $messageTypeId
+     * @param string $description
+     * @param int|string|null $language The language for which to insert or update the message. This should be the
+     *                                  two-letter ISO-639-1 language code (e.g. "en"). To ensure backwards compatibility,
+     *                                  it is also possible to pass a Chameleon language ID. If you do not pass any
+     *                                  language value, the system's base language is used. This is not recommended though,
+     *                                  because it may produce different values on different systems.
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
@@ -1062,22 +1055,22 @@ class TCMSLogChange
         $languageCode = self::getLanguageCodeFromArgument($language);
         $databaseConnection = self::getDatabaseConnection();
         $checkQuery = 'SELECT `id`, `description` FROM `cms_message_manager_backend_message` WHERE `name` = :messageName';
-        $result = $databaseConnection->fetchAllAssociative($checkQuery, array(
+        $result = $databaseConnection->fetchAllAssociative($checkQuery, [
             'messageName' => $identifierName,
-        ));
+        ]);
         $data = self::createMigrationQueryData('cms_message_manager_backend_message', $languageCode);
-        $fields = array(
+        $fields = [
                 'description' => $description,
                 'message' => $message,
                 'cms_config_id' => '1',
                 'cms_message_manager_message_type_id' => $messageTypeId,
-        );
+        ];
         if (count($result) > 0) {
             $row = $result[0];
             $data->setFields($fields);
-            $data->setWhereEquals(array(
+            $data->setWhereEquals([
                 'id' => $row['id'],
-            ));
+            ]);
             self::update(__LINE__, $data);
         } else { // not found... insert it
             $fields['name'] = $identifierName;
@@ -1119,7 +1112,7 @@ class TCMSLogChange
     public static function deleteBackEndMessage($name)
     {
         $query = 'DELETE FROM `cms_message_manager_backend_message` WHERE `name` = :name';
-        self::RunQuery(__LINE__, $query, array('name' => $name));
+        self::RunQuery(__LINE__, $query, ['name' => $name]);
     }
 
     /**
@@ -1255,16 +1248,16 @@ class TCMSLogChange
         $tableId = self::GetTableId($tableName);
 
         $query = 'DELETE FROM `cms_tbl_extension` WHERE `cms_tbl_conf_id` = :tableId AND `name` = :className';
-        self::RunQuery(__LINE__, $query, array(
+        self::RunQuery(__LINE__, $query, [
             'tableId' => $tableId,
             'className' => $className,
-        ));
+        ]);
     }
 
     /**
      * Moves an extension behind a given extension in cms_tbl_extension.
      *
-     * @param int    $tableId
+     * @param int $tableId
      * @param string $sExtensionName
      * @param string $sPreExtensionName - extensionname where we want to set the new extension behind
      */
@@ -1274,7 +1267,7 @@ class TCMSLogChange
         /** @var $databaseConnection \Doctrine\DBAL\Connection */
         $databaseConnection = ServiceLocator::get('database_connection');
         $query = 'SELECT `position` FROM `cms_tbl_extension` WHERE `name` = :preExtensionName';
-        $posData = $databaseConnection->fetchNumeric($query, array('preExtensionName' => $sPreExtensionName));
+        $posData = $databaseConnection->fetchNumeric($query, ['preExtensionName' => $sPreExtensionName]);
         if (false === $posData) {
             self::addInfoMessage("unable to position extension {$sExtensionName} after {$sPreExtensionName} because {$sPreExtensionName} can not be found", self::INFO_MESSAGE_LEVEL_ERROR);
 
@@ -1283,10 +1276,10 @@ class TCMSLogChange
         $pos = $posData[0];
 
         $query = 'UPDATE `cms_tbl_extension` SET `position` = `position`+1 WHERE `position` >  :positionAfter AND `cms_tbl_conf_id` = :tableConfId';
-        self::RunQuery(__LINE__, $query, array('positionAfter' => $pos, 'tableConfId' => $tableId), array('positionAfter' => \PDO::PARAM_INT, 'tableConfId' => \PDO::PARAM_STR));
+        self::RunQuery(__LINE__, $query, ['positionAfter' => $pos, 'tableConfId' => $tableId], ['positionAfter' => PDO::PARAM_INT, 'tableConfId' => PDO::PARAM_STR]);
 
         $query = 'UPDATE `cms_tbl_extension` SET `position` = :newPosition WHERE `name` = :extensionName AND `cms_tbl_conf_id` = :tableConfId';
-        self::RunQuery(__LINE__, $query, array('newPosition' => $pos + 1, 'tableConfId' => $tableId, 'extensionName' => $sExtensionName), array('newPosition' => \PDO::PARAM_INT, 'tableConfId' => \PDO::PARAM_STR, 'extensionName' => \PDO::PARAM_STR));
+        self::RunQuery(__LINE__, $query, ['newPosition' => $pos + 1, 'tableConfId' => $tableId, 'extensionName' => $sExtensionName], ['newPosition' => PDO::PARAM_INT, 'tableConfId' => PDO::PARAM_STR, 'extensionName' => PDO::PARAM_STR]);
     }
 
     /**
@@ -1301,30 +1294,30 @@ class TCMSLogChange
 
         $nameFieldWithTranslationSuffix = self::getFieldTranslationUtil()->getTranslatedFieldName('cms_tbl_field_tab', 'name');
 
-        $query = "SELECT `position` FROM `cms_tbl_field_tab` WHERE `cms_tbl_conf_id` = :tableId AND (".$databaseConnection->quoteIdentifier($nameFieldWithTranslationSuffix)." = :preTabName OR `systemname` = :preTabName)";
+        $query = 'SELECT `position` FROM `cms_tbl_field_tab` WHERE `cms_tbl_conf_id` = :tableId AND ('.$databaseConnection->quoteIdentifier($nameFieldWithTranslationSuffix).' = :preTabName OR `systemname` = :preTabName)';
         $pos = $databaseConnection->fetchColumn($query, [
                 'tableId' => $tableId,
-                'preTabName' => $preTabSystemName
+                'preTabName' => $preTabSystemName,
                 ]
         );
 
         if (false === $pos) {
-            self::addInfoMessage("Unable to position tab ".$tabSystemName." after ".$preTabSystemName." because ".$preTabSystemName." was not found", self::INFO_MESSAGE_LEVEL_ERROR);
+            self::addInfoMessage('Unable to position tab '.$tabSystemName.' after '.$preTabSystemName.' because '.$preTabSystemName.' was not found', self::INFO_MESSAGE_LEVEL_ERROR);
 
             return false;
         }
 
         $pos = (int) $pos;
 
-        $query = "UPDATE `cms_tbl_field_tab` SET `position` = `position`+1 WHERE `position` > ".$pos." AND `cms_tbl_conf_id` = ".$databaseConnection->quote($tableId);
+        $query = 'UPDATE `cms_tbl_field_tab` SET `position` = `position`+1 WHERE `position` > '.$pos.' AND `cms_tbl_conf_id` = '.$databaseConnection->quote($tableId);
         self::_RunQuery($query, __LINE__);
 
-        $query = "UPDATE `cms_tbl_field_tab`
-                     SET `position` = ".$databaseConnection->quote(($pos + 1))."
+        $query = 'UPDATE `cms_tbl_field_tab`
+                     SET `position` = '.$databaseConnection->quote($pos + 1).'
                    WHERE
-                        (".$databaseConnection->quoteIdentifier($nameFieldWithTranslationSuffix)." = ".$databaseConnection->quote($tabSystemName)."
-                     OR `systemname` = ".$databaseConnection->quote($tabSystemName).")
-                     AND `cms_tbl_conf_id` = ".$databaseConnection->quote($tableId);
+                        ('.$databaseConnection->quoteIdentifier($nameFieldWithTranslationSuffix).' = '.$databaseConnection->quote($tabSystemName).'
+                     OR `systemname` = '.$databaseConnection->quote($tabSystemName).')
+                     AND `cms_tbl_conf_id` = '.$databaseConnection->quote($tableId);
         self::_RunQuery($query, __LINE__);
 
         return true;
@@ -1363,7 +1356,7 @@ class TCMSLogChange
      */
     public static function FieldChangeMultiLanguageSetting($sTableName, $sFieldName, $sSetting)
     {
-        if (true == $sSetting) { // non-strict comparison intended.
+        if (true === $sSetting) { // non-strict comparison intended.
             self::makeFieldMultilingual($sTableName, $sFieldName);
         } else {
             self::makeFieldMonolingual($sTableName, $sFieldName);
@@ -1372,10 +1365,10 @@ class TCMSLogChange
 
     public static function UpdateVirtualNonDbClasses()
     {
-        $filemanager = ServiceLocator::get('chameleon_system_core.filemanager');
+        $filesystemWrapper = ServiceLocator::get('chameleon_system_core.service.file_system_wrapper');
         $virtualClassManager = ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         $classCacheWarmer = ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
-        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filemanager, $virtualClassManager);
+        $oAutoTableWriter = new TPkgCoreAutoClassHandler_TPkgCmsClassManager(self::getDatabaseConnection(), $filesystemWrapper->getFileSystemService(), $virtualClassManager);
         $oList = TdbPkgCmsClassManagerList::GetList();
         while ($oItem = $oList->Next()) {
             $oAutoTableWriter->create($oItem->fieldNameOfEntryPoint, null);
@@ -1384,11 +1377,11 @@ class TCMSLogChange
     }
 
     /**
-     * @param int    $iLine
+     * @param int $iLine
      * @param string $sEntryPoint
      * @param string $sExitClass
      * @param string $sExitClassSubType - deprecated - handled by autoLoader
-     * @param string $sExitClassType    - deprecated - handled by autoLoader
+     * @param string $sExitClassType - deprecated - handled by autoLoader
      *
      * @return TPkgCmsVirtualClassManager
      *
@@ -1397,7 +1390,7 @@ class TCMSLogChange
      */
     public static function CreateVirtualNonDbEntryPoint($iLine, $sEntryPoint, $sExitClass = '', $sExitClassSubType = '', $sExitClassType = 'Core')
     {
-        $oManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_class_manager.manager');
+        $oManager = ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         if (false == $oManager->load($sEntryPoint)) {
             $query = "INSERT INTO `pkg_cms_class_manager`
                           SET `name_of_entry_point` = '".MySqlLegacySupport::getInstance()->real_escape_string($sEntryPoint)."',
@@ -1405,18 +1398,18 @@ class TCMSLogChange
                  ";
             self::_RunQuery($query, $iLine);
             if (false === TPkgCmsVirtualClassManager::GetEntryPointClassForClass($sEntryPoint, '', '', true)) {
-                throw new TPkgCmsException_Log('[line '.$iLine.'] virtual class entry point not created - make sure that the virtual class manager update to the current version was run before the update tries to use it!', array(
+                throw new TPkgCmsException_Log('[line '.$iLine.'] virtual class entry point not created - make sure that the virtual class manager update to the current version was run before the update tries to use it!', [
                     'entry point' => $sEntryPoint,
                     'exitClass' => $sExitClass,
                     'called from' => $iLine,
-                ));
+                ]);
             }
             if (false === $oManager->load($sEntryPoint)) {
-                throw new TPkgCmsException_Log('[line '.$iLine.'] virtual class entry point created but unable to load - make sure that the virtual class manager update to the current version was run before the update tries to use it!', array(
+                throw new TPkgCmsException_Log('[line '.$iLine.'] virtual class entry point created but unable to load - make sure that the virtual class manager update to the current version was run before the update tries to use it!', [
                     'entry point' => $sEntryPoint,
                     'exitClass' => $sExitClass,
                     'called from' => $iLine,
-                ));
+                ]);
             }
             $oManager->UpdateVirtualClasses();
             if (empty($sExitClass)) {
@@ -1435,26 +1428,26 @@ class TCMSLogChange
     public static function deleteVirtualEntryPoint($virtualEntryPoint)
     {
         $query = 'select id from pkg_cms_class_manager where name_of_entry_point = :nameOfEntryPoint';
-        $entryPoint = self::getDatabaseConnection()->fetchAssociative($query, array('nameOfEntryPoint' => $virtualEntryPoint));
+        $entryPoint = self::getDatabaseConnection()->fetchAssociative($query, ['nameOfEntryPoint' => $virtualEntryPoint]);
         if (false === $entryPoint) {
             throw new ErrorException("unable to delete {$virtualEntryPoint} - not found", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
 
         $query = 'DELETE FROM pkg_cms_class_manager_extension where `pkg_cms_class_manager_id` = :classManagerId';
-        self::RunQuery(__LINE__, $query, array('classManagerId' => $entryPoint['id']));
+        self::RunQuery(__LINE__, $query, ['classManagerId' => $entryPoint['id']]);
 
         $query = 'DELETE FROM pkg_cms_class_manager where id = :classManagerId';
-        self::RunQuery(__LINE__, $query, array('classManagerId' => $entryPoint['id']));
+        self::RunQuery(__LINE__, $query, ['classManagerId' => $entryPoint['id']]);
 
         self::getAutoclassesCacheWarmer()->updateAllTables();
     }
 
     /**
-     * @param int      $iLine
-     * @param string   $sEntryPoint
-     * @param string   $sClassName
-     * @param string   $sClassSubType - deprecated - handled by autoLoader
-     * @param string   $sClassType    - deprecated - handled by autoLoader
+     * @param int $iLine
+     * @param string $sEntryPoint
+     * @param string $sClassName
+     * @param string $sClassSubType - deprecated - handled by autoLoader
+     * @param string $sClassType - deprecated - handled by autoLoader
      * @param int|null $iPos
      */
     public static function AddVirtualNonDbExtension($iLine, $sEntryPoint, $sClassName, $sClassSubType = '', $sClassType = '', $iPos = null)
@@ -1484,7 +1477,7 @@ class TCMSLogChange
     }
 
     /**
-     * @param int    $iLine
+     * @param int $iLine
      * @param string $sEntryPoint
      * @param string $sClassName
      *
@@ -1492,12 +1485,12 @@ class TCMSLogChange
      */
     public static function deleteVirtualNonDbExtension($iLine, $sEntryPoint, $sClassName)
     {
-        $oManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_class_manager.manager');
+        $oManager = ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         if (false === $oManager->load($sEntryPoint)) {
             throw new ErrorException("unable to find virtual class entry point {$sEntryPoint} (called from the running update in line {$iLine})", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
         $oExtension = TdbPkgCmsClassManagerExtension::GetNewInstance();
-        if (false === $oExtension->LoadFromFields(array('class' => $sClassName, 'pkg_cms_class_manager_id' => $oManager->getConfigValue('id')))) {
+        if (false === $oExtension->LoadFromFields(['class' => $sClassName, 'pkg_cms_class_manager_id' => $oManager->getConfigValue('id')])) {
             throw new ErrorException("unable to find virtual extension {$sClassName} for {$sEntryPoint} (called from the running update in line {$iLine})", 0, E_USER_ERROR, __FILE__, __LINE__);
         }
 
@@ -1517,9 +1510,9 @@ class TCMSLogChange
     }
 
     /**
-     * @param string      $sFolderName
-     * @param string|null $sType        - if set to empty, the system will search for the update in customer, custom core, and core
-     * @param int|null    $iBuildNumber
+     * @param string $sFolderName
+     * @param string|null $sType - if set to empty, the system will search for the update in customer, custom core, and core
+     * @param int|null $iBuildNumber
      *
      * @deprecated since 5.7.0 - use requireBundleUpdates() instead
      */
@@ -1532,7 +1525,7 @@ class TCMSLogChange
 
         // test if folder exists in vendor packages
         if (false === strpos('/', $sFolderName) && '-updates' === substr($sFolderName, -strlen('-updates'))) {
-            $packagePathToCheck = array(CHAMELEON_CORE_COMPONENTS, ESONO_PACKAGES);
+            $packagePathToCheck = [CHAMELEON_CORE_COMPONENTS, ESONO_PACKAGES];
             $match = false;
             $packageName = null;
             foreach ($packagePathToCheck as $packagePath) {
@@ -1558,7 +1551,7 @@ class TCMSLogChange
 
     /**
      * @param string $bundleName
-     * @param int    $highestBuildNumber
+     * @param int $highestBuildNumber
      */
     public static function requireBundleUpdates($bundleName, $highestBuildNumber)
     {
@@ -1567,10 +1560,10 @@ class TCMSLogChange
     }
 
     /**
-     * @param string      $packageName
-     * @param int|string  $iVersion
-     * @param string|null $subFolder   @deprecated since 6.2.0 - no longer used
-     * @param string      $vendor
+     * @param string $packageName
+     * @param int|string $iVersion
+     * @param string|null $subFolder @deprecated since 6.2.0 - no longer used
+     * @param string $vendor
      *
      * @throws TPkgCmsException_Log
      *
@@ -1578,7 +1571,7 @@ class TCMSLogChange
      */
     public static function requirePackage($packageName, $iVersion, $subFolder = null, $vendor = 'chameleon-system')
     {
-        $pathList = array(CHAMELEON_CORE_COMPONENTS, sprintf('%s/%s/', PATH_VENDORS, $vendor));
+        $pathList = [CHAMELEON_CORE_COMPONENTS, sprintf('%s/%s/', PATH_VENDORS, $vendor)];
         $bundleDir = null;
         foreach ($pathList as $rootPath) {
             $dirName = realpath($rootPath.'/'.$packageName);
@@ -1621,10 +1614,10 @@ class TCMSLogChange
      *
      * @param string $sTable - table name where the cms_field_conf_mlt field is stored
      * @param string $sTargetTable - table name of the table from what the fields will be selected also used in fieldtyp config parameter (sShowFieldsFromTable)
-     * @param array $aFields   - field names for that will be a mlt connection added
-     * @param null  $sRecordId - record id if you only want to set the connections for a specific record - if null all records of $sTable will be selected
+     * @param array $aFields - field names for that will be a mlt connection added
+     * @param null $sRecordId - record id if you only want to set the connections for a specific record - if null all records of $sTable will be selected
      */
-    public static function SetCmsFieldConfMltField($sTable, $sTargetTable, $aFields = array(), $sRecordId = null)
+    public static function SetCmsFieldConfMltField($sTable, $sTargetTable, $aFields = [], $sRecordId = null)
     {
         $sQuery = 'SELECT `'.MySqlLegacySupport::getInstance()->real_escape_string($sTable).'`.*
                    FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTable).'`';
@@ -1671,10 +1664,10 @@ class TCMSLogChange
     /**
      * adds user groups to a CMS user, optional replaces the current groups.
      *
-     * @param string $sUserID        - target user
-     * @param array  $aUserGroupIDs  - array of CMS user group IDs, that will be added to the user
-     * @param bool   $bReplaceGroups - if true the users current groups will be removed and replaced with the new ones,
-     *                               else the new groups will be added
+     * @param string $sUserID - target user
+     * @param array $aUserGroupIDs - array of CMS user group IDs, that will be added to the user
+     * @param bool $bReplaceGroups - if true the users current groups will be removed and replaced with the new ones,
+     *                             else the new groups will be added
      */
     public static function SetGroupsToUser($sUserID, $aUserGroupIDs, $bReplaceGroups = false)
     {
@@ -1697,7 +1690,7 @@ class TCMSLogChange
 
     /**
      * @param string $sTableName
-     * @param int    $iMaxEntriesToConvert
+     * @param int $iMaxEntriesToConvert
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
@@ -1734,7 +1727,7 @@ class TCMSLogChange
                 self::_RunQuery($sInsertQuery, __LINE__, false);
                 self::_RunQuery($sDropQuery, __LINE__);
             } else {
-                $aMsgArray = array();
+                $aMsgArray = [];
                 $aMsgArray[] = 'Did not convert '.$sTableName.' to InnoDb, because the table has over '.$iMaxEntriesToConvert.' entries and operation can produce heavy db load and consume a lot of time.';
                 $aMsgArray[] = 'A new table with the correct structure has been created, however it is still empty.';
                 $aMsgArray[] = 'Please execute the following queries to remedy this:';
@@ -1749,12 +1742,12 @@ class TCMSLogChange
     }
 
     /**
-     * @param string $sTableName      - table name
-     * @param string $sTabName        - Tab-Name
-     * @param null   $sTabIdentifier  - if no identifier ist set, then one will be generated based on name
-     * @param null   $sTabDescription
-     * @param null   $sPlaceTabAfter  - if null, then tab will be placed last
-     * @param null   $sTabId
+     * @param string $sTableName - table name
+     * @param string $sTabName - Tab-Name
+     * @param null $sTabIdentifier - if no identifier ist set, then one will be generated based on name
+     * @param null $sTabDescription
+     * @param null $sPlaceTabAfter - if null, then tab will be placed last
+     * @param null $sTabId
      *
      * @return string|null
      */
@@ -1804,7 +1797,7 @@ class TCMSLogChange
 
     public static function getLogger(): LoggerInterface
     {
-        return  ServiceLocator::get('monolog.logger.cms_update');
+        return ServiceLocator::get('monolog.logger.cms_update');
     }
 
     /**
@@ -1883,7 +1876,7 @@ class TCMSLogChange
      * initialises a table with parent-id structure with left and right values for nested set.
      *
      * @param string $sTable
-     * @param int    $iCurrentLft
+     * @param int $iCurrentLft
      * @param string $sParentId
      * @param string $sParentIdField
      * @param string $sOrderByField
@@ -2120,7 +2113,7 @@ class TCMSLogChange
      *
      * @return bool|void
      */
-    public static function setTableFieldExtraUserGroupRights($tableName, $userGroupSystemName, array $fieldNameList = array())
+    public static function setTableFieldExtraUserGroupRights($tableName, $userGroupSystemName, array $fieldNameList = [])
     {
         $tableId = self::GetTableId($tableName);
         if ('' == $tableId) {
@@ -2176,13 +2169,13 @@ class TCMSLogChange
      *
      * @see \ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier::addToSnippetChain()
      *
-     * @param string      $pathToAdd
+     * @param string $pathToAdd
      * @param string|null $afterThisPath
-     * @param string[]    $toTheseThemes
+     * @param string[] $toTheseThemes
      *
      * @throws DataAccessException
      */
-    public static function addToSnippetChain($pathToAdd, $afterThisPath = null, array $toTheseThemes = array())
+    public static function addToSnippetChain($pathToAdd, $afterThisPath = null, array $toTheseThemes = [])
     {
         self::getSnippetChainModifier()->addToSnippetChain($pathToAdd, $afterThisPath, $toTheseThemes);
     }
@@ -2192,12 +2185,12 @@ class TCMSLogChange
      *
      * @see \ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier::removeFromSnippetChain()
      *
-     * @param string   $pathToRemove
+     * @param string $pathToRemove
      * @param string[] $fromTheseThemes
      *
      * @throws DataAccessException
      */
-    public static function removeFromSnippetChain($pathToRemove, array $fromTheseThemes = array())
+    public static function removeFromSnippetChain($pathToRemove, array $fromTheseThemes = [])
     {
         self::getSnippetChainModifier()->removeFromSnippetChain($pathToRemove, $fromTheseThemes);
     }
@@ -2205,8 +2198,7 @@ class TCMSLogChange
     /**
      * Inserts one or more rows into the given table.
      *
-     * @param int                $line
-     * @param MigrationQueryData $migrationQueryData
+     * @param int $line
      */
     public static function insert($line, MigrationQueryData $migrationQueryData)
     {
@@ -2216,8 +2208,7 @@ class TCMSLogChange
     /**
      * Updates one or more rows in the given table.
      *
-     * @param int                $line
-     * @param MigrationQueryData $migrationQueryData
+     * @param int $line
      */
     public static function update($line, MigrationQueryData $migrationQueryData)
     {
@@ -2227,8 +2218,7 @@ class TCMSLogChange
     /**
      * Deletes rows from the given table.
      *
-     * @param int                $line
-     * @param MigrationQueryData $migrationQueryData
+     * @param int $line
      */
     public static function delete($line, MigrationQueryData $migrationQueryData)
     {
@@ -2236,19 +2226,18 @@ class TCMSLogChange
     }
 
     /**
-     * @param int                $line
-     * @param string             $serviceId
-     * @param MigrationQueryData $migrationQueryData
+     * @param int $line
+     * @param string $serviceId
      */
     private static function executeUpdateOperation($line, $serviceId, MigrationQueryData $migrationQueryData)
     {
         /** @var QueryInterface $operation */
         $operation = ServiceLocator::get($serviceId);
         try {
-            list($query, $queryParams) = $operation->execute($migrationQueryData);
+            [$query, $queryParams] = $operation->execute($migrationQueryData);
             self::outputSuccess($line, $query, $queryParams);
             self::logSuccess($line, $query, $queryParams);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             self::outputError($e);
             self::logError($line, $e);
         }
@@ -2276,9 +2265,9 @@ class TCMSLogChange
     }
 
     /**
-     * @param int    $line
+     * @param int $line
      * @param string $query
-     * @param array  $queryParams
+     * @param array $queryParams
      */
     private static function outputSuccess($line, $query, $queryParams)
     {
@@ -2298,9 +2287,9 @@ class TCMSLogChange
     }
 
     /**
-     * @param int    $line
+     * @param int $line
      * @param string $query
-     * @param array  $queryParams
+     * @param array $queryParams
      */
     private static function logSuccess($line, $query, $queryParams)
     {
@@ -2315,7 +2304,7 @@ class TCMSLogChange
     }
 
     /**
-     * @param int       $line
+     * @param int $line
      * @param Exception $exception
      */
     private static function logError($line, $exception)
@@ -2334,7 +2323,7 @@ class TCMSLogChange
         $query = 'SELECT `id` FROM `cms_portal`';
         $databaseConnection = self::getDatabaseConnection();
         $result = $databaseConnection->fetchAllAssociative($query);
-        $portalIdList = array();
+        $portalIdList = [];
         foreach ($result as $row) {
             $portalIdList[] = $row['id'];
         }
@@ -2355,8 +2344,8 @@ class TCMSLogChange
           ON lang.`id` = mlt.`target_id`
           WHERE mlt.`source_id` = ?';
         $databaseConnection = self::getDatabaseConnection();
-        $result = $databaseConnection->fetchAllAssociative($query, array($portalId));
-        $languageList = array();
+        $result = $databaseConnection->fetchAllAssociative($query, [$portalId]);
+        $languageList = [];
         foreach ($result as $row) {
             $languageList[] = $row['iso_6391'];
         }

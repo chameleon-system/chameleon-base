@@ -15,49 +15,11 @@
 class TCMSRender
 {
     /**
-     * @param string   $sTitle
-     * @param string   $boxIcon - not used anymore
-     * @param int|null $width
+     * Renders a bootstrap 4 CSS button.
      *
-     * @deprecated since 6.3.0 - only used for deprecated classic main menu
+     * @example TCMSRender::DrawButton($buttonTitle, $mediaManagerUrl, 'far fa-image', null, null, null, null, '_blank');
      */
-    public static function DrawBoxHeader($sTitle, $boxIcon, $width = null)
-    {
-        if (!is_null($width)) {
-            $width = 'style="width:'.htmlspecialchars($width).'"';
-        }
-        echo "<div {$width} class=\"card mb-3\">\n";
-        echo '      <div class="card-header"><h5 class="card-title mb-0">'.TGlobal::OutHTML($sTitle)."</h5></div>\n";
-        echo "      <div class=\"card-body p-0\">\n";
-    }
-
-    /**
-     * @deprecated since 6.3.0 - only used for deprecated classic main menu
-     */
-    public static function DrawBoxFooter()
-    {
-        echo "    </div>\n";
-        echo "</div>\n";
-    }
-
-    /**
-     * renders a bootstrap 4 CSS button.
-     *
-     * sample usage with thickbox and javascript mouseover event:
-     * TCMSRender::DrawButton('Webseite anzeigen',"",URL_CMS."/images/icons/icon_world.gif",'thickbox','document.location.href=document.getElementById(\''.TGlobal::OutHTML($this->name).'\').value + \'?TB_iframe=true&height=600&width=800\'');
-     *
-     * @param string $title
-     * @param string $link
-     * @param string $icon
-     * @param string $linkClass
-     * @param string $onMouseOver
-     * @param string $id
-     * @param string $onclick
-     * @param string|null $sTarget     was cleared if link is javascript button
-     *
-     * @return string
-     */
-    public static function DrawButton($title = null, $link = null, $icon = null, $linkClass = null, $onMouseOver = null, $id = null, $onclick = null, $sTarget = null)
+    public static function DrawButton(?string $title = null, ?string $link = null, ?string $icon = null, ?string $linkClass = null, ?string $onMouseOver = null, ?string $id = null, ?string $onclick = null, ?string $sTarget = null): string
     {
         $sTemplate = 'singleButton';
 

@@ -55,14 +55,14 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
         // update cache
-        TCacheManager::PerformeTableChange($this->oTableConf->sqlData['name'], $this->sId);
+        $this->getCacheService()->callTrigger($this->oTableConf->sqlData['name'], $this->sId);
     }
 
     /**
@@ -85,7 +85,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
                 // edit
                 if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
-                    $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save');
+                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.save');
                     $oMenuItem->sItemKey = 'save';
                     $oMenuItem->sIcon = 'far fa-save';
                     $oMenuItem->sOnClick = 'SaveTreeNodeAjax();';
@@ -182,7 +182,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
      *
      * @return object TCMSstdClass
      */
-    public function GetObjectShortInfo($postData = array())
+    public function GetObjectShortInfo($postData = [])
     {
         $oRecordData = parent::GetObjectShortInfo($postData);
         $oRecordData->parentID = $this->oTable->sqlData['parent_id'];

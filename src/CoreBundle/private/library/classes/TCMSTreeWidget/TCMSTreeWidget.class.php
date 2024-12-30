@@ -241,7 +241,7 @@ class TCMSTreeWidget
             }
             $sNodeName = $oTreeNode->GetName();
             if (empty($sNodeName)) {
-                $sNodeName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
+                $sNodeName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
             }
 
             if ($oTreeNode->id == $this->sRootNodeID && !empty($this->sRootNodeName)) {

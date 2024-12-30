@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TCMSTableEditorFiles extends TCMSTableEditor
 {
@@ -20,7 +21,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      *
      * @var array
      */
-    protected $aUploadData = null;
+    protected $aUploadData;
 
     /**
      * prevents is_uploaded_file() check
@@ -37,7 +38,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      *  array('name'=>'testfile.jpg','type'=>'application/octet-stream','tmp_name'=>'/tmp/php7Sv9yk','error'=>0,'size'=>77105)
      *
      * @param array $aData
-     * @param bool  $bAllowSaveOfNotUploadedFiles - set to true if the upload data is not from an upload (for example when the images come from a zip)
+     * @param bool $bAllowSaveOfNotUploadedFiles - set to true if the upload data is not from an upload (for example when the images come from a zip)
      */
     public function SetUploadData($aData, $bAllowSaveOfNotUploadedFiles = false)
     {
@@ -50,7 +51,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
         if (is_null($tableid)) {
             // get table id of cms_media
             $oTableConf = new TCMSRecord();
-            /** @var $oTableConf TCMSRecord */
+            /* @var $oTableConf TCMSRecord */
             $oTableConf->table = 'cms_tbl_conf';
             $oTableConf->LoadFromField('name', $this->GetTableName());
             $tableid = $oTableConf->sqlData['id'];
@@ -85,7 +86,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
                             $isValid = true;
                         }
                     } else {
-                        throw new Exception(TGlobal::Translate('chameleon_system_core.cms_module_universal_uploader.error_upload').': '.$this->aUploadData['error'], -250);
+                        throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_universal_uploader.error_upload').': '.$this->aUploadData['error'], -250);
                     }
                 }
             }
@@ -116,9 +117,9 @@ class TCMSTableEditorFiles extends TCMSTableEditor
                 if (!empty($sAllowedFileTypesFromExternal)) {
                     $sAllowedFileTypesFromExternal = strtoupper($sAllowedFileTypesFromExternal);
                     $sAllowedFileTypesFromExternal = str_replace(',', ', ', $sAllowedFileTypesFromExternal);
-                    throw new Exception(TGlobal::Translate('chameleon_system_core.cms_module_universal_uploader.error_type_not_allowed', array('%sFileType%' => strtoupper($fileExtension), 'sAllowedFileTypesFromExternal' => $sAllowedFileTypesFromExternal)), -270);
+                    throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_universal_uploader.error_type_not_allowed', ['%sFileType%' => strtoupper($fileExtension), 'sAllowedFileTypesFromExternal' => $sAllowedFileTypesFromExternal]), -270);
                 } else {
-                    throw new Exception(TGlobal::Translate('chameleon_system_core.cms_module_universal_uploader.error_type_not_supported').': '.strtoupper($fileExtension), -270);
+                    throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_universal_uploader.error_type_not_supported').': '.strtoupper($fileExtension), -270);
                 }
             }
         } else {
@@ -131,7 +132,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      *
      * @return bool
@@ -146,7 +147,7 @@ class TCMSTableEditorFiles extends TCMSTableEditor
                 $this->MoveFile(
                     $this->aUploadData['tmp_name'],
                     $this->GetTargetFileName(),
-                    (false === $this->bAllowSaveOfNotUploadedFiles)
+                    false === $this->bAllowSaveOfNotUploadedFiles
                 );
             } catch (Exception $e) {
                 // This cleanup is problematic since it fails on updates and the file may have made it to some of the servers.
@@ -191,9 +192,9 @@ class TCMSTableEditorFiles extends TCMSTableEditor
      * trys to move an uploaded file to target directory
      * if the move failes it deletes the database record.
      *
-     * @param string $sourceFile          full path to source file
-     * @param string $targetFile          full path to target file
-     * @param bool   $treatAsUploadedFile will use move_uploaded_file to move the file
+     * @param string $sourceFile full path to source file
+     * @param string $targetFile full path to target file
+     * @param bool $treatAsUploadedFile will use move_uploaded_file to move the file
      *
      * @throws Exception
      */
@@ -206,21 +207,21 @@ class TCMSTableEditorFiles extends TCMSTableEditor
         $targetDir = dirname($targetFile);
 
         if (false === is_dir($targetDir)) {
-            throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_file.error_target_folder_missing').' '.$targetDir, -220);
+            throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_file.error_target_folder_missing').' '.$targetDir, -220);
         }
 
         if (false === is_writable($targetDir)) {
-            throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_file.error_missing_write_permission_on_target_folder').' '.$targetDir, -220);
+            throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_file.error_missing_write_permission_on_target_folder').' '.$targetDir, -220);
         }
 
         // if the file exists (we are overwriting it) then we should also have write permission
         if (true === file_exists($targetFile) && false === is_writable($targetFile)) {
-            throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_files.error_missing_permission_to_overwrite_existing_file').' '.$targetFile, -220);
+            throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_files.error_missing_permission_to_overwrite_existing_file').' '.$targetFile, -220);
         }
 
         if (true === $treatAsUploadedFile) {
             if (false === move_uploaded_file($sourceFile, $targetFile)) {
-                throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_files.error_expected_uploaded_file').' '.$sourceFile, -220);
+                throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_files.error_expected_uploaded_file').' '.$sourceFile, -220);
             }
         } else {
             if (true === file_exists($targetFile)) {
@@ -230,20 +231,10 @@ class TCMSTableEditorFiles extends TCMSTableEditor
             if (false === rename($sourceFile, $targetFile)) {
                 // in this case the source file could not be moved. the original code would not fail here, but try a copy. again, we want to keep the behavior for now... :-/
                 if (false === copy($sourceFile, $targetFile)) {
-                    throw new Exception(TGlobal::Translate('chameleon_system_core.table_editor_files.error_unable_to_move_or_copy_file').' '.$targetFile, -220);
+                    throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_files.error_unable_to_move_or_copy_file').' '.$targetFile, -220);
                 }
             }
         }
-
-        // ok, file is now in the correct location on our local server - since there may be cluster server, we need to also push the file there
-        $fileManager = $this->getFileManager();
-
-        $fileManager->put(
-            $targetFile,
-            $targetFile,
-            null,
-            true // we have a local copy - so we only want to push the change to remote server
-        );
     }
 
     protected function PrepareDataForSave($postData)
@@ -339,11 +330,8 @@ class TCMSTableEditorFiles extends TCMSTableEditor
         return $this->oMenuItems;
     }
 
-    /**
-     * @return IPkgCmsFileManager
-     */
-    protected function getFileManager()
+    protected function getFileManager(): Filesystem
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.filemanager');
+        return new Filesystem();
     }
 }

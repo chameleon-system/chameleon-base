@@ -281,11 +281,6 @@ EOF;
             \symlink('../../vendor/chameleon-system/ckeditor-bootstrap-bundle/Resources/public', 'ckeditorBootstrap-assets');
         }
 
-        if (true === \is_link('pkgshoppaymentamazon-assets')) {
-            \unlink('pkgshoppaymentamazon-assets');
-            \symlink('../../vendor/chameleon-system/chameleon-shop/src/AmazonPaymentBundle/Resources/public', 'pkgshoppaymentamazon-assets');
-        }
-
         if (true === \is_link('pkgShopPaymentPayone')) {
             \unlink('pkgShopPaymentPayone');
             \symlink('../../vendor/chameleon-system/pkgshoppaymentpayone/Resources/public', 'pkgShopPaymentPayone');

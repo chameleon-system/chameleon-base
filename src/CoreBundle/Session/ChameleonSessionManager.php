@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Session;
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -62,13 +63,12 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
      */
     public function boot()
     {
-        $sessionHandler = null;
         if (true === \TdbCmsConfig::RequestIsInBotList()) {
             $sessionHandler = new NullSessionHandler();
         } else {
-            $memcacheSessionsServer = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.cache.memcache_sessions_server1');
+            $memcacheSessionsServer = ServiceLocator::getParameter('chameleon_system_core.cache.memcache_sessions_server1');
             if ($memcacheSessionsServer) {
-                $memcache = \TCMSMemcache::GetSessionInstance();
+                $memcache = ServiceLocator::get('chameleon_system_cms_cache.memcache_cache');
                 $sessionHandler = new MemcachedSessionHandler($memcache->getDriver());
             } else {
                 $options = [
@@ -123,6 +123,11 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         }
 
         $request = $this->getRequest();
+
+        if (null === $request) {
+            return;
+        }
+
         $request->setSession($session);
 
         $this->isSessionStarting = true;
@@ -159,14 +164,10 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         }
 
         if ($this->requestInfoService->isCmsTemplateEngineEditMode()) {
-            $this->logger->notice('Using backend session because we are in template engine edit mode');
-
             return self::SESSION_BASE_NAME.'CMS';
         }
 
         if ($this->requestInfoService->isPreviewMode()) {
-            $this->logger->notice('Using backend session because we are in preview mode');
-
             return self::SESSION_BASE_NAME.'CMS';
         }
 

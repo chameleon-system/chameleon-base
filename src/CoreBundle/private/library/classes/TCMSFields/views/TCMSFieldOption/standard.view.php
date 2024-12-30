@@ -7,7 +7,7 @@ if (count($aOptions) >= 3) { // show as select box?>
 <select name="<?=TGlobal::OutHTML($oField->name); ?>" id="<?=TGlobal::OutHTML($oField->name); ?>">
     <?php if ($oField->EmptySelectionAllowed()) {
     ?>
-    <option value=""><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected')); ?></option>
+    <option value=""><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected')); ?></option>
     <option value="">-------------------------------------------</option>
     <?php
 } ?>
@@ -35,7 +35,7 @@ if (count($aOptions) >= 3) { // show as select box?>
     <label style="padding-right: 10px;">
         <input type="radio" class="radio" style="margin-right: 3px;" id="<?=TGlobal::OutHTML($oField->name); ?>"
                name="<?=TGlobal::OutHTML($oField->name); ?>"
-               value=""<?=$selected; ?> /> <?=TGlobal::Translate('chameleon_system_core.field_options.select_nothing'); ?>
+               value=""<?=$selected; ?> /> <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_options.select_nothing'); ?>
     </label>
     <?php
         }

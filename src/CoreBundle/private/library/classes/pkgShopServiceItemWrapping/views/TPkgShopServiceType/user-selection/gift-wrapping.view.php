@@ -17,12 +17,12 @@ $sIntroText = $oPkgShopServiceType->GetTextField('display_intro_text');
     echo 'checked="checked"';
 }?>
         type="radio" name="pkg_shop_service_type[<?=TGlobal::OutHTML($oPkgShopServiceType->id); ?>][default]"
-        value="1"/> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_service_item_wrapping.form.apply_to_all')); ?></label><br/>
+        value="1"/> <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_service_item_wrapping.form.apply_to_all')); ?></label><br/>
     <label><input <?php if (!$oActiveSelection || false == $oActiveSelection->IsUsedAsDefault()) {
     echo 'checked="checked"';
 }?>
         type="radio" name="pkg_shop_service_type[<?=TGlobal::OutHTML($oPkgShopServiceType->id); ?>][default]"
-        value="0"/> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_service_item_wrapping.form.apply_to_product')); ?></label>
+        value="0"/> <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_service_item_wrapping.form.apply_to_product')); ?></label>
     <br/><br/>
     <ul class="card">
         <li>
@@ -30,7 +30,7 @@ $sIntroText = $oPkgShopServiceType->GetTextField('display_intro_text');
     echo 'checked="checked"';
 }?> type="radio"
                                                                              name="pkg_shop_service_item_id[<?=TGlobal::OutHTML($oPkgShopServiceType->id); ?>]"
-                                                                             value="clear"/> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop_service_item_wrapping.form.apply_to_none')); ?>
+                                                                             value="clear"/> <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop_service_item_wrapping.form.apply_to_none')); ?>
         </li>
         <?php
         // Verpackung

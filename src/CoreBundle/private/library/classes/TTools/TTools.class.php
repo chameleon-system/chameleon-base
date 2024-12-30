@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\Corebundle\Util\UrlUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -367,7 +368,9 @@ class TTools
         $oGlobal = TGlobal::instance();
         $requestModuleChooser = ($oGlobal->UserDataExists('__modulechooser') && ('true' == $oGlobal->GetUserData('__modulechooser')));
 
-        return $requestModuleChooser && TGlobal::CMSUserDefined();
+        $securityHelperAccess = self::getSecurityHelperAccess();
+
+        return $requestModuleChooser && $securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER);
     }
 
     /**
@@ -666,59 +669,33 @@ class TTools
     }
 
     /**
-     * generates a random password by $iLength.
-     *
-     * @param int $iLength
-     *
-     * @return string
+     * Generates a random password by $length.
      */
-    public static function GenerateRandomPassword($iLength)
+    public static function GenerateRandomPassword(int $length = 10, ?array $passwordChars = null): string
     {
-        $aPasswordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'), ['+', '-', '.']);
-        mt_srand((float) microtime() * 1000000);
-        for ($i = 1; $i <= (count($aPasswordChars) * 2); ++$i) {
-            $swap = mt_rand(0, count($aPasswordChars) - 1);
-            $tmp = $aPasswordChars[$swap];
-            $aPasswordChars[$swap] = $aPasswordChars[0];
-            $aPasswordChars[0] = $tmp;
+        if (null === $passwordChars) {
+            $passwordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'), ['+', '-', '.']);
         }
 
-        return substr(implode('', $aPasswordChars), 0, $iLength);
+        mt_srand((float) microtime() * 1000000);
+        for ($i = 1; $i <= (count($passwordChars) * 2); ++$i) {
+            $swap = mt_rand(0, count($passwordChars) - 1);
+            $tmp = $passwordChars[$swap];
+            $passwordChars[$swap] = $passwordChars[0];
+            $passwordChars[0] = $tmp;
+        }
+
+        return substr(implode('', $passwordChars), 0, $length);
     }
 
     /**
      * generates a voucher code by $iLength.
-     *
-     * @param int $iLength
-     *
-     * @return string
      */
-    public static function GenerateVaoucherCode($iLength)
+    public static function GenerateVoucherCode(int $length): string
     {
-        trigger_error('Methode is deprecated. Use GenerateVoucherCode instead', E_USER_WARNING);
+        $passwordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'));
 
-        return self::GenerateVoucherCode($iLength);
-    }
-
-    /**
-     * generates a voucher code by $iLength.
-     *
-     * @param int $iLength
-     *
-     * @return string
-     */
-    public static function GenerateVoucherCode($iLength)
-    {
-        $aPasswordChars = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'));
-        mt_srand((float) microtime() * 1000000);
-        for ($i = 1; $i <= (count($aPasswordChars) * 2); ++$i) {
-            $swap = mt_rand(0, count($aPasswordChars) - 1);
-            $tmp = $aPasswordChars[$swap];
-            $aPasswordChars[$swap] = $aPasswordChars[0];
-            $aPasswordChars[0] = $tmp;
-        }
-
-        return substr(implode('', $aPasswordChars), 0, $iLength);
+        return self::GenerateRandomPassword($length, $passwordChars);
     }
 
     /**
@@ -733,7 +710,7 @@ class TTools
         $syllable_array = explode(',', $syllables);
         srand((float) microtime() * 1000000);
         for ($count = 1; $count <= 4; ++$count) {
-            if (1 == rand() % 10) {
+            if (1 === rand() % 10) {
                 $makepass .= sprintf('%0.0f', (rand() % 50) + 1);
             } else {
                 $makepass .= sprintf('%s', $syllable_array[rand() % 62]);
@@ -874,15 +851,15 @@ class TTools
         static $aCodeList;
         if (!$aCodeList) {
             $aCodeList = [
-                UPLOAD_ERR_INI_SIZE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_to_large'),
-                UPLOAD_ERR_FORM_SIZE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_to_large'),
-                UPLOAD_ERR_PARTIAL => TGlobal::Translate('chameleon_system_core.field_document.upload_error_interrupted'),
-                UPLOAD_ERR_NO_FILE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_no_file'),
-                UPLOAD_ERR_NO_TMP_DIR => TGlobal::Translate(
+                UPLOAD_ERR_INI_SIZE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
+                UPLOAD_ERR_FORM_SIZE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
+                UPLOAD_ERR_PARTIAL => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_interrupted'),
+                UPLOAD_ERR_NO_FILE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_no_file'),
+                UPLOAD_ERR_NO_TMP_DIR => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                     'chameleon_system_core.field_document.upload_error_tmp_folder_not_writable'
                 ),
-                UPLOAD_ERR_CANT_WRITE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_unable_to_save_to_disc'),
-                UPLOAD_ERR_EXTENSION => TGlobal::Translate('chameleon_system_core.field_document.upload_error_invalid_file_extension'),
+                UPLOAD_ERR_CANT_WRITE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unable_to_save_to_disc'),
+                UPLOAD_ERR_EXTENSION => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_invalid_file_extension'),
             ];
         }
 
@@ -890,7 +867,7 @@ class TTools
         if (array_key_exists($iUploadErrorCode, $aCodeList)) {
             $sError = $aCodeList[$iUploadErrorCode];
         } else {
-            $sError = TGlobal::Translate('chameleon_system_core.field_document.upload_error_unknown_error');
+            $sError = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unknown_error');
         }
 
         return $sError;
@@ -1123,8 +1100,7 @@ class TTools
      */
     public static function IsRecordLocked($sTableID, $sRecordID)
     {
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = self::getSecurityHelperAccess();
         $userId = $securityHelper->getUser()?->getId();
         if (null === $userId) {
             $userId = '';
@@ -1190,7 +1166,7 @@ class TTools
         $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
         $sActiveLanguage = $backendSession->getCurrentEditLanguageId();
-        if (($sActiveLanguage != $oCmsConfig->sqlData['translation_base_language_id'])) {
+        if ($sActiveLanguage != $oCmsConfig->sqlData['translation_base_language_id']) {
             $sActiveLanguagePrefix = TGlobal::GetLanguagePrefix($sActiveLanguage);
             $aTranslatableFields = $oCmsConfig->GetListOfTranslatableFields();
 
@@ -1814,5 +1790,10 @@ class TTools
     private static function getLogger(): LoggerInterface
     {
         return ServiceLocator::get('logger');
+    }
+
+    private static function getSecurityHelperAccess(): SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
     }
 }

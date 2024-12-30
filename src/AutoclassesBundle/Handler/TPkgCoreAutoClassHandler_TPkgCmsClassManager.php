@@ -13,14 +13,13 @@ namespace ChameleonSystem\AutoclassesBundle\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use IPkgCmsFileManager;
-use TPkgCmsVirtualClassManager;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHandler_AbstractBase
 {
-    private TPkgCmsVirtualClassManager $virtualClassManager;
+    private \TPkgCmsVirtualClassManager $virtualClassManager;
 
-    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager, \TPkgCmsVirtualClassManager $virtualClassManager)
+    public function __construct(Connection $databaseConnection, Filesystem $filemanager, \TPkgCmsVirtualClassManager $virtualClassManager)
     {
         parent::__construct($databaseConnection, $filemanager);
         $this->virtualClassManager = $virtualClassManager;
@@ -35,6 +34,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
 
         if (true === $virtualClassManager->load($sClassName)) {
             $virtualClassManager->UpdateVirtualClasses($targetDir);
+
             return;
         }
 
@@ -52,7 +52,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
            INNER JOIN `pkg_cms_class_manager_extension` ON `pkg_cms_class_manager`.`id` = `pkg_cms_class_manager_extension`.`pkg_cms_class_manager_id`
                 WHERE `pkg_cms_class_manager_extension`.`class` = :cleanClassName
               ';
-        $aClassManager = $this->getDatabaseConnection()->fetchAssociative($sQuery, array('cleanClassName' => $sClean));
+        $aClassManager = $this->getDatabaseConnection()->fetchAssociative($sQuery, ['cleanClassName' => $sClean]);
         if (false === $aClassManager) {
             trigger_error(
                 "invalid class name {$sClassName} for TPkgCoreAutoClassHandler_TPkgCmsClassManager",
@@ -66,7 +66,6 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
                 E_USER_ERROR
             );
         }
-
 
         $virtualClassManager->UpdateVirtualClasses($targetDir);
     }
@@ -82,7 +81,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
     {
         $sClassName = false;
         $query = 'SELECT `name_of_entry_point` FROM `pkg_cms_class_manager` WHERE `id` = :key';
-        if ($aClass = $this->getDatabaseConnection()->fetchAssociative($query, array('key' => $sKey))) {
+        if ($aClass = $this->getDatabaseConnection()->fetchAssociative($query, ['key' => $sKey])) {
             /** @psalm-suppress InvalidArrayOffset */
             $sClassName = $aClass[0];
         }
@@ -117,13 +116,10 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
         return false;
     }
 
-    /**
-     * @return array
-     */
-    private function getExtensionList()
+    private function getExtensionList(): array
     {
         if (null === $this->aClassExtensionList) {
-            $this->aClassExtensionList = array();
+            $this->aClassExtensionList = [];
             $query = 'SELECT `class` FROM `pkg_cms_class_manager_extension` ORDER BY `cmsident`';
             $tRes = $this->getDatabaseConnection()->executeQuery($query);
             while ($aRow = $tRes->fetchNumeric()) {
@@ -142,7 +138,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
     public function getClassNameList()
     {
         if (null === $this->aClassNameList) {
-            $this->aClassNameList = array();
+            $this->aClassNameList = [];
             $query = 'SELECT `name_of_entry_point` FROM `pkg_cms_class_manager` ORDER BY `cmsident`';
             try {
                 $tRes = $this->getDatabaseConnection()->executeQuery($query);
@@ -151,7 +147,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
                     $this->aClassNameList[] = $aRow[0];
                 }
             } catch (DBALException $e) {
-                return array();
+                return [];
             }
         }
 

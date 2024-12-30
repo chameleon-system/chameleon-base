@@ -12,33 +12,14 @@
 namespace ChameleonSystem\ViewRendererBundle\objects;
 
 use ChameleonSystem\ViewRenderer\Interfaces\ThemeServiceInterface;
-use Exception;
 use MatthiasMullie\Minify\CSS;
-use TdbCmsPortal;
-use TPkgViewRendererSnippetResourceCollector;
-use ViewRenderException;
 
 class TPkgViewRendererLessCompiler
 {
-    /**
-     * @var string
-     */
-    private $cssDir;
-
-    /**
-     * @var string
-     */
-    private $resourceCollectionRefreshPrefix;
-
-    /**
-     * @var array
-     */
-    private $additionalVariables = [];
-
-    /**
-     * @var ThemeServiceInterface
-     */
-    private $themeService;
+    private string $cssDir;
+    private string $resourceCollectionRefreshPrefix;
+    private array $additionalVariables = [];
+    private ThemeServiceInterface $themeService;
 
     public function __construct(string $cssDirRelativeToWebRoot, string $resourceCollectionRefreshPrefix, ThemeServiceInterface $themeService)
     {
@@ -48,7 +29,7 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @param array $variables - key-value pairs that are passed to the less compiler.
+     * @param array $variables - key-value pairs that are passed to the less compiler
      */
     public function addAdditionalVariables(array $variables): void
     {
@@ -74,11 +55,9 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @param TdbCmsPortal|null $portal
-     *
      * @return string
      */
-    public function getCompiledCssUrl(TdbCmsPortal $portal = null)
+    public function getCompiledCssUrl(?\TdbCmsPortal $portal = null)
     {
         $path = $this->getLessDirUrlPath();
         $filename = $this->getCompiledCssFilename($portal);
@@ -96,11 +75,9 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @param TdbCmsPortal|null $portal
-     *
      * @return string
      */
-    protected function getCompiledCssFilename(TdbCmsPortal $portal = null)
+    protected function getCompiledCssFilename(?\TdbCmsPortal $portal = null)
     {
         $fileSuffix = (null === $portal) ? '' : $portal->getFileSuffix();
 
@@ -112,35 +89,11 @@ class TPkgViewRendererLessCompiler
      */
     public function getCssRoutingPattern(): string
     {
-        return $this->cssDir.'/'.'chameleon_{portalId}.css';
+        return $this->cssDir.'/chameleon_{portalId}.css';
     }
 
     /**
-     * @return string - the file part for route generation; without a leading slash
-     *
-     * will be deprecated in 6.3.0 - use getCssRoutingPattern() which includes the relative path
-     */
-    public function getCompiledCssFilenameRoutingPattern(): string
-    {
-        return 'chameleon_{portalId}.css';
-    }
-
-    /**
-     * @see getCompiledCssFilename
-     *
-     * @return string
-     *
-     * @deprecated since 6.2.0 - handled in GenerateCssRouteCollectionGenerator
-     */
-    public function getCompiledCssFilenamePattern()
-    {
-        return '/(.*)chameleon_([0-9]{1,16}).css/';
-        // when changing the pattern, be aware that clients depend on the
-        // fact that the portal ID is match number 2.
-    }
-
-    /**
-     * @param TdbCmsPortal $portal
+     * @param \TdbCmsPortal $portal
      *
      * @return string[] the less files relative to the web root
      */
@@ -148,7 +101,7 @@ class TPkgViewRendererLessCompiler
     {
         $theme = $this->themeService->getTheme($portal);
 
-        $resourceCollector = new TPkgViewRendererSnippetResourceCollector();
+        $resourceCollector = new \TPkgViewRendererSnippetResourceCollector();
         $resources = $resourceCollector->getLessResources($portal, CMS_SNIPPET_PATH);
 
         if (null === $theme || empty($theme->fieldLessFile)) {
@@ -168,17 +121,17 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @param TdbCmsPortal $portal
-     * @param bool|null    $minifyCss
+     * @param \TdbCmsPortal $portal
+     * @param bool|null $minifyCss
      *
      * @return string
      *
-     * @throws ViewRenderException
+     * @throws \ViewRenderException
      */
     public function getGeneratedCssForPortal($portal, $minifyCss = null)
     {
         if (false === class_exists('Less_Parser') && false === class_exists('lessc')) {
-            throw new ViewRenderException(
+            throw new \ViewRenderException(
                 'No Less support found. You need to install wikimedia/less.php.'
             );
         }
@@ -199,17 +152,17 @@ class TPkgViewRendererLessCompiler
             $cachedLessDir = $this->getLocalPathToCachedLess();
             $this->createDirectoryIfNeeded($cachedLessDir);
 
-            $options = _DEVELOPMENT_MODE ? array(
+            $options = _DEVELOPMENT_MODE ? [
                 'sourceMap' => true,
                 'sourceMapWriteTo' => $this->getLocalPathToCompiledLess().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
                 'sourceMapURL' => $this->getLessDirUrlPath().'/lessSourceMap_'.$lessPortalIdentifier.'.map',
-            ) : array();
+            ] : [];
 
-            $options['import_dirs'] = array(PATH_WEB => '/');
+            $options['import_dirs'] = [PATH_WEB => '/'];
             $options['cache_dir'] = $cachedLessDir;
             $options['compress'] = $minifyCss;
 
-            $filesForLessParsing = array();
+            $filesForLessParsing = [];
             foreach ($lessFiles as $lessFile) {
                 $filesForLessParsing[PATH_WEB.$lessFile] = '/';
             }
@@ -220,14 +173,14 @@ class TPkgViewRendererLessCompiler
                 \Less_Cache::SetCacheDir($cachedLessDir);
                 try {
                     $cssFile = \Less_Cache::Get($filesForLessParsing, $options, $this->additionalVariables);
-                } catch (Exception $exc) {
+                } catch (\Exception $exc) {
                     if (false !== strpos($exc->getMessage(), 'stat failed')) {
                         // Consider this as a 'File removed! Halp!' and clear the cache and try again
                         array_map('unlink', glob($cachedLessDir.'/*'));
 
                         $cssFile = \Less_Cache::Get($filesForLessParsing, $options, $this->additionalVariables);
                     } else {
-                        throw new ViewRenderException('Exception during less compile', 0, $exc);
+                        throw new \ViewRenderException('Exception during less compile', 0, $exc);
                     }
                 }
 
@@ -246,8 +199,8 @@ class TPkgViewRendererLessCompiler
                     }
 
                     $css = $parser->getCss();
-                } catch (Exception $exc) {
-                    throw new ViewRenderException('Exception during less compile', 0, $exc);
+                } catch (\Exception $exc) {
+                    throw new \ViewRenderException('Exception during less compile', 0, $exc);
                 }
             }
 
@@ -261,15 +214,7 @@ class TPkgViewRendererLessCompiler
         return $this->getCssFromLessC($lessFiles, $minifyCss);
     }
 
-    /**
-     * @deprecated since 6.2.0 - lessc (leafo) should not be used anymore; support will be removed
-     *
-     * @param string[] $lessFiles
-     * @param bool     $minifyCss
-     *
-     * @return string
-     */
-    private function getCssFromLessC($lessFiles, $minifyCss)
+    private function getCssFromLessC(array $lessFiles, bool $minifyCss): string
     {
         $less = new \lessc();
         $less->addImportDir($_SERVER['DOCUMENT_ROOT']);
@@ -285,27 +230,19 @@ class TPkgViewRendererLessCompiler
         return $generatedCss;
     }
 
-    /**
-     * @param string[] $lessFiles
-     *
-     * @return array|string
-     */
-    private function getImportStatementsForFiles($lessFiles)
+    private function getImportStatementsForFiles(array $lessFiles): string
     {
-        $importStatements = array();
-        $pattern = '@import "{{}}";';
+        $importStatements = [];
         foreach ($lessFiles as $file) {
-            $importStatements[] = str_replace('{{}}', $file, $pattern);
+            $importStatements[] = sprintf('@import "%s";', $file);
         }
 
-        $importStatements = implode("\n", $importStatements);
-
-        return $importStatements;
+        return implode("\n", $importStatements);
     }
 
     /**
-     * @param string       $css
-     * @param TdbCmsPortal $portal
+     * @param string $css
+     * @param \TdbCmsPortal $portal
      *
      * @return false|int
      */
@@ -315,7 +252,7 @@ class TPkgViewRendererLessCompiler
 
         try {
             $this->createDirectoryIfNeeded($lessDir);
-        } catch (ViewRenderException $exception) {
+        } catch (\ViewRenderException $exception) {
             return false;
         }
 
@@ -325,9 +262,6 @@ class TPkgViewRendererLessCompiler
         return file_put_contents($targetPath, $css);
     }
 
-    /**
-     * @return mixed
-     */
     private function getMinifyParameter()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::getParameter(
@@ -335,15 +269,13 @@ class TPkgViewRendererLessCompiler
     }
 
     /**
-     * @param string $dir
-     *
-     * @throws ViewRenderException
+     * @throws \ViewRenderException
      */
     private function createDirectoryIfNeeded(string $dir): void
     {
         if (false === \is_dir($dir)) {
             if (false === \mkdir($dir, 0777, true) && false === \is_dir($dir)) {
-                throw new ViewRenderException(sprintf('Cannot create directory %s', $dir));
+                throw new \ViewRenderException(sprintf('Cannot create directory %s', $dir));
             }
         }
     }

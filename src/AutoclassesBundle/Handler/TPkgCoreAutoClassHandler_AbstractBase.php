@@ -12,36 +12,17 @@
 namespace ChameleonSystem\AutoclassesBundle\Handler;
 
 use Doctrine\DBAL\Connection;
-use IPkgCmsFileManager;
+use Symfony\Component\Filesystem\Filesystem;
 
 abstract class TPkgCoreAutoClassHandler_AbstractBase implements IPkgCmsCoreAutoClassHandler
 {
-    /**
-     * @var mixed
-     */
-    protected $aClassMapping = null;
+    protected ?array $aClassMapping = null;
+    protected ?array $aClassExtensionList = null;
+    protected ?array $aClassNameList = null;
+    protected Filesystem $filemanager;
+    private Connection $databaseConnection;
 
-    /**
-     * @var null|array
-     */
-    protected $aClassExtensionList = null;
-
-    /**
-     * @var null|class-string[]
-     */
-    protected $aClassNameList = null;
-
-    /**
-     * @var IPkgCmsFileManager
-     */
-    protected $filemanager;
-
-    /**
-     * @var Connection
-     */
-    private $databaseConnection;
-
-    public function __construct(Connection $databaseConnection, IPkgCmsFileManager $filemanager)
+    public function __construct(Connection $databaseConnection, Filesystem $filemanager)
     {
         $this->databaseConnection = $databaseConnection;
         $this->filemanager = $filemanager;

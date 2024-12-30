@@ -37,7 +37,7 @@ class TCMSFieldCreatedTimestamp extends TCMSFieldTimestamp
             $timeArray = explode(':', $valArray[1]);
 
             $variablesArray['%timestamp%'] = TGlobal::OutHTML($dateArray[2].'.'.$dateArray[1].'.'.$dateArray[0].' '.$timeArray[0].':'.$timeArray[1].':'.$timeArray[2]);
-            $html .= TGlobal::Translate('chameleon_system_core.field_timestamp.is_set_to', $variablesArray);
+            $html .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_timestamp.is_set_to', $variablesArray);
         } else {
             $year = date('Y');
             $month = date('m');
@@ -47,7 +47,7 @@ class TCMSFieldCreatedTimestamp extends TCMSFieldTimestamp
             $seconds = date('s');
 
             $variablesArray['%timestamp%'] = "{$day}.{$month}.{$year} {$hour}:{$minutes}:{$seconds}";
-            $html .= TGlobal::Translate('chameleon_system_core.field_timestamp.will_be_set_to', $variablesArray);
+            $html .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_timestamp.will_be_set_to', $variablesArray);
         }
 
         return $html;
