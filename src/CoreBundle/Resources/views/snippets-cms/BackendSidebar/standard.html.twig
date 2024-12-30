@@ -28,7 +28,7 @@
                 <ul class="nav-group-items">
                     {% for menuItem in category.menuItems %}
                         <li class="nav-item" tabindex="0">
-                            <a href="{{ menuItem.url }}" class="nav-link" data-entry-id="{{ menuItem.id | e("html_attr") }}">
+                            <a href="{{ menuItem.url }}" class="nav-link" data-entry-id="{{ menuItem.id | e('html_attr') }}">
                                 <i class="nav-icon {{ menuItem.icon|e('html_attr') }}"></i>
                                 {{ menuItem.name }}
                             </a>
@@ -37,7 +37,6 @@
                 </ul>
             </li>
         {% endfor %}
-
 
         <div class="ps__rail-x">
             <div class="ps__thumb-x" tabindex="0"></div>
