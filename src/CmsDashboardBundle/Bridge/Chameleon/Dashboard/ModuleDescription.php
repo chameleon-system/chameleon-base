@@ -3,11 +3,12 @@
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard;
 
 // ModuleDescription represents an available dashboard module with its id, name and description
-final class ModuleDescription
+final readonly class ModuleDescription
 {
     public function __construct(
-        public readonly string $name,
-        public readonly string $description,
-        public readonly string $id
-    ) {}
+        public string $name,
+        public string $description,
+        public string $id
+    ) {
+    }
 }

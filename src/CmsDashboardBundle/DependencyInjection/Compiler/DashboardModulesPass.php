@@ -2,9 +2,8 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 class DashboardModulesPass implements CompilerPassInterface
@@ -17,8 +16,8 @@ class DashboardModulesPass implements CompilerPassInterface
 
         foreach ($moduleServiceIds as $moduleServiceId) {
             $moduleDefinition = $container->getDefinition($moduleServiceId);
-            $moduleServiceDefinition->addMethodCall("addDashboardModule", [new Reference($moduleServiceId), $moduleServiceId]);
-            //$services[$moduleServiceId] = new Reference($moduleServiceId);
+            $moduleServiceDefinition->addMethodCall('addDashboardModule', [new Reference($moduleServiceId), $moduleServiceId]);
+            // $services[$moduleServiceId] = new Reference($moduleServiceId);
         }
     }
 }
