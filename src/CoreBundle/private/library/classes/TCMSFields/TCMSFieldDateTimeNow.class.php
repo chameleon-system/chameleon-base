@@ -91,7 +91,7 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
 
             $html = $this->_GetHiddenField();
             $html .= '<div class="form-content-simple">';
-            $html .= TGlobal::OutHTML($date.' '.$hour.':'.$minutes.' '.TGlobal::Translate('chameleon_system_core.field_date_time.time'));
+            $html .= TGlobal::OutHTML($date.' '.$hour.':'.$minutes.' '.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.time'));
             $html .= '</div>';
         }
 

@@ -335,15 +335,15 @@ class CMSDocumentManager extends TCMSModelBase
             $oFile->Load($sFileId);
             if ($bInfoOnFileDelete) {
                 $sTitle = 'chameleon_system_core.document_manager.delete_document';
-                $sNotice = '<div class="alert alert-warning">'.TGlobal::Translate('chameleon_system_core.document_manager.attention').'<br />'.TGlobal::Translate('chameleon_system_core.document_manager.action_delete_confirm_connections').'</div>';
+                $sNotice = '<div class="alert alert-warning">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.attention').'<br />'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.action_delete_confirm_connections').'</div>';
             } else {
                 $sTitle = 'chameleon_system_core.document_manager.document_id';
-                $sNotice = '<div class="alert alert-info">'.TGlobal::Translate('chameleon_system_core.document_manager.attention').'<br />'.TGlobal::Translate('chameleon_system_core.document_manager.connection_list').'</div>';
+                $sNotice = '<div class="alert alert-info">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.attention').'<br />'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.connection_list').'</div>';
             }
             $foundConnectionsHTML = '
         <div class="card">
             <div class="card-header">
-                '.TGlobal::Translate($sTitle, [
+                '.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans($sTitle, [
                     '%id%' => $sFileId,
                 ]).'
             </div>
@@ -356,9 +356,9 @@ class CMSDocumentManager extends TCMSModelBase
                <table class="table table-bordered">
                     <tr class="bg-primary">
                         <th>ID</th>
-                        <th>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_name').'</th>
-                        <th>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_table').'</th>
-                        <th>'.TGlobal::Translate('chameleon_system_core.document_manager.connected_item_column_field').'</th>
+                        <th>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.connected_item_column_name').'</th>
+                        <th>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.connected_item_column_table').'</th>
+                        <th>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.connected_item_column_field').'</th>
                     </tr>';
 
             $count = 0;
@@ -389,10 +389,10 @@ class CMSDocumentManager extends TCMSModelBase
 
                      ';
             if ($bInfoOnFileDelete) {
-                $foundConnectionsHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.confirm_delete_with_connections'), "javascript:SendDelete('".$sFileId."');", 'far fa-check-circle').'
-                                      '.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.abort_delete'), 'javascript:CloseDeleteCheckDialog();', 'far fa-times-circle');
+                $foundConnectionsHTML .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.confirm_delete_with_connections'), "javascript:SendDelete('".$sFileId."');", 'far fa-check-circle').'
+                                      '.TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.abort_delete'), 'javascript:CloseDeleteCheckDialog();', 'far fa-times-circle');
             } else {
-                $foundConnectionsHTML .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.document_manager.close'), 'javascript:CloseModalIFrameDialog();', 'far fa-times-circle');
+                $foundConnectionsHTML .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_manager.close'), 'javascript:CloseModalIFrameDialog();', 'far fa-times-circle');
             }
             $foundConnectionsHTML .= '  </div>
                                        </div>';

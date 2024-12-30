@@ -77,11 +77,11 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
         $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackDocumentSelectBox'), null, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('cms_filetype_id' => TGlobal::Translate('chameleon_system_core.list_document.file_type')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('cms_filetype_id' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_type')), 'left', null, 1, false);
         $this->tableObj->AddColumn('cms_filetype_id', 'left', array($this, 'CallBackGenerateDownloadLink'), null, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('name' => TGlobal::Translate('chameleon_system_core.list_document.title')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('name' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.title')), 'left', null, 1, false);
         $sFieldNameTransformed = 'name';
 
         if (!empty($sLanguageIdent) && TdbCmsDocument::CMSFieldIsTranslated('name')) {
@@ -93,12 +93,12 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
         $this->tableObj->searchFields["`cms_document`.$quotedFieldNameTransformed"] = 'full'; // allow searching in this field
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('filename' => TGlobal::Translate('chameleon_system_core.list_document.file_name')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('filename' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_name')), 'left', null, 1, false);
         $this->tableObj->AddColumn('filename', 'left', array($this, 'CallBackFilenameShort'), $jsParas, 1);
         $this->tableObj->searchFields['`cms_document`.`filename`'] = 'full'; // allow searching in this field
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('filesize' => TGlobal::Translate('chameleon_system_core.list_document.file_size')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('filesize' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_size')), 'left', null, 1, false);
         $this->tableObj->AddColumn('filesize', 'left', array($this, 'CallBackHumanRedableFileSize'), $jsParas, 1);
     }
 

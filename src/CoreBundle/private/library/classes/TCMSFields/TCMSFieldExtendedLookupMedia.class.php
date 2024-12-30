@@ -197,7 +197,7 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
         }
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aRequest);
-        $sErrorMessage = TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_document.error_missing_target'));
+        $sErrorMessage = TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.error_missing_target'));
         $oGlobal = TGlobal::instance();
 
         $aParam = $oGlobal->GetUserData(null, array('module_fnc', '_rmhist', '_histid', '_fnc'));
@@ -279,9 +279,9 @@ JAVASCRIPTCODE;
         $oTableManager = TTools::GetTableEditorManager($this->sTableName, $this->recordId);
         $oTableManager->AllowEditByAll(true);
         if (true === $oTableManager->SaveField($this->name, $sMediaId)) {
-            $sReturn = TGlobal::Translate('chameleon_system_core.field_image_lookup.created');
+            $sReturn = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_image_lookup.created');
         } else {
-            $sReturn = TGlobal::Translate('chameleon_system_core.field_image_lookup.error_creating');
+            $sReturn = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_image_lookup.error_creating');
         }
         $oTableManager->AllowDeleteByAll(false);
 

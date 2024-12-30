@@ -2,7 +2,7 @@
             <table class="table table-striped table-bordered table-sm table-hover" id="generateVariantTable">
                 <thead>
                 <tr>
-                    <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.variant_editor_headline')); ?></th>
+                    <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.variants.variant_editor_headline')); ?></th>
                     <?php
                     foreach ($aVariantTypeNames as $variantTypeName) {
                         echo '<th>'.TGlobal::OutHTML($variantTypeName).'</th>';
@@ -11,7 +11,7 @@
                      * @var TdbShopArticle $oArticle
                      */
                     ?>
-                    <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.variant_price')); ?> (<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.variant_base_price')); ?>: <?=$oArticle->sqlData['price']; ?>)</th>
+                    <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.variants.variant_price')); ?> (<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.variants.variant_base_price')); ?>: <?=$oArticle->sqlData['price']; ?>)</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -69,7 +69,7 @@
                 if ($VariantValueCount > 0) {
                     ?>
                 <tr>
-                    <td colspan="<?=$VariantValueCount + 2; ?>"><input type="checkbox" value="" class="generateVariantCheckall" /> <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.action_select_all_variants')); ?></td>
+                    <td colspan="<?=$VariantValueCount + 2; ?>"><input type="checkbox" value="" class="generateVariantCheckall" /> <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.variants.action_select_all_variants')); ?></td>
                 </tr>
                 <?php
                 }
@@ -78,7 +78,7 @@
             </table>
 
             <div>
-                <a href="javascript:generateVariants();" class="btn btn-success btn-sm"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.action_create_variants')); ?></a>
+                <a href="javascript:generateVariants();" class="btn btn-success btn-sm"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.variants.action_create_variants')); ?></a>
             </div>
         </div>
         <script>

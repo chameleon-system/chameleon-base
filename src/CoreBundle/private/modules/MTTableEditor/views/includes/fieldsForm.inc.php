@@ -34,7 +34,7 @@
                     $sTabName = $oTab->fieldName;
                     $sTabId = $oTab->id;
                 } else {
-                    $sTabName = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.tab_default');
+                    $sTabName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.tab_default');
                     $sTabId = '';
                 }
                 ++$iTabCount;

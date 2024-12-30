@@ -60,7 +60,7 @@ if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW
             <td>
                 <div style="padding-left: 2px;">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="document.cmsform.elements['module_fnc[contentmodule]'].value='Insert';document.cmsform.submit();"><i class="fas fa-plus pr-2"></i><?php echo TGlobal::Translate('chameleon_system_core.action.new'); ?></button>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="document.cmsform.elements['module_fnc[contentmodule]'].value='Insert';document.cmsform.submit();"><i class="fas fa-plus pr-2"></i><?php echo \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.new'); ?></button>
                     </div>
                 </div>
             </td>

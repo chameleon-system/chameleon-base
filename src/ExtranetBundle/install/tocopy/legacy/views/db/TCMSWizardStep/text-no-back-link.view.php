@@ -17,7 +17,7 @@
 
     <div class="stepnavibuttons">
       <?php if (!is_null($oStepNext)) {
-      ?><div class="formButtonNext"><input type="submit" value="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_extranet.action.next_step')); ?>" /></div><?php
+      ?><div class="formButtonNext"><input type="submit" value="<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_extranet.action.next_step')); ?>" /></div><?php
   } ?>
     </div>
   </form>

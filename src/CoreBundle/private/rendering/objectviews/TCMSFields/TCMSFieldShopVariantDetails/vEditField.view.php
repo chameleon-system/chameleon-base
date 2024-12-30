@@ -9,9 +9,9 @@
         <input type="hidden" name="<?=TGlobal::OutHTML($oField->name); ?>[x]" value="x"/>
         <table class="table table-striped table-bordered table-sm">
             <tr>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.variant_type')); ?></th>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.variant_value')); ?></th>
-                <th><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_shop.variants.action_new_variant_value')); ?></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.variants.variant_type')); ?></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.variants.variant_value')); ?></th>
+                <th><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_shop.variants.action_new_variant_value')); ?></th>
             </tr>
             <?php
             $oVariantTypes = $oVariantSet->GetFieldShopVariantTypeList();
@@ -20,7 +20,7 @@
                 $oValueList = $oType->GetFieldShopVariantTypeValueList(); ?>
                 <tr>
                     <th><?=TGlobal::OutHTML($oType->fieldName); ?> <a
-                        href="<?=$oField->GetEditLink($oType->table, $oType->id); ?>" class="btn btn-sm btn-info" style="float: right"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.link.edit')); ?></a>
+                        href="<?=$oField->GetEditLink($oType->table, $oType->id); ?>" class="btn btn-sm btn-info" style="float: right"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.link.edit')); ?></a>
                     </th>
                     <td>
                         <?php

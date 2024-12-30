@@ -531,7 +531,7 @@ class TCMSListManagerEndPoint
                 if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->fieldName)) {
                     // new
                     $oMenuItem = new TCMSTableEditorMenuItem();
-                    $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.new');
+                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.new');
                     $oMenuItem->sIcon = 'fas fa-plus';
                     $oMenuItem->sItemKey = 'new';
                     $oMenuItem->sOnClick = "document.cmsform.elements['module_fnc[contentmodule]'].value='Insert';document.cmsform.submit();";
@@ -545,7 +545,7 @@ class TCMSListManagerEndPoint
                     $oTableEditorConf->LoadFromField('name', 'cms_tbl_conf');
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'edittableconf';
-                    $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.open_table_configuration');
+                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.open_table_configuration');
                     $oMenuItem->sIcon = 'fas fa-cogs';
                     $oMenuItem->setButtonStyle('btn-warning');
 

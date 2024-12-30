@@ -630,9 +630,9 @@ class TFullGroupTable extends TGroupTable
                         }
 
                         if ('ASC' == $tmpOrderList[$cellObj->name]) {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-down" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_asc')).'"></i>';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-down" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_sort_order_asc')).'"></i>';
                         } else {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-up" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_sort_order_desc')).'"></i>';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-up" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_sort_order_desc')).'"></i>';
                         }
 
                         $row[$cellObj->name] = '<nobr>'.$row[$cellObj->name].$orderImage;
@@ -767,7 +767,7 @@ class TFullGroupTable extends TGroupTable
         if ($this->showRowsPerPageChooser) {
             $tableNavigation .= '<div class="TFullGroupTablePerPageSelect">
             <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_records_per_page')).'</span></div>
+                <div class="input-group-prepend"><span class="input-group-text">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_records_per_page')).'</span></div>
                 <select name="_limit" class="form-control" onChange="document.'.$this->listName.'._startRecord.value=0;document.'.$this->listName.'.submit();">
             ';
 

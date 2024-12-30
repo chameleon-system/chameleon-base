@@ -26,7 +26,7 @@ if (array_key_exists('copyState', $data) && 'copied' == $data['copyState']) {
     } ?>
     <script type="text/javascript">
         $(document).ready(function () {
-            toasterMessage('<?=$sTmpName; ?><?=TGlobal::Translate('chameleon_system_core.template_engine.msg_copy_success'); ?>', 'MESSAGE');
+            toasterMessage('<?=$sTmpName; ?><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.msg_copy_success'); ?>', 'MESSAGE');
         });
     </script>
     <?php
@@ -38,7 +38,7 @@ $rowCount = 0;
         if (!empty($data['showLangCopy'])) {
             echo "
     $(document).ready(function() {
-      toasterMessage('".TGlobal::Translate('chameleon_system_core.cms_module_table_editor.msg_translation_created')."','WARNING');
+      toasterMessage('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.msg_translation_created')."','WARNING');
     });
     ";
         }

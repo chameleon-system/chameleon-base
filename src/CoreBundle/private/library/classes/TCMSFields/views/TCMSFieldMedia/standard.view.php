@@ -14,7 +14,7 @@ foreach ($aRecordsConnected as $aValue) {
     <div class="image-connected">
         <img src="<?=$oThumb->GetFullURL(); ?>" alt="<?=TGlobal::OutHTML($oImage->aData['description']); ?>" border="0"/>
         <span class="close"
-              onclick="$(this).parent().remove();$('#<?=TGlobal::OutHTML($oField->name).$iPosition; ?>cms_media_id').attr('value','1')"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_media.remove')); ?></span>
+              onclick="$(this).parent().remove();$('#<?=TGlobal::OutHTML($oField->name).$iPosition; ?>cms_media_id').attr('value','1')"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_media.remove')); ?></span>
     </div>
     <?php
     } ?>

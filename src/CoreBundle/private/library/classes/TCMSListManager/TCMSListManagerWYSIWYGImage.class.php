@@ -52,13 +52,13 @@ class TCMSListManagerWYSIWYGImage extends TCMSListManagerImagedatabase
             $mediaTreeId = '';
         }
 
-        $options = '<option value="">'.TGlobal::Translate('Bitte wählen')."</option>\n";
+        $options = '<option value="">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Bitte wählen')."</option>\n";
         $options .= $oTreeSelect->GetTreeOptions($mediaTreeId);
 
         $oViewRenderer = new ViewRenderer();
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
         $oViewRenderer->AddSourceObject('sName', 'cms_media_tree_id');
-        $oViewRenderer->AddSourceObject('sLabelText', TGlobal::Translate('chameleon_system_core.image_chooser.tree_node'));
+        $oViewRenderer->AddSourceObject('sLabelText', \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.image_chooser.tree_node'));
         $oViewRenderer->AddSourceObject('onChange', "document.forms['".TGlobal::OutHTML($this->tableObj->listName)."'].submit();");
         $oViewRenderer->AddSourceObject('options', $options);
 
@@ -156,7 +156,7 @@ class TCMSListManagerWYSIWYGImage extends TCMSListManagerImagedatabase
         $this->tableObj->showGroupSelector = false;
         $this->tableObj->AddGroupField(array($list_group_field_column => $groupField), 'left', null, null, $this->columnCount);
         // $this->tableObj->showGroupSelectorText = 'Verzeichnis';
-        $this->tableObj->showAllGroupsText = '['.TGlobal::Translate('chameleon_system_core.list.group_show_all').']';
+        $this->tableObj->showAllGroupsText = '['.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
         $tmpArray = array($list_group_field_column => 'ASC');
         $this->tableObj->orderList = array_merge($tmpArray, $this->tableObj->orderList);
     }

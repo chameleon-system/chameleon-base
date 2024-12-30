@@ -23,7 +23,7 @@ class TCMSListManagerImageMLTList extends TCMSListManagerMLTList
     {
         $jsParas = array('id');
         ++$this->columnCount;
-        $sTranslatedField = TGlobal::Translate('chameleon_system_core.list_image_database.column_name_preview');
+        $sTranslatedField = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_image_database.column_name_preview');
         $this->tableObj->AddHeaderField(array('path' => $sTranslatedField), 'left', null, 1, false);
         $this->tableObj->AddColumn('path', 'left', array($this, 'CallBackImageWithZoom'), $jsParas, 1);
         parent::AddFields();

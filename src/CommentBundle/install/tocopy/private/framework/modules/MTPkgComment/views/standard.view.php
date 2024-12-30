@@ -36,9 +36,9 @@ if ($oGlobal->UserDataExists('commenttypeid')) {
             }
         } ?>
     </div>
-    <input type="submit" name="savecomment" value=" <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_comment.action.submit')); ?> "/>
+    <input type="submit" name="savecomment" value=" <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.submit')); ?> "/>
 </form>
-<div id="comment_preview_button"><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_comment.action.preview')); ?></div>
+<div id="comment_preview_button"><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.preview')); ?></div>
 <div id="comment_preview">
     <?php
     $oPreviewComment = TdbPkgComment::GetNewInstance();
@@ -51,7 +51,7 @@ if ($oGlobal->UserDataExists('commenttypeid')) {
     $oExtranetConfig = TdbDataExtranet::GetInstance();
         $sLinkLogin = $oExtranetConfig->GetFieldNodeLoginIdPageURL();
         $aReplaceArray = array('%linkloginstart%' => '<a href="'.$sLinkLogin.'">', '%linkloginend%' => '</a>'); ?>
-    <?= TGlobal::Translate('chameleon_system_comment.error.login_required', $aReplaceArray); ?>
+    <?= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.error.login_required', $aReplaceArray); ?>
 <?php
     } ?>
 <?php

@@ -1,5 +1,5 @@
 <?php
-    $sMainMenuText = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_main_menu')); ?>
+    $sMainMenuText = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_header.action_main_menu')); ?>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb my-0">
             <li class="breadcrumb-item">
@@ -22,7 +22,7 @@
                 }
 
                 if (empty($sBreadcrumbNodeName)) {
-                    $sBreadcrumbNodeName = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
+                    $sBreadcrumbNodeName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
                 } ?>
                         <li class="breadcrumb-item">
                             <a href="<?= TGlobal::OutHTML($item['url']); ?>"<?= $atagID; ?>>

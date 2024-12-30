@@ -51,7 +51,8 @@ class TGlobal extends TGlobalBase
      *
      * @throws InvalidArgumentException If the locale contains invalid characters
      *
-     * @deprecated deprecated since 6.1.0 - please use the "translator" service
+     * @deprecated deprecated since 6.1.0 - please use the \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans()
+     * will be removed in 9.0
      */
     public static function Translate($id, $parameters = [], $domain = null, $locale = null)
     {

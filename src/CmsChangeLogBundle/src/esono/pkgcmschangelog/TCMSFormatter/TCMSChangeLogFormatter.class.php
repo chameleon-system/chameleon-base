@@ -71,9 +71,9 @@ class TCMSChangeLogFormatter
     public static function formatChangeType($sChangeType)
     {
         switch ($sChangeType) {
-            case 'UPDATE': return TGlobal::Translate('chameleon_system_cms_change_log.state.changed');
-            case 'INSERT': return TGlobal::Translate('chameleon_system_cms_change_log.state.new');
-            case 'DELETE': return TGlobal::Translate('chameleon_system_cms_change_log.state.removed');
+            case 'UPDATE': return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.state.changed');
+            case 'INSERT': return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.state.new');
+            case 'DELETE': return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.state.removed');
         }
     }
 

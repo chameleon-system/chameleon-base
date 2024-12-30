@@ -23,7 +23,7 @@ class TCMSFieldTailLog extends TCMSField
 
         $html = '<div id="'.TGlobal::OutHTML($this->name).'_lastReloaded" style="border-bottom: 1px solid #362B36; margin-bottom: 10px;">
         <strong>
-        '.TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_tail_log.last_update')).': <span>'.date('H:i:s').'</span>
+        '.TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_tail_log.last_update')).': <span>'.date('H:i:s').'</span>
         </strong>
         </div>';
         $html .= '<div style="overflow: auto; height: 350px; border: 1px solid #A9C4E7; padding: 5px;" id="'.TGlobal::OutHTML($this->name).'">';
@@ -80,7 +80,7 @@ class TCMSFieldTailLog extends TCMSField
             $logFilePath = realpath(PATH_CMS_CUSTOMER_DATA.'/'.$sPath);
             if (empty($logFilePath)) {
                 $this->bLogNotReadable = true;
-                $html = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_tail_log.error_unable_to_read_log').': '.$logFilePath);
+                $html = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_tail_log.error_unable_to_read_log').': '.$logFilePath);
 
                 return $html;
             }
@@ -114,7 +114,7 @@ class TCMSFieldTailLog extends TCMSField
             }
         } else {
             $this->bLogNotReadable = true;
-            $html = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_tail_log.error_unable_to_read_log').': '.$logFilePath);
+            $html = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_tail_log.error_unable_to_read_log').': '.$logFilePath);
         }
 
         return $html;

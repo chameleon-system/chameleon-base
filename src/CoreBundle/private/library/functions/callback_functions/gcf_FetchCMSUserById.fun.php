@@ -11,7 +11,7 @@
 
 function gcf_FetchCMSUserById($id, $row)
 {
-    $name = TGlobal::Translate('chameleon_system_core.list.gcf_cms_user_unknown');
+    $name = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.gcf_cms_user_unknown');
     if (!empty($id)) {
         $oCmsUser = TdbCmsUser::GetNewInstance();
         /** @var $oCmsUser TdbCmsUser */

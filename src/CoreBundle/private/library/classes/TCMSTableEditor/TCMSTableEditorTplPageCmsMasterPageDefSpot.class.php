@@ -27,7 +27,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
             $oCmsTplModule = $oCmsTplModuleInstance->GetFieldCmsTplModule();
             if ($oCmsTplModule->fieldIsCopyAllowed) {
                 // copy module instance
-                $sNewName = TGlobal::Translate('chameleon_system_core.table_editor_page_def_spot.after_copy_name', array('%name%' => $oCmsTplModuleInstance->GetName()));
+                $sNewName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_page_def_spot.after_copy_name', array('%name%' => $oCmsTplModuleInstance->GetName()));
                 $aFieldValueOverloading = array('name' => $sNewName);
 
                 $oTableEditor->Init($iTableID, $oCmsTplModuleInstance->id);

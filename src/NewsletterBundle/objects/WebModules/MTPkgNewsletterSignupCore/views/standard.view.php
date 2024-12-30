@@ -27,7 +27,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
                     ?>
                     <div class="inputbox_salutaion inputbox">
                         <div class="left">
-                            <?=TGlobal::Translate('chameleon_system_newsletter.form.salutation'); ?>
+                            <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.form.salutation'); ?>
                         </div>
                         <div class="right">
                             <?php
@@ -48,7 +48,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
 
                     <div class="inputbox_firstname inputbox">
                         <div class="left">
-                            <?=TGlobal::Translate('chameleon_system_newsletter.form.first_name'); ?>
+                            <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.form.first_name'); ?>
                         </div>
                         <div class="right">
                             <?php
@@ -70,7 +70,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
 
                     <div class="inputbox_lastname inputbox">
                         <div class="left">
-                            <?=TGlobal::Translate('chameleon_system_newsletter.form.last_name'); ?>
+                            <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.form.last_name'); ?>
                         </div>
                         <div class="right">
                             <?php
@@ -92,7 +92,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
 
                     <div class="inputbox_email inputbox">
                         <div class="left">
-                            <?=TGlobal::Translate('chameleon_system_newsletter.form.email'); ?>
+                            <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.form.email'); ?>
                         </div>
                         <div class="right">
                             <?php
@@ -115,7 +115,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
                     <?php if ($oNewsletterGroupList->Length() > 0) {
                                 ?>
                     <div class="inputbox_newsletter inputbox">
-                        <div class="left"><?=TGlobal::Translate('chameleon_system_newsletter.text.available_newsletter'); ?></div>
+                        <div class="left"><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.text.available_newsletter'); ?></div>
                         <div class="right">
                             <?php if ($oNewsletterGroupList->Length() > 1) {
                                     ?>
@@ -125,7 +125,7 @@ $oUser = TdbDataExtranetUser::GetInstance();
                                                          onclick="$('.newsletterchecker').prop('checked', true)"/>
                                 </div>
                                 <div class="right"><label
-                                    for="all"><?=TGlobal::Translate('chameleon_system_newsletter.form.subscribe_to_all'); ?></label></div>
+                                    for="all"><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.form.subscribe_to_all'); ?></label></div>
                                 <div class="cleardiv">&nbsp;</div>
                             </div>
                             <?php

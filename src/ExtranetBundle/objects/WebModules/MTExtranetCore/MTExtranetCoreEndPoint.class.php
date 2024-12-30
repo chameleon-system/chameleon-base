@@ -1457,7 +1457,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             $bIsValid = false;
 
             $this->data['bError'] = true;
-            $this->data['sErrorMsg'] = TGlobal::Translate('chameleon_system_extranet.send_password.email_invalid');
+            $this->data['sErrorMsg'] = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_extranet.send_password.email_invalid');
         }
 
         return $bIsValid;

@@ -232,7 +232,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 $hasExportProfile = $this->getDatabaseConnection()->fetchOne($query, ['tableId' => $this->oTableConf->sqlData['id']]);
                 if (1 === (int) $hasExportProfile) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
-                    $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.export');
+                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.export');
                     $oMenuItem->sIcon = 'far fa-save';
 
                     $sListClass = 'TCMSListManager';
@@ -251,7 +251,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                         'listCacheKey' => $this->GetListCacheKey(),
                     ];
 
-                    $js = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParameters)."',0,0,'".TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.action.export'))."');";
+                    $js = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParameters)."',0,0,'".TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.export'))."');";
 
                     $oMenuItem->sOnClick = $js;
                     $this->oMenuItems->AddItem($oMenuItem);
@@ -262,7 +262,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
                 $oMenuItem = new TCMSTableEditorMenuItem();
                 $oMenuItem->sItemKey = 'deleteall';
-                $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.list.delete_selected');
+                $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.delete_selected');
                 $oMenuItem->sIcon = 'far fa-trash-alt';
                 $oMenuItem->setButtonStyle('btn-danger');
                 $oMenuItem->sOnClick = "DeleteSelectedRecords('{$sFormName}');";
@@ -308,10 +308,10 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $this->tableObj->style->searchButtonTDstyle = 'tblSearchButtonTDstyle';
         $this->tableObj->style->searchFieldTDstyle = 'tblSearchFieldTDstyle';
 
-        $this->tableObj->hitText = TGlobal::Translate('chameleon_system_core.list.current_page_details');
-        $this->tableObj->searchFieldText = TGlobal::Translate('chameleon_system_core.list.search_term');
-        $this->tableObj->searchButtonText = TGlobal::Translate('chameleon_system_core.list.perform_search');
-        $this->tableObj->notFoundText = TGlobal::Translate('chameleon_system_core.list.no_entries');
+        $this->tableObj->hitText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.current_page_details');
+        $this->tableObj->searchFieldText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.search_term');
+        $this->tableObj->searchButtonText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.perform_search');
+        $this->tableObj->notFoundText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.no_entries');
         $this->tableObj->pageingLocation = 'bottom';
 
         $this->tableObj->_postData = $postData;
@@ -408,7 +408,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         // add locking column if locking is active
         if ('1' == $this->oTableConf->sqlData['locking_active']) {
-            $this->tableObj->AddHeaderField(['Locking' => TGlobal::Translate('chameleon_system_core.list.column_name_lock')], 'left', null, 1, false, 30);
+            $this->tableObj->AddHeaderField(['Locking' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.column_name_lock')], 'left', null, 1, false, 30);
             $this->tableObj->AddColumn('id', 'left', [$this, 'CallBackLockingStatus'], $jsParas, 1);
             ++$this->columnCount;
         }
@@ -448,9 +448,9 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             $name = $this->oTableConf->GetNameColumn();
             $callback = $this->oTableConf->GetNameFieldCallbackFunction();
             $this->tableObj->AddHeaderField(['id' => 'ID'], 'left', null, 1, $allowSort, false);
-            $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_cmsident');
+            $sTranslatedField = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.column_name_cmsident');
             $this->tableObj->AddHeaderField(['cmsident' => $sTranslatedField], 'left', null, 1, $allowSort, false);
-            $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_name');
+            $sTranslatedField = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.column_name_name');
             $this->tableObj->AddHeaderField([$name => $sTranslatedField], 'left', null, 1, $allowSort);
 
             $this->tableObj->AddColumn('id', 'left', ['TCMSRecord', 'callBackUuid'], $jsParas, 1);
@@ -566,7 +566,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
     public function _AddFunctionColumn()
     {
         ++$this->columnCount;
-        $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_actions');
+        $sTranslatedField = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.column_name_actions');
         $this->tableObj->AddHeaderField(['id' => $sTranslatedField.'&nbsp;&nbsp;'], 'right', null, 1, false, false);
         $this->tableObj->AddColumn('id', 'left', [$this, 'CallBackFunctionBlock'], null, 1);
     }
@@ -607,7 +607,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
         $this->tableObj->AddGroupField([$list_group_field_column => $groupField], 'left', null, null, $columnCount);
         $this->tableObj->showGroupSelectorText = $this->oTableConf->fieldListGroupFieldHeader;
-        $this->tableObj->showAllGroupsText = '['.TGlobal::Translate('chameleon_system_core.list.group_show_all').']';
+        $this->tableObj->showAllGroupsText = '['.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
         $tmpArray = [$list_group_field_column => 'ASC'];
         $this->tableObj->orderList = array_merge($tmpArray, $this->tableObj->orderList);
     }
@@ -716,7 +716,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
         $lockUser = $userLock->GetFieldCmsUser();
 
-        return '<i class="fas fa-user-lock text-danger" data-record-lock-status="locked" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.header_lock')).': '.TGlobal::OutHTML($lockUser->GetName()).'"></i>';
+        return '<i class="fas fa-user-lock text-danger" data-record-lock-status="locked" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.header_lock')).': '.TGlobal::OutHTML($lockUser->GetName()).'"></i>';
     }
 
     /**
@@ -796,7 +796,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      */
     public function CallBackFunctionBlockEditButton($id, $row)
     {
-        $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.edit'));
+        $label = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.edit'));
 
         return '<span onclick="document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="fas fa-edit"></span>';
     }
@@ -811,7 +811,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      */
     public function CallBackFunctionBlockCopyButton($id, $row)
     {
-        $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.copy'));
+        $label = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.copy'));
 
         if ((array_key_exists('cms_translation_parent_id', $row) && array_key_exists('cms_translationparentid', $row) && '' == $row['cms_translationparentid']) || !array_key_exists('cms_translation_parent_id', $row)) {
             return '<span onclick="document.cmsform.elements[\'module_fnc[contentmodule]\'].value=\'DatabaseCopy\';document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();" title="'.$label.'" class="fas fa-copy"></span>';
@@ -830,7 +830,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      */
     public function CallBackFunctionBlockDeleteButton($id, $row)
     {
-        $label = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.action.delete'));
+        $label = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.delete'));
 
         return '<span onclick="DeleteRecord(\''.$row['id'].'\')" title="'.$label.'" class="fas fa-trash-alt text-danger"></span>';
     }

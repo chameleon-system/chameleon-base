@@ -93,7 +93,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
             $html = '<div>';
             $html .= '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm" data-select2-option=\'{"width": "100%"}\'>';
             if ($this->allowEmptySelection) {
-                $chooseMessage = TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected');
+                $chooseMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected');
 
                 $html .= '<option value="">'.TGlobal::OutHTML($chooseMessage)."</option>\n";
             }
@@ -118,7 +118,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
 
             if ($this->allowEmptySelection) {
                 $html .= '<input class="btn-check" type="radio" id="' . TGlobal::OutHTML($this->name) . '" name="' . TGlobal::OutHTML($this->name) . '" value=""' . $selected . ' /> ';
-                $html .= '<label class="btn btn-outline-secondary" for="' . TGlobal::OutHTML($this->name) . '">' . TGlobal::Translate('chameleon_system_core.field_options.select_nothing') . '</label>' . "\n";
+                $html .= '<label class="btn btn-outline-secondary" for="' . TGlobal::OutHTML($this->name) . '">' . \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_options.select_nothing') . '</label>' . "\n";
             }
 
             foreach ($this->options as $key => $value) {

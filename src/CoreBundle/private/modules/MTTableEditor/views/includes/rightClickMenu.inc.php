@@ -1,7 +1,7 @@
 <div id="rightClickMenuContainer" style="display: none;">
     <ul>
         <li class="firstnode haschildren"><a href="javascript:void(0);" class="haschildren">
-                <i class="fas fa-bars pr-2"></i><?=TGlobalBase::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_header.action_edit_navigation')); ?></a>
+                <i class="fas fa-bars pr-2"></i><?=TGlobalBase::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_header.action_edit_navigation')); ?></a>
             <ul>
                 <?php
                 foreach ($data['breadcrumb'] as $histid => $item) {
@@ -22,7 +22,7 @@
         ?>
         <li><a href="#" onclick="$('#tableEditorContainer').unbind('contextmenu');$('#jqContextMenu').hide();">
             <i class="fas fa-times-circle pr-2"></i>
-            <?=TGlobalBase::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.right_click_disable')); ?></a></li>
+            <?=TGlobalBase::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.right_click_disable')); ?></a></li>
     </ul>
     <div class="cleardiv">&nbsp;</div>
 </div>

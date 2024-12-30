@@ -131,7 +131,10 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `TPkgCmsCoreSendToHost::setLogRequest` removed
 - `TGlobalBase::CountCalls` / `TGlobal::CountCalls` removed
 - `TGlobalBase::GetRewriteParameter` / `TGlobal::GetRewriteParameter` removed
-- `TGlobalBase::GetController()` / `TGlobal::GetController` removed removed - use `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller')` instead 
+- `TGlobalBase::GetController()` / `TGlobal::GetController` removed removed - use `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller')` instead
+- We want to get rid of `TGlobal::Translate`. Search and replace: 
+  - `\TGlobal::Translate(` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(`
+  - `TGlobal::Translate(` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(`
 
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
   https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.0.md

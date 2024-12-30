@@ -14,13 +14,13 @@ $aRecordsConnected = $oConnectedMLTRecords->GetIdList();
             var value = $(this).val();
             var text = $(this).html();
             $("#<?=TGlobal::OutJS($this->name); ?>" + value).remove();
-            var sPrependHTML = "<div id=\"<?=TGlobal::OutJS($this->name); ?>" + value + "\">" + text + " <span class=\"close\" onclick=\"$(this).parent().remove();\"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.remove')); ?><\/span><input type=\"hidden\" name=\"<?=TGlobal::OutJS($this->name); ?>[]\" value=\"" + value + "\" \/><\/div>";
+            var sPrependHTML = "<div id=\"<?=TGlobal::OutJS($this->name); ?>" + value + "\">" + text + " <span class=\"close\" onclick=\"$(this).parent().remove();\"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.remove')); ?><\/span><input type=\"hidden\" name=\"<?=TGlobal::OutJS($this->name); ?>[]\" value=\"" + value + "\" \/><\/div>";
             $("#<?=TGlobal::OutHTML($this->name); ?>selection").prepend(sPrependHTML);
         });
     }
 </script>
 <div class="multiselect-left">
-    <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.connect_elements')); ?>
+    <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.connect_elements')); ?>
     <select name="<?=TGlobal::OutHTML($this->name); ?>[]" multiple size="10" id="<?=TGlobal::OutHTML($this->name); ?>">
         <?php
         while ($oRecord = $oMLTRecords->Next()) {
@@ -35,7 +35,7 @@ $aRecordsConnected = $oConnectedMLTRecords->GetIdList();
     </select>
 </div>
 <div class="multiselect-right">
-    <?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.connected_elements')); ?>
+    <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.connected_elements')); ?>
     <div id="<?=TGlobal::OutHTML($this->name); ?>selection">
         <?php
         $oConnectedMLTRecords->GoToStart();
@@ -47,5 +47,5 @@ $aRecordsConnected = $oConnectedMLTRecords->GetIdList();
 </div>
 <div class="cleardiv">&nbsp;</div>
 <button
-    onclick="Add<?=TGlobal::OutHTML($this->name); ?>();return false;"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.connect_element')); ?></button>
+    onclick="Add<?=TGlobal::OutHTML($this->name); ?>();return false;"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.connect_element')); ?></button>
 <div class="cleardiv">&nbsp;</div>

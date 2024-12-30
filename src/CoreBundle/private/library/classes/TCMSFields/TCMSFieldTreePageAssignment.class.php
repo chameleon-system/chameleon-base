@@ -74,7 +74,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
      */
     protected function GetPagedefSelectionOptions()
     {
-        $sHTML = '<option value="">'.TGlobal::Translate(
+        $sHTML = '<option value="">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                 'chameleon_system_core.field_tree_page_assignment.select_page_template'
             )."</option>\n";
         $oMasterPagedefs = $this->getPageDefListForTreePortal();
