@@ -26,7 +26,7 @@ $previewLanguageId = $backendSession->getCurrentEditLanguageId();
     <?php
     while ($oPageLayout = $data['oMasterDefs']->Next()) {
         /** @var $oPageLayout TdbCmsMasterPagedef */
-        $bIsActiveLayout = ($data['sActivePageDef'] == $oPageLayout->id);
+        $bIsActiveLayout = ($data['sActivePageDef'] === $oPageLayout->id);
         $layoutItemClass = true === $bIsActiveLayout ? 'layoutitemactive' : '';
 
         $urlParameters = [

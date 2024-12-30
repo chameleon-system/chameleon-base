@@ -19,18 +19,6 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                     <i class="far fa-eye"></i>
                     <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.show_all')); ?>
                 </a>
-            <?php
-            if (_DEVELOPMENT_MODE) {
-                ?>
-                <br /><br />
-                <a class="btn btn-secondary" onclick="document.getElementById('module_fnc').value='RunUpdateSingle';document.getElementById('updateForm').submit();">
-                    <i class="far fa-play-circle"></i>
-                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.select_single_update')); ?>
-                </a>
-                <?php
-            }
-            ?>
-
             <br />
             <br />
             <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">

@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\MigrationResult;
-use esono\pkgCmsCache\CacheInterface;
+use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 class CMSUpdateManager extends TModelBase
 {
@@ -26,14 +27,13 @@ class CMSUpdateManager extends TModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array(
+        $externalFunctions = [
             'RunUpdates',
-            'RunUpdateSingle',
             'runSingleUpdate',
             'ajaxProxyUpdateAllTables',
             'ajaxProxyUpdateVirtualNonDbClasses',
             'ajaxProxyClearCache',
-        );
+        ];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -44,13 +44,6 @@ class CMSUpdateManager extends TModelBase
     {
         define('CMSUpdateManagerRunning', true);
         $this->SetTemplate('CMSUpdateManager', 'runUpdate');
-        $oUpdateManager = TCMSUpdateManager::GetInstance();
-        $this->data['oUpdateManager'] = $oUpdateManager;
-    }
-
-    public function RunUpdateSingle()
-    {
-        $this->SetTemplate('CMSUpdateManager', 'runUpdateSingle');
         $oUpdateManager = TCMSUpdateManager::GetInstance();
         $this->data['oUpdateManager'] = $oUpdateManager;
     }
@@ -79,25 +72,22 @@ class CMSUpdateManager extends TModelBase
      */
     public function runSingleUpdate()
     {
-        $oGlobal = TGlobal::instance();
+        $inputFilter = $this->getInputFilter();
 
-        if (false === $oGlobal->UserDataExists('fileName') || false === $oGlobal->UserDataExists('bundleName')) {
+        $fileName = $inputFilter->getFilteredInput('fileName');
+        $bundleName = $inputFilter->getFilteredInput('bundleName');
+
+        if (null === $fileName || null === $bundleName) {
             return '';
         }
 
-        $fileName = $oGlobal->GetUserData('fileName');
-        $bundleName = $oGlobal->GetUserData('bundleName');
-
-        $oUpdateManager = TCMSUpdateManager::GetInstance();
-
-        return $oUpdateManager->runSingleUpdate($fileName, $bundleName);
+        return TCMSUpdateManager::GetInstance()->runSingleUpdate($fileName, $bundleName);
     }
 
     /*
      * proxy methods for post-update-executing via ajax
      * (register new ones in runUpdate.view.php)
      */
-
     public function ajaxProxyUpdateAllTables()
     {
         $this->getAutoclassesCacheWarmer()->updateAllTables();
@@ -110,21 +100,17 @@ class CMSUpdateManager extends TModelBase
 
     public function ajaxProxyClearCache()
     {
-        /** @var CacheInterface $cache */
-        $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        $cache = ServiceLocator::get('chameleon_system_core.cache');
         $cache->clearAll();
     }
 
-    /**
-     * @return AutoclassesCacheWarmer
-     */
-    private function getAutoclassesCacheWarmer()
+    private function getAutoclassesCacheWarmer(): CacheWarmerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+        return ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
     }
 
-    private function getViewRenderer()
+    private function getInputFilter(): InputFilterUtilInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }
