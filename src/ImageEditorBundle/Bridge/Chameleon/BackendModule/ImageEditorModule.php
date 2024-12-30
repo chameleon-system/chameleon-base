@@ -17,6 +17,7 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\ImageCrop\DataModel\CmsMediaDataModel;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
 use ChameleonSystem\ImageEditorBundle\Interface\ImageEditorUrlServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 
 class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
@@ -32,7 +33,9 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         private readonly Connection $dbConnection,
         private readonly FlashMessageServiceInterface $flashMessageService,
         private readonly \cmsCoreRedirect $cmsCoreRedirect,
-        private readonly ImageEditorUrlServiceInterface $editorUrlService
+        private readonly ImageEditorUrlServiceInterface $editorUrlService,
+        private readonly SecurityHelperAccess $securityHelperAccess,
+        private readonly \TTools $tools
     ) {
         parent::__construct();
     }
@@ -106,7 +109,7 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             return;
         }
 
-        $user = \TdbCmsUser::GetActiveUser();
+        $user = $this->securityHelperAccess->getUser();
 
         if (null === $user) {
             $this->flashMessageService->addMessage(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'IMAGE_EDITOR_WARNING_COULD_NOT_SAVE_IMAGE_DATA');
@@ -114,7 +117,7 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             return;
         }
 
-        $tableManagerMedia = \TTools::GetTableEditorManager('cms_media');
+        $tableManagerMedia = $this->tools::GetTableEditorManager('cms_media');
         $tableManagerMedia->AllowEditByAll(true);
 
         $mediaRecord = $tableManagerMedia->Insert();
@@ -136,7 +139,7 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             'description' => $editedImageObject['name'],
             'path' => $path,
             'cms_filetype_id' => '8',
-            'cms_user_id' => $user->id,
+            'cms_user_id' => $user->getId(),
             'custom_filename' => $editedImageObject['name'],
             'size' => $size,
             'tmp_name' => $path,
