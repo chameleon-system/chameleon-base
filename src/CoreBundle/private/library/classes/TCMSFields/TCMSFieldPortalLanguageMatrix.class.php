@@ -47,8 +47,8 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
           ';
 
         if (!$this->bReadOnlyMode) {
-            $html .= '<a href="javascript:markCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink"><i class="fas fa-check pr-2"></i>'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all').'</a>
-          <a href="javascript:invertCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-random pr-2"></i>'.TGlobal::Translate('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>
+            $html .= '<a href="javascript:markCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink"><i class="fas fa-check pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all').'</a>
+          <a href="javascript:invertCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-random pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>
           ';
         }
 

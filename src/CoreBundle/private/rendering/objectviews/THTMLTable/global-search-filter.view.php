@@ -19,7 +19,7 @@ $sFormID = 'THTMLTableSearch'.md5(uniqid(rand(), true));
               action="<?=$oHTMLTable->GetGlobalSearchBaseURL(); ?>">
             <table>
                 <tr>
-                    <th class="perPage"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.form_records_per_page')); ?></th>
+                    <th class="perPage"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_records_per_page')); ?></th>
                     <td class="perPage">
                         <select
                             name="<?=TGlobal::OutHTML($oHTMLTable->sListIdentKey); ?>[<?=THTMLTable::URL_PARAM_CHANGE_PAGE_SIZE; ?>]"
@@ -56,13 +56,13 @@ $sFormID = 'THTMLTableSearch'.md5(uniqid(rand(), true));
                             </option>
                         </select>
                     </td>
-                    <th class="searchtext"><?=TGlobal::OutHTML(TGlobal::Translate('Suchbegriff')); ?></th>
+                    <th class="searchtext"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Suchbegriff')); ?></th>
                     <td class="searchform"><input type="text"
                                                   name="<?=TGlobal::OutHTML($oHTMLTable->sListIdentKey); ?>[<?=THTMLTable::URL_PARAM_SEARCH_GLOBAL; ?>]"
                                                   value="<?=TGlobal::OutHTML($oHTMLTable->GetGlobalSearchTerm()); ?>"/>
                     </td>
                     <td class="searchbutton"><input type="submit"
-                                                    value="<?=TGlobal::OutHTML(TGlobal::Translate('Suchen')); ?>"/></td>
+                                                    value="<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Suchen')); ?>"/></td>
                 </tr>
             </table>
         </form>

@@ -6,7 +6,7 @@
 <select name="<?=TGlobal::OutHTML($oField->name); ?>" id="<?=TGlobal::OutHTML($oField->name); ?>">
     <?php if ($oField->allowEmptySelection) {
     ?>
-    <option value=""><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.form.select_box_nothing_selected')); ?></option>
+    <option value=""><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected')); ?></option>
     <?php
 } ?>
     <?php

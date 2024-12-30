@@ -37,8 +37,8 @@
         <input
             type="submit"
             class="btn btn-primary"
-            value="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_interface.action_run')); ?>"
-            onClick="if (confirm('<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_interface.action_run_confirm')); ?>')) {
+            value="<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_interface.action_run')); ?>"
+            onClick="if (confirm('<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_interface.action_run_confirm')); ?>')) {
                 return true
                 } else {
                 return false

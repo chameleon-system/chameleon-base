@@ -1,8 +1,8 @@
 <?php
 ?>
 <br/>
-<h1><?=TGlobal::Translate('chameleon_system_core.cms_module_newsletter_robinson_import.headline'); ?></h1>
-<h2><?=TGlobal::Translate('chameleon_system_core.cms_module_newsletter_robinson_import.result'); ?> (<?=count($data['aListImported']); ?>)</h2>
+<h1><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_newsletter_robinson_import.headline'); ?></h1>
+<h2><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_newsletter_robinson_import.result'); ?> (<?=count($data['aListImported']); ?>)</h2>
 <?php
 $count = 0;
 foreach ($data['aListImported'] as $email) {
@@ -10,7 +10,7 @@ foreach ($data['aListImported'] as $email) {
     echo $count.'. '.$email."<br />\n";
 }
 ?>
-<h2><?=TGlobal::Translate('chameleon_system_core.cms_module_newsletter_robinson_import.import_error'); ?> (<?=count($data['aListIgnored']); ?>)</h2>
+<h2><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_newsletter_robinson_import.import_error'); ?> (<?=count($data['aListIgnored']); ?>)</h2>
 <?php
 $count = 0;
 foreach ($data['aListIgnored'] as $email) {

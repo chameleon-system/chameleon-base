@@ -179,7 +179,7 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
             $flashMessageService = $this->getFlashMessageService();
             $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
             $sFieldTitle = $this->oDefinition->GetName();
-            $sFieldTitle = TGlobal::Translate($sFieldTitle);
+            $sFieldTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans($sFieldTitle);
             $flashMessageService->addMessage(
                 $sConsumerName,
                 'TABLEEDITOR_FIELD_DATE_NOT_VALID',

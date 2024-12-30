@@ -406,7 +406,7 @@ class TCMSTableEditorEndPoint
                 if ($this->AllowEdit()) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'save';
-                    $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.save');
+                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.save');
                     $oMenuItem->sIcon = 'fas fa-save';
 
                     $sOnSaveViaAjaxHookMethods = '';
@@ -430,15 +430,15 @@ class TCMSTableEditorEndPoint
                         // copy
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'copy';
-                        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.copy');
+                        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.copy');
                         $oMenuItem->sIcon = 'far fa-clone';
-                        $oMenuItem->sOnClick = "if(confirm('".TGlobalBase::OutJS(TGlobal::Translate('chameleon_system_core.action.confirm_copy'))."')){ExecutePostCommand('DatabaseCopy');}";
+                        $oMenuItem->sOnClick = "if(confirm('".TGlobalBase::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.confirm_copy'))."')){ExecutePostCommand('DatabaseCopy');}";
                         $this->oMenuItems->AddItem($oMenuItem);
 
                         // new
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'new';
-                        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.new');
+                        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.new');
                         $oMenuItem->sIcon = 'fas fa-plus';
                         $oMenuItem->sOnClick = "ExecutePostCommand('Insert');";
                         $this->oMenuItems->AddItem($oMenuItem);
@@ -453,7 +453,7 @@ class TCMSTableEditorEndPoint
                     if ($allowDelete) {
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'delete';
-                        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.delete');
+                        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.delete');
                         $oMenuItem->sIcon = 'far fa-trash-alt';
                         $oMenuItem->sOnClick = 'DeleteRecord();';
                         $oMenuItem->setButtonStyle('btn-danger');
@@ -464,7 +464,7 @@ class TCMSTableEditorEndPoint
                     if (1 == $this->oTableConf->sqlData['show_previewbutton']) {
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'previewPage';
-                        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.preview');
+                        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.preview');
                         $oMenuItem->sIcon = 'far fa-eye';
 
                         $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'tableeditor', 'id' => $this->sId, 'tableid' => $this->oTableConf->id, 'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'], '_fnc' => 'AjaxGetPreviewURL']);
@@ -479,7 +479,7 @@ class TCMSTableEditorEndPoint
                         $oTableEditorConf->LoadFromField('name', 'cms_tbl_conf');
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'edittableconf';
-                        $oMenuItem->setTitle(TGlobal::Translate('chameleon_system_core.action.open_table_configuration'));
+                        $oMenuItem->setTitle(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.open_table_configuration'));
                         $oMenuItem->sIcon = 'fas fa-cogs';
                         $oMenuItem->setButtonStyle('btn-warning');
 
@@ -565,7 +565,7 @@ class TCMSTableEditorEndPoint
 
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'copy_translation';
-        $oMenuItem->setTitle(TGlobal::Translate('chameleon_system_core.action.translate_from_copy'));
+        $oMenuItem->setTitle(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.translate_from_copy'));
         $oMenuItem->sIcon = TGlobal::GetPathTheme().'/images/icons/language-flags/'.strtolower($currentLanguageISO).'.png';
         $languageService = $this->getLanguageService();
 
@@ -590,7 +590,7 @@ class TCMSTableEditorEndPoint
             }
             $sFullURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
 
-            $text = TGlobal::Translate(
+            $text = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                 'chameleon_system_core.action.translate_from_copy_confirm',
                 ['%lang%' => $name]
             );
@@ -1405,7 +1405,7 @@ class TCMSTableEditorEndPoint
             if (!empty($sNameColumn)) {
                 $oFieldDefinition = $this->oTableConf->GetFieldDefinition($sNameColumn);
                 $sTranslatedNameColumns = $oFieldDefinition->GetRealEditFieldName();
-                $this->oTable->sqlData[$sTranslatedNameColumns] = $this->oTable->sqlData[$sTranslatedNameColumns].' ['.TGlobal::Translate('chameleon_system_core.cms_module_table_editor.copied_record_suffix').']';
+                $this->oTable->sqlData[$sTranslatedNameColumns] = $this->oTable->sqlData[$sTranslatedNameColumns].' ['.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.copied_record_suffix').']';
             }
         }
     }
@@ -2110,7 +2110,7 @@ class TCMSTableEditorEndPoint
         // get name value
         $name = $this->GetName();
         if (empty($name) || false === $name || is_null($name)) {
-            $name = TGlobal::Translate('chameleon_system_core.text.unnamed_record');
+            $name = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
         }
 
         if (!is_null($this->sId)) {

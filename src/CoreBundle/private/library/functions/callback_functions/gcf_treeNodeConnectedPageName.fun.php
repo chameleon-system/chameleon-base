@@ -11,7 +11,7 @@
 
 function gcf_treeNodeConnectedPageName($recordID, $row)
 {
-    $sName = TGlobal::Translate('chameleon_system_core.list.gcf_connected_page_no_page');
+    $sName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.gcf_connected_page_no_page');
     $oCmsTplPage = TdbCmsTplPage::GetNewInstance();
     /** @var $oCmsTplPage TdbCmsTplPage */
     $oCmsTplPage->Load($recordID);

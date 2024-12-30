@@ -122,7 +122,7 @@
             })
 
             .bind("delete_node.jstree", function (e, data) {
-                if (confirm('<?php echo TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.cms_module_tree_widget.confirm_delete_folder')); ?>')) {
+                if (confirm('<?php echo TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.confirm_delete_folder')); ?>')) {
                     $.ajax({
                         async:false,
                         cache:false,

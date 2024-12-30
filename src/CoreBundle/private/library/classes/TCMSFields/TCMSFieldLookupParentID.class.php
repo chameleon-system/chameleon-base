@@ -163,7 +163,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
             if ('' !== $itemName) {
                 $html .= '<div class="mr-2">'.$itemName.'</div>';
             }
-            $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_lookup.switch_to'), $this->GetEditLinkForParentRecord(), 'fas fa-location-arrow').'</div>';
+            $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.switch_to'), $this->GetEditLinkForParentRecord(), 'fas fa-location-arrow').'</div>';
             $html .= '</div>';
 
             return $html;

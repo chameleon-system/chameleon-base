@@ -21,15 +21,15 @@ class TCMSListManagerChangeLogItem extends TCMSListManagerFullGroupTable
         $jsParas = array('id');
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('cms_field_conf' => TGlobal::Translate('chameleon_system_cms_change_log.column.changed_field')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('cms_field_conf' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.column.changed_field')), 'left', null, 1, false);
         $this->tableObj->AddColumn('cms_field_conf', 'left', array($this, 'CallbackResolveFieldName'), $jsParas, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('value_old' => TGlobal::Translate('chameleon_system_cms_change_log.column.old_value')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('value_old' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.column.old_value')), 'left', null, 1, false);
         $this->tableObj->AddColumn('value_old', 'left', array($this, 'CallbackResolveFieldValue'), $jsParas, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('value_new' => TGlobal::Translate('chameleon_system_cms_change_log.column.new_value')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('value_new' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.column.new_value')), 'left', null, 1, false);
         $this->tableObj->AddColumn('value_new', 'left', array($this, 'CallbackResolveFieldValue'), $jsParas, 1);
     }
 

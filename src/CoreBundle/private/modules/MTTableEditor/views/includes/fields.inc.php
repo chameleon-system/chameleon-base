@@ -24,7 +24,7 @@ while ($oField = $data['oFields']->Next()) {
                 $sTmpFormTabsContent .= '</h4>';
                 if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
                     $sTmpFormTabsContent .= '<span class="help-text-button pl-2" data-helptextId="'.TGlobal::OutHTML($oField->name).'">
-                        <i class="fas fa-info-circle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'"></i>
+                        <i class="fas fa-info-circle" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.field_help')).'"></i>
                     </span>';
                 }
                 $sTmpFormTabsContent .= '
@@ -71,7 +71,7 @@ while ($oField = $data['oFields']->Next()) {
                         if ($oFieldType->fieldBaseType = 'standard' && isset($oTable->sqlData[$oFieldConfig->fieldName.'__'.$sPrefix])) {
                             if ('' == $oTable->sqlData[$oFieldConfig->fieldName.'__'.$sPrefix]) {
                                 $sTmpFormTabsContent .= '<span class="badge badge-secondary translationStateIcon mr-1 bg-danger">
-                                                              <i class="fas fa-language" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.not_translated')).'" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.not_translated')).'"></i>
+                                                              <i class="fas fa-language" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.not_translated')).'" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.not_translated')).'"></i>
                                                          </span>';
                             }
                         }
@@ -80,7 +80,7 @@ while ($oField = $data['oFields']->Next()) {
 
                 if (!empty($oField->oDefinition->sqlData['049_helptext'])) {
                     $sTmpFormTabsContent .= '<span class="help-text-button" data-helptextId="'.TGlobal::OutHTML($oField->name).'">
-                        <i class="fas fa-info-circle" title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.cms_module_table_editor.field_help')).'"></i>
+                        <i class="fas fa-info-circle" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.field_help')).'"></i>
                     </span>';
                 }
 

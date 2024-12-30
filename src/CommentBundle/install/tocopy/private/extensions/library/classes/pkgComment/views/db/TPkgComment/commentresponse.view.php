@@ -48,7 +48,7 @@ $oModulePointer = $oGlobal->GetExecutingModulePointer();
                             <textarea class="commenttextarea" cols="0" rows="0" name="commentsavetext"></textarea>
                             <input type="submit" name="savecomment" id="editbuton-<?=TGlobal::OutHTML($oComment->id); ?>"
                                    class="button_savecomment"
-                                   value="<?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_comment.action.refresh')); ?>"/>
+                                   value="<?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.refresh')); ?>"/>
                         </form>
                     </div>
                     <?php if (!$oComment->fieldMarkAsDeleted) {
@@ -56,11 +56,11 @@ $oModulePointer = $oGlobal->GetExecutingModulePointer();
                     <?php if ($oComment->fieldMarkAsReported) {
                                 ?>
                         <div
-                            class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_comment.text.marked_as_inappropriate')); ?></div>
+                            class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.text.marked_as_inappropriate')); ?></div>
                         <?php if ($sReCommentURL) {
                                     ?>
                             <div class="recomment <?=$sCmsIdent; ?>"><a href="<?=$sReCommentURL; ?>"
-                                                                      onclick="RespondComment('<?=TGlobal::OutHTML($oComment->id); ?>','<?=TGlobal::OutHTML($sCmsIdent); ?>');$(this).parent().siblings('.jscomment_inner').show(400);return false;"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_comment.action.answer')); ?></a>
+                                                                      onclick="RespondComment('<?=TGlobal::OutHTML($oComment->id); ?>','<?=TGlobal::OutHTML($sCmsIdent); ?>');$(this).parent().siblings('.jscomment_inner').show(400);return false;"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.answer')); ?></a>
                             </div>
                             <?php
                                 } ?>
@@ -72,14 +72,14 @@ $oModulePointer = $oGlobal->GetExecutingModulePointer();
                         <?php if ($sReportCommentURL) {
                                     ?>
                             <div class="notification <?=$sCmsIdent; ?>"><a
-                                href="<?=$sReportCommentURL; ?>"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_comment.action.mark_as_inappropriate')); ?></a>
+                                href="<?=$sReportCommentURL; ?>"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.mark_as_inappropriate')); ?></a>
                             </div>
                             <?php
                                 } ?>
                         <?php if ($sReCommentURL) {
                                     ?>
                             <div class="recomment <?=$sCmsIdent; ?>"><a href="<?=$sReCommentURL; ?>"
-                                                                      onclick="RespondComment('<?=TGlobal::OutHTML($oComment->id); ?>','<?=TGlobal::OutHTML($sCmsIdent); ?>');$(this).parent().siblings('.jscomment_inner').show(400);return false;"><?=TGlobal::OutHTML(TGlobal::Translate('chameleon_system_comment.action.answer')); ?></a>
+                                                                      onclick="RespondComment('<?=TGlobal::OutHTML($oComment->id); ?>','<?=TGlobal::OutHTML($sCmsIdent); ?>');$(this).parent().siblings('.jscomment_inner').show(400);return false;"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.answer')); ?></a>
                             </div>
                             <?php
                                 } ?>
@@ -89,14 +89,14 @@ $oModulePointer = $oGlobal->GetExecutingModulePointer();
                         } else {
                             ?>
                     <div
-                        class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(TGlobal::Translate('chameleon_system_comment.text.is_deleted_comment')); ?></div>
+                        class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.text.is_deleted_comment')); ?></div>
                     <?php
                         } ?>
                     <?php if ($oChildCommentList->Length() > 0) {
                             ?>
             <div class=" respondcommentlist respondcommentlistc<?=$oComment->id; ?>">&nbsp;<div>
             <div
-                class="antwortCount"><?=$oChildCommentList->Length().'&nbsp;'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_comment.action.answer')); ?></div>
+                class="antwortCount"><?=$oChildCommentList->Length().'&nbsp;'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.answer')); ?></div>
                     <?php   while ($oChildComment = $oChildCommentList->Next()) {
                                 echo $oChildComment->Render('commentresponse', array('iCommentNr' => $aCallTimeVars['iCommentNr'], 'oActiveItem' => $aCallTimeVars['oActiveItem'], 'iAktPage' => $aCallTimeVars['iAktPage']));
                             } ?>

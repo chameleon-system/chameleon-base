@@ -852,14 +852,14 @@ class TTools
         if (!$aCodeList) {
             $aCodeList = [
                 UPLOAD_ERR_INI_SIZE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
-                UPLOAD_ERR_FORM_SIZE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_to_large'),
-                UPLOAD_ERR_PARTIAL => TGlobal::Translate('chameleon_system_core.field_document.upload_error_interrupted'),
-                UPLOAD_ERR_NO_FILE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_no_file'),
-                UPLOAD_ERR_NO_TMP_DIR => TGlobal::Translate(
+                UPLOAD_ERR_FORM_SIZE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
+                UPLOAD_ERR_PARTIAL => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_interrupted'),
+                UPLOAD_ERR_NO_FILE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_no_file'),
+                UPLOAD_ERR_NO_TMP_DIR => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                     'chameleon_system_core.field_document.upload_error_tmp_folder_not_writable'
                 ),
-                UPLOAD_ERR_CANT_WRITE => TGlobal::Translate('chameleon_system_core.field_document.upload_error_unable_to_save_to_disc'),
-                UPLOAD_ERR_EXTENSION => TGlobal::Translate('chameleon_system_core.field_document.upload_error_invalid_file_extension'),
+                UPLOAD_ERR_CANT_WRITE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unable_to_save_to_disc'),
+                UPLOAD_ERR_EXTENSION => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_invalid_file_extension'),
             ];
         }
 
@@ -867,7 +867,7 @@ class TTools
         if (array_key_exists($iUploadErrorCode, $aCodeList)) {
             $sError = $aCodeList[$iUploadErrorCode];
         } else {
-            $sError = TGlobal::Translate('chameleon_system_core.field_document.upload_error_unknown_error');
+            $sError = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unknown_error');
         }
 
         return $sError;

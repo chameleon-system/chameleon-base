@@ -21,25 +21,25 @@ class TCMSListManagerChangeLogSet extends TCMSListManagerFullGroupTable
         $jsParas = array('id');
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('cms_tbl_conf' => TGlobal::Translate('chameleon_system_cms_change_log.column.changed_table')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('cms_tbl_conf' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.column.changed_table')), 'left', null, 1, false);
         $this->tableObj->AddColumn('cms_tbl_conf', 'left', array($this, 'CallbackResolveTableName'), $jsParas, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('modified_name' => TGlobal::Translate('chameleon_system_cms_change_log.column.changed_record')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('modified_name' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.column.changed_record')), 'left', null, 1, false);
         $this->tableObj->AddColumn('modified_name', 'left', null, $jsParas, 1);
         $this->tableObj->searchFields['`pkg_cms_changelog_set`.`modified_name`'] = 'full'; // allow searching in this field
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('modify_date' => TGlobal::Translate('chameleon_system_cms_change_log.column.changed_on')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('modify_date' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.column.changed_on')), 'left', null, 1, false);
         $this->tableObj->AddColumn('modify_date', 'left', array($this, 'CallbackFormatDate'), $jsParas, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('cms_user' => TGlobal::Translate('chameleon_system_cms_change_log.column.changed_by')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('cms_user' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.column.changed_by')), 'left', null, 1, false);
         $this->tableObj->AddColumn('cms_user', 'left', array($this, 'CallbackFormatUser'), $jsParas, 1);
         $this->tableObj->searchFields['`pkg_cms_changelog_set`.`cms_user`'] = 'full'; // allow searching in this field
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('change_type' => TGlobal::Translate('chameleon_system_cms_change_log.column.change_type')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(array('change_type' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.column.change_type')), 'left', null, 1, false);
         $this->tableObj->AddColumn('change_type', 'left', array($this, 'CallbackFormatChangeType'), $jsParas, 1);
     }
 

@@ -20,7 +20,7 @@
     <tr>
         <td valign="top">
             <h1>
-                <?=TGlobal::Translate('chameleon_system_core.cms_module_image_manager.folder_list'); ?>
+                <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_image_manager.folder_list'); ?>
             </h1>
             <div>
                 <div id="mediaFolderSelectTree">

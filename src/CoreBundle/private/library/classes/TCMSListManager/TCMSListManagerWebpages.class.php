@@ -24,7 +24,7 @@ class TCMSListManagerWebpages extends TCMSListManagerFullGroupTable
     public function _AddFunctionColumn()
     {
         ++$this->columnCount;
-        $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_actions');
+        $sTranslatedField = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.column_name_actions');
         $this->tableObj->AddHeaderField(array('id' => $sTranslatedField.'&nbsp;&nbsp;'), 'right', null, 1, false, 100);
         $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackFunctionBlock'), null, 1);
     }
@@ -48,7 +48,7 @@ class TCMSListManagerWebpages extends TCMSListManagerFullGroupTable
 
         if ($userHasWebsiteEditRight && $userHasNaviEditRight) {
             $oMenuItem = new TCMSTableEditorMenuItem();
-            $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_core.action.pages_regenerate_page_path');
+            $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.pages_regenerate_page_path');
             $oMenuItem->sIcon = 'fas fa-sync';
             $js = "document.location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'tablemanager', 'id' => $this->oTableConf->id, 'module_fnc' => array('contentmodule' => 'ClearNaviCache'), '_rmhist' => 'false'))."';";
             $oMenuItem->sOnClick = $js;
@@ -71,7 +71,7 @@ class TCMSListManagerWebpages extends TCMSListManagerFullGroupTable
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         if ($securityHelper->isGranted('CMS_RIGHT_CMS_PAGE_PROPERTY')) {
-            $aItems['pageConfig'] = '<a title="'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.list.page_settings')).'" href="javascript:document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();"><i class="fas fa-cog"></i></a>';
+            $aItems['pageConfig'] = '<a title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.page_settings')).'" href="javascript:document.cmsform.id.value=\''.$row['id'].'\';document.cmsform.submit();"><i class="fas fa-cog"></i></a>';
         }
 
         return $aItems;

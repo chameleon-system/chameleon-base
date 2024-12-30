@@ -28,7 +28,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
         $html = '<input type="hidden" id="'.TGlobalBase::OutHTML($this->name).'" name="'.TGlobalBase::OutHTML($this->name).'" value="'.TGlobalBase::OutHTML($this->data).'" />
       <div>';
 
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.link.open_document_manager'), "javascript:loadDocumentManager('".$this->recordId."','".$this->oTableConf->id."','".$this->name."');", 'fas fa-file');
+        $html .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.link.open_document_manager'), "javascript:loadDocumentManager('".$this->recordId."','".$this->oTableConf->id."','".$this->name."');", 'fas fa-file');
         $html .= '</div>
       <div class="cleardiv">&nbsp;</div>';
 
@@ -76,12 +76,12 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
                                     <i class="far fa-trash-alt mr-2"></i>%s
                                 </button>';
                 $html .= sprintf($deleteButton,
-                    TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_download.confirm_removal')),
+                    TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.confirm_removal')),
                     TGlobal::OutJS($this->name),
                     TGlobal::OutJS($oDownload->id),
                     TGlobal::OutJS($this->recordId),
                     TGlobal::OutJS($this->oTableConf->id),
-                    TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_download.remove'))
+                    TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.remove'))
                 );
 
                 $detailsButton = '<button type="button" class="btn info btn-sm" onClick="CreateModalIFrameDialog(\'%s?tableid=%s&pagedef=tableeditorPopup&id=%s\', 0, 0, \'%s\');">
@@ -91,8 +91,8 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
                     TGlobal::OutJS(PATH_CMS_CONTROLLER),
                     TGlobal::OutJS($oDocumentTableConf->id),
                     TGlobal::OutJS($oDownload->id),
-                    TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_download.document_details')),
-                    TGlobal::OutJS(TGlobal::Translate('chameleon_system_core.field_download.document_details'))
+                    TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.document_details')),
+                    TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.document_details'))
                 );
 
                 $html .= '</td>';

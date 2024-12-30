@@ -19,7 +19,7 @@
 <script>
     function addMLTConnectionPassThrough(id) {
         parent.addMLTConnection('<?php echo str_replace('_mlt', '', $data['sRestrictionField']); ?>', '<?=$data['name']; ?>', '<?php echo $data['sRestriction']; ?>', id);
-        toasterMessage('<?php echo TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_mlt.item_added')); ?>', 'SUCCESS');
+        toasterMessage('<?php echo TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_mlt.item_added')); ?>', 'SUCCESS');
     }
 </script>
 <?php echo $data['sTable']; ?>
