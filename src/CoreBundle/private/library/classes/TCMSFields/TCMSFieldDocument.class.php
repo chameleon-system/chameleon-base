@@ -17,10 +17,9 @@ class TCMSFieldDocument extends TCMSFieldLookup
     {
         $this->oTableConf = $this->oTableRow->GetTableConf();
 
-        $currentFile = TGlobal::Translate('chameleon_system_core.field_document.nothing_selected');
+        $currentFile = ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.nothing_selected');
         if (!empty($this->data)) {
             $oCmsDocument = TdbCmsDocument::GetNewInstance();
-            /** @var $oCmsDocument TdbCmsDocument */
             if ($oCmsDocument->Load($this->data)) {
                 $currentFile = $oCmsDocument->getDownloadHtmlTag();
             }
@@ -44,7 +43,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
 
     public function _GetOpenWindowJS()
     {
-        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'CMSDocumentSelect', 'documentfieldname' => $this->name, 'tableid' => $this->oTableConf->id, 'id' => $this->recordId));
+        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'CMSDocumentSelect', 'documentfieldname' => $this->name, 'tableid' => $this->oTableConf->id, 'id' => $this->recordId]);
         $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');";
 
         return $js;

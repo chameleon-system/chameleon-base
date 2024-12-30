@@ -16,10 +16,9 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
  * picks a node from a tree.
-/**/
+ * /**/
 class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $propertyName = $this->name;
@@ -45,7 +44,6 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
             'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$targetTable], $this->snakeToPascalCase($targetTable)),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
-
         ])->render();
 
         return new DataModelParts(
@@ -68,8 +66,8 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
         $html = '<input type="hidden" id="'.TGlobalBase::OutHTML($this->name).'" name="'.TGlobalBase::OutHTML($this->name).'" value="'.TGlobalBase::OutHTML($this->data).'" />';
         $html .= '<div id="'.TGlobalBase::OutHTML($this->name).'_path">'.$path.'</div>';
         $html .= '<div class="cleardiv">&nbsp;</div>';
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.field_tree_node.assign_node'), 'javascript:'.$this->_GetOpenWindowJS().';', 'fas fa-check');
-        $html .= TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.action.reset'), "javascript:ResetTreeNodeSelection('".TGlobalBase::OutHTML($this->name)."');", 'fas fa-undo');
+        $html .= TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.field_tree_node.assign_node'), 'javascript:'.$this->_GetOpenWindowJS().';', 'fas fa-check');
+        $html .= TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.action.reset'), "javascript:ResetTreeNodeSelection('".TGlobalBase::OutHTML($this->name)."');", 'fas fa-undo');
 
         return $html;
     }
@@ -137,22 +135,22 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
         $aMethodData = $this->GetFieldMethodBaseDataArray();
 
         $aMethodData['sMethodName'] = $this->GetFieldMethodName('PageURL');
-        $aMethodData['aParameters'] = array(
-            'bForceDomain' => array(
+        $aMethodData['aParameters'] = [
+            'bForceDomain' => [
                 'sType' => 'boolean',
                 'description' => 'force include the portal domain (generate an absolute link)',
                 'default' => 'false',
-            ),
-            'forcePageLanguage' => array(
+            ],
+            'forcePageLanguage' => [
                 'sType' => 'boolean',
                 'description' => 'force page language (if true, the language of the page is used; if false, the currently active language is used)',
                 'default' => 'false',
-            ),
-        );
+            ],
+        ];
         $aMethodData['sReturnType'] = 'string|null';
 
         $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
+        /* @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $oViewParser->AddVarArray($aMethodData);
 

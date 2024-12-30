@@ -12,9 +12,6 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
-/**
- * cms user.
-/**/
 class TCMSFieldCMSUser extends TCMSFieldExtendedLookup
 {
     public function GetHTML()
@@ -26,7 +23,6 @@ class TCMSFieldCMSUser extends TCMSFieldExtendedLookup
             $this->data = $securityHelper->getUser()?->getId();
         }
 
-        /** @var $oUser TdbCmsUser */
         $oUser = TdbCmsUser::GetNewInstance();
         if ($oUser->Load($this->data)) {
             if ($oUser->IsAdmin()) {
@@ -47,7 +43,7 @@ class TCMSFieldCMSUser extends TCMSFieldExtendedLookup
         $oTableConf = new TCMSTableConf();
         $oTableConf->LoadFromField('name', $tblName);
 
-        $sButtonText = TGlobal::Translate('chameleon_system_core.field_cms_user.select_user');
+        $sButtonText = ServiceLocator::get('translator')->trans('chameleon_system_core.field_cms_user.select_user');
         $html = TCMSRender::DrawButton($sButtonText, 'javascript:'.$this->_GetOpenWindowJS($oTableConf).';', 'fas fa-user-check');
 
         return $html;
@@ -72,9 +68,7 @@ class TCMSFieldCMSUser extends TCMSFieldExtendedLookup
             $name .= ' ['.$oUser->sqlData['company'].']';
         }
 
-        $returnVal = $this->_GetHiddenField()."<div>{$imageTag} ".TGlobal::OutHTML($name).'<div class="cleardiv">&nbsp;</div></div>';
-
-        return $returnVal;
+        return $this->_GetHiddenField()."<div>{$imageTag} ".TGlobal::OutHTML($name).'<div class="cleardiv">&nbsp;</div></div>';
     }
 
     /**

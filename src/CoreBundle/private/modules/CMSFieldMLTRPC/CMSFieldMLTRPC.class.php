@@ -264,7 +264,7 @@ class CMSFieldMLTRPC extends TCMSModelBase
             }
         }
         if (false == $bFindShowField) {
-            $sFieldListString .= '<th scope="col">'.TGlobal::Translate('chameleon_system_core.field_mltrpc.name').'</th>';
+            $sFieldListString .= '<th scope="col">'.ServiceLocator::get('translator')->trans('chameleon_system_core.field_mltrpc.name').'</th>';
         }
 
         return $sFieldListString;

@@ -66,11 +66,11 @@ class CMSDocumentLocalImport extends TCMSModelBase
      */
     protected function GetFileRecordData($sFile)
     {
-        $realExtension = mb_substr($sFile, (mb_strrpos($sFile, '.') ? mb_strrpos($sFile, '.') + 1 : mb_strlen($sFile)), mb_strlen($sFile));
+        $realExtension = mb_substr($sFile, mb_strrpos($sFile, '.') ? mb_strrpos($sFile, '.') + 1 : mb_strlen($sFile), mb_strlen($sFile));
         $fileNameWithoutExtension = str_replace('.'.$realExtension, '', $sFile);
         $sNiceFileName = str_replace('_', ' ', $fileNameWithoutExtension);
 
-        $postData = array();
+        $postData = [];
         $postData['name'] = $sNiceFileName;
         $postData[$this->sTargetTreeTable.'_id'] = $this->nodeID;
         $postData['description'] = $sNiceFileName;
@@ -107,10 +107,10 @@ class CMSDocumentLocalImport extends TCMSModelBase
         $returnVal = true;
 
         if (!is_dir($this->sImportFolder)) {
-            $returnVal = TGlobal::Translate('chameleon_system_core.document_local_import.error_path_not_found', array('%path%' => $this->sImportFolder));
+            $returnVal = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.error_path_not_found', ['%path%' => $this->sImportFolder]);
         } else {
             if (!is_readable($this->sImportFolder)) {
-                $returnVal = TGlobal::Translate('chameleon_system_core.document_local_import.error_no_read_access_to_path', array('%path%' => $this->sImportFolder));
+                $returnVal = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.error_no_read_access_to_path', ['%path%' => $this->sImportFolder]);
             }
         }
 
@@ -123,7 +123,7 @@ class CMSDocumentLocalImport extends TCMSModelBase
     protected function ShowDirectories()
     {
         $aScanlisting = scandir($this->sImportFolder);
-        $dirlisting = array();
+        $dirlisting = [];
         $this->data['dirListing'] = $dirlisting;
         $bFilesInRootDirFound = false;
         $keyCount = 0;
@@ -133,7 +133,7 @@ class CMSDocumentLocalImport extends TCMSModelBase
                 ++$keyCount;
                 $aScanlistingSubDir = scandir($this->sImportFolder.'/'.$file);
                 $count = (count($aScanlistingSubDir) - 2);
-                $aDir = array();
+                $aDir = [];
                 $aDir['directory'] = $file;
                 $aDir['filecount'] = $count;
                 $this->data['dirListing'][$keyCount] = $aDir;
@@ -231,7 +231,7 @@ class CMSDocumentLocalImport extends TCMSModelBase
 
         $fileSize = filesize($sFilePath);
 
-        $aFileData = array('name' => $sFile, 'type' => $oFileType->sqlData['content_type'], 'size' => $fileSize, 'tmp_name' => $sFilePath, 'error' => 0);
+        $aFileData = ['name' => $sFile, 'type' => $oFileType->sqlData['content_type'], 'size' => $fileSize, 'tmp_name' => $sFilePath, 'error' => 0];
 
         return $aFileData;
     }

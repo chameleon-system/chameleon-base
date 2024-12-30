@@ -30,9 +30,9 @@ class TCMSListManagerNewsletterSubscriber extends TCMSListManagerFullGroupTable
     {
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'ImportSubscriber';
-        $oMenuItem->sDisplayName = TGlobal::Translate('chameleon_system_newsletter.action.import_subscribers');
+        $oMenuItem->sDisplayName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.action.import_subscribers');
         $oMenuItem->sIcon = 'fas fa-user-plus';
-        $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=NewsletterSubscriberImport&_pagedefType=Core',0,0,'".TGlobal::OutJS(TGlobal::Translate('chameleon_system_newsletter.action.import_subscribers'))."');";
+        $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=NewsletterSubscriberImport&_pagedefType=Core',0,0,'".TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.action.import_subscribers'))."');";
 
         return $oMenuItem;
     }

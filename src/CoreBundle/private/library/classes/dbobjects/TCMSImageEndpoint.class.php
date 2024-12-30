@@ -1633,7 +1633,7 @@ class TCMSImageEndpoint
                     if ($securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER) && $oGlobal->IsCMSMode()) {
                         $returnString = '<div class="cmsimage"><img class=\"'.TGlobal::OutHTML($sCSSClass).'\" width="'.$oThumb->aData['width'].'" height="'.$oThumb->aData['height'].'" onclick="CreateMediaZoomDialogFromImageURL(\''.$oZoomThumb->GetFullURL().'\',\''.$oZoomThumb->aData['width'].'\',\''.$oZoomThumb->aData['height'].'\');event.cancelBubble=true;return false;" style="padding: 3px;" id="cmsimage_'.$this->id.'" src="'.$oThumb->GetFullURL().'" />';
                         if ($this->IsExternalMovie() && empty($sEmbedCode)) {
-                            $returnString .= '<div class="videoprocessing">'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.text.wait_for_processing')).'</div>';
+                            $returnString .= '<div class="videoprocessing">'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.text.wait_for_processing')).'</div>';
                         }
                         $returnString .= '</div>';
                     } else {

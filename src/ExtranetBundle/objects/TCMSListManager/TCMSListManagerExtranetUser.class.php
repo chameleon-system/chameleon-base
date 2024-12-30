@@ -15,15 +15,15 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * manages the extranet user list.
-/**/
+ * /**/
 class TCMSListManagerExtranetUser extends TCMSListManagerFullGroupTable
 {
     /**
      * the function block for the buttons in the function column
      * adds a button to login as a extranet user (if cms user has the right to do that).
      *
-     * @param string $id  - id of the current page
-     * @param array  $row - all field/value pairs of the page
+     * @param string $id - id of the current page
+     * @param array $row - all field/value pairs of the page
      *
      * @return string
      */
@@ -33,8 +33,8 @@ class TCMSListManagerExtranetUser extends TCMSListManagerFullGroupTable
 
         $sReturnValue = substr($sReturnValue, 0, strrpos($sReturnValue, '<div id="functionTitle_'.$row['cmsident'].'" class="functionTitle">'));
 
-        $aParameter = TGlobal::instance()->GetUserData(null, array('module_fnc', 'id', '_noModuleFunction', 'pagedef'));
-        $aParameter['module_fnc'] = array(TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'LoginAsExtranetUser');
+        $aParameter = TGlobal::instance()->GetUserData(null, ['module_fnc', 'id', '_noModuleFunction', 'pagedef']);
+        $aParameter['module_fnc'] = [TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'LoginAsExtranetUser'];
         $aParameter['_noModuleFunction'] = 'true';
         $aParameter['id'] = $id;
         $aParameter['pagedef'] = 'tableeditor';
@@ -46,7 +46,7 @@ class TCMSListManagerExtranetUser extends TCMSListManagerFullGroupTable
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         if (true === $securityHelper->isGranted('CMS_RIGHT_ALLOW-LOGIN-AS-EXTRANET-USER')) {
-            $sReturnValue .= "<a href=\"{$sURL}\" target=\"_blank\"><i class=\"fas fa-user-check\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".TGlobal::Translate('chameleon_system_extranet.action.login_as_extranet_user')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\"></i></a>";
+            $sReturnValue .= "<a href=\"{$sURL}\" target=\"_blank\"><i class=\"fas fa-user-check\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".ServiceLocator::get('translator')->trans('chameleon_system_extranet.action.login_as_extranet_user')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\"></i></a>";
         }
 
         $sReturnValue .= '<div id="functionTitle_'.$row['cmsident'].'" class="functionTitle"></div>';
@@ -60,6 +60,6 @@ class TCMSListManagerExtranetUser extends TCMSListManagerFullGroupTable
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

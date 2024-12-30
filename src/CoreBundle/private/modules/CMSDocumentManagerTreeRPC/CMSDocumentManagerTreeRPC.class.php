@@ -11,7 +11,7 @@
 
 /**
  * Treemanagement Module for the CMS Navigation tree.
- * /**/
+ **/
 class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
 {
     /**
@@ -58,7 +58,7 @@ class CMSDocumentManagerTreeRPC extends CMSModulePageTreeRPC
 
         $name = $oTreeNode->sqlData['name'];
         if (empty($name)) {
-            $name = '['.TGlobal::Translate('chameleon_system_core.text.unnamed_record').']';
+            $name = '['.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record').']';
         }
 
         $child['title'] = '<span class="">'.TGlobal::OutHTML($name).'</span>';

@@ -41,12 +41,12 @@ class TCMSMediaFieldUploadMapper extends AbstractViewMapper
         }
         $oVisitor->SetMappedValue('bShowCategorySelector', $bShowCategorySelector);
         $oVisitor->SetMappedValue('sCategorySelectOptionsHtml', $this->getCategorySelectOptionsHtml($oCategory, $bShowCategorySelector));
-        $oVisitor->SetMappedValue('sUploadButton', TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.link.upload_and_assign_media'), 'javascript:'.$this->getOpenUploadWindowJS($sFieldName), 'fas fa-upload'));
+        $oVisitor->SetMappedValue('sUploadButton', TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.link.upload_and_assign_media'), 'javascript:'.$this->getOpenUploadWindowJS($sFieldName), 'fas fa-upload'));
     }
 
     /**
      * @param TdbCmsMediaTree|null $oCategory
-     * @param bool                 $bShowCategorySelector
+     * @param bool $bShowCategorySelector
      *
      * @return string
      */
@@ -76,11 +76,11 @@ class TCMSMediaFieldUploadMapper extends AbstractViewMapper
         $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($fieldName)."');";
         if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
-            $parentIFrame = $parentField . '_iframe';
+            $parentIFrame = $parentField.'_iframe';
             $js .= "saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
-                    TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($fieldName)."(document.cmseditform.".TGlobal::OutHTML($fieldName)."__cms_media_tree_id.value,'".TGlobal::OutHTML($parentIFrame)."');";
+                    TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($fieldName).'(document.cmseditform.'.TGlobal::OutHTML($fieldName)."__cms_media_tree_id.value,'".TGlobal::OutHTML($parentIFrame)."');";
         } else {
-            $js .= "TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutHTML($fieldName)."(document.cmseditform.".TGlobal::OutHTML($fieldName)."__cms_media_tree_id.value);";
+            $js .= 'TCMSFieldPropertyTableCmsMediaOpenUploadWindow_'.TGlobal::OutHTML($fieldName).'(document.cmseditform.'.TGlobal::OutHTML($fieldName).'__cms_media_tree_id.value);';
         }
 
         return $js;

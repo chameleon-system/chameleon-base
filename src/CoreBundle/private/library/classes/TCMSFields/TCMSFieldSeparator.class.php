@@ -9,14 +9,11 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
-
 /**
  * separator.
-/**/
+ * /**/
 class TCMSFieldSeparator extends TCMSField
 {
-
     public function __construct()
     {
         $this->completeRow = true;
@@ -24,8 +21,6 @@ class TCMSFieldSeparator extends TCMSField
 
     public function GetHTML()
     {
-        $title = TGlobal::OutHTML(TGlobal::Translate($this->oDefinition->sqlData['field_default_value']));
-
-        return $title;
+        return TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans($this->oDefinition->sqlData['field_default_value']));
     }
 }

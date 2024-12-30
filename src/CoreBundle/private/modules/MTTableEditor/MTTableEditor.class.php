@@ -29,42 +29,42 @@ class MTTableEditor extends TCMSModelBase
      *
      * @var TCMSTableEditorManager
      */
-    protected $oTableManager = null;
+    protected $oTableManager;
 
     /**
      * record ID.
      *
      * @var string
      */
-    protected $sId = null;
+    protected $sId;
 
     /**
      * cms_tbl_conf ID.
      *
      * @var string
      */
-    protected $sTableId = null;
+    protected $sTableId;
 
     /**
      * definition of the table.
      *
      * @var TCMSTableConf
      */
-    protected $oTableConf = null;
+    protected $oTableConf;
 
     /**
      * target pagedef to redirect after method execution.
      *
      * @var string
      */
-    protected $redirectPagedef = null;
+    protected $redirectPagedef;
 
     /**
      * array of methods where a call is allowed without edit rights to the table data.
      *
      * @var array
      */
-    protected $readOnlyMethods = array();
+    protected $readOnlyMethods = [];
 
     /**
      * indicates if the record is rendered in readonly mode.
@@ -79,16 +79,16 @@ class MTTableEditor extends TCMSModelBase
      *
      * @var array
      */
-    protected $aMessages = array();
+    protected $aMessages = [];
 
     /**
      * base language for translations.
      *
      * @var TdbCmsLanguage
      */
-    protected $oBaseLanguage = null;
+    protected $oBaseLanguage;
 
-    private $fillEmptyFromLanguageId = null;
+    private $fillEmptyFromLanguageId;
 
     /**
      * @param string|null $languageId
@@ -222,9 +222,9 @@ class MTTableEditor extends TCMSModelBase
             $tableName = $this->oTableManager->oTableConf->GetName();
             $id = $this->sId;
             if (true === empty($id)) {
-                $id = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.no_id_set');
+                $id = ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.no_id_set');
             }
-            $this->data['errorMessage'] = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.error_record_missing', ['%id%' => $id, '%tableName%' => $tableName]);
+            $this->data['errorMessage'] = ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.error_record_missing', ['%id%' => $id, '%tableName%' => $tableName]);
             $this->SetTemplate($moduleName, 'error');
         }
     }
@@ -234,7 +234,7 @@ class MTTableEditor extends TCMSModelBase
      */
     protected function DefineReadOnlyMethods()
     {
-        $readOnlyMethods = array('GetName', 'GetDisplayValue', 'IsRecordLockedAjax');
+        $readOnlyMethods = ['GetName', 'GetDisplayValue', 'IsRecordLockedAjax'];
         $this->readOnlyMethods = array_merge($this->readOnlyMethods, $readOnlyMethods);
     }
 
@@ -269,7 +269,7 @@ class MTTableEditor extends TCMSModelBase
                 $breadcrumb->PopURL();
             }
 
-            $params = array();
+            $params = [];
             $params['pagedef'] = $this->global->GetUserData('pagedef');
             $params['id'] = $this->oTableManager->sId;
             $params['tableid'] = $this->oTableManager->sTableId;
@@ -341,7 +341,7 @@ class MTTableEditor extends TCMSModelBase
                     $oPostTable = $this->fillEmptyFieldsWithTranslationFrom($oPostTable, $this->fillEmptyFromLanguageId);
                 }
                 if (array_key_exists('module_fnc', $aPostData) && array_key_exists('contentmodule', $aPostData['module_fnc']) && 'Save' === $aPostData['module_fnc']['contentmodule']) {
-                    $aPostBlackList = array('pagedef', 'tableid', 'id', 'referer_id', 'referer_table', '_fnc', 'module_fnc', '_noModuleFunction');
+                    $aPostBlackList = ['pagedef', 'tableid', 'id', 'referer_id', 'referer_table', '_fnc', 'module_fnc', '_noModuleFunction'];
                     foreach ($aPostBlackList as $forbiddenPostKey) {
                         unset($aPostData[$forbiddenPostKey]);
                     }
@@ -404,7 +404,7 @@ class MTTableEditor extends TCMSModelBase
         if (is_array($this->aMessages) && count($this->aMessages) > 0) {
             $aMessages = $this->aMessages;
         } else {
-            $aMessages = array();
+            $aMessages = [];
         }
 
         $oMessages = $oMessageManager->ConsumeMessages($sConsumerName, $bConsumeMessages);
@@ -425,10 +425,10 @@ class MTTableEditor extends TCMSModelBase
                     $sMessageType = 'MESSAGE';
                 }
 
-                $aMessage = array(
+                $aMessage = [
                     'sMessage' => $sMessage,
                     'sMessageType' => $sMessageType,
-                );
+                ];
 
                 if (is_array($aParams) && array_key_exists('sFieldName', $aParams)) {
                     $aMessage['sMessageRefersToField'] = $aParams['sFieldName'];
@@ -470,7 +470,7 @@ class MTTableEditor extends TCMSModelBase
      */
     protected function GetPermissionSettings()
     {
-        $permissions = array('new' => false, 'edit' => false, 'delete' => false, 'showlist' => false);
+        $permissions = ['new' => false, 'edit' => false, 'delete' => false, 'showlist' => false];
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
@@ -492,7 +492,7 @@ class MTTableEditor extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('Save', 'Insert', 'Delete', 'AjaxDelete', 'Copy', 'DatabaseCopy', 'AjaxSave', 'AjaxSaveField', 'AjaxGetFieldEditBox', 'AjaxGetPreviewURL', 'PublishViaAjax', 'RefreshLock', 'AddNewRevision', 'ActivateRevision', 'IsRecordLockedAjax');
+        $externalFunctions = ['Save', 'Insert', 'Delete', 'AjaxDelete', 'Copy', 'DatabaseCopy', 'AjaxSave', 'AjaxSaveField', 'AjaxGetFieldEditBox', 'AjaxGetPreviewURL', 'PublishViaAjax', 'RefreshLock', 'AddNewRevision', 'ActivateRevision', 'IsRecordLockedAjax'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
         $this->methodCallAllowed[] = 'changeListFieldState';
         $this->methodCallAllowed[] = 'setFillEmptyFromLanguageId';
@@ -523,7 +523,7 @@ class MTTableEditor extends TCMSModelBase
         window.onbeforeunload = function () {
           if (CHAMELEON.CORE.MTTableEditor.bCmsContentChanged) {
             CHAMELEON.CORE.hideProcessingModal();
-            return \''.TGlobal::Translate('chameleon_system_core.cms_module_table_editor.confirm_discard_changes').'\';
+            return \''.ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.confirm_discard_changes').'\';
           }
         }
 
@@ -555,7 +555,7 @@ class MTTableEditor extends TCMSModelBase
 
     public function GetHtmlFooterIncludes()
     {
-        $aIncludes = array();
+        $aIncludes = [];
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
 
         // get the tableEditor specific footer includes
@@ -608,12 +608,10 @@ class MTTableEditor extends TCMSModelBase
     /**
      * overwrite the callmethod method, so that we pass the call on the the TCMSTableEditorManager.
      *
-     * @param string $sFunctionName    - method name
-     * @param array  $aMethodParameter - parameters to pass to the method
-     *
-     * @return mixed
+     * @param string $sFunctionName - method name
+     * @param array $aMethodParameter - parameters to pass to the method
      */
-    public function _CallMethod($sFunctionName, $aMethodParameter = array())
+    public function _CallMethod($sFunctionName, $aMethodParameter = [])
     {
         $tmp = null;
         $isNotAModuleFunction = $this->global->GetUserData('_noModuleFunction');
@@ -644,14 +642,14 @@ class MTTableEditor extends TCMSModelBase
             $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
 
             if (null !== $oRecordData && !empty($oRecordData->id)) {
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_SAVE_SUCCESS', array('sRecordName' => $oRecordData->name));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_SAVE_SUCCESS', ['sRecordName' => $oRecordData->name]);
                 $bSaveSuccessfull = true;
             } else {
                 $bSaveSuccessfull = false;
             }
 
             if ($bSaveSuccessfull && !$bPreventRedirect) {
-                $parameter = array('pagedef' => $this->global->GetUserData('pagedef'), 'tableid' => $this->oTableManager->sTableId, 'id' => $this->oTableManager->sId);
+                $parameter = ['pagedef' => $this->global->GetUserData('pagedef'), 'tableid' => $this->oTableManager->sTableId, 'id' => $this->oTableManager->sId];
 
                 $aAdditionalParams = $this->GetHiddenFieldsHook();
                 if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
@@ -688,7 +686,7 @@ class MTTableEditor extends TCMSModelBase
     {
         $editFieldName = $this->global->GetUserData('_fieldName');
         $oField = $this->oTableManager->oTableConf->GetField($editFieldName, $this->oTableManager->oTableEditor->oTable);
-        $result = array('field' => $editFieldName, 'content' => $oField->GetContent());
+        $result = ['field' => $editFieldName, 'content' => $oField->GetContent()];
 
         return $result;
     }
@@ -716,7 +714,7 @@ class MTTableEditor extends TCMSModelBase
                 } elseif (isset($postData['name'])) {
                     $sName = $postData['name'];
                 }
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_SAVE_SUCCESS', array('sRecordName' => $sName));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_SAVE_SUCCESS', ['sRecordName' => $sName]);
             }
 
             $this->LoadMessages();
@@ -744,15 +742,15 @@ class MTTableEditor extends TCMSModelBase
             $contentFormatted = $this->getFormattedFieldContent($editFieldName, $fieldValue);
             $this->LoadMessages();
 
-            $result = array(
+            $result = [
                 'success' => false === $this->hasErrorMessages(),
                 'fieldname' => $editFieldName,
                 'content' => $fieldValue,
                 'contentFormatted' => $contentFormatted,
                 'messages' => $this->aMessages,
-            );
+            ];
         } else {
-            $result = array('success' => false);
+            $result = ['success' => false];
         }
 
         return $result;
@@ -781,10 +779,10 @@ class MTTableEditor extends TCMSModelBase
     {
         $tableEditor = $this->oTableManager->oTableEditor;
         $oPostTable = $tableEditor->GetNewTableObjectForEditor();
-        $postData = array(
+        $postData = [
             'id' => $this->sId,
             $editFieldName => $editFieldValue,
-        );
+        ];
         $oPostTable->DisablePostLoadHook(true);
         $oPostTable->LoadFromRow($postData);
         $field = $tableEditor->oTableConf->GetField($editFieldName, $oPostTable);
@@ -806,11 +804,11 @@ class MTTableEditor extends TCMSModelBase
             $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
             $breadcrumb->PopURL();
 
-            $parameters = array(
+            $parameters = [
                 'pagedef' => $inputFilterUtil->getFilteredInput('pagedef'),
                 'tableid' => $this->oTableManager->sTableId,
                 'id' => $this->oTableManager->sId,
-            );
+            ];
             if ('true' === $inputFilterUtil->getFilteredInput('bOnlyOneRecord')) {
                 $parameters['bOnlyOneRecord'] = 'true';
             }
@@ -823,7 +821,7 @@ class MTTableEditor extends TCMSModelBase
         } else {
             $sModuleName = get_class($this);
             $sTableName = $this->oTableManager->oTableConf->GetName();
-            $this->data['errorMessage'] = TGlobal::Translate('chameleon_system_core.cms_module_table_editor.error_unable_to_create_new_record', array('%id%' => $this->sId, '%tableName%' => $sTableName));
+            $this->data['errorMessage'] = ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.error_unable_to_create_new_record', ['%id%' => $this->sId, '%tableName%' => $sTableName]);
             $this->SetTemplate($sModuleName, 'error');
         }
     }
@@ -843,7 +841,7 @@ class MTTableEditor extends TCMSModelBase
             $isInIFrame = $inputFilterUtil->getFilteredInput('_isiniframe');
             $parentURL = '';
 
-            $parameter = array();
+            $parameter = [];
             $parameter['_isiniframe'] = $isInIFrame;
             $parameter['id'] = $this->oTableManager->sTableId;
 
@@ -938,7 +936,7 @@ class MTTableEditor extends TCMSModelBase
             MySqlLegacySupport::getInstance()->query($mltQuery);
         }
 
-        $parameter = array('pagedef' => $this->global->GetUserData('pagedef'), 'tableid' => $this->oTableManager->sTableId, 'id' => $this->oTableManager->sId);
+        $parameter = ['pagedef' => $this->global->GetUserData('pagedef'), 'tableid' => $this->oTableManager->sTableId, 'id' => $this->oTableManager->sId];
 
         $aAdditionalParams = $this->GetHiddenFieldsHook();
         if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
@@ -953,7 +951,7 @@ class MTTableEditor extends TCMSModelBase
      */
     public function DatabaseCopy()
     {
-        $this->oTableManager->DatabaseCopy(false, array(), true);
+        $this->oTableManager->DatabaseCopy(false, [], true);
 
         $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
         $breadcrumb->PopURL();
@@ -966,12 +964,12 @@ class MTTableEditor extends TCMSModelBase
             MySqlLegacySupport::getInstance()->query($mltQuery);
         }
 
-        $parameters = array(
+        $parameters = [
             'pagedef' => $this->global->GetUserData('pagedef'),
             'tableid' => $this->oTableManager->sTableId,
             'id' => $this->oTableManager->sId,
             'copyState' => 'copied',
-        );
+        ];
 
         $additionalParameters = $this->GetHiddenFieldsHook();
         if (is_array($additionalParameters) && count($additionalParameters) > 0) {

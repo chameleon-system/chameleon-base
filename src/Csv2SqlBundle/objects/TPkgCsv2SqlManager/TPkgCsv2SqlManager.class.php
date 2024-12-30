@@ -17,13 +17,13 @@ class TPkgCsv2SqlManager
     /**
      * Mail profile.
      */
-    const IMPORT_ERROR_LOG_MAIL = 'shop-import-data';
+    public const IMPORT_ERROR_LOG_MAIL = 'shop-import-data';
     /**
      * error-log filename.
      *
      * @deprecated since 6.3.0 - not used anymore
      */
-    const IMPORT_ERROR_LOG_FILE = 'TPkgCsv2SqlManager.log';
+    public const IMPORT_ERROR_LOG_FILE = 'TPkgCsv2SqlManager.log';
 
     /**
      * call this method if you want to import all files (manages validation, and error handling)
@@ -35,10 +35,10 @@ class TPkgCsv2SqlManager
      */
     public static function ProcessAll()
     {
-        $aImportErrors = array();
-        $aAllErr = array();
+        $aImportErrors = [];
+        $aAllErr = [];
 
-        $aData = array();
+        $aData = [];
         $aData['oImportName'] = 'CSV-2-SQL Datenimport:';
         $aData['successMessage'] = '';
 
@@ -50,19 +50,19 @@ class TPkgCsv2SqlManager
         if (0 == count($aValidationErrors)) {
             // all good, import
             $aImportErrors = self::ImportAll();
-            $aData['successMessage'] = TGlobal::OutHTML(TGlobal::Translate('chameleon_system_csv2sql.msg.import_completed'));
+            $aData['successMessage'] = TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_csv2sql.msg.import_completed'));
         }
         $logger->info('TPkgCsv2SqlManager: ImportAll end');
 
         $aAllErr = TPkgCsv2Sql::ArrayConcat($aAllErr, $aValidationErrors);
         $aAllErr = TPkgCsv2Sql::ArrayConcat($aAllErr, $aImportErrors);
         if (count($aAllErr) > 0) {
-            //send all errors by email
+            // send all errors by email
             self::SendErrorNotification($aAllErr);
         }
         $logger->info('TPkgCsv2SqlManager: SendErrorNotification end');
 
-        //View vars
+        // View vars
         $aData['aValidationErrors'] = (array) $aValidationErrors;
         $aData['aImportErrors'] = (array) $aImportErrors;
 
@@ -84,7 +84,7 @@ class TPkgCsv2SqlManager
     {
         $logger = self::getLogger();
 
-        $aErrors = array();
+        $aErrors = [];
         // get list of import handler
         /** @var $oCsv2SqlList TdbPkgCsv2sqlList */
         $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
@@ -111,16 +111,15 @@ class TPkgCsv2SqlManager
      *    YES: validate bestand and return result
      *    NO: generate error "PKG-CSV-2-SQL-MISSING-FILES" with list of files missing and return
      *
-     *
      * @return array
      */
     public static function ValidateAll()
     {
         $logger = self::getLogger();
 
-        $aErrors = array();
+        $aErrors = [];
 
-        //get list of import handler
+        // get list of import handler
         /** @var $oCsv2SqlList TdbPkgCsv2sqlList */
         $oCsv2SqlList = TdbPkgCsv2sqlList::GetList();
         $oCsv2SqlList->GoToStart();
@@ -166,14 +165,14 @@ class TPkgCsv2SqlManager
         }
         $sMailBody .= $sErrorLines;
 
-        //send report by mail
+        // send report by mail
         $oMailProfile = TdbDataMailProfile::GetProfile(self::IMPORT_ERROR_LOG_MAIL);
         if (\count($aErrors) > 0) {
             $oMailProfile->SetSubject('FEHLER: '.$oMailProfile->sqlData['subject']);
             $sMailBody .= "\r\nACHTUNG: \r\nEs sind Fehler aufgetreten. Überprüfen Sie auch Log-Informationen.\r\n";
         }
 
-        $aMailData = array('sReport' => '<pre>'.$sMailBody.'</pre>');
+        $aMailData = ['sReport' => '<pre>'.$sMailBody.'</pre>'];
         $oMailProfile->AddDataArray($aMailData);
         $oMailProfile->SendUsingObjectView('emails', 'Customer');
     }

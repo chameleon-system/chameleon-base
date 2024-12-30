@@ -168,7 +168,7 @@ class CMSTemplateEngine extends TCMSModelBase
         /** @var $oReturnData TCMSstdClass */
         $oRecordData->bMainNavigationIsSet = $bMainNavigationIsSet;
         $oRecordData->sPageId = $this->sPageId;
-        $oRecordData->sToasterErrorMessage = TGlobal::Translate('chameleon_system_core.template_engine.error_primary_navigation_node_required_before_layout_selection');
+        $oRecordData->sToasterErrorMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.error_primary_navigation_node_required_before_layout_selection');
 
         return $oRecordData;
     }
@@ -208,7 +208,7 @@ class CMSTemplateEngine extends TCMSModelBase
             $params['sRestrictionField'] = $this->global->GetUserData('sRestrictionField');
         }
 
-        $breadcrumbTitle = TGlobal::Translate('chameleon_system_core.template_engine.breadcrumb_title_page').': '.(trim($this->oPage->sqlData['name']) ?: TGlobal::Translate('chameleon_system_core.text.unnamed_record'));
+        $breadcrumbTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.breadcrumb_title_page').': '.(trim($this->oPage->sqlData['name']) ?: \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record'));
 
         if ('preview_content' === $this->sMode || 'layout_selection' === $this->sMode || 'layoutlist' === $this->sMode) {
             return;
@@ -361,7 +361,7 @@ class CMSTemplateEngine extends TCMSModelBase
             }
 
             if (!stristr($subPath, '<li>')) { // no node active
-                $subPath .= '<li>'.TGlobal::Translate('chameleon_system_core.template_engine.no_node_selected').'</li>';
+                $subPath .= '<li>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.no_node_selected').'</li>';
             }
 
             $subPath .= "</ul></div>\n";
@@ -563,7 +563,7 @@ class CMSTemplateEngine extends TCMSModelBase
         $returnVal = false;
 
         $sDialogContent = '<div id="chooseModuleViewDialog" style="display:none;">
-      <h2>'.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.template_engine.select_module_view'))."</h2>\n";
+      <h2>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_module_view'))."</h2>\n";
         if ($this->global->UserDataExists('instanceid') && '' !== $this->global->GetUserData('instanceid')) {
             $sInstanceId = $this->global->GetUserData('instanceid');
             $sSpotName = $this->global->GetUserData('spotName');
@@ -578,7 +578,7 @@ class CMSTemplateEngine extends TCMSModelBase
             $returnVal = array();
             $returnVal['bIsTableLocked'] = $oEditor->IsRecordLocked();
 
-            $sSubmitButton = TCMSRender::DrawButton(TGlobal::Translate('chameleon_system_core.template_engine.select_instance'), "javascript:$('#loadmoduleclass').submit();", 'fas fa-check');
+            $sSubmitButton = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_instance'), "javascript:$('#loadmoduleclass').submit();", 'fas fa-check');
 
             $sDialogContent .= '<form name="loadmoduleclass" id="loadmoduleclass" method="post" action="'.URL_WEB_CONTROLLER.'" accept-charset="UTF-8">'."\n".'
     <input type="hidden" name="pagedef" value="'.$this->sPageId.'"/>  '."\n".'

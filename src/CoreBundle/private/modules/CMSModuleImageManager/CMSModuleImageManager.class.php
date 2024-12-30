@@ -11,13 +11,13 @@
 
 class CMSModuleImageManager extends TCMSModelBase
 {
-    protected $oTableConf = null;
-    protected $oTable = null;
-    protected $oFieldDefinition = null;
+    protected $oTableConf;
+    protected $oTable;
+    protected $oFieldDefinition;
     protected $nodeID = 1;
-    protected $fieldName = null;
+    protected $fieldName;
     protected $rootTreeID = 1;
-    protected $imageTableConfId = null;
+    protected $imageTableConfId;
 
     public function Execute()
     {
@@ -30,7 +30,7 @@ class CMSModuleImageManager extends TCMSModelBase
             $oRootNode = new TCMSMediaManagerTreeNode();
             $oRootNode->Load($this->rootTreeID);
             $oImageTableConf = new TCMSTableConf();
-            /** @var $oTable TCMSTableConf */
+            /* @var $oTable TCMSTableConf */
             $oImageTableConf->LoadFromField('name', 'cms_media');
             $this->imageTableConfId = $oImageTableConf->sqlData['id'];
             $this->data['treeHTML'] = '';
@@ -50,7 +50,7 @@ class CMSModuleImageManager extends TCMSModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('SetImage', 'ClearImage');
+        $externalFunctions = ['SetImage', 'ClearImage'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -62,7 +62,7 @@ class CMSModuleImageManager extends TCMSModelBase
     {
         // need to pass the parameters (modulespotname) back to the view
         $oListTable = new TCMSListManagerMediaSelector();
-        /** @var $oListTable TCMSListManagerMediaSelector */
+        /* @var $oListTable TCMSListManagerMediaSelector */
         if ($this->global->UserDataExists('sRestriction')) {
             $oListTable->sRestriction = $this->global->GetUserData('sRestriction');
         }
@@ -80,7 +80,7 @@ class CMSModuleImageManager extends TCMSModelBase
 
         $defaults = explode(',', $this->oFieldDefinition->sqlData['field_default_value']);
         $oImage = new TCMSImage();
-        /** @var $oImage TCMSImage */
+        /* @var $oImage TCMSImage */
         $oImage->Load($defaults[$position]);
 
         $oListTable->Init($oImage);
@@ -137,7 +137,7 @@ class CMSModuleImageManager extends TCMSModelBase
         // get default value
         $images[$position] = $imageId;
 
-        $returnData = array();
+        $returnData = [];
         $returnData['fieldvalue'] = implode(',', $images);
         $oImage = new TCMSImage();
         /** @var $oImage TCMSImage */
@@ -150,7 +150,7 @@ class CMSModuleImageManager extends TCMSModelBase
 
             $returnData['sImage'] = $this->getBackendResponsiveThumbnail($oImage);
         } else {
-            $returnData['message'] = TGlobal::Translate('chameleon_system_core.cms_module_image_manager.selected_image_not_found');
+            $returnData['message'] = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_image_manager.selected_image_not_found');
             $returnData['messageType'] = 'ERROR';
         }
 
@@ -158,8 +158,6 @@ class CMSModuleImageManager extends TCMSModelBase
     }
 
     /**
-     * @param TCMSImage $image
-     *
      * @return string
      */
     protected function getBackendResponsiveThumbnail(TCMSImage $image)
@@ -178,11 +176,11 @@ class CMSModuleImageManager extends TCMSModelBase
         $viewRenderer->AddSourceObject('sFullImageURL', $image->GetFullURL());
         $viewRenderer->AddSourceObject(
             'aTagProperties',
-            array(
+            [
                 'width' => $width + 6,
                 'height' => $height + 6,
                 'cmsshowfull' => '1',
-            )
+            ]
         );
 
         return $viewRenderer->Render('/common/media/pkgCmsTextFieldImageResponsive.html.twig', null, false);
@@ -191,11 +189,11 @@ class CMSModuleImageManager extends TCMSModelBase
     protected function _LoadData($tableId, $recordId, $imageFieldName)
     {
         $this->oTableConf = new TCMSTableConf();
-        /** @var $oTableConf TCMSTableConf */
+        /* @var $oTableConf TCMSTableConf */
         $this->oTableConf->Load($tableId);
         $this->oFieldDefinition = $this->oTableConf->GetFieldDefinition($imageFieldName);
         $this->oTable = new TCMSRecord();
-        /** @var $oTable TCMSRecord */
+        /* @var $oTable TCMSRecord */
         $this->oTable->table = $this->oTableConf->sqlData['name'];
         $this->oTable->Load($recordId);
     }
@@ -204,10 +202,10 @@ class CMSModuleImageManager extends TCMSModelBase
      * Render Tree for Media Categories.
      *
      * @param TCMSTreeNode $oNode
-     * @param int          $activeID
-     * @param string       $fieldName
-     * @param string       $path
-     * @param int          $level
+     * @param int $activeID
+     * @param string $fieldName
+     * @param string $path
+     * @param int $level
      */
     public function RenderTree($oNode, $activeID, $fieldName, $path = '', $level = 0)
     {
@@ -264,7 +262,7 @@ class CMSModuleImageManager extends TCMSModelBase
 
         $aExternalListParams = $this->GetAdditionalListParams();
         if (!is_array($aExternalListParams)) {
-            $aExternalListParams = array();
+            $aExternalListParams = [];
         }
         $aExternalListParams['_user_data'] = '';
         $aExternalListParams['_sort_order'] = '';
@@ -289,9 +287,9 @@ class CMSModuleImageManager extends TCMSModelBase
      */
     protected function GetAdditionalListParams()
     {
-        $aAdditionalListParams = array('imageWidth', 'imageHeight', 'sAllowedFileTypes');
+        $aAdditionalListParams = ['imageWidth', 'imageHeight', 'sAllowedFileTypes'];
 
-        $aExternalListParams = array();
+        $aExternalListParams = [];
 
         foreach ($aAdditionalListParams as $sListParam) {
             if ($this->global->UserDataExists($sListParam)) {
@@ -304,7 +302,7 @@ class CMSModuleImageManager extends TCMSModelBase
 
     public function GetHtmlHeadIncludes()
     {
-        $aIncludes = array();
+        $aIncludes = [];
         // first the includes that are needed for the all fields
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/table.css" rel="stylesheet" type="text/css" />';
