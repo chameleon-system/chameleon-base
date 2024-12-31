@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * module manages the page-system of the webpage. in it we assume that a page
  * has been selected, and now some operations are performed on that page (assigning a tree node,
  * picking a layout, placing modules into that layout, and editing the modules content).
-/**/
+ * /**/
 class CMSTemplateEngine extends TCMSModelBase
 {
     /**
@@ -38,56 +38,56 @@ class CMSTemplateEngine extends TCMSModelBase
      *
      * @var string
      */
-    protected $sPageId = null;
+    protected $sPageId;
 
     /**
      * the active layout.
      *
      * @var CMSTemplateEngineLayout
      */
-    protected $oActiveLayout = null;
+    protected $oActiveLayout;
 
     /**
      * the requested mode (function or component) of the template engine being called.
      *
      * @var string
      */
-    protected $sMode = null;
+    protected $sMode;
 
     /**
      * the page being viewed.
      *
      * @var TCMSPagedef
      */
-    protected $oPage = null;
+    protected $oPage;
 
     /**
      * the portal of the page being viewed.
      *
      * @var TCMSPortal
      */
-    protected $oPortal = null;
+    protected $oPortal;
 
     /**
      * the table manager for.
      *
      * @var TCMSTableEditor
      */
-    protected $oTableManager = null;
+    protected $oTableManager;
 
     /**
      * table id of cms_tpl_page.
      *
      * @var string
      */
-    protected $sTableID = null;
+    protected $sTableID;
 
     /**
      * array of all modules of all spots of the page.
      *
      * @var array - key = spotname
      */
-    protected $aModuleList = null;
+    protected $aModuleList;
 
     /**
      * indicates if the record is rendered in readonly mode.
