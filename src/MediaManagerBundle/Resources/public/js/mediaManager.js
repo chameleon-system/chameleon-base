@@ -1181,6 +1181,12 @@
                 evt.preventDefault();
             });
 
+            $('.create-editor', self.editContainer).on('click', function (evt) {
+                var mediaItem = $(this).parents('.cms-media-item');
+                self.openIframeLayover(mediaItem.data('name'), $(this).attr('href'));
+                evt.preventDefault();
+            });
+
             $('.create-version', self.editContainer).on('click', function (evt) {
                 var mediaItem = $(this).parents('.cms-media-item');
                 self.openIframeLayover(CHAMELEON.CORE.i18n.Translate('chameleon_system_media_manager.crop_window_title') + ' ' + mediaItem.data('name'), $(this).attr('href'));

@@ -6,6 +6,11 @@
                <source>chameleon_system_image_editor.editor.button_label</source>
                <target>Save Image</target>
            </trans-unit>
+
+           <trans-unit id="chameleon_system_image_editor.detail_page.button_label">
+               <source>chameleon_system_image_editor.detail_page.button_label</source>
+               <target>Edit Image</target>
+           </trans-unit>
         </body>
     </file>
 </xliff>

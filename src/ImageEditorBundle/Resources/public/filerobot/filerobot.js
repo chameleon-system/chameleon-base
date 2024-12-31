@@ -66,7 +66,7 @@ const config = {
             },
         ],
     },
-    tabsIds: [TABS.ADJUST, TABS.ANNOTATE],
+    tabsIds: [TABS.ADJUST, TABS.ANNOTATE, TABS.FINETUNE, TABS.RESIZE, TABS.FILTERS],
     defaultTabId: TABS.ADJUST,
     defaultToolId: TOOLS.TEXT,
 };
