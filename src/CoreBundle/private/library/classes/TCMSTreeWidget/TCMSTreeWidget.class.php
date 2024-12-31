@@ -148,7 +148,6 @@ class TCMSTreeWidget
     /**
      * sets the context menu view name (filename without view.php extension).
      *
-     * @param string $sViewName
      * @param string $sViewPath - default is TCMSTreeWidget in /rendering/objectviews
      * @param string $sViewType - Core,Customer,Custom-Core
      */
@@ -197,10 +196,10 @@ class TCMSTreeWidget
      */
     public function GetChildren($sNodeID)
     {
-        $aReturnVal = array();
+        $aReturnVal = [];
         if (!empty($sNodeID)) {
             /** @var $oTreeNode TCMSTreeNode */
-            $oTreeNode = call_user_func(array($this->sTreeNodeClassName, 'GetNewInstance'), null);
+            $oTreeNode = call_user_func([$this->sTreeNodeClassName, 'GetNewInstance'], null);
             if ($oTreeNode->Load($sNodeID)) {
                 $iMaxLevel = 1;
                 if ($sNodeID == $this->sRootNodeID) {
@@ -219,9 +218,9 @@ class TCMSTreeWidget
 
     /**
      * @param TCMSTreeNode $oTreeNode
-     * @param int          $iMaxLevel      - maximum level to render
-     * @param int          $iCurrentLevel  - current render level
-     * @param null         $editLanguageId
+     * @param int $iMaxLevel - maximum level to render
+     * @param int $iCurrentLevel - current render level
+     * @param null $editLanguageId
      *
      * @return array
      */
@@ -229,7 +228,7 @@ class TCMSTreeWidget
     {
         $bRootLevelCall = false;
         if (0 == $iCurrentLevel) {
-            $aReturnVal = array();
+            $aReturnVal = [];
             $bRootLevelCall = true;
         }
 
@@ -241,7 +240,7 @@ class TCMSTreeWidget
             }
             $sNodeName = $oTreeNode->GetName();
             if (empty($sNodeName)) {
-                $sNodeName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
+                $sNodeName = ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
             }
 
             if ($oTreeNode->id == $this->sRootNodeID && !empty($this->sRootNodeName)) {
@@ -259,14 +258,14 @@ class TCMSTreeWidget
                 }
             }
 
-            $aHTMLAttributes = array('id' => 'node'.TGlobal::OutJS($oTreeNode->id));
+            $aHTMLAttributes = ['id' => 'node'.TGlobal::OutJS($oTreeNode->id)];
             $aHTMLAttributes = $this->GetNodeHTMLAttributes($aHTMLAttributes, $oTreeNode);
 
-            $aNodeProperties = array('attr' => $aHTMLAttributes, 'data' => $sNodeName, 'state' => $sState);
+            $aNodeProperties = ['attr' => $aHTMLAttributes, 'data' => $sNodeName, 'state' => $sState];
 
             if ($iCurrentLevel <= $iMaxLevel) {
                 ++$iCurrentLevel;
-                $aSubNodes = array();
+                $aSubNodes = [];
                 while ($oChildrenNode = $oChildrenNodeList->Next()) {
                     $aSubNodes[] = $this->RenderJSONNodes($oChildrenNode, $iMaxLevel, $iCurrentLevel++, $editLanguageId);
                 }
@@ -277,7 +276,7 @@ class TCMSTreeWidget
                     } else {
                         $aNodeProperties = $aSubNodes; // replace root node with sub nodes
                     }
-                } else { //sub level call
+                } else { // sub level call
                     $aNodeProperties['children'] = $aSubNodes;
                 }
             }
@@ -292,7 +291,7 @@ class TCMSTreeWidget
      * returns an array of HTML attributes
      * sets a rel attribute with rootNode and permission flags.
      *
-     * @param array        $aHTMLAttributes
+     * @param array $aHTMLAttributes
      * @param TCMSTreeNode $oTreeNode
      *
      * @return array $aHTMLAttributes
@@ -384,7 +383,7 @@ class TCMSTreeWidget
                    WHERE `entry_sort` >= '.MySqlLegacySupport::getInstance()->real_escape_string($newIndex)."
                      AND `parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($newParentNodeID)."'";
 
-            $oTreeNodeList = call_user_func(array($this->sTreeNodeClassName.'List', 'GetList'), $query);
+            $oTreeNodeList = call_user_func([$this->sTreeNodeClassName.'List', 'GetList'], $query);
             while ($oTreeNode = $oTreeNodeList->Next()) {
                 $oTableEditorManager->Init($iTableID, $oTreeNode->id);
                 // $oTableEditorManager->AllowEditByAll();
@@ -393,7 +392,7 @@ class TCMSTreeWidget
         } else {
             $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTreeTableName)."` WHERE `parent_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($newParentNodeID)."' AND `id` != '".MySqlLegacySupport::getInstance()->real_escape_string($nodeID)."' ORDER BY `entry_sort`  ASC";
 
-            $oTreeNodeList = call_user_func(array($this->sTreeNodeClassName.'List', 'GetList'), $query);
+            $oTreeNodeList = call_user_func([$this->sTreeNodeClassName.'List', 'GetList'], $query);
             $count = 0;
             while ($oTreeNode = $oTreeNodeList->Next()) {
                 if ($newIndex == $count) {
