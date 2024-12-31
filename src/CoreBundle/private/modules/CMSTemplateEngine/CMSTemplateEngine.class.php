@@ -10,10 +10,8 @@
  */
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
-use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -105,7 +103,7 @@ class CMSTemplateEngine extends TCMSModelBase
     {
         $cspRules = CMS_AUTO_SEND_BACKEND_HEADER_CONTENT_SECURITY_POLICY;
         if (!empty($cspRules)) {
-            $aHeaderNames = array('X-WebKit-CSP', 'X-Content-Security-Policy', 'Content-Security-Policy');
+            $aHeaderNames = ['X-WebKit-CSP', 'X-Content-Security-Policy', 'Content-Security-Policy'];
             foreach ($aHeaderNames as $csp) {
                 header($csp.': '.$cspRules);
             }
@@ -158,17 +156,17 @@ class CMSTemplateEngine extends TCMSModelBase
     {
         $bMainNavigationIsSet = false;
         $oCmsTplPage = TdbCmsTplPage::GetNewInstance();
-        /** @var $oCmsTplPage TdbCmsTplPage */
+        /* @var $oCmsTplPage TdbCmsTplPage */
         $oCmsTplPage->Load($this->sPageId);
         if (!empty($oCmsTplPage->fieldPrimaryTreeIdHidden)) {
             $bMainNavigationIsSet = true;
         }
 
         $oRecordData = new TCMSstdClass();
-        /** @var $oReturnData TCMSstdClass */
+        /* @var $oReturnData TCMSstdClass */
         $oRecordData->bMainNavigationIsSet = $bMainNavigationIsSet;
         $oRecordData->sPageId = $this->sPageId;
-        $oRecordData->sToasterErrorMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.error_primary_navigation_node_required_before_layout_selection');
+        $oRecordData->sToasterErrorMessage = ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.error_primary_navigation_node_required_before_layout_selection');
 
         return $oRecordData;
     }
@@ -208,7 +206,7 @@ class CMSTemplateEngine extends TCMSModelBase
             $params['sRestrictionField'] = $this->global->GetUserData('sRestrictionField');
         }
 
-        $breadcrumbTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.breadcrumb_title_page').': '.(trim($this->oPage->sqlData['name']) ?: \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record'));
+        $breadcrumbTitle = ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.breadcrumb_title_page').': '.(trim($this->oPage->sqlData['name']) ?: ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record'));
 
         if ('preview_content' === $this->sMode || 'layout_selection' === $this->sMode || 'layoutlist' === $this->sMode) {
             return;
@@ -220,7 +218,7 @@ class CMSTemplateEngine extends TCMSModelBase
 
     public static function removeHistoryEntry(array $historyEntry, string $tableId, string $entryId, string $cmsTblConfId): bool
     {
-        return $tableId === 'cms_tpl_page' && 'templateengine' === ($historyEntry['params']['pagedef'] ?? null) && $entryId === ($historyEntry['params']['id'] ?? null);
+        return 'cms_tpl_page' === $tableId && 'templateengine' === ($historyEntry['params']['pagedef'] ?? null) && $entryId === ($historyEntry['params']['id'] ?? null);
     }
 
     public function Execute()
@@ -229,7 +227,7 @@ class CMSTemplateEngine extends TCMSModelBase
 
         $oMainNavigationSet = $this->IsMainNavigationSet();
         if (!$oMainNavigationSet->bMainNavigationIsSet) {
-            $sURL = PATH_CMS_CONTROLLER.'?'.str_replace('&amp;', '&', TTools::GetArrayAsURL(array('pagedef' => 'tableeditor', 'tableid' => $this->sTableID, 'id' => $this->sPageId)));
+            $sURL = PATH_CMS_CONTROLLER.'?'.str_replace('&amp;', '&', TTools::GetArrayAsURL(['pagedef' => 'tableeditor', 'tableid' => $this->sTableID, 'id' => $this->sPageId]));
             $this->getRedirectService()->redirect($sURL);
         }
 
@@ -306,7 +304,7 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     protected function GetPermissionSettings()
     {
-        $permissions = array('new' => false, 'edit' => false, 'delete' => false, 'showlist' => false);
+        $permissions = ['new' => false, 'edit' => false, 'delete' => false, 'showlist' => false];
 
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
@@ -338,7 +336,7 @@ class CMSTemplateEngine extends TCMSModelBase
 
         $total = $oBreadcrumbs->Length();
 
-        $aNavigations = array();
+        $aNavigations = [];
 
         $naviCount = 0;
         while ($oBreadCrumb = $oBreadcrumbs->Next()) {
@@ -361,7 +359,7 @@ class CMSTemplateEngine extends TCMSModelBase
             }
 
             if (!stristr($subPath, '<li>')) { // no node active
-                $subPath .= '<li>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.no_node_selected').'</li>';
+                $subPath .= '<li>'.ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.no_node_selected').'</li>';
             }
 
             $subPath .= "</ul></div>\n";
@@ -379,7 +377,7 @@ class CMSTemplateEngine extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('SetLayout', 'GetModuleMainMenu', 'IsMainNavigationSet', 'AddNewRevisionFromDatabase', 'getChooseModuleViewDialog');
+        $externalFunctions = ['SetLayout', 'GetModuleMainMenu', 'IsMainNavigationSet', 'AddNewRevisionFromDatabase', 'getChooseModuleViewDialog'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -393,7 +391,7 @@ class CMSTemplateEngine extends TCMSModelBase
         $this->oPage->ChangeMasterPagedef($this->global->GetUserData('sourcepagedef'));
 
         // and redirect to "edit page"
-        $parameter = array('pagedef' => 'templateengine', 'id' => $this->sPageId, '_mode' => $this->sMode);
+        $parameter = ['pagedef' => 'templateengine', 'id' => $this->sPageId, '_mode' => $this->sMode];
         $this->getRedirectService()->redirectToActivePage($parameter);
     }
 
@@ -413,7 +411,7 @@ class CMSTemplateEngine extends TCMSModelBase
                               OR `cms_master_pagedef`.`restrict_to_portals` = '0'  ";
         }
         $oMasterDefs = TdbCmsMasterPagedefList::GetList($query);
-        $oMasterDefs->ChangeOrderBy(array('position' => 'ASC'));
+        $oMasterDefs->ChangeOrderBy(['position' => 'ASC']);
         $this->data['oMasterDefs'] = $oMasterDefs;
     }
 
@@ -430,7 +428,7 @@ class CMSTemplateEngine extends TCMSModelBase
         }
 
         $oModuleListTableConf = new TCMSTableConf();
-        /** @var $oModuleListTableConf TCMSTableConf */
+        /* @var $oModuleListTableConf TCMSTableConf */
         $oModuleListTableConf->LoadFromField('name', 'cms_tpl_module_instance');
         $this->data['oModuleListTableConf'] = $oModuleListTableConf;
 
@@ -438,7 +436,7 @@ class CMSTemplateEngine extends TCMSModelBase
         // fetch listClass first using the definition in the tableconf...
         if (!empty($oModuleListTableConf->sqlData['cms_tbl_list_class_id'])) {
             $oListDef = new TCMSRecord();
-            /** @var $oListDef TCMSRecord */
+            /* @var $oListDef TCMSRecord */
             $oListDef->table = 'cms_tbl_list_class';
             if ($oListDef->Load($oModuleListTableConf->sqlData['cms_tbl_list_class_id'])) {
                 $listClass = $oListDef->sqlData['classname'];
@@ -472,7 +470,7 @@ class CMSTemplateEngine extends TCMSModelBase
 
         $tableEditorButton = $menuItems->FindItemWithProperty('sItemKey', 'edittableconf');
         if (false !== $tableEditorButton) {
-            /**
+            /*
              * @var $tableEditorButton TCMSTableEditorMenuItem
              */
             $tableEditorButton->sOnClick = str_replace('pagedef=templateengine', 'pagedef=tableeditor', $tableEditorButton->sOnClick);
@@ -508,7 +506,7 @@ class CMSTemplateEngine extends TCMSModelBase
 
     public function GetHtmlHeadIncludes()
     {
-        $aIncludes = array();
+        $aIncludes = [];
         // first the includes that are needed for the all fields
 
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/cms.v1.js').'" type="text/javascript"></script>';
@@ -529,7 +527,6 @@ class CMSTemplateEngine extends TCMSModelBase
       function openModuleViewChooseDialog() {
         CreateModalDialogFromContainer('chooseModuleViewDialog');
       }
-
 
       </script>";
         }
@@ -563,22 +560,22 @@ class CMSTemplateEngine extends TCMSModelBase
         $returnVal = false;
 
         $sDialogContent = '<div id="chooseModuleViewDialog" style="display:none;">
-      <h2>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_module_view'))."</h2>\n";
+      <h2>'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_module_view'))."</h2>\n";
         if ($this->global->UserDataExists('instanceid') && '' !== $this->global->GetUserData('instanceid')) {
             $sInstanceId = $this->global->GetUserData('instanceid');
             $sSpotName = $this->global->GetUserData('spotName');
 
             $oModuleListTableConf = new TCMSTableConf();
-            /** @var $oModuleListTableConf TCMSTableConf */
+            /* @var $oModuleListTableConf TCMSTableConf */
             $oModuleListTableConf->LoadFromField('name', 'cms_tpl_module_instance');
             /** @var $oEditor TCMSTableEditorManager */
             $oEditor = new TCMSTableEditorManager();
             $oEditor->Init($oModuleListTableConf->id, $sInstanceId);
 
-            $returnVal = array();
+            $returnVal = [];
             $returnVal['bIsTableLocked'] = $oEditor->IsRecordLocked();
 
-            $sSubmitButton = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_instance'), "javascript:$('#loadmoduleclass').submit();", 'fas fa-check');
+            $sSubmitButton = TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_instance'), "javascript:$('#loadmoduleclass').submit();", 'fas fa-check');
 
             $sDialogContent .= '<form name="loadmoduleclass" id="loadmoduleclass" method="post" action="'.URL_WEB_CONTROLLER.'" accept-charset="UTF-8">'."\n".'
     <input type="hidden" name="pagedef" value="'.$this->sPageId.'"/>  '."\n".'
@@ -623,7 +620,7 @@ class CMSTemplateEngine extends TCMSModelBase
                 }
                 $sListContent .= '<div style="padding: 5px;"><select name="template" style="min-width:200px">'."\n";
 
-                $aViews = array();
+                $aViews = [];
                 while ($sViewName = $oViewList->Next()) {
                     $aViews[$sViewName] = '';
                 }
