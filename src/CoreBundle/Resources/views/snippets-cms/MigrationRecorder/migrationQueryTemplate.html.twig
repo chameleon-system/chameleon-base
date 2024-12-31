@@ -10,9 +10,10 @@ $data = TCMSLogChange::createMigrationQueryData('{{ tableName }}', '{{ language 
   ->setFields([
   {% for fieldName, value in fields %}
     {% set comment = comments[fieldName] -%}
+
     {% if comment is same as(true) %}// {% endif -%}
     '{{ fieldName }}' => {{ value|raw }},
-    {%- if comment is defined and comment is not same as(true) %} // {{ comment|raw }}{% endif %}
+    {%- if comment and comment is not same as(true) %} // {{ comment|raw }}{% endif %}
 
   {% endfor %}
 ])

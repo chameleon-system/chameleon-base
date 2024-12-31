@@ -1564,7 +1564,7 @@ class TCMSTableEditorEndPoint
                 }
 
                 $isCommentedField = false;
-                if (true === $bIsUpdateCall && $oField->data === $this->oTable->sqlData[$oField->name]) {
+                if (true === $bIsUpdateCall && true === array_key_exists($oField->name, $this->oTable->sqlData) && $oField->data === $this->oTable->sqlData[$oField->name]) {
                     // field value not changed
                     if ('name' === $oField->name) { // special field, comment line (maybe extended by table specific lists)
                         $comments[$oField->name] = true;
@@ -1609,7 +1609,10 @@ class TCMSTableEditorEndPoint
 
                     if (false === $isCommentedField) {
                         $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
-                        $comments[$oField->name] = sprintf("prev.: %s", $this->getDatabaseConnection()->quote($this->oTable->sqlData[$oField->name]));
+
+                        if (true === $bIsUpdateCall) {
+                            $comments[$oField->name] = sprintf("prev.: %s", $this->getDatabaseConnection()->quote($this->oTable->sqlData[$oField->name]));
+                        }
                     }
 
                     $dataForChangeRecorder[$oField->name] = $sqlValue;
@@ -1742,7 +1745,6 @@ class TCMSTableEditorEndPoint
             $migrationQueryData = new MigrationQueryData($tableName, $language);
             $migrationQueryData->setFields($fields);
             $migrationQueryData->setWhereEquals($whereConditions);
-            //TODO $migrationQueryData->setComments($comments);
             $dataModelList[] = new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE);
         }
 
