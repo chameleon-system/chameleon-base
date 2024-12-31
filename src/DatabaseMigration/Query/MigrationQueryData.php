@@ -30,23 +30,23 @@ class MigrationQueryData
     /**
      * @var array
      */
-    private $fields = array();
+    private $fields = [];
     /**
      * @var Comparison[]
      */
-    private $whereEquals = array();
+    private $whereEquals = [];
     /**
      * @var Comparison[]
      */
-    private $whereExpressions = array();
+    private $whereExpressions = [];
     /**
      * @var array
      */
-    private $fieldTypes = array();
+    private $fieldTypes = [];
     /**
      * @var array
      */
-    private $whereExpressionsFieldTypes = array();
+    private $whereExpressionsFieldTypes = [];
     /**
      * @var array<string, string|true>
      */
@@ -75,8 +75,6 @@ class MigrationQueryData
     }
 
     /**
-     * @param array $fields
-     *
      * @return MigrationQueryData
      */
     public function setFields(array $fields)
@@ -99,8 +97,6 @@ class MigrationQueryData
     }
 
     /**
-     * @param array $fieldTypes
-     *
      * @return MigrationQueryData
      */
     public function setFieldTypes(array $fieldTypes)
@@ -111,8 +107,6 @@ class MigrationQueryData
     }
 
     /**
-     * @param array $whereEquals
-     *
      * @return MigrationQueryData
      */
     public function setWhereEquals(array $whereEquals)
@@ -133,8 +127,6 @@ class MigrationQueryData
     }
 
     /**
-     * @param array $whereExpressionsFieldTypes
-     *
      * @return MigrationQueryData
      */
     public function setWhereExpressionsFieldTypes(array $whereExpressionsFieldTypes)

@@ -14,11 +14,7 @@ namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Recorder;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use Doctrine\Common\Collections\Expr\Comparison;
-use ErrorException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use TCMSLogChange;
-use TPkgCmsException_Log;
-use ViewRenderer;
 
 /**
  * QueryWriter writes queries to a file in order to replay them on another Chameleon installation.
@@ -30,16 +26,13 @@ class QueryWriter
      */
     private $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container; // used to get the non-shared snippet renderer service
     }
 
     /**
-     * @param resource             $filePointer
+     * @param resource $filePointer
      * @param LogChangeDataModel[] $dataModels
      *
      * @return void
@@ -52,8 +45,7 @@ class QueryWriter
     }
 
     /**
-     * @param resource           $filePointer
-     * @param LogChangeDataModel $dataModel
+     * @param resource $filePointer
      *
      * @return void
      */
@@ -74,8 +66,7 @@ class QueryWriter
     }
 
     /**
-     * @param resource           $filePointer
-     * @param MigrationQueryData $migrationQueryData
+     * @param resource $filePointer
      *
      * @return void
      */
@@ -85,8 +76,7 @@ class QueryWriter
     }
 
     /**
-     * @param resource           $filePointer
-     * @param MigrationQueryData $migrationQueryData
+     * @param resource $filePointer
      *
      * @return void
      */
@@ -96,8 +86,7 @@ class QueryWriter
     }
 
     /**
-     * @param resource           $filePointer
-     * @param MigrationQueryData $migrationQueryData
+     * @param resource $filePointer
      *
      * @return void
      */
@@ -106,10 +95,8 @@ class QueryWriter
         $this->writeQueryToFile($filePointer, $migrationQueryData, LogChangeDataModel::TYPE_DELETE);
     }
 
-
     /**
      * @param resource $filePointer
-     * @param MigrationQueryData $migrationQueryData
      * @param string $operationType
      *
      * @return void
@@ -141,7 +128,6 @@ class QueryWriter
 
     /**
      * @param Comparison[] $expressionsToWrite
-     * @return array
      */
     private function getExpressionValuesToWrite(array $expressionsToWrite): array
     {
@@ -187,7 +173,7 @@ class QueryWriter
      */
     private function getTableConfIdValueToWrite($value)
     {
-        $tableName = TCMSLogChange::getTableName($value);
+        $tableName = \TCMSLogChange::getTableName($value);
 
         return "TCMSLogChange::GetTableId('$tableName')";
     }
@@ -199,7 +185,7 @@ class QueryWriter
      */
     private function getFieldTypeValueToWrite($value)
     {
-        $constantName = TCMSLogChange::getFieldConstantName($value);
+        $constantName = \TCMSLogChange::getFieldConstantName($value);
 
         return "TCMSLogChange::GetFieldType('$constantName')";
     }
@@ -216,12 +202,12 @@ class QueryWriter
 
     /**
      * @param resource $filePointer
-     * @param string   $query
-     *
-     * @throws ErrorException
-     * @throws TPkgCmsException_Log
+     * @param string $query
      *
      * @return void
+     *
+     * @throws \ErrorException
+     * @throws \TPkgCmsException_Log
      */
     public function writeLiteralQueryToFile($filePointer, $query)
     {
@@ -236,7 +222,7 @@ class QueryWriter
             $iPos = mb_strpos($aQueryParts[1], "'");
             if (false !== $iPos) {
                 $sTblConfId = mb_substr($aQueryParts[1], 0, $iPos);
-                $tableName = TCMSLogChange::getTableName($sTblConfId);
+                $tableName = \TCMSLogChange::getTableName($sTblConfId);
                 if (null !== $tableName) {
                     $query = str_replace($sSearchString.$sTblConfId."'", $sSearchString.'".TCMSLogChange::GetTableId(\''.$tableName.'\')."\'', $query);
                 }
@@ -250,7 +236,7 @@ class QueryWriter
             $iPos = mb_strpos($aQueryParts[1], "'");
             if (false !== $iPos) {
                 $sFieldTypeId = mb_substr($aQueryParts[1], 0, $iPos);
-                $sFieldTypeConstant = TCMSLogChange::getFieldConstantName($sFieldTypeId);
+                $sFieldTypeConstant = \TCMSLogChange::getFieldConstantName($sFieldTypeId);
                 if (null !== $sFieldTypeConstant) {
                     $query = str_replace($sSearchString.$sFieldTypeId."'", $sSearchString.'".TCMSLogChange::GetFieldType(\''.$sFieldTypeConstant.'\')."\'', $query);
                 }
@@ -264,9 +250,9 @@ class QueryWriter
         fwrite($filePointer, $renderedQuery, strlen($renderedQuery));
     }
 
-    private function getViewRenderer(): ViewRenderer
+    private function getViewRenderer(): \ViewRenderer
     {
-        /** @var ViewRenderer $viewRenderer */
+        /** @var \ViewRenderer $viewRenderer */
         $viewRenderer = $this->container->get('chameleon_system_view_renderer.view_renderer');
         $viewRenderer->setShowHTMLHints(false);
         $viewRenderer->setIsBackendMode();
