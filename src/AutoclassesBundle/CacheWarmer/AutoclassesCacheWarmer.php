@@ -42,7 +42,7 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
         ServiceLocator::setContainer($container);
     }
 
-    public function warmUp(string $cacheDirectory): array
+    public function warmUp(string $cacheDir): array
     {
         $this->updateAllTables();
 
@@ -105,10 +105,7 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
         }
     }
 
-    /**
-     * @return string
-     */
-    private function createTempCacheDir()
+    private function createTempCacheDir(): string
     {
         $tempCacheDir = $this->cacheDir;
         $tempCacheDir = rtrim($tempCacheDir, DIRECTORY_SEPARATOR);
@@ -118,17 +115,15 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
         if (file_exists($tempCacheDir)) {
             $this->fileManager->remove($tempCacheDir);
         }
-        mkdir($tempCacheDir, 0777, true);
+
+        if (!mkdir($tempCacheDir, 0777, true) && !is_dir($tempCacheDir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $tempCacheDir));
+        }
 
         return $tempCacheDir;
     }
 
-    /**
-     * @param string $targetDir
-     *
-     * @return void
-     */
-    private function makeTempDirToAutoclassesDir($targetDir)
+    private function makeTempDirToAutoclassesDir(string $targetDir): void
     {
         $oldCacheDir = $this->getOldCacheDir();
         if (file_exists($oldCacheDir)) {
@@ -139,10 +134,7 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
         $this->fileManager->remove($oldCacheDir);
     }
 
-    /**
-     * @return string
-     */
-    private function getOldCacheDir()
+    private function getOldCacheDir(): string
     {
         $dir = $this->cacheDir;
         $dir = rtrim($dir, DIRECTORY_SEPARATOR);
@@ -168,17 +160,10 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
 
         $result2 = $this->databaseAdapter->getVirtualClassList();
 
-        $convertedList = ['virtualClasses' => $result2, 'tableClasses' => $convertedList];
-
-        return $convertedList;
+        return ['virtualClasses' => $result2, 'tableClasses' => $convertedList];
     }
 
-    /**
-     * @param string $bareClassName
-     *
-     * @return string
-     */
-    private function convertToCamelCase($bareClassName)
+    private function convertToCamelCase(string $bareClassName): string
     {
         $className = preg_replace_callback('/(_.)/', function ($matches) {
             return strtoupper(substr($matches[0], 1, 1));
@@ -187,12 +172,7 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
         return strtoupper(substr($className, 0, 1)).substr($className, 1);
     }
 
-    /**
-     * @param string $bareClassName
-     *
-     * @return string[]
-     */
-    private function getClassListForTableName($bareClassName)
+    private function getClassListForTableName(string $bareClassName): array
     {
         $list = [];
         $realClassName = $this->convertToCamelCase($bareClassName);
@@ -225,10 +205,8 @@ class AutoclassesCacheWarmer implements CacheWarmerInterface
 
     /**
      * @param resource $file
-     *
-     * @return void
      */
-    private function writeClassmap($file, array $classData)
+    private function writeClassmap($file, array $classData): void
     {
         fwrite($file, '<?php return array(');
         foreach ($classData as $class => $path) {
