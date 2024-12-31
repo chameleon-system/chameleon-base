@@ -1614,8 +1614,10 @@ class TCMSTableEditorEndPoint
                             $comments[$oField->name] = sprintf("prev.: %s", $this->getDatabaseConnection()->quote($this->oTable->sqlData[$oField->name]));
                         }
                     }
-
-                    $dataForChangeRecorder[$oField->name] = $sqlValue;
+                    // filter insert default values, except field "name"
+                    if (true === $bIsUpdateCall || $oField->data !== $oField->oDefinition->fieldFieldDefaultValue || 'name' === $oField->name) {
+                        $dataForChangeRecorder[$oField->name] = $sqlValue;
+                    }
                 }
             }
         }
