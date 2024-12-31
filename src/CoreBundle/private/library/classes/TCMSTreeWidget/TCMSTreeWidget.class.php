@@ -142,7 +142,7 @@ class TCMSTreeWidget
         $this->bHasNewPermission = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->sTreeTableName);
         $this->bHasEditPermission = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->sTreeTableName);
         $this->bHasDeletePermission = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->sTreeTableName);
-        $this->bHasUploadPermission = $securityHelper->isGranted('RIGHT_CMS_IMAGE_POOL_UPLOAD');
+        $this->bHasUploadPermission = $securityHelper->isGranted('CMS_RIGHT_CMS_DATA_POOL_UPLOAD');
     }
 
     /**
