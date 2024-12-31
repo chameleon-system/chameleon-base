@@ -12,6 +12,10 @@
             <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
             <argument type="service" id="database_connection"/>
             <argument type="service" id="chameleon_system_core.flash_messages"/>
+            <argument type="service" id="chameleon_system_core.redirect"/>
+            <argument type="service" id="chameleon_system_image_editor.service.image_editor_url_service"/>
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
+            <argument type="service" id="chameleon_system_core.tools"/>
         </service>
 
         <service id="chameleon_system_image_editor.bridge_chameleon_media_manager_extension.media_manager_image_editor_extension"
@@ -22,6 +26,11 @@
         <service id="chameleon_system_image_editor.bridge_chameleon_media_manager_mapper.image_editor_mapper"
                  class="ChameleonSystem\ImageEditorBundle\Bridge\Chameleon\MediaManager\Mapper\ImageEditorMapper">
             <tag name="chameleon_system.mapper"/>
+            <argument type="service" id="chameleon_system_image_editor.service.image_editor_url_service"/>
+        </service>
+
+        <service id="chameleon_system_image_editor.service.image_editor_url_service"
+                 class="ChameleonSystem\ImageEditorBundle\Service\ImageEditorUrlService">
             <argument type="service" id="chameleon_system_core.util.url"/>
         </service>
     </services>
