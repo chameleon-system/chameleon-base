@@ -123,6 +123,7 @@ class QueryWriter
         $snippetrenderer->AddSourceObject('fields', $this->getArrayValuesToWrite($operationType, $migrationQueryData->getFields()));
         $snippetrenderer->AddSourceObject('whereEquals', $this->getArrayValuesToWrite($operationType, $migrationQueryData->getWhereEquals()));
         $snippetrenderer->AddSourceObject('whereExpressions', $this->getExpressionValuesToWrite($migrationQueryData->getWhereExpressions()));
+        $snippetrenderer->AddSourceObject('comments', $migrationQueryData->getComments());
 
         $renderedQuery = $snippetrenderer->Render('MigrationRecorder/migrationQueryTemplate.html.twig');
         fwrite($filePointer, $renderedQuery, strlen($renderedQuery));

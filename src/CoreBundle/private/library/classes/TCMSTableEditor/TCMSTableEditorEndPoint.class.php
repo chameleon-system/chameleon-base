@@ -1486,6 +1486,7 @@ class TCMSTableEditorEndPoint
     {
         $aMLTFields = [];
         $aPropertyFields = [];
+        $comments = [];
         $oFields->GoToStart();
 
         $tableName = $this->oTableConf->sqlData['name'];
@@ -1561,14 +1562,28 @@ class TCMSTableEditorEndPoint
                 } elseif ($oField->isPropertyField) {
                     $aPropertyFields[] = $oField;
                 }
+
+                $isCommentedField = false;
+                if (true === $bIsUpdateCall && $oField->data === $this->oTable->sqlData[$oField->name]) {
+                    // field value not changed
+                    if ('name' === $oField->name) { // special field, comment line (maybe extended by table specific lists)
+                        $comments[$oField->name] = true;
+                        $isCommentedField = true; // skip such for the SQL query
+                    } else {
+                        continue;
+                    }
+                }
+
                 // now convert field name (if this is a multi-language field)
                 $sqlFieldNameWithLanguageCode = $oField->oDefinition->GetRealEditFieldName($languageId);
                 if (false !== $sqlValue && false !== $writeField) {
-                    if ($isFirst) {
-                        $isFirst = false;
-                        $query .= 'SET ';
-                    } else {
-                        $query .= ', ';
+                    if (false === $isCommentedField) {
+                        if ($isFirst) {
+                            $isFirst = false;
+                            $query .= 'SET ';
+                        } else {
+                            $query .= ', ';
+                        }
                     }
 
                     if ($bCopyAllLanguages && '1' == $oField->oDefinition->sqlData['is_translatable']) {
@@ -1579,7 +1594,10 @@ class TCMSTableEditorEndPoint
                             $sTargetFieldNameLanguage = $oField->oDefinition->GetEditFieldNameForLanguage($oLanguageCopy);
                             if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sqlFieldNameWithLanguageCode) {
                                 $sqlValueLanguage = $oField->oTableRow->sqlData[$sTargetFieldNameLanguage];
-                                $query .= ' `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldNameLanguage)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValueLanguage)."', ";
+
+                                if (false === $isCommentedField) {
+                                    $query .= ' `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldNameLanguage)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValueLanguage)."', ";
+                                }
 
                                 if (false === isset($setLanguageFields[$oLanguageCopy->fieldIso6391])) {
                                     $setLanguageFields[$oLanguageCopy->fieldIso6391] = [];
@@ -1589,13 +1607,17 @@ class TCMSTableEditorEndPoint
                         }
                     }
 
-                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
+                    if (false === $isCommentedField) {
+                        $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
+                        $comments[$oField->name] = sprintf("prev.: %s", $this->getDatabaseConnection()->quote($this->oTable->sqlData[$oField->name]));
+                    }
+
                     $dataForChangeRecorder[$oField->name] = $sqlValue;
                 }
             }
         }
 
-        if ($isFirst) {
+        if ($isFirst || [] === $dataForChangeRecorder) {
             return false;
         } // no changes made... no fields to write
 
@@ -1644,7 +1666,8 @@ class TCMSTableEditorEndPoint
                     $bIsUpdateCall,
                     $dataForChangeRecorder,
                     $whereConditions,
-                    $setLanguageFields
+                    $setLanguageFields,
+                    $comments
                 );
             }
 
@@ -1692,8 +1715,9 @@ class TCMSTableEditorEndPoint
 
     /**
      * @param bool $isUpdateCall
+     * @param array<string, string|true> $comments
      */
-    private function writePostWriteLogChangeData($isUpdateCall, array $setFields, array $whereConditions, array $setLanguageFields)
+    private function writePostWriteLogChangeData($isUpdateCall, array $setFields, array $whereConditions, array $setLanguageFields, array $comments)
     {
         $tableName = $this->oTableConf->sqlData['name'];
         $languageService = $this->getLanguageService();
@@ -1707,6 +1731,7 @@ class TCMSTableEditorEndPoint
         $migrationQueryData = new MigrationQueryData($tableName, $language->fieldIso6391);
         $migrationQueryData->setFields($setFields);
         $migrationQueryData->setWhereEquals($whereConditions);
+        $migrationQueryData->setComments($comments);
         $dataModelList = [];
         $dataModelList[] = new LogChangeDataModel($migrationQueryData, $changeType);
         if (false === $isUpdateCall) {
@@ -1717,6 +1742,7 @@ class TCMSTableEditorEndPoint
             $migrationQueryData = new MigrationQueryData($tableName, $language);
             $migrationQueryData->setFields($fields);
             $migrationQueryData->setWhereEquals($whereConditions);
+            //TODO $migrationQueryData->setComments($comments);
             $dataModelList[] = new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE);
         }
 

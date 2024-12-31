@@ -47,6 +47,10 @@ class MigrationQueryData
      * @var array
      */
     private $whereExpressionsFieldTypes = array();
+    /**
+     * @var array<string, string|true>
+     */
+    private array $comments = [];
 
     /**
      * @param string $tableName
@@ -119,6 +123,16 @@ class MigrationQueryData
     }
 
     /**
+     * @param array<string, string|true> $comments
+     */
+    public function setComments(array $comments): self
+    {
+        $this->comments = $comments;
+
+        return $this;
+    }
+
+    /**
      * @param array $whereExpressionsFieldTypes
      *
      * @return MigrationQueryData
@@ -184,5 +198,10 @@ class MigrationQueryData
     public function getWhereExpressionsFieldTypes()
     {
         return $this->whereExpressionsFieldTypes;
+    }
+
+    public function getComments(): array
+    {
+        return $this->comments;
     }
 }
