@@ -11,38 +11,33 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelectWysiwyg;
 
-use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\NavigationTreeSingleSelect\NavigationTreeSingleSelect;
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\DataModel\BackendTreeNodeDataModel;
 use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Doctrine\DBAL\Connection;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use TGlobal;
-use TTools;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * {@inheritdoc}
  */
 class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
     public function __construct(
         InputFilterUtilInterface $inputFilterUtil,
         UrlUtil $urlUtil,
         BackendTreeNodeFactory $backendTreeNodeFactory,
         TranslatorInterface $translator,
-        TTools $tools,
-        TGlobal $global,
+        \TTools $tools,
+        \TGlobal $global,
         FieldTranslationUtil $fieldTranslationUtil,
         BackendSessionInterface $backendSession,
-        RequestStack $requestStack
+        Connection $dbConnection,
+        private readonly RequestStack $requestStack
     ) {
         parent::__construct(
             $inputFilterUtil,
@@ -52,9 +47,9 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
             $tools,
             $global,
             $fieldTranslationUtil,
-            $backendSession
+            $backendSession,
+            $dbConnection
         );
-        $this->requestStack = $requestStack;
     }
 
     /**
