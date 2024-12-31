@@ -82,9 +82,4 @@ class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
             }
         }
     }
-
-    private function getCacheService(): CacheInterface
-    {
-        return ServiceLocator::get('chameleon_system_cms_cache.cache');
-    }
 }
