@@ -604,6 +604,13 @@ function ShowAjaxSaveResultAndClose(data, statusText) {
 function ResetTreeNodeSelection(fieldName) {
     document.getElementById(fieldName).value = '';
     document.getElementById(fieldName + '_path').innerHTML = '<ol class="breadcrumb pl-0"><li class="breadcrumb-item"><i class="fas fa-sitemap"></i></li><li class="breadcrumb-item text-warning">' + CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.nothing_assigned') + '</li></ol>';
+    const assignButton = document.getElementById(`${fieldName}_btn-assign`);
+    if (assignButton) {
+        const onclickValue = assignButton.getAttribute('onclick');
+        if (onclickValue) {
+            assignButton.setAttribute('onclick', onclickValue.replace(/(&id=)[^&]*/, '&id='));
+        }
+    }
 }
 
 function markCheckboxes(fieldname) {
