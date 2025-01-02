@@ -1719,7 +1719,7 @@ class TCMSTableEditorEndPoint
         $valueNow = $field->data;
 
         if (true === is_string($valuePrev) && true === is_string($valueNow) && true === in_array($field->oDefinition->GetFieldCmsFieldType()->fieldConstname, ['CMSFIELD_WYSIWYG', 'CMSFIELD_WYSIWYG_LIGHT'])) {
-            return str_replace("\r\n", "\n", $valueNow) !== $valuePrev;
+            return str_replace(["\n\r", "\r\n"], "\n", $valueNow) !== $valuePrev;
         }
 
         return $valueNow !== $valuePrev;
