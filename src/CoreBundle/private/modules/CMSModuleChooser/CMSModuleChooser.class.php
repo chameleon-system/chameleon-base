@@ -13,12 +13,12 @@ use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
  * used to pick the module, and configure it
@@ -922,7 +922,7 @@ class CMSModuleChooser extends TCMSModelBase
             $urlParameters[$sKey] = $sValue;
         }
 
-        $url = PATH_CMS_CONTROLLER_FRONTEND .'?'. http_build_query($urlParameters);
+        $url = PATH_CMS_CONTROLLER_FRONTEND.'?'.http_build_query($urlParameters);
 
         $this->getRedirectService()->redirect($url);
     }
