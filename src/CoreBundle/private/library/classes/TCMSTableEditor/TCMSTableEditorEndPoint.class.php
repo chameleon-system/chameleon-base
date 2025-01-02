@@ -1564,7 +1564,7 @@ class TCMSTableEditorEndPoint
                 }
 
                 $isCommentedField = false;
-                if (true === $bIsUpdateCall && true === array_key_exists($oField->name, $this->oTable->sqlData) && false === $this->hasFieldChanged($oField)) {
+                if (true === $bIsUpdateCall && true === array_key_exists($oField->name, $this->oTable->sqlData) && false === $this->hasFieldChanged($oField, $sqlValue)) {
                     if ('name' === $oField->name) { // special field, comment line (maybe extended by table specific lists)
                         $comments[$oField->name] = true;
                         $isCommentedField = true; // skip such for the SQL query
@@ -1713,10 +1713,9 @@ class TCMSTableEditorEndPoint
         return $bSaveSuccess;
     }
 
-    private function hasFieldChanged(TCMSField $field): bool
+    private function hasFieldChanged(TCMSField $field, mixed $valueNow): bool
     {
         $valuePrev = $this->oTable->sqlData[$field->name];
-        $valueNow = $field->data;
 
         if (true === is_string($valuePrev) && true === is_string($valueNow) && true === in_array($field->oDefinition->GetFieldCmsFieldType()->fieldConstname, ['CMSFIELD_WYSIWYG', 'CMSFIELD_WYSIWYG_LIGHT'])) {
             return str_replace(["\n\r", "\r\n"], "\n", $valueNow) !== $valuePrev;
