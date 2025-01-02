@@ -16,39 +16,15 @@ use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManag
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
-use TdbCmsLanguage;
-use TdbCmsPortal;
 
 class UrlUtil
 {
-    /**
-     * @var UrlPrefixGeneratorInterface
-     */
-    private $urlPrefixGenerator;
-    /**
-     * @var PortalDomainServiceInterface
-     */
-    private $portalDomainService;
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
-    /**
-     * @var DomainValidatorInterface
-     */
-    private $domainValidator;
-    /**
-     * @var AuthenticityTokenManagerInterface
-     */
-    private $authenticityTokenManager;
+    private UrlPrefixGeneratorInterface $urlPrefixGenerator;
+    private PortalDomainServiceInterface $portalDomainService;
+    private LanguageServiceInterface $languageService;
+    private DomainValidatorInterface $domainValidator;
+    private AuthenticityTokenManagerInterface $authenticityTokenManager;
 
-    /**
-     * @param UrlPrefixGeneratorInterface       $urlPrefixGenerator
-     * @param PortalDomainServiceInterface      $portalDomainService
-     * @param LanguageServiceInterface          $languageService
-     * @param DomainValidatorInterface          $domainValidator
-     * @param AuthenticityTokenManagerInterface $authenticityTokenManager
-     */
     public function __construct(
         UrlPrefixGeneratorInterface $urlPrefixGenerator,
         PortalDomainServiceInterface $portalDomainService,
@@ -92,7 +68,7 @@ class UrlUtil
      */
     public function getUrlParametersAsArray($url)
     {
-        $retValue = array();
+        $retValue = [];
         if (false !== $parameterStartPos = strpos($url, '?')) {
             $url = substr($url, $parameterStartPos + 1);
         }
@@ -115,22 +91,20 @@ class UrlUtil
      * Returns the URL of the current request. The URL can be modified by specifying which protocol to use (HTTP/HTTPS)
      * and/or passing additional URL parameters and/or specifying which URL parameters to remove.
      *
-     * @param Request     $request
      * @param string|null $protocol
-     * @param array       $parameterBlacklist
-     * @param array       $additionalParameters
+     * @param array $additionalParameters
      *
      * @return string|null
      */
     public function getModifiedUrlFromRequest(
         Request $request,
         $protocol = null,
-        array $parameterBlacklist = array(),
-        $additionalParameters = array()
+        array $parameterBlacklist = [],
+        $additionalParameters = []
     ) {
         $requestUri = $request->getRequestUri();
 
-        if (null === $protocol || false === in_array($protocol, array('http', 'https'), true)) {
+        if (null === $protocol || false === in_array($protocol, ['http', 'https'], true)) {
             $requestedScheme = $request->getScheme();
         } else {
             $requestedScheme = $protocol;
@@ -172,7 +146,7 @@ class UrlUtil
     }
 
     /**
-     * @param int    $port
+     * @param int $port
      * @param string $protocol
      *
      * @return bool
@@ -221,13 +195,11 @@ class UrlUtil
     }
 
     /**
-     * @param string         $url
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
+     * @param string $url
      *
      * @return string
      */
-    public function normalizeURL($url, TdbCmsPortal $portal, TdbCmsLanguage $language)
+    public function normalizeURL($url, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
         $url = $this->cutPortalAndLanguagePrefixFromUrl($url, $portal, $language);
 
@@ -256,13 +228,11 @@ class UrlUtil
     }
 
     /**
-     * @param string         $url
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
+     * @param string $url
      *
      * @return string
      */
-    public function cutPortalAndLanguagePrefixFromUrl($url, TdbCmsPortal $portal, TdbCmsLanguage $language)
+    public function cutPortalAndLanguagePrefixFromUrl($url, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
         $urlPrefixGenerator = $this->urlPrefixGenerator;
         $prefixToCutParts = $urlPrefixGenerator->generatePrefixParts($portal, $language);
@@ -330,11 +300,9 @@ class UrlUtil
      * If $domain is not set and $url is absolute, the domain will be taken from $url if this domain is valid.
      * Otherwise the active or primary domain is used, depending on Chameleon settings.
      *
-     * @param string              $url
-     * @param bool                $secure
-     * @param string|null         $domain
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
+     * @param string $url
+     * @param bool $secure
+     * @param string|null $domain
      *
      * @return string
      */
@@ -342,8 +310,8 @@ class UrlUtil
         $url,
         $secure,
         $domain = null,
-        TdbCmsPortal $portal = null,
-        TdbCmsLanguage $language = null
+        ?\TdbCmsPortal $portal = null,
+        ?\TdbCmsLanguage $language = null
     ) {
         if (true === $this->isUrlAbsolute($url)) {
             /*
@@ -356,7 +324,7 @@ class UrlUtil
             $url = $this->getRelativeUrl($url);
         }
 
-        if (0 !== strpos($url, '/')) {
+        if (!str_starts_with($url, '/')) {
             $url = '/'.$url;
         }
 
@@ -376,8 +344,6 @@ class UrlUtil
     }
 
     /**
-     * @param array $parameters
-     *
      * @return void
      */
     public function addAuthenticityTokenToArrayIfRequired(array &$parameters)
@@ -389,12 +355,7 @@ class UrlUtil
         }
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return bool
-     */
-    private function isAuthenticityTokenRequired(array $parameters)
+    private function isAuthenticityTokenRequired(array $parameters): bool
     {
         if (false === $this->authenticityTokenManager->isProtectionEnabled()) {
             return false;
@@ -417,7 +378,6 @@ class UrlUtil
 
     /**
      * @param string $url
-     * @param array  $parameters
      * @param string $paramSeparator
      *
      * @return void
@@ -437,8 +397,6 @@ class UrlUtil
     }
 
     /**
-     * @param array $parameters
-     *
      * @return void
      */
     public function removeAuthenticityTokenFromArray(array &$parameters)
@@ -470,7 +428,7 @@ class UrlUtil
             return $baseUrl;
         }
 
-        return  $baseUrl.'?'.implode('&', $params);
+        return $baseUrl.'?'.implode('&', $params);
     }
 
     /**
@@ -478,11 +436,11 @@ class UrlUtil
      * path elements (nothing else!) to be wellformed using urlencode().
      * This ensures HTML validators will not fail on external URLs.
      *
-     * @var $url string
-     *
-     * @return string
+     * @var string
      *
      * @param string $url
+     *
+     * @return string
      */
     public function encodeUrlParts($url)
     {

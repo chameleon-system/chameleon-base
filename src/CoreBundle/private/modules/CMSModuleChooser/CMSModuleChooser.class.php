@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
@@ -206,7 +207,7 @@ class CMSModuleChooser extends TCMSModelBase
             // load page
             $oCmsTplPage = $this->getActivePageService()->getActivePage();
 
-            $iTableID = TTools::GetCMSTableId('cms_tpl_page');
+            $iTableID = $this->getTools()::GetCMSTableId('cms_tpl_page');
             /** @var $oTableEditor TCMSTableEditorManager */
             $oTableEditor = new TCMSTableEditorManager();
             $oTableEditor->Init($iTableID, $sPagedef);
@@ -217,11 +218,9 @@ class CMSModuleChooser extends TCMSModelBase
         }
 
         if (!is_null($this->instanceID) && !empty($this->instanceID)) {
-            /** @var $oCmsTplModuleInstance TdbCmsTplModuleInstance */
             $oCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
             if ($oCmsTplModuleInstance->LoadWithCaching($this->instanceID)) {
                 $this->oModuleInstance = $oCmsTplModuleInstance;
-                /** @var $oCmsTplModule TdbCmsTplModule */
                 $oCmsTplModule = TdbCmsTplModule::GetNewInstance();
                 $oCmsTplModule->Load($this->oModuleInstance->sqlData['cms_tpl_module_id']);
                 $this->oModule = $oCmsTplModule;
@@ -271,27 +270,24 @@ class CMSModuleChooser extends TCMSModelBase
      */
     protected function GetDefaultView($oCmsTplPage, $oCmsTplModuleInstance, $oCmsTplModule, $sModuleInstanceSpotName)
     {
-        $aViewTypeList = ['sSpotDefaultUsedView' => false, 'sLoadedModuleInstanceView' => false, 'sStandardView' => false, 'sSimilarStandardView' => false, 'sFirstFoundView' => false];
-        $aViewTypeList['sSpotDefaultUsedView'] = $this->GetSpotDefaultView($oCmsTplPage, $sModuleInstanceSpotName, $oCmsTplModule);
-        $aViewTypeList['sLoadedModuleInstanceView'] = $this->GetLoadedModuleInstanceView($oCmsTplModuleInstance);
-        $oViewList = $oCmsTplModule->GetViews();
-        $sFirstFoundExistedView = '';
-        while ($sView = $oViewList->Next()) {
+        $viewList = $oCmsTplModule->GetViews();
+        $firstFoundExistedView = '';
+        while ($sView = $viewList->Next()) {
             $sViewRealPath = PATH_CUSTOMER_FRAMEWORK.'/modules/'.$oCmsTplModule->fieldClassname.'/views/'.$sView.'.view.php';
             if (file_exists(realpath($sViewRealPath))) {
-                $sFirstFoundExistedView = $sView;
+                $firstFoundExistedView = $sView;
                 break;
             }
         }
-        if (empty($sFirstFoundExistedView)) {
-            $sFirstFoundExistedView = 'standard';
+        if (empty($firstFoundExistedView)) {
+            $firstFoundExistedView = 'standard';
         }
 
-        return $sFirstFoundExistedView;
+        return $firstFoundExistedView;
     }
 
     /**
-     * Get view form loaded module instance.
+     * Get view from loaded module instance.
      *
      * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
      *
@@ -439,11 +435,11 @@ class CMSModuleChooser extends TCMSModelBase
         $aRedirectParameters = [];
         if ($oModule->Load($moduleID)) {
             $oConnectedTables = $oModule->GetFieldCmsTblConfList();
-            if ($oConnectedTables && 1 == $oConnectedTables->Length()) {
+            if ($oConnectedTables && 1 === $oConnectedTables->Length()) {
                 $oTable = $oConnectedTables->Current();
                 if ($oTable->fieldOnlyOneRecordTbl) {
                     $aURLParam = ['pagedef' => 'tablemanagerframe', 'id' => $oTable->id, 'sRestrictionField' => 'cms_tpl_module_instance_id', 'sRestriction' => $this->instanceID];
-                    $sURL = PATH_CMS_CONTROLLER.'?'.str_replace('&amp;', '&', TTools::GetArrayAsURL($aURLParam));
+                    $sURL = PATH_CMS_CONTROLLER.'?'.str_replace('&amp;', '&', $this->getUrlUtil()->getArrayAsUrl($aURLParam));
                     $aRedirectParameters['sRedirectURL'] = $sURL;
                 }
             }
@@ -494,7 +490,6 @@ class CMSModuleChooser extends TCMSModelBase
      */
     public function CopyInstance()
     {
-        /** @var $oPage TCMSPage */
         $oPage = new TCMSPage();
         $sPageId = $this->global->GetUserData('pagedef');
         $sModuleInstanceName = $this->global->GetUserData('instancename');
@@ -549,7 +544,6 @@ class CMSModuleChooser extends TCMSModelBase
      */
     protected function GetRecordsToCopy($sTableName, $sOldModuleInstanceId)
     {
-        /** @var $oRecordListToCopy TIterator */
         $oRecordListToCopy = new TIterator();
 
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableName.'List');
@@ -559,7 +553,7 @@ class CMSModuleChooser extends TCMSModelBase
         if (TTools::FieldExists($sTableName, 'cms_tpl_module_instance_id')) {
             $sQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` WHERE `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sOldModuleInstanceId)."'";
             /** @var $oRecordToCopyList TCMSRecordList */
-            $oRecordToCopyList = $oTableList->GetList($sQuery);
+            $oRecordToCopyList = $oTableList::GetList($sQuery);
             while ($oRecordToCopy = $oRecordToCopyList->Next()) {
                 $oRecordListToCopy->AddItem($oRecordToCopy);
             }
@@ -581,8 +575,7 @@ class CMSModuleChooser extends TCMSModelBase
         $bSuccess = false;
         /** @var $oRecordToCopy TCMSRecord */
         while ($oRecordToCopy = $oRecordListToCopy->Next()) {
-            $iTableID = TTools::GetCMSTableId($oRecordToCopy->table);
-            /** @var $oTableEditor TCMSTableEditorManager */
+            $iTableID = $this->getTools()::GetCMSTableId($oRecordToCopy->table);
             $oTableEditor = new TCMSTableEditorManager();
             $oTableEditor->Init($iTableID, $oRecordToCopy->id);
             $aOverloadedFields = ['cms_tpl_module_instance_id' => $sNewModuleInstanceId];
@@ -611,7 +604,7 @@ class CMSModuleChooser extends TCMSModelBase
             $view = $this->global->GetUserData('template');
         }
 
-        if (!empty($bLoadCopy) && '1' == $bLoadCopy) {
+        if (!empty($bLoadCopy) && '1' === $bLoadCopy) {
             $this->CopyInstanceData();
         } else {
             $this->UpdatePageMasterPagedefSpot($sPageId, $this->instanceID, $view, $this->oModule->fieldClassname);
@@ -625,7 +618,6 @@ class CMSModuleChooser extends TCMSModelBase
      */
     protected function CopyInstanceData()
     {
-        /** @var $oPage TCMSPage */
         $oPage = new TCMSPage();
         $sPageId = $this->global->GetUserData('pagedef');
         $oPage->Load($sPageId);
@@ -667,7 +659,6 @@ class CMSModuleChooser extends TCMSModelBase
 
             $oSpot = $this->GetCmsTplPageCmsMasterPagedefSpot();
             if (null !== $oSpot) {
-                /** @var $oTableEditor TCMSTableEditorManager */
                 $oTableEditor = new TCMSTableEditorManager();
                 $iTableID = TTools::GetCMSTableId('cms_tpl_page_cms_master_pagedef_spot');
                 $oTableEditor->Init($iTableID, $oSpot->id);
@@ -690,8 +681,7 @@ class CMSModuleChooser extends TCMSModelBase
         $sPageId = $this->global->GetUserData('pagedef');
         $view = $this->global->GetUserData('view');
 
-        $iTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
-        /** @var $oTableEditor TCMSTableEditorManager */
+        $iTableID = $this->getTools()::GetCMSTableId('cms_tpl_module_instance');
         $oTableEditor = new TCMSTableEditorManager();
         $oTableEditor->Init($iTableID, $this->instanceID);
 
@@ -712,7 +702,6 @@ class CMSModuleChooser extends TCMSModelBase
         $instanceName = $this->global->GetUserData('instancename');
 
         $iTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
-        /** @var $oTableEditor TCMSTableEditorManager */
         $oTableEditor = new TCMSTableEditorManager();
         $oTableEditor->Init($iTableID, $this->instanceID);
         $oTableEditor->SaveField('name', $instanceName);
@@ -766,7 +755,6 @@ class CMSModuleChooser extends TCMSModelBase
     protected function OnCreateInstance($sName, $moduleID, $view, $oPage)
     {
         $iTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
-        /** @var $oEditor TCMSTableEditorManager */
         $oEditor = new TCMSTableEditorManager();
         $oEditor->Init($iTableID, null);
         $aData = ['name' => $sName, 'cms_tpl_module_id' => $moduleID, 'template' => $view, 'cms_portal_id' => $oPage->sqlData['cms_portal_id']];
@@ -784,9 +772,7 @@ class CMSModuleChooser extends TCMSModelBase
      */
     protected function OnDeleteInstance()
     {
-        $iTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
-
-        /** @var $oEditor TCMSTableEditorManager */
+        $iTableID = $this->getTools()::GetCMSTableId('cms_tpl_module_instance');
         $oEditor = new TCMSTableEditorManager();
         $oEditor->Init($iTableID, $this->instanceID);
         $oEditor->Delete($this->instanceID);
@@ -838,7 +824,6 @@ class CMSModuleChooser extends TCMSModelBase
         while ($oSpotToDelete = $TdbCmsTplPageCmsMasterPagedefSpotList->Next()) {
             if ($oSpotToDelete->id != $this->oCmsTplPageCmsMasterPagedefSpot->id) {
                 $iTableID = TTools::GetCMSTableId('cms_tpl_page_cms_master_pagedef_spot');
-                /** @var $oTableEditorSpotToDelete TCMSTableEditorManager */
                 $oTableEditorSpotToDelete = new TCMSTableEditorManager();
                 $oTableEditorSpotToDelete->Init($iTableID, $oSpotToDelete->id);
                 $oTableEditorSpotToDelete->AllowDeleteByAll(true);
@@ -907,43 +892,39 @@ class CMSModuleChooser extends TCMSModelBase
                      WHERE `cms_tpl_page_cms_master_pagedef_spot`.`cms_tpl_page_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oPage->id)."'
                        AND `cms_master_pagedef_spot`.`name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTargetModuleSpotName)."'
                    ";
-        $TdbCmsTplPageCmsMasterPagedefSpotList = TdbCmsTplPageCmsMasterPagedefSpotList::GetList($query);
 
-        return $TdbCmsTplPageCmsMasterPagedefSpotList;
+        return TdbCmsTplPageCmsMasterPagedefSpotList::GetList($query);
     }
 
-    /**
-     * Redirect to the editing page.
-     *
-     * @param string $sPageId
-     * @param array $aOtherParameters - parameters to add to the redirect call
-     */
-    protected function RedirectToEditPage($sPageId, $aOtherParameters = [])
+    protected function RedirectToEditPage(string $sPageId, array $aOtherParameters = [])
     {
-        $aParameter = [
+        $urlParameters = [
             'pagedef' => $sPageId,
             'id' => $sPageId,
             '__modulechooser' => 'true',
         ];
         // we need to preserve certain parameters to avoid loading frontend js
-        $aAdditionalParameters = [
+        $additionalUrlParameters = [
             'esdisablelinks',
             '__previewmode',
             'previewLanguageId',
         ];
         // to redirect the page outside the iframe, we use javascript in a script tag included in the HTMLHeadIncludes. Therefore, we need to avoid the removal of all frontend script tags, if we are going to redirect the page. (by passing 'sRedirectURL' in  $aOtherParameters). So if this parameter is present, we avoid retaining the value of 'esdisablefrontendjs'.
         if (!isset($aOtherParameters['sRedirectURL'])) {
-            $aAdditionalParameters[] = 'esdisablefrontendjs';
+            $additionalUrlParameters[] = 'esdisablefrontendjs';
         }
-        foreach ($aAdditionalParameters as $parameterName) {
+        foreach ($additionalUrlParameters as $parameterName) {
             if ($this->global->UserDataExists($parameterName)) {
-                $aParameter[$parameterName] = $this->global->GetUserData($parameterName);
+                $urlParameters[$parameterName] = $this->global->GetUserData($parameterName);
             }
         }
         foreach ($aOtherParameters as $sKey => $sValue) {
-            $aParameter[$sKey] = $sValue;
+            $urlParameters[$sKey] = $sValue;
         }
-        $this->getRedirectService()->redirectToActivePage($aParameter);
+
+        $url = PATH_CMS_CONTROLLER_FRONTEND.'?'.http_build_query($urlParameters);
+
+        $this->getRedirectService()->redirect($url);
     }
 
     /**
@@ -980,7 +961,7 @@ class CMSModuleChooser extends TCMSModelBase
         $oNewPagedefSpot = TdbCmsMasterPagedefSpot::GetNewInstance();
         $oNewPagedefSpot->LoadFromFields(['name' => $sTargetModuleSpotName, 'cms_master_pagedef_id' => $oOldPagedefSpot->fieldCmsMasterPagedefId]);
         $bAllowed = $oNewPagedefSpot->CheckAccess($oSourceSpot->fieldModel, $oSourceSpot->fieldView);
-        $bAllowed = $bAllowed && (!empty($oSourceSpot->fieldCmsTplModuleInstanceId) && 'MTEmpty' != $oSourceSpot->fieldModel);
+        $bAllowed = $bAllowed && (!empty($oSourceSpot->fieldCmsTplModuleInstanceId) && 'MTEmpty' !== $oSourceSpot->fieldModel);
         if ($bAllowed) {
             $this->SaveSwitchedSpotIdToInstance($oSourceSpot->id, $oNewPagedefSpot->id);
         }
@@ -994,7 +975,7 @@ class CMSModuleChooser extends TCMSModelBase
      */
     protected function SaveSwitchedSpotIdToInstance($sModuleInstanceId, $sNewSpotId)
     {
-        $oTableEditor = TTools::GetTableEditorManager('cms_tpl_page_cms_master_pagedef_spot', $sModuleInstanceId);
+        $oTableEditor = $this->getTools()::GetTableEditorManager('cms_tpl_page_cms_master_pagedef_spot', $sModuleInstanceId);
         $oTableEditor->oTableEditor->ForceHiddenFieldWriteOnSave(true);
         $oTableEditor->AllowEditByAll(true);
         $oTableEditor->SaveField('cms_master_pagedef_spot_id', $sNewSpotId);
@@ -1002,24 +983,19 @@ class CMSModuleChooser extends TCMSModelBase
 
     /**
      * performs a dummy save in the name field to create a lock on the page.
-     *
-     * @param string|bool $sPageId
      */
-    protected function TriggerWorkflowLockForPage($sPageId = false)
+    protected function TriggerWorkflowLockForPage(?string $sPageId = null)
     {
         if (false === $sPageId) {
             $sPageId = $this->global->GetUserData('pagedef');
         }
-        $oCmsTplPage = $this->getActivePageService()->getActivePage();
-        $iTableID = TTools::GetCMSTableId('cms_tpl_page');
         $oTableEditor = new TCMSTableEditorManager();
-        $oTableEditor->Init($iTableID, $sPageId);
-        $oTableEditor->SaveField('name', $oCmsTplPage->sqlData['name']);
+        $oTableEditor->Init($this->getTools()::GetCMSTableId('cms_tpl_page'), $sPageId);
+        $oTableEditor->RefreshLock();
     }
 
     private function createModuleMenuHtml()
     {
-        /** @var $cache CacheInterface */
         $cache = $this->getCacheManager();
         $key = $cache->getKey([
             'class' => __CLASS__,
@@ -1044,55 +1020,36 @@ class CMSModuleChooser extends TCMSModelBase
                 ]
             );
         }
-        $content = str_replace('[{replaceSpotName}]', $this->data['sModuleSpotName'], $content);
 
-        return $content;
+        return str_replace('[{replaceSpotName}]', $this->data['sModuleSpotName'], $content);
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private function getActivePageService()
+    private function getActivePageService(): ActivePageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return CacheInterface
-     */
-    private function getCacheManager()
+    private function getCacheManager(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');
     }
 
-    /**
-     * @return Connection
-     */
-    private function getDatabaseConnection()
+    private function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
-    /**
-     * @return FieldTranslationUtil
-     */
-    private function getFieldTranslationUtil()
+    private function getFieldTranslationUtil(): FieldTranslationUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslator()
+    private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
     }
@@ -1100,5 +1057,15 @@ class CMSModuleChooser extends TCMSModelBase
     private function getRedirectService(): ICmsCoreRedirect
     {
         return ServiceLocator::get('chameleon_system_core.redirect');
+    }
+
+    private function getTools(): TTools
+    {
+        return ServiceLocator::get('chameleon_system_core.tools');
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }
