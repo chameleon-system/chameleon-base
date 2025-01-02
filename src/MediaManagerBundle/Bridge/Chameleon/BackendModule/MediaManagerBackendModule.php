@@ -38,29 +38,20 @@ use ChameleonSystem\MediaManager\MediaManagerExtensionCollection;
 use ChameleonSystem\MediaManager\MediaManagerListState;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
-use IMapperCacheTriggerRestricted;
-use IMapperVisitorRestricted;
-use LogicException;
-use MapperException;
-use MTPkgViewRendererAbstractModuleMapper;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use TdbCmsUser;
-use TGlobal;
-use TPkgSnippetRenderer_SnippetRenderingException;
-use ViewRenderer;
 
-class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
+class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
-    const PAGEDEF_NAME = 'mediaManager';
+    public const PAGEDEF_NAME = 'mediaManager';
 
-    const PAGEDEF_NAME_PICK_IMAGE = 'mediaManagerPickImage';
+    public const PAGEDEF_NAME_PICK_IMAGE = 'mediaManagerPickImage';
 
-    const PAGEDEF_TYPE = '@ChameleonSystemMediaManagerBundle';
+    public const PAGEDEF_TYPE = '@ChameleonSystemMediaManagerBundle';
 
-    const MEDIA_ITEM_URL_NAME = 'mediaItemId';
+    public const MEDIA_ITEM_URL_NAME = 'mediaItemId';
 
-    const URL_TEMPLATE_PLACEHOLDER_ID = '--id--';
+    public const URL_TEMPLATE_PLACEHOLDER_ID = '--id--';
 
     /**
      * @var MediaTreeDataAccessInterface
@@ -145,9 +136,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
         try {
             $oVisitor->SetMappedValue('mediaTree', $this->getMediaTree());
@@ -178,20 +169,12 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         return $this->mediaTreeDataAccess->getMediaTree($this->backendSession->getCurrentEditLanguageId());
     }
 
-    /**
-     * @return AccessRightsModel
-     */
-    private function createMediaTreeAccessRightsModel()
+    private function createMediaTreeAccessRightsModel(): AccessRightsModel
     {
         return $this->createAccessRightsModel('cms_media_tree');
     }
 
-    /**
-     * @param string $tableName
-     *
-     * @return AccessRightsModel
-     */
-    private function createAccessRightsModel($tableName)
+    private function createAccessRightsModel(string $tableName): AccessRightsModel
     {
         $accessRightsModel = new AccessRightsModel();
         /** @var SecurityHelperAccess $securityHelper */
@@ -227,9 +210,9 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $configurationUrls = new JavascriptPluginConfigurationUrls();
 
         $configurationUrls->listUrl = $this->getUrlToModuleFunction('renderList');
-        $parameters = array(
+        $parameters = [
             MediaManagerListState::STATE_PARAM_NAME_MEDIA_TREE_NODE_ID => self::URL_TEMPLATE_PLACEHOLDER_ID,
-        );
+        ];
         $configurationUrls->mediaTreeNodeInfoUrlTemplate = $this->getUrlToModuleFunction(
             'provideMediaTreeNodeInfo',
             $parameters
@@ -247,37 +230,37 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $configurationUrls->quickEditUrl = $this->getUrlToModuleFunction('quickEdit');
         $configurationUrls->mediaItemDetailsUrlTemplate = $this->getUrlToModuleFunction(
             'renderDetail',
-            array(self::MEDIA_ITEM_URL_NAME => self::URL_TEMPLATE_PLACEHOLDER_ID)
+            [self::MEDIA_ITEM_URL_NAME => self::URL_TEMPLATE_PLACEHOLDER_ID]
         );
 
-        $universalUploaderBaseParameters = array(
+        $universalUploaderBaseParameters = [
             'pagedef' => 'CMSUniversalUploader',
             'mode' => 'media',
-        );
+        ];
         $parametersUploadMedia = array_merge(
             $universalUploaderBaseParameters,
-            array('treeNodeID' => self::URL_TEMPLATE_PLACEHOLDER_ID, 'queueCompleteCallback' => 'queueCompleteCallback')
+            ['treeNodeID' => self::URL_TEMPLATE_PLACEHOLDER_ID, 'queueCompleteCallback' => 'queueCompleteCallback']
         );
         $parametersReplaceMediaItem = array_merge(
             $universalUploaderBaseParameters,
-            array(
+            [
                 'callback' => 'reloadMediaItemDetail',
                 'singleMode' => '1',
                 'showMetaFields' => '0',
                 'recordID' => self::URL_TEMPLATE_PLACEHOLDER_ID,
-            )
+            ]
         );
 
         $configurationUrls->uploaderUrlTemplate = URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl(
-                $parametersUploadMedia,
-                '?',
-                '&'
-            );
+            $parametersUploadMedia,
+            '?',
+            '&'
+        );
         $configurationUrls->uploaderReplaceMediaItemUrl = URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl(
-                $parametersReplaceMediaItem,
-                '?',
-                '&'
-            );
+            $parametersReplaceMediaItem,
+            '?',
+            '&'
+        );
         $configurationUrls->autoCompleteSearchUrl = $this->getUrlToModuleFunction('autoCompleteSearch');
         $configurationUrls->postSelectUrl = $this->getUrlToModuleFunction('postSelectHook');
 
@@ -286,17 +269,16 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @param string $functionName
-     * @param array  $additionalParameters
      *
      * @return string
      */
-    private function getUrlToModuleFunction($functionName, array $additionalParameters = array())
+    private function getUrlToModuleFunction($functionName, array $additionalParameters = [])
     {
-        $parameters = array(
+        $parameters = [
             'pagedef' => self::PAGEDEF_NAME,
             '_pagedefType' => self::PAGEDEF_TYPE,
-            'module_fnc' => array('contentmodule' => $functionName),
-        );
+            'module_fnc' => ['contentmodule' => $functionName],
+        ];
 
         $parameters = array_merge($parameters, $additionalParameters);
 
@@ -310,12 +292,12 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getMediaTreeNodeEditUrl($id)
     {
-        $parameters = array(
+        $parameters = [
             'pagedef' => 'tableeditorPopup',
             '_pagedefType' => 'Core',
             'tableid' => \TTools::GetCMSTableId('cms_media_tree'),
             'id' => $id,
-        );
+        ];
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
     }
@@ -372,24 +354,24 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
-            TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/themes/default/style.css')
+            \TGlobal::GetStaticURL('/bundles/chameleonsystemcore/javascript/jsTree/3.3.17/themes/default/style.min.css')
         );
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
-            TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css')
+            \TGlobal::GetStaticURLToWebLib('/components/select2.v4/css/select2.min.css')
         );
         $includes[] = sprintf(
             '<link rel="stylesheet" href="%s">',
-            TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/css/mediaManager.css')
+            \TGlobal::GetStaticURL('/bundles/chameleonsystemmediamanager/css/mediaManager.css')
         );
 
-        //part to fix wysiwyg handling
+        // part to fix wysiwyg handling
         $ckEditorReference = $this->inputFilterUtil->getFilteredGetInput('CKEditorFuncNum');
         if (null !== $ckEditorReference) {
             $includes[] = '<script src="'.URL_CMS.'/javascript/wysiwygImage.js" type="text/javascript"></script>';
             $includes[] = sprintf(
                 '<script type="text/javascript">setCKEditorFuncNum("%s");</script>',
-                TGlobal::OutJS($ckEditorReference)
+                \TGlobal::OutJS($ckEditorReference)
             );
         }
 
@@ -402,22 +384,22 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     public function GetHtmlFooterIncludes()
     {
         $includes = parent::GetHtmlFooterIncludes();
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemcore/javascript/jsTree/3.3.8/jstree.js'
-            ).'"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/lib/xselectable/xselectable.js'
-            ).'"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/lib/Split.js/split.js'
-            ).'?v=2"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/lib/Jeditable/jquery.jeditable.js'
-            ).'"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
-        $includes[] = '<script src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemmediamanager/js/mediaManager.js?v=1'
-            ).'"></script>';
+        $includes[] = '<script src="'.\TGlobal::GetStaticURL(
+            '/bundles/chameleonsystemcore/javascript/jsTree/3.3.17/jstree.min.js'
+        ).'"></script>';
+        $includes[] = '<script src="'.\TGlobal::GetStaticURL(
+            '/bundles/chameleonsystemmediamanager/lib/xselectable/xselectable.js'
+        ).'"></script>';
+        $includes[] = '<script src="'.\TGlobal::GetStaticURL(
+            '/bundles/chameleonsystemmediamanager/lib/Split.js/split.js'
+        ).'?v=2"></script>';
+        $includes[] = '<script src="'.\TGlobal::GetStaticURL(
+            '/bundles/chameleonsystemmediamanager/lib/Jeditable/jquery.jeditable.js'
+        ).'"></script>';
+        $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+        $includes[] = '<script src="'.\TGlobal::GetStaticURL(
+            '/bundles/chameleonsystemmediamanager/js/mediaManager.js?v=1'
+        ).'"></script>';
 
         return $includes;
     }
@@ -446,11 +428,11 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     /**
      * renders list view based on list state.
      *
-     * @throws LogicException
-     * @throws MapperException
-     * @throws TPkgSnippetRenderer_SnippetRenderingException
-     *
      * @return void
+     *
+     * @throws \LogicException
+     * @throws \MapperException
+     * @throws \TPkgSnippetRenderer_SnippetRenderingException
      */
     protected function renderList()
     {
@@ -481,11 +463,11 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         }
 
         if ('tableList' === $listState->getListView()) {
-            $parameters = array(
+            $parameters = [
                 'pagedef' => 'mediaManagerLegacyList',
                 '_pagedefType' => self::PAGEDEF_TYPE,
                 'cms_media_tree_id' => $listState->getMediaTreeNodeId(),
-            );
+            ];
 
             $viewRenderer->AddSourceObject(
                 'tableSrc',
@@ -504,19 +486,19 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     private function logAndReturnError(?string $logMessage = null, ?\Throwable $exception = null)
     {
-        $this->logger->error($logMessage ?? 'A media error occured', ['exception'=>$exception]);
+        $this->logger->error($logMessage ?? 'A media error occured', ['exception' => $exception]);
 
         $return = new JavascriptPluginMessage();
         $return->message = $this->translator->trans(
             'chameleon_system_media_manager.general_error_message',
-            array(),
+            [],
             TranslationConstants::DOMAIN_BACKEND
         );
         $this->returnAsAjaxError($return);
     }
 
     /**
-     * @param mixed $object - must be JSON encodable.
+     * @param mixed $object - must be JSON encodable
      *
      * @return never
      */
@@ -524,23 +506,15 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         header('HTTP/1.1 500 Internal Server Error');
         echo json_encode($object);
-        exit();
+        exit;
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    private function createViewRendererInstance()
+    private function createViewRendererInstance(): \ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
-    /**
-     * @param MediaManagerListState $listState
-     *
-     * @return MediaTreeNodeDataModel|null
-     */
-    private function getMediaTreeNodeFromListState(MediaManagerListState $listState)
+    private function getMediaTreeNodeFromListState(MediaManagerListState $listState): ?MediaTreeNodeDataModel
     {
         $listRequest = $this->mediaManagerListRequestService->createListRequestFromListState(
             $listState,
@@ -557,12 +531,12 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function getListMappers()
     {
-        return array(
+        return [
             'chameleon_system_media_manager.backend_module_mapper.list_result',
             'chameleon_system_media_manager.backend_module_mapper.list_sort',
             'chameleon_system_media_manager.backend_module_mapper.page_size',
             'chameleon_system_media_manager.backend_module_mapper.pick_images',
-        );
+        ];
     }
 
     /**
@@ -574,17 +548,17 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         header('HTTP/1.1 200 OK');
         echo json_encode($object);
-        exit();
+        exit;
     }
 
     /**
      * renders detail view.
      *
-     * @throws MapperException
-     * @throws TPkgSnippetRenderer_SnippetRenderingException
-     * @throws LogicException
-     *
      * @return void
+     *
+     * @throws \MapperException
+     * @throws \TPkgSnippetRenderer_SnippetRenderingException
+     * @throws \LogicException
      */
     protected function renderDetail()
     {
@@ -606,11 +580,11 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $viewRenderer->AddSourceObject('listState', $this->getListState());
         $viewRenderer->AddSourceObject('mediaItem', $mediaItem);
 
-        $parameters = array(
+        $parameters = [
             'pagedef' => 'tableeditorPopup',
             'tableid' => \TTools::GetCMSTableId('cms_media'),
             'id' => $mediaItem->getId(),
-        );
+        ];
         $viewRenderer->AddSourceObject(
             'tableEditorIframeUrl',
             URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&')
@@ -619,8 +593,8 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $viewRenderer->AddSourceObject('accessRightsMedia', $this->createMediaAccessRightsModel());
 
         $extensions = $this->mediaManagerExtensionCollection->getExtensions();
-        $additionalButtonTemplates = array();
-        $additionalDetailViewTemplates = array();
+        $additionalButtonTemplates = [];
+        $additionalDetailViewTemplates = [];
         foreach ($extensions as $extension) {
             $additionalButtonTemplates = array_merge(
                 $additionalButtonTemplates,
@@ -659,10 +633,10 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
      */
     protected function getDetailMappers()
     {
-        $detailMappers = array(
+        $detailMappers = [
             'chameleon_system_media_manager.backend_module_mapper.media_item_usages',
             'chameleon_system_media_manager.backend_module_mapper.pick_images',
-        );
+        ];
 
         $extensions = $this->mediaManagerExtensionCollection->getExtensions();
         foreach ($extensions as $extension) {
@@ -794,7 +768,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $info->setMessage(
             $this->translator->trans(
                 'chameleon_system_media_manager.delete.success_message',
-                array(),
+                [],
                 TranslationConstants::DOMAIN_BACKEND_JS
             )
         );
@@ -866,7 +840,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
         $return = new JavascriptPluginMessage();
         $return->message = $this->translator->trans(
             'chameleon_system_media_manager.messages.moved_successfully',
-            array(),
+            [],
             TranslationConstants::DOMAIN_BACKEND
         );
         $this->returnAsAjaxResponse($return);
@@ -933,7 +907,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param null|string $string
+     * @param string|null $string
      *
      * @return never
      */
@@ -941,7 +915,7 @@ class MediaManagerBackendModule extends MTPkgViewRendererAbstractModuleMapper
     {
         header('HTTP/1.1 200 OK');
         echo $string;
-        exit();
+        exit;
     }
 
     /**

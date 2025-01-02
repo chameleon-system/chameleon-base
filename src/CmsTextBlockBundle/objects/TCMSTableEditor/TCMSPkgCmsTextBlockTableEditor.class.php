@@ -9,9 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
-use esono\pkgCmsCache\CacheInterface;
-
 /**
  * @property TdbPkgCmsTextBlock $oTable
  */
@@ -81,10 +78,5 @@ class TCMSPkgCmsTextBlockTableEditor extends TCMSTableEditor
                 $cacheService->callTrigger($aRow['sTableName'], $aTableFieldRow['id']);
             }
         }
-    }
-
-    private function getCacheService(): CacheInterface
-    {
-        return ServiceLocator::get('chameleon_system_cms_cache.cache');
     }
 }

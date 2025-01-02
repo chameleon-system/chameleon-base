@@ -16,6 +16,8 @@ use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\ImageCrop\DataModel\CmsMediaDataModel;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
+use ChameleonSystem\ImageEditorBundle\Interface\ImageEditorUrlServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 
 class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
@@ -29,7 +31,11 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         private readonly BackendSessionInterface $backendSession,
         private readonly CmsMediaDataAccessInterface $cmsMediaDataAccess,
         private readonly Connection $dbConnection,
-        private readonly FlashMessageServiceInterface $flashMessageService
+        private readonly FlashMessageServiceInterface $flashMessageService,
+        private readonly \cmsCoreRedirect $cmsCoreRedirect,
+        private readonly ImageEditorUrlServiceInterface $editorUrlService,
+        private readonly SecurityHelperAccess $securityHelperAccess,
+        private readonly \TTools $tools
     ) {
         parent::__construct();
     }
@@ -82,21 +88,19 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->methodCallAllowed[] = 'saveImage';
     }
 
-    protected function saveImage()
+    protected function saveImage(): void
     {
-        $imageData = $this->inputFilterUtil->getFilteredPostInput('editedImageData');
-        $decoded = json_decode($imageData, true);
-
-        $editedImageData = $decoded['editedImageObject']['imageBase64'];
+        $editedImageObject = $this->getEditedImageObject();
+        $editedImageData = $editedImageObject['imageBase64'];
         $editedImageDataParts = explode(',', $editedImageData);
-
-        $imageData = base64_decode($editedImageDataParts[1], true);
 
         $imageId = $this->inputFilterUtil->getFilteredPostInput('imageId');
 
         $subPath = $this->dbConnection->fetchOne('SELECT `path` FROM `cms_media` WHERE `id` = :id', ['id' => $imageId]);
-        $path = PATH_MEDIA_LIBRARY.$subPath;
+        $splitedPath = explode('/', $subPath);
 
+        $imageData = base64_decode($editedImageDataParts[1], true);
+        $path = PATH_MEDIA_LIBRARY.$splitedPath[0].'/'.$splitedPath[1].'/'.time().$editedImageObject['name'].'.'.$editedImageObject['extension'];
         $fileSet = file_put_contents($path, $imageData);
 
         if (false === $fileSet) {
@@ -105,16 +109,69 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             return;
         }
 
-        $tableManagerMedia = \TTools::GetTableEditorManager('cms_media', $imageId);
+        $user = $this->securityHelperAccess->getUser();
 
-        // We save this field to force the table manager to trigger its post save hook and update caches, thumbnails and so on
-        if (false === $tableManagerMedia->SaveField('path', $subPath, true)) {
+        if (null === $user) {
             $this->flashMessageService->addMessage(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'IMAGE_EDITOR_WARNING_COULD_NOT_SAVE_IMAGE_DATA');
 
             return;
         }
 
+        $tableManagerMedia = $this->tools::GetTableEditorManager('cms_media');
+        $tableManagerMedia->AllowEditByAll(true);
+
+        $mediaRecord = $tableManagerMedia->Insert();
+
+        if (null === $mediaRecord) {
+            $this->flashMessageService->addMessage(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'IMAGE_EDITOR_WARNING_COULD_NOT_SAVE_IMAGE_DATA');
+
+            return;
+        }
+
+        $size = filesize($path);
+
+        $imageData = [
+            'id' => $mediaRecord->id,
+            'name' => $editedImageObject['name'].'.'.$editedImageObject['extension'],
+            'cms_media_tree_id' => '1',
+            'width' => '',
+            'height' => '',
+            'description' => $editedImageObject['name'],
+            'path' => $path,
+            'cms_filetype_id' => '8',
+            'cms_user_id' => $user->getId(),
+            'custom_filename' => $editedImageObject['name'],
+            'size' => $size,
+            'tmp_name' => $path,
+            'error' => 0,
+            'type' => 'jpg',
+        ];
+
+        /**
+         * @var \TCMSTableEditorFiles $tableEditor
+         */
+        $tableEditor = $tableManagerMedia->oTableEditor;
+        $tableEditor->SetUploadData($imageData, true);
+
+        if (false === $tableManagerMedia->Save($imageData)) {
+            $this->flashMessageService->addMessage(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'IMAGE_EDITOR_WARNING_COULD_NOT_SAVE_IMAGE_DATA');
+            $tableManagerMedia->AllowEditByAll(false);
+
+            return;
+        }
+
+        $tableManagerMedia->AllowEditByAll(false);
         $this->flashMessageService->addMessage(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'IMAGE_EDITOR_SUCCESS_NEW_IMAGE_HAS_BEEN_SAVED');
+
+        $this->cmsCoreRedirect->redirect($this->editorUrlService->getImageEditorUrl($mediaRecord->id));
+    }
+
+    private function getEditedImageObject()
+    {
+        $imageData = $this->inputFilterUtil->getFilteredPostInput('editedImageData');
+        $decoded = json_decode($imageData, true);
+
+        return $decoded['editedImageObject'];
     }
 
     /**
