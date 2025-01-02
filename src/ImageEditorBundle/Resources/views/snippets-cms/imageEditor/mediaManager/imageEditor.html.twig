@@ -1,13 +1,25 @@
 {{ renderedTableEditorMessages | raw }}
 
-<form action="{{ formAction | e('html_attr') }}" method="post" class="snippetImageEditorForm mb-4">
+<form action="{{ formAction | e('html_attr') }}" method="post" class="snippetImageEditorForm">
 
     <input type="hidden" name="module_fnc[contentmodule]" value="saveImage">
     <input type="hidden" name="imageUrl" value="{{ imageUrl }}">
     <input type="hidden" name="imageId" value="{{ imageId }}">
     <input type="hidden" id="editedImageData" name="editedImageData" value=""/>
 
-    <div id="editor_container"></div>
+    {% set aspecRatio = imageWidth / imageHeight %}
+
+    {% set calcHeight = imageHeight %}
+    {% if calcHeight < 400 %}
+        {% set calcHeight = 400 %}
+    {% endif %}
+    {% if calcHeight > 600 and aspecRatio > 1 %}
+        {% set calcHeight = calcHeight / aspecRatio %}
+    {% endif %}
+    {% if calcHeight > 750 %}
+        {% set calcHeight = 750 %}
+    {% endif %}
+    <div id="editor_container" style="height: {{ (calcHeight + 150) }}px"></div>
 
     <button type="submit" class="btn btn-success mr-2 mt-2" id="submitEditedImage">
         <span class="fas fa-save"></span> {{ 'chameleon_system_image_editor.editor.button_label' | trans }}

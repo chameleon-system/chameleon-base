@@ -25,6 +25,8 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
     public const PAGEDEF_NAME = 'imageEditor';
     public const PAGEDEF_TYPE = '@ChameleonSystemImageEditorBundle';
     private const URL_PARAM_IMAGE_ID = 'cmsMediaId';
+    private const URL_PARAM_IMAGE_WIDTH = 'imageWidth';
+    private const URL_PARAM_IMAGE_HEIGHT = 'imageHeight';
 
     public function __construct(
         private readonly InputFilterUtilInterface $inputFilterUtil,
@@ -53,6 +55,8 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $oVisitor->SetMappedValue('imageUrl', $image->getImageUrl());
         $oVisitor->SetMappedValue('imageId', $image->getId());
+        $oVisitor->SetMappedValue('imageWidth', $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_IMAGE_WIDTH));
+        $oVisitor->SetMappedValue('imageHeight', $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_IMAGE_HEIGHT));
 
         if ($this->flashMessageService->consumerHasMessages(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER)) {
             $oVisitor->SetMappedValue(
