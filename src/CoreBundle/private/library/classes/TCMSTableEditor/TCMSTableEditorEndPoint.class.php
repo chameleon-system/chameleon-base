@@ -1710,7 +1710,7 @@ class TCMSTableEditorEndPoint
         return $bSaveSuccess;
     }
 
-    private function hasFieldChanged(\TCMSField $field): bool
+    private function hasFieldChanged(TCMSField $field): bool
     {
         $valuePrev = $this->oTable->sqlData[$field->name];
         $valueNow = $field->data;
@@ -1725,7 +1725,7 @@ class TCMSTableEditorEndPoint
     /**
      * prints an adequate comment for the previous field value, consider WYSIWYG fields and shows partly the difference.
      */
-    private function getPreviousComment(\TCMSField $field): string
+    private function getPreviousComment(TCMSField $field): string
     {
         $previous = $this->oTable->sqlData[$field->name];
 
