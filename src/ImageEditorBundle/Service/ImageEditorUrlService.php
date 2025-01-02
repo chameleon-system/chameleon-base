@@ -14,13 +14,21 @@ class ImageEditorUrlService implements ImageEditorUrlServiceInterface
     ) {
     }
 
-    public function getImageEditorUrl(string $mediaItemId): string
+    public function getImageEditorUrl(string $mediaItemId, string $imageWidth = '', string $imageHeight = ''): string
     {
         $parameters = [
             'pagedef' => ImageEditorModule::PAGEDEF_NAME,
             '_pagedefType' => ImageEditorModule::PAGEDEF_TYPE,
             ImageCropEditorModule::URL_PARAM_IMAGE_ID => $mediaItemId,
         ];
+
+        if ('' !== $imageWidth) {
+            $parameters['imageWidth'] = $imageWidth;
+        }
+
+        if ('' !== $imageHeight) {
+            $parameters['imageHeight'] = $imageHeight;
+        }
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
     }

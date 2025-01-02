@@ -39,7 +39,7 @@ class ImageEditorMapper extends \AbstractViewMapper
             return;
         }
 
-        $url = $this->editorUrlService->getImageEditorUrl($imageId);
+        $url = $this->editorUrlService->getImageEditorUrl($imageId, $mediaItem->getWidth(), $mediaItem->getHeight());
         $oVisitor->SetMappedValue('createEditorUrl', $url);
     }
 }
