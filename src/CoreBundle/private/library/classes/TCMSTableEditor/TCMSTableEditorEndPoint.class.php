@@ -1610,7 +1610,10 @@ class TCMSTableEditorEndPoint
                         $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
 
                         if (true === $bIsUpdateCall) {
-                            $comments[$oField->name] = $this->getPreviousComment($oField);
+                            $previousComment = $this->getPreviousComment($oField);
+                            if (null !== $previousComment) {
+                                $comments[$oField->name] = $previousComment;
+                            }
                         }
                     }
                     // filter insert default values, except field "name"
@@ -1725,31 +1728,12 @@ class TCMSTableEditorEndPoint
     /**
      * prints an adequate comment for the previous field value, consider WYSIWYG fields and shows partly the difference.
      */
-    private function getPreviousComment(TCMSField $field): string
+    private function getPreviousComment(TCMSField $field): ?string
     {
         $previous = $this->oTable->sqlData[$field->name];
 
-        if (strlen($previous) > 255 && true === in_array($field->oDefinition->GetFieldCmsFieldType()->fieldConstname, ['CMSFIELD_WYSIWYG', 'CMSFIELD_WYSIWYG_LIGHT'])) {
-            $now = $field->data;
-            $differencePrev = '';
-            $differenceNow = '';
-            $maxLength = max(strlen($previous), strlen($field->data));
-
-            // record any after first difference, starting if chars are not equal anymore (includes one string has ended)
-            for ($i = 0; $i < $maxLength; ++$i) {
-                $previousChar = $previous[$i] ?? null;
-                $nowChar = $now[$i] ?? null;
-                if ('' !== $differencePrev || $nowChar !== $previousChar) {
-                    $differencePrev .= $previousChar ?? '';
-                    $differenceNow .= $nowChar ?? '';
-
-                    if (strlen($differencePrev) >= 40) {
-                        break;
-                    }
-                }
-            }
-
-            return sprintf('prev.: ...%s..., now: ...%s...', $this->getDatabaseConnection()->quote($differencePrev), $this->getDatabaseConnection()->quote($differenceNow));
+        if (true === is_string($previous) && strlen($previous) > 255) {
+            return null;
         }
 
         return sprintf('prev.: %s', $this->getDatabaseConnection()->quote($previous));
