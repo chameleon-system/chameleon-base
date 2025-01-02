@@ -1718,10 +1718,15 @@ class TCMSTableEditorEndPoint
         $valuePrev = $this->oTable->sqlData[$field->name];
 
         if (true === is_string($valuePrev) && true === is_string($valueNow) && true === in_array($field->oDefinition->GetFieldCmsFieldType()->fieldConstname, ['CMSFIELD_WYSIWYG', 'CMSFIELD_WYSIWYG_LIGHT'])) {
-            return str_replace(["\n\r", "\r\n"], "\n", $valueNow) !== $valuePrev;
+           return $this->normalizeText($valuePrev) !== $this->normalizeText($valueNow);
         }
 
         return $valueNow !== $valuePrev;
+    }
+
+    private function normalizeText(string $text): string
+    {
+        return str_replace("\r", '', $text);
     }
 
     /**
