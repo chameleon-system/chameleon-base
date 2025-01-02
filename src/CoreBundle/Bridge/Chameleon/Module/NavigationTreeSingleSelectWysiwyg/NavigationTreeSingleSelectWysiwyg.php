@@ -18,31 +18,26 @@ use ChameleonSystem\CoreBundle\Factory\BackendTreeNodeFactory;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use TGlobal;
-use TTools;
 
 /**
  * {@inheritdoc}
  */
 class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
     public function __construct(
         InputFilterUtilInterface $inputFilterUtil,
         UrlUtil $urlUtil,
         BackendTreeNodeFactory $backendTreeNodeFactory,
         TranslatorInterface $translator,
-        TTools $tools,
-        TGlobal $global,
+        \TTools $tools,
+        \TGlobal $global,
         FieldTranslationUtil $fieldTranslationUtil,
         BackendSessionInterface $backendSession,
-        RequestStack $requestStack
+        Connection $dbConnection,
+        private readonly RequestStack $requestStack
     ) {
         parent::__construct(
             $inputFilterUtil,
@@ -52,9 +47,9 @@ class NavigationTreeSingleSelectWysiwyg extends NavigationTreeSingleSelect
             $tools,
             $global,
             $fieldTranslationUtil,
-            $backendSession
+            $backendSession,
+            $dbConnection
         );
-        $this->requestStack = $requestStack;
     }
 
     /**
