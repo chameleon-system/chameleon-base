@@ -1610,14 +1610,14 @@ class TCMSTableEditorEndPoint
                         $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
 
                         if (true === $bIsUpdateCall) {
-                            $previousComment = $this->getPreviousComment($oField);
+                            $previousComment = $this->getPreviousComment($oField, $sqlValue);
                             if (null !== $previousComment) {
                                 $comments[$oField->name] = $previousComment;
                             }
                         }
                     }
                     // filter insert default values, except field "name"
-                    if (true === $bIsUpdateCall || $oField->data !== $oField->oDefinition->fieldFieldDefaultValue || 'name' === $oField->name) {
+                    if (true === $bIsUpdateCall || $sqlValue !== $oField->oDefinition->fieldFieldDefaultValue || 'name' === $oField->name) {
                         $dataForChangeRecorder[$oField->name] = $sqlValue;
                     }
                 }
@@ -1721,15 +1721,37 @@ class TCMSTableEditorEndPoint
     /**
      * prints an adequate comment for the previous field value, consider WYSIWYG fields and shows partly the difference.
      */
-    private function getPreviousComment(TCMSField $field): ?string
+    private function getPreviousComment(TCMSField $field, mixed $valueNow): ?string
     {
-        $previous = $this->oTable->sqlData[$field->name];
-
-        if (true === is_string($previous) && strlen($previous) > 255) {
+        $valuePrev = $this->oTable->sqlData[$field->name];
+        if (false === is_string($valuePrev)) {
             return null;
         }
 
-        return sprintf('prev.: %s', $this->getDatabaseConnection()->quote($previous));
+        if (strlen($valuePrev) > 255) {
+            return null;
+        }
+
+        if (true === is_string($valueNow)) {
+            $maxLength = max(strlen($valuePrev), strlen($field->data));
+
+            // record first difference with fix length, starting if chars are not equal anymore (includes one string has ended)
+            for ($i = 0; $i < $maxLength; ++$i) {
+                $previousChar = $valuePrev[$i] ?? null;
+                $nowChar = $valueNow[$i] ?? null;
+                if ($nowChar !== $previousChar) {
+                    $differencePrev = substr($valuePrev, $i, 40);
+                    $differenceNow = substr($valueNow, $i, 40);
+
+                    return sprintf('prev.: %s, now: %s',
+                        '' === $differencePrev ? '(at end)' : '...'.$this->getDatabaseConnection()->quote($differencePrev).'...',
+                        '' === $differenceNow ? '(at end)' : '...'.$this->getDatabaseConnection()->quote($differenceNow).'...',
+                    );
+                }
+            }
+        }
+
+        return sprintf('prev.: %s', $this->getDatabaseConnection()->quote($valuePrev));
     }
 
     private function isRecordingActive(): bool
