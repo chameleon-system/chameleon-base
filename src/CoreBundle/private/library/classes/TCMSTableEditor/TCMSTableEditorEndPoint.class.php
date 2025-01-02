@@ -1564,8 +1564,7 @@ class TCMSTableEditorEndPoint
                 }
 
                 $isCommentedField = false;
-                if (true === $bIsUpdateCall && true === array_key_exists($oField->name, $this->oTable->sqlData) && $oField->data === $this->oTable->sqlData[$oField->name]) {
-                    // field value not changed
+                if (true === $bIsUpdateCall && true === array_key_exists($oField->name, $this->oTable->sqlData) && false === $this->hasFieldChanged($oField)) {
                     if ('name' === $oField->name) { // special field, comment line (maybe extended by table specific lists)
                         $comments[$oField->name] = true;
                         $isCommentedField = true; // skip such for the SQL query
@@ -1611,7 +1610,7 @@ class TCMSTableEditorEndPoint
                         $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
 
                         if (true === $bIsUpdateCall) {
-                            $comments[$oField->name] = sprintf('prev.: %s', $this->getDatabaseConnection()->quote($this->oTable->sqlData[$oField->name]));
+                            $comments[$oField->name] = $this->getPreviousComment($oField);
                         }
                     }
                     // filter insert default values, except field "name"
@@ -1709,6 +1708,51 @@ class TCMSTableEditorEndPoint
         }
 
         return $bSaveSuccess;
+    }
+
+    private function hasFieldChanged(\TCMSField $field): bool
+    {
+        $valuePrev = $this->oTable->sqlData[$field->name];
+        $valueNow = $field->data;
+
+        if (true === is_string($valuePrev) && true === is_string($valueNow) && true === in_array($field->oDefinition->GetFieldCmsFieldType()->fieldConstname, ['CMSFIELD_WYSIWYG', 'CMSFIELD_WYSIWYG_LIGHT'])) {
+            return str_replace("\r\n", "\n", $valueNow) !== $valuePrev;
+        }
+
+        return $valueNow !== $valuePrev;
+    }
+
+    /**
+     * prints an adequate comment for the previous field value, consider WYSIWYG fields and shows partly the difference.
+     */
+    private function getPreviousComment(\TCMSField $field): string
+    {
+        $previous = $this->oTable->sqlData[$field->name];
+
+        if (strlen($previous) > 255 && true === in_array($field->oDefinition->GetFieldCmsFieldType()->fieldConstname, ['CMSFIELD_WYSIWYG', 'CMSFIELD_WYSIWYG_LIGHT'])) {
+            $now = $field->data;
+            $differencePrev = '';
+            $differenceNow = '';
+            $maxLength = max(strlen($previous), strlen($field->data));
+
+            // record any after first difference, starting if chars are not equal anymore (includes one string has ended)
+            for ($i = 0; $i < $maxLength; ++$i) {
+                $previousChar = $previous[$i] ?? null;
+                $nowChar = $now[$i] ?? null;
+                if ('' !== $differencePrev || $nowChar !== $previousChar) {
+                    $differencePrev .= $previousChar ?? '';
+                    $differenceNow .= $nowChar ?? '';
+
+                    if (strlen($differencePrev) >= 40) {
+                        break;
+                    }
+                }
+            }
+
+            return sprintf('prev.: ...%s..., now: ...%s...', $this->getDatabaseConnection()->quote($differencePrev), $this->getDatabaseConnection()->quote($differenceNow));
+        }
+
+        return sprintf('prev.: %s', $this->getDatabaseConnection()->quote($previous));
     }
 
     private function isRecordingActive(): bool
