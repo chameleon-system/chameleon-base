@@ -71,7 +71,7 @@ $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
             }
             ?>
             <form style="margin:0;padding:0" name="moduleblock<?=$menuPrefix; ?>"
-                  method="post" action="<?=URL_WEB_CONTROLLER; ?>" accept-charset="UTF-8">
+                  method="post" action="<?=PATH_CMS_CONTROLLER_FRONTEND; ?>" accept-charset="UTF-8">
                 <input type="hidden" name="__modulechooser" value="true"/>
                 <input type="hidden" name="pagedef" value="<?=TGlobal::OutHTML($data['pagedef']); ?>"/>
                 <input type="hidden" name="id" value="<?=TGlobal::OutHTML($data['id']); ?>"/>

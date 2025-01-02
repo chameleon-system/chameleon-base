@@ -291,7 +291,7 @@ class CMSModuleChooser extends TCMSModelBase
     }
 
     /**
-     * Get view form loaded module instance.
+     * Get view from loaded module instance.
      *
      * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
      *
@@ -439,7 +439,7 @@ class CMSModuleChooser extends TCMSModelBase
         $aRedirectParameters = [];
         if ($oModule->Load($moduleID)) {
             $oConnectedTables = $oModule->GetFieldCmsTblConfList();
-            if ($oConnectedTables && 1 == $oConnectedTables->Length()) {
+            if ($oConnectedTables && 1 === $oConnectedTables->Length()) {
                 $oTable = $oConnectedTables->Current();
                 if ($oTable->fieldOnlyOneRecordTbl) {
                     $aURLParam = ['pagedef' => 'tablemanagerframe', 'id' => $oTable->id, 'sRestrictionField' => 'cms_tpl_module_instance_id', 'sRestriction' => $this->instanceID];
@@ -494,7 +494,6 @@ class CMSModuleChooser extends TCMSModelBase
      */
     public function CopyInstance()
     {
-        /** @var $oPage TCMSPage */
         $oPage = new TCMSPage();
         $sPageId = $this->global->GetUserData('pagedef');
         $sModuleInstanceName = $this->global->GetUserData('instancename');
@@ -549,7 +548,6 @@ class CMSModuleChooser extends TCMSModelBase
      */
     protected function GetRecordsToCopy($sTableName, $sOldModuleInstanceId)
     {
-        /** @var $oRecordListToCopy TIterator */
         $oRecordListToCopy = new TIterator();
 
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableName.'List');
@@ -582,7 +580,6 @@ class CMSModuleChooser extends TCMSModelBase
         /** @var $oRecordToCopy TCMSRecord */
         while ($oRecordToCopy = $oRecordListToCopy->Next()) {
             $iTableID = TTools::GetCMSTableId($oRecordToCopy->table);
-            /** @var $oTableEditor TCMSTableEditorManager */
             $oTableEditor = new TCMSTableEditorManager();
             $oTableEditor->Init($iTableID, $oRecordToCopy->id);
             $aOverloadedFields = ['cms_tpl_module_instance_id' => $sNewModuleInstanceId];
@@ -611,7 +608,7 @@ class CMSModuleChooser extends TCMSModelBase
             $view = $this->global->GetUserData('template');
         }
 
-        if (!empty($bLoadCopy) && '1' == $bLoadCopy) {
+        if (!empty($bLoadCopy) && '1' === $bLoadCopy) {
             $this->CopyInstanceData();
         } else {
             $this->UpdatePageMasterPagedefSpot($sPageId, $this->instanceID, $view, $this->oModule->fieldClassname);
@@ -625,7 +622,6 @@ class CMSModuleChooser extends TCMSModelBase
      */
     protected function CopyInstanceData()
     {
-        /** @var $oPage TCMSPage */
         $oPage = new TCMSPage();
         $sPageId = $this->global->GetUserData('pagedef');
         $oPage->Load($sPageId);
@@ -712,7 +708,6 @@ class CMSModuleChooser extends TCMSModelBase
         $instanceName = $this->global->GetUserData('instancename');
 
         $iTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
-        /** @var $oTableEditor TCMSTableEditorManager */
         $oTableEditor = new TCMSTableEditorManager();
         $oTableEditor->Init($iTableID, $this->instanceID);
         $oTableEditor->SaveField('name', $instanceName);
@@ -766,7 +761,6 @@ class CMSModuleChooser extends TCMSModelBase
     protected function OnCreateInstance($sName, $moduleID, $view, $oPage)
     {
         $iTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
-        /** @var $oEditor TCMSTableEditorManager */
         $oEditor = new TCMSTableEditorManager();
         $oEditor->Init($iTableID, null);
         $aData = ['name' => $sName, 'cms_tpl_module_id' => $moduleID, 'template' => $view, 'cms_portal_id' => $oPage->sqlData['cms_portal_id']];
@@ -785,8 +779,6 @@ class CMSModuleChooser extends TCMSModelBase
     protected function OnDeleteInstance()
     {
         $iTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
-
-        /** @var $oEditor TCMSTableEditorManager */
         $oEditor = new TCMSTableEditorManager();
         $oEditor->Init($iTableID, $this->instanceID);
         $oEditor->Delete($this->instanceID);
@@ -907,43 +899,39 @@ class CMSModuleChooser extends TCMSModelBase
                      WHERE `cms_tpl_page_cms_master_pagedef_spot`.`cms_tpl_page_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oPage->id)."'
                        AND `cms_master_pagedef_spot`.`name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTargetModuleSpotName)."'
                    ";
-        $TdbCmsTplPageCmsMasterPagedefSpotList = TdbCmsTplPageCmsMasterPagedefSpotList::GetList($query);
 
-        return $TdbCmsTplPageCmsMasterPagedefSpotList;
+        return TdbCmsTplPageCmsMasterPagedefSpotList::GetList($query);
     }
 
-    /**
-     * Redirect to the editing page.
-     *
-     * @param string $sPageId
-     * @param array $aOtherParameters - parameters to add to the redirect call
-     */
-    protected function RedirectToEditPage($sPageId, $aOtherParameters = [])
+    protected function RedirectToEditPage(string $sPageId, array $aOtherParameters = [])
     {
-        $aParameter = [
+        $urlParameters = [
             'pagedef' => $sPageId,
             'id' => $sPageId,
             '__modulechooser' => 'true',
         ];
         // we need to preserve certain parameters to avoid loading frontend js
-        $aAdditionalParameters = [
+        $additionalUrlParameters = [
             'esdisablelinks',
             '__previewmode',
             'previewLanguageId',
         ];
         // to redirect the page outside the iframe, we use javascript in a script tag included in the HTMLHeadIncludes. Therefore, we need to avoid the removal of all frontend script tags, if we are going to redirect the page. (by passing 'sRedirectURL' in  $aOtherParameters). So if this parameter is present, we avoid retaining the value of 'esdisablefrontendjs'.
         if (!isset($aOtherParameters['sRedirectURL'])) {
-            $aAdditionalParameters[] = 'esdisablefrontendjs';
+            $additionalUrlParameters[] = 'esdisablefrontendjs';
         }
-        foreach ($aAdditionalParameters as $parameterName) {
+        foreach ($additionalUrlParameters as $parameterName) {
             if ($this->global->UserDataExists($parameterName)) {
-                $aParameter[$parameterName] = $this->global->GetUserData($parameterName);
+                $urlParameters[$parameterName] = $this->global->GetUserData($parameterName);
             }
         }
         foreach ($aOtherParameters as $sKey => $sValue) {
-            $aParameter[$sKey] = $sValue;
+            $urlParameters[$sKey] = $sValue;
         }
-        $this->getRedirectService()->redirectToActivePage($aParameter);
+
+        $url = PATH_CMS_CONTROLLER_FRONTEND .'?'. http_build_query($urlParameters);
+
+        $this->getRedirectService()->redirect($url);
     }
 
     /**
