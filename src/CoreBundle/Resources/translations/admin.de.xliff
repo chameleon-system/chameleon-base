@@ -776,9 +776,17 @@
                 <source>chameleon_system_core.list.group_show_all</source>
                 <target>Alle</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.list.add_selected_as_list_fields">
+                <source>chameleon_system_core.list.add_selected_as_list_fields</source>
+                <target>Markierte als Listenfelder verwenden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.list.add_selected_as_sort_fields">
+                <source>chameleon_system_core.list.add_selected_as_sort_fields</source>
+                <target>Markierte als Sortierfelder verwenden</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.list.delete_selected">
                 <source>chameleon_system_core.list.delete_selected</source>
-                <target>Markierte löschen</target>
+                <target>Markierte löschen </target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.list.next_page">
                 <source>chameleon_system_core.list.next_page</source>

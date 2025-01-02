@@ -160,6 +160,8 @@ class MTTableManager extends TCMSModelBase
             'ClearNaviCache',
             'getAutocompleteRecordList',
             'getAutocompleteRecords',
+            'AddSelectedAsListFields',
+            'AddSelectedAsSortFields',
             'DeleteSelected',
         );
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
@@ -218,6 +220,67 @@ class MTTableManager extends TCMSModelBase
         }
 
         return $response;
+    }
+
+    //TODO AddSelectedAsSortFields,
+    public function AddSelectedAsListFields()
+    {
+        $oGlobal = TGlobal::instance();
+        $sInput = $oGlobal->GetUserData('items');
+        $aInput = explode(',', $sInput);
+
+        foreach ($aInput as $id) {
+            /** @var $oEditor TCMSTableEditorManager */
+            $oEditor = new TCMSTableEditorManager();
+            $oEditor->Init($this->oTableConf->id, $id);
+            //$oEditor->Delete($id);
+        }
+
+        $isInIFrame = $this->global->GetUserData('_isiniframe');
+
+        // redirect back to list
+        if ($isInIFrame && 'true' == $isInIFrame) {
+            // get redirect parameter
+            $parameter = array();
+            $parameter['_isiniframe'] = $isInIFrame;
+            $parameter['id'] = $this->global->GetUserData('id');
+            $parameter['pagedef'] = $this->global->GetUserData('pagedef');
+
+            $aAdditionalParams = $this->GetHiddenFieldsHook();
+            if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
+                $parameter = array_merge($parameter, $aAdditionalParams);
+            }
+
+            if (isset($parameter['sRestrictionField']) && '_mlt' == substr($parameter['sRestrictionField'], -4)) {
+                /** @var $oRestrictionTableConf TCMSTableConf */
+                $oRestrictionTableConf = new TCMSTableConf();
+                $sTableName = substr($parameter['sRestrictionField'], 0, -3);
+                $oRestrictionTableConf->LoadFromField('name', $sTableName);
+
+                if ($this->global->UserDataExists('sourceRecordID')) {
+                    $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
+                }
+
+                $this->getRedirectService()->redirectToActivePage($parameter);
+            } else {
+                /** @var $oRestrictionTableConf TCMSTableConf */
+                $oRestrictionTableConf = new TCMSTableConf();
+                $sTableName = substr($oEditor->sRestrictionField, 0, -3);
+                $oRestrictionTableConf->LoadFromField('name', $sTableName);
+
+                if ($this->global->UserDataExists('sourceRecordID')) {
+                    $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
+                }
+
+                $this->getRedirectService()->redirectToActivePage($parameter);
+            }
+        } else {
+            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
+
+            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->getHistoryCount() - 1);
+        }
+
+        //$this->getRedirectService()->redirect($parentURL);
     }
 
     public function DeleteSelected()

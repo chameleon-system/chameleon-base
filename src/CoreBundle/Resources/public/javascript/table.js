@@ -98,6 +98,33 @@ function DeleteSelectedRecords(formName) {
 }
 
 
+function AddSelectedAsListFields(formName) {
+    var IDs = '';
+    $("input[name='aInputIdList[]']").each(function () {
+            if (this.checked) {
+                if (IDs != '') IDs = IDs + ',';
+                IDs = IDs + this.value;
+            }
+        }
+    );
+    console.log("IDs", IDs)
+
+    if (IDs != '') {
+        //var message = CHAMELEON.CORE.i18n.Translate("chameleon_system_core.js.confirm_multi_delete");
+        var message = 'Wirklich?';
+        if (confirm(message)) {
+            document.cmsformworkonlist.elements['module_fnc[contentmodule]'].value = 'AddSelectedAsListFields';
+            document.cmsformworkonlist.items.value = IDs;
+            document.cmsformworkonlist.submit();
+        }
+    } else {
+        toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_no_selection'), 'WARNING');
+    }
+}
+
+
+
+
 function ChangeListMarking(fieldValue, formName) {
     var searchId = "#" + formName;
 
