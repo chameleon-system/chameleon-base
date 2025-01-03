@@ -15,6 +15,8 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 
 - `Deprecated` tag in service xml files now needs to include a `package` and `version` attribute
 - Routes looking like `FoobarController:exampleAction` are no longer supported. Use `FoobarController::exampleAction` instead.
+  Search for `_controller:` and `_controller :` in your code and fix missing double colons found in controller service calls.
+  You also made need the Tag: `<tag name="controller.service_arguments" />` for your controllers.
 - `InputFilterUtil` has two new methods: `getFilteredGetInputArray` and `getFilteredPostInputArray`. Use them if you expect the value to be an array instead of a scalar value.
   - This is due to a change in symfony's ParameterBag, which does not support arrays on its `query.get` and `request.get` methods anymore. You now have to use the `all` method for expected arrays.
   - If you are using the `InputFilterUtil` class, there is currently a fallback so the project won't crash immediately. However, this fallback will be removed in the future.
@@ -183,9 +185,3 @@ The functionality "annotation support" was removed. This file was calling a
 deprecated function `AnnotationRegistry::registerLoader()`. If needed annotations can still be configured and used
 directly in a project.
 However with php > 8 you should use attributes instead.
-
-# Newly Deprecated Code Entities
-# Removed Code Entities
-
-The code entities in this list were marked as deprecated in previous releases and have now been removed.
-

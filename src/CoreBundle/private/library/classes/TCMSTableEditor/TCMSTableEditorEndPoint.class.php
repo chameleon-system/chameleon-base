@@ -1740,12 +1740,10 @@ class TCMSTableEditorEndPoint
                 $previousChar = $valuePrev[$i] ?? null;
                 $nowChar = $valueNow[$i] ?? null;
                 if ($nowChar !== $previousChar) {
-                    $differencePrev = substr($valuePrev, $i, 40);
-                    $differenceNow = substr($valueNow, $i, 40);
+                    $differencePrev = substr($valuePrev, $i, 100);
 
-                    return sprintf('prev.: %s, now: %s',
-                        '' === $differencePrev ? '(at end)' : '...'.$this->getDatabaseConnection()->quote($differencePrev).'...',
-                        '' === $differenceNow ? '(at end)' : '...'.$this->getDatabaseConnection()->quote($differenceNow).'...',
+                    return sprintf('prev.: %s',
+                        '' === $differencePrev ? '(at end)' : '...'.$this->getDatabaseConnection()->quote($differencePrev).'...'
                     );
                 }
             }

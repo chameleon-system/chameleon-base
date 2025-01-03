@@ -9,10 +9,9 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\Service\CssClassExtractorInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\CoreBundle\Service\CssClassExtractorInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\CoreBundle\Wysiwyg\CkEditorConfigProviderInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -363,7 +362,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $languageId = $securityHelper->getUser()?->getCmsLanguageId();
         if (null === $languageId) {
-            return null;
+            return '';
         }
         /** @var LanguageServiceInterface $languageService */
         $languageService = ServiceLocator::get('chameleon_system_core.language_service');
@@ -378,15 +377,11 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
      */
     private function getEnterMode(): string
     {
-        switch (CHAMELEON_WYSIWYG_LINE_ENDINGS) {
-            case 'DIV':
-                return 'CKEDITOR.ENTER_DIV';
-            case 'BR':
-                return 'CKEDITOR.ENTER_BR';
-            case 'P':
-            default:
-                return 'CKEDITOR.ENTER_P';
-        }
+        return match (CHAMELEON_WYSIWYG_LINE_ENDINGS) {
+            'DIV' => 'CKEDITOR.ENTER_DIV',
+            'BR' => 'CKEDITOR.ENTER_BR',
+            default => 'CKEDITOR.ENTER_P',
+        };
     }
 
     /**
