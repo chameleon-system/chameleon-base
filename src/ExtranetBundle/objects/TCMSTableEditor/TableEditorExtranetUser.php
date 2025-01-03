@@ -14,13 +14,11 @@ use ChameleonSystem\CoreBundle\Routing\PortalAndLanguageAwareRouterInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
-use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use ChameleonSystem\ExtranetBundle\LoginByToken\LoginTokenServiceInterface;
 use ChameleonSystem\ExtranetBundle\LoginByToken\LoginByTokenController;
-use ChameleonSystem\ExtranetBundle\LoginByToken\RouteGenerator;
+use ChameleonSystem\ExtranetBundle\LoginByToken\LoginTokenServiceInterface;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TableEditorExtranetUser extends TCMSTableEditor
 {
@@ -106,8 +104,6 @@ class TableEditorExtranetUser extends TCMSTableEditor
      * which uses said token to log the user in.
      *
      * @see LoginByTokenController::loginAction()
-     *
-     * @return void
      */
     public function LoginAsExtranetUser(): void
     {
@@ -145,17 +141,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
         return '' !== $this->oTable->fieldPassword;
     }
 
-    private function isBackendUserLoggedInWithPermission(string $permission): bool
-    {
-        $cmsUser = TCMSUser::GetActiveUser();
-
-        return null !== $cmsUser
-            && null !== $cmsUser->oAccessManager
-            && true === $cmsUser->oAccessManager->PermitFunction($permission);
-    }
-
     /**
-     * @param string $userId
      * @return false|TdbCmsPortal
      */
     private function getPortalForExtranetUserId(string $userId)
@@ -183,7 +169,7 @@ class TableEditorExtranetUser extends TCMSTableEditor
         );
         $url = $this->router()->generateWithPrefixes(
             'chameleon_system_extranet.login_by_token',
-            [ 'token' => $token ],
+            ['token' => $token],
             $portal,
             null,
             UrlGeneratorInterface::ABSOLUTE_URL
@@ -192,61 +178,38 @@ class TableEditorExtranetUser extends TCMSTableEditor
         $this->getRedirect()->redirect($url);
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslator()
+    private function getTranslator(): TranslatorInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 
-    /**
-     * @return InputFilterUtilInterface
-     */
-    private function getInputFilterUtil()
+    private function getInputFilterUtil(): InputFilterUtilInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
-    /**
-     * @return TGlobal
-     */
-    private function getGlobal()
+    private function getGlobal(): TGlobal
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.global');
+        return ServiceLocator::get('chameleon_system_core.global');
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function getUrlUtil(): UrlUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
-    /**
-     * @return ExtranetUserProviderInterface
-     */
-    private function getExtranetUserProvider()
+    private function getRedirect(): ICmsCoreRedirect
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
-    }
-
-    /**
-     * @return ICmsCoreRedirect
-     */
-    private function getRedirect()
-    {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ServiceLocator::get('chameleon_system_core.redirect');
     }
 
     private function loginTokenService(): LoginTokenServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.login_by_token.service.login_token');
+        return ServiceLocator::get('chameleon_system_extranet.login_by_token.service.login_token');
     }
 
     private function router(): PortalAndLanguageAwareRouterInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
+        return ServiceLocator::get('chameleon_system_core.router.chameleon_frontend');
     }
 }
