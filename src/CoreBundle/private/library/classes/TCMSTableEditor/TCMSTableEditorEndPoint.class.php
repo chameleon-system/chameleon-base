@@ -406,7 +406,7 @@ class TCMSTableEditorEndPoint
                 if ($this->AllowEdit()) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'save';
-                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.save');
+                    $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.save');
                     $oMenuItem->sIcon = 'fas fa-save';
 
                     $sOnSaveViaAjaxHookMethods = '';
@@ -430,15 +430,15 @@ class TCMSTableEditorEndPoint
                         // copy
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'copy';
-                        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.copy');
+                        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.copy');
                         $oMenuItem->sIcon = 'far fa-clone';
-                        $oMenuItem->sOnClick = "if(confirm('".TGlobalBase::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.confirm_copy'))."')){ExecutePostCommand('DatabaseCopy');}";
+                        $oMenuItem->sOnClick = "if(confirm('".TGlobalBase::OutJS(ServiceLocator::get('translator')->trans('chameleon_system_core.action.confirm_copy'))."')){ExecutePostCommand('DatabaseCopy');}";
                         $this->oMenuItems->AddItem($oMenuItem);
 
                         // new
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'new';
-                        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.new');
+                        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.new');
                         $oMenuItem->sIcon = 'fas fa-plus';
                         $oMenuItem->sOnClick = "ExecutePostCommand('Insert');";
                         $this->oMenuItems->AddItem($oMenuItem);
@@ -453,7 +453,7 @@ class TCMSTableEditorEndPoint
                     if ($allowDelete) {
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'delete';
-                        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.delete');
+                        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.delete');
                         $oMenuItem->sIcon = 'far fa-trash-alt';
                         $oMenuItem->sOnClick = 'DeleteRecord();';
                         $oMenuItem->setButtonStyle('btn-danger');
@@ -464,7 +464,7 @@ class TCMSTableEditorEndPoint
                     if (1 == $this->oTableConf->sqlData['show_previewbutton']) {
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'previewPage';
-                        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.preview');
+                        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.preview');
                         $oMenuItem->sIcon = 'far fa-eye';
 
                         $ajaxURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'tableeditor', 'id' => $this->sId, 'tableid' => $this->oTableConf->id, 'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'], '_fnc' => 'AjaxGetPreviewURL']);
@@ -479,7 +479,7 @@ class TCMSTableEditorEndPoint
                         $oTableEditorConf->LoadFromField('name', 'cms_tbl_conf');
                         $oMenuItem = new TCMSTableEditorMenuItem();
                         $oMenuItem->sItemKey = 'edittableconf';
-                        $oMenuItem->setTitle(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.open_table_configuration'));
+                        $oMenuItem->setTitle(ServiceLocator::get('translator')->trans('chameleon_system_core.action.open_table_configuration'));
                         $oMenuItem->sIcon = 'fas fa-cogs';
                         $oMenuItem->setButtonStyle('btn-warning');
 
@@ -565,7 +565,7 @@ class TCMSTableEditorEndPoint
 
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'copy_translation';
-        $oMenuItem->setTitle(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.translate_from_copy'));
+        $oMenuItem->setTitle(ServiceLocator::get('translator')->trans('chameleon_system_core.action.translate_from_copy'));
         $oMenuItem->sIcon = TGlobal::GetPathTheme().'/images/icons/language-flags/'.strtolower($currentLanguageISO).'.png';
         $languageService = $this->getLanguageService();
 
@@ -590,7 +590,7 @@ class TCMSTableEditorEndPoint
             }
             $sFullURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
 
-            $text = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+            $text = ServiceLocator::get('translator')->trans(
                 'chameleon_system_core.action.translate_from_copy_confirm',
                 ['%lang%' => $name]
             );
@@ -1405,7 +1405,7 @@ class TCMSTableEditorEndPoint
             if (!empty($sNameColumn)) {
                 $oFieldDefinition = $this->oTableConf->GetFieldDefinition($sNameColumn);
                 $sTranslatedNameColumns = $oFieldDefinition->GetRealEditFieldName();
-                $this->oTable->sqlData[$sTranslatedNameColumns] = $this->oTable->sqlData[$sTranslatedNameColumns].' ['.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.copied_record_suffix').']';
+                $this->oTable->sqlData[$sTranslatedNameColumns] = $this->oTable->sqlData[$sTranslatedNameColumns].' ['.ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.copied_record_suffix').']';
             }
         }
     }
@@ -1486,6 +1486,7 @@ class TCMSTableEditorEndPoint
     {
         $aMLTFields = [];
         $aPropertyFields = [];
+        $comments = [];
         $oFields->GoToStart();
 
         $tableName = $this->oTableConf->sqlData['name'];
@@ -1561,14 +1562,27 @@ class TCMSTableEditorEndPoint
                 } elseif ($oField->isPropertyField) {
                     $aPropertyFields[] = $oField;
                 }
+
+                $isCommentedField = false;
+                if (true === $bIsUpdateCall && true === array_key_exists($oField->name, $this->oTable->sqlData) && false === $this->hasFieldChanged($oField, $sqlValue)) {
+                    if ('name' === $oField->name) { // special field, comment line (maybe extended by table specific lists)
+                        $comments[$oField->name] = true;
+                        $isCommentedField = true; // skip such for the SQL query
+                    } else {
+                        continue;
+                    }
+                }
+
                 // now convert field name (if this is a multi-language field)
                 $sqlFieldNameWithLanguageCode = $oField->oDefinition->GetRealEditFieldName($languageId);
                 if (false !== $sqlValue && false !== $writeField) {
-                    if ($isFirst) {
-                        $isFirst = false;
-                        $query .= 'SET ';
-                    } else {
-                        $query .= ', ';
+                    if (false === $isCommentedField) {
+                        if ($isFirst) {
+                            $isFirst = false;
+                            $query .= 'SET ';
+                        } else {
+                            $query .= ', ';
+                        }
                     }
 
                     if ($bCopyAllLanguages && '1' == $oField->oDefinition->sqlData['is_translatable']) {
@@ -1579,7 +1593,10 @@ class TCMSTableEditorEndPoint
                             $sTargetFieldNameLanguage = $oField->oDefinition->GetEditFieldNameForLanguage($oLanguageCopy);
                             if ($sTargetFieldNameLanguage && $sTargetFieldNameLanguage !== $sqlFieldNameWithLanguageCode) {
                                 $sqlValueLanguage = $oField->oTableRow->sqlData[$sTargetFieldNameLanguage];
-                                $query .= ' `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldNameLanguage)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValueLanguage)."', ";
+
+                                if (false === $isCommentedField) {
+                                    $query .= ' `'.MySqlLegacySupport::getInstance()->real_escape_string($sTargetFieldNameLanguage)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValueLanguage)."', ";
+                                }
 
                                 if (false === isset($setLanguageFields[$oLanguageCopy->fieldIso6391])) {
                                     $setLanguageFields[$oLanguageCopy->fieldIso6391] = [];
@@ -1589,13 +1606,25 @@ class TCMSTableEditorEndPoint
                         }
                     }
 
-                    $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
-                    $dataForChangeRecorder[$oField->name] = $sqlValue;
+                    if (false === $isCommentedField) {
+                        $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
+
+                        if (true === $bIsUpdateCall) {
+                            $previousComment = $this->getPreviousComment($oField, $sqlValue);
+                            if (null !== $previousComment) {
+                                $comments[$oField->name] = $previousComment;
+                            }
+                        }
+                    }
+                    // filter insert default values, except field "name"
+                    if (true === $bIsUpdateCall || $sqlValue !== $oField->oDefinition->fieldFieldDefaultValue || 'name' === $oField->name) {
+                        $dataForChangeRecorder[$oField->name] = $sqlValue;
+                    }
                 }
             }
         }
 
-        if ($isFirst) {
+        if ($isFirst || [] === $dataForChangeRecorder) {
             return false;
         } // no changes made... no fields to write
 
@@ -1644,7 +1673,8 @@ class TCMSTableEditorEndPoint
                     $bIsUpdateCall,
                     $dataForChangeRecorder,
                     $whereConditions,
-                    $setLanguageFields
+                    $setLanguageFields,
+                    $comments
                 );
             }
 
@@ -1683,6 +1713,47 @@ class TCMSTableEditorEndPoint
         return $bSaveSuccess;
     }
 
+    private function hasFieldChanged(TCMSField $field, mixed $valueNow): bool
+    {
+        return $valueNow !== $this->oTable->sqlData[$field->name];
+    }
+
+    /**
+     * prints an adequate comment for the previous field value, consider WYSIWYG fields and shows partly the difference.
+     */
+    private function getPreviousComment(TCMSField $field, mixed $valueNow): ?string
+    {
+        $valuePrev = $this->oTable->sqlData[$field->name];
+        if (false === is_string($valuePrev)) {
+            return null;
+        }
+
+        if (strlen($valuePrev) > 255) {
+            return null;
+        }
+
+        if (true === is_string($valueNow)) {
+            $maxLength = max(strlen($valuePrev), strlen($field->data));
+
+            // record first difference with fix length, starting if chars are not equal anymore (includes one string has ended)
+            for ($i = 0; $i < $maxLength; ++$i) {
+                $previousChar = $valuePrev[$i] ?? null;
+                $nowChar = $valueNow[$i] ?? null;
+                if ($nowChar !== $previousChar) {
+                    $differencePrev = substr($valuePrev, $i, 40);
+                    $differenceNow = substr($valueNow, $i, 40);
+
+                    return sprintf('prev.: %s, now: %s',
+                        '' === $differencePrev ? '(at end)' : '...'.$this->getDatabaseConnection()->quote($differencePrev).'...',
+                        '' === $differenceNow ? '(at end)' : '...'.$this->getDatabaseConnection()->quote($differenceNow).'...',
+                    );
+                }
+            }
+        }
+
+        return sprintf('prev.: %s', $this->getDatabaseConnection()->quote($valuePrev));
+    }
+
     private function isRecordingActive(): bool
     {
         $migrationRecorderStateHandler = $this->getMigrationRecorderStateHandler();
@@ -1692,8 +1763,9 @@ class TCMSTableEditorEndPoint
 
     /**
      * @param bool $isUpdateCall
+     * @param array<string, string|true> $comments
      */
-    private function writePostWriteLogChangeData($isUpdateCall, array $setFields, array $whereConditions, array $setLanguageFields)
+    private function writePostWriteLogChangeData($isUpdateCall, array $setFields, array $whereConditions, array $setLanguageFields, array $comments)
     {
         $tableName = $this->oTableConf->sqlData['name'];
         $languageService = $this->getLanguageService();
@@ -1707,6 +1779,7 @@ class TCMSTableEditorEndPoint
         $migrationQueryData = new MigrationQueryData($tableName, $language->fieldIso6391);
         $migrationQueryData->setFields($setFields);
         $migrationQueryData->setWhereEquals($whereConditions);
+        $migrationQueryData->setComments($comments);
         $dataModelList = [];
         $dataModelList[] = new LogChangeDataModel($migrationQueryData, $changeType);
         if (false === $isUpdateCall) {
@@ -2110,7 +2183,7 @@ class TCMSTableEditorEndPoint
         // get name value
         $name = $this->GetName();
         if (empty($name) || false === $name || is_null($name)) {
-            $name = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
+            $name = ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
         }
 
         if (!is_null($this->sId)) {
