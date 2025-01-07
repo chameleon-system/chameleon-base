@@ -1728,11 +1728,7 @@ class TCMSTableEditorEndPoint
             return null;
         }
 
-        if (strlen($valuePrev) > 255) {
-            return null;
-        }
-
-        if (true === is_string($valueNow)) {
+        if (true === is_string($valueNow) && strlen($valuePrev) > 255) {
             $maxLength = max(strlen($valuePrev), strlen($field->data));
 
             // record first difference with fix length, starting if chars are not equal anymore (includes one string has ended)
