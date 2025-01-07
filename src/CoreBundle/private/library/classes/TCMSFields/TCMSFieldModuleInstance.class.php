@@ -9,14 +9,15 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * lookup.
-/**/
+ * /**/
 class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
 {
     /**
@@ -24,14 +25,14 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
      *
      * @var TCMSRecord
      */
-    public $oModuleInstance = null;
+    public $oModuleInstance;
 
     /**
      * the module of the module instance.
      *
      * @var TCMSTPLModule
      */
-    public $oModule = null;
+    public $oModule;
 
     public function GetHTML()
     {
@@ -67,6 +68,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         $aData['sModuleView'] = $this->oTableRow->sqlData[$this->name.'_view'];
         $aData['sRecordName'] = $this->oTableRow->GetName();
         $aData['sPageEditURL'] = $this->GeneratePageEditURL();
+        $aData['securityHelper'] = $this->getSecurityHelperAccess();
 
         $oTemplateParser = new TViewParser();
         $oTemplateParser->bShowTemplatePathAsHTMLHint = false;
@@ -78,9 +80,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
 
     protected function GeneratePageEditURL()
     {
-        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'templateengine', '_mode' => 'edit_content'));
-
-        return $url;
+        return PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'templateengine', '_mode' => 'edit_content']);
     }
 
     /**
@@ -89,7 +89,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('RenameInstance', 'CreateNewInstance', 'DeleteInstance');
+        $externalFunctions = ['RenameInstance', 'CreateNewInstance', 'DeleteInstance'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -97,9 +97,9 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     {
         $oTableConf = new TCMSTableConf();
         $oTableConf->LoadFromField('name', 'cms_tpl_module_instance');
-        $html = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_instance'), 'javascript:'.$this->_GetOpenWindowJS($oTableConf).'', 'far fa-check-square', 'float-left');
-        $html .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.reset_spot'), "javascript:ResetModuleInstance('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."')", 'fas fa-undo', 'float-left button-spacing');
-        $html .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.create_or_edit_instance'), '#', 'fas fa-plus', 'float-left button-spacing', null, $this->name.'NewInstanceButton');
+        $html = TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_instance'), 'javascript:'.$this->_GetOpenWindowJS($oTableConf).'', 'far fa-check-square', 'float-left');
+        $html .= TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.reset_spot'), "javascript:ResetModuleInstance('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."')", 'fas fa-undo', 'float-left button-spacing');
+        $html .= TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.create_or_edit_instance'), '#', 'fas fa-plus', 'float-left button-spacing', null, $this->name.'NewInstanceButton');
 
         return $html;
     }
@@ -111,9 +111,8 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         if (!empty($sRestrictToModule)) {
             $url .= '&amp;sModuleRestriction='.urlencode($sRestrictToModule);
         }
-        $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');";
 
-        return $js;
+        return "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."');";
     }
 
     public function GetConnectedTableName()
@@ -121,10 +120,8 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         return 'cms_tpl_module_instance';
     }
 
-
     public function _GetHTMLValue()
     {
-        $returnValue = '';
         if (!empty($this->data)) {
             $tblName = 'cms_tpl_module_instance';
             $oRecord = new TCMSRecord();
@@ -133,7 +130,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
 
             $returnValue = $oRecord->GetDisplayValue();
         } else {
-            $returnValue = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected');
+            $returnValue = ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected');
         }
 
         return $returnValue;
@@ -146,7 +143,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     {
         if (!empty($this->data)) {
             $this->oModuleInstance = new TCMSTPLModuleInstance();
-            /** @var $this->oModuleInstance TCMSTPLModuleInstance */
+            /* @var $this->oModuleInstance TCMSTPLModuleInstance */
             $this->oModuleInstance->Load($this->data);
             $this->oModule = new TCMSTPLModule();
             if (false !== $this->oModuleInstance->sqlData) {
@@ -180,14 +177,14 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
      *
      * @param string $sOldName
      * @param string $sNewName
-     * @param array  $postData
+     * @param array $postData
      */
     public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
     {
         parent::ChangeFieldDefinition($sOldName, $sNewName, $postData);
 
         $sComment = '';
-        if (!is_null($postData) && is_array($postData)) {
+        if (is_array($postData)) {
             $sComment = substr($postData['translation'].': '.$postData['049_helptext'], 0, 255);
         }
         $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
@@ -196,7 +193,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         $query .= " COMMENT '".MySqlLegacySupport::getInstance()->real_escape_string($sComment)."'";
 
         MySqlLegacySupport::getInstance()->query($query);
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
 
         TCMSLogChange::WriteTransaction($aQuery);
     }
@@ -224,7 +221,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
                        DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name.'_view').'` ';
 
         MySqlLegacySupport::getInstance()->query($query);
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -237,7 +234,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
                        DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name.'_view').'` ';
 
         MySqlLegacySupport::getInstance()->query($query);
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -248,7 +245,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     {
         $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
                         ADD `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name)."_view` VARCHAR(255) NOT NULL DEFAULT 'standard'";
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
 
         TCMSLogChange::WriteTransaction($aQuery);
         MySqlLegacySupport::getInstance()->query($query);
@@ -280,10 +277,10 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
             $oTableConf = $oTdbCmsTplModuleInstance->GetTableConf();
 
             $oTableEditor = new TCMSTableEditorModuleInstance();
-            /** @var $oTableEditor TCMSTableEditorModuleInstance */
+            /* @var $oTableEditor TCMSTableEditorModuleInstance */
             $oTableEditor->Init($oTableConf->id);
 
-            $postData = array();
+            $postData = [];
             $postData['name'] = $oGlobal->GetUserData('sName');
             $postData['cms_tpl_module_id'] = $oGlobal->GetUserData('moduleID');
             $postData['template'] = $oGlobal->GetUserData('sView');
@@ -304,15 +301,15 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
             $query = "SELECT * FROM `cms_tpl_page_cms_master_pagedef_spot` WHERE `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($moduleInstanceId)."'";
             $result = MySqlLegacySupport::getInstance()->query($query);
             if (MySqlLegacySupport::getInstance()->num_rows($result) > 0) {
-                $returnVal = array();
+                $returnVal = [];
 
                 while ($row = MySqlLegacySupport::getInstance()->fetch_assoc($result)) {
                     $oTdbCmsTplPage = TdbCmsTplPage::GetNewInstance();
-                    /** @var $oTdbCmsTplPage TdbCmsTplPage */
+                    /* @var $oTdbCmsTplPage TdbCmsTplPage */
                     $oTdbCmsTplPage->Load($row['cms_tpl_page_id']);
 
                     $oRecordData = new TCMSstdClass();
-                    /** @var $oReturnData TCMSstdClass */
+                    /* @var $oReturnData TCMSstdClass */
                     $oRecordData->id = $row['cms_tpl_page_id'];
                     $oRecordData->name = $oTdbCmsTplPage->GetName();
                     $oRecordData->tree = $oTdbCmsTplPage->fieldTreePathSearchString;
@@ -325,7 +322,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
                 $oTableConf = $oTdbCmsTplModuleInstance->GetTableConf();
 
                 $oTableEditor = new TCMSTableEditorModuleInstance();
-                /** @var $oTableEditor TCMSTableEditorModuleInstance */
+                /* @var $oTableEditor TCMSTableEditorModuleInstance */
                 $oTableEditor->Init($oTableConf->id, $moduleInstanceId);
                 $oTableEditor->Delete($moduleInstanceId);
 
@@ -353,14 +350,14 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
         $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguageIsoCode);
         $migrationQueryData
-            ->setFields(array(
+            ->setFields([
                 $this->name.'_view' => $sView,
-            ))
-            ->setWhereEquals(array(
+            ])
+            ->setWhereEquals([
                 'id' => $this->recordId,
-            ))
+            ])
         ;
-        $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE));
+        $aQuery = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -397,11 +394,13 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         return $sCode;
     }
 
-    /**
-     * @return FieldTranslationUtil
-     */
-    private function getFieldTranslationUtil()
+    private function getFieldTranslationUtil(): FieldTranslationUtil
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
+    }
+
+    private function getSecurityHelperAccess(): SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
     }
 }

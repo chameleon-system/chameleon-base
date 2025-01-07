@@ -821,9 +821,9 @@ class TCMSRecordList extends TIterator
             }
 
             return implode(', ', $idList);
-        } else {
-            return $idList;
         }
+
+        return $idList;
     }
 
     /**

@@ -1676,11 +1676,6 @@ class TCMSField implements TCMSFieldVisitableInterface
         return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
-    private function getGlobal(): TGlobal
-    {
-        return ServiceLocator::get('chameleon_system_core.global');
-    }
-
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');

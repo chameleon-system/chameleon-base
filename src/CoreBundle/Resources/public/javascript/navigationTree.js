@@ -247,12 +247,34 @@ function updateCurrentPageOrPortalSuccess(nodeId, responseMessage) {
 }
 
 function chooseTreeNode(fieldName, newId) {
-    parent.$('#' + fieldName).val(newId);
+    const fieldElement = parent.document.getElementById(fieldName);
+    if (fieldElement) {
+        fieldElement.value = newId;
+    }
+
+    // display new path
     let newPath = "";
     if (newId !== "") {
-        newPath = $('#' + fieldName + '_tmp_path_' + newId).html();
+        const tmpPathElement = document.getElementById(`${fieldName}_tmp_path_${newId}`);
+        if (tmpPathElement) {
+            newPath = tmpPathElement.innerHTML;
+        }
     }
-    parent.$('#' + fieldName + '_path').html(newPath);
+
+    const pathElement = parent.document.getElementById(`${fieldName}_path`);
+    if (pathElement) {
+        pathElement.innerHTML = newPath;
+    }
+
+    // update onclick attribute in assign button
+    const assignButton = parent.document.getElementById(`${fieldName}_btn-assign`);
+    if (assignButton) {
+        const onclickValue = assignButton.getAttribute('onclick');
+        if (onclickValue) {
+            const updatedOnClick = onclickValue.replace(/(&id=)[^&]*/, newId ? `$1${newId}` : '');
+            assignButton.setAttribute('onclick', updatedOnClick);
+        }
+    }
 }
 
 function updateSelectionWysiwyg(selectedItem) {
@@ -504,6 +526,7 @@ function disconnectPageSuccess(nodeId, responseMessage) {
 }
 
 function updateTreeBreadcrumbs() {
+    debugger;
     const fieldName = navTreeDataContainer.data('field-name');
     let newPath = "";
     const selectedItemIds = $("#navigationTreeContainer-checkboxes").jstree('get_selected');

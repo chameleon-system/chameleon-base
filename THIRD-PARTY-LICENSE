@@ -42,9 +42,9 @@ MIT License
 - CoreUI - https://http://coreui.io
 - Cropper.js - https://github.com/fengyuanchen/cropperjs
 - moment.js - https://github.com/moment/moment/
-- SocialSharePrivacy - http://panzi.github.io/SocialSharePrivacy/
 - Tempus Dominus - https://github.com/tempusdominus/bootstrap-4/
-- Thickbox modified by ESONO AG - http://codylindley.com/thickbox/
+- filerobot-image-editor https://github.com/scaleflex/filerobot-image-editor/blob/master/LICENSE
+- chart.js - https://github.com/chartjs/Chart.js/blob/master/LICENSE.md
 
 - Font Awesome - https://fontawesome.com/
 - /src/CoreBundle/Resources/public/themes/standard/images/icons/user.png - https://github.com/material-components/material-components-web/
@@ -56,7 +56,6 @@ Apache License 2.0
 - Bootstrap Colorpicker - http://mjolnic.github.io/bootstrap-colorpicker/
 - Amazon Payments API - https://github.com/amzn/login-and-pay-with-amazon-sdk-php
 - Instaclick PHP-Webdriver - https://github.com/instaclick/php-webdriver
-- MarkerWithLabel for Google Maps API V3 - https://github.com/googlemaps/v3-utility-library
 - pnotify - http://sciactive.com/pnotify/
 
 
@@ -89,26 +88,11 @@ LGPLv2.1
 
 - HTMLPurifier - http://htmlpurifier.org/
 - PHPMailer - https://github.com/PHPMailer/PHPMailer
-- IDNA Convert - https://github.com/phpWhois/idna-convert
-
-
-Creative Commons Attribution 2.5 License
-----------------------------------------
-(see the end of this file for the license text)
-- Silk Icons http://famfamfam.com/lab/icons/silk/
-
 
 Free
 ----
 
-- pngForIE - http://webfx.eae.net
 - monofont - http://www.larabiefonts.com
-
-
-CCO
----
-
-- Animated Spinner from loading.io - https://loading.io/
 
 
 

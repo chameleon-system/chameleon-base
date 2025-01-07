@@ -15,6 +15,8 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 
 - `Deprecated` tag in service xml files now needs to include a `package` and `version` attribute
 - Routes looking like `FoobarController:exampleAction` are no longer supported. Use `FoobarController::exampleAction` instead.
+  Search for `_controller:` and `_controller :` in your code and fix missing double colons found in controller service calls.
+  You also made need the Tag: `<tag name="controller.service_arguments" />` for your controllers.
 - `InputFilterUtil` has two new methods: `getFilteredGetInputArray` and `getFilteredPostInputArray`. Use them if you expect the value to be an array instead of a scalar value.
   - This is due to a change in symfony's ParameterBag, which does not support arrays on its `query.get` and `request.get` methods anymore. You now have to use the `all` method for expected arrays.
   - If you are using the `InputFilterUtil` class, there is currently a fallback so the project won't crash immediately. However, this fallback will be removed in the future.
@@ -88,18 +90,25 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSUser::$oAccessManager` removed.
 - `\TCMSUser::_LoadAccessManager` removed.
 - `\TAccessManager` removed.
+  rights are checked via the `SecurityHelperAccess` service now. For example,
+  change `$oAccessManager->PermitFunction('cms_template_module_edit')` to `$securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')`
+  so add `CMS_RIGHT_` in front of the old right name from the datbase and make it uppercase.
 - `\TAccessManagerUser` removed.
 - `\TAccessManagerEditLanguages` removed.
 - `\TAccessManagerExtraFunctions` removed.
 - `\TAccessManagerGroups` removed.
 - `\TAccessManagerPermissions` removed.
 - `\TAccessManagerPortals` removed.
-- `\TAccessManagerRoles` removed. @todo remove in article-right bundle
+- `\TAccessManagerRoles` removed.  
+  Use `$user = ServiceLocator::get(SecurityHelperAccess::class)->getUser()
+  $roles = $user->getRoles();
+  $roleIds = array_keys($roles);
+  $roleIdsEscaped = implode(',', array_map(fn($id) => "'".addslashes($id)."'", $roleIds));` instead.
 - `\MTLoginEndPoint::Logout` removed (logout works by redirecting to the logout url)
 - `\TCMSUser::Logout` removed
 - `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
 - `\TCMSTableEditorCMSUser::SwitchToUser` removed - switch user by using Symfony impersonate.
-- `\TCMSUser::CMSUserDefined` removed - use  `ServiceLocator::get(SecurityHelperAccess::class)->isGranted(\ChameleonSystem\SecurityBundle\CmsUser\UserRoles::CMS_USER)` instead
+- `\TCMSUser::CMSUserDefined` removed - use  `ServiceLocator::get(SecurityHelperAccess::class)->isGranted(ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants::CMS_USER)` instead
 - `\TCMSUser::ValidSessionKey` removed
 - `\TCMSUser::GetUserSessionKey` removed
 - `\ChameleonSystem\CoreBundle\Service\LanguageServiceInterface::getActiveEditLanguage` removed. Use `\ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface::getCurrentEditLanguageIso6391` 
@@ -183,9 +192,3 @@ The functionality "annotation support" was removed. This file was calling a
 deprecated function `AnnotationRegistry::registerLoader()`. If needed annotations can still be configured and used
 directly in a project.
 However with php > 8 you should use attributes instead.
-
-# Newly Deprecated Code Entities
-# Removed Code Entities
-
-The code entities in this list were marked as deprecated in previous releases and have now been removed.
-

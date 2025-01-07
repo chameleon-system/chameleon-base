@@ -1,8 +1,21 @@
+{# @var tableName string #}
+{# @var language string #}
+{# @var fields array<string, mixed> #}
+{# @var whereEquals \Doctrine\Common\Collections\Expr\Comparison[] #}
+{# @var whereExpressions string[] #}
+{# @var comments array<string, string|true> #}
+{# @var operationType string #}
+
 $data = TCMSLogChange::createMigrationQueryData('{{ tableName }}', '{{ language }}')
 {% if fields|length > 0 %}
   ->setFields([
   {% for fieldName, value in fields %}
+    {% set comment = comments[fieldName] -%}
+
+    {% if comment is same as(true) %}// {% endif -%}
     '{{ fieldName }}' => {{ value|raw }},
+    {%- if comment and comment is not same as(true) %} // {{ comment|raw }}{% endif %}
+
   {% endfor %}
 ])
 {% endif -%}
