@@ -410,10 +410,8 @@ class MTHeader extends TCMSModelBase
 
         $fileManager = $this->getFileManager();
         $files = array_values(preg_grep('/^((?!.gitkeep).)*$/', glob($dir.'*.*')));
-        if ($files) {
-            foreach ($files as $file) {
-                $fileManager->unlink($file);
-            }
+        if ([] !== $files) {
+            $fileManager->remove($files);
         }
     }
 
@@ -449,7 +447,7 @@ class MTHeader extends TCMSModelBase
         $fileManager->rename($cacheDir, $oldCache);
         $fileManager->mkdir($cacheDir);
         $fileManager->mkdir($cacheDir.'/raw');
-        $fileManager->remove($oldCache, true);
+        $fileManager->remove($oldCache);
     }
 
     /**
@@ -510,7 +508,7 @@ class MTHeader extends TCMSModelBase
         if ('.gitkeep' === basename($path)) {
             return;
         }
-        $this->getFileManager()->unlink($path);
+        $this->getFileManager()->remove($path);
     }
 
     /**
