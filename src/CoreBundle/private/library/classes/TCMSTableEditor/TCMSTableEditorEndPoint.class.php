@@ -1624,9 +1624,9 @@ class TCMSTableEditorEndPoint
             }
         }
 
-        if ($isFirst || [] === $dataForChangeRecorder) {
-            return false;
-        } // no changes made... no fields to write
+        if (true === $isFirst || [] === $dataForChangeRecorder) {
+            return true; // no changes made, but is a valid operation
+        }
 
         $databaseChanged = false;
         $error = '';
