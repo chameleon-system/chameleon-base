@@ -3,7 +3,6 @@
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Module;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\DashboardModulesProvider;
-use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\RenderedDashboardModule;
 
 // Dashboard is the main module that renders all dashboard modules inside the dashboard page in the backend
 final class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
@@ -19,14 +18,22 @@ final class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         $oVisitor->SetMappedValue('greeting', 'Hello World from Dashboard');
-        $oVisitor->SetMappedValue('availableModules', $this->provider->getAllModules());
+        $oVisitor->SetMappedValue('widgetCollections', $this->provider->getWidgetCollections());
+    }
 
-        $enabledModules = $this->provider->getEnabledModules();
-        $renderedModules = [];
-        foreach ($enabledModules as $module) {
-            $renderedModules[] = new RenderedDashboardModule(content: $module->render());
+    public function GetHtmlFooterIncludes(): array
+    {
+        $includes = [];
+        $widgetCollections = $this->provider->getWidgetCollections();
+        foreach($widgetCollections as $widgetCollection) {
+            foreach ($widgetCollection as $widgetData) {
+                $footerIncludesFromWidget = $widgetData['widget']->getFooterIncludes();
+                if (count($footerIncludesFromWidget) > 0) {
+                    $includes = array_merge($includes, $footerIncludesFromWidget);
+                }
+            }
         }
 
-        $oVisitor->SetMappedValue('renderedModules', $renderedModules);
+        return $includes;
     }
 }

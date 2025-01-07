@@ -14,3 +14,16 @@ $data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'en')
     ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_menu_custom_item', 'en')
+    ->setFields(
+        array(
+            'name' => 'Dashboard',
+        )
+    )
+    ->setWhereEquals(
+        array(
+            'id' => $dashboardMenuItem,
+        )
+    );
+TCMSLogChange::update(__LINE__, $data);

@@ -2,45 +2,42 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard;
 
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface;
+
 final class DashboardModulesProvider
 {
     /**
     * Array<DashboardModuleInterface>
     */
-    private array $modules = [];
+    private array $widgets = [];
 
-    // addDashboardModule is used by the compiler pass to add all tagged dashboard modules to this provider
-    public function addDashboardModule(DashboardModuleInterface $module, string $id): void
+    /**
+     * Is used by the compiler pass to add all tagged dashboard widgets to this provider.
+     **/
+    public function addDashboardWidget(DashboardWidgetInterface $widget, string $id, string $collection = 'default', int $priority = 0): void
     {
-        $this->modules[$id] = $module;
+        $this->widgets[$collection][] = [
+            'id' => $id,
+            'widget' => $widget,
+            'priority' => $priority,
+        ];
     }
 
     /**
-    * @return Array<ModuleDescription>
+    * @return Array<DashboardWidgetInterface>
     */
-    public function getAllModules(): array
+    public function getWidgetCollections(string $collection = 'default'): array
     {
-        $descriptions = [];
-        foreach ($this->modules as $id => $service) {
-            $descriptions[] = new ModuleDescription(
-                id: $id,
-                description: $service->description(),
-                name: $service->name()
-            );
+        return $this->widgets;
+
+        /*if (!isset($this->widgets[$collection])) {
+            return [];
         }
 
-        return $descriptions;
-    }
+        usort($this->widgets[$collection], function ($a, $b) {
+            return $b['priority'] <=> $a['priority'];
+        });
 
-    /**
-    * @return Array<DashboardModuleInterface>
-    */
-    public function getEnabledModules(): array
-    {
-        // TODO: get the configuration from somewhere
-        // usually we want a list of ids and positions here
-        // for now we just return all available modules for demo purposes
-
-        return $this->modules;
+        return array_column($this->widgets[$collection], 'widget');*/
     }
 }

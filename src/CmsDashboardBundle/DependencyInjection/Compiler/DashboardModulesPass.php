@@ -10,14 +10,39 @@ class DashboardModulesPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        $moduleServiceDefinition = $container->getDefinition('chameleon_system_cms_dashboard.modules_provider_service');
-        $moduleServiceIds = array_keys($container->findTaggedServiceIds('chameleon_system.dashboard_module'));
-        $services = [];
+        if (!$container->hasDefinition('chameleon_system_cms_dashboard.modules_provider_service')) {
+            return;
+        }
 
-        foreach ($moduleServiceIds as $moduleServiceId) {
-            $moduleDefinition = $container->getDefinition($moduleServiceId);
-            $moduleServiceDefinition->addMethodCall('addDashboardModule', [new Reference($moduleServiceId), $moduleServiceId]);
-            // $services[$moduleServiceId] = new Reference($moduleServiceId);
+        $moduleServiceDefinition = $container->getDefinition('chameleon_system_cms_dashboard.modules_provider_service');
+        $taggedServices = $container->findTaggedServiceIds('chameleon_system.dashboard_widget');
+
+        $widgets = [];
+
+        foreach ($taggedServices as $serviceId => $tags) {
+            foreach ($tags as $attributes) {
+                $collection = $attributes['collection'] ?? 'default';
+                $priority = $attributes['priority'] ?? 0;
+
+                $widgets[] = [
+                    'serviceId' => $serviceId,
+                    'collection' => $collection,
+                    'priority' => (int) $priority,
+                ];
+            }
+        }
+
+        // sort widgets by collection und priority
+        usort($widgets, function ($a, $b) {
+            return $b['priority'] <=> $a['priority'];
+        });
+
+        // add widgets to dashboard service
+        foreach ($widgets as $widget) {
+            $moduleServiceDefinition->addMethodCall(
+                'addDashboardWidget',
+                [new Reference($widget['serviceId']), $widget['serviceId'], $widget['collection'], $widget['priority']]
+            );
         }
     }
 }
