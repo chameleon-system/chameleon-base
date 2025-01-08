@@ -20,11 +20,13 @@
 
         <service id="chameleon_system_cms_dashboard.widget.example" class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardExampleWidget">
             <argument id="chameleon_system_cms_cache.cache" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="20" />
         </service>
 
         <service id="chameleon_system_cms_dashboard.widget.example_second" class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardExampleSecondWidget">
             <argument id="chameleon_system_cms_cache.cache" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="analytics" priority="15" />
         </service>
     </services>

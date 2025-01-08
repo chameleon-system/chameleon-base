@@ -14,11 +14,8 @@ use esono\pkgCmsCache\CacheInterface;
 
 abstract class DashboardWidget implements DashboardWidgetInterface
 {
-    private CacheInterface $cache;
-
-    public function __construct(CacheInterface $cache)
+    public function __construct(private readonly CacheInterface $cache)
     {
-        $this->cache = $cache;
     }
 
     abstract public function getTitle(): string;
@@ -47,23 +44,34 @@ abstract class DashboardWidget implements DashboardWidgetInterface
         $body = $this->generateBodyHtml();
 
         $this->cache->set($cacheKey, $body, [], $this->getCacheTimeToLiveInSec());
+        $this->cache->set($this->getCacheTimestampKey(), time(), [], $this->getCacheTimeToLiveInSec());
 
         return $body;
     }
 
     abstract protected function generateBodyHtml(): string;
 
-    public function getFooterHtml(): string
-    {
-        return '';
-    }
-
     protected function getCacheKey(): string
     {
         return md5('widget_body_'.static::class);
     }
 
+    protected function getCacheTimestampKey(): string
+    {
+        return md5('widget_body_timestamp_'.static::class);
+    }
+
+    protected function getCacheCreationTime(): ?int
+    {
+        return $this->cache->get($this->getCacheTimestampKey());
+    }
+
     public function getColorCssClass(): string
+    {
+        return '';
+    }
+
+    public function getFooterHtml(): string
     {
         return '';
     }

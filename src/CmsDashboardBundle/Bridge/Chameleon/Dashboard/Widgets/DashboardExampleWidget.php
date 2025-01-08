@@ -11,12 +11,21 @@
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use ChameleonSystem\CoreBundle\Translation\ChameleonTranslator;
+use esono\pkgCmsCache\CacheInterface;
 
 final class DashboardExampleWidget extends DashboardWidget
 {
+    public function __construct(
+        private readonly CacheInterface $cache,
+        private readonly ChameleonTranslator $translator)
+    {
+        parent::__construct($cache);
+    }
+
     public function getTitle(): string
     {
-        return 'Example Module Title';
+        return $this->translator->trans('Umsatz ohne Versand');
     }
 
     public function getDropdownItems(): array
@@ -127,7 +136,14 @@ final class DashboardExampleWidget extends DashboardWidget
 
     public function getFooterHtml(): string
     {
-        return "<div class='px-3 py-2'>Optional Footer Text</div>";
+        $cacheCreationTime = $this->getCacheCreationTime();
+        if (null === $cacheCreationTime) {
+            return '';
+        }
+
+        $formattedTime = date('Y-m-d H:i:s', $cacheCreationTime);
+
+        return "<div class='px-3 py-2'>letzte Aktualisierung: ".$formattedTime."</div>";
     }
 
     public function getFooterIncludes(): array
