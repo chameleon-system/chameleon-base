@@ -1,5 +1,12 @@
 {# @var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget #}
 
+<div class="card mb-4">
+    <div class="card-body">
+        <h1 class="display-5">{{ 'chameleon_system_cms_dashboard.dashboard'|trans }}</h1>
+        <p class="lead">{{ cmsOwner }}</p>
+    </div>
+</div>
+
 {% for widgetCollectionName, widgetCollection in widgetCollections %}
     <div class="row">
         {% set widgetCount = widgetCollection|length %}
@@ -45,4 +52,3 @@
         {% endfor %}
     </div>
 {% endfor %}
-

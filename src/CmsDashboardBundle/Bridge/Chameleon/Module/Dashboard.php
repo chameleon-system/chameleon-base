@@ -12,8 +12,7 @@ namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Module;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\DashboardModulesProvider;
 
-// Dashboard is the main module that renders all dashboard modules inside the dashboard page in the backend
-final class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
+class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
 {
     public function __construct(private readonly DashboardModulesProvider $provider)
     {
@@ -25,7 +24,7 @@ final class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         $bCachingEnabled,
         \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
-        $oVisitor->SetMappedValue('greeting', 'Hello World from Dashboard');
+        $oVisitor->SetMappedValue('cmsOwner', $this->getOwnerName());
         $oVisitor->SetMappedValue('widgetCollections', $this->provider->getWidgetCollections());
     }
 
@@ -43,5 +42,10 @@ final class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         return $includes;
+    }
+
+    protected function getOwnerName(): string
+    {
+        return \TdbCmsConfig::GetNewInstance('1')->fieldName;
     }
 }
