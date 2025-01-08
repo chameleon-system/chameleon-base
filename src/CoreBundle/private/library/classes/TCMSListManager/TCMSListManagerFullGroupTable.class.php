@@ -265,7 +265,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
             if ('cms_field_conf' === $this->oTableConf->fieldName) { // CMS table fields ("Record fields")
                 if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
-                    $sFormName = 'cmstablelistObj' . $this->oTableConf->sqlData['cmsident'];
+                    $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'add_selected_as_list_fields';
                     $oMenuItem->setTitle(ServiceLocator::get('translator')->trans('chameleon_system_core.list.add_selected_as_list_fields'));
@@ -277,7 +277,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
                 }
 
                 if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
-                    $sFormName = 'cmstablelistObj' . $this->oTableConf->sqlData['cmsident'];
+                    $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'add_selected_as_sort_fields';
                     $oMenuItem->setTitle(ServiceLocator::get('translator')->trans('chameleon_system_core.list.add_selected_as_sort_fields'));
@@ -638,7 +638,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         }
         $this->tableObj->AddGroupField([$list_group_field_column => $groupField], 'left', null, null, $columnCount);
         $this->tableObj->showGroupSelectorText = $this->oTableConf->fieldListGroupFieldHeader;
-        $this->tableObj->showAllGroupsText = '['. ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
+        $this->tableObj->showAllGroupsText = '['.ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
         $tmpArray = [$list_group_field_column => 'ASC'];
         $this->tableObj->orderList = array_merge($tmpArray, $this->tableObj->orderList);
     }

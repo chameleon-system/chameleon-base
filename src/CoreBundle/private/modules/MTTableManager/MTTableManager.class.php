@@ -10,14 +10,14 @@
  */
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
-use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Exception as DBALException;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -46,7 +46,7 @@ class MTTableManager extends TCMSModelBase
      *
      * @var array
      */
-    protected $aMessages = array();
+    protected $aMessages = [];
 
     /**
      * Called before any external functions get called, but after the constructor.
@@ -254,6 +254,7 @@ class MTTableManager extends TCMSModelBase
     /**
      * @param bool $intoListFields true if target is <i>list fields</i>, false if <i>sort fields</i>
      * @param string[] $fieldIds
+     *
      * @return bool true if some fields were actually inserted; false if none
      *
      * @throws DBALException
@@ -368,6 +369,7 @@ class MTTableManager extends TCMSModelBase
 
     /**
      * current a table's max "position" field value or zero if no fields yet.
+     *
      * @throws DBALException
      */
     protected function getListTableMaxPosition(string $tableName, string $id): int
@@ -418,7 +420,7 @@ class MTTableManager extends TCMSModelBase
         // redirect back to list
         if ($isInIFrame && 'true' == $isInIFrame) {
             // get redirect parameter
-            $parameter = array();
+            $parameter = [];
             $parameter['_isiniframe'] = $isInIFrame;
             $parameter['id'] = $this->global->GetUserData('id');
             $parameter['pagedef'] = $this->global->GetUserData('pagedef');
@@ -480,10 +482,10 @@ class MTTableManager extends TCMSModelBase
             $query .= " WHERE $quotedRestrictionField = $quotedRestrictionValue";
         }
 
-        $parameters = array(
+        $parameters = [
             'tableid' => $tableId,
             'pagedef' => 'tableeditor',
-        );
+        ];
 
         if ('true' === $inputFilterUtil->getFilteredInput('bOnlyOneRecord')) {
             $parameters['bOnlyOneRecord'] = 'true';
@@ -494,7 +496,7 @@ class MTTableManager extends TCMSModelBase
         }
 
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->sqlData['name']).'List';
-        $oRecordList = call_user_func(array($sClassName, 'GetList'), $query, null, false, true, true);
+        $oRecordList = call_user_func([$sClassName, 'GetList'], $query, null, false, true, true);
 
         if ($oRecordList->Length() > 0) {
             // If record exists, redirect to its editing view.
@@ -521,7 +523,7 @@ class MTTableManager extends TCMSModelBase
 
         $inputFilterUtil = $this->getInputFilterUtil();
 
-        $params = array();
+        $params = [];
         $params['pagedef'] = $inputFilterUtil->getFilteredInput('pagedef');
         $params['id'] = $inputFilterUtil->getFilteredInput('id');
 
@@ -547,10 +549,10 @@ class MTTableManager extends TCMSModelBase
 
     private function getIconCssClassForTable(string $tableId): string
     {
-        $menuItem = \TdbCmsMenuItem::GetNewInstance();
-        if (false === $menuItem->LoadFromFields(array(
+        $menuItem = TdbCmsMenuItem::GetNewInstance();
+        if (false === $menuItem->LoadFromFields([
             'target' => $tableId,
-            'target_table_name' => 'cms_tbl_conf', )
+            'target_table_name' => 'cms_tbl_conf', ]
         )) {
             return '';
         }
@@ -595,9 +597,9 @@ class MTTableManager extends TCMSModelBase
         $autoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->fieldName);
 
         /** @var $recordList TCMSRecordList */
-        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $this->getAutocompleteListQuery());
+        $recordList = call_user_func([$autoClassName.'List', 'GetList'], $this->getAutocompleteListQuery());
 
-        $returnVal = array();
+        $returnVal = [];
 
         /** @var $record TCMSRecord */
         while ($record = $recordList->Next()) {
@@ -630,8 +632,6 @@ class MTTableManager extends TCMSModelBase
 
     /**
      * Generates the record list for the ajax autocomplete for search in table editor and record lists.
-     *
-     * @return array
      */
     protected function getAutocompleteRecords(): array
     {
@@ -641,7 +641,7 @@ class MTTableManager extends TCMSModelBase
 
         $listQuery = $this->getAutocompleteListQuery();
         /** @var $recordList TCMSRecordList */
-        $recordList = call_user_func(array($autoClassName.'List', 'GetList'), $listQuery);
+        $recordList = call_user_func([$autoClassName.'List', 'GetList'], $listQuery);
 
         $returnVal = [];
 
@@ -681,7 +681,7 @@ class MTTableManager extends TCMSModelBase
 
         $nameColumn = $this->oTableConf->GetNameColumn();
         $autoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->fieldName);
-        $fieldIsTranslatable = call_user_func(array($autoClassName, 'CMSFieldIsTranslated'), $nameColumn);
+        $fieldIsTranslatable = call_user_func([$autoClassName, 'CMSFieldIsTranslated'], $nameColumn);
 
         if ($fieldIsTranslatable) {
             /** @var BackendSessionInterface $backendSession */
@@ -754,7 +754,7 @@ class MTTableManager extends TCMSModelBase
             $includeLines[] = $messageHandlerJS;
         }
 
-        $tableListIncludeLines = array();
+        $tableListIncludeLines = [];
         if (!is_null($this->oTableList)) {
             $tableListIncludeLines = $this->oTableList->GetHtmlHeadIncludes();
         }
@@ -779,7 +779,7 @@ class MTTableManager extends TCMSModelBase
      */
     protected function LoadMessages()
     {
-        $constructedMessages = array();
+        $constructedMessages = [];
         if (is_array($this->aMessages) && count($this->aMessages) > 0) {
             $constructedMessages = $this->aMessages;
         }
@@ -802,10 +802,10 @@ class MTTableManager extends TCMSModelBase
                     $messageType = 'MESSAGE';
                 }
 
-                $messageConstruct = array(
+                $messageConstruct = [
                     'sMessage' => $messageString,
                     'sMessageType' => $messageType,
-                );
+                ];
 
                 if (is_array($params) && array_key_exists('sFieldName', $params)) {
                     $messageConstruct['sMessageRefersToField'] = $params['sFieldName'];
@@ -886,6 +886,7 @@ class MTTableManager extends TCMSModelBase
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
     }
+
     protected function getBackendSession(): BackendSessionInterface
     {
         return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
