@@ -127,6 +127,11 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $_SESSION['_listObjCache'][$cacheKey] = base64_encode($tmp);
     }
 
+    public static function clearTableCache(): void
+    {
+        unset($_SESSION['_listObjCache']);
+    }
+
     private function isTableCacheChangeRequest(): bool
     {
         $inputFilter = $this->getInputFilterUtil();
@@ -267,7 +272,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
                     $oMenuItem->sIcon = 'fas fa-list-alt'; // fas fa-sort
                     $oMenuItem->setButtonStyle('btn-info');
-                    $oMenuItem->sOnClick = "AddSelectedAsListFields('{$sFormName}');";
+                    $oMenuItem->sOnClick = "addSelectedAsListFields('{$sFormName}');";
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
 
@@ -279,7 +284,7 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
 
                     $oMenuItem->sIcon = 'fas fa-sort';
                     $oMenuItem->setButtonStyle('btn-info');
-                    $oMenuItem->sOnClick = "AddSelectedAsSortFields('{$sFormName}');";
+                    $oMenuItem->sOnClick = "addSelectedAsSortFields('{$sFormName}');";
                     $this->oMenuItems->AddItem($oMenuItem);
                 }
             }

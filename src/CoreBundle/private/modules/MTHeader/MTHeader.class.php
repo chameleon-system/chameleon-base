@@ -369,6 +369,7 @@ class MTHeader extends TCMSModelBase
     public function ClearCache()
     {
         $this->getCache()->clearAll();
+        TCMSListManagerFullGroupTable::clearTableCache();
 
         $translator = $this->getTranslator();
         // clear compiled less css and resource collection files
