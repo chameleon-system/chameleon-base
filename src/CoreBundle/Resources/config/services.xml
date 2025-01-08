@@ -440,6 +440,11 @@
             <tag name="console.command" />
         </service>
 
+        <service id="chameleon_system_core.command.clear_memcache_command" class="ChameleonSystem\CoreBundle\Command\ClearMemcacheCommand">
+            <argument type="service" id="chameleon_system_cms_cache.cache" />
+            <tag name="console.command"/>
+        </service>
+
         <service id="chameleon_system_core.tpl_page_controller" class="%chameleon_system_core.tpl_page_controller.class%" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.language_service" />
