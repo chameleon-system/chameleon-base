@@ -66,9 +66,9 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
         if (true === $this->cache->isActive()) {
             $key = $this->getUserCacheKey($backendUser);
 
-            $this->history = $this->cache->get($key);
-            if (null !== $this->history) {
-                // callback is locally not assigned yet
+            $historyData = $this->cache->get($key);
+            if (null !== $historyData) {
+                $this->history = \TCMSURLHistory::fromArray($historyData);
                 $this->setOnChangeCallback();
 
                 return $this->history;
@@ -130,6 +130,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
         }
 
         $key ??= $this->getUserCacheKey($backendUser);
-        $this->cache->set($key, $this->history, ['cms_user' => $backendUser->id], self::USER_BREADCRUMB_CACHE_TTL);
+        $historyData = $this->history->toArray();
+        $this->cache->set($key, $historyData, ['cms_user' => $backendUser->id], self::USER_BREADCRUMB_CACHE_TTL);
     }
 }
