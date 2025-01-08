@@ -28,7 +28,7 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
 
-        $oVisitor->SetMappedValue('loggedInUserName', $this->getLoggenInUserName());
+        $oVisitor->SetMappedValue('loggedInUserName', $this->getLoggedInUserName());
         $oVisitor->SetMappedValue('cmsOwner', $this->getOwnerName());
         $oVisitor->SetMappedValue('widgetCollections', $this->provider->getWidgetCollections());
     }
@@ -54,7 +54,7 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         return \TdbCmsConfig::GetNewInstance('1')->fieldName;
     }
 
-    private function getLoggenInUserName(): string
+    private function getLoggedInUserName(): string
     {
         $user = $this->securityHelperAccess->getUser();
 
