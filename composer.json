@@ -20,7 +20,7 @@
         "ext-tidy": "*",
         "ext-memcached": "*",
         "bassjobsen/bootstrap-3-typeahead": "~4.0",
-        "ckeditor/ckeditor": "4.6.2",
+        "ckeditor/ckeditor": "4.25.0",
         "dmhendricks/file-icon-vectors": "~1.0",
         "doctrine/annotations": "^1.13",
         "doctrine/dbal": "^2",
