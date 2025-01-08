@@ -60,7 +60,7 @@ abstract class DashboardWidget implements DashboardWidgetInterface
 
     protected function getCacheKey(): string
     {
-        return 'widget_body_'.static::class;
+        return md5('widget_body_'.static::class);
     }
 
     public function getColorCssClass(): string

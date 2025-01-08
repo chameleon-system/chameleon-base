@@ -7,6 +7,7 @@
         <service id="chameleon_system_cms_dashboard.backend_module.dashboard" class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Module\Dashboard" shared="false">
             <tag name="chameleon_system.module" />
             <argument type="service" id="chameleon_system_cms_dashboard.modules_provider_service" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
         </service>
 
         <service id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.dashboard_widget"

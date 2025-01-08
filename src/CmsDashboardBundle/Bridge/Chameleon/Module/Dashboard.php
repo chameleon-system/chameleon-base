@@ -11,10 +11,13 @@
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Module;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\DashboardModulesProvider;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
 {
-    public function __construct(private readonly DashboardModulesProvider $provider)
+    public function __construct(
+        private readonly DashboardModulesProvider $provider,
+        private readonly SecurityHelperAccess $securityHelperAccess)
     {
         parent::__construct();
     }
@@ -24,6 +27,8 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         $bCachingEnabled,
         \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
+
+        $oVisitor->SetMappedValue('loggedInUserName', $this->getLoggenInUserName());
         $oVisitor->SetMappedValue('cmsOwner', $this->getOwnerName());
         $oVisitor->SetMappedValue('widgetCollections', $this->provider->getWidgetCollections());
     }
@@ -47,5 +52,23 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
     protected function getOwnerName(): string
     {
         return \TdbCmsConfig::GetNewInstance('1')->fieldName;
+    }
+
+    private function getLoggenInUserName(): string
+    {
+        $user = $this->securityHelperAccess->getUser();
+
+        if (null === $user) {
+            return '';
+        }
+
+        $name = $user->getFirstname();
+        if ('' !== $name) {
+            $name .= ' ';
+        }
+
+        $name .= $user->getLastname();
+
+        return $name;
     }
 }

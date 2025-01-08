@@ -6,6 +6,10 @@
                 <source>chameleon_system_cms_dashboard.dashboard</source>
                 <target>Chameleon Dashboard</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.for">
+                <source>chameleon_system_cms_dashboard.for</source>
+                <target>für</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
