@@ -14,7 +14,7 @@ use esono\pkgCmsCache\CacheInterface;
 
 abstract class DashboardWidget implements DashboardWidgetInterface
 {
-    public const DEFAULT_TIMEFRAME_FOR_STATS = '-30 days';
+    public const DEFAULT_TIMEFRAME_FOR_STATS = '-90 days';
 
     public function __construct(private readonly CacheInterface $cache)
     {
