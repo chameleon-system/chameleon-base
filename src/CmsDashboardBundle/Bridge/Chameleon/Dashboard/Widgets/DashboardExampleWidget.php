@@ -30,10 +30,6 @@ final class DashboardExampleWidget extends DashboardWidget
     protected function generateBodyHtml(): string
     {
         return "<div>
-                <div class=\"p-3\">
-                  <h4 class=\"card-title mb-0\">Traffic</h4>
-                  <div class=\"card-text\">January - July 2024</div>
-                </div>
 <div class='bg-white'>
 <canvas id=\"chart1\"></canvas>
 </div>
@@ -131,7 +127,7 @@ final class DashboardExampleWidget extends DashboardWidget
 
     public function getFooterHtml(): string
     {
-        return "Optional Footer Text";
+        return "<div class='px-3 py-2'>Optional Footer Text</div>";
     }
 
     public function getFooterIncludes(): array

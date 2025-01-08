@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Module;
 
@@ -25,7 +33,7 @@ final class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
     {
         $includes = [];
         $widgetCollections = $this->provider->getWidgetCollections();
-        foreach($widgetCollections as $widgetCollection) {
+        foreach ($widgetCollections as $widgetCollection) {
             foreach ($widgetCollection as $widgetData) {
                 $footerIncludesFromWidget = $widgetData['widget']->getFooterIncludes();
                 if (count($footerIncludesFromWidget) > 0) {

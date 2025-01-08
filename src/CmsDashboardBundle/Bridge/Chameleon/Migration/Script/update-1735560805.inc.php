@@ -10,5 +10,5 @@ $connection = TCMSLogChange::getDatabaseConnection();
 $backendThemeId = $connection->fetchOne('SELECT `pkg_cms_theme_id` FROM `cms_config`');
 
 if (false !== $backendThemeId) {
-    TCMSLogChange::addToSnippetChain('@ChameleonSystemCmsDashboardBundle/Resources/views','@ChameleonSystemCoreBundle/Resources/views', [$backendThemeId]);
+    TCMSLogChange::addToSnippetChain('@ChameleonSystemCmsDashboardBundle/Resources/views', '@ChameleonSystemCoreBundle/Resources/views', [$backendThemeId]);
 }

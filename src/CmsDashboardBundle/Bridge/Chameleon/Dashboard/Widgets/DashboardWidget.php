@@ -14,7 +14,6 @@ use esono\pkgCmsCache\CacheInterface;
 
 abstract class DashboardWidget implements DashboardWidgetInterface
 {
-
     private CacheInterface $cache;
 
     public function __construct(CacheInterface $cache)
@@ -61,7 +60,7 @@ abstract class DashboardWidget implements DashboardWidgetInterface
 
     protected function getCacheKey(): string
     {
-        return 'widget_body_' . static::class;
+        return 'widget_body_'.static::class;
     }
 
     public function getColorCssClass(): string

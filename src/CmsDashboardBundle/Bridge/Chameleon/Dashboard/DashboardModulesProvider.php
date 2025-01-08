@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the Chameleon System (https://www.chameleonsystem.com).
+ *
+ * (c) ESONO AG (https://www.esono.de)
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard;
 
@@ -7,8 +15,8 @@ use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\Dashbo
 final class DashboardModulesProvider
 {
     /**
-    * Array<DashboardModuleInterface>
-    */
+     * Array<DashboardModuleInterface>.
+     */
     private array $widgets = [];
 
     /**
@@ -24,13 +32,15 @@ final class DashboardModulesProvider
     }
 
     /**
-    * @return Array<DashboardWidgetInterface>
-    */
-    public function getWidgetCollections(string $collection = 'default'): array
+     * @return array<DashboardWidgetInterface>
+     */
+    public function getWidgetCollections(?string $collection = null): array
     {
-        return $this->widgets;
+        if (null === $collection) {
+            return $this->widgets;
+        }
 
-        /*if (!isset($this->widgets[$collection])) {
+        if (!isset($this->widgets[$collection])) {
             return [];
         }
 
@@ -38,6 +48,6 @@ final class DashboardModulesProvider
             return $b['priority'] <=> $a['priority'];
         });
 
-        return array_column($this->widgets[$collection], 'widget');*/
+        return array_column($this->widgets[$collection], 'widget');
     }
 }

@@ -1,8 +1,6 @@
 {# @var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget #}
 
 {% for widgetCollectionName, widgetCollection in widgetCollections %}
-    <h2>{{ widgetCollectionName }}</h2>
-
     <div class="row">
         {% set widgetCount = widgetCollection|length %}
         {% if widgetCount == 1 %}
@@ -12,7 +10,7 @@
         {% elseif widgetCount == 3 %}
             {% set colClass = 4 %}
         {% else %}
-            {% set colClass = 12 // widgetCount %}
+            {% set colClass = 12 %}
         {% endif %}
 
         {% for widgetData in widgetCollection %}
@@ -47,8 +45,4 @@
         {% endfor %}
     </div>
 {% endfor %}
-
-
-
-
 
