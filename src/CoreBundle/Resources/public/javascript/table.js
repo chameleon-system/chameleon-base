@@ -97,33 +97,41 @@ function DeleteSelectedRecords(formName) {
     }
 }
 
-
-function AddSelectedAsListFields(formName) {
-    var IDs = '';
-    $("input[name='aInputIdList[]']").each(function () {
-            if (this.checked) {
-                if (IDs != '') IDs = IDs + ',';
-                IDs = IDs + this.value;
-            }
+function addSelectedAsListFields(formName) {
+    var ids = [];
+    document.querySelectorAll("input[name='aInputIdList[]']").forEach(function (inputElement) {
+        if (inputElement.checked) {
+            ids.push(inputElement.value);
         }
-    );
-    console.log("IDs", IDs)
+    });
 
-    if (IDs != '') {
-        //var message = CHAMELEON.CORE.i18n.Translate("chameleon_system_core.js.confirm_multi_delete");
-        var message = 'Wirklich?';
-        if (confirm(message)) {
-            document.cmsformworkonlist.elements['module_fnc[contentmodule]'].value = 'AddSelectedAsListFields';
-            document.cmsformworkonlist.items.value = IDs;
-            document.cmsformworkonlist.submit();
-        }
-    } else {
+    if (ids.length === 0) {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_no_selection'), 'WARNING');
+        return;
     }
+
+    document.cmsformworkonlist.elements['module_fnc[contentmodule]'].value = 'addSelectedAsListFields';
+    document.cmsformworkonlist.items.value = ids.join(',');
+    document.cmsformworkonlist.submit();
 }
 
+function addSelectedAsSortFields(formName) {
+    var ids = [];
+    document.querySelectorAll("input[name='aInputIdList[]']").forEach(function (inputElement) {
+        if (inputElement.checked) {
+            ids.push(inputElement.value);
+        }
+    });
 
+    if (ids.length === 0) {
+        toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_no_selection'), 'WARNING');
+        return;
+    }
 
+    document.cmsformworkonlist.elements['module_fnc[contentmodule]'].value = 'addSelectedAsSortFields';
+    document.cmsformworkonlist.items.value = ids.join(',');
+    document.cmsformworkonlist.submit();
+}
 
 function ChangeListMarking(fieldValue, formName) {
     var searchId = "#" + formName;

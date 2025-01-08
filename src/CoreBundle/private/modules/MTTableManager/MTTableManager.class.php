@@ -18,6 +18,7 @@ use Doctrine\DBAL\Connection;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use Doctrine\DBAL\Exception as DBALException;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -156,14 +157,14 @@ class MTTableManager extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array(
+        $externalFunctions = [
             'ClearNaviCache',
             'getAutocompleteRecordList',
             'getAutocompleteRecords',
-            'AddSelectedAsListFields',
-            'AddSelectedAsSortFields',
+            'addSelectedAsListFields',
+            'addSelectedAsSortFields',
             'DeleteSelected',
-        );
+        ];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -222,65 +223,181 @@ class MTTableManager extends TCMSModelBase
         return $response;
     }
 
-    //TODO AddSelectedAsSortFields,
-    public function AddSelectedAsListFields()
+    public function addSelectedAsListFields()
     {
-        $oGlobal = TGlobal::instance();
-        $sInput = $oGlobal->GetUserData('items');
-        $aInput = explode(',', $sInput);
+        $itemIdList = $this->getInputFilterUtil()->getFilteredPostInput('items');
+        $itemIds = explode(',', $itemIdList);
 
-        foreach ($aInput as $id) {
-            /** @var $oEditor TCMSTableEditorManager */
-            $oEditor = new TCMSTableEditorManager();
-            $oEditor->Init($this->oTableConf->id, $id);
-            //$oEditor->Delete($id);
+        try {
+            if (true === $this->insertFieldItemIntoList(true, $itemIds)) {
+                $this->getFlashMessageService()->addMessage(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'FIELDS-INSERTED-INTO-LIST');
+            }
+        } catch (DBALException|InvalidArgumentException) {
+            $this->getFlashMessageService()->addMessage(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, '');
+        }
+    }
+
+    public function addSelectedAsSortFields()
+    {
+        $itemIdList = $this->getInputFilterUtil()->getFilteredPostInput('items');
+        $itemIds = explode(',', $itemIdList);
+
+        try {
+            if (true === $this->insertFieldItemIntoList(false, $itemIds)) {
+                $this->getFlashMessageService()->addMessage(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'FIELDS-INSERTED-INTO-LIST');
+            }
+        } catch (DBALException|InvalidArgumentException $e) {
+            $this->getFlashMessageService()->addMessage(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'ERROR-INSERT-FIELDS-IN-LIST');
+        }
+    }
+
+    /**
+     * @param bool $intoListFields true if target is <i>list fields</i>, false if <i>sort fields</i>
+     * @param string[] $fieldIds
+     * @return bool true if some fields were actually inserted; false if none
+     *
+     * @throws DBALException
+     * @throws InvalidArgumentException
+     */
+    protected function insertFieldItemIntoList(bool $intoListFields, array $fieldIds): bool
+    {
+        $inserted = false;
+        $targetTableName = true === $intoListFields ? 'cms_tbl_display_list_fields' : 'cms_tbl_display_orderfields';
+
+        $tableConfId = $this->getTableConfigId($targetTableName);
+        if (null === $tableConfId) {
+            throw new InvalidArgumentException(sprintf('Table "%s" not found', $targetTableName));
         }
 
-        $isInIFrame = $this->global->GetUserData('_isiniframe');
-
-        // redirect back to list
-        if ($isInIFrame && 'true' == $isInIFrame) {
-            // get redirect parameter
-            $parameter = array();
-            $parameter['_isiniframe'] = $isInIFrame;
-            $parameter['id'] = $this->global->GetUserData('id');
-            $parameter['pagedef'] = $this->global->GetUserData('pagedef');
-
-            $aAdditionalParams = $this->GetHiddenFieldsHook();
-            if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
-                $parameter = array_merge($parameter, $aAdditionalParams);
-            }
-
-            if (isset($parameter['sRestrictionField']) && '_mlt' == substr($parameter['sRestrictionField'], -4)) {
-                /** @var $oRestrictionTableConf TCMSTableConf */
-                $oRestrictionTableConf = new TCMSTableConf();
-                $sTableName = substr($parameter['sRestrictionField'], 0, -3);
-                $oRestrictionTableConf->LoadFromField('name', $sTableName);
-
-                if ($this->global->UserDataExists('sourceRecordID')) {
-                    $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
-                }
-
-                $this->getRedirectService()->redirectToActivePage($parameter);
-            } else {
-                /** @var $oRestrictionTableConf TCMSTableConf */
-                $oRestrictionTableConf = new TCMSTableConf();
-                $sTableName = substr($oEditor->sRestrictionField, 0, -3);
-                $oRestrictionTableConf->LoadFromField('name', $sTableName);
-
-                if ($this->global->UserDataExists('sourceRecordID')) {
-                    $parameter['sourceRecordID'] = $this->global->GetUserData('sourceRecordID');
-                }
-
-                $this->getRedirectService()->redirectToActivePage($parameter);
-            }
-        } else {
-            $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
-
-            $parentURL = $breadcrumb->GetURL().'&_histid='.($breadcrumb->getHistoryCount() - 1);
+        $targetTableId = $this->oTableList->sRestriction;
+        $cmsTargetTableConf = TdbCmsTblConf::GetNewInstance();
+        if (false === $cmsTargetTableConf->Load($targetTableId)) {
+            throw new InvalidArgumentException(sprintf('Config table ID "%s" not found', $targetTableId));
         }
 
-        //$this->getRedirectService()->redirect($parentURL);
+        $tableName = $cmsTargetTableConf->fieldName ?? '';
+        $position = $this->getListTableMaxPosition($targetTableName, $targetTableId);
+        $languageIds = $this->getLanguageIds();
+
+        $oEditor = new TCMSTableEditorManager();
+
+        foreach ($fieldIds as $fieldId) {
+            $tdbCmsFieldConf = TdbCmsFieldConf::GetNewInstance();
+            if (false === $tdbCmsFieldConf->Load($fieldId)) {
+                throw new InvalidArgumentException(sprintf('Could not saving list field record ID "%s"', $fieldId));
+            }
+            $fieldName = $tdbCmsFieldConf->fieldName ?? '';
+            $sqlFieldName = $this->getDatabaseConnection()->quoteIdentifier($tableName).'.'.$this->getDatabaseConnection()->quoteIdentifier($fieldName);
+
+            if (true === $this->existsListTableEntry($targetTableName, $targetTableId, [$fieldName, $sqlFieldName])) {
+                $this->getFlashMessageService()->addMessage(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'FIELD-ALREADY-IN-LIST', ['fieldName' => $fieldName]);
+                continue; // skip field if already exists
+            }
+
+            ++$position;
+            $callbackFunctionName = $this->getDefaultCallbackFunctionName($tdbCmsFieldConf);
+
+            $recordId = null;
+            foreach ($languageIds as $languageId) {
+                $oEditor->Init($tableConfId, $recordId, $languageId);
+
+                if (null === $recordId) {
+                    $postData = [
+                        'title' => $tdbCmsFieldConf->fieldTranslation ?? '',
+                        'cms_tbl_conf_id' => $targetTableId,
+                        'name' => $sqlFieldName,
+                        'db_alias' => $fieldName,
+                        'position' => $position,
+                        'width' => '-1',
+                        'align' => 'left',
+                        'callback_fnc' => $callbackFunctionName,
+                        true === $intoListFields ? 'show_in_list' : 'show_in_sort' => '1',
+                    ];
+                } else {
+                    $tdbCmsFieldConf = TdbCmsFieldConf::GetNewInstance();
+                    $tdbCmsFieldConf->SetLanguage($languageId);
+                    if (false === $tdbCmsFieldConf->Load($fieldId)) {
+                        throw new InvalidArgumentException(sprintf('Error loading field config record ID "%s"', $fieldId));
+                    }
+
+                    $postData = [
+                        'id' => $recordId,
+                        'title' => $tdbCmsFieldConf->fieldTranslation ?? '',
+                    ];
+                }
+
+                $recordData = $oEditor->Save($postData);
+                if (false === $recordData) {
+                    throw new InvalidArgumentException('Error upserting list field record');
+                }
+
+                $inserted = true;
+                $recordId = $recordData->id;
+            }
+        }
+
+        return $inserted;
+    }
+
+    /**
+     * list of used language ids with the base language ahead.
+     *
+     * @return string[]
+     */
+    protected function getLanguageIds(): array
+    {
+        $baseLanguageId = $this->getLanguageService()->getCmsBaseLanguageId();
+        $languageIds = TdbCmsConfig::GetInstance()->GetFieldCmsLanguageList()->GetIdList();
+        $languageIds = array_diff($languageIds, [$baseLanguageId]);
+        array_unshift($languageIds, $baseLanguageId);
+
+        return $languageIds;
+    }
+
+    /**
+     * @param string[] $fieldNames
+     *
+     * @throws DBALException
+     */
+    protected function existsListTableEntry(string $tableName, string $targetTableId, array $fieldNames): bool
+    {
+        $query = sprintf('SELECT 1 FROM `%s` WHERE `name` IN (:names) AND `cms_tbl_conf_id` = :cmsTableConfId', $tableName);
+
+        return (bool) $this->getDatabaseConnection()->fetchOne($query, ['names' => $fieldNames, 'cmsTableConfId' => $targetTableId], ['names' => Connection::PARAM_STR_ARRAY]);
+    }
+
+    /**
+     * current a table's max "position" field value or zero if no fields yet.
+     * @throws DBALException
+     */
+    protected function getListTableMaxPosition(string $tableName, string $id): int
+    {
+        $query = sprintf('SELECT MAX(`position`) FROM %s WHERE `cms_tbl_conf_id` = ?', $this->getDatabaseConnection()->quoteIdentifier($tableName));
+
+        return (int) $this->getDatabaseConnection()->fetchOne($query, [$id]);
+    }
+
+    /**
+     * @throws DBALException
+     */
+    protected function getTableConfigId(string $tableName): ?string
+    {
+        $query = 'SELECT `id` FROM `cms_tbl_conf` WHERE `name` = ?';
+
+        return $this->getDatabaseConnection()->fetchOne($query, [$tableName]) ?: null;
+    }
+
+    protected function getDefaultCallbackFunctionName(TdbCmsFieldConf $tdbCmsFieldConf): string
+    {
+        $typeConstant = $tdbCmsFieldConf->GetFieldCmsFieldType()?->fieldConstname ?? '';
+
+        return match ($typeConstant) {
+            'CMSFIELD_MULTITABLELIST' => 'gcf_MltLookup',
+            'CMSFIELD_WYSIWYG' => 'gcf_ShowWYSIWYG',
+            'CMSFIELD_EXTENDEDTABLELIST_MEDIA' => 'gcf_ShowImage',
+            'CMSFIELD_BOOLEAN' => 'gcf_GetAciveIcon', // no typo!
+            default => '',
+        };
     }
 
     public function DeleteSelected()
