@@ -5,10 +5,8 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\ListManager;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
-use TCMSListManagerFullGroupTable;
-use TCMSTableEditorMenuItem;
 
-class RecordFieldsTableListView extends TCMSListManagerFullGroupTable
+class RecordFieldsTableListView extends \TCMSListManagerFullGroupTable
 {
     /**
      * {@inheritdoc}
@@ -31,7 +29,7 @@ class RecordFieldsTableListView extends TCMSListManagerFullGroupTable
     protected function addAddSelectedAsListFieldsButton(): void
     {
         $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
-        $oMenuItem = new TCMSTableEditorMenuItem();
+        $oMenuItem = new \TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'add_selected_as_list_fields';
         $oMenuItem->setTitle(ServiceLocator::get('translator')->trans('chameleon_system_core.list.add_selected_as_list_fields'));
 
@@ -44,7 +42,7 @@ class RecordFieldsTableListView extends TCMSListManagerFullGroupTable
     protected function addAddSelectedAsSortFieldsButton(): void
     {
         $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
-        $oMenuItem = new TCMSTableEditorMenuItem();
+        $oMenuItem = new \TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'add_selected_as_sort_fields';
         $oMenuItem->setTitle(ServiceLocator::get('translator')->trans('chameleon_system_core.list.add_selected_as_sort_fields'));
 

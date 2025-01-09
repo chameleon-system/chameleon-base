@@ -55,7 +55,6 @@ class MTTableManager extends TCMSModelBase
     {
         $inputFilterUtil = $this->getInputFilterUtil();
 
-        /** @var $oTable TdbCmsTableConf */
         $this->oTableConf = TdbCmsTblConf::GetNewInstance();
 
         $tableConfId = $inputFilterUtil->getFilteredInput('id');
@@ -130,7 +129,6 @@ class MTTableManager extends TCMSModelBase
         // fetch listClass and listClassLocation first using the definition in the tableconf...
         if (!empty($this->oTableConf->sqlData['cms_tbl_list_class_id'])) {
             $oListDef = new TCMSRecord();
-            /** @var $oListDef TCMSRecord */
             $oListDef->table = 'cms_tbl_list_class';
             if ($oListDef->Load($this->oTableConf->sqlData['cms_tbl_list_class_id'])) {
                 $listClass = $oListDef->sqlData['classname'];
