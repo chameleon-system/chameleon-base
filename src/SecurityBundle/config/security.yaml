@@ -31,6 +31,8 @@ security:
         # "app_login" is the name of the route created previously
         login_path: cms_login
         check_path: cms_login
+        always_use_default_target_path: false
+        default_target_path: cms_login
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#firewalls-authentication
 
