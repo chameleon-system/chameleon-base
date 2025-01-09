@@ -14,6 +14,7 @@ namespace ChameleonSystem\CoreBundle\Routing;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatcherInterface
 {
@@ -44,9 +45,7 @@ class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatch
     public function match(string $pathinfo): array
     {
         $match = parent::match($pathinfo);
-        if (is_array($match)) {
-            $this->addLocaleToMatch($match);
-        }
+        $this->addLocaleToMatch($match);
 
         return $match;
     }
@@ -57,19 +56,12 @@ class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatch
     public function matchRequest(Request $request): array
     {
         $match = parent::matchRequest($request);
-        if (is_array($match)) {
-            $this->addLocaleToMatch($match);
-        }
+        $this->addLocaleToMatch($match);
 
         return $match;
     }
 
-    /**
-     * @param array $match
-     *
-     * @return void
-     */
-    private function addLocaleToMatch(array $match)
+    private function addLocaleToMatch(array &$match): void
     {
         if (isset($match['_locale'])) {
             return;
@@ -83,11 +75,9 @@ class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatch
     /**
      * Avoid BC break - to be changed to use real injection (even constructor pseudo-injection won't work because an
      * object of this class is instantiated before the static container is ready).
-     *
-     * @return LanguageServiceInterface
      */
-    private function getLanguageService()
+    private function getLanguageService(): LanguageServiceInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 }
