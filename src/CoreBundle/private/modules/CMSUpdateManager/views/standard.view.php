@@ -1,4 +1,5 @@
 <?php
+/** @var $data array<string, mixed> */
 $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
 ?>
 <div id="updatemanager">
@@ -19,6 +20,14 @@ $translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
                     <i class="far fa-eye"></i>
                     <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.show_all')); ?>
                 </a>
+                <?php if (null !== $data['redirectUrl']) { ?>
+                    <br />
+                    <br />
+                    <a class="btn btn-primary" href="<?= $data['redirectUrl']; ?>">
+                        <i class="fas fa-arrow-alt-circle-right"></i>
+                        <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.redirect_to_login_url')); ?>
+                    </a>
+                <?php } ?>
             <br />
             <br />
             <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">

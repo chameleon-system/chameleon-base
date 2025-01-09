@@ -1,11 +1,14 @@
 <?php
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\UpdateCounterMigrationBundle\Exception\InvalidMigrationCounterException;
+
+/** @var $data array<string, mixed> */
 
 /**
  * @var TCMSUpdateManager $oUpdateManager
  */
-$translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+$translator = ServiceLocator::get('translator');
 try {
     $updatesByBundle = $oUpdateManager->getAllUpdateFilesToProcess();
 } catch (InvalidMigrationCounterException $e) {
@@ -44,6 +47,12 @@ if (0 === \count($updatesByBundle)) {
                 <div class="alert alert-info">
                     <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.update_info_no_updates')); ?>
                 </div>
+                <?php if (null !== $data['redirectUrl']) { ?>
+                <a class="btn btn-primary" href="<?= $data['redirectUrl']; ?>">
+                    <i class="fas fa-arrow-alt-circle-right"></i>
+                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.redirect_to_login_url')); ?>
+                </a>
+                <?php } ?>
                 <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">
                     <i class="fas fa-home"></i>
                     <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
@@ -127,6 +136,12 @@ if (0 === \count($updatesByBundle)) {
                 <i class="fas fa-home"></i>
                 <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
             </a>
+            <?php if (null !== $data['redirectUrl']) { ?>
+                <a class="btn btn-primary" href="<?= $data['redirectUrl']; ?>">
+                    <i class="fas fa-arrow-alt-circle-right"></i>
+                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.redirect_to_login_url')); ?>
+                </a>
+            <?php } ?>
             <a class="btn btn-success" href="#" id="btnRunUpdates"
                data-loading-text="<?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>">
                 <i class="far fa-play-circle"></i>
