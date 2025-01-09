@@ -4,14 +4,13 @@ if (typeof CHAMELEON === "undefined" || !CHAMELEON) {
 CHAMELEON.CORE = CHAMELEON.CORE || {};
 
 var sLastDialogID = null;
+var coreuiProcessingModal = null;
 
 CHAMELEON.CORE.showProcessingModal = function () {
     var processingDialogContainer = document.querySelector("#processingModal");
     if (processingDialogContainer) {
-        if (typeof coreuiProcessingModal === 'undefined') {
-            coreuiProcessingModal = new coreui.Modal(processingDialogContainer, {
-                focus: true
-            });
+        if (coreuiProcessingModal === null) {
+            coreuiProcessingModal = new coreui.Modal(processingDialogContainer, {focus: true});
         }
         coreuiProcessingModal.show();
     }
@@ -19,8 +18,8 @@ CHAMELEON.CORE.showProcessingModal = function () {
 
 CHAMELEON.CORE.hideProcessingModal = function () {
     var processingDialogContainer = document.querySelector("#processingModal");
-    if (processingDialogContainer && coreuiProcessingModal) {
-        coreuiProcessingModal.hide();
+    if (processingDialogContainer) {
+        coreuiProcessingModal?.hide();
     }
 };
 

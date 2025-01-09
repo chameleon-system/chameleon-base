@@ -97,6 +97,41 @@ function DeleteSelectedRecords(formName) {
     }
 }
 
+function addSelectedAsListFields(formName) {
+    var ids = [];
+    document.querySelectorAll("input[name='aInputIdList[]']").forEach(function (inputElement) {
+        if (inputElement.checked) {
+            ids.push(inputElement.value);
+        }
+    });
+
+    if (ids.length === 0) {
+        toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_no_selection'), 'WARNING');
+        return;
+    }
+
+    document.cmsformworkonlist.elements['module_fnc[contentmodule]'].value = 'addSelectedAsListFields';
+    document.cmsformworkonlist.items.value = ids.join(',');
+    document.cmsformworkonlist.submit();
+}
+
+function addSelectedAsSortFields(formName) {
+    var ids = [];
+    document.querySelectorAll("input[name='aInputIdList[]']").forEach(function (inputElement) {
+        if (inputElement.checked) {
+            ids.push(inputElement.value);
+        }
+    });
+
+    if (ids.length === 0) {
+        toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_no_selection'), 'WARNING');
+        return;
+    }
+
+    document.cmsformworkonlist.elements['module_fnc[contentmodule]'].value = 'addSelectedAsSortFields';
+    document.cmsformworkonlist.items.value = ids.join(',');
+    document.cmsformworkonlist.submit();
+}
 
 function ChangeListMarking(fieldValue, formName) {
     var searchId = "#" + formName;
