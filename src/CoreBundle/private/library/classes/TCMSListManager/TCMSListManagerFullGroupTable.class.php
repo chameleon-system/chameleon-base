@@ -225,80 +225,56 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
-        if ($tableInUserGroup) {
-            $portalIds = $securityHelper->getUser()?->getPortals();
-            if (null === $portalIds) {
-                $portalIds = [];
-            }
-            $portalRestriction = implode(', ', array_map(fn ($id) => $this->getDatabaseConnection()->quote($id), array_keys($portalIds)));
-            /* Check for Export Profiles */
-            if (!empty($portalRestriction)) {
-                $query = "SELECT EXISTS (SELECT 1 FROM `cms_export_profiles` WHERE `cms_tbl_conf_id` = :tableId AND `cms_portal_id` IN ({$portalRestriction}))";
-                $hasExportProfile = $this->getDatabaseConnection()->fetchOne($query, ['tableId' => $this->oTableConf->sqlData['id']]);
-                if (1 === (int) $hasExportProfile) {
-                    $oMenuItem = new TCMSTableEditorMenuItem();
-                    $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.export');
-                    $oMenuItem->sIcon = 'far fa-save';
+        if (false === $tableInUserGroup) {
+            return;
+        }
 
-                    $sListClass = 'TCMSListManager';
-
-                    $oListClass = $this->oTableConf->GetLookup('cms_tbl_list_class_id');
-                    if (isset($oListClass) && !is_null($oListClass) && is_object($oListClass)) {
-                        $sListClass = $oListClass->sqlData['classname'];
-                    }
-
-                    $aParameters = [
-                        'pagedef' => 'CMSTableExport',
-                        '_pagedefType' => 'Core',
-                        'tableID' => $this->oTableConf->id,
-                        'tableCmsIdentID' => $this->oTableConf->sqlData['cmsident'],
-                        'listClass' => $sListClass,
-                        'listCacheKey' => $this->GetListCacheKey(),
-                    ];
-
-                    $js = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParameters)."',0,0,'".TGlobal::OutJS(ServiceLocator::get('translator')->trans('chameleon_system_core.action.export'))."');";
-
-                    $oMenuItem->sOnClick = $js;
-                    $this->oMenuItems->AddItem($oMenuItem);
-                }
-            }
-
-            if ('cms_field_conf' === $this->oTableConf->fieldName) { // CMS table fields ("Record fields")
-                if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
-                    $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
-                    $oMenuItem = new TCMSTableEditorMenuItem();
-                    $oMenuItem->sItemKey = 'add_selected_as_list_fields';
-                    $oMenuItem->setTitle(ServiceLocator::get('translator')->trans('chameleon_system_core.list.add_selected_as_list_fields'));
-
-                    $oMenuItem->sIcon = 'fas fa-list-alt'; // fas fa-sort
-                    $oMenuItem->setButtonStyle('btn-info');
-                    $oMenuItem->sOnClick = "addSelectedAsListFields('{$sFormName}');";
-                    $this->oMenuItems->AddItem($oMenuItem);
-                }
-
-                if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
-                    $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
-                    $oMenuItem = new TCMSTableEditorMenuItem();
-                    $oMenuItem->sItemKey = 'add_selected_as_sort_fields';
-                    $oMenuItem->setTitle(ServiceLocator::get('translator')->trans('chameleon_system_core.list.add_selected_as_sort_fields'));
-
-                    $oMenuItem->sIcon = 'fas fa-sort';
-                    $oMenuItem->setButtonStyle('btn-info');
-                    $oMenuItem->sOnClick = "addSelectedAsSortFields('{$sFormName}');";
-                    $this->oMenuItems->AddItem($oMenuItem);
-                }
-            }
-
-            if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name'])) {
-                $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
+        $portalIds = $securityHelper->getUser()?->getPortals();
+        if (null === $portalIds) {
+            $portalIds = [];
+        }
+        $portalRestriction = implode(', ', array_map(fn ($id) => $this->getDatabaseConnection()->quote($id), array_keys($portalIds)));
+        /* Check for Export Profiles */
+        if (!empty($portalRestriction)) {
+            $query = "SELECT EXISTS (SELECT 1 FROM `cms_export_profiles` WHERE `cms_tbl_conf_id` = :tableId AND `cms_portal_id` IN ({$portalRestriction}))";
+            $hasExportProfile = $this->getDatabaseConnection()->fetchOne($query, ['tableId' => $this->oTableConf->sqlData['id']]);
+            if (1 === (int) $hasExportProfile) {
                 $oMenuItem = new TCMSTableEditorMenuItem();
-                $oMenuItem->sItemKey = 'deleteall';
-                $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.list.delete_selected');
-                $oMenuItem->sIcon = 'far fa-trash-alt';
-                $oMenuItem->setButtonStyle('btn-danger');
-                $oMenuItem->sOnClick = "DeleteSelectedRecords('{$sFormName}');";
+                $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.export');
+                $oMenuItem->sIcon = 'far fa-save';
+
+                $sListClass = 'TCMSListManager';
+
+                $oListClass = $this->oTableConf->GetLookup('cms_tbl_list_class_id');
+                if (isset($oListClass) && !is_null($oListClass) && is_object($oListClass)) {
+                    $sListClass = $oListClass->sqlData['classname'];
+                }
+
+                $aParameters = [
+                    'pagedef' => 'CMSTableExport',
+                    '_pagedefType' => 'Core',
+                    'tableID' => $this->oTableConf->id,
+                    'tableCmsIdentID' => $this->oTableConf->sqlData['cmsident'],
+                    'listClass' => $sListClass,
+                    'listCacheKey' => $this->GetListCacheKey(),
+                ];
+
+                $js = "CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParameters)."',0,0,'".TGlobal::OutJS(ServiceLocator::get('translator')->trans('chameleon_system_core.action.export'))."');";
+
+                $oMenuItem->sOnClick = $js;
                 $this->oMenuItems->AddItem($oMenuItem);
             }
+        }
+
+        if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name'])) {
+            $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
+            $oMenuItem = new TCMSTableEditorMenuItem();
+            $oMenuItem->sItemKey = 'deleteall';
+            $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.list.delete_selected');
+            $oMenuItem->sIcon = 'far fa-trash-alt';
+            $oMenuItem->setButtonStyle('btn-danger');
+            $oMenuItem->sOnClick = "DeleteSelectedRecords('{$sFormName}');";
+            $this->oMenuItems->AddItem($oMenuItem);
         }
     }
 
