@@ -28,5 +28,9 @@
             <argument type="service" id="service_container" />
             <tag name="controller.service_arguments" />
         </service>
+
+        <service class="ChameleonSystem\CmsDashboardBundle\Service\ColorGeneratorService"
+                 id="chameleon_system_cms_dashboard.service.color_generator_service" public="true">
+        </service>
     </services>
 </container>
