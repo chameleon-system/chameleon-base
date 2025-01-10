@@ -61,7 +61,7 @@ class CmsLoginController extends AbstractController
         $referer = $request->headers->get('referer');
 
         if (null !== $referer && false === $this->isDefaultPath($referer)) { // logout from subpage
-            $session->set(self::LAST_USED_URL_COOKIE_NAME, $referer); //
+            $session->set(self::LAST_USED_URL_COOKIE_NAME, $referer);
             $session->set(self::FIREWALL_BACKEND_COOKIE_NAME, $referer); // used by symfony if directly login after logout
             $redirectUrl = $referer; // used if directly login after logout if update available
         } else {
