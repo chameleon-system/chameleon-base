@@ -113,24 +113,24 @@ if (0 === \count($updatesByBundle)) {
                 <h4 id="updateProgressBarText" class="justify-content-center d-flex position-absolute w-100"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.progress_bar_initial')); ?> (0%)</h4>
             </div>
             <?php if (count($blacklistedUpdates) > 0) {
-    ?>
+                ?>
                 <div class="alert alert-danger" role="alert">
                     <h3><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_blacklisted')); ?></h3>
                     <ul>
                         <?php
-                        foreach ($blacklistedUpdates as $blackListedBundle => $blackListedUpdates) {
-                            echo "<li>
+                                    foreach ($blacklistedUpdates as $blackListedBundle => $blackListedUpdates) {
+                                        echo "<li>
                                       <strong>{$blackListedBundle}</strong>
                                       <ul>";
-                            foreach ($blackListedUpdates as $blacklistedBuildNumber) {
-                                echo "<li>{$blacklistedBuildNumber}</li>";
-                            }
-                            echo '</ul></li>';
-                        } ?>
+                                        foreach ($blackListedUpdates as $blacklistedBuildNumber) {
+                                            echo "<li>{$blacklistedBuildNumber}</li>";
+                                        }
+                                        echo '</ul></li>';
+                                    } ?>
                     </ul>
                 </div>
                 <?php
-} ?>
+            } ?>
 
             <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">
                 <i class="fas fa-home"></i>
@@ -157,11 +157,11 @@ if (0 === \count($updatesByBundle)) {
 <ul class="d-none">
     <?php
 
-    foreach ($updatesByBundle as $updates) {
-        foreach ($updates as $update) {
-            echo "<li>{$update->fileName}</li>\n";
-        }
-    }
+                foreach ($updatesByBundle as $updates) {
+                    foreach ($updates as $update) {
+                        echo "<li>{$update->fileName}</li>\n";
+                    }
+                }
 
-    ?>
+?>
 </ul>

@@ -39,8 +39,8 @@ class CmsLoginController extends AbstractController
 
         return $this->render('@ChameleonSystemSecurity/cms/login/index.html.twig', [
             'last_username' => $lastUsername,
-            'error'         => $error,
-            'googleLoginUrl' => $googleLoginUrl
+            'error' => $error,
+            'googleLoginUrl' => $googleLoginUrl,
         ]);
     }
 }

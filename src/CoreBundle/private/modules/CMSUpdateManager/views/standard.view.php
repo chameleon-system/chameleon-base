@@ -1,6 +1,6 @@
 <?php
 /** @var $data array<string, mixed> */
-$translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+$translator = ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
 ?>
 <div id="updatemanager">
 <form id="updateForm">
