@@ -32,10 +32,10 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
             'docCommentType' => 'bool',
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($this->name),
-            'defaultValue' => sprintf("%s", '1' === $default ? 'true' : 'false'),
+            'defaultValue' => sprintf('%s', '1' === $default ? 'true' : 'false'),
             'allowDefaultValue' => true,
-            'getterName' => 'is'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'is'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -55,6 +55,7 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
         if ('' === $default) {
             $default = '0';
         }
+
         return $this->getDoctrineRenderer('mapping/boolean.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),
             'type' => 'boolean',
@@ -64,15 +65,14 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
         ])->render();
     }
 
-
     public function GetOptions()
     {
         parent::GetOptions();
 
         $translator = $this->getTranslator();
         // translate points
-        $this->options['0'] = $translator->trans('chameleon_system_core.field_boolean.no', array(), 'admin');
-        $this->options['1'] = $translator->trans('chameleon_system_core.field_boolean.yes', array(), 'admin');
+        $this->options['0'] = $translator->trans('chameleon_system_core.field_boolean.no', [], 'admin');
+        $this->options['1'] = $translator->trans('chameleon_system_core.field_boolean.yes', [], 'admin');
     }
 
     /**
@@ -166,7 +166,7 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
         $messageManager = TCMSMessageManager::GetInstance();
         $consumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
         $fieldTitle = $this->oDefinition->GetName();
-        $messageManager->AddMessage($consumerName, 'TABLEEDITOR_FIELD_BOOLEAN_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $fieldTitle));
+        $messageManager->AddMessage($consumerName, 'TABLEEDITOR_FIELD_BOOLEAN_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $fieldTitle]);
 
         return false;
     }
