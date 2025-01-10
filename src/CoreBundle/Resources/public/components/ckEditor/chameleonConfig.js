@@ -5,6 +5,8 @@
 
 
 CKEDITOR.editorConfig = function (config) {
+    // for current version 4.23, suppress "no secure version" message
+    config.versionCheck = false;
 
     // %REMOVE_START%
 
