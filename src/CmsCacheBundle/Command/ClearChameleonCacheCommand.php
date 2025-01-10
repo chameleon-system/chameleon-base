@@ -20,14 +20,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[\Symfony\Component\Console\Attribute\AsCommand(name: 'chameleon_system:cache:clear', description: 'Clears the Chameleon cache.')]
 class ClearChameleonCacheCommand extends Command
 {
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
+    private CacheInterface $cache;
 
     /**
-     * @param CacheInterface $cache
-     * @param string|null    $name
+     * @param string|null $name
      *
      * @throws LogicException When the command name is empty
      */

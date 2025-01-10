@@ -144,6 +144,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - We want to get rid of `TGlobal::Translate`. Search and replace: 
   - `\TGlobal::Translate(` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(`
   - `TGlobal::Translate(` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(`
+- `TPkgCmsResultCacheManager()` removed - search `new TPkgCmsResultCacheManager()` and replace it with `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_result_cache.bridge_chameleon_service.data_base_cache_manager')` instead
 
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
   https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.0.md
