@@ -27,9 +27,9 @@ $blacklistedUpdates = $oUpdateManager->getUpdateBlacklist();
 ?>
 <script type="text/javascript">
     $(document).ready(function () {
-        CHAMELEON.UPDATE_MANAGER.setUpdateFiles(<?=json_encode($updatesByBundle); ?>);
+        CHAMELEON.UPDATE_MANAGER.setUpdateFiles(<?php echo json_encode($updatesByBundle); ?>);
         <?php include __DIR__.'/updateManagerConfig.inc.php'; ?>
-        CHAMELEON.UPDATE_MANAGER.addPostUpdateCommand('ajaxProxyClearCache', "<?=TGlobal::OutJS($translator->trans('chameleon_system_core.cms_module_update.clearing_cache')); ?>");
+        CHAMELEON.UPDATE_MANAGER.addPostUpdateCommand('ajaxProxyClearCache', "<?php echo TGlobal::OutJS($translator->trans('chameleon_system_core.cms_module_update.clearing_cache')); ?>");
         CHAMELEON.UPDATE_MANAGER.init();
     });
 </script>
@@ -41,21 +41,21 @@ if (0 === \count($updatesByBundle)) {
 
         <div class="card">
             <div class="card-header">
-                <h1><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.headline')); ?></h1>
+                <h1><?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.headline')); ?></h1>
             </div>
             <div class="card-body" id="infoContainer">
                 <div class="alert alert-info">
-                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.update_info_no_updates')); ?>
+                    <?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.update_info_no_updates')); ?>
                 </div>
                 <?php if (null !== $data['redirectUrl']) { ?>
-                <a class="btn btn-primary" href="<?= $data['redirectUrl']; ?>">
+                <a class="btn btn-primary" href="<?php echo $data['redirectUrl']; ?>">
                     <i class="fas fa-arrow-alt-circle-right"></i>
-                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.redirect_to_login_url')); ?>
+                    <?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.action.redirect_to_login_url')); ?>
                 </a>
                 <?php } ?>
-                <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">
+                <a class="btn btn-warning" id="btnGoBack" href="<?php echo PATH_CMS_CONTROLLER; ?>">
                     <i class="fas fa-home"></i>
-                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
+                    <?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
                 </a>
             </div>
         </div>
@@ -66,41 +66,41 @@ if (0 === \count($updatesByBundle)) {
 <div id="updatemanager">
     <div class="card">
         <div class="card-header">
-            <h1><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.headline')); ?></h1>
+            <h1><?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.headline')); ?></h1>
         </div>
         <div class="card-body">
             <div id="infoContainerText">
-                <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.update_info')); ?>
+                <?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.update_info')); ?>
             </div>
             <div id="updateCountInfo">
                 <div class="row">
                     <div class="col-sm-2">
                         <div class="callout callout-info">
-                            <small class="text-muted"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_total')); ?></small><br>
+                            <small class="text-muted"><?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_total')); ?></small><br>
                             <strong class="h4 update-count count-total">0</strong>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="callout callout-info">
-                            <small class="text-muted"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_pending')); ?></small><br>
+                            <small class="text-muted"><?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_pending')); ?></small><br>
                             <strong class="h4 update-count count-pending">0</strong>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="callout callout-info">
-                            <small class="text-muted"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_processed')); ?></small><br>
+                            <small class="text-muted"><?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_processed')); ?></small><br>
                             <strong class="h4 update-count count-processed">0</strong>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="callout callout-success">
-                            <small class="text-muted"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_executed')); ?></small><br>
+                            <small class="text-muted"><?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_executed')); ?></small><br>
                             <strong class="h4 update-count count-executed">0</strong>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="callout callout-warning">
-                            <small class="text-muted"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_skipped')); ?></small><br>
+                            <small class="text-muted"><?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_skipped')); ?></small><br>
                             <strong class="h4 update-count count-skipped">0</strong>
                         </div>
                     </div>
@@ -110,12 +110,12 @@ if (0 === \count($updatesByBundle)) {
 
             <div class="progress mb-3 position-relative" id="updateProgressBarContainer">
                 <div id="updateProgressBar" class="progress-bar progress-bar-animated" role="progressbar" style="width: 1%;" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100"></div>
-                <h4 id="updateProgressBarText" class="justify-content-center d-flex position-absolute w-100"><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.progress_bar_initial')); ?> (0%)</h4>
+                <h4 id="updateProgressBarText" class="justify-content-center d-flex position-absolute w-100"><?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.progress_bar_initial')); ?> (0%)</h4>
             </div>
             <?php if (count($blacklistedUpdates) > 0) {
                 ?>
                 <div class="alert alert-danger" role="alert">
-                    <h3><?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_blacklisted')); ?></h3>
+                    <h3><?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.updates_blacklisted')); ?></h3>
                     <ul>
                         <?php
                                     foreach ($blacklistedUpdates as $blackListedBundle => $blackListedUpdates) {
@@ -132,20 +132,20 @@ if (0 === \count($updatesByBundle)) {
                 <?php
             } ?>
 
-            <a class="btn btn-warning" id="btnGoBack" href="<?= PATH_CMS_CONTROLLER; ?>">
+            <a class="btn btn-warning" id="btnGoBack" href="<?php echo PATH_CMS_CONTROLLER; ?>">
                 <i class="fas fa-home"></i>
-                <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
+                <?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.action.return_to_main_menu')); ?>
             </a>
             <?php if (null !== $data['redirectUrl']) { ?>
-                <a class="btn btn-primary" href="<?= $data['redirectUrl']; ?>">
+                <a class="btn btn-primary" href="<?php echo $data['redirectUrl']; ?>">
                     <i class="fas fa-arrow-alt-circle-right"></i>
-                    <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.action.redirect_to_login_url')); ?>
+                    <?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.action.redirect_to_login_url')); ?>
                 </a>
             <?php } ?>
             <a class="btn btn-success" href="#" id="btnRunUpdates"
-               data-loading-text="<?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>">
+               data-loading-text="<?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>">
                 <i class="far fa-play-circle"></i>
-                <?= TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>
+                <?php echo TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_update.action_update')); ?>
             </a>
             <?php include __DIR__.'/globalOutput.inc.php'; ?>
 
