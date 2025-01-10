@@ -1827,7 +1827,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.action.redirect_to_login_url">
                 <source>chameleon_system_core.action.redirect_to_login_url</source>
-                <target>Weiter zur vor dem Login aufgerufenen Seite</target>
+                <target>Weiter zur zuletzt aufgerufenen Seite</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
