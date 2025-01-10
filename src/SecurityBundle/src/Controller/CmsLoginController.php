@@ -10,6 +10,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class CmsLoginController extends AbstractController
 {
+    public const DEFAULT_PATH = '/cms';
+    public const FIREWALL_BACKEND_COOKIE_NAME = '_security.backend.target_path'; // "backend" is the firewall name
+    public const LAST_USED_URL_COOKIE_NAME = '_lastUsedUrl';
+    public const LOGIN_REDIRECT_COOKIE_NAME = '_redirectUrl';
+
     public function __construct(
         private readonly AuthenticationUtils $authenticationUtils,
         readonly RouterInterface $router,
@@ -30,17 +35,45 @@ class CmsLoginController extends AbstractController
         $error = $this->authenticationUtils->getLastAuthenticationError();
         $lastUsername = $this->authenticationUtils->getLastUsername();
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (true === $request->hasSession()) {
-            $session = $request->getSession();
-            $targetPath = $session->get('_security.backend.target_path'); // "backend" is the firewall name
-            $session->set('_targetPath', $targetPath);
-        }
+        $this->handleRedirecting();
 
         return $this->render('@ChameleonSystemSecurity/cms/login/index.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
             'googleLoginUrl' => $googleLoginUrl,
         ]);
+    }
+
+    protected function handleRedirecting(): void
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (false === $request->hasSession()) {
+            return;
+        }
+
+        $session = $request->getSession();
+
+        $redirectUrl = $session->get(self::FIREWALL_BACKEND_COOKIE_NAME);
+        if (true === $this->isDefaultPath($redirectUrl)) {
+            $redirectUrl = null;
+        }
+
+        $referer = $request->headers->get('referer');
+
+        if (null !== $referer && false === $this->isDefaultPath($referer)) { // logout from subpage
+            $session->set(self::LAST_USED_URL_COOKIE_NAME, $referer); //
+            $session->set(self::FIREWALL_BACKEND_COOKIE_NAME, $referer); // used by symfony if directly login after logout
+            $redirectUrl = $referer; // used if directly login after logout if update available
+        } else {
+            // use redirect path if defined; for default login, restore last used path if any
+            $redirectUrl ??= $session->get(self::LAST_USED_URL_COOKIE_NAME);
+        }
+
+        $session->set(self::LOGIN_REDIRECT_COOKIE_NAME, $redirectUrl);
+    }
+
+    protected function isDefaultPath(?string $url): bool
+    {
+        return null !== $url && self::DEFAULT_PATH === parse_url($url, PHP_URL_PATH) && null === parse_url($url, PHP_URL_QUERY);
     }
 }

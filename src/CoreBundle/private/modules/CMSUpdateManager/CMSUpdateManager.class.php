@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\MigrationResult;
+use ChameleonSystem\SecurityBundle\Controller\CmsLoginController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
@@ -22,7 +23,7 @@ class CMSUpdateManager extends TModelBase
     {
         $this->data = parent::Execute();
         clearstatcache(true);
-        $this->data['redirectUrl'] = $this->getSession()?->get('_targetPath');
+        $this->data['redirectUrl'] = $this->getSession()?->get(CmsLoginController::LOGIN_REDIRECT_COOKIE_NAME);
 
         return $this->data;
     }
