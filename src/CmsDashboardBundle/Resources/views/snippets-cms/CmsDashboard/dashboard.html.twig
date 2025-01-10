@@ -1,6 +1,6 @@
 {# @var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget #}
 
-<div class="card mb-4">
+<div class="card mb-4 bg-image" style="background-image: url('/bundles/chameleonsystemcmsdashboard/images/dashboard-bg.png');">
     <div class="card-body">
         <h1 class="display-5">{{ 'chameleon_system_cms_dashboard.dashboard'|trans }}</h1>
         <p class="lead">{{ 'chameleon_system_cms_dashboard.for'|trans }} {{ loggedInUserName }} [{{ cmsOwner }}]</p>
@@ -52,3 +52,9 @@
         {% endfor %}
     </div>
 {% endfor %}
+
+<div class="card mb-4">
+    <div class="card-body">
+        © Header image: aalmeidah via pixabay.com
+    </div>
+</div>
