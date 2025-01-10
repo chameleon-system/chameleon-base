@@ -37,3 +37,9 @@ a {
 .input-group-sm>.form-control,.input-group-sm>.form-select,.input-group-sm>.input-group-text,.input-group-sm>.btn {
   text-rendering: geometricPrecision; // fixes missing underscore rendering bug in chrome
 }
+
+.bg-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
