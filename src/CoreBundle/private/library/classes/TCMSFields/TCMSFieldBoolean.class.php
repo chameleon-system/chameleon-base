@@ -90,11 +90,10 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
         }
 
         $html = '
+            <input id="'.TGlobal::OutHTML($this->name).'hidden" type="hidden" value="0" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off"'.$disabled.'>
             <div class="form-check form-switch form-switch-xl">
                 <input id="'.TGlobal::OutHTML($this->name).'" type="checkbox" value="1" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off" class="form-check-input"'.$checked.'>
-            </div>
-            
-            <input id="'.TGlobal::OutHTML($this->name).'hidden" type="hidden" value="0" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off"'.$disabled.'>';
+            </div>';
 
         return $html;
     }
