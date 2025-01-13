@@ -1,0 +1,65 @@
+{# @var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget #}
+<div id="">
+    <div class="card mb-4 bg-image" style="background-image: url('/bundles/chameleonsystemcmsdashboard/images/dashboard-bg.png');">
+        <div class="card-body">
+            <h1 class="display-5">{{ 'chameleon_system_cms_dashboard.dashboard'|trans }}</h1>
+            <p class="lead">{{ 'chameleon_system_cms_dashboard.for'|trans }} {{ loggedInUserName }} [{{ cmsOwner }}]</p>
+        </div>
+    </div>
+
+    {% for widgetCollectionName, widgetCollection in widgetCollections %}
+        <div class="row">
+            {% set widgetCount = widgetCollection|length %}
+            {% if widgetCount == 1 %}
+                {% set colClass = 12 %}
+            {% elseif widgetCount == 2 %}
+                {% set colClass = 6 %}
+            {% elseif widgetCount == 3 %}
+                {% set colClass = 4 %}
+            {% else %}
+                {% set colClass = 4 %}
+            {% endif %}
+
+            {% for widgetData in widgetCollection %}
+                {% set widget = widgetData.widget %}
+                <div class="col-{{ colClass }}">
+                    <div class="card mb-4{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" id="widget-{{ widget.chartId|escape('html_attr') }}">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>{{ widget.title }}</span>
+                            {% if widget.dropdownItems is not empty %}
+                                <div class="dropdown dropleft">
+                                    <button class="btn btn-transparent p-0{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        {% for dropdownItem in widget.dropdownItems %}
+                                            <a class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}" href="{{ dropdownItem.url|escape('html_attr') }}"
+                                            {% for dataAttributeKey, dataAttributeVal in dropdownItem.dataAttributes %}
+                                                {{ dataAttributeKey|escape('html_attr') }}="{{ dataAttributeVal|escape('html_attr') }}"
+                                            {% endfor %}
+                                            >{{ dropdownItem.title }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-body p-0">
+                            {{ widget.bodyHtml|raw }}
+                        </div>
+                        {% if widget.footerHtml %}
+                            <div class="card-footer p-0">
+                                {{ widget.footerHtml|raw }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <div class="card mb-4">
+        <div class="card-body">
+            © Header image: aalmeidah via pixabay.com
+        </div>
+    </div>
+</div>

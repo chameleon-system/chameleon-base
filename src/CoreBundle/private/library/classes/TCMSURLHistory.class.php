@@ -87,9 +87,9 @@ class TCMSURLHistory
 
         if ($historyCount > 0 && isset($this->aHistory[$historyCount - 1])) {
             return $this->aHistory[$historyCount - 1]['url'];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function getHistoryCount()
@@ -233,7 +233,7 @@ class TCMSURLHistory
 
         $this->aHistory = array_values(
             array_filter($this->aHistory,
-                function (array $history) use ($tableName, $entryId, $cmsTblConfId) {
+                static function (array $history) use ($tableName, $entryId, $cmsTblConfId) {
                     $filterCallback = $history['filterCallback'];
                     if (true === is_callable($filterCallback)) {
                         /* @var $filterCallback callable(array $historyEntry, string $tableName, string $entryId, string $cmsTblConfId): bool */
@@ -251,6 +251,21 @@ class TCMSURLHistory
     public function setOnChangeCallback(callable $onChangeCallback): void
     {
         $this->onChangeCallback = $onChangeCallback;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'historyList' => $this->aHistory,
+        ];
+    }
+
+    public static function fromArray(array $data): self
+    {
+        $instance = new self();
+        $instance->aHistory = $data['historyList'];
+
+        return $instance;
     }
 
     private function update(): void

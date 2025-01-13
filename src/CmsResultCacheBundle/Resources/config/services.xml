@@ -7,5 +7,10 @@
         <service id="chameleon_system_cms_result_cache.cronjob.garbage_collector_cronjob" class="TCMSCronJob_PkgCmsResultCache_GarbageCollector" shared="false">
             <tag name="chameleon_system.cronjob" />
         </service>
+
+        <service class="ChameleonSystem\CmsResultCacheBundle\Bridge\Chameleon\Service\DataBaseCacheManager"
+                 id="chameleon_system_cms_result_cache.bridge_chameleon_service.data_base_cache_manager" public="true">
+            <argument id="database_connection" type="service"/>
+        </service>
     </services>
 </container>

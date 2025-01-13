@@ -9,19 +9,24 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CmsResultCacheBundle\Bridge\Chameleon\Service\DataBaseCacheManager;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 /**
- * clear expired result cache entries.
-/**/
+ * Clears expired result cache entries.
+ */
 class TCMSCronJob_PkgCmsResultCache_GarbageCollector extends TdbCmsCronjobs
 {
     /**
-     * runs result cache manager garbage collector to delete expired content.
-     *
-     * @return void
+     * Runs result cache manager garbage collector to delete expired content.
      */
-    protected function _ExecuteCron()
+    protected function _ExecuteCron(): void
     {
-        $oResultCacheManager = new TPkgCmsResultCacheManager();
-        $oResultCacheManager->garbageCollector();
+        $this->getDataBaseCacheManagerService()->garbageCollector();
+    }
+
+    private function getDataBaseCacheManagerService(): DataBaseCacheManager
+    {
+        return ServiceLocator::get('chameleon_system_cms_result_cache.bridge_chameleon_service.data_base_cache_manager');
     }
 }
