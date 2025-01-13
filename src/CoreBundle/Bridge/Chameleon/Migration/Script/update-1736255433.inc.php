@@ -1,7 +1,7 @@
 <h1>Build #1736255433</h1>
 <h2>Date: 2025-01-07</h2>
 <div class="changelog">
-    - ref #none: add several backend messages when adding selected fields into list/sort fields
+    - ref #65446: add several backend messages when adding selected fields into list/sort fields
 </div>
 <?php
 

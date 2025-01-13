@@ -1,7 +1,7 @@
 <h1>Build #1736238296</h1>
 <h2>Date: 2025-01-07</h2>
 <div class="changelog">
-    - ref #none: fix list field table names for message type table
+    - ref #65446: fix list field table names for message type table
 </div>
 <?php
 

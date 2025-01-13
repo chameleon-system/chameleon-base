@@ -1,7 +1,7 @@
 <h1>Build #1736411557</h1>
 <h2>Date: 2025-01-09</h2>
 <div class="changelog">
-    - ref #none: register list view class for table "cms_field_conf" (table class extension)
+    - ref #65446: register list view class for table "cms_field_conf" (table class extension)
 </div>
 <?php
 
