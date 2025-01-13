@@ -18,9 +18,9 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
     /**
      * array of allowed modules for the current spot.
      *
-     * @var array
+     * @var array|null
      */
-    public $aPermittedModules = null;
+    public $aPermittedModules;
 
     /**
      * {@inheritdoc}
@@ -43,9 +43,9 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
 
         ++$this->columnCount;
 
-        $siteText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_module_instance.column_name_pages');
-        $this->tableObj->AddHeaderField(array('id' => $siteText.'&nbsp;&nbsp;'), 'left', null, 1, false);
-        $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackTemplateEngineInstancePages'), $jsParas, 1);
+        $siteText = ServiceLocator::get('translator')->trans('chameleon_system_core.list_module_instance.column_name_pages');
+        $this->tableObj->AddHeaderField(['id' => $siteText.'&nbsp;&nbsp;'], 'left', null, 1, false);
+        $this->tableObj->AddColumn('id', 'left', [$this, 'CallBackTemplateEngineInstancePages'], $jsParas, 1);
     }
 
     /**
@@ -93,7 +93,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
 
         if (!is_null($this->aPermittedModules)) {
             $databaseConnection = $this->getDatabaseConnection();
-            $permittedModulesString = implode(',', array_map(array($databaseConnection, 'quote'), array_keys($this->aPermittedModules)));
+            $permittedModulesString = implode(',', array_map([$databaseConnection, 'quote'], array_keys($this->aPermittedModules)));
             $query .= " AND `cms_tpl_module`.`classname` IN ($permittedModulesString)";
         }
         if (array_key_exists('sModuleRestriction', $this->tableObj->_postData) && !empty($this->tableObj->_postData['sModuleRestriction'])) {
@@ -107,7 +107,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         }
         $sGroupList = implode(
             ', ',
-            array_map(fn($id) => $this->getDatabaseConnection()->quote($id),
+            array_map(fn ($id) => $this->getDatabaseConnection()->quote($id),
                 array_keys(
                     $userGroups
                 ))
@@ -125,7 +125,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         }
         $sPortalList = implode(
             ', ',
-            array_map(fn($id) => $this->getDatabaseConnection()->quote($id),
+            array_map(fn ($id) => $this->getDatabaseConnection()->quote($id),
                 array_keys(
                     $portals
                 ))
@@ -159,7 +159,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
      * returns the navigation breadcrumbs of the module instance.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
@@ -177,7 +177,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         while ($oCmsTplPage = $oCmsTplPageList->Next()) {
             $path = $this->getBreadcrumbsFromPaths($oCmsTplPage->fieldTreePathSearchString);
             if (empty($path)) {
-                $path = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_module_instance.no_usages_found_in_navigation_node');
+                $path = ServiceLocator::get('translator')->trans('chameleon_system_core.list_module_instance.no_usages_found_in_navigation_node');
             }
             $pageString .= '<div class="font-weight-bold">'.TGlobal::OutHTML($oCmsTplPage->fieldName).' (ID '.TGlobal::OutHTML($oCmsTplPage->id).'):</div>
             <div>'.$path.'</div>';
@@ -205,6 +205,6 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 }
