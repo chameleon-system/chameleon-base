@@ -32,7 +32,7 @@ class TModuleLoader
      * @var TModelBase[]
      */
     public array $modules = []; // an array of all model classes.
-    protected ChameleonControllerInterface $controller; // a pointer to the controller of the framework
+    protected ?ChameleonControllerInterface $controller = null; // a pointer to the controller of the framework
     private array $aModuleCacheData = [];
     protected RequestStack $requestStack;
     protected ModuleResolverInterface $moduleResolver;
