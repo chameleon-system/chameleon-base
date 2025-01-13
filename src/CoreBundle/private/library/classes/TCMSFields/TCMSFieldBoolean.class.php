@@ -81,21 +81,13 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
     public function GetHTML()
     {
         $this->GetOptions();
+        $checked = true === $this->isChecked() ? ' checked' : '';
 
-        $checked = '';
-        $disabled = '';
-        if (true === $this->isChecked()) {
-            $checked = ' checked';
-            $disabled = ' disabled';
-        }
-
-        $html = '
-            <input id="'.TGlobal::OutHTML($this->name).'hidden" type="hidden" value="0" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off"'.$disabled.'>
+        return '
+            <input id="'.TGlobal::OutHTML($this->name).'hidden" type="hidden" value="0" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off"'.'>
             <div class="form-check form-switch form-switch-xl">
                 <input id="'.TGlobal::OutHTML($this->name).'" type="checkbox" value="1" name="'.TGlobal::OutHTML($this->name).'" autocomplete="off" class="form-check-input"'.$checked.'>
             </div>';
-
-        return $html;
     }
 
     /**
