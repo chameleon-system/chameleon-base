@@ -1834,6 +1834,10 @@
                 <source>chameleon_system_core.action.pages_regenerate_page_path</source>
                 <target>Regenerate page paths</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.action.redirect_to_login_url">
+                <source>chameleon_system_core.action.redirect_to_login_url</source>
+                <target>Redirect to the last used page</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
                 <target>Return to home</target>

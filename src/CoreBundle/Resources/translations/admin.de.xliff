@@ -1833,6 +1833,10 @@
                 <source>chameleon_system_core.action.pages_regenerate_page_path</source>
                 <target>Navigationspfade aktualisieren</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.action.redirect_to_login_url">
+                <source>chameleon_system_core.action.redirect_to_login_url</source>
+                <target>Weiter zur zuletzt aufgerufenen Seite</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.action.return_to_main_menu">
                 <source>chameleon_system_core.action.return_to_main_menu</source>
                 <target>Zurück zur Startseite</target>

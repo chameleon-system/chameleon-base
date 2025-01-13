@@ -8,6 +8,7 @@ use ChameleonSystem\SecurityBundle\Controller\CmsLoginController;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 class ChameleonSystemSecurityExtension extends ConfigurableExtension
@@ -23,6 +24,7 @@ class ChameleonSystemSecurityExtension extends ConfigurableExtension
         $enableGoogleLogin = $mergedConfig['google_login']['enabled'];
 
         $loginController = $container->getDefinition(CmsLoginController::class);
+        $loginController->setArgument('$requestStack', new Reference('request_stack'));
         $loginController->setArgument('$enableGoogleLogin', $enableGoogleLogin);
 
         if (false === $enableGoogleLogin) {
