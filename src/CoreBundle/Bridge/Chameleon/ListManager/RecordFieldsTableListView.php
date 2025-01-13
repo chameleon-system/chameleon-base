@@ -13,21 +13,26 @@ class RecordFieldsTableListView extends \TCMSListManagerFullGroupTable
      */
     protected function GetCustomMenuItems()
     {
-        parent::GetCustomMenuItems();
-
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
+        $tableInUserGroup = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $this->oTableConf->fieldName);
+        if (false === $tableInUserGroup) {
+            return;
+        }
+
+        $this->addButtonExportData($securityHelper);
+        $this->addAddSelectedAsListFieldsButton($securityHelper);
+        $this->addAddSelectedAsSortFieldsButton($securityHelper);
+        $this->addButtonDeleteAll($securityHelper);
+    }
+
+    protected function addAddSelectedAsListFieldsButton(SecurityHelperAccess $securityHelper): void
+    {
         if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
             return;
         }
 
-        $this->addAddSelectedAsListFieldsButton();
-        $this->addAddSelectedAsSortFieldsButton();
-    }
-
-    protected function addAddSelectedAsListFieldsButton(): void
-    {
         $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
         $oMenuItem = new \TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'add_selected_as_list_fields';
@@ -39,8 +44,12 @@ class RecordFieldsTableListView extends \TCMSListManagerFullGroupTable
         $this->oMenuItems->AddItem($oMenuItem);
     }
 
-    protected function addAddSelectedAsSortFieldsButton(): void
+    protected function addAddSelectedAsSortFieldsButton(SecurityHelperAccess $securityHelper): void
     {
+        if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
+            return;
+        }
+
         $sFormName = 'cmstablelistObj'.$this->oTableConf->sqlData['cmsident'];
         $oMenuItem = new \TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'add_selected_as_sort_fields';
