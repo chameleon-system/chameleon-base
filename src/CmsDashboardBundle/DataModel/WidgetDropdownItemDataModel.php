@@ -15,6 +15,7 @@ class WidgetDropdownItemDataModel
     private string $id;
     private string $title;
     private string $url;
+    private array $dataAttributes = [];
 
     public function __construct(string $id, string $title, string $url)
     {
@@ -36,5 +37,20 @@ class WidgetDropdownItemDataModel
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    public function getDataAttributes(): array
+    {
+        return $this->dataAttributes;
+    }
+
+    public function setDataAttributes(array $dataAttributes): void
+    {
+        $this->dataAttributes = $dataAttributes;
+    }
+
+    public function addDataAttribute(string $dataAttributeKey, string $dataAttributeValue): void
+    {
+        $this->dataAttributes[$dataAttributeKey] = $dataAttributeValue;
     }
 }

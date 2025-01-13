@@ -54,7 +54,7 @@ class DataBaseCacheManager
         if (null !== $expireTimestamp) {
             $cacheEntryData['date_expire_after'] = date('Y-m-d H:i:s', $expireTimestamp);
         }
-        $cacheEntryData['garbage_collect_when_expired'] = $allowGarbageCollection;
+        $cacheEntryData['garbage_collect_when_expired'] = $allowGarbageCollection ? '1' : '0';
         $resultCache = \TdbPkgCmsResultCache::GetNewInstance();
         $mergedCacheEntryData = $cacheEntryData;
         if (true === $resultCache->LoadFromFields(

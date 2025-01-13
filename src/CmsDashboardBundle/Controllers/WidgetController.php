@@ -18,29 +18,41 @@ readonly class WidgetController
     {
     }
 
-    public function callWidgetMethod(Request $request, string $widgetServiceId, string $methodName): Response
+    public function callWidgetMethod(Request $request, string $widgetAlias, string $methodName): Response
     {
         try {
-            $parameters = array_merge(
+            $widgetService = $this->getWidgetServiceByAlias($widgetAlias);
+
+            $reflectionMethod = new \ReflectionMethod($widgetService, $methodName);
+            if (!$reflectionMethod->isPublic()) {
+                throw new InvalidArgumentException('Method '.$methodName.' is not public on widget service '.$widgetAlias);
+            }
+
+            $attributes = $reflectionMethod->getAttributes(ExposeAsApi::class);
+            if (empty($attributes)) {
+                throw new InvalidArgumentException('Method '.$methodName.' is not exposed via #[ExposeAsApi] attribute on widget service '.$widgetAlias);
+            }
+
+            $expectedParameters = $reflectionMethod->getParameters();
+            $arguments = [];
+            $providedParameters = array_merge(
                 $request->query->all(),
                 $request->request->all()
             );
 
-            $widgetService = $this->getWidgetService($widgetServiceId);
+            foreach ($expectedParameters as $parameter) {
+                $name = $parameter->getName();
 
-            $reflectionMethod = new \ReflectionMethod($widgetService, $methodName);
-
-            if (!$reflectionMethod->isPublic()) {
-                throw new InvalidArgumentException('Method '.$methodName.' is not public on widget service '.$widgetServiceId);
+                if (array_key_exists($name, $providedParameters)) {
+                    $arguments[] = $providedParameters[$name];
+                } elseif ($parameter->isDefaultValueAvailable()) {
+                    $arguments[] = $parameter->getDefaultValue();
+                } else {
+                    throw new InvalidArgumentException("Missing required parameter '$name' for method $methodName.");
+                }
             }
 
-            // Check if #[ExposeAsApi] Attribut is set for method
-            $attributes = $reflectionMethod->getAttributes(ExposeAsApi::class);
-            if (empty($attributes)) {
-                throw new InvalidArgumentException('Method '.$methodName.' is not exposed via #[ExposeAsApi] attribute on widget service '.$widgetServiceId);
-            }
-
-            return $reflectionMethod->invokeArgs($widgetService, $parameters);
+            return $reflectionMethod->invokeArgs($widgetService, $arguments);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'error' => $e->getMessage(),
@@ -59,6 +71,22 @@ readonly class WidgetController
 
         if (!$widgetService instanceof DashboardWidgetInterface) {
             throw new InvalidArgumentException('Service '.$widgetServiceId.' does not implement DashboardWidgetInterface');
+        }
+
+        return $widgetService;
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws InvalidArgumentException
+     */
+    private function getWidgetServiceByAlias(string $alias): DashboardWidgetInterface
+    {
+        $widgetService = $this->container->get($alias);
+
+        if (!$widgetService instanceof DashboardWidgetInterface) {
+            throw new InvalidArgumentException(sprintf('Service for alias "%s" does not implement DashboardWidgetInterface.', $alias));
         }
 
         return $widgetService;

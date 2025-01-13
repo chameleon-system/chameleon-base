@@ -27,7 +27,6 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         $bCachingEnabled,
         \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
-
         $oVisitor->SetMappedValue('loggedInUserName', $this->getLoggedInUserName());
         $oVisitor->SetMappedValue('cmsOwner', $this->getOwnerName());
         $oVisitor->SetMappedValue('widgetCollections', $this->provider->getWidgetCollections());

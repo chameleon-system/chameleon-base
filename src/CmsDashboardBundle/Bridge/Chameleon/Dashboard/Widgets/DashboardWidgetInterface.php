@@ -16,6 +16,8 @@ interface DashboardWidgetInterface
 {
     public function getTitle(): string;
 
+    public function getChartId(): string;
+
     /**
      * @return array<array<WidgetDropdownItemDataModel>>
      */
@@ -23,7 +25,7 @@ interface DashboardWidgetInterface
 
     public function getFooterIncludes(): array;
 
-    public function getBodyHtml(): string;
+    public function getBodyHtml(bool $forceCacheReload = false): string;
 
     public function getFooterHtml(): string;
 

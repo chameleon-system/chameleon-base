@@ -19,8 +19,7 @@
         </service>
 
         <service id="chameleon_system_cms_dashboard.widget.example" class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardExampleWidget">
-            <argument id="chameleon_system_cms_cache.cache" type="service"/>
-            <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
         </service>
 
         <service class="ChameleonSystem\CmsDashboardBundle\Controllers\WidgetController"
@@ -32,5 +31,14 @@
         <service class="ChameleonSystem\CmsDashboardBundle\Service\ColorGeneratorService"
                  id="chameleon_system_cms_dashboard.service.color_generator_service" public="true">
         </service>
+
+        <service class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService"
+                 id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service">
+            <argument id="chameleon_system_cms_cache.cache" type="service"/>
+            <argument id="chameleon_system_cms_result_cache.bridge_chameleon_service.data_base_cache_manager" type="service"/>
+            <argument id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" type="service"/>
+            <argument>%dashboard_cache_ttl%</argument>
+        </service>
+
     </services>
 </container>

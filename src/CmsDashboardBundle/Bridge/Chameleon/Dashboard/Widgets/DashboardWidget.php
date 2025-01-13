@@ -10,15 +10,18 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
-use esono\pkgCmsCache\CacheInterface;
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 
 abstract class DashboardWidget implements DashboardWidgetInterface
 {
-    public function __construct(private readonly CacheInterface $cache)
+    public function __construct(
+        private readonly DashboardCacheService $dashboardCacheService)
     {
     }
 
     abstract public function getTitle(): string;
+
+    abstract public function getChartId(): string;
 
     abstract public function getDropdownItems(): array;
 
@@ -27,43 +30,28 @@ abstract class DashboardWidget implements DashboardWidgetInterface
         return [];
     }
 
-    protected function getCacheTimeToLiveInSec(): int
+    public function getBodyHtml(bool $forceCacheReload = false): string
     {
-        return 60 * 60 * 24; // one day
-    }
+        if (false === $forceCacheReload) {
+            $bodyFromCache = $this->dashboardCacheService->getCachedBodyHtml($this->dashboardCacheService->getCacheKey(static::class));
 
-    public function getBodyHtml(): string
-    {
-        $cacheKey = $this->getCacheKey();
-        $bodyFromCache = $this->cache->get($cacheKey);
-
-        if (null !== $bodyFromCache) {
-            return $bodyFromCache;
+            if (null !== $bodyFromCache) {
+                return $bodyFromCache;
+            }
         }
 
         $body = $this->generateBodyHtml();
 
-        $this->cache->set($cacheKey, $body, [], $this->getCacheTimeToLiveInSec());
-        $this->cache->set($this->getCacheTimestampKey(), time(), [], $this->getCacheTimeToLiveInSec());
+        $this->dashboardCacheService->setCachedBodyHtml($this->dashboardCacheService->getCacheKey(static::class), $body);
 
         return $body;
     }
 
     abstract protected function generateBodyHtml(): string;
 
-    protected function getCacheKey(): string
-    {
-        return md5('widget_body_'.static::class);
-    }
-
-    protected function getCacheTimestampKey(): string
-    {
-        return md5('widget_body_timestamp_'.static::class);
-    }
-
     protected function getCacheCreationTime(): ?int
     {
-        return $this->cache->get($this->getCacheTimestampKey());
+        return $this->dashboardCacheService->getCacheCreationTime($this->dashboardCacheService->getCacheTimestampKey($this->dashboardCacheService->getCacheKey(static::class)));
     }
 
     public function getColorCssClass(): string
@@ -73,6 +61,6 @@ abstract class DashboardWidget implements DashboardWidgetInterface
 
     public function getFooterHtml(): string
     {
-        return '';
+        return '<div class="mx-3 my-2">zuletzt aktualisiert: <span class="widget-timestamp">'.date('d.m.Y H:i', $this->getCacheCreationTime()).'</span></div>';
     }
 }
