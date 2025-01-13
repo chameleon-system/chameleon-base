@@ -283,7 +283,7 @@ class MTTableManager extends TCMSModelBase
         foreach ($fieldIds as $fieldId) {
             $tdbCmsFieldConf = TdbCmsFieldConf::GetNewInstance();
             if (false === $tdbCmsFieldConf->Load($fieldId)) {
-                throw new InvalidArgumentException(sprintf('Could not saving list field record ID "%s"', $fieldId));
+                throw new InvalidArgumentException(sprintf('Error loading field config record "%s"', $fieldId));
             }
             $fieldName = $tdbCmsFieldConf->fieldName ?? '';
             $sqlFieldName = $this->getDatabaseConnection()->quoteIdentifier($tableName).'.'.$this->getDatabaseConnection()->quoteIdentifier($fieldName);
@@ -298,6 +298,11 @@ class MTTableManager extends TCMSModelBase
 
             $recordId = null;
             foreach ($languageIds as $languageId) {
+                $tdbCmsFieldConf = TdbCmsFieldConf::GetNewInstance(sLanguage: $languageId);
+                if (false === $tdbCmsFieldConf->Load($fieldId)) {
+                    throw new InvalidArgumentException(sprintf('Error loading field config record ID "%s" with language id "%s"', $fieldId, $languageId));
+                }
+
                 $oEditor->Init($tableConfId, $recordId, $languageId);
 
                 if (null === $recordId) {
@@ -313,12 +318,6 @@ class MTTableManager extends TCMSModelBase
                         true === $intoListFields ? 'show_in_list' : 'show_in_sort' => '1',
                     ];
                 } else {
-                    $tdbCmsFieldConf = TdbCmsFieldConf::GetNewInstance();
-                    $tdbCmsFieldConf->SetLanguage($languageId);
-                    if (false === $tdbCmsFieldConf->Load($fieldId)) {
-                        throw new InvalidArgumentException(sprintf('Error loading field config record ID "%s"', $fieldId));
-                    }
-
                     $postData = [
                         'id' => $recordId,
                         'title' => $tdbCmsFieldConf->fieldTranslation ?? '',
