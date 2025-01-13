@@ -18,7 +18,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
  * holds one Menu (category) for the CMS, including icon, title, and menu items.
  *
  * @deprecated since 6.3.0 - only used for deprecated classic main menu
-/**/
+ */
 class TCMSContentBoxItem extends TAdbCmsContentBox
 {
     /**
@@ -26,7 +26,7 @@ class TCMSContentBoxItem extends TAdbCmsContentBox
      *
      * @var TIterator
      */
-    public $oMenuItems = null;
+    public $oMenuItems;
 
     /**
      * Draw the menu header (outputs HTML).
@@ -50,9 +50,9 @@ class TCMSContentBoxItem extends TAdbCmsContentBox
             /** @var SecurityHelperAccess $securityHelper */
             $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
             if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
-                return ;
+                return;
             }
-            $aMenuItemsTemp = array();
+            $aMenuItemsTemp = [];
 
             $this->oMenuItems = new TIterator();
             // fetch tables

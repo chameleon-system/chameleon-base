@@ -18,24 +18,25 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
  * one of the menu columns.
  *
  * @deprecated since 6.3.0 - only used for deprecated classic main menu
-/**/
+ */
 class TCMSContentBox extends TAdbCmsContentBoxList
 {
     /**
      * where the menu is located (left, middle, or right).
      *
-     * @var string
+     * @var string|null
      */
-    public $sLocation = null;
+    public $sLocation;
 
     /**
      * Overwrites the Load function so that we may fetch the query using the $sLocation
      * sets the users backend language for the menu items.
      *
      * @param string $query
+     *
      * @return void
      */
-    public function Load($query = null, array $queryParameters = array(), array $queryParameterTypes = array())
+    public function Load($query = null, array $queryParameters = [], array $queryParameterTypes = [])
     {
         $language = null;
         /** @var SecurityHelperAccess $securityHelper */
@@ -56,14 +57,12 @@ class TCMSContentBox extends TAdbCmsContentBoxList
     /**
      * fetch the query used to get the menus for the column set by $sLocation.
      *
-     * @param TdbCmsLanguage $language
-     *
      * @return string
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
      */
-    protected function _GetQuery(\TdbCmsLanguage $language = null)
+    protected function _GetQuery(?TdbCmsLanguage $language = null)
     {
         $query = null;
         if (!is_null($this->sLocation)) {
