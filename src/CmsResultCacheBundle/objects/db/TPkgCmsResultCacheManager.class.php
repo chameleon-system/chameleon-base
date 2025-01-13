@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
  * Can be used to cache results.
  * Independent of cache manager in db.
  * Can be used for caching templates from other sites, credit or address checks.
+ *
  * @deprecated since 8.0.0 - use the drop in replacement ServiceLocator::get('chameleon_system_cms_result_cache.bridge_chameleon_service.data_base_cache_manager') instead
  **/
 class TPkgCmsResultCacheManager

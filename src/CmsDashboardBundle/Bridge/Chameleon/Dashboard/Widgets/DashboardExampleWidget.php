@@ -17,8 +17,7 @@ final class DashboardExampleWidget extends DashboardWidget
 {
     public function __construct(
         private readonly DashboardCacheService $dashboardCacheService
-        )
-    {
+    ) {
         parent::__construct($dashboardCacheService);
     }
 

@@ -12,13 +12,14 @@
 namespace ChameleonSystem\CoreBundle\Routing;
 
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatcherInterface
 {
-    protected function generateCacheDirPath(string $baseCacheDir): string {
+    protected function generateCacheDirPath(string $baseCacheDir): string
+    {
         return sprintf('%s/backend', $baseCacheDir);
     }
 
@@ -27,14 +28,14 @@ class ChameleonBackendRouter extends ChameleonBaseRouter implements RequestMatch
      */
     protected function getRouterConfig()
     {
-        $configArray = array();
+        $configArray = [];
 
         // add backend route
-        $configArray[] = array(
+        $configArray[] = [
             'name' => 'cms_tpl_page',
             'resource' => '@ChameleonSystemCoreBundle/Resources/config/route_backend.yml',
             'type' => 'yaml',
-        );
+        ];
 
         return $configArray;
     }
