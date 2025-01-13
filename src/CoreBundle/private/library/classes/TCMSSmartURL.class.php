@@ -133,7 +133,7 @@ class TCMSSmartURL
      *
      * @return int
      */
-    protected static function RunCustomHandlers(Request $request, $aCustomURLParameters)
+    protected static function RunCustomHandlers(Request $request, &$aCustomURLParameters)
     {
         $pagedef = false;
         $oPortal = self::getPortalDomainService()->getActivePortal();
