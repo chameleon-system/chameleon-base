@@ -134,14 +134,14 @@ class CMSFieldPositionRPC extends TCMSModelBase
 
         if ((array_key_exists('cms_tbl_field_tab', $oPositionRow->sqlData) && $oPositionRow->sqlData['cms_tbl_field_tab'] != $sTabId) || true === $bFirst) {
             if (true === $bFirst) {
-                $sTabName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.tab_default');
+                $sTabName = ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.tab_default');
                 $bFirst = false;
             } else {
                 $sTabId = $oPositionRow->sqlData['cms_tbl_field_tab'];
                 $oTab = TdbCmsTblFieldTab::GetNewInstance($sTabId);
                 $sTabName = $oTab->GetName();
             }
-            $sHTML = '<li id="item'.$sTabId.'" rel="0" class="list-group-item list-group-item-dark disabled" style="background-color:#8ab9ff; color#000000; font-weight:bold;"> '.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_mltrpc.tab', ['%tab%' => $sTabName]).'</li> ';
+            $sHTML = '<li id="item'.$sTabId.'" rel="0" class="list-group-item list-group-item-dark disabled" style="background-color:#8ab9ff; color#000000; font-weight:bold;"> '.ServiceLocator::get('translator')->trans('chameleon_system_core.field_mltrpc.tab', ['%tab%' => $sTabName]).'</li> ';
         }
 
         return $sHTML;
@@ -213,7 +213,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
      *
      * @return int|null - returns null if current record position did not change
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Doctrine\DBAL\Exception
      */
     public function SavePosChange()
     {
@@ -232,7 +232,7 @@ class CMSFieldPositionRPC extends TCMSModelBase
         $tableID = TTools::GetCMSTableId($tableSQLName);
         $editor = TTools::GetTableEditorManager($tableSQLName, $movedItemID);
 
-        $query = "SELECT 1 FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = :tableId AND `name` = :fieldName";
+        $query = 'SELECT 1 FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = :tableId AND `name` = :fieldName';
         if (false === (bool) $this->getDatabaseConnection()->fetchOne($query, ['tableId' => $tableID, 'fieldName' => $fieldName])) {
             return null;
         }
