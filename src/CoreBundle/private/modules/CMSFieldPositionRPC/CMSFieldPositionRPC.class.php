@@ -250,49 +250,49 @@ class CMSFieldPositionRPC extends TCMSModelBase
         return $newPositionOfCurrentRecord;
     }
 
-    protected function moveCmsField(string $sFieldName, string $sTableSQLName, string $movedItemID, array $aPosOrder): ?int
+    protected function moveCmsField(string $fieldName, string $tableSqlName, string $movedItemId, array $posOrder): ?int
     {
-        if ('cms_field_conf' !== $sTableSQLName || 'position' !== $sFieldName) {
+        if ('cms_field_conf' !== $tableSqlName || 'position' !== $fieldName) {
             return null;
         }
 
         $baseLanguageId = $this->getLanguageService()->getCmsBaseLanguageId();
 
-        $oRecord = TdbCmsFieldConf::GetNewInstance();
-        $oRecord->SetEnableObjectCaching(false);
-        $oRecord->SetLanguage($baseLanguageId);
+        $record = TdbCmsFieldConf::GetNewInstance();
+        $record->SetEnableObjectCaching(false);
+        $record->SetLanguage($baseLanguageId);
 
-        if (false === $oRecord->Load($movedItemID)) {
+        if (false === $record->Load($movedItemId)) {
             return null; // error
         }
 
-        $tableId = $oRecord->sqlData['cms_tbl_conf_id'];
-        $tableName = $oRecord->GetFieldCmsTblConf()->fieldName;
-        $movedFieldName = $oRecord->sqlData['name'];
+        $tableId = $record->sqlData['cms_tbl_conf_id'];
+        $tableName = $record->GetFieldCmsTblConf()->fieldName;
+        $movedFieldName = $record->sqlData['name'];
 
-        $targetIndex = array_search($movedItemID, $aPosOrder);
+        $targetIndex = array_search($movedItemId, $posOrder);
         if (false === $targetIndex) {
             return null; // error
         }
 
-        $beforeTargetId = $aPosOrder[$targetIndex - 1] ?? null;
+        $beforeTargetId = $posOrder[$targetIndex - 1] ?? null;
         $beforeFieldName = 'id';
         if (null !== $beforeTargetId) {
-            if (false === $oRecord->Load($beforeTargetId)) {
+            if (false === $record->Load($beforeTargetId)) {
                 return null; // error
             }
 
-            $beforeFieldName = $oRecord->sqlData['name'];
+            $beforeFieldName = $record->sqlData['name'];
         }
 
         TCMSLogChange::SetFieldPosition($tableId, $movedFieldName, $beforeFieldName);
         $this->writeSetFieldPositionSqlLog($tableName, $movedFieldName, $beforeFieldName);
 
-        if (false === $oRecord->Load($movedItemID)) {
+        if (false === $record->Load($movedItemId)) {
             return null; // error
         }
 
-        return $oRecord->sqlData[$sFieldName];
+        return $record->sqlData[$fieldName];
     }
 
     protected function writeSetFieldPositionSqlLog(string $tableName, string $movedFieldName, string $beforeFieldName): void
