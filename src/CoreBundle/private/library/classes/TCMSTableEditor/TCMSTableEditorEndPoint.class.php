@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
+use ChameleonSystem\CoreBundle\DataModel\CommentDataModel;
 use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
@@ -1566,7 +1567,7 @@ class TCMSTableEditorEndPoint
                 $isCommentedField = false;
                 if (true === $bIsUpdateCall && true === array_key_exists($oField->name, $this->oTable->sqlData) && false === $this->hasFieldChanged($oField, $sqlValue)) {
                     if ('name' === $oField->name) { // special field, comment line (maybe extended by table specific lists)
-                        $comments[$oField->name] = true;
+                        $comments[$oField->name] = new CommentDataModel(full: true);
                         $isCommentedField = true; // skip such for the SQL query
                     } else {
                         continue;
@@ -1612,7 +1613,7 @@ class TCMSTableEditorEndPoint
                         if (true === $bIsUpdateCall) {
                             $previousComment = $this->getPreviousComment($oField, $sqlValue);
                             if (null !== $previousComment) {
-                                $comments[$oField->name] = $previousComment;
+                                $comments[$oField->name] = new CommentDataModel($previousComment);
                             }
                         }
                     }
@@ -1757,7 +1758,7 @@ class TCMSTableEditorEndPoint
 
     /**
      * @param bool $isUpdateCall
-     * @param array<string, string|true> $comments
+     * @param array<string, CommentDataModel> $comments
      */
     private function writePostWriteLogChangeData($isUpdateCall, array $setFields, array $whereConditions, array $setLanguageFields, array $comments)
     {

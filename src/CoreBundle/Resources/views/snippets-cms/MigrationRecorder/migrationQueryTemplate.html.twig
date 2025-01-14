@@ -3,7 +3,7 @@
 {# @var fields array<string, mixed> #}
 {# @var whereEquals \Doctrine\Common\Collections\Expr\Comparison[] #}
 {# @var whereExpressions string[] #}
-{# @var comments array<string, string|true> #}
+{# @var comments array<string, \ChameleonSystem\CoreBundle\DataModel\CommentDataModel> #}
 {# @var operationType string #}
 $data = TCMSLogChange::createMigrationQueryData('{{ tableName }}', '{{ language }}')
 {% if fields|length > 0 %}
@@ -11,9 +11,9 @@ $data = TCMSLogChange::createMigrationQueryData('{{ tableName }}', '{{ language 
   {% for fieldName, value in fields %}
     {% set comment = comments[fieldName] -%}
 
-    {% if comment is same as(true) %}// {% endif -%}
+    {% if comment.full %}// {% endif -%}
     '{{ fieldName }}' => {{ value|raw }},
-    {%- if comment and comment is not same as(true) %} // {{ comment|raw }}{% endif %}
+    {%- if comment.text %} // {{ comment.text|raw }}{% endif %}
 
   {% endfor %}
 ])
