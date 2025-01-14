@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class CMSFieldPositionRPC extends TCMSModelBase
 {
     public function Execute()
@@ -207,17 +210,21 @@ class CMSFieldPositionRPC extends TCMSModelBase
     /**
      * saves a dropped element at the new position and reorders the other elements.
      *
-     * @return int - returns null if current record position did not change
+     * @return int|null - returns null if current record position did not change
      */
     public function SavePosChange()
     {
-        $iNewPositionOfCurrentRecord = null;
         $aPosOrder = $this->global->GetUserData('aPosOrder');
         $sFieldName = $this->global->GetUserData('fieldName');
         $sTableSQLName = $this->global->GetUserData('tableSQLName');
         $movedItemID = $this->global->GetUserData('movedItemID');
-
         $sActiveItemId = $this->global->GetUserData('activeItemId');
+
+        // try re-positioning CMS field if any
+        $iNewPositionOfCurrentRecord = $this->moveCmsField($sFieldName, $sTableSQLName, $movedItemID, $aPosOrder);
+        if (null !== $iNewPositionOfCurrentRecord) {
+            return $iNewPositionOfCurrentRecord;
+        }
 
         $sTableID = TTools::GetCMSTableId($sTableSQLName);
         $oEditor = TTools::GetTableEditorManager($sTableSQLName, $movedItemID);
@@ -242,6 +249,61 @@ class CMSFieldPositionRPC extends TCMSModelBase
         }
 
         return $iNewPositionOfCurrentRecord;
+    }
+
+    protected function moveCmsField(string $sFieldName, string $sTableSQLName, string $movedItemID, array $aPosOrder): ?int
+    {
+        if ('cms_field_conf' !== $sTableSQLName || 'position' !== $sFieldName) {
+            return null;
+        }
+
+        $baseLanguageId = $this->getLanguageService()->getCmsBaseLanguageId();
+
+        $oRecord = TdbCmsFieldConf::GetNewInstance();
+        $oRecord->SetEnableObjectCaching(false);
+        $oRecord->SetLanguage($baseLanguageId);
+
+        if (false === $oRecord->Load($movedItemID)) {
+            return null; // error
+        }
+
+        $tableId = $oRecord->sqlData['cms_tbl_conf_id'];
+        $tableName = $oRecord->GetFieldCmsTblConf()->fieldName;
+        $movedFieldName = $oRecord->sqlData['name'];
+
+        $targetIndex = array_search($movedItemID, $aPosOrder);
+        if (false === $targetIndex) {
+            return null; // error
+        }
+
+        $beforeTargetId = $aPosOrder[$targetIndex - 1] ?? null;
+        $beforeFieldName = 'id';
+        if (null !== $beforeTargetId) {
+            if (false === $oRecord->Load($beforeTargetId)) {
+                return null; // error
+            }
+
+            $beforeFieldName = $oRecord->sqlData['name'];
+        }
+
+        TCMSLogChange::SetFieldPosition($tableId, $movedFieldName, $beforeFieldName);
+        $this->writeSetFieldPositionSqlLog($tableName, $movedFieldName, $beforeFieldName);
+
+        if (false === $oRecord->Load($movedItemID)) {
+            return null; // error
+        }
+
+        return $oRecord->sqlData[$sFieldName];
+    }
+
+    protected function writeSetFieldPositionSqlLog(string $tableName, string $movedFieldName, string $beforeFieldName): void
+    {
+        $command = <<<COMMAND
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('{$tableName}'), '{$movedFieldName}', '{$beforeFieldName}');
+
+COMMAND;
+
+        TCMSLogChange::WriteSqlTransactionWithPhpCommands('', [$command]);
     }
 
     public function GetHtmlHeadIncludes()
@@ -283,5 +345,10 @@ class CMSFieldPositionRPC extends TCMSModelBase
       </script>';
 
         return $aIncludes;
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 }

@@ -78,7 +78,9 @@ class TCMSLogChange
         if (self::getMigrationRecorderStateHandler()->isDatabaseLoggingActive()) {
             $migrationRecorder = self::getMigrationRecorder();
             $filePointer = $migrationRecorder->startTransaction(self::getCurrentBuildNumber());
-            fwrite($filePointer, "/* {$sName} */\n");
+            if ('' !== $sName) {
+                fwrite($filePointer, "/* {$sName} */\n");
+            }
             foreach ($phpCommands as $command) {
                 fwrite($filePointer, $command."\n");
             }
