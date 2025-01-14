@@ -16,6 +16,7 @@ use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
+use ChameleonSystem\CoreBundle\Service\DeletedFieldsServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -1509,6 +1510,8 @@ class TCMSTableEditorEndPoint
         }
         $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($tableName).'` ';
 
+        $deletedFields = $this->getDeletedFieldsService()->getTableDeletedFields($tableName);
+
         $isFirst = true;
         if ($bCopyAllLanguages) {
             $oLanguageCopyList = $this->GetLanguageListForDatabaseCopy();
@@ -1577,6 +1580,9 @@ class TCMSTableEditorEndPoint
                 // now convert field name (if this is a multi-language field)
                 $sqlFieldNameWithLanguageCode = $oField->oDefinition->GetRealEditFieldName($languageId);
                 if (false !== $sqlValue && false !== $writeField) {
+                    $isDeletedField = true === in_array($oField->name, $deletedFields);
+                    $isCommentedField = true === $isCommentedField || true === $isDeletedField;
+
                     if (false === $isCommentedField) {
                         if ($isFirst) {
                             $isFirst = false;
@@ -1617,6 +1623,11 @@ class TCMSTableEditorEndPoint
                             }
                         }
                     }
+
+                    if (true === $isDeletedField) {
+                        $comments[$oField->name] = new CommentDataModel('(!) this field was deleted', true);
+                    }
+
                     // filter insert default values, except field "name"
                     if (true === $bIsUpdateCall || $sqlValue !== $oField->oDefinition->fieldFieldDefaultValue || 'name' === $oField->name) {
                         $dataForChangeRecorder[$oField->name] = $sqlValue;
@@ -2631,5 +2642,10 @@ class TCMSTableEditorEndPoint
     protected function getCacheService(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');
+    }
+
+    protected function getDeletedFieldsService(): DeletedFieldsServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.deleted_fields');
     }
 }
