@@ -8,6 +8,7 @@
         <parameter key="chameleon_system_core.database.estimation_lower_limit">0</parameter>
         <parameter key="chameleon_system_core.controller_invoke_listener.class">ChameleonSystem\CoreBundle\Controller\ChameleonControllerInvokeListener</parameter>
         <parameter key="chameleon_system_core.tpl_page_controller.class">TPkgCmsRouteControllerCmsTplPage</parameter>
+        <parameter key="deleted_fields">deletedFields.json</parameter>
     </parameters>
 
     <services>
@@ -984,6 +985,10 @@
 
         <service class="ChameleonSystem\CoreBundle\Service\FileSystemWrapper" id="chameleon_system_core.service.file_system_wrapper" public="true">
             <argument type="service" id="filesystem"/>
+        </service>
+
+        <service id="chameleon_system_core.service.deleted_fields" class="ChameleonSystem\CoreBundle\Service\DeletedFieldsService" public="true">
+            <argument type="string" key="$deletedFields"/> <!-- will be injected by DeletedFieldsPass -->
         </service>
     </services>
 </container>
