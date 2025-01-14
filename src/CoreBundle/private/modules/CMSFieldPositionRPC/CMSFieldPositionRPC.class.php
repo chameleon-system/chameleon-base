@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Doctrine\DBAL\Connection;
 
 class CMSFieldPositionRPC extends TCMSModelBase
 {
@@ -211,44 +212,42 @@ class CMSFieldPositionRPC extends TCMSModelBase
      * saves a dropped element at the new position and reorders the other elements.
      *
      * @return int|null - returns null if current record position did not change
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function SavePosChange()
     {
-        $aPosOrder = $this->global->GetUserData('aPosOrder');
-        $sFieldName = $this->global->GetUserData('fieldName');
-        $sTableSQLName = $this->global->GetUserData('tableSQLName');
+        $posOrder = $this->global->GetUserData('aPosOrder');
+        $fieldName = $this->global->GetUserData('fieldName');
+        $tableSQLName = $this->global->GetUserData('tableSQLName');
         $movedItemID = $this->global->GetUserData('movedItemID');
         $sActiveItemId = $this->global->GetUserData('activeItemId');
 
         // try re-positioning CMS field if any
-        $iNewPositionOfCurrentRecord = $this->moveCmsField($sFieldName, $sTableSQLName, $movedItemID, $aPosOrder);
-        if (null !== $iNewPositionOfCurrentRecord) {
-            return $iNewPositionOfCurrentRecord;
+        $newPositionOfCurrentRecord = $this->moveCmsField($fieldName, $tableSQLName, $movedItemID, $posOrder);
+        if (null !== $newPositionOfCurrentRecord) {
+            return $newPositionOfCurrentRecord;
         }
 
-        $sTableID = TTools::GetCMSTableId($sTableSQLName);
-        $oEditor = TTools::GetTableEditorManager($sTableSQLName, $movedItemID);
+        $tableID = TTools::GetCMSTableId($tableSQLName);
+        $editor = TTools::GetTableEditorManager($tableSQLName, $movedItemID);
 
-        $query = "SELECT *
-                  FROM `cms_field_conf`
-                 WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableID)."'
-                   AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
-        $result = MySqlLegacySupport::getInstance()->query($query);
-        if (MySqlLegacySupport::getInstance()->num_rows($result) > 0) {
-            $iNewPositionOfCurrentRecord = $oEditor->oTableEditor->UpdatePositionField($sFieldName);
-            $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableSQLName);
-
-            /**
-             * @var TCMSRecord $oRecord
-             */
-            $oRecord = new $sClassName();
-            $oRecord->SetEnableObjectCaching(false);
-            if ($oRecord->Load($sActiveItemId)) {
-                $iNewPositionOfCurrentRecord = $oRecord->sqlData[$sFieldName];
-            }
+        $query = "SELECT 1 FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = :tableId AND `name` = :fieldName";
+        if (false === (bool) $this->getDatabaseConnection()->fetchOne($query, ['tableId' => $tableID, 'fieldName' => $fieldName])) {
+            return null;
         }
 
-        return $iNewPositionOfCurrentRecord;
+        $newPositionOfCurrentRecord = $editor->oTableEditor->UpdatePositionField($fieldName);
+        $className = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $tableSQLName);
+
+        /** @var TCMSRecord $record */
+        $record = new $className();
+        $record->SetEnableObjectCaching(false);
+        if ($record->Load($sActiveItemId)) {
+            $newPositionOfCurrentRecord = $record->sqlData[$fieldName];
+        }
+
+        return $newPositionOfCurrentRecord;
     }
 
     protected function moveCmsField(string $sFieldName, string $sTableSQLName, string $movedItemID, array $aPosOrder): ?int
@@ -350,5 +349,10 @@ COMMAND;
     private function getLanguageService(): LanguageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getDatabaseConnection(): Connection
+    {
+        return ServiceLocator::get('database_connection');
     }
 }
