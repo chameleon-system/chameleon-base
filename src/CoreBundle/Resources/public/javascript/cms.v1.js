@@ -285,7 +285,9 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
         // set dialog size
         var modalDialogInner = document.querySelectorAll('#modalDialog .modal-dialog')[0];
         modalDialogInner.classList.remove('modal-xxl', 'modal-xl', 'modal-lg', 'modal-md');
-        modalDialogInner.classList.add(sizeClass);
+        if (sizeClass !== '') {
+            modalDialogInner.classList.add(sizeClass);
+        }
 
         // reset content
         var modalBody = document.querySelectorAll('#modalDialog .modal-body')[0];
