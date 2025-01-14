@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Doctrine\DBAL\Connection;
+
 class CMSFieldPositionRPC extends TCMSModelBase
 {
     public function Execute()
@@ -130,14 +134,14 @@ class CMSFieldPositionRPC extends TCMSModelBase
 
         if ((array_key_exists('cms_tbl_field_tab', $oPositionRow->sqlData) && $oPositionRow->sqlData['cms_tbl_field_tab'] != $sTabId) || true === $bFirst) {
             if (true === $bFirst) {
-                $sTabName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.tab_default');
+                $sTabName = ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_table_editor.tab_default');
                 $bFirst = false;
             } else {
                 $sTabId = $oPositionRow->sqlData['cms_tbl_field_tab'];
                 $oTab = TdbCmsTblFieldTab::GetNewInstance($sTabId);
                 $sTabName = $oTab->GetName();
             }
-            $sHTML = '<li id="item'.$sTabId.'" rel="0" class="list-group-item list-group-item-dark disabled" style="background-color:#8ab9ff; color#000000; font-weight:bold;"> '.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_mltrpc.tab', ['%tab%' => $sTabName]).'</li> ';
+            $sHTML = '<li id="item'.$sTabId.'" rel="0" class="list-group-item list-group-item-dark disabled" style="background-color:#8ab9ff; color#000000; font-weight:bold;"> '.ServiceLocator::get('translator')->trans('chameleon_system_core.field_mltrpc.tab', ['%tab%' => $sTabName]).'</li> ';
         }
 
         return $sHTML;
@@ -207,41 +211,98 @@ class CMSFieldPositionRPC extends TCMSModelBase
     /**
      * saves a dropped element at the new position and reorders the other elements.
      *
-     * @return int - returns null if current record position did not change
+     * @return int|null - returns null if current record position did not change
+     *
+     * @throws Doctrine\DBAL\Exception
      */
     public function SavePosChange()
     {
-        $iNewPositionOfCurrentRecord = null;
-        $aPosOrder = $this->global->GetUserData('aPosOrder');
-        $sFieldName = $this->global->GetUserData('fieldName');
-        $sTableSQLName = $this->global->GetUserData('tableSQLName');
+        $posOrder = $this->global->GetUserData('aPosOrder');
+        $fieldName = $this->global->GetUserData('fieldName');
+        $tableSQLName = $this->global->GetUserData('tableSQLName');
         $movedItemID = $this->global->GetUserData('movedItemID');
-
         $sActiveItemId = $this->global->GetUserData('activeItemId');
 
-        $sTableID = TTools::GetCMSTableId($sTableSQLName);
-        $oEditor = TTools::GetTableEditorManager($sTableSQLName, $movedItemID);
-
-        $query = "SELECT *
-                  FROM `cms_field_conf`
-                 WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableID)."'
-                   AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
-        $result = MySqlLegacySupport::getInstance()->query($query);
-        if (MySqlLegacySupport::getInstance()->num_rows($result) > 0) {
-            $iNewPositionOfCurrentRecord = $oEditor->oTableEditor->UpdatePositionField($sFieldName);
-            $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableSQLName);
-
-            /**
-             * @var TCMSRecord $oRecord
-             */
-            $oRecord = new $sClassName();
-            $oRecord->SetEnableObjectCaching(false);
-            if ($oRecord->Load($sActiveItemId)) {
-                $iNewPositionOfCurrentRecord = $oRecord->sqlData[$sFieldName];
-            }
+        // try re-positioning CMS field if any
+        $newPositionOfCurrentRecord = $this->moveCmsField($fieldName, $tableSQLName, $movedItemID, $posOrder);
+        if (null !== $newPositionOfCurrentRecord) {
+            return $newPositionOfCurrentRecord;
         }
 
-        return $iNewPositionOfCurrentRecord;
+        $tableID = TTools::GetCMSTableId($tableSQLName);
+        $editor = TTools::GetTableEditorManager($tableSQLName, $movedItemID);
+
+        $query = 'SELECT 1 FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = :tableId AND `name` = :fieldName';
+        if (false === (bool) $this->getDatabaseConnection()->fetchOne($query, ['tableId' => $tableID, 'fieldName' => $fieldName])) {
+            return null;
+        }
+
+        $newPositionOfCurrentRecord = $editor->oTableEditor->UpdatePositionField($fieldName);
+        $className = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $tableSQLName);
+
+        /** @var TCMSRecord $record */
+        $record = new $className();
+        $record->SetEnableObjectCaching(false);
+        if ($record->Load($sActiveItemId)) {
+            $newPositionOfCurrentRecord = $record->sqlData[$fieldName];
+        }
+
+        return $newPositionOfCurrentRecord;
+    }
+
+    protected function moveCmsField(string $fieldName, string $tableSqlName, string $movedItemId, array $posOrder): ?int
+    {
+        if ('cms_field_conf' !== $tableSqlName || 'position' !== $fieldName) {
+            return null;
+        }
+
+        $baseLanguageId = $this->getLanguageService()->getCmsBaseLanguageId();
+
+        $record = TdbCmsFieldConf::GetNewInstance();
+        $record->SetEnableObjectCaching(false);
+        $record->SetLanguage($baseLanguageId);
+
+        if (false === $record->Load($movedItemId)) {
+            return null; // error
+        }
+
+        $tableId = $record->sqlData['cms_tbl_conf_id'];
+        $tableName = $record->GetFieldCmsTblConf()->fieldName;
+        $movedFieldName = $record->sqlData['name'];
+
+        $targetIndex = array_search($movedItemId, $posOrder);
+        if (false === $targetIndex) {
+            return null; // error
+        }
+
+        $beforeTargetId = $posOrder[$targetIndex - 1] ?? null;
+        $beforeFieldName = 'id';
+        if (null !== $beforeTargetId) {
+            if (false === $record->Load($beforeTargetId)) {
+                return null; // error
+            }
+
+            $beforeFieldName = $record->sqlData['name'];
+        }
+
+        TCMSLogChange::SetFieldPosition($tableId, $movedFieldName, $beforeFieldName);
+        $this->writeSetFieldPositionSqlLog($tableName, $movedFieldName, $beforeFieldName);
+
+        if (false === $record->Load($movedItemId)) {
+            return null; // error
+        }
+
+        return $record->sqlData[$fieldName];
+    }
+
+    protected function writeSetFieldPositionSqlLog(string $tableName, string $movedFieldName, string $beforeFieldName): void
+    {
+        $command = <<<COMMAND
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('{$tableName}'), '{$movedFieldName}', '{$beforeFieldName}');
+
+COMMAND;
+
+        TCMSLogChange::WriteSqlTransactionWithPhpCommands('', [$command]);
     }
 
     public function GetHtmlHeadIncludes()
@@ -283,5 +344,15 @@ class CMSFieldPositionRPC extends TCMSModelBase
       </script>';
 
         return $aIncludes;
+    }
+
+    private function getLanguageService(): LanguageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.language_service');
+    }
+
+    private function getDatabaseConnection(): Connection
+    {
+        return ServiceLocator::get('database_connection');
     }
 }

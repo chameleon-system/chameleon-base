@@ -70,15 +70,20 @@ class TCMSLogChange
     /**
      * write a database change to the change log.
      *
-     * @param string $sName - name of the transaction
+     * @param string $name - name of the transaction
      * @param array $phpCommands - queries to write
+     *
+     * @throws MapperException
+     * @throws TPkgSnippetRenderer_SnippetRenderingException
      */
-    public static function WriteSqlTransactionWithPhpCommands($sName, array $phpCommands)
+    public static function WriteSqlTransactionWithPhpCommands($name, array $phpCommands)
     {
-        if (self::getMigrationRecorderStateHandler()->isDatabaseLoggingActive()) {
+        if (true === self::getMigrationRecorderStateHandler()->isDatabaseLoggingActive()) {
             $migrationRecorder = self::getMigrationRecorder();
             $filePointer = $migrationRecorder->startTransaction(self::getCurrentBuildNumber());
-            fwrite($filePointer, "/* {$sName} */\n");
+            if ('' !== $name) {
+                fwrite($filePointer, "/* {$name} */\n");
+            }
             foreach ($phpCommands as $command) {
                 fwrite($filePointer, $command."\n");
             }

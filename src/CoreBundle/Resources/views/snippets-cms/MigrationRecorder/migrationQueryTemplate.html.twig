@@ -5,7 +5,6 @@
 {# @var whereExpressions string[] #}
 {# @var comments array<string, string|true> #}
 {# @var operationType string #}
-
 $data = TCMSLogChange::createMigrationQueryData('{{ tableName }}', '{{ language }}')
 {% if fields|length > 0 %}
   ->setFields([
