@@ -12,6 +12,7 @@
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -90,7 +91,6 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
 
     public function GetHTML()
     {
-        $sHTML = '';
         $bAllowEdit = $this->oDefinition->GetFieldtypeConfigKey('bAllowEdit');
         if ($bAllowEdit) {
             $sHTML = parent::GetHTML();
@@ -128,10 +128,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
         return null;
     }
 
-    /**
-     * @return string
-     */
-    protected function getLinkToParentRecordIfSet()
+    protected function getLinkToParentRecordIfSet(): string
     {
         $translator = $this->getTranslator();
 
@@ -163,7 +160,7 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
             if ('' !== $itemName) {
                 $html .= '<div class="mr-2">'.$itemName.'</div>';
             }
-            $html .= '<div class="switchToRecordBox">'.TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.switch_to'), $this->GetEditLinkForParentRecord(), 'fas fa-location-arrow').'</div>';
+            $html .= '<div class="switchToRecordBox ms-auto">'.TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.switch_to'), $this->GetEditLinkForParentRecord(), 'fas fa-location-arrow').'</div>';
             $html .= '</div>';
 
             return $html;
@@ -210,9 +207,8 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
             'tableid' => $oTableConf->id,
             'id' => urlencode($this->data),
         ];
-        $sLink = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($sLinkParams);
 
-        return $sLink;
+        return PATH_CMS_CONTROLLER.$this->getUrlUtilService()->getArrayAsUrl($sLinkParams, '?', '&');
     }
 
     /**
@@ -260,5 +256,10 @@ class TCMSFieldLookupParentID extends TCMSFieldLookup implements DoctrineTransfo
     private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
+    }
+
+    private function getUrlUtilService(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }
