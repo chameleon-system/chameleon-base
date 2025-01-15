@@ -373,6 +373,7 @@ class TCMSLogChange
     public static function RunQuery($line, $sql, array $parameter = [], ?array $types = null)
     {
         $db = ServiceLocator::get('database_connection');
+        $sql = self::getDeletedFieldsService()->stripDeletedFields($sql);
 
         $logger = self::getLogger();
         try {

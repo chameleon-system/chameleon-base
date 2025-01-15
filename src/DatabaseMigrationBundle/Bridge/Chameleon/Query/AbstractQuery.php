@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Query;
 
+use ChameleonSystem\CoreBundle\Service\DeletedFieldsServiceInterface;
 use ChameleonSystem\DatabaseMigration\Constant\QueryConstants;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\DatabaseMigration\Query\QueryInterface;
@@ -39,7 +40,11 @@ abstract class AbstractQuery implements QueryInterface
      * @param Connection                       $databaseConnection
      * @param AbstractQueryDataAccessInterface $dataAccess
      */
-    public function __construct(Connection $databaseConnection, AbstractQueryDataAccessInterface $dataAccess)
+    public function __construct(
+        Connection $databaseConnection,
+        AbstractQueryDataAccessInterface $dataAccess,
+        protected readonly DeletedFieldsServiceInterface $deletedFieldsService,
+    )
     {
         $this->databaseConnection = $databaseConnection;
         $this->dataAccess = $dataAccess;
@@ -80,6 +85,7 @@ abstract class AbstractQuery implements QueryInterface
      */
     final public function getQuery(MigrationQueryData $migrationQueryData)
     {
+        $this->filterDeletedFields($migrationQueryData);
         $query = $this->getBaseQuery($this->databaseConnection->quoteIdentifier($migrationQueryData->getTableName()));
         $queryParams = array();
 
@@ -95,6 +101,13 @@ abstract class AbstractQuery implements QueryInterface
         $queryParams = array_merge($queryParams, $subQueryParams);
 
         return array($query, $queryParams);
+    }
+
+    protected function filterDeletedFields(MigrationQueryData $migrationQueryData): void
+    {
+        $deletedFields = $this->deletedFieldsService->getTableDeletedFields($migrationQueryData->getTableName());
+        $filteredFields = array_diff_key($migrationQueryData->getFields(), array_fill_keys($deletedFields, true));
+        $migrationQueryData->setFields($filteredFields);
     }
 
     /**
