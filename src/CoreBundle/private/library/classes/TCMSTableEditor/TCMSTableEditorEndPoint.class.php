@@ -11,10 +11,12 @@
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
+use ChameleonSystem\CoreBundle\DataModel\CommentDataModel;
 use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
+use ChameleonSystem\CoreBundle\Service\DeletedFieldsServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -1265,31 +1267,53 @@ class TCMSTableEditorEndPoint
      */
     protected function DeleteExecute()
     {
-        $sDeleteId = $this->sId; // prevent delete of wrong records when id is accidentally reset
+        $deleteId = $this->sId; // prevent delete of wrong records when id is accidentally reset
+        $tableName = $this->oTableConf->sqlData['name'];
+
         if (!is_null($this->oTableConf) && TCMSRecord::TableExists('shop_search_indexer') && !defined('CMSUpdateManagerRunning')) {
-            TdbShopSearchIndexer::UpdateIndex($this->oTableConf->sqlData['name'], $sDeleteId, 'delete');
+            TdbShopSearchIndexer::UpdateIndex($tableName, $deleteId, 'delete');
         }
         $this->DeleteRecordReferences();
 
         // final mysql delete
         $query = 'DELETE FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->oTableConf->sqlData['name'])."`
-                      WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sDeleteId)."'";
+                      WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($deleteId)."'";
         MySqlLegacySupport::getInstance()->query($query);
 
+        $this->addFieldDeletedTodoComment();
+
         $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
-        $migrationQueryData = new MigrationQueryData($this->oTableConf->sqlData['name'], $editLanguage->fieldIso6391);
+        $migrationQueryData = new MigrationQueryData($tableName, $editLanguage->fieldIso6391);
         $migrationQueryData
             ->setWhereEquals([
-                'id' => $sDeleteId,
+                'id' => $deleteId,
             ])
         ;
-        $aQuery = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_DELETE)];
-        TCMSLogChange::WriteTransaction($aQuery);
+        $queries = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_DELETE)];
+        TCMSLogChange::WriteTransaction($queries);
 
-        $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $sDeleteId);
+        $event = new RecordChangeEvent($tableName, $deleteId);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_RECORD);
 
         $this->sId = null;
+    }
+
+    /**
+     * @throws TPkgSnippetRenderer_SnippetRenderingException
+     * @throws MapperException
+     */
+    protected function addFieldDeletedTodoComment(): void
+    {
+        if (false === property_exists($this, '_oField') || null === $this->_oField) {
+            return;
+        }
+
+        $todo = sprintf(
+            '//@todo (usually only in the Core) you may add this table/field entry in the "deletedFields.json" like: "%s": [..., "%s"]'."\n",
+            $this->_oField->sTableName,
+            $this->_oField->name,
+        );
+        TCMSLogChange::WriteSqlTransactionWithPhpCommands('', [$todo]);
     }
 
     /**
@@ -1508,6 +1532,8 @@ class TCMSTableEditorEndPoint
         }
         $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($tableName).'` ';
 
+        $deletedFields = $this->getDeletedFieldsService()->getTableDeletedFields($tableName);
+
         $isFirst = true;
         if ($bCopyAllLanguages) {
             $oLanguageCopyList = $this->GetLanguageListForDatabaseCopy();
@@ -1566,7 +1592,7 @@ class TCMSTableEditorEndPoint
                 $isCommentedField = false;
                 if (true === $bIsUpdateCall && true === array_key_exists($oField->name, $this->oTable->sqlData) && false === $this->hasFieldChanged($oField, $sqlValue)) {
                     if ('name' === $oField->name) { // special field, comment line (maybe extended by table specific lists)
-                        $comments[$oField->name] = true;
+                        $comments[$oField->name] = new CommentDataModel(full: true);
                         $isCommentedField = true; // skip such for the SQL query
                     } else {
                         continue;
@@ -1576,6 +1602,9 @@ class TCMSTableEditorEndPoint
                 // now convert field name (if this is a multi-language field)
                 $sqlFieldNameWithLanguageCode = $oField->oDefinition->GetRealEditFieldName($languageId);
                 if (false !== $sqlValue && false !== $writeField) {
+                    $isDeletedField = true === in_array($oField->name, $deletedFields);
+                    $isCommentedField = true === $isCommentedField || true === $isDeletedField;
+
                     if (false === $isCommentedField) {
                         if ($isFirst) {
                             $isFirst = false;
@@ -1612,10 +1641,15 @@ class TCMSTableEditorEndPoint
                         if (true === $bIsUpdateCall) {
                             $previousComment = $this->getPreviousComment($oField, $sqlValue);
                             if (null !== $previousComment) {
-                                $comments[$oField->name] = $previousComment;
+                                $comments[$oField->name] = new CommentDataModel($previousComment);
                             }
                         }
                     }
+
+                    if (true === $isDeletedField) {
+                        $comments[$oField->name] = new CommentDataModel('(!) this field was deleted', true);
+                    }
+
                     // filter insert default values, except field "name"
                     if (true === $bIsUpdateCall || $sqlValue !== $oField->oDefinition->fieldFieldDefaultValue || 'name' === $oField->name) {
                         $dataForChangeRecorder[$oField->name] = $sqlValue;
@@ -1757,7 +1791,7 @@ class TCMSTableEditorEndPoint
 
     /**
      * @param bool $isUpdateCall
-     * @param array<string, string|true> $comments
+     * @param array<string, CommentDataModel> $comments
      */
     private function writePostWriteLogChangeData($isUpdateCall, array $setFields, array $whereConditions, array $setLanguageFields, array $comments)
     {
@@ -2630,5 +2664,10 @@ class TCMSTableEditorEndPoint
     protected function getCacheService(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');
+    }
+
+    protected function getDeletedFieldsService(): DeletedFieldsServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.deleted_fields');
     }
 }

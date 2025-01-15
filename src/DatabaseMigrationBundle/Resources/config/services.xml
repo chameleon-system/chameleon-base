@@ -10,6 +10,7 @@
         <service id="chameleon_system_database_migration.query.base" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Query\AbstractQuery" abstract="true">
             <argument type="service" id="database_connection" />
             <argument type="service" id="chameleon_system_database_migration.query.abstract_query_data_access" />
+            <argument type="service" id="chameleon_system_core.service.deleted_fields"/>
         </service>
 
         <service id="chameleon_system_database_migration.query.insert" class="ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Query\Insert" parent="chameleon_system_database_migration.query.base" public="true">

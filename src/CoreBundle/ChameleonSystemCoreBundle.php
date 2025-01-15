@@ -19,6 +19,7 @@ use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\AddUrlNormalizersPas
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\ChameleonModulePass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\CollectRequestStateElementProvidersPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\ControllerResolverPass;
+use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\DeletedFieldsPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\MakeLoggerPublicPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\SetChameleonHttpKernelPass;
 use ChameleonSystem\CoreBundle\DependencyInjection\Compiler\SetCsrfTokenManagerFactoryPass;
@@ -47,5 +48,6 @@ class ChameleonSystemCoreBundle extends Bundle
         $container->addCompilerPass(new CollectRequestStateElementProvidersPass());
         $container->addCompilerPass(new MakeLoggerPublicPass());
         $container->addCompilerPass(new AddFieldExtensions());
+        $container->addCompilerPass(new DeletedFieldsPass());
     }
 }

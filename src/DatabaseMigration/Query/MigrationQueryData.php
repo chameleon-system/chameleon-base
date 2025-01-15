@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\DatabaseMigration\Query;
 
+use ChameleonSystem\CoreBundle\DataModel\CommentDataModel;
 use Doctrine\Common\Collections\Expr\Comparison;
 
 /**
@@ -48,7 +49,7 @@ class MigrationQueryData
      */
     private $whereExpressionsFieldTypes = [];
     /**
-     * @var array<string, string|true>
+     * @var array<string, CommentDataModel>
      */
     private array $comments = [];
 
@@ -117,7 +118,7 @@ class MigrationQueryData
     }
 
     /**
-     * @param array<string, string|true> $comments
+     * @param array<string, CommentDataModel> $comments
      */
     public function setComments(array $comments): self
     {
