@@ -989,6 +989,7 @@
 
         <service id="chameleon_system_core.service.deleted_fields" class="ChameleonSystem\CoreBundle\Service\DeletedFieldsService" public="true">
             <argument type="string" key="$deletedFields"/> <!-- will be injected by DeletedFieldsPass -->
+            <argument type="service" id="database_connection" key="$connection"/>
         </service>
     </services>
 </container>

@@ -14,6 +14,7 @@ use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesRequestCacheDataAcce
 use ChameleonSystem\AutoclassesBundle\Handler\TPkgCoreAutoClassHandler_TPkgCmsClassManager;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
 use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
+use ChameleonSystem\CoreBundle\Service\DeletedFieldsServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\UpdateManager\StripVirtualFieldsFromQuery;
@@ -309,6 +310,7 @@ class TCMSLogChange
         /** @var $stripNonExistingFields StripVirtualFieldsFromQuery */
         $stripNonExistingFields = ServiceLocator::get('chameleon_system_core.update_manager_strip_virtual_fields_from_query');
         $query = $stripNonExistingFields->stripNonExistingFields($query);
+        $query = self::getDeletedFieldsService()->stripDeletedFields($query);
 
         $sOriginalQuery = $query;
         $sCommand = substr($query, 0, 11);
@@ -366,7 +368,7 @@ class TCMSLogChange
      * @param int $line
      * @param string $sql
      * @param array $parameter - parameter list (indexed or named)
-     * @param array $types - if nothing is passed, then string type is assumed
+     * @param array|null $types - if nothing is passed, then string type is assumed
      */
     public static function RunQuery($line, $sql, array $parameter = [], ?array $types = null)
     {
@@ -2433,5 +2435,10 @@ class TCMSLogChange
     private static function getGuidCreationService(): GuidCreationServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.guid_creation');
+    }
+
+    protected static function getDeletedFieldsService(): DeletedFieldsServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.deleted_fields');
     }
 }

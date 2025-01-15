@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer;
+use ChameleonSystem\CoreBundle\Service\DeletedFieldsServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use Doctrine\DBAL\DBALException;
@@ -540,5 +541,10 @@ class TCMSTableWriter extends TCMSTableEditor
     private function getAutoclassDataAccess(): ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface
     {
         return ServiceLocator::get('chameleon_system_autoclasses.data_access.autoclasses');
+    }
+
+    protected function getDeletedFieldsService(): DeletedFieldsServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.service.deleted_fields');
     }
 }
