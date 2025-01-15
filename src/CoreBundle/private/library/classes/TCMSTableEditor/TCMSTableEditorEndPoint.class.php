@@ -1278,6 +1278,8 @@ class TCMSTableEditorEndPoint
                       WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sDeleteId)."'";
         MySqlLegacySupport::getInstance()->query($query);
 
+        $this->addFieldDeletedTodoComment();
+
         $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
         $migrationQueryData = new MigrationQueryData($this->oTableConf->sqlData['name'], $editLanguage->fieldIso6391);
         $migrationQueryData
@@ -1292,6 +1294,24 @@ class TCMSTableEditorEndPoint
         $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_RECORD);
 
         $this->sId = null;
+    }
+
+    /**
+     * @throws TPkgSnippetRenderer_SnippetRenderingException
+     * @throws MapperException
+     */
+    protected function addFieldDeletedTodoComment(): void
+    {
+        if (false === property_exists($this, '_oField') || null === $this->_oField) {
+            return;
+        }
+
+        $todo = sprintf(
+            '//TODO (usually only in the Core) you may add this table/field entry in the "deletedFields.json" like: "%s": [..., "%s"]'."\n",
+            $this->_oField->sTableName,
+            $this->_oField->name,
+        );
+        TCMSLogChange::WriteSqlTransactionWithPhpCommands('', [$todo]);
     }
 
     /**
