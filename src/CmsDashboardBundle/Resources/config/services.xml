@@ -8,6 +8,7 @@
             <tag name="chameleon_system.module" />
             <argument type="service" id="chameleon_system_cms_dashboard.modules_provider_service" />
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.dashboard_widget"
@@ -20,6 +21,7 @@
 
         <service id="chameleon_system_cms_dashboard.widget.example" class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardExampleWidget">
             <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
+            <argument id="chameleon_system_core.translator" type="service"/>
         </service>
 
         <service class="ChameleonSystem\CmsDashboardBundle\Controllers\WidgetController"

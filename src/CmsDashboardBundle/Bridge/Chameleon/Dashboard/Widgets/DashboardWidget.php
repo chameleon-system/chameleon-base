@@ -11,11 +11,13 @@
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class DashboardWidget implements DashboardWidgetInterface
 {
     public function __construct(
-        private readonly DashboardCacheService $dashboardCacheService)
+        private readonly DashboardCacheService $dashboardCacheService,
+        private readonly TranslatorInterface $translator)
     {
     }
 
@@ -61,6 +63,6 @@ abstract class DashboardWidget implements DashboardWidgetInterface
 
     public function getFooterHtml(): string
     {
-        return '<div class="mx-3 my-2">zuletzt aktualisiert: <span class="widget-timestamp">'.date('d.m.Y H:i', $this->getCacheCreationTime()).'</span></div>';
+        return '<div class="mx-3 my-2">'.$this->translator->trans('chameleon_system_cms_dashboard.last_updated').': <span class="widget-timestamp">'.date('d.m.Y H:i', $this->getCacheCreationTime()).'</span></div>';
     }
 }

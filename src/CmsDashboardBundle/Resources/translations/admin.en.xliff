@@ -10,6 +10,14 @@
                 <source>chameleon_system_cms_dashboard.for</source>
                 <target>for</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.last_updated">
+                <source>chameleon_system_cms_dashboard.last_updated</source>
+                <target>last updated</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.reload_all">
+                <source>chameleon_system_cms_dashboard.reload_all</source>
+                <target>Reload All</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
