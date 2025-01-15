@@ -1267,30 +1267,32 @@ class TCMSTableEditorEndPoint
      */
     protected function DeleteExecute()
     {
-        $sDeleteId = $this->sId; // prevent delete of wrong records when id is accidentally reset
+        $deleteId = $this->sId; // prevent delete of wrong records when id is accidentally reset
+        $tableName = $this->oTableConf->sqlData['name'];
+
         if (!is_null($this->oTableConf) && TCMSRecord::TableExists('shop_search_indexer') && !defined('CMSUpdateManagerRunning')) {
-            TdbShopSearchIndexer::UpdateIndex($this->oTableConf->sqlData['name'], $sDeleteId, 'delete');
+            TdbShopSearchIndexer::UpdateIndex($tableName, $deleteId, 'delete');
         }
         $this->DeleteRecordReferences();
 
         // final mysql delete
         $query = 'DELETE FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->oTableConf->sqlData['name'])."`
-                      WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sDeleteId)."'";
+                      WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($deleteId)."'";
         MySqlLegacySupport::getInstance()->query($query);
 
         $this->addFieldDeletedTodoComment();
 
         $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
-        $migrationQueryData = new MigrationQueryData($this->oTableConf->sqlData['name'], $editLanguage->fieldIso6391);
+        $migrationQueryData = new MigrationQueryData($tableName, $editLanguage->fieldIso6391);
         $migrationQueryData
             ->setWhereEquals([
-                'id' => $sDeleteId,
+                'id' => $deleteId,
             ])
         ;
-        $aQuery = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_DELETE)];
-        TCMSLogChange::WriteTransaction($aQuery);
+        $queries = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_DELETE)];
+        TCMSLogChange::WriteTransaction($queries);
 
-        $event = new RecordChangeEvent($this->oTableConf->sqlData['name'], $sDeleteId);
+        $event = new RecordChangeEvent($tableName, $deleteId);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_RECORD);
 
         $this->sId = null;
