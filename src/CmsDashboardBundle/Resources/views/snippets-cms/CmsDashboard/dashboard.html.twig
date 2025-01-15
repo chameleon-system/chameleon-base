@@ -1,8 +1,15 @@
 {# @var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget #}
+{# @var bool forceReload #}
 <div id="">
     <div class="card mb-4 bg-image" style="background-image: url('/bundles/chameleonsystemcmsdashboard/images/dashboard-bg.png');">
         <div class="card-body">
             <h1 class="display-5">{{ 'chameleon_system_cms_dashboard.dashboard'|trans }}</h1>
+            <div class="float-right">
+                <form action="">
+                    <input type="hidden" name="reload" value="true">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-sync"></i> {{ 'chameleon_system_cms_dashboard.reload_all'|trans }}</button>
+                </form>
+            </div>
             <p class="lead">{{ 'chameleon_system_cms_dashboard.for'|trans }} {{ loggedInUserName }} [{{ cmsOwner }}]</p>
         </div>
     </div>
@@ -44,7 +51,7 @@
                             {% endif %}
                         </div>
                         <div class="card-body p-0">
-                            {{ widget.bodyHtml|raw }}
+                            {{ widget.bodyHtml(forceReload)|raw }}
                         </div>
                         {% if widget.footerHtml %}
                             <div class="card-footer p-0">

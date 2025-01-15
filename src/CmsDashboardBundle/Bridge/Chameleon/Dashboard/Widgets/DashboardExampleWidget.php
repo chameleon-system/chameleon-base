@@ -12,13 +12,15 @@ namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class DashboardExampleWidget extends DashboardWidget
 {
     public function __construct(
-        private readonly DashboardCacheService $dashboardCacheService
+        private readonly DashboardCacheService $dashboardCacheService,
+        private readonly TranslatorInterface $translator
     ) {
-        parent::__construct($dashboardCacheService);
+        parent::__construct($dashboardCacheService, $translator);
     }
 
     public function getTitle(): string

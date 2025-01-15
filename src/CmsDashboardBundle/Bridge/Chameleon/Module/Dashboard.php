@@ -12,12 +12,14 @@ namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Module;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\DashboardModulesProvider;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
 {
     public function __construct(
         private readonly DashboardModulesProvider $provider,
-        private readonly SecurityHelperAccess $securityHelperAccess)
+        private readonly SecurityHelperAccess $securityHelperAccess,
+        private readonly RequestStack $requestStack)
     {
         parent::__construct();
     }
@@ -27,6 +29,13 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         $bCachingEnabled,
         \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
+
+        $reload = $this->requestStack->getCurrentRequest()?->query->get('reload', false);
+        if ('true' === $reload) {
+            $reload = true;
+        }
+
+        $oVisitor->SetMappedValue('forceReload', $reload);
         $oVisitor->SetMappedValue('loggedInUserName', $this->getLoggedInUserName());
         $oVisitor->SetMappedValue('cmsOwner', $this->getOwnerName());
         $oVisitor->SetMappedValue('widgetCollections', $this->provider->getWidgetCollections());
