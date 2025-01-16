@@ -19,10 +19,17 @@
         <service id="chameleon_system_cms_dashboard.modules_provider_service" class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\DashboardModulesProvider">
         </service>
 
-        <service id="chameleon_system_cms_dashboard.widget.example" class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardExampleWidget">
+        <service id="chameleon_system_cms_dashboard.widget.last_run_cronjobs"
+                 class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardLastRunCronjobsWidget">
             <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
+            <argument id="chameleon_system_core.cronjob.cronjob_state_service" type="service"/>
+            <argument id="chameleon_system_view_renderer.view_renderer" type="service"/>
+            <argument id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" type="service"/>
+            <tag name="chameleon_system.dashboard_widget" collection="admin" priority="1"/>
         </service>
+
+        <service id="widget-last-run-cronjobs" alias="chameleon_system_cms_dashboard.widget.last_run_cronjobs" public="true" />
 
         <service class="ChameleonSystem\CmsDashboardBundle\Controllers\WidgetController"
                  id="chameleon_system_cms_dashboard.controllers.widget_controller">

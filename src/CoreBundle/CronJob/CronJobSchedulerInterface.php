@@ -11,20 +11,16 @@
 
 namespace ChameleonSystem\CoreBundle\CronJob;
 
+use ChameleonSystem\CoreBundle\CronJob\DataModel\CronJobScheduleDataModel;
+
 interface CronJobSchedulerInterface
 {
     /**
-     * @param CronJobScheduleDataModel $schedule
-     *
-     * @return bool
      * @throws \InvalidArgumentException
      */
     public function requiresExecution(CronJobScheduleDataModel $schedule): bool;
 
     /**
-     * @param CronJobScheduleDataModel $schedule
-     *
-     * @return \DateTime
      * @throws \InvalidArgumentException
      */
     public function calculateCurrentPlannedExecutionDate(CronJobScheduleDataModel $schedule): \DateTime;

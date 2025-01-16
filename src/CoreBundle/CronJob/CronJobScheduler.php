@@ -11,18 +11,13 @@
 
 namespace ChameleonSystem\CoreBundle\CronJob;
 
+use ChameleonSystem\CoreBundle\CronJob\DataModel\CronJobScheduleDataModel;
 use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 
-class CronJobScheduler implements CronJobSchedulerInterface
+readonly class CronJobScheduler implements CronJobSchedulerInterface
 {
-    /**
-     * @var TimeProviderInterface
-     */
-    private $timeProvider;
-
-    public function __construct(TimeProviderInterface $timeProvider)
+    public function __construct(private TimeProviderInterface $timeProvider)
     {
-        $this->timeProvider = $timeProvider;
     }
 
     /**
@@ -43,23 +38,18 @@ class CronJobScheduler implements CronJobSchedulerInterface
         $nextExecution->add(new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes())));
 
         if ($now < $nextExecution) {
-
             return false;
         }
 
         if (false === $schedule->isLocked()) {
-
             return true;
         }
 
         $iMaxLockTime = $schedule->getUnlockAfterNMinutes();
         $maxLock = clone $lastPlannedExecution;
         $maxLock->add(new \DateInterval(sprintf('PT%sM', $iMaxLockTime)));
-        if ($now <= $maxLock) {
-            return false;
-        }
 
-        return true;
+        return $now > $maxLock;
     }
 
     /**
@@ -85,7 +75,7 @@ class CronJobScheduler implements CronJobSchedulerInterface
         $executionInterval = new \DateInterval(sprintf('PT%sM', $schedule->getExecuteEveryNMinutes()));
 
         $plannedExecution = clone $lastPlannedExecution;
-        while($plannedExecution < $now) {
+        while ($plannedExecution < $now) {
             $plannedExecution->add($executionInterval);
         }
 
@@ -96,9 +86,6 @@ class CronJobScheduler implements CronJobSchedulerInterface
         return $plannedExecution;
     }
 
-    /**
-     * @param CronJobScheduleDataModel $schedule
-     */
     private function validateSchedule(CronJobScheduleDataModel $schedule): void
     {
         if ($schedule->getExecuteEveryNMinutes() <= 0) {

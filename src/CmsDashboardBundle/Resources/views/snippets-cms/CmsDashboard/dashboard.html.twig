@@ -1,6 +1,6 @@
 {# @var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget #}
 {# @var bool forceReload #}
-<div id="">
+<div id="cms-dashboard">
     <div class="card mb-4 bg-image" style="background-image: url('/bundles/chameleonsystemcmsdashboard/images/dashboard-bg.png');">
         <div class="card-body">
             <h1 class="display-5">{{ 'chameleon_system_cms_dashboard.dashboard'|trans }}</h1>
@@ -30,7 +30,7 @@
             {% for widgetData in widgetCollection %}
                 {% set widget = widgetData.widget %}
                 <div class="col-{{ colClass }}">
-                    <div class="card mb-4{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" id="widget-{{ widget.chartId|escape('html_attr') }}">
+                    <div class="card mb-4{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" id="widget-{{ widget.chartId|replace({'widget-' : ''})|escape('html_attr') }}">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span>{{ widget.title }}</span>
                             {% if widget.dropdownItems is not empty %}
@@ -40,11 +40,21 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         {% for dropdownItem in widget.dropdownItems %}
-                                            <a class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}" href="{{ dropdownItem.url|escape('html_attr') }}"
+                                            {% if dropdownItem.url %}
+                                                <a class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}" href="{{ dropdownItem.url|escape('html_attr') }}"
+                                            {% else %}
+                                                <button class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}"
+                                            {% endif %}
                                             {% for dataAttributeKey, dataAttributeVal in dropdownItem.dataAttributes %}
                                                 {{ dataAttributeKey|escape('html_attr') }}="{{ dataAttributeVal|escape('html_attr') }}"
                                             {% endfor %}
-                                            >{{ dropdownItem.title }}</a>
+                                            >
+                                            {{ dropdownItem.title }}
+                                            {% if dropdownItem.url %}
+                                               </a>
+                                            {% else %}
+                                               </button>
+                                            {% endif %}
                                         {% endfor %}
                                     </div>
                                 </div>

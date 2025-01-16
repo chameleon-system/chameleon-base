@@ -18,6 +18,38 @@
                 <source>chameleon_system_cms_dashboard.reload_all</source>
                 <target>Alles aktualisieren</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs_title">
+                <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs_title</source>
+                <target>letzte automatisch ausgeführte Aktionen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.running">
+                <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.running</source>
+                <target>läuft gerade</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.active">
+                <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.active</source>
+                <target>aktiv</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.deactivated">
+                <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.deactivated</source>
+                <target>deaktiviert</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.name">
+                <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.last_run_time">
+                <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.last_run_time</source>
+                <target>zuletzt ausgeführt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.running_since">
+                <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.running_since</source>
+                <target>läuft seit</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.status">
+                <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.status</source>
+                <target>Status</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

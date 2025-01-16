@@ -44,6 +44,8 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
     public function GetHtmlFooterIncludes(): array
     {
         $includes = [];
+        $includes[] = '<script src="/bundles/chameleonsystemcmsdashboard/js/dashboard.js"></script>';
+
         $widgetCollections = $this->provider->getWidgetCollections();
         foreach ($widgetCollections as $widgetCollection) {
             foreach ($widgetCollection as $widgetData) {

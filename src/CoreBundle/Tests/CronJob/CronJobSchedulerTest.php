@@ -11,7 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Tests\CronJob;
 
-use ChameleonSystem\CoreBundle\CronJob\CronJobScheduleDataModel;
+use ChameleonSystem\CoreBundle\CronJob\DataModel\CronJobScheduleDataModel;
 use ChameleonSystem\CoreBundle\CronJob\CronJobScheduler;
 use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 use PHPUnit\Framework\TestCase;

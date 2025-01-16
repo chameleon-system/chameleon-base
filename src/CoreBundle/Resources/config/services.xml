@@ -738,6 +738,7 @@
 
         <service id="chameleon_system_core.cronjob.cronjob_state_service" class="ChameleonSystem\CoreBundle\CronJob\CronjobStateService" public="true">
             <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.tools"/>
         </service>
 
         <service id="chameleon_system_core.security.authenticity_token.authenticity_token_storage" class="ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenStorage" public="false">
