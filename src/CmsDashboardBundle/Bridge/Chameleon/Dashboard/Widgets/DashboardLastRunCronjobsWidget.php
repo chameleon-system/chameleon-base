@@ -61,7 +61,7 @@ class DashboardLastRunCronjobsWidget extends DashboardWidget
         return [$button];
     }
 
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getStatsDataAsJson')]
+    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
     public function getWidgetHtmlAsJson(): JsonResponse
     {
         $data = [
