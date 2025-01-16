@@ -46,7 +46,7 @@ class CronjobStateService implements CronjobStateServiceInterface
         $cronJobList = \TdbCmsCronjobsList::GetList($query);
 
         $cronJobDataModels = [];
-        while($cronJob = $cronJobList->Next()) {
+        while ($cronJob = $cronJobList->Next()) {
             $cronJobDataModels[] = $this->createCronJobDataModel($cronJob);
         }
 
@@ -61,13 +61,13 @@ class CronjobStateService implements CronjobStateServiceInterface
         $query = "SELECT *
                     FROM `cms_cronjobs`
                    WHERE `lock` = '1'
-                ORDER BY `real_last_execution` DESC 
+                ORDER BY `real_last_execution` DESC
                    LIMIT ".$limit;
 
         $cronJobList = \TdbCmsCronjobsList::GetList($query);
 
         $cronJobDataModels = [];
-        while($cronJob = $cronJobList->Next()) {
+        while ($cronJob = $cronJobList->Next()) {
             $cronJobDataModels[] = $this->createCronJobDataModel($cronJob);
         }
 
@@ -77,6 +77,7 @@ class CronjobStateService implements CronjobStateServiceInterface
     private function createCronJobDataModel(\TdbCmsCronjobs $cronJob): CronJobDataModel
     {
         $cronJobScheduleDataModel = $cronJob->getSchedule();
+
         return new CronJobDataModel(
             $cronJob->id,
             $cronJob->GetName(),
@@ -92,7 +93,6 @@ class CronjobStateService implements CronjobStateServiceInterface
 
         return '/cms?pagedef=tableeditor&tableid='.$tableId.'&id='.$cronJob->id;
     }
-
 
     private function getCronJobTableId(): string
     {

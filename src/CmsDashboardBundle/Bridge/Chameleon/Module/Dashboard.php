@@ -29,7 +29,6 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         $bCachingEnabled,
         \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
-
         $reload = $this->requestStack->getCurrentRequest()?->query->get('reload', false);
         if ('true' === $reload) {
             $reload = true;
