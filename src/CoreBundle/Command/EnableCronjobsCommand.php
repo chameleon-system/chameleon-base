@@ -12,18 +12,15 @@
 namespace ChameleonSystem\CoreBundle\Command;
 
 use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
+use ChameleonSystem\CoreBundle\Exception\CronjobHandlingException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use ChameleonSystem\CoreBundle\Exception\CronjobHandlingException;
 
 #[\Symfony\Component\Console\Attribute\AsCommand(description: 'Enables the cron job execution', name: 'chameleon_system:cronjobs:enable')]
 class EnableCronjobsCommand extends Command
 {
-    /**
-     * @var CronjobEnablingServiceInterface
-     */
-    private $cronjobEnablingService;
+    private CronjobEnablingServiceInterface $cronjobEnablingService;
 
     public function __construct(CronjobEnablingServiceInterface $cronjobEnablingService)
     {

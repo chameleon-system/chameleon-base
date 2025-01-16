@@ -11,8 +11,8 @@
 
 namespace ChameleonSystem\CoreBundle\Tests\CronJob;
 
-use ChameleonSystem\CoreBundle\CronJob\CronJobScheduleDataModel;
 use ChameleonSystem\CoreBundle\CronJob\CronJobScheduler;
+use ChameleonSystem\CoreBundle\CronJob\DataModel\CronJobScheduleDataModel;
 use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -41,9 +41,6 @@ class CronJobSchedulerTest extends TestCase
      * @var CronJobScheduler
      */
     private $subject;
-    /**
-     * @var mixed
-     */
     private $subjectResult;
 
     public function provideDataForExecutionNeeded(): array
@@ -281,10 +278,6 @@ class CronJobSchedulerTest extends TestCase
 
     /**
      * @dataProvider provideDataForExecutionNeeded
-     *
-     * @param CronJobScheduleDataModel $schedule
-     * @param \DateTime                $currentUtcTime
-     * @param bool                     $expectedResult
      */
     public function testExecutionNeeded(
         CronJobScheduleDataModel $schedule,
@@ -300,10 +293,6 @@ class CronJobSchedulerTest extends TestCase
 
     /**
      * @dataProvider provideDataForExecutionNeededThrowsExceptionOnInvalidInput
-     *
-     * @param CronJobScheduleDataModel $schedule
-     * @param \DateTime                $currentUtcTime
-     * @param \Exception               $expectedException
      */
     public function testExecutionNeededThrowsExceptionOnInvalidInput(
         CronJobScheduleDataModel $schedule,
@@ -333,10 +322,6 @@ class CronJobSchedulerTest extends TestCase
 
     /**
      * @dataProvider provideDataForCalculateCurrentPlanedExecutionDateUtc
-     *
-     * @param CronJobScheduleDataModel $schedule
-     * @param \DateTime                $currentUtcTime
-     * @param \DateTime                $expectedUtcExecutionTime
      */
     public function testCalculateCurrentPlanedExecutionDate(
         CronJobScheduleDataModel $schedule,
@@ -350,10 +335,6 @@ class CronJobSchedulerTest extends TestCase
 
     /**
      * @dataProvider provideDataForExecutionNeededThrowsExceptionOnInvalidInput
-     *
-     * @param CronJobScheduleDataModel $schedule
-     * @param \DateTime                $currentUtcTime
-     * @param \Exception               $expectedException
      */
     public function testCalculateCurrentPlanedExecutionDateThrowsExceptionOnInvalidInput(
         CronJobScheduleDataModel $schedule,
@@ -378,7 +359,7 @@ class CronJobSchedulerTest extends TestCase
 
     private function createDate(string $dateString): \DateTime
     {
-        $utc = null; //new \DateTimeZone('UTC');
+        $utc = null; // new \DateTimeZone('UTC');
 
         return \DateTime::createFromFormat(
             'Y-m-d H:i:s',

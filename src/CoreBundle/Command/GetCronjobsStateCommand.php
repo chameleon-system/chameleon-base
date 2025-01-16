@@ -20,10 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[\Symfony\Component\Console\Attribute\AsCommand(description: 'Checks if any cron job is running', name: 'chameleon_system:cronjobs:state_check')]
 class GetCronjobsStateCommand extends Command
 {
-    /**
-     * @var CronjobStateServiceInterface
-     */
-    private $cronjobStateService;
+    private CronjobStateServiceInterface $cronjobStateService;
 
     public function __construct(CronjobStateServiceInterface $cronjobStateService)
     {

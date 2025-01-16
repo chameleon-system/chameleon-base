@@ -27,6 +27,14 @@ abstract class DashboardWidget implements DashboardWidgetInterface
 
     abstract public function getDropdownItems(): array;
 
+    /**
+     * Implement user permission checks here.
+     */
+    public function showWidget(): bool
+    {
+        return true;
+    }
+
     public function getFooterIncludes(): array
     {
         return [];

@@ -9,8 +9,8 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\CronJob\CronJobScheduleDataModel;
 use ChameleonSystem\CoreBundle\CronJob\CronJobSchedulerInterface;
+use ChameleonSystem\CoreBundle\CronJob\DataModel\CronJobScheduleDataModel;
 use ChameleonSystem\CoreBundle\Interfaces\TimeProviderInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
@@ -26,10 +26,7 @@ class TCMSCronJob extends TCMSRecord
      */
     protected $sMessageOutput = '';
 
-    /**
-     * @param string $id
-     */
-    public function __construct($id = null)
+    public function __construct(?string $id = null)
     {
         parent::__construct('cms_cronjobs', $id);
     }
@@ -147,13 +144,21 @@ class TCMSCronJob extends TCMSRecord
     /**
      * @throws InvalidArgumentException
      */
-    private function getSchedule(): CronJobScheduleDataModel
+    public function getSchedule(): CronJobScheduleDataModel
     {
         $lastPlannedExecution = null;
         if ('' !== $this->sqlData['last_execution']) {
             $lastPlannedExecution = DateTime::createFromFormat(
                 'Y-m-d H:i:s',
                 $this->sqlData['last_execution']
+            );
+        }
+
+        $realLastExecution = null;
+        if ('' !== $this->sqlData['real_last_execution']) {
+            $realLastExecution = DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $this->sqlData['real_last_execution']
             );
         }
 
@@ -173,7 +178,8 @@ class TCMSCronJob extends TCMSRecord
             $executeEveryNMinutes,
             (int) $this->sqlData['unlock_after_n_minutes'],
             '1' === $this->sqlData['lock'],
-            $lastPlannedExecution
+            $lastPlannedExecution,
+            $realLastExecution
         );
     }
 
@@ -262,7 +268,7 @@ class TCMSCronJob extends TCMSRecord
         $connection = $this->getDatabaseConnection();
         $tableNameQuoted = $connection->quoteIdentifier($this->table);
 
-        $numberOfRowsAffected = $connection->executeUpdate("UPDATE $tableNameQuoted SET `lock` = '1' WHERE `id` = :id", ['id' => $this->id]);
+        $numberOfRowsAffected = $connection->executeStatement("UPDATE $tableNameQuoted SET `lock` = '1' WHERE `id` = :id", ['id' => $this->id]);
         $this->sqlData['lock'] = '1';
 
         return 1 === $numberOfRowsAffected;
@@ -276,7 +282,7 @@ class TCMSCronJob extends TCMSRecord
         $connection = $this->getDatabaseConnection();
         $tableNameQuoted = $connection->quoteIdentifier($this->table);
 
-        $connection->executeUpdate("UPDATE $tableNameQuoted SET `lock` = '0' WHERE `id` = :id", ['id' => $this->id]);
+        $connection->executeStatement("UPDATE $tableNameQuoted SET `lock` = '0' WHERE `id` = :id", ['id' => $this->id]);
         $this->sqlData['lock'] = '0';
     }
 
@@ -288,7 +294,7 @@ class TCMSCronJob extends TCMSRecord
         $failureErrorLevel = $this->getFailureErrorLevel();
 
         return set_error_handler(
-            function ($severity, $message, $file, $line) use ($failureErrorLevel) {
+            static function ($severity, $message, $file, $line) use ($failureErrorLevel) {
                 if (0 === ($failureErrorLevel & $severity)) {
                     return;
                 }

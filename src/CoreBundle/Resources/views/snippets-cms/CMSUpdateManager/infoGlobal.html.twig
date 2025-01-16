@@ -6,7 +6,7 @@
     {% else %}
         {% set messageType = message.level|lower %}
     {% endif %}
-    <li class="list-group-item list-group-item-{{ messageType }}">
+    <li class="list-group-item list-group-item-{{ messageType }} text-dark">
         <a href="#info-{{ bundleName }}-{{ buildNumber }}-{{ loop.index0 }}">{{ 'chameleon_system_core.cms_module_update.go_to_message'|trans }}</a>
         <b>{{ message.level }}:</b><br/>{{ message.text }}
     </li>

@@ -20,10 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[\Symfony\Component\Console\Attribute\AsCommand(description: 'Disables the cron job execution', name: 'chameleon_system:cronjobs:disable')]
 class DisableCronjobsCommand extends Command
 {
-    /**
-     * @var CronjobEnablingServiceInterface
-     */
-    private $cronjobEnablingService;
+    private CronjobEnablingServiceInterface $cronjobEnablingService;
 
     public function __construct(CronjobEnablingServiceInterface $cronjobEnablingService)
     {

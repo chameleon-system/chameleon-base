@@ -6,14 +6,8 @@ use Psr\Container\ContainerInterface;
 
 class CronJobFactory implements CronJobFactoryInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(private readonly ContainerInterface $container)
     {
-        $this->container = $container;
     }
 
     /**
@@ -32,7 +26,7 @@ class CronJobFactory implements CronJobFactoryInterface
         if (false === $cronJob instanceof \TCMSCronJob) {
             throw new \InvalidArgumentException(sprintf('Class for given identifier %s does not extend TCMSCronJob', $identifier));
         }
-        /**
+        /*
          * @var \TCMSCronJob $cronJob
          */
         $cronJob->LoadFromRow($data);

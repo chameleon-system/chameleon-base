@@ -24,6 +24,10 @@ final class DashboardModulesProvider
      **/
     public function addDashboardWidget(DashboardWidgetInterface $widget, string $id, string $collection = 'default', int $priority = 0): void
     {
+        if (false === $widget->showWidget()) {
+            return;
+        }
+
         $this->widgets[$collection][] = [
             'id' => $id,
             'widget' => $widget,
