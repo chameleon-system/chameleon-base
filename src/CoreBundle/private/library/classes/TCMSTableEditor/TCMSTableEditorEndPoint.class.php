@@ -1515,7 +1515,7 @@ class TCMSTableEditorEndPoint
 
         $tableName = $this->oTableConf->sqlData['name'];
         $languageId = $this->oTableConf->GetLanguage();
-        $language = \TdbCmsLanguage::GetNewInstance();
+        $language = TdbCmsLanguage::GetNewInstance();
         $language->Load($languageId);
 
         $bRecordExists = false;
