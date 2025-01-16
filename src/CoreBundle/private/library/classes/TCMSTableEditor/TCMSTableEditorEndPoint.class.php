@@ -1757,7 +1757,7 @@ class TCMSTableEditorEndPoint
      */
     private function getPreviousComment(mixed $valuePrev, mixed $valueNow): ?string
     {
-        if (false === is_string($valuePrev)) {
+        if (true === is_array($valuePrev)) {
             return null;
         }
 
