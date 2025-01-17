@@ -13,7 +13,7 @@ use Doctrine\DBAL\Exception as DBALException;
 
 /**
  * add a menu item to switch to any user if the current user has that right.
-/**/
+ */
 class TCMSTableEditorCMSRole extends TCMSTableEditor
 {
     protected function PostSaveHook($oFields, $oPostTable)
@@ -29,7 +29,7 @@ class TCMSTableEditorCMSRole extends TCMSTableEditor
     {
         $query = 'UPDATE `cms_user`
             INNER JOIN `cms_user_cms_role_mlt` ON `cms_user_cms_role_mlt`.source_id = `cms_user`.`id`
-            SET `date_modified` = :date_time 
+            SET `date_modified` = :date_time
             WHERE `cms_user_cms_role_mlt`.`target_id` = :role_id';
 
         try {
