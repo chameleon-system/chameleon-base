@@ -1515,6 +1515,8 @@ class TCMSTableEditorEndPoint
 
         $tableName = $this->oTableConf->sqlData['name'];
         $languageId = $this->oTableConf->GetLanguage();
+        $language = TdbCmsLanguage::GetNewInstance();
+        $language->Load($languageId);
 
         $bRecordExists = false;
         if ($bForceInsert) {
@@ -1589,8 +1591,11 @@ class TCMSTableEditorEndPoint
                     $aPropertyFields[] = $oField;
                 }
 
+                $fieldName = '1' == $oField->oDefinition->sqlData['is_translatable'] ? $oField->oDefinition->GetEditFieldNameForLanguage($language) : $oField->name;
+                $valuePrev = $this->oTable->sqlData[$fieldName] ?? null;
+
                 $isCommentedField = false;
-                if (true === $bIsUpdateCall && true === array_key_exists($oField->name, $this->oTable->sqlData) && false === $this->hasFieldChanged($oField, $sqlValue)) {
+                if (true === $bIsUpdateCall && $sqlValue === $valuePrev) {
                     if ('name' === $oField->name) { // special field, comment line (maybe extended by table specific lists)
                         $comments[$oField->name] = new CommentDataModel(full: true);
                         $isCommentedField = true; // skip such for the SQL query
@@ -1639,7 +1644,7 @@ class TCMSTableEditorEndPoint
                         $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($sqlFieldNameWithLanguageCode)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sqlValue)."'";
 
                         if (true === $bIsUpdateCall) {
-                            $previousComment = $this->getPreviousComment($oField, $sqlValue);
+                            $previousComment = $this->getPreviousComment($valuePrev, $sqlValue);
                             if (null !== $previousComment) {
                                 $comments[$oField->name] = new CommentDataModel($previousComment);
                             }
@@ -1747,23 +1752,17 @@ class TCMSTableEditorEndPoint
         return $bSaveSuccess;
     }
 
-    private function hasFieldChanged(TCMSField $field, mixed $valueNow): bool
-    {
-        return $valueNow !== $this->oTable->sqlData[$field->name];
-    }
-
     /**
      * prints an adequate comment for the previous field value, consider WYSIWYG fields and shows partly the difference.
      */
-    private function getPreviousComment(TCMSField $field, mixed $valueNow): ?string
+    private function getPreviousComment(mixed $valuePrev, mixed $valueNow): ?string
     {
-        $valuePrev = $this->oTable->sqlData[$field->name];
-        if (false === is_string($valuePrev)) {
+        if (true === is_array($valuePrev)) {
             return null;
         }
 
         if (true === is_string($valueNow) && strlen($valuePrev) > 255) {
-            $maxLength = max(strlen($valuePrev), strlen($field->data));
+            $maxLength = max(strlen($valuePrev), strlen($valueNow));
 
             // record first difference with fix length, starting if chars are not equal anymore (includes one string has ended)
             for ($i = 0; $i < $maxLength; ++$i) {
