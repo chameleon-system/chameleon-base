@@ -98,7 +98,7 @@ class TCMSTableEditorTree extends TCMSTableEditor
         $this->writeSqlLog();
 
         // update cache
-        $this->getCacheService()->callTrigger(this->oTableConf->sqlData['name'], $this->sId);
+        $this->getCacheService()->callTrigger($this->oTableConf->fieldName, $this->sId);
 
         $event = new ChangeNavigationTreeNodeEvent($updatedNodes);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_NAVIGATION_TREE_NODE);
