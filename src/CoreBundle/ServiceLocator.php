@@ -37,7 +37,7 @@ class ServiceLocator
      * @throws ServiceCircularReferenceException if a circular reference is detected
      * @throws ServiceNotFoundException if the service is not defined or the container isn't set yet
      *
-     * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement
+     * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement, InvalidReturnType, InvalidReturnStatement
      */
     public static function get($serviceId)
     {
