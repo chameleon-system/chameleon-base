@@ -207,7 +207,7 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
         );
     }
 
-    private function getParentIFrame()
+    private function getParentIFrame(): string
     {
         return $this->inputFilterUtil->getFilteredInput(
             MediaManagerListState::URL_NAME_PARENT_IFRAME,

@@ -32,6 +32,9 @@ class TableEditorNewsletterGroup extends TCMSTableEditor
         $this->oMenuItems->AddItem($menuItem);
     }
 
+    /**
+     * @psalm-suppress UndefinedAttributeClass
+     */
     #[NoReturn] public function exportSubscriber(): void
     {
         $newsletterSubscriberList = $this->getNewsletterGroupSubscriberExportService()->exportSubscriberAsCsv($this->sId);

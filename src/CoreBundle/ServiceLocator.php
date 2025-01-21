@@ -32,7 +32,7 @@ class ServiceLocator
      *
      * @param string $serviceId
      *
-     * @return T
+     * @return T|object
      *
      * @throws ServiceCircularReferenceException if a circular reference is detected
      * @throws ServiceNotFoundException if the service is not defined or the container isn't set yet
@@ -50,6 +50,8 @@ class ServiceLocator
 
     /**
      * @param string $name
+     *
+     * @return \UnitEnum|float|array|bool|int|string|null
      *
      * @throws InvalidArgumentException if the parameter is not defined
      * @throws ServiceCircularReferenceException

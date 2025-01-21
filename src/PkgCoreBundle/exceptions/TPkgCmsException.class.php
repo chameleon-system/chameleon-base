@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+// TODO implement "Serializable" with magics "__serialize" and "__unserialize" using an more secure mechanism with associative arrays
 class TPkgCmsException extends \Exception implements Serializable
 {
     /**
@@ -55,7 +56,7 @@ class TPkgCmsException extends \Exception implements Serializable
      *
      * @return string the string representation of the object or null
      */
-    public function serialize()
+    public function serialize(): string
     {
         $content = array();
         foreach ($this as $key => $value) {
@@ -77,7 +78,7 @@ class TPkgCmsException extends \Exception implements Serializable
      *                           The string representation of the object.
      *                           </p>
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): string
     {
         $content = unserialize($serialized);
         foreach ($content as $key => $value) {

@@ -464,6 +464,8 @@ class TCMSField implements TCMSFieldVisitableInterface
     /**
      * returns the field value for database storage
      * overwrite this method to modify data before save.
+     *
+     * @return string|false
      */
     public function GetSQL()
     {
@@ -1121,6 +1123,9 @@ class TCMSField implements TCMSFieldVisitableInterface
         return '';
     }
 
+    /**
+     * @return string
+     */
     public function RenderFieldMethodsString()
     {
         return '';

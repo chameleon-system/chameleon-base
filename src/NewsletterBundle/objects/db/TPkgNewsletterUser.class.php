@@ -60,7 +60,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
             $newsletterUser = null;
             $user = self::getExtranetUserProvider()->getActiveUser();
             if (null !== $user && $user->IsLoggedIn()) {
-                $oInst = TdbPkgNewsletterUser::GetNewInstance();
+                $newsletterUser = TdbPkgNewsletterUser::GetNewInstance();
                 $oPortal = self::getPortalDomainServiceStatic()->getActivePortal();
                 $newsletterUserLoaded = false;
                 $newsletterLoadedOnlyFromEMail = false;

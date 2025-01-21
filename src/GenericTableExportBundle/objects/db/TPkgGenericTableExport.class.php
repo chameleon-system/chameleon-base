@@ -22,6 +22,8 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
      *
      * @param null $sId
      * @param bool $bUtf8Decode
+     *
+     * @return bool
      */
     public function WriteExport($sId = null, $bUtf8Decode = false)
     {

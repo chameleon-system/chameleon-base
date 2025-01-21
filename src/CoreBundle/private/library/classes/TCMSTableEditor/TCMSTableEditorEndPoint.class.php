@@ -228,6 +228,8 @@ class TCMSTableEditorEndPoint
 
     /**
      * set public methods here that may be called from outside.
+     *
+     * @return void
      */
     public function DefineInterface()
     {

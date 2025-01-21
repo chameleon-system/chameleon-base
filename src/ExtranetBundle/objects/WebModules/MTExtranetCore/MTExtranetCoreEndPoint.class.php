@@ -221,7 +221,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
             // validate shipping address (if passed...)
             // @TODO move the shop stuff in extension
             if (class_exists('TdbDataExtranetUserAddress', false)) {
-                $aShipping = $this->getInputFilterUtil()->getFilteredPostInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
+                $aShipping = $this->getInputFilterUtil()->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
                 if ($aShipping && is_array($aShipping)) {
                     $oTmpAdr = TdbDataExtranetUserAddress::GetNewInstance();
                     $oTmpAdr->LoadFromRowProtected($aShipping);
@@ -418,7 +418,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     protected function DeleteShippingAddress($selectedAddressId = null, $sSuccessURL = null, $sFailureURL = null, $bInternalCall = false)
     {
         $bDataValid = false;
-        $aUserData = $this->getInputFilterUtil()->getFilteredPostInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
+        $aUserData = $this->getInputFilterUtil()->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
         if (is_null($selectedAddressId)) {
             if (is_array($aUserData) && array_key_exists('selectedAddressId', $aUserData)) {
                 $selectedAddressId = $aUserData['selectedAddressId'];
@@ -479,7 +479,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      */
     public function SelectBillingAddress($selectedAddressId = null, $sRedirectToURL = null, $bInternalCall = false)
     {
-        $aUserData = $this->getInputFilterUtil()->getFilteredInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
+        $aUserData = $this->getInputFilterUtil()->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_BILLING);
         if (is_null($selectedAddressId)) {
             if (is_array($aUserData) && array_key_exists('selectedAddressId', $aUserData)) {
                 $selectedAddressId = $aUserData['selectedAddressId'];
@@ -541,7 +541,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
      */
     public function SelectShippingAddress($selectedAddressId = null, $sRedirectToURL = null, $bInternalCall = false)
     {
-        $aUserData = $this->getInputFilterUtil()->getFilteredInput(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
+        $aUserData = $this->getInputFilterUtil()->getFilteredPostInputArray(TdbDataExtranetUserAddress::FORM_DATA_NAME_SHIPPING);
         if (is_null($selectedAddressId)) {
             if (is_array($aUserData) && array_key_exists('selectedAddressId', $aUserData)) {
                 $selectedAddressId = $aUserData['selectedAddressId'];

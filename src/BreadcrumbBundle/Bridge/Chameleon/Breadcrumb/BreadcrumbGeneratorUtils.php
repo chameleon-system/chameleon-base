@@ -19,7 +19,7 @@ class BreadcrumbGeneratorUtils implements BreadcrumbGeneratorUtilsInterface
     public function attachBreadcrumbItem(
         BreadcrumbDataModel $breadcrumb,
         \TdbCmsTree $tree,
-        $ignoreHiddenTree = true
+        bool $ignoreHiddenTree = true
     ): void
     {
         if ($ignoreHiddenTree && $tree->fieldHidden) {
@@ -37,8 +37,8 @@ class BreadcrumbGeneratorUtils implements BreadcrumbGeneratorUtilsInterface
 
     public function attachBreadcrumbItemsByTreeId(
         BreadcrumbDataModel $breadcrumb,
-        $treeId,
-        $ignoreFirstTreeIfHidden = true
+        string $treeId,
+        bool $ignoreFirstTreeIfHidden = true
     ): void {
         $tree = $this->treeService->getById($treeId);
         if (null === $tree) {

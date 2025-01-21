@@ -45,6 +45,10 @@ class DataBaseCacheManager
         return false !== $resultCache->LoadFromFields(['owner_hash' => sha1($owner), 'hash' => sha1($key)]);
     }
 
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
     public function set(string $owner, $key, $value, ?int $expireTimestamp, bool $allowGarbageCollection = true): void
     {
         $cacheEntryData = [];

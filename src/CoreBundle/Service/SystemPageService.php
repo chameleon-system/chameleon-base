@@ -62,7 +62,7 @@ class SystemPageService implements SystemPageServiceInterface
 
         $pages = \TdbCmsPortalSystemPageList::GetList(null, $language->id);
         while ($page = $pages->Next()) {
-            /** @var TdbCmsPortalSystemPage $page */
+            /** @var \TdbCmsPortalSystemPage $page */
             if ($page->fieldCmsPortalId === $portal->id) {
                 $systemPageList[] = $page;
             }
@@ -149,6 +149,9 @@ class SystemPageService implements SystemPageServiceInterface
         return $pageDataModel;
     }
 
+    /**
+     * @return bool
+     */
     protected function isActivePage(\TdbCmsTplPage $pageRecord)
     {
         $activePage = $this->activePageService->getActivePage();
@@ -157,6 +160,6 @@ class SystemPageService implements SystemPageServiceInterface
             return false;
         }
 
-        return $pageRecord->id = $activePage->id;
+        return $pageRecord->id === $activePage->id;
     }
 }
