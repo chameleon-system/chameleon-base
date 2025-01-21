@@ -10,22 +10,22 @@ class ColorGeneratorService implements ColorGeneratorServiceInterface
     {
         $palette = [
             '#20a8d8', // Blue
-            '#6610f2', // Indigo
-            '#6f42c1', // Purple
-            '#e83e8c', // Pink
             '#f86c6b', // Red
             '#f8cb00', // Orange
-            '#ffc107', // Yellow
             '#4dbd74', // Green
+            '#6610f2', // Indigo
             '#20c997', // Teal
             '#17a2b8', // Cyan
             '#73818f', // Gray
             '#63c2de', // Light-blue
             '#20a8d8', // Primary
+            '#6f42c1', // Purple
             '#c8ced3', // Secondary
             '#4dbd74', // Success
             '#63c2de', // Info
+            '#e83e8c', // Pink
             '#ffc107', // Warning
+            '#ffc107', // Yellow
             '#f86c6b', // Danger
             '#f0f3f5', // Light
         ];

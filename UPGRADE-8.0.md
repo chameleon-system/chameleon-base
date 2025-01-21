@@ -22,7 +22,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
   - If you are using the `InputFilterUtil` class, there is currently a fallback so the project won't crash immediately. However, this fallback will be removed in the future.
 - `AppKernel::registerBundles` now needs a return type.
 
-### backend user rights changed to symfy security voters
+### backend user rights changed to symfony security voters
 
 @todo add more information
 

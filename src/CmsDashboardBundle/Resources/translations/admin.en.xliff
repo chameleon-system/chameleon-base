@@ -18,6 +18,10 @@
                 <source>chameleon_system_cms_dashboard.reload_all</source>
                 <target>Reload All</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.reload_button_label">
+                <source>chameleon_system_cms_dashboard.widget.reload_button_label</source>
+                <target>Reload</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs_title">
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs_title</source>
                 <target>Last automatically executed actions</target>

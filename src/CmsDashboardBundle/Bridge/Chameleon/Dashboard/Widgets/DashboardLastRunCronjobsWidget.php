@@ -52,7 +52,7 @@ class DashboardLastRunCronjobsWidget extends DashboardWidget
     {
         $button = new WidgetDropdownItemDataModel(
             'reload-'.$this->getChartId(),
-            $this->translator->trans('chameleon_system_ecommerce_stats.widgets.reload_button_label'),
+            $this->translator->trans('chameleon_system_cms_dashboard.widget.reload_button_label'),
             ''
         );
 
@@ -90,13 +90,5 @@ class DashboardLastRunCronjobsWidget extends DashboardWidget
     public function getChartId(): string
     {
         return self::WIDGET_ID;
-    }
-
-    public function getFooterIncludes(): array
-    {
-        $includes = parent::getFooterIncludes();
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemshop/js/dashboard.js"></script>';
-
-        return $includes;
     }
 }
