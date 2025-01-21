@@ -43,9 +43,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * assoc array holding the sql data row.
      *
-     * @var array<string, mixed>
+     * @var array<string, mixed>|false
      */
-    public $sqlData = [];
+    public $sqlData = false;
 
     /**
      * id of table record (complex id string) - use fieldCmsIdent if you want an auto increment.
