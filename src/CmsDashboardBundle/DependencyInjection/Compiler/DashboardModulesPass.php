@@ -30,22 +30,28 @@ class DashboardModulesPass implements CompilerPassInterface
         foreach ($taggedServices as $serviceId => $tags) {
             foreach ($tags as $attributes) {
                 $collection = $attributes['collection'] ?? 'default';
+                $collectionPriority = $attributes['collectionPriority'] ?? 0;
                 $priority = $attributes['priority'] ?? 0;
 
                 $widgets[] = [
                     'serviceId' => $serviceId,
                     'collection' => $collection,
+                    'collectionPriority' => (int) $collectionPriority,
                     'priority' => (int) $priority,
                 ];
             }
         }
 
-        // sort widgets by collection und priority
+        // Sort widgets by collectionPriority and then by priority
         usort($widgets, function ($a, $b) {
+            if ($a['collectionPriority'] !== $b['collectionPriority']) {
+                return $b['collectionPriority'] <=> $a['collectionPriority'];
+            }
+
             return $b['priority'] <=> $a['priority'];
         });
 
-        // add widgets to dashboard service
+        // Add widgets to the dashboard service
         foreach ($widgets as $widget) {
             $moduleServiceDefinition->addMethodCall(
                 'addDashboardWidget',

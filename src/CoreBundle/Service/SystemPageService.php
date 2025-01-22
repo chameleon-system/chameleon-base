@@ -135,6 +135,11 @@ class SystemPageService implements SystemPageServiceInterface
         $absoluteUrl = $this->getLinkToSystemPageAbsolute($systemPageNameInternal, $parameters, $portal, $language);
 
         $treeNodeRecord = $this->getSystemPageTree($systemPageNameInternal, $portal, $language);
+
+        if (null === $treeNodeRecord) {
+            return null;
+        }
+
         $pageRecord = $treeNodeRecord->GetLinkedPageObject();
 
         $pageDataModel = new PageDataModel();

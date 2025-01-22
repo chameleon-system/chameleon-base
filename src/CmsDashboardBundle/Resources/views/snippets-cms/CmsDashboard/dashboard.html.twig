@@ -15,7 +15,7 @@
     </div>
 
     {% for widgetCollectionName, widgetCollection in widgetCollections %}
-        <div class="row">
+        <div class="row dashboard-widget-collection" id="dashboard-widget-collection-{{ widgetCollectionName|e('html_attr') }}">
             {% set widgetCount = widgetCollection|length %}
             {% if widgetCount == 1 %}
                 {% set colClass = 12 %}

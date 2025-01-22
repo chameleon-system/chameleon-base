@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TCMSFieldTailLog extends TCMSField
 {
-    protected $methodCallAllowed = array('getLogData');
+    protected $methodCallAllowed = ['getLogData'];
 
-    protected $bLogNotReadable = false;
+    protected bool $bLogNotReadable = false;
 
     public function GetHTML()
     {
@@ -23,7 +23,7 @@ class TCMSFieldTailLog extends TCMSField
 
         $html = '<div id="'.TGlobal::OutHTML($this->name).'_lastReloaded" style="border-bottom: 1px solid #362B36; margin-bottom: 10px;">
         <strong>
-        '.TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_tail_log.last_update')).': <span>'.date('H:i:s').'</span>
+        '.TGlobal::OutJS(ServiceLocator::get('translator')->trans('chameleon_system_core.field_tail_log.last_update')).': <span>'.date('H:i:s').'</span>
         </strong>
         </div>';
         $html .= '<div style="overflow: auto; height: 350px; border: 1px solid #A9C4E7; padding: 5px;" id="'.TGlobal::OutHTML($this->name).'">';
@@ -33,17 +33,17 @@ class TCMSFieldTailLog extends TCMSField
         $html .= '</div>';
 
         $sReloadDisabled = $this->getFieldTypeConfigKey('disableReload');
-        if ('1' != $sReloadDisabled && 'true' != $sReloadDisabled) {
+        if ('1' !== $sReloadDisabled && 'true' !== $sReloadDisabled) {
             $html .= "
         <script type=\"text/javascript\">
         $(document).ready(function() {
             setInterval(function() {
-                GetAjaxCallTransparent('".$this->GenerateAjaxURL(array('_fnc' => 'getLogData', '_fieldName' => $this->name))."', reloadLog);
+                GetAjaxCallTransparent('".$this->GenerateAjaxURL(['_fnc' => 'getLogData', '_fieldName' => $this->name])."', reloadLog);
             }, 10000);
         });
 
         function reloadLog(data,statusText) {
-            if(data != '') {
+            if (data != '') {
                 $('#".TGlobal::OutHTML($this->name)."').html(data);
                 var currentDate = new Date();
                 var hours = currentDate.getHours()
@@ -80,30 +80,29 @@ class TCMSFieldTailLog extends TCMSField
             $logFilePath = realpath(PATH_CMS_CUSTOMER_DATA.'/'.$sPath);
             if (empty($logFilePath)) {
                 $this->bLogNotReadable = true;
-                $html = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_tail_log.error_unable_to_read_log').': '.$logFilePath);
 
-                return $html;
+                return TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.field_tail_log.error_unable_to_read_log').': '.$logFilePath);
             }
             $securedLogFilePath = TGlobal::ProtectedPath($logFilePath, '.log');
         }
 
-        $iNumLines = $this->getFieldTypeConfigKey('numLines');
-        if (is_null($iNumLines) || empty($iNumLines)) {
-            $iNumLines = 50;
+        $numLines = $this->getFieldTypeConfigKey('numLines');
+        if (empty($numLines)) {
+            $numLines = 50;
         }
 
-        $aLogLines = array();
+        $aLogLines = [];
         if (!empty($securedLogFilePath) && is_file($securedLogFilePath)) {
-            if ($fp = fopen($securedLogFilePath, 'r')) {
-                fseek($fp, -($iNumLines * $maxLineLength), SEEK_END); // move pointer to end of file
+            if ($fp = fopen($securedLogFilePath, 'rb')) {
+                fseek($fp, -($numLines * $maxLineLength), SEEK_END); // move pointer to end of file
 
-                $lines = array();
+                $lines = [];
                 while (!feof($fp)) {
                     $lines[] = fgets($fp);
                 }
 
                 $c = count($lines);
-                $i = $c >= $iNumLines ? $c - $iNumLines : 0;
+                $i = $c >= $numLines ? $c - $numLines : 0;
                 for (; $i < $c; ++$i) {
                     $aLogLines[] = $lines[$i];
                 }
@@ -114,7 +113,7 @@ class TCMSFieldTailLog extends TCMSField
             }
         } else {
             $this->bLogNotReadable = true;
-            $html = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_tail_log.error_unable_to_read_log').': '.$logFilePath);
+            $html = TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.field_tail_log.error_unable_to_read_log').': '.$logFilePath);
         }
 
         return $html;

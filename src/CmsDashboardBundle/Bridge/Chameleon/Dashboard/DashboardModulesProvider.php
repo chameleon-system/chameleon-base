@@ -14,9 +14,6 @@ use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\Dashbo
 
 final class DashboardModulesProvider
 {
-    /**
-     * Array<DashboardModuleInterface>.
-     */
     private array $widgets = [];
 
     /**

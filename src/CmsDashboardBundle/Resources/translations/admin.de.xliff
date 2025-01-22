@@ -24,7 +24,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs_title">
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs_title</source>
-                <target>letzte automatisch ausgeführte Aktionen</target>
+                <target>zuletzt automatisch ausgeführte Aktionen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.running">
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.running</source>

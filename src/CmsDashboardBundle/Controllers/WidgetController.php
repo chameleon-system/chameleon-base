@@ -65,22 +65,6 @@ readonly class WidgetController
      * @throws NotFoundExceptionInterface
      * @throws InvalidArgumentException
      */
-    private function getWidgetService(string $widgetServiceId): DashboardWidgetInterface
-    {
-        $widgetService = $this->container->get($widgetServiceId);
-
-        if (!$widgetService instanceof DashboardWidgetInterface) {
-            throw new InvalidArgumentException('Service '.$widgetServiceId.' does not implement DashboardWidgetInterface');
-        }
-
-        return $widgetService;
-    }
-
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws InvalidArgumentException
-     */
     private function getWidgetServiceByAlias(string $alias): DashboardWidgetInterface
     {
         $widgetService = $this->container->get($alias);
