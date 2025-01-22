@@ -36,10 +36,10 @@ class ModuleChooserModuleListMapper extends AbstractViewMapper
         $bCachingEnabled,
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
-        /** @var $permittedModules array */
+        /** @var array $permittedModules */
         $permittedModules = $oVisitor->GetSourceObject('aPermittedModules');
 
-        /** @var $moduleList \TdbCmsTplModuleList */
+        /** @var \TdbCmsTplModuleList $moduleList */
         $moduleList = $oVisitor->GetSourceObject('moduleList');
 
         $modules = array();
@@ -59,14 +59,13 @@ class ModuleChooserModuleListMapper extends AbstractViewMapper
                 'views' => array(),
             );
             $moduleObject->aPermittedViews = $permittedModules[$moduleObject->fieldClassname] ?? null;
-            /** @var $views \TIterator */
+            /** @var \TIterator<string> $views */
             $views = $moduleObject->GetViews();
             if (0 === $views->Length()) {
                 continue;
             }
             $viewMapping = $moduleObject->GetViewMapping();
 
-            /** @var $viewName string */
             $views->GoToStart();
             while ($viewName = $views->Next()) {
                 $displayName = (is_array($viewMapping) && isset($viewMapping[$viewName])) ? $viewMapping[$viewName] : $viewName;
@@ -76,7 +75,7 @@ class ModuleChooserModuleListMapper extends AbstractViewMapper
                 );
             }
             usort($module['views'], function ($element1, $element2) {
-                return $element1['displayName'] > $element2['displayName'];
+                return $element1['displayName'] > $element2['displayName'] ? 1 : 0;
             });
 
             $modules[] = $module;

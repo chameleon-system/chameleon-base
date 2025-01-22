@@ -39,6 +39,9 @@ class TCMSTPLModule extends TCMSRecord
         return 0 === $this->getViewMapperConfig()->getConfigCount();
     }
 
+    /**
+     * @return TIterator<string>|null
+     */
     public function GetViews()
     {
         if (true === $this->isLegacy()) {
@@ -52,6 +55,8 @@ class TCMSTPLModule extends TCMSRecord
         $this->_oViews = new TIterator();
 
         $aViewMapperConfig = $this->getViewMapperConfig();
+
+        /** @var string[] $views */
         $views = $aViewMapperConfig->getConfigs();
         foreach ($views as $sViewName) {
             $this->_oViews->AddItem($sViewName);

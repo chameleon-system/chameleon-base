@@ -16,14 +16,14 @@ class TDataExtranetUserAddressList extends TDataExtranetUserAddressListAutoParen
     /**
      * user id for the current address list. Set by GetUserAddressList.
      *
-     * @var int
+     * @var string
      */
     protected $iUserId = null;
 
     /**
      * return user addresses.
      *
-     * @param int $iUserId
+     * @param string $iUserId
      *
      * @return TdbDataExtranetUserAddressList
      */
@@ -43,7 +43,7 @@ class TDataExtranetUserAddressList extends TDataExtranetUserAddressListAutoParen
     /**
      * set the user id for the current list. should only be called by GetUserAddressList.
      *
-     * @param int $iUserId
+     * @param string $iUserId
      *
      * @return void
      */
@@ -71,7 +71,6 @@ class TDataExtranetUserAddressList extends TDataExtranetUserAddressListAutoParen
         // get user... if set
         if (!is_null($this->iUserId)) {
             $oUser = TdbDataExtranetUser::GetNewInstance();
-            /** @var $oUser TdbDataExtranetUser */
             if (!$oUser->Load($this->iUserId)) {
                 $oUser = null;
             }

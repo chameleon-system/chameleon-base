@@ -9,6 +9,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Permit required access if the subject implements RestrictedByCmsRightsInterface and has at least one matching right for the active user
+ *
+ * @template-extends Voter<string,RestrictedByCmsRightsInterface>
  */
 class CmsRightVoter extends Voter
 {

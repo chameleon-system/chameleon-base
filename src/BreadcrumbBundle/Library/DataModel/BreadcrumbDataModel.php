@@ -2,6 +2,9 @@
 
 namespace ChameleonSystem\BreadcrumbBundle\Library\DataModel;
 
+/**
+ * @template-implements \Iterator<int, string>
+ */
 final class BreadcrumbDataModel implements \Iterator, \Countable
 {
     /**

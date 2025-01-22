@@ -30,7 +30,7 @@ interface IPkgCmsEvent
     /**
      * @abstract
      *
-     * @return object
+     * @return object|null
      */
     public function GetSubject();
 

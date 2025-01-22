@@ -25,7 +25,7 @@ class ChameleonControllerResolver extends ControllerResolver
     /** @var ControllerResolver The default Symfony resolver */
     private $defaultControllerResolver;
     /**
-     * @var array
+     * @var string[]
      */
     private $controllerList;
     /**
@@ -36,7 +36,7 @@ class ChameleonControllerResolver extends ControllerResolver
     /**
      * @param ContainerInterface  $container
      * @param ControllerResolver  $defaultControllerResolver
-     * @param array               $controllerList
+     * @param string[]            $controllerList
      * @param ChameleonController $defaultChameleonController
      */
     public function __construct(ContainerInterface $container, ControllerResolver $defaultControllerResolver, array $controllerList, $defaultChameleonController)
@@ -49,11 +49,10 @@ class ChameleonControllerResolver extends ControllerResolver
 
     /**
      * {@inheritdoc}
-     *
-     * @return callable|false|null
      */
     public function getController(Request $request): callable|false
     {
+        /** @var object|null|string $controller */
         $controller = $request->attributes->get('_controller', null);
         if (null === $controller) {
             return false;

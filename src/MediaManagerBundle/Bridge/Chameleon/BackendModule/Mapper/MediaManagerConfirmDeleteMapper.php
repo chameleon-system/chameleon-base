@@ -74,9 +74,9 @@ class MediaManagerConfirmDeleteMapper extends AbstractViewMapper
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
-         * @var $listState    MediaManagerListState
-         * @var $mediaItemIds string[]
-         * @var $language     TdbCmsLanguage
+         * @var MediaManagerListState $listState
+         * @var string[] $mediaItemIds
+         * @var TdbCmsLanguage $language
          */
         $listState = $oVisitor->GetSourceObject('listState');
         $enableUsageSearch = $listState->isDeleteWithUsageSearch();

@@ -68,14 +68,14 @@ class TCMSTableEditorEndPoint
     /**
      * record ID.
      *
-     * @var int
+     * @var string
      */
     public $sId;
 
     /**
      * holds the source ID AFTER a copy was performed (so the source can be used by the post copy functions).
      *
-     * @var int
+     * @var string
      */
     protected $sSourceId;
 
@@ -228,6 +228,8 @@ class TCMSTableEditorEndPoint
 
     /**
      * set public methods here that may be called from outside.
+     *
+     * @return void
      */
     public function DefineInterface()
     {

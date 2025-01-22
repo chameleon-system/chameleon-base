@@ -9,6 +9,7 @@ class LegacyTableExportConfig
 {
     private array $legacyTableExportConfig;
 
+    /** @psalm-suppress UndefinedAttributeClass */
     public function __construct(
         private readonly FileLocator $fileLocator,
         #[ArrayShape([

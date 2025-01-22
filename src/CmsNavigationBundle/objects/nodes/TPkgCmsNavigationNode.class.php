@@ -29,9 +29,11 @@ class TPkgCmsNavigationNode extends AbstractPkgCmsNavigationNode
                 $this->aChildren = array();
                 $oChildren = $this->getNodeCopy()->GetChildren();
                 while ($oChild = $oChildren->Next()) {
+
+                    /** @psalm-var class-string<self> $sClass */
                     $sClass = get_class($this);
-                    /** @var $oNaviNode AbstractPkgCmsNavigationNode */
                     $oNaviNode = new $sClass();
+
                     $oNaviNode->iLevel = $this->iLevel + 1;
                     if (true === $oNaviNode->loadFromNode($oChild)) {
                         $this->aChildren[] = $oNaviNode;

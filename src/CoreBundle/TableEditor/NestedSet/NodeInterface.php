@@ -23,12 +23,12 @@ interface NodeInterface
     public function getParentId();
 
     /**
-     * @return string
+     * @return int
      */
     public function getLeft();
 
     /**
-     * @return string
+     * @return int
      */
     public function getRight();
 }

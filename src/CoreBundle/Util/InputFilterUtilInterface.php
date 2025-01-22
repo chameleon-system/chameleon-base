@@ -28,8 +28,6 @@ interface InputFilterUtilInterface
      * @param bool   $deep
      * @param string $filter
      *
-     * @return string|null
-     *
      * @psalm-template TDefault
      * @psalm-param TDefault $default
      * @psalm-return string|TDefault
@@ -55,6 +53,16 @@ interface InputFilterUtilInterface
 
     /**
      * getFilteredGetInputArray is the same as getFilteredGetInput that has to be used if the expected value is an array.
+     *
+     * @param string $key
+     * @param mixed $default
+     * @param string $filter
+     *
+     * @return mixed|string|null
+     *
+     * @psalm-template TDefault
+     * @psalm-param TDefault $default
+     * @psalm-return mixed|string|null|TDefault
      */
     public function getFilteredGetInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER);
 
@@ -77,6 +85,16 @@ interface InputFilterUtilInterface
 
     /**
      * getFilteredPostInputArray is the same as getFilteredPostInput that has to be used if the expected value is an array.
+     *
+     * @param string $key
+     * @param mixed $default
+     * @param string $filter
+     *
+     * @return mixed|string|null
+     *
+     * @psalm-template TDefault
+     * @psalm-param TDefault $default
+     * @psalm-return mixed|string|null|TDefault
      */
     public function getFilteredPostInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER);
 
@@ -84,12 +102,12 @@ interface InputFilterUtilInterface
     /**
      * Applies a filter to one or more values.
      *
-     * @param string|null $value
+     * @param string|array|null $value
      * @param string $filterClass - form: classname;path;type|classname;path;type
      *
-     * @return string|null - null if $filter is null
+     * @return string|array|null - null if $filter is null
      *
-     * @psalm-return ($value is null ? null : string)
+     * @psalm-return ($value is null ? null : string|array)
      */
     public function filterValue($value, $filterClass);
 

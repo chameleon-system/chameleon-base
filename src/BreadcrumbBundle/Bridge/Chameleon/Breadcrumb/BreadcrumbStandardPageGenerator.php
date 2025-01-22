@@ -134,7 +134,7 @@ class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
         return $this->cache->get($this->generateCacheKey());
     }
 
-    private function getActivePage()
+    private function getActivePage(): ?\TCMSActivePage
     {
         $activePage = null;
         if (null === $this->activePage) {

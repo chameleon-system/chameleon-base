@@ -30,6 +30,8 @@ class TCMSFieldNewsletterCampaignStatistics extends TCMSFieldText
         } else {
             $sShowData = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.field_campaign_stats.subscriber_count').': '.$sShowData;
             $iAlreadySentCont = $this->getAlreadySentCount();
+
+            /** @var int $iToSendCount */
             $iToSendCount = $this->data - $iAlreadySentCont;
             if (0 == $iToSendCount) {
                 $html = '<i class="far fa-check-square"></i> '.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_newsletter.field_campaign_stats.queue_processed')).'<br />';

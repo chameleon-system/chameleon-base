@@ -23,9 +23,7 @@ class TCMSSmartURLHandler_RegistrationConfirm extends TCMSSmartURLHandler
         $aParts = $this->CleanPath($aParts);
         if ('key' == $aParts[0]) {
             $oNode = new TCMSTreeNode();
-            /** @var $oNode TCMSTreeNode */
             $oExtranetConf = TdbDataExtranet::GetNewInstance();
-            /** @var $oExtranetConf TdbDataExtranet */
             $oExtranetConf->LoadFromField('cms_portal_id', $oURLData->iPortalId);
             $oNode->Load($oExtranetConf->sqlData['node_confirm_registration']);
             $iPageId = $oNode->GetLinkedPage();

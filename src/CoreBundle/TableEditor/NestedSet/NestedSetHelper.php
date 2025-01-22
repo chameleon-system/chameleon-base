@@ -176,7 +176,7 @@ class NestedSetHelper implements NestedSetHelperInterface
     }
 
     /**
-     * @param string $subtreeRightValue
+     * @param int $subtreeRightValue
      * @param int $subtreeWidth
      * @return void
      */
@@ -184,17 +184,17 @@ class NestedSetHelper implements NestedSetHelperInterface
     {
         $query = "UPDATE `{$this->tableName}` SET lft = lft - :subtreeWidth WHERE lft > :oldRgt";
         $this->connection->executeUpdate($query,
-            array(
+            [
                 'subtreeWidth' => $subtreeWidth,
                 'oldRgt' => $subtreeRightValue,
-            )
+            ]
         );
         $query = "UPDATE `{$this->tableName}` SET rgt = rgt - :subtreeWidth WHERE rgt > :oldRgt";
         $this->connection->executeUpdate($query,
-            array(
+            [
                 'subtreeWidth' => $subtreeWidth,
                 'oldRgt' => $subtreeRightValue,
-            )
+            ]
         );
     }
 
@@ -325,7 +325,7 @@ class NestedSetHelper implements NestedSetHelperInterface
      *
      * @param NodeInterface $node
      *
-     * @return numeric
+     * @return int
      */
     private function calculateNodePosition(NodeInterface $node)
     {

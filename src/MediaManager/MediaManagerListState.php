@@ -143,6 +143,7 @@ class MediaManagerListState
      * @param bool   $isPickImageMode
      * @param string $callback
      * @param bool   $hasCrop
+     * @param string $parentIFrame
      *
      * @return void
      */
@@ -251,6 +252,9 @@ class MediaManagerListState
         return $this->getStateParameter(self::URL_NAME_PICK_IMAGE_CALLBACK, '_SetImage');
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getParentIFrame()
     {
         return $this->getStateParameter(self::URL_NAME_PARENT_IFRAME, '');

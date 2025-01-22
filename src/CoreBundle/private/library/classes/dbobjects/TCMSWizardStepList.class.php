@@ -33,8 +33,8 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
     /**
      * Return all records belonging to the Template Modul Instanzen.
      *
-     * @param int $iCmsTplModuleInstanceId - ID for the record in: Template Modul Instanzen
-     * @param int $iLanguageId             - set language id for list - if null, the default language will be used instead
+     * @param string $iCmsTplModuleInstanceId - ID for the record in: Template Modul Instanzen
+     * @param string $iLanguageId             - set language id for list - if null, the default language will be used instead
      *
      * @return TdbCmsWizardStepList
      */

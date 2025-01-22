@@ -262,6 +262,9 @@ class TPkgViewRendererLessCompiler
         return file_put_contents($targetPath, $css);
     }
 
+    /**
+     * @return bool
+     */
     private function getMinifyParameter()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::getParameter(

@@ -166,11 +166,9 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
             if (is_null($this->aModuleInstances)) {
                 $oModuleList = $this->GetModuleList();
                 if (is_object($oModuleList)) {
-                    /** @var $oModuleItem TdbPkgMultiModuleSetItem */
                     $i = 0;
                     while ($oModuleItem = $oModuleList->Next()) {
                         ++$i;
-                        /** @var $oModuleInstance TdbCmsTplModuleInstance */
                         $oModuleInstance = $oModuleItem->GetFieldCmsTplModuleInstance();
                         if (is_object($oModuleInstance)) {
                             if (!is_array($this->aModuleInstances)) {
@@ -208,7 +206,6 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
         if (is_null($this->oModuleList)) {
             $oModuleSet = $this->GetMultiModuleSet();
             if (!is_null($oModuleSet)) {
-                /** @var $oModuleList TdbPkgMultiModuleSetItemList */
                 $oModuleList = $oModuleSet->GetFieldPkgMultiModuleSetItemList();
                 $oModuleList->ChangeOrderBy(array('sort_order' => 'ASC'));
             }
@@ -290,7 +287,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
 
         $this->LoadInstances();
         if (is_array($this->aModuleInstances)) {
-            /** @var $oModuleInstance TdbCmsTplModuleInstance */
+            /** @var TdbCmsTplModuleInstance $oModuleInstance */
             foreach ($this->aModuleInstances as $oModuleInstance) {
                 $oModule = $this->GetModuleObjectByInstance($oModuleInstance);
                 $aModuleIncludes = $oModule->GetHtmlFooterIncludes();
@@ -312,7 +309,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
 
         $this->LoadInstances();
         if (is_array($this->aModuleInstances)) {
-            /** @var $oModuleInstance TdbCmsTplModuleInstance */
+            /** @var TdbCmsTplModuleInstance $oModuleInstance */
             foreach ($this->aModuleInstances as $oModuleInstance) {
                 $oModule = $this->GetModuleObjectByInstance($oModuleInstance);
                 $aModuleIncludes = $oModule->GetHtmlHeadIncludes();
@@ -338,7 +335,6 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
             $this->LoadInstances();
 
             if (is_array($this->aModuleInstances)) {
-                /** @var $oModuleInstance TdbCmsTplModuleInstance */
                 foreach (array_keys($this->aModuleInstances) as $index) {
                     if (is_object($this->aModuleInstances[$index])) {
                         $oModule = $this->GetModuleObjectByInstance($this->aModuleInstances[$index]);

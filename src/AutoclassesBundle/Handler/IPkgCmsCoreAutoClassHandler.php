@@ -28,7 +28,7 @@ interface IPkgCmsCoreAutoClassHandler
      *
      * @param string $sKey
      *
-     * @return string
+     * @return string|false
      */
     public function getClassNameFromKey($sKey);
 

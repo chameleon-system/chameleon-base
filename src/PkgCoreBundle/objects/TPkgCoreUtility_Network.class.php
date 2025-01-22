@@ -90,6 +90,10 @@ class TPkgCoreUtility_Network
 
         if (self::IP_RANGE_TYPE_CIDR === $sFormat) {
             // $range is in IP/NETMASK format
+            /**
+             * @var string $range
+             * @var numeric-string $netmask
+             */
             list($range, $netmask) = explode('/', $range, 2);
             if (false !== strpos($netmask, '.')) {
                 // $netmask is a 255.255.0.0 format

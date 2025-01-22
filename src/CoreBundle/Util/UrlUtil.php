@@ -118,6 +118,7 @@ class UrlUtil
             'https' === $protocol);
         $transformedUrl .= $domain;
 
+        /** @var int $port */
         $port = $request->getPort();
         $currentScheme = $request->getScheme();
         if (($currentScheme === $requestedScheme) && (false === $this->isDefaultPort($port, $currentScheme))) {
@@ -435,8 +436,6 @@ class UrlUtil
      * This method receives a URL(absolute or relative) and forces its
      * path elements (nothing else!) to be wellformed using urlencode().
      * This ensures HTML validators will not fail on external URLs.
-     *
-     * @var string
      *
      * @param string $url
      *

@@ -186,7 +186,7 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      * saves the captcha value in session.
      *
      * @param string $sIdentifier
-     * @param string $sCode
+     * @param scalar $sCode
      *
      * @return void
      */
@@ -203,7 +203,7 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      *
      * @param string $sIdentifier
      *
-     * @return string|bool
+     * @return string|false
      */
     protected static function GetCodeFromSession($sIdentifier)
     {

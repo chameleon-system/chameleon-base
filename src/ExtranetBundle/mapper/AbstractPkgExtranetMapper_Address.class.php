@@ -54,7 +54,7 @@ abstract class AbstractPkgExtranetMapper_Address extends AbstractViewMapper
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         if ($bCachingEnabled) {
-            /** @var $oAddress TdbDataExtranetUserAddress */
+            /** @var TdbDataExtranetUserAddress $oAddress */
             $oAddress = $oVisitor->GetSourceObject('oAddressObject');
             if ($oAddress) {
                 if (!empty($oAddress->id)) {

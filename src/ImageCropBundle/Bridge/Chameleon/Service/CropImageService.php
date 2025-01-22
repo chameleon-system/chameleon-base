@@ -147,7 +147,7 @@ class CropImageService implements CropImageServiceInterface
         if (0 !== $targetWidth) {
             $ratio = $targetWidth / $crop->getWidth();
             $height = $crop->getHeight() * $ratio;
-            $crop->setTargetHeight($height);
+            $crop->setTargetHeight((int) $height);
             $crop->setTargetWidth($targetWidth);
         }
 
@@ -155,7 +155,7 @@ class CropImageService implements CropImageServiceInterface
             $ratio = $targetHeight / $crop->getHeight();
             $width = $crop->getWidth() * $ratio;
             $crop->setTargetHeight($targetHeight);
-            $crop->setTargetWidth($width);
+            $crop->setTargetWidth((int) $width);
         }
 
         return $this->getCroppedImage($crop);

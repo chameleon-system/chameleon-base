@@ -12,7 +12,7 @@ interface BreadcrumbGeneratorUtilsInterface
         BreadcrumbDataModel $breadcrumb,
         string $treeId,
         bool $ignoreFirstTreeIfHidden = true
-    );
+    ): void;
 
     public function attachHomePageBreadcrumbItem(BreadcrumbDataModel $breadcrumb): void;
 }

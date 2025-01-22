@@ -59,7 +59,7 @@ class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
         return (string) $this->original->getNodeTag();
     }
 
-    public function count()
+    public function count(): int
     {
         return $this->original->count();
     }
