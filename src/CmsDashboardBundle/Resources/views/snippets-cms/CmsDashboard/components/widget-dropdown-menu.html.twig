@@ -1,0 +1,26 @@
+{% if widget.dropdownItems is not empty %}
+    <div class="dropdown dropleft">
+        <button class="btn btn-transparent p-0{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <div class="dropdown-menu">
+            {% for dropdownItem in widget.dropdownItems %}
+                {% if dropdownItem.url %}
+                    <a class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}" href="{{ dropdownItem.url|escape('html_attr') }}"
+                {% else %}
+                    <button class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}"
+                {% endif %}
+                {% for dataAttributeKey, dataAttributeVal in dropdownItem.dataAttributes %}
+                    {{ dataAttributeKey|escape('html_attr') }}="{{ dataAttributeVal|escape('html_attr') }}"
+                {% endfor %}
+                >
+                {{ dropdownItem.title }}
+                {% if dropdownItem.url %}
+                    </a>
+                {% else %}
+                    </button>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

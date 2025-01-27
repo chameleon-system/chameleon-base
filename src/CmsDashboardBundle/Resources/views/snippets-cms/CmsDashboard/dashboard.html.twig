@@ -1,4 +1,6 @@
-{# @var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget #}
+{#
+    @var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget
+#}
 {# @var bool forceReload #}
 <div id="cms-dashboard">
     <div class="card mb-4 bg-image" style="background-image: url('/bundles/chameleonsystemcmsdashboard/images/dashboard-bg.png');">
@@ -15,7 +17,13 @@
     </div>
 
     {% for widgetCollectionName, widgetCollection in widgetCollections %}
-        <div class="row dashboard-widget-collection" id="dashboard-widget-collection-{{ widgetCollectionName|e('html_attr') }}">
+        {% set useWidgetContainerTemplate = true %}
+        {% for widgetData in widgetCollection %}
+            {% set widget = widgetData.widget %}
+            {% set useWidgetContainerTemplate = widget.useWidgetContainerTemplate %}
+        {% endfor %}
+
+        <div class="{% if useWidgetContainerTemplate %}row {% endif %}dashboard-widget-collection" id="dashboard-widget-collection-{{ widgetCollectionName|e('html_attr') }}">
             {% set widgetCount = widgetCollection|length %}
             {% if widgetCount == 1 %}
                 {% set colClass = 12 %}
@@ -29,36 +37,12 @@
 
             {% for widgetData in widgetCollection %}
                 {% set widget = widgetData.widget %}
+                {% if useWidgetContainerTemplate %}
                 <div class="col-{{ colClass }}">
-                    <div class="card mb-4{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" id="widget-{{ widget.chartId|replace({'widget-' : ''})|escape('html_attr') }}">
+                    <div class="card mb-4{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" id="widget-{{ widget.widgetId|replace({'widget-' : ''})|escape('html_attr') }}">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span>{{ widget.title }}</span>
-                            {% if widget.dropdownItems is not empty %}
-                                <div class="dropdown dropleft">
-                                    <button class="btn btn-transparent p-0{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        {% for dropdownItem in widget.dropdownItems %}
-                                            {% if dropdownItem.url %}
-                                                <a class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}" href="{{ dropdownItem.url|escape('html_attr') }}"
-                                            {% else %}
-                                                <button class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}"
-                                            {% endif %}
-                                            {% for dataAttributeKey, dataAttributeVal in dropdownItem.dataAttributes %}
-                                                {{ dataAttributeKey|escape('html_attr') }}="{{ dataAttributeVal|escape('html_attr') }}"
-                                            {% endfor %}
-                                            >
-                                            {{ dropdownItem.title }}
-                                            {% if dropdownItem.url %}
-                                               </a>
-                                            {% else %}
-                                               </button>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endif %}
+                            {{ include('@ChameleonSystemCmsDashboard/snippets-cms/CmsDashboard/components/widget-dropdown-menu.html.twig') }}
                         </div>
                         <div class="card-body p-0">
                             {{ widget.bodyHtml(forceReload)|raw }}
@@ -70,6 +54,11 @@
                         {% endif %}
                     </div>
                 </div>
+                {% else %}
+                    <div class="mb-3">
+                    {{ widget.bodyHtml(forceReload)|raw }}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     {% endfor %}

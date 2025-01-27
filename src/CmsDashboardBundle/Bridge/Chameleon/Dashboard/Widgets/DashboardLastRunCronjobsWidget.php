@@ -51,12 +51,12 @@ class DashboardLastRunCronjobsWidget extends DashboardWidget
     public function getDropdownItems(): array
     {
         $button = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getChartId(),
+            'reload-'.$this->getWidgetId(),
             $this->translator->trans('chameleon_system_cms_dashboard.widget.reload_button_label'),
             ''
         );
 
-        $button->addDataAttribute('data-service-alias', $this->getChartId());
+        $button->addDataAttribute('data-service-alias', $this->getWidgetId());
 
         return [$button];
     }
@@ -76,7 +76,7 @@ class DashboardLastRunCronjobsWidget extends DashboardWidget
     {
         $this->renderer->AddSourceObject('runningCronjobDataModels', $this->cronjobStateService->getRunningRunCronJobs());
         $this->renderer->AddSourceObject('lastCronjobDataModels', $this->cronjobStateService->getLastRunCronJobs());
-        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getChartId());
+        $this->renderer->AddSourceObject('reloadEventButtonId', 'reload-'.$this->getWidgetId());
 
         $renderedTable = $this->renderer->Render('CmsDashboard/cronjob-widget.html.twig');
 
@@ -87,7 +87,7 @@ class DashboardLastRunCronjobsWidget extends DashboardWidget
                 </div>';
     }
 
-    public function getChartId(): string
+    public function getWidgetId(): string
     {
         return self::WIDGET_ID;
     }

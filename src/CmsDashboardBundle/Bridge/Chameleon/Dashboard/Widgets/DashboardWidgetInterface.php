@@ -16,12 +16,16 @@ interface DashboardWidgetInterface
 {
     public function getTitle(): string;
 
-    public function getChartId(): string;
+    public function getWidgetId(): string;
 
     /**
      * @return array<array<WidgetDropdownItemDataModel>>
      */
     public function getDropdownItems(): array;
+
+    public function showWidget(): bool;
+
+    public function useWidgetContainerTemplate(): bool;
 
     public function getFooterIncludes(): array;
 
