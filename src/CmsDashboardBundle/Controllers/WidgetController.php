@@ -4,6 +4,7 @@ namespace ChameleonSystem\CmsDashboardBundle\Controllers;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface;
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Module\Dashboard;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -14,7 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 readonly class WidgetController
 {
-    public function __construct(private ContainerInterface $container)
+    public function __construct(
+        private ContainerInterface $container,
+        private Dashboard $dashboardModule)
     {
     }
 
@@ -22,17 +25,9 @@ readonly class WidgetController
     {
         try {
             $widgetService = $this->getWidgetServiceByAlias($widgetAlias);
+            $this->checkForValidExposedApiMethod($widgetService, $methodName, $widgetAlias);
 
             $reflectionMethod = new \ReflectionMethod($widgetService, $methodName);
-            if (!$reflectionMethod->isPublic()) {
-                throw new InvalidArgumentException('Method '.$methodName.' is not public on widget service '.$widgetAlias);
-            }
-
-            $attributes = $reflectionMethod->getAttributes(ExposeAsApi::class);
-            if (empty($attributes)) {
-                throw new InvalidArgumentException('Method '.$methodName.' is not exposed via #[ExposeAsApi] attribute on widget service '.$widgetAlias);
-            }
-
             $expectedParameters = $reflectionMethod->getParameters();
             $arguments = [];
             $providedParameters = array_merge(
@@ -52,12 +47,59 @@ readonly class WidgetController
                 }
             }
 
-            return $reflectionMethod->invokeArgs($widgetService, $arguments);
+            return (new \ReflectionMethod($widgetService, $methodName))->invokeArgs($widgetService, $arguments);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'error' => $e->getMessage(),
             ], 400);
         }
+    }
+
+    private function checkForValidExposedApiMethod(mixed $service, string $methodName, ?string $widgetAlias): void
+    {
+        $reflectionMethod = new \ReflectionMethod($service, $methodName);
+        if (false === $reflectionMethod->isPublic()) {
+            if (null === $widgetAlias) {
+                throw new InvalidArgumentException('Method '.$methodName.' is not public on widget service '.$widgetAlias);
+            }
+
+            throw new InvalidArgumentException('Method '.$methodName.' is not public on service class '.get_class($service));
+        }
+
+        $attributes = $reflectionMethod->getAttributes(ExposeAsApi::class);
+        if (empty($attributes)) {
+            if (null === $widgetAlias) {
+                throw new InvalidArgumentException(
+                    'Method '.$methodName.' is not exposed via #[ExposeAsApi] attribute on widget service '.$widgetAlias
+                );
+            }
+
+            throw new InvalidArgumentException(
+                'Method '.$methodName.' is not exposed via #[ExposeAsApi] attribute on service class '.get_class($service)
+            );
+        }
+    }
+
+    public function saveWidgetLayout(Request $request): Response
+    {
+        try {
+        $this->checkForValidExposedApiMethod($this->dashboardModule, 'saveWidgetLayout', null);
+
+        $content = $request->getContent();
+
+        $data = json_decode($content, true);
+        if (!isset($data['widgetLayout'])) {
+            return new JsonResponse(['error' => 'Missing required parameter "widgetLayout".'], 400);
+        }
+
+        $this->dashboardModule->saveWidgetLayout($data['widgetLayout']);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+
+        return new JsonResponse(['updateSuccessful' => true]);
     }
 
     /**

@@ -22,6 +22,18 @@
                 <source>chameleon_system_cms_dashboard.widget.reload_button_label</source>
                 <target>Reload</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.edit_mode_enable">
+                <source>chameleon_system_cms_dashboard.widget.edit_mode_enable</source>
+                <target>Edit</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.edit_mode_disable">
+                <source>chameleon_system_cms_dashboard.widget.edit_mode_disable</source>
+                <target>Stop Editing</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.edit_hide">
+                <source>chameleon_system_cms_dashboard.widget.edit_hide</source>
+                <target>Hide</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs_title">
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs_title</source>
                 <target>Last automatically executed actions</target>

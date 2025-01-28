@@ -5,17 +5,60 @@
 <div id="cms-dashboard">
     <div class="card mb-4 bg-image" style="background-image: url('/bundles/chameleonsystemcmsdashboard/images/dashboard-bg.png');">
         <div class="card-body">
-            <h1 class="display-5">{{ 'chameleon_system_cms_dashboard.dashboard'|trans }}</h1>
             <div class="float-right">
                 <form action="">
                     <input type="hidden" name="reload" value="true">
+                <div class="btn-group" role="group">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-sync"></i> {{ 'chameleon_system_cms_dashboard.reload_all'|trans }}</button>
+
+                <button type="button"
+                        id="toggle-edit-mode"
+                        class="btn btn-primary"
+                        data-text-enable="{{ 'chameleon_system_cms_dashboard.widget.edit_mode_enable'|trans }}"
+                        data-text-disable="{{ 'chameleon_system_cms_dashboard.widget.edit_mode_disable'|trans }}"
+                        data-class-enable="btn-success"
+                        data-class-disable="btn-primary"
+                >
+                    <i class="fas fa-edit"></i> <span>{{ 'chameleon_system_cms_dashboard.widget.edit_mode_enable'|trans }}</span>
+                </button>
+                </div>
                 </form>
             </div>
+
+            <h1 class="display-5">{{ 'chameleon_system_cms_dashboard.dashboard'|trans }}</h1>
             <p class="lead">{{ 'chameleon_system_cms_dashboard.for'|trans }} {{ loggedInUserName }} [{{ cmsOwner }}]</p>
         </div>
     </div>
+    <style>
+        /* Highlight im Edit-Modus */
+        #sortable-list.edit-mode .dashboard-widget-collection:hover {
+            outline: 2px dashed cadetblue;
+            outline-offset: 1px;
+            cursor: grab;
+            background-color: lightblue;
+        }
 
+        /* Visuelles Feedback beim Draggen */
+        #sortable-list .dashboard-widget-collection.dragging {
+            opacity: 0.5;
+            transform: scale(1.02);
+        }
+
+        #sortable-list.edit-mode .dashboard-widget-collection:hover .delete-icon {
+            display: block;
+        }
+
+        .delete-icon {
+            position: absolute;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .dashboard-widget-collection {
+            position: relative;
+        }
+    </style>
+    <div id="sortable-list">
     {% for widgetCollectionName, widgetCollection in widgetCollections %}
         {% set useWidgetContainerTemplate = true %}
         {% for widgetData in widgetCollection %}
@@ -23,7 +66,7 @@
             {% set useWidgetContainerTemplate = widget.useWidgetContainerTemplate %}
         {% endfor %}
 
-        <div class="{% if useWidgetContainerTemplate %}row {% endif %}dashboard-widget-collection" id="dashboard-widget-collection-{{ widgetCollectionName|e('html_attr') }}">
+        <div class="{% if useWidgetContainerTemplate %}row {% endif %}dashboard-widget-collection" id="dashboard-widget-collection-{{ widgetCollectionName|e('html_attr') }}" data-id="{{ widgetCollectionName|e('html_attr') }}">
             {% set widgetCount = widgetCollection|length %}
             {% if widgetCount == 1 %}
                 {% set colClass = 12 %}
@@ -40,6 +83,9 @@
                 {% if useWidgetContainerTemplate %}
                 <div class="col-{{ colClass }}">
                     <div class="card mb-4{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" id="widget-{{ widget.widgetId|replace({'widget-' : ''})|escape('html_attr') }}">
+                        <div class="delete-icon position-absolute top-0 end-0" style="display: none;">
+                            <button class="btn btn-danger delete-collection" title="{{ 'chameleon_system_cms_dashboard.widget.edit_hide'|trans|e('html_attr') }}">×</button>
+                        </div>
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span>{{ widget.title }}</span>
                             {{ include('@ChameleonSystemCmsDashboard/snippets-cms/CmsDashboard/components/widget-dropdown-menu.html.twig') }}
@@ -55,9 +101,15 @@
                     </div>
                 </div>
                 {% else %}
-                    {{ widget.bodyHtml(forceReload)|raw }}
+                    <div>
+                        <div class="delete-icon position-absolute top-0 end-0" style="display: none;">
+                            <button class="btn btn-danger delete-collection" title="{{ 'chameleon_system_cms_dashboard.widget.edit_hide'|trans|e('html_attr') }}">&times;</button>
+                        </div>
+                        {{ widget.bodyHtml(forceReload)|raw }}
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>
     {% endfor %}
+    </div>
 </div>
