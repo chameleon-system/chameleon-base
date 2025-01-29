@@ -58,12 +58,18 @@ final class DashboardModulesProvider
 
     /**
      * Returns the widget collections, sorted and filtered according to the user's preferences.
+     * If the user has no saved layout, return all available widgets.
      *
      * @return array<DashboardWidgetInterface>
      */
     public function getWidgetCollections(?string $collection = null): array
     {
         $userWidgetLayout = $this->getUserWidgetLayout();
+
+        // if the user has no saved layout, return all widgets
+        if (empty($userWidgetLayout)) {
+            return $collection === null ? $this->widgets : ($this->widgets[$collection] ?? []);
+        }
 
         if (null === $collection) {
             return $this->applyUserSortingAndFiltering($this->widgets, $userWidgetLayout);
@@ -76,14 +82,20 @@ final class DashboardModulesProvider
         return $this->applyUserSortingAndFiltering([$collection => $this->widgets[$collection]], $userWidgetLayout)[$collection] ?? [];
     }
 
+    /**
+     * Returns the available collections that are not yet in the user's layout.
+     * If the user has no saved layout, return all collections.
+     */
     public function getAvailableCollectionsForUser(): array
     {
         $userWidgetLayout = $this->getUserWidgetLayout();
         $allCollections = array_keys($this->widgets);
 
-        $availableCollections = array_diff($allCollections, $userWidgetLayout);
+        if (empty($userWidgetLayout)) {
+            return $allCollections;
+        }
 
-        return array_values($availableCollections);
+        return array_values(array_diff($allCollections, $userWidgetLayout));
     }
 
     /**
@@ -91,9 +103,8 @@ final class DashboardModulesProvider
      */
     private function applyUserSortingAndFiltering(array $collections, array $userWidgetLayout): array
     {
-        // If the user has no saved layout, return an empty array
         if (empty($userWidgetLayout)) {
-            return [];
+            return $collections;
         }
 
         $sortedCollections = [];
