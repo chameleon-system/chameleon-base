@@ -28,12 +28,12 @@ class SystemPageService implements SystemPageServiceInterface
     private ActivePageServiceInterface $activePageService;
 
     /**
-     * \TdbCmsPortalSystemPage[] $systemPageCache
+     * \TdbCmsPortalSystemPage[] $systemPageCache.
      */
     private array $systemPageCache = [];
 
     /**
-     * \TdbCmsTree[] $systemPageTreeCache
+     * \TdbCmsTree[] $systemPageTreeCache.
      */
     private array $systemPageTreeCache = [];
 
@@ -135,6 +135,11 @@ class SystemPageService implements SystemPageServiceInterface
         $absoluteUrl = $this->getLinkToSystemPageAbsolute($systemPageNameInternal, $parameters, $portal, $language);
 
         $treeNodeRecord = $this->getSystemPageTree($systemPageNameInternal, $portal, $language);
+
+        if (null === $treeNodeRecord) {
+            return null;
+        }
+
         $pageRecord = $treeNodeRecord->GetLinkedPageObject();
 
         $pageDataModel = new PageDataModel();

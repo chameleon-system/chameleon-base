@@ -18,9 +18,34 @@
                 <source>chameleon_system_cms_dashboard.reload_all</source>
                 <target>Alles aktualisieren</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.reload_button_label">
+                <source>chameleon_system_cms_dashboard.widget.reload_button_label</source>
+                <target>Aktualisieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.edit_mode_enable">
+                <source>chameleon_system_cms_dashboard.widget.edit_mode_enable</source>
+                <target>Editieren</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.edit_mode_disable">
+                <source>chameleon_system_cms_dashboard.widget.edit_mode_disable</source>
+                <target>Editieren beenden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.edit_hide">
+                <source>chameleon_system_cms_dashboard.widget.edit_hide</source>
+                <target>Ausblenden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_admin">
+                <source>chameleon_system_cms_dashboard.widget.group_name_admin</source>
+                <target>Administrator</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_cms_dashboard.widget.collection_selection">
+                <source>chameleon_system_cms_dashboard.widget.collection_selection</source>
+                <target>Widget Gruppe hinzufügen</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs_title">
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs_title</source>
-                <target>letzte automatisch ausgeführte Aktionen</target>
+                <target>zuletzt automatisch ausgeführte Aktionen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.running">
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.running</source>

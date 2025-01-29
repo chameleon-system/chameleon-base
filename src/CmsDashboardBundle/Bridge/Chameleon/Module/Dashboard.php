@@ -10,8 +10,10 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Module;
 
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\DashboardModulesProvider;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
@@ -19,7 +21,8 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
     public function __construct(
         private readonly DashboardModulesProvider $provider,
         private readonly SecurityHelperAccess $securityHelperAccess,
-        private readonly RequestStack $requestStack)
+        private readonly RequestStack $requestStack,
+        private readonly Connection $databaseConnection)
     {
         parent::__construct();
     }
@@ -38,6 +41,19 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('loggedInUserName', $this->getLoggedInUserName());
         $oVisitor->SetMappedValue('cmsOwner', $this->getOwnerName());
         $oVisitor->SetMappedValue('widgetCollections', $this->provider->getWidgetCollections());
+        $oVisitor->SetMappedValue('availableCollections', $this->provider->getAvailableCollectionsForUser());
+    }
+
+    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
+    public function saveWidgetLayout(array $widgetLayout): void
+    {
+        $user = $this->securityHelperAccess->getUser();
+        if (null === $user) {
+            return;
+        }
+
+        $query = 'UPDATE `cms_user` SET `dashboard_widget_config` = :layout WHERE `id` = :userId';
+        $this->databaseConnection->executeQuery($query, ['layout' => json_encode($widgetLayout), 'userId' => $user->getId()]);
     }
 
     public function GetHtmlFooterIncludes(): array

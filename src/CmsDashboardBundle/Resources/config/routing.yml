@@ -1,3 +1,7 @@
 chameleon_system_dashboard.widget.api:
   path: /cms/api/dashboard/widget/{widgetAlias}/{methodName}
   defaults: { _controller: chameleon_system_cms_dashboard.controllers.widget_controller::callWidgetMethod }
+chameleon_system_dashboard.widget_order.api:
+  path: /cms/api/dashboard/save-widget-layout
+  methods: [POST]
+  defaults: { _controller: chameleon_system_cms_dashboard.controllers.widget_controller::saveWidgetLayout }

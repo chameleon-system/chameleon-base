@@ -9,6 +9,7 @@
             <argument type="service" id="chameleon_system_cms_dashboard.modules_provider_service" />
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <argument type="service" id="request_stack" />
+            <argument type="service" id="database_connection" />
         </service>
 
         <service id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.dashboard_widget"
@@ -17,6 +18,8 @@
         </service>
 
         <service id="chameleon_system_cms_dashboard.modules_provider_service" class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\DashboardModulesProvider">
+            <argument id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" type="service"/>
+            <argument id="database_connection" type="service"/>
         </service>
 
         <service id="chameleon_system_cms_dashboard.widget.last_run_cronjobs"
@@ -34,6 +37,7 @@
         <service class="ChameleonSystem\CmsDashboardBundle\Controllers\WidgetController"
                  id="chameleon_system_cms_dashboard.controllers.widget_controller">
             <argument type="service" id="service_container" />
+            <argument type="service" id="chameleon_system_cms_dashboard.backend_module.dashboard" />
             <tag name="controller.service_arguments" />
         </service>
 

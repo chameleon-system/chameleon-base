@@ -23,7 +23,7 @@ abstract class DashboardWidget implements DashboardWidgetInterface
 
     abstract public function getTitle(): string;
 
-    abstract public function getChartId(): string;
+    abstract public function getWidgetId(): string;
 
     abstract public function getDropdownItems(): array;
 
@@ -31,6 +31,11 @@ abstract class DashboardWidget implements DashboardWidgetInterface
      * Implement user permission checks here.
      */
     public function showWidget(): bool
+    {
+        return true;
+    }
+
+    public function useWidgetContainerTemplate(): bool
     {
         return true;
     }
