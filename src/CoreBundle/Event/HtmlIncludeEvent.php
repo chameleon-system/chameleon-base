@@ -84,15 +84,12 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
      * @param mixed $value
      * @psalm-assert-if-true string $value
      */
-    private function isInteger($value): bool
+    private function isInteger(mixed $value): bool
     {
-        if (true === is_numeric($value)) {
-            $test = (int) $value;
-            if (0 !== $test) {
-                return true;
-            }
+        if (is_int($value)) {
+            return true;
         }
 
-        return false;
+        return is_numeric($value);
     }
 }
