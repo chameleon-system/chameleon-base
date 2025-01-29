@@ -34,6 +34,15 @@
                 <source>chameleon_system_cms_dashboard.widget.edit_hide</source>
                 <target>Hide</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.collection_selection">
+                <source>chameleon_system_cms_dashboard.widget.collection_selection</source>
+                <target>Add Widget Group</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_admin">
+                <source>chameleon_system_cms_dashboard.widget.group_name_admin</source>
+                <target>Administrator</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs_title">
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs_title</source>
                 <target>Last automatically executed actions</target>

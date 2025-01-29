@@ -1,0 +1,27 @@
+/* Highlight im Edit-Modus */
+#sortable-list.edit-mode .dashboard-widget-collection:hover {
+  outline: 2px dashed cadetblue;
+  outline-offset: 1px;
+  cursor: grab;
+  background-color: lightblue;
+}
+
+/* Visuelles Feedback beim Draggen */
+#sortable-list .dashboard-widget-collection.dragging {
+  opacity: 0.5;
+  transform: scale(1.02);
+}
+
+#sortable-list.edit-mode .dashboard-widget-collection:hover .delete-icon {
+  display: block;
+}
+
+.delete-icon {
+  position: absolute;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.dashboard-widget-collection {
+  position: relative;
+}

@@ -76,6 +76,16 @@ final class DashboardModulesProvider
         return $this->applyUserSortingAndFiltering([$collection => $this->widgets[$collection]], $userWidgetLayout)[$collection] ?? [];
     }
 
+    public function getAvailableCollectionsForUser(): array
+    {
+        $userWidgetLayout = $this->getUserWidgetLayout();
+        $allCollections = array_keys($this->widgets);
+
+        $availableCollections = array_diff($allCollections, $userWidgetLayout);
+
+        return array_values($availableCollections);
+    }
+
     /**
      * Applies user-defined sorting and filters out non-configured collections.
      */

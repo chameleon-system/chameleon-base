@@ -51,10 +51,15 @@ function initializeWidgetReload(buttonSelector) {
 document.addEventListener('DOMContentLoaded', () => {
     const sortableList = document.getElementById('sortable-list');
     const toggleEditModeButton = document.getElementById('toggle-edit-mode');
+    const addWidgetButton = document.getElementById('add-widget-button');
+    const widgetCollectionDropdown = document.getElementById('add-widget-collection');
+    const widgetCollectionDropdownContainer = document.getElementById('add-widget-collection-container');
+    
+
     let isEditMode = false;
     let draggedItem = null;
 
-    // switch edit mode
+    // Switch edit mode
     toggleEditModeButton.addEventListener('click', () => {
         isEditMode = !isEditMode;
         sortableList.classList.toggle('edit-mode', isEditMode);
@@ -66,27 +71,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const enableClass = toggleEditModeButton.getAttribute('data-class-enable');
         const disableClass = toggleEditModeButton.getAttribute('data-class-disable');
 
-        // Change the button text dynamically
         if (buttonText) {
             buttonText.textContent = isEditMode ? disableText : enableText;
         }
 
-        // Change the button class dynamically
         toggleEditModeButton.classList.remove(isEditMode ? disableClass : enableClass);
         toggleEditModeButton.classList.add(isEditMode ? enableClass : disableClass);
 
-        // Enable or disable drag-and-drop
+        if (isEditMode) {
+            widgetCollectionDropdownContainer.classList.remove('d-none');
+        } else {
+            widgetCollectionDropdownContainer.classList.add('d-none');
+        }
+
         Array.from(sortableList.querySelectorAll('.dashboard-widget-collection')).forEach((collection) => {
             collection.setAttribute('draggable', isEditMode ? 'true' : 'false');
         });
 
-        // Show or hide delete icons
         Array.from(sortableList.querySelectorAll('.delete-icon')).forEach((icon) => {
             icon.style.display = isEditMode ? 'block' : 'none';
         });
     });
 
-    // Drag-and-Drop-Events initialisieren
+    // Drag-and-Drop handling
     sortableList.addEventListener('dragstart', (event) => {
         if (isEditMode && event.target.classList.contains('dashboard-widget-collection')) {
             draggedItem = event.target;
@@ -105,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const offset = bounding.y + bounding.height / 2;
                 const parent = target.parentNode;
 
-                // Insert before or after based on mouse position
                 if (event.clientY - offset > 0) {
                     parent.insertBefore(draggedItem, target.nextSibling);
                 } else {
@@ -131,29 +137,57 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // delete a widget collection
+    // Delete a widget collection
     sortableList.addEventListener('click', (event) => {
         if (isEditMode && event.target.classList.contains('delete-collection')) {
             const collection = event.target.closest('.dashboard-widget-collection');
             if (collection) {
-                collection.remove(); // Remove the entire widget collection
-                saveWidgetLayout(); // Save the remaining layout
+                collection.remove();
+                saveWidgetLayout();
             }
         }
     });
 
-    const saveWidgetLayout = () => {
-        const widgetLayout = Array.from(sortableList.querySelectorAll('.dashboard-widget-collection'))
+    // Add new widget collection
+    if (addWidgetButton) {
+        addWidgetButton.addEventListener('click', () => {
+            const selectedCollection = widgetCollectionDropdown.value;
+            if (!selectedCollection) {
+                return;
+            }
+
+            // Aktuelles Layout abrufen
+            let layout = Array.from(sortableList.querySelectorAll('.dashboard-widget-collection'))
+                .map((item) => item.dataset.id);
+
+            if (layout.includes(selectedCollection)) {
+                alert('Collection already in dashboard.');
+                return;
+            }
+
+            layout.unshift(selectedCollection);
+
+            saveWidgetLayout(layout, true);
+        });
+    }
+
+    // Save widget layout
+    const saveWidgetLayout = (layout = null, reload = false) => {
+        const widgetLayout = layout || Array.from(sortableList.querySelectorAll('.dashboard-widget-collection'))
             .map((item) => item.dataset.id);
 
         fetch('/cms/api/dashboard/save-widget-layout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ widgetLayout: widgetLayout })
+            body: JSON.stringify({ widgetLayout })
         }).then((response) => {
             if (!response.ok) {
                 console.error('Error saving the layout');
+                return;
             }
-        });
+            if (reload) {
+                location.reload();
+            }
+        }).catch((error) => console.error('Fetch-Fehler:', error));
     };
 });

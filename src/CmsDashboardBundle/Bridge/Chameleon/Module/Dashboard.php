@@ -41,6 +41,7 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('loggedInUserName', $this->getLoggedInUserName());
         $oVisitor->SetMappedValue('cmsOwner', $this->getOwnerName());
         $oVisitor->SetMappedValue('widgetCollections', $this->provider->getWidgetCollections());
+        $oVisitor->SetMappedValue('availableCollections', $this->provider->getAvailableCollectionsForUser());
     }
 
     #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
