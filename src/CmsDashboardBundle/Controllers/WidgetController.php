@@ -83,16 +83,16 @@ readonly class WidgetController
     public function saveWidgetLayout(Request $request): Response
     {
         try {
-        $this->checkForValidExposedApiMethod($this->dashboardModule, 'saveWidgetLayout', null);
+            $this->checkForValidExposedApiMethod($this->dashboardModule, 'saveWidgetLayout', null);
 
-        $content = $request->getContent();
+            $content = $request->getContent();
 
-        $data = json_decode($content, true);
-        if (!isset($data['widgetLayout'])) {
-            return new JsonResponse(['error' => 'Missing required parameter "widgetLayout".'], 400);
-        }
+            $data = json_decode($content, true);
+            if (!isset($data['widgetLayout'])) {
+                return new JsonResponse(['error' => 'Missing required parameter "widgetLayout".'], 400);
+            }
 
-        $this->dashboardModule->saveWidgetLayout($data['widgetLayout']);
+            $this->dashboardModule->saveWidgetLayout($data['widgetLayout']);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'error' => $e->getMessage(),

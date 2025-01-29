@@ -31,7 +31,7 @@
                     <select id="add-widget-collection" class="form-control mr-2">
                         <option value="">{{ 'chameleon_system_cms_dashboard.widget.collection_selection'|trans }}</option>
                         {% for collectionId, name in availableCollections %}
-                            {% set collectionNameTranslationKey =  'chameleon_system_cms_dashboard.widget.group_name_'~name %}
+                            {% set collectionNameTranslationKey = 'chameleon_system_cms_dashboard.widget.group_name_' ~ name %}
                             <option value="{{ name }}">{{ collectionNameTranslationKey|trans }}</option>
                         {% endfor %}
                     </select>

@@ -28,12 +28,12 @@ class SystemPageService implements SystemPageServiceInterface
     private ActivePageServiceInterface $activePageService;
 
     /**
-     * \TdbCmsPortalSystemPage[] $systemPageCache
+     * \TdbCmsPortalSystemPage[] $systemPageCache.
      */
     private array $systemPageCache = [];
 
     /**
-     * \TdbCmsTree[] $systemPageTreeCache
+     * \TdbCmsTree[] $systemPageTreeCache.
      */
     private array $systemPageTreeCache = [];
 
