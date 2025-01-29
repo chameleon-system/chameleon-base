@@ -58,6 +58,7 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
             $state = $this->createDefaultState();
         }
 
+        /** @var string|null $searchTerm */
         $searchTerm = $this->inputFilterUtil->getFilteredInput(
             MediaManagerListState::STATE_PARAM_NAME_SEARCH_TERM
         );
@@ -65,16 +66,19 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
             $state->setSearchTerm($searchTerm);
         }
 
+        /** @var int|null $pageSize */
         $pageSize = $this->inputFilterUtil->getFilteredInput(MediaManagerListState::STATE_PARAM_NAME_PAGE_SIZE);
         if (null !== $pageSize) {
             $state->setPageSize($pageSize);
         }
 
+        /** @var int|null $pageNumber */
         $pageNumber = $this->inputFilterUtil->getFilteredInput(MediaManagerListState::STATE_PARAM_NAME_PAGE);
         if (null !== $pageNumber) {
             $state->setPageNumber($pageNumber);
         }
 
+        /** @var string|null $mediaTreeNodeId */
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredInput(
             MediaManagerListState::STATE_PARAM_NAME_MEDIA_TREE_NODE_ID
         );
@@ -82,11 +86,13 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
             $state->setMediaTreeNodeId($mediaTreeNodeId);
         }
 
+        /** @var string|null $listView */
         $listView = $this->inputFilterUtil->getFilteredInput(MediaManagerListState::STATE_PARAM_NAME_LIST_VIEW);
         if (null !== $listView) {
             $state->setListView($listView);
         }
 
+        /** @var string|null $showSubtree */
         $showSubtree = $this->inputFilterUtil->getFilteredInput(
             MediaManagerListState::STATE_PARAM_NAME_SHOW_SUBTREE
         );
@@ -94,6 +100,7 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
             $state->setShowSubtree('1' === $showSubtree);
         }
 
+        /** @var string|null $deleteWithUsageSearch */
         $deleteWithUsageSearch = $this->inputFilterUtil->getFilteredInput(
             MediaManagerListState::STATE_PARAM_NAME_DELETE_WITH_USAGE_SEARCH
         );
@@ -101,6 +108,7 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
             $state->setDeleteWithUsageSearch('1' === $deleteWithUsageSearch);
         }
 
+        /** @var string|null $sortColumn */
         $sortColumn = $this->inputFilterUtil->getFilteredInput(MediaManagerListState::STATE_PARAM_NAME_SORT);
         if (null !== $sortColumn) {
             $state->setSortColumn($sortColumn);
@@ -199,7 +207,7 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
         );
     }
 
-    private function getParentIFrame()
+    private function getParentIFrame(): string
     {
         return $this->inputFilterUtil->getFilteredInput(
             MediaManagerListState::URL_NAME_PARENT_IFRAME,

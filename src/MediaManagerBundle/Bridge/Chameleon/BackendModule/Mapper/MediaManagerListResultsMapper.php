@@ -64,8 +64,8 @@ class MediaManagerListResultsMapper extends AbstractViewMapper
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
-         * @var $listState MediaManagerListState
-         * @var $language  TdbCmsLanguage
+         * @var MediaManagerListState $listState
+         * @var TdbCmsLanguage $language
          */
         $listState = $oVisitor->GetSourceObject('listState');
         $language = $oVisitor->GetSourceObject('language');

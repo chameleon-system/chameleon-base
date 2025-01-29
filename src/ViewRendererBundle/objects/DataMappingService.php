@@ -182,10 +182,10 @@ class DataMappingService implements DataMappingServiceInterface
             $mapper->Accept(new \MapperVisitorRestrictedProxy($this->mapperVisitor), true, new \MapperCacheTriggerRestrictedProxy($this->cacheTriggerCollector));
         } catch (\MapperException $e) {
             $message = 'Mapper: '.get_class($mapper).' Error: '.$e->getMessage();
-            throw new \MapperException($message, $e->getCode(), $e);
+            throw new \MapperException($message, (int) $e->getCode(), $e);
         } catch (\Exception $e) {
             $message = 'Mapper: '.get_class($mapper).' Unexpected error: '.$e->getMessage().' in file:'.$e->getFile().' on line:'.$e->getLine();
-            throw new \MapperException($message, $e->getCode(), $e);
+            throw new \MapperException($message, (int) $e->getCode(), $e);
         }
     }
 

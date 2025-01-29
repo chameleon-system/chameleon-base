@@ -107,8 +107,7 @@ interface IPkgSnippetRenderer
      * @param string|TModelBase $sSource
      * @param int $iSourceType
      *
-     * @psalm-param IPkgSnippetRenderer::SOURCE_TYPE_* $sourceType
-     * @psalm-param ($iSourceType is IPkgSnippetRenderer::SOURCE_TYPE_CMSMODULE ? TModelBase : string) $sSource
+     * @psalm-param IPkgSnippetRenderer::SOURCE_TYPE_* $iSourceType
      *
      * @return void
      */

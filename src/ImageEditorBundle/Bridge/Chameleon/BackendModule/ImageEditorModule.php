@@ -170,7 +170,7 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->cmsCoreRedirect->redirect($this->editorUrlService->getImageEditorUrl($mediaRecord->id));
     }
 
-    private function getEditedImageObject()
+    private function getEditedImageObject(): mixed
     {
         $imageData = $this->inputFilterUtil->getFilteredPostInput('editedImageData');
         $decoded = json_decode($imageData, true);

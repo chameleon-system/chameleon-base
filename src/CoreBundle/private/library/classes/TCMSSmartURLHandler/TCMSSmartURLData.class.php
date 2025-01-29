@@ -27,7 +27,7 @@ use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
  * @property string $sRelativeURLPortalIdentifier
  * @property string $sRelativeFullURL
  * @property array $aParameters
- * @property int $iPortalId
+ * @property string $iPortalId
  * @property bool $bPagedefFound
  * @property bool $bDomainNotFound
  * @property bool $bPortalNotFound

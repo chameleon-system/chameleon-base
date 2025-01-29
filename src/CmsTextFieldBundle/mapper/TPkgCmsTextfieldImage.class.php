@@ -30,20 +30,26 @@ class TPkgCmsTextfieldImage extends AbstractViewMapper
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
-        /**
-         * @var $oImage TCMSImage
-         */
+        /** @var TCMSImage $oImage */
         $oImage = $oVisitor->GetSourceObject('oImage');
+
+        /** @var array{width: int, height: int} $aTagProperties */
         $aTagProperties = $oVisitor->GetSourceObject('aTagProperties');
         $oVisitor->SetMappedValue('aTagProperties', $aTagProperties);
+
+        /** @var string $sFullImageURL */
         $sFullImageURL = $oVisitor->GetSourceObject('sFullImageURL');
         $oVisitor->SetMappedValue('sFullImageURL', $sFullImageURL);
+
+        /** @var string $sImageGroupName */
         $sImageGroupName = $oVisitor->GetSourceObject('sImageGroupName');
         $oVisitor->SetMappedValue('sImageGroupName', $sImageGroupName);
 
         /**
          * if the size difference between the thumbnail and the original image is smaller than x pixel (5 by default)
          * the extra link for the original image should not be rendered.
+         *
+         * @var int
          */
         $iThumbnailSizeThreshold = $oVisitor->GetSourceObject('iThumbnailSizeThreshold');
 
@@ -76,8 +82,10 @@ class TPkgCmsTextfieldImage extends AbstractViewMapper
         }
         $oVisitor->SetMappedValue('bFullsizeImageBiggerThanThumbnail', $bFullsizeImageBiggerThanThumbnail);
 
+        /** @var string[] $aEffects */
         $aEffects = $oVisitor->GetSourceObject('aEffects');
 
+        /** @var bool $isForceThumbnailGenerationOnFullSizeImagesEnabled */
         $isForceThumbnailGenerationOnFullSizeImagesEnabled = $oVisitor->GetSourceObject('isForceThumbnailGenerationOnFullSizeImagesEnabled');
 
         if (true === $isForceThumbnailGenerationOnFullSizeImagesEnabled) {

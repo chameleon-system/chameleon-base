@@ -383,7 +383,6 @@ class TPkgComment extends TPkgCommentAutoParent
         }
         $oView->AddVar('oComment', $this);
         $oCommentUser = TdbDataExtranetUser::GetNewInstance();
-        /* @var $oCommentUser TdbDataExtranetUser */
         $oCommentUser->Load($this->fieldDataExtranetUserId);
         $oView->AddVar('oCommentUser', $oCommentUser);
 

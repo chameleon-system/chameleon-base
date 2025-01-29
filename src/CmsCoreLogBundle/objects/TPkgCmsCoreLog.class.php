@@ -35,7 +35,7 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
     public function __construct(Psr\Log\LoggerInterface $oLogger)
     {
         $this->setLogger($oLogger);
-        $this->requestUID = md5(uniqid(rand()));
+        $this->requestUID = md5(uniqid((string) rand()));
     }
 
     /**

@@ -234,6 +234,6 @@
         "chameleon-system/update-counter-migration-bundle": "*"
     },
     "scripts": {
-        "analyze": "psalm --output-format=compact"
+        "analyze": "psalm"
     }
 }

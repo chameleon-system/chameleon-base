@@ -6,7 +6,7 @@
 -->
 
 <psalm
-    errorLevel="5"
+    errorLevel="8"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
@@ -19,6 +19,7 @@
         <directory name="./src" />
         <ignoreFiles>
             <directory name="../../symfony" />
+            <directory name="../../doctrine" />
             <directory name="src/**/views/" />
             <directory name="src/**/Resources/BackendPageDefs" />
             <directory name="src/**/Resources/views/objectviews" />
@@ -29,6 +30,7 @@
             <directory name="src/**/objects/**/**/views" />
             <directory name="src/**/objects/Tests" />
             <directory name="src/**/Bridge/Chameleon/Migration" />
+            <directory name="src/SanityCheckChameleonBundle"/> <!-- deprecated bundle -->
             <file name="src/CoreBundle/Maintenance/Migrator62/autoloadTemplate.php" />
             <file name="src/AutoclassesBundle/Resources/views/snippets-cms/ChameleonSystemAutoclasses/class.php.twig" />
         </ignoreFiles>
@@ -50,18 +52,25 @@
         <class name="TCMSstdClass"/>
     </universalObjectCrates>
 
-    <plugins>
-        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
-            <containerXml>../../../var/cache/dev/AppKernelDevDebugContainer.xml</containerXml>
-        </pluginClass>
-    </plugins>
-
-    <fileExtensions>
-        <extension name=".php" />
-        <extension name=".twig" checker="./vendor/psalm/plugin-symfony/src/Twig/TemplateFileAnalyzer.php"/>
-    </fileExtensions>
+    <globals>
+        <var name="_SESSION" type="array&lt;string, mixed&gt;" />
+    </globals>
 
     <issueHandlers>
+        <!-- As long as the types are not 100% consistent, redundant casts and conditions are ok -->
+        <RedundantCondition errorLevel="suppress" />
+        <RedundantCast errorLevel="suppress" />
+        <RedundantCastGivenDocblockType errorLevel="suppress" />
+
+        <!-- This will also fail on chameleon constants since it doesn't know that projects can 'change' them  -->
+        <TypeDoesNotContainType errorLevel="suppress" />
+
+        <!-- Symfony does not annotate this method correctly -->
+        <InvalidScalarArgument errorLevel="error">
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Component\HttpFoundation\Request::setTrustedHeaderName" />
+            </errorLevel>
+        </InvalidScalarArgument>
 
         <!-- Ignore undefined constants for now: psalm is not picking up the declarations in `*.inc.php` files? -->
         <UndefinedConstant errorLevel="suppress" />
@@ -69,13 +78,14 @@
         <!-- We switch param names from hungarian notation to regular quite often -->
         <ParamNameMismatch errorLevel="suppress" />
 
-        <!-- Redundant type casts can help add more meaning to the code -->
-        <RedundantCastGivenDocblockType errorLevel="suppress" />
-
         <UnusedPsalmSuppress errorLevel="error" />
         <MissingReturnType errorLevel="error" />
         <MissingParamType errorLevel="error" />
         <MissingPropertyType errorLevel="error" />
+
+        <!-- Psalm 6: use /psalm/attributeHandling/ignoreUndefinedAttributes/attribute=My\Custom\Attribute -->
+        <!-- e.g. ArrayShape, NoReturn -->
+        <!-- <UndefinedAttributeClass errorLevel="info"/> -->
 
         <!-- TODO Not supress? -->
         <MoreSpecificImplementedParamType errorLevel="suppress" />

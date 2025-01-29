@@ -742,7 +742,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     /**
      * @param string $SourceFile
      *
-     * @return bool|string
+     * @return false|string
      */
     protected function MoveFileToWorkingDirectory($SourceFile)
     {
@@ -752,7 +752,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     /**
      * @param string $SourceFile
      *
-     * @return bool|string
+     * @return false|string
      */
     protected function MoveFileToArchiveDirectory($SourceFile)
     {
@@ -762,7 +762,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     /**
      * @param string $SourceFile
      *
-     * @return bool|string
+     * @return false|string
      */
     protected function MoveFileToSourceDirectory($SourceFile)
     {
@@ -775,7 +775,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      * @param string $sDestinationType
      * @param string $SourceFile
      *
-     * @return bool|string
+     * @return false|string
      */
     protected function MoveFile($SourceFile, $sDestinationType = 'working')
     {

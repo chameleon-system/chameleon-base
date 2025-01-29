@@ -21,13 +21,13 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
     private $targetTable;
 
     /**
-     * @var string
+     * @var int
      */
     private $timeToLive;
 
     /**
      * @param string $targetTable
-     * @param string $timeToLive
+     * @param int $timeToLive
      */
     public function __construct($targetTable, $timeToLive)
     {
@@ -43,7 +43,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
      * you can overwrite it like following for custom usage
      * i.e:  array('cms_document'=>86400)
      *
-     * @var array
+     * @var array<string, int>
      */
     protected $aTableTTL = array();
 
@@ -119,11 +119,12 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
             $aData = array('table_name' => $aHistoryRow['table_name'], 'owner_id' => $aHistoryRow['owner_id'], 'count' => $aHistoryRow['views'], 'time_block' => $aDateGroup[$sDate]);
 
             /**
-             * @var class-string<TCMSRecordWritable> $sClassName
+             * @var string $sClassName
+             * @psalm-var class-string<TCMSRecordWritable> $sClassName
              */
             $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $targetTable);
 
-            /** @var $oViewCount TCMSRecordWritable* */
+            /** @var TCMSRecordWritable $oViewCount* */
             $oViewCount = $sClassName::GetNewInstance();
 
             $oViewCount->LoadFromRow($aData);
@@ -192,7 +193,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
      * delete counted items that are expired.
      *
      * @param string $sTableName
-     * @param float  $dTime
+     * @param int    $dTime
      *
      * @return void
      */
@@ -215,7 +216,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
      *
      * @param string $sTableName
      *
-     * @return string
+     * @return int
      */
     protected function getHistoryTimeToLive($sTableName)
     {

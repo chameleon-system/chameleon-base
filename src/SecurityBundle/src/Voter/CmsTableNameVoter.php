@@ -4,11 +4,13 @@ namespace ChameleonSystem\SecurityBundle\Voter;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @template-extends Voter<CmsPermissionAttributeConstants::TABLE_EDITOR_ACTIONS,string>
+ */
 class CmsTableNameVoter extends Voter
 {
     public function __construct(readonly private DataAccessCmsTblConfInterface $accessCmsTblConf)

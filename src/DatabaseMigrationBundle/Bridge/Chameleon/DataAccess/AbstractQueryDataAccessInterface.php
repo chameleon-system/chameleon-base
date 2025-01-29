@@ -19,7 +19,7 @@ interface AbstractQueryDataAccessInterface
     /**
      * Returns the ISO639-1 two-letter language identifier of the system's base language.
      *
-     * @return string
+     * @return string|null
      */
     public function getBaseLanguageIso();
 

@@ -24,7 +24,7 @@ class TPkgCoreTeaserMapper_CmsTplPage extends AbstractViewMapper
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
-        /** @var $oPage TdbCmsTplPage */
+        /** @var TdbCmsTplPage $oPage */
         $oPage = $oVisitor->GetSourceObject('oObject');
         if ($oPage && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger($oPage->table, $oPage->id);

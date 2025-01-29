@@ -11,6 +11,9 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/**
+ * @template-implements UserProviderInterface<CmsUserModel>
+ */
 class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterface
 {
     public function __construct(readonly private Connection $connection)

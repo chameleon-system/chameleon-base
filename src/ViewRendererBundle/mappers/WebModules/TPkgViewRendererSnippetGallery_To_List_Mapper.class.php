@@ -26,7 +26,7 @@ class TPkgViewRendererSnippetGallery_To_List_Mapper extends AbstractViewMapper
     {
         $aList = array();
         /**
-         * @var $aSnippetList TPkgViewRendererSnippetGalleryItem[]
+         * @var TPkgViewRendererSnippetGalleryItem[] $aSnippetList
          */
         $aSnippetList = $oVisitor->GetSourceObject('aSnippetList');
         foreach ($aSnippetList as $sSnippetName => $oSnippetData) {

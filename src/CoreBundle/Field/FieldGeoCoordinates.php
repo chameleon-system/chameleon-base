@@ -28,12 +28,12 @@ class FieldGeoCoordinates extends TCMSField
     public function GetSQL()
     {
         $returnVal = false;
-        $latitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_lat', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name.'_lat']));
-        $longitudePassed = trim(false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_lng', $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name.'_lng']));
-        if (!empty($latitudePassed) && !empty($longitudePassed)) {
-            $returnVal = $this->oTableRow->sqlData[$this->name.'_lat'].'|'.$this->oTableRow->sqlData[$this->name.'_lng'];
+        $latitudePassed = false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_lat', $this->oTableRow->sqlData) && !empty(trim($this->oTableRow->sqlData[$this->name.'_lat']));
+        $longitudePassed = false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_lng', $this->oTableRow->sqlData) && !empty(trim($this->oTableRow->sqlData[$this->name.'_lng']));
+        if (true === $latitudePassed && true === $longitudePassed) {
+            $returnVal = trim($this->oTableRow->sqlData[$this->name.'_lat']).'|'.trim($this->oTableRow->sqlData[$this->name.'_lng']);
         } else {
-            $completeDatePassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name, $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name]));
+            $completeDatePassed = false !== $this->oTableRow->sqlData && array_key_exists($this->name, $this->oTableRow->sqlData) && !empty($this->oTableRow->sqlData[$this->name]);
             if ($completeDatePassed) {
                 $returnVal = $this->oTableRow->sqlData[$this->name];
             }

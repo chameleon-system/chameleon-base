@@ -28,14 +28,16 @@ class ServiceLocator
     private static $container;
 
     /**
+     * @template T of object
+     *
      * @param string $serviceId
      *
-     * @return object
+     * @return T|object
      *
      * @throws ServiceCircularReferenceException if a circular reference is detected
-     * @throws ServiceNotFoundException          if the service is not defined or the container isn't set yet
+     * @throws ServiceNotFoundException if the service is not defined or the container isn't set yet
      *
-     * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement
+     * @psalm-suppress InvalidNullableReturnType, NullableReturnStatement, InvalidReturnType, InvalidReturnStatement
      */
     public static function get($serviceId)
     {
@@ -49,11 +51,11 @@ class ServiceLocator
     /**
      * @param string $name
      *
-     * @return mixed
+     * @return \UnitEnum|float|array|bool|int|string|null
      *
-     * @throws InvalidArgumentException          if the parameter is not defined
+     * @throws InvalidArgumentException if the parameter is not defined
      * @throws ServiceCircularReferenceException
-     * @throws ServiceNotFoundException          if the container isn't set yet
+     * @throws ServiceNotFoundException if the container isn't set yet
      */
     public static function getParameter($name)
     {
@@ -69,8 +71,6 @@ class ServiceLocator
     }
 
     /**
-     * @param ContainerInterface $container
-     *
      * @internal
      *
      * @return void

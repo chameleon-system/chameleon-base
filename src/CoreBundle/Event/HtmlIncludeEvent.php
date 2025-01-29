@@ -88,7 +88,7 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
     {
         if (true === is_numeric($value)) {
             $test = (int) $value;
-            if (0 !== $test || '0' == $value) {
+            if (0 !== $test) {
                 return true;
             }
         }

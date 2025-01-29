@@ -50,7 +50,6 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
                 $iNewsletterGroup = $oNewsletterGroup->id;
 
                 $oPkgNewsletterGroup = TdbPkgNewsletterGroup::GetNewInstance();
-                /* @var $oPkgNewsletterGroup TdbPkgNewsletterGroup */
                 $oPkgNewsletterGroup->Load($iNewsletterGroup);
 
                 $this->AddUsersToTmpTable($oPkgNewsletterGroup);
@@ -278,7 +277,6 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
         $bAllowDeletingCampaignQueue = false;
 
         $oTargetTableConf = TdbCmsTblConf::GetNewInstance();
-        /** @var $oTargetTableConf TdbCmsTblConf */
         if ($oTargetTableConf->Loadfromfield('name', 'pkg_newsletter_campaign')) {
             /** @var SecurityHelperAccess $securityHelper */
             $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);

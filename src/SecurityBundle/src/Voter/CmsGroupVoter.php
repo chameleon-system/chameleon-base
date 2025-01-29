@@ -7,6 +7,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @template-extends Voter<string,RestrictedByCmsGroupInterface>
+ */
 class CmsGroupVoter extends Voter
 {
     protected function supports(string $attribute, $subject): bool

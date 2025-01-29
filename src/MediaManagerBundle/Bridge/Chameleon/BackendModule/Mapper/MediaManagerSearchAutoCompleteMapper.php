@@ -52,8 +52,8 @@ class MediaManagerSearchAutoCompleteMapper extends AbstractViewMapper
         IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
-         * @var $searchTerm string
-         * @var $language   TdbCmsLanguage
+         * @var string $searchTerm
+         * @var TdbCmsLanguage $language
          */
         $searchTerm = $oVisitor->GetSourceObject('searchTerm');
         $language = $oVisitor->GetSourceObject('language');

@@ -130,7 +130,7 @@ class TCMSUser extends TCMSRecord
     /**
      * load the user from id.
      *
-     * @param int $id
+     * @param string $id
      *
      * @return bool
      */
@@ -332,7 +332,7 @@ class TCMSUser extends TCMSRecord
     /**
      * returns the current edit language ID.
      *
-     * @return int
+     * @return string
      */
     public function GetCurrentEditLanguageID()
     {

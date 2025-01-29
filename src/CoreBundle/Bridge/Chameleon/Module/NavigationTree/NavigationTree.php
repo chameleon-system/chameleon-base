@@ -337,7 +337,7 @@ class NavigationTree extends \MTPkgViewRendererAbstractModuleMapper
         $parentNodeId = $this->inputFilterUtil->getFilteredGetInput('parentNodeId', '');
         $position = (int) $this->inputFilterUtil->getFilteredGetInput('position', '0');
 
-        if ('' === $treeTableName || '' === $tableId || '' === $nodeId || '' === $parentNodeId || '' === $position) {
+        if ('' === $treeTableName || '' === $tableId || '' === $nodeId || '' === $parentNodeId) {
             return false;
         }
 

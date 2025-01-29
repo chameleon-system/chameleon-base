@@ -36,8 +36,8 @@ class BackendRequestType extends AbstractRequestType
     private function initBackend()
     {
         set_time_limit(1800);
-        @ini_set('session.use_only_cookies', 1);
-        @ini_set('session.use_trans_sid', 0);
+        @ini_set('session.use_only_cookies', '1');
+        @ini_set('session.use_trans_sid', '0');
     }
 
     /**
