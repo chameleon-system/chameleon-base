@@ -12,17 +12,23 @@ namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Module;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\DashboardModulesProvider;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\ImageCrop\Interfaces\CropImageServiceInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
 {
+    private const DEFAULT_BG_IMAGE = '/bundles/chameleonsystemcmsdashboard/images/dashboard-bg.png';
+
     public function __construct(
         private readonly DashboardModulesProvider $provider,
         private readonly SecurityHelperAccess $securityHelperAccess,
         private readonly RequestStack $requestStack,
-        private readonly Connection $databaseConnection)
+        private readonly Connection $databaseConnection,
+        private readonly CropImageServiceInterface $cropImageService,
+        private readonly LanguageServiceInterface $languageService)
     {
         parent::__construct();
     }
@@ -40,6 +46,7 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('forceReload', $reload);
         $oVisitor->SetMappedValue('loggedInUserName', $this->getLoggedInUserName());
         $oVisitor->SetMappedValue('cmsOwner', $this->getOwnerName());
+        $oVisitor->SetMappedValue('headerBackgroundImage', $this->getDashboardHeaderImage());
         $oVisitor->SetMappedValue('widgetCollections', $this->provider->getWidgetCollections());
         $oVisitor->SetMappedValue('availableCollections', $this->provider->getAvailableCollectionsForUser());
     }
@@ -95,5 +102,26 @@ class Dashboard extends \MTPkgViewRendererAbstractModuleMapper
         $name .= $user->getLastname();
 
         return $name;
+    }
+
+    private function getDashboardHeaderImage(): string
+    {
+        $config = \TdbCmsConfig::GetNewInstance('1');
+
+        if ('' === $config->fieldDashboardBg) {
+            return self::DEFAULT_BG_IMAGE;
+        }
+
+        $imageDataModel = $this->cropImageService->getCroppedImageForCmsMediaIdAndCropId(
+            $config->fieldDashboardBg,
+            $config->fieldDashboardBgImageCropId,
+            $this->languageService->getActiveLanguageId()
+        );
+
+        if (null === $imageDataModel) {
+            return self::DEFAULT_BG_IMAGE;
+        }
+
+        return $imageDataModel->getImageUrl();
     }
 }
