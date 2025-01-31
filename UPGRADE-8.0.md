@@ -84,6 +84,9 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSUser::GetSessionVarName` removed
 - `\MTLoginEndPoint::Login` removed
 - `\TCMSUser::Login` removed
+- `\TCMSUser::Logout` removed
+- `\TCMSUser::RelesaseOpenLogs` removed
+- `\TCMSUser::getCmsUserId` removed
 - `\MTLoginEndPoint::postLoginRedirect` removed
 - `\MTLoginEndPoint::IsUserAlreadyLoggedIn` removed
 - `\ChameleonSystem\CoreBundle\CoreEvents::BACKEND_LOGIN_SUCCESS` removed
@@ -109,7 +112,6 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
   $roleIds = array_keys($roles);
   $roleIdsEscaped = implode(',', array_map(fn($id) => "'".addslashes($id)."'", $roleIds));` instead.
 - `\MTLoginEndPoint::Logout` removed (logout works by redirecting to the logout url)
-- `\TCMSUser::Logout` removed
 - `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
 - `\TCMSTableEditorCMSUser::SwitchToUser` removed - switch user by using Symfony impersonate.
 - `\TCMSUser::CMSUserDefined` removed - use  `ServiceLocator::get(SecurityHelperAccess::class)->isGranted(ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants::CMS_USER)` instead

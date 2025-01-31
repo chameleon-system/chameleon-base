@@ -11,6 +11,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class CmsLoginController extends AbstractController
 {
     public const DEFAULT_PATH = '/cms';
+    public const LOGIN_PATH = '/cms/login';
     public const FIREWALL_BACKEND_COOKIE_NAME = '_security.backend.target_path'; // "backend" is the firewall name
     public const LAST_USED_URL_COOKIE_NAME = '_lastUsedUrl';
     public const LOGIN_REDIRECT_COOKIE_NAME = '_redirectUrl';
@@ -47,6 +48,11 @@ class CmsLoginController extends AbstractController
     protected function handleRedirecting(): void
     {
         $request = $this->requestStack->getCurrentRequest();
+
+        if (null === $request) {
+            return;
+        }
+
         if (false === $request->hasSession()) {
             return;
         }
@@ -60,7 +66,7 @@ class CmsLoginController extends AbstractController
 
         $referer = $request->headers->get('referer');
 
-        if (null !== $referer && false === $this->isDefaultPath($referer)) { // logout from subpage
+        if (null !== $referer && false === $this->isDefaultPath($referer) && false === $this->isLoginPath($referer)) { // logout from subpage
             $session->set(self::LAST_USED_URL_COOKIE_NAME, $referer);
             $session->set(self::FIREWALL_BACKEND_COOKIE_NAME, $referer); // used by symfony if directly login after logout
             $redirectUrl = $referer; // used if directly login after logout if update available
@@ -75,5 +81,10 @@ class CmsLoginController extends AbstractController
     protected function isDefaultPath(?string $url): bool
     {
         return null !== $url && self::DEFAULT_PATH === parse_url($url, PHP_URL_PATH) && null === parse_url($url, PHP_URL_QUERY);
+    }
+
+    protected function isLoginPath(?string $url): bool
+    {
+        return null !== $url && self::LOGIN_PATH === parse_url($url, PHP_URL_PATH) && null === parse_url($url, PHP_URL_QUERY);
     }
 }
