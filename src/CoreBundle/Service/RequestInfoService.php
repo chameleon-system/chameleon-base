@@ -124,11 +124,10 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         $this->isPreviewModeCache = false === \TGlobal::IsCMSMode()
+            && true === $this->getPreviewModeService()->currentSessionHasPreviewAccess() || $this->checkTokenFromQueryParam($request)
             && (
-                true === $this->getPreviewModeService()->currentSessionHasPreviewAccess() || $this->checkTokenFromQueryParam($request)
-            ) && (
                 'true' === $request->query->get('__previewmode')
-                 || 'true' === $request->query->get('preview')
+                || 'true' === $request->query->get('preview')
             );
 
         return $this->isPreviewModeCache;
