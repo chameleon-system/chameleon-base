@@ -2334,7 +2334,27 @@
             <trans-unit id="chameleon_system_core.field_css_icon.select_icon">
                 <source>chameleon_system_core.field_css_icon.select_icon</source>
                 <target>Select Icon</target>
-            </trans-unit>            
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.filename_label">
+                <source>chameleon_system_core.log_viewer.filename_label</source>
+                <target>File name</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.size_label">
+                <source>chameleon_system_core.log_viewer.size_label</source>
+                <target>Filename</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.last_modified_label">
+                <source>chameleon_system_core.log_viewer.last_modified_label</source>
+                <target>Last modified</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.headline">
+                <source>chameleon_system_core.log_viewer.headline</source>
+                <target>Log Overview</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.number_of_lines_label">
+                <source>chameleon_system_core.log_viewer.number_of_lines_label</source>
+                <target>Number of lines</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
