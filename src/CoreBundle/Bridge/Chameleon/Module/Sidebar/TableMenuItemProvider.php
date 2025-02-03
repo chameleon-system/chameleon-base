@@ -51,11 +51,11 @@ class TableMenuItemProvider implements MenuItemProviderInterface
             return false;
         }
 
-        if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableObject->fieldName)) {
-            return false;
+        if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $tableObject->fieldName)) {
+            return true;
         }
 
-        if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $tableObject->fieldName)) {
+        if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableObject->fieldName)) {
             return true;
         }
 
