@@ -12,3 +12,7 @@
   position: relative;
   top: -3px;
 }
+
+.snippetImageEditorForm #editor_container label.SfxSelect-Label {
+  margin-bottom: 0 !important;
+}

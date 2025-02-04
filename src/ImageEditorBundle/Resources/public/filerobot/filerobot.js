@@ -19,6 +19,8 @@ const config = {
     },
     Text: { text: 'Filerobot...' },
     Rotate: { angle: 90, componentType: 'slider' },
+    useBackendTranslations: true,
+    language: 'de',
     translations: {
         profile: 'Profile',
         coverPhoto: 'Cover photo',

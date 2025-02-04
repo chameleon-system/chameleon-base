@@ -78,7 +78,7 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/css/imageEditor.css').'?v=1" rel="stylesheet">
             <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/lodash.min.js').'?v=1"></script>
             <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerbot-image-editor.min.js').'?v=1"></script>;
-            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerobot.js').'?v=1"></script>';
+            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerobot.js').'?v=2"></script>';
 
         return $includes;
     }
