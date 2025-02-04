@@ -440,7 +440,7 @@ class TCMSLogChange
 
     private static function isUuidOrNumeric(string $value): bool
     {
-        return self::isUuid($value) || ctype_digit($value);
+        return self::isUuid($value) || is_numeric($value);
     }
 
     private static function isUuid(string $value): bool
