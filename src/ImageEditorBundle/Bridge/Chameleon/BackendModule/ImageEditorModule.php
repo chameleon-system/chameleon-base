@@ -53,8 +53,10 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             return;
         }
 
+        $user = $this->securityHelperAccess->getUser();
         $oVisitor->SetMappedValue('imageUrl', $image->getImageUrl());
         $oVisitor->SetMappedValue('imageId', $image->getId());
+        $oVisitor->SetMappedValue('backendLanguage', $user->getCurrentEditLanguageIsoCode());
         $oVisitor->SetMappedValue('imageWidth', $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_IMAGE_WIDTH));
         $oVisitor->SetMappedValue('imageHeight', $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_IMAGE_HEIGHT));
 

@@ -5,6 +5,9 @@ const imageUrl = imageUrlField.value;
 const imageIdField = document.querySelector('input[name="imageId"]');
 const imageId = imageIdField.value;
 
+const backendLanguageField = document.querySelector('input[name="backendLanguage"]');
+const backendLanguage = backendLanguageField.value;
+
 const config = {
     source: imageUrl,
     onSave: (editedImageObject, designState) =>{
@@ -20,7 +23,7 @@ const config = {
     Text: { text: 'Filerobot...' },
     Rotate: { angle: 90, componentType: 'slider' },
     useBackendTranslations: true,
-    language: 'de',
+    language: backendLanguage,
     translations: {
         profile: 'Profile',
         coverPhoto: 'Cover photo',
