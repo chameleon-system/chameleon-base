@@ -169,7 +169,7 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $tableManagerMedia->AllowEditByAll(false);
         $this->flashMessageService->addMessage(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'IMAGE_EDITOR_SUCCESS_NEW_IMAGE_HAS_BEEN_SAVED');
 
-        $this->cmsCoreRedirect->redirect($this->editorUrlService->getImageEditorUrl($mediaRecord->id));
+        $this->cmsCoreRedirect->redirect($this->editorUrlService->getImageEditorUrl($mediaRecord->id, $editedImageObject['width'], $editedImageObject['height']));
     }
 
     private function getEditedImageObject(): mixed
