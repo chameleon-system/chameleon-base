@@ -1,22 +1,24 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace ChameleonSystem\CoreBundle\Geocoding;
 
+use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class GeocodingController
+readonly class GeocodingController
 {
-
-    /** @var GeocoderInterface */
-    private $geocoder;
-
-    public function __construct(GeocoderInterface $geocoder)
+    public function __construct(
+        private GeocoderInterface $geocoder,
+        private SecurityHelperAccess $securityHelper)
     {
-        $this->geocoder = $geocoder;
     }
 
     public function __invoke(Request $request): Response
@@ -31,20 +33,17 @@ class GeocodingController
         }
 
         $results = $this->geocoder->geocode($query);
-        $serialized = array_map([ $this, 'serialize' ], $results);
+        $serialized = array_map([$this, 'serialize'], $results);
 
         return new JsonResponse($serialized);
     }
 
     private function isBackendUserAuthenticated(): bool
     {
-        $user = \TdbCmsUser::GetActiveUser();
+        $user = $this->securityHelper->getUser();
 
-        if (null === $user || false === $user->bLoggedIn) {
-            return false;
-        }
-
-        return true;
+        return !(null === $user || false === $this->securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)
+            || false === ($user instanceof CmsUserModel));
     }
 
     private function serialize(GeocodingResult $geocodingResult): array

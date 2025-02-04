@@ -17,9 +17,14 @@
 
         <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="true"/>
 
-        <service id="ChameleonSystem\CoreBundle\EventListener\ReleaseOldLocksOnLoginListener">
+        <service id="ChameleonSystem\CoreBundle\EventListener\ReleaseOldLocksListener">
             <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess" />
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout" />
             <argument type="service" id="database_connection" />
+        </service>
+
+        <service id="ChameleonSystem\CoreBundle\EventListener\ListCacheResetListener">
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout" />
         </service>
 
         <service id="esono_customer.twig.version_extension" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\BackendTwigExtension">
@@ -978,6 +983,7 @@
         </service>
         <service id="chameleon_system_core.geocoding.geocoding_controller" class="ChameleonSystem\CoreBundle\Geocoding\GeocodingController" public="true">
             <argument type="service" id="chameleon_system_core.geocoding.geocoder" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
         </service>
 
         <service id="chameleon_system_core.service.css_class_extractor" class="ChameleonSystem\CoreBundle\Service\CssClassExtractor" public="true">
