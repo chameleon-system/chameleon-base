@@ -18,20 +18,20 @@ use Doctrine\DBAL\Connection;
 
 /**
  * manages the TableEditor classes.
-/**/
+ */
 class TCMSTableEditorManager
 {
     /**
      * definition of the table.
      *
-     * @var TdbCmsTblConf
+     * @var TdbCmsTblConf|null
      */
     public $oTableConf = null;
 
     /**
      * object manages the table operations.
      *
-     * @var TCMSTableEditor
+     * @var TCMSTableEditor|null
      */
     public $oTableEditor = null;
 
@@ -47,21 +47,21 @@ class TCMSTableEditorManager
      *
      * @var string
      */
-    public $sTableId = null;
+    public $sTableId;
 
     /**
      * Enter description here...
      *
      * @var string
      */
-    public $sRestriction = null;
+    public $sRestriction;
 
     /**
      * Enter description here...
      *
      * @var string
      */
-    public $sRestrictionField = null;
+    public $sRestrictionField;
 
     /**
      * if set to true, any delete checks are ignored for the item.
@@ -87,7 +87,7 @@ class TCMSTableEditorManager
     /**
      * TCMSMessageManager consumer spot name.
      */
-    const MESSAGE_MANAGER_CONSUMER = 'MTTableEditorMessages';
+    public const MESSAGE_MANAGER_CONSUMER = 'MTTableEditorMessages';
     /**
      * @var Connection
      */
@@ -160,7 +160,6 @@ class TCMSTableEditorManager
         $this->sTableId = $sTableId;
         $this->sId = $sId;
 
-        /** @var $oCmsTblConf TdbCmsTblConf */
         $this->oTableConf = TdbCmsTblConf::GetNewInstance();
         if (null === $sLanguageID) {
             /** @var BackendSessionInterface $backendSession */
@@ -174,12 +173,12 @@ class TCMSTableEditorManager
         $this->oTableConf->Load($this->sTableId);
 
         // check if record exists
-        $oRecord = new TCMSRecord();
-        $oRecord->table = $this->oTableConf->sqlData['name'];
-        $bRecordFound = null !== $sId && true === $oRecord->LoadWithCaching($sId);
-        unset($oRecord);
+        $record = new TCMSRecord();
+        $record->table = $this->oTableConf->sqlData['name'];
+        $recordFound = null !== $sId && true === $record->LoadWithCaching($sId);
+        unset($record);
 
-        if (null !== $sId && false === $bRecordFound) {
+        if (null !== $sId && false === $recordFound) {
             return false;
         }
 
@@ -190,18 +189,16 @@ class TCMSTableEditorManager
         $this->oTableEditor->sRestrictionField = $this->sRestrictionField;
         $this->oTableEditor->oTableConf->SetLanguage($this->oTableConf->GetLanguage());
 
-        return $bRecordFound;
+        return $recordFound;
     }
 
     /**
      * allow an external object to call a method on the encapsulated TCMSTableEditor object.
      *
      * @param string $sFunctionName - function name
-     * @param array  $aParameters
-     *
-     * @return mixed
+     * @param array $aParameters
      */
-    public function HandleExternalFunctionCall($sFunctionName, $aParameters = array())
+    public function HandleExternalFunctionCall($sFunctionName, $aParameters = [])
     {
         // check if the function exists
         if (!method_exists($this->oTableEditor, $sFunctionName)) {
@@ -231,6 +228,7 @@ class TCMSTableEditorManager
 
     /**
      * Load the table editor class that is configured in cms_tbl_conf.
+     *
      * @return TCMSTableEditor
      */
     public function TableEditorFactory()
@@ -253,7 +251,7 @@ class TCMSTableEditorManager
      * saves a record.
      *
      * @param array $postData
-     * @param bool  $bDataIsInSQLForm
+     * @param bool $bDataIsInSQLForm
      *
      * @return TCMSstdClass|false
      */
@@ -274,14 +272,14 @@ class TCMSTableEditorManager
      *
      * @param string $sFieldName
      * @param scalar $sFieldContent
-     * @param bool   $bTriggerPostSaveHook
+     * @param bool $bTriggerPostSaveHook
      *
      * @return bool
      */
     public function SaveField($sFieldName, $sFieldContent, $bTriggerPostSaveHook = false)
     {
         $bSaved = false;
-        if ($this->oTableEditor->AllowEdit(array($sFieldName => $sFieldContent)) && !$this->IsRecordLocked()) {
+        if ($this->oTableEditor->AllowEdit([$sFieldName => $sFieldContent]) && !$this->IsRecordLocked()) {
             $this->oTableEditor->SaveField($sFieldName, $sFieldContent, $bTriggerPostSaveHook);
             $this->RefreshLock();
             $bSaved = true;
@@ -345,14 +343,14 @@ class TCMSTableEditorManager
                 $flashMessageService->AddMessage(
                     $sConsumerName,
                     'TABLEEDITOR_DELETE_RECORD_SUCCESS',
-                    array('id' => $this->sId, 'name' => $sRecordName)
+                    ['id' => $this->sId, 'name' => $sRecordName]
                 );
                 $bReturnVal = true;
             } else {
                 $flashMessageService->AddMessage(
                     $sConsumerName,
                     'TABLEEDITOR_DELETE_RECORD_DOES_NOT_EXIST',
-                    array('id' => $this->sId, 'name' => 'Unknown')
+                    ['id' => $this->sId, 'name' => 'Unknown']
                 );
             }
         }
@@ -401,13 +399,13 @@ class TCMSTableEditorManager
     /**
      * inserts a copy of the record based on the data from the database instead of postdata.
      *
-     * @param bool  $languageCopy
+     * @param bool $languageCopy
      * @param array $aOverloadedFields fields to copy with given value
-     * @param bool  $bCopyAllLanguages Set to true if you want top copy alle language fields
+     * @param bool $bCopyAllLanguages Set to true if you want top copy alle language fields
      *
      * @return TCMSstdClass|bool
      */
-    public function DatabaseCopy($languageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = true)
+    public function DatabaseCopy($languageCopy = false, $aOverloadedFields = [], $bCopyAllLanguages = true)
     {
         $returnVal = false;
 
@@ -462,13 +460,14 @@ class TCMSTableEditorManager
 
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
         return $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $this->oTableConf->sqlData['name']);
     }
 
     /**
      * removes one connection from mlt.
      *
-     * @param string $sFieldName   mlt fieldname (connected table name)
+     * @param string $sFieldName mlt fieldname (connected table name)
      * @param string $iConnectedID the connected record id that will be removed
      */
     public function RemoveMLTConnection($sFieldName, $iConnectedID)
@@ -484,8 +483,8 @@ class TCMSTableEditorManager
     /**
      * adds one connection to mlt.
      *
-     * @param string $sFieldName   - mlt fieldname (connected table name)
-     * @param int    $iConnectedID - the connected record id that will be added
+     * @param string $sFieldName - mlt fieldname (connected table name)
+     * @param int $iConnectedID - the connected record id that will be added
      */
     public function AddMLTConnection($sFieldName, $iConnectedID)
     {
@@ -571,7 +570,7 @@ class TCMSTableEditorManager
     public function __call($name, $args)
     {
         if (method_exists($this->oTableEditor, $name)) {
-            return call_user_func_array(array($this->oTableEditor, $name), $args);
+            return call_user_func_array([$this->oTableEditor, $name], $args);
         }
     }
 
@@ -595,9 +594,6 @@ class TCMSTableEditorManager
         }
     }
 
-    /**
-     * @param Connection $connection
-     */
     public function setDatabaseConnection(Connection $connection)
     {
         $this->databaseConnection = $connection;
@@ -612,7 +608,7 @@ class TCMSTableEditorManager
             return $this->databaseConnection;
         }
 
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     private function getFlashMessageService(): FlashMessageServiceInterface
