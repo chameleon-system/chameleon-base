@@ -30,9 +30,6 @@ class InputFilterUtil implements InputFilterUtilInterface
      */
     private $logger;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack, LoggerInterface $logger)
     {
         $this->requestStack = $requestStack;
@@ -60,6 +57,7 @@ class InputFilterUtil implements InputFilterUtilInterface
             return $this->filterValue($request->query->get($key, $default, $deep), $filter);
         } catch (\InvalidArgumentException|BadRequestException $e) {
             $this->logger->warning('getFilteredGetInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredGetInputArray instead.', ['key' => $key, 'default' => $default, 'filter' => $filter]);
+
             return $this->getFilteredGetInputArray($key, $default, $filter);
         }
     }
@@ -87,9 +85,9 @@ class InputFilterUtil implements InputFilterUtilInterface
             return $this->filterValue($request->request->get($key, $default, $deep), $filter);
         } catch (\InvalidArgumentException|BadRequestException $e) {
             $this->logger->warning('getFilteredPostInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredPostInputArray instead.', ['key' => $key, 'default' => $default, 'filter' => $filter]);
+
             return $this->getFilteredPostInputArray($key, $default, $filter);
         }
-
     }
 
     public function getFilteredPostInputArray($key, $default = null, $filter = TCMSUSERINPUT_DEFAULTFILTER)
@@ -109,13 +107,12 @@ class InputFilterUtil implements InputFilterUtilInterface
         if (null === $value) {
             return $value;
         }
-        /** @var string $value */
+        /* @var string $value */
         if (null === $filterClass || '' === $filterClass || false === $filterClass) {
             return $value;
         }
 
-        static $aFilteredValueCache = array();
-        $sCacheKey = '';
+        static $aFilteredValueCache = [];
         if (is_array($value)) {
             $sCacheKey = md5(serialize($value));
         } else {
@@ -138,7 +135,7 @@ class InputFilterUtil implements InputFilterUtilInterface
 
     public function getFilterObject($filterClass)
     {
-        $aFilters = array();
+        $aFilters = [];
         $aFilterClasses = explode('|', $filterClass);
         foreach ($aFilterClasses as $sFilter) {
             $aParts = explode(';', $sFilter);
