@@ -26,21 +26,21 @@ class TCMSTableEditorManager
      *
      * @var TdbCmsTblConf|null
      */
-    public $oTableConf = null;
+    public $oTableConf;
 
     /**
      * object manages the table operations.
      *
      * @var TCMSTableEditor|null
      */
-    public $oTableEditor = null;
+    public $oTableEditor;
 
     /**
      * record id.
      *
      * @var string|null
      */
-    public $sId = null;
+    public $sId;
 
     /**
      * table conf id.
