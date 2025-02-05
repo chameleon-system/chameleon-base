@@ -38,7 +38,7 @@ class TCMSTableEditorManager
     /**
      * record id.
      *
-     * @var string
+     * @var string|null
      */
     public $sId = null;
 
@@ -150,14 +150,13 @@ class TCMSTableEditorManager
      * initalises the table editor object.
      *
      * @param string $sTableId
-     * @param string $sId
-     * @param ?string $sLanguageID - overwrites the user language and loads the record in this language instead
+     * @param string|null $sId
+     * @param string|null $sLanguageID - overwrites the user language and loads the record in this language instead
      *
-     * @return bool - returns false if the record doesn`t exist
+     * @return bool - returns false if the record doesn't exist
      */
     public function Init($sTableId, $sId = null, $sLanguageID = null)
     {
-        $bRecordFound = false;
         $this->sTableId = $sTableId;
         $this->sId = $sId;
 
@@ -176,12 +175,13 @@ class TCMSTableEditorManager
 
         // check if record exists
         $oRecord = new TCMSRecord();
-        /** @var $oRecord TCMSRecord */
         $oRecord->table = $this->oTableConf->sqlData['name'];
-        if ($oRecord->LoadWithCaching($sId)) {
-            $bRecordFound = true;
-        }
+        $bRecordFound = null !== $sId && true === $oRecord->LoadWithCaching($sId);
         unset($oRecord);
+
+        if (null !== $sId && false === $bRecordFound) {
+            return false;
+        }
 
         $this->oTableEditor = $this->TableEditorFactory();
         $this->oTableEditor->AllowEditByAll($this->bAllowEditByAll);
