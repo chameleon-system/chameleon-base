@@ -31,7 +31,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - add `new \Symfony\Bundle\SecurityBundle\SecurityBundle(),` to the bundles in `AppKernel::registerBundles` before the chameleon bundles
 - add `new \ChameleonSystem\SecurityBundle\ChameleonSystemSecurityBundle(),
   new \ChameleonSystem\CmsBackendBundle\ChameleonSystemCmsBackendBundle(),
-  new KnpUOAuth2ClientBundle(),
+  new \KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
   new \ChameleonSystem\EcommerceStatsBundle\ChameleonSystemEcommerceStatsBundle(),
   new \ChameleonSystem\ImageEditorBundle\ChameleonSystemImageEditorBundle(),
   new \ChameleonSystem\CmsDashboardBundle\ChameleonSystemCmsDashboardBundle()` bundles to the `AppKernel::registerBundles` method at the end.
