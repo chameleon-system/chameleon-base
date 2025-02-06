@@ -9,17 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 readonly class LogViewController
 {
-
-    public function __construct
-    (
+    public function __construct(
         private LogViewerServiceInterface $logViewerService
-    )
-    {
+    ) {
     }
 
     public function fetchLogContent(string $filename, int $lineCount): Response
     {
-        $filePath = LogViewerService::LOG_DIR . '/' . basename($filename);
+        $filePath = LogViewerService::LOG_DIR.'/'.basename($filename);
 
         if (!file_exists($filePath)) {
             return new JsonResponse(['error' => 'File not found'], 404);
@@ -36,5 +33,4 @@ readonly class LogViewController
             'lines' => implode("\n", $lines),
         ]);
     }
-
 }

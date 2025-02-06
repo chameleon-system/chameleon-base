@@ -992,5 +992,18 @@
             <argument type="string" key="$deletedFields"/> <!-- will be injected by DeletedFieldsPass -->
             <argument type="service" id="database_connection" key="$connection"/>
         </service>
+
+        <service id="chameleon_system_core.bridge_chameleon_backend_module.log_viewer_backend_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\BackendModule\LogViewerBackendModule" shared="false" public="true">
+            <tag name="chameleon_system.module"/>
+            <argument type="service" id="chameleon_system_core.service.log_view_service"/>
+        </service>
+
+        <service id="chameleon_system_core.controller.log_view_controller" class="ChameleonSystem\CoreBundle\Controller\LogViewController" public="true">
+            <argument type="service" id="chameleon_system_core.service.log_view_service"/>
+        </service>
+
+        <service id="chameleon_system_core.service.log_view_service" class="ChameleonSystem\CoreBundle\Service\LogViewerService" public="true">
+            <argument type="service" id="Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface"/>
+        </service>
     </services>
 </container>

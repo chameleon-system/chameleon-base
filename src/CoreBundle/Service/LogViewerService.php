@@ -2,19 +2,29 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+
 class LogViewerService implements LogViewerServiceInterface
 {
     public const LOG_DIR = __DIR__.'/../../../../../../var/log';
 
+    public function __construct(
+        private readonly ParameterBagInterface $parameterBag
+    ) {
+    }
+
     public function getLogFiles(): array
     {
-        if (!is_dir(self::LOG_DIR)) {
+        $logDirectory = $this->parameterBag->get('kernel.logs_dir');
+
+        if (!is_dir($logDirectory)) {
             return [];
         }
 
-        $files = scandir(self::LOG_DIR);
-        return array_values(array_filter($files, static function ($file) {
-            return is_file(self::LOG_DIR . '/' . $file) && 'log' === pathinfo($file, PATHINFO_EXTENSION);
+        $files = scandir($logDirectory);
+
+        return array_values(array_filter($files, static function ($file) use ($logDirectory) {
+            return is_file($logDirectory.'/'.$file) && 'log' === pathinfo($file, PATHINFO_EXTENSION);
         }));
     }
 

@@ -5,12 +5,12 @@ namespace ChameleonSystem\CoreBundle\Service;
 interface LogViewerServiceInterface
 {
     /**
-     * @return String[]
+     * @return string[]
      */
     public function getLogFiles(): array;
 
     /**
-     * @return String[]
+     * @return string[]
      */
     public function getLastLines(string $filePath, string $numLines): array;
 }

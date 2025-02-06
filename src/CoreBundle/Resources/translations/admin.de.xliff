@@ -2352,6 +2352,14 @@
                 <source>chameleon_system_core.log_viewer.number_of_lines_label</source>
                 <target>Zeilenanzahl</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.view_button">
+                <source>chameleon_system_core.log_viewer.view_button</source>
+                <target>Anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.live_button">
+                <source>chameleon_system_core.log_viewer.live_button</source>
+                <target>Live</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
