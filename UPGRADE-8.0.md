@@ -6,6 +6,10 @@ UPGRADE FROM 7.1 to 8.0
 The steps in this chapter are required to get the project up and running in version 8.0.
 It is recommended to follow these steps in the given order.
 
+## PHP Version
+
+Minimum required PHP version is 8.2. The recommended PHP version is >= 8.4.
+
 ## Change Or Remove Deprecated Code (Symfony)
 
 You must change some code which was deprecated in previous Symfony versions and is now removed. Do this now with a working
@@ -20,7 +24,17 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `InputFilterUtil` has two new methods: `getFilteredGetInputArray` and `getFilteredPostInputArray`. Use them if you expect the value to be an array instead of a scalar value.
   - This is due to a change in symfony's ParameterBag, which does not support arrays on its `query.get` and `request.get` methods anymore. You now have to use the `all` method for expected arrays.
   - If you are using the `InputFilterUtil` class, there is currently a fallback so the project won't crash immediately. However, this fallback will be removed in the future.
-- `AppKernel::registerBundles` now needs a return type.
+ 
+# New mandatory bundles
+
+- `AppKernel::registerBundles` now needs the return type "iterable".
+- add `new \Symfony\Bundle\SecurityBundle\SecurityBundle(),` to the bundles in `AppKernel::registerBundles` before the chameleon bundles
+- add `new \ChameleonSystem\SecurityBundle\ChameleonSystemSecurityBundle(),
+  new \ChameleonSystem\CmsBackendBundle\ChameleonSystemCmsBackendBundle(),
+  new \KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
+  new \ChameleonSystem\EcommerceStatsBundle\ChameleonSystemEcommerceStatsBundle(),
+  new \ChameleonSystem\ImageEditorBundle\ChameleonSystemImageEditorBundle(),
+  new \ChameleonSystem\CmsDashboardBundle\ChameleonSystemCmsDashboardBundle()` bundles to the `AppKernel::registerBundles` method at the end.
 
 ### backend user rights changed to symfony security voters
 
@@ -29,7 +43,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 ### List Of Removed Or Changed Code
 
 - Configuration classes: TreeBuilder must be constructed with an argument. (search for new TreeBuilder())
-- Event dispatcher (`EventDispatcherInterface`): The argument order is swapped. (search for ->dispatch( )
+- Event dispatcher (`EventDispatcherInterface`): The argument order is swapped. (search for `->dispatch(` )
 - Session: Instead of `getSession()` `hasSession()` should be used for a null check. (search for ->getSession( with a following null check)
 - Some event classes have been renamed. 
   specifically: 
