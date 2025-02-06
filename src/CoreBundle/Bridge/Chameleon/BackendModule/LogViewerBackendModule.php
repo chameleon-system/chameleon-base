@@ -16,11 +16,14 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\BackendModule;
 use ChameleonSystem\CoreBundle\DataModel\LogViewerItemDataModel;
 use ChameleonSystem\CoreBundle\Service\LogViewerService;
 use ChameleonSystem\CoreBundle\Service\LogViewerServiceInterface;
+use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class LogViewerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 {
     public function __construct(
-        private readonly LogViewerServiceInterface $logViewerService
+        private readonly LogViewerServiceInterface $logViewerService,
+        private readonly Security $security
     ) {
         parent::__construct();
     }
@@ -30,6 +33,22 @@ class LogViewerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     public function Accept(\IMapperVisitorRestricted $oVisitor, $bCachingEnabled, \IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
+        $user = $this->security->getUser();
+
+        if (null === $user) {
+            $oVisitor->SetMappedValue('userIsNotAdmin', true);
+
+            return;
+        }
+
+        $userRoles = $user->getRoles();
+
+        if (false === \in_array(CmsUserRoleConstants::CMS_ADMIN, $userRoles, true)) {
+            $oVisitor->SetMappedValue('userIsNotAdmin', true);
+
+            return;
+        }
+
         $logFiles = [];
 
         foreach ($this->logViewerService->getLogFiles() as $filename) {

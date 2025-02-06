@@ -2337,11 +2337,11 @@
             </trans-unit>
             <trans-unit id="chameleon_system_core.log_viewer.filename_label">
                 <source>chameleon_system_core.log_viewer.filename_label</source>
-                <target>File name</target>
+                <target>Filename</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.log_viewer.size_label">
                 <source>chameleon_system_core.log_viewer.size_label</source>
-                <target>Filename</target>
+                <target>File size</target>
             </trans-unit>
             <trans-unit id="chameleon_system_core.log_viewer.last_modified_label">
                 <source>chameleon_system_core.log_viewer.last_modified_label</source>
@@ -2362,6 +2362,10 @@
             <trans-unit id="chameleon_system_core.log_viewer.live_button">
                 <source>chameleon_system_core.log_viewer.live_button</source>
                 <target>Live</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.no_admin_message">
+                <source>chameleon_system_core.log_viewer.no_admin_message</source>
+                <target>You do not have the necessary rights to view this content</target>
             </trans-unit>
         </body>
     </file>

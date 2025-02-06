@@ -2360,6 +2360,10 @@
                 <source>chameleon_system_core.log_viewer.live_button</source>
                 <target>Live</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.no_admin_message">
+                <source>chameleon_system_core.log_viewer.no_admin_message</source>
+                <target>Sie haben nicht die Rechte um den Inhalt dieser Seite aufzurufen</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
