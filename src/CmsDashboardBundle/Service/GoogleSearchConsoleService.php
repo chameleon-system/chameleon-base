@@ -27,13 +27,13 @@ class GoogleSearchConsoleService
     private function initClient(): void
     {
         if ('' === $this->googleSearchConsoleAuthJson) {
-            throw new \RuntimeException("Google Auth JSON is not set.");
+            throw new \RuntimeException('Google Auth JSON is not set.');
         }
 
         $authConfig = json_decode($this->googleSearchConsoleAuthJson, true);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException("Invalid Google Auth JSON format: " . json_last_error_msg());
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new \RuntimeException('Invalid Google Auth JSON format: '.json_last_error_msg());
         }
 
         $this->client = new Client();
@@ -56,7 +56,8 @@ class GoogleSearchConsoleService
 
             return $response->getRows() ?: [];
         } catch (\Exception $e) {
-            $this->logger->error('Google Search Console API Error: ' . $e->getMessage());
+            $this->logger->error('Google Search Console API Error: '.$e->getMessage());
+
             return [];
         }
     }
@@ -72,7 +73,7 @@ class GoogleSearchConsoleService
         return [
             'current' => $this->formatChartData($currentData),
             'previous' => $this->formatChartData($previousData),
-            'topImprovedQueries' => $this->getTopImprovedQueries($currentDataSearchQueries, $previousDataSearchQueries)
+            'topImprovedQueries' => $this->getTopImprovedQueries($currentDataSearchQueries, $previousDataSearchQueries),
         ];
     }
 
@@ -98,8 +99,8 @@ class GoogleSearchConsoleService
                 [
                     'label' => 'impressions',
                     'data' => $impressions,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -131,7 +132,7 @@ class GoogleSearchConsoleService
             ];
         }
 
-        usort($improvementData, fn($a, $b) => $b['difference'] <=> $a['difference']);
+        usort($improvementData, fn ($a, $b) => $b['difference'] <=> $a['difference']);
 
         return array_slice($improvementData, 0, $maxResults);
     }
