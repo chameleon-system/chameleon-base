@@ -46,8 +46,10 @@
             <tag name="security.voter"/>
         </service>
 
-
-
+        <service class="ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccess"
+                 id="chameleon_system_security.data_access.rights_data_access">
+            <argument type="service" id="database_connection" />
+        </service>
     </services>
 
 </container>
