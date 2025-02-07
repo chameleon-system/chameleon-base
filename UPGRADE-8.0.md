@@ -6,6 +6,10 @@ UPGRADE FROM 7.1 to 8.0
 The steps in this chapter are required to get the project up and running in version 8.0.
 It is recommended to follow these steps in the given order.
 
+## PHP Version
+
+Minimum required PHP version is 8.2. The recommended PHP version is >= 8.4.
+
 ## Change Or Remove Deprecated Code (Symfony)
 
 You must change some code which was deprecated in previous Symfony versions and is now removed. Do this now with a working
@@ -20,16 +24,72 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `InputFilterUtil` has two new methods: `getFilteredGetInputArray` and `getFilteredPostInputArray`. Use them if you expect the value to be an array instead of a scalar value.
   - This is due to a change in symfony's ParameterBag, which does not support arrays on its `query.get` and `request.get` methods anymore. You now have to use the `all` method for expected arrays.
   - If you are using the `InputFilterUtil` class, there is currently a fallback so the project won't crash immediately. However, this fallback will be removed in the future.
-- `AppKernel::registerBundles` now needs a return type.
 
-### backend user rights changed to symfony security voters
+# Twig Changes
 
-@todo add more information
+Remove twig error routing from `config/routing_dev.yml`
+
+```yaml
+_errors:
+    resource: '@TwigBundle/Resources/config/routing/errors.xml'
+    prefix:   /_error
+```
+
+# New mandatory bundles
+
+- `AppKernel::registerBundles` now needs the return type "iterable".
+- add `new \Symfony\Bundle\SecurityBundle\SecurityBundle(),` to the bundles in `AppKernel::registerBundles` before the chameleon bundles
+- add `new \ChameleonSystem\SecurityBundle\ChameleonSystemSecurityBundle(),
+  new \ChameleonSystem\CmsBackendBundle\ChameleonSystemCmsBackendBundle(),
+  new \KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
+  new \ChameleonSystem\EcommerceStatsBundle\ChameleonSystemEcommerceStatsBundle(),
+  new \ChameleonSystem\ImageEditorBundle\ChameleonSystemImageEditorBundle(),
+  new \ChameleonSystem\CmsDashboardBundle\ChameleonSystemCmsDashboardBundle()` bundles to the `AppKernel::registerBundles` method at the end.
+
+### Backend user rights changed to symfony security voters
+
+You need to use the SecurityHelperAccess service to check for user rights. The old access manager is no longer available.
+
+See the [backend permissions documentation](docs/backend-permissions.md) for more information.
+
+Examples how to migrate the old accessManager calls to securityHelperAccess:
+
+before:
+
+```php
+  $isUserInTableUserGroup = $activeUser->oAccessManager->user->IsInGroups($tableObject->fieldCmsUsergroupId);
+  $isEditAllowed = $activeUser->oAccessManager->HasEditPermission($tableObject->fieldName);
+  $isShowAllReadonlyAllowed = $activeUser->oAccessManager->HasShowAllReadOnlyPermission($tableObject->fieldName);
+
+  return true === $isUserInTableUserGroup && (true === $isEditAllowed || true === $isShowAllReadonlyAllowed);
+
+  if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableObject->fieldName)) {
+      return false;
+  }
+```
+
+after:
+
+```php
+  /** @var SecurityHelperAccess $securityHelper */
+  $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+  if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
+      return false;
+  }
+
+  if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $tableObject->fieldName)) {
+      return true;
+  }
+
+  if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableObject->fieldName)) {
+      return true;
+  }
+```
 
 ### List Of Removed Or Changed Code
 
 - Configuration classes: TreeBuilder must be constructed with an argument. (search for new TreeBuilder())
-- Event dispatcher (`EventDispatcherInterface`): The argument order is swapped. (search for ->dispatch( )
+- Event dispatcher (`EventDispatcherInterface`): The argument order is swapped. (search for `->dispatch(` )
 - Session: Instead of `getSession()` `hasSession()` should be used for a null check. (search for ->getSession( with a following null check)
 - Some event classes have been renamed. 
   specifically: 
@@ -84,6 +144,9 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `\TCMSUser::GetSessionVarName` removed
 - `\MTLoginEndPoint::Login` removed
 - `\TCMSUser::Login` removed
+- `\TCMSUser::Logout` removed
+- `\TCMSUser::RelesaseOpenLogs` removed
+- `\TCMSUser::getCmsUserId` removed
 - `\MTLoginEndPoint::postLoginRedirect` removed
 - `\MTLoginEndPoint::IsUserAlreadyLoggedIn` removed
 - `\ChameleonSystem\CoreBundle\CoreEvents::BACKEND_LOGIN_SUCCESS` removed
@@ -109,7 +172,6 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
   $roleIds = array_keys($roles);
   $roleIdsEscaped = implode(',', array_map(fn($id) => "'".addslashes($id)."'", $roleIds));` instead.
 - `\MTLoginEndPoint::Logout` removed (logout works by redirecting to the logout url)
-- `\TCMSUser::Logout` removed
 - `\TCMSUser::SetAsActiveUser` removed - switch user by using Symfony impersonate.
 - `\TCMSTableEditorCMSUser::SwitchToUser` removed - switch user by using Symfony impersonate.
 - `\TCMSUser::CMSUserDefined` removed - use  `ServiceLocator::get(SecurityHelperAccess::class)->isGranted(ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants::CMS_USER)` instead
@@ -189,11 +251,8 @@ In `composer.json`, adjust version constraints for all Chameleon dependencies fr
 
 Remove the file `app/autoload.php`. It is no longer used by the system (see below).
 
-# Removed Features
-
 ## Annotation support
 
-The functionality "annotation support" was removed. This file was calling a
-deprecated function `AnnotationRegistry::registerLoader()`. If needed annotations can still be configured and used
-directly in a project.
+The functionality "annotation support" was removed. A deprecated function `AnnotationRegistry::registerLoader()` was called. 
+If needed annotations can still be configured and used directly in a project.
 However with php > 8 you should use attributes instead.

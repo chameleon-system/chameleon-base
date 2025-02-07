@@ -19,6 +19,12 @@
             <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess" />
         </service>
 
+        <service id="ChameleonSystem\SecurityBundle\EventListener\PreviewTokenEventListener">
+            <argument type="service" id="chameleon_system_core.preview_mode_service" />
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess" />
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout" />
+        </service>
+
         <service id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" public="true">
         </service>
 
@@ -46,8 +52,10 @@
             <tag name="security.voter"/>
         </service>
 
-
-
+        <service class="ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccess"
+                 id="chameleon_system_security.data_access.rights_data_access">
+            <argument type="service" id="database_connection" />
+        </service>
     </services>
 
 </container>

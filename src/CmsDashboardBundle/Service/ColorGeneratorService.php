@@ -6,7 +6,7 @@ use ChameleonSystem\CmsDashboardBundle\Library\Interfaces\ColorGeneratorServiceI
 
 class ColorGeneratorService implements ColorGeneratorServiceInterface
 {
-    public function generateColor(int $index, int $total): string
+    public function generateColor(int $index, int $total, float $opacity = 1): string
     {
         $palette = [
             '#20a8d8', // Blue
@@ -33,23 +33,40 @@ class ColorGeneratorService implements ColorGeneratorServiceInterface
         $paletteSize = count($palette);
 
         if ($total <= $paletteSize) {
-            // small color palette is enough
-            return $palette[$index % $paletteSize];
+            $rgb = $this->hexToRgb($palette[$index % $paletteSize]);
+        } else {
+            $step = ($index / max(1, $total - 1)) * ($paletteSize - 1);
+            $startIndex = floor($step);
+            $endIndex = ceil($step);
+
+            $startColor = $this->hexToRgb($palette[$startIndex]);
+            $endColor = $this->hexToRgb($palette[$endIndex]);
+
+            $factor = $step - $startIndex;
+            $r = (1 - $factor) * $startColor[0] + $factor * $endColor[0];
+            $g = (1 - $factor) * $startColor[1] + $factor * $endColor[1];
+            $b = (1 - $factor) * $startColor[2] + $factor * $endColor[2];
+
+            $rgb = [(int) $r, (int) $g, (int) $b];
         }
 
-        // lots of colors needed, interpolate between them
-        $step = ($index / max(1, $total - 1)) * ($paletteSize - 1); // Position zwischen den Farben
-        $startIndex = floor($step);
-        $endIndex = ceil($step);
+        if ($opacity >= 1) {
+            // Full opacity: return hex value
+            return sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
+        }
 
-        $startColor = $this->hexToRgb($palette[$startIndex]);
-        $endColor = $this->hexToRgb($palette[$endIndex]);
+        // With transparency: return rgba() string
+        return sprintf('rgba(%d, %d, %d, %s)', $rgb[0], $rgb[1], $rgb[2], $opacity);
+    }
 
-        $factor = $step - $startIndex;
-        $r = (1 - $factor) * $startColor[0] + $factor * $endColor[0];
-        $g = (1 - $factor) * $startColor[1] + $factor * $endColor[1];
-        $b = (1 - $factor) * $startColor[2] + $factor * $endColor[2];
+    private function hexToRgb(string $hex): array
+    {
+        $hex = ltrim($hex, '#');
 
-        return sprintf('#%02x%02x%02x', (int) $r, (int) $g, (int) $b);
+        return [
+            hexdec(substr($hex, 0, 2)),
+            hexdec(substr($hex, 2, 2)),
+            hexdec(substr($hex, 4, 2)),
+        ];
     }
 }

@@ -165,6 +165,52 @@ $color = $colorGeneratorService->generateColor($index, $total);
 <div style="backgroundColor: '{{ generate_color(1, 4) }}'"></div>
 ```
 
+## Configuring the Bundle
+
+You may set the cache TTL for all widgets in your configuration. Default is 1 day.
+
+```yaml
+chameleon_system_cms_dashboard:
+    cache_ttl: 86400
+```
+
+## Google Search Console Widget
+
+The Google Search Console widget is a widget that requires access to the Google Search Console API.
+https://console.cloud.google.com/apis/dashboard
+
+- Add a new service account to the Google Cloud Console and add this account as read only user to your Search Console property 
+for the desired website.
+- Add the Google Search Console API to the APIs 
+- Configure the API access and and the domain you want to show data for in the widget. 
+
+config.yml:
+
+```yaml
+chameleon_system_cms_dashboard:
+    google_search_console_domain_property: 'your-domain.de'
+    google_search_console_auth_json: '%google_search_console_auth_json%'
+```
+
+parameters.yml (or env):
+
+```yaml
+parameters:
+    google_auth_json: |
+        {
+            "type": "service_account",
+            "project_id": "your-project-id",
+            "private_key_id": "your-private-key-id",
+            "private_key": "-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n",
+            "client_email": "your-service-account@your-project.iam.gserviceaccount.com",
+            "client_id": "your-client-id",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/your-service-account%40your-project.iam.gserviceaccount.com"
+        }
+```
+
 ---
 
 ## 📚 Summary

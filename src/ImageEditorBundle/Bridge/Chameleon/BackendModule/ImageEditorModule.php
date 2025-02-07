@@ -53,8 +53,10 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             return;
         }
 
+        $user = $this->securityHelperAccess->getUser();
         $oVisitor->SetMappedValue('imageUrl', $image->getImageUrl());
         $oVisitor->SetMappedValue('imageId', $image->getId());
+        $oVisitor->SetMappedValue('backendLanguage', $user->getCurrentEditLanguageIsoCode());
         $oVisitor->SetMappedValue('imageWidth', $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_IMAGE_WIDTH));
         $oVisitor->SetMappedValue('imageHeight', $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_IMAGE_HEIGHT));
 
@@ -78,7 +80,7 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/css/imageEditor.css').'?v=1" rel="stylesheet">
             <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/lodash.min.js').'?v=1"></script>
             <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerbot-image-editor.min.js').'?v=1"></script>;
-            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerobot.js').'?v=1"></script>';
+            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimageeditor/filerobot/filerobot.js').'?v=2"></script>';
 
         return $includes;
     }
@@ -167,7 +169,7 @@ class ImageEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $tableManagerMedia->AllowEditByAll(false);
         $this->flashMessageService->addMessage(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER, 'IMAGE_EDITOR_SUCCESS_NEW_IMAGE_HAS_BEEN_SAVED');
 
-        $this->cmsCoreRedirect->redirect($this->editorUrlService->getImageEditorUrl($mediaRecord->id));
+        $this->cmsCoreRedirect->redirect($this->editorUrlService->getImageEditorUrl($mediaRecord->id, $editedImageObject['width'], $editedImageObject['height']));
     }
 
     private function getEditedImageObject(): mixed
