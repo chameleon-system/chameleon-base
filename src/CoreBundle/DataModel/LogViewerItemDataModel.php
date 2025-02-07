@@ -10,8 +10,7 @@ class LogViewerItemDataModel
 
     public function __construct(
         string $filename,
-        string $size, string
-        $modified
+        string $size, string $modified
     ) {
         $this->filename = $filename;
         $this->size = $size;
