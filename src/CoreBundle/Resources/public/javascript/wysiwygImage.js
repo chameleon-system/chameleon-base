@@ -15,7 +15,7 @@ function selectImageResponse(data, responseMessage) {
             // Get the reference to a text field that holds the "alt" attribute.
             element = dialog.getContentElement('info', 'txtAlt');
             if (element) {
-                element.setValue(data['image'].aData['description']);
+                element.setValue(data['image'].aData['alt_tag']);
             }
 
             element = dialog.getContentElement('advanced', 'txtGenTitle');
