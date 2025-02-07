@@ -35,8 +35,7 @@
         "symfony/polyfill-apcu": "v1.27.0",
         "tedivm/jshrink": "~1.0",
         "symfony/orm-pack": "~2.2.0",
-
-
+        "google/apiclient": "^2.0",
         "symfony/asset": "^6.4",
         "symfony/cache": "^6.4",
         "symfony/config": "^6.4",

@@ -8,16 +8,36 @@
     {{ 'chameleon_system_shop.widget.last_orders_not_found'|trans }}
 </div>
 {% else %}
-<table class="table table-bordered m-0">
-    <thead>
-    <tr>
-        <th scope="col" title="{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.name'|trans|e('html_attr') }}">{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.name'|trans }}</th>
-        <th scope="col" title="{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.last_run_time'|trans|e('html_attr') }}"><i class="fas fa-stopwatch"></i> <i class="fas fa-history"></i></th>
-        <th scope="col" title="{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.running_since'|trans|e('html_attr') }}"><i class="fas fa-spinner fa-spin"></i></th>
-        <th scope="col" title="{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.status'|trans|e('html_attr') }}"><i class="fas fa-info-circle"></i></th>
-    </tr>
-    </thead>
-    {% for cronjobDataModel in runningCronjobDataModels %}
+<div class="table-responsive">
+    <table class="table table-bordered m-0">
+        <thead>
+        <tr>
+            <th scope="col" title="{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.name'|trans|e('html_attr') }}">{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.name'|trans }}</th>
+            <th scope="col" title="{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.last_run_time'|trans|e('html_attr') }}"><i class="fas fa-stopwatch"></i> <i class="fas fa-history"></i></th>
+            <th scope="col" title="{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.running_since'|trans|e('html_attr') }}"><i class="fas fa-spinner fa-spin"></i></th>
+            <th scope="col" title="{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.status'|trans|e('html_attr') }}"><i class="fas fa-info-circle"></i></th>
+        </tr>
+        </thead>
+        {% for cronjobDataModel in runningCronjobDataModels %}
+            <tr>
+                <td><a href="{{ cronjobDataModel.cmsEditUrl|e('html_attr') }}">{{ cronjobDataModel.name }}</a></td>
+                <td>
+                    {{ cronjobDataModel.cronJobScheduleDataModel.realLastExecution
+                    ? cronjobDataModel.cronJobScheduleDataModel.realLastExecution|date('d.m.Y H:i:s')
+                    : 'never run' }}
+                </td>
+                <td>
+                    {{ cronjobDataModel.cronJobScheduleDataModel.lastPlannedExecution
+                    ? cronjobDataModel.cronJobScheduleDataModel.lastPlannedExecution|date('d.m.Y H:i:s')
+                    : '' }}
+                </td>
+                <td>
+                    <span class="badge badge-success">{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.running'|trans }}</span>
+                </td>
+            </tr>
+        {% endfor %}
+
+        {% for cronjobDataModel in lastCronjobDataModels %}
         <tr>
             <td><a href="{{ cronjobDataModel.cmsEditUrl|e('html_attr') }}">{{ cronjobDataModel.name }}</a></td>
             <td>
@@ -26,36 +46,18 @@
                 : 'never run' }}
             </td>
             <td>
-                {{ cronjobDataModel.cronJobScheduleDataModel.lastPlannedExecution
-                ? cronjobDataModel.cronJobScheduleDataModel.lastPlannedExecution|date('d.m.Y H:i:s')
-                : '' }}
+
             </td>
-            <td>
-                <span class="badge badge-success">{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.running'|trans }}</span>
+            <td>{% if cronjobDataModel.active %}
+                <span class="badge badge-info">{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.active'|trans }}</span>
+                {% else %}
+                    <span class="badge badge-danger">{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.deactivated'|trans }}</span>
+                {% endif %}
             </td>
         </tr>
-    {% endfor %}
-
-    {% for cronjobDataModel in lastCronjobDataModels %}
-    <tr>
-        <td><a href="{{ cronjobDataModel.cmsEditUrl|e('html_attr') }}">{{ cronjobDataModel.name }}</a></td>
-        <td>
-            {{ cronjobDataModel.cronJobScheduleDataModel.realLastExecution
-            ? cronjobDataModel.cronJobScheduleDataModel.realLastExecution|date('d.m.Y H:i:s')
-            : 'never run' }}
-        </td>
-        <td>
-
-        </td>
-        <td>{% if cronjobDataModel.active %}
-            <span class="badge badge-info">{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.active'|trans }}</span>
-            {% else %}
-                <span class="badge badge-danger">{{ 'chameleon_system_cms_dashboard.widget.last_run_cronjobs.deactivated'|trans }}</span>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+        {% endfor %}
+    </table>
+</div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         initializeWidgetReload("#{{ reloadEventButtonId|e('html_attr') }}");
