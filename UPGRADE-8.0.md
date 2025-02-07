@@ -24,7 +24,17 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `InputFilterUtil` has two new methods: `getFilteredGetInputArray` and `getFilteredPostInputArray`. Use them if you expect the value to be an array instead of a scalar value.
   - This is due to a change in symfony's ParameterBag, which does not support arrays on its `query.get` and `request.get` methods anymore. You now have to use the `all` method for expected arrays.
   - If you are using the `InputFilterUtil` class, there is currently a fallback so the project won't crash immediately. However, this fallback will be removed in the future.
- 
+
+# Twig Changes
+
+Remove twig error routing from `config/routing_dev.yml`
+
+```yaml
+_errors:
+    resource: '@TwigBundle/Resources/config/routing/errors.xml'
+    prefix:   /_error
+```
+
 # New mandatory bundles
 
 - `AppKernel::registerBundles` now needs the return type "iterable".
@@ -36,9 +46,45 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
   new \ChameleonSystem\ImageEditorBundle\ChameleonSystemImageEditorBundle(),
   new \ChameleonSystem\CmsDashboardBundle\ChameleonSystemCmsDashboardBundle()` bundles to the `AppKernel::registerBundles` method at the end.
 
-### backend user rights changed to symfony security voters
+### Backend user rights changed to symfony security voters
 
-@todo add more information
+You need to use the SecurityHelperAccess service to check for user rights. The old access manager is no longer available.
+
+See the [backend permissions documentation](docs/backend-permissions.md) for more information.
+
+Examples how to migrate the old accessManager calls to securityHelperAccess:
+
+before:
+
+```php
+  $isUserInTableUserGroup = $activeUser->oAccessManager->user->IsInGroups($tableObject->fieldCmsUsergroupId);
+  $isEditAllowed = $activeUser->oAccessManager->HasEditPermission($tableObject->fieldName);
+  $isShowAllReadonlyAllowed = $activeUser->oAccessManager->HasShowAllReadOnlyPermission($tableObject->fieldName);
+
+  return true === $isUserInTableUserGroup && (true === $isEditAllowed || true === $isShowAllReadonlyAllowed);
+
+  if (false === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableObject->fieldName)) {
+      return false;
+  }
+```
+
+after:
+
+```php
+  /** @var SecurityHelperAccess $securityHelper */
+  $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+  if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
+      return false;
+  }
+
+  if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $tableObject->fieldName)) {
+      return true;
+  }
+
+  if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableObject->fieldName)) {
+      return true;
+  }
+```
 
 ### List Of Removed Or Changed Code
 
@@ -205,11 +251,8 @@ In `composer.json`, adjust version constraints for all Chameleon dependencies fr
 
 Remove the file `app/autoload.php`. It is no longer used by the system (see below).
 
-# Removed Features
-
 ## Annotation support
 
-The functionality "annotation support" was removed. This file was calling a
-deprecated function `AnnotationRegistry::registerLoader()`. If needed annotations can still be configured and used
-directly in a project.
+The functionality "annotation support" was removed. A deprecated function `AnnotationRegistry::registerLoader()` was called. 
+If needed annotations can still be configured and used directly in a project.
 However with php > 8 you should use attributes instead.

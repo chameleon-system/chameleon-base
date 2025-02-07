@@ -75,6 +75,66 @@
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.status</source>
                 <target>Status</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_title">
+                <source>chameleon_system_cms_dashboard.widget.search_console_title</source>
+                <target>Google Suchbegriffe für %domain% (letzte %days% Tage)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_dropdown_menu_console_link_title">
+                <source>chameleon_system_cms_dashboard.widget.search_console_dropdown_menu_console_link_title</source>
+                <target>Google Search Console Details</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_total_clicks">
+                <source>chameleon_system_cms_dashboard.widget.search_console_total_clicks</source>
+                <target>Klicks insgesamt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_total_impressions">
+                <source>chameleon_system_cms_dashboard.widget.search_console_total_impressions</source>
+                <target>Impressions insgesamt</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_last_n_days">
+                <source>chameleon_system_cms_dashboard.widget.search_console_last_n_days</source>
+                <target>Letzte %days% Tage</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_previous_n_days">
+                <source>chameleon_system_cms_dashboard.widget.search_console_previous_n_days</source>
+                <target>Vorherige %days% Tage</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_search_term">
+                <source>chameleon_system_cms_dashboard.widget.search_console_search_term</source>
+                <target>Suchbegriff</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_clicks">
+                <source>chameleon_system_cms_dashboard.widget.search_console_clicks</source>
+                <target>Klicks</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_impressions">
+                <source>chameleon_system_cms_dashboard.widget.search_console_impressions</source>
+                <target>Impressions</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_current_period">
+                <source>chameleon_system_cms_dashboard.widget.search_console_current_period</source>
+                <target>aktueller Zeitraum</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_previous_period">
+                <source>chameleon_system_cms_dashboard.widget.search_console_previous_period</source>
+                <target>vorheriger Zeitraum</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_current">
+                <source>chameleon_system_cms_dashboard.widget.search_console_current</source>
+                <target>aktuell</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_previous">
+                <source>chameleon_system_cms_dashboard.widget.search_console_previous</source>
+                <target>vorher</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_improvement">
+                <source>chameleon_system_cms_dashboard.widget.search_console_improvement</source>
+                <target>Verbesserung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_date">
+                <source>chameleon_system_cms_dashboard.widget.search_console_date</source>
+                <target>Datum</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
