@@ -32,7 +32,7 @@ CKEDITOR.plugins.chameleon_image = {
         this.setupShowFullField(dialogDefinition, ev.editor);
         this.setupShowCaptionField(dialogDefinition, ev.editor);
         this.setupCaptionField(dialogDefinition);
-        this.setupAltTextField(dialogDefinition);
+        this.setupTitleTextField(dialogDefinition);
 
         this.setupWidthField(dialogDefinition);
         this.setupHeightField(dialogDefinition);
@@ -328,16 +328,16 @@ CKEDITOR.plugins.chameleon_image = {
             }
         });
     },
-    setupAltTextField:function (dialogDefinition) {
-        var infoTab = dialogDefinition.getContents('info'),
-            altTextField = infoTab.get('txtAlt');
-        altTextField['setup'] = (CKEDITOR.tools.override(altTextField.setup, function(originalSetupFunction) {
+    setupTitleTextField:function (dialogDefinition) {
+        var advancedTab = dialogDefinition.getContents('advanced'),
+            titleTextField = advancedTab.get('txtGenTitle');
+        titleTextField['setup'] = (CKEDITOR.tools.override(titleTextField.setup, function(originalSetupFunction) {
             return function(type, element) {
                 originalSetupFunction.call(this, type, element);
                 this.setValue(element.getAttribute('title'));
             };
         }));
-        altTextField['commit'] = (CKEDITOR.tools.override(altTextField.commit, function(originalCommitFunction) {
+        titleTextField['commit'] = (CKEDITOR.tools.override(titleTextField.commit, function(originalCommitFunction) {
             return function(type, element) {
                 originalCommitFunction.call(this, type, element);
                 if (this.getValue() || this.isChanged()) {
