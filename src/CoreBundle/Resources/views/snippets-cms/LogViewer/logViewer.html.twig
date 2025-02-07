@@ -1,0 +1,83 @@
+<div class="container mt-4">
+    {% if userIsNotAdmin == true %}
+        {{ 'chameleon_system_core.log_viewer.no_admin_message'|trans }}
+    {% else %}
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h2 class="mb-0">{{ 'chameleon_system_core.log_viewer.headline'|trans }} (Host: {{ server_address() }})</h2>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+                <thead class="thead-dark">
+                <tr>
+                    <th>{{ 'chameleon_system_core.log_viewer.filename_label'|trans }}</th>
+                    <th>{{ 'chameleon_system_core.log_viewer.size_label'|trans }}</th>
+                    <th>{{ 'chameleon_system_core.log_viewer.last_modified_label'|trans }}</th>
+                    <th>{{ 'chameleon_system_core.log_viewer.number_of_lines_label'|trans }}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for log in logFiles %}
+                    <tr>
+                        <td>{{ log.filename }}</td>
+                        <td>{{ log.size }}</td>
+                        <td>{{ log.modified }}</td>
+                        <td>
+                            <input
+                                    type="number"
+                                    id="lines-{{ log.filename }}"
+                                    class="form-control form-control-sm"
+                                    min="1"
+                                    value="100"
+                            >
+                        </td>
+                        <td>
+                            <button
+                                    class="btn btn-primary btn-sm"
+                                    onclick="loadLogContent('{{ log.filename }}', 'lines-{{ log.filename }}')"
+                            >
+                                {{ 'chameleon_system_core.log_viewer.view_button'|trans }}
+                            </button>
+                        </td>
+                        <td>
+                            <button
+                                    id="live-button-{{ log.filename }}"
+                                    class="btn btn-success btn-sm"
+                                    onclick="toggleLiveMode('{{ log.filename }}', 'lines-{{ log.filename }}', this)"
+                            >
+                                {{ 'chameleon_system_core.log_viewer.live_button'|trans }}
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="card-footer">
+            {{ 'chameleon_system_core.log_viewer.host_notice'|trans }}
+        </div>
+    </div>
+
+    <div id="logContent" class="card mt-4" style="display: none;">
+        <div class="card-header bg-dark text-white d-flex justify-content-between">
+            <h2 id="logTitle" class="mb-0"></h2>
+            <input type="text" id="logFilter" class="form-control form-control-sm w-25" placeholder="{{ 'chameleon_system_core.log_viewer.filter_log'|trans }}">
+        </div>
+        <div class="card-body">
+            <div id="logLoading" style="display: none;">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;">
+                        <span class="h5">{{ 'chameleon_system_core.log_viewer.log_loading_message'|trans }}</span>
+                    </div>
+                </div>
+            </div>
+            <pre id="logLines" class="pre-scrollable" style="max-height: 500px;">
+            </pre>
+        </div>
+    </div>
+    {% endif %}
+</div>

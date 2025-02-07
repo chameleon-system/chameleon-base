@@ -26,3 +26,7 @@ backend_geocoder:
   defaults: { _controller: 'chameleon_system_core.geocoding.geocoding_controller' }
   schemes: ['https']
   methods: ['GET']
+
+chameleon_system_core.log_viewer.api:
+  path: /cms/api/logViewer/{filename}/{lineCount}
+  defaults: { _controller: chameleon_system_core.controller.log_view_controller::fetchLogContent }

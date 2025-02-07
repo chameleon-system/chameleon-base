@@ -2334,7 +2334,51 @@
             <trans-unit id="chameleon_system_core.field_css_icon.select_icon">
                 <source>chameleon_system_core.field_css_icon.select_icon</source>
                 <target>Select Icon</target>
-            </trans-unit>            
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.filename_label">
+                <source>chameleon_system_core.log_viewer.filename_label</source>
+                <target>Filename</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.size_label">
+                <source>chameleon_system_core.log_viewer.size_label</source>
+                <target>File size</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.last_modified_label">
+                <source>chameleon_system_core.log_viewer.last_modified_label</source>
+                <target>Last modified</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.headline">
+                <source>chameleon_system_core.log_viewer.headline</source>
+                <target>Log Overview</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.number_of_lines_label">
+                <source>chameleon_system_core.log_viewer.number_of_lines_label</source>
+                <target>Number of lines</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.view_button">
+                <source>chameleon_system_core.log_viewer.view_button</source>
+                <target>View</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.live_button">
+                <source>chameleon_system_core.log_viewer.live_button</source>
+                <target>Live</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.no_admin_message">
+                <source>chameleon_system_core.log_viewer.no_admin_message</source>
+                <target>You do not have the necessary rights to view this content</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.host_notice">
+                <source>chameleon_system_core.log_viewer.host_notice</source>
+                <target>* On hostings with several nodes, it is possible that only some of the logs are visible.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.log_loading_message">
+                <source>chameleon_system_core.log_viewer.log_loading_message</source>
+                <target>Log laoding...</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.filter_log">
+                <source>chameleon_system_core.log_viewer.filter_log</source>
+                <target>Filter log...</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
