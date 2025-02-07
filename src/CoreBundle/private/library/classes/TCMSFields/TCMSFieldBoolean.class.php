@@ -95,19 +95,13 @@ class TCMSFieldBoolean extends TCMSFieldOption implements DoctrineTransformableI
      */
     public function GetReadOnly()
     {
-        $checked = '';
-        if (true === $this->isChecked()) {
-            $checked = ' checked';
-        }
+        $checked = true === $this->isChecked() ? ' checked' : '';
 
         // The checkbox in readonly mode is a dummy for styling issues and therefore has no name and value.
-        $html = '
-            <label class="switch switch-lg switch-label switch-success">
-            <input type="checkbox" autocomplete="off" class="switch-input"'.$checked.' disabled>
-                <span class="switch-slider" data-active="✓" data-inactive="✕"></span>
-            </label>';
-
-        return $html;
+        return '
+            <div class="form-check form-switch form-switch-xl">
+                <input type="checkbox" value="1" autocomplete="off" class="form-check-input"'.$checked.' disabled>
+            </div>';
     }
 
     private function isChecked()

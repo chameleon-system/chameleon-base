@@ -333,11 +333,10 @@ class TCMSField implements TCMSFieldVisitableInterface
             "javascript:{$openWindow}",
             'far fa-edit'
         );
-        $edititem .= '<div class="cleardiv" style="margin-bottom: 10px;">&nbsp;</div>';
+        $edititem .= '<div class="mb-2"></div>';
 
-        return sprintf('<div id="fieldcontainer_%1$s"><div style="width:%2$s;position:relative;">%3$s<div id=\"%1$s_contentdiv\">%4$s</div></div></div>',
+        return sprintf('<div id="fieldcontainer_%1$s"><div>%2$s<div id=\"%1$s_contentdiv\">%3$s</div></div></div>',
             TGlobal::OutHTML($this->name),
-            $this->fieldCSSwidth,
             $edititem,
             $this->GetReadOnly()
         );
