@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\BackendModule;
 
 use ChameleonSystem\CoreBundle\DataModel\LogViewerItemDataModel;
-use ChameleonSystem\CoreBundle\Service\LogViewerService;
 use ChameleonSystem\CoreBundle\Service\LogViewerServiceInterface;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Bundle\SecurityBundle\Security;
