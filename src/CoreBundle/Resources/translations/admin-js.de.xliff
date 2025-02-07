@@ -409,7 +409,10 @@
                 <source>chameleon_system_core.navigation_tree.confirm_delete</source>
                 <target>Möchten Sie den Navigationpunkt "%nodeName%" inkl. aller Unterpunkte wirklich löschen?</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_core.log_viewer.live_view_stopped">
+                <source>chameleon_system_core.log_viewer.live_view_stopped</source>
+                <target>Live Ansicht beendet</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

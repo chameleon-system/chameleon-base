@@ -1007,6 +1007,7 @@
 
         <service id="chameleon_system_core.controller.log_view_controller" class="ChameleonSystem\CoreBundle\Controller\LogViewController" public="true">
             <argument type="service" id="chameleon_system_core.service.log_view_service"/>
+            <argument type="service" id="security.helper"/>
         </service>
 
         <service id="chameleon_system_core.service.log_view_service" class="ChameleonSystem\CoreBundle\Service\LogViewerService" public="true">

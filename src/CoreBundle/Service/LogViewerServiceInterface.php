@@ -9,6 +9,8 @@ interface LogViewerServiceInterface
      */
     public function getLogFiles(): array;
 
+    public function getLogDirectory(): string;
+
     /**
      * @return string[]
      */

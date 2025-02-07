@@ -409,7 +409,10 @@
                 <source>chameleon_system_core.navigation_tree.confirm_delete</source>
                 <target>Do you want to delete the navigation node "%nodeName%" including all subnodes?</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_core.log_viewer.live_view_stopped">
+                <source>chameleon_system_core.log_viewer.live_view_stopped</source>
+                <target>Live View stopped</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -41,9 +41,7 @@ class LogViewerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
             return;
         }
 
-        $userRoles = $user->getRoles();
-
-        if (false === \in_array(CmsUserRoleConstants::CMS_ADMIN, $userRoles, true)) {
+        if (false === $this->security->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
             $oVisitor->SetMappedValue('userIsNotAdmin', true);
 
             return;
@@ -52,7 +50,7 @@ class LogViewerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $logFiles = [];
 
         foreach ($this->logViewerService->getLogFiles() as $filename) {
-            $filePath = LogViewerService::LOG_DIR.'/'.$filename;
+            $filePath = $this->logViewerService->getLogDirectory().'/'.$filename;
 
             $fileSize = file_exists($filePath) ? round(filesize($filePath) / 1024, 2).' KB' : 'Unknown';
 

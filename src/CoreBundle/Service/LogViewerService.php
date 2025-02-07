@@ -6,8 +6,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class LogViewerService implements LogViewerServiceInterface
 {
-    public const LOG_DIR = __DIR__.'/../../../../../../var/log';
-
     public function __construct(
         private readonly ParameterBagInterface $parameterBag
     ) {
@@ -15,7 +13,7 @@ class LogViewerService implements LogViewerServiceInterface
 
     public function getLogFiles(): array
     {
-        $logDirectory = $this->parameterBag->get('kernel.logs_dir');
+        $logDirectory = $this->getLogDirectory();
 
         if (!is_dir($logDirectory)) {
             return [];
@@ -26,6 +24,11 @@ class LogViewerService implements LogViewerServiceInterface
         return array_values(array_filter($files, static function ($file) use ($logDirectory) {
             return is_file($logDirectory.'/'.$file) && 'log' === pathinfo($file, PATHINFO_EXTENSION);
         }));
+    }
+
+    public function getLogDirectory(): string
+    {
+        return $this->parameterBag->get('kernel.logs_dir');
     }
 
     public function getLastLines(string $filePath, string $numLines): array

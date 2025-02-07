@@ -2364,6 +2364,18 @@
                 <source>chameleon_system_core.log_viewer.no_admin_message</source>
                 <target>Sie haben nicht die Rechte um den Inhalt dieser Seite aufzurufen</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.host_notice">
+                <source>chameleon_system_core.log_viewer.host_notice</source>
+                <target>* Auf Hostings mit mehreren Nodes kann es sein, dass entsprechend nur ein Teil der Logs sichtbar sind.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.log_loading_message">
+                <source>chameleon_system_core.log_viewer.log_loading_message</source>
+                <target>Log wird geladen...</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.filter_log">
+                <source>chameleon_system_core.log_viewer.filter_log</source>
+                <target>Log filtern...</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
