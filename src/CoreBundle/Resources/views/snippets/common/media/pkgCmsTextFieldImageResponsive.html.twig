@@ -12,11 +12,11 @@
         ">
 {% endif %}
     {%- if bFullsizeImageBiggerThanThumbnail and aTagProperties.cmsshowfull == '1' %}
-    <a href="{{ sFullImageURL }}" class="cmsmediafullimagelink thickbox" title="{{ imageTitleText }}{% endif %}" rel="{{ sImageGroupName }}">
+    <a href="{{ sFullImageURL }}" class="cmsmediafullimagelink thickbox" title="{{ imageTitleText }}" rel="{{ sImageGroupName }}">
     {% endif %}
         <img data-rwdimage="{ src: url({{ sSmallThumbnailURL }}); height: auto; },
-        (min-width: {{ iSmallScreenSize+1 }}px) { src: url({{ sMediumThumbnailURL }}); height: auto; },
-        (min-width: {{ iMediumScreenSize+1 }}px) { src: url({{ sThumbnailURL }}); height: auto; }"
+        (min-width: {{ iSmallScreenSize + 1 }}px) { src: url({{ sMediumThumbnailURL }}); height: auto; },
+        (min-width: {{ iMediumScreenSize + 1 }}px) { src: url({{ sThumbnailURL }}); height: auto; }"
              data-rwdimage-fallback="{ src: url({{ sThumbnailURL }}); height: auto; }" data-rwdimage-fallback-class="no-mq"
              {%- if aTagProperties.usemap %} usemap="{{ aTagProperties.usemap }}"{% endif %}
              class="rwdimage img-responsive {{ aTagProperties.class }} {% if aTagProperties.cmsshowcaption != '1' %}cssmedia{% endif %}"
