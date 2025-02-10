@@ -1,11 +1,11 @@
-    {%- if bFullsizeImageBiggerThanThumbnail and aTagProperties.cmsshowfull == '1' %}
-    <a href="{{ sFullImageURL }}" class="cmsmediafullimagelink lightbox" title="{{ aTagProperties.title }}" rel="{{ sImageGroupName }}" data-width="{{ aTagProperties.width }}" data-height="{{ aTagProperties.height }}">
-        {% endif %}
-            <img src="{{ sThumbnailURL }}" alt="{{ aTagProperties.title }}" title="{{ aTagProperties.title }}"
-                    {%- if aTagProperties.usemap %} usemap="{{ aTagProperties.usemap }}"{% endif %}
-                 class="img-fluid {{ aTagProperties.class }}" style ="height: auto; {% if aTagProperties.cmsshowcaption != '1' %}{{ aTagProperties.style }}{% endif %}
+{%- if bFullsizeImageBiggerThanThumbnail and aTagProperties.cmsshowfull == '1' %}
+<a href="{{ sFullImageURL }}" class="cmsmediafullimagelink lightbox" title="{{ aTagProperties.title }}" rel="{{ sImageGroupName }}" data-width="{{ aTagProperties.width }}" data-height="{{ aTagProperties.height }}">
+{% endif %}
+    <img src="{{ sThumbnailURL }}" alt="{% if aTagProperties.alt %}{{ aTagProperties.alt }}{% else %}{{ aTagProperties.title }}{% endif %}" title="{{ aTagProperties.title }}"
+        {%- if aTagProperties.usemap %} usemap="{{ aTagProperties.usemap }}"{% endif %}
+         class="img-fluid {{ aTagProperties.class }}" style ="height: auto; {% if aTagProperties.cmsshowcaption != '1' %}{{ aTagProperties.style }}{% endif %}
         {%- if aTagProperties.cmsshowcaption != '1' and (aTagProperties.align == 'left' or aTagProperties.align == 'right' or aTagProperties.align == 'center') %} text-align: {{ aTagProperties.align }};
             {%- endif %}" />
-        {%- if bFullsizeImageBiggerThanThumbnail and aTagProperties.cmsshowfull == '1' -%}
-    </a>
-    {%- endif %}
+{%- if bFullsizeImageBiggerThanThumbnail and aTagProperties.cmsshowfull == '1' -%}
+</a>
+{%- endif %}
