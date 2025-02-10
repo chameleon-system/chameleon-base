@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 
 class GoogleSearchConsoleService
 {
-    private Client $client;
+    private ?Client $client = null;
     private SearchConsole $searchConsole;
 
     public function __construct(
@@ -18,7 +18,6 @@ class GoogleSearchConsoleService
         private readonly string $googleSearchConsoleAuthJson)
     {
         $this->initClient();
-        $this->searchConsole = new SearchConsole($this->client);
     }
 
     /**
@@ -27,7 +26,7 @@ class GoogleSearchConsoleService
     private function initClient(): void
     {
         if ('' === $this->googleSearchConsoleAuthJson) {
-            throw new \RuntimeException('Google Auth JSON is not set.');
+            return;
         }
 
         $authConfig = json_decode($this->googleSearchConsoleAuthJson, true);
@@ -40,6 +39,8 @@ class GoogleSearchConsoleService
         $this->client->setApplicationName('Chameleon Google Search Console Integration');
         $this->client->setAuthConfig($authConfig);
         $this->client->setScopes([SearchConsole::WEBMASTERS_READONLY]);
+
+        $this->searchConsole = new SearchConsole($this->client);
     }
 
     public function getSearchAnalytics(string $siteUrl, string $startDate, string $endDate, array $dimensions = ['date']): array
