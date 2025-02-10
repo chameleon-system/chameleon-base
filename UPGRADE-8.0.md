@@ -16,12 +16,12 @@ Add the following mandatory backend routes to your `config/routing.yaml`:
 
 ```yaml
 chameleon_system_security:
-  resource: "@ChameleonSystemSecurityBundle/src/Controller/"
-  type: attribute
+    resource: "@ChameleonSystemSecurityBundle/src/Controller/"
+    type:     attribute
 
 app_logout:
-  path: /cms/logout
-  methods: GET
+    path: /cms/logout
+    methods: GET
 ```
 
 ## Change Or Remove Deprecated Code (Symfony)
