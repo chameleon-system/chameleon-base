@@ -10,6 +10,20 @@ It is recommended to follow these steps in the given order.
 
 Minimum required PHP version is 8.2. The recommended PHP version is >= 8.4.
 
+## Mandatory Routes
+
+Add the following mandatory backend routes to your `config/routing.yaml`:
+
+```yaml
+chameleon_system_security:
+  resource: "@ChameleonSystemSecurityBundle/src/Controller/"
+  type: attribute
+
+app_logout:
+  path: /cms/logout
+  methods: GET
+```
+
 ## Change Or Remove Deprecated Code (Symfony)
 
 You must change some code which was deprecated in previous Symfony versions and is now removed. Do this now with a working
