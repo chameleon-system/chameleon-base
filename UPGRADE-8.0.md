@@ -41,7 +41,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 
 # Twig Changes
 
-Remove twig error routing from `config/routing_dev.yml`
+Cahgne the twig error routing from `config/routing_dev.yml`
 
 ```yaml
 _errors:
@@ -49,6 +49,13 @@ _errors:
     prefix:   /_error
 ```
 
+to:
+
+```yaml
+_errors:
+resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
+prefix: /_error
+```
 # New mandatory bundles
 
 - `AppKernel::registerBundles` now needs the return type "iterable".
@@ -118,15 +125,17 @@ after:
 - Take care that all yaml string values have quotes. For example in any config.yml.
 - Signature of `Iterator` has changed. Make sure `current()` and `next()` match the signature
 - pass by reference and return by reference has been removed almost everywhere - search for `function &`, `&$` and `=&`.
-- search for `=[ ]*\&[\\]{0,1}\w`
+- search for Regex `=[ ]*\&[\\]{0,1}\w`
 - search for `protected function _NewElement\(\$aData\)[ ]*[^\:]{0,1}` (must return the specific Tdb item)
 - search for `public static function GetList\(.*\)` (must return the specific list type)
 - search for `public static function GetDefaultQuery\(.*\)` (must return `string`)
 - search for `public function Previous()` (must return `bool|Tdb....`)
 - search for `public function Current()` (must return `bool|Tdb....`)
 - search for `public functiocn Next()` (must return `bool|Tdb....`)
+- search for `public function GetRequirements()` (must return `void`)
+- search for `public function Accept(` (must return `void`)
 - `\ChameleonSystem\DebugBundle\ChameleonSystemDebugBundle` removed. The logging of database connections can no longer be done the way done in the bundle
-- doctrine update [maybe]s.
+- doctrine update [maybe]s. This also means configuration with `chameleon_system_debug` can no longer be used
   - replace `->fetchAll(` with `->fetchAllAssociative(`
   - replace `->fetchArray` with `->fetchNumeric(`
   - replace `->fetchAssoc` with `->fetchAssociative(`
@@ -225,7 +234,13 @@ after:
   - `\TGlobal::Translate(` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(`
   - `TGlobal::Translate(` -> `\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(`
 - `TPkgCmsResultCacheManager()` removed - search `new TPkgCmsResultCacheManager()` and replace it with `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_result_cache.bridge_chameleon_service.data_base_cache_manager')` instead
+- The Mapper `chameleon_system_shop.mapper.social.social_share_privacy` isn't available anymore, remove `chameleon_system_shop.mapper.social.social_share_privacy` from VirtualDbExtension
+- The Twig function "url" crashed when recived "null", so check for element is null or defined prior to using it
 
+## LazyLoading
+- LazyLoading Changed, search for data-src=" and remove data- prefix and add `loading="lazy"`  
+
+## Further Migrations
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
   https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.0.md
 
