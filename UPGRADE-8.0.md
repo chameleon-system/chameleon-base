@@ -53,8 +53,8 @@ to:
 
 ```yaml
 _errors:
-resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
-prefix: /_error
+    resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
+    prefix: /_error
 ```
 # New mandatory bundles
 
@@ -238,7 +238,7 @@ after:
 - The Twig function "url" crashed when recived "null", so check for element is null or defined prior to using it
 
 ## LazyLoading
-- LazyLoading Changed, search for data-src=" and remove data- prefix and add `loading="lazy"`  
+- LazyLoading in the default shop theme and SELL theme changed. If your system is based on these themes, check your code for data-src=" and remove data- prefix and add `loading="lazy"` instead.
 
 ## Further Migrations
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
