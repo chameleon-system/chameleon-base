@@ -41,7 +41,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 
 # Twig Changes
 
-Cahgne the twig error routing from `config/routing_dev.yml`
+Change the twig error routing from `config/routing_dev.yml`
 
 ```yaml
 _errors:
