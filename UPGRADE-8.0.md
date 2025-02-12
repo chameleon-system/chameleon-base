@@ -238,7 +238,7 @@ after:
 - The Twig function "url" crashed when recived "null", so check for element is null or defined prior to using it
 
 ## LazyLoading
-- LazyLoading Changed, search for data-src=" and remove data- prefix and add `loading="lazy"`  
+- LazyLoading in the default shop theme changed, search for data-src=" and remove data- prefix and add `loading="lazy"`  
 
 ## Further Migrations
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
