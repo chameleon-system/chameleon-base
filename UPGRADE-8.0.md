@@ -67,6 +67,10 @@ _errors:
   new \ChameleonSystem\ImageEditorBundle\ChameleonSystemImageEditorBundle(),
   new \ChameleonSystem\CmsDashboardBundle\ChameleonSystemCmsDashboardBundle()` bundles to the `AppKernel::registerBundles` method at the end.
 
+# Removed bundles
+
+- remove `new \ChameleonSystem\UpdateCounterMigrationBundle\ChameleonSystemUpdateCounterMigrationBundle()` from the `AppKernel::registerBundles` method
+
 ### Backend user rights changed to symfony security voters
 
 You need to use the SecurityHelperAccess service to check for user rights. The old access manager is no longer available.
