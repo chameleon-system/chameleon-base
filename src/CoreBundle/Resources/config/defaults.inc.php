@@ -209,12 +209,6 @@ if (!defined('CHAMELEON_404_IMAGE_PATH_BIG')) {
 if (!defined('CHAMELEON_URL_JQUERY')) {
     define('CHAMELEON_URL_JQUERY', '/static/js/jquery.js');
 }
-/**
- * if you want to use jquery from google apis, you can set the path using this constant. CHAMELEON_URL_JQUERY will still be used if jquery via google can not be reached.
- */
-if (!defined('CHAMELEON_URL_GOOGLE_JQUERY')) {
-    define('CHAMELEON_URL_GOOGLE_JQUERY', false);
-}
 
 /**
  * path to themes directory.
