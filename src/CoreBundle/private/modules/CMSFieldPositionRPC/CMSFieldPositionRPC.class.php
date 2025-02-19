@@ -310,72 +310,15 @@ COMMAND;
         $aIncludes = parent::GetHtmlHeadIncludes();
         $fieldName = $this->global->GetUserData('fieldName');
 
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/sortableList.v1.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.8.1/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script type="text/javascript">
-  document.addEventListener("DOMContentLoaded", function () {
-    const posList = document.getElementById("posList");
-    const movedItemInput = document.getElementById("movedItemID");
-
-    posList.querySelectorAll("li:not(.disabled)").forEach((item) => {
-      item.draggable = true;
-      item.addEventListener("dragstart", handleDragStart);
-      item.addEventListener("dragover", handleDragOver);
-      item.addEventListener("drop", handleDrop);
-      item.addEventListener("dragend", handleDragEnd);
+      document.addEventListener("DOMContentLoaded", function () {
+        CHAMELEON.CORE.SortableList.init("'.TGlobal::OutJS($fieldName).'");
     });
-
-    let draggedItem = null;
-
-    function handleDragStart(event) {
-      draggedItem = this;
-      event.dataTransfer.effectAllowed = "move";
-      event.dataTransfer.setData("text/plain", this.id);
-      this.classList.add("dragging");
-    }
-
-    function handleDragOver(event) {
-      event.preventDefault();
-      const afterElement = getDragAfterElement(posList, event.clientY);
-      if (afterElement == null) {
-        posList.appendChild(draggedItem);
-      } else {
-        posList.insertBefore(draggedItem, afterElement);
-      }
-    }
-
-    function handleDrop(event) {
-      event.preventDefault();
-    }
-
-    function handleDragEnd() {
-      this.classList.remove("dragging");
-      updateOrder();
-    }
-
-    function getDragAfterElement(container, y) {
-      const elements = [...container.querySelectorAll("li:not(.dragging)")];
-      return elements.reduce(
-        (closest, child) => {
-          const box = child.getBoundingClientRect();
-          const offset = y - box.top - box.height / 2;
-          return offset < 0 && offset > closest.offset ? { offset, element: child } : closest;
-        },
-        { offset: Number.NEGATIVE_INFINITY }
-      ).element;
-    }
-
-    function updateOrder() {
-        PostAjaxForm("poslistform", sortAjaxCallback);
-    }
-
-    function sortAjaxCallback(data) {
-      parent.document.cmseditform.'.TGlobal::OutJS($fieldName).'.value = data;
-      CloseModalIFrameDialog();
-    }
-  });
-</script>
-';
+    </script>
+    ';
 
         return $aIncludes;
     }
