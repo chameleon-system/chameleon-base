@@ -240,6 +240,15 @@ after:
 - `TPkgCmsResultCacheManager()` removed - search `new TPkgCmsResultCacheManager()` and replace it with `\ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_result_cache.bridge_chameleon_service.data_base_cache_manager')` instead
 - The Mapper `chameleon_system_shop.mapper.social.social_share_privacy` isn't available anymore, remove `chameleon_system_shop.mapper.social.social_share_privacy` from VirtualDbExtension
 - The Twig function "url" crashed when recived "null", so check for element is null or defined prior to using it
+- `CHAMELEON_URL_GOOGLE_JQUERY` removed because loading an external resource is not recommended. Use the local jQuery version instead.
+- `CHAMELEON_ENABLE_FLUSHING` removed
+- `\ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController` removed
+
+## jQuery and jQuery Migrate
+
+jQuery was upgraded to the latest 3.7.1 version. jQuery Migrate was removed. 
+If you have custom backend code that relies on jQuery or uses older libraries, you need to check it for incompatibilities with the newer version
+or missing migrate library.
 
 ## LazyLoading
 - LazyLoading in the default shop theme and SELL theme changed. If your system is based on these themes, check your code for data-src=" and remove data- prefix and add `loading="lazy"` instead.
@@ -248,16 +257,10 @@ after:
 - This list might not be complete. Also take a look at the official Symfony migration documentation:
   https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.0.md
 
-## Services
-
-- \ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController
-
-## Constants
-
-- CHAMELEON_ENABLE_FLUSHING
-
-
 ## Migrating to doctrine ORM
+
+This is NOT recommended yet. The ORM is not yet fully supported. However, if you want to try it, follow these steps:
+
 First, make sure that all property tables have a matching parent key field in the target table. If not, add it.
 Add `ChameleonSystemDataAccessBundle` to your AppKernel.
 

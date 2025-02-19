@@ -310,38 +310,15 @@ COMMAND;
         $aIncludes = parent::GetHtmlHeadIncludes();
         $fieldName = $this->global->GetUserData('fieldName');
 
-        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
+        $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/sortableList.v1.js').'" type="text/javascript"></script>';
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fontawesome-free-5.8.1/css/all.css').'" media="screen" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<link href="'.TGlobal::GetPathTheme().'/css/tableeditcontainer.css" rel="stylesheet" type="text/css" />';
         $aIncludes[] = '<script type="text/javascript">
-      $(document).ready(function(){
-        $("#posList").sortable({
-          smooth: false,
-          tolerance: "fit",
-          activeClass: "active",
-          containment: "document",
-          axis: "y",
-          scroll: "true",
-          helper: "clone",
-          items: "li:not(.disabled)",
-          start:  function(e , el){
-            $(el.helper).addClass("active");
-            helperforthis = el.helper;
-          },
-          update: function (e , el) {
-            var id = $(helperforthis).attr("id").replace("item", "");
-            $("#movedItemID").val(id);
-
-            PostAjaxForm("poslistform", sortAjaxCallback);
-          }
-        });
-      });
-
-      function sortAjaxCallback(data) {
-        parent.document.cmseditform.'.TGlobal::OutJS($fieldName).'.value = data;
-        CloseModalIFrameDialog();
-      }
-      </script>';
+      document.addEventListener("DOMContentLoaded", function () {
+        CHAMELEON.CORE.SortableList.init("'.TGlobal::OutJS($fieldName).'");
+    });
+    </script>
+    ';
 
         return $aIncludes;
     }
