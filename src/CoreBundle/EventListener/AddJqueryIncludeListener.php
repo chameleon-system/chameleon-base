@@ -12,23 +12,20 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEventInterface;
-use TGlobal;
 
 class AddJqueryIncludeListener
 {
     /**
-     * @param HtmlIncludeEventInterface $event
-     *
      * @return void
      */
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
     {
-        if (true === TGlobal::IsCMSMode()) {
-            $jqueryInclude = '<script src="'.TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jquery-3.7.1.min.js').'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
+        if (true === \TGlobal::IsCMSMode()) {
+            $jqueryInclude = '<script src="'.\TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jquery-3.7.1.min.js').'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
 
             $event->addData([$jqueryInclude]);
         } else {
-            $jqueryInclude = '<script src="'.TGlobal::GetStaticURL(CHAMELEON_URL_JQUERY).'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
+            $jqueryInclude = '<script src="'.\TGlobal::GetStaticURL(CHAMELEON_URL_JQUERY).'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
             $event->addData([$jqueryInclude]);
         }
     }
