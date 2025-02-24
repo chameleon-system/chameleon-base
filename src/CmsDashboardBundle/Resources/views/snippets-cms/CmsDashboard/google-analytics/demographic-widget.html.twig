@@ -1,0 +1,82 @@
+{# @var array demographicData #}
+{% if demographicData %}
+<canvas id="demographicsChart" style="max-height: 300px;"></canvas>
+<div class="table-responsive mt-4">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.age_group'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.gender'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.engaged_sessions'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in demographicData %}
+            <tr>
+                <td>{{ data.dimension_0 }}</td> {# Age Group #}
+                <td>{{ data.dimension_1 }}</td> {# Gender #}
+                <td>{{ data.metric_0 }}</td> {# Engaged Sessions #}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const demographicsData = {{ demographicData|json_encode|raw }};
+
+        if (!demographicsData || demographicsData.length === 0) {
+            console.error("No data available for demographics chart");
+            return;
+        }
+
+        const ageGroups = [...new Set(demographicsData.map(entry => entry.dimension_0))];
+        const maleData = demographicsData.filter(d => d.dimension_1 === 'male').map(d => d.metric_0);
+        const femaleData = demographicsData.filter(d => d.dimension_1 === 'female').map(d => d.metric_0);
+
+        const ctx = document.getElementById("demographicsChart").getContext("2d");
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ageGroups,
+                datasets: [
+                    {
+                        label: "{{ 'chameleon_system_cms_dashboard.widget.male'|trans|e('js') }}",
+                        data: maleData,
+                        borderColor: "#007bff",
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: "{{ 'chameleon_system_cms_dashboard.widget.female'|trans|e('js') }}",
+                        data: femaleData,
+                        borderColor: "#ff6384",
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: "top" }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: "{{ 'chameleon_system_cms_dashboard.widget.age_group'|trans|e('js') }}" }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: "{{ 'chameleon_system_cms_dashboard.widget.engaged_sessions'|trans|e('js') }}" }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% else %}
+    <div class="chart-no-data-message">
+        {{ 'chameleon_system_cms_dashboard.widget.no_data_available' | trans }}
+    </div>
+{% endif %}

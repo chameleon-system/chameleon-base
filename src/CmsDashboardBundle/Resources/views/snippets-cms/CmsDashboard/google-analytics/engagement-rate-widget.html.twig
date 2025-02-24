@@ -1,0 +1,108 @@
+{# @var array engagementRate #}
+{# @var array sessionDuration #}
+
+{% if engagementRate and sessionDuration %}
+<div class="row mb-1 g-0">
+    <div class="col-md-6">
+        <div class="bg-primary text-white p-3 d-flex justify-content-between align-items-center">
+            <div>
+                <h5>{{ 'chameleon_system_cms_dashboard.widget.google_analytics_total_engagement'|trans }}</h5>
+                <p class="display-6 mb-0">{{ engagementRate.totalEngagementCurrent|number_format(2, ',', '.') }}
+                    %</p>
+            </div>
+            <div class="border-start ps-4">
+                <h5>{{ 'chameleon_system_cms_dashboard.widget.previous_month'|trans }}</h5>
+                <p class="h4 mb-0">{{ engagementRate.totalEngagementPrevious|number_format(2, ',', '.') }}
+                    %</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-info text-white p-3 d-flex justify-content-between align-items-center">
+            <div>
+                <h5>{{ 'chameleon_system_cms_dashboard.widget.google_analytics_avg_session_duration'|trans }}</h5>
+                <p class="display-6 mb-0">{{ sessionDuration.avgSessionCurrent|number_format(2, ',', '.') }}
+                    s</p>
+            </div>
+            <div class="border-start ps-4">
+                <h5>{{ 'chameleon_system_cms_dashboard.widget.previous_month'|trans }}</h5>
+                <p class="h4 mb-0">{{ sessionDuration.avgSessionPrevious|number_format(2, ',', '.') }}
+                    s</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<canvas id="engagementChart" style="max-height: 250px;"></canvas>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentEngagementData = {{ engagementRate.current|json_encode|raw }};
+        const previousEngagementData = {{ engagementRate.previous|json_encode|raw }};
+
+        if (currentEngagementData.length === 0) {
+            console.error("No data available for engagement chart");
+            return;
+        }
+
+        let labels = currentEngagementData.map(entry => {
+            const dateStr = entry.dimension_0;
+            return dateStr.substring(6, 8) + '.' + dateStr.substring(4, 6) + '.'; // Format as DD.MM.
+        });
+
+        let currentDataPoints = currentEngagementData.map(entry => entry.metric_0 * 100 );
+        let previousDataPoints = previousEngagementData.map(entry => entry.metric_0 * 100);
+
+        const ctx = document.getElementById('engagementChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: '{{ 'chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate_percent'|trans|e('js') }}',
+                        data: currentDataPoints,
+                        borderColor: '{{ generate_color(0,8)|e('js') }}',
+                        backgroundColor: '{{ generate_color(0,4,0.3)|e('js') }}',
+                        fill: true
+                    },
+                    {
+                        label: '{{ 'chameleon_system_cms_dashboard.widget.previous_month'|trans|e('js') }}',
+                        data: previousDataPoints,
+                        borderColor: '{{ generate_color(5,8)|e('js') }}',
+                        backgroundColor: '{{ generate_color(0,2,0.5)|e('js') }}',
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '{{ 'chameleon_system_cms_dashboard.widget.google_analytics.period'|trans|e('js') }}'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '{{ 'chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate'|trans|e('js') }}'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                responsive: true
+            }
+        });
+    });
+</script>
+{% else %}
+    <div class="chart-no-data-message">
+        {{ 'chameleon_system_cms_dashboard.widget.no_data_available' | trans }}
+    </div>
+{% endif %}
