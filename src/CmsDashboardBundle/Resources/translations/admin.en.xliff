@@ -147,6 +147,22 @@
                 <source>chameleon_system_cms_dashboard.widget.no_data_available</source>
                 <target>Unfortunately there is not enough data available!</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title</source>
+                <target>View now on Google!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-geo-location">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics_geo_location</source>
+                <target>Locationdistribution</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-device-source-distribution">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-device-source-distribution</source>
+                <target>Device Source Distribution</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-engagement-rate">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-engagement-rate</source>
+                <target>Engagement Rate</target>
+            </trans-unit>
             <!-- Engagement Rate -->
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics_engagement_rate_dashboard_link_title">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics_engagement_rate_dashboard_link_title</source>
@@ -279,11 +295,6 @@
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.purchase_dropout">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.checkout_dropout</source>
                 <target>Purchase Dropout</target>
-            </trans-unit>
-            <!-- Demographic -->
-            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.demographic_title">
-                <source>chameleon_system_cms_dashboard.widget.google_analytics.demographic_title</source>
-                <target>Demographic Data</target>
             </trans-unit>
             <!-- Device Ratio -->
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.device_ratio_title">

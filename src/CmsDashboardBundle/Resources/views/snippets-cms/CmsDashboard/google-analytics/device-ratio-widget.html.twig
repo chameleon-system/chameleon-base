@@ -51,7 +51,12 @@
         const conversionsPrevious = deviceDataPrevious.map(d => d.metric_1);
 
         // Colors for Pie Chart
-        const colors = ["#007bff", "#ff6384", "#ffce56", "#4bc0c0"];
+        const colors = [
+            {% for element in deviceRatioData.current %}
+            '{{ generate_color(loop.index, deviceRatioData.current|length)|e('js') }}'
+            {% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
 
         // Engaged Sessions Pie Chart
         new Chart(document.getElementById("deviceEngagementChart"), {

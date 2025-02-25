@@ -27,12 +27,12 @@
                     {
                         label: "{{ 'chameleon_system_cms_dashboard.widget.current_month' | trans }}",
                         data: currentDataPoints, // Example values
-                        backgroundColor: "rgba(0, 123, 255, 0.7)",
+                        backgroundColor: '{{ generate_color(0,2)|e('js') }}',
                     },
                     {
                         label: "{{ 'chameleon_system_cms_dashboard.widget.previous_month' | trans }}",
                         data: previousDataPoints, // Example values
-                        backgroundColor: "rgba(255, 99, 132, 0.7)",
+                        backgroundColor: '{{ generate_color(1,2)|e('js') }}',
                     }
                 ]
             },
