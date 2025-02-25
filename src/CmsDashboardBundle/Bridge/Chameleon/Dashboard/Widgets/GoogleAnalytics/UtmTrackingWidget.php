@@ -2,13 +2,13 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics;
 
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\CmsDashboardBundle\Service\GoogleAnalyticsDashboardService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
-use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
@@ -37,7 +37,7 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
             'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking_title',
             [
                 '%property%' => $this->googleAnalyticsPropertyId,
-                '%days%' => $this->googleAnalyticsPeriodDays
+                '%days%' => $this->googleAnalyticsPeriodDays,
             ]
         );
     }
@@ -106,7 +106,6 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
             $previousStart,
             $previousEnd
         );
-
 
         $utmTracking = array_splice($utmTracking, 0, self::MAX_UTM_ELEMENTS);
 

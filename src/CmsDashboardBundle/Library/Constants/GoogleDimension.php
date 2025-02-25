@@ -2,7 +2,8 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Library\Constants;
 
-class GoogleDimension{
+class GoogleDimension
+{
     // Date & Time
     public const DATE = 'date';
 

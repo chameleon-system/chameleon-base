@@ -2,13 +2,13 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics;
 
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\CmsDashboardBundle\Service\GoogleAnalyticsDashboardService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
-use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class GeoLocationWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
@@ -102,7 +102,7 @@ class GeoLocationWidget extends DashboardWidget implements RestrictedByCmsGroupI
 
         $renderTemplate = 'CmsDashboard/google-analytics/geo-location-widget.html.twig';
         if (true === self::WIDGET_AS_MAP) {
-            $renderTemplate = 'CmsDashboard/google-analytics/geo-location-map-widget.html.twig';;
+            $renderTemplate = 'CmsDashboard/google-analytics/geo-location-map-widget.html.twig';
         }
 
         $renderedTable = $this->renderer->Render($renderTemplate);

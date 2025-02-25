@@ -2,7 +2,8 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Library\Constants;
 
-class GoogleMetric{
+class GoogleMetric
+{
     // Engagement
     public const ENGAGEMENT_RATE = 'engagementRate';
     public const AVERAGE_SESSION_DURATION = 'averageSessionDuration';

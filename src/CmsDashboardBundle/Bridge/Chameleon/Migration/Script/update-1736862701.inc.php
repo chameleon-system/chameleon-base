@@ -5,7 +5,6 @@
 </div>
 <?php
 
-
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
       'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_user'),
@@ -19,10 +18,9 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
 ;
 TCMSLogChange::insert(__LINE__, $data);
 
-$query ="ALTER TABLE `cms_user`
+$query = "ALTER TABLE `cms_user`
                         ADD `dashboard_widget_config` LONGTEXT NOT NULL COMMENT 'Dashboard Widget Konfiguration: '";
 TCMSLogChange::RunQuery(__LINE__, $query);
-
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
   ->setFields([

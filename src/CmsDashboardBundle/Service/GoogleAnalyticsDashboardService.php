@@ -2,20 +2,18 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Service;
 
-use Google\Analytics\Data\V1beta\OrderBy;
-use Google\Analytics\Data\V1beta\OrderBy\DimensionOrderBy;
+use ChameleonSystem\CmsDashboardBundle\Library\Constants\GoogleDimension;
+use ChameleonSystem\CmsDashboardBundle\Library\Constants\GoogleMetric;
 use Google\Analytics\Data\V1alpha\OrderBy\DimensionOrderBy\OrderType;
 use Google\Analytics\Data\V1beta\Client\BetaAnalyticsDataClient;
 use Google\Analytics\Data\V1beta\DateRange;
-use Google\Analytics\Data\V1beta\Metric;
 use Google\Analytics\Data\V1beta\Dimension;
+use Google\Analytics\Data\V1beta\Metric;
+use Google\Analytics\Data\V1beta\OrderBy;
+use Google\Analytics\Data\V1beta\OrderBy\DimensionOrderBy;
 use Google\Analytics\Data\V1beta\RunReportRequest;
 use Google\Analytics\Data\V1beta\RunReportResponse;
-use Google\Client;
-use Google\Service\SearchConsole;
 use Psr\Log\LoggerInterface;
-use ChameleonSystem\CmsDashboardBundle\Library\Constants\GoogleMetric;
-use ChameleonSystem\CmsDashboardBundle\Library\Constants\GoogleDimension;
 
 class GoogleAnalyticsDashboardService
 {
@@ -76,12 +74,12 @@ class GoogleAnalyticsDashboardService
 
         $totalEngagementCurrent = array_reduce(
             $engagementCurrent,
-            fn($carry, $item) => $carry + ($item['metric_0'] ?? 0),
+            fn ($carry, $item) => $carry + ($item['metric_0'] ?? 0),
             0
         );
         $totalEngagementPrevious = array_reduce(
             $engagementPrevious,
-            fn($carry, $item) => $carry + ($item['metric_0'] ?? 0),
+            fn ($carry, $item) => $carry + ($item['metric_0'] ?? 0),
             0
         );
 
@@ -124,8 +122,8 @@ class GoogleAnalyticsDashboardService
         $avgSessionCurrent = $avgSessionCurrentCount > 0 ? array_sum(array_column($sessionDurationCurrent, 'metric_0'))
             / $avgSessionCurrentCount : 0;
         $avgSessionPrevious = $avgSessionPreviousCount > 0 ? array_sum(
-                array_column($sessionDurationPrevious, 'metric_0')
-            ) / $avgSessionPreviousCount : 0;
+            array_column($sessionDurationPrevious, 'metric_0')
+        ) / $avgSessionPreviousCount : 0;
 
         return [
             'current' => $sessionDurationCurrent,
@@ -333,8 +331,8 @@ class GoogleAnalyticsDashboardService
         $request = new RunReportRequest([
             'property' => 'properties/'.$propertyId,
             'date_ranges' => [new DateRange(['start_date' => $startDate, 'end_date' => $endDate])],
-            'metrics' => array_map(fn($metric) => new Metric(['name' => $metric]), $metrics),
-            'dimensions' => array_map(fn($dimension) => new Dimension(['name' => $dimension]), $dimensions),
+            'metrics' => array_map(fn ($metric) => new Metric(['name' => $metric]), $metrics),
+            'dimensions' => array_map(fn ($dimension) => new Dimension(['name' => $dimension]), $dimensions),
             'order_bys' => $orderBys,
         ]);
 

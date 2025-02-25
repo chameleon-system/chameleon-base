@@ -38,17 +38,18 @@ class ChameleonSystemCmsDashboardExtension extends Extension
         $this->loadGoogleAnalyticsWidgets($config, $container);
     }
 
-    private function loadGoogleAnalyticsWidgets(array $config, ContainerBuilder $container): void{
+    private function loadGoogleAnalyticsWidgets(array $config, ContainerBuilder $container): void
+    {
         $googleAnalyticsWidget = [
             'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.engagement_rate_widget',
             'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.geo_location_widget',
             'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.traffic_source_widget',
             'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.utm_tracking_widget',
             'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.e_commerce_widget',
-            'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.device_ratio_widget'
+            'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.device_ratio_widget',
         ];
 
-        foreach($googleAnalyticsWidget as $widgetId){
+        foreach ($googleAnalyticsWidget as $widgetId) {
             $widgetDefinition = $container->getDefinition($widgetId);
             $widgetDefinition->setArgument(5, $config['google_search_console_auth_json']);
             $widgetDefinition->setArgument(6, $config['google_search_console_domain_property']);
