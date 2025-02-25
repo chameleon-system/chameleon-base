@@ -35,7 +35,7 @@ class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInt
             'chameleon_system_cms_dashboard.widget.google_analytics.e_commerce_title',
             [
                 '%property%' => $this->googleAnalyticsPropertyId,
-                '%days%' => $this->googleAnalyticsPeriodDays
+                '%days%' => $this->googleAnalyticsPeriodDays,
             ]
         );
     }
@@ -67,7 +67,8 @@ class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInt
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
             'googleAnalyticsECommerceWidget',
             $this->translator->trans('chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title'),
-            'https://analytics.google.com/analytics/web/#/report-home/a'.$this->googleAnalyticsPropertyId
+            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId
+            .'/reports/explorer?params=_u..nav%3Dmaui&r=ecomm-shopping-funnel&ruid=ecomm-shopping-funnel,business-objectives,drive-online-sales&collectionId=business-objectives',
         );
 
         $dropDownMenuItem->setTarget('_blank');

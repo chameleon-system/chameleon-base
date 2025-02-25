@@ -14,9 +14,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class GeoLocationWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
     private const WIDGET_NAME = 'widget-google-analytics-geo-location';
-
     private const WIDGET_AS_MAP = false;
-
     private const MAX_LOCATION_ELEMENTS = 10;
 
     public function __construct(
@@ -39,7 +37,7 @@ class GeoLocationWidget extends DashboardWidget implements RestrictedByCmsGroupI
             'chameleon_system_cms_dashboard.widget.google_analytics.geo_location_title',
             [
                 '%property%' => $this->googleAnalyticsPropertyId,
-                '%days%' => $this->googleAnalyticsPeriodDays
+                '%days%' => $this->googleAnalyticsPeriodDays,
             ]
         );
     }
@@ -71,7 +69,8 @@ class GeoLocationWidget extends DashboardWidget implements RestrictedByCmsGroupI
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
             'googleAnalyticsGeoLocationWidget',
             $this->translator->trans('chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title'),
-            'https://analytics.google.com/analytics/web/#/report-home/a'.$this->googleAnalyticsPropertyId
+            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId
+            .'/reports/explorer?params=_u..nav%3Dmaui%26_r.explorerCard..selmet%3D%5B%22activeUsers%22%5D%26_r.explorerCard..seldim%3D%5B%22country%22%5D&r=user-demographics-detail&collectionId=business-objectives'
         );
 
         $dropDownMenuItem->setTarget('_blank');
@@ -102,7 +101,7 @@ class GeoLocationWidget extends DashboardWidget implements RestrictedByCmsGroupI
         $this->renderer->AddSourceObject('geoLocation', $geoLocation);
 
         $renderTemplate = 'CmsDashboard/google-analytics/geo-location-widget.html.twig';
-        if(true === self::WIDGET_AS_MAP) {
+        if (true === self::WIDGET_AS_MAP) {
             $renderTemplate = 'CmsDashboard/google-analytics/geo-location-map-widget.html.twig';;
         }
 

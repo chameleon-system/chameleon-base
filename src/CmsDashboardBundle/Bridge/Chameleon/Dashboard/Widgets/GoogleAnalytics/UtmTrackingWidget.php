@@ -69,7 +69,7 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
             'googleAnalyticsWidget',
             $this->translator->trans('chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title'),
-            'https://analytics.google.com/analytics/web/#/report-home/a'.$this->googleAnalyticsPropertyId
+            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId.'/reports/dashboard/edit?params=_u..nav%3Dmaui%26_u..insightCards%3D%5B%7B%22question%22:%22Campain%22%7D%5D&r=user-demographics-overview&collectionId=business-objectives',
         );
 
         $dropDownMenuItem->setTarget('_blank');

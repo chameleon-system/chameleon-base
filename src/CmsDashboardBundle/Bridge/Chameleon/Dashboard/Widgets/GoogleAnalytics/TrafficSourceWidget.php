@@ -35,7 +35,7 @@ class TrafficSourceWidget extends DashboardWidget implements RestrictedByCmsGrou
             'chameleon_system_cms_dashboard.widget.google_analytics.traffic_source_title',
             [
                 '%property%' => $this->googleAnalyticsPropertyId,
-                '%days%' => $this->googleAnalyticsPeriodDays
+                '%days%' => $this->googleAnalyticsPeriodDays,
             ]
         );
     }
@@ -67,7 +67,8 @@ class TrafficSourceWidget extends DashboardWidget implements RestrictedByCmsGrou
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
             'googleAnalyticsWidget',
             $this->translator->trans('chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title'),
-            'https://analytics.google.com/analytics/web/#/report-home/a'.$this->googleAnalyticsPropertyId
+            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId
+            .'/reports/explorer?params=_u..nav%3Dmaui%26_r.explorerCard..selmet%3D%5B%22newUsers%22%5D%26_r.explorerCard..seldim%3D%5B%22firstUserPrimaryChannelGroup%22%5D&r=lifecycle-user-acquisition-v2&collectionId=5150716439',
         );
 
         $dropDownMenuItem->setTarget('_blank');

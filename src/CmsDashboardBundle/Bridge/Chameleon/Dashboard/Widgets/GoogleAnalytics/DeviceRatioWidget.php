@@ -35,7 +35,7 @@ class DeviceRatioWidget extends DashboardWidget implements RestrictedByCmsGroupI
             'chameleon_system_cms_dashboard.widget.google_analytics.device_ratio_title',
             [
                 '%property%' => $this->googleAnalyticsPropertyId,
-                '%days%' => $this->googleAnalyticsPeriodDays
+                '%days%' => $this->googleAnalyticsPeriodDays,
             ]
         );
     }
@@ -67,7 +67,8 @@ class DeviceRatioWidget extends DashboardWidget implements RestrictedByCmsGroupI
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
             'googleAnalyticsDeviceRatioWidget',
             $this->translator->trans('chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title'),
-            'https://analytics.google.com/analytics/web/#/report-home/a'.$this->googleAnalyticsPropertyId
+            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId
+            .'/reports/dashboard?params=_u..nav%3Dmaui&r=user-technology-overview&ruid=user-technology-overview,user,technology&collectionId=user'
         );
 
         $dropDownMenuItem->setTarget('_blank');

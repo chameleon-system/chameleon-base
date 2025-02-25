@@ -67,7 +67,7 @@ class EngagementRateWidget extends DashboardWidget implements RestrictedByCmsGro
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
             'googleAnalyticsWidget',
             $this->translator->trans('chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title'),
-            'https://analytics.google.com/analytics/web/#/report-home/a'.$this->googleAnalyticsPropertyId
+            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId.'/reports/dashboard?params=_u..nav%3Dmaui%26_r.3..selmet%3D%5B%22newUsers%22%5D&r=business-objectives-examine-user-behavior-overview&ruid=business-objectives-examine-user-behavior-overview,business-objectives,examine-user-behavior&collectionId=business-objectives',
         );
 
         $dropDownMenuItem->setTarget('_blank');
