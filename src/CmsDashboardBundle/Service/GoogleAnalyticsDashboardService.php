@@ -80,7 +80,7 @@ class GoogleAnalyticsDashboardService
             0
         );
         $totalEngagementPrevious = array_reduce(
-            $totalEngagementPrevious,
+            $engagementPrevious,
             fn($carry, $item) => $carry + ($item['metric_0'] ?? 0),
             0
         );
@@ -106,7 +106,7 @@ class GoogleAnalyticsDashboardService
             $currentEnd,
             [GoogleMetric::AVERAGE_SESSION_DURATION],
             [GoogleDimension::DATE],
-            [$sessionOrderBy]
+            [$this->getDateOrderBy()]
         );
 
         $sessionDurationPrevious = $this->fetchAnalyticsData(
@@ -371,7 +371,7 @@ class GoogleAnalyticsDashboardService
         return (new OrderBy())->setDimension(
             (new DimensionOrderBy())
                 ->setDimensionName(GoogleDimension::DATE)
-                ->setOrderType(DimensionOrderBy::NUMERIC)
+                ->setOrderType(OrderType::NUMERIC)
         );
     }
 }
