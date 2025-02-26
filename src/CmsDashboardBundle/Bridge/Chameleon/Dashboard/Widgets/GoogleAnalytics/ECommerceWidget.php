@@ -5,12 +5,12 @@ namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
 use ChameleonSystem\CmsDashboardBundle\Service\GoogleAnalyticsDashboardService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
 
 class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
@@ -139,7 +139,7 @@ class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInt
     {
         return [
             CmsGroup::CMS_MANAGEMENT,
-            CmsGroup::CMS_ADMIN
+            CmsGroup::CMS_ADMIN,
         ];
     }
 }
