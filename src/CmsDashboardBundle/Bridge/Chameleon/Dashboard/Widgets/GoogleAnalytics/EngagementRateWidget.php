@@ -5,6 +5,7 @@ namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
 use ChameleonSystem\CmsDashboardBundle\Service\GoogleAnalyticsDashboardService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -67,7 +68,8 @@ class EngagementRateWidget extends DashboardWidget implements RestrictedByCmsGro
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
             'googleAnalyticsWidget',
             $this->translator->trans('chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title'),
-            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId.'/reports/dashboard?params=_u..nav%3Dmaui%26_r.3..selmet%3D%5B%22newUsers%22%5D&r=business-objectives-examine-user-behavior-overview&ruid=business-objectives-examine-user-behavior-overview,business-objectives,examine-user-behavior&collectionId=business-objectives',
+            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId
+            .'/reports/dashboard?params=_u..nav%3Dmaui%26_r.3..selmet%3D%5B%22newUsers%22%5D&r=business-objectives-examine-user-behavior-overview&ruid=business-objectives-examine-user-behavior-overview,business-objectives,examine-user-behavior&collectionId=business-objectives',
         );
 
         $dropDownMenuItem->setTarget('_blank');
@@ -145,8 +147,8 @@ class EngagementRateWidget extends DashboardWidget implements RestrictedByCmsGro
     protected function getPermittedGroupSystemNames(): array
     {
         return [
-            'CMS_GROUP_CMS_MANAGEMENT',
-            'CMS_GROUP_CMS_ADMIN',
+            CmsGroup::CMS_MANAGEMENT,
+            CmsGroup::CMS_ADMIN,
         ];
     }
 }

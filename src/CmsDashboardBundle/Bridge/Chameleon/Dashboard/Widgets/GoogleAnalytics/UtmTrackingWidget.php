@@ -5,6 +5,7 @@ namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
 use ChameleonSystem\CmsDashboardBundle\Service\GoogleAnalyticsDashboardService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -14,7 +15,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
     private const WIDGET_NAME = 'widget-google-analytics-utm-tracking';
-
     private const MAX_UTM_ELEMENTS = 10;
 
     public function __construct(
@@ -69,7 +69,8 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
             'googleAnalyticsWidget',
             $this->translator->trans('chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title'),
-            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId.'/reports/dashboard/edit?params=_u..nav%3Dmaui%26_u..insightCards%3D%5B%7B%22question%22:%22Campain%22%7D%5D&r=user-demographics-overview&collectionId=business-objectives',
+            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId
+            .'/reports/dashboard/edit?params=_u..nav%3Dmaui%26_u..insightCards%3D%5B%7B%22question%22:%22Campain%22%7D%5D&r=user-demographics-overview&collectionId=business-objectives',
         );
 
         $dropDownMenuItem->setTarget('_blank');
@@ -140,8 +141,8 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
     protected function getPermittedGroupSystemNames(): array
     {
         return [
-            'CMS_GROUP_CMS_MANAGEMENT',
-            'CMS_GROUP_CMS_ADMIN',
+            CmsGroup::CMS_MANAGEMENT,
+            CmsGroup::CMS_ADMIN,
         ];
     }
 }

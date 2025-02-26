@@ -5,6 +5,7 @@ namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
 use ChameleonSystem\CmsDashboardBundle\Service\GoogleAnalyticsDashboardService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -132,8 +133,8 @@ class GeoLocationWidget extends DashboardWidget implements RestrictedByCmsGroupI
     protected function getPermittedGroupSystemNames(): array
     {
         return [
-            'CMS_GROUP_CMS_MANAGEMENT',
-            'CMS_GROUP_CMS_ADMIN',
+            CmsGroup::CMS_MANAGEMENT,
+            CmsGroup::CMS_ADMIN,
         ];
     }
 }

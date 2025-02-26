@@ -10,6 +10,7 @@ use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
 
 class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
@@ -93,7 +94,7 @@ class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInt
 
     protected function generateBodyHtml(): string
     {
-        $currentEnd = (new \DateTime('- 1 days'))->format('Y-m-d');
+        $currentEnd = (new \DateTime('-1 days'))->format('Y-m-d');
         $currentStart = (new \DateTime('-'.$this->googleAnalyticsPeriodDays.' days'))->format('Y-m-d');
         $previousEnd = (new \DateTime('-'.($this->googleAnalyticsPeriodDays + 1).' days'))->format('Y-m-d');
         $previousStart = (new \DateTime('-'.($this->googleAnalyticsPeriodDays * 2 + 1).' days'))->format('Y-m-d');
@@ -137,8 +138,8 @@ class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInt
     protected function getPermittedGroupSystemNames(): array
     {
         return [
-            'CMS_GROUP_CMS_MANAGEMENT',
-            'CMS_GROUP_CMS_ADMIN',
+            CmsGroup::CMS_MANAGEMENT,
+            CmsGroup::CMS_ADMIN
         ];
     }
 }

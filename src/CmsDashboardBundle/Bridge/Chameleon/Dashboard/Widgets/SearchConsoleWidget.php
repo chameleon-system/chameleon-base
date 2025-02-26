@@ -4,6 +4,7 @@ namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
 use ChameleonSystem\CmsDashboardBundle\Service\GoogleSearchConsoleService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -30,7 +31,8 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
 
     public function getTitle(): string
     {
-        return $this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_title',
+        return $this->translator->trans(
+            'chameleon_system_cms_dashboard.widget.search_console_title',
             [
                 '%domain%' => $this->googleSearchConsoleDomainProperty,
                 '%days%' => $this->googleSearchConsolePeriodDays,
@@ -57,8 +59,12 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
     {
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
             'searchConsoleWidget',
-            $this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_dropdown_menu_console_link_title'),
-            'https://search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3A'.$this->googleSearchConsoleDomainProperty.'&hl=de&num_of_days=28&compare_date=PREV&metrics=CLICKS%2CIMPRESSIONS'
+            $this->translator->trans(
+                'chameleon_system_cms_dashboard.widget.search_console_dropdown_menu_console_link_title'
+            ),
+            'https://search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3A'
+            .$this->googleSearchConsoleDomainProperty
+            .'&hl=de&num_of_days=28&compare_date=PREV&metrics=CLICKS%2CIMPRESSIONS'
         );
 
         $dropDownMenuItem->setTarget('_blank');
@@ -90,8 +96,10 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
 
         $comparisonData = $this->googleSearchConsoleService->getComparisonData(
             'sc-domain:'.$this->googleSearchConsoleDomainProperty,
-            $currentStart, $currentEnd,
-            $previousStart, $previousEnd
+            $currentStart,
+            $currentEnd,
+            $previousStart,
+            $previousEnd
         );
 
         $this->renderer->AddSourceObject('dayPeriod', $this->googleSearchConsolePeriodDays);
@@ -129,8 +137,8 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
     protected function getPermittedGroupSystemNames(): array
     {
         return [
-            'CMS_GROUP_CMS_MANAGEMENT',
-            'CMS_GROUP_CMS_ADMIN',
+            CmsGroup::CMS_MANAGEMENT,
+            CmsGroup::CMS_ADMIN,
         ];
     }
 }
