@@ -9,61 +9,49 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 
 return static function (RectorConfig $rectorConfig): void {
     /*
-     * Basis-String-Ersetzungen (nur in PHP-Dateien!)
+     * Basic string replacements (only in PHP files!)
      */
-    // 1. TGlobal::Translate ersetzen:
+    // 1. Replace TGlobal::Translate:
     $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
-        'TGlobal::Translate(' => "ServiceLocator::get('translator')->trans(",
+        'TGlobal::Translate(' => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('translator')->trans(",
     ]);
 
-    // 2. Namespace von TranslatorInterface anpassen:
+    // 2. Adjust the namespace of TranslatorInterface:
     $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
         'Symfony\\Component\\Translation\\TranslatorInterface'
         => 'Symfony\\Contracts\\Translation\\TranslatorInterface',
     ]);
 
-    // 3. Twig Error Routing ändern (Hinweis: Greift nur in PHP-Dateien, YAML-Dateien bleiben unverändert):
+    // 3. Change Twig error routing (Note: Only affects PHP files, YAML files remain unchanged):
     $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
         '@TwigBundle/Resources/config/routing/errors.xml'
         => '@FrameworkBundle/Resources/config/routing/errors.xml',
     ]);
 
-    // 4. Doctrine-Methoden anpassen:
+    // 4. Adjust Doctrine methods:
     $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
         'fetchArray'  => 'fetchNumeric',
         'fetchAssoc'  => 'fetchAssociative',
         'fetchAll('   => 'fetchAllAssociative(',
     ]);
 
-    // 5. RequestStack- und KernelEvent-Methoden anpassen:
+    // 5. Adjust RequestStack and KernelEvent methods:
     $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
         'getMasterRequest' => 'getMainRequest',
         'isMasterRequest'  => 'isMainRequest',
     ]);
 
-    // 6. HttpKernelInterface-Konstante anpassen:
+    // 6. Adjust HttpKernelInterface constant:
     $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
         'HttpKernelInterface::MASTER_REQUEST'
         => 'HttpKernelInterface::MAIN_REQUEST',
     ]);
 
-    // 7. Event-Klassen umbenennen:
+    // 7. Rename event classes:
     $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
         'FilterResponseEvent'            => 'ResponseEvent',
         'GetResponseEvent'               => 'RequestEvent',
         'GetResponseForExceptionEvent'   => 'ExceptionEvent',
         'PostResponseEvent'              => 'TerminateEvent',
-    ]);
-
-    /*
-     * Basis-Methodenumbenennung:
-     */
-    // 8. InputFilterUtil-Methode umbenennen:
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename(
-            'ChameleonSystem\\CoreBundle\\Util\\InputFilterUtil',
-            'getFilteredGetInput',
-            'getFilteredGetInputArray'
-        ),
     ]);
 };
