@@ -7,33 +7,33 @@ use Rector\Renaming\Rector\String_\RenameStringRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(RenameStringRector::class, [
-        // Basis-Shop-Aufrufe:
+        // Basic shop calls:
         'TdbShop::GetInstance()'
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()",
         'TShop::GetInstance()'
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveShop()",
-        // Aufrufe mit Parametern – hier wird die öffnende Klammer ersetzt:
+        // Calls with parameters – here the opening parenthesis is replaced:
         'TdbShop::GetInstance('
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getShopForPortalId(",
-        // Kategorie-Aufrufe:
+        // Category calls:
         'TdbShop::GetActiveCategory()'
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory()",
         'TShop::GetActiveCategory()'
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveCategory()",
-        // Produkt-Aufrufe:
+        // Product calls:
         'TdbShop::GetActiveItem()'
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct()",
         'TShop::GetActiveItem()'
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct()",
-        // Manuelle Ersetzung für Fälle wie "hop->GetActiveItem()":
+        // Manual replacement for cases like "hop->GetActiveItem()":
         'hop->GetActiveItem()'
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveProduct()",
-        // Root-Kategorie-Aufrufe:
+        // Root category calls:
         'TdbShop::GetActiveRootCategory()'
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory()",
         'TShop::GetActiveRootCategory()'
         => "\\ChameleonSystem\\CoreBundle\\ServiceLocator::get('chameleon_system_shop.shop_service')->getActiveRootCategory()",
-        // Allgemeiner Hinweis: Falls in der Codebasis auch Aufrufe mit "->GetActiveRootCategory()" vorkommen:
+        // General note: If calls like "->GetActiveRootCategory()" appear in the codebase:
         '->GetActiveRootCategory()'
         => "->getActiveRootCategory()",
     ]);
