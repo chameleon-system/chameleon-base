@@ -334,7 +334,7 @@ class TTools
             $tableId = self::GetCMSTableId($sTableName);
             $query = "SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableId)."' AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
             $result = MySqlLegacySupport::getInstance()->query($query);
-            if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
+            if (1 === MySqlLegacySupport::getInstance()->num_rows($result)) {
                 $returnVal = true;
             }
         } else {
@@ -344,7 +344,12 @@ class TTools
             } else {
                 $query = 'SHOW FIELDS FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` LIKE '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
                 $result = MySqlLegacySupport::getInstance()->query($query);
-                if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
+
+                if (false === $result) {
+                    throw new Exception('Error in query: '.$query.' - '.MySqlLegacySupport::getInstance()->error());
+                }
+
+                if (1 === MySqlLegacySupport::getInstance()->num_rows($result)) {
                     $returnVal = true;
                 }
 
