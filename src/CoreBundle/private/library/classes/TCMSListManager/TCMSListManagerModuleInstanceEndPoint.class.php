@@ -17,10 +17,8 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
 {
     /**
      * array of allowed modules for the current spot.
-     *
-     * @var array|null
      */
-    public $aPermittedModules;
+    public ?array $aPermittedModules = null;
 
     /**
      * {@inheritdoc}
@@ -70,10 +68,8 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
      */
     protected function GetFilterQueryCustomJoins()
     {
-        $sQueryJoin = '  LEFT JOIN `cms_tpl_module_cms_usergroup_mlt` ON `cms_tpl_module_instance`.`cms_tpl_module_id` = `cms_tpl_module_cms_usergroup_mlt`.`source_id`
+        return '  LEFT JOIN `cms_tpl_module_cms_usergroup_mlt` ON `cms_tpl_module_instance`.`cms_tpl_module_id` = `cms_tpl_module_cms_usergroup_mlt`.`source_id`
             LEFT JOIN `cms_tpl_module_cms_portal_mlt` ON `cms_tpl_module_instance`.`cms_tpl_module_id`  = `cms_tpl_module_cms_portal_mlt`.`source_id` ';
-
-        return $sQueryJoin;
     }
 
     /**
@@ -200,10 +196,7 @@ class TCMSListManagerModuleInstanceEndPoint extends TCMSListManagerFullGroupTabl
         return $renderedPaths;
     }
 
-    /**
-     * @return Connection
-     */
-    private function getDatabaseConnection()
+    private function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
     }
