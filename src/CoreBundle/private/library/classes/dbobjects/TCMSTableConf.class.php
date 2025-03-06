@@ -44,7 +44,7 @@ class TCMSTableConf extends TCMSRecord
 
         if (!is_null($listClassName)) {
             $oList = new $listClassName();
-        } elseif ('cms_media' == $this->sqlData['name']) {
+        } elseif ('cms_media' === $this->sqlData['name']) {
             if ($oGlobal->UserDataExists('sRestrictionField') && '_mlt' == substr($oGlobal->GetUserData('sRestrictionField'), -4)) {
                 $oList = new TCMSListManagerImagedatabaseMLT();
             /* @var $oList TCMSListManagerImagedatabaseMLT */
@@ -52,7 +52,7 @@ class TCMSTableConf extends TCMSRecord
                 $oList = new TCMSListManagerImagedatabase();
                 /* @var $oList TCMSListManagerImagedatabase */
             }
-        } elseif ('cms_tpl_page' == $this->sqlData['name']) {
+        } elseif ('cms_tpl_page' === $this->sqlData['name']) {
             $oList = new TCMSListManagerWebpages();
         /* @var $oList TCMSListManagerFullGroupTable */
         } elseif ($oGlobal->UserDataExists('sRestrictionField') && '_mlt' == substr($oGlobal->GetUserData('sRestrictionField'), -4)) {
@@ -179,7 +179,7 @@ class TCMSTableConf extends TCMSRecord
                 $oGlobal = TGlobal::instance();
                 $oField->data = $oGlobal->GetUserData($oField->name);
             } else {
-                if ($loadDefaults) {
+                if (true === $loadDefaults) {
                     $oField->data = $oFieldDef->sqlData['field_default_value'];
                     $bAllowAddingField = true;
                 } elseif ($oTableRow && is_array($oTableRow->sqlData) && array_key_exists($oField->name, $oTableRow->sqlData)) {
@@ -255,27 +255,27 @@ class TCMSTableConf extends TCMSRecord
 
         if (null === $fieldDefinition) {
             throw new Exception('Field definition not found for field: '.$sFieldName.' in table: '.$this->sqlData['name']);
-        } else {
-            $field = $fieldDefinition->GetFieldObject();
-            $field->sTableName = $this->sqlData['name'];
-            if (null !== $oTableRow) {
-                $field->recordId = $oTableRow->id;
-            }
-            $field->name = $fieldDefinition->sqlData['name'];
-            if ($loadDefaults) {
-                $field->data = $fieldDefinition->sqlData['field_default_value'];
-            } elseif (null !== $oTableRow && is_array($oTableRow->sqlData) && array_key_exists($field->name, $oTableRow->sqlData)) {
-                $data = $this->getDataForCurrentLanguage($fieldDefinition, $oTableRow->sqlData);
-
-                if (null === $data) {
-                    $data = $oTableRow->sqlData[$field->name];
-                }
-
-                $field->data = $data;
-            }
-            $field->oDefinition = $fieldDefinition;
-            $field->oTableRow = $oTableRow;
         }
+
+        $field = $fieldDefinition->GetFieldObject();
+        $field->sTableName = $this->sqlData['name'];
+        if (null !== $oTableRow) {
+            $field->recordId = $oTableRow->id;
+        }
+        $field->name = $fieldDefinition->sqlData['name'];
+        if ($loadDefaults) {
+            $field->data = $fieldDefinition->sqlData['field_default_value'];
+        } elseif (null !== $oTableRow && is_array($oTableRow->sqlData) && array_key_exists($field->name, $oTableRow->sqlData)) {
+            $data = $this->getDataForCurrentLanguage($fieldDefinition, $oTableRow->sqlData);
+
+            if (null === $data) {
+                $data = $oTableRow->sqlData[$field->name];
+            }
+
+            $field->data = $data;
+        }
+        $field->oDefinition = $fieldDefinition;
+        $field->oTableRow = $oTableRow;
 
         return $field;
     }
@@ -391,9 +391,9 @@ class TCMSTableConf extends TCMSRecord
     {
         if (!empty($this->sqlData['name_column'])) {
             return $this->sqlData['name_column'];
-        } else {
-            return 'name';
         }
+
+        return 'name';
     }
 
     /**
@@ -405,9 +405,9 @@ class TCMSTableConf extends TCMSRecord
     {
         if (!empty($this->sqlData['display_column'])) {
             return $this->sqlData['display_column'];
-        } else {
-            return $this->GetNameColumn();
         }
+
+        return $this->GetNameColumn();
     }
 
     /**
@@ -434,7 +434,6 @@ class TCMSTableConf extends TCMSRecord
      */
     public function GetDisplayFieldCallbackFunction()
     {
-        $callbackFunction = null;
         if (is_array($this->sqlData) && array_key_exists('display_column_callback', $this->sqlData) && !empty($this->sqlData['display_column_callback'])) {
             $callbackFunction = $this->sqlData['display_column_callback'];
             TGlobal::LoadCallbackFunction($callbackFunction);

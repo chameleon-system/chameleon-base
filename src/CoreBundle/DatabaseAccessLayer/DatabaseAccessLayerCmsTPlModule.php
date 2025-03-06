@@ -29,11 +29,8 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
         $keyMappingData = array('classname' => $classOrId);
         $mappedKey = $this->getMapLookupKey($keyMappingData);
         $data = $this->getFromCacheViaMappedKey($mappedKey);
-        if (null !== $data) {
-            return $data;
-        }
 
-        return null;
+        return $data ?? null;
     }
 
     /**
@@ -64,10 +61,7 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
         return $matches[0];
     }
 
-    /**
-     * @return void
-     */
-    private function loadAllModules()
+    private function loadAllModules(): void
     {
         if (true === $this->isLoaded) {
             return;
