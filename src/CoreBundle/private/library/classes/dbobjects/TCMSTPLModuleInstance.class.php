@@ -11,6 +11,8 @@
 
 use ChameleonSystem\CoreBundle\Exception\ModuleException;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -20,24 +22,33 @@ class TCMSTPLModuleInstance extends TCMSRecord
 {
     /**
      * module loader object.
-     *
-     * @var TModuleLoader
      */
-    protected $oModuleLoader;
+    protected ?TModuleLoader $oModuleLoader = null;
 
     /**
      * module record.
-     *
-     * @var TCMSTPLModule
      */
-    protected $oModule;
+    protected TCMSTPLModule $oModule;
 
     /**
      * the name of the spot the module instance is set.
-     *
-     * @var string
      */
-    protected $sSpotName;
+    protected string $sSpotName;
+
+    /** @var string Module state: No edits made yet */
+    public const STATE_NEW = 'new';
+
+    /** @var string Module state: Partially edited (only some related tables edited) */
+    public const STATE_PARTIAL = 'partial';
+
+    /** @var string Module state: Fully edited (all related tables edited) */
+    public const STATE_COMPLETED = 'completed';
+
+    public array $moduleStateCodeColorList = [
+        self::STATE_NEW => 'F86C6B', // danger
+        self::STATE_PARTIAL => 'FFC107', // warning
+        self::STATE_COMPLETED => '', // all edited
+    ];
 
     public function __construct($id = null)
     {
@@ -92,7 +103,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
      */
     protected function GetModule()
     {
-        if (is_null($this->oModule)) {
+        if (null === $this->oModule) {
             $this->oModule = new TCMSTPLModule();
             $this->oModule->Load($this->sqlData['cms_tpl_module_id']);
         }
@@ -102,7 +113,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
 
     protected function GetModuleLoader($sView, $aParameters)
     {
-        if (is_null($this->oModuleLoader)) {
+        if (null === $this->oModuleLoader) {
             $aParameters['instanceID'] = $this->id;
             $this->GetModule();
             $this->oModuleLoader = TTools::GetModuleLoaderObject($this->oModule->sqlData['classname'], $sView, $aParameters, $this->sSpotName);
@@ -111,10 +122,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
         return $this->oModuleLoader;
     }
 
-    /**
-     * @return array
-     */
-    public function GetPermittedFunctions()
+    public function GetPermittedFunctions(): array
     {
         return $this->oModuleLoader->GetPermittedFunctions();
     }
@@ -147,7 +155,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
      */
     public function Render($aAdditionalModuleParameters = [], $sModuleSpotName = 'tmpmodule', $sView = '')
     {
-        $dbAccessLayer = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
+        $dbAccessLayer = ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
         $oModule = $dbAccessLayer->loadFromId($this->sqlData['cms_tpl_module_id']);
 
         // now create instance of TModuleLoader...
@@ -186,70 +194,84 @@ class TCMSTPLModuleInstance extends TCMSRecord
 
     /**
      * Get the color for the edit state of the module instance.
-     *
-     * @return string
      */
-    public function GetModuleColorEditState()
+    public function GetModuleColorEditState(): string
     {
-        $aModuleStateCodeColorList = ['ne' => 'EB3335', 'na' => 'FAA11C', 'ea' => '78C043'];
-        $sModuleState = $this->GetModuleEditState();
+        $moduleState = $this->GetModuleEditState();
 
-        return $aModuleStateCodeColorList[$sModuleState];
+        return $this->moduleStateCodeColorList[$moduleState];
     }
 
     /**
      * Get the color for the edit state of the module connected table.
-     *
-     * @param TCMSRecord $oModuleConnectedTable
-     *
-     * @return string
      */
-    public function GetModuleConnectedTableColorEditState($oModuleConnectedTable)
+    public function GetModuleConnectedTableColorEditState(TCMSRecord $moduleConnectedTable): string
     {
-        $aModuleStateCodeColorList = ['ne' => 'EB3335', 'na' => 'FAA11C', 'ea' => '78C043'];
-        $sModuleState = $this->UpdateModuleEditStateForConnectedTable('', $oModuleConnectedTable);
+        $sModuleState = $this->UpdateModuleEditStateForConnectedTable(self::STATE_NEW, $moduleConnectedTable);
 
-        return $aModuleStateCodeColorList[$sModuleState];
+        return $this->moduleStateCodeColorList[$sModuleState];
     }
 
     /**
-     * Get the edit state of the module instances as code or human readable text.
-     *
-     * @param bool $bReturnTranslatedText to get the module instance edit state as human readable text
-     *
-     * @return string
+     * Get the edit state of the module instances as code or human-readable text.
      */
-    public function GetModuleEditState($bReturnTranslatedText = false)
+    public function GetModuleEditState(): string
     {
-        $translator = $this->getTranslator();
-        $aModuleStateCodeList = [
-            'ne' => $translator->trans('chameleon_system_core.template_engine.module_edit_state_new', [], TranslationConstants::DOMAIN_BACKEND),
-            'na' => $translator->trans('chameleon_system_core.template_engine.module_edit_state_partial', [], TranslationConstants::DOMAIN_BACKEND),
-            'ea' => $translator->trans('chameleon_system_core.template_engine.module_edit_state_completed', [], TranslationConstants::DOMAIN_BACKEND),
-        ];
-        $sModuleState = 'na';
+        $moduleState = self::STATE_PARTIAL;
         $oInstanceModule = $this->GetFieldCmsTplModule();
-        if (!is_object($oInstanceModule)) {
-            if (!empty($this->fieldCmsTplModuleId)) {
-                // something went terribly wrong! the connected module doesn`t exist anymore
-                $sMessage = 'module with ID: '.$this->fieldCmsTplModuleId.' doesn´t exist anymore, but is set in instance: '.$this->id.' - '.$this->fieldName;
-                TTools::WriteLogEntry($sMessage, 1, __FILE__, __LINE__);
-            }
-        } else {
-            $oModuleConnectedTableList = $oInstanceModule->GetMLT('cms_tbl_conf_mlt');
-            if ($oModuleConnectedTableList->Length() > 0) {
-                while ($oModuleConnectedTable = $oModuleConnectedTableList->Next()) {
-                    $sModuleState = $this->UpdateModuleEditStateForConnectedTable($sModuleState, $oModuleConnectedTable);
-                }
-            } else {
-                $sModuleState = 'ea';
-            }
-            if ($bReturnTranslatedText) {
-                $sModuleState = $aModuleStateCodeList[$sModuleState];
-            }
+
+        if (null === $oInstanceModule) {
+            $this->logMissingModule();
+
+            return $moduleState;
         }
 
-        return $sModuleState;
+        return $this->determineModuleState($oInstanceModule, $moduleState);
+    }
+
+    /**
+     * @todo not used at the moment, should be handled in the template
+     */
+    public function getModuleEditStateTranslation(): string
+    {
+        $translator = $this->getTranslator();
+
+        $moduleStateCodeList = [
+            self::STATE_NEW => $translator->trans('chameleon_system_core.template_engine.module_edit_state_new', [], TranslationConstants::DOMAIN_BACKEND),
+            self::STATE_PARTIAL => $translator->trans('chameleon_system_core.template_engine.module_edit_state_partial', [], TranslationConstants::DOMAIN_BACKEND),
+            self::STATE_COMPLETED => $translator->trans('chameleon_system_core.template_engine.module_edit_state_completed', [], TranslationConstants::DOMAIN_BACKEND),
+        ];
+
+        $moduleState = $this->GetModuleEditState();
+
+        return $moduleStateCodeList[$moduleState];
+    }
+
+    private function logMissingModule(): void
+    {
+        if (!empty($this->fieldCmsTplModuleId)) {
+            $sMessage = 'module with ID: '.$this->fieldCmsTplModuleId.' doesn´t exist anymore, but is set in instance: '.$this->id.' - '.$this->fieldName;
+            $this->getLogger()->error($sMessage);
+        }
+    }
+
+    private function determineModuleState(TdbCmsTplModule $instanceModule, string $moduleState): string
+    {
+        $moduleConnectedTableList = $instanceModule->GetMLT('cms_tbl_conf_mlt');
+
+        if (null === $moduleConnectedTableList) {
+            return self::STATE_COMPLETED;
+        }
+
+        if ($moduleConnectedTableList->Length() > 0) {
+            while ($oModuleConnectedTable = $moduleConnectedTableList->Next()) {
+                $moduleState = $this->UpdateModuleEditStateForConnectedTable($moduleState, $oModuleConnectedTable);
+            }
+        } else {
+            $moduleState = self::STATE_COMPLETED;
+        }
+
+        return $moduleState;
     }
 
     /**
@@ -274,52 +296,58 @@ class TCMSTPLModuleInstance extends TCMSRecord
     }
 
     /**
-     * Update the module instance edit state for given module connected table.
+     * Updates the module instance edit state for the given connected table.
      *
-     * @param string $sModuleState
-     * @param TCMSRecord $oModuleConnectedTable
+     * @param string $moduleState the initial module state
+     * @param TCMSRecord $moduleConnectedTable the connected table record
      *
-     * @return string
+     * @return string updated module state
      */
-    protected function UpdateModuleEditStateForConnectedTable($sModuleState, $oModuleConnectedTable)
+    protected function UpdateModuleEditStateForConnectedTable(string $moduleState, TCMSRecord $moduleConnectedTable): string
     {
-        $bFoundModuleInstanceField = false;
-        $sFieldClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, 'cms_field_conf');
-        $oFieldList = $oModuleConnectedTable->GetProperties('cms_field_conf_mlt', $sFieldClassName);
-        while ($oField = $oFieldList->Next()) {
-            if ('cms_tpl_module_instance_id' == $oField->fieldName) {
-                $bFoundModuleInstanceField = true;
-                if (!$this->HasConnectedTableInstanceRecord($oModuleConnectedTable)) {
-                    if ('ea' == $sModuleState) {
-                        $sModuleState = 'na';
-                    } elseif ('' == $sModuleState) {
-                        $sModuleState = 'ne';
+        $foundModuleInstanceField = false;
+        $fieldClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, 'cms_field_conf');
+        $fieldList = $moduleConnectedTable->GetProperties('cms_field_conf_mlt', $fieldClassName);
+
+        if (null === $fieldList) {
+            return self::STATE_COMPLETED;
+        }
+
+        while ($oField = $fieldList->Next()) {
+            if ('cms_tpl_module_instance_id' === $oField->fieldName) {
+                $foundModuleInstanceField = true;
+                if (false === $this->HasConnectedTableInstanceRecord($moduleConnectedTable)) {
+                    if (self::STATE_COMPLETED === $moduleState) {
+                        $moduleState = self::STATE_PARTIAL;
+                    } elseif ('' === $moduleState) {
+                        $moduleState = self::STATE_NEW;
                     }
-                } else {
-                    if ('' == $sModuleState) {
-                        $sModuleState = 'ea';
-                    } elseif ('ne' == $sModuleState) {
-                        $sModuleState = 'na';
-                    }
+                } elseif (self::STATE_PARTIAL === $moduleState) {
+                    $moduleState = self::STATE_COMPLETED;
+                } elseif (self::STATE_NEW === $moduleState) {
+                    $moduleState = self::STATE_PARTIAL;
                 }
             }
         }
-        if (!$bFoundModuleInstanceField) {
-            if ('ne' == $sModuleState) {
-                $sModuleState = 'na';
-            } elseif ('' == $sModuleState) {
-                $sModuleState = 'ea';
+
+        if (!$foundModuleInstanceField) {
+            if (self::STATE_NEW === $moduleState) {
+                $moduleState = self::STATE_PARTIAL;
+            } elseif ('' === $moduleState) {
+                $moduleState = self::STATE_COMPLETED;
             }
         }
 
-        return $sModuleState;
+        return $moduleState;
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslator()
+    private function getTranslator(): TranslatorInterface
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return ServiceLocator::get('logger');
     }
 }

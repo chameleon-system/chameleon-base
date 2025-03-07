@@ -9,9 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+
 /**
  * holds a record from the "cms_tpl_module" table.
- * /**/
+ */
 class TCMSTPLModule extends TCMSRecord
 {
     /**
@@ -23,15 +26,33 @@ class TCMSTPLModule extends TCMSRecord
 
     /**
      * if set, it will be used to restricted the views returned by GetViews.
-     *
-     * @var array
      */
-    public $aPermittedViews;
+    public array $aPermittedViews = [];
+
+    private ?string $activePortalId = null;
 
     public function __construct($id = null)
     {
-        $table = 'cms_tpl_module';
-        parent::__construct($table, $id);
+        parent::__construct('cms_tpl_module', $id);
+    }
+
+    public function getActivePortal(): TdbCmsPortal
+    {
+        $portalDomainService = $this->getPortalDomainService();
+
+        if (null !== $this->activePortalId) {
+            $activePortal = \TdbCmsPortal::GetNewInstance();
+            $activePortal->Load($this->activePortalId);
+
+            return $activePortal;
+        }
+
+        return $portalDomainService->getActivePortal();
+    }
+
+    public function setActivePortalId(?string $activePortalId): void
+    {
+        $this->activePortalId = $activePortalId;
     }
 
     public function isLegacy()
@@ -39,10 +60,7 @@ class TCMSTPLModule extends TCMSRecord
         return 0 === $this->getViewMapperConfig()->getConfigCount();
     }
 
-    /**
-     * @return TIterator<string>|null
-     */
-    public function GetViews()
+    public function GetViews(): ?TIterator
     {
         if (true === $this->isLegacy()) {
             return $this->GetViewsLegacy();
@@ -70,7 +88,7 @@ class TCMSTPLModule extends TCMSRecord
      *
      * @return TIterator
      */
-    public function GetViewsLegacy()
+    public function GetViewsLegacy(): TIterator
     {
         if (null !== $this->_oViews) {
             return $this->_oViews;
@@ -153,6 +171,11 @@ class TCMSTPLModule extends TCMSRecord
     {
         $aViewMapping = [];
         $views = $this->GetViews();
+
+        if (null === $views) {
+            return $aViewMapping;
+        }
+
         $views->GoToStart();
         while ($view = $views->next()) {
             $aViewMapping[$view] = $view;
@@ -222,9 +245,7 @@ class TCMSTPLModule extends TCMSRecord
      */
     public function getMapperChains()
     {
-        $config = $this->getMapperChainConfig();
-
-        return $config->getMapperChains();
+        return $this->getMapperChainConfig()->getMapperChains();
     }
 
     /**
@@ -238,11 +259,13 @@ class TCMSTPLModule extends TCMSRecord
         return $config;
     }
 
-    /**
-     * @return TPkgViewRendererSnippetDirectoryInterface
-     */
-    private function getViewRendererSnippetDirectory()
+    private function getViewRendererSnippetDirectory(): TPkgViewRendererSnippetDirectoryInterface
     {
         return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }
