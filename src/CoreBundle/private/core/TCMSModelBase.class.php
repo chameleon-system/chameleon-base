@@ -102,8 +102,7 @@ class TCMSModelBase extends TModelBase
     public function Execute()
     {
         parent::Execute();
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         $user = $securityHelper->getUser();
         $userObject = null;
@@ -129,8 +128,7 @@ class TCMSModelBase extends TModelBase
             return $includes;
         }
         $includes = parent::GetHtmlHeadIncludes();
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
 
         if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             return $includes;
@@ -149,6 +147,11 @@ class TCMSModelBase extends TModelBase
         return array_merge($includes, $includes);
     }
 
+    protected function getSecurityHelperAccess(): SecurityHelperAccess
+    {
+        return ServiceLocator::get(SecurityHelperAccess::class);
+    }
+
     private function getBackendRouter(): RouterInterface
     {
         return ServiceLocator::get('chameleon_system_core.router.chameleon_backend');
@@ -157,10 +160,5 @@ class TCMSModelBase extends TModelBase
     private function getCurrentRequest(): ?Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
-    }
-
-    protected function getCacheService(): CacheInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.cache');
     }
 }

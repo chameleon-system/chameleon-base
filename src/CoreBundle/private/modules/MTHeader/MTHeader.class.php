@@ -766,9 +766,4 @@ class MTHeader extends TCMSModelBase
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
-
-    private function getSecurityHelperAccess(): SecurityHelperAccess
-    {
-        return ServiceLocator::get(SecurityHelperAccess::class);
-    }
 }
