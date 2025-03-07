@@ -259,13 +259,14 @@ class TGroupTableField
         $event->setCssClasses(\explode(' ', $style));
         $event->setCellValue($cellValue);
 
-        $this->getEventDispatcher()->dispatch($event, CoreEvents::DISPLAY_LISTMANAGER_CELL);
+        $this->getEventDispatcher()?->dispatch($event, CoreEvents::DISPLAY_LISTMANAGER_CELL);
 
         $onclick = $event->getOnclickEvent();
 
-        $cellValueWithDetailLink = $event->getCellValue();
-        if (1 === \count($linkFields)) {
+        if (empty($onclick) && 1 === \count($linkFields)) {
             $cellValueWithDetailLink = '<a href="'.$this->getDetailLinkURL($row, $linkFields[0]).'" target="_top" class="TGroupTableLink">'.$cellValue.'</a>';
+        } else {
+            $cellValueWithDetailLink = $event->getCellValue(); // no link if there is a click event
         }
 
         $event->setCellValueWithDetailLink($cellValueWithDetailLink);
