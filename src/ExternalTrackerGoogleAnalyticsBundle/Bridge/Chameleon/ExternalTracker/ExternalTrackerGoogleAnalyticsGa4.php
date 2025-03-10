@@ -154,14 +154,17 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
             /** @var TdbShopOrderItem $orderItem */
 
             $article = $orderItem->GetFieldShopArticle();
-            $category = null !== $article ? $article->GetFieldShopCategory() : null;
+            $category = $article?->GetFieldShopCategory();
+
+            $manufacturer = $orderItem->GetFieldShopManufacturer();
+            $brand = $manufacturer?->fieldName;
 
             $data['items'][] = [
                 'index' => $i,
                 'item_id' => $orderItem->fieldArticlenumber,
                 'item_name' => $orderItem->fieldName,
-                'item_brand' => $orderItem->GetFieldShopManufacturer()->fieldName,
-                'item_category' => null !== $category ? $category->fieldName : null,
+                'item_brand' => $brand,
+                'item_category' => $category?->fieldName,
                 'affiliation' => $orderEvent->fieldAffiliateCode,
                 'price' => (float) $orderItem->fieldPrice,
                 'quantity' => (float) $orderItem->fieldQuantityInUnits,
