@@ -205,11 +205,11 @@ class TCMSTPLModuleInstance extends TCMSRecord
     /**
      * Get the color for the edit state of the module connected table.
      */
-    public function GetModuleConnectedTableColorEditState(TCMSRecord $moduleConnectedTable): string
+    public function GetModuleConnectedTableColorEditState(string $moduleConnectedTableId): string
     {
-        $sModuleState = $this->UpdateModuleEditStateForConnectedTable(self::STATE_NEW, $moduleConnectedTable);
+        $moduleState = $this->UpdateModuleEditStateForConnectedTable(self::STATE_NEW, $moduleConnectedTableId);
 
-        return $this->moduleStateCodeColorList[$sModuleState];
+        return $this->moduleStateCodeColorList[$moduleState];
     }
 
     /**
@@ -250,8 +250,8 @@ class TCMSTPLModuleInstance extends TCMSRecord
     private function logMissingModule(): void
     {
         if (!empty($this->fieldCmsTplModuleId)) {
-            $sMessage = 'module with ID: '.$this->fieldCmsTplModuleId.' doesn´t exist anymore, but is set in instance: '.$this->id.' - '.$this->fieldName;
-            $this->getLogger()->error($sMessage);
+            $message = 'module with ID: '.$this->fieldCmsTplModuleId.' doesn´t exist anymore, but is set in instance: '.$this->id.' - '.$this->fieldName;
+            $this->getLogger()->error($message);
         }
     }
 
@@ -265,7 +265,7 @@ class TCMSTPLModuleInstance extends TCMSRecord
 
         if ($moduleConnectedTableList->Length() > 0) {
             while ($oModuleConnectedTable = $moduleConnectedTableList->Next()) {
-                $moduleState = $this->UpdateModuleEditStateForConnectedTable($moduleState, $oModuleConnectedTable);
+                $moduleState = $this->UpdateModuleEditStateForConnectedTable($moduleState, $oModuleConnectedTable->id);
             }
         } else {
             $moduleState = self::STATE_COMPLETED;
@@ -299,14 +299,15 @@ class TCMSTPLModuleInstance extends TCMSRecord
      * Updates the module instance edit state for the given connected table.
      *
      * @param string $moduleState the initial module state
-     * @param TCMSRecord $moduleConnectedTable the connected table record
+     * @param string $moduleConnectedTableId the connected table record id
      *
      * @return string updated module state
      */
-    protected function UpdateModuleEditStateForConnectedTable(string $moduleState, TCMSRecord $moduleConnectedTable): string
+    protected function UpdateModuleEditStateForConnectedTable(string $moduleState, string $moduleConnectedTableId): string
     {
         $foundModuleInstanceField = false;
         $fieldClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, 'cms_field_conf');
+        $moduleConnectedTable = new TCMSRecord('cms_tbl_conf', $moduleConnectedTableId);
         $fieldList = $moduleConnectedTable->GetProperties('cms_field_conf_mlt', $fieldClassName);
 
         if (null === $fieldList) {

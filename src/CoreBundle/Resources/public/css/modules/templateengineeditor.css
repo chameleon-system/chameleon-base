@@ -1,168 +1,168 @@
+/* Basic styling for module type info */
 .moduleType {
-  font-size: 10px !important;
-  font-family: Arial, helvetica, sans-serif !important;
-  padding: 3px 3px 3px 3px !important;
-  color: #23282c !important;
+  padding: 5px !important;
+  color: #004085 !important; /* CoreUI Primary */
+  display: flex;
+  align-items: center;
+  font-size: 12px !important;
 }
 
 .moduleType i {
-  font-size: 14px !important;
-  margin-right: 3px;
+  font-size: 16px !important;
+  padding-right: 5px;
 }
 
+/* Danger color icon for fa-cube */
 .moduleType i.fa-cube {
-  color: #f86c6b !important
+  color: #f9b115 !important; /* CoreUI "danger" */
 }
 
+/* Module info box with "info" color */
 .moduleInfo {
-  padding: 3px 3px 3px 3px !important;
-  font-size: 10px !important;
-  font-family: Arial, helvetica, sans-serif !important;
-  background-color: #63c2de !important;
-  color: #23282c !important;
-  border-top: 1px solid #fff;
+  font-size: 12px !important;
+  font-family: "Open Sans", Arial, sans-serif !important;
+  background-color: #fff !important; /* Bootstrap Light Gray */
+  color: #495057 !important; /* Darker Gray */
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #39f !important;
 }
 
+/* Make strong text inside .moduleInfo more visible */
 .moduleInfo strong {
   color: #23282c !important;
 }
 
+/* Main menu container */
 #cmsModuleMenu {
-  background: #efefef;
-  border: 1px solid #20a8d8;
-  height: 335px;
-  left: 300px;
-  margin: 0px;
-  overflow: hidden;
-  padding: 0px;
+  /* Light background with slight shadow and rounding for a more modern look */
+  background: #f8f9fa; /* A bright "light" color from CoreUI (near-white) */
+  border: 1px solid #f8f9fa;
+  border-radius: 6px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+
   position: absolute;
   top: 50px;
-  width: 227px;
+  left: 300px;
   z-index: 9998;
-  font-family: Arial, helvetica, sans-serif;
+
+  width: 300px;
+  height: 340px;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+  font-family: "Open Sans", Arial, helvetica, sans-serif;
   font-size: 11px;
   text-align: left;
 }
 
+/* Header (drag bar) of the module menu */
 #cmsModuleMenu .moduleMenuHeader {
-  background-color: #20a8d8;
-  color:#FFFFFF;
-  cursor:move;
-  height:18px;
-  line-height:18px;
-  text-align:right;
-  vertical-align:middle;
-  width: 227px;
-  position:absolute;
-  top:0;
+  background-color: #39f;
+  color: #ffffff;
+  cursor: move;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  text-align: right;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  user-select: none;
 }
 
+#cmsModuleMenu .moduleMenuHeader #closeModuleMenu {
+  cursor: pointer;
+  color: #fff;
+  margin-right: 5px;
+  font-size: 14px !important;
+}
+
+/* Close link inside the header */
 #cmsModuleMenu .moduleMenuHeader a {
-	cursor: pointer;
-	color: #fff;
-	margin-right: 5px;
-	text-decoration: none;
+  cursor: pointer;
+  color: #fff;
+  margin-right: 5px;
+  text-decoration: none;
 }
 
 #cmsModuleMenu .moduleMenuHeader a i {
   font-size: 14px !important;
 }
 
+/* Hover effect for close link */
 #cmsModuleMenu .moduleMenuHeader a:hover {
-	color: #efefef;
-	text-decoration: none;
+  color: #efefef;
+  text-decoration: none;
 }
 
+/* Inner scroll area */
 #cmsModuleMenu #menuWrapper {
-  position:absolute;
-  top:32px;
-  padding: 0px 0px 0px 0px;
-  margin: 0px 0px 14px 1px;
-  overflow: hidden;
-  width: 225px;
-  height: 288px;
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  height: 320px; /* 340 - 20 header */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 5px;
+  box-sizing: border-box;
 }
 
 #menuWrapper a, #menuWrapper span {
-  font-size: 11px !important;
+  font-size: 12px !important;
 }
 
-#cmsModuleMenu a.scrolltop {
-  position:absolute;
-  top:18px;
-}
-
-#cmsModuleMenu a.scrolltop, #cmsModuleMenu a.scrollbottom {
-  display: block;
-  height: 14px;
-  background-color: #20a8d8;
-  cursor: hand;
-  cursor: pointer;
-  text-decoration: none;
-  width: 225px;
-  margin: 1px;
-  line-height: 10px;
-  font-size: 14px;
-  color: #fff;
-  text-align: center;
-  padding-top: 3px;
-}
-
-#cmsModuleMenu a.scrolltop:hover, #cmsModuleMenu a.scrollbottom:hover {
-  text-decoration: none;
-  background-color: #63c2de;
-}
-
-#cmsModuleMenu a.scrollbottom {
-  position: absolute;
-  bottom: 0px;
-  padding-top: 0;
-}
-
-#cmsModuleMenu a.scrollbottom i {
-  line-height: 10px;
-}
-
+/* UL styling */
 #menuWrapper ul {
-  list-style-image:none;
-  list-style-position:outside;
-  list-style-type:none;
-  margin:0;
-  padding:0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: block;
 }
 
 #menuWrapper ul li {
   display: block;
-  margin: -1px 0px 0px 0px;
-  border-top:1px solid #EFEFEF;
-  width: 225px;
-  position:relative;
+  margin: 0;
+  border-top: 1px solid #D2E4FD;
   color: #333333;
-  font-family: Arial, helvetica, sans-serif;
-  background-image:none;
-  padding-left:0px;
+  padding-left: 0;
+  position: relative;
+  width: 100%;
+  background-image: none;
 }
 
+/* Basic link look for list items */
 #menuWrapper ul li a {
   color: #000;
   display: block;
-  padding: 0px 5px 0px 5px;
-  background-color: #63c2de;
+  background-color: #cce5ff;
   text-decoration: none;
-  font-family: Arial, helvetica, sans-serif;
+  padding: 3px 5px;
+  font-family: "Open Sans", Arial, helvetica, sans-serif;
+  transition: background-color 0.2s ease-in-out;
+  border-bottom: 1px solid #20a8d8;
 }
 
+/* Hover color for subitems */
 #menuWrapper ul li a:hover {
-  background-color: #D2E4FD;
+  background-color: #fff;
 }
 
 #menuWrapper ul ul {
   display:none;
-
 }
 
-#menuWrapper ul ul {
+#menuWrapper ul li ul li a {
+  background-color: #fff;
+}
+
+#menuWrapper ul li ul li a:hover {
+  background-color: #20a8d8;
 }
 
 #menuWrapper ul li.active ul {
@@ -214,11 +214,11 @@
 
 #menuWrapper ul li a.expanded {
   color: #000;
-  background-color: #D2E4FD;
+  background-color: #fff;
   font-weight: bold;
-  border-bottom: 5px solid #20a8d8;
-  position:relative;
+  position: relative;
   z-index:100;
+  border-bottom: 1px solid #20a8d8;
 }
 
 #menuWrapper ul li a.expanded:after {
@@ -240,7 +240,7 @@
 }
 #menuWrapper ul li.active ul li a.expanded {
   color: #000;
-  background-color: #D2E4FD;
+  background-color: #fff;
   font-weight: bold;
   border-bottom: 1px solid #20a8d8;
 }
@@ -280,27 +280,24 @@
   width: 15px;
 }
 
-a.cmsModuleMenuLauncher {
-  color: #fff;
-  display: block;
-  background-color: #20a8d8;
-  padding: 3px 3px 3px 3px;
+.cmsModuleMenuLauncher {
+  padding: 5px;
   text-decoration: none;
   font-weight: bold;
-  font-size: 11px !important;
+  font-size: 12px;
+  color: #004085 !important;
 }
 
 a.cmsModuleMenuLauncher i {
-  font-size: 14px !important;
+  font-size: 16px !important;
 }
 
 a.cmsModuleMenuLauncher:hover {
   display: block;
-  background-color: #20a8d8;
-  text-decoration: none;
-  color: #151c55;
+  color: #fff !important;
   cursor: pointer;
   cursor: hand;
+  background-color: #004085 !important;
 }
 
 .CMSModuleChooserReadOnly, .CMSModuleChooserTarget, #menuWrapper {
@@ -312,8 +309,9 @@ a.cmsModuleMenuLauncher:hover {
 }
 
 .CMSModuleChooserReadOnly, .CMSModuleChooserTarget {
-  width: 155px;
-  border: 2px solid black;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #39f;
 }
 
 .CMSModuleChooserCrosshair {
@@ -321,4 +319,56 @@ a.cmsModuleMenuLauncher:hover {
   color: #000 !important;
   font-size: 16px;
   margin: 3px 5px;
+}
+
+.moduleChooserMenu {
+  border: 1px solid #b8daff;
+  margin-bottom: 8px;
+  background-color: #cce5ff;
+  border-left: 6px solid #39f;
+  border-radius: 4px;
+}
+
+.moduleChooserMenuInner {
+  position:relative;
+  z-index:1000;
+}
+
+.moduleChooserMenu .dragging {
+  opacity: 0.5;
+}
+
+.moduleChooserMenu .drop-target {
+  border-color: #2eb85c !important;
+  animation: glow 1s infinite alternate;
+  transition: border 0.2s ease-in-out;
+}
+
+.moduleChooserMenu .moduleContainer {
+  font-size: 12px !important;
+  font-family: "Open Sans", Arial, sans-serif !important;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px rgba(0, 150, 255, 0.5); }
+  50% { box-shadow: 0 0 15px rgba(0, 150, 255, 1); }
+  100% { box-shadow: 0 0 5px rgba(0, 150, 255, 0.5); }
+}
+
+.moduleHeaderContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.modulePositionSwitcher {
+  color: #004085 !important;
+  text-align: right;
+  border-top: 1px solid #39f;
+}
+
+.moduleBlockForm {
+  margin: 0;
+  padding: 0;
 }
