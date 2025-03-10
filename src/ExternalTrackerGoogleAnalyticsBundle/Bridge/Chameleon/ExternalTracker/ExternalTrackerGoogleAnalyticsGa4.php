@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 /*
  * This file is part of the Chameleon System (https://www.chameleonsystem.com).
@@ -13,32 +15,23 @@ namespace ChameleonSystem\ExternalTrackerGoogleAnalyticsBundle\Bridge\Chameleon\
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\ShopCurrencyBundle\Interfaces\ShopCurrencyServiceInterface;
-use TdbPkgExternalTracker;
-use TdbShopOrder;
-use TdbShopOrderItem;
-use TGlobal;
-use TPkgExternalTrackerState;
-use TPkgExternalTrackerState_PkgShop;
-use TShopBasketArticle;
 
-class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
+class ExternalTrackerGoogleAnalyticsGa4 extends \TdbPkgExternalTracker
 {
-
     /**
      * Set to true to enable debug mode. This will make events sent from the tracker
-     * visible in google analytics DebugView (Configure > DebugView in GA dashboard)
-     * @var bool
+     * visible in google analytics DebugView (Configure > DebugView in GA dashboard).
      */
     private bool $debugMode = false;
 
-    public function GetPreBodyClosingCode(TPkgExternalTrackerState $state)
+    public function GetPreBodyClosingCode(\TPkgExternalTrackerState $state)
     {
         $lines = parent::GetPreBodyClosingCode($state);
         $identifier = $this->getIdentifierCode($state);
         if (null === $identifier) {
             return $lines;
         }
-        $quotedIdentifier = TGlobal::OutJS($identifier);
+        $quotedIdentifier = \TGlobal::OutJS($identifier);
 
         $config = [];
         if ($this->debugMode) {
@@ -57,9 +50,9 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag("js", new Date());
-        
+
           gtag("config", "%1$s", %2$s);
-          
+
           %3$s
         </script>
         ', $quotedIdentifier, json_encode($config, JSON_FORCE_OBJECT), implode("\n", $events));
@@ -70,7 +63,7 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
     /**
      * Get identifier from active portal with fallback to tracker identifier.
      */
-    protected function getIdentifierCode(TPkgExternalTrackerState $state): ?string
+    protected function getIdentifierCode(\TPkgExternalTrackerState $state): ?string
     {
         $identifier = $this->fieldIdentifier;
         $page = $state->GetActivePage();
@@ -88,20 +81,21 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
     /**
      * Add to basket and remove from basket use the same payload and only one of them can happen at a time, so they
      * are handled together.
+     *
      * @see https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type=gtag#add_to_cart
      *
-     * @param TPkgExternalTrackerState&TPkgExternalTrackerState_PkgShop $state
+     * @param \TPkgExternalTrackerState&\TPkgExternalTrackerState_PkgShop $state
      */
-    protected function getBasketEvent(TPkgExternalTrackerState $state): string
+    protected function getBasketEvent(\TPkgExternalTrackerState $state): string
     {
-        /** @var TShopBasketArticle|false $event */
+        /** @var \TShopBasketArticle|false $event */
         $event = false;
-        if ($state->HasEvent(TPkgExternalTrackerState::EVENT_PKG_SHOP_ADD_TO_BASKET)) {
+        if ($state->HasEvent(\TPkgExternalTrackerState::EVENT_PKG_SHOP_ADD_TO_BASKET)) {
             $gaEvent = 'add_to_cart';
-            $event = $state->GetEventData(TPkgExternalTrackerState::EVENT_PKG_SHOP_ADD_TO_BASKET);
-        } elseif ($state->HasEvent(TPkgExternalTrackerState::EVENT_PKG_SHOP_REMOVE_FROM_BASKET)) {
+            $event = $state->GetEventData(\TPkgExternalTrackerState::EVENT_PKG_SHOP_ADD_TO_BASKET);
+        } elseif ($state->HasEvent(\TPkgExternalTrackerState::EVENT_PKG_SHOP_REMOVE_FROM_BASKET)) {
             $gaEvent = 'remove_from_cart';
-            $event = $state->GetEventData(TPkgExternalTrackerState::EVENT_PKG_SHOP_REMOVE_FROM_BASKET);
+            $event = $state->GetEventData(\TPkgExternalTrackerState::EVENT_PKG_SHOP_REMOVE_FROM_BASKET);
         }
 
         if (false === $event) {
@@ -122,19 +116,19 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
                 'price' => (float) $event->fieldPrice,
                 'currency' => $this->getActiveCurrencyCode(),
                 'quantity' => (float) $event->fieldQuantityInUnits,
-            ]]
+            ]],
         ];
 
         return sprintf('gtag("event", "%s", %s);', $gaEvent, json_encode($data));
     }
 
     /**
-     * @param TPkgExternalTrackerState&TPkgExternalTrackerState_PkgShop $state
+     * @param \TPkgExternalTrackerState&\TPkgExternalTrackerState_PkgShop $state
      */
-    protected function getOrderCompleteEvent(TPkgExternalTrackerState $state): string
+    protected function getOrderCompleteEvent(\TPkgExternalTrackerState $state): string
     {
-        /** @var TdbShopOrder|false $orderEvent */
-        $orderEvent = $state->GetEventData(TPkgExternalTrackerState::EVENT_PKG_SHOP_CREATE_ORDER);
+        /** @var \TdbShopOrder|false $orderEvent */
+        $orderEvent = $state->GetEventData(\TPkgExternalTrackerState::EVENT_PKG_SHOP_CREATE_ORDER);
         if (false === $orderEvent) {
             return '';
         }
@@ -147,12 +141,11 @@ class ExternalTrackerGoogleAnalyticsGa4 extends TdbPkgExternalTracker
             'shipping' => (float) $orderEvent->fieldShopShippingGroupPrice,
             'currency' => $orderEvent->GetFieldPkgShopCurrency()->fieldIso4217,
             'coupon' => $orderEvent->fieldShopOrderDiscount,
-            'items' => []
+            'items' => [],
         ];
 
         foreach ($orderEvent->GetFieldShopOrderItemList() as $i => $orderItem) {
-            /** @var TdbShopOrderItem $orderItem */
-
+            /** @var \TdbShopOrderItem $orderItem */
             $article = $orderItem->GetFieldShopArticle();
             $category = $article?->GetFieldShopCategory();
 
