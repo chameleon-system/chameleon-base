@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -25,7 +26,7 @@ class CMSTreeNodeSelectWYSIWYG extends CMSTreeNodeSelect
     }
 
     /**
-     * @param string       $fieldName
+     * @param string $fieldName
      * @param TCMSTreeNode $oNode
      *
      * @return string
@@ -52,6 +53,6 @@ class CMSTreeNodeSelectWYSIWYG extends CMSTreeNodeSelect
      */
     private function getRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

@@ -1,0 +1,256 @@
+{#
+@var TdbCmsTplModule module
+@var ?TdbCmsTplModuleInstance moduleInstance
+@var string createModuleMenu
+@var string activePortalId
+@var bool hasRightToEditModules
+@var bool hasRightToSwitchLayouts
+@var ?string pagedef
+@var ?string id
+@var ?string disableLinks
+@var ?string disableFrontendJs
+@var ?string previewMode
+@var ?string previewLanguageId
+@var string cmsMasterPageDefinitionSpotTableId
+@var ?TdbCmsMasterPagedefSpot cmsMasterPageDefSpot
+@var string moduleEditStateColor
+@var string menuPrefix
+@var array viewMapping
+@var string moduleSpotName
+@var array functionRights
+@var array fullModuleList
+@var array relatedTables
+@var string path_cms_controller_frontend
+@var string path_cms_controller
+#}
+
+<div class="moduleChooserMenu">
+    <div class="moduleChooserMenuInner">
+        <div class="CMSModuleChooserTarget moduleContainer" id="CMSModuleChooserTarget{{ menuPrefix|e('html_attr') }}"
+             data-spotname="{{ menuPrefix|e('html_attr') }}"
+             style="{% if moduleEditStateColor is not empty %}border-color: #{{ moduleEditStateColor|e('html_attr') }}{% endif %}">
+
+            {# active module header #}
+            <div id="moduleheaderline_{{ menuPrefix|e('html_attr') }}" class="moduleHeader">
+                <div class="moduleHeaderContainer">
+                    <div class="moduleType">
+                        {% if module is not null %}
+                            <i class="{{ module.fieldIconFontCssClass ?: 'fas fa-pen-square'|e('html_attr') }}"></i>
+                            {{ module.fieldName|e('html_attr') }}
+                        {% else %}
+                            <i class="fas fa-cube"></i>
+                            {{ 'chameleon_system_core.template_engine.slot_is_empty'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
+                        {% endif %}
+                    </div>
+                    <a id="launch{{ menuPrefix|e('html_attr') }}" class="cmsModuleMenuLauncher" href="javascript:void(0);">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
+            </div>
+
+            {# active module details #}
+            {% if module is not null and moduleInstance is not null %}
+                {% set viewName = viewMapping[moduleInstance.fieldTemplate] ?? moduleInstance.fieldTemplate %}
+                <div class="moduleInfo">
+                    <strong>{{ 'chameleon_system_core.template_engine.module_view'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}:</strong>
+                    {{ viewName|replace({'_': ' '})|e('html_attr') }}
+                </div>
+                <div class="moduleInfo">
+                    <strong>{{ 'chameleon_system_core.template_engine.slot_content'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}:</strong>
+                    {{ moduleInstance.fieldName|e('html_attr') }}
+                </div>
+                <div class="modulePositionSwitcher">
+                    <span>{{ 'chameleon_system_core.template_engine.action_move_slot_content'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}</span>
+                    <div class="CMSModuleChooserCrosshair fas fa-random" data-spotname="{{ moduleSpotName|e('html_attr') }}"></div>
+                </div>
+            {% endif %}
+
+            <form class="moduleBlockForm" name="moduleblock{{ menuPrefix|e('html_attr') }}" method="post" action="{{ path_cms_controller_frontend|e('html_attr') }}" accept-charset="UTF-8">
+                <input type="hidden" name="__modulechooser" value="true"/>
+                <input type="hidden" name="pagedef" value="{{ pagedef|e('html_attr') }}"/>
+                <input type="hidden" name="id" value="{{ id|e('html_attr') }}"/>
+                <input type="hidden" name="module_fnc[{{ moduleSpotName|e('html_attr') }}]" value=""/>
+                {% if moduleInstance is not null %}
+                    <input type="hidden" name="moduleid" value="{{ moduleInstance.fieldCmsTplModuleId|e('html_attr') }}"/>
+                    <input type="hidden" name="view" value="{{ moduleInstance.fieldTemplate|e('html_attr') }}"/>
+                    <input type="hidden" name="instancename" value="{{ moduleInstance.fieldName|e('html_attr') }}"/>
+                    <input type="hidden" name="moduleinstanceid" value="{{ moduleInstance.id|e('html_attr') }}"/>
+                {% else %}
+                    <input type="hidden" name="moduleid" value=""/>
+                    <input type="hidden" name="view" value=""/>
+                {% endif %}
+                {% if disableLinks is not null %}<input type="hidden" name="esdisablelinks" value="{{ disableLinks|e('html_attr') }}" />{% endif %}
+                {% if disableFrontendJs is not null %}<input type="hidden" name="esdisablefrontendjs" value="{{ disableFrontendJs|e('html_attr') }}" />{% endif %}
+                {% if previewMode is not null %}<input type="hidden" name="__previewmode" value="{{ previewMode|e('html_attr') }}" />{% endif %}
+                {% if previewLanguageId is not null %}<input type="hidden" name="previewLanguageId" value="{{ previewLanguageId|e('html_attr') }}" />{% endif %}
+            </form>
+        </div>
+    </div>
+
+    {# chameleon module edit overlay menu #}
+    <div id="{{ menuPrefix|e('html_attr') }}MenuTree" class="moduleChooserMenuTree" style="display: none;">
+        <ul>
+            {% if moduleInstance is not null %}
+                {% set relatedTable = relatedTables|first %}
+                {% set relatedTables = relatedTables|slice(1) %}
+
+                {% if relatedTable is not empty %}
+                    <li>
+                        <a href="javascript:void(0);" 
+                        {% if relatedTables|length > 0 %}
+                            class="hasChildren" onclick="openMenuLevel(this); return false"
+                        {% else %}
+                            onclick="EditTable('{{ relatedTable.id|e('js') }}', '{{ moduleInstance.id|url_encode|e('js') }}', ''); return false;"
+                                {% endif %}>
+                            <span class="menueicon">
+                                <i class="fas fa-edit"></i> 
+                                {{ 'chameleon_system_core.template_engine.slot_edit'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
+                            </span>
+                        </a>
+                        <ul>
+                            {% for tmpRelatedTable in relatedTables %}
+                                {% set bgColor = moduleInstance.GetModuleConnectedTableColorEditState(tmpRelatedTable.id)|e('html') %}
+                                {% set sJS = "onclick=\"EditTable('" ~ tmpRelatedTable.id|e('js') ~ "', '" ~ moduleInstance.id|url_encode|e('js') ~ "', ''); return false;\"" %}
+                                <li>
+                                    <a href="javascript:void(0);" style="background-color: #{{ bgColor }}" {{ sJS|raw }}>
+                                        <span class="menueicon">
+                                            <i class="fas fa-edit"></i> {{ tmpRelatedTable.name|e('html') }}
+                                        </span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+
+                {% if hasRightToEditModules %}
+                    {% if functionRights.instanceChangeViewAllowed and viewMapping|length > 1%}
+                        <li>
+                            <a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this); return false;">
+                                <span class="menueicon">
+                                    <i class="fas fa-th-large"></i>
+                                    {{ 'chameleon_system_core.template_engine.action_change_template'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
+                                </span>
+                            </a>
+                            <ul>
+                                {% for sView, viewName in viewMapping %}
+                                    {% set sNameView = viewName|e('html') %}
+                                    {% set jsFunction = "onclick=\"ChangeView('" ~ moduleSpotName|e('html') ~ "', '" ~ sView|e('html') ~ "'); return false;\"" %}
+
+                                    {% if sView == moduleInstance.sqlData.template %}
+                                        {% set sNameView = '<strong>' ~ viewName|e('html') ~ '</strong>' %}
+                                        {% set jsFunction = 'onclick="return false"' %}
+                                    {% endif %}
+                                    <li>
+                                        <a href="javascript:void(0);" {{ jsFunction|raw }}>
+                                            <span class="menueicon">
+                                                <i class="fas fa-th-large"></i> {{ sNameView|raw }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+
+                    {% set functionMenuItems = [
+                        {
+                            'right': 'instanceRenameInstanceAllowed',
+                            'icon': 'fas fa-font',
+                            'translationKey': 'chameleon_system_core.template_engine.slot_rename',
+                            'onClickMethod': 'Rename'
+                        },
+                        {
+                            'right': 'instanceClearInstanceAllowed',
+                            'icon': 'fas fa-undo',
+                            'translationKey': 'chameleon_system_core.template_engine.slot_reset',
+                            'onClickMethod': 'ClearModuleInstance'
+                        },
+                        {
+                            'right': 'instanceDeleteInstanceAllowed',
+                            'icon': 'fas fa-trash-alt',
+                            'translationKey': 'chameleon_system_core.template_engine.action_delete_instance_content',
+                            'onClickMethod': 'DeleteModuleInstance'
+                        },
+                        {
+                            'right': 'instanceCopyInstanceAllowed',
+                            'icon': 'fas fa-copy',
+                            'translationKey': 'chameleon_system_core.template_engine.slot_copy_content',
+                            'onClickMethod': 'CopyModuleInstance'
+                        }
+                    ] %}
+
+                    {% for functionMenuItem in functionMenuItems %}
+                        {% if functionMenuItem.right is defined and functionRights[functionMenuItem.right] is defined and functionRights[functionMenuItem.right] and moduleInstance is not null %}
+                            <li>
+                                <a href="javascript:void(0);"
+                                   onclick="{{ functionMenuItem.onClickMethod }}('{{ moduleSpotName|e('html') }}', '{{ moduleInstance.sqlData.name|e('js') }}'); return false;">
+                                    <span class="menueicon">
+                                        <i class="{{ functionMenuItem.icon }}"></i>
+                                        {{ functionMenuItem.translationKey|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
+                                    </span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+
+            {% if hasRightToEditModules %}
+                {% if functionRights.instanceNewInstanceAllowed %}
+                    <li>
+                        <a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this); return false;">
+                            <span class="menueicon">
+                                <i class="fas fa-plus-square"></i>
+                                {{ 'chameleon_system_core.template_engine.action_create_module_instance'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
+                            </span>
+                        </a>
+                        <ul>
+                            {{ createModuleMenu|raw }}
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="hasChildren" onclick="openMenuLevel(this); return false;">
+                            <span class="menueicon">
+                                <i class="fas fa-check-square"></i>
+                                {{ 'chameleon_system_core.template_engine.slot_load_content_headline'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
+                            </span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0);"
+                                   onclick="LoadModuleInstance('{{ moduleSpotName|e('html') }}', '{{ id|e('js') }}', ''); return false;">
+                                    <span class="menueicon">
+                                        <i class="fas fa-share-alt-square"></i>
+                                        {{ 'chameleon_system_core.template_engine.slot_load_instance'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);"
+                                   onclick="LoadModuleInstanceCopy('{{ moduleSpotName|e('html') }}', '{{ id|e('js') }}', ''); return false;">
+                                    <span class="menueicon">
+                                        <i class="fas fa-copy"></i>
+                                        {{ 'chameleon_system_core.template_engine.slot_load_as_copy'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+
+                {% if hasRightToSwitchLayouts %}
+                    <li>
+                        <a href="javascript:void(0);"
+                           onclick="EditCmsMasterSpot('{{ PATH_CMS_CONTROLLER|e('js') }}', '{{ cmsMasterPageDefinitionSpotTableId|e('js') }}', '{{ cmsMasterPageDefSpot.id|e('js') }}');">
+                            <span class="menueicon">
+                                <i class="fas fa-tools"></i>
+                                {{ 'chameleon_system_core.template_engine.slot_edit_definition'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
+                            </span>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
+</div>

@@ -72,7 +72,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @var TCMSTableConf|null
      */
-    public $_oTableConf = null;
+    public $_oTableConf;
 
     /**
      * sets the state of field based translation overload fallback
@@ -1478,7 +1478,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $targetTableName = $oFieldConfig->GetPropertyTableNameFrontend();
 
         if (is_null($sClassName)) {
-            $sClassName = 'TCMSRecord';
             $sTargetTable = $oFieldConfig->oDefinition->GetFieldtypeConfigKey('connectedTableName');
             if (!empty($sTargetTable)) {
                 $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTargetTable);
@@ -1496,14 +1495,14 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             }
         }
 
-        if ('Tdb' == substr($sClassName, 0, 3)) {
+        if ('Tdb' === substr($sClassName, 0, 3)) {
             $sListClassName = $sClassName.'List';
         }
 
         $sCacheName = 'propertyField_'.$sFieldName.'_'.$sClassName.'_'.$sOrderBy;
 
         // add filter conditions to cache key
-        if (!is_null($aFilterConditions) && is_array($aFilterConditions)) {
+        if (is_array($aFilterConditions)) {
             foreach ($aFilterConditions as $key => $val) {
                 $sCacheName .= '_'.$key.'_'.$val;
             }

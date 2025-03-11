@@ -11,7 +11,6 @@
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -28,17 +27,13 @@ class CMSTemplateEngine extends TCMSModelBase
     /**
      * is true if a page has a layout definition file set (pagedef)
      * if false the template engine redirects to the layout manager.
-     *
-     * @var bool
      */
-    protected $bPageDefinitionAssigned = false;
+    protected bool $bPageDefinitionAssigned = false;
 
     /**
      * cms_tpl_page id.
-     *
-     * @var string
      */
-    protected $sPageId;
+    protected string $sPageId = '';
 
     /**
      * the active layout.
@@ -49,10 +44,8 @@ class CMSTemplateEngine extends TCMSModelBase
 
     /**
      * the requested mode (function or component) of the template engine being called.
-     *
-     * @var string
      */
-    protected $sMode;
+    protected string $sMode = '';
 
     /**
      * the page being viewed.
@@ -63,10 +56,8 @@ class CMSTemplateEngine extends TCMSModelBase
 
     /**
      * the portal of the page being viewed.
-     *
-     * @var TCMSPortal
      */
-    protected $oPortal;
+    protected ?TCMSPortal $oPortal = null;
 
     /**
      * the table manager for.
@@ -77,24 +68,20 @@ class CMSTemplateEngine extends TCMSModelBase
 
     /**
      * table id of cms_tpl_page.
-     *
-     * @var string
      */
-    protected $sTableID;
+    protected string $sTableID = '';
 
     /**
      * array of all modules of all spots of the page.
      *
-     * @var array - key = spotname
+     * key = spotname
      */
-    protected $aModuleList;
+    protected ?array $aModuleList = null;
 
     /**
      * indicates if the record is rendered in readonly mode.
-     *
-     * @var bool
      */
-    protected $bIsReadOnlyMode = false;
+    protected bool $bIsReadOnlyMode = false;
 
     /**
      * {@inheritdoc}
@@ -138,9 +125,7 @@ class CMSTemplateEngine extends TCMSModelBase
      */
     private function getPageIdFromRequest()
     {
-        $filter = $this->getInputFilter();
-
-        return $filter->getFilteredInput('id');
+        return $this->getInputFilter()->getFilteredInput('id');
     }
 
     /**
@@ -156,14 +141,12 @@ class CMSTemplateEngine extends TCMSModelBase
     {
         $bMainNavigationIsSet = false;
         $oCmsTplPage = TdbCmsTplPage::GetNewInstance();
-        /* @var $oCmsTplPage TdbCmsTplPage */
         $oCmsTplPage->Load($this->sPageId);
         if (!empty($oCmsTplPage->fieldPrimaryTreeIdHidden)) {
             $bMainNavigationIsSet = true;
         }
 
         $oRecordData = new TCMSstdClass();
-        /* @var $oReturnData TCMSstdClass */
         $oRecordData->bMainNavigationIsSet = $bMainNavigationIsSet;
         $oRecordData->sPageId = $this->sPageId;
         $oRecordData->sToasterErrorMessage = ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.error_primary_navigation_node_required_before_layout_selection');
@@ -213,7 +196,7 @@ class CMSTemplateEngine extends TCMSModelBase
         }
 
         $breadcrumb = $this->getBreadcrumbService()->getBreadcrumb();
-        $breadcrumb->AddItem($params, $breadcrumbTitle, join('::', ['CMSTemplateEngine', 'removeHistoryEntry']));
+        $breadcrumb?->AddItem($params, $breadcrumbTitle, implode('::', ['CMSTemplateEngine', 'removeHistoryEntry']));
     }
 
     public static function removeHistoryEntry(array $historyEntry, string $tableId, string $entryId, string $cmsTblConfId): bool
@@ -342,7 +325,7 @@ class CMSTemplateEngine extends TCMSModelBase
         while ($oBreadCrumb = $oBreadcrumbs->Next()) {
             $path = '';
             ++$naviCount;
-            if ($naviCount == $total) {
+            if ($naviCount === $total) {
                 $margin = 0;
             } else {
                 $margin = 3;
@@ -358,7 +341,7 @@ class CMSTemplateEngine extends TCMSModelBase
                 ++$count;
             }
 
-            if (!stristr($subPath, '<li>')) { // no node active
+            if (false === stripos($subPath, '<li>')) { // no node active
                 $subPath .= '<li>'.ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.no_node_selected').'</li>';
             }
 
@@ -522,7 +505,7 @@ class CMSTemplateEngine extends TCMSModelBase
         </script>';
         }
 
-        if ('cmp_loadmoduleinstance' == $this->aModuleConfig['view']) {
+        if ('cmp_loadmoduleinstance' === $this->aModuleConfig['view']) {
             $aIncludes[] = "<script type=\"text/javascript\">
       function openModuleViewChooseDialog() {
         CreateModalDialogFromContainer('chooseModuleViewDialog');
@@ -541,132 +524,124 @@ class CMSTemplateEngine extends TCMSModelBase
     {
         $aIncludes = parent::GetHtmlFooterIncludes();
         $aIncludes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
+        $aIncludes[] = '<script>
+            window.addEventListener("load", () => {
+                coreui.Sidebar.getInstance(document.querySelector("#sidebar")).hide();
+            });
+        </script>';
 
-        if ('cmp_loadmoduleinstance' == $this->aModuleConfig['view']) {
-            $aChooseModuleViewDialog = $this->getChooseModuleViewDialog();
-            if (is_array($aChooseModuleViewDialog) && isset($aChooseModuleViewDialog['html'])) {
-                $aIncludes[] = $aChooseModuleViewDialog['html'];
+        if ('cmp_loadmoduleinstance' === $this->aModuleConfig['view']) {
+            $chooseModuleViewDialog = $this->getChooseModuleViewDialog();
+            if (null !== $chooseModuleViewDialog && isset($chooseModuleViewDialog['html'])) {
+                $aIncludes[] = $chooseModuleViewDialog['html'];
             }
         }
 
         return $aIncludes;
     }
 
-    /**
-     * @return array|bool
-     */
-    public function getChooseModuleViewDialog()
+    public function getChooseModuleViewDialog(): ?array
     {
-        $returnVal = false;
+        $returnVal = null;
 
-        $sDialogContent = '<div id="chooseModuleViewDialog" style="display:none;">
+        $dialogContent = '<div id="chooseModuleViewDialog" style="display:none;">
       <h2>'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_module_view'))."</h2>\n";
         if ($this->global->UserDataExists('instanceid') && '' !== $this->global->GetUserData('instanceid')) {
-            $sInstanceId = $this->global->GetUserData('instanceid');
-            $sSpotName = $this->global->GetUserData('spotName');
+            $instanceId = $this->global->GetUserData('instanceid');
+            $spotName = $this->global->GetUserData('spotName');
 
-            $oModuleListTableConf = new TCMSTableConf();
-            /* @var $oModuleListTableConf TCMSTableConf */
-            $oModuleListTableConf->LoadFromField('name', 'cms_tpl_module_instance');
-            /** @var $oEditor TCMSTableEditorManager */
-            $oEditor = new TCMSTableEditorManager();
-            $oEditor->Init($oModuleListTableConf->id, $sInstanceId);
+            $moduleListTableConf = new TCMSTableConf();
+            $moduleListTableConf->LoadFromField('name', 'cms_tpl_module_instance');
+            $editor = new TCMSTableEditorManager();
+            $editor->Init($moduleListTableConf->id, $instanceId);
 
             $returnVal = [];
-            $returnVal['bIsTableLocked'] = $oEditor->IsRecordLocked();
+            $returnVal['bOpenDialog'] = false;
+            $returnVal['bIsTableLocked'] = $editor->IsRecordLocked();
 
-            $sSubmitButton = TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_instance'), "javascript:$('#loadmoduleclass').submit();", 'fas fa-check');
+            $submitButton = TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_instance'), "javascript:$('#loadmoduleclass').submit();", 'fas fa-check');
 
-            $sDialogContent .= '<form name="loadmoduleclass" id="loadmoduleclass" method="post" action="'.URL_WEB_CONTROLLER.'" accept-charset="UTF-8">'."\n".'
+            $dialogContent .= '<form name="loadmoduleclass" id="loadmoduleclass" method="post"
+action="/cms/frontend?__modulechooser=true&esdisablelinks=true&esdisablefrontendjs=true&__previewmode=true" accept-charset="UTF-8">'."\n".'
     <input type="hidden" name="pagedef" value="'.$this->sPageId.'"/>  '."\n".'
     <input type="hidden" name="id" value="'.$this->sPageId.'"/> '."\n".'
-    <input type="hidden" name="instanceid" value="'.$sInstanceId.'"/>  '."\n".'
+    <input type="hidden" name="instanceid" value="'.$instanceId.'"/>  '."\n".'
     <input type="hidden" name="__modulechooser" value="true"/>  '."\n".'
-    <input type="hidden" name="spotname" value="'.$sSpotName.'"/> '."\n".'
-    <input type="hidden" name="module_fnc['.$sSpotName.']" value="SetInstance"/>'."\n";
+    <input type="hidden" name="spotname" value="'.$spotName.'"/> '."\n".'
+    <input type="hidden" name="module_fnc['.$spotName.']" value="SetInstance"/>'."\n";
 
-            if ($this->global->UserDataExists('bLoadCopy') && '1' == $this->global->GetUserData('bLoadCopy')) {
-                $sDialogContent .= '<input type="hidden" name="bLoadCopy" value="1"/>';
+            if ($this->global->UserDataExists('bLoadCopy') && '1' === $this->global->GetUserData('bLoadCopy')) {
+                $dialogContent .= '<input type="hidden" name="bLoadCopy" value="1"/>';
             }
 
             $previewLanguageId = $this->getBackendSession()->getCurrentEditLanguageId();
-            $sDialogContent .= '<input type="hidden" name="previewLanguageId" value="'.TGlobal::OutHTML($previewLanguageId).'"/>  '."\n".'';
+            $dialogContent .= '<input type="hidden" name="previewLanguageId" value="'.TGlobal::OutHTML($previewLanguageId).'"/>  '."\n".'';
 
-            /** @var $oCmsTplModuleInstance TdbCmsTplModuleInstance */
-            $oCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance($sInstanceId);
+            $cmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance($instanceId);
 
             $lastUsedTemplate = '';
-            $oViewList = false;
-            if (is_object($oCmsTplModuleInstance)) {
-                $oCmsTplModule = $oCmsTplModuleInstance->GetFieldCmsTplModule();
-                if (!empty($oCmsTplModuleInstance->fieldTemplate)) {
-                    $lastUsedTemplate = $oCmsTplModuleInstance->fieldTemplate;
+            $viewList = null;
+            if (is_object($cmsTplModuleInstance)) {
+                $cmsTplModule = $cmsTplModuleInstance->GetFieldCmsTplModule();
+                if (!empty($cmsTplModuleInstance->fieldTemplate)) {
+                    $lastUsedTemplate = $cmsTplModuleInstance->fieldTemplate;
                 }
-                /** @var $oCmsTplModule TdbCmsTplModule */
-                if ($oCmsTplModule) {
-                    /** @var $oViewList TIterator */
-                    $oViewList = $oCmsTplModule->GetViews();
+                if (null !== $cmsTplModule) {
+                    /** @var $viewList TIterator */
+                    $viewList = $cmsTplModule->GetViews();
                 }
             }
             $count = 0;
 
-            $sListContent = '';
+            $listContent = '';
 
-            if ($oViewList && $oViewList->Length() > 0) {
-                if (1 == $oViewList->Length()) {
-                    $returnVal['bOpenDialog'] = false;
-                } else {
+            if (null !== $viewList && $viewList->Length() > 0) {
+                if ($viewList->Length() > 1) {
                     $returnVal['bOpenDialog'] = true;
                 }
-                $sListContent .= '<div style="padding: 5px;"><select name="template" style="min-width:200px">'."\n";
+                $listContent .= '<div style="padding: 5px;"><select name="template" style="min-width:200px">'."\n";
 
-                $aViews = [];
-                while ($sViewName = $oViewList->Next()) {
-                    $aViews[$sViewName] = '';
+                $views = [];
+                while ($sViewName = $viewList->Next()) {
+                    $views[$sViewName] = '';
                 }
-                ksort($aViews);
-                $bLastUsedTemplateInArray = array_key_exists($lastUsedTemplate, $aViews);
-                if ($bLastUsedTemplateInArray) {
-                    $aViews[$lastUsedTemplate] = ' selected';
+                ksort($views);
+                $lastUsedTemplateInArray = array_key_exists($lastUsedTemplate, $views);
+                if (false !== $lastUsedTemplateInArray) {
+                    $views[$lastUsedTemplate] = ' selected';
                 }
 
-                foreach ($aViews as $sViewName => $sSelect) {
-                    if ($count < 1 && !$bLastUsedTemplateInArray) {
-                        $sSelect = ' selected';
+                foreach ($views as $sViewName => $selected) {
+                    if ($count < 1 && !$lastUsedTemplateInArray) {
+                        $selected = ' selected';
                     }
                     ++$count;
-                    $sListContent .= '<option'.$sSelect.' value="'.TGlobal::OutHTML($sViewName).'">'.TGlobal::OutHTML($sViewName).'</option>'."\n";
+                    $listContent .= '<option'.$selected.' value="'.TGlobal::OutHTML($sViewName).'">'.TGlobal::OutHTML($sViewName).'</option>'."\n";
                 }
-                $sListContent .= '</select></div>'."\n";
+                $listContent .= '</select></div>'."\n";
+            } else {
+                $dialogContent .= '<input type="hidden" name="template" value="'.$lastUsedTemplate.'"/>';
             }
 
-            if (0 == $count) {
-                $sSubmitButton = '';
+            if (0 === $count) {
+                $submitButton = '';
             }
 
-            $sDialogContent .= "<div class=\"cleardiv\" style=\"margin-bottom: 10px;\">&nbsp;</div>\n".$sListContent.'<div style="padding-top: 10px;">
-          '.$sSubmitButton.'
+            $dialogContent .= "<div class=\"cleardiv\" style=\"margin-bottom: 10px;\">&nbsp;</div>\n".$listContent.'<div style="padding-top: 10px;">
+          '.$submitButton.'
           </div>
         </form>
       ';
         }
-        $sDialogContent .= '</div>';
-        $returnVal['html'] = $sDialogContent;
+        $dialogContent .= '</div>';
+        $returnVal['html'] = $dialogContent;
 
         return $returnVal;
     }
 
-    /**
-     * @return InputFilterUtilInterface
-     */
-    private function getInputFilter()
+    private function getInputFilter(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
-    }
-
-    private function getLanguageService(): LanguageServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     private function getBackendSession(): BackendSessionInterface

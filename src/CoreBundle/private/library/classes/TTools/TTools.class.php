@@ -334,7 +334,7 @@ class TTools
             $tableId = self::GetCMSTableId($sTableName);
             $query = "SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableId)."' AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
             $result = MySqlLegacySupport::getInstance()->query($query);
-            if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
+            if (1 === MySqlLegacySupport::getInstance()->num_rows($result)) {
                 $returnVal = true;
             }
         } else {
@@ -344,7 +344,12 @@ class TTools
             } else {
                 $query = 'SHOW FIELDS FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` LIKE '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
                 $result = MySqlLegacySupport::getInstance()->query($query);
-                if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
+
+                if (false === $result) {
+                    throw new Exception('Error in query: '.$query.' - '.MySqlLegacySupport::getInstance()->error());
+                }
+
+                if (1 === MySqlLegacySupport::getInstance()->num_rows($result)) {
                     $returnVal = true;
                 }
 
@@ -851,15 +856,15 @@ class TTools
         static $aCodeList;
         if (!$aCodeList) {
             $aCodeList = [
-                UPLOAD_ERR_INI_SIZE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
-                UPLOAD_ERR_FORM_SIZE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
-                UPLOAD_ERR_PARTIAL => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_interrupted'),
-                UPLOAD_ERR_NO_FILE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_no_file'),
-                UPLOAD_ERR_NO_TMP_DIR => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+                UPLOAD_ERR_INI_SIZE => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
+                UPLOAD_ERR_FORM_SIZE => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
+                UPLOAD_ERR_PARTIAL => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_interrupted'),
+                UPLOAD_ERR_NO_FILE => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_no_file'),
+                UPLOAD_ERR_NO_TMP_DIR => ServiceLocator::get('translator')->trans(
                     'chameleon_system_core.field_document.upload_error_tmp_folder_not_writable'
                 ),
-                UPLOAD_ERR_CANT_WRITE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unable_to_save_to_disc'),
-                UPLOAD_ERR_EXTENSION => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_invalid_file_extension'),
+                UPLOAD_ERR_CANT_WRITE => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unable_to_save_to_disc'),
+                UPLOAD_ERR_EXTENSION => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_invalid_file_extension'),
             ];
         }
 
@@ -867,7 +872,7 @@ class TTools
         if (array_key_exists($iUploadErrorCode, $aCodeList)) {
             $sError = $aCodeList[$iUploadErrorCode];
         } else {
-            $sError = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unknown_error');
+            $sError = ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unknown_error');
         }
 
         return $sError;

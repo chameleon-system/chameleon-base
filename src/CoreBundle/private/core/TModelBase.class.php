@@ -165,8 +165,6 @@ class TModelBase
      * this function should fill the data array and return a pointer to it
      * (pointer because it may contain objects).
      *
-     * @deprecated - use a mapper instead (see getMapper)
-     *
      * @return array<string, mixed>
      */
     public function Execute()

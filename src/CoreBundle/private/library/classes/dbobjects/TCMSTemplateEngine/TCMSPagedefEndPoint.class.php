@@ -72,22 +72,18 @@ class TCMSPagedefEndPoint extends TCMSPage
     /**
      * if object is found in cache, then we return it from cache, else we create
      * a new instance, save it to cache, and return it.
-     *
-     * @param int $iPageId
-     *
-     * @return TCMSPagedef
      */
-    public static function GetCachedInstance($iPageId)
+    public static function GetCachedInstance(string $pageId): TCMSPagedef
     {
-        static $aPageCache = [];
-        if (!array_key_exists($iPageId, $aPageCache)) {
-            $aPageCache[$iPageId] = null;
-            $oTCMSPagedef = new TCMSPagedef();
-            $oTCMSPagedef->Load($iPageId);
-            $aPageCache[$iPageId] = $oTCMSPagedef;
+        static $pageCache = [];
+        if (false === array_key_exists($pageId, $pageCache)) {
+            $pageCache[$pageId] = null;
+            $cmsPageDefinition = new TCMSPagedef();
+            $cmsPageDefinition->Load($pageId);
+            $pageCache[$pageId] = $cmsPageDefinition;
         }
 
-        return $aPageCache[$iPageId];
+        return $pageCache[$pageId];
     }
 
     /**
@@ -214,7 +210,7 @@ class TCMSPagedefEndPoint extends TCMSPage
                           WHERE `cms_tpl_page_id` = :id
                           AND `cms_master_pagedef_spot_id` = :spotId';
 
-                $recordID = $databaseConnection->fetchColumn($query, [
+                $recordID = $databaseConnection->fetchOne($query, [
                     'id' => $this->id,
                     'spotId' => $sSpotID,
                 ]);

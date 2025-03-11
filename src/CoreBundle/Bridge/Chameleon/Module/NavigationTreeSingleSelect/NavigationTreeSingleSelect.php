@@ -65,7 +65,7 @@ class NavigationTreeSingleSelect extends \MTPkgViewRendererAbstractModuleMapper
         $this->isPortalSelectMode = 'portalSelect' === $portalSelectMode;
         $this->isPortalHomeNodeSelectMode = 'portalHomePage' === $portalSelectMode;  // also 404-page-selection
         // NOTE the selection of "Page not found" for a portal is handled special (old) with TCMSFieldPortalHomeTreeNode.
-        //   The "normal" selection of a tree node anywhere (i. e. for system pages) is handled with TCMSFieldTreeNode.
+        // The "normal" selection of a tree node anywhere (i. e. for system pages) is handled with TCMSFieldTreeNode.
 
         $this->isSelectModeForPage = 'true' === $this->inputFilterUtil->getFilteredGetInput('selectModeForPage', 'false');
     }
@@ -91,7 +91,7 @@ class NavigationTreeSingleSelect extends \MTPkgViewRendererAbstractModuleMapper
 
             $tableNameSubmitted = $this->inputFilterUtil->getFilteredGetInput('tableName');
             if (null !== $tableNameSubmitted) {
-                $tableNameForUpdate = $tableNameSubmitted; // TODO this always right?
+                $tableNameForUpdate = $tableNameSubmitted; // @TODO Is this always right?
             }
 
             $isSelectModeForPage = 'cms_tpl_page' === $tableNameForUpdate;
