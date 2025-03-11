@@ -10,6 +10,7 @@
  */
 
 use Symfony\Component\HttpFoundation\Request;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * @deprecated since 6.3.8 - use NavigationTreeSingleSelectWysiwyg instead
@@ -52,6 +53,6 @@ class CMSTreeNodeSelectWYSIWYG extends CMSTreeNodeSelect
      */
     private function getRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }
