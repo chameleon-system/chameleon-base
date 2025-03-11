@@ -16,7 +16,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
  * picks a node from a tree.
- * /**/
+ */
 class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterface
 {
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
@@ -150,7 +150,6 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
         $aMethodData['sReturnType'] = 'string|null';
 
         $oViewParser = new TViewParser();
-        /* @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $oViewParser->AddVarArray($aMethodData);
 
