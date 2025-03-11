@@ -153,6 +153,43 @@ function initModuleChooser() {
     });
 }
 
+function closeModuleMenu() {
+    cmsModuleMenu.style.display = "none";
+    document.querySelectorAll("#cmsModuleMenu ul").forEach(ul => {
+        ul.style.display = "none";
+    });
+    document.querySelectorAll("#cmsModuleMenu li.active").forEach(activeItem => {
+        activeItem.classList.remove("active");
+    });
+
+    const topLevelUl = document.querySelector("#cmsModuleMenu #menuWrapper > ul");
+    if (topLevelUl) {
+        topLevelUl.style.display = "block";
+    }
+}
+
+function makeDraggable(element, handle) {
+    let offsetX, offsetY, isDragging = false;
+
+    handle.addEventListener("mousedown", (event) => {
+        isDragging = true;
+        offsetX = event.clientX - element.getBoundingClientRect().left;
+        offsetY = event.clientY - element.getBoundingClientRect().top;
+        event.preventDefault();
+    });
+
+    document.addEventListener("mousemove", (event) => {
+        if (isDragging) {
+            element.style.left = `${event.clientX - offsetX}px`;
+            element.style.top = `${event.clientY - offsetY}px`;
+        }
+    });
+
+    document.addEventListener("mouseup", () => {
+        isDragging = false;
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     initModuleChooser();
 
@@ -160,21 +197,6 @@ document.addEventListener("DOMContentLoaded", function () {
     cmsModuleMenu.id = "cmsModuleMenu";
     cmsModuleMenu.style.display = "none";
     document.body.appendChild(cmsModuleMenu);
-
-    function closeModuleMenu() {
-        cmsModuleMenu.style.display = "none";
-        document.querySelectorAll("#cmsModuleMenu ul").forEach(ul => {
-            ul.style.display = "none";
-        });
-        document.querySelectorAll("#cmsModuleMenu li.active").forEach(activeItem => {
-            activeItem.classList.remove("active");
-        });
-
-        const topLevelUl = document.querySelector("#cmsModuleMenu #menuWrapper > ul");
-        if (topLevelUl) {
-            topLevelUl.style.display = "block";
-        }
-    }
 
     document.querySelectorAll(".moduleChooserMenu .cmsModuleMenuLauncher").forEach(launcher => {
         launcher.addEventListener("click", event => {
@@ -229,25 +251,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
-function makeDraggable(element, handle) {
-    let offsetX, offsetY, isDragging = false;
-
-    handle.addEventListener("mousedown", (event) => {
-        isDragging = true;
-        offsetX = event.clientX - element.getBoundingClientRect().left;
-        offsetY = event.clientY - element.getBoundingClientRect().top;
-        event.preventDefault();
-    });
-
-    document.addEventListener("mousemove", (event) => {
-        if (isDragging) {
-            element.style.left = `${event.clientX - offsetX}px`;
-            element.style.top = `${event.clientY - offsetY}px`;
-        }
-    });
-
-    document.addEventListener("mouseup", () => {
-        isDragging = false;
-    });
-}
