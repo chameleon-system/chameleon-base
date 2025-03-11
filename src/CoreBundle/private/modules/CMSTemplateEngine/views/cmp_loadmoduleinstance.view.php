@@ -7,19 +7,18 @@ $sSpotName = $global->GetExecutingModulePointer()->sModuleSpotName;
 $sLoadCopy = (isset($bLoadCopy) && '1' === $bLoadCopy) ? ('&bLoadCopy='.$bLoadCopy) : ('');
 ?>
 <script type="text/javascript">
-    var sModuleInstanceID = '';
+    let sModuleInstanceID = '';
 
     function LoadCMSInstance(id) {
         sModuleInstanceID = id;
         GetAjaxCallTransparent('<?php echo $urlUtil->getArrayAsUrl(
-                [
-                    'pagedef' => 'templateengine',
-                    'module_fnc' =>
-                    [
-                        $sSpotName => 'ExecuteAjaxCall'
-                    ],
-                        '_fnc' => 'getChooseModuleViewDialog'
-                ], PATH_CMS_CONTROLLER.'?', '&'); ?>&instanceid=' + id + '&id=<?php echo $data['id']; ?>&spotName=<?php echo $data['spotname'].$sLoadCopy; ?>', LoadModuleInstanceCallback);
+            [
+                'pagedef' => 'templateengine',
+                'module_fnc' => [
+                    $sSpotName => 'ExecuteAjaxCall',
+                ],
+                    '_fnc' => 'getChooseModuleViewDialog',
+            ], PATH_CMS_CONTROLLER.'?', '&'); ?>&instanceid=' + id + '&id=<?php echo $data['id']; ?>&spotName=<?php echo $data['spotname'].$sLoadCopy; ?>', LoadModuleInstanceCallback);
     }
 
     function LoadModuleInstanceCallback(data) {

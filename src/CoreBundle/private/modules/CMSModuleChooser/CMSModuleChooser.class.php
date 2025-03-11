@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -18,9 +19,8 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * used to pick the module, and configure it
@@ -136,7 +136,7 @@ class CMSModuleChooser extends TCMSModelBase
     {
         $relatedTablesList = $this->oModule->GetMLT('cms_tbl_conf_mlt');
         if (null !== $relatedTablesList) {
-            while($relatedTable = $relatedTablesList->Next()) {
+            while ($relatedTable = $relatedTablesList->Next()) {
                 $this->data['relatedTables'][] = [
                     'id' => $relatedTable->id,
                     'name' => $relatedTable->sqlData['name'],
@@ -152,7 +152,7 @@ class CMSModuleChooser extends TCMSModelBase
         $cmsMasterPageDefSpot->LoadFromFieldsWithCaching(
             [
                 'name' => $this->sModuleSpotName,
-                'cms_master_pagedef_id' => $pageDefinition->fieldCmsMasterPagedefId
+                'cms_master_pagedef_id' => $pageDefinition->fieldCmsMasterPagedefId,
             ]
         );
 
@@ -213,9 +213,6 @@ class CMSModuleChooser extends TCMSModelBase
         }
     }
 
-    /**
-     * @return void
-     */
     public function getRequestData(): void
     {
         $currentRequest = $this->getCurrentRequest();

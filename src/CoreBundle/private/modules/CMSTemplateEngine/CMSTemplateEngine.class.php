@@ -530,7 +530,6 @@ class CMSTemplateEngine extends TCMSModelBase
             });
         </script>';
 
-
         if ('cmp_loadmoduleinstance' === $this->aModuleConfig['view']) {
             $chooseModuleViewDialog = $this->getChooseModuleViewDialog();
             if (null !== $chooseModuleViewDialog && isset($chooseModuleViewDialog['html'])) {
@@ -562,7 +561,7 @@ class CMSTemplateEngine extends TCMSModelBase
 
             $submitButton = TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.select_instance'), "javascript:$('#loadmoduleclass').submit();", 'fas fa-check');
 
-            $dialogContent .= '<form name="loadmoduleclass" id="loadmoduleclass" method="post" 
+            $dialogContent .= '<form name="loadmoduleclass" id="loadmoduleclass" method="post"
 action="/cms/frontend?__modulechooser=true&esdisablelinks=true&esdisablefrontendjs=true&__previewmode=true" accept-charset="UTF-8">'."\n".'
     <input type="hidden" name="pagedef" value="'.$this->sPageId.'"/>  '."\n".'
     <input type="hidden" name="id" value="'.$this->sPageId.'"/> '."\n".'

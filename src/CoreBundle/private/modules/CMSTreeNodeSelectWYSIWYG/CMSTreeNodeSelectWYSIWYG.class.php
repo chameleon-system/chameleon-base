@@ -9,8 +9,8 @@
  * file that was distributed with this source code.
  */
 
-use Symfony\Component\HttpFoundation\Request;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @deprecated since 6.3.8 - use NavigationTreeSingleSelectWysiwyg instead
@@ -26,7 +26,7 @@ class CMSTreeNodeSelectWYSIWYG extends CMSTreeNodeSelect
     }
 
     /**
-     * @param string       $fieldName
+     * @param string $fieldName
      * @param TCMSTreeNode $oNode
      *
      * @return string
