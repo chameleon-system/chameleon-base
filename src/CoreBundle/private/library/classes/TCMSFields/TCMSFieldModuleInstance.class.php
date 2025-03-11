@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -22,17 +23,13 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
 {
     /**
      * the module instance data.
-     *
-     * @var TCMSRecord
      */
-    public $oModuleInstance;
+    public ?TCMSTPLModuleInstance $oModuleInstance = null;
 
     /**
      * the module of the module instance.
-     *
-     * @var TCMSTPLModule
      */
-    public $oModule;
+    public ?TCMSTPLModule $oModule;
 
     public function GetHTML()
     {
@@ -45,7 +42,6 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         $aData['oField'] = $this;
 
         $sRestrictToModule = $this->oDefinition->GetFieldtypeConfigKey('moduleclass');
-        $sQuery = null;
         $databaseConnection = $this->getDatabaseConnection();
         $nameField = $this->getFieldTranslationUtil()->getTranslatedFieldName('cms_tpl_module', 'name');
         $quotedNameField = $databaseConnection->quoteIdentifier($nameField);
@@ -73,14 +69,14 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         $oTemplateParser = new TViewParser();
         $oTemplateParser->bShowTemplatePathAsHTMLHint = false;
         $oTemplateParser->AddVarArray($aData);
-        $html .= $oTemplateParser->RenderObjectView('moduleInstanceChooser', 'TCMSFields/TCMSFieldModuleInstance', 'Core');
+        $html .= $oTemplateParser->RenderObjectView('moduleInstanceChooser', 'TCMSFields/TCMSFieldModuleInstance');
 
         return $html;
     }
 
     protected function GeneratePageEditURL()
     {
-        return PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'templateengine', '_mode' => 'edit_content']);
+        return PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl(['pagedef' => 'templateengine', '_mode' => 'edit_content'], '?', '&');
     }
 
     /**
@@ -143,7 +139,6 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     {
         if (!empty($this->data)) {
             $this->oModuleInstance = new TCMSTPLModuleInstance();
-            /* @var $this->oModuleInstance TCMSTPLModuleInstance */
             $this->oModuleInstance->Load($this->data);
             $this->oModule = new TCMSTPLModule();
             if (false !== $this->oModuleInstance->sqlData) {
@@ -254,12 +249,16 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     /**
      * renames the module instance.
      *
-     * @return TCMSstdClass
+     * @return false|TCMSstdClass
      */
     public function RenameInstance()
     {
         $oTdbCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
         $oTableConf = $oTdbCmsTplModuleInstance->GetTableConf();
+
+        if (null === $oTableConf) {
+            return false;
+        }
 
         $oTableEditor = new TCMSTableEditorModuleInstance();
         $oTableEditor->Init($oTableConf->id, $this->data);
@@ -273,11 +272,9 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         $oGlobal = TGlobal::instance();
         if ($oGlobal->UserDataExists('moduleID') && $oGlobal->UserDataExists('sView') && $oGlobal->UserDataExists('sName')) {
             $oTdbCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
-            /** @var $oTdbCmsTplModuleInstance TdbCmsTplModuleInstance */
             $oTableConf = $oTdbCmsTplModuleInstance->GetTableConf();
 
             $oTableEditor = new TCMSTableEditorModuleInstance();
-            /* @var $oTableEditor TCMSTableEditorModuleInstance */
             $oTableEditor->Init($oTableConf->id);
 
             $postData = [];
@@ -305,11 +302,9 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
 
                 while ($row = MySqlLegacySupport::getInstance()->fetch_assoc($result)) {
                     $oTdbCmsTplPage = TdbCmsTplPage::GetNewInstance();
-                    /* @var $oTdbCmsTplPage TdbCmsTplPage */
                     $oTdbCmsTplPage->Load($row['cms_tpl_page_id']);
 
                     $oRecordData = new TCMSstdClass();
-                    /* @var $oReturnData TCMSstdClass */
                     $oRecordData->id = $row['cms_tpl_page_id'];
                     $oRecordData->name = $oTdbCmsTplPage->GetName();
                     $oRecordData->tree = $oTdbCmsTplPage->fieldTreePathSearchString;
@@ -318,11 +313,9 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
                 }
             } else {
                 $oTdbCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
-                /** @var $oTdbCmsTplModuleInstance TdbCmsTplModuleInstance */
                 $oTableConf = $oTdbCmsTplModuleInstance->GetTableConf();
 
                 $oTableEditor = new TCMSTableEditorModuleInstance();
-                /* @var $oTableEditor TCMSTableEditorModuleInstance */
                 $oTableEditor->Init($oTableConf->id, $moduleInstanceId);
                 $oTableEditor->Delete($moduleInstanceId);
 
@@ -402,5 +395,10 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
     private function getSecurityHelperAccess(): SecurityHelperAccess
     {
         return ServiceLocator::get(SecurityHelperAccess::class);
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }
