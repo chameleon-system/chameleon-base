@@ -19,32 +19,24 @@ class CMSTreeNodeSelect extends TCMSModelBase
 {
     /**
      * the id of the current node.
-     *
-     * @var int
      */
-    protected $nodeID = null;
+    protected ?string $nodeID = null;
 
     /**
      * the name of the current node.
-     *
-     * @var string
      */
-    protected $fieldName = null;
+    protected ?string $fieldName = null;
 
     /**
      * the root node id.
-     *
-     * @var string
      */
-    protected $rootTreeID = TCMSTreeNode::TREE_ROOT_ID;
+    protected string $rootTreeID = TCMSTreeNode::TREE_ROOT_ID;
 
     /**
      * nodes that should not be assignable or that should have only a
      * restricted context menu.
-     *
-     * @var array
      */
-    protected $aRestrictedNodes = array();
+    protected array $aRestrictedNodes = [];
 
     public function Execute()
     {
@@ -83,19 +75,16 @@ class CMSTreeNodeSelect extends TCMSModelBase
      * renders the tree.
      *
      * @param TdbCmsTree $oNode
-     * @param int        $activeID
+     * @param int $activeID
      * @param string $fieldName
      * @param string $path
-     * @param int    $level
+     * @param int $level
      */
     protected function RenderTree($oNode, $activeID, $fieldName, $path = '', $level = 0)
     {
         $sNodeName = $oNode->fieldName;
         if (!empty($sNodeName)) {
-            $spacer = '';
-            for ($i = 0; $i < $level; ++$i) {
-                $spacer .= '  ';
-            }
+            $spacer = str_repeat('  ', $level);
 
             ++$level;
 
@@ -106,7 +95,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
 
             $this->data['treeHTML'] .= '<a href="#" onClick="'.$this->getOnClick($fieldName, $oNode).'">'.$sNodeName;
 
-            if ($activeID == $oNode->id) {
+            if ($activeID === $oNode->id) {
                 $this->data['treeHTML'] .= '<i class="fas fa-check"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
             }
 
@@ -139,7 +128,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
     {
         $oPortalList = TdbCmsPortalList::GetList();
 
-        $aRestrictedNodes = array();
+        $aRestrictedNodes = [];
         while ($oPortal = $oPortalList->Next()) {
             $aRestrictedNodes[] = $oPortal->fieldMainNodeTree;
             $oNavigationList = $oPortal->GetFieldPropertyNavigationsList();
@@ -169,7 +158,7 @@ class CMSTreeNodeSelect extends TCMSModelBase
     }
 
     /**
-     * @param string       $fieldName
+     * @param string $fieldName
      * @param TCMSTreeNode $oNode
      *
      * @return string
