@@ -72,7 +72,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @var TCMSTableConf|null
      */
-    public $_oTableConf = null;
+    public $_oTableConf;
 
     /**
      * sets the state of field based translation overload fallback

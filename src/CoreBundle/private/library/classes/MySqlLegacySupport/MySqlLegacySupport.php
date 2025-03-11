@@ -33,9 +33,9 @@ class MySqlLegacySupport
 {
     private Connection $databaseConnection;
     /**
-     * @var Statement|null|bool
+     * @var Statement|bool|null
      */
-    private $lastStatement = null;
+    private $lastStatement;
 
     private ?DBALException $lastError;
 

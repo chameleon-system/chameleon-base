@@ -30,22 +30,18 @@ class TGroupTableField
 
     /**
      * Full db field name (like B.`name`) default = same as $name.
-     *
-     * @var string
      */
-    public $full_db_name = '';
+    public string $full_db_name = '';
 
     /**
      * Left, center, right.
-     *
-     * @var string
      */
-    public $align = 'left';
+    public string $align = 'left';
 
     /**
      * Callback formatting function, receiving the cell value and row array.
      *
-     * @var null|callable(string, array<string, mixed>, string):(string|null)
+     * @var callable(string, array<string, mixed>, string):(string|null)|null
      */
     public $format;
 
@@ -94,17 +90,17 @@ class TGroupTableField
     /**
      * Table cell configuration.
      *
-     * @param string|non-empty-array<string, string>  $name - if it is an array it should be of the form 'name'=>'full_name'
-     * @param string        $align
+     * @param string|non-empty-array<string, string> $name - if it is an array it should be of the form 'name'=>'full_name'
+     * @param string $align
      * @param callable(string, array<string, mixed>, string):(string|null) $formatCallBack - a callback function to use for the column (the function will get 3 parameters,
-     *                                 the value, the row and the name. The string returned by the function will be displayed
-     *                                 in the cell
-     * @param array|null    $linkFields
-     * @param int           $colSpan
-     * @param object|null   $selectFormat   - callback function for option titles
-     * @param string|null   $ident
-     * @param string|null   $originalField
-     * @param string|null   $originalTable
+     *                                                                                     the value, the row and the name. The string returned by the function will be displayed
+     *                                                                                     in the cell
+     * @param array|null $linkFields
+     * @param int $colSpan
+     * @param object|null $selectFormat - callback function for option titles
+     * @param string|null $ident
+     * @param string|null $originalField
+     * @param string|null $originalTable
      */
     public function __construct($name, $align = 'left', $formatCallBack = null, $linkFields = null, $colSpan = 1, $selectFormat = null, $ident = null, $originalField = null, $originalTable = null)
     {
@@ -147,10 +143,10 @@ class TGroupTableField
     /**
      * return cell HTML.
      *
-     * @param array<string, mixed>  $row           - assoc array of data for that row
-     * @param string $style         - the style class to apply
-     * @param string $onClickEvent  - the js function to call onClick
-     * @param bool   $isTableHeader
+     * @param array<string, mixed> $row - assoc array of data for that row
+     * @param string $style - the style class to apply
+     * @param string $onClickEvent - the js function to call onClick
+     * @param bool $isTableHeader
      *
      * @return string
      */
@@ -167,18 +163,18 @@ class TGroupTableField
 
     /**
      * @param array<string, mixed> $row
-     * @param bool  $isTableHeader
+     * @param bool $isTableHeader
      *
      * @return string
      */
     private function getCellValue(array $row, $isTableHeader)
     {
         $cellValue = '';
-        
+
         if (null !== $this->name && isset($row[$this->name])) {
             $cellValue = $row[$this->name];
-        } 
-        
+        }
+
         if (null === $this->format) {
             if (null === $this->name || array_key_exists($this->name, $row)) {
                 if (false === $isTableHeader) {
@@ -191,7 +187,7 @@ class TGroupTableField
             // has callback method
             $cellValue = $this->getFormatBasedCellValueForDisplayString($row, $cellValue);
         }
-        
+
         if (CMS_TRANSLATION_FIELD_BASED_EMPTY_TRANSLATION_FALLBACK_TO_BASE_LANGUAGE) {
             $cellValue = $this->getFormattedValueForDisplayString($row, $cellValue);
         }
@@ -247,7 +243,7 @@ class TGroupTableField
         foreach ($additionalAttributes as $key => $value) {
             if (isset($attributes[$key])) {
                 // if key exists, add value to existing value
-                $attributes[$key] .= ' ' . $value;
+                $attributes[$key] .= ' '.$value;
             } else {
                 $attributes[$key] = $value;
             }
@@ -396,7 +392,7 @@ class TGroupTableField
     }
 
     /**
-     * @param array<string, mixed>  $row
+     * @param array<string, mixed> $row
      * @param string $cellValue
      *
      * @return string
@@ -444,7 +440,7 @@ class TGroupTableField
             } else {
                 $cellValue = $this->EscapeCellValue($row[$this->sOriginalField]);
             }
-            $cellValue .= ' <i class="fas fa-language" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.default_language')).'"></i>';
+            $cellValue .= ' <i class="fas fa-language" title="'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.list.default_language')).'"></i>';
         }
 
         return $cellValue;
@@ -468,6 +464,7 @@ class TGroupTableField
     {
         if (array_key_exists($linkField, $row)) {
             $row[$linkField] = preg_replace("/(\r\n|\n|\r)/", '\\n', $row[$linkField]); // cross-platform newlines
+
             return addslashes($row[$linkField]);
         }
 
