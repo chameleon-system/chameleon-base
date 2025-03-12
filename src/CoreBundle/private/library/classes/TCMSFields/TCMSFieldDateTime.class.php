@@ -18,7 +18,6 @@ require_once PATH_LIBRARY.'/functions/ConvertDate.fun.php';
 
 class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
@@ -29,8 +28,8 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => 'null',
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -85,7 +84,7 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
             date_default_timezone_set('UTC');
             $oLocal = TdbCmsLocals::GetActive();
             $sFormatedDateTime = $oLocal->FormatDate(date('Y-m-d H:i:s'));
-            $sCurrentUTCTime = '&nbsp;&nbsp;&nbsp;<strong>'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.current_utc')).': '.$sFormatedDateTime.'</strong>';
+            $sCurrentUTCTime = '&nbsp;&nbsp;&nbsp;<strong>'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.current_utc')).': '.$sFormatedDateTime.'</strong>';
             date_default_timezone_set($sServerDateTimeZoneSetting);
         }
 
@@ -96,7 +95,7 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
     {
         $currentDate = $this->_GetHTMLValue();
         if ('0000-00-00 00:00:00' == $currentDate) {
-            $html = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.not_set');
+            $html = ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.not_set');
         } else {
             $aDateParts = explode(' ', $currentDate);
             $date = $aDateParts[0];
@@ -116,7 +115,7 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
             if (!empty($sUTCDateTime)) {
                 $html .= '<strong>UTC</strong>&nbsp;&nbsp;';
             }
-            $html .= TGlobal::OutHTML($date.' '.$hour.':'.$minutes.' '.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.time'));
+            $html .= TGlobal::OutHTML($date.' '.$hour.':'.$minutes.' '.ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.time'));
             if (!empty($sUTCDateTime)) {
                 $html .= $sUTCDateTime;
             }
@@ -128,8 +127,6 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
-     *
-     * @return mixed
      */
     public function ConvertPostDataToSQL()
     {
@@ -149,7 +146,7 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
     public function GetCMSHtmlHeadIncludes()
     {
         $includes = parent::GetCMSHtmlHeadIncludes();
-        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/css/tempusdominus-bootstrap-4.min.css')); //datetimepicker
+        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/css/tempusdominus-bootstrap-4.min.css')); // datetimepicker
 
         return $includes;
     }
@@ -160,8 +157,8 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
     public function GetCMSHtmlFooterIncludes()
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/moment-2.23.0/js/moment-with-locales.min.js')); //moment.js for datetimepicker
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/js/tempusdominus-bootstrap-4.min.js')); //datetimepicker
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/moment-2.23.0/js/moment-with-locales.min.js')); // moment.js for datetimepicker
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/js/tempusdominus-bootstrap-4.min.js')); // datetimepicker
 
         return $includes;
     }
@@ -189,7 +186,7 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_DATE_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_DATE_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 
@@ -243,8 +240,6 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
      * called before save of form, the returned value is set
      * to form data of owning form for this field
      * important: this is called weather data is valid or not!
-     *
-     * @return mixed
      */
     public function PkgCmsFormTransformFormDataBeforeSave($oForm)
     {
@@ -286,7 +281,7 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $data = $this->GetFieldWriterData();
 
-        if('null' === $data['sFieldDefaultValue']){
+        if ('null' === $data['sFieldDefaultValue']) {
             $data['sFieldType'] = '?'.$data['sFieldType'];
         }
 

@@ -17,7 +17,6 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
  */
 class TCMSFieldColorpicker extends TCMSField implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
@@ -28,8 +27,8 @@ class TCMSFieldColorpicker extends TCMSField implements DoctrineTransformableInt
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -65,8 +64,8 @@ class TCMSFieldColorpicker extends TCMSField implements DoctrineTransformableInt
         return '
             <div class="input-group input-group-sm" id="colorPickerContainer'.TGlobal::OutHTML($this->name).'">
                 <input type="hidden" value="'.TGlobal::OutHTML(
-                $value
-            ).'" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'">
+            $value
+        ).'" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'">
             </div>
         ';
     }
@@ -104,7 +103,7 @@ class TCMSFieldColorpicker extends TCMSField implements DoctrineTransformableInt
         $includes[] = "<script>
             $(function() {
                 $('#colorPickerContainer".TGlobal::OutHTML($this->name)."').colorpicker({
-                  format: 'hex', 
+                  format: 'hex',
                   useHashPrefix: true,
                   autoInputFallback: false,
                   inline: true,
@@ -140,7 +139,7 @@ class TCMSFieldColorpicker extends TCMSField implements DoctrineTransformableInt
                     // Do not replace the input value if the color is invalid or equals the current value.
                     return;
                   }
-        
+
                   io.val(e.color.string());
                 });
             });
@@ -162,7 +161,7 @@ class TCMSFieldColorpicker extends TCMSField implements DoctrineTransformableInt
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_COLOR_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_COLOR_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 
@@ -198,7 +197,7 @@ class TCMSFieldColorpicker extends TCMSField implements DoctrineTransformableInt
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $data = $this->GetFieldWriterData();
 
-        if('null' === $data['sFieldDefaultValue']){
+        if ('null' === $data['sFieldDefaultValue']) {
             $data['sFieldType'] = '?'.$data['sFieldType'];
         }
 

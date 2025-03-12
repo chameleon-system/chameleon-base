@@ -20,7 +20,6 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
  */
 class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
@@ -31,8 +30,8 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => 'null',
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -56,7 +55,6 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
             'default' => null,
         ])->render();
     }
-
 
     /**
      * view path for frontend.
@@ -94,7 +92,7 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
         }
 
         if (false === $this->IsSQLDate($this->data)) {
-            $dateTime = new \DateTime($this->data);
+            $dateTime = new DateTime($this->data);
 
             return $dateTime->format('Y-m-d');
         }
@@ -107,7 +105,7 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
      */
     public function GetReadOnly()
     {
-        $dateTime = new \DateTime($this->data);
+        $dateTime = new DateTime($this->data);
 
         return TGlobal::OutHTML($dateTime->format('d.m.Y'));
     }
@@ -126,7 +124,7 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
     public function GetCMSHtmlHeadIncludes()
     {
         $includes = parent::GetCMSHtmlHeadIncludes();
-        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/css/tempusdominus-bootstrap-4.min.css')); //datetimepicker
+        $includes[] = sprintf('<link href="%s" media="screen" rel="stylesheet" type="text/css" />', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/css/tempusdominus-bootstrap-4.min.css')); // datetimepicker
 
         return $includes;
     }
@@ -137,8 +135,8 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
     public function GetCMSHtmlFooterIncludes()
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/moment-2.23.0/js/moment-with-locales.min.js')); //moment.js for datetimepicker
-        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/js/tempusdominus-bootstrap-4.min.js')); //datetimepicker
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/moment-2.23.0/js/moment-with-locales.min.js')); // moment.js for datetimepicker
+        $includes[] = sprintf('<script src="%s" type="text/javascript"></script>', TGlobal::GetStaticURL('/chameleon/blackbox/javascript/tempus-dominus-5.39.0/js/tempusdominus-bootstrap-4.min.js')); // datetimepicker
 
         return $includes;
     }
@@ -158,7 +156,7 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
 
         setlocale(LC_TIME, 0);
 
-        $dateTime = new \DateTime($date);
+        $dateTime = new DateTime($date);
         $returnString = $dayString.' '.$dateTime->format('d.m.Y');
 
         return $returnString;
@@ -179,11 +177,11 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
             $flashMessageService = $this->getFlashMessageService();
             $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
             $sFieldTitle = $this->oDefinition->GetName();
-            $sFieldTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans($sFieldTitle);
+            $sFieldTitle = ServiceLocator::get('translator')->trans($sFieldTitle);
             $flashMessageService->addMessage(
                 $sConsumerName,
                 'TABLEEDITOR_FIELD_DATE_NOT_VALID',
-                array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle)
+                ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]
             );
         }
 
@@ -267,7 +265,7 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $data = $this->GetFieldWriterData();
 
-        if('null' === $data['sFieldDefaultValue']){
+        if ('null' === $data['sFieldDefaultValue']) {
             $data['sFieldType'] = '?'.$data['sFieldType'];
         }
 

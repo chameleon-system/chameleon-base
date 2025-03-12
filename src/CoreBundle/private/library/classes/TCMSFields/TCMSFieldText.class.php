@@ -14,7 +14,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 
 /**
  * a long text field.
-/**/
+ * /**/
 class TCMSFieldText extends TCMSField implements DoctrineTransformableInterface
 {
     /**
@@ -32,8 +32,8 @@ class TCMSFieldText extends TCMSField implements DoctrineTransformableInterface
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -54,7 +54,6 @@ class TCMSFieldText extends TCMSField implements DoctrineTransformableInterface
             'type' => 'text',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
-
         ];
         if ('' !== $this->oDefinition->sqlData['field_default_value']) {
             $parameter['default'] = $this->oDefinition->sqlData['field_default_value'];
@@ -62,7 +61,6 @@ class TCMSFieldText extends TCMSField implements DoctrineTransformableInterface
 
         return $this->getDoctrineRenderer('mapping/text.xml.twig', $parameter)->render();
     }
-
 
     /**
      * {@inheritdoc}
@@ -152,7 +150,7 @@ class TCMSFieldText extends TCMSField implements DoctrineTransformableInterface
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $data = $this->GetFieldWriterData();
 
-        if('null' === $data['sFieldDefaultValue']){
+        if ('null' === $data['sFieldDefaultValue']) {
             $data['sFieldType'] = '?'.$data['sFieldType'];
         }
 

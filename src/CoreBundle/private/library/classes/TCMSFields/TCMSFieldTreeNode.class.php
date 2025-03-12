@@ -165,7 +165,7 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $data = $this->GetFieldWriterData();
 
-        if('null' === $data['sFieldDefaultValue']){
+        if ('null' === $data['sFieldDefaultValue']) {
             $data['sFieldType'] = '?'.$data['sFieldType'];
         }
 

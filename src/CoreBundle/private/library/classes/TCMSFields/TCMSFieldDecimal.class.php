@@ -22,7 +22,7 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
      *
      * @var int
      */
-    protected $numberOfDecimals = null;
+    protected $numberOfDecimals;
 
     /**
      * view path for frontend.
@@ -38,10 +38,10 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
             'docCommentType' => 'string',
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($this->name),
-            'defaultValue' => sprintf("'%s'", (string)$this->oDefinition->sqlData['field_default_value']),
+            'defaultValue' => sprintf("'%s'", (string) $this->oDefinition->sqlData['field_default_value']),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -61,10 +61,11 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
         if ('' === $lengthData) {
             $lengthData = '10,2';
         }
-        $lengthParts = explode(',', str_replace(' ', '',$lengthData));
+        $lengthParts = explode(',', str_replace(' ', '', $lengthData));
         if (1 === count($lengthParts)) {
             $lengthData[1] = 0;
         }
+
         return $this->getDoctrineRenderer('mapping/decimal.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),
             'column' => $this->name,
@@ -75,21 +76,20 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
         ])->render();
     }
 
-
     public function GetHTML()
     {
         // number of decimals can be retrived from the length set of the field definition
         $sFormatValue = number_format($this->data, $this->_GetNumberOfDecimals(), ',', '.');
 
         $html = '<div class="row field-decimal"><div class="col-xs-12 col-md-6 col-lg-4">';
-        
+
         $html .= sprintf('<input class="fieldnumber form-control form-control-sm" onblur="this.value=NumberFormat(NumberToFloat(this.value, \',\', \'.\'), %s, \',\', \'.\')" type="text" id="%s" name="%s" value="%s"',
             $this->numberOfDecimals,
             TGlobal::OutHTML($this->name),
             TGlobal::OutHTML($this->name),
             TGlobal::OutHTML($sFormatValue)
         );
-        
+
         if ('' !== $this->fieldWidth && $this->fieldWidth > 0) {
             $html .= ' size="'.TGlobal::OutHTML($this->fieldWidth).'" maxlength="'.TGlobal::OutHTML($this->fieldWidth).'"';
         }
@@ -103,8 +103,6 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
-     *
-     * @return mixed
      */
     public function ConvertPostDataToSQL()
     {
@@ -173,7 +171,7 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
         $aData['sFieldName'] = $aData['sFieldName'].'Formated';
         $aData['sFieldType'] = 'string';
 
-        if('null' === $aData['sFieldDefaultValue']){
+        if ('null' === $aData['sFieldDefaultValue']) {
             $aData['sFieldType'] = '?'.$aData['sFieldType'];
         }
 
@@ -234,7 +232,7 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_DECIMAL_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_DECIMAL_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 

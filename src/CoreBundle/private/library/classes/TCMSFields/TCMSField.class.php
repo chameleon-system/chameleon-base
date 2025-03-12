@@ -1098,7 +1098,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $data = $this->GetFieldWriterData();
 
-        if('null' === $data['sFieldDefaultValue']){
+        if ('null' === $data['sFieldDefaultValue']) {
             $data['sFieldType'] .= '|null';
         }
 

@@ -48,7 +48,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
      *
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
@@ -80,7 +80,6 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         );
     }
 
-
     protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
     {
         $propertyName = $this->name;
@@ -95,10 +94,8 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
             'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetConnectedTableName()], $this->snakeToPascalCase($this->GetConnectedTableName())),
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
-
         ])->render();
     }
-
 
     public function GetHTML()
     {
@@ -176,12 +173,12 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
     public function GetOptions()
     {
-        if (in_array($this->GetDisplayType(), array('readonly', 'hidden'))) {
+        if (in_array($this->GetDisplayType(), ['readonly', 'hidden'])) {
             $connectedRecord = $this->getConnectedRecordObject();
             if ($connectedRecord) {
-                $this->options = array($this->data => $connectedRecord->GetName());
+                $this->options = [$this->data => $connectedRecord->GetName()];
             } else {
-                $this->options = array();
+                $this->options = [];
             }
 
             return;
@@ -189,9 +186,9 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         $tblName = $this->GetConnectedTableName();
 
-        $this->options = array();
+        $this->options = [];
         $query = $this->GetOptionsQuery();
-        $oList = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $tblName).'List', 'GetList'), $query);
+        $oList = call_user_func([TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $tblName).'List', 'GetList'], $query);
         $this->allowEmptySelection = true; // add the "please choose" option
         while ($oRow = $oList->Next()) {
             $name = $oRow->GetName();
@@ -226,7 +223,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         if (false === empty($this->data)) {
             $html .= '<div class="col-12 pt-2 col-lg-4 pt-lg-0">';
             $html .= TCMSRender::DrawButton(
-                \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.switch_to'),
+                ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.switch_to'),
                 $this->getSelectedEntryLink($this->data),
                 'far fa-edit'
             );
@@ -241,18 +238,18 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
     protected function getSelectedEntryLink(string $value): string
     {
         $foreignTableName = $this->GetConnectedTableName();
-        $tableConf = \TdbCmsTblConf::GetNewInstance();
+        $tableConf = TdbCmsTblConf::GetNewInstance();
         if (false === $tableConf->LoadFromField('name', $foreignTableName)) {
             return '';
         }
 
-        $linkParams = array(
+        $linkParams = [
             'pagedef' => 'tableeditor',
             'tableid' => $tableConf->id,
             'id' => urlencode($value),
-        );
+        ];
 
-        return PATH_CMS_CONTROLLER . $this->getUrlUtil()->getArrayAsUrl($linkParams, '?', '&');
+        return PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($linkParams, '?', '&');
     }
 
     /**
@@ -308,7 +305,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         }
 
         $oTableConf = new TCMSTableConf();
-        /** @var $oTableConf TCMSTableConf */
+        /* @var $oTableConf TCMSTableConf */
         $oTableConf->LoadFromField('name', $tblName);
 
         $sCustomQuery = trim($oTableConf->sqlData['list_query']);
@@ -330,7 +327,6 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         $sPortalList = implode(', ', array_map(fn (string $portalId) => $this->getDatabaseConnection()->quote($portalId), array_keys($portals)));
 
         if ('cms_portal' == $tblName) {
-
             if (!empty($sPortalList)) {
                 $query .= ' AND `cms_portal`.`id` IN ('.$sPortalList.')';
             }
@@ -450,7 +446,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
     {
         if (!empty($this->data)) {
             $sTableName = $this->GetConnectedTableName();
-            $oRecord = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableName), 'GetNewInstance'));
+            $oRecord = call_user_func([TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTableName), 'GetNewInstance']);
             if ($oRecord->Load($this->data)) {
                 return $oRecord;
             }
@@ -511,18 +507,18 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         $aMethodData = $this->GetFieldMethodBaseDataArray();
         $sInputName = 'i'.ucfirst(TCMSTableToClass::ConvertToClassString($this->name));
-        $aParameters = array(
-            $sInputName => array(
+        $aParameters = [
+            $sInputName => [
                 'description' => 'ID for the record in: '.($aTableConf['translation'] ?? ' [not found]'),
                 'default' => '',
                 'sType' => 'string',
-            ),
-            'iLanguageId' => array(
+            ],
+            'iLanguageId' => [
                 'description' => 'set language id for list - if null, the default language will be used instead',
                 'default' => 'null',
                 'sType' => 'string|null',
-            ),
-        );
+            ],
+        ];
         $aMethodData['aParameters'] = $aParameters;
 
         $sMethodName = 'GetListFor'.TCMSTableToClass::ConvertToClassString($this->name);
@@ -582,7 +578,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
      */
     public function PkgCmsFormDataIsValid()
     {
-        //call parent to skip TABLEEDITOR_RECORD_ID_NOT_VALID message
+        // call parent to skip TABLEEDITOR_RECORD_ID_NOT_VALID message
         return parent::DataIsValid();
     }
 
@@ -643,7 +639,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         $quotedTableName = $databaseConnection->quoteIdentifier($tableName);
         $quotedIdentifierColumn = $databaseConnection->quoteIdentifier($identifyingColumnName);
         if (is_array($this->data)) {
-            $idList = join(',', array_map(array($databaseConnection, 'quote'), $this->data));
+            $idList = join(',', array_map([$databaseConnection, 'quote'], $this->data));
         } else {
             $idList = $databaseConnection->quote($this->data);
         }
@@ -654,8 +650,8 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
             return '';
         }
 
-        $aRetValueArray = array();
-        while ($row = $result->fetch(\PDO::FETCH_ASSOC)) {
+        $aRetValueArray = [];
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $aRetValueArray[] = $row[$identifyingColumnName];
         }
 
