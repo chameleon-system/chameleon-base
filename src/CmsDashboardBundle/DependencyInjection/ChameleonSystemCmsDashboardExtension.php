@@ -24,15 +24,15 @@ class ChameleonSystemCmsDashboardExtension extends Extension
         $dashboardCacheServiceDefinition->setArgument(3, $config['cache_ttl']);
 
         $searchConsoleServiceDefinition = $container->getDefinition('chameleon_system_cms_dashboard.service.google_search_console_service');
-        $searchConsoleServiceDefinition->setArgument(1, $config['google_search_console_auth_json']);
+        $searchConsoleServiceDefinition->setArgument(1, $config['google_api_auth_json']);
 
         $searchConsoleWidgetDefinition = $container->getDefinition('chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.search_console_widget');
-        $searchConsoleWidgetDefinition->setArgument(5, $config['google_search_console_auth_json']);
+        $searchConsoleWidgetDefinition->setArgument(5, $config['google_api_auth_json']);
         $searchConsoleWidgetDefinition->setArgument(6, $config['google_search_console_domain_property']);
         $searchConsoleWidgetDefinition->setArgument(7, $config['google_search_console_period_days']);
 
         $searchConsoleServiceDefinition = $container->getDefinition('chameleon_system_cms_dashboard.service.google_analytics_dashboard_service');
-        $searchConsoleServiceDefinition->setArgument(1, $config['google_search_console_auth_json']);
+        $searchConsoleServiceDefinition->setArgument(1, $config['google_api_auth_json']);
         $searchConsoleServiceDefinition->setArgument(2, $config['google_search_console_domain_property']);
 
         $this->loadGoogleAnalyticsWidgets($config, $container);
@@ -51,9 +51,9 @@ class ChameleonSystemCmsDashboardExtension extends Extension
 
         foreach ($googleAnalyticsWidget as $widgetId) {
             $widgetDefinition = $container->getDefinition($widgetId);
-            $widgetDefinition->setArgument(5, $config['google_search_console_auth_json']);
-            $widgetDefinition->setArgument(6, $config['google_search_console_domain_property']);
-            $widgetDefinition->setArgument(7, $config['google_search_console_period_days']);
+            $widgetDefinition->setArgument(5, $config['google_api_auth_json']);
+            $widgetDefinition->setArgument(6, $config['google_analytics_property_id']);
+            $widgetDefinition->setArgument(7, $config['google_analytics_period_days']);
         }
     }
 }
