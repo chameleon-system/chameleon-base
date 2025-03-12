@@ -172,6 +172,14 @@
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate_title</source>
                 <target>Google Analytics Engagement Rate</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics</source>
+                <target>E-Commerce Stats</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-utm-tracking">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-utm-tracking</source>
+                <target>UTM Campaigns</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate</source>
                 <target>Engagement Rate</target>
@@ -222,10 +230,6 @@
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking_title">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking_title</source>
                 <target>UTM-Tracking</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campaign">
-                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campaign</source>
-                <target>UTM Campaign</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.source">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.source</source>
@@ -320,6 +324,10 @@
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.conversions_previous">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.conversions_previous</source>
                 <target>Conversions (Previous)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_voucher-info">
+                <source>chameleon_system_cms_dashboard.widget.group_name_voucher-info</source>
+                <target>Voucher Usage</target>
             </trans-unit>
         </body>
     </file>
