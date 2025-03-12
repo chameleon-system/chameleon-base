@@ -145,4 +145,19 @@ class TCMSFieldText extends TCMSField implements DoctrineTransformableInterface
 
         return $data;
     }
+
+    public function RenderFieldPropertyString()
+    {
+        $viewParser = new TViewParser();
+        $viewParser->bShowTemplatePathAsHTMLHint = false;
+        $data = $this->GetFieldWriterData();
+
+        if('null' === $data['sFieldDefaultValue']){
+            $data['sFieldType'] = '?'.$data['sFieldType'];
+        }
+
+        $viewParser->AddVarArray($data);
+
+        return $viewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
+    }
 }

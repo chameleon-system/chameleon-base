@@ -208,6 +208,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         $value = \str_replace("'", "\'", $this->data);
         $aData['sFieldDefaultValue'] = "'$value'";
+        $aData['sFieldType'] .= '|null';
 
         return $aData;
     }

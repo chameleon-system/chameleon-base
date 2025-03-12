@@ -261,6 +261,21 @@ class TCMSFieldDate extends TCMSField implements DoctrineTransformableInterface
         return false;
     }
 
+    public function RenderFieldPropertyString()
+    {
+        $viewParser = new TViewParser();
+        $viewParser->bShowTemplatePathAsHTMLHint = false;
+        $data = $this->GetFieldWriterData();
+
+        if('null' === $data['sFieldDefaultValue']){
+            $data['sFieldType'] = '?'.$data['sFieldType'];
+        }
+
+        $viewParser->AddVarArray($data);
+
+        return $viewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
+    }
+
     /**
      * {@inheritdoc}
      */

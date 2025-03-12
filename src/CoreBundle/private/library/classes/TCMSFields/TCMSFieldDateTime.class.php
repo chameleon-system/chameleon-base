@@ -280,6 +280,21 @@ class TCMSFieldDateTime extends TCMSField implements DoctrineTransformableInterf
         return $date;
     }
 
+    public function RenderFieldPropertyString()
+    {
+        $viewParser = new TViewParser();
+        $viewParser->bShowTemplatePathAsHTMLHint = false;
+        $data = $this->GetFieldWriterData();
+
+        if('null' === $data['sFieldDefaultValue']){
+            $data['sFieldType'] = '?'.$data['sFieldType'];
+        }
+
+        $viewParser->AddVarArray($data);
+
+        return $viewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
+    }
+
     private function getViewRenderer(): ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');

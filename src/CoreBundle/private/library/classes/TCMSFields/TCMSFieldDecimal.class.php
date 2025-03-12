@@ -173,9 +173,13 @@ class TCMSFieldDecimal extends TCMSField implements DoctrineTransformableInterfa
         $aData['sFieldName'] = $aData['sFieldName'].'Formated';
         $aData['sFieldType'] = 'string';
 
+        if('null' === $aData['sFieldDefaultValue']){
+            $aData['sFieldType'] = '?'.$aData['sFieldType'];
+        }
+
         $oViewParser->AddVarArray($aData);
 
-        $sNormalfield .= "\n".$oViewParser->RenderObjectView('property', 'TCMSFields/TCMSField');
+        $sNormalfield .= "\n".$oViewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
 
         return $sNormalfield;
     }
