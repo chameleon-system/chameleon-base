@@ -172,6 +172,14 @@
                 <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-engagement-rate</source>
                 <target>Interaktionsrate</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-utm-tracking">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-utm-tracking</source>
+                <target>UTM Tracking</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics</source>
+                <target>E-Commerce Statistik</target>
+            </trans-unit>
             <!-- Engagement Rate -->
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics_engagement_rate_dashboard_link_title">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics_engagement_rate_dashboard_link_title</source>
@@ -230,10 +238,6 @@
             <!-- UTM Tracking -->
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking_title">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking_title</source>
-                <target>UTM-Tracking</target>
-            </trans-unit>
-            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campain">
-                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campain</source>
                 <target>UTM-Kampagne</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.source">
@@ -329,6 +333,10 @@
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.conversions_previous">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.conversions_previous</source>
                 <target>Konversionen (Vorheriger Zeitraum)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_voucher-info">
+                <source>chameleon_system_cms_dashboard.widget.group_name_voucher-info</source>
+                <target>Gutschein Verwendungen</target>
             </trans-unit>
         </body>
     </file>
