@@ -16,10 +16,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * an enum field.
-/**/
+ * /**/
 class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
@@ -30,8 +29,8 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -47,11 +46,12 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
 
     protected function getDoctrineDataModelXml(string $namespace): string
     {
-        $options = explode(',',$this->oDefinition->sqlData['length_set']);
-        $options = array_map(static fn(string $option) => trim($option, "' "), $options);
+        $options = explode(',', $this->oDefinition->sqlData['length_set']);
+        $options = array_map(static fn (string $option) => trim($option, "' "), $options);
         $maxLength = array_reduce($options, static function (int $size, string $option) {
             return max([$size, mb_strlen($option)]);
         }, 0);
+
         return $this->getDoctrineRenderer('mapping/string-char.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->name),
             'type' => 'string',
@@ -67,7 +67,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
      *
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * view path for frontend.
@@ -93,7 +93,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
             $html = '<div>';
             $html .= '<select name="'.TGlobal::OutHTML($this->name).'" id="'.TGlobal::OutHTML($this->name).'" class="form-control form-control-sm" data-select2-option=\'{"width": "100%"}\'>';
             if ($this->allowEmptySelection) {
-                $chooseMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected');
+                $chooseMessage = ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected');
 
                 $html .= '<option value="">'.TGlobal::OutHTML($chooseMessage)."</option>\n";
             }
@@ -102,7 +102,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
                 if ($this->data == $key) {
                     $selected = ' selected="selected"';
                 }
-                $html .= '<option value="' . TGlobal::OutHTML($key) . '"' . $selected . '>' . TGlobal::OutHTML($value) . '</option>' . "\n";
+                $html .= '<option value="'.TGlobal::OutHTML($key).'"'.$selected.'>'.TGlobal::OutHTML($value).'</option>'."\n";
             }
             $html .= '</select>';
 
@@ -117,8 +117,8 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
             }
 
             if ($this->allowEmptySelection) {
-                $html .= '<input class="btn-check" type="radio" id="' . TGlobal::OutHTML($this->name) . '" name="' . TGlobal::OutHTML($this->name) . '" value=""' . $selected . ' /> ';
-                $html .= '<label class="btn btn-outline-secondary" for="' . TGlobal::OutHTML($this->name) . '">' . \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_options.select_nothing') . '</label>' . "\n";
+                $html .= '<input class="btn-check" type="radio" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value=""'.$selected.' /> ';
+                $html .= '<label class="btn btn-outline-secondary" for="'.TGlobal::OutHTML($this->name).'">'.ServiceLocator::get('translator')->trans('chameleon_system_core.field_options.select_nothing').'</label>'."\n";
             }
 
             foreach ($this->options as $key => $value) {
@@ -127,8 +127,8 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
                     $selected = ' checked="checked"';
                 }
 
-                $html .= '<input class="btn-check" type="radio" id="' . TGlobal::OutHTML($this->name).TGlobal::OutHTML($value) . '" name="' . TGlobal::OutHTML($this->name) . '" value="' . TGlobal::OutHTML($key) . '"' . $selected . ' /> ';
-                $html .= '<label class="btn btn-outline-primary" for="' . TGlobal::OutHTML($this->name).TGlobal::OutHTML($value) . '">' . TGlobal::OutHTML($value) . '</label>' . "\n";
+                $html .= '<input class="btn-check" type="radio" id="'.TGlobal::OutHTML($this->name).TGlobal::OutHTML($value).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($key).'"'.$selected.' /> ';
+                $html .= '<label class="btn btn-outline-primary" for="'.TGlobal::OutHTML($this->name).TGlobal::OutHTML($value).'">'.TGlobal::OutHTML($value).'</label>'."\n";
             }
         }
 
@@ -176,6 +176,21 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
         }
     }
 
+    public function RenderFieldPropertyString()
+    {
+        $viewParser = new TViewParser();
+        $viewParser->bShowTemplatePathAsHTMLHint = false;
+        $data = $this->GetFieldWriterData();
+
+        if ('null' === $data['sFieldDefaultValue']) {
+            $data['sFieldType'] = '?'.$data['sFieldType'];
+        }
+
+        $viewParser->AddVarArray($data);
+
+        return $viewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -202,7 +217,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_OPTION_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_OPTION_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 
@@ -240,7 +255,7 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
      */
     protected function GetOptionNameMapping()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -262,11 +277,11 @@ class TCMSFieldOption extends TCMSField implements DoctrineTransformableInterfac
      */
     private function translateEnumKey($value)
     {
-        if ('class_type' === $this->name && in_array($value, array('Core', 'Custom-Core', 'Customer'))) {
+        if ('class_type' === $this->name && in_array($value, ['Core', 'Custom-Core', 'Customer'])) {
             return $value;
         }
         $key = $this->createEnumTranslationKey($value);
-        $translatedValue = $this->getTranslator()->trans($key, array(), \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND_ENUM);
+        $translatedValue = $this->getTranslator()->trans($key, [], ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND_ENUM);
         if ($translatedValue === $key) {
             return $value;
         }

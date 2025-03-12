@@ -14,10 +14,9 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 
 /**
  * a number (int).
-/**/
+ * /**/
 class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $defaultValue = $this->oDefinition->sqlData['field_default_value'];
@@ -30,10 +29,10 @@ class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableI
             'docCommentType' => 'int',
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($this->name),
-            'defaultValue' => sprintf("%s", addslashes($defaultValue)),
+            'defaultValue' => sprintf('%s', addslashes($defaultValue)),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -93,7 +92,7 @@ class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableI
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_NUMBER_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_NUMBER_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 
@@ -147,7 +146,23 @@ class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableI
         return $iFieldMaxLength;
     }
 
-    protected function GetFieldWriterData() {
+    public function RenderFieldPropertyString()
+    {
+        $viewParser = new TViewParser();
+        $viewParser->bShowTemplatePathAsHTMLHint = false;
+        $data = $this->GetFieldWriterData();
+
+        if ('null' === $data['sFieldDefaultValue']) {
+            $data['sFieldType'] = '?'.$data['sFieldType'];
+        }
+
+        $viewParser->AddVarArray($data);
+
+        return $viewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
+    }
+
+    protected function GetFieldWriterData()
+    {
         $data = parent::GetFieldWriterData();
         $data['sFieldType'] = 'int';
 

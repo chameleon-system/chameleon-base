@@ -44,8 +44,8 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -76,7 +76,6 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
         return [];
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -96,11 +95,11 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
             </span>
         </div>
       <script type=\"text/javascript\">
-  			$(document).ready(function() {
-  			  $('#".TGlobal::OutJS($this->name)."').countRemainingChars('".TGlobal::OutJS(
-                $this->fieldWidth
-            )."','#".TGlobal::OutJS($this->name)."Count');
-  			});
+              $(document).ready(function() {
+                $('#".TGlobal::OutJS($this->name)."').countRemainingChars('".TGlobal::OutJS(
+            $this->fieldWidth
+        )."','#".TGlobal::OutJS($this->name)."Count');
+              });
       </script>";
 
         return $html;
@@ -162,5 +161,20 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
         }
 
         return $bHasContent;
+    }
+
+    public function RenderFieldPropertyString()
+    {
+        $viewParser = new TViewParser();
+        $viewParser->bShowTemplatePathAsHTMLHint = false;
+        $data = $this->GetFieldWriterData();
+
+        if ('null' === $data['sFieldDefaultValue']) {
+            $data['sFieldType'] = '?'.$data['sFieldType'];
+        }
+
+        $viewParser->AddVarArray($data);
+
+        return $viewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
     }
 }

@@ -159,6 +159,21 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
         return $oViewParser->RenderObjectView('method', 'TCMSFields/TCMSField');
     }
 
+    public function RenderFieldPropertyString()
+    {
+        $viewParser = new TViewParser();
+        $viewParser->bShowTemplatePathAsHTMLHint = false;
+        $data = $this->GetFieldWriterData();
+
+        if ('null' === $data['sFieldDefaultValue']) {
+            $data['sFieldType'] = '?'.$data['sFieldType'];
+        }
+
+        $viewParser->AddVarArray($data);
+
+        return $viewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
+    }
+
     private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
