@@ -44,9 +44,7 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
 
     public function getBodyHtml(bool $forceCacheReload = false): string
     {
-        $body = $this->generateBodyHtml();
-
-        return $body;
+        return $this->generateBodyHtml();
     }
 
     public function showWidget(): bool
