@@ -8,7 +8,8 @@ It is recommended to follow these steps in the given order.
 
 ## PHP Version
 
-Minimum required PHP version is 8.2. The recommended PHP version is >= 8.4.
+Minimum required PHP version is 8.2. The recommended PHP version is 8.3.
+At the moment PHP 8.4 is not yet supported.
 
 ## Mandatory Routes
 
