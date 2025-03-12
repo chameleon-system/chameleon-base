@@ -1,29 +1,30 @@
 <?php
 
-namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
+namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics;
 
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
-use ChameleonSystem\CmsDashboardBundle\Service\GoogleSearchConsoleService;
+use ChameleonSystem\CmsDashboardBundle\Service\GoogleAnalyticsDashboardService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
+class TrafficSourceWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-search-console';
+    private const WIDGET_NAME = 'widget-google-analytics-traffic-source';
 
     public function __construct(
         private readonly DashboardCacheService $dashboardCacheService,
         private readonly \ViewRenderer $renderer,
         private readonly TranslatorInterface $translator,
         private readonly SecurityHelperAccess $securityHelperAccess,
-        private readonly GoogleSearchConsoleService $googleSearchConsoleService,
+        private readonly GoogleAnalyticsDashboardService $googleAnalyticsService,
         private readonly string $googleSearchConsoleAuthJson,
-        private readonly string $googleSearchConsoleDomainProperty,
-        private readonly int $googleSearchConsolePeriodDays,
+        private readonly string $googleAnalyticsPropertyId,
+        private readonly int $googleAnalyticsPeriodDays,
         private readonly RightsDataAccessInterface $rightsDataAccess
     ) {
         parent::__construct($dashboardCacheService, $translator);
@@ -32,17 +33,24 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
     public function getTitle(): string
     {
         return $this->translator->trans(
-            'chameleon_system_cms_dashboard.widget.search_console_title',
+            'chameleon_system_cms_dashboard.widget.google_analytics.traffic_source_title',
             [
-                '%domain%' => $this->googleSearchConsoleDomainProperty,
-                '%days%' => $this->googleSearchConsolePeriodDays,
+                '%property%' => $this->googleAnalyticsPropertyId,
+                '%days%' => $this->googleAnalyticsPeriodDays,
             ]
         );
     }
 
+    public function getBodyHtml(bool $forceCacheReload = false): string
+    {
+        $body = $this->generateBodyHtml();
+
+        return $body;
+    }
+
     public function showWidget(): bool
     {
-        if ('' === $this->googleSearchConsoleAuthJson || '' === $this->googleSearchConsoleDomainProperty) {
+        if ('' === $this->googleSearchConsoleAuthJson || '' === $this->googleAnalyticsPropertyId) {
             return false;
         }
 
@@ -58,13 +66,10 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
     public function getDropdownItems(): array
     {
         $dropDownMenuItem = new WidgetDropdownItemDataModel(
-            'searchConsoleWidget',
-            $this->translator->trans(
-                'chameleon_system_cms_dashboard.widget.search_console_dropdown_menu_console_link_title'
-            ),
-            'https://search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3A'
-            .$this->googleSearchConsoleDomainProperty
-            .'&hl=de&num_of_days=28&compare_date=PREV&metrics=CLICKS%2CIMPRESSIONS'
+            'googleAnalyticsWidget',
+            $this->translator->trans('chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title'),
+            'https://analytics.google.com/analytics/web/#/p'.$this->googleAnalyticsPropertyId
+            .'/reports/explorer?params=_u..nav%3Dmaui%26_r.explorerCard..selmet%3D%5B%22newUsers%22%5D%26_r.explorerCard..seldim%3D%5B%22firstUserPrimaryChannelGroup%22%5D&r=lifecycle-user-acquisition-v2&collectionId=5150716439',
         );
 
         $dropDownMenuItem->setTarget('_blank');
@@ -89,25 +94,24 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
 
     protected function generateBodyHtml(): string
     {
-        $currentEnd = (new \DateTime())->format('Y-m-d');
-        $currentStart = (new \DateTime('-'.$this->googleSearchConsolePeriodDays.' days'))->format('Y-m-d');
-        $previousEnd = (new \DateTime('-'.($this->googleSearchConsolePeriodDays + 1).' days'))->format('Y-m-d');
-        $previousStart = (new \DateTime('-'.($this->googleSearchConsolePeriodDays * 2 + 1).' days'))->format('Y-m-d');
+        $currentEnd = (new \DateTime('- 1 days'))->format('Y-m-d');
+        $currentStart = (new \DateTime('-'.$this->googleAnalyticsPeriodDays.' days'))->format('Y-m-d');
+        $previousEnd = (new \DateTime('-'.($this->googleAnalyticsPeriodDays + 1).' days'))->format('Y-m-d');
+        $previousStart = (new \DateTime('-'.($this->googleAnalyticsPeriodDays * 2 + 1).' days'))->format('Y-m-d');
 
-        $comparisonData = $this->googleSearchConsoleService->getComparisonData(
-            'sc-domain:'.$this->googleSearchConsoleDomainProperty,
+        $trafficSource = $this->googleAnalyticsService->getTrafficSource(
+            $this->googleAnalyticsPropertyId,
             $currentStart,
             $currentEnd,
             $previousStart,
             $previousEnd
         );
 
-        $this->renderer->AddSourceObject('dayPeriod', $this->googleSearchConsolePeriodDays);
-        $this->renderer->AddSourceObject('searchConsoleCurrentData', $comparisonData['current']);
-        $this->renderer->AddSourceObject('searchConsolePreviousData', $comparisonData['previous']);
-        $this->renderer->AddSourceObject('searchConsoleTopImprovedQueries', $comparisonData['topImprovedQueries']);
+        // Pass the data to the view renderer
+        $this->renderer->AddSourceObject('dayPeriod', $this->googleAnalyticsPeriodDays);
+        $this->renderer->AddSourceObject('trafficSource', $trafficSource);
 
-        $renderedTable = $this->renderer->Render('CmsDashboard/search-console-widget.html.twig');
+        $renderedTable = $this->renderer->Render('CmsDashboard/google-analytics/traffic-source-widget.html.twig');
 
         return "<div>
                     <div class='bg-white'>
@@ -116,9 +120,6 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
                 </div>';
     }
 
-    /**
-     * method is used by SecurityHelperAccess to check if the user has the required rights to see the widget.
-     */
     public function getPermittedGroups(?string $qualifier = null): array
     {
         $groupSystemNames = $this->getPermittedGroupSystemNames();

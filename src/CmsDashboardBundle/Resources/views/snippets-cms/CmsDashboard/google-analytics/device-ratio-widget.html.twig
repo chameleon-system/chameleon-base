@@ -1,0 +1,124 @@
+{# @var array deviceRatioData #}
+{% if deviceRatioData %}
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="deviceEngagementChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <canvas id="deviceConversionChart"></canvas>
+    </div>
+</div>
+
+<div class="table-responsive mt-4">
+    <table class="mb-0 table table-striped">
+        <thead>
+        <tr>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.device'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.engaged_sessions_current'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.engaged_sessions_previous'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.conversions_current'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.conversions_previous'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in deviceRatioData.current %}
+            <tr>
+                <td>{{ data.dimension_0 }}</td>
+                <td>{{ data.metric_0 }}</td>
+                <td>{{ deviceRatioData.previous[loop.index0].metric_0 }}</td>
+                <td>{{ data.metric_1 }}</td>
+                <td>{{ deviceRatioData.previous[loop.index0].metric_1 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deviceDataCurrent = {{ deviceRatioData.current|json_encode|raw }};
+        const deviceDataPrevious = {{ deviceRatioData.previous|json_encode|raw }};
+
+        if (!deviceDataCurrent || deviceDataCurrent.length === 0) {
+            console.error("No data available for device ratio chart");
+            return;
+        }
+
+        // Prepare labels and data
+        const labels = deviceDataCurrent.map(d => d.dimension_0);
+        const engagedSessionsCurrent = deviceDataCurrent.map(d => d.metric_0);
+        const engagedSessionsPrevious = deviceDataPrevious.map(d => d.metric_0);
+        const conversionsCurrent = deviceDataCurrent.map(d => d.metric_1);
+        const conversionsPrevious = deviceDataPrevious.map(d => d.metric_1);
+
+        // Colors for Pie Chart
+        const colors = [
+            {% for element in deviceRatioData.current %}
+            '{{ generate_color(loop.index, deviceRatioData.current|length)|e('js') }}'
+            {% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        // Engaged Sessions Pie Chart
+        new Chart(document.getElementById("deviceEngagementChart"), {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "{{ 'chameleon_system_cms_dashboard.widget.engaged_sessions'|trans|e('js') }}",
+                        data: engagedSessionsCurrent,
+                        backgroundColor: colors
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: "top" },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let value = context.raw;
+                                return context.label + ": " + value + " sessions";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Conversions Pie Chart
+        new Chart(document.getElementById("deviceConversionChart"), {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "{{ 'chameleon_system_cms_dashboard.widget.conversions'|trans|e('js') }}",
+                        data: conversionsCurrent,
+                        backgroundColor: colors
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: "top" },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let value = context.raw;
+                                return context.label + ": " + value + " conversions";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% else %}
+    <div class="chart-no-data-message">
+        {{ 'chameleon_system_cms_dashboard.widget.no_data_available' | trans }}
+    </div>
+{% endif %}

@@ -1,0 +1,43 @@
+{# @var array utmTracking #}
+{% if utmTracking %}
+<div class="table-responsive">
+    <table class="table table-striped mb-0">
+        <thead>
+        <tr>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campain'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.source'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.medium'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.sessions_current'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.sessions_previous'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.sessions_change'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.conversions_current'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.conversions_previous'|trans }}</th>
+            <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.conversions_change'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for entry in utmTracking %}
+            <tr>
+                <td>{{ entry.campaign }}</td>
+                <td>{{ entry.source }}</td>
+                <td>{{ entry.medium }}</td>
+                <td>{{ entry.current_sessions }}</td>
+                <td>{{ entry.previous_sessions }}</td>
+                <td class="{% if entry.session_change < 0 %}text-danger{% else %}text-success{% endif %}">
+                    {{ entry.session_change }}
+                </td>
+                <td>{{ entry.current_conversions | number_format(2, ',', '.') }}</td>
+                <td>{{ entry.previous_conversions | number_format(2, ',', '.') }}</td>
+                <td class="{% if entry.conversion_change < 0 %}text-danger{% else %}text-success{% endif %}">
+                    {{ entry.conversion_change | number_format(2, ',', '.')}}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <div class="chart-no-data-message">
+        {{ 'chameleon_system_cms_dashboard.widget.no_data_available' | trans }}
+    </div>
+{% endif %}

@@ -1,0 +1,31 @@
+{# @var array geoLocation #}
+
+{% if geoLocation %}
+<div id="geoLocationChart" style="max-height: 800px;"></div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        google.charts.load('current', {
+            'packages': ['geochart'],
+        });
+        google.charts.setOnLoadCallback(() => {
+            const geoLocationData = {{ geoLocation.current|json_encode|raw }};
+
+            const formattedData = [['Country', 'Sessions', 'Conversion']].concat(geoLocationData.map(entry => ([
+                entry.dimension_0, parseInt(entry.metric_0), parseInt(entry.metric_1)
+            ])));
+
+            var data = google.visualization.arrayToDataTable(formattedData);
+
+            var options = {};
+
+            var chart = new google.visualization.GeoChart(document.getElementById('geoLocationChart'));
+            chart.draw(data, options);
+        });
+    });
+</script>
+{% else %}
+    <div class="chart-no-data-message">
+        {{ 'chameleon_system_cms_dashboard.widget.no_data_available' | trans }}
+    </div>
+{% endif %}
