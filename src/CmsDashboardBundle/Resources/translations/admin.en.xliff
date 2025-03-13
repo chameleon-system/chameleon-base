@@ -163,6 +163,10 @@
                 <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-engagement-rate</source>
                 <target>Engagement Rate</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campaign">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campaign</source>
+                <target>UTM Campaign</target>
+            </trans-unit>
             <!-- Engagement Rate -->
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics_engagement_rate_dashboard_link_title">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics_engagement_rate_dashboard_link_title</source>
