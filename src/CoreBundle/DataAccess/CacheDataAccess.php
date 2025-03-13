@@ -17,35 +17,16 @@ use TCMSRecord;
 
 /**
  * @template T extends TCMSRecord
+ *
  * @implements DataAccessInterface<T>
  */
-class CacheDataAccess implements DataAccessInterface
+readonly class CacheDataAccess implements DataAccessInterface
 {
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
-
-    /**
-     * @var DataAccessInterface
-     */
-    private $decorated;
-
-    /**
-     * @param CacheInterface           $cache
-     * @param LanguageServiceInterface $languageService
-     * @param DataAccessInterface<T>    $decorated
-     */
-    public function __construct(CacheInterface $cache, LanguageServiceInterface $languageService, DataAccessInterface $decorated)
+    public function __construct(
+        private CacheInterface $cache,
+        private LanguageServiceInterface $languageService,
+        private DataAccessInterface $decorated)
     {
-        $this->cache = $cache;
-        $this->languageService = $languageService;
-        $this->decorated = $decorated;
     }
 
     /**
@@ -56,14 +37,15 @@ class CacheDataAccess implements DataAccessInterface
         if (null === $languageId) {
             $languageId = $this->languageService->getActiveLanguageId();
         }
-        $key = $this->cache->getKey(array(
-            get_class(),
+        $key = $this->cache->getKey([
+            __CLASS__,
             'loadAll',
             get_class($this->decorated),
             $languageId,
-        ));
+        ]);
         /**
-         * @var TCMSRecord[] $elements
+         * @var \TCMSRecord[] $elements
+         *
          * @psalm-var T[] $elements
          */
         $elements = $this->cache->get($key);
@@ -80,6 +62,6 @@ class CacheDataAccess implements DataAccessInterface
      */
     public function getCacheTriggers()
     {
-        return array();
+        return [];
     }
 }
