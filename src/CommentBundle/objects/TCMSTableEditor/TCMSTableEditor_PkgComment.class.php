@@ -57,7 +57,7 @@ class TCMSTableEditor_PkgComment extends TCMSTableEditor
         return $oRecordData;
     }
 
-    private function getCacheService(): CacheInterface
+    protected function getCacheService(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');
     }
