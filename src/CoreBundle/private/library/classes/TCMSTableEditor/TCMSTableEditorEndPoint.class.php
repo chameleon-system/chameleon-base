@@ -1665,7 +1665,7 @@ class TCMSTableEditorEndPoint
             }
         }
 
-        if (true === $isFirst || [] === $dataForChangeRecorder) {
+        if (true === $isFirst || [] === $dataForChangeRecorder && true === $bIsUpdateCall) {
             return true; // no changes made, but is a valid operation
         }
 
