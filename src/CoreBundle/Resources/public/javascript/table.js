@@ -51,8 +51,24 @@ function selectExtendedLookupMultiTableRecord(id) {
 }
 
 function selectExtendedLookupRecordClose(data, statusText) {
-    var fieldDisplayValue = parent.document.getElementById(document.cmsformAjaxCall.fieldName.value + 'CurrentSelection');
+    var fieldName = document.cmsformAjaxCall.fieldName.value;
+    var fieldDisplayValue = parent.document.getElementById(fieldName + 'CurrentSelection');
+    var hiddenField = parent.document.getElementById(fieldName);
+
     fieldDisplayValue.innerHTML = data;
+
+    var editButton = parent.document.querySelector(".input-group-append a");
+
+    if (editButton) {
+        var newId = hiddenField.value;
+
+        var currentHref = new URL(editButton.href, window.location.origin);
+        var urlParams = new URLSearchParams(currentHref.search);
+
+        urlParams.set('id', newId);
+        editButton.href = currentHref.pathname + '?' + urlParams.toString();
+    }
+
     parent.CloseModalIFrameDialog();
 }
 

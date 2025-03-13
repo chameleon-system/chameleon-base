@@ -408,6 +408,16 @@ function setTableEditorListFieldState(triggerDiv, requestURL) {
 function resetExtendedListField(fieldName, defaultValue, defaultPreview) {
     document.getElementById(fieldName).value = defaultValue;
     document.getElementById(fieldName + 'CurrentSelection').innerHTML = defaultPreview;
+
+    var editButton = document.querySelector(".input-group-append a");
+
+    if (editButton) {
+        var currentHref = new URL(editButton.href, window.location.origin);
+        var urlParams = new URLSearchParams(currentHref.search);
+
+        urlParams.delete('id');
+        editButton.href = currentHref.pathname + '?' + urlParams.toString();
+    }
 }
 
 /*
