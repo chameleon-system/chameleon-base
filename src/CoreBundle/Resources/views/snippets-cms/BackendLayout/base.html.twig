@@ -20,12 +20,12 @@
         {% endblock %}
     </head>
     <body{% if bodyClass is defined %} class="{{ bodyClass }}"{% endif %}{% if bodyAttributes is defined %} {{ bodyAttributes }}{% endif %}>
-        {% block body %}
+    {% block body %}
             {% block sidebar %}
             {% endblock %}
 
             {% if bg is not defined %}
-                {% set bg = 'bg-light bg-gradient' %}
+                {% set bg = 'bg-splash' %}
             {% endif %}
             <div class="wrapper d-flex flex-column min-vh-100 {{ bg }}">
                 {% block header %}
