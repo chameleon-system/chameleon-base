@@ -409,7 +409,7 @@ function resetExtendedListField(fieldName, defaultValue, defaultPreview) {
     document.getElementById(fieldName).value = defaultValue;
     document.getElementById(fieldName + 'CurrentSelection').innerHTML = defaultPreview;
 
-    var editButton = document.querySelector(".input-group-append a");
+    var editButton = document.querySelector(".lookup-button");
 
     if (editButton) {
         var currentHref = new URL(editButton.href, window.location.origin);
