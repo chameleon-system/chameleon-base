@@ -418,7 +418,27 @@ function resetExtendedListField(fieldName, defaultValue, defaultPreview) {
         urlParams.delete('id');
         editButton.href = currentHref.pathname + '?' + urlParams.toString();
     }
+
+    updateButtonState();
 }
+
+function updateButtonState() {
+    document.querySelectorAll(".lookup-button").forEach(editButton => {
+        var currentHref = new URL(editButton.href, window.location.origin);
+        var urlParams = new URLSearchParams(currentHref.search);
+        var id = urlParams.get("id");
+        var isDisabled = !id || id.trim() === "";
+        if (isDisabled == true ) {
+            editButton.classList.add("disabled");
+        } else {
+            editButton.classList.remove("disabled");
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    updateButtonState();
+})
 
 /*
  * extended multi table list field: resets field value to default value

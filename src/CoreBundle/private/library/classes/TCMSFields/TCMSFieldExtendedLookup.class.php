@@ -69,7 +69,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
                 \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.switch_to'),
                 $this->getSelectedEntryLink($this->data),
                 'far fa-edit',
-                null,
+                'lookup-button',
                 null,
                 null,
                 null,

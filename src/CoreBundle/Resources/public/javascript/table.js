@@ -54,19 +54,16 @@ function selectExtendedLookupRecordClose(data, statusText) {
     var fieldName = document.cmsformAjaxCall.fieldName.value;
     var fieldDisplayValue = parent.document.getElementById(fieldName + 'CurrentSelection');
     var hiddenField = parent.document.getElementById(fieldName);
-
     fieldDisplayValue.innerHTML = data;
+    var newId = hiddenField.value;
 
-    var editButton = parent.document.querySelector(".input-group-append a");
-
+    var editButton = parent.document.querySelector(".lookup-button");
     if (editButton) {
-        var newId = hiddenField.value;
-
         var currentHref = new URL(editButton.href, window.location.origin);
         var urlParams = new URLSearchParams(currentHref.search);
-
-        urlParams.set('id', newId);
+        urlParams.set("id", newId);
         editButton.href = currentHref.pathname + '?' + urlParams.toString();
+        editButton.classList.remove("disabled");
     }
 
     parent.CloseModalIFrameDialog();
