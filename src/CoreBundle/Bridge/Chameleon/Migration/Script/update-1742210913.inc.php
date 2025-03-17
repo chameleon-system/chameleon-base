@@ -5,18 +5,20 @@
 </div>
 <?php
 
-/** @var \ChameleonSystem\CoreBundle\Util\FieldTranslationUtil $fieldTranslationHelper */
-$fieldTranslationHelper = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+/** @var ChameleonSystem\CoreBundle\Util\FieldTranslationUtil $fieldTranslationHelper */
+$fieldTranslationHelper = ChameleonSystem\CoreBundle\ServiceLocator::get(
+    'chameleon_system_core.util.field_translation'
+);
 
 $connection = TCMSLogChange::getDatabaseConnection();
 
-foreach($connection->fetchAllAssociative('SELECT * FROM cms_right WHERE name=""') as $cmsRight){
+foreach ($connection->fetchAllAssociative('SELECT * FROM cms_right WHERE name=""') as $cmsRight) {
     $name = $cmsRight['name'];
-    if(isset($cmsRight['name__en'])){
+    if (isset($cmsRight['name__en'])) {
         $name = $cmsRight['name__en'];
     }
-    //DE-Translation has a higher priority
-    if(isset($cmsRight['name__de'])){
+    // DE-Translation has a higher priority
+    if (isset($cmsRight['name__de'])) {
         $name = $cmsRight['name__de'];
     }
     $connection->update('cms_right', ['name' => $name], ['id' => $cmsRight['id']]);
