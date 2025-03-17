@@ -21,5 +21,5 @@ $query ="ALTER TABLE cms_right
                             name VARCHAR(40) NOT NULL COMMENT 'CMS-Kürzel des Rechtetyps: '";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-$query ="ALTER TABLE cms_right DROP name__en";
+$query ="ALTER TABLE cms_right DROP IF EXISTS name__en ";
 TCMSLogChange::RunQuery(__LINE__, $query);
