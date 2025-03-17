@@ -5,21 +5,4 @@
 </div>
 <?php
 
-$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
-    ->setFields([
-        'is_translatable' => '0', // prev.: '1'
-    ])
-    ->setWhereEquals([
-        'name' => 'name',
-        'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_right'),
-    ])
-;
-TCMSLogChange::update(__LINE__, $data);
-
-$query ="ALTER TABLE cms_right
-                     CHANGE name
-                            name VARCHAR(40) NOT NULL COMMENT 'CMS-Kürzel des Rechtetyps: '";
-TCMSLogChange::RunQuery(__LINE__, $query);
-
-$query ="ALTER TABLE cms_right DROP IF EXISTS name__en ";
-TCMSLogChange::RunQuery(__LINE__, $query);
+TCMSLogChange::makeFieldMonolingual('cms_right', 'name');
