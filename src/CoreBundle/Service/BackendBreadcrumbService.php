@@ -13,8 +13,8 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
-use Symfony\Component\HttpFoundation\RequestStack;
 use esono\pkgCmsCache\CacheInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * manages the history object (also called "breadcrumb"), uses a cache and session object as fallback (esp. in development mode).
@@ -112,7 +112,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
             return $this->resetSession();
         }
 
-        if(false === $currentRequest->getSession()->has(self::BREADCRUMB_SESSION_KEY)){
+        if (false === $currentRequest->getSession()->has(self::BREADCRUMB_SESSION_KEY)) {
             return $this->resetSession();
         }
 
@@ -126,6 +126,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
     {
         $this->history = new \TCMSURLHistory();
         $this->requestStack->getCurrentRequest()?->getSession()->set(self::BREADCRUMB_SESSION_KEY, $this->history);
+
         return $this->history;
     }
 
