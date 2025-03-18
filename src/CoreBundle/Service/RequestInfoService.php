@@ -12,7 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -68,8 +67,6 @@ class RequestInfoService implements RequestInfoServiceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param int $requestType
      */
     public function isChameleonRequestType(int $requestType): bool
     {
