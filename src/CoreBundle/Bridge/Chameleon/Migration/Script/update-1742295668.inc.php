@@ -103,9 +103,6 @@ if (
             'id' => $shopArticleMltFieldId,
         ]);
     TCMSLogChange::update(__LINE__, $data);
-
-    $query = "ALTER TABLE `shop_discount` ADD `shop_article_mlt` ENUM ('0','1') DEFAULT '0' NOT NULL";
-    TCMSLogChange::RunQuery(__LINE__, $query);
 }
 
 
