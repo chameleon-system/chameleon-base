@@ -889,6 +889,7 @@
 
         <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService" public="true">
             <argument type="service" id="chameleon_system_cms_cache.cache"/>
+            <argument type="service" id="request_stack"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
         </service>
 
