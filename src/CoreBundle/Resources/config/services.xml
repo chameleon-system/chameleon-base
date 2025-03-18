@@ -328,6 +328,7 @@
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="chameleon_system_core.language_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
+            <argument type="service" id="chameleon_system_core.preview_mode_service" />
         </service>
 
         <service id="chameleon_system_core.active_page_service" class="ChameleonSystem\CoreBundle\Service\ActivePageService" public="true">

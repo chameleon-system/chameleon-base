@@ -21,10 +21,8 @@ interface RequestInfoServiceInterface
     /**
      * Returns the chameleon request type. This is always an integer that is defined as
      * a constant in ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface.
-     *
-     * @return int
      */
-    public function getChameleonRequestType();
+    public function getChameleonRequestType(): int;
 
     /**
      * Compares a given chameleon request type to the currently active request type.
@@ -32,38 +30,29 @@ interface RequestInfoServiceInterface
      * @param int $requestType This must be an integer that is defined as a constant in
      *                         Returns the chameleon request type. This is always an integer that is defined as
      *                         a constant in ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface
-     *
-     * @return bool
      */
-    public function isChameleonRequestType($requestType);
+    public function isChameleonRequestType(int $requestType): bool;
 
     /**
      * Returns true if the user is accessing a frontend page in template mode.
      * This is used when editing spots in the backend.
-     *
-     * @return bool
      */
-    public function isCmsTemplateEngineEditMode();
+    public function isCmsTemplateEngineEditMode(): bool;
 
     /**
      * Returns true if the user is accessing a frontend page in preview mode.
      * This is used when a page is previewed from the backend.
-     *
-     * @return bool
      */
-    public function isPreviewMode();
+    public function isPreviewMode(): bool;
 
-    /**
-     * @return bool
-     */
-    public function isBackendMode();
+    public function isFrontendJsDisabled(): bool;
+
+    public function isBackendMode(): bool;
 
     /**
      * Returns the request URI, without the portal and language prefixes.
-     *
-     * @return string
      */
-    public function getPathInfoWithoutPortalAndLanguagePrefix();
+    public function getPathInfoWithoutPortalAndLanguagePrefix(): string;
 
     /**
      * Returns a unique ID for every request.
