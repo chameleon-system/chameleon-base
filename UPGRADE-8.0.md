@@ -245,6 +245,7 @@ after:
 - `CHAMELEON_ENABLE_FLUSHING` removed
 - `\ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController` removed
 - `RequestInfoServiceInterface` is now fully typed. If you extended it, make sure to update your code.
+- `TGlobalBase::isFrontendJSDisabled` was removed. Use `ServiceLocator::get('chameleon_system_core.request_info_service')->isFrontendJsDisabled()` instead.
 
 ## jQuery and jQuery Migrate
 
