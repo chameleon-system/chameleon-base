@@ -19,11 +19,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestInfoService implements RequestInfoServiceInterface
 {
-    private RequestStack $requestStack;
-    private LanguageServiceInterface $languageService;
-    private PortalDomainServiceInterface $portalDomainService;
     private ?string $pathInfoWithoutPortalAndLanguagePrefix = null;
-    private UrlPrefixGeneratorInterface $urlPrefixGenerator;
     private ?string $requestId = null;
 
     /**
@@ -34,21 +30,18 @@ class RequestInfoService implements RequestInfoServiceInterface
     private ?bool $isPreviewModeCache = null;
 
     public function __construct(
-        RequestStack $requestStack,
-        PortalDomainServiceInterface $portalDomainService,
-        LanguageServiceInterface $languageService,
-        UrlPrefixGeneratorInterface $urlPrefixGenerator,
+        private readonly RequestStack $requestStack,
+        private readonly PortalDomainServiceInterface $portalDomainService,
+        private readonly LanguageServiceInterface $languageService,
+        private readonly UrlPrefixGeneratorInterface $urlPrefixGenerator,
+        private readonly PreviewModeServiceInterface $previewModeService
     ) {
-        $this->requestStack = $requestStack;
-        $this->languageService = $languageService;
-        $this->portalDomainService = $portalDomainService;
-        $this->urlPrefixGenerator = $urlPrefixGenerator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getChameleonRequestType()
+    public function getChameleonRequestType(): int
     {
         if (null !== $this->chameleonRequestType) {
             return $this->chameleonRequestType;
@@ -78,15 +71,12 @@ class RequestInfoService implements RequestInfoServiceInterface
      *
      * @param int $requestType
      */
-    public function isChameleonRequestType($requestType)
+    public function isChameleonRequestType(int $requestType): bool
     {
         return $this->getChameleonRequestType() === $requestType;
     }
 
-    /**
-     * @return Request|null
-     */
-    protected function getRequest()
+    protected function getRequest(): ?Request
     {
         return $this->requestStack->getCurrentRequest();
     }
@@ -94,7 +84,7 @@ class RequestInfoService implements RequestInfoServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function isCmsTemplateEngineEditMode()
+    public function isCmsTemplateEngineEditMode(): bool
     {
         if (null !== $this->isCmsTemplateEngineEditModeCache) {
             return $this->isCmsTemplateEngineEditModeCache;
@@ -112,7 +102,7 @@ class RequestInfoService implements RequestInfoServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function isPreviewMode()
+    public function isPreviewMode(): bool
     {
         if (null !== $this->isPreviewModeCache) {
             return $this->isPreviewModeCache;
@@ -124,7 +114,10 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         $this->isPreviewModeCache = false === \TGlobal::IsCMSMode()
-            && true === $this->getPreviewModeService()->currentSessionHasPreviewAccess() || $this->checkTokenFromQueryParam($request)
+            && (
+                true === $this->previewModeService->currentSessionHasPreviewAccess()
+                || $this->checkTokenFromQueryParam($request)
+            )
             && (
                 'true' === $request->query->get('__previewmode')
                 || 'true' === $request->query->get('preview')
@@ -133,10 +126,20 @@ class RequestInfoService implements RequestInfoServiceInterface
         return $this->isPreviewModeCache;
     }
 
+    public function isFrontendJsDisabled(): bool
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
+        }
+
+        return 'true' === $request->query->get('disableFrontendJs') || 'true' === $request->get('disableFrontendJS');
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function isBackendMode()
+    public function isBackendMode(): bool
     {
         return $this->isChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_BACKEND);
     }
@@ -144,7 +147,7 @@ class RequestInfoService implements RequestInfoServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getPathInfoWithoutPortalAndLanguagePrefix()
+    public function getPathInfoWithoutPortalAndLanguagePrefix(): string
     {
         if (null !== $this->pathInfoWithoutPortalAndLanguagePrefix) {
             return $this->pathInfoWithoutPortalAndLanguagePrefix;
@@ -192,11 +195,6 @@ class RequestInfoService implements RequestInfoServiceInterface
         return $this->requestId;
     }
 
-    protected function getPreviewModeService(): PreviewModeServiceInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.preview_mode_service');
-    }
-
     private function checkTokenFromQueryParam(Request $request): bool
     {
         $previewToken = $request->query->get('previewToken');
@@ -204,6 +202,6 @@ class RequestInfoService implements RequestInfoServiceInterface
             return false;
         }
 
-        return $this->getPreviewModeService()->previewTokenExists($previewToken);
+        return $this->previewModeService->previewTokenExists($previewToken);
     }
 }
