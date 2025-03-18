@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use Symfony\Component\HttpFoundation\RequestStack;
 use esono\pkgCmsCache\CacheInterface;
 
 /**
@@ -26,6 +27,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 
     public function __construct(
         private readonly CacheInterface $cache,
+        private readonly RequestStack $requestStack,
         private readonly SecurityHelperAccess $securityHelperAccess
     ) {
     }
@@ -105,11 +107,16 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
 
     private function getBreadCrumbFromSession()
     {
-        if (false === isset($_SESSION[self::BREADCRUMB_SESSION_KEY])) {
+        $currentRequest = $this->requestStack->getCurrentRequest();
+        if (null === $currentRequest || false === $currentRequest->hasSession()) {
             return $this->resetSession();
         }
 
-        return $_SESSION[self::BREADCRUMB_SESSION_KEY];
+        if(false === $currentRequest->getSession()->has(self::BREADCRUMB_SESSION_KEY)){
+            return $this->resetSession();
+        }
+
+        return $currentRequest->getSession()->get(self::BREADCRUMB_SESSION_KEY);
     }
 
     /**
@@ -118,8 +125,7 @@ class BackendBreadcrumbService implements BackendBreadcrumbServiceInterface
     private function resetSession(): \TCMSURLHistory
     {
         $this->history = new \TCMSURLHistory();
-        $_SESSION[self::BREADCRUMB_SESSION_KEY] = $this->history;
-
+        $this->requestStack->getCurrentRequest()?->getSession()->set(self::BREADCRUMB_SESSION_KEY, $this->history);
         return $this->history;
     }
 
