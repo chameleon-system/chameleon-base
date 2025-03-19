@@ -63,24 +63,6 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
     /**
      * {@inheritdoc}
      */
-    public function ChangeFieldTypePreHook()
-    {
-        parent::ChangeFieldTypePreHook();
-        $connection = $this->getDatabaseConnection();
-
-        $query = sprintf(
-            'ALTER TABLE %s DROP %s ',
-            $connection->quoteIdentifier($this->sTableName),
-            $connection->quoteIdentifier($this->getInverseEmptyFieldName())
-        );
-        $connection->executeQuery($query);
-        $queryData = [new LogChangeDataModel($query)];
-        TCMSLogChange::WriteTransaction($queryData);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function GetHTML()
     {
         $translator = $this->getTranslator();
