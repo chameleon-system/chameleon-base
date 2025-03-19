@@ -20,8 +20,6 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
     {
         $parts = parent::getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
 
-
-
         $default = $this->oDefinition->sqlData['field_default_value'];
         if ('' === $default) {
             $default = '0';
@@ -33,15 +31,15 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             'docCommentType' => 'bool',
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
-            'defaultValue' => sprintf("%s", '1' === $default ? 'true' : 'false'),
+            'defaultValue' => sprintf('%s', '1' === $default ? 'true' : 'false'),
             'allowDefaultValue' => true,
-            'getterName' => 'is'. $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->getInverseEmptyFieldName()),
+            'getterName' => 'is'.$this->snakeToPascalCase($this->getInverseEmptyFieldName()),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->getInverseEmptyFieldName()),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
 
-        $mappingXml =  $this->getDoctrineRenderer('mapping/boolean.xml.twig', [
+        $mappingXml = $this->getDoctrineRenderer('mapping/boolean.xml.twig', [
             'fieldName' => $this->snakeToCamelCase($this->getInverseEmptyFieldName()),
             'type' => 'boolean',
             'comment' => $this->oDefinition->sqlData['translation'],
@@ -49,53 +47,18 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             'default' => $default,
         ])->render();
 
-
-        return $parts->merge(new DataModelParts(
-            $propertyCode,
-            $methodCode,
-            $mappingXml,
-            [],
-            true
-        ));
-    }
-
-
-    const INVERSE_EMPTY_FIELD_NAME_POST_NAME = '_inverse_empty';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function ChangeFieldTypePreHook()
-    {
-        parent::ChangeFieldTypePreHook();
-        $connection = $this->getDatabaseConnection();
-
-        $query = sprintf(
-            'ALTER TABLE %s DROP %s ',
-            $connection->quoteIdentifier($this->sTableName),
-            $connection->quoteIdentifier($this->getInverseEmptyFieldName())
+        return $parts->merge(
+            new DataModelParts(
+                $propertyCode,
+                $methodCode,
+                $mappingXml,
+                [],
+                true
+            )
         );
-        $connection->executeQuery($query);
-        $queryData = array(new LogChangeDataModel($query));
-        TCMSLogChange::WriteTransaction($queryData);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function ChangeFieldTypePostHook()
-    {
-        parent::ChangeFieldTypePostHook();
-        $connection = $this->getDatabaseConnection();
-        $query = sprintf(
-            "ALTER TABLE %s ADD %s ENUM ('0','1') DEFAULT '0' NOT NULL",
-            $connection->quoteIdentifier($this->sTableName),
-            $connection->quoteIdentifier($this->getInverseEmptyFieldName())
-        );
-        $connection->executeQuery($query);
-        $queryData = array(new LogChangeDataModel($query));
-        TCMSLogChange::WriteTransaction($queryData);
-    }
+    public const INVERSE_EMPTY_FIELD_NAME_POST_NAME = '_inverse_empty';
 
     /**
      * {@inheritdoc}
@@ -112,7 +75,7 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             '
             <div class="fieldMltInverseEmpty" >
                 <input type="checkbox" name="%s" id="fieldMltInverseEmptyCheckbox%s" %s value="1" autocomplete="off">
-                <label for="fieldMltInverseEmptyCheckbox%2$s">%s</label> 
+                <label for="fieldMltInverseEmptyCheckbox%2$s">%s</label>
                 <span class="toolTipButton toolTipButton%2$s"><i class="fas fa-question-circle text-info" style="font-size: 1.3em; cursor: pointer; cursor: hand;" title="%s"></i></span>
                 <div class="tooltipContainer alert alert-info">%s</div>
             </div>
@@ -124,14 +87,17 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             $translator->trans('chameleon_system_core.cms_module_table_editor.field_help'),
             $translator->trans('chameleon_system_core.field_lookup_multi_select_restriction.check_help')
         );
-        $html .= sprintf('
-        <script type="text/javascript"> 
+        $html .= sprintf(
+            '
+        <script type="text/javascript">
             $(\'.toolTipButton%1$s\').siblings(\'.tooltipContainer\').hide();
             $(\'.toolTipButton%1$s\').bind(\'click\',function(){
                 $(this).siblings(\'.tooltipContainer\').toggle();
             });
         </script>
-        ', $this->name);
+        ',
+            $this->name
+        );
 
         return $html.' '.parent::GetHTML();
     }
@@ -147,7 +113,7 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             $connection->quoteIdentifier($this->sTableName),
             $connection->quoteIdentifier($this->getInverseEmptyFieldName())
         );
-        $result = $connection->fetchColumn($query, array('recordId' => $this->oTableRow->sqlData['id']));
+        $result = $connection->fetchColumn($query, ['recordId' => $this->oTableRow->sqlData['id']]);
         if (false === $result) {
             return false;
         }
@@ -170,15 +136,15 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
         $connection = $this->getDatabaseConnection();
         $connection->update(
             $this->oTableRow->table,
-            array($inverseEmptyFieldName => $inverseEmptyValue),
-            array('id' => $this->oTableRow->id)
+            [$inverseEmptyFieldName => $inverseEmptyValue],
+            ['id' => $this->oTableRow->id]
         );
         $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
         $migrationQueryData = new MigrationQueryData($this->oTableRow->table, $editLanguageIsoCode);
         $migrationQueryData
-            ->setFields(array($inverseEmptyFieldName => $inverseEmptyValue))
-            ->setWhereEquals(array('id' => $this->oTableRow->id));
-        $queryData = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_INSERT));
+            ->setFields([$inverseEmptyFieldName => $inverseEmptyValue])
+            ->setWhereEquals(['id' => $this->oTableRow->id]);
+        $queryData = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_INSERT)];
 
         TCMSLogChange::WriteTransaction($queryData);
     }
@@ -198,8 +164,8 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
         $itemClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $targetTableName);
         $methodData['sReturnType'] = $itemClassName.'List|null';
         $methodData['inverseEmptyFieldName'] = TCMSTableToClass::PREFIX_PROPERTY.TCMSTableToClass::ConvertToClassString(
-                $this->getInverseEmptyFieldName()
-            );
+            $this->getInverseEmptyFieldName()
+        );
         $methodData['aParameters']['sOrderBy'] = self::GetMethodParameterArray(
             'string',
             "''",
@@ -233,9 +199,9 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
         );
         $viewParser->AddVar('sMethodCode', $methodCode);
         $methodOutput .= "\n".$viewParser->RenderObjectView(
-                'method',
-                'TCMSFields/TCMSFieldLookupMultiSelectRestriction'
-            );
+            'method',
+            'TCMSFields/TCMSFieldLookupMultiSelectRestriction'
+        );
 
         return $methodOutput;
     }
@@ -279,27 +245,27 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
      */
     protected function GetInverseEmptyFieldWriterData()
     {
-        $fieldNotes = array();
+        $fieldNotes = [];
         $fieldNoteHelp = trim($this->oDefinition->sqlData['049_helptext']);
         if (!empty($fieldNoteHelp)) {
             $fieldNoteHelp = wordwrap($fieldNoteHelp, 80);
             $fieldNotes = explode("\n", $fieldNoteHelp);
         }
 
-        $writeData = array(
+        $writeData = [
             'sFieldFullName' => $this->oDefinition->sqlData['translation'].' inverse empty selection logic',
             'aFieldDesc' => $fieldNotes,
             'sFieldType' => 'boolean',
             'sFieldVisibility' => 'public',
             'sFieldName' => TCMSTableToClass::PREFIX_PROPERTY.TCMSTableToClass::ConvertToClassString(
-                    $this->getInverseEmptyFieldName()
-                ),
+                $this->getInverseEmptyFieldName()
+            ),
             'sFieldDefaultValue' => 'false',
             'sFieldDatabaseName' => $this->getInverseEmptyFieldName(),
             'oDefinition' => $this->oDefinition,
             'sTableName' => $this->sTableName,
             'databaseConnection' => $this->getDatabaseConnection(),
-        );
+        ];
 
         return $writeData;
     }
@@ -309,6 +275,6 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }

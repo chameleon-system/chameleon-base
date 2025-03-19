@@ -14,6 +14,10 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 
 abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableInterface
 {
+    public function __construct()
+    {
+        $this->isMLTField = true;
+    }
 
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
@@ -47,7 +51,6 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
         );
     }
 
-
     protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string
     {
         $propertyName = $this->name;
@@ -59,35 +62,34 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
 
         return $this->getDoctrineRenderer($viewName, [
             'fieldName' => $this->snakeToCamelCase($propertyName.'_collection'),
-            'targetClass' => sprintf('%s\\%s', $tableNamespaceMapping[$this->GetForeignTableName()], $this->snakeToPascalCase($this->GetForeignTableName())),
+            'targetClass' => sprintf(
+                '%s\\%s',
+                $tableNamespaceMapping[$this->GetForeignTableName()],
+                $this->snakeToPascalCase($this->GetForeignTableName())
+            ),
             'joinTable' => $this->GetMLTTableName(),
             'comment' => $this->oDefinition->sqlData['translation'],
-
         ])->render();
     }
-
-
-    public function __construct()
-    {
-        $this->isMLTField = true;
-    }
-
 
     public function getMltValues()
     {
         $sMltTableName = $this->GetMLTTableName();
         $oFieldTableRow = $this->oTableRow;
-        $aConnectedIds = array();
+        $aConnectedIds = [];
 
-        if (is_array($oFieldTableRow->sqlData) && array_key_exists('id', $oFieldTableRow->sqlData) && !empty($oFieldTableRow->sqlData['id'])) {
+        if (is_array($oFieldTableRow->sqlData) && array_key_exists('id', $oFieldTableRow->sqlData)
+            && !empty($oFieldTableRow->sqlData['id'])) {
             $recordId = $oFieldTableRow->sqlData['id'];
 
             $oTableConf = new TCMSTableConf();
             $oTableConf->LoadFromField('name', $this->sTableName);
 
-            $sAlreadyConnectedQuery = 'SELECT * FROM `'.\MySqlLegacySupport::getInstance()->real_escape_string($sMltTableName)."` WHERE `source_id` = '".\MySqlLegacySupport::getInstance()->real_escape_string($recordId)."'";
-            $tRes = \MySqlLegacySupport::getInstance()->query($sAlreadyConnectedQuery);
-            while ($aRow = \MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
+            $sAlreadyConnectedQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string(
+                $sMltTableName
+            )."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($recordId)."'";
+            $tRes = MySqlLegacySupport::getInstance()->query($sAlreadyConnectedQuery);
+            while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
                 $aConnectedIds[] = $aRow['target_id'];
             }
         }
@@ -142,7 +144,7 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
         $quotedTableName = $databaseConnection->quoteIdentifier($tableName);
         $quotedNameColumn = $databaseConnection->quoteIdentifier($nameColumn);
         if (is_array($this->data)) {
-            $idList = join(',', array_map(array($databaseConnection, 'quote'), $this->data));
+            $idList = join(',', array_map([$databaseConnection, 'quote'], $this->data));
         } else {
             $idList = $databaseConnection->quote($this->data);
         }
@@ -153,8 +155,8 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
             return '';
         }
 
-        $aRetValueArray = array();
-        while ($row = $result->fetch(\PDO::FETCH_ASSOC)) {
+        $aRetValueArray = [];
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $aRetValueArray[] = $row[$nameColumn];
         }
 
@@ -197,13 +199,12 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
      * Returns the cleared table without _mlt post fix.
      * If given table name was empty get table name from field name.
      *
-     *
      * @param string $sTableName can be mlt field name or table name
-     * @param array  $aFieldData If filled get table name from sql field data (only if given table name was empty)
+     * @param array $aFieldData If filled get table name from sql field data (only if given table name was empty)
      *
      * @return string|null
      */
-    protected function GetClearedTableName($sTableName, $aFieldData = array())
+    protected function GetClearedTableName($sTableName, $aFieldData = [])
     {
         if (is_null($sTableName) || empty($sTableName)) {
             $sName = $this->name;
@@ -237,12 +238,13 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
         $oTableConf->LoadFromField('name', $foreignTableName);
         $sNameField = $oTableConf->GetNameColumn();
 
-        $query = 'SELECT * FROM `'.\MySqlLegacySupport::getInstance()->real_escape_string($foreignTableName).'` AS parenttable
+        $query = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($foreignTableName).'` AS parenttable
     WHERE 1=1
     '.$this->GetMLTRecordRestrictions().'';
         $bShowCustomsort = $this->oDefinition->GetFieldtypeConfigKey('bAllowCustomSortOrder');
         if (true == $bShowCustomsort) {
-            $query .= 'ORDER BY MLT.`entry_sort` ASC , `parenttable`.`'.\MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'`';
+            $query .= 'ORDER BY MLT.`entry_sort` ASC , `parenttable`.`'.MySqlLegacySupport::getInstance()
+                    ->real_escape_string($sNameField).'`';
         }
 
         return $query;
