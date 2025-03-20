@@ -324,7 +324,7 @@ a.cmsModuleMenuLauncher:hover {
 .moduleChooserMenu {
   border: 1px solid #b8daff;
   margin-bottom: 8px;
-  background-color: #cce5ff;
+  background-color: #ebedef;
   border-left: 6px solid #39f;
   border-radius: 4px;
 }
@@ -360,12 +360,14 @@ a.cmsModuleMenuLauncher:hover {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  background-color: #cce5ff;
 }
 
 .modulePositionSwitcher {
   color: #004085 !important;
   text-align: right;
   border-top: 1px solid #39f;
+  background-color: #cce5ff;
 }
 
 .moduleBlockForm {

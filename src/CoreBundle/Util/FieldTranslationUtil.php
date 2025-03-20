@@ -14,40 +14,17 @@ namespace ChameleonSystem\CoreBundle\Util;
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
-use InvalidArgumentException;
-use TdbCmsFieldConf;
-use TTools;
 
 class FieldTranslationUtil
 {
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
-
-    /**
-     * @param RequestInfoServiceInterface $requestInfoService
-     * @param LanguageServiceInterface    $languageService
-     */
     public function __construct(
-        RequestInfoServiceInterface $requestInfoService,
-        LanguageServiceInterface $languageService,
-        readonly private BackendSessionInterface $backendSession
+        private readonly RequestInfoServiceInterface $requestInfoService,
+        private readonly LanguageServiceInterface $languageService,
+        private readonly BackendSessionInterface $backendSession
     ) {
-        $this->requestInfoService = $requestInfoService;
-        $this->languageService = $languageService;
     }
 
-    /**
-     * @param \TdbCmsLanguage|null $language
-     *
-     * @return bool
-     */
-    public function isTranslationNeeded(\TdbCmsLanguage $language = null)
+    public function isTranslationNeeded(?\TdbCmsLanguage $language = null): bool
     {
         if (null === $language) {
             $language = $this->getCurrentLanguage();
@@ -60,16 +37,14 @@ class FieldTranslationUtil
         return $language->id !== $this->getBaseLanguage()->id;
     }
 
-    /**
-     * @param string               $tableName
-     * @param string               $fieldName
-     * @param \TdbCmsLanguage|null $language
-     *
-     * @return string
-     */
-    public function getTranslatedFieldName($tableName, $fieldName, \TdbCmsLanguage $language = null)
+    public function getTranslatedFieldName(string $tableName, string $fieldName, ?\TdbCmsLanguage $language = null): string
     {
         $baseLanguage = $this->getBaseLanguage();
+
+        if (null === $baseLanguage) {
+            return $fieldName;
+        }
+
         if (null === $language) {
             $language = $this->getCurrentLanguage();
             if (null === $language) {
@@ -85,17 +60,14 @@ class FieldTranslationUtil
             return $fieldName;
         }
         $translatedFieldList = $translatableFieldList[$tableName];
-        if (!in_array($fieldName, $translatedFieldList)) {
+        if (false === in_array($fieldName, $translatedFieldList)) {
             return $fieldName;
         }
 
         return $fieldName.'__'.$language->fieldIso6391;
     }
 
-    /**
-     * @return \TdbCmsLanguage|null
-     */
-    private function getCurrentLanguage()
+    private function getCurrentLanguage(): ?\TdbCmsLanguage
     {
         if ($this->requestInfoService->isBackendMode()) {
             $language = \TdbCmsLanguage::GetNewInstance($this->backendSession->getCurrentEditLanguageId());
@@ -106,10 +78,7 @@ class FieldTranslationUtil
         return $language;
     }
 
-    /**
-     * @return \TdbCmsLanguage|null
-     */
-    private function getBaseLanguage()
+    private function getBaseLanguage(): ?\TdbCmsLanguage
     {
         static $baseLanguage = null;
         if (null === $baseLanguage) {
@@ -122,12 +91,8 @@ class FieldTranslationUtil
     /**
      * Translates all field names in the query where necessary. This requires that all table names and all field names
      * are enclosed in backticks.
-     *
-     * @param string $query
-     *
-     * @return string
      */
-    public function getTranslatedQuery($query)
+    public function getTranslatedQuery(string $query): string
     {
         if (!$this->isTranslationNeeded()) {
             return $query;
@@ -157,13 +122,13 @@ class FieldTranslationUtil
      * This is not a method to be proud of - it just helps managing translations in the backend list manager where
      * translations were not counted in originally.
      *
-     * @param string[]             $fieldList
-     * @param \TdbCmsLanguage|null $language  the language in which the translated fields should be expected. Defaults to
-     *                                        the currently active language
+     * @param string[] $fieldList
+     * @param \TdbCmsLanguage|null $language the language in which the translated fields should be expected. Defaults to
+     *                                       the currently active language
      *
      * @return string[]
      */
-    public function copyTranslationsToDefaultFields(array $fieldList, \TdbCmsLanguage $language = null)
+    public function copyTranslationsToDefaultFields(array $fieldList, ?\TdbCmsLanguage $language = null)
     {
         if (null === $language) {
             $language = $this->getCurrentLanguage();
@@ -188,13 +153,9 @@ class FieldTranslationUtil
     /**
      * Marks a field as translatable and changes the database structure accordingly.
      *
-     * @param string $fieldId
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return void
+     * @throws \InvalidArgumentException
      */
-    public function makeFieldMultilingual($fieldId)
+    public function makeFieldMultilingual(string $fieldId): void
     {
         $this->changeTranslatableState($fieldId, true);
     }
@@ -202,34 +163,25 @@ class FieldTranslationUtil
     /**
      * Marks a field as non-translatable and changes the database structure accordingly.
      *
-     * @param string $fieldId
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return void
+     * @throws \InvalidArgumentException
      */
-    public function makeFieldMonolingual($fieldId)
+    public function makeFieldMonolingual(string $fieldId): void
     {
         $this->changeTranslatableState($fieldId, false);
     }
 
     /**
-     * @param string $fieldId
-     * @param bool   $translatable
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return void
+     * @throws \InvalidArgumentException
      */
-    private function changeTranslatableState($fieldId, $translatable)
+    private function changeTranslatableState(string $fieldId, bool $translatable): void
     {
-        $fieldConf = TdbCmsFieldConf::GetNewInstance($fieldId);
+        $fieldConf = \TdbCmsFieldConf::GetNewInstance($fieldId);
         if (false === $fieldConf->sqlData) {
-            throw new InvalidArgumentException("Field with ID '$fieldId' not found.");
+            throw new \InvalidArgumentException("Field with ID '$fieldId' not found.");
         }
 
         $translatableString = $translatable ? '1' : '0';
-        $tableEditorManager = TTools::GetTableEditorManager('cms_field_conf', $fieldId);
+        $tableEditorManager = \TTools::GetTableEditorManager('cms_field_conf', $fieldId);
         $tableEditorManager->AllowEditByAll(true);
         $tableEditorManager->SaveField('is_translatable', $translatableString);
         $tableEditorManager->AllowEditByAll(false);
