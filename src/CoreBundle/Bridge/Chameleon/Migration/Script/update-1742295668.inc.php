@@ -84,26 +84,36 @@ if (0 === TCMSLogChange::GetFieldType('CMSFIELD_MULTITABLELIST_RESTRICTION')) {
     TCMSLogChange::insert(__LINE__, $data);
 }
 
-if (
-    true === TCMSLogChange::TableExists('shop_discount')
-    && true === TCMSLogChange::FieldExists(
-        'shop_discount',
-        'shop_article_mlt'
-    )
-) {
-    $shopArticleMltFieldId = TCMSLogChange::GetTableFieldId(
-        TCMSLogChange::GetTableId('shop_discount'),
-        'shop_article_mlt'
-    );
-    $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
-        ->setFields([
-            'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_MULTITABLELIST_RESTRICTION'),
-        ])
-        ->setWhereEquals([
-            'id' => $shopArticleMltFieldId,
-        ]);
-    TCMSLogChange::update(__LINE__, $data);
+$fieldsToBeUpdated = [
+        'shop_article_mlt',
+        'shop_category_mlt',
+        'data_extranet_group_mlt',
+        'data_extranet_user_mlt',
+];
+
+foreach($fieldsToBeUpdated as $fieldName) {
+    if (
+        true === TCMSLogChange::TableExists('shop_discount')
+        && true === TCMSLogChange::FieldExists(
+            'shop_discount',
+            $fieldName
+        )
+    ) {
+        $mltFieldId = TCMSLogChange::GetTableFieldId(
+            TCMSLogChange::GetTableId('shop_discount'),
+            $fieldName
+        );
+        $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
+            ->setFields([
+                'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_MULTITABLELIST_RESTRICTION'),
+            ])
+            ->setWhereEquals([
+                'id' => $mltFieldId,
+            ]);
+        TCMSLogChange::update(__LINE__, $data);
+    }
 }
+
 
 
 
