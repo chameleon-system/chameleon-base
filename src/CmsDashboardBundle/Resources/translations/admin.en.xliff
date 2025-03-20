@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="chameleon_system_cms_dashboard.dashboard">
                 <source>chameleon_system_cms_dashboard.dashboard</source>
-                <target>Chameleon Dashboard</target>
+                <target>Dashboard</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.for">
                 <source>chameleon_system_cms_dashboard.for</source>

@@ -811,16 +811,13 @@ class TTools
     }
 
     /**
-     * fetches the id for a tablename.
+     * Fetches the id for a table name.
      *
-     * @param string $tableName
      * @param bool $forceLoad - if true the local cache is ignored
      *
-     * @return string
-     *
-     * @throws InvalidArgumentException if no table was found for $tableName
+     * @throws InvalidArgumentException|\Doctrine\DBAL\Exception if no table was found for $tableName
      */
-    public static function GetCMSTableId($tableName, $forceLoad = false)
+    public static function GetCMSTableId(string $tableName, bool $forceLoad = false): string
     {
         static $tableIdCache = [];
 
@@ -837,7 +834,22 @@ class TTools
             'tableName' => $tableName,
         ]);
         if (false === $tableId) {
-            throw new InvalidArgumentException("Table $tableName not found.");
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+            $traceInfo = array_map(static function ($trace) {
+                return sprintf(
+                    '%s%s%s:%d',
+                    $trace['class'] ?? '',
+                    $trace['type'] ?? '',
+                    $trace['function'] ?? 'unknown',
+                    $trace['line'] ?? 0
+                );
+            }, $backtrace);
+
+            throw new InvalidArgumentException(sprintf(
+                "Table '%s' not found. Call stack: %s",
+                $tableName,
+                implode(' -> ', $traceInfo)
+            ));
         }
         $tableIdCache[$tableName] = $tableId;
 
