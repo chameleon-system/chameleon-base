@@ -54,7 +54,7 @@ class SupportedLanguagesService implements SupportedLanguagesServiceInterface
                   ON c.`translation_base_language_id` = l.`id`
         ';
 
-        return $this->databaseConnection->fetchColumn($query);
+        return $this->databaseConnection->fetchOne($query);
     }
 
     /**

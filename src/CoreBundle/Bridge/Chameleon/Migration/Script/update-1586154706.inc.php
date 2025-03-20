@@ -7,8 +7,8 @@
 
 $connection = TCMSLogChange::getDatabaseConnection();
 
-$editorRoleId = $connection->fetchColumn("SELECT `id` FROM `cms_role` WHERE `name` = 'editor'");
-$navigationEditRightId = $connection->fetchColumn("SELECT `id` FROM `cms_right` WHERE `name` = 'navigation_edit'");
+$editorRoleId = $connection->fetchOne("SELECT `id` FROM `cms_role` WHERE `name` = 'editor'");
+$navigationEditRightId = $connection->fetchOne("SELECT `id` FROM `cms_right` WHERE `name` = 'navigation_edit'");
 
 if (false === $editorRoleId || false === $navigationEditRightId) {
     return;

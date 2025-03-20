@@ -188,7 +188,7 @@ class Cache implements CacheInterface
                              `table` = '{$sTriggerList}',
                              `groupid` = '{$triggerGroup}'
         ";
-        $this->getDbConnection()->query($query);
+        $this->getDbConnection()->executeQuery($query);
         $this->getDbConnection()->commit();
     }
 
@@ -214,10 +214,10 @@ class Cache implements CacheInterface
         }
         $this->getDbConnection()->beginTransaction();
         $query = 'DELETE FROM `_cms_cache_info`';
-        $this->getDbConnection()->query($query);
+        $this->getDbConnection()->executeQuery($query);
         $query = 'DELETE FROM `_cms_cache_group`';
         try {
-            $this->getDbConnection()->query($query);
+            $this->getDbConnection()->executeQuery($query);
         } catch (DBALException $e) {
             // the table does not exist yet
         }
@@ -241,13 +241,13 @@ class Cache implements CacheInterface
         try {
             $stmt = $this->getDbConnection()->prepare($query);
             $stmt->bindValue(1, '%|'.$table.'|%');
-            $stmt->execute();
+            $result = $stmt->executeQuery();
         } catch (DBALException $e) {
             return;
         }
 
         $aSelect = array();
-        while ($group = $stmt->fetch()) {
+        while ($group = $result->fetchAssociative()) {
             $groupId = $group['id'];
             if (null === $id || '' === $id) {
                 $aSelect[] = "SELECT cms_cache_key FROM _cms_cache_info WHERE `groupid` = '{$groupId}' AND (`table` LIKE '%|{$table}=%|%')";
@@ -260,9 +260,9 @@ class Cache implements CacheInterface
         }
         $fullSelect = implode(' UNION DISTINCT ', $aSelect);
 
-        $stmt = $this->getDbConnection()->query($fullSelect);
+        $result = $this->getDbConnection()->executeQuery($fullSelect);
 
-        while ($trigger = $stmt->fetch()) {
+        while ($trigger = $result->fetchAssociative()) {
             $this->delete($trigger['cms_cache_key']);
         }
     }
@@ -340,7 +340,7 @@ class Cache implements CacheInterface
                                  SET `id` = '{$group}',
                                      `tables` = '{$sTableList}'
                  ";
-        $this->getDbConnection()->query($query);
+        $this->getDbConnection()->executeQuery($query);
 
         return $group;
     }

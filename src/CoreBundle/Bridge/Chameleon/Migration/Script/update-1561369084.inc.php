@@ -7,9 +7,9 @@
 
 $connection = TCMSLogChange::getDatabaseConnection();
 
-$firstPortalId = $connection->fetchColumn('SELECT `id` FROM `cms_portal` ORDER BY `id` ASC LIMIT 1');
+$firstPortalId = $connection->fetchOne('SELECT `id` FROM `cms_portal` ORDER BY `id` ASC LIMIT 1');
 
-$primaryPortalId = $connection->fetchColumn('SELECT `cms_portal_id` FROM `cms_config`');
+$primaryPortalId = $connection->fetchOne('SELECT `cms_portal_id` FROM `cms_config`');
 
 if ($firstPortalId !== $primaryPortalId) {
     TCMSLogChange::addInfoMessage(

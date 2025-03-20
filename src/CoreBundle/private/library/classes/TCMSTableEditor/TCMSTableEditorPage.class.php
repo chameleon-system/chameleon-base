@@ -236,7 +236,7 @@ class TCMSTableEditorPage extends TCMSTableEditor
             $fullHTMLTrees = self::GetNavigationBreadCrumbs($oCmsTplPage->id);
 
             // we don`t want to use a table editor here, to prevent a workflow transaction with ALL pages
-            $statement->execute([
+            $statement->executeQuery([
                 'treePathSearchString' => $fullHTMLTrees,
                 'id' => $oCmsTplPage->id,
             ]);

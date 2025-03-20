@@ -9,7 +9,7 @@ $query = 'SELECT EXISTS (SELECT 1 FROM `cms_tbl_conf_index`
           WHERE `cms_tbl_conf_id` = :tableId
             AND `name` = :indexName
           )';
-$indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchColumn(
+$indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchOne(
     $query,
     [
         'tableId' => TCMSLogChange::GetTableId('t_country'),
@@ -37,7 +37,7 @@ $query = 'SELECT EXISTS (SELECT 1 FROM `cms_tbl_conf_index`
           WHERE `cms_tbl_conf_id` = :tableId
             AND `name` = :indexName
           )';
-$indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchColumn(
+$indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchOne(
     $query,
     [
         'tableId' => TCMSLogChange::GetTableId('cms_message_manager_message'),
@@ -66,7 +66,7 @@ $query = 'SELECT EXISTS (SELECT 1 FROM `cms_tbl_conf_index`
           WHERE `cms_tbl_conf_id` = :tableId
             AND `name` = :indexName
           )';
-$indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchColumn(
+$indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchOne(
     $query,
     [
         'tableId' => TCMSLogChange::GetTableId('cms_config_parameter'),
@@ -94,7 +94,7 @@ $query = 'SELECT EXISTS (SELECT 1 FROM `cms_tbl_conf_index`
           WHERE `cms_tbl_conf_id` = :tableId
             AND `name` = :indexName
           )';
-$indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchColumn(
+$indexEntryExists = TCMSLogChange::getDatabaseConnection()->fetchOne(
     $query,
     [
         'tableId' => TCMSLogChange::GetTableId('cms_url_alias'),

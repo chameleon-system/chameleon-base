@@ -176,7 +176,7 @@ class MainMenuMigrator
         $systemName = $row['system_name'];
 
         $query = 'SELECT `position` FROM `cms_menu_category` ORDER BY `position` DESC';
-        $lastPosition = (int) $this->databaseConnection->fetchColumn($query);
+        $lastPosition = (int) $this->databaseConnection->fetchOne($query);
         ++$lastPosition;
 
         $iconFontClass = $this->getFontIconStyleByImage($row['icon_list'], $additionalIconMapping);
@@ -230,10 +230,10 @@ class MainMenuMigrator
                    )
             ORDER BY `cms_tbl_conf`.`translation` ASC
 ";
-        $statement = $this->databaseConnection->executeQuery($query, ['contentBoxId' => $oldContentBoxId, '']);
+        $result = $this->databaseConnection->executeQuery($query, ['contentBoxId' => $oldContentBoxId, '']);
 
-        $position = $this->databaseConnection->fetchColumn('SELECT MAX(`position`) + 1 FROM `cms_menu_item` WHERE `cms_menu_category_id` = ?', [$newCategoryId]) ?? 0;
-        while (false !== $row = $statement->fetch()) {
+        $position = $this->databaseConnection->fetchOne('SELECT MAX(`position`) + 1 FROM `cms_menu_item` WHERE `cms_menu_category_id` = ?', [$newCategoryId]) ?? 0;
+        while (false !== $row = $result->fetchAssociative()) {
             $menuItemId = \TCMSLogChange::createUnusedRecordId('cms_menu_item');
 
             $iconFontClass = $row['icon_font_css_class'];
@@ -275,19 +275,19 @@ class MainMenuMigrator
 
     private function getAllSupportedLanguages(): array
     {
-        $primaryLanguage = $this->databaseConnection->fetchColumn('SELECT `translation_base_language_id` FROM `cms_config`');
+        $primaryLanguage = $this->databaseConnection->fetchOne('SELECT `translation_base_language_id` FROM `cms_config`');
 
         $query = 'SELECT `iso_6391`
           FROM `cms_language` AS l
           JOIN `cms_config_cms_language_mlt` AS mlt ON l.`id` = mlt.`target_id`
           WHERE l.`id` <> ?';
-        $statement = $this->databaseConnection->executeQuery($query, [$primaryLanguage]);
+        $result = $this->databaseConnection->executeQuery($query, [$primaryLanguage]);
 
         $languageList = [];
-        while (false !== $row = $statement->fetch()) {
+        while (false !== $row = $result->fetchOne()) {
             $languageList[] = $row['iso_6391'];
         }
-        $statement->closeCursor();
+        $result->free();
 
         return $languageList;
     }

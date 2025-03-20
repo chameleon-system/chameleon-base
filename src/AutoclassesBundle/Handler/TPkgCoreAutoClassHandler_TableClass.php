@@ -141,8 +141,8 @@ class TPkgCoreAutoClassHandler_TableClass extends TPkgCoreAutoClassHandler_Abstr
         if (null === $this->aClassNameList) {
             $this->aClassNameList = [];
             $query = 'SELECT `name` FROM `cms_tbl_conf` ORDER BY `cmsident`';
-            $tRes = $this->getDatabaseConnection()->query($query);
-            while ($aRow = $tRes->fetch(\PDO::FETCH_NUM)) {
+            $result = $this->getDatabaseConnection()->executeQuery($query);
+            while ($aRow = $result->fetchNumeric()) {
                 $this->aClassNameList[] = $this->getClassNameFromKey($aRow[0]);
             }
         }

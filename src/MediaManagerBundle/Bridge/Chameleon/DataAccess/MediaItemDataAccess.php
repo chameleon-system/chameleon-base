@@ -25,6 +25,7 @@ use ChameleonSystem\MediaManager\SortColumnCollection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
 use TCMSstdClass;
 use TCMSTableEditorManager;
@@ -108,7 +109,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
                 array('mediaTreeIds' => $treeIds),
                 array('mediaTreeIds' => Connection::PARAM_STR_ARRAY)
             );
-            $rows = $stm->fetchAllAssociative(\PDO::FETCH_ASSOC);
+            $rows = $stm->fetchAllAssociative();
         } catch (DBALException $e) {
             throw new DataAccessException(
                 sprintf('Error getting media items for tree node %s: %s', $mediaTreeNode->getId(), $e->getMessage())
@@ -415,18 +416,18 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         $languageId
     ) {
         try {
-            $stm = $this->databaseConnection->executeQuery(
+            $result = $this->databaseConnection->executeQuery(
                 $query,
                 $params,
                 $paramTypes
             );
-            $numberOfRecords = (int) $stm->rowCount();
+            $numberOfRecords = (int) $result->rowCount();
 
-            $stm = $this->transformStatementForPaging($stm, $mediaManagerListRequest, $query, $params, $paramTypes);
+            $result = $this->transformStatementForPaging($result, $mediaManagerListRequest, $query, $params, $paramTypes);
             $numberOfPages = (int) ceil($numberOfRecords / $mediaManagerListRequest->getPageSize());
 
             $mediaItems = array();
-            $rows = $stm->fetchAllAssociative(\PDO::FETCH_ASSOC);
+            $rows = $result->fetchAllAssociative();
             foreach ($rows as $row) {
                 $mediaItems[] = $this->createDataModelFromTableObject(TdbCmsMedia::GetNewInstance($row, $languageId));
             }
@@ -442,13 +443,13 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     }
 
     /**
-     * @param Statement|\PDOStatement $stm
+     * @param DriverStatement|DriverResultStatement $stm
      * @param MediaManagerListRequest $mediaManagerListRequest
      * @param string                  $query
      * @param array                   $params
      * @param array                   $paramTypes
      *
-     * @return Statement|DriverResultStatement|\PDOStatement
+     * @return DriverStatement|DriverResultStatement|\PDOStatement
      *
      * @throws DBALException
      */
@@ -526,7 +527,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     {
         $query = 'SELECT * FROM `cms_media` WHERE `id` IN (:ids)';
         try {
-            $stm = $this->databaseConnection->executeQuery(
+            $result = $this->databaseConnection->executeQuery(
                 $query,
                 array('ids' => $ids),
                 array('ids' => Connection::PARAM_STR_ARRAY)
@@ -537,7 +538,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             );
         }
         $items = array();
-        while ($row = $stm->fetch(\PDO::FETCH_ASSOC)) {
+        while ($row = $result->fetchAssociative()) {
             $tableObject = TdbCmsMedia::GetNewInstance($row, $languageId);
             $items[] = $this->createDataModelFromTableObject($tableObject);
         }
@@ -667,8 +668,8 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             'SELECT `id`, %1$s FROM `cms_tags` WHERE %1$s IN (?)',
             $this->databaseConnection->quoteIdentifier($tagNameFieldName)
         );
-        $stm = $this->databaseConnection->executeQuery($query, [$tagNames], [Connection::PARAM_STR_ARRAY]);
-        while ($row = $stm->fetch(\PDO::FETCH_ASSOC)) {
+        $result = $this->databaseConnection->executeQuery($query, [$tagNames], [Connection::PARAM_STR_ARRAY]);
+        while ($row = $result->fetchAssociative()) {
             $tags[$row['id']] = $row[$tagNameFieldName];
         }
 

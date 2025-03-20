@@ -645,13 +645,15 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         }
         $sQuery = "SELECT $quotedIdentifierColumn FROM $quotedTableName WHERE `id` in ($idList) ORDER BY $quotedIdentifierColumn";
 
-        $result = $databaseConnection->query($sQuery);
-        if (!$result) {
+        try {
+            $result = $databaseConnection->executeQuery($sQuery);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            // If the query fails, handle it here
             return '';
         }
 
         $aRetValueArray = [];
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $result->fetchAssociative()) {
             $aRetValueArray[] = $row[$identifyingColumnName];
         }
 

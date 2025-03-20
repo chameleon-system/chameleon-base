@@ -135,38 +135,38 @@ $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
 // Get data of all tables.
 
-$statement = $databaseConnection->executeQuery('SELECT * FROM `cms_tbl_conf`');
-if (false === $statement) {
+$result = $databaseConnection->executeQuery('SELECT * FROM `cms_tbl_conf`');
+if (0 === $result->rowCount()) {
     TCMSLogChange::addInfoMessage('Could not retrieve list of tables.', TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
 
     return;
 }
 
 $tableList = [];
-while (false !== $row = $statement->fetch()) {
+while (false !== $row = $result->fetchAssociative()) {
     $tableList[$row['name']] = $row;
 }
-$statement->closeCursor();
+$result->free();
 
 // Get data of all backend modules.
 
-$statement = $databaseConnection->executeQuery('SELECT * FROM `cms_module`');
-if (false === $statement) {
+$result = $databaseConnection->executeQuery('SELECT * FROM `cms_module`');
+if (0 === $result->rowCount()) {
     TCMSLogChange::addInfoMessage('Could not retrieve list of modules.', TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
 
     return;
 }
 
 $moduleList = [];
-while (false !== $row = $statement->fetch()) {
+while (false !== $row = $result->fetchAssociative()) {
     $moduleList[$row['uniquecmsname']] = $row;
 }
-$statement->closeCursor();
+$result->free();
 
 // Get data of all custom menu items.
 
-$statement = $databaseConnection->executeQuery('SELECT * FROM `cms_menu_custom_item`');
-if (false === $statement) {
+$result = $databaseConnection->executeQuery('SELECT * FROM `cms_menu_custom_item`');
+if (0 === $result->rowCount()) {
     TCMSLogChange::addInfoMessage('Could not retrieve list of custom main menu items.', TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
 
     return;
@@ -186,47 +186,47 @@ $nameFieldNameEn = $fieldTranslationUtil->getTranslatedFieldName(
         $languageService->getLanguageFromIsoCode('en')
 );
 $customMenuItemList = [];
-while (false !== $row = $statement->fetch()) {
+while (false !== $row = $result->fetchAssociative()) {
     $customMenuItemList[$row[$nameFieldNameEn]] = $row;
 }
-$statement->closeCursor();
+$result->free();
 
 // Get all supported languages.
 
-$primaryLanguage = $databaseConnection->fetchColumn('SELECT `translation_base_language_id` FROM `cms_config`');
+$primaryLanguage = $databaseConnection->fetchOne('SELECT `translation_base_language_id` FROM `cms_config`');
 
 $languages = [];
 $query = 'SELECT `iso_6391`
           FROM `cms_language` AS l
           JOIN `cms_config_cms_language_mlt` AS mlt ON l.`id` = mlt.`target_id`
           WHERE l.`id` <> ?';
-$statement = $databaseConnection->executeQuery($query, [$primaryLanguage]);
-if (false === $statement) {
+$result = $databaseConnection->executeQuery($query, [$primaryLanguage]);
+if (0 === $result->rowCount()) {
     TCMSLogChange::addInfoMessage('Could not retrieve list of languages.', TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
 
     return;
 }
 
 $languageList = [];
-while (false !== $row = $statement->fetch()) {
+while (false !== $row = $result->fetchAssociative()) {
     $languageList[] = $row['iso_6391'];
 }
-$statement->closeCursor();
+$result->free();
 
 // Get main menu category data
 
-$statement = $databaseConnection->executeQuery('SELECT `id`, `system_name` FROM `cms_menu_category`');
-if (false === $statement) {
+$result = $databaseConnection->executeQuery('SELECT `id`, `system_name` FROM `cms_menu_category`');
+if (0 === $result->rowCount()) {
     TCMSLogChange::addInfoMessage('Could not retrieve list of main menu categories.', TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
 
     return;
 }
 
 $categoryList = [];
-while (false !== $row = $statement->fetch()) {
+while (false !== $row = $result->fetchAssociative()) {
     $categoryList[$row['system_name']] = $row;
 }
-$statement->closeCursor();
+$result->free();
 unset($statement);
 
 // Create menu items.

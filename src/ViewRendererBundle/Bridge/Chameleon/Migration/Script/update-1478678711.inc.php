@@ -6,7 +6,7 @@
 <?php
 
 $connection = TCMSLogChange::getDatabaseConnection();
-$oldValue = trim($connection->fetchColumn('SELECT `additional_files_to_delete_from_cache` FROM `cms_config`'));
+$oldValue = trim($connection->fetchOne('SELECT `additional_files_to_delete_from_cache` FROM `cms_config`'));
 if ('' === $oldValue) {
     $newValue = 'chameleon/outbox/static/less/cached';
 } else {

@@ -833,7 +833,7 @@ class TTools
         }
 
         $query = 'SELECT `id` FROM `cms_tbl_conf` WHERE `name` = :tableName';
-        $tableId = self::getDatabaseConnection()->fetchColumn($query, [
+        $tableId = self::getDatabaseConnection()->fetchOne($query, [
             'tableName' => $tableName,
         ]);
         if (false === $tableId) {

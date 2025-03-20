@@ -200,12 +200,12 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     {
         $query = $this->getLanguageQuery();
         $statement = $this->databaseConnection->prepare($query);
-        $statement->execute([
+        $result = $statement->executeQuery([
             'languageCode' => $languageCode,
         ]);
         $theLanguage = null;
         $languageFound = false;
-        while ($row = $statement->fetch()) {
+        while ($row = $result->fetchAssociative()) {
             $languageFound = true;
             $portalId = $row['portal_id'];
             $languageId = $row['language_id'];

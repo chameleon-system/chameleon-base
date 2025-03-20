@@ -559,7 +559,7 @@ class TCMSFieldDefinition extends TCMSRecord
     private function getTableNameFromConfigId()
     {
         $databaseConnection = $this->getDatabaseConnection();
-        $tableName = $databaseConnection->fetchColumn('SELECT `name` FROM `cms_tbl_conf` WHERE `id` = :id', [
+        $tableName = $databaseConnection->fetchOne('SELECT `name` FROM `cms_tbl_conf` WHERE `id` = :id', [
                 'id' => $this->sqlData['cms_tbl_conf_id'],
             ]);
 

@@ -5,8 +5,6 @@
 </div>
 <?php
 
-  $databaseConnection = TCMSLogChange::getDatabaseConnection();
-
   $data = TCMSLogChange::createMigrationQueryData('cms_cronjobs', 'en')
       ->setWhereEquals(array(
           'cron_class' => 'TCMSCronJob_VideoSyncViddler',

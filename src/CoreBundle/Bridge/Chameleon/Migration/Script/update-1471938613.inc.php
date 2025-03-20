@@ -23,7 +23,7 @@ foreach ($tableNameList as $tableName) {
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 $query = 'SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_conf_id` IN (:tableIdList)';
-$statement = $databaseConnection->executeQuery($query, [
+$result = $databaseConnection->executeQuery($query, [
       'tableIdList' => $tableIdList,
   ], [
       'tableIdList' => Connection::PARAM_STR_ARRAY,
@@ -31,7 +31,7 @@ $statement = $databaseConnection->executeQuery($query, [
 );
 
 $fieldIdList = [];
-while ($row = $statement->fetch(PDO::FETCH_COLUMN)) {
+while ($row = $result->fetchOne()) {
     $fieldIdList[] = $row;
 }
 

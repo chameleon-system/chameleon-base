@@ -13,6 +13,8 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
+use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 
 if (!defined('MYSQL_ASSOC')) {
     define('MYSQL_ASSOC', 1);
@@ -33,9 +35,9 @@ class MySqlLegacySupport
 {
     private Connection $databaseConnection;
     /**
-     * @var Statement|bool|null
+     * @var DriverResultStatement|DriverStatement|bool|null
      */
-    private $lastStatement;
+    private $lastResult;
 
     private ?DBALException $lastError;
 
@@ -58,11 +60,11 @@ class MySqlLegacySupport
         if (null !== $linkIdentifier) {
             throw new TPkgCmsException_Log('MySqlLegacySupport::mysql_affected_rows does not support passing a link identifier');
         }
-        if (null === $this->lastStatement) {
+        if (null === $this->lastResult) {
             return -1;
         }
 
-        return $this->lastStatement->rowCount();
+        return $this->lastResult->rowCount();
     }
 
     /**
@@ -99,7 +101,7 @@ class MySqlLegacySupport
     /**
      * Move internal result pointer.
      *
-     * @param Statement $resultSet
+     * @param DriverResultStatement|DriverStatement $resultSet
      * @param int $row_number
      *
      * @throws TPkgCmsException_Log
@@ -194,35 +196,33 @@ class MySqlLegacySupport
     /**
      * Fetch a result row as an associative array, a numeric array, or both.
      *
-     * @param Statement $result
+     * @param DriverResultStatement|DriverStatement $result
      * @param int $result_type
      */
-    public function fetch_array($result, $result_type = MYSQL_BOTH)
+    public function fetch_array($result, $result_type = MYSQL_ASSOC)
     {
         $mappedType = null;
         switch ($result_type) {
             case MYSQL_ASSOC:
-                $mappedType = PDO::FETCH_ASSOC;
+                return $result->fetchAssociative();
                 break;
             case MYSQL_NUM:
-                $mappedType = PDO::FETCH_NUM;
+                return $result->fetchNumeric();
                 break;
             case MYSQL_BOTH:
-                $mappedType = PDO::FETCH_BOTH;
+                throw new TPkgCmsException_Log('MySqlLegacySupport::fetch_array MYSQL_BOTH is no longer supported!');
                 break;
         }
-
-        return $result->fetch($mappedType);
     }
 
     /**
      * Fetch a result row as an associative array.
      *
-     * @param Statement $result
+     * @param DriverResultStatement|DriverStatement $result
      */
     public function fetch_assoc($result)
     {
-        return $result->fetch(PDO::FETCH_ASSOC);
+        return $result->fetchAssociative();
     }
 
     /**
@@ -253,7 +253,7 @@ class MySqlLegacySupport
     /**
      * Fetch a result row as an object.
      *
-     * @param Statement $result
+     * @param DriverResultStatement|DriverStatement $result
      * @param string|null $class_name
      *
      * @throws TPkgCmsException_Log
@@ -264,17 +264,22 @@ class MySqlLegacySupport
             throw new TPkgCmsException_Log('MySqlLegacySupport::mysql_fetch_object does not support passing a class');
         }
 
-        return $result->fetch(PDO::FETCH_OBJ);
+        $row = $result->fetchAssociative();
+        if (false === $row) {
+            // No rows returned
+            return null;
+        }
+        return (object) $row;
     }
 
     /**
      * Get a result row as an enumerated array.
      *
-     * @param Statement $result
+     * @param DriverResultStatement|DriverStatement $result
      */
     public function fetch_row($result)
     {
-        return $result->fetch(PDO::FETCH_NUM);
+        return $result->fetchNumeric();
     }
 
     /**
@@ -325,7 +330,7 @@ class MySqlLegacySupport
     /**
      * Get number of fields in result.
      *
-     * @param Statement $result
+     * @param DriverResultStatement|DriverStatement $result
      *
      * @return int
      */
@@ -337,7 +342,7 @@ class MySqlLegacySupport
     /**
      * Get number of rows in result.
      *
-     * @param Statement $result
+     * @param DriverResultStatement|DriverStatement $result
      *
      * @return int
      */
@@ -352,7 +357,7 @@ class MySqlLegacySupport
      * @param string $query
      * @param string|null $link_identifier
      *
-     * @return Statement
+     * @return DriverResultStatement|DriverStatement
      *
      * @throws TPkgCmsException_Log
      */
@@ -362,16 +367,16 @@ class MySqlLegacySupport
             throw new TPkgCmsException_Log('MySqlLegacySupport::mysql_insert_id does not support passing a link identifier');
         }
 
-        $this->lastStatement = false;
+        $this->lastResult = false;
         try {
-            $this->lastStatement = $this->databaseConnection->executeQuery($query);
+            $this->lastResult = $this->databaseConnection->executeQuery($query);
             $this->lastError = null;
         } catch (DBALException $e) {
-            $this->lastStatement = false;
+            $this->lastResult = false;
             $this->lastError = $e;
         }
 
-        return $this->lastStatement;
+        return $this->lastResult;
     }
 
     /**
@@ -481,11 +486,11 @@ class MySqlLegacySupport
     /**
      * Free result memory.
      *
-     * @param Statement $result
+     * @param DriverResultStatement $result
      */
     public function free_result($result)
     {
-        $result->closeCursor();
+        $result->free();
     }
 
     /**
@@ -571,9 +576,7 @@ class MySqlLegacySupport
      */
     public function result($result, $row, $field = 0)
     {
-        $result->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT, $row);
-
-        return $result->fetchColumn($field);
+        throw new TPkgCmsException_Log('MySqlLegacySupport::result is no longer supported! Please use fetchAllAssociative');
     }
 
     /**

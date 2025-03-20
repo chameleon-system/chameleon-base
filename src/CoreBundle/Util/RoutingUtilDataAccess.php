@@ -129,14 +129,14 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
             ORDER BY `start_date` DESC, `cmsident` DESC
           )";
         $statement = $this->databaseConnection->prepare($query);
-        $statement->execute(array(
+        $result = $statement->executeQuery([
             'contId' => $page->id,
             'date' => date('Y-m-d H:i:s'),
-        ));
-        $retValue = array();
+        ]);
+        $retValue = [];
         $count = 0;
         $primaryTreeIdPosition = 0;
-        while ($row = $statement->fetch()) {
+        while ($row = $result->fetchAssociative()) {
             $node = new TdbCmsTree();
             if (null !== $language) {
                 $node->SetLanguage($language->id);
@@ -186,13 +186,13 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
         ";
 
         $statement = $this->databaseConnection->prepare($query);
-        $result = $statement->executeQuery(array(
+        $result = $statement->executeQuery([
             'portalId' => $portal->id,
             'date' => date('Y-m-d H:i:s'),
-        ));
+        ]);
 
-        $pageAssignmentList = array();
-        foreach($result->iterateAssociative() as $row) {
+        $pageAssignmentList = [];
+        foreach($result->fetchAllAssociative() as $row) {
 //        while ($row = $result->fetch()) {
             $pageId = $row['page_id'];
             $treeId = $row['tree_id'];

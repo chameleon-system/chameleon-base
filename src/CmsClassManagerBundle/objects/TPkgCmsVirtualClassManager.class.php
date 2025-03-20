@@ -52,6 +52,7 @@ class TPkgCmsVirtualClassManager
         if ($bRefresh) {
             $aEntryPoints = null;
         }
+        /** @var Connection $databaseConnection */
         $databaseConnection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         $sEntryPointClass = false;
         if (is_null($aEntryPoints)) {
@@ -59,8 +60,8 @@ class TPkgCmsVirtualClassManager
             $query = 'SELECT `pkg_cms_class_manager`.`name_of_entry_point`
                   FROM `pkg_cms_class_manager`
                ';
-            $tRes = $databaseConnection->query($query);
-            while ($aRow = $tRes->fetch(\PDO::FETCH_ASSOC)) {
+            $result = $databaseConnection->executeQuery($query);
+            while ($aRow = $result->fetchAssociative()) {
                 if (!array_key_exists($aRow['name_of_entry_point'], $aEntryPoints)) {
                     $aEntryPoints[$aRow['name_of_entry_point']] = '1';
                 }

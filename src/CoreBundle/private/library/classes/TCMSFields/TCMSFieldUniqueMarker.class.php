@@ -75,7 +75,7 @@ class TCMSFieldUniqueMarker extends TCMSFieldBoolean
             $whereEquals[$sRestriction] = $this->oTableRow->sqlData[$sRestriction];
         }
 
-        $databaseConnection->executeUpdate($updateQuery, $parameters);
+        $databaseConnection->executeStatement($updateQuery, $parameters);
 
         $this->getBackendSession()->getCurrentEditLanguageId();
         $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();

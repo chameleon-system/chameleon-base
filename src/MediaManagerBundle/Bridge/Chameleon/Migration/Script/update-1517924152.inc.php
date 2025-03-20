@@ -5,7 +5,7 @@
 </div>
 <?php
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$tableEditorClass = $databaseConnection->fetchColumn(
+$tableEditorClass = $databaseConnection->fetchOne(
     'SELECT `table_editor_class` FROM `cms_tbl_conf` WHERE `name` = \'cms_media\''
 );
 if ('TCMSTableEditorMedia' === $tableEditorClass) {
@@ -31,7 +31,7 @@ if ('TCMSTableEditorMedia' === $tableEditorClass) {
     );
 }
 
-$tableEditorClassTree = $databaseConnection->fetchColumn(
+$tableEditorClassTree = $databaseConnection->fetchOne(
     'SELECT `table_editor_class` FROM `cms_tbl_conf` WHERE `name` = \'cms_media_tree\''
 );
 if ('TCMSTableEditorMediaTree' === $tableEditorClassTree) {
