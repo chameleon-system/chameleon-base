@@ -76,7 +76,7 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             $connection->quoteIdentifier($this->getInverseEmptyFieldName())
         );
         $connection->executeQuery($query);
-        $queryData = array(new LogChangeDataModel($query));
+        $queryData = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($queryData);
     }
 
@@ -93,7 +93,7 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             $connection->quoteIdentifier($this->getInverseEmptyFieldName())
         );
         $connection->executeQuery($query);
-        $queryData = array(new LogChangeDataModel($query));
+        $queryData = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($queryData);
     }
 
@@ -147,8 +147,12 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             $connection->quoteIdentifier($this->sTableName),
             $connection->quoteIdentifier($this->getInverseEmptyFieldName())
         );
-        $result = $connection->fetchColumn($query, array('recordId' => $this->oTableRow->sqlData['id']));
-        if (false === $result) {
+        try {
+            $result = $connection->fetchOne($query, ['recordId' => $this->oTableRow->sqlData['id']]);
+            if (false === $result) {
+                return false;
+            }
+        }catch (\Doctrine\DBAL\Exception $e) {
             return false;
         }
 

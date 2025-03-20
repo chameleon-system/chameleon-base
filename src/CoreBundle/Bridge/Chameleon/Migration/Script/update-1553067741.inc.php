@@ -7,7 +7,7 @@
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
-$flashUrlHandlerId = $databaseConnection->fetchColumn("SELECT `id` FROM `cms_smart_url_handler` WHERE `name` = 'TCMSSmartURLHandler_FlashCrossDomain'");
+$flashUrlHandlerId = $databaseConnection->fetchOne("SELECT `id` FROM `cms_smart_url_handler` WHERE `name` = 'TCMSSmartURLHandler_FlashCrossDomain'");
 if (false === $flashUrlHandlerId) {
     return;
 }

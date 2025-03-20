@@ -148,13 +148,15 @@ abstract class TCMSMLTField extends TCMSField implements DoctrineTransformableIn
         }
         $sQuery = "SELECT `id`, $quotedNameColumn FROM $quotedTableName WHERE `id` in ($idList) ORDER BY $quotedNameColumn";
 
-        $result = $databaseConnection->query($sQuery);
-        if (!$result) {
+        try {
+            $result = $databaseConnection->executeQuery($sQuery);
+        } catch (\Doctrine\DBAL\Exception $e) {
+            // If the query fails, handle it here
             return '';
         }
 
-        $aRetValueArray = array();
-        while ($row = $result->fetch(\PDO::FETCH_ASSOC)) {
+        $aRetValueArray = [];
+        while ($row = $result->fetchAssociative()) {
             $aRetValueArray[] = $row[$nameColumn];
         }
 

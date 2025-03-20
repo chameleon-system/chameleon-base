@@ -65,12 +65,9 @@ $bundles = [
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
-$statement = $databaseConnection->executeQuery('SELECT `id`, `snippet_chain` FROM `pkg_cms_theme`');
-if (false === $statement->execute()) {
-    return;
-}
+$result = $databaseConnection->executeQuery('SELECT `id`, `snippet_chain` FROM `pkg_cms_theme`');
 
-while (false !== $row = $statement->fetch()) {
+while (false !== $row = $result->fetchAssociative()) {
     $id = $row['id'];
     $snippetChain = \explode("\n", $row['snippet_chain']);
     $isChanged = false;

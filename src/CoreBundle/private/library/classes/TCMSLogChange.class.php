@@ -30,6 +30,8 @@ use ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier;
 use Doctrine\Common\Collections\ExpressionBuilder;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
+use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -275,7 +277,7 @@ class TCMSLogChange
     {
         $query = 'SELECT `name` FROM cms_tbl_conf WHERE `id` = :tableConfId';
 
-        return self::getDatabaseConnection()->fetchColumn($query, [
+        return self::getDatabaseConnection()->fetchOne($query, [
             'tableConfId' => $tableId,
         ]);
     }
@@ -289,7 +291,7 @@ class TCMSLogChange
     {
         $query = 'SELECT `constname` FROM cms_field_type WHERE `id` = :fieldConfId';
 
-        return self::getDatabaseConnection()->fetchColumn($query, [
+        return self::getDatabaseConnection()->fetchOne($query, [
             'fieldConfId' => $fieldId,
         ]);
     }
@@ -301,7 +303,7 @@ class TCMSLogChange
      * @param int $line
      * @param bool $bInsertId - add id to statement if it is an insert without id
      *
-     * @return Statement
+     * @return DriverResultStatement|DriverStatement
      *
      * @deprecated use RunQuery with bound parameters instead
      */
@@ -372,6 +374,7 @@ class TCMSLogChange
      */
     public static function RunQuery($line, $sql, array $parameter = [], ?array $types = null)
     {
+        /** @var \Doctrine\DBAL\Connection $db */
         $db = ServiceLocator::get('database_connection');
         $sql = self::getDeletedFieldsService()->stripDeletedFields($sql);
 
@@ -382,7 +385,7 @@ class TCMSLogChange
                 $type = (is_array($types) && isset($types[$name])) ? $types[$name] : null;
                 $stm->bindValue($name, $value, $type);
             }
-            $stm->execute();
+            $stm->executeQuery();
             $logger->info(
                 sprintf('Query Successfully executed in line %s: %s with %s', $line, $sql, print_r($parameter, true)),
                 [
@@ -1004,13 +1007,12 @@ class TCMSLogChange
             if (empty($sPortalID)) {
                 // insert into every portal if no explicit portal id was set
                 $statement = $connection->prepare('SELECT `id` FROM `cms_portal`');
-                if ($statement->execute()) {
-                    while ($row = $statement->fetch()) {
-                        $fields['id'] = self::createUnusedRecordId('cms_message_manager_message');
-                        $fields['cms_portal_id'] = $row['id'];
-                        $data->setFields($fields);
-                        static::insert(__LINE__, $data);
-                    }
+                $result = $statement->executeQuery();
+                while ($row = $result->fetchAssociative()) {
+                    $fields['id'] = self::createUnusedRecordId('cms_message_manager_message');
+                    $fields['cms_portal_id'] = $row['id'];
+                    $data->setFields($fields);
+                    static::insert(__LINE__, $data);
                 }
             } else {
                 $fields['id'] = self::createUnusedRecordId('cms_message_manager_message');
@@ -1303,7 +1305,7 @@ class TCMSLogChange
         $nameFieldWithTranslationSuffix = self::getFieldTranslationUtil()->getTranslatedFieldName('cms_tbl_field_tab', 'name');
 
         $query = 'SELECT `position` FROM `cms_tbl_field_tab` WHERE `cms_tbl_conf_id` = :tableId AND ('.$databaseConnection->quoteIdentifier($nameFieldWithTranslationSuffix).' = :preTabName OR `systemname` = :preTabName)';
-        $pos = $databaseConnection->fetchColumn($query, [
+        $pos = $databaseConnection->fetchOne($query, [
                 'tableId' => $tableId,
                 'preTabName' => $preTabSystemName,
                 ]
@@ -2047,7 +2049,7 @@ class TCMSLogChange
 
         $sQuery = "SELECT COUNT(*) FROM `information_schema`.`columns` WHERE `table_name` = '".$escapedTableName."' AND `column_name` = '".$escapedFieldName."'";
         $statement = self::_RunQuery($sQuery, __LINE__);
-        $count = intval($statement->fetchColumn());
+        $count = intval($statement->fetchOne());
         if ($count > 0) {
             $sQuery = 'ALTER TABLE `'.$escapedTableName.'` DROP `'.$escapedFieldName.'`';
             self::_RunQuery($sQuery, __LINE__);
@@ -2374,7 +2376,7 @@ class TCMSLogChange
           ON lang.`id` = conf.`translation_base_language_id`';
         $databaseConnection = self::getDatabaseConnection();
 
-        return $databaseConnection->fetchColumn($query);
+        return $databaseConnection->fetchOne($query);
     }
 
     /**

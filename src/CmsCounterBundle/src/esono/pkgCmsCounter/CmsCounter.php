@@ -41,14 +41,14 @@ class CmsCounter
                      AND `owner` = :ownerId
                      AND `system_name` = :systemName
                    LIMIT 1';
-        $stm = $this->db->prepare($query);
-        $stm->execute(array('ownerTable' => $owner->table, 'ownerId' => $owner->id, 'systemName' => $systemName));
-        if (0 === $stm->rowCount()) {
+        $stmt = $this->db->prepare($query);
+        $result = $stmt->executeQuery(['ownerTable' => $owner->table, 'ownerId' => $owner->id, 'systemName' => $systemName]);
+        if (0 === $result->rowCount()) {
             return null;
         }
 
-        $match = $stm->fetch(\PDO::FETCH_NUM);
-        $stm->closeCursor();
+        $match = $result->fetchNumeric();
+        $result->free();
 
         return intval($match[0]);
     }
@@ -74,8 +74,8 @@ class CmsCounter
       ON DUPLICATE KEY UPDATE `value` = :value
             ';
         $statement = $this->db->prepare($query);
-        $statement->execute(array(':id' => \TTools::GetUUID(), 'ownerTable' => $owner->table, 'ownerId' => $owner->id, 'systemName' => $systemName, 'value' => intval($value)));
-        $statement->closeCursor();
+        $result = $statement->executeQuery([':id' => \TTools::GetUUID(), 'ownerTable' => $owner->table, 'ownerId' => $owner->id, 'systemName' => $systemName, 'value' => intval($value)]);
+        $result->free();
     }
 
     /**
@@ -99,9 +99,9 @@ class CmsCounter
               FOR UPDATE
                     ';
         $statement = $this->db->prepare($query);
-        $statement->execute(array('ownerTable' => $owner->table, 'ownerId' => $owner->id, 'systemName' => $systemName));
-        if (0 === $statement->rowCount()) {
-            $statement->closeCursor();
+        $result = $statement->executeQuery(['ownerTable' => $owner->table, 'ownerId' => $owner->id, 'systemName' => $systemName]);
+        if (0 === $result->rowCount()) {
+            $result->free();
             $query = 'INSERT INTO `pkg_cms_counter`
                               SET `id` = :id,
                                   `owner_table_name` = :ownerTable,
@@ -111,15 +111,15 @@ class CmsCounter
                                   `value` = :value
             ';
             $statement = $this->db->prepare($query);
-            $statement->execute(array(':id' => \TTools::GetUUID(), 'ownerTable' => $owner->table, 'ownerId' => $owner->id, 'systemName' => $systemName, 'value' => 2));
+            $statement->executeQuery([':id' => \TTools::GetUUID(), 'ownerTable' => $owner->table, 'ownerId' => $owner->id, 'systemName' => $systemName, 'value' => 2]);
             $counterValue = 1;
         } else {
-            $currentCounterData = $statement->fetch(\PDO::FETCH_ASSOC);
-            $statement->closeCursor();
+            $currentCounterData = $result->fetchAssociative();
+            $result->free();
             $counterValue = $currentCounterData['value'];
             $query = 'UPDATE `pkg_cms_counter` SET `value` = `value` + 1 WHERE `id` = :id';
             $statement = $this->db->prepare($query);
-            $statement->execute(array('id' => $currentCounterData['id']));
+            $statement->executeQuery(['id' => $currentCounterData['id']]);
         }
 
         $this->db->commit();

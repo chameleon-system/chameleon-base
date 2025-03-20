@@ -7,7 +7,7 @@
 
 $conn = TCMSLogChange::getDatabaseConnection();
 
-if (false === $conn->fetchColumn("SELECT `id` FROM `cms_tbl_display_list_fields` WHERE `name` = '`cms_tpl_module`.`classname`'")) {
+if (false === $conn->fetchOne("SELECT `id` FROM `cms_tbl_display_list_fields` WHERE `name` = '`cms_tpl_module`.`classname`'")) {
     $id1 = TCMSLogChange::createUnusedRecordId('cms_tbl_display_list_fields');
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', 'de')
         ->setFields(

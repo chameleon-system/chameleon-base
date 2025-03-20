@@ -44,8 +44,8 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
         $query = 'SELECT *
                   FROM `cms_tbl_extension`
                   ORDER BY `position` DESC';
-        $statement = $this->connection->executeQuery($query);
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        $result = $this->connection->executeQuery($query);
+        while ($row = $result->fetchAssociative()) {
             $data[$row['cms_tbl_conf_id']][] = $row;
         }
 
@@ -62,9 +62,9 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
                   FROM `cms_field_conf`
                   INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
                   ORDER BY `position` ASC';
-        $statement = $this->connection->executeQuery($query);
+        $result = $this->connection->executeQuery($query);
         $fieldTypes = array();
-        while ($row = $statement->fetchAssociative()) {
+        while ($row = $result->fetchAssociative()) {
             $tableConfId = $row['cms_tbl_conf_id'];
             if (false === isset($data[$tableConfId])) {
                 $data[$tableConfId] = new TIterator();
@@ -119,10 +119,10 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 
 
         $query = 'SELECT * FROM `cms_tbl_display_orderfields` ORDER BY `position` ASC';
-        $statement = $this->connection->executeQuery($query);
+        $result = $this->connection->executeQuery($query);
 
         $data = [];
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $result->fetchAssociative()) {
             $tableConfId = $row['cms_tbl_conf_id'];
             if (false === isset($data[$tableConfId])) {
                 $data[$tableConfId] = [];
@@ -147,8 +147,8 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 
         $query = 'SELECT *
                   FROM `cms_tbl_conf`';
-        $statement = $this->connection->executeQuery($query);
-        while ($row = $statement->fetchAssociative()) {
+        $result = $this->connection->executeQuery($query);
+        while ($row = $result->fetchAssociative()) {
             $data[$row['id']] = $row;
         }
 

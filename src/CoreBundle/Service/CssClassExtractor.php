@@ -147,11 +147,11 @@ class CssClassExtractor implements CssClassExtractorInterface
                       OR `sslname` = :hostname
                    ';
             $sqlStatement = $this->connection->prepare($query);
-            $sqlStatement->executeQuery(['hostname' => $hostName]);
+            $result = $sqlStatement->executeQuery(['hostname' => $hostName]);
         } catch (\Exception $e) {
             return false;
         }
 
-        return $sqlStatement->rowCount() > 0;
+        return $result->rowCount() > 0;
     }
 }

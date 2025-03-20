@@ -13,7 +13,9 @@ namespace ChameleonSystem\core\DatabaseAccessLayer;
 
 use ChameleonSystem\core\DatabaseAccessLayer\LengthCalculationStrategy\EntityListLengthCalculationStrategyInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Statement;
+use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
+use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
+
 
 /**
  * @template T
@@ -58,7 +60,7 @@ class EntityList implements EntityListInterface
     }
 
     /**
-     * @return Statement
+     * @return DriverStatement|DriverResultStatement
      */
     protected function getDatabaseEntityListStatement()
     {
@@ -93,7 +95,7 @@ class EntityList implements EntityListInterface
             return $this->entityList[$this->entityIndex];
         }
 
-        $this->entityList[$this->entityIndex] = $this->getDatabaseEntityListStatement()->fetch(\PDO::FETCH_ASSOC);
+        $this->entityList[$this->entityIndex] = $this->getDatabaseEntityListStatement()->fetchAssociative();
 
         return $this->entityList[$this->entityIndex];
     }
@@ -378,11 +380,11 @@ class EntityList implements EntityListInterface
 
     public function getNumberOfResultsOnPage(): int
     {
-        $statement = $this->getDatabaseEntityListStatement();
-        if (null === $statement) {
+        $result = $this->getDatabaseEntityListStatement();
+        if (null === $result) {
             return 0;
         }
 
-        return $statement->rowCount();
+        return $result->rowCount();
     }
 }

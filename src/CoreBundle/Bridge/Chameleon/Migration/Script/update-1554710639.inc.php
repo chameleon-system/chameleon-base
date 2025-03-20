@@ -12,7 +12,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_module', 'en')
 TCMSLogChange::delete(__LINE__, $data);
 
 $query = "SELECT `id` FROM `cms_tpl_module` WHERE `classname` = 'MTSearch'";
-$moduleId = TCMSLogChange::getDatabaseConnection()->fetchColumn($query);
+$moduleId = TCMSLogChange::getDatabaseConnection()->fetchOne($query);
 if (false === $moduleId) {
     return;
 }

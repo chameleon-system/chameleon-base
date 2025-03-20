@@ -80,7 +80,7 @@ class UserMenuItemDataAccess implements UserMenuItemDataAccessInterface
                      AND `target_id` = :menuItemId';
 
         try {
-            $currentCount = $this->connection->fetchColumn($query, ['userId' => $userId, 'menuItemId' => $menuItemId]);
+            $currentCount = $this->connection->fetchOne($query, ['userId' => $userId, 'menuItemId' => $menuItemId]);
 
             if (false === $currentCount) {
                 $this->connection->insert('cms_user_cms_menu_item_mlt', ['source_id' => $userId, 'target_id' => $menuItemId, 'entry_sort' => 1]);

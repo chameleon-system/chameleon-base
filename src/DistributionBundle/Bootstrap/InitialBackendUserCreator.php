@@ -54,7 +54,7 @@ class InitialBackendUserCreator
     public function create(InputInterface $input, OutputInterface $output, QuestionHelper $questionHelper): string
     {
         $query = "SELECT 1 FROM `cms_user` WHERE `login` != 'www' LIMIT 1";
-        $hasUser = $this->databaseConnection->fetchColumn($query);
+        $hasUser = $this->databaseConnection->fetchOne($query);
         if ('1' === $hasUser) {
             throw new \LogicException('This command can only be used to create an initial user, but at least one user already exists.');
         }
@@ -207,7 +207,7 @@ class InitialBackendUserCreator
         $i = 0;
         foreach ($userRoleList as $subList) {
             $roleId = $subList['id'];
-            $statement->execute([
+            $statement->executeQuery([
                 $userId,
                 $roleId,
                 $i++,
@@ -224,7 +224,7 @@ class InitialBackendUserCreator
         $i = 0;
         foreach ($userGroupList as $subList) {
             $userGroupId = $subList['id'];
-            $statement->execute([
+            $statement->executeQuery([
                 $userId,
                 $userGroupId,
                 $i++,

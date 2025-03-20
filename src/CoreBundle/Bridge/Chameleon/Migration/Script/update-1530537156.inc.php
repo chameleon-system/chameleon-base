@@ -8,8 +8,8 @@
 $query = "SELECT `name` FROM `cms_message_manager_message` WHERE `id` = ''";
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$statement = $databaseConnection->executeQuery($query);
-while ($name = $statement->fetch(\PDO::FETCH_COLUMN)) {
+$result = $databaseConnection->executeQuery($query);
+while ($name = $result->fetchOne()) {
     $data = TCMSLogChange::createMigrationQueryData('cms_message_manager_message', 'en')
       ->setFields([
           'id' => TCMSLogChange::createUnusedRecordId('cms_message_manager_message'),

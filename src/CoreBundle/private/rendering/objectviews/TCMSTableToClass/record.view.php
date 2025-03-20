@@ -170,7 +170,7 @@ $oFields->GoToStart();
                      ';
                   $tRes = $databaseConnection->executeQuery($query, array('targetTableName' => $sTargetTable));
                   $aOrderByList = array();
-                  while ($aOrder = $tRes->fetch(\PDO::FETCH_ASSOC)) {
+                  while ($aOrder = $tRes->fetchAssociative()) {
                       $aOrderByList[] = "{$aOrder['name']} {$aOrder['sort_order_direction']}";
                   }
                   if (count($aOrderByList) > 0) {

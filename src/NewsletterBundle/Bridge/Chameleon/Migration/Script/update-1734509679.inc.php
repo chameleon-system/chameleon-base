@@ -10,12 +10,9 @@ $mappers = [
 ];
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$statement = $databaseConnection->executeQuery("SELECT `classname` FROM `cms_tpl_module` WHERE `view_mapper_config` != '' OR `mapper_chain` != ''");
-if (false === $statement->execute()) {
-    return;
-}
+$result = $databaseConnection->executeQuery("SELECT `classname` FROM `cms_tpl_module` WHERE `view_mapper_config` != '' OR `mapper_chain` != ''");
 
-while (false !== ($row = $statement->fetchNumeric())) {
+while (false !== $row = $result->fetchNumeric()) {
     $moduleManager = TCMSLogChange::getModuleManager($row[0]);
 
     $mapperConfig = $moduleManager->getMapperConfig();

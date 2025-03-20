@@ -125,7 +125,7 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
             array('fieldTypes' => Connection::PARAM_STR_ARRAY)
         );
 
-        return $stm->fetchAllAssociative(\PDO::FETCH_ASSOC);
+        return $stm->fetchAllAssociative();
     }
 
     /**
