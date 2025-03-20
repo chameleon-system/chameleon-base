@@ -246,6 +246,17 @@ after:
 - `\ChameleonSystem\CoreBundle\Controller\ChameleonNoAutoFlushController` removed
 - `RequestInfoServiceInterface` is now fully typed. If you extended it, make sure to update your code.
 - `TGlobalBase::isFrontendJSDisabled` was removed. Use `ServiceLocator::get('chameleon_system_core.request_info_service')->isFrontendJsDisabled()` instead.
+- Prepared for DBAL Update:
+  - executeUpdate -> executeStatement
+  - query -> executeQuery
+  - execute -> executeQuery
+  - fetch() -> fetchAssociative
+  -  fetch(\PDO::FETCH_COLUMN) -> fetchNumeric
+  - fetch(\PDO::FETCH_ASSOC) -> fetchAssociative
+  - fetchColumn -> fetchOne 
+- MySQLLegacySupport changed
+  - MySqlLegacySupport::fetch_array Default: MYSQL_BOTH is now MYSQL_ASSOC (MYSQL_BOTH is no longer supported)
+  - MySqlLegacySupport::result is no longer supported!
 
 ## jQuery and jQuery Migrate
 
