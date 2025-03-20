@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-use Symfony\Component\Yaml\Yaml;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use Symfony\Component\Yaml\Yaml;
 
 class TPkgViewRendererSnippetResourceCollectorEndPoint
 {
