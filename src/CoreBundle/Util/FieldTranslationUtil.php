@@ -214,14 +214,9 @@ class FieldTranslationUtil
     }
 
     /**
-     * @param string $fieldId
-     * @param bool   $translatable
-     *
      * @throws InvalidArgumentException
-     *
-     * @return void
      */
-    private function changeTranslatableState($fieldId, $translatable)
+    private function changeTranslatableState(string $fieldId, bool $translatable): void
     {
         $fieldConf = TdbCmsFieldConf::GetNewInstance($fieldId);
         if (false === $fieldConf->sqlData) {

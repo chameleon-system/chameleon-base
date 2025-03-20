@@ -10,18 +10,20 @@
  */
 
 use Symfony\Component\Yaml\Yaml;
+use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 
 class TPkgViewRendererSnippetResourceCollectorEndPoint
 {
     /**
      * @param TdbCmsPortal|null $oPortal
-     * @param string|null       $snippetPath - the base path (snippets/snippets-cms)
+     * @param string|null $snippetPath - the base path (snippets/snippets-cms)
      *
      * @return array
      */
     public function getLessResources($oPortal = null, $snippetPath = null)
     {
-        $aLessFiles = array();
+        $aLessFiles = [];
         $oTree = $this->getViewRendererSnippetDirectory();
         $aSnippetTree = $oTree->getConfigTree($oPortal, $snippetPath);
         $aTmpResources = $this->getConfigsFromTree($aSnippetTree);
@@ -46,17 +48,12 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
      */
     protected function getAdditionalLessResources($oPortal = null)
     {
-        return array();
+        return [];
     }
 
-    /**
-     * @param bool $bExcludeJS
-     *
-     * @return array
-     */
-    public function getResources($bExcludeJS = false)
+    public function getResources(bool $bExcludeJS = false): array
     {
-        $aResources = array();
+        $aResources = [];
         $oTree = $this->getViewRendererSnippetDirectory();
         $aSnippetTree = $oTree->getDirTree();
         $aTmpResources = $this->getResourcesFromTree($aSnippetTree, $bExcludeJS);
@@ -67,7 +64,7 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
         $aResources['css'] = $this->getAsHTMLInclude($aResources['css'], 'css');
         $aResources['less'] = $this->getAsHTMLInclude($aResources['less'], 'less');
         $aResources['js'] = $this->getAsHTMLInclude($aResources['js'], 'js');
-        if (true === TGlobal::instance()->isFrontendJSDisabled()) {
+        if (true === $this->getRequestInfoService()->isFrontendJsDisabled()) {
             $aResources['nop'] = null;
         }
 
@@ -75,7 +72,7 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
     }
 
     /**
-     * @param array  $aFileList
+     * @param array $aFileList
      * @param string $sType
      *
      * @return array
@@ -84,7 +81,6 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
      */
     protected function getAsHTMLInclude($aFileList, $sType)
     {
-        $sPattern = '';
         $bUseStaticUrlTransformation = true;
         switch ($sType) {
             case 'css':
@@ -118,7 +114,7 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
      */
     protected function getConfigsFromTree($aSnippetTree)
     {
-        $aResource = array();
+        $aResource = [];
         foreach (array_keys($aSnippetTree) as $sDirectory) {
             if (is_array($aSnippetTree[$sDirectory])) {
                 $aTmpResource = $this->getConfigsFromTree($aSnippetTree[$sDirectory]);
@@ -139,7 +135,7 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
      */
     protected function getResourcesFromTree($aSnippetTree, $bExcludeJS = false)
     {
-        $aResource = array('css' => array(), 'js' => array(), 'less' => array());
+        $aResource = ['css' => [], 'js' => [], 'less' => []];
         foreach (array_keys($aSnippetTree) as $sDirectory) {
             if (is_array($aSnippetTree[$sDirectory])) {
                 $aTmpResource = $this->getResourcesFromTree($aSnippetTree[$sDirectory], $bExcludeJS);
@@ -166,20 +162,19 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
     }
 
     /**
-     * @param TPkgViewRendererSnippetGalleryItem $oSnippetItem
-     * @param bool                               $bExcludeJS
+     * @param bool $bExcludeJS
      *
      * @return array
      */
     protected function getResourceFromSnippet(TPkgViewRendererSnippetGalleryItem $oSnippetItem, $bExcludeJS = false)
     {
-        $aResource = array('css' => array(), 'js' => array(), 'less' => array());
+        $aResource = ['css' => [], 'js' => [], 'less' => []];
         $sFile = $oSnippetItem->sType.'/'.$this->getViewRendererSnippetDirectory()->getSnippetBaseDirectory().$oSnippetItem->sRelativePath.'/'.$oSnippetItem->sSnippetName;
         $sSource = file_get_contents($sFile);
         if (false !== $sSource) {
             $sPattern = '/\\{%\\s*?cmsresources\\s*?%\\}(.*?)\\{%\\s*?endcmsresources\\s*?%\\}/uis';
-            $aTmpResource = array();
-            $aResourceBlocks = array();
+            $aTmpResource = [];
+            $aResourceBlocks = [];
             if (0 < preg_match_all($sPattern, $sSource, $aTmpResource)) {
                 $aResourceBlocks = $aTmpResource[1];
             }
@@ -193,11 +188,13 @@ class TPkgViewRendererSnippetResourceCollectorEndPoint
         return $aResource;
     }
 
-    /**
-     * @return TPkgViewRendererSnippetDirectoryInterface
-     */
-    private function getViewRendererSnippetDirectory()
+    private function getViewRendererSnippetDirectory(): TPkgViewRendererSnippetDirectoryInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
+        return ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
+    }
+
+    private function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 }
