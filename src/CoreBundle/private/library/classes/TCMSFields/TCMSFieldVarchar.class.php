@@ -170,7 +170,7 @@ class TCMSFieldVarchar extends TCMSField implements DoctrineTransformableInterfa
         $data = $this->GetFieldWriterData();
 
         if ('null' === $data['sFieldDefaultValue']) {
-            $data['sFieldType'] = '?'.$data['sFieldType'];
+            $data['sFieldType'] .= '|null';
         }
 
         $viewParser->AddVarArray($data);
