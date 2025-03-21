@@ -113,6 +113,17 @@ class TCMSFieldBlob extends TCMSFieldText implements DoctrineTransformableInterf
         return '<pre style="white-space:pre">'.$html.'</pre>';
     }
 
+    public function RenderFieldPropertyString()
+    {
+        $viewParser = new TViewParser();
+        $viewParser->bShowTemplatePathAsHTMLHint = false;
+        $data = $this->GetFieldWriterData();
+
+        $viewParser->AddVarArray($data);
+
+        return $viewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
+    }
+
     protected function GetFieldWriterData()
     {
         $data = parent::GetFieldWriterData();
