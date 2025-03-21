@@ -149,7 +149,7 @@ class TCMSFieldNumber extends TCMSFieldVarchar implements DoctrineTransformableI
     protected function GetFieldWriterData()
     {
         $data = parent::GetFieldWriterData();
-        $data['sFieldType'] = 'int';
+        $data['sFieldType'] = 'int|string';
 
         return $data;
     }
