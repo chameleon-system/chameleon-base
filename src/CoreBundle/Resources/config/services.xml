@@ -643,11 +643,6 @@
             <argument type="service" id="chameleon_system_core.frontend_controller" />
         </service>
 
-        <service id="chameleon_system_core.event_listener.add_antispam_includes" class="ChameleonSystem\CoreBundle\EventListener\AddAntispamIncludesListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.footer" method="onGlobalHtmlFooterInclude" />
-            <argument type="service" id="chameleon_system_core.request_info_service" />
-        </service>
-
         <service id="chameleon_system_core.event_listener.case_insensitive_portal_exception_listener" class="ChameleonSystem\CoreBundle\EventListener\CaseInsensitivePortalExceptionListener">
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
             <tag name="kernel.event_listener" event="kernel.exception" />

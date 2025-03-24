@@ -160,7 +160,6 @@ class TCMSTextFieldEndPoint
         $content = $this->_ReplaceImages($content);
         $content = $this->_AddCMSClassToExternalLinks($content);
         $content = $this->_ReplaceLinks($content);
-        $content = $this->_ReplaceEMailLinks($content);
         $content = $this->_ReplaceDownloadLinks($content);
         $content = $this->_ReplaceInvalidDivs($content);
         $content = $this->_ReplaceEmptyAligns($content);
@@ -429,22 +428,6 @@ class TCMSTextFieldEndPoint
         return $sReturnString;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
-    protected function _ReplaceEMailLinks($content)
-    {
-        if (false === stripos($content, 'mailto:')) {
-            return $content;
-        }
-        $matchString = "/<a([^>]+?)href=['\"]mailto:([^'\"]*?)['\"]([^>]*?)>([^<]*?)<\\/a>/si";
-
-        $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_emailparser'), $content);
-
-        return $content;
-    }
 
     /**
      * @param array $aMatch
