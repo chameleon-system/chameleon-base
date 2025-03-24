@@ -263,6 +263,7 @@ after:
   - `AddAntispamIncludesListener` removed
   - `init_spam_class` removed
   - `CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL` can be removed from config.inc.php
+  - `TCMSLogChange::addShopSystemPage` removed
 
 ## jQuery and jQuery Migrate
 

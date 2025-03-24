@@ -45,6 +45,9 @@ class TCMSLogChange
     public const INFO_MESSAGE_LEVEL_WARNING = 'WARNING';
     public const INFO_MESSAGE_LEVEL_TODO = 'TODO';
 
+    private static array $tableNameCache = [];
+    private static array $fieldConstantNameCache = [];
+
     /**
      * @param string $bundleName
      *
@@ -135,13 +138,15 @@ class TCMSLogChange
     /**
      * returns the id of a field.
      *
-     * @param string $tableId
+     * @param string $table
      * @param string $sFieldName
      *
      * @return string
      */
-    public static function GetTableFieldId($tableId, $sFieldName)
+    public static function GetTableFieldId($table, $sFieldName)
     {
+        $tableId = self::isUuidOrNumeric($table) ? $table : self::getTableId($table);
+
         $fieldID = '';
         $query = "SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableId)."' AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
         if ($tmp = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
@@ -206,7 +211,7 @@ class TCMSLogChange
     }
 
     /**
-     * @param string $tableId
+     * @param string $table
      * @param string $sFieldName
      *
      * @return string
@@ -214,8 +219,10 @@ class TCMSLogChange
      * @throws ErrorException
      * @throws TPkgCmsException_Log
      */
-    public static function GetTableListFieldId($tableId, $sFieldName)
+    public static function GetTableListFieldId($table, $sFieldName)
     {
+        $tableId = self::isUuidOrNumeric($table) ? $table : self::getTableId($table);
+
         $fieldID = '';
         $query = "SELECT `id` FROM `cms_tbl_display_list_fields` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableId)."' AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
         if ($tmp = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
@@ -237,7 +244,7 @@ class TCMSLogChange
     }
 
     /**
-     * @param string $sTableid
+     * @param string $table
      * @param string $sFieldAlias
      *
      * @return string
@@ -245,24 +252,25 @@ class TCMSLogChange
      * @throws ErrorException
      * @throws TPkgCmsException_Log
      */
-    public static function GetTableListFieldIdFromAlias($sTableid, $sFieldAlias)
+    public static function GetTableListFieldIdFromAlias($table, $sFieldAlias)
     {
+        $tableId = self::isUuidOrNumeric($table) ? $table : self::getTableId($table);
         $fieldID = '';
-        $query = "SELECT `id` FROM `cms_tbl_display_list_fields` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableid)."' AND `db_alias` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldAlias)."'";
+        $query = "SELECT `id` FROM `cms_tbl_display_list_fields` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableId)."' AND `db_alias` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldAlias)."'";
         if ($tmp = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
             $fieldID = $tmp['id'];
         }
         if (empty($fieldID)) {
             $logger = self::getLogger();
             $logger->critical(
-                sprintf('UNABLE TO FIND DISPLAY FIELD %s for TABLE %s', $sFieldAlias, $sTableid),
+                sprintf('UNABLE TO FIND DISPLAY FIELD %s for TABLE %s', $sFieldAlias, $tableId),
                 [
                     'sFieldName' => $sFieldAlias,
-                    'tableId' => $sTableid,
+                    'tableId' => $tableId,
                 ]
             );
 
-            trigger_error(self::escapeJSOutput("UNABLE TO FIND DISPLAY FIELD '{$sFieldAlias}' for TABLE [{$sTableid}] in FILE [".__FILE__.'] ON LINE: '.__LINE__), E_USER_ERROR);
+            trigger_error(self::escapeJSOutput("UNABLE TO FIND DISPLAY FIELD '{$sFieldAlias}' for TABLE [{$tableId}] in FILE [".__FILE__.'] ON LINE: '.__LINE__), E_USER_ERROR);
         }
 
         return $fieldID;
@@ -270,15 +278,17 @@ class TCMSLogChange
 
     /**
      * @param string $tableId
-     *
-     * @return string
      */
-    public static function getTableName($tableId)
+    public static function getTableName($tableId): string
     {
+        if (isset(self::$tableNameCache[$tableId])) {
+            return self::$tableNameCache[$tableId];
+        }
+
         $query = 'SELECT `name` FROM cms_tbl_conf WHERE `id` = :tableConfId';
 
         return self::getDatabaseConnection()->fetchOne($query, [
-            'tableConfId' => $tableId,
+            'tableConfId' => (string) $tableId,
         ]);
     }
 
@@ -289,6 +299,10 @@ class TCMSLogChange
      */
     public static function getFieldConstantName($fieldId)
     {
+        if (isset(self::$fieldConstantNameCache[$fieldId])) {
+            return self::$fieldConstantNameCache[$fieldId];
+        }
+
         $query = 'SELECT `constname` FROM cms_field_type WHERE `id` = :fieldConfId';
 
         return self::getDatabaseConnection()->fetchOne($query, [
@@ -374,7 +388,7 @@ class TCMSLogChange
      */
     public static function RunQuery($line, $sql, array $parameter = [], ?array $types = null)
     {
-        /** @var \Doctrine\DBAL\Connection $db */
+        /** @var Doctrine\DBAL\Connection $db */
         $db = ServiceLocator::get('database_connection');
         $sql = self::getDeletedFieldsService()->stripDeletedFields($sql);
 
@@ -411,12 +425,13 @@ class TCMSLogChange
     /**
      * moves a field behind a given fieldname.
      *
-     * @param int $tableId
+     * @param string $table (alternative the tableName is possible)
      * @param string $fieldName
      * @param string $afterThisField name of the field after which to place the passed field
      */
-    public static function SetFieldPosition($tableId, $fieldName, $afterThisField)
+    public static function SetFieldPosition(string $table, $fieldName, $afterThisField)
     {
+        $tableId = self::isUuidOrNumeric($table) ? $table : self::getTableId($table);
         $pos = 0;
         if ('id' !== $afterThisField) {
             // check position of field where we want to set the new field behind
@@ -435,15 +450,26 @@ class TCMSLogChange
         self::_RunQuery($query, __LINE__);
     }
 
+    private static function isUuidOrNumeric(string $value): bool
+    {
+        return self::isUuid($value) || is_numeric($value);
+    }
+
+    private static function isUuid(string $value): bool
+    {
+        return 1 === preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $value);
+    }
+
     /**
      * set the position of a table display field relative to another field.
      *
-     * @param string $sTableId
+     * @param string $table
      * @param string $sNameField
      * @param string $sNameFieldAfterWhichTheNewFieldShouldBePlaced
      */
-    public static function SetDisplayFieldPosition($sTableId, $sNameField, $sNameFieldAfterWhichTheNewFieldShouldBePlaced)
+    public static function SetDisplayFieldPosition($table, $sNameField, $sNameFieldAfterWhichTheNewFieldShouldBePlaced)
     {
+        $sTableId = self::isUuidOrNumeric($table) ? $table : self::getTableId($table);
         $iPos = 0;
         $query = "SELECT * FROM cms_tbl_display_list_fields
                  WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableId)."'
@@ -474,12 +500,14 @@ class TCMSLogChange
     /**
      * set the position of a table display field relative to another field.
      *
-     * @param string $sTableId
+     * @param string $table
      * @param string $sAliasField
      * @param string $sAliasFieldAfterWhichTheNewFieldShouldBePlaced
      */
-    public static function SetDisplayFieldPositionByAlias($sTableId, $sAliasField, $sAliasFieldAfterWhichTheNewFieldShouldBePlaced)
+    public static function SetDisplayFieldPositionByAlias($table, $sAliasField, $sAliasFieldAfterWhichTheNewFieldShouldBePlaced)
     {
+        $sTableId = self::isUuidOrNumeric($table) ? $table : self::getTableId($table);
+
         $query = "SELECT * FROM cms_tbl_display_list_fields
                  WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableId)."'
                    AND `db_alias` = '".MySqlLegacySupport::getInstance()->real_escape_string($sAliasField)."'";
@@ -545,7 +573,7 @@ class TCMSLogChange
         if (!empty($identifierKey)) {
             $query = "SELECT * FROM `cms_role` WHERE `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($identifierKey)."'";
             $result = MySqlLegacySupport::getInstance()->query($query);
-            if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
+            if (1 === MySqlLegacySupport::getInstance()->num_rows($result)) {
                 $row = MySqlLegacySupport::getInstance()->fetch_assoc($result);
                 $returnVal = $row['id'];
             }
@@ -567,7 +595,7 @@ class TCMSLogChange
         if (!empty($identifierKey)) {
             $query = "SELECT * FROM `cms_usergroup` WHERE `internal_identifier` = '".MySqlLegacySupport::getInstance()->real_escape_string($identifierKey)."'";
             $result = MySqlLegacySupport::getInstance()->query($query);
-            if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
+            if (1 === MySqlLegacySupport::getInstance()->num_rows($result)) {
                 $row = MySqlLegacySupport::getInstance()->fetch_assoc($result);
                 $returnVal = $row['id'];
             }
@@ -639,13 +667,15 @@ class TCMSLogChange
     /**
      * checks if a field exists.
      *
-     * @param string $sTableName
+     * @param string $table
      * @param string $sFieldName
      *
      * @return bool
      */
-    public static function FieldExists($sTableName, $sFieldName)
+    public static function FieldExists($table, $sFieldName)
     {
+        $sTableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
+
         return TTools::FieldExists($sTableName, $sFieldName, true);
     }
 
@@ -662,15 +692,15 @@ class TCMSLogChange
      * 6 = show all records
      *
      * @param string $sRoleName
-     * @param string $sTableName
+     * @param string $table
      * @param bool $bResetRoles - indicates if all other roles will be kicked and the new role has the exclusive right
      * @param array|bool $aPermissions - array of the role fieldnr. 0,1,2,3,4,5,6, default = false
      */
-    public static function SetTableRolePermissions($sRoleName, $sTableName, $bResetRoles = false, $aPermissions = false)
+    public static function SetTableRolePermissions($sRoleName, $table, $bResetRoles = false, $aPermissions = false)
     {
         $databaseConnection = self::getDatabaseConnection();
         $roleID = self::GetUserRoleIdByKey($sRoleName);
-        $tableID = self::GetTableId($sTableName);
+        $tableID = self::isUuidOrNumeric($table) ? $table : self::getTableId($table);
         $quotedTableId = $databaseConnection->quote($tableID);
         $quotedRoleId = $databaseConnection->quote($roleID);
 
@@ -713,8 +743,6 @@ class TCMSLogChange
     /**
      * checks if table exists in database.
      *
-     * @param string $sTableName
-     *
      * @return bool
      */
     public static function TableExists($sTableName)
@@ -725,15 +753,15 @@ class TCMSLogChange
     /**
      * checks if record exists in table.
      *
-     * @param string $sTableName
-     * @param string $sFieldName
-     * @param string $sFieldValue
+     * @param string $table
      *
      * @return bool
      */
-    public static function RecordExists($sTableName, $sFieldName, $sFieldValue)
+    public static function RecordExists($table, $fieldName, $fieldValue)
     {
-        return TTools::RecordExists($sTableName, $sFieldName, $sFieldValue);
+        $tableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
+
+        return TTools::RecordExists($tableName, $fieldName, $fieldValue);
     }
 
     /**
@@ -758,13 +786,14 @@ class TCMSLogChange
     /**
      * returns the id of a field tab or empty string if nothing found.
      *
-     * @param string $sTableID
+     * @param string $table
      * @param string $sTabName
      *
      * @return string - id of field tab (default = empty string)
      */
-    public static function GetTabIDByName($sTableID, $sTabName)
+    public static function GetTabIDByName($table, $sTabName)
     {
+        $sTableID = self::isUuidOrNumeric($table) ? $table : self::getTableId($table);
         $sTabID = '';
         if (!empty($sTableID) && !empty($sTabName)) {
             $query = "SELECT *
@@ -783,7 +812,7 @@ class TCMSLogChange
     }
 
     /**
-     * @param string $sTableName
+     * @param string $table
      * @param string $sTabSystemName
      *
      * @return bool
@@ -791,12 +820,13 @@ class TCMSLogChange
      * @throws ErrorException
      * @throws TPkgCmsException_Log
      */
-    public static function getTabIDBySystemName($sTableName, $sTabSystemName)
+    public static function getTabIDBySystemName($table, $sTabSystemName)
     {
+        $tableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         $sTabId = false;
         $query = "SELECT *
                         FROM `cms_tbl_field_tab`
-                       WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(self::GetTableId($sTableName))."'
+                       WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(self::GetTableId($tableName))."'
                          AND `systemname` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTabSystemName)."' ";
         if ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
             $sTabId = $aRow['id'];
@@ -806,13 +836,14 @@ class TCMSLogChange
     }
 
     /**
-     * @param string $tableName
+     * @param string $table
      * @param string $tabSystemName
      *
      * @throws DBALException
      */
-    public static function deleteTabBySystemName($tableName, $tabSystemName)
+    public static function deleteTabBySystemName($table, $tabSystemName)
     {
+        $tableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         $tabId = self::getTabIDBySystemName($tableName, $tabSystemName);
         $fieldList = self::getFieldIdListForTab($tabId);
         if (!empty($fieldList)) {
@@ -832,10 +863,8 @@ class TCMSLogChange
 
     /**
      * @param string $tabId
-     *
-     * @return array
      */
-    public static function getFieldIdListForTab($tabId)
+    public static function getFieldIdListForTab($tabId): array
     {
         $query = 'SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_field_tab` = :tabId';
 
@@ -883,11 +912,12 @@ class TCMSLogChange
     /**
      * @see FieldTranslationUtil::makeFieldMultilingual()
      *
-     * @param string $tableName
+     * @param string $table
      * @param string $fieldName
      */
-    public static function makeFieldMultilingual($tableName, $fieldName)
+    public static function makeFieldMultilingual($table, $fieldName)
     {
+        $tableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         $fieldId = self::GetTableFieldId(self::GetTableId($tableName), $fieldName);
         self::getFieldTranslationUtil()->makeFieldMultilingual($fieldId);
     }
@@ -895,11 +925,12 @@ class TCMSLogChange
     /**
      * @see FieldTranslationUtil::makeFieldMonolingual()
      *
-     * @param string $tableName
+     * @param string $table
      * @param string $fieldName
      */
-    public static function makeFieldMonolingual($tableName, $fieldName)
+    public static function makeFieldMonolingual($table, $fieldName)
     {
+        $tableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         $fieldId = self::GetTableFieldId(self::GetTableId($tableName), $fieldName);
         self::getFieldTranslationUtil()->makeFieldMonolingual($fieldId);
     }
@@ -1025,10 +1056,8 @@ class TCMSLogChange
 
     /**
      * @param string $languageCode
-     *
-     * @return bool
      */
-    private static function isMessageEmptyOrInsertedAutomatically(array $row, $languageCode)
+    private static function isMessageEmptyOrInsertedAutomatically(array $row, $languageCode): bool
     {
         $descriptionFieldName = 'description';
         if (null !== $languageCode) {
@@ -1099,9 +1128,13 @@ class TCMSLogChange
      */
     private static function getLanguageCodeFromArgument($language)
     {
-        $languageCode = null;
         if (null === $language) {
-            $baseLanguage = TdbCmsConfig::GetInstance()->GetFieldTranslationBaseLanguage();
+            $baseLanguage = TdbCmsConfig::GetInstance()?->GetFieldTranslationBaseLanguage();
+
+            if (null === $baseLanguage) {
+                return null;
+            }
+
             $languageCode = $baseLanguage->fieldIso6391;
         } else {
             $baseLanguage = TdbCmsLanguage::GetNewInstance();
@@ -1116,10 +1149,7 @@ class TCMSLogChange
         return $languageCode;
     }
 
-    /**
-     * @param string $name
-     */
-    public static function deleteBackEndMessage($name)
+    public static function deleteBackEndMessage(string $name): void
     {
         $query = 'DELETE FROM `cms_message_manager_backend_message` WHERE `name` = :name';
         self::RunQuery(__LINE__, $query, ['name' => $name]);
@@ -1128,14 +1158,16 @@ class TCMSLogChange
     /**
      * Returns a new record ID that is guaranteed to be unused in the given table.
      *
-     * @param string $tableName The table to create an ID for. This MUST be a table with an 'id' attribute.
+     * @param string $table The table to create an ID for. This MUST be a table with an 'id' attribute.
      *
      * @return string
      *
      * @throws UnexpectedValueException if after 10 attempts no unique ID could be generated
      */
-    public static function createUnusedRecordId($tableName)
+    public static function createUnusedRecordId($table)
     {
+        $tableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
+
         try {
             return self::getGuidCreationService()->findUnusedId($tableName);
         } catch (GuidCreationFailedException $exception) {
@@ -1148,15 +1180,15 @@ class TCMSLogChange
      *
      * @static
      *
-     * @param string $sExtensionTableName - the db table name
+     * @param string $extensionTable - the db table id or name
      * @param string $sClassName - the origianl class name
      * @param string $sListClassName - the original list class name (if set)
      * @param string $sClassSubType - (deprecated!) the path relative to classes
      * @param string $sClassType - (deprecated!) core/customer?
      */
-    public static function ChangeExtensionToAutoParentClass($sExtensionTableName, $sClassName, $sListClassName, $sClassSubType = '', $sClassType = 'Core')
+    public static function ChangeExtensionToAutoParentClass($extensionTable, $sClassName, $sListClassName, $sClassSubType = '', $sClassType = 'Core')
     {
-        $sTableId = self::GetTableId($sExtensionTableName);
+        $sTableId = self::isUuidOrNumeric($extensionTable) ? $extensionTable : self::GetTableId($extensionTable);
 
         $query = "SELECT * FROM `cms_tbl_extension` WHERE `cms_tbl_conf_id` = '{$sTableId}'";
         $tRes = MySqlLegacySupport::getInstance()->query($query);
@@ -1192,8 +1224,8 @@ class TCMSLogChange
                    WHERE `id` = '{$aRes['id']}'
                  ";
             self::_RunQuery($query, __LINE__);
-            if ('Customer' == $aRes['type']) {
-                self::addInfoMessage('The extension in <strong>'.$sExtensionTableName.'</strong> was changed to use AutoParent classes. Since this class was extended in your project,
+            if ('Customer' === $aRes['type']) {
+                self::addInfoMessage('The extension in <strong>'.$extensionTable.'</strong> was changed to use AutoParent classes. Since this class was extended in your project,
       <strong>you must</strong> change your extension <strong>'.$aRes['name'].'</strong> to use auto classes as well!', self::INFO_MESSAGE_LEVEL_TODO);
             }
         }
@@ -1202,15 +1234,16 @@ class TCMSLogChange
     /**
      * add a new extension to a table. if no $sNameOfClassAfterWhichToPosition is given, the class will be inserted in last position.
      *
-     * @param string $sTableName
+     * @param string $table
      * @param string $sClassName
      * @param string $sClassSubType - deprecated! handled by autoloader
      * @param string $sClassType - deprecated! handled by autoloader
      * @param string $sListClass
      * @param string $sNameOfClassAfterWhichToPosition
      */
-    public static function AddExtensionAutoParentToTable($sTableName, $sClassName, $sClassSubType = '', $sClassType = '', $sListClass = '', $sNameOfClassAfterWhichToPosition = '')
+    public static function AddExtensionAutoParentToTable($table, $sClassName, $sClassSubType = '', $sClassType = '', $sListClass = '', $sNameOfClassAfterWhichToPosition = '')
     {
+        $sTableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         $iPos = 1;
         $sTableId = self::GetTableId($sTableName);
         $query = "SELECT MAX(`position`) AS maxpos FROM `cms_tbl_extension` WHERE `cms_tbl_conf_id` = '{$sTableId}'";
@@ -1250,12 +1283,12 @@ class TCMSLogChange
     /**
      * Deletes an extension previously added with AddExtensionAutoParentToTable() from a table.
      *
-     * @param string $tableName
+     * @param string $table
      * @param string $className
      */
-    public static function deleteExtensionAutoParentFromTable($tableName, $className)
+    public static function deleteExtensionAutoParentFromTable($table, $className)
     {
-        $tableId = self::GetTableId($tableName);
+        $tableId = self::isUuidOrNumeric($table) ? $table : self::GetTableId($table);
 
         $query = 'DELETE FROM `cms_tbl_extension` WHERE `cms_tbl_conf_id` = :tableId AND `name` = :className';
         self::RunQuery(__LINE__, $query, [
@@ -1267,12 +1300,14 @@ class TCMSLogChange
     /**
      * Moves an extension behind a given extension in cms_tbl_extension.
      *
-     * @param int $tableId
+     * @param int $table
      * @param string $sExtensionName
      * @param string $sPreExtensionName - extensionname where we want to set the new extension behind
      */
-    public static function SetExtensionPosition($tableId, $sExtensionName, $sPreExtensionName)
+    public static function SetExtensionPosition($table, $sExtensionName, $sPreExtensionName)
     {
+        $tableId = self::isUuidOrNumeric($table) ? $table : self::GetTableId($table);
+
         // check position of field where we want to set the new field behind
         /** @var $databaseConnection \Doctrine\DBAL\Connection */
         $databaseConnection = ServiceLocator::get('database_connection');
@@ -1297,8 +1332,9 @@ class TCMSLogChange
      * Use the system names for the tabs.
      * For backwards compatibility the name field is checked too.
      */
-    public static function SetTabPosition(string $tableId, string $tabSystemName, string $preTabSystemName): bool
+    public static function SetTabPosition(string $table, string $tabSystemName, string $preTabSystemName): bool
     {
+        $tableId = self::isUuidOrNumeric($table) ? $table : self::GetTableId($table);
         // check position of field where we want to set the new field behind
         $databaseConnection = self::getDatabaseConnection();
 
@@ -1356,7 +1392,7 @@ class TCMSLogChange
     }
 
     /**
-     * @param string $sTableName
+     * @param string $table
      * @param string $sFieldName
      * @param string $sSetting
      *
@@ -1364,8 +1400,9 @@ class TCMSLogChange
      *
      * @deprecated since 6.2.0 - use TCMSLogChange:makeFieldMultilingual() and TCMSLogChange::makeFieldMonolingual() instead.
      */
-    public static function FieldChangeMultiLanguageSetting($sTableName, $sFieldName, $sSetting)
+    public static function FieldChangeMultiLanguageSetting($table, $sFieldName, $sSetting)
     {
+        $sTableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         if (true === $sSetting) { // non-strict comparison intended.
             self::makeFieldMultilingual($sTableName, $sFieldName);
         } else {
@@ -1622,13 +1659,14 @@ class TCMSLogChange
      * use this method to simple add field connections for fields of $sTargetTable given in $aFields for your cms_field_conf_mlt field in $sTable
      * you can specify one record or leave it null to set for all records of $sTable.
      *
-     * @param string $sTable - table name where the cms_field_conf_mlt field is stored
+     * @param string $table - table id or name where the cms_field_conf_mlt field is stored
      * @param string $sTargetTable - table name of the table from what the fields will be selected also used in fieldtyp config parameter (sShowFieldsFromTable)
      * @param array $aFields - field names for that will be a mlt connection added
      * @param null $sRecordId - record id if you only want to set the connections for a specific record - if null all records of $sTable will be selected
      */
-    public static function SetCmsFieldConfMltField($sTable, $sTargetTable, $aFields = [], $sRecordId = null)
+    public static function SetCmsFieldConfMltField($table, $sTargetTable, $aFields = [], $sRecordId = null)
     {
+        $sTable = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         $sQuery = 'SELECT `'.MySqlLegacySupport::getInstance()->real_escape_string($sTable).'`.*
                    FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTable).'`';
 
@@ -1699,14 +1737,15 @@ class TCMSLogChange
     }
 
     /**
-     * @param string $sTableName
+     * @param string $table
      * @param int $iMaxEntriesToConvert
      *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
      */
-    public static function convertTableToInnoDB($sTableName, $iMaxEntriesToConvert = 200000)
+    public static function convertTableToInnoDB($table, $iMaxEntriesToConvert = 200000)
     {
+        $sTableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         $databaseConnection = self::getDatabaseConnection();
         $sStatusQuery = 'SHOW TABLE STATUS LIKE '.$databaseConnection->quote($sTableName);
         $aStatus = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sStatusQuery));
@@ -1752,7 +1791,7 @@ class TCMSLogChange
     }
 
     /**
-     * @param string $sTableName - table name
+     * @param string $table - table id or name
      * @param string $sTabName - Tab-Name
      * @param null $sTabIdentifier - if no identifier ist set, then one will be generated based on name
      * @param null $sTabDescription
@@ -1762,14 +1801,14 @@ class TCMSLogChange
      * @return string|null
      */
     public static function addTabToTable(
-        $sTableName,
+        $table,
         $sTabName,
         $sTabIdentifier = null,
         $sTabDescription = null,
         $sPlaceTabAfter = null,
         $sTabId = null
     ) {
-        $iTableId = self::GetTableId($sTableName);
+        $iTableId = self::isUuidOrNumeric($table) ? $table : self::GetTableId($table);
         $sOriginalTabName = $sTabName;
 
         if (null === $sTabIdentifier) {
@@ -1822,54 +1861,8 @@ class TCMSLogChange
         $str = addslashes($str);
         $str = str_replace("\n", '\\n', $str);
         $str = str_replace("\r", '\\r', $str);
-        $str = str_replace("\t", '\\t', $str);
 
-        return $str;
-    }
-
-    /**
-     * This method lets old updates insert shop system pages. The table "shop_system_page" has been removed in shop-165.inc.php and
-     * old updates would fail when triggered afterwards.
-     *
-     * You should not use this method in new packages, which already know about the change.
-     *
-     * @param string $shop_id
-     * @param string $name_internal
-     * @param string $name
-     * @param string $cms_tree_id
-     *
-     * @deprecated since 6.2.0 - no longer used.
-     */
-    public static function addShopSystemPage($shop_id, $name_internal, $name, $cms_tree_id = '', $id = null)
-    {
-        if (self::TableExists('shop_system_page')) {
-            $query = "INSERT INTO `shop_system_page`
-                      SET `shop_id` = '".$shop_id."',
-                          `name_internal` = '".$name_internal."',
-                          `name` = '".$name."',
-                          `cms_tree_id` = '".$cms_tree_id."'";
-            if (null !== $id) {
-                $query .= ", `id`='".MySqlLegacySupport::getInstance()->real_escape_string($id)."'";
-            }
-            self::_RunQuery($query, __LINE__);
-        } else {
-            $shop = TdbShop::GetNewInstance();
-            if ($shop->Load($shop_id)) {
-                $portals = $shop->GetFieldCmsPortalIdList();
-                foreach ($portals as $portalid) {
-                    $query = "INSERT INTO `cms_portal_system_page` SET
-                                `cms_portal_id` =   '".MySqlLegacySupport::getInstance()->real_escape_string($portalid)."',
-                                `name_internal` =   '".MySqlLegacySupport::getInstance()->real_escape_string($name_internal)."',
-                                `name` =            '".MySqlLegacySupport::getInstance()->real_escape_string($name)."',
-                                `cms_tree_id` =     '".MySqlLegacySupport::getInstance()->real_escape_string($cms_tree_id)."',
-                                `id` =              '".MySqlLegacySupport::getInstance()->real_escape_string(TTools::GetUUID())."'
-                            ";
-                    self::_RunQuery($query, __LINE__);
-                }
-            } else {
-                self::DisplayErrorMessage('tried to insert system page for non existent shop id');
-            }
-        }
+        return str_replace("\t", '\\t', $str);
     }
 
     /**
@@ -1885,7 +1878,7 @@ class TCMSLogChange
     /**
      * initialises a table with parent-id structure with left and right values for nested set.
      *
-     * @param string $sTable
+     * @param string $table
      * @param int $iCurrentLft
      * @param string $sParentId
      * @param string $sParentIdField
@@ -1893,8 +1886,10 @@ class TCMSLogChange
      *
      * @return int
      */
-    public static function AddLftAndRgtValuesForNestedSet($sTable, $iCurrentLft = 0, $sParentId = '', $sParentIdField = 'parent_id', $sOrderByField = null)
+    public static function AddLftAndRgtValuesForNestedSet($table, $iCurrentLft = 0, $sParentId = '', $sParentIdField = 'parent_id', $sOrderByField = null)
     {
+        $sTable = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
+
         $sQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTable).'` WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($sParentIdField)."` = '".MySqlLegacySupport::getInstance()->real_escape_string($sParentId)."'";
         if ($sOrderByField) {
             $sQuery .= ' ORDER BY `'.MySqlLegacySupport::getInstance()->real_escape_string($sOrderByField).'`';
@@ -1919,12 +1914,16 @@ class TCMSLogChange
      * please note! does NOT delete fields connecting to this table!
      *
      * handle with care!
-     *
-     * @param string $sTableName
      */
-    public static function deleteTable($sTableName)
+    public static function deleteTable($table)
     {
-        $sTableID = self::GetTableId($sTableName);
+        if (self::isUuidOrNumeric($table)) {
+            $sTableID = $table;
+            $sTableName = self::getTableName($table);
+        } else {
+            $sTableName = $table;
+            $sTableID = self::GetTableId($table);
+        }
 
         self::deleteRelatedTables($sTableName);
 
@@ -2004,10 +2003,11 @@ class TCMSLogChange
     /**
      * deletes all related tables (MLT) for $sTableName.
      *
-     * @param string $sTableName
+     * @param string $table
      */
-    public static function deleteRelatedTables($sTableName)
+    public static function deleteRelatedTables($table)
     {
+        $sTableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         $oTableConf = TdbCmsTblConf::GetNewInstance();
         $oTableConf->LoadFromField('name', $sTableName);
         $oFields = $oTableConf->GetFields($oTableConf, true);
@@ -2030,11 +2030,12 @@ class TCMSLogChange
      *
      * handle with care!
      *
-     * @param string $sTableName
+     * @param string $table
      * @param string $sFieldName
      */
-    public static function deleteField($sTableName, $sFieldName)
+    public static function deleteField($table, $sFieldName)
     {
+        $sTableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
         $mysql = MySqlLegacySupport::getInstance();
         $sTableID = self::GetTableId($sTableName);
         $sFieldID = $mysql->real_escape_string(self::GetTableFieldId($sTableID, $sFieldName));
@@ -2117,15 +2118,22 @@ class TCMSLogChange
      * Set field user group right for a table to show them in mlt field connection.
      * For example in variant sets article fields.
      *
-     * @param string $tableName
+     * @param string $table
      * @param string $userGroupSystemName (cms_admin)
      * @param array $fieldNameList if array is empty grand rights to all table fields
      *
      * @return bool|void
      */
-    public static function setTableFieldExtraUserGroupRights($tableName, $userGroupSystemName, array $fieldNameList = [])
+    public static function setTableFieldExtraUserGroupRights($table, $userGroupSystemName, array $fieldNameList = [])
     {
-        $tableId = self::GetTableId($tableName);
+        if (self::isUuidOrNumeric($table)) {
+            $tableName = self::getTableName($table);
+            $tableId = $table;
+        } else {
+            $tableName = $table;
+            $tableId = self::GetTableId($table);
+        }
+
         if ('' == $tableId) {
             self::DisplayErrorMessage("ERROR: Unable to find table [{$tableName}]");
 
@@ -2256,13 +2264,15 @@ class TCMSLogChange
     /**
      * Creates a MigrationQueryData object, avoiding the PHP 5.3 limitation of not being able to call "fluent constructors".
      *
-     * @param string $tableName
+     * @param string $table
      * @param string $language
      *
      * @return MigrationQueryData
      */
-    public static function createMigrationQueryData($tableName, $language)
+    public static function createMigrationQueryData($table, $language)
     {
+        $tableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
+
         return new MigrationQueryData($tableName, $language);
     }
 
