@@ -712,19 +712,6 @@ if (!defined('CHAMELEON_EMAIL_ENCODING')) {
 }
 
 /**
- * defines the email print security level against spam bot indexing
- * chameleon will replace dots and the @ symbol in email addresses if level > 0.
- *
- * Level 0 -> off. emails will not be replaced.
- * Level 1 -> emails will be replaced by predefined strings, something like [Klammeraffe] [Punkt] (STANDARD)
- *            you can define your own replacement using $antiSpam->SetDefaultReplacementStrings()
- * Level 2 -> emails will be replaced by random strings
- */
-if (!defined('CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL')) {
-    define('CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL', 1);
-}
-
-/**
  * WYSIWYGPro line endings. possible values: DIV,BR,P
  * new default is "P".
  */
