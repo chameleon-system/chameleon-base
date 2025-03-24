@@ -257,6 +257,12 @@ after:
 - MySQLLegacySupport changed
   - MySqlLegacySupport::fetch_array Default: MYSQL_BOTH is now MYSQL_ASSOC (MYSQL_BOTH is no longer supported)
   - MySqlLegacySupport::result is no longer supported!
+- antiSpam removed
+  - TTools::EncodeEMail removed
+  - TCMSTextFieldEndPoint::_ReplaceEMailLinks removed
+  - AddAntispamIncludesListener removed
+  - init_spam_class removed
+  - CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL can be removed from config.inc.php
 
 ## jQuery and jQuery Migrate
 
