@@ -1,5 +1,4 @@
-Backend Permissions
-===================
+# Backend Permissions
 
 This document describes the backend permissions of the Chameleon System.
 
@@ -13,7 +12,8 @@ accessible only to users logged into the backend. The firewall "frontend" is acc
 
 Currently, the frontend firewall is not used - instead, frontend security is handelt directly by the Chameleon System.
 
-The backend user has roles, groups, and permissions. The groups are generated from the groups assigned to the user via `cms_user_cms_usergroup_mlt`,
+The backend user has roles, groups, and permissions. 
+The groups are generated from the groups assigned to the user via `cms_user_cms_usergroup_mlt`,
 the roles via `cms_user_cms_role_mlt` and the permissions from the `cms_right` assigned to the users roles via `cms_role_cms_right_mlt`.
 
 Roles, groups and permissions are all changed to uppercase and prefixed with `ROLE_`, `CMS_GROUP_`, and `CMS_RIGHT_` respectively.
@@ -32,7 +32,31 @@ Relevant permissions can be found in `CmsPermissionAttributeConstants`.
 
 If you need access to the symfony security component in a place where injection is not possible, you can access it using the 
 `SecurityHelperAccess` via the `ServiceLocator` service.
+
+## Group, Role and Rights IDs
+
+You can use the RightsDataAccessInterface to get the ID represantives of groups, roles and rights.
+
+
 ```php
 /** @var SecurityHelperAccess $securityHelper */
-$securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+$securityHelperAccess = ServiceLocator::get(SecurityHelperAccess::class);
 ```
+
+## Examples:
+
+Check if a user is a logged in CMS user:
+
+```php
+$securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)
+```
+
+Check if a user has the right to access a table.
+This means the user has either edit or read only access to the table, so he is able to see/access the table in the backend at all.
+
+```php
+$securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableName)
+```
+
+See `SearchConsoleWidget` for an example how to check custom groups on any service like modules, widgets or anything else, 
+by implementing the `RestrictedByCmsGroupInterface` 

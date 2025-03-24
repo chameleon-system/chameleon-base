@@ -7,7 +7,7 @@
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
-$oldUrlHandlerId = $databaseConnection->fetchColumn("SELECT `id` FROM `cms_smart_url_handler` WHERE `name` = 'TPkgViewRenderer_TCMSSmartURLHandler_SnippetLessCompiler'");
+$oldUrlHandlerId = $databaseConnection->fetchOne("SELECT `id` FROM `cms_smart_url_handler` WHERE `name` = 'TPkgViewRenderer_TCMSSmartURLHandler_SnippetLessCompiler'");
 if (false === $oldUrlHandlerId) {
     return;
 }

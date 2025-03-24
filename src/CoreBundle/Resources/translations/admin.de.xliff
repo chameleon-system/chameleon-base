@@ -2332,6 +2332,50 @@
                 <source>chameleon_system_core.field_css_icon.select_icon</source>
                 <target>Icon auswählen</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.filename_label">
+                <source>chameleon_system_core.log_viewer.filename_label</source>
+                <target>Dateiname</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.size_label">
+                <source>chameleon_system_core.log_viewer.size_label</source>
+                <target>Größe</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.last_modified_label">
+                <source>chameleon_system_core.log_viewer.last_modified_label</source>
+                <target>Letzte Änderung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.headline">
+                <source>chameleon_system_core.log_viewer.headline</source>
+                <target>Log Übersicht</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.number_of_lines_label">
+                <source>chameleon_system_core.log_viewer.number_of_lines_label</source>
+                <target>Zeilenanzahl</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.view_button">
+                <source>chameleon_system_core.log_viewer.view_button</source>
+                <target>Anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.live_button">
+                <source>chameleon_system_core.log_viewer.live_button</source>
+                <target>Live</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.no_admin_message">
+                <source>chameleon_system_core.log_viewer.no_admin_message</source>
+                <target>Sie haben nicht die Rechte um den Inhalt dieser Seite aufzurufen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.host_notice">
+                <source>chameleon_system_core.log_viewer.host_notice</source>
+                <target>* Auf Hostings mit mehreren Nodes kann es sein, dass entsprechend nur ein Teil der Logs sichtbar sind.</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.log_loading_message">
+                <source>chameleon_system_core.log_viewer.log_loading_message</source>
+                <target>Log wird geladen...</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.log_viewer.filter_log">
+                <source>chameleon_system_core.log_viewer.filter_log</source>
+                <target>Log filtern...</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

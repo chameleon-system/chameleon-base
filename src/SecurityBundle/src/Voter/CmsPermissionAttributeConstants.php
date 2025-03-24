@@ -12,7 +12,7 @@ final class CmsPermissionAttributeConstants
         self::TABLE_EDITOR_EDIT_ALL,
         self::TABLE_EDITOR_DELETE,
         self::TABLE_EDITOR_NEW_LANGUAGE,
-        self::TABLE_EDITOR_WORKFLOW_PUBLISH,
+        self::TABLE_EDITOR_WORKFLOW_PUBLISH, // @deprecated since 8.0
         self::TABLE_EDITOR_VERSIONING,
     ];
 

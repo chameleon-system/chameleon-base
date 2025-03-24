@@ -485,7 +485,7 @@ class TCMSTableWriter extends TCMSTableEditor
                      AND `table_name` = :tableName';
 
         $databaseConnection = $this->getDatabaseConnection();
-        $engine = $databaseConnection->fetchColumn($query, [
+        $engine = $databaseConnection->fetchOne($query, [
             'databaseName' => $databaseConnection->getDatabase(),
             'tableName' => $tableName,
         ]);

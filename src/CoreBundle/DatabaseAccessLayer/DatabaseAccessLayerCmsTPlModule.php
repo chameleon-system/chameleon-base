@@ -26,14 +26,11 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
     public function loadFromClassOrServiceId($classOrId)
     {
         $this->loadAllModules();
-        $keyMappingData = array('classname' => $classOrId);
+        $keyMappingData = ['classname' => $classOrId];
         $mappedKey = $this->getMapLookupKey($keyMappingData);
         $data = $this->getFromCacheViaMappedKey($mappedKey);
-        if (null !== $data) {
-            return $data;
-        }
 
-        return null;
+        return $data ?? null;
     }
 
     /**
@@ -51,6 +48,7 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
     /**
      * @param string $field
      * @param string $value
+     *
      * @return mixed|null
      */
     public function loadFromField($field, $value)
@@ -64,10 +62,7 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
         return $matches[0];
     }
 
-    /**
-     * @return void
-     */
-    private function loadAllModules()
+    private function loadAllModules(): void
     {
         if (true === $this->isLoaded) {
             return;
@@ -81,7 +76,7 @@ class DatabaseAccessLayerCmsTPlModule extends AbstractDatabaseAccessLayer
             $id = $module['id'];
             $object = \TdbCmsTplModule::GetNewInstance($module);
             $this->setCache($id, $object);
-            $keyMappingData = array('classname' => $className);
+            $keyMappingData = ['classname' => $className];
             $mappedKey = $this->getMapLookupKey($keyMappingData);
 
             $this->setCacheKeyMapping($mappedKey, $id);

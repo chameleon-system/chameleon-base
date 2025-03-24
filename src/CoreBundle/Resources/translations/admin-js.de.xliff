@@ -313,6 +313,11 @@
                 <target>Sind Sie sicher? Auch der Modulinhalt geht durch diesen Vorgang verloren!</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_core.js.confirm_new_name">
+                <source>chameleon_system_core.js.confirm_new_name</source>
+                <target>Bitte geben Sie einen neuen Namen an:</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_core.js.permission_error_with_logout">
                 <source>chameleon_system_core.js.permission_error_with_logout</source>
                 <target>Es ist ein Rechte-Problem aufgetreten und Sie wurden abgemeldet.\nMöchten Sie zur Login Seite weitergeleitet werden?</target>
@@ -409,7 +414,10 @@
                 <source>chameleon_system_core.navigation_tree.confirm_delete</source>
                 <target>Möchten Sie den Navigationpunkt "%nodeName%" inkl. aller Unterpunkte wirklich löschen?</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_core.log_viewer.live_view_stopped">
+                <source>chameleon_system_core.log_viewer.live_view_stopped</source>
+                <target>Live Ansicht beendet</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

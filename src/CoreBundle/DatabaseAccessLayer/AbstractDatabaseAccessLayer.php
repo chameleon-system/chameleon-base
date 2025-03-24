@@ -15,27 +15,19 @@ use Doctrine\DBAL\Connection;
 
 abstract class AbstractDatabaseAccessLayer
 {
-    /**
-     * @var Connection
-     */
-    private $databaseConnection;
+    private Connection $databaseConnection;
 
     /**
      * @var array<string, mixed>
      */
-    private $cache = array();
+    private array $cache = [];
 
     /**
      * @var array<string, string>
      */
-    private $keyMapping = array();
+    private array $keyMapping = [];
 
-    /**
-     * @param Connection $connection
-     *
-     * @return void
-     */
-    public function setDatabaseConnection(Connection $connection)
+    public function setDatabaseConnection(Connection $connection): void
     {
         $this->databaseConnection = $connection;
     }
@@ -43,13 +35,13 @@ abstract class AbstractDatabaseAccessLayer
     /**
      * @param string $field
      * @param string $value
-     * @param null|string $languageId
+     * @param string|null $languageId
      *
      * @return list<\TCMSRecord|null>
      */
     protected function findDbObjectFromFieldInCache($field, $value, $languageId = null)
     {
-        $results = array();
+        $results = [];
         reset($this->cache);
         $compareValue = (string) $value;
         foreach ($this->cache as $cacheKey => $cacheValue) {
@@ -75,7 +67,6 @@ abstract class AbstractDatabaseAccessLayer
 
     /**
      * @param string $id
-     * @param mixed $object
      *
      * @return void
      */
@@ -108,12 +99,7 @@ abstract class AbstractDatabaseAccessLayer
         return null;
     }
 
-    /**
-     * @param array $cacheLookupData
-     *
-     * @return void
-     */
-    private function normalize($cacheLookupData)
+    private function normalize(array $cacheLookupData): void
     {
         foreach ($cacheLookupData as $key => $value) {
             if (is_array($cacheLookupData[$key])) {
@@ -135,8 +121,6 @@ abstract class AbstractDatabaseAccessLayer
     }
 
     /**
-     * @param array $cacheLookupData
-     *
      * @return string
      */
     protected function getMapLookupKey(array $cacheLookupData)

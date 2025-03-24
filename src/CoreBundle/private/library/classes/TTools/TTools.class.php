@@ -334,7 +334,7 @@ class TTools
             $tableId = self::GetCMSTableId($sTableName);
             $query = "SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableId)."' AND `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
             $result = MySqlLegacySupport::getInstance()->query($query);
-            if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
+            if (1 === MySqlLegacySupport::getInstance()->num_rows($result)) {
                 $returnVal = true;
             }
         } else {
@@ -344,7 +344,12 @@ class TTools
             } else {
                 $query = 'SHOW FIELDS FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` LIKE '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
                 $result = MySqlLegacySupport::getInstance()->query($query);
-                if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
+
+                if (false === $result) {
+                    throw new Exception('Error in query: '.$query.' - '.MySqlLegacySupport::getInstance()->error());
+                }
+
+                if (1 === MySqlLegacySupport::getInstance()->num_rows($result)) {
                     $returnVal = true;
                 }
 
@@ -371,31 +376,6 @@ class TTools
         $securityHelperAccess = self::getSecurityHelperAccess();
 
         return $requestModuleChooser && $securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER);
-    }
-
-    /**
-     * return encoded email link.
-     *
-     * @param string $sEMail
-     * @param string $sDisplayName
-     * @param array $aLinkAttributes
-     *
-     * @return string
-     */
-    public static function EncodeEMail($sEMail, $sDisplayName = null, $aLinkAttributes = [])
-    {
-        static $oAntiSpam;
-        if (!$oAntiSpam) {
-            $oAntiSpam = new antiSpam();
-        }
-        if (is_null($sDisplayName)) {
-            $sEncode = $oAntiSpam->ShowLink($sEMail, $oAntiSpam->EncodeEmail($sEMail), $aLinkAttributes);
-        } else {
-            $sDisplayName = str_replace(' ', '&nbsp;', TGlobal::OutHTML($sDisplayName));
-            $sEncode = $oAntiSpam->ShowLink($sEMail, $sDisplayName, $aLinkAttributes);
-        }
-
-        return $sEncode;
     }
 
     /**
@@ -806,16 +786,13 @@ class TTools
     }
 
     /**
-     * fetches the id for a tablename.
+     * Fetches the id for a table name.
      *
-     * @param string $tableName
      * @param bool $forceLoad - if true the local cache is ignored
      *
-     * @return string
-     *
-     * @throws InvalidArgumentException if no table was found for $tableName
+     * @throws InvalidArgumentException|\Doctrine\DBAL\Exception if no table was found for $tableName
      */
-    public static function GetCMSTableId($tableName, $forceLoad = false)
+    public static function GetCMSTableId(string $tableName, bool $forceLoad = false): string
     {
         static $tableIdCache = [];
 
@@ -828,11 +805,26 @@ class TTools
         }
 
         $query = 'SELECT `id` FROM `cms_tbl_conf` WHERE `name` = :tableName';
-        $tableId = self::getDatabaseConnection()->fetchColumn($query, [
+        $tableId = self::getDatabaseConnection()->fetchOne($query, [
             'tableName' => $tableName,
         ]);
         if (false === $tableId) {
-            throw new InvalidArgumentException("Table $tableName not found.");
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+            $traceInfo = array_map(static function ($trace) {
+                return sprintf(
+                    '%s%s%s:%d',
+                    $trace['class'] ?? '',
+                    $trace['type'] ?? '',
+                    $trace['function'] ?? 'unknown',
+                    $trace['line'] ?? 0
+                );
+            }, $backtrace);
+
+            throw new InvalidArgumentException(sprintf(
+                "Table '%s' not found. Call stack: %s",
+                $tableName,
+                implode(' -> ', $traceInfo)
+            ));
         }
         $tableIdCache[$tableName] = $tableId;
 
@@ -851,15 +843,15 @@ class TTools
         static $aCodeList;
         if (!$aCodeList) {
             $aCodeList = [
-                UPLOAD_ERR_INI_SIZE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
-                UPLOAD_ERR_FORM_SIZE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
-                UPLOAD_ERR_PARTIAL => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_interrupted'),
-                UPLOAD_ERR_NO_FILE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_no_file'),
-                UPLOAD_ERR_NO_TMP_DIR => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+                UPLOAD_ERR_INI_SIZE => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
+                UPLOAD_ERR_FORM_SIZE => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_to_large'),
+                UPLOAD_ERR_PARTIAL => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_interrupted'),
+                UPLOAD_ERR_NO_FILE => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_no_file'),
+                UPLOAD_ERR_NO_TMP_DIR => ServiceLocator::get('translator')->trans(
                     'chameleon_system_core.field_document.upload_error_tmp_folder_not_writable'
                 ),
-                UPLOAD_ERR_CANT_WRITE => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unable_to_save_to_disc'),
-                UPLOAD_ERR_EXTENSION => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_invalid_file_extension'),
+                UPLOAD_ERR_CANT_WRITE => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unable_to_save_to_disc'),
+                UPLOAD_ERR_EXTENSION => ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_invalid_file_extension'),
             ];
         }
 
@@ -867,7 +859,7 @@ class TTools
         if (array_key_exists($iUploadErrorCode, $aCodeList)) {
             $sError = $aCodeList[$iUploadErrorCode];
         } else {
-            $sError = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unknown_error');
+            $sError = ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.upload_error_unknown_error');
         }
 
         return $sError;

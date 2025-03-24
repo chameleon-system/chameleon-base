@@ -52,7 +52,7 @@ abstract class AbstractQuery implements QueryInterface
         $this->assertPrerequisites($migrationQueryData);
         list($query, $queryParams) = $this->getQuery($migrationQueryData);
         $statement = $this->databaseConnection->prepare($query);
-        $statement->execute($queryParams);
+        $statement->executeQuery($queryParams);
 
         return [$query, $queryParams];
     }

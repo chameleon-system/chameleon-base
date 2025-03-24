@@ -1,12 +1,4 @@
 <?php
-/*
- * This file is part of the Chameleon System (https://www.chameleonsystem.com).
- *
- * (c) ESONO AG (https://www.esono.de)
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace ChameleonSystem\CmsDashboardBundle\DependencyInjection;
 
@@ -28,9 +20,40 @@ class ChameleonSystemCmsDashboardExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('dashboard_cache_ttl', $config['cache_ttl']);
+        $dashboardCacheServiceDefinition = $container->getDefinition('chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service');
+        $dashboardCacheServiceDefinition->setArgument(3, $config['cache_ttl']);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
+        $searchConsoleServiceDefinition = $container->getDefinition('chameleon_system_cms_dashboard.service.google_search_console_service');
+        $searchConsoleServiceDefinition->setArgument(1, $config['google_api_auth_json']);
+
+        $searchConsoleWidgetDefinition = $container->getDefinition('chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.search_console_widget');
+        $searchConsoleWidgetDefinition->setArgument(5, $config['google_api_auth_json']);
+        $searchConsoleWidgetDefinition->setArgument(6, $config['google_search_console_domain_property']);
+        $searchConsoleWidgetDefinition->setArgument(7, $config['google_search_console_period_days']);
+
+        $searchConsoleServiceDefinition = $container->getDefinition('chameleon_system_cms_dashboard.service.google_analytics_dashboard_service');
+        $searchConsoleServiceDefinition->setArgument(1, $config['google_api_auth_json']);
+        $searchConsoleServiceDefinition->setArgument(2, $config['google_search_console_domain_property']);
+
+        $this->loadGoogleAnalyticsWidgets($config, $container);
+    }
+
+    private function loadGoogleAnalyticsWidgets(array $config, ContainerBuilder $container): void
+    {
+        $googleAnalyticsWidget = [
+            'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.engagement_rate_widget',
+            'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.geo_location_widget',
+            'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.traffic_source_widget',
+            'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.utm_tracking_widget',
+            'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.e_commerce_widget',
+            'chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.device_ratio_widget',
+        ];
+
+        foreach ($googleAnalyticsWidget as $widgetId) {
+            $widgetDefinition = $container->getDefinition($widgetId);
+            $widgetDefinition->setArgument(5, $config['google_api_auth_json']);
+            $widgetDefinition->setArgument(6, $config['google_analytics_property_id']);
+            $widgetDefinition->setArgument(7, $config['google_analytics_period_days']);
+        }
     }
 }

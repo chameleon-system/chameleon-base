@@ -4,6 +4,7 @@ namespace ChameleonSystem\SecurityBundle\CmsUser;
 
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
+use SebastianBergmann\Diff\Exception;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -74,13 +75,18 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
     private function userHasBeenModified(CmsUserModel $user): bool
     {
-        $query = 'SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId';
-        $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
-        if (false === $dateModified) {
-            return true;
-        }
+        try { 
+            // during upgrade from chameleon 7.1 to 8.0 the field does not yet exist @todo remove try/catch in chameleon 9.0
+            $query = 'SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId';
+            $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
+            if (false === $dateModified) {
+                return true;
+            }
 
-        return $user->getDateModified()->format('Y-m-d H:i:s') < $dateModified;
+            return $user->getDateModified()->format('Y-m-d H:i:s') < $dateModified;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function loadUserWithBackendLoginPermissionFromSSOID(string $ssoType, string $ssoId): ?CmsUserModel
@@ -188,13 +194,18 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         }, []);
 
         $ssoList = [];
-        $ssoRows = $this->connection->fetchAllAssociative('SELECT * FROM `cms_user_sso` WHERE `cms_user_id` = :userId', ['userId' => $userRow['id']]);
-        foreach ($ssoRows as $ssoRow) {
-            $ssoList[] = new CmsUserSSOModel($ssoRow['cms_user_id'], $ssoRow['type'], $ssoRow['sso_id'], $ssoRow['id']);
+
+        try {
+            // during upgrade from chameleon 7.1 to 8.0 the table does not yet exist @todo remove try/catch in chameleon 9.0
+            $ssoRows = $this->connection->fetchAllAssociative('SELECT * FROM `cms_user_sso` WHERE `cms_user_id` = :userId', ['userId' => $userRow['id']]);
+            foreach ($ssoRows as $ssoRow) {
+                $ssoList[] = new CmsUserSSOModel($ssoRow['cms_user_id'], $ssoRow['type'], $ssoRow['sso_id'], $ssoRow['id']);
+            }
+        } catch (\Exception $e) {
         }
 
         return new CmsUserModel(
-            \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $userRow['date_modified']),
+            \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $userRow['date_modified'] ?? date('Y-m-d H:i:s')),
             $userRow['id'],
             $userRow['login'],
             $userRow['firstname'],

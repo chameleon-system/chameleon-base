@@ -333,11 +333,10 @@ class TCMSField implements TCMSFieldVisitableInterface
             "javascript:{$openWindow}",
             'far fa-edit'
         );
-        $edititem .= '<div class="cleardiv" style="margin-bottom: 10px;">&nbsp;</div>';
+        $edititem .= '<div class="mb-2"></div>';
 
-        return sprintf('<div id="fieldcontainer_%1$s"><div style="width:%2$s;position:relative;">%3$s<div id=\"%1$s_contentdiv\">%4$s</div></div></div>',
+        return sprintf('<div id="fieldcontainer_%1$s"><div>%2$s<div id=\"%1$s_contentdiv\">%3$s</div></div></div>',
             TGlobal::OutHTML($this->name),
-            $this->fieldCSSwidth,
             $edititem,
             $this->GetReadOnly()
         );
@@ -579,7 +578,7 @@ class TCMSField implements TCMSFieldVisitableInterface
                             '.$quotedNewName.' '.$this->_GetSQLDefinition($postData).
             ' COMMENT '.$quotedComment;
 
-        $connection->query($query);
+        $connection->executeQuery($query);
 
         if (null !== $postData) {
             $field_default_value = '';
@@ -632,7 +631,7 @@ class TCMSField implements TCMSFieldVisitableInterface
             $updateQuery .= " OR $quotedFieldName = $quotedFieldDefaultValueFromSqlData";
         }
 
-        $connection->query($updateQuery);
+        $connection->executeQuery($updateQuery);
     }
 
     /**
@@ -653,9 +652,9 @@ class TCMSField implements TCMSFieldVisitableInterface
             $query .= ' OR `'.$connection->quoteIdentifier($fieldName)."` = '".$connection->quote($this->oDefinition->sqlData['field_default_value'])."'";
         }
 
-        $stmt = $connection->query($query);
+        $result = $connection->executeQuery($query);
 
-        while ($row = $stmt->fetch()) {
+        while ($row = $result->fetchAssociative()) {
             $oEditor = TTools::GetTableEditorManager($this->sTableName, $row['id']);
             $oEditor->AllowEditByAll(true);
             $oEditor->SaveField($fieldName, $fieldDefaultValue);
@@ -693,7 +692,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         if (!$returnDDL) {
             $aQuery = [new LogChangeDataModel($query)];
             TCMSLogChange::WriteTransaction($aQuery);
-            $connection->query($query);
+            $connection->executeQuery($query);
         }
         $sql .= $query.";\n";
 
@@ -743,7 +742,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         }
 
         $dropIndexQuery = 'ALTER TABLE '.$quotedTableName.' DROP INDEX '.$connection->quoteIdentifier($indexName);
-        $connection->query($dropIndexQuery);
+        $connection->executeQuery($dropIndexQuery);
 
         $transaction = [new LogChangeDataModel($dropIndexQuery)];
         TCMSLogChange::WriteTransaction($transaction);
@@ -757,7 +756,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $quotedTableName = $connection->quoteIdentifier($this->sTableName);
 
         $indexExistsQuery = 'SHOW INDEX FROM '.$quotedTableName.' WHERE KEY_NAME = '.$connection->quote($indexName);
-        $indexExistsResult = $connection->query($indexExistsQuery);
+        $indexExistsResult = $connection->executeQuery($indexExistsQuery);
 
         return 0 !== $indexExistsResult->rowCount();
     }
@@ -824,7 +823,7 @@ class TCMSField implements TCMSFieldVisitableInterface
 
         $query = $this->getIndexQuery($indexName, $indexType, $fields);
 
-        $connection->query($query);
+        $connection->executeQuery($query);
         $transaction = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($transaction);
     }
@@ -933,7 +932,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         $query = 'ALTER TABLE '.$connection->quoteIdentifier($this->sTableName).'
                        DROP '.$connection->quoteIdentifier($this->name).' ';
 
-        $connection->query($query);
+        $connection->executeQuery($query);
         $transaction = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($transaction);
     }
@@ -1098,6 +1097,11 @@ class TCMSField implements TCMSFieldVisitableInterface
         $viewParser = new TViewParser();
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $data = $this->GetFieldWriterData();
+
+        if ('null' === $data['sFieldDefaultValue']) {
+            $data['sFieldType'] .= '|null';
+        }
+
         $viewParser->AddVarArray($data);
 
         return $viewParser->RenderObjectView('property', 'TCMSFields/TCMSField');

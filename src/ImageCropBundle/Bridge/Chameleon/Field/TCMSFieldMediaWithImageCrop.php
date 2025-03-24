@@ -112,7 +112,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $databaseConnection = $this->getDatabaseConnection();
 
         $tableName = $databaseConnection->quoteIdentifier($this->sTableName);
-        if (false !== $databaseConnection->fetchColumn(sprintf('SHOW COLUMNS FROM %s LIKE :columnName', $tableName), ['columnName' => $additionalFieldNameOldFieldName])) {
+        if (false !== $databaseConnection->fetchOne(sprintf('SHOW COLUMNS FROM %s LIKE :columnName', $tableName), ['columnName' => $additionalFieldNameOldFieldName])) {
             //For new fields, the additional field already has the right name, but we have no way to check that here so we just check if the column exists.
             $query = sprintf(
                 'ALTER TABLE %s CHANGE %s %s CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL',
@@ -120,7 +120,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
                 $databaseConnection->quoteIdentifier($additionalFieldNameOldFieldName),
                 $databaseConnection->quoteIdentifier($additionalFieldNameNewFieldName)
             );
-            $databaseConnection->query($query);
+            $databaseConnection->executeQuery($query);
 
             $logChangeDataModels[] = new LogChangeDataModel($query);
             TCMSLogChange::WriteTransaction($logChangeDataModels);
@@ -226,7 +226,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             $databaseConnection->quoteIdentifier($this->sTableName),
             $databaseConnection->quoteIdentifier($additionalFieldName)
         );
-        $databaseConnection->query($query);
+        $databaseConnection->executeQuery($query);
 
         $logChangeDataModels[] = new LogChangeDataModel($query);
         TCMSLogChange::WriteTransaction($logChangeDataModels);
@@ -258,7 +258,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             $databaseConnection->quoteIdentifier($additionalFieldName)
         );
 
-        $databaseConnection->query($query);
+        $databaseConnection->executeQuery($query);
 
         $logChangeDataModels[] = new LogChangeDataModel($query);
         TCMSLogChange::WriteTransaction($logChangeDataModels);

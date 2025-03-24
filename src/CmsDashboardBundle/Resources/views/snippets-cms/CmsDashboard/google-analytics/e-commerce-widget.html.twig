@@ -1,0 +1,36 @@
+{# @var array eCommerceData #}
+{% if eCommerceData %}
+<canvas id="ecommerceChart"></canvas>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ecommerceData = {{ eCommerceData|json_encode|raw }};
+
+        new Chart(document.getElementById('ecommerceChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: [
+                    "{{ 'chameleon_system_cms_dashboard.widget.google_analytics.e_commerce.item_views' | trans }}",
+                    "{{ 'chameleon_system_cms_dashboard.widget.google_analytics.e_commerce.add_to_cart' | trans }}",
+                    "{{ 'chameleon_system_cms_dashboard.widget.google_analytics.e_commerce.purchases' | trans }}",
+                ],
+                datasets: [
+                    {
+                        label: "{{ 'chameleon_system_cms_dashboard.widget.current_month'|trans }}",
+                        data: ecommerceData.current,
+                        backgroundColor: '{{ generate_color(0,2)|e('js') }}',
+                    },
+                    {
+                        label: "{{ 'chameleon_system_cms_dashboard.widget.previous_month'|trans }}",
+                        data: ecommerceData.previous,
+                        backgroundColor: '{{ generate_color(1,2)|e('js') }}'
+                    },
+                ]
+            },
+        });
+    });
+</script>
+{% else %}
+    <div class="chart-no-data-message p-4">
+        {{ 'chameleon_system_cms_dashboard.widget.no_data_available' | trans }}
+    </div>
+{% endif %}

@@ -12,3 +12,22 @@
   position: relative;
   top: -3px;
 }
+
+.snippetImageEditorForm #editor_container label {
+  margin-bottom: 0 !important;
+}
+
+/*media manager -> image editor -> save dialog*/
+body.Modal-open .SfxModal-Wrapper .bdFkrw {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+body.Modal-open .SfxModal-Wrapper .bdFkrw label.SfxSelect-Label {
+  margin-bottom: 0;
+}
+
+.bg-splash {
+  background: url('/bundles/chameleonsystemcore/themes/standard/images/debora-pilati-dOG0z4-gqp0-unsplash.jpg') no-repeat center center fixed;
+  background-size: cover;
+}

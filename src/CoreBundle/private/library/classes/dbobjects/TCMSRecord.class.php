@@ -19,6 +19,8 @@ use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
+use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
 use esono\pkgCmsCache\CacheInterface;
 
 /**
@@ -72,7 +74,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      *
      * @var TCMSTableConf|null
      */
-    public $_oTableConf = null;
+    public $_oTableConf;
 
     /**
      * sets the state of field based translation overload fallback
@@ -391,7 +393,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $query = $this->GetQueryString($conditions);
         $query .= ' LIMIT 1';
 
-        if ($this->sqlData = $this->ExecuteSQLQueries($query, array_values($fieldData))->fetch(PDO::FETCH_ASSOC)) {
+        if ($this->sqlData = $this->ExecuteSQLQueries($query, array_values($fieldData))->fetchAssociative()) {
             $this->id = $this->sqlData['id'];
             if ($this->bAllowPostLoadHookExecution) {
                 $this->PostLoadHook();
@@ -730,7 +732,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $listQuery = preg_replace('/\s+WHERE\s+/i', $queryFilter.' AND ', $listQuery);
         }
 
-        $nameRecord = $this->ExecuteSQLQueries($listQuery)->fetch(PDO::FETCH_ASSOC);
+        $nameRecord = $this->ExecuteSQLQueries($listQuery)->fetchAssociative();
 
         if (is_array($nameRecord) && isset($nameRecord[$nameColumn])) {
             return $nameRecord[$nameColumn];
@@ -933,7 +935,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
     /**
      * returns the E-Mail encoded so that it can not be harvested by a spambot.
-     *
+     * @deprecated
      * @param string $sFieldName - field name
      * @param string $sDisplayText - link text to show instead of email address
      *
@@ -941,7 +943,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function GetEMailLink($sFieldName, $sDisplayText = null)
     {
-        return TTools::EncodeEMail($this->sqlData[$sFieldName], $sDisplayText);
+        return $this->sqlData[$sFieldName];
     }
 
     /**
@@ -1258,9 +1260,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                 $sQuery .= " AND (`cms_field_conf`.`name` REGEXP '^".$this->table."([1-9]?_mlt$|[1-9]*$|_mlt$)'
                             OR `cms_field_conf`.`fieldtype_config` REGEXP 'connectedTableName\s*=\s*".$this->table."(\s*$|$)')";
             }
-            $oMySqLSourceFieldName = $this->getDatabaseConnection()->query($sQuery);
+            $oMySqLSourceFieldName = $this->getDatabaseConnection()->executeQuery($sQuery);
             if ($oMySqLSourceFieldName->rowCount() > 0) {
-                while ($oSourceFieldNameRow = $oMySqLSourceFieldName->fetch(PDO::FETCH_ASSOC)) {
+                while ($oSourceFieldNameRow = $oMySqLSourceFieldName->fetchAssociative()) {
                     $aMLTTableNameList[] = $this->GetMltTableName($oSourceFieldNameRow['sFieldName'], $sSourceTableName, true);
                 }
             }
@@ -1353,7 +1355,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
             $aMatches = [];
             $res = $this->ExecuteSQLQueries($query, ['lookupFieldValue' => $this->id]);
-            while ($match = $res->fetch(PDO::FETCH_ASSOC)) {
+            while ($match = $res->fetchAssociative()) {
                 $aMatches[] = $match[$selectField];
             }
             $this->SetInternalCache($sInternalCacheKey, $aMatches);
@@ -1478,7 +1480,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $targetTableName = $oFieldConfig->GetPropertyTableNameFrontend();
 
         if (is_null($sClassName)) {
-            $sClassName = 'TCMSRecord';
             $sTargetTable = $oFieldConfig->oDefinition->GetFieldtypeConfigKey('connectedTableName');
             if (!empty($sTargetTable)) {
                 $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTargetTable);
@@ -1496,14 +1497,14 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             }
         }
 
-        if ('Tdb' == substr($sClassName, 0, 3)) {
+        if ('Tdb' === substr($sClassName, 0, 3)) {
             $sListClassName = $sClassName.'List';
         }
 
         $sCacheName = 'propertyField_'.$sFieldName.'_'.$sClassName.'_'.$sOrderBy;
 
         // add filter conditions to cache key
-        if (!is_null($aFilterConditions) && is_array($aFilterConditions)) {
+        if (is_array($aFilterConditions)) {
             foreach ($aFilterConditions as $key => $val) {
                 $sCacheName .= '_'.$key.'_'.$val;
             }
@@ -1589,7 +1590,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $query .= "ORDER BY $quotedOrderBy";
 
             $tres = $this->ExecuteSQLQueries($query);
-            while ($prop = $tres->fetch(PDO::FETCH_ASSOC)) {
+            while ($prop = $tres->fetchAssociative()) {
                 $aIdList[] = $prop['id'];
             }
             $this->SetInternalCache($sCacheName, $aIdList);
@@ -1616,7 +1617,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                  ';
 
             $query .= ' AND `cms_tree_node`.`contid` = '.$this->getDatabaseConnection()->quote($this->id);
-            if ($node = $this->ExecuteSQLQueries($query)->fetch(PDO::FETCH_ASSOC)) {
+            if ($node = $this->ExecuteSQLQueries($query)->fetchAssociative()) {
                 $oTreeNode = new TCMSTreeNode();
                 $oTreeNode->LoadFromRow($node);
             }
@@ -1642,7 +1643,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $bTableExists = $aTableExistsLookup[$tableName];
         } else {
             $query = 'SHOW TABLES LIKE '.ServiceLocator::get('database_connection')->quote($tableName);
-            $res = ServiceLocator::get('database_connection')->query($query);
+            $res = ServiceLocator::get('database_connection')->executeQuery($query);
             $bTableExists = ($res->rowCount() > 0);
             $aTableExistsLookup[$tableName] = $bTableExists;
         }
@@ -1669,7 +1670,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             } else {
                 if (self::TableExists($tableName)) {
                     $query = "SHOW COLUMNS FROM `{$tableName}` LIKE ".ServiceLocator::get('database_connection')->quote($sFieldName);
-                    $res = ServiceLocator::get('database_connection')->query($query);
+                    $res = ServiceLocator::get('database_connection')->executeQuery($query);
                     $bExists = ($res->rowCount() > 0);
                     $aFieldExistsLookup[$sStaticCacheKey] = $bExists;
                 }
@@ -1763,7 +1764,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $quotedSubTableName = $databaseConnection->quoteIdentifier($tableName);
             $query = "SELECT * FROM $quotedSubTableName WHERE `source_id` = $quotedId";
             $mltRecs = $this->ExecuteSQLQueries($query);
-            while ($mlt = $mltRecs->fetch(PDO::FETCH_ASSOC)) {
+            while ($mlt = $mltRecs->fetchAssociative()) {
                 $sql .= "INSERT INTO $quotedSubTableName".'        SET `source_id` = @recordId'.$this->table.', `target_id` = '.$databaseConnection->quote($mlt['target_id']).";\n";
             }
         }
@@ -1778,7 +1779,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                    WHERE $quotedSqlDataTableName = $quotedId
                    ";
             $propertyRes = $this->ExecuteSQLQueries($query);
-            while ($property = $propertyRes->fetch(PDO::FETCH_ASSOC)) {
+            while ($property = $propertyRes->fetchAssociative()) {
                 $oProperty = new self($tableName);
                 $property[$oTableConf->sqlData['name'].'_id'] = '##@recordId'.$this->table.'##';
                 $oProperty->LoadFromRow($property);
@@ -2023,7 +2024,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     /**
      * @throws Doctrine\DBAL\Exception
      */
-    private function ExecuteSQLQueries(string $query, array $parameter = [], array $types = []): Statement
+    private function ExecuteSQLQueries(string $query, array $parameter = [], array $types = []): DriverStatement|DriverResultStatement
     {
         return $this->getDatabaseConnection()->executeQuery($query, $parameter, $types);
     }

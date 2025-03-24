@@ -38,7 +38,7 @@ class DataAccessClassFromTableTableFieldProvider implements DataAccessClassFromT
         $query = $this->getFieldClassRowQuery();
 
         try {
-            $fieldClassName = $this->databaseConnection->fetchColumn($query, array(
+            $fieldClassName = $this->databaseConnection->fetchOne($query, array(
                 'tableName' => $tableName,
                 'fieldName' => $fieldName,
             ));

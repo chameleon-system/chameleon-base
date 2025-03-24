@@ -7,7 +7,7 @@
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
 
-$id = $databaseConnection->fetchColumn("SELECT `id` FROM `cms_smart_url_handler` WHERE `name` = 'TCMSSmartURLHandler_ThumbAutoCreate'");
+$id = $databaseConnection->fetchOne("SELECT `id` FROM `cms_smart_url_handler` WHERE `name` = 'TCMSSmartURLHandler_ThumbAutoCreate'");
 
 $data = TCMSLogChange::createMigrationQueryData('cms_smart_url_handler_cms_portal_mlt', 'en')
   ->setWhereEquals([

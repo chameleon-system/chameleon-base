@@ -16,7 +16,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
  * picks a node from a tree.
- * /**/
+ */
 class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterface
 {
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
@@ -150,7 +150,6 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
         $aMethodData['sReturnType'] = 'string|null';
 
         $oViewParser = new TViewParser();
-        /* @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $oViewParser->AddVarArray($aMethodData);
 
@@ -158,6 +157,21 @@ class TCMSFieldTreeNode extends TCMSField implements DoctrineTransformableInterf
         $oViewParser->AddVar('sMethodCode', $sMethodCode);
 
         return $oViewParser->RenderObjectView('method', 'TCMSFields/TCMSField');
+    }
+
+    public function RenderFieldPropertyString()
+    {
+        $viewParser = new TViewParser();
+        $viewParser->bShowTemplatePathAsHTMLHint = false;
+        $data = $this->GetFieldWriterData();
+
+        if ('null' === $data['sFieldDefaultValue']) {
+            $data['sFieldType'] = '?'.$data['sFieldType'];
+        }
+
+        $viewParser->AddVarArray($data);
+
+        return $viewParser->RenderObjectView('typed-property', 'TCMSFields/TCMSField');
     }
 
     private function getUrlUtil(): UrlUtil

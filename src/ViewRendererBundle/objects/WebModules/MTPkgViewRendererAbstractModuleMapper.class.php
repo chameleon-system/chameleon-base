@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsTPlModule;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBase implements IViewMapper
 {
@@ -51,10 +52,10 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
      */
     public function GetHtmlHeadIncludes()
     {
-        $aHeadIncludes = parent::GetHtmlHeadIncludes();
-        $sViewName = $this->aModuleConfig['view'];
+        $headIncludes = parent::GetHtmlHeadIncludes();
+        $viewName = $this->aModuleConfig['view'];
         /** @var DatabaseAccessLayerCmsTPlModule $dbAccessLayer */
-        $dbAccessLayer = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
+        $dbAccessLayer = ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
         if (!isset($this->aModuleConfig['model'])) {
             throw new ErrorException(
                 'unable to run GetHtmlHeadIncludes for '.get_class(
@@ -65,15 +66,15 @@ abstract class MTPkgViewRendererAbstractModuleMapper extends TUserCustomModelBas
                 ), 0, E_USER_ERROR, __FILE__, __LINE__
             );
         }
-        $oModule = $dbAccessLayer->loadFromClassOrServiceId($this->aModuleConfig['model']);
-        if (null !== $oModule) {
-            $viewMapperConfig = $oModule->getViewMapperConfig();
-            $sSnippet = $viewMapperConfig->getSnippetForConfig($sViewName);
+        $module = $dbAccessLayer->loadFromClassOrServiceId($this->aModuleConfig['model']);
+        if (null !== $module) {
+            $viewMapperConfig = $module->getViewMapperConfig();
+            $sSnippet = $viewMapperConfig->getSnippetForConfig($viewName);
             $sSnippetPath = dirname($sSnippet);
             $aAdditionalIncludes = $this->getResourcesForSnippetPackage($sSnippetPath);
-            $aHeadIncludes = array_merge($aHeadIncludes, $aAdditionalIncludes);
+            $headIncludes = array_merge($headIncludes, $aAdditionalIncludes);
         }
 
-        return $aHeadIncludes;
+        return $headIncludes;
     }
 }

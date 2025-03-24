@@ -1,37 +1,61 @@
+{% set bg = 'bg-splash' %}
+
 {% extends 'BackendLayout/base.html.twig' %}
 
-{% block main_content %}
-    <div class="card">
-        <div class="card-header">
-            <h4>Login</h4>
-        </div>
-        <div class="card-body">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
-            <form name="cmsform" action="{{ path('cms_login') }}" method="post">
-                <fieldset>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
-                            <input class="form-control" placeholder="{{ 'chameleon_system_core.cms_module_login.form_user_name' | trans | e('html_attr') }}" type="text" id="username" name="_username" value="{{ last_username | e('html_attr') }}" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
-                            <input class="form-control" placeholder="{{ 'chameleon_system_core.cms_module_login.form_password' | trans | e('html_attr') }}" type="password" id="password" name="_password" />
-                        </div>
-                    </div>
-                    <input class="btn btn-lg btn-success btn-block" type="submit" value="{{ 'chameleon_system_core.cms_module_login.action_login' | trans | e('html_attr') }}">
+{% block header %}
 
-                    {% if googleLoginUrl %}<a href="{{ googleLoginUrl |e('html_attr') }}" class="btn btn-md btn-info btn-block">{{ 'chameleon_system_core.security.action_login_google' | trans }}</a>{% endif %}
-                </fieldset>
-            </form>
-        </div>
-    </div>
 {% endblock %}
 
+{% block main %}
+<main class="flex-grow-1 d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-11 col-sm-9 col-md-8 col-lg-6 col-xl-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <img class="img-fluid" src="{{ cmsGetPathTheme() }}/images/chameleon_logo.svg" alt="" />
+                    </div>
+                    <div class="card-body">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+
+                        <div class="text-center mt-1 m-3 text-dark">
+                            <h2>Backend Login</h2>
+                        </div>
+
+                        <form name="cmsform" action="{{ path('cms_login') }}" method="post">
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
+                                        <input class="form-control form-control-lg" placeholder="{{ 'chameleon_system_core.cms_module_login.form_user_name' | trans | e('html_attr') }}" type="text" id="username" name="_username" value="{{ last_username | e('html_attr') }}" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
+                                        <input class="form-control form-control-lg" placeholder="{{ 'chameleon_system_core.cms_module_login.form_password' | trans | e('html_attr') }}" type="password" id="password" name="_password" />
+                                    </div>
+                                </div>
+                                <input class="btn btn-lg btn-dark btn-block" type="submit" value="{{ 'chameleon_system_core.cms_module_login.action_login' | trans | e('html_attr') }}">
+
+                                {% if googleLoginUrl %}<a href="{{ googleLoginUrl |e('html_attr') }}" class="btn btn-md btn-info btn-block">{{ 'chameleon_system_core.security.action_login_google' | trans }}</a>{% endif %}
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <span>&copy;&nbsp;&nbsp;<a href="https://www.esono.de" target="_blank">ESONO AG</a>&nbsp;&nbsp;{{ 'now'|date('Y') }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block backend_footer %}
+{% endblock %}
 {% block modalDialog %}
 {% endblock %}
 {% block footer_includes %}

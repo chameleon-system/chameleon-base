@@ -371,18 +371,13 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 $tempReplacePattern = '/static/js/jquery.js';
                 $sPageContent = str_replace($tempReplacePattern, '@@jquery@@', $sPageContent);
 
-                if (defined('CHAMELEON_URL_GOOGLE_JQUERY') && false !== CHAMELEON_URL_GOOGLE_JQUERY) {
-                    $tempReplacePattern = CHAMELEON_URL_GOOGLE_JQUERY;
-                    $sPageContent = str_replace($tempReplacePattern, '@@jquery@@', $sPageContent);
-                }
-
                 $sPattern = "/<script.*\/chameleon\/+javascript.*<\/script>/i";
                 $sPageContent = preg_replace($sPattern, '', $sPageContent);
 
                 $sPattern = "/<script (?!.*blackbox.*).*\/javascript\/.*<\/script>/i";
                 $sPageContent = preg_replace($sPattern, '', $sPageContent);
 
-                $sPageContent = str_replace('@@jquery@@', '/chameleon/blackbox/javascript/jquery/jquery-3.3.1.min.js', $sPageContent);
+                $sPageContent = str_replace('@@jquery@@', '/chameleon/blackbox/javascript/jquery/jquery-3.7.1.min.js', $sPageContent);
 
                 $sPattern = "/<script>.*?<\/script>/si";
                 $sPageContent = preg_replace($sPattern, '', $sPageContent);

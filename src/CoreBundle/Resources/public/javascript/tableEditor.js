@@ -408,7 +408,37 @@ function setTableEditorListFieldState(triggerDiv, requestURL) {
 function resetExtendedListField(fieldName, defaultValue, defaultPreview) {
     document.getElementById(fieldName).value = defaultValue;
     document.getElementById(fieldName + 'CurrentSelection').innerHTML = defaultPreview;
+
+    var editButton = document.querySelector(".lookup-button");
+
+    if (editButton) {
+        var currentHref = new URL(editButton.href, window.location.origin);
+        var urlParams = new URLSearchParams(currentHref.search);
+
+        urlParams.delete('id');
+        editButton.href = currentHref.pathname + '?' + urlParams.toString();
+    }
+
+    updateButtonState();
 }
+
+function updateButtonState() {
+    document.querySelectorAll(".lookup-button").forEach(editButton => {
+        var currentHref = new URL(editButton.href, window.location.origin);
+        var urlParams = new URLSearchParams(currentHref.search);
+        var id = urlParams.get("id");
+        var isDisabled = !id || id.trim() === "";
+        if (isDisabled == true ) {
+            editButton.classList.add("disabled");
+        } else {
+            editButton.classList.remove("disabled");
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    updateButtonState();
+})
 
 /*
  * extended multi table list field: resets field value to default value

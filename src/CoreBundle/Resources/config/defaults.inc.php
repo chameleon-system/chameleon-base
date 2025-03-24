@@ -209,12 +209,6 @@ if (!defined('CHAMELEON_404_IMAGE_PATH_BIG')) {
 if (!defined('CHAMELEON_URL_JQUERY')) {
     define('CHAMELEON_URL_JQUERY', '/static/js/jquery.js');
 }
-/**
- * if you want to use jquery from google apis, you can set the path using this constant. CHAMELEON_URL_JQUERY will still be used if jquery via google can not be reached.
- */
-if (!defined('CHAMELEON_URL_GOOGLE_JQUERY')) {
-    define('CHAMELEON_URL_GOOGLE_JQUERY', false);
-}
 
 /**
  * path to themes directory.
@@ -715,19 +709,6 @@ if (!defined('JPEG_IMAGE_QUALITY')) {
  */
 if (!defined('CHAMELEON_EMAIL_ENCODING')) {
     define('CHAMELEON_EMAIL_ENCODING', 'UTF-8');
-}
-
-/**
- * defines the email print security level against spam bot indexing
- * chameleon will replace dots and the @ symbol in email addresses if level > 0.
- *
- * Level 0 -> off. emails will not be replaced.
- * Level 1 -> emails will be replaced by predefined strings, something like [Klammeraffe] [Punkt] (STANDARD)
- *            you can define your own replacement using $antiSpam->SetDefaultReplacementStrings()
- * Level 2 -> emails will be replaced by random strings
- */
-if (!defined('CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL')) {
-    define('CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL', 1);
 }
 
 /**

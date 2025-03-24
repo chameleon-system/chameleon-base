@@ -93,6 +93,6 @@ class DataAccessCmsTree implements DataAccessCmsTreeInterface
     {
         $query = 'SELECT `target_id` FROM `cms_tree_cms_tpl_page_mlt` WHERE `source_id` = :treeId';
 
-        return $this->databaseConnection->fetchColumn($query, array('treeId' => $cmsTreeId));
+        return $this->databaseConnection->fetchOne($query, array('treeId' => $cmsTreeId));
     }
 }

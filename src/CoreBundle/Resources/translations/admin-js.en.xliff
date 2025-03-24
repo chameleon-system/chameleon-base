@@ -313,6 +313,11 @@
                 <target>Are you sure? Also the module content will be lost.</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_core.js.confirm_new_name">
+                <source>chameleon_system_core.js.confirm_new_name</source>
+                <target>Please enter a new name:</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_core.js.permission_error_with_logout">
                 <source>chameleon_system_core.js.permission_error_with_logout</source>
                 <target>You tried to perform an action or access an entry for which you do not have sufficient permission. You have been logged out as a security precaution.\n Do you want to be redirected to the login page?</target>
@@ -409,7 +414,10 @@
                 <source>chameleon_system_core.navigation_tree.confirm_delete</source>
                 <target>Do you want to delete the navigation node "%nodeName%" including all subnodes?</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_core.log_viewer.live_view_stopped">
+                <source>chameleon_system_core.log_viewer.live_view_stopped</source>
+                <target>Live View stopped</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

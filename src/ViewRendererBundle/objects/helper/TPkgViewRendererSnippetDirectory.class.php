@@ -16,46 +16,19 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirectoryInterface
 {
-    /**
-     * @var string
-     */
-    public static $CSSSNIPPET = '<link rel="stylesheet" href="{{}}" type="text/css" />';
-    /**
-     * @var string
-     */
-    public static $JSSNIPPET = '<script src="{{}}" type="text/javascript"></script>';
+    public static string $CSSSNIPPET = '<link rel="stylesheet" href="{{}}" type="text/css" />';
+    public static string $JSSNIPPET = '<script src="{{}}" type="text/javascript"></script>';
 
-    const PATH_MODULES = 'webModules';
-    const PATH_OBJECTVIEWS = 'objectviews';
-    const PATH_LAYOUTS = 'layoutTemplates';
-
-    /**
-     * @var PortalDomainServiceInterface
-     */
-    private $portalDomainService;
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
-    /**
-     * @var ThemeServiceInterface
-     */
-    private $themeService;
+    public const PATH_MODULES = 'webModules';
+    public const PATH_OBJECTVIEWS = 'objectviews';
+    public const PATH_LAYOUTS = 'layoutTemplates';
 
     public function __construct(
-        PortalDomainServiceInterface $portalDomainService,
-        RequestInfoServiceInterface $requestInfoService,
-        KernelInterface $kernel,
-        ThemeServiceInterface $themeService
+        private readonly PortalDomainServiceInterface $portalDomainService,
+        private readonly RequestInfoServiceInterface $requestInfoService,
+        private readonly KernelInterface $kernel,
+        private readonly ThemeServiceInterface $themeService
     ) {
-        $this->requestInfoService = $requestInfoService;
-        $this->kernel = $kernel;
-        $this->themeService = $themeService;
-        $this->portalDomainService = $portalDomainService;
     }
 
     /**
@@ -71,13 +44,12 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
      * to break possible circular references.
      *
      * @param string $sSnippetPath
-     * @param array  $aUsedPackages
      *
      * @return array
      */
-    private function doGetResourcesForSnippetPackage($sSnippetPath, array $aUsedPackages = array())
+    private function doGetResourcesForSnippetPackage($sSnippetPath, array $aUsedPackages = [])
     {
-        static $aCachedResources = array();
+        static $aCachedResources = [];
 
         if (isset($aCachedResources[$sSnippetPath])) {
             return $aCachedResources[$sSnippetPath];
@@ -85,16 +57,16 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
 
         // break circular references
         if (in_array($sSnippetPath, $aUsedPackages)) {
-            return array();
+            return [];
         }
         $aUsedPackages[] = $sSnippetPath;
 
-        $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
-        $key = array(
+        $cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        $key = [
             'class' => __CLASS__,
             'method' => 'doGetResourcesForSnippetPackage',
             'sSnippetPath' => $sSnippetPath,
-        );
+        ];
 
         $sKey = $cache->getKey($key, true);
         $aIncludes = $cache->get($sKey);
@@ -104,7 +76,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
             return $aCachedResources[$sSnippetPath];
         }
 
-        $aIncludes = array();
+        $aIncludes = [];
 
         static $locator = null;
         if (null === $locator) {
@@ -131,8 +103,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
                     $aIncludes[] = $sResource;
                 }
             }
-            $oGlobal = TGlobal::instance();
-            if (true === isset($aConfig['js']) && false === $oGlobal->isFrontendJSDisabled()) {
+            if (true === isset($aConfig['js']) && false === $this->requestInfoService->isFrontendJsDisabled()) {
                 foreach ($aConfig['js'] as $sJSFile) {
                     $sResource = str_replace('{{}}', TGlobal::GetStaticURL($sJSFile), self::$JSSNIPPET);
                     $aIncludes[] = $sResource;
@@ -142,7 +113,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
             // file not found. continue happily.
         }
 
-        $cache->set($sKey, $aIncludes, array());
+        $cache->set($sKey, $aIncludes, []);
 
         $aCachedResources[$sSnippetPath] = $aIncludes;
 
@@ -163,7 +134,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
             $aActiveDir = $aActiveDir[$sPath];
         }
 
-        $aActiveSnippets = array();
+        $aActiveSnippets = [];
         if (false === is_array($aActiveDir)) {
             $aActiveSnippets[$aActiveDir->sSnippetName] = $aActiveDir;
         } else {
@@ -195,7 +166,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
     public function getConfigTree($oPortal = null, $snippetPath = null)
     {
         $aTypeList = $this->getBasePaths($oPortal, $snippetPath);
-        $aDirTree = array();
+        $aDirTree = [];
         foreach ($aTypeList as $sType) {
             if (false === $sType) {
                 continue;
@@ -212,7 +183,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
     public function getDirTree($bWithDummyData = false, $oPortal = null)
     {
         $aTypeList = $this->getBasePaths($oPortal);
-        $aDirTree = array();
+        $aDirTree = [];
         foreach ($aTypeList as $sType) {
             if (false === $sType) {
                 continue;
@@ -224,13 +195,12 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
     }
 
     /**
-     * @param array       $aTree
-     * @param string      $sType
+     * @param string $sType
      * @param string|null $sRootPath
      *
      * @return array
      */
-    private function getConfigTreeHelper(array $aTree = array(), $sType = _CMS_CORE, $sRootPath = null)
+    private function getConfigTreeHelper(array $aTree = [], $sType = _CMS_CORE, $sRootPath = null)
     {
         if (null === $sRootPath) {
             $sRootPath = $this->getSnippetBaseDirectory();
@@ -251,7 +221,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
                 if (isset($aTree[$entry])) {
                     $aTree[$entry] = $this->getConfigTreeHelper($aTree[$entry], $sType, $sRootPath.'/'.$entry);
                 } else {
-                    $aTree[$entry] = $this->getConfigTreeHelper(array(), $sType, $sRootPath.'/'.$entry);
+                    $aTree[$entry] = $this->getConfigTreeHelper([], $sType, $sRootPath.'/'.$entry);
                 }
             }
         }
@@ -262,14 +232,14 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
     }
 
     /**
-     * @param array       $aTree
-     * @param string      $sType
-     * @param string      $sRootPath
-     * @param bool        $bWithDummyData - include the dummy data files
+     * @param array $aTree
+     * @param string $sType
+     * @param string $sRootPath
+     * @param bool $bWithDummyData - include the dummy data files
      *
      * @return array
      */
-    private function getDirTreeHelper($aTree = array(), $sType = _CMS_CORE, $sRootPath = null, $bWithDummyData = false)
+    private function getDirTreeHelper($aTree = [], $sType = _CMS_CORE, $sRootPath = null, $bWithDummyData = false)
     {
         if (null === $sRootPath) {
             $sRootPath = '';
@@ -294,7 +264,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
                 if (isset($aTree[$entry])) {
                     $aTree[$entry] = $this->getDirTreeHelper($aTree[$entry], $sType, $sRootPath.'/'.$entry, $bWithDummyData);
                 } else {
-                    $aTree[$entry] = $this->getDirTreeHelper(array(), $sType, $sRootPath.'/'.$entry, $bWithDummyData);
+                    $aTree[$entry] = $this->getDirTreeHelper([], $sType, $sRootPath.'/'.$entry, $bWithDummyData);
                 }
             }
         }
@@ -307,7 +277,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
      * @param string $sType
      * @param string $sRelativePath
      * @param string $sSnippetName
-     * @param bool   $bWithDummyData
+     * @param bool $bWithDummyData
      *
      * @return TPkgViewRendererSnippetGalleryItem
      *
@@ -351,7 +321,7 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
      */
     private function getAllSnippets($mContent)
     {
-        $aSnippets = array();
+        $aSnippets = [];
 
         if (is_array($mContent)) {
             foreach ($mContent as $mSubContent) {
@@ -397,8 +367,8 @@ class TPkgViewRendererSnippetDirectory implements TPkgViewRendererSnippetDirecto
         } else {
             // NOTE this is now a very old fallback; normally everything should have a theme and a snippet chain > 0
 
-            $aBasePaths = array(realpath(PATH_CORE_VIEWS.'/'.$sBaseDirectory));
-            $aCandidates = array(_CMS_CUSTOMER_CORE, _CMS_CUSTOM_CORE);
+            $aBasePaths = [realpath(PATH_CORE_VIEWS.'/'.$sBaseDirectory)];
+            $aCandidates = [_CMS_CUSTOMER_CORE, _CMS_CUSTOM_CORE];
             foreach ($aCandidates as $sCandidate) {
                 if (false !== $sCandidate && true === is_dir($sCandidate.'/'.$sBaseDirectory)) {
                     $aBasePaths[] = realpath($sCandidate.'/'.$sBaseDirectory);

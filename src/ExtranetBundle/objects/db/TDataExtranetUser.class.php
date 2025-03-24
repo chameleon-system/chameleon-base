@@ -214,7 +214,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
         }
         if (is_null($this->id) || empty($this->id)) {
             $this->sqlData['tmpconfirmkey'] = md5(uniqid((string) rand(), true));
-            $oExtranetConf = &TdbDataExtranet::GetInstance();
+            $oExtranetConf = \TdbDataExtranet::GetInstance();
             if ($oExtranetConf->fieldUserMustConfirmRegistration || $bForceUserConfirm) {
                 $this->sqlData['confirmed'] = '0';
                 $this->sqlData['confirmedon'] = '0';

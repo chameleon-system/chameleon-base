@@ -67,15 +67,3 @@ The configuration does not work with ip ranges, all IPs must be whitelisted sepa
 
 An empty list means, that there is no limitation. This is the default setting, so to avoid limiting access, just don't specify anything.
 
-
-Cronjob Trigger Sanity Check
-----------------------------
-
-The `\ChameleonSystem\CoreBundle\SanityCheck\CronJobCheck` makes sure, that cronjobs are being triggered.
-To check this, it will compare the time since a cronjob has been triggered with a defined threshold.
-
-The default setting for the threshold is 3600 seconds and it can be configured like so:
-
-.. code-block:: yaml
-
-    chameleon_system_sanity_check.cronjob_threshold_in_seconds: 3600

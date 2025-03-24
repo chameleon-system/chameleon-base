@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="chameleon_system_cms_dashboard.dashboard">
                 <source>chameleon_system_cms_dashboard.dashboard</source>
-                <target>Chameleon Dashboard</target>
+                <target>Dashboard</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.for">
                 <source>chameleon_system_cms_dashboard.for</source>
@@ -42,7 +42,6 @@
                 <source>chameleon_system_cms_dashboard.widget.group_name_admin</source>
                 <target>Administrator</target>
             </trans-unit>
-
             <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs_title">
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs_title</source>
                 <target>Last automatically executed actions</target>
@@ -74,6 +73,265 @@
             <trans-unit id="chameleon_system_cms_dashboard.widget.last_run_cronjobs.status">
                 <source>chameleon_system_cms_dashboard.widget.last_run_cronjobs.status</source>
                 <target>Status</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_title">
+                <source>chameleon_system_cms_dashboard.widget.search_console_title</source>
+                <target>Google Search Terms for %domain% (last %days% days)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_dropdown_menu_console_link_title">
+                <source>chameleon_system_cms_dashboard.widget.search_console_dropdown_menu_console_link_title</source>
+                <target>Google Search Console Details</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_total_clicks">
+                <source>chameleon_system_cms_dashboard.widget.search_console_total_clicks</source>
+                <target>Total Clicks</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_last_n_days">
+                <source>chameleon_system_cms_dashboard.widget.search_console_last_n_days</source>
+                <target>Last %days% days</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_previous_n_days">
+                <source>chameleon_system_cms_dashboard.widget.search_console_previous_n_days</source>
+                <target>Previous %days% days</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_search_term">
+                <source>chameleon_system_cms_dashboard.widget.search_console_search_term</source>
+                <target>Search Term</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_clicks">
+                <source>chameleon_system_cms_dashboard.widget.search_console_clicks</source>
+                <target>Clicks</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_impressions">
+                <source>chameleon_system_cms_dashboard.widget.search_console_impressions</source>
+                <target>Impressions</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_current_period">
+                <source>chameleon_system_cms_dashboard.widget.search_console_current_period</source>
+                <target>current period</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_previous_period">
+                <source>chameleon_system_cms_dashboard.widget.search_console_previous_period</source>
+                <target>previous period</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_current">
+                <source>chameleon_system_cms_dashboard.widget.search_console_current</source>
+                <target>current</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_previous">
+                <source>chameleon_system_cms_dashboard.widget.search_console_previous</source>
+                <target>previous</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_improvement">
+                <source>chameleon_system_cms_dashboard.widget.search_console_improvement</source>
+                <target>Improvement</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.search_console_date">
+                <source>chameleon_system_cms_dashboard.widget.search_console_date</source>
+                <target>Date</target>
+            </trans-unit>
+            <!-- Google Analytics-->
+             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.period">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.period</source>
+                <target>Period</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.previous_month">
+                <source>chameleon_system_cms_dashboard.widget.previous_month</source>
+                <target>Previous Month</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.current_month">
+                <source>chameleon_system_cms_dashboard.widget.current_month</source>
+                <target>Current Monat</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.no_data_available">
+                <source>chameleon_system_cms_dashboard.widget.no_data_available</source>
+                <target>Unfortunately there is not enough data available!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics_dashboard_link_title</source>
+                <target>View now on Google!</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-geo-location">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics_geo_location</source>
+                <target>Locationdistribution</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-device-source-distribution">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-device-source-distribution</source>
+                <target>Device Source Distribution</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-engagement-rate">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-engagement-rate</source>
+                <target>Engagement Rate</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campaign">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campaign</source>
+                <target>UTM Campaign</target>
+            </trans-unit>
+            <!-- Engagement Rate -->
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics_engagement_rate_dashboard_link_title">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics_engagement_rate_dashboard_link_title</source>
+                <target>Google Analytics Engagement Rate Dashboard anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate_title">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate_title</source>
+                <target>Google Analytics Engagement Rate</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics</source>
+                <target>E-Commerce Stats</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-utm-tracking">
+                <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-utm-tracking</source>
+                <target>UTM Campaigns</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate</source>
+                <target>Engagement Rate</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate_percent">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.engagement_rate_percent</source>
+                <target>Engagement Rate in %</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics_total_engagement">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics_total_engagement</source>
+                <target>Total Engagement Rate</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics_avg_session_duration">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics_avg_session_duration</source>
+                <target>Average Session Duration</target>
+            </trans-unit>
+            <!-- Geo Location -->
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.geo_location_title">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.geo_location_title</source>
+                <target>Google Analytics Locations of the last %days% days</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.country">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.country</source>
+                <target>Country</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.region">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.region</source>
+                <target>Region</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.engaged_sessions">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.engaged_sessions</source>
+                <target>Engaged Sessions</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.conversions">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.conversions</source>
+                <target>Conversions</target>
+            </trans-unit>
+            <!-- Traffic Source -->
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.traffic_source_title">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.traffic_source_title</source>
+                <target>Traffic Source of the last %days% days</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.traffic_source_x_achses">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.traffic_source_x_achses</source>
+                <target>Session default channel group</target>
+            </trans-unit>
+            <!-- UTM Tracking -->
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking_title">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking_title</source>
+                <target>UTM-Tracking</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.source">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.source</source>
+                <target>Source</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.medium">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.medium</source>
+                <target>Medium</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.sessions_current">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.sessions_current</source>
+                <target>Sessions (Current)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.sessions_previous">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.sessions_previous</source>
+                <target>Sessions (Previous Period)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.sessions_change">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.sessions_change</source>
+                <target>Sessions Change</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.conversions_current">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.conversions_current</source>
+                <target>Conversions (Current)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.conversions_previous">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.conversions_previous</source>
+                <target>Conversions (Previous Period)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.conversions_change">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.conversions_change</source>
+                <target>Conversions Change</target>
+            </trans-unit>
+            <!-- ECommerce -->
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.e_commerce_title">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.e_commerce_title</source>
+                <target>E-Commerce Statistic</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.e_commerce.current">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics_current_period</source>
+                <target>Current Period</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.e_commerce.item_views">
+                <source>chameleon_system_cms_dashboard.widget.e_commerce.item_views</source>
+                <target>Item Views</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.e_commerce.add_to_cart">
+                <source>chameleon_system_cms_dashboard.widget.e_commerce.add_to_cart</source>
+                <target>Add to cart</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.e_commerce.purchases">
+                <source>chameleon_system_cms_dashboard.widget.e_commerce.purchases</source>
+                <target>Purchases</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.product_view_dropout">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.product_view_dropout</source>
+                <target>Item View Dropout</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.add_to_cart_dropout">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.add_to_cart_dropout</source>
+                <target>Cart Dropout</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.checkout_dropout">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.checkout_dropout</source>
+                <target>Checkout Dropout</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.purchase_dropout">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.checkout_dropout</source>
+                <target>Purchase Dropout</target>
+            </trans-unit>
+            <!-- Device Ratio -->
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.device_ratio_title">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.device_ratio_title</source>
+                <target>Device Ratio</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.device">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.device</source>
+                <target>Device</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.engaged_sessions_current">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.engaged_sessions_current</source>
+                <target>Engaged Sessions (Current)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.engaged_sessions_previous">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.engaged_sessions_previous</source>
+                <target>Engaged Sessions (Previous)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.conversions_current">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.conversions_current</source>
+                <target>Conversions (Current)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.conversions_previous">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.conversions_previous</source>
+                <target>Conversions (Previous)</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_voucher-info">
+                <source>chameleon_system_cms_dashboard.widget.group_name_voucher-info</source>
+                <target>Voucher Usage</target>
             </trans-unit>
         </body>
     </file>

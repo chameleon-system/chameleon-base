@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -886,7 +886,7 @@ class TGlobalBase
         if (empty($sTmpPath)) {
             $sErrorMessage = 'File not found ['.$sPath.']';
         } else {
-            if (0 != strcmp(substr($sTmpPath, -strlen($sAllowedExtension)), $sAllowedExtension)) {
+            if (0 !== strcmp(substr($sTmpPath, -strlen($sAllowedExtension)), $sAllowedExtension)) {
                 // invalid extension...
                 $sErrorMessage = 'File unsafe ['.$sPath.'] expecting extension: '.$sAllowedExtension;
                 $sTmpPath = '';
@@ -897,7 +897,7 @@ class TGlobalBase
             $bIsBelow = false;
             reset($aDirList);
             foreach ($aDirList as $sDir) {
-                if (0 == strcmp(substr($sTmpPath, 0, strlen($sDir)), $sDir)) {
+                if (0 === strcmp(substr($sTmpPath, 0, strlen($sDir)), $sDir)) {
                     $bIsBelow = true;
                 }
             }
@@ -919,17 +919,23 @@ class TGlobalBase
         return $sTmpPath;
     }
 
-    public function isFrontendJSDisabled()
+    /**
+     * @deprecated since 8.0.0 - use ServiceLocator::get('chameleon_system_core.request_info_service')->isFrontendJsDisabled() instead
+     */
+    public function isFrontendJSDisabled(): bool
     {
-        $bExclude = ($this->UserDataExists('esdisablefrontendjs') && 'true' == $this->GetUserData('esdisablefrontendjs'));
-
-        return $bExclude;
+        return self::getRequestInfoService()->isFrontendJsDisabled();
     }
 
     public function __sleep()
     {
         // avoid $requestStack being serialized
         return [];
+    }
+
+    private static function getRequestInfoService(): RequestInfoServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 
     private static function getPortalDomainService(): PortalDomainServiceInterface

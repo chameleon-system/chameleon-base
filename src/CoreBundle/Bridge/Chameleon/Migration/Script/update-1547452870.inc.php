@@ -168,14 +168,10 @@ foreach ($iconMapping as $moduleName => $iconName) {
 
 // get all main menu tables that got no mapped icon
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$statement = $databaseConnection->executeQuery("SELECT * FROM `cms_tbl_conf` WHERE `icon_font_css_class` = '' AND `cms_content_box_id` != '' AND `cms_content_box_id` !='0'");
-
-if (false === $statement->execute()) {
-    return;
-}
+$result = $databaseConnection->executeQuery("SELECT * FROM `cms_tbl_conf` WHERE `icon_font_css_class` = '' AND `cms_content_box_id` != '' AND `cms_content_box_id` !='0'");
 
 $tablesWithEmptyIcon = [];
-while (false !== $row = $statement->fetch()) {
+while (false !== $row = $result->fetchAssociative()) {
     $tablesWithEmptyIcon[] = $row['name'];
 }
 
@@ -184,13 +180,10 @@ if (count($tablesWithEmptyIcon) > 0) {
 }
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$statement = $databaseConnection->executeQuery("SELECT * FROM `cms_module` WHERE `icon_font_css_class` = '' AND `cms_content_box_id` != '' AND `cms_content_box_id` !='0'");
-if (false === $statement->execute()) {
-    return;
-}
+$result = $databaseConnection->executeQuery("SELECT * FROM `cms_module` WHERE `icon_font_css_class` = '' AND `cms_content_box_id` != '' AND `cms_content_box_id` !='0'");
 
 $modulesWithEmptyIcon = [];
-while (false !== $row = $statement->fetch()) {
+while (false !== $row = $result->fetchAssociative()) {
     $modulesWithEmptyIcon[] = $row['name'];
 }
 

@@ -6,7 +6,7 @@
 <?php
 
 $databaseConnection = TCMSLogChange::getDatabaseConnection();
-$filesize = (int) $databaseConnection->fetchColumn("SELECT `filesize` FROM `cms_media` WHERE `id` = '1'");
+$filesize = (int) $databaseConnection->fetchOne("SELECT `filesize` FROM `cms_media` WHERE `id` = '1'");
 
 // Do not replace image if customized.
 if (782 !== $filesize) {
@@ -441,7 +441,7 @@ nlZe31RtKOSxGNz4dzrFnUAIFQEAOGL6LUILoEj9R+xLQdXtNlqTkk96pfZgjNlPq5KCrH8n5Kwg
 nUIgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKB
 QCAQCAQCgUAgEAgEAoFAIBAcn/8DEL218dY+HAcAAAAASUVORK5CYII=';
 
-$subPath = $databaseConnection->fetchColumn("SELECT `path` FROM `cms_media` WHERE `id` = '1'");
+$subPath = $databaseConnection->fetchOne("SELECT `path` FROM `cms_media` WHERE `id` = '1'");
 $path = PATH_MEDIA_LIBRARY.$subPath;
 
 \file_put_contents($path, \base64_decode($imageData));

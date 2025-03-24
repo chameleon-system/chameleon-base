@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -18,6 +19,7 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -71,18 +73,36 @@ class CMSModuleChooser extends TCMSModelBase
     public function Execute()
     {
         parent::Execute();
-        /** @var SecurityHelperAccess $securityHelper */
-        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+        $securityHelper = $this->getSecurityHelperAccess();
+        $this->data['hasRightToEditModules'] = $securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT');
+        $this->data['hasRightToSwitchLayouts'] = $securityHelper->isGranted('CMS_RIGHT_CMS_MASTER_PAGEDEF_SPOT');
 
-        $this->data['oModuleInstance'] = $this->oModuleInstance;
-        $this->data['oModuleInstanceColorState'] = '000000';
-        if (!is_null($this->oModuleInstance)) {
-            $this->data['oModuleInstanceColorState'] = $this->oModuleInstance->GetModuleColorEditState();
+        $activePortal = $this->getPortalDomainService()->getActivePortal();
+
+        if (null !== $activePortal) {
+            $this->data['activePortalId'] = $activePortal->id;
         }
-        $this->data['oModule'] = $this->oModule;
-        $this->data['sModuleSpotName'] = $this->sModuleSpotName;
-        $this->data['pagedef'] = $this->global->GetUserData('pagedef');
-        $this->data['id'] = $this->global->GetUserData('id');
+
+        $this->data['moduleInstance'] = $this->oModuleInstance;
+        $this->data['moduleEditStateColor'] = '';
+        if (null !== $this->oModuleInstance) {
+            $this->data['moduleEditStateColor'] = $this->oModuleInstance->GetModuleColorEditState();
+        }
+        $this->data['module'] = $this->oModule;
+        $this->data['moduleSpotName'] = $this->sModuleSpotName;
+        $this->data['viewMapping'] = [];
+        $this->data['moduleViews'] = null;
+        $this->data['relatedTables'] = [];
+        if (null !== $this->oModule) {
+            $this->data['viewMapping'] = $this->oModule->GetViewMapping();
+            $this->data['moduleViews'] = $this->oModule->GetViews();
+            $this->getRelatedTables();
+        }
+        $this->data['menuPrefix'] = TGlobal::OutHTML($this->sModuleSpotName);
+        $this->data['cmsMasterPageDefinitionSpotTableId'] = TTools::GetCMSTableId('cms_master_pagedef_spot');
+
+        $this->getRequestData();
+
         if (array_key_exists('permittedModules', $this->aModuleConfig)) {
             $this->data['aPermittedModules'] = $this->aModuleConfig['permittedModules'];
         } else {
@@ -90,6 +110,8 @@ class CMSModuleChooser extends TCMSModelBase
         }
 
         $this->CheckFunctionRights();
+
+        $this->data['cmsMasterPageDefSpot'] = $this->getMasterPageDefSpot();
 
         $this->data['createModuleMenu'] = '';
 
@@ -110,6 +132,33 @@ class CMSModuleChooser extends TCMSModelBase
         return $this->data;
     }
 
+    private function getRelatedTables(): void
+    {
+        $relatedTablesList = $this->oModule->GetMLT('cms_tbl_conf_mlt');
+        if (null !== $relatedTablesList) {
+            while ($relatedTable = $relatedTablesList->Next()) {
+                $this->data['relatedTables'][] = [
+                    'id' => $relatedTable->id,
+                    'name' => $relatedTable->sqlData['name'],
+                ];
+            }
+        }
+    }
+
+    private function getMasterPageDefSpot(): TdbCmsMasterPagedefSpot
+    {
+        $pageDefinition = TCMSPagedef::GetCachedInstance($this->data['pagedef']);
+        $cmsMasterPageDefSpot = TdbCmsMasterPagedefSpot::GetNewInstance();
+        $cmsMasterPageDefSpot->LoadFromFieldsWithCaching(
+            [
+                'name' => $this->sModuleSpotName,
+                'cms_master_pagedef_id' => $pageDefinition->fieldCmsMasterPagedefId,
+            ]
+        );
+
+        return $cmsMasterPageDefSpot;
+    }
+
     /**
      *  Check the rights of the functions, who call the corresponding table in database
      *  fills data['functionRights'] with function rights based on current user.
@@ -123,45 +172,57 @@ class CMSModuleChooser extends TCMSModelBase
         $bHasSpotEditRight = true; // we ignore the table rights on cms_tpl_page_cms_master_pagedef_spot at this moment
 
         // NewInstance
-        $this->data['functionRights']['bInstanceNewInstanceAllowed'] = false;
+        $this->data['functionRights']['instanceNewInstanceAllowed'] = false;
         if ($bHasSpotEditRight && $bHasModuleInstanceEditRight) {
-            $this->data['functionRights']['bInstanceNewInstanceAllowed'] = true;
+            $this->data['functionRights']['instanceNewInstanceAllowed'] = true;
         }
         // ClearInstance
-        $this->data['functionRights']['bInstanceClearInstanceAllowed'] = false;
+        $this->data['functionRights']['instanceClearInstanceAllowed'] = false;
         if ($bHasSpotEditRight) {
-            $this->data['functionRights']['bInstanceClearInstanceAllowed'] = true;
+            $this->data['functionRights']['instanceClearInstanceAllowed'] = true;
         }
         // DeleteInstance
-        $this->data['functionRights']['bInstanceDeleteInstanceAllowed'] = false;
+        $this->data['functionRights']['instanceDeleteInstanceAllowed'] = false;
         if ($bHasSpotEditRight && $bHasModuleInstanceEditRight) {
-            $this->data['functionRights']['bInstanceDeleteInstanceAllowed'] = true;
+            $this->data['functionRights']['instanceDeleteInstanceAllowed'] = true;
         }
         // ChangeView
-        $this->data['functionRights']['bInstanceChangeViewAllowed'] = false;
+        $this->data['functionRights']['instanceChangeViewAllowed'] = false;
         if ($bHasSpotEditRight && $bHasModuleInstanceEditRight) {
-            $this->data['functionRights']['bInstanceChangeViewAllowed'] = true;
+            $this->data['functionRights']['instanceChangeViewAllowed'] = true;
         }
         // RenameInstance
-        $this->data['functionRights']['bInstanceRenameInstanceAllowed'] = false;
+        $this->data['functionRights']['instanceRenameInstanceAllowed'] = false;
         if ($bHasSpotEditRight && $bHasModuleInstanceEditRight) {
-            $this->data['functionRights']['bInstanceRenameInstanceAllowed'] = true;
+            $this->data['functionRights']['instanceRenameInstanceAllowed'] = true;
         }
         // SetInstance
-        $this->data['functionRights']['bInstanceSetInstanceAllowed'] = false;
+        $this->data['functionRights']['instanceSetInstanceAllowed'] = false;
         if ($bHasSpotEditRight && $bHasModuleInstanceEditRight) {
-            $this->data['functionRights']['bInstanceSetInstanceAllowed'] = true;
+            $this->data['functionRights']['instanceSetInstanceAllowed'] = true;
         }
         // CopyInstance
-        $this->data['functionRights']['bInstanceCopyInstanceAllowed'] = false;
+        $this->data['functionRights']['instanceCopyInstanceAllowed'] = false;
         if ($bHasSpotEditRight && $bHasModuleInstanceEditRight) {
-            $this->data['functionRights']['bInstanceCopyInstanceAllowed'] = true;
+            $this->data['functionRights']['instanceCopyInstanceAllowed'] = true;
         }
         // SwitchInstances / Move
-        $this->data['functionRights']['bInstanceSwitchingAllowed'] = false;
+        $this->data['functionRights']['instanceSwitchingAllowed'] = false;
         if ($bHasSpotEditRight) {
-            $this->data['functionRights']['bInstanceSwitchingAllowed'] = true;
+            $this->data['functionRights']['instanceSwitchingAllowed'] = true;
         }
+    }
+
+    public function getRequestData(): void
+    {
+        $currentRequest = $this->getCurrentRequest();
+
+        $this->data['pagedef'] = $currentRequest->get('pagedef');
+        $this->data['id'] = $currentRequest->get('id');
+        $this->data['disableLinks'] = $currentRequest->get('esdisablelinks');
+        $this->data['disableFrontendJs'] = $currentRequest->get('esdisablefrontendjs');
+        $this->data['previewMode'] = $currentRequest->get('__previewmode');
+        $this->data['previewLanguageId'] = $currentRequest->get('previewLanguageId');
     }
 
     protected function CheckLogin()
@@ -201,33 +262,33 @@ class CMSModuleChooser extends TCMSModelBase
     protected function LoadModuleInstanceData()
     {
         // check if page is under workflow control and locked
-        $sPagedef = $this->global->GetUserData('pagedef');
+        $pageDefinition = $this->global->GetUserData('pagedef');
         $oCmsTplPage = null;
-        if (!empty($sPagedef)) {
+        if (!empty($pageDefinition)) {
             // load page
             $oCmsTplPage = $this->getActivePageService()->getActivePage();
 
             $iTableID = $this->getTools()::GetCMSTableId('cms_tpl_page');
             /** @var $oTableEditor TCMSTableEditorManager */
             $oTableEditor = new TCMSTableEditorManager();
-            $oTableEditor->Init($iTableID, $sPagedef);
+            $oTableEditor->Init($iTableID, $pageDefinition);
             $oLock = $oTableEditor->IsRecordLocked();
             if (is_object($oLock)) {
                 $this->bPageIsLockedByUser = true;
             }
         }
 
-        if (!is_null($this->instanceID) && !empty($this->instanceID)) {
-            $oCmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
-            if ($oCmsTplModuleInstance->LoadWithCaching($this->instanceID)) {
-                $this->oModuleInstance = $oCmsTplModuleInstance;
+        if (!empty($this->instanceID)) {
+            $cmsTplModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
+            if ($cmsTplModuleInstance->LoadWithCaching($this->instanceID)) {
+                $this->oModuleInstance = $cmsTplModuleInstance;
                 $oCmsTplModule = TdbCmsTplModule::GetNewInstance();
                 $oCmsTplModule->Load($this->oModuleInstance->sqlData['cms_tpl_module_id']);
                 $this->oModule = $oCmsTplModule;
-                if ($this->oModuleInstance->id != $this->oCustomerModelObject->instanceID) {
-                    $sDefaultView = $this->GetDefaultView($oCmsTplPage, $oCmsTplModuleInstance, $this->oModule, $this->sModuleSpotName);
+                if ($this->oModuleInstance->id !== $this->oCustomerModelObject->instanceID) {
+                    $defaultView = $this->GetDefaultView($oCmsTplPage, $cmsTplModuleInstance, $this->oModule, $this->sModuleSpotName);
                 } else {
-                    $sDefaultView = $this->aModuleConfig['view'];
+                    $defaultView = $this->aModuleConfig['view'];
                 }
 
                 if (array_key_exists('permittedModules', $this->aModuleConfig)) {
@@ -237,12 +298,12 @@ class CMSModuleChooser extends TCMSModelBase
                 }
 
                 if (is_array($this->oModule->aPermittedViews) && count($this->oModule->aPermittedViews) > 0) { // module views are restricted on current spot
-                    if (!in_array($sDefaultView, $this->oModule->aPermittedViews)) { // check if view is allowed
-                        $sDefaultView = $this->oModule->aPermittedViews[0]; // set view to first allowed view
+                    if (!in_array($defaultView, $this->oModule->aPermittedViews)) { // check if view is allowed
+                        $defaultView = $this->oModule->aPermittedViews[0]; // set view to first allowed view
                     }
                 }
-                $this->oModuleInstance->sqlData['template'] = $sDefaultView;
-                $this->oModuleInstance->fieldTemplate = $sDefaultView;
+                $this->oModuleInstance->sqlData['template'] = $defaultView;
+                $this->oModuleInstance->fieldTemplate = $defaultView;
             } else {
                 // the instance no longer exists... this is an error... we clear the spot
                 $this->_ClearInstance();
@@ -254,84 +315,18 @@ class CMSModuleChooser extends TCMSModelBase
 
     /**
      * Get the default view for a module spot.
-     * Priority for getting view:
-     * - sSpotDefaultUsedView: views that are used from other instances on same pagedef and spot
-     * - sLoadedModuleInstanceView: view of the loaded module instance
-     * - sStandardView: use standard view if exists
-     * - sSimilarStandardView: use views that are similar to the standardview
-     * - sFirstFoundView: use the first view of the module.
      *
-     * @param TdbCmsTplPage $oCmsTplPage
-     * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
-     * @param TdbCmsTplModule $oCmsTplModule
-     * @param string $sModuleInstanceSpotName
-     *
-     * @return string
+     * returns the first view of the module or "standard" if no views are defined.
      */
-    protected function GetDefaultView($oCmsTplPage, $oCmsTplModuleInstance, $oCmsTplModule, $sModuleInstanceSpotName)
+    private function GetDefaultView(TdbCmsTplPage $oCmsTplPage, TdbCmsTplModuleInstance $oCmsTplModuleInstance, TdbCmsTplModule $oCmsTplModule, string $sModuleInstanceSpotName): string
     {
         $viewList = $oCmsTplModule->GetViews();
-        $firstFoundExistedView = '';
-        while ($sView = $viewList->Next()) {
-            $sViewRealPath = PATH_CUSTOMER_FRAMEWORK.'/modules/'.$oCmsTplModule->fieldClassname.'/views/'.$sView.'.view.php';
-            if (file_exists(realpath($sViewRealPath))) {
-                $firstFoundExistedView = $sView;
-                break;
-            }
-        }
-        if (empty($firstFoundExistedView)) {
-            $firstFoundExistedView = 'standard';
+
+        if (null === $viewList) {
+            return 'standard';
         }
 
-        return $firstFoundExistedView;
-    }
-
-    /**
-     * Get view from loaded module instance.
-     *
-     * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
-     *
-     * @return string
-     */
-    protected function GetLoadedModuleInstanceView($oCmsTplModuleInstance)
-    {
-        $sLoadedModuleInstanceView = false;
-        if (!empty($oCmsTplModuleInstance->fieldTemplate)) {
-            $sLoadedModuleInstanceView = $oCmsTplModuleInstance->fieldTemplate;
-        }
-
-        return $sLoadedModuleInstanceView;
-    }
-
-    /**
-     * Get used views for the module on same pagedefs and spots.
-     *
-     * @param TdbCmsTplPage $oCmsTplPage
-     * @param string $sModuleInstanceSpotName
-     * @param TdbCmsTplModule $oCmsTplModule
-     *
-     * @return string
-     */
-    protected function GetSpotDefaultView($oCmsTplPage, $sModuleInstanceSpotName, $oCmsTplModule)
-    {
-        $sSpotDefaultView = false;
-        $sSelect = "SELECT `cms_tpl_page_cms_master_pagedef_spot`.`view` , COUNT(cms_tpl_page_cms_master_pagedef_spot.view) AS sMostUsedView FROM `cms_master_pagedef_spot`
-              INNER JOIN `cms_tpl_page_cms_master_pagedef_spot` ON `cms_tpl_page_cms_master_pagedef_spot`.`cms_master_pagedef_spot_id` = `cms_master_pagedef_spot`.`id`
-                   WHERE `cms_master_pagedef_spot`.`cms_master_pagedef_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oCmsTplPage->fieldCmsMasterPagedefId)."'
-                     AND `cms_master_pagedef_spot`.`name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sModuleInstanceSpotName)."'
-                     AND `cms_tpl_page_cms_master_pagedef_spot`.`model` = '".MySqlLegacySupport::getInstance()->real_escape_string($oCmsTplModule->fieldClassname)."'
-                GROUP BY `cms_tpl_page_cms_master_pagedef_spot`.`view`
-                ORDER BY `sMostUsedView` DESC";
-
-        $res = MySqlLegacySupport::getInstance()->query($sSelect);
-        if (MySqlLegacySupport::getInstance()->num_rows($res) > 0) {
-            $aRow = MySqlLegacySupport::getInstance()->fetch_array($res);
-            if ($aRow['sMostUsedView'] > 0) {
-                $sSpotDefaultView = $aRow['view'];
-            }
-        }
-
-        return $sSpotDefaultView;
+        return $viewList->current();
     }
 
     /**
@@ -579,7 +574,7 @@ class CMSModuleChooser extends TCMSModelBase
             $oTableEditor = new TCMSTableEditorManager();
             $oTableEditor->Init($iTableID, $oRecordToCopy->id);
             $aOverloadedFields = ['cms_tpl_module_instance_id' => $sNewModuleInstanceId];
-            $oTableEditor->DatabaseCopy(false, $aOverloadedFields);
+            $bSuccess = false !== $oTableEditor->DatabaseCopy(false, $aOverloadedFields);
         }
 
         return $bSuccess;
@@ -800,7 +795,7 @@ class CMSModuleChooser extends TCMSModelBase
             $TdbCmsTplPageCmsMasterPagedefSpotList = TdbCmsTplPageCmsMasterPagedefSpotList::GetList($query);
             if ($TdbCmsTplPageCmsMasterPagedefSpotList->Length() > 1) {
                 $this->DeleteNotNeededModuleInstances($sPageId, $TdbCmsTplPageCmsMasterPagedefSpotList);
-            } elseif (1 == $TdbCmsTplPageCmsMasterPagedefSpotList->Length()) {
+            } elseif (1 === $TdbCmsTplPageCmsMasterPagedefSpotList->Length()) {
                 $this->oCmsTplPageCmsMasterPagedefSpot = $TdbCmsTplPageCmsMasterPagedefSpotList->Current();
             } else {
                 $this->oCmsTplPageCmsMasterPagedefSpot = null;
@@ -1067,5 +1062,15 @@ class CMSModuleChooser extends TCMSModelBase
     private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getPortalDomainService(): PortalDomainServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function getCurrentRequest(): Request
+    {
+        return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 }

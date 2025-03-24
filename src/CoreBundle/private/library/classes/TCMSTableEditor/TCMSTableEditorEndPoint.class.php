@@ -1665,7 +1665,7 @@ class TCMSTableEditorEndPoint
             }
         }
 
-        if (true === $isFirst || [] === $dataForChangeRecorder) {
+        if (true === $isFirst || [] === $dataForChangeRecorder && true === $bIsUpdateCall) {
             return true; // no changes made, but is a valid operation
         }
 
@@ -2043,7 +2043,7 @@ class TCMSTableEditorEndPoint
                 $whereEquals[$row['fieldName']] = $id;
             }
 
-            $databaseConnection->executeUpdate($updateQuery);
+            $databaseConnection->executeStatement($updateQuery);
 
             $migrationQueryData = new MigrationQueryData($row['tableName'], $editLanguage->fieldIso6391);
             $migrationQueryData->setFields($setFields);
@@ -2062,7 +2062,7 @@ class TCMSTableEditorEndPoint
         $databaseConnection = $this->getDatabaseConnection();
 
         $query = 'SELECT `id` FROM `cms_field_type` WHERE `constname` = '.$databaseConnection->quote($systemName);
-        $fieldTypeId = $databaseConnection->fetchColumn($query);
+        $fieldTypeId = $databaseConnection->fetchOne($query);
 
         if (false === $fieldTypeId) {
             return null;

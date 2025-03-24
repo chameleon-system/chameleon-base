@@ -68,7 +68,7 @@ final class DashboardModulesProvider
 
         // if the user has no saved layout, return all widgets
         if (empty($userWidgetLayout)) {
-            return $collection === null ? $this->widgets : ($this->widgets[$collection] ?? []);
+            return null === $collection ? $this->widgets : ($this->widgets[$collection] ?? []);
         }
 
         if (null === $collection) {

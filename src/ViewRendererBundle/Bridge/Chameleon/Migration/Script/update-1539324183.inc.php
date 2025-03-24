@@ -6,7 +6,7 @@
 <?php
 
 $connection = TCMSLogChange::getDatabaseConnection();
-$cachePathSettings = trim($connection->fetchColumn('SELECT `additional_files_to_delete_from_cache` FROM `cms_config`'));
+$cachePathSettings = trim($connection->fetchOne('SELECT `additional_files_to_delete_from_cache` FROM `cms_config`'));
 $pathToRemove = 'chameleon/outbox/static/less/cached';
 
 // Code copied from SnippetChainModifier:

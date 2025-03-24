@@ -122,7 +122,7 @@ public function getWidgetHtmlAsJson(): JsonResponse
 ```
 ### 📌 **Reloading Widget Content Dynamically
 
-Each widget can support dynamic content reloading using the **initializeWidgetReload** function. 
+Each widget can support dynamic content reloading using the **initializeWidgetReload** function.
 This allows refreshing widget data via AJAX without requiring a full page reload.
 
 Initialize the widget reload by calling the **`initializeWidgetReload`** function in the widget's JavaScript file.
@@ -165,7 +165,87 @@ $color = $colorGeneratorService->generateColor($index, $total);
 <div style="backgroundColor: '{{ generate_color(1, 4) }}'"></div>
 ```
 
+## Configuring the Bundle
+
+You may set the cache TTL for all widgets in your configuration. Default is 1 day.
+
+```yaml
+chameleon_system_cms_dashboard:
+    cache_ttl: 86400
+```
+
+## Google Search Console Widget
+
+The Google Search Console widget is a widget that requires access to the Google Search Console API.
+https://console.cloud.google.com/apis/dashboard
+
+- Add a new service account to the Google Cloud Console and add this account as read only user to your Search Console property
+  for the desired website.
+- Add the Google Search Console API to the APIs
+- Configure the API access and and the domain you want to show data for in the widget.
+
+config.yml:
+
+```yaml
+chameleon_system_cms_dashboard:
+    google_search_console_domain_property: 'your-domain.de'
+    google_api_auth_json: '%google_api_auth_json%'
+```
+
+parameters.yml (or env):
+
+```yaml
+parameters:
+    google_api_auth_json: |
+        {
+            "type": "service_account",
+            "project_id": "your-project-id",
+            "private_key_id": "your-private-key-id",
+            "private_key": "-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n",
+            "client_email": "your-service-account@your-project.iam.gserviceaccount.com",
+            "client_id": "your-client-id",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/your-service-account%40your-project.iam.gserviceaccount.com"
+        }
+```
+
 ---
+
+## Google Analytics Widget
+
+Google Analytics API Documentation: https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema
+
+- Add the User to analytics
+
+config.yml:
+
+```yaml
+chameleon_system_cms_dashboard:
+    google_api_auth_json: '%google_api_auth_json%'
+    google_analytics_property_id: '123456789'
+    google_analytics_period_days: 28
+```
+
+parameters.yml (or env):
+
+```yaml
+parameters:
+    google_api_auth_json: |
+        {
+            "type": "service_account",
+            "project_id": "your-project-id",
+            "private_key_id": "your-private-key-id",
+            "private_key": "-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n",
+            "client_email": "your-service-account@your-project.iam.gserviceaccount.com",
+            "client_id": "your-client-id",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/your-service-account%40your-project.iam.gserviceaccount.com"
+        }
+```
 
 ## 📚 Summary
 ✔ **Extend `DashboardWidget` to create a new widget**  

@@ -9,7 +9,7 @@ $documentTreeParentFieldId = TCMSLogChange::GetTableFieldId(
     'parent_id'
 );
 $query = "SELECT `fieldtype_config` FROM `cms_field_conf` WHERE `id` = :id";
-$fieldConfig = TCMSLogChange::getDatabaseConnection()->fetchColumn($query, ['id' => $documentTreeParentFieldId]);
+$fieldConfig = TCMSLogChange::getDatabaseConnection()->fetchOne($query, ['id' => $documentTreeParentFieldId]);
 if (false === stripos($fieldConfig, 'connectedTableName')) {
     $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
         ->setFields(

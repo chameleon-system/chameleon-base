@@ -17,9 +17,14 @@
 
         <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="true"/>
 
-        <service id="ChameleonSystem\CoreBundle\EventListener\ReleaseOldLocksOnLoginListener">
+        <service id="ChameleonSystem\CoreBundle\EventListener\ReleaseOldLocksListener">
             <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess" />
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout" />
             <argument type="service" id="database_connection" />
+        </service>
+
+        <service id="ChameleonSystem\CoreBundle\EventListener\ListCacheResetListener">
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout" />
         </service>
 
         <service id="esono_customer.twig.version_extension" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\BackendTwigExtension">
@@ -323,6 +328,7 @@
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="chameleon_system_core.language_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
+            <argument type="service" id="chameleon_system_core.preview_mode_service" />
         </service>
 
         <service id="chameleon_system_core.active_page_service" class="ChameleonSystem\CoreBundle\Service\ActivePageService" public="true">
@@ -637,11 +643,6 @@
             <argument type="service" id="chameleon_system_core.frontend_controller" />
         </service>
 
-        <service id="chameleon_system_core.event_listener.add_antispam_includes" class="ChameleonSystem\CoreBundle\EventListener\AddAntispamIncludesListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.footer" method="onGlobalHtmlFooterInclude" />
-            <argument type="service" id="chameleon_system_core.request_info_service" />
-        </service>
-
         <service id="chameleon_system_core.event_listener.case_insensitive_portal_exception_listener" class="ChameleonSystem\CoreBundle\EventListener\CaseInsensitivePortalExceptionListener">
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
             <tag name="kernel.event_listener" event="kernel.exception" />
@@ -883,6 +884,7 @@
 
         <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService" public="true">
             <argument type="service" id="chameleon_system_cms_cache.cache"/>
+            <argument type="service" id="request_stack"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
         </service>
 
@@ -978,6 +980,7 @@
         </service>
         <service id="chameleon_system_core.geocoding.geocoding_controller" class="ChameleonSystem\CoreBundle\Geocoding\GeocodingController" public="true">
             <argument type="service" id="chameleon_system_core.geocoding.geocoder" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
         </service>
 
         <service id="chameleon_system_core.service.css_class_extractor" class="ChameleonSystem\CoreBundle\Service\CssClassExtractor" public="true">
@@ -991,6 +994,21 @@
         <service id="chameleon_system_core.service.deleted_fields" class="ChameleonSystem\CoreBundle\Service\DeletedFieldsService" public="true">
             <argument type="string" key="$deletedFields"/> <!-- will be injected by DeletedFieldsPass -->
             <argument type="service" id="database_connection" key="$connection"/>
+        </service>
+
+        <service id="chameleon_system_core.bridge_chameleon_backend_module.log_viewer_backend_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\BackendModule\LogViewerBackendModule" shared="false" public="true">
+            <tag name="chameleon_system.module"/>
+            <argument type="service" id="chameleon_system_core.service.log_view_service"/>
+            <argument type="service" id="security.helper"/>
+        </service>
+
+        <service id="chameleon_system_core.controller.log_view_controller" class="ChameleonSystem\CoreBundle\Controller\LogViewController" public="true">
+            <argument type="service" id="chameleon_system_core.service.log_view_service"/>
+            <argument type="service" id="security.helper"/>
+        </service>
+
+        <service id="chameleon_system_core.service.log_view_service" class="ChameleonSystem\CoreBundle\Service\LogViewerService" public="true">
+            <argument type="service" id="parameter_bag"/>
         </service>
     </services>
 </container>

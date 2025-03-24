@@ -1,0 +1,29 @@
+{# @var array geoLocation #}
+{% if geoLocation %}
+<div class="table-responsive">
+    <table class="table table-sm mb-0 mt-0">
+        <thead>
+            <tr>
+                <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.country' | trans }}</th>
+                <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.region' | trans }}</th>
+                <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.engaged_sessions' | trans }}</th>
+                <th>{{ 'chameleon_system_cms_dashboard.widget.google_analytics.conversions' | trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for locationData in geoLocation %}
+            <tr>
+                <td>{{ locationData.dimension_0 }}</td>
+                <td>{{ locationData.dimension_1 }}</td>
+                <td>{{ locationData.metric_0 }}</td>
+                <td>{{ locationData.metric_1 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <div class="chart-no-data-message p-4">
+        {{ 'chameleon_system_cms_dashboard.widget.no_data_available' | trans }}
+    </div>
+{% endif %}
