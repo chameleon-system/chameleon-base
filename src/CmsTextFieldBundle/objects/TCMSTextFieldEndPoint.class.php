@@ -428,7 +428,6 @@ class TCMSTextFieldEndPoint
         return $sReturnString;
     }
 
-
     /**
      * @param array $aMatch
      *
@@ -713,29 +712,6 @@ class TCMSTextFieldEndPoint
         }
 
         return $sResult;
-    }
-
-    /**
-     * callback method that replaces email addresses with javascript encoded e-mail links
-     * to prevent SPAM
-     * warning: don`t use this in e-mails or RSS feeds.
-     *
-     * @param array $aMatch
-     *
-     * @return string
-     */
-    public function _callback_cmstextfield_emailparser($aMatch)
-    {
-        // extranet title...
-        $aLinkAttributes = $this->getLinkAttributes($aMatch[0]);
-        $sEmail = $aMatch[2];
-        $sEmailName = $aMatch[4];
-        $sEmailNameTmp = trim($sEmailName);
-        if (0 == strcasecmp($sEmail, $sEmailNameTmp)) {
-            return TTools::EncodeEMail($sEmail, null, $aLinkAttributes);
-        } else {
-            return TTools::EncodeEMail($sEmail, $sEmailName, $aLinkAttributes);
-        }
     }
 
     /**
