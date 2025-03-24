@@ -935,7 +935,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
     /**
      * returns the E-Mail encoded so that it can not be harvested by a spambot.
-     *
+     * @deprecated
      * @param string $sFieldName - field name
      * @param string $sDisplayText - link text to show instead of email address
      *
@@ -943,7 +943,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function GetEMailLink($sFieldName, $sDisplayText = null)
     {
-        return TTools::EncodeEMail($this->sqlData[$sFieldName], $sDisplayText);
+        return $this->sqlData[$sFieldName];
     }
 
     /**

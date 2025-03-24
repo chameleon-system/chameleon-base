@@ -160,7 +160,6 @@ class TCMSTextFieldEndPoint
         $content = $this->_ReplaceImages($content);
         $content = $this->_AddCMSClassToExternalLinks($content);
         $content = $this->_ReplaceLinks($content);
-        $content = $this->_ReplaceEMailLinks($content);
         $content = $this->_ReplaceDownloadLinks($content);
         $content = $this->_ReplaceInvalidDivs($content);
         $content = $this->_ReplaceEmptyAligns($content);
@@ -427,23 +426,6 @@ class TCMSTextFieldEndPoint
         }
 
         return $sReturnString;
-    }
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
-    protected function _ReplaceEMailLinks($content)
-    {
-        if (false === stripos($content, 'mailto:')) {
-            return $content;
-        }
-        $matchString = "/<a([^>]+?)href=['\"]mailto:([^'\"]*?)['\"]([^>]*?)>([^<]*?)<\\/a>/si";
-
-        $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_emailparser'), $content);
-
-        return $content;
     }
 
     /**
@@ -730,29 +712,6 @@ class TCMSTextFieldEndPoint
         }
 
         return $sResult;
-    }
-
-    /**
-     * callback method that replaces email addresses with javascript encoded e-mail links
-     * to prevent SPAM
-     * warning: don`t use this in e-mails or RSS feeds.
-     *
-     * @param array $aMatch
-     *
-     * @return string
-     */
-    public function _callback_cmstextfield_emailparser($aMatch)
-    {
-        // extranet title...
-        $aLinkAttributes = $this->getLinkAttributes($aMatch[0]);
-        $sEmail = $aMatch[2];
-        $sEmailName = $aMatch[4];
-        $sEmailNameTmp = trim($sEmailName);
-        if (0 == strcasecmp($sEmail, $sEmailNameTmp)) {
-            return TTools::EncodeEMail($sEmail, null, $aLinkAttributes);
-        } else {
-            return TTools::EncodeEMail($sEmail, $sEmailName, $aLinkAttributes);
-        }
     }
 
     /**
