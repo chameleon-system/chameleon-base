@@ -379,31 +379,6 @@ class TTools
     }
 
     /**
-     * return encoded email link.
-     *
-     * @param string $sEMail
-     * @param string $sDisplayName
-     * @param array $aLinkAttributes
-     *
-     * @return string
-     */
-    public static function EncodeEMail($sEMail, $sDisplayName = null, $aLinkAttributes = [])
-    {
-        static $oAntiSpam;
-        if (!$oAntiSpam) {
-            $oAntiSpam = new antiSpam();
-        }
-        if (is_null($sDisplayName)) {
-            $sEncode = $oAntiSpam->ShowLink($sEMail, $oAntiSpam->EncodeEmail($sEMail), $aLinkAttributes);
-        } else {
-            $sDisplayName = str_replace(' ', '&nbsp;', TGlobal::OutHTML($sDisplayName));
-            $sEncode = $oAntiSpam->ShowLink($sEMail, $sDisplayName, $aLinkAttributes);
-        }
-
-        return $sEncode;
-    }
-
-    /**
      * delete directory recursive (optional).
      *
      * @param string $path start path
