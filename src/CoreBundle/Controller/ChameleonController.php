@@ -56,7 +56,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         DataAccessCmsMasterPagedefInterface $dataAccessCmsMasterPagedef,
         \TModuleLoader $moduleLoader,
         SecurityHelperAccess $securityHelperAccess,
-        ?\IViewPathManager $viewPathManager = null
+        ?\IViewPathManager $viewPathManager = null,
     ) {
         $this->requestStack = $requestStack;
         $this->eventDispatcher = $eventDispatcher;
@@ -273,9 +273,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
             $moduleFunctionsGet = [];
         }
 
-        $moduleFunctions = \array_merge($moduleFunctions, $moduleFunctionsGet);
-
-        return $moduleFunctions;
+        return \array_merge($moduleFunctions, $moduleFunctionsGet);
     }
 
     /**
@@ -342,45 +340,26 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         if ($this->securityHelperAccess->isGranted(CmsUserRoleConstants::CMS_USER)) {
             if ('true' === $this->inputFilterUtil->getFilteredInput('esdisablelinks')) {
-                $sPattern = "/<a([^>]+)href=[']([^']*)[']/Uusi";
-                $sReplacePatter = '<a$1href="javascript:var tmp=false;"';
+                $pattern = "/<a([^>]+)href=[']([^']*)[']/Uusi";
+                $replacePattern = '<a$1href="javascript:var tmp=false;"';
 
-                $sPageContent = preg_replace($sPattern, $sReplacePatter, $sPageContent);
+                $sPageContent = preg_replace($pattern, $replacePattern, $sPageContent);
 
-                $sPattern = '/<a([^>]+)href=["]([^"]*)["]/Uusi';
-                $sReplacePatter = '<a$1href="javascript:var tmp=false;"';
+                $pattern = '/<a([^>]+)href=["]([^"]*)["]/Uusi';
 
-                $sPageContent = preg_replace($sPattern, $sReplacePatter, $sPageContent);
+                $sPageContent = preg_replace($pattern, $replacePattern, $sPageContent);
             }
 
             // disable frontend javascripts (css is not replaced)
-            // i´m not sure if this is a brilliant idea, but it is a workaround to edit pages where frontend and backend javascript is incompatible
-            if ($this->global->isFrontendJSDisabled()) {
-                $tempReplacePattern = '/chameleon//javascript/jquery/jquery.js';
-                $sPageContent = str_replace($tempReplacePattern, '@@jquery@@', $sPageContent);
+            if (true === $this->requestInfoService->isFrontendJsDisabled()) {
+                $pattern = "/<script.*\/chameleon\/+javascript.*<\/script>/i";
+                $sPageContent = preg_replace($pattern, '', $sPageContent);
 
-                $tempReplacePattern = '/chameleon/javascript/jquery/jquery.js';
-                $sPageContent = str_replace($tempReplacePattern, '@@jquery@@', $sPageContent);
+                $pattern = "/<script (?!.*blackbox.*).*\/javascript\/.*<\/script>/i";
+                $sPageContent = preg_replace($pattern, '', $sPageContent);
 
-                $tempReplacePattern = '/static/javascript/jquery/jquery.js';
-                $sPageContent = str_replace($tempReplacePattern, '@@jquery@@', $sPageContent);
-
-                $tempReplacePattern = '/static/jquery/jquery.js';
-                $sPageContent = str_replace($tempReplacePattern, '@@jquery@@', $sPageContent);
-
-                $tempReplacePattern = '/static/js/jquery.js';
-                $sPageContent = str_replace($tempReplacePattern, '@@jquery@@', $sPageContent);
-
-                $sPattern = "/<script.*\/chameleon\/+javascript.*<\/script>/i";
-                $sPageContent = preg_replace($sPattern, '', $sPageContent);
-
-                $sPattern = "/<script (?!.*blackbox.*).*\/javascript\/.*<\/script>/i";
-                $sPageContent = preg_replace($sPattern, '', $sPageContent);
-
-                $sPageContent = str_replace('@@jquery@@', '/chameleon/blackbox/javascript/jquery/jquery-3.7.1.min.js', $sPageContent);
-
-                $sPattern = "/<script>.*?<\/script>/si";
-                $sPageContent = preg_replace($sPattern, '', $sPageContent);
+                $pattern = "/<script>.*?<\/script>/si";
+                $sPageContent = preg_replace($pattern, '', $sPageContent);
             }
         }
 
@@ -394,9 +373,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
 
         $event = new FilterContentEvent($sPageContent);
         $this->eventDispatcher->dispatch($event, CoreEvents::FILTER_CONTENT);
-        $sPageContent = $event->getContent();
 
-        return $sPageContent;
+        return $event->getContent();
     }
 
     /**
@@ -435,8 +413,9 @@ abstract class ChameleonController implements ChameleonControllerInterface
             // need to keep everything in the header since the resource collection looks for it there
             $sPageContent = str_replace('<!--#CMSHEADERCODE-CSS#-->', $sCustomHeaderData, $sPageContent);
         } else {
-            $sPageContent = str_replace('<!--#CMSHEADERCODE-CSS#-->', $sCustomHeaderDataOTHER, $sPageContent);
-            $sPageContent = str_replace('<!--#CMSHEADERCODE-JS#-->', $sCustomHeaderDataJS, $sPageContent);
+            $sPageContent = str_replace(['<!--#CMSHEADERCODE-CSS#-->', '<!--#CMSHEADERCODE-JS#-->'],
+                [$sCustomHeaderDataOTHER, $sCustomHeaderDataJS],
+                $sPageContent);
         }
 
         return $sPageContent;
@@ -650,22 +629,12 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return $this->aFooterIncludes;
     }
 
-    /**
-     * @param AuthenticityTokenManagerInterface $authenticityTokenManager
-     *
-     * @return void
-     */
-    public function setAuthenticityTokenManager($authenticityTokenManager)
+    public function setAuthenticityTokenManager(AuthenticityTokenManagerInterface $authenticityTokenManager): void
     {
         $this->authenticityTokenManager = $authenticityTokenManager;
     }
 
-    /**
-     * @param RequestInfoServiceInterface $requestInfoService
-     *
-     * @return void
-     */
-    public function setRequestInfoService($requestInfoService)
+    public function setRequestInfoService(RequestInfoServiceInterface $requestInfoService): void
     {
         $this->requestInfoService = $requestInfoService;
     }
@@ -678,10 +647,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return $this->inputFilterUtil;
     }
 
-    /**
-     * @return void
-     */
-    public function setInputFilterUtil(InputFilterUtilInterface $inputFilterUtil)
+    public function setInputFilterUtil(InputFilterUtilInterface $inputFilterUtil): void
     {
         $this->inputFilterUtil = $inputFilterUtil;
     }
