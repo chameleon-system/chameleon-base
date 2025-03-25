@@ -247,22 +247,23 @@ after:
 - `RequestInfoServiceInterface` is now fully typed. If you extended it, make sure to update your code.
 - `TGlobalBase::isFrontendJSDisabled` was removed. Use `ServiceLocator::get('chameleon_system_core.request_info_service')->isFrontendJsDisabled()` instead.
 - Prepared for DBAL Update:
-  - executeUpdate -> executeStatement
-  - query -> executeQuery
-  - execute -> executeQuery
-  - fetch() -> fetchAssociative
-  -  fetch(\PDO::FETCH_COLUMN) -> fetchNumeric
-  - fetch(\PDO::FETCH_ASSOC) -> fetchAssociative
-  - fetchColumn -> fetchOne 
-- MySQLLegacySupport changed
-  - MySqlLegacySupport::fetch_array Default: MYSQL_BOTH is now MYSQL_ASSOC (MYSQL_BOTH is no longer supported)
-  - MySqlLegacySupport::result is no longer supported!
-- antiSpam removed
-  - TTools::EncodeEMail removed
-  - TCMSTextFieldEndPoint::_ReplaceEMailLinks removed
-  - AddAntispamIncludesListener removed
-  - init_spam_class removed
-  - CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL can be removed from config.inc.php
+  - `executeUpdate` -> `executeStatement`
+  - `query` -> `executeQuery`
+  - `execute` -> `executeQuery`
+  - `fetch()` -> `fetchAssociative`
+  -  `fetch(\PDO::FETCH_COLUMN)` -> `fetchNumeric`
+  - `fetch(\PDO::FETCH_ASSOC)` -> `fetchAssociative`
+  - `fetchColumn` -> `fetchOne` 
+- `MySQLLegacySupport` changed
+  - `MySqlLegacySupport::fetch_array` Default: `MYSQL_BOTH` is now `MYSQL_ASSOC` (`MYSQL_BOTH` is no longer supported)
+  - `MySqlLegacySupport::result` is no longer supported!
+- `antiSpam` removed
+  - `TTools::EncodeEMail` removed
+  - `TCMSTextFieldEndPoint::_ReplaceEMailLinks` removed
+  - `AddAntispamIncludesListener` removed
+  - `init_spam_class` removed
+  - `CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL` can be removed from config.inc.php
+  - `TCMSLogChange::addShopSystemPage` removed
 
 ## jQuery and jQuery Migrate
 
