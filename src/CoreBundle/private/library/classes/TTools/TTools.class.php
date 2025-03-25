@@ -340,6 +340,11 @@ class TTools
             } else {
                 $query = 'SHOW FIELDS FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` LIKE '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldName)."'";
                 $result = MySqlLegacySupport::getInstance()->query($query);
+
+                if (false === $result) {
+                    throw new Exception('Error in query: '.$query.' - '.MySqlLegacySupport::getInstance()->error());
+                }
+
                 if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
                     $returnVal = true;
                 }
