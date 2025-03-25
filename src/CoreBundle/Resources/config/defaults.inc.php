@@ -203,12 +203,6 @@ if (!defined('CHAMELEON_404_IMAGE_PATH_SMALL')) {
 if (!defined('CHAMELEON_404_IMAGE_PATH_BIG')) {
     define('CHAMELEON_404_IMAGE_PATH_BIG', '/chameleon/blackbox/images/noImage/noImage_400.jpg');
 }
-/**
- * url path to frontend jquery.
- */
-if (!defined('CHAMELEON_URL_JQUERY')) {
-    define('CHAMELEON_URL_JQUERY', '/static/js/jquery.js');
-}
 
 /**
  * path to themes directory.
