@@ -264,6 +264,14 @@ after:
   - `init_spam_class` removed
   - `CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL` can be removed from config.inc.php
   - `TCMSLogChange::addShopSystemPage` removed
+- `AddJqueryIncludeListener` removed
+- `CHAMELEON_URL_JQUERY` removed (remove it from config.inc.php)
+
+## jQuery in Theme
+
+From now on, each website or theme must include and manage its own version of jQuery if required.
+This allows for more flexibility and prevents unnecessary loading of jQuery on projects that do not use it. 
+Please make sure to adjust your custom themes as needed.
 
 ## jQuery and jQuery Migrate
 
