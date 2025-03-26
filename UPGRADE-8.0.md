@@ -264,10 +264,13 @@ after:
   - `init_spam_class` removed
   - `CHAMELEON_EMAIL_PRINT_SECURITY_LEVEL` can be removed from config.inc.php
   - `TCMSLogChange::addShopSystemPage` removed
-- `AddJqueryIncludeListener` removed
+- `AddJqueryIncludeListener` removed (check if you have a custom listener, you should remove it or adjust it to load jQuery only in the frontend)
 - `CHAMELEON_URL_JQUERY` removed (remove it from config.inc.php)
 - `CMSTreeNodeSelectWYSIWYG` removed
 - `treenodeselect.pagedef.php` removed
+- `CMSDeliverFile` removed
+- `CMSGMap` removed
+- `CMSiconList` removed
 
 ## jQuery in Theme
 
