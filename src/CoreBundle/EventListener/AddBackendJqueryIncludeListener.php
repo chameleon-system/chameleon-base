@@ -16,12 +16,9 @@ class AddBackendJqueryIncludeListener
 {
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event): void
     {
-        if (false === \TGlobal::IsCMSMode()) {
-            return;
+        if (true === \TGlobal::IsCMSMode()) {
+            $jqueryInclude = '<script src="'.\TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jquery-3.7.1.min.js').'" type="text/javascript"></script>';
+            $event->addData([$jqueryInclude]);
         }
-
-        $jqueryInclude = '<script src="'.\TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jquery-3.7.1.min.js').'" type="text/javascript"></script><!--#GLOBALRESOURCECOLLECTION#-->';
-
-        $event->addData([$jqueryInclude]);
     }
 }
