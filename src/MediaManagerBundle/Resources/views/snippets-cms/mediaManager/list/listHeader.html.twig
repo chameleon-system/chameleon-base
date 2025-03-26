@@ -4,7 +4,7 @@
 {# accessRightsMediaTree \ChameleonSystem\MediaManager\AccessRightsModel #}
 <div class="snippetMediaManagerListHeader cancel-unselect mt-2 mb-2">
     <div class="row top-bar">
-        <div class="col-12">
+        <div class="col-12 border-bottom mb-3">
             <h2 class="h3 headline">{{ mediaTreeNode.name | default('chameleon_system_media_manager.tree.untitled_tree_item_placeholder' | trans) }}
                 {% if accessRightsMediaTree.edit %}
                     <a href="{{ mediaTreeNodeEditUrl }}" class="edit-media-tree-node" data-id="{{ mediaTreeNode.id }}">

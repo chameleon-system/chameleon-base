@@ -9,7 +9,7 @@ $moduleList = array(
     'contentmodule' => array(
         'model' => 'chameleon_system_media_manager.backend_module.media_manager',
         'moduleType' => '@ChameleonSystemMediaManagerBundle',
-        'view' => 'full',
+        'view' => 'overlay',
     ),
 );
 

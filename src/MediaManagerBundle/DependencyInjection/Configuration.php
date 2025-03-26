@@ -40,7 +40,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue(array(12, 24, 48, 96, 204, 504, -1))
                 ->end()
                 ->integerNode('default_page_size')
-                    ->defaultValue(204)
+                    ->defaultValue(24)
                 ->end()
             ->end();
         // @formatter:on
