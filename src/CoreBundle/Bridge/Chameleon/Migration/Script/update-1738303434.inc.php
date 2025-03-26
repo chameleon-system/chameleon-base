@@ -47,7 +47,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_menu_item', 'en')
     ->setFields([
         'name' => 'Log Overview', // prev.: ''
         'target' => '0f71bd50-e242-155f-7e46-0cb047b9c4f4', // prev.: ''
-        'icon_font_css_class' => 'far fa-image', // prev.: ''
+        'icon_font_css_class' => 'fas fa-clipboard-list', // prev.: ''
         'position' => '23', // prev.: '0'
     ])
     ->setWhereEquals([

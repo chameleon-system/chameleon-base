@@ -1,7 +1,7 @@
 <h1>Build #1742295668</h1>
 <h2>Date: 2025-03-18</h2>
 <div class="changelog">
-    -
+    - add missing field type for multi table list restriction
 </div>
 <?php
 
