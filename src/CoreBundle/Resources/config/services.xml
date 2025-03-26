@@ -618,6 +618,10 @@
             <argument type="service" id="chameleon_system_core.i18n.active_user_permission" />
         </service>
 
+        <service id="chameleon_system_core.event_listener.add_backend_jquery_include" class="ChameleonSystem\CoreBundle\EventListener\AddBackendJqueryIncludeListener">
+            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="250" />
+        </service>
+
         <service id="chameleon_system_core.event_listener.add_global_head_includes" class="ChameleonSystem\CoreBundle\EventListener\AddGlobalHeadIncludesListener">
             <argument type="service" id="chameleon_system_view_renderer.snippet_directory" />
             <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="240" />

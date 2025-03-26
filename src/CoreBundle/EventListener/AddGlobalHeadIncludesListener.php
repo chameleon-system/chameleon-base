@@ -12,40 +12,26 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Event\HtmlIncludeEventInterface;
-use TGlobal;
 
 /**
- * Class AddJqueryIncludeListener returns the resources configured in the root directory of the snippets.
+ * Class AddGlobalHeadIncludesListener returns the resources configured in the root directory of the snippets.
  * Those will be included no matter which modules are being loaded.
  */
-class AddGlobalHeadIncludesListener
+readonly class AddGlobalHeadIncludesListener
 {
-    /**
-     * @var \TPkgViewRendererSnippetDirectoryInterface
-     */
-    private $viewRendererSnippetDirectory;
-
-    /**
-     * @param \TPkgViewRendererSnippetDirectoryInterface $viewRendererSnippetDirectory
-     */
-    public function __construct(\TPkgViewRendererSnippetDirectoryInterface $viewRendererSnippetDirectory)
+    public function __construct(private \TPkgViewRendererSnippetDirectoryInterface $viewRendererSnippetDirectory)
     {
-        $this->viewRendererSnippetDirectory = $viewRendererSnippetDirectory;
     }
 
-    /**
-     * @param HtmlIncludeEventInterface $event
-     *
-     * @return void
-     */
-    public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
+    public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event): void
     {
         $event->addData($this->viewRendererSnippetDirectory->getResourcesForSnippetPackage(''));
 
-        $event->addData(array(
-            '<script src="'.TGlobal::GetStaticURLToWebLib('/wysiwyg/functions.js').'" type="text/javascript"></script>',
-            '<link href="'.TGlobal::GetStaticURLToWebLib('/css/cms_user_style/main.css').'" rel="stylesheet" type="text/css" />',
-            '<link href="'.TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" rel="stylesheet" type="text/css" />',
-        ));
+        $event->addData([
+            '<script src="'.\TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jquery-3.7.1.min.js').'" type="text/javascript"></script>',
+            '<script src="'.\TGlobal::GetStaticURLToWebLib('/wysiwyg/functions.js').'" type="text/javascript"></script>',
+            '<link href="'.\TGlobal::GetStaticURLToWebLib('/css/cms_user_style/main.css').'" rel="stylesheet" type="text/css" />',
+            '<link href="'.\TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" rel="stylesheet" type="text/css" />',
+        ]);
     }
 }
