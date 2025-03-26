@@ -4,7 +4,7 @@
         <body>
             <trans-unit id="chameleon_system_media_manager.backend_module.title">
                 <source>chameleon_system_media_manager.backend_module.title</source>
-                <target>Media management</target>
+                <target>Media</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_media_manager.list.upload">

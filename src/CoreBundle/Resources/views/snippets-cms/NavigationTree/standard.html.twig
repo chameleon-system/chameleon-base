@@ -4,7 +4,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3>{{ 'chameleon_system_core.cms_module_page_tree.headline' | trans }}</h3>
+        <h3><i class="nav-icon fas fa-leaf"></i> {{ 'chameleon_system_core.cms_module_page_tree.headline' | trans }}</h3>
     </div>
     <div class="card-body simple-tree-card">
 {% endif %}
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 col-xl-4 justify-content-end mt-4 mt-md-0">
-                {% include 'NavigationTree/treeLegend.html.twig' %}
+                {{ include( 'NavigationTree/treeLegend.html.twig' ) }}
             </div>
         </div>
 

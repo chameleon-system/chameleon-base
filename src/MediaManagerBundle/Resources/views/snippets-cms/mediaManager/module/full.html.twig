@@ -1,18 +1,24 @@
 {# mediaTree \ChameleonSystem\MediaManager\DataModel\MediaTreeDataModel #}
 {# javascriptPluginConfiguration \ChameleonSystem\MediaManager\JavascriptPlugin\JavascriptPluginConfiguration #}
-
-<div class="snippetMediaManagerBackendModuleStandard cmsBoxBorder"
-     data-state='{{ javascriptPluginState | json_encode() }}'
-     data-configuration='{{ javascriptPluginConfiguration | json_encode() }}'>
-    <div id="tree-container" class="split split-horizontal">
-        {% if mediaTree %}
-            {% include 'mediaManager/tree/mediaTree.html.twig' %}
-        {% endif %}
-        {% if messageCode %}
-            <div class="alert alert-danger">
-                {{ messageCode | trans }}
-            </div>
-        {% endif %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="mb-0"><i class="nav-icon far fa-image"></i> {{'chameleon_system_media_manager.backend_module.title'|trans}}</h3>
     </div>
-    <div class="edit-container split split-horizontal" id="edit-container"></div>
+    <div class="card-body p-0">
+        <div class="snippetMediaManagerBackendModuleStandard cmsBoxBorder"
+             data-state='{{ javascriptPluginState | json_encode() }}'
+             data-configuration='{{ javascriptPluginConfiguration | json_encode() }}'>
+            <div id="tree-container" class="split split-horizontal">
+                {% if mediaTree %}
+                    {% include 'mediaManager/tree/mediaTree.html.twig' %}
+                {% endif %}
+                {% if messageCode %}
+                    <div class="alert alert-danger">
+                        {{ messageCode | trans }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="edit-container split split-horizontal" id="edit-container"></div>
+        </div>
+    </div>
 </div>

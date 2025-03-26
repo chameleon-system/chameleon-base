@@ -972,7 +972,7 @@
 
             <trans-unit id="chameleon_system_core.cms_module_page_tree.headline">
                 <source>chameleon_system_core.cms_module_page_tree.headline</source>
-                <target>Navigationsverwaltung</target>
+                <target>Navigation</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_core.cms_module_page_tree.legend_header">
