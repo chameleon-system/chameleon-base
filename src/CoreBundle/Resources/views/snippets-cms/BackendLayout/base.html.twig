@@ -3,14 +3,14 @@
     <head>
         {% block head %}
             {% block title %}
-                <title>{{ constant('CMS_BACKEND_TITLE') }}</title>
+        <title>{{ constant('CMS_BACKEND_TITLE') }}</title>
             {% endblock %}
             {% block head_meta_data %}
-                {{ include('BackendLayout/parts/head-meta-data.html.twig') }}
+        {{ include('BackendLayout/parts/head-meta-data.html.twig') }}
             {% endblock %}
 
             {% block head_constants %}
-                {{ include('BackendLayout/parts/head-js-constants.html.twig') }}
+        {{ include('BackendLayout/parts/head-js-constants.html.twig') }}
             {% endblock %}
 
             <!--#CMSHEADERCODE#-->
