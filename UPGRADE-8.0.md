@@ -266,6 +266,8 @@ after:
   - `TCMSLogChange::addShopSystemPage` removed
 - `AddJqueryIncludeListener` removed
 - `CHAMELEON_URL_JQUERY` removed (remove it from config.inc.php)
+- `CMSTreeNodeSelectWYSIWYG` removed
+- `treenodeselect.pagedef.php` removed
 
 ## jQuery in Theme
 
