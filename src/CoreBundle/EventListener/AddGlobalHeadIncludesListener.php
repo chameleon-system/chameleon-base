@@ -28,7 +28,6 @@ readonly class AddGlobalHeadIncludesListener
         $event->addData($this->viewRendererSnippetDirectory->getResourcesForSnippetPackage(''));
 
         $event->addData([
-            '<script src="'.\TGlobal::GetStaticURL('/chameleon/blackbox/javascript/jquery/jquery-3.7.1.min.js').'" type="text/javascript"></script>',
             '<script src="'.\TGlobal::GetStaticURLToWebLib('/wysiwyg/functions.js').'" type="text/javascript"></script>',
             '<link href="'.\TGlobal::GetStaticURLToWebLib('/css/cms_user_style/main.css').'" rel="stylesheet" type="text/css" />',
             '<link href="'.\TGlobal::GetStaticURLToWebLib('/iconFonts/fileIconVectors/file-icon-square-o.css').'" rel="stylesheet" type="text/css" />',
