@@ -2376,6 +2376,26 @@
                 <source>chameleon_system_core.log_viewer.filter_log</source>
                 <target>Log filtern...</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_show_field">
+                <source>chameleon_system_core.field.snippet_chain_show_field</source>
+                <target>Feld anzeigen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_hide_field">
+                <source>chameleon_system_core.field.snippet_chain_hide_field</source>
+                <target>Feld ausblenden</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_add_path">
+                <source>chameleon_system_core.field.snippet_chain_add_path</source>
+                <target>Pfad hinzufügen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_remove_path">
+                <source>chameleon_system_core.field.snippet_chain_remove_path</source>
+                <target>Pfad löschen</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_copy_path">
+                <source>chameleon_system_core.field.snippet_chain_copy_path</source>
+                <target>Pfad in Zwischenablage kopieren</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
