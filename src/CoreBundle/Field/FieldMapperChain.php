@@ -4,7 +4,6 @@ namespace ChameleonSystem\CoreBundle\Field;
 
 class FieldMapperChain extends \TCMSFieldText
 {
-
     /**
      * {@inheritdoc}
      */
@@ -38,10 +37,10 @@ class FieldMapperChain extends \TCMSFieldText
 
         foreach ($chains as $key => $mappers) {
             $overviewHtml .= '<tr>';
-            $overviewHtml .= '<td><i class="fas fa-eye"></i> ' . htmlspecialchars($key) . '</td>';
+            $overviewHtml .= '<td><i class="fas fa-eye"></i> '.htmlspecialchars($key).'</td>';
             $overviewHtml .= '<td><ul class="list-group list-group-flush p-0 m-0">';
             foreach ($mappers as $mapper) {
-                $overviewHtml .= '<li class="list-group-item list-group-item-action" style="background-color: transparent;"><i class="fas fa-code-branch"></i> ' . htmlspecialchars($mapper) . '</li>';
+                $overviewHtml .= '<li class="list-group-item list-group-item-action" style="background-color: transparent;"><i class="fas fa-code-branch"></i> '.htmlspecialchars($mapper).'</li>';
             }
             $overviewHtml .= '</ul></td>';
             $overviewHtml .= '</tr>';
@@ -52,7 +51,6 @@ class FieldMapperChain extends \TCMSFieldText
 
         $html = parent::GetHTML();
 
-        return $overviewHtml . $html;
+        return $overviewHtml.$html;
     }
-
 }
