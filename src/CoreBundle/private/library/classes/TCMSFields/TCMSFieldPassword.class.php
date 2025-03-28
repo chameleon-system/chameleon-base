@@ -23,10 +23,7 @@ class TCMSFieldPassword extends TCMSFieldVarchar
 {
     public const DEFAULT_MINIMUM_PASSWORD_LENGTH = 6;
 
-    /**
-     * @var string|null
-     */
-    private $backendLanguageCode;
+    private ?string $backendLanguageCode = null;
 
     /**
      * {@inheritdoc}
@@ -38,15 +35,18 @@ class TCMSFieldPassword extends TCMSFieldVarchar
         $value = $this->_GetHTMLValue();
         if (!empty($value)) {
             $passwordMessage = 'chameleon_system_core.field_password.has_password';
-            $sMessageClass = 'alert alert-info';
+            $messageClass = 'alert alert-info';
+            $iconClass = 'fas fa-check-circle text-success';
         } else {
             $passwordMessage = 'chameleon_system_core.field_password.has_no_password';
-            $sMessageClass = 'alert alert-danger';
+            $messageClass = 'alert alert-danger';
+            $iconClass = 'fas fa-times-circle text-danger';
         }
 
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('passwordMessage', $passwordMessage);
-        $viewRenderer->AddSourceObject('messageClass', $sMessageClass);
+        $viewRenderer->AddSourceObject('messageClass', $messageClass);
+        $viewRenderer->AddSourceObject('iconClass', $iconClass);
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('backendLanguageCode', $this->getBackendLanguageCode());
 
@@ -90,7 +90,7 @@ class TCMSFieldPassword extends TCMSFieldVarchar
     {
         $this->getBackendLanguageCode();
 
-        $includes = array();
+        $includes = [];
         $includes[] = '<link href="'.URL_CMS.'/fields/TCMSFieldPassword/strength-meter/css/strength-meter.min.css" rel="stylesheet" type="text/css" />';
         $includes[] = '<script src="'.URL_CMS.'/fields/TCMSFieldPassword/strength-meter/js/strength-meter.min.js" type="text/javascript"></script>';
         $includes[] = '<script src="'.URL_CMS.'/fields/TCMSFieldPassword/TCMSFieldPassword.js" type="text/javascript"></script>';
@@ -111,14 +111,16 @@ class TCMSFieldPassword extends TCMSFieldVarchar
         return $includes;
     }
 
-    /**
-     * @return string|null
-     */
-    private function getMappedLanguageCodeForStrengthMeterPlugin()
+    private function getMappedLanguageCodeForStrengthMeterPlugin(): ?string
     {
-        $backendLanguageIsoCode = strtolower($this->getBackendLanguageCode());
+        $backendLanguageIsoCode = $this->getBackendLanguageCode();
+        if (null === $backendLanguageIsoCode) {
+            return null;
+        }
 
-        $languageMapping = array(
+        $backendLanguageIsoCode = strtolower($backendLanguageIsoCode);
+
+        $languageMapping = [
             'de' => 'de',
             'es' => 'es',
             'fr' => 'fr',
@@ -130,7 +132,7 @@ class TCMSFieldPassword extends TCMSFieldVarchar
             'ru' => 'ru',
             'sr' => 'sr',
             'zh' => 'zh-CN',
-        );
+        ];
 
         if (false === isset($languageMapping[$backendLanguageIsoCode])) {
             return null;
@@ -262,10 +264,8 @@ class TCMSFieldPassword extends TCMSFieldVarchar
 
     /**
      * returns the ISO6391 language code of the current CMS user.
-     *
-     * @return string
      */
-    private function getBackendLanguageCode()
+    private function getBackendLanguageCode(): ?string
     {
         if (null !== $this->backendLanguageCode) {
             return $this->backendLanguageCode;
@@ -289,18 +289,12 @@ class TCMSFieldPassword extends TCMSFieldVarchar
         return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
+    private function getViewRenderer(): ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
-    /**
-     * @return TranslatorInterface
-     */
-    private function getTranslator()
+    private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
     }
