@@ -2379,6 +2379,26 @@
                 <source>chameleon_system_core.log_viewer.filter_log</source>
                 <target>Filter log...</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_show_field">
+                <source>chameleon_system_core.field.snippet_chain_show_field</source>
+                <target>Show field</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_hide_field">
+                <source>chameleon_system_core.field.snippet_chain_hide_field</source>
+                <target>Hide field</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_add_path">
+                <source>chameleon_system_core.field.snippet_chain_add_path</source>
+                <target>Add path</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_remove_path">
+                <source>chameleon_system_core.field.snippet_chain_remove_path</source>
+                <target>Delete path</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field.snippet_chain_copy_path">
+                <source>chameleon_system_core.field.snippet_chain_copy_path</source>
+                <target>Copy path to clipboard</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
