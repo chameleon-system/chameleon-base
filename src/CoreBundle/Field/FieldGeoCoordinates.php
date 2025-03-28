@@ -11,16 +11,12 @@
 
 namespace ChameleonSystem\CoreBundle\Field;
 
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use TCMSField;
-use TCMSMessageManager;
-use TCMSTableEditorManager;
-use TGlobal;
-use ViewRenderer;
 
-class FieldGeoCoordinates extends TCMSField
+class FieldGeoCoordinates extends \TCMSField
 {
     /**
      * {@inheritdoc}
@@ -81,7 +77,7 @@ class FieldGeoCoordinates extends TCMSField
     {
         $html = parent::_GetHTMLValue();
 
-        return TGlobal::OutHTML($html);
+        return \TGlobal::OutHTML($html);
     }
 
     /**
@@ -93,16 +89,16 @@ class FieldGeoCoordinates extends TCMSField
         if ($dataIsValid) {
             $sQLData = $this->ConvertPostDataToSQL();
 
-            if (!$this->IsMandatoryField() && ('|' == $sQLData || '' == $sQLData)) {
+            if (('|' === $sQLData || '' === $sQLData) && false === $this->IsMandatoryField()) {
                 $dataIsValid = true;
             } else {
                 $pattern = '/^-?([0-9](\.\d+)?|[1-7][0-9](\.\d+)?|8[0-4](\.\d+)?|85(\.00*)?)\|-?([0-9](\.\d+)?|[1-9][0-9](\.\d+)?|1[0-7][0-9](\.\d+)?|180(\.00*)?)$/';
                 if ($this->HasContent() && !preg_match($pattern, $sQLData)) {
                     $dataIsValid = false;
-                    $messageManager = TCMSMessageManager::GetInstance();
-                    $consumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
+                    $messageManager = $this->getFlashMessageService();
+                    $consumerName = \TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                     $fieldTitle = $this->oDefinition->GetName();
-                    $messageManager->AddMessage($consumerName, 'TABLEEDITOR_FIELD_GOOGLECOORDINATES_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $fieldTitle]);
+                    $messageManager->addMessage($consumerName, 'TABLEEDITOR_FIELD_GOOGLECOORDINATES_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $fieldTitle]);
                 }
             }
         }
@@ -117,7 +113,7 @@ class FieldGeoCoordinates extends TCMSField
     {
         $hasContent = false;
         $content = $this->ConvertPostDataToSQL();
-        if (!empty($content) || '|' == $content) {
+        if (!empty($content) || '|' !== $content) {
             $hasContent = true;
         }
 
@@ -138,10 +134,10 @@ class FieldGeoCoordinates extends TCMSField
     public function GetCMSHtmlFooterIncludes()
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
-        $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/fields/FieldGeoCoordinates/FieldGeoCoordinates.js').'" type="text/javascript"></script>';
+        $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/fields/FieldGeoCoordinates/FieldGeoCoordinates.js').'" type="text/javascript"></script>';
         $includes[] = '<script type="text/javascript">
 $(document).ready(function() {
-    CHAMELEON.CORE.FieldGeoCoordinates.init("'.TGlobal::OutJS($this->name).'","'.$this->getMapsBackendModuleUrl().'");
+    CHAMELEON.CORE.FieldGeoCoordinates.init("'.\TGlobal::OutJS($this->name).'","'.$this->getMapsBackendModuleUrl().'");
     CHAMELEON.CORE.FieldGeoCoordinates.wrongLatitude = "'.$this->getTranslator()->trans('chameleon_system_core.field_map_coordinates.wrong_latitude').'";
     CHAMELEON.CORE.FieldGeoCoordinates.wrongLongitude = "'.$this->getTranslator()->trans('chameleon_system_core.field_map_coordinates.wrong_longitude').'";
 });
@@ -152,15 +148,13 @@ $(document).ready(function() {
 
     protected function getMapsBackendModuleUrl(): string
     {
-        $urlUtil = $this->getUrlUtil();
-
-        return $urlUtil->getArrayAsUrl([
+        return $this->getUrlUtil()->getArrayAsUrl([
             'pagedef' => 'geoMap',
             '_pagedefType' => 'Core',
             ], PATH_CMS_CONTROLLER.'?');
     }
 
-    private function getViewRenderer(): ViewRenderer
+    private function getViewRenderer(): \ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
@@ -173,5 +167,10 @@ $(document).ready(function() {
     private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('chameleon_system_core.translator');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }
