@@ -349,7 +349,7 @@ class TTools
                     throw new Exception('Error in query: '.$query.' - '.MySqlLegacySupport::getInstance()->error());
                 }
 
-                if (1 == MySqlLegacySupport::getInstance()->num_rows($result)) {
+                if (1 === MySqlLegacySupport::getInstance()->num_rows($result)) {
                     $returnVal = true;
                 }
 
