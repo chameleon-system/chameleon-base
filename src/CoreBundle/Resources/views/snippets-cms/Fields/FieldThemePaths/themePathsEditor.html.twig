@@ -6,8 +6,9 @@
 <ul id="{{ id }}" class="list-group mb-3">
     {% for path in paths %}
         <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"
-            style="cursor: grab;" draggable="true">
+            style="cursor: grab;" draggable="true" data-order="{{ loop.index }}">
             <div class="d-flex align-items-center">
+                <span class="badge bg-secondary me-2 order-number">{{ loop.index }}</span>
                 <i class="fas fa-code-branch me-2 text-muted"></i>
                 <span class="path-text">{{ path }}</span>
             </div>
@@ -69,6 +70,7 @@
                         this.parentNode.insertBefore(dragged, this.nextSibling);
                     }
                     updateTextarea();
+                    updateOrderNumbers();
                 }
             });
         }
@@ -97,6 +99,7 @@
 
             li.innerHTML = `
             <div class="d-flex align-items-center">
+                <span class="badge bg-secondary me-2 order-number"></span>
                 <i class="fas fa-code-branch me-2 text-muted"></i>
                 <span class="path-text"></span>
             </div>
@@ -115,6 +118,7 @@
             list.insertBefore(li, list.firstChild); // insert at top (bottom of config)
             input.value = '';
             updateTextarea();
+            updateOrderNumbers();
         }
 
         list.querySelectorAll('li').forEach(bindDragEvents);
@@ -206,9 +210,16 @@
                     list.appendChild(li);
                 });
 
+                updateOrderNumbers();
                 CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
             });
         }
 
+        function updateOrderNumbers() {
+            const orderBadges = list.querySelectorAll('.order-number');
+            orderBadges.forEach((badge, index) => {
+                badge.textContent = index + 1;
+            });
+        }
     });
 </script>
