@@ -474,7 +474,7 @@ function ReloadMainPage() {
     window.parent.location.href = window.location.pathname;
 }
 
-function setSaveButtonBacktoNormalAfterSave()
+CHAMELEON.CORE.MTTableEditor.setSaveButtonBacktoNormalAfterSave = function () {
 {
     const $saveBtn = $('button[data-table-function="save"]');
     $saveBtn.removeClass('btn-unsaved').addClass('btn-secondary');
@@ -495,7 +495,7 @@ function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
 
     PostAjaxForm('cmseditform', eval(customCallbackFunction));
 
-    setSaveButtonBacktoNormalAfterSave();
+    CHAMELEON.CORE.MTTableEditor.setSaveButtonBacktoNormalAfterSave();
 
     if (closeAfterSave == true && typeof parent != 'undefined') {
         parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
@@ -515,7 +515,7 @@ function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'ExecuteAjaxCall';
     document.cmseditform._fnc.value = 'AjaxSaveField';
 
-    setSaveButtonBacktoNormalAfterSave();
+    CHAMELEON.CORE.MTTableEditor.setSaveButtonBacktoNormalAfterSave();
 
     PostAjaxForm('cmseditform', eval(customCallbackFunction));
 }
@@ -566,7 +566,7 @@ function SaveViaAjaxCallback(data, statusText) {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }
 
-    setSaveButtonBacktoNormalAfterSave();
+    CHAMELEON.CORE.MTTableEditor.setSaveButtonBacktoNormalAfterSave();
 
     return returnVal;
 }
