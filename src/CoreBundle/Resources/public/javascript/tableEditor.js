@@ -474,6 +474,12 @@ function ReloadMainPage() {
     window.parent.location.href = window.location.pathname;
 }
 
+function setSaveButtonBacktoNormalAfterSave()
+{
+    const $saveBtn = $('button[data-table-function="save"]');
+    $saveBtn.removeClass('btn-unsaved').addClass('btn-secondary');
+}
+
 /*
  * tableEditor: save edit table via ajax
  */
@@ -488,6 +494,8 @@ function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
     document.cmseditform._fnc.value = 'AjaxSave';
 
     PostAjaxForm('cmseditform', eval(customCallbackFunction));
+
+    setSaveButtonBacktoNormalAfterSave();
 
     if (closeAfterSave == true && typeof parent != 'undefined') {
         parent.setTimeout("parent.CloseModalIFrameDialog()", 3000);
@@ -507,9 +515,10 @@ function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'ExecuteAjaxCall';
     document.cmseditform._fnc.value = 'AjaxSaveField';
 
+    setSaveButtonBacktoNormalAfterSave();
+
     PostAjaxForm('cmseditform', eval(customCallbackFunction));
 }
-
 
 /*
  * tableEditor: save edit table via ajax
@@ -536,7 +545,6 @@ function SaveViaAjaxCallback(data, statusText) {
 
     var returnVal = false;
     if (data !== false && data != null) {
-
         returnVal = true;
 
         if (data.aMessages) {
@@ -557,6 +565,8 @@ function SaveViaAjaxCallback(data, statusText) {
     } else {
         toasterMessage(CHAMELEON.CORE.i18n.Translate('chameleon_system_core.js.error_save'), 'ERROR');
     }
+
+    setSaveButtonBacktoNormalAfterSave();
 
     return returnVal;
 }
@@ -923,9 +933,15 @@ CHAMELEON.CORE.MTTableEditor.addCheckBoxSwitchClickEvent = function (selector) {
 };
 
 CHAMELEON.CORE.MTTableEditor.initInputChangeObservation = function () {
-    $("input:text,input:checkbox,input:radio,textarea,select,input:hidden",$("#cmseditform")).not(".cmsdisablechangemessage").one("change",function() {
-        CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
-    });
+    $("input:text,input:checkbox,input:radio,textarea,select,input:hidden", $("#cmseditform"))
+        .not(".cmsdisablechangemessage")
+        .one("change", function () {
+            CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
+
+            // Make save button visually active
+            const $saveBtn = $('button[data-table-function="save"]');
+            $saveBtn.removeClass('btn-secondary').addClass('btn-unsaved');
+        });
 };
 
 CHAMELEON.CORE.MTTableEditor.initHelpTexts = function () {
