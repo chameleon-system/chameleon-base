@@ -1,34 +1,40 @@
+{% set imageAltText = aTagProperties.alt %}
+{% set imageTitleText = aTagProperties.title %}
+{% if fromWYSIWYG %}
+    {% set imageAltText = aTagProperties.alt|raw %}
+    {% set imageTitleText = aTagProperties.title|raw %}
+{% endif -%}
+
 {% if aTagProperties.cmsshowcaption == '1' %}
 <figure class="cssmedia img-responsive" style="{{ aTagProperties.style }} {% if aTagProperties.align == 'left' or aTagProperties.align == 'right' or aTagProperties.align == 'center' -%}
         text-align: {{ aTagProperties.align }};
 {%- endif -%}
         ">
-    {% endif %}
+{% endif %}
     {%- if bFullsizeImageBiggerThanThumbnail and aTagProperties.cmsshowfull == '1' %}
-    <a href="{{ sFullImageURL }}" class="cmsmediafullimagelink thickbox" title="{% if fromWYSIWYG %}{{ aTagProperties.title|raw }}{% else %}{{ aTagProperties.title }}{% endif %}" rel="{{ sImageGroupName }}">
-        {% endif %}
-
+    <a href="{{ sFullImageURL }}" class="cmsmediafullimagelink thickbox" title="{{ imageTitleText }}" rel="{{ sImageGroupName }}">
+    {% endif %}
         <img data-rwdimage="{ src: url({{ sSmallThumbnailURL }}); height: auto; },
-    (min-width: {{ iSmallScreenSize+1 }}px) { src: url({{ sMediumThumbnailURL }}); height: auto; },
-    (min-width: {{ iMediumScreenSize+1 }}px) { src: url({{ sThumbnailURL }}); height: auto; }
-    " data-rwdimage-fallback="{ src: url({{ sThumbnailURL }}); height: auto; }" data-rwdimage-fallback-class="no-mq"
-                {%- if aTagProperties.usemap %} usemap="{{ aTagProperties.usemap }}"{% endif %}
+        (min-width: {{ iSmallScreenSize + 1 }}px) { src: url({{ sMediumThumbnailURL }}); height: auto; },
+        (min-width: {{ iMediumScreenSize + 1 }}px) { src: url({{ sThumbnailURL }}); height: auto; }"
+             data-rwdimage-fallback="{ src: url({{ sThumbnailURL }}); height: auto; }" data-rwdimage-fallback-class="no-mq"
+             {%- if aTagProperties.usemap %} usemap="{{ aTagProperties.usemap }}"{% endif %}
              class="rwdimage img-responsive {{ aTagProperties.class }} {% if aTagProperties.cmsshowcaption != '1' %}cssmedia{% endif %}"
              style="{% if aTagProperties.cmsshowcaption != '1'%}{{ aTagProperties.style }} {% endif %}{% if aTagProperties.cmsshowcaption != '1' and (aTagProperties.align == 'left' or aTagProperties.align == 'right' or aTagProperties.align == 'center') -%}
                      text-align: {{ aTagProperties.align }};
              {%- endif -%}
-                     " />
+                     "/>
         <noscript>
-            <img src="{{ sThumbnailURL }}" alt="{% if fromWYSIWYG %}{{ aTagProperties.title|raw }}{% else %}{{ aTagProperties.title }}{% endif %}" title="{% if fromWYSIWYG %}{{ aTagProperties.title|raw }}{% else %}{{ aTagProperties.title }}{% endif %}"
+            <img src="{{ sThumbnailURL }}" alt="{% if imageAltText %}{{ imageAltText }}{% else %}{{ imageTitleText }}{% endif %}" title="{{ imageTitleText }}"
                     {%- if aTagProperties.usemap %} usemap="{{ aTagProperties.usemap }}"{% endif %}
-                 class="img-responsive {{ aTagProperties.class }} {% if aTagProperties.cmsshowcaption != '1' %}cssmedia{% endif %}" style ="height: auto; {% if aTagProperties.cmsshowcaption != '1' %}{{ aTagProperties.style }}{% endif %}
-        {%- if aTagProperties.cmsshowcaption != '1' and (aTagProperties.align == 'left' or aTagProperties.align == 'right' or aTagProperties.align == 'center') %} text-align: {{ aTagProperties.align }};
-            {%- endif %}" />
+                 class="img-responsive {{ aTagProperties.class }} {% if aTagProperties.cmsshowcaption != '1' %}cssmedia{% endif %}"
+                 style="height: auto; {% if aTagProperties.cmsshowcaption != '1' %}{{ aTagProperties.style }}{% endif %}
+                 {%- if aTagProperties.cmsshowcaption != '1' and (aTagProperties.align == 'left' or aTagProperties.align == 'right' or aTagProperties.align == 'center') %} text-align: {{ aTagProperties.align }};{%- endif %}"/>
         </noscript>
-        {%- if bFullsizeImageBiggerThanThumbnail and aTagProperties.cmsshowfull == '1' -%}
+    {%- if bFullsizeImageBiggerThanThumbnail and aTagProperties.cmsshowfull == '1' -%}
     </a>
     {%- endif %}
-    {% if aTagProperties.cmsshowcaption == '1' %}
+{% if aTagProperties.cmsshowcaption == '1' %}
     <figcaption class="cssmediacaption">{% if fromWYSIWYG %}{{ aTagProperties.cmscaption|raw }}{% else %}{{ aTagProperties.cmscaption }}{% endif %}</figcaption>
 </figure>
 {% endif %}

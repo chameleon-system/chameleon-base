@@ -2,6 +2,7 @@ composer.lock
 vendor/
 /src/CoreBundle/Resources/Theme/node_modules/
 .phpunit.result.cache
+.DS_Store
 
 # Code quality
 .php-cs.xml

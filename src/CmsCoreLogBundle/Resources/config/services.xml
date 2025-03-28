@@ -26,7 +26,7 @@
             <tag name="monolog.processor"/>
         </service>
 
-        <service id="chameleon_system_cms_core_log.processor.request_id" class="ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\RequestIdProcessor" public="false">
+        <service id="chameleon_system_cms_core_log.processor.request_id" class="ChameleonSystem\CmsCoreLogBundle\Bridge\Monolog\RequestIdProcessor" public="false" lazy="true">
             <argument type="service" id="chameleon_system_core.request_info_service"/>
             <tag name="monolog.processor"/>
         </service>

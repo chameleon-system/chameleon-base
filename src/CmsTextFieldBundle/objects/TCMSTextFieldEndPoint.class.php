@@ -794,7 +794,21 @@ class TCMSTextFieldEndPoint
      */
     protected function _callback_cmstextfield_imageparser($aMatch)
     {
-        $tags = array('cmscaption' => '', 'cmsshowcaption' => 0, 'width' => 0, 'height' => 0, 'style' => '', 'align' => '', 'border' => 0, 'cmsshowfull' => 0, 'src' => '', 'title' => '', 'usemap' => '', 'class' => '');
+        $tags = [
+            'cmscaption' => '',
+            'cmsshowcaption' => 0,
+            'width' => 0,
+            'height' => 0,
+            'style' => '',
+            'align' => '',
+            'border' => 0,
+            'cmsshowfull' => 0,
+            'src' => '',
+            'alt' => '',
+            'title' => '',
+            'usemap' => '',
+            'class' => '',
+        ];
         $parameterString = $aMatch[1].' '.$aMatch[3];
         $matchString = '/\\s*(.*?)\\s*=\\s*"(.*?)".*?/si';
         $parameters = '';
