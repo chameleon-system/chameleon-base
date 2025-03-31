@@ -3,28 +3,7 @@
 @var string[] paths
 #}
 
-<ul id="{{ id }}" class="list-group mb-3">
-    {% for path in paths %}
-        <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"
-            style="cursor: grab;" draggable="true" data-order="{{ loop.index }}">
-            <div class="d-flex align-items-center">
-                <span class="badge bg-secondary me-2 order-number">{{ loop.index }}</span>
-                <i class="fas fa-code-branch me-2 text-muted"></i>
-                <span class="path-text">{{ path }}</span>
-            </div>
-            <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-outline-secondary copy-path"
-                        title="{{ 'chameleon_system_core.field.snippet_chain_copy_path'|trans }}">
-                    <i class="fas fa-copy"></i>
-                </button>
-                <button type="button" class="btn btn-outline-danger remove-path"
-                        title="{{ 'chameleon_system_core.field.snippet_chain_remove_path'|trans }}">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </div>
-        </li>
-    {% endfor %}
-</ul>
+<ul id="{{ id }}" class="list-group mb-3" data-paths='{{ paths|json_encode|e('html_attr') }}'></ul>
 
 <div class="d-flex justify-content-between align-items-center mb-2" style="gap: 1rem;">
     <div class="input-group" style="max-width: 500px;">
@@ -75,11 +54,47 @@
             });
         }
 
+        function createListItem(path) {
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center list-group-item-action';
+            li.style.cursor = 'grab';
+            li.setAttribute('draggable', 'true');
+
+            li.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <span class="badge bg-secondary me-2 order-number"></span>
+                    <i class="fas fa-code-branch me-2 text-muted"></i>
+                    <span class="path-text"></span>
+                </div>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-outline-secondary copy-path" title="{{ 'chameleon_system_core.field.snippet_chain_copy_path'|trans|e('html_attr') }}">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger remove-path" title="{{ 'chameleon_system_core.field.snippet_chain_remove_path'|trans|e('html_attr') }}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `;
+
+            li.querySelector('.path-text').textContent = path;
+            bindDragEvents(li);
+            return li;
+        }
+
+        function updateOrderNumbers() {
+            const orderBadges = list.querySelectorAll('.order-number');
+            orderBadges.forEach((badge, index) => {
+                badge.textContent = index + 1;
+            });
+        }
+
         function updateTextarea() {
             const items = list.querySelectorAll('.path-text');
             const values = Array.from(items).reverse().map(el => el.textContent.trim());
-            textarea.value = values.join("\n");
-            CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true; // trigger change state, so on page leave the user gets a warning
+            if (textarea) {
+                textarea.value = values.join("\n");
+                CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
+            }
         }
 
         function addNewPath() {
@@ -92,36 +107,26 @@
                 return;
             }
 
-            const li = document.createElement('li');
-            li.className = 'list-group-item d-flex justify-content-between align-items-center list-group-item-action';
-            li.style.cursor = 'grab';
-            li.setAttribute('draggable', 'true');
-
-            li.innerHTML = `
-            <div class="d-flex align-items-center">
-                <span class="badge bg-secondary me-2 order-number"></span>
-                <i class="fas fa-code-branch me-2 text-muted"></i>
-                <span class="path-text"></span>
-            </div>
-            <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-outline-secondary copy-path" title="{{ 'chameleon_system_core.field.snippet_chain_copy_path'|trans|e('html_attr') }}">
-                    <i class="fas fa-copy"></i>
-                </button>
-                <button type="button" class="btn btn-outline-danger remove-path" title="{{ 'chameleon_system_core.field.snippet_chain_remove_path'|trans|e('html_attr') }}">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </div>
-        `;
-
-            li.querySelector('.path-text').textContent = value;
-            bindDragEvents(li);
-            list.insertBefore(li, list.firstChild); // insert at top (bottom of config)
+            const li = createListItem(value);
+            list.insertBefore(li, list.firstChild);
             input.value = '';
             updateTextarea();
             updateOrderNumbers();
         }
 
-        list.querySelectorAll('li').forEach(bindDragEvents);
+        // Init list from data-paths
+        const initialPathsJson = list.getAttribute('data-paths');
+        if (initialPathsJson) {
+            try {
+                const initialPaths = JSON.parse(initialPathsJson);
+                initialPaths.reverse().forEach(path => {
+                    list.appendChild(createListItem(path));
+                });
+                updateOrderNumbers();
+            } catch (e) {
+                console.error('Invalid initial path data', e);
+            }
+        }
 
         addButton.addEventListener('click', addNewPath);
         input.addEventListener('keydown', function (e) {
@@ -131,13 +136,13 @@
             }
         });
 
-        // Copy and remove buttons
         list.addEventListener('click', function (e) {
             if (e.target.closest('.remove-path')) {
                 const item = e.target.closest('li');
                 if (item) {
                     item.remove();
                     updateTextarea();
+                    updateOrderNumbers();
                 }
             }
 
@@ -168,57 +173,25 @@
                     target.classList.toggle('d-none');
                     this.innerHTML = isHidden
                         ? '<i class="fas fa-chevron-up"></i> {{ 'chameleon_system_core.field.snippet_chain_hide_field'|trans|e('html_attr') }}'
-                : '<i class="fas fa-chevron-down"></i> {{ 'chameleon_system_core.field.snippet_chain_show_field'|trans|e('html_attr') }}';
+                        : '<i class="fas fa-chevron-down"></i> {{ 'chameleon_system_core.field.snippet_chain_show_field'|trans|e('html_attr') }}';
                 }
             });
         });
 
-        // Rebuild list when textarea is manually edited
+        // Rebuild list when textarea changes
         if (textarea) {
             textarea.addEventListener('input', function () {
                 const newPaths = textarea.value.split("\n")
                     .map(line => line.trim())
                     .filter(line => line !== '')
-                    .reverse(); // reverse for display (last first)
+                    .reverse();
 
-                // Remove all current <li> children
                 list.innerHTML = '';
-
                 newPaths.forEach(path => {
-                    const li = document.createElement('li');
-                    li.className = 'list-group-item d-flex justify-content-between align-items-center list-group-item-action';
-                    li.style.cursor = 'grab';
-                    li.setAttribute('draggable', 'true');
-
-                    li.innerHTML = `
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-code-branch me-2 text-muted"></i>
-                            <span class="path-text"></span>
-                        </div>
-                        <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-outline-secondary copy-path" title="{{ 'chameleon_system_core.field.snippet_chain_copy_path'|trans|e('html_attr') }}">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-danger remove-path" title="{{ 'chameleon_system_core.field.snippet_chain_remove_path'|trans|e('html_attr') }}">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    `;
-
-                    li.querySelector('.path-text').textContent = path;
-                    bindDragEvents(li);
-                    list.appendChild(li);
+                    list.appendChild(createListItem(path));
                 });
-
                 updateOrderNumbers();
                 CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
-            });
-        }
-
-        function updateOrderNumbers() {
-            const orderBadges = list.querySelectorAll('.order-number');
-            orderBadges.forEach((badge, index) => {
-                badge.textContent = index + 1;
             });
         }
     });
