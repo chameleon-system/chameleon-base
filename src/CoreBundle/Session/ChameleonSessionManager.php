@@ -68,7 +68,7 @@ class ChameleonSessionManager implements ChameleonSessionManagerInterface
         } else {
             $memcacheSessionsServer = ServiceLocator::getParameter('chameleon_system_core.cache.memcache_sessions_server1');
             if ($memcacheSessionsServer) {
-                $memcache = ServiceLocator::get('chameleon_system_cms_cache.memcache_cache');
+                $memcache = ServiceLocator::get('chameleon_system_cms_cache.memcache_session');
                 $sessionHandler = new MemcachedSessionHandler($memcache->getDriver());
             } else {
                 $options = [
