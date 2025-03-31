@@ -475,7 +475,6 @@ function ReloadMainPage() {
 }
 
 CHAMELEON.CORE.MTTableEditor.setSaveButtonBacktoNormalAfterSave = function () {
-{
     const $saveBtn = $('button[data-table-function="save"]');
     $saveBtn.removeClass('btn-unsaved').addClass('btn-secondary');
 }
