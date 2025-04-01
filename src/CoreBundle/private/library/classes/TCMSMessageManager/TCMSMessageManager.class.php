@@ -456,7 +456,7 @@ class TCMSMessageManager
 
     /**
      * @param string $id message ID to be translated
-     * @param string $type one of the message types defined in cms.v1.js:toasterMessage()
+     * @param string $type one of the message types defined in cms.v2.js:toasterMessage()
      * @param array $parameters for the message translation
      * @param string $domain for the message translation
      */
