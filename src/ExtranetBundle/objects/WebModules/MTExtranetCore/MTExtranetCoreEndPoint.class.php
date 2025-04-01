@@ -118,7 +118,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         $this->oMessages = null;
         $oMessageManager = TCMSMessageManager::GetInstance();
         if ($oMessageManager->ConsumerHasMessages($this->sModuleSpotName)) {
-            $this->oMessages = $oMessageManager->ConsumeMessages($this->sModuleSpotName);
+            $this->oMessages = $oMessageManager->ConsumeMessages($this->sModuleSpotName, true, false);
         }
     }
 
