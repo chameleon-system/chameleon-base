@@ -258,6 +258,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
     }
 
     var modalDialog = document.getElementById('modalDialog');
+    var modalBody;
 
     if (null === modalDialog) {
         var newModal = document.createElement('div');
@@ -281,6 +282,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
             '                 </div>';
         document.body.appendChild(newModal);
         modalDialog = document.getElementById('modalDialog');
+        modalBody = modalDialog.querySelector('.modal-body');
     } else {
         // set dialog size
         var modalDialogInner = document.querySelectorAll('#modalDialog .modal-dialog')[0];
@@ -290,7 +292,7 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
         }
 
         // reset content
-        var modalBody = document.querySelectorAll('#modalDialog .modal-body')[0];
+        modalBody = document.querySelectorAll('#modalDialog .modal-body')[0];
         modalBody.innerHTML = '';
     }
 
@@ -303,30 +305,10 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
         modaldialogLabel.innerHTML = '';
     }
 
-    // set content after dialog is initialized
-    $('#modalDialog').on('shown.bs.modal', function () {
-        var $modalBody = $('#modalDialog .modal-body');
-        $modalBody.html(content);
-        var $iframe = $modalBody.find('iframe');
-        if ($iframe.length > 0) {
-            var iframeSrc = $iframe.attr('src');
-            if (iframeSrc !== undefined) {
-                if (iframeSrc.indexOf('?') > -1) {
-                    iframeSrc += '&';
-                } else {
-                    iframeSrc += '?';
-                }
-                iframeSrc += 'isInModal=1';
-                $iframe.attr('src', iframeSrc);
-            }
-        }
-    });
-
     if (typeof height === 'undefined' || height < 300) {
         height = window.innerHeight-150;
     }
 
-    var modalBody = modalDialog.querySelector('.modal-body');
     modalBody.style.height = height+'px';
 
     // init/reset modal
@@ -336,8 +318,16 @@ CHAMELEON.CORE.showModal = function (title, content, sizeClass, height) {
 
     // set content after dialog is initialized
     modalDialog.addEventListener('shown.coreui.modal', function () {
-        let modalBody = modalDialog.querySelector('.modal-body');
+        var modalBody = this.querySelector('.modal-body');
         modalBody.innerHTML = content;
+        var iframe = modalBody.querySelector('iframe');
+        if (iframe) {
+            var iframeSrc = iframe.getAttribute('src');
+            if (iframeSrc !== null) {
+                iframeSrc += (iframeSrc.includes('?') ? '&' : '?') + 'isInModal=1';
+                iframe.setAttribute('src', iframeSrc);
+            }
+        }
     });
 
     modalCoreui.show();
