@@ -193,10 +193,12 @@ function makeDraggable(element, handle) {
 document.addEventListener("DOMContentLoaded", function () {
     initModuleChooser();
 
-    const cmsModuleMenu = document.createElement("div");
-    cmsModuleMenu.id = "cmsModuleMenu";
-    cmsModuleMenu.style.display = "none";
-    document.body.appendChild(cmsModuleMenu);
+    if (!document.getElementById("cmsModuleMenu")) {
+        const cmsModuleMenu = document.createElement("div");
+        cmsModuleMenu.id = "cmsModuleMenu";
+        cmsModuleMenu.style.display = "none";
+        document.body.appendChild(cmsModuleMenu);
+    }
 
     document.querySelectorAll(".moduleChooserMenu .cmsModuleMenuLauncher").forEach(launcher => {
         launcher.addEventListener("click", event => {
