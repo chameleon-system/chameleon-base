@@ -153,9 +153,23 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
     {
         $aParams = array('pagedef' => 'extendedLookupList', 'id' => $oPopupTableConf->id, 'fieldName' => $this->name, 'sourceTblConfId' => $this->oDefinition->fieldCmsTblConfId);
         $restriction = $this->getTargetListRestriction();
+
         if (0 !== \count($restriction)) {
             $aParams = array_merge($aParams, $restriction);
         }
+
+        $targetListClass = $this->oDefinition->GetFieldtypeConfigKey('targetListClass');
+        if (null !== $targetListClass) {
+            if (true === \class_exists($targetListClass)) {
+                $aParams += ['targetListClass' => $targetListClass];
+            } else {
+                $this->getFlashMessageService()->addBackendToasterMessage('chameleon_system_core.field_lookup.invalid_target_list_class', 'ERROR', [
+                    '%field%' => $this->oDefinition->GetName(),
+                    '%targetListClass%' => addcslashes($targetListClass, '\\'),
+                ]);
+            }
+        }
+
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParams);
         $translator = $this->getTranslationService();
         $sWindowTitle = $translator->trans('chameleon_system_core.field_lookup.select_item', array(), 'admin');

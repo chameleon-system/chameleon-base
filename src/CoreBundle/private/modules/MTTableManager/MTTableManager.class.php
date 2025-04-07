@@ -133,6 +133,12 @@ class MTTableManager extends TCMSModelBase
             $listClass = $this->aModuleConfig['listClass'];
         }
 
+        // list class as request parameter
+        $targetListClass = $inputFilterUtil->getFilteredInput('targetListClass');
+        if (null !== $targetListClass) {
+            $listClass = $targetListClass;
+        }
+
         $this->data['listClass'] = $listClass;
 
         $this->oTableList = &$this->oTableConf->GetListObject($listClass);
@@ -484,6 +490,12 @@ class MTTableManager extends TCMSModelBase
         // allow custom list class overwriting (defined in pagedef)
         if (array_key_exists('listClass', $this->aModuleConfig)) {
             $listClass = $this->aModuleConfig['listClass'];
+        }
+
+        // list class as request parameter
+        $targetListClass = $inputFilterUtil->getFilteredInput('targetListClass');
+        if (null !== $targetListClass) {
+            $listClass = $targetListClass;
         }
 
         $oTableList = &$this->oTableConf->GetListObject($listClass);
