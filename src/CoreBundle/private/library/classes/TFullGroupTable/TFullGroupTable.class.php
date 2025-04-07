@@ -17,7 +17,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 /**
  * class TFullGroupTable extends TGroupTable to add a header, sorting, and searching.
  *
-/**/
+ **/
 class TFullGroupTable extends TGroupTable
 {
     /**
@@ -27,14 +27,14 @@ class TFullGroupTable extends TGroupTable
      *
      * @var array
      */
-    public $headerCells = array();
+    public $headerCells = [];
 
     /**
      * see class definition to view available styles.
      *
      * @var TFullGroupTableStyle
      */
-    public $style = null;
+    public $style;
 
     /**
      * string to display for showing the next page (default = 'next page').
@@ -139,7 +139,7 @@ class TFullGroupTable extends TGroupTable
      *
      * @var array
      */
-    public $_postData = array();
+    public $_postData = [];
 
     /**
      * indicates if a searchbox should be shown.
@@ -175,7 +175,7 @@ class TFullGroupTable extends TGroupTable
      *
      * @var array
      */
-    public $aHiddenFieldIgnoreList = array();
+    public $aHiddenFieldIgnoreList = [];
 
     /**
      * array that holds data for custom searchbox parameters.
@@ -183,7 +183,7 @@ class TFullGroupTable extends TGroupTable
      *
      * @var array
      */
-    public $customSearchFieldParameter = array();
+    public $customSearchFieldParameter = [];
 
     /**
      * optional show a rows per page pulldown menu.
@@ -234,7 +234,7 @@ class TFullGroupTable extends TGroupTable
      */
     protected $tableCSS = 'table table-sm table-striped table-hover TCMSListManagerFullGroupTable';
 
-    public function __construct($postData = array())
+    public function __construct($postData = [])
     {
         parent::__construct();
         $this->style = new TFullGroupTableStyle();
@@ -250,22 +250,18 @@ class TFullGroupTable extends TGroupTable
         $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
-
     /**
      * initialises the class, set postdata here.
      *
      * @param array $postData
      */
-    public function Init($postData = array())
+    public function Init($postData = [])
     {
         $this->style = new TFullGroupTableStyle();
         $this->_postData = $postData;
     }
 
-
     /**
-     * @param bool $state
-     *
      * @deprecated since 6.3.6 - not necessary anymore
      */
     public function setAutoCompleteState(bool $state)
@@ -301,23 +297,23 @@ class TFullGroupTable extends TGroupTable
     /**
      * add a header cell.
      *
-     * @param string|non-empty-array<string, string>   $name - database name of the column name may be a string, or an array. if it is an array
-     *                                 it should be of the form 'name'=>'full_name'
-     * @param string   $align          - horizontal alignment to use in the cell
-     * @param resource $format         - a callback function to use for the column (the function will get 2 parameters,
-     *                                 the value, and the row. The string returned by the function will be displayed
-     *                                 in the cell
-     * @param int      $colSpan        - the colSpan parameter of the cell
-     * @param bool     $allowSort      - allow sorting by that column
-     * @param mixed    $width          - force width to X pixels
-     * @param int      $columnPosition - the array key position where the header will be added (array key starts with 0)
+     * @param string|non-empty-array<string, string> $name           - database name of the column name may be a string, or an array. if it is an array
+     *                                                               it should be of the form 'name'=>'full_name'
+     * @param string                                 $align          - horizontal alignment to use in the cell
+     * @param resource                               $format         - a callback function to use for the column (the function will get 2 parameters,
+     *                                                               the value, and the row. The string returned by the function will be displayed
+     *                                                               in the cell
+     * @param int                                    $colSpan        - the colSpan parameter of the cell
+     * @param bool                                   $allowSort      - allow sorting by that column
+     * @param mixed                                  $width          - force width to X pixels
+     * @param int                                    $columnPosition - the array key position where the header will be added (array key starts with 0)
      */
     public function AddHeaderField($name, $align = 'left', $format = null, $colSpan = 1, $allowSort = true, $width = false, $columnPosition = null)
     {
         $oTGroupTableHeaderField = new TGroupTableHeaderField($name, $align, $format, $colSpan, $allowSort, $width);
         if (!is_null($columnPosition) && count($this->headerCells) > 0) {
             $count = 0;
-            $aTmpHeaderFields = array();
+            $aTmpHeaderFields = [];
             reset($this->headerCells);
             foreach ($this->headerCells as $key => $oTmpGroupTable) {
                 ++$count;
@@ -351,7 +347,7 @@ class TFullGroupTable extends TGroupTable
         }
 
         reset($this->headerCells);
-        $aTmpHeader = array();
+        $aTmpHeader = [];
         foreach ($this->headerCells as $oHeaderField) {
             $aTmpHeader[] = $oHeaderField;
         }
@@ -374,7 +370,7 @@ class TFullGroupTable extends TGroupTable
      *
      * @return array
      *
-     * @throws \ChameleonSystem\CoreBundle\Security\AuthenticityToken\InvalidTokenFormatException
+     * @throws ChameleonSystem\CoreBundle\Security\AuthenticityToken\InvalidTokenFormatException
      */
     private function getManagedAttributes()
     {
@@ -383,7 +379,7 @@ class TFullGroupTable extends TGroupTable
         $tableEditorConfId = TTools::GetCMSTableId('cms_tbl_conf');
         $authenticityTokenValue = current($this->getAuthenticityTokenManager()
             ->getTokenPlaceholderAsParameter(AuthenticityTokenManagerInterface::TOKEN_FORMAT_ARRAY));
-        $attributes = array(
+        $attributes = [
             'data-table-managed' => null,
             'data-authenticity-token-id' => AuthenticityTokenManagerInterface::TOKEN_ID,
             'data-authenticity-token-value' => $authenticityTokenValue,
@@ -391,7 +387,7 @@ class TFullGroupTable extends TGroupTable
             'data-table-conf-id' => $tableConfigurationId,
             'data-table-editor-conf-id' => $tableEditorConfId,
             'data-table-name' => $this->sTableName,
-        );
+        ];
 
         return $attributes;
     }
@@ -587,6 +583,7 @@ class TFullGroupTable extends TGroupTable
         $query = $this->getFieldTranslationUtil()->getTranslatedQuery($query);
 
         $this->fullQuery = $query;
+
         // echo $query;
         return $query;
     }
@@ -697,7 +694,7 @@ class TFullGroupTable extends TGroupTable
             }
         }
 
-        $hitText = str_replace(array('$startRecord$', '$endRecord$', '$totalFound$'), array(($this->startRecord + 1), $next_startValue, $this->recordCount), $this->hitText);
+        $hitText = str_replace(['$startRecord$', '$endRecord$', '$totalFound$'], [$this->startRecord + 1, $next_startValue, $this->recordCount], $this->hitText);
         $tableNavigation .= '
                     <div id="'.TGlobal::OutHTML($this->listName).'_navi" class="p-2">
         <script>
@@ -743,7 +740,7 @@ class TFullGroupTable extends TGroupTable
             $pagingStartPage = $currentPage - ($maxPagingElements / 2);
         }
 
-        for ($i = $pagingStartPage; ($i < $pageCount && $i <= ($maxPagingElements + $pagingStartPage)); ++$i) {
+        for ($i = $pagingStartPage; $i < $pageCount && $i <= ($maxPagingElements + $pagingStartPage); ++$i) {
             $active = '';
             if ($i == $currentPage) {
                 $active = 'active';
@@ -776,7 +773,7 @@ class TFullGroupTable extends TGroupTable
                 $userCount = $this->_postData['_limit'];
             }
 
-            $aPageSize = array(10, 20, 50, 100, 200, 500);
+            $aPageSize = [10, 20, 50, 100, 200, 500];
             foreach ($aPageSize as $i) {
                 $selected = '';
                 if ($userCount == $i) {
@@ -813,7 +810,7 @@ class TFullGroupTable extends TGroupTable
         foreach ($this->_postData as $key => $value) {
             if ($key != session_name() && ('_search_word' != $key || !$this->showSearchBox) && '_listName' != $key && '_limit' != $key && '_sort_order' != $key && '_user_data' != $key && !in_array($key, $this->aHiddenFieldIgnoreList)) {
                 // also make sure it is not the group key... assuming that exists
-                if (((!is_null($this->groupByCell) && $key != $this->groupByCell->name) || (is_null($this->groupByCell)) || false == $this->showGroupSelector)) {
+                if ((!is_null($this->groupByCell) && $key != $this->groupByCell->name) || is_null($this->groupByCell) || false == $this->showGroupSelector) {
                     if (is_array($value)) {
                         foreach ($value as $subKey => $subValue) {
                             if ('ChangeEditLanguage' != $subValue) {
@@ -923,6 +920,8 @@ class TFullGroupTable extends TGroupTable
         $tableId = $inputFilterUtil->getFilteredInput('id');
         $restrictionField = $inputFilterUtil->getFilteredInput('sRestrictionField');
         $restriction = $inputFilterUtil->getFilteredInput('sRestriction');
+        $targetListClass = $inputFilterUtil->getFilteredInput('targetListClass');
+
         $urlUtil = $this->getUrlUtil();
         $sAjaxURL = $urlUtil->getArrayAsUrl([
             'id' => $tableId,
@@ -934,6 +933,7 @@ class TFullGroupTable extends TGroupTable
             'sRestrictionField' => $restrictionField,
             'sRestriction' => $restriction,
             'recordID' => '',
+            'targetListClass' => $targetListClass,
         ], PATH_CMS_CONTROLLER.'?', '&');
 
         return $sAjaxURL;
