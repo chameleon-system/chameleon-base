@@ -558,7 +558,7 @@ function moveNodeSuccess(nodeId, responseMessage) {
 }
 
 function refreshNodeOnModalClose(nodeId) {
-    $('#modalDialog').on('hidden.bs.modal', function () {
+    $('#modalDialog').on('hidden.coreui.modal', function () {
         refreshNode(nodeId);
     });
 }
