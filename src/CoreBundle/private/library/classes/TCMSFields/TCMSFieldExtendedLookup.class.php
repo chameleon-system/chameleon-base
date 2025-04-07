@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * lookup.
-/**/
+ **/
 class TCMSFieldExtendedLookup extends TCMSFieldLookup
 {
     /**
@@ -151,7 +151,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
      */
     protected function _GetOpenWindowJS(&$oPopupTableConf)
     {
-        $aParams = array('pagedef' => 'extendedLookupList', 'id' => $oPopupTableConf->id, 'fieldName' => $this->name, 'sourceTblConfId' => $this->oDefinition->fieldCmsTblConfId);
+        $aParams = ['pagedef' => 'extendedLookupList', 'id' => $oPopupTableConf->id, 'fieldName' => $this->name, 'sourceTblConfId' => $this->oDefinition->fieldCmsTblConfId];
         $restriction = $this->getTargetListRestriction();
 
         if (0 !== \count($restriction)) {
@@ -172,7 +172,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParams);
         $translator = $this->getTranslationService();
-        $sWindowTitle = $translator->trans('chameleon_system_core.field_lookup.select_item', array(), 'admin');
+        $sWindowTitle = $translator->trans('chameleon_system_core.field_lookup.select_item', [], 'admin');
 
         $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."',0,0,'".$sWindowTitle."');return false;";
 
@@ -197,7 +197,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
             if (null === $restrictionValueReplaced) {
                 $this->getFlashMessageService()->addBackendToasterMessage('chameleon_system_core.field_lookup.invalid_restriction', 'ERROR', [
                     '%field%' => $this->oDefinition->GetName(),
-                    '%restriction%' => $restrictionExpression
+                    '%restriction%' => $restrictionExpression,
                 ]);
                 $restrictionValueReplaced = \sprintf('field token %s not found in record.', $restrictionValue);
             }
@@ -222,15 +222,14 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
     private function isFieldToken(string $string): bool
     {
         $string = \trim($string);
-        return \mb_strpos($string, '[{') === 0 && '}]' === \mb_substr($string, -2);
+
+        return 0 === \mb_strpos($string, '[{') && '}]' === \mb_substr($string, -2);
     }
 
     /**
      * Returns field value in current record if token matches a known field. Otherwise, null will be returned.
-     * 
+     *
      * @param string $fieldToken - token in the form [{fieldName}]
-     * 
-     * @return string|null
      */
     private function getFieldValueFromFieldToken(string $fieldToken): ?string
     {
@@ -249,7 +248,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
     {
         $translator = $this->getTranslationService();
         if (empty($this->data)) {
-            return $translator->trans('chameleon_system_core.field_lookup.nothing_selected', array(), 'admin');
+            return $translator->trans('chameleon_system_core.field_lookup.nothing_selected', [], 'admin');
         }
 
         $record = $this->getConnectedRecordObject();
@@ -257,7 +256,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
             return $record->getDisplayTitle(-1);
         }
 
-        return $translator->trans('chameleon_system_core.field_lookup.error_assigned_id_does_not_exists', array('%id%' => $this->data), 'admin');
+        return $translator->trans('chameleon_system_core.field_lookup.error_assigned_id_does_not_exists', ['%id%' => $this->data], 'admin');
     }
 
     /**
