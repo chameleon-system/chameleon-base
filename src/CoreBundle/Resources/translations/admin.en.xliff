@@ -410,6 +410,10 @@
                 <source>chameleon_system_core.field_lookup.invalid_restriction</source>
                 <target>The restriction "%restriction%" specified for the field "%field%" is invalid.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup.invalid_target_list_class">
+                <source>chameleon_system_core.field_lookup.invalid_target_list_class</source>
+                <target>The target list class "%targetListClass%" for the field "%field%" could not be found.</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup.switch_to">
                 <source>chameleon_system_core.field_lookup.switch_to</source>
                 <target>Switch to record</target>

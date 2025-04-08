@@ -412,6 +412,10 @@
                 <source>chameleon_system_core.field_lookup.invalid_restriction</source>
                 <target>Die für das Feld "%field%" hinterlegte Einschränkung "%restriction%" ist nicht zulässig.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_lookup.invalid_target_list_class">
+                <source>chameleon_system_core.field_lookup.invalid_target_list_class</source>
+                <target>Die Ziel-Listenklasse "%targetListClass%" für das Feld "%field%" wurde nicht gefunden.</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.field_lookup.switch_to">
                 <source>chameleon_system_core.field_lookup.switch_to</source>
                 <target>Zu Datensatz wechseln</target>
