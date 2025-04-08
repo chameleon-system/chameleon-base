@@ -153,7 +153,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-geo-location">
                 <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics_geo_location</source>
-                <target>Locationdistribution</target>
+                <target>Location Distribution</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-device-source-distribution">
                 <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-device-source-distribution</source>
@@ -179,6 +179,10 @@
             <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics">
                 <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics</source>
                 <target>E-Commerce Stats</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_search_console">
+                <source>chameleon_system_cms_dashboard.widget.group_name_search_console</source>
+                <target>Google Search Console</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-utm-tracking">
                 <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-utm-tracking</source>
