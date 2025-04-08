@@ -180,6 +180,10 @@
                 <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics</source>
                 <target>E-Commerce Statistik</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_search_console">
+                <source>chameleon_system_cms_dashboard.widget.group_name_search_console</source>
+                <target>Google Search Console</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campaign">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.utm_tracking.campaign</source>
                 <target>UTM Kampagne</target>
