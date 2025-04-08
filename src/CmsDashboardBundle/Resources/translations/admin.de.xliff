@@ -162,7 +162,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-geo-location">
                 <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-geo-location</source>
-                <target>Geräteverteilung</target>
+                <target>Standort Verteilung</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_google-analytics-device-source-distribution">
                 <source>chameleon_system_cms_dashboard.widget.group_name_google-analytics-device-source</source>
