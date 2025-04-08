@@ -140,6 +140,12 @@ class MTTableManager extends TCMSModelBase
             $listClass = $this->aModuleConfig['listClass'];
         }
 
+        // list class as request parameter
+        $targetListClass = $inputFilterUtil->getFilteredInput('targetListClass');
+        if (null !== $targetListClass) {
+            $listClass = $targetListClass;
+        }
+
         $this->data['listClass'] = $listClass;
 
         $this->oTableList = $this->oTableConf->GetListObject($listClass);
@@ -671,6 +677,12 @@ class MTTableManager extends TCMSModelBase
             $listClass = $this->aModuleConfig['listClass'];
         }
 
+        // list class as request parameter
+        $targetListClass = $inputFilterUtil->getFilteredInput('targetListClass');
+        if (null !== $targetListClass) {
+            $listClass = $targetListClass;
+        }
+
         $oTableList = $this->oTableConf->GetListObject($listClass);
 
         $query = $oTableList->FilterQuery();
@@ -760,9 +772,6 @@ class MTTableManager extends TCMSModelBase
         return $includeLines;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function GetHtmlFooterIncludes()
     {
         $includes = parent::GetHtmlFooterIncludes();
