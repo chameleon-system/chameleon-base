@@ -1,0 +1,143 @@
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#editorTab{{ editorId }}">{{ 'markdown_bundle.editor.tab' | trans }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#helpTab{{ editorId }}">{{ 'markdown_bundle.help.tab' | trans }}</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="editorTab{{ editorId }}" class="tab-pane active">
+        <div id="{{ editorId }}" style="height: 500px; overflow: auto;"></div>
+    </div>
+    <div id="helpTab{{ editorId }}" class="tab-pane">
+        <div id="markDownCheatSheet{{ editorId }}">
+            <h3 class="mt-3 mb-3">{{ 'markdown_bundle.markdown.syntax' | trans }}</h3>
+
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                <tr>
+                    <th>{{ 'markdown_bundle.markdown.element' | trans }}</th>
+                    <th>{{ 'markdown_bundle.markdown.syntax' | trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.line.breaks' | trans }}</td>
+                    <td>
+                        <code>
+                            lorem ipsum [break]<br>
+                            {{ 'markdown_bundle.markdown.line_breaks_help'|trans }}
+                        </code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.heading' | trans }}</td>
+                    <td><code># H1<br>
+                            ## H2<br>
+                            ### H3</code></td>
+                </tr>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.bold' | trans }}</td>
+                    <td><code>**bold text**<br>&nbsp;<br>
+                            or<br>&nbsp;<br>
+                            __bold text__
+                        </code></td>
+                </tr>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.italic' | trans }}</td>
+                    <td><code>*italicized text*<br>&nbsp;<br>
+                            or<br>&nbsp;<br>
+                            _italicized text_
+                        </code></td>
+                </tr>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.blockquote' | trans }}</td>
+                    <td><code>&gt; blockquote</code></td>
+                </tr>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.ordered.list' | trans }}</td>
+                    <td><code>
+                            1. First item<br>
+                            2. Second item<br>
+                            3. Third item<br>&nbsp;
+                            <br>
+                            or<br>&nbsp;
+                            <br>
+                            1) First item<br>
+                            2) Second item<br>
+                            3) Third item
+                        </code></td>
+                </tr>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.unordered.list' | trans }}</td>
+                    <td>
+                        <code>
+                            - First item<br>
+                            - Second item<br>
+                            - Third item<br>&nbsp;
+                            <br>
+                            or<br>&nbsp;
+                            <br>
+                            * First item<br>
+                            * Second item<br>
+                            * Third item<br>
+                        </code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.code' | trans }}</td>
+                    <td><code>`code`</code></td>
+                </tr>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.horizontal.rule' | trans }}</td>
+                    <td><code>---<br>&nbsp;
+                            <br>
+                            or<br>&nbsp;
+                            <br>
+                            ***
+                        </code></td>
+                </tr>
+                <tr>
+                    <td>{{ 'markdown_bundle.markdown.link' | trans }}</td>
+                    <td><code>[title](https://www.example.com)</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        let config = {{ toastUiConfiguration  | json_encode | raw }};
+        window.TUIEditorManager.initEditor("{{ editorId|e('js') }}", config, "{{ name|e('js') }}", "{{ modalLink|raw }}", "{{ 'markdown_bundle.select.category'|trans|e('js') }}");
+    });
+</script>
+
+<div class="toastui-modal modal fade" tabindex="-1" role="dialog" id="toastui-custom-button-dialog-{{ editorId }}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'markdown_bundle.select.category' | trans}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <label>
+                        <select class="form-control">
+                            {% for id, tableName in linkSourceTableData %}
+                                <option value="{{ id }}">{{ tableName }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-xs select-button">{{ 'markdown_bundle.button.select' | trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

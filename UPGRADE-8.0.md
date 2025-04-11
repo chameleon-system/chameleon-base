@@ -66,6 +66,7 @@ _errors:
   new \KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
   new \ChameleonSystem\EcommerceStatsBundle\ChameleonSystemEcommerceStatsBundle(),
   new \ChameleonSystem\ImageEditorBundle\ChameleonSystemImageEditorBundle(),
+  new \ChameleonSystem\MarkdownCmsBundle\ChameleonSystemMarkdownCmsBundle(),
   new \ChameleonSystem\CmsDashboardBundle\ChameleonSystemCmsDashboardBundle()` bundles to the `AppKernel::registerBundles` method at the end.
 
 # Removed bundles

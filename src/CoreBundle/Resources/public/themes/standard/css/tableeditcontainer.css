@@ -126,6 +126,10 @@
     display: none;
 }
 
+.helptextContainer p:last-child {
+    margin-bottom: 0;
+}
+
 #tableEditorHeader th, #tableEditorHeader td, #tableEditorHeader td span, #tableEditorHeader td div {
     text-align: left;
 }
