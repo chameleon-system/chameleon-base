@@ -3,6 +3,8 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
+$markdownParserService = ServiceLocator::get('chameleon_system_markdown_cms.markdown_parser_service');
+
 $data['oFields']->GoToStart();
 $sTmpFormTabsContent = '';
 while ($oField = $data['oFields']->Next()) {
@@ -33,7 +35,10 @@ while ($oField = $data['oFields']->Next()) {
                     </div>';
 
                 if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
-                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.nl2br(TGlobal::OutHTML($oField->oDefinition->sqlData['049_helptext'])).'</div>';
+                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">
+                    '.
+                        $markdownParserService->getMarkdownParser()->convert($oField->oDefinition->sqlData['049_helptext']).
+                        '</div>';
                 }
             } else {
                 if (true === $isReadOnly) { // overwrite field type with readonly (e.g. record is locked by another cms user)
@@ -89,7 +94,9 @@ while ($oField = $data['oFields']->Next()) {
                 $sTmpFormTabsContent .= '</div>';
                 $sTmpFormTabsContent .= '<div class="col-xl-9 col-sm-8 col-form-content">';
                 if ('' !== $oField->oDefinition->sqlData['049_helptext']) {
-                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.nl2br(TGlobal::OutHTML($oField->oDefinition->sqlData['049_helptext'])).'</div>';
+                    $sTmpFormTabsContent .= '<div class="helptextContainer alert alert-info" id="helptext-'.TGlobal::OutHTML($oField->name).'">'.
+                        $markdownParserService->getMarkdownParser()->convert($oField->oDefinition->sqlData['049_helptext']).
+                        '</div>';
                 }
                 $sTmpFormTabsContent .= $oField->GetContent();
                 $sTmpFormTabsContent .= $oField->getFieldExtensionHtml();

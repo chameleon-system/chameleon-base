@@ -11,5 +11,6 @@
     <services>
         <service id="chameleon_system_cms_string_utilities.url_utility_service" class="%chameleon_system_cms_string_utilities.url_utility_service.class%" public="true"/>
         <service id="chameleon_system_cms_string_utilities.array_utility_service" class="%chameleon_system_cms_string_utilities.array_utility_service.class%" public="true"/>
+        <service id="chameleon_system_core.variable_injection" class="TPkgCmsStringUtilities_VariableInjection" public="true"/>
     </services>
 </container>

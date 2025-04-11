@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="admin.en.xliff">
+        <body>
+            <trans-unit id="markdown_bundle.button.select">
+                <source>markdown_bundle.button.select</source>
+                <target>Auswahl öffnen</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.select.category">
+                <source>markdown_bundle.select.category</source>
+                <target>Link Ziel wählen</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.editor.tab">
+                <source>markdown_bundle.editor.tab</source>
+                <target>Editor</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.help.tab">
+                <source>markdown_bundle.help.tab</source>
+                <target>Hilfe</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.syntax">
+                <source>markdown_bundle.markdown.syntax</source>
+                <target>Markdown-Syntax</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.element">
+                <source>markdown_bundle.markdown.element</source>
+                <target>Element</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.line.breaks">
+                <source>markdown_bundle.markdown.line.breaks</source>
+                <target>Zeilenumbrüche</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.heading">
+                <source>markdown_bundle.markdown.heading</source>
+                <target>Überschrift</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.bold">
+                <source>markdown_bundle.markdown.bold</source>
+                <target>Fett</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.italic">
+                <source>markdown_bundle.markdown.italic</source>
+                <target>Kursiv</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.blockquote">
+                <source>markdown_bundle.markdown.blockquote</source>
+                <target>Blocktext</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.unordered.list">
+                <source>markdown_bundle.markdown.unordered.list</source>
+                <target>Aufzählung</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.ordered.list">
+                <source>markdown_bundle.markdown.ordered.list</source>
+                <target>Nummerische Aufzählung</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.code">
+                <source>markdown_bundle.markdown.code</source>
+                <target>Code</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.link">
+                <source>markdown_bundle.markdown.link</source>
+                <target>Link</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.horizontal.rule">
+                <source>markdown_bundle.markdown.horizontal.rule</source>
+                <target>Trennlinie</target>
+            </trans-unit>
+            <trans-unit id="markdown_bundle.markdown.line_breaks_help">
+                <source>markdown_bundle.markdown.line_breaks_help</source>
+                <target>(Zwei Leerstellen am Ende der Zeile, vor dem Umbruch)</target>
+            </trans-unit>            
+        </body>
+    </file>
+</xliff>

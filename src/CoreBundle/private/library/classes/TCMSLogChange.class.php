@@ -169,25 +169,27 @@ class TCMSLogChange
     }
 
     /**
-     * return id of field type for codename passed.
-     *
-     * @param string $sFieldTypeCodename
-     *
-     * @return int
+     * returns the id of field type for codename passed.
      */
-    public static function GetFieldType($sFieldTypeCodename)
+    public static function GetFieldType(string $fieldTypeCodename, bool $displayErrorOnUnknownField = true): string
     {
-        $sFieldId = 0;
-        $sFieldTypeCodename = trim($sFieldTypeCodename);
-        $query = "SELECT * FROM `cms_field_type` WHERE `constname` = '".MySqlLegacySupport::getInstance()->real_escape_string($sFieldTypeCodename)."'";
-        if ($aType = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            $sFieldId = $aType['id'];
+        $fieldTypeId = '';
+        $fieldTypeCodename = trim($fieldTypeCodename);
+        $dbConnection = self::getDatabaseConnection(); // Assuming this returns a DBAL Connection
+
+        $sql = "SELECT `id` FROM `cms_field_type` WHERE constname = ?";
+        $stmt = $dbConnection->executeQuery($sql, [$fieldTypeCodename], [\Doctrine\DBAL\ParameterType::STRING]);
+        $aType = $stmt->fetchAssociative();
+
+        if (false !== $aType) {
+            $fieldTypeId = $aType['id'];
         } else {
-            self::DisplayErrorMessage("ERROR: Unable to find field type [{$sFieldTypeCodename}] in TCMSLogChange::GetFieldType");
+            self::DisplayErrorMessage("ERROR: Unable to find field type [{$fieldTypeCodename}] in TCMSLogChange::GetFieldType");
         }
 
-        return $sFieldId;
+        return $fieldTypeId;
     }
+
 
     /**
      * @param string $sMessage
@@ -667,16 +669,16 @@ class TCMSLogChange
     /**
      * checks if a field exists.
      *
-     * @param string $table
+     * @param string|int $table
      * @param string $sFieldName
      *
      * @return bool
      */
-    public static function FieldExists($table, $sFieldName)
+    public static function FieldExists(string|int $table, string $sFieldName, bool $checkFieldConfig = true): bool
     {
         $sTableName = self::isUuidOrNumeric($table) ? self::getTableName($table) : $table;
 
-        return TTools::FieldExists($sTableName, $sFieldName, true);
+        return TTools::FieldExists($sTableName, $sFieldName, $checkFieldConfig);
     }
 
     /**

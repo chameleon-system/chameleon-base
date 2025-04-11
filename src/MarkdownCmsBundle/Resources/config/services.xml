@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="twig.markdown" class="ChameleonSystem\MarkdownCmsBundle\Twig\MarkdownExtension">
+            <argument type="service" id="chameleon_system_markdown_cms.markdown_parser_service"/>
+            <tag name="twig.extension"/>
+        </service>
+
+        <service class="ChameleonSystem\MarkdownCmsBundle\Bridge\Chameleon\Service\MarkdownCmsLinkParser" id="chameleon_system_markdown_cms.service.markdown_cms_link_parser">
+            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+            <argument type="service" id="chameleon_system_core.page_service"/>
+        </service>
+
+        <service id="chameleon_system_markdown_cms.markdown_parser_service" class="ChameleonSystem\MarkdownCmsBundle\Bridge\Chameleon\Service\MarkdownParserService" public="true">
+            <argument type="service" id="chameleon_system_markdown_cms.service.markdown_cms_link_parser"/>
+            <argument type="service" id="chameleon_system_core.variable_injection"/>
+        </service>
+    </services>
+</container>
