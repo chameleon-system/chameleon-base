@@ -584,7 +584,7 @@ class TCMSFieldDefinition extends TCMSRecord
                 break;
             case 'DELETE':
                 $queries = array_merge($queries, $this->DeleteTranslationFields($tableName, $baseFieldName, $languageArray));
-                if (1 === $this->sqlData['is_translatable']) {
+                if ('1' === $this->sqlData['is_translatable']) {
                     $queries = array_merge($queries, $this->AddNewTranslationFields($tableName, $baseFieldName, $languageArray));
                 }
                 break;
