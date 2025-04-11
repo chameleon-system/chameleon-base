@@ -238,9 +238,9 @@ class TCMSFieldDefinition extends TCMSRecord
         $aChangedFieldAction = $this->GetTranslateFieldActionList();
         if ('0' === $this->sqlData['is_translatable']) {
             $action = 'DELETE';
-        } elseif (is_array($originalData) && count($originalData) > 0) {
+        } elseif (true === is_array($originalData) && count($originalData) > 0) {
             foreach ($aChangedFieldAction as $sFieldName => $sTransFieldAction) {
-                if (array_key_exists($sFieldName, $this->sqlData) && array_key_exists($sFieldName, $originalData)
+                if (true === array_key_exists($sFieldName, $this->sqlData) && true === array_key_exists($sFieldName, $originalData)
                     && $this->sqlData[$sFieldName] !== $originalData[$sFieldName]) {
                     if ('cms_field_type_id' === $sFieldName) {
                         return $this->getFieldChangeType(
