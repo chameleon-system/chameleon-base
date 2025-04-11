@@ -23,6 +23,25 @@ class TCMSFieldDefinition extends TCMSRecord
      */
     private $oCacheExtraConfigFieldObject;
 
+    public const COMPATIBLE_SQL_FIELD_TYPE_GROUPS = [
+        'CHAR' => 'text',
+        'VARCHAR' => 'text',
+        'TEXT' => 'text',
+        'TINYTEXT' => 'text',
+        'MEDIUMTEXT' => 'text',
+        'LONGTEXT' => 'text',
+
+        'TINYINT' => 'int',
+        'SMALLINT' => 'int',
+        'MEDIUMINT' => 'int',
+        'INT' => 'int',
+        'BIGINT' => 'int',
+
+        'DECIMAL' => 'number',
+        'FLOAT' => 'number',
+        'DOUBLE' => 'number',
+    ];
+
     public function __construct($id = null)
     {
         parent::__construct('cms_field_conf', $id);
@@ -201,41 +220,69 @@ class TCMSFieldDefinition extends TCMSRecord
     /**
      * Get array wich shows what action is required on field definition change
      * for translation fields.
-     *
-     * @return array
      */
-    protected function GetTranslateFieldActionList()
+    protected function GetTranslateFieldActionList(): array
     {
-        $aChangedFieldAction = ['name' => 'CHANGE', 'cms_field_type_id' => 'DELETE', 'field_default_value' => 'CHANGE', 'length_set' => 'CHANGE'];
-
-        return $aChangedFieldAction;
+        return ['name' => 'CHANGE', 'cms_field_type_id' => 'DELETE', 'field_default_value' => 'CHANGE', 'length_set' => 'CHANGE'];
     }
 
     /**
-     * Returns required action on field definiton change or refresh field based translation.
-     * Action for translation fields can be NONE, DELETE and CHANGE.
+     * Returns required action on field definition change or refresh field based translation.
+     * Action for translation fields can be NONE, DELETE or CHANGE.
      *
-     * @param array $aOriginalData original sql data befor field definition change
-     *
-     * @return string
+     * @param array $originalData original sql data before field definition change
      */
-    protected function GetActionForTranslationFields($aOriginalData = [])
+    protected function GetActionForTranslationFields(array $originalData = []): string
     {
-        $sAction = 'NONE';
+        $action = 'NONE';
         $aChangedFieldAction = $this->GetTranslateFieldActionList();
-        if ('1' != $this->sqlData['is_translatable']) {
-            $sAction = 'DELETE';
-        } elseif (is_array($aOriginalData) && count($aOriginalData) > 0) {
+        if ('0' === $this->sqlData['is_translatable']) {
+            $action = 'DELETE';
+        } elseif (is_array($originalData) && count($originalData) > 0) {
             foreach ($aChangedFieldAction as $sFieldName => $sTransFieldAction) {
-                if (array_key_exists($sFieldName, $this->sqlData) && array_key_exists($sFieldName, $aOriginalData) && $this->sqlData[$sFieldName] != $aOriginalData[$sFieldName]) {
-                    if ('DELETE' != $sAction) {
-                        $sAction = $sTransFieldAction;
+                if (array_key_exists($sFieldName, $this->sqlData) && array_key_exists($sFieldName, $originalData)
+                    && $this->sqlData[$sFieldName] !== $originalData[$sFieldName]) {
+                    if ('cms_field_type_id' === $sFieldName) {
+                        return $this->getFieldChangeType(
+                            $originalData[$sFieldName],
+                            $this->sqlData[$sFieldName]
+                        );
+                    }
+
+                    if ('DELETE' !== $action) {
+                        $action = $sTransFieldAction;
                     }
                 }
             }
         }
 
-        return $sAction;
+        return $action;
+    }
+
+    protected function getFieldChangeType($sourceFielTypeId, $targetFielTypeId): string
+    {
+        $sourceFieldType = TdbCmsFieldType::GetNewInstance($sourceFielTypeId);
+        $targetFielType = TdbCmsFieldType::GetNewInstance($targetFielTypeId);
+
+        if ($sourceFieldType->fieldMysqlType === $targetFielType->fieldMysqlType) {
+            return 'NONE';
+        }
+
+        $typeMap = $this->getSqlTypeToGroupMap();
+
+        $sourceGroup = $typeMap[$sourceFieldType->fieldMysqlType] ?? null;
+        $targetGroup = $typeMap[$targetFielType->fieldMysqlType] ?? null;
+
+        if (null !== $sourceGroup && $sourceGroup === $targetGroup) {
+            return 'CHANGE';
+        }
+
+        return 'DELETE';
+    }
+
+    protected function getSqlTypeToGroupMap(): array
+    {
+        return self::COMPATIBLE_SQL_FIELD_TYPE_GROUPS;
     }
 
     /**
@@ -250,16 +297,16 @@ class TCMSFieldDefinition extends TCMSRecord
      */
     protected function DeleteNotNeededTranslationFields($sTableName, $sBaseFieldName, $aLanguageArray)
     {
-        $aQuery = [];
+        $queryList = [];
         $sQuery = 'SHOW FIELDS FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` WHERE field REGEXP '^".MySqlLegacySupport::getInstance()->real_escape_string($sBaseFieldName)."__[a-zA-Z]{2}\$'";
         $oRes = MySqlLegacySupport::getInstance()->query($sQuery);
         while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($oRes)) {
             if (!array_key_exists(substr($aRow['Field'], -2), $aLanguageArray)) {
-                $aQuery = array_merge($aQuery, $this->DeleteTranslationField($sTableName, $aRow['Field']));
+                $queryList = array_merge($queryList, $this->DeleteTranslationField($sTableName, $aRow['Field']));
             }
         }
 
-        return $aQuery;
+        return $queryList;
     }
 
     /**
@@ -295,7 +342,7 @@ class TCMSFieldDefinition extends TCMSRecord
     protected function DeleteTranslationField($sTableName, $sFieldName)
     {
         $aQuery = [];
-        if (TTools::FieldExists($sTableName, $sFieldName)) {
+        if (true === TTools::FieldExists($sTableName, $sFieldName)) {
             $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($sFieldName).'`';
             MySqlLegacySupport::getInstance()->query($query);
             $aQuery['remove field '.$sFieldName] = $query;
@@ -319,7 +366,7 @@ class TCMSFieldDefinition extends TCMSRecord
         $aQuery = [];
         foreach ($aLanguageArray as $sLanguageExtension => $sLanguage) {
             $aSubQuery = $this->ChangeTransLationField($sTableName, $sBaseFieldName, $sLanguageExtension, $sLanguage);
-            if (0 == count($aSubQuery)) {
+            if (0 === count($aSubQuery)) {
                 $aSubQuery = $this->AddNewTranslationField($sTableName, $sBaseFieldName, $sLanguageExtension, $sLanguage);
             }
             $aQuery = array_merge($aQuery, $aSubQuery);
@@ -343,7 +390,7 @@ class TCMSFieldDefinition extends TCMSRecord
     protected function ChangeTransLationField($sTableName, $sBaseFieldName, $sLanguageExtension, $sLanguage)
     {
         $aQuery = [];
-        if (TTools::FieldExists($sTableName, $sBaseFieldName.'__'.$sLanguageExtension)) {
+        if (true === TTools::FieldExists($sTableName, $sBaseFieldName.'__'.$sLanguageExtension)) {
             $sNewBaseFieldName = $this->sqlData['name'];
             $sQuery = 'SHOW FIELDS FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` WHERE field = '".MySqlLegacySupport::getInstance()->real_escape_string($sNewBaseFieldName)."'";
             if ($aSourceFieldSQLData = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQuery))) {
@@ -389,7 +436,7 @@ class TCMSFieldDefinition extends TCMSRecord
     protected function AddNewTranslationField($sTableName, $sBaseFieldName, $sLanguageExtension, $sLanguage)
     {
         $aQuery = [];
-        if (!TTools::FieldExists($sTableName, $sBaseFieldName.'__'.$sLanguageExtension)) {
+        if (false === TTools::FieldExists($sTableName, $sBaseFieldName.'__'.$sLanguageExtension)) {
             $sNewBaseFieldName = $this->sqlData['name'];
             $sQuery = 'SHOW FIELDS FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` WHERE field = '".MySqlLegacySupport::getInstance()->real_escape_string($sNewBaseFieldName)."'";
             if ($aSourceFieldSQLData = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQuery))) {
@@ -452,12 +499,12 @@ class TCMSFieldDefinition extends TCMSRecord
      */
     protected function GetTranlationFieldQueryFromOriginalField($sTableName, $sBaseFieldName, $sLanguage, $sLanguageExtension, $aSourceFieldSQLData, $sSQLAlterTableAction)
     {
-        if ('ADD' == $sSQLAlterTableAction) {
+        if ('ADD' === $sSQLAlterTableAction) {
             $sQuery = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` '.MySqlLegacySupport::getInstance()->real_escape_string($sSQLAlterTableAction).' `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sqlData['name'].'__'.$sLanguageExtension).'` '.$aSourceFieldSQLData['Type'];
         } else {
             $sQuery = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` '.MySqlLegacySupport::getInstance()->real_escape_string($sSQLAlterTableAction).' `'.MySqlLegacySupport::getInstance()->real_escape_string($sBaseFieldName.'__'.$sLanguageExtension).'` '.MySqlLegacySupport::getInstance()->real_escape_string($this->sqlData['name'].'__'.$sLanguageExtension).'  '.$aSourceFieldSQLData['Type'];
         }
-        if ('NO' == $aSourceFieldSQLData['Null']) {
+        if ('NO' === $aSourceFieldSQLData['Null']) {
             $sQuery .= ' NOT NULL';
         }
         if (!is_null($aSourceFieldSQLData['Default'])) {
@@ -503,9 +550,9 @@ class TCMSFieldDefinition extends TCMSRecord
     protected function GetTransLationFieldQueryForIndexFromOringinalField($sTableName, $sBaseFieldName, $sLanguageExtension, $aSourceFieldSQLData)
     {
         $sQuery = '';
-        if ('MUL' == $aSourceFieldSQLData['Key']) {
+        if ('MUL' === $aSourceFieldSQLData['Key']) {
             $sQuery = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` ADD INDEX ( `'.MySqlLegacySupport::getInstance()->real_escape_string($sBaseFieldName.'__'.$sLanguageExtension).'` )';
-        } elseif ('UNI' == $aSourceFieldSQLData['Key']) {
+        } elseif ('UNI' === $aSourceFieldSQLData['Key']) {
             $sQuery = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` ADD  UNIQUE ( `'.MySqlLegacySupport::getInstance()->real_escape_string($sBaseFieldName.'__'.$sLanguageExtension).'` )';
         }
 
@@ -531,17 +578,15 @@ class TCMSFieldDefinition extends TCMSRecord
         $languageArray = TdbCmsConfig::GetInstance()->GetFieldBasedTranslationLanguageArray();
         $queries = $this->DeleteNotNeededTranslationFields($tableName, $baseFieldName, $languageArray);
         switch ($this->GetActionForTranslationFields($originalData)) {
+            case 'NONE':
             case 'CHANGE':
                 $queries = array_merge($queries, $this->ChangeTranslationFields($tableName, $baseFieldName, $languageArray));
                 break;
             case 'DELETE':
                 $queries = array_merge($queries, $this->DeleteTranslationFields($tableName, $baseFieldName, $languageArray));
-                if (1 == $this->sqlData['is_translatable']) {
+                if (1 === $this->sqlData['is_translatable']) {
                     $queries = array_merge($queries, $this->AddNewTranslationFields($tableName, $baseFieldName, $languageArray));
                 }
-                break;
-            case 'NONE':
-                $queries = array_merge($queries, $this->ChangeTranslationFields($tableName, $baseFieldName, $languageArray));
                 break;
         }
         if (count($queries) > 0) {
@@ -553,10 +598,7 @@ class TCMSFieldDefinition extends TCMSRecord
         }
     }
 
-    /**
-     * @return string|null
-     */
-    private function getTableNameFromConfigId()
+    private function getTableNameFromConfigId(): ?string
     {
         $databaseConnection = $this->getDatabaseConnection();
         $tableName = $databaseConnection->fetchOne('SELECT `name` FROM `cms_tbl_conf` WHERE `id` = :id', [
