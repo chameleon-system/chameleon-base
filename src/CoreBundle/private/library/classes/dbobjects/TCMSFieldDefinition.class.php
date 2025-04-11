@@ -301,7 +301,7 @@ class TCMSFieldDefinition extends TCMSRecord
         $sQuery = 'SHOW FIELDS FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."` WHERE field REGEXP '^".MySqlLegacySupport::getInstance()->real_escape_string($sBaseFieldName)."__[a-zA-Z]{2}\$'";
         $oRes = MySqlLegacySupport::getInstance()->query($sQuery);
         while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($oRes)) {
-            if (!array_key_exists(substr($aRow['Field'], -2), $aLanguageArray)) {
+            if (false === array_key_exists(substr($aRow['Field'], -2), $aLanguageArray)) {
                 $queryList = array_merge($queryList, $this->DeleteTranslationField($sTableName, $aRow['Field']));
             }
         }
