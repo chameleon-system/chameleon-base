@@ -282,7 +282,7 @@ class TCMSFieldDefinition extends TCMSRecord
 
     protected function getSqlTypeToGroupMap(): array
     {
-        return self::COMPATIBLE_SQL_FIELD_TYPE_GROUPS;
+        return static::COMPATIBLE_SQL_FIELD_TYPE_GROUPS;
     }
 
     /**
