@@ -475,8 +475,11 @@ function ReloadMainPage() {
 }
 
 CHAMELEON.CORE.MTTableEditor.setSaveButtonBacktoNormalAfterSave = function () {
-    const $saveBtn = $('button[data-table-function="save"]');
-    $saveBtn.removeClass('btn-unsaved').addClass('btn-secondary');
+    const buttons = document.querySelectorAll('button[data-table-function="save"], button[data-table-function="saveAndClose"]');
+    buttons.forEach((btn) => {
+        btn.classList.remove('btn-unsaved');
+        btn.classList.add('btn-secondary');
+    });
 }
 
 /*
@@ -938,8 +941,12 @@ CHAMELEON.CORE.MTTableEditor.initInputChangeObservation = function () {
             CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
 
             // Make save button visually active
-            const $saveBtn = $('button[data-table-function="save"]');
-            $saveBtn.removeClass('btn-secondary').addClass('btn-unsaved');
+
+            const buttons = document.querySelectorAll('button[data-table-function="save"], button[data-table-function="saveAndClose"]');
+            buttons.forEach((btn) => {
+                btn.classList.remove('btn-secondary');
+                btn.classList.add('btn-unsaved');
+            });
         });
 };
 
