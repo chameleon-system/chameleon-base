@@ -1,0 +1,179 @@
+{#
+    @var ChameleonSystem\CmsDashboardBundle\DataModel\ServerStatusDataModel serverData
+#}
+
+<div class="p-3">
+    {% set diskUsagePercent = serverData.diskUsagePercent %}
+    {% set diskUsageClass = diskUsagePercent < 50 ? 'bg-success' : (diskUsagePercent < 80 ? 'bg-warning' : 'bg-danger') %}
+    {% set memoryUsagePercent = serverData.memoryUsage.usagePercent %}
+    {% set memoryUsageClass = memoryUsagePercent < 50 ? 'bg-success' : (memoryUsagePercent < 90 ? 'bg-warning' : 'bg-danger') %}
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-server me-2 text-primary"></i>{{ 'chameleon_system_cms_dashboard.widget.server_status.system_info'|trans }}
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.system_php_version'|trans }}:</strong> {{ serverData.phpVersion }}</li>
+                        <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.system_php_memory_limit'|trans }}:</strong> {{ serverData.memoryLimit }}</li>
+                        <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.system_webserver'|trans }}:</strong> {{ serverData.serverSoftware }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-hdd me-2 text-primary"></i>{{ 'chameleon_system_cms_dashboard.widget.server_status.disk_usage'|trans }}
+                    </h5>
+                    <div class="progress mb-2" style="height: 1rem;">
+                        <div class="progress-bar {{ diskUsageClass }}" role="progressbar"
+                             style="width: {{ diskUsagePercent }}%"
+                             aria-valuenow="{{ diskUsagePercent }}"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            {{ diskUsagePercent }}%
+                        </div>
+                    </div>
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between"><strong>Free Space:</strong> {{ serverData.diskFreeSpace }}</li>
+                        <li class="d-flex justify-content-between"><strong>Total Space:</strong> {{ serverData.diskTotalSpace }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-memory me-2 text-primary"></i>{{ 'chameleon_system_cms_dashboard.widget.server_status.memory_usage'|trans }}
+                    </h5>
+                    {% if serverData.memoryUsage.total != 'N/A' %}
+                        <div class="progress mb-2" style="height: 1rem;">
+                            <div class="progress-bar {{ memoryUsageClass }}" role="progressbar"
+                                 style="width: {{ memoryUsagePercent }}%"
+                                 aria-valuenow="{{ memoryUsagePercent }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                {{ memoryUsagePercent }}%
+                            </div>
+                        </div>
+                    {% endif %}
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between"><strong>Total Memory:</strong> {{ serverData.memoryUsage.total }}</li>
+                        <li class="d-flex justify-content-between"><strong>Used Memory:</strong> {{ serverData.memoryUsage.used }}</li>
+                        <li class="d-flex justify-content-between"><strong>Free Memory:</strong> {{ serverData.memoryUsage.free }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-tachometer-alt me-2 text-primary"></i>{{ 'chameleon_system_cms_dashboard.widget.server_status.load_average'|trans }}
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between"><strong>1 min:</strong> {{ serverData.loadAverage[0]|number_format(2, '.', '') }}</li>
+                        <li class="d-flex justify-content-between"><strong>5 min:</strong> {{ serverData.loadAverage[1]|number_format(2, '.', '') }}</li>
+                        <li class="d-flex justify-content-between"><strong>15 min:</strong> {{ serverData.loadAverage[2]|number_format(2, '.', '') }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-microchip me-2 text-primary"></i>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_status_cache'|trans }}
+                    </h5>
+                    {% if serverData.memcacheCache.enabled %}
+                        {% set mcUsagePercent = serverData.memcacheCache.memoryUsagePercent %}
+                        {% set mcUsageClass = mcUsagePercent < 50 ? 'bg-success' : (mcUsagePercent < 80 ? 'bg-warning' : 'bg-danger') %}
+
+                        <div class="progress mb-2" style="height: 1rem;">
+                            <div class="progress-bar {{ mcUsageClass }}" role="progressbar"
+                                 style="width: {{ mcUsagePercent }}%"
+                                 aria-valuenow="{{ mcUsagePercent }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                {{ mcUsagePercent }}%
+                            </div>
+                        </div>
+
+                        <ul class="list-unstyled">
+                            <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_version'|trans }}:</strong> <span>{{ serverData.memcacheCache.version }}</span></li>
+                            <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_uptime'|trans }}:</strong> <span>{{ serverData.memcacheCache.uptime }}</span></li>
+                            <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_memory_limit'|trans }}:</strong> <span>{{ serverData.memcacheCache.memoryLimit }}</span></li>
+                            <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_memory_usage'|trans }}:</strong> <span>{{ serverData.memcacheCache.memoryUsage }} ({{ serverData.memcacheCache.memoryUsagePercent }}%)</span></li>
+                        </ul>
+                    {% else %}
+                        <div class="alert alert-warning">{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_disabled'|trans }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-exchange-alt me-2 text-primary"></i>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_status_session'|trans }}
+                    </h5>
+                    {% if serverData.memcacheCache.enabled %}
+                        {% set mcUsagePercent = serverData.memcacheSession.memoryUsagePercent %}
+                        {% set mcUsageClass = mcUsagePercent < 50 ? 'bg-success' : (mcUsagePercent < 80 ? 'bg-warning' : 'bg-danger') %}
+
+                        <div class="progress mb-2" style="height: 1rem;">
+                            <div class="progress-bar {{ mcUsageClass }}" role="progressbar"
+                                 style="width: {{ mcUsagePercent }}%"
+                                 aria-valuenow="{{ mcUsagePercent }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                {{ mcUsagePercent }}%
+                            </div>
+                        </div>
+
+                        <ul class="list-unstyled">
+                            <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_version'|trans }}:</strong> <span>{{ serverData.memcacheSession.version }}</span></li>
+                            <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_uptime'|trans }}:</strong> <span>{{ serverData.memcacheSession.uptime }}</span></li>
+                            <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_memory_limit'|trans }}:</strong> <span>{{ serverData.memcacheSession.memoryLimit }}</span></li>
+                            <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_memory_usage'|trans }}:</strong> <span>{{ serverData.memcacheSession.memoryUsage }} ({{ serverData.memcacheSession.memoryUsagePercent }}%)</span></li>
+                        </ul>
+                    {% else %}
+                        <div class="alert alert-warning">{{ 'chameleon_system_cms_dashboard.widget.server_status.memcache_disabled'|trans }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-database me-2 text-primary"></i>{{ 'chameleon_system_cms_dashboard.widget.server_status.database_status'|trans }}
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.database_size'|trans }}:</strong> {{ serverData.database.totalSize }}</li>
+                        <li class="d-flex justify-content-between"><strong>{{ 'chameleon_system_cms_dashboard.widget.server_status.database_threads_connected'|trans }}:</strong> {{ serverData.database.threadsConnected }}</li>
+                    </ul>
+                    <hr>
+                    <h6 class="mt-3">{{ 'chameleon_system_cms_dashboard.widget.server_status.database_top_tables'|trans }}</h6>
+                    <ul class="list-unstyled mb-0">
+                        {% for table in serverData.database.topTables %}
+                            <li class="d-flex justify-content-between"><strong>{{ table.name }}</strong> ({{ table.size }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        initializeWidgetReload("#{{ reloadEventButtonId|e('html_attr') }}");
+    });
+</script>

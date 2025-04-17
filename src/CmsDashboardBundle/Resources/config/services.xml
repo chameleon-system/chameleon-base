@@ -166,6 +166,22 @@
             <tag name="chameleon_system.dashboard_widget" collection="google-analytics-device-source" priority="2"/>
         </service>
 
+        <service id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.server_status_widget"
+                 class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\ServerStatusDashboardWidget"
+                 public="true">
+            <argument type="service" id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service"/>
+            <argument type="service" id="chameleon_system_view_renderer.view_renderer"/>
+            <argument type="service" id="chameleon_system_core.translator"/>
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
+            <argument type="service" id="chameleon_system_security.data_access.rights_data_access"/>
+            <argument type="service" id="chameleon_system_cms_cache.memcache_cache"/>
+            <argument type="service" id="chameleon_system_cms_cache.memcache_session"/>
+            <argument type="service" id="database_connection"/>
+            <tag name="chameleon_system.dashboard_widget" collection="system" priority="1"/>
+        </service>
+
+        <service id="widget-server-status" alias="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.server_status_widget" public="true"/>
+
         <service class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Twig\DashboardTwigExtension" id="chameleon_system_cms_dashboard.bridge_chameleon_twig.dashboard_twig_extension">
             <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <tag name="twig.extension"/>

@@ -337,6 +337,86 @@
                 <source>chameleon_system_cms_dashboard.widget.group_name_voucher-info</source>
                 <target>Voucher Usage</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.system_php_version">
+                <source>chameleon_system_cms_dashboard.widget.server_status.system_php_version</source>
+                <target>PHP Version</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.system_webserver">
+                <source>chameleon_system_cms_dashboard.widget.server_status.system_webserver</source>
+                <target>Webserver</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.system_php_memory_limit">
+                <source>chameleon_system_cms_dashboard.widget.server_status.system_php_memory_limit</source>
+                <target>PHP Memory Limit</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.memcache_status_cache">
+                <source>chameleon_system_cms_dashboard.widget.server_status.memcache_status_cache</source>
+                <target>Memcache: Cache</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.memcache_status_session">
+                <source>chameleon_system_cms_dashboard.widget.server_status.memcache_status_session</source>
+                <target>Memcache: Session</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.memcache_disabled">
+                <source>chameleon_system_cms_dashboard.widget.server_status.memcache_disabled</source>
+                <target>Memcache is not activated</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.memcache_version">
+                <source>chameleon_system_cms_dashboard.widget.server_status.memcache_version</source>
+                <target>Version</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.memcache_uptime">
+                <source>chameleon_system_cms_dashboard.widget.server_status.memcache_uptime</source>
+                <target>Uptime</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.memcache_memory_limit">
+                <source>chameleon_system_cms_dashboard.widget.server_status.memcache_memory_limit</source>
+                <target>Memory Limit</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.memcache_memory_usage">
+                <source>chameleon_system_cms_dashboard.widget.server_status.memcache_memory_usage</source>
+                <target>Memory Usage</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.database_status">
+                <source>chameleon_system_cms_dashboard.widget.server_status.database_status</source>
+                <target>Database</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.database_size">
+                <source>chameleon_system_cms_dashboard.widget.server_status.database_size</source>
+                <target>Database Size</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.database_threads_connected">
+                <source>chameleon_system_cms_dashboard.widget.server_status.database_threads_connected</source>
+                <target>Connections</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.database_top_tables">
+                <source>chameleon_system_cms_dashboard.widget.server_status.database_top_tables</source>
+                <target>Largest Tables</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.title">
+                <source>chameleon_system_cms_dashboard.widget.server_status.title</source>
+                <target>Server Status</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.system_info">
+                <source>chameleon_system_cms_dashboard.widget.server_status.system_info</source>
+                <target>System</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.disk_usage">
+                <source>chameleon_system_cms_dashboard.widget.server_status.disk_usage</source>
+                <target>Harddisk</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.memory_usage">
+                <source>chameleon_system_cms_dashboard.widget.server_status.memory_usage</source>
+                <target>Memory Usage</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.load_average">
+                <source>chameleon_system_cms_dashboard.widget.server_status.load_average</source>
+                <target>Load</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_system">
+                <source>chameleon_system_cms_dashboard.widget.group_name_system</source>
+                <target>Server Status</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
