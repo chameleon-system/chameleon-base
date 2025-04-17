@@ -12,21 +12,26 @@
 namespace ChameleonSystem\CoreBundle\Security;
 
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class BackendAccessCheck
 {
     private \ICmsCoreRedirect $redirect;
     private RequestStack $requestStack;
-
     /**
      * @var array<string, string[]>
      */
     private array $ipRestrictedPageDefs = [];
 
-    public function __construct(\ICmsCoreRedirect $redirect, RequestStack $requestStack, readonly private Security $security)
-    {
+    public function __construct(
+        \ICmsCoreRedirect $redirect,
+        RequestStack $requestStack,
+        readonly private Security $security,
+        readonly private bool $twoFactorEnabled = false
+    ) {
         $this->redirect = $redirect;
         $this->requestStack = $requestStack;
     }
@@ -71,9 +76,16 @@ class BackendAccessCheck
      */
     protected function checkLogin()
     {
-        if (true === $this->security->isGranted(CmsUserRoleConstants::CMS_USER)) {
-            return;
+        if (true === $this->twoFactorEnabled) {
+            if (true === $this->checkTwoFactorIsSetupCorrectly()) {
+                return;
+            }
+        } else {
+            if (true === $this->security->isGranted(CmsUserRoleConstants::CMS_USER)) {
+                return;
+            }
         }
+
         $this->checkLoginOnAjax();
         $this->redirect->redirectToActivePage(['pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout']);
     }
@@ -90,7 +102,8 @@ class BackendAccessCheck
             return;
         }
         $aModuleFNC = $request->get('module_fnc');
-        if (is_array($aModuleFNC) && array_key_exists('contentmodule', $aModuleFNC) && 'ExecuteAjaxCall' === $aModuleFNC['contentmodule']) {
+        if (is_array($aModuleFNC) && array_key_exists('contentmodule', $aModuleFNC)
+            && 'ExecuteAjaxCall' === $aModuleFNC['contentmodule']) {
             $aParameters = ['pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout'];
             $sLocation = PATH_CMS_CONTROLLER.'?'.http_build_query($aParameters);
             $aJson = ['logedoutajax', $sLocation];
@@ -113,5 +126,24 @@ class BackendAccessCheck
     private function getCurrentParametersAsUrl(): string
     {
         return \urlencode(\http_build_query($this->requestStack->getCurrentRequest()->query->all()));
+    }
+
+    /* If 2factor authorization isn't correctly setup the user is not allowed to login
+     * this is a fix because, during the setup process of 2fa the user is "logged in" as
+     * he logged in with username + password and 2fa is not setup, but once he manipulates
+     * the url to /cms, the user would be able to access the backend
+     */
+    private function checkTwoFactorIsSetupCorrectly(): bool
+    {
+        $user = $this->security->getUser();
+
+        if (
+            false === ($user instanceof TwoFactorInterface)
+            || true === $user->isGoogleAuthenticatorEnabled()
+            || '' !== $user->getGoogleAuthenticatorSecret()
+        ) {
+            return true;
+        }
+        return false;
     }
 }

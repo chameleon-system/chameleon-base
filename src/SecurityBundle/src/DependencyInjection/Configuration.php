@@ -28,6 +28,14 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+            ->end()
+            ->arrayNode('two_factor')
+                ->canBeEnabled()
+                ->children()
+                ->scalarNode('enabled')
+                    ->isRequired()
+                    ->defaultValue(false)
+                ->end()
             ->end();
 
         return $treeBuilder;

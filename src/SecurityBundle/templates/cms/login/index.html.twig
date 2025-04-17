@@ -12,9 +12,7 @@
         <div class="row justify-content-center">
             <div class="col-11 col-sm-9 col-md-8 col-lg-6 col-xl-4">
                 <div class="card">
-                    <div class="card-header bg-dark text-white">
-                        <img class="img-fluid" src="{{ cmsGetPathTheme() }}/images/chameleon_logo.svg" alt="" />
-                    </div>
+                    {{ include('@ChameleonSystemSecurity/cms/components/card-header.html.twig') }}
                     <div class="card-body">
                         {% if error %}
                             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -44,9 +42,7 @@
                             </fieldset>
                         </form>
                     </div>
-                    <div class="card-footer">
-                        <span>&copy;&nbsp;&nbsp;<a href="https://www.esono.de" target="_blank">ESONO AG</a>&nbsp;&nbsp;{{ 'now'|date('Y') }}</span>
-                    </div>
+                    {{ include('@ChameleonSystemSecurity/cms/components/card-footer.html.twig') }}
                 </div>
             </div>
         </div>

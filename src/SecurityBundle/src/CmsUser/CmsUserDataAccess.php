@@ -4,7 +4,6 @@ namespace ChameleonSystem\SecurityBundle\CmsUser;
 
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
-use SebastianBergmann\Diff\Exception;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -75,7 +74,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
     private function userHasBeenModified(CmsUserModel $user): bool
     {
-        try { 
+        try {
             // during upgrade from chameleon 7.1 to 8.0 the field does not yet exist @todo remove try/catch in chameleon 9.0
             $query = 'SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId';
             $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
@@ -224,7 +223,8 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             $userRights,
             $userGroups,
             $userPortals,
-            $ssoList
+            $ssoList,
+            $userRow['google_authenticator_secret']
         );
     }
 
@@ -367,5 +367,12 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         $this->connection->commit();
 
         return $this->loadUserByIdentifier($user->getUserIdentifier());
+    }
+
+    public function setGoogleAuthenticatorSecret(UserInterface $user, string $secret): void
+    {
+        $this->connection->update('cms_user', [
+            'google_authenticator_secret' => $secret,
+        ], ['id' => $user->getId()]);
     }
 }

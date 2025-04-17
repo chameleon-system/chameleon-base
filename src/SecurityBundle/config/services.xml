@@ -56,6 +56,17 @@
                  id="chameleon_system_security.data_access.rights_data_access">
             <argument type="service" id="database_connection" />
         </service>
+        <service id="chameleon_system_security.event_listener.two_factor_setup"
+                 class="ChameleonSystem\SecurityBundle\EventListener\TwoFactorSetupRedirectListener">
+            <argument type="service" id="router" />
+            <bind key="$twoFactorEnabled">%chameleon_system_security.two_factor.enabled%</bind>
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess" />
+        </service>
+        <service id="chameleon_system_security.service.two_factor_service" class="ChameleonSystem\SecurityBundle\Service\TwoFactorService">
+            <argument on-invalid="null" type="service" id="scheb_two_factor.security.google_authenticator" />
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess" />
+        </service>
     </services>
 
 </container>

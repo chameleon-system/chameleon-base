@@ -1,0 +1,65 @@
+{% set bg = 'bg-splash' %}
+
+{% extends 'BackendLayout/base.html.twig' %}
+
+{% block header %}
+{% endblock %}
+
+{% block main %}
+    <main class="flex-grow-1 d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-9 col-md-8 col-lg-6 col-xl-4">
+                    <div class="card">
+                        {{ include('@ChameleonSystemSecurity/cms/components/card-header.html.twig') }}
+                        <div class="card-body">
+
+                            {% for message in app.flashes('error') %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                            {% endfor %}
+
+                            <div class="text-center mt-1 m-3 text-dark">
+                                <h2>2FA Setup</h2>
+                                <p>{{ 'Scan the QR code and enter your 6-digit code from Google Authenticator.'|trans }}</p>
+                            </div>
+
+                            <div class="text-center mb-4">
+                                <img src="{{ qrCode }}" alt="QR Code">
+                            </div>
+
+                            <div class="text-center text-muted mt-3">
+                                <p>If you can't scan the QR code, enter this code manually:</p>
+                                <div class="alert alert-light font-monospace">
+                                    {{ secret }}
+                                </div>
+                                <small>This is your 2FA setup key. Keep it private.</small>
+                            </div>
+
+                            <form method="post">
+                                <input type="hidden" name="secret" value="{{ secret }}" />
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text"><i
+                                                        class="fas fa-key"></i></span></div>
+                                        <input class="form-control form-control-lg" type="text" name="code"
+                                               placeholder="123456" maxlength="6" required/>
+                                    </div>
+                                </div>
+                                <input class="btn btn-lg btn-dark btn-block" type="submit" value="{{ 'Verify'|trans }}">
+                            </form>
+
+                        </div>
+                        {{ include('@ChameleonSystemSecurity/cms/components/card-footer.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block backend_footer %}
+{% endblock %}
+{% block modalDialog %}
+{% endblock %}
+{% block footer_includes %}
+{% endblock %}

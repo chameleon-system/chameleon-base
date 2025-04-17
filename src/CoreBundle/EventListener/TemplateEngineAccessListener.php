@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\SecurityBundle\ChameleonSystemSecurityConstants;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -45,7 +46,7 @@ class TemplateEngineAccessListener
         }
         $firewallName = $this->security->getFirewallConfig($event->getRequest())?->getName();
 
-        if ('backend' !== $firewallName) {
+        if (ChameleonSystemSecurityConstants::FIREWALL_BACKEND_NAME !== $firewallName) {
             // ignore frontend requests (such as access to the less files)
             return;
         }

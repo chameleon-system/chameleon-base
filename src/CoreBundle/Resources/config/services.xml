@@ -317,6 +317,7 @@
             <argument type="service" id="chameleon_system_core.redirect" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="security.helper" />
+            <bind key="$twoFactorEnabled">%chameleon_system_security.two_factor.enabled%</bind>
             <call method="unrestrictPagedef">
                 <argument>login</argument>
                 <argument type="collection"></argument>
