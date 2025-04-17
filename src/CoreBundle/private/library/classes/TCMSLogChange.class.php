@@ -172,8 +172,8 @@ class TCMSLogChange
         $fieldTypeCodename = trim($fieldTypeCodename);
         $dbConnection = self::getDatabaseConnection(); // Assuming this returns a DBAL Connection
 
-        $sql = "SELECT `id` FROM `cms_field_type` WHERE constname = ?";
-        $stmt = $dbConnection->executeQuery($sql, [$fieldTypeCodename], [\Doctrine\DBAL\ParameterType::STRING]);
+        $sql = 'SELECT `id` FROM `cms_field_type` WHERE constname = ?';
+        $stmt = $dbConnection->executeQuery($sql, [$fieldTypeCodename], [Doctrine\DBAL\ParameterType::STRING]);
         $aType = $stmt->fetchAssociative();
 
         if (false !== $aType) {
@@ -662,11 +662,6 @@ class TCMSLogChange
 
     /**
      * checks if a field exists.
-     *
-     * @param string|int $table
-     * @param string $sFieldName
-     *
-     * @return bool
      */
     public static function FieldExists(string|int $table, string $sFieldName, bool $checkFieldConfig = true): bool
     {
