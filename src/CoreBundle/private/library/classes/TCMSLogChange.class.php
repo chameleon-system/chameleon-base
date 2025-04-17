@@ -124,13 +124,8 @@ class TCMSLogChange
 
     /**
      * fetches the id for a tablename.
-     *
-     * @param string $sTableName
-     * @param bool $bForceLoad
-     *
-     * @return int
      */
-    public static function GetTableId($sTableName, $bForceLoad = false)
+    public static function GetTableId(string $sTableName, bool $bForceLoad = false): string
     {
         return TTools::GetCMSTableId($sTableName, $bForceLoad);
     }
@@ -189,7 +184,6 @@ class TCMSLogChange
 
         return $fieldTypeId;
     }
-
 
     /**
      * @param string $sMessage

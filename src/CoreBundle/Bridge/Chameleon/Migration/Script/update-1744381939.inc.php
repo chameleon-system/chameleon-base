@@ -1,7 +1,7 @@
-<h1>Build #1744381935</h1>
+<h1>Build #1744381939</h1>
 <h2>Date: 2025-04-11</h2>
 <div class="changelog">
-    -
+    - ref #66343: enhance all field descriptions in cms_field_conf
 </div>
 <?php
 
