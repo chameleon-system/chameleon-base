@@ -92,8 +92,8 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
     private function getServerData(): ServerStatusDataModel
     {
         return new ServerStatusDataModel(
-             PHP_VERSION,
-            ($_SERVER['SERVER_SOFTWARE'] ?? 'Unknown'),
+            PHP_VERSION,
+            $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown',
             $this->getMemoryLimit(),
             $this->formatBytes(disk_free_space('/')),
             $this->formatBytes(disk_total_space('/')),
@@ -103,7 +103,7 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
             $this->getMemcacheStats('cache'),
             $this->getMemcacheStats('session'),
             $this->getDataBaseStats()
-         );
+        );
     }
 
     private function getMemoryLimit(): string
@@ -135,7 +135,7 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
                     $s = current($stats);
                     $cacheStats['enabled'] = true;
                     $cacheStats['version'] = $s['version'] ?? 'Unknown';
-                    $cacheStats['uptime'] =  $this->formatUptime((int) ($s['uptime'] ?? 0));
+                    $cacheStats['uptime'] = $this->formatUptime((int) ($s['uptime'] ?? 0));
                     $limit = (float) ($s['limit_maxbytes'] ?? 0);
                     $used = (float) ($s['bytes'] ?? 0);
                     $cacheStats['memory_limit'] = $this->formatBytes($limit);
@@ -169,18 +169,18 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
     private function formatUptime(int $seconds): string
     {
         if ($seconds < 60) {
-            return $seconds . ' s';
+            return $seconds.' s';
         }
 
         if ($seconds < 3600) {
-            return floor($seconds / 60) . ' min';
+            return floor($seconds / 60).' min';
         }
 
         if ($seconds < 86400) {
-            return floor($seconds / 3600) . ' h';
+            return floor($seconds / 3600).' h';
         }
 
-        return floor($seconds / 86400) . ' d';
+        return floor($seconds / 86400).' d';
     }
 
     private function getDataBaseStats(): DatabaseStatusDataModel
@@ -223,7 +223,6 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
             $dbStats['top_tables']
         );
     }
-
 
     private function formatBytes(float $bytes, int $precision = 2): string
     {
