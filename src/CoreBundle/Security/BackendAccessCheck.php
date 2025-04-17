@@ -14,7 +14,6 @@ namespace ChameleonSystem\CoreBundle\Security;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class BackendAccessCheck
@@ -144,6 +143,7 @@ class BackendAccessCheck
         ) {
             return true;
         }
+
         return false;
     }
 }

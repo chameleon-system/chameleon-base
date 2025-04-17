@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
                         ->useAttributeAsKey('domain')
                         ->arrayPrototype()
                             ->children()
-                                ->scalarNode('domain')->info("G Suite/Google App domain. Users (G Suite/Google Apps) must be from this domain.")->end()
+                                ->scalarNode('domain')->info('G Suite/Google App domain. Users (G Suite/Google Apps) must be from this domain.')->end()
                                 ->scalarNode('clone_user_permissions_from')->isRequired()->info('New users will be based on this user.')->end()
                             ->end()
                         ->end()
@@ -40,5 +40,4 @@ class Configuration implements ConfigurationInterface
 
         return $treeBuilder;
     }
-
 }

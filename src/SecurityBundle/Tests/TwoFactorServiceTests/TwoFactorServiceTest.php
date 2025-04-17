@@ -8,7 +8,6 @@ use ChameleonSystem\SecurityBundle\Service\TwoFactorService;
 use PHPUnit\Framework\TestCase;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class TwoFactorServiceTest extends TestCase
 {

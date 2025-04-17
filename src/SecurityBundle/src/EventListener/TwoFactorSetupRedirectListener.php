@@ -17,7 +17,7 @@ class TwoFactorSetupRedirectListener
 
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
-        if(false === $this->twoFactorEnabled) {
+        if (false === $this->twoFactorEnabled) {
             return;
         }
         /** @var UserInterface $user */

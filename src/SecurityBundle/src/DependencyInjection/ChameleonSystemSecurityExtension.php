@@ -5,8 +5,6 @@ namespace ChameleonSystem\SecurityBundle\DependencyInjection;
 use ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator;
 use ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleUserRegistrationService;
 use ChameleonSystem\SecurityBundle\Controller\CmsLoginController;
-use ChameleonSystem\SecurityBundle\EventListener\TwoFactorSetupRedirectListener;
-use Scheb\TwoFactorBundle\DependencyInjection\Configuration as TwoFactorBundleConfiguration;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -51,7 +49,8 @@ class ChameleonSystemSecurityExtension extends ConfigurableExtension
         );
     }
 
-    private function configureTwoFactorLogin(array $mergedConfig, ContainerBuilder $container): void{
+    private function configureTwoFactorLogin(array $mergedConfig, ContainerBuilder $container): void
+    {
         $enabled = $mergedConfig['two_factor']['enabled'] ?? false;
         $container->setParameter('chameleon_system_security.two_factor.enabled', $enabled);
     }
