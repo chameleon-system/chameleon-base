@@ -1,0 +1,2334 @@
+"name";"table_name";"049_helptext__de_new";"049_helptext__en_new"
+"active_from";"shop_shipping_group";"**Ab diesem Zeitpunkt steht die Versandkostengruppe zur Verfügung.**
+
+Vorher kann sie nicht ausgewählt oder verwendet werden.";"From this point on, the shipping cost group is available.
+
+Before that, it cannot be selected or used."
+"action_plugin_list";"cms_master_pagedef";"**Action-Plugins**
+
+Tragen Sie hier die gewünschten Action-Plugins ein, die für diese Seitenvorlage verfügbar sein sollen.
+
+- Öffentliche Methoden der hinterlegten Klassen können mit der Syntax module_fnc[Name]=>Methode aufgerufen werden.
+- Module mit identischen Namen im Seitenbereich (Modul-Spots) haben Vorrang gegenüber diesen Plugins.
+- Die hier eingetragenen Plugins überschreiben die im Portal hinterlegten Plugins.
+
+Format:
+```
+name=Klasse
+name2=Klasse
+...
+```";"**Action Plugins**
+
+Enter the desired action plugins here that should be available for this page template.
+
+- Public methods of the assigned classes can be called using the syntax module_fnc[Name]=>Method.
+- Modules with identical names in the page area (module spots) take precedence over these plugins.
+- The plugins entered here override the plugins stored in the portal.
+
+Format:
+```
+name=Class
+name2=Class
+...
+```"
+"active";"shop_shipping_type";"**Aktiv**
+
+Wichtig: Wenn eine Versandkostenart deaktiviert ist, wird sie niemals angewendet  auch dann nicht, wenn sie laut Zeiteinschränkung eigentlich aktiv sein sollte.
+
+Soll die Versandkostenart zeitlich eingeschränkt werden, muss sie daher auf Aktiv gesetzt sein (JA). Die gewünschte zeitliche Begrenzung kann anschließend über Aktiv ab und Aktiv bis festgelegt werden.";"**Active**
+
+Important: If a shipping cost type is deactivated, it will never be applied  even if it should actually be active according to the time restriction.
+
+If you want to limit the shipping cost type to a certain period, it must therefore be set to ""Active"" (YES). The desired time limitation can then be defined using ""Active from"" and ""Active until."""
+"signup_date";"pkg_newsletter_user";"**Anmeldedatum**
+
+Dies ist das Datum, an dem sich der Kunde registriert hat.";"**Registration Date**
+
+This is the date on which the customer registered."
+"rating_count";"pkg_shop_article_review_module_shop_article_review_configuration";"**Anzahl Bewertungspunkte**
+
+Legt fest, wie viele Bewertungspunkte ein Benutzer maximal für einen Artikel vergeben kann.
+
+Wenn der Wert unter 1 liegt, ist es für Benutzer nicht möglich, eine Bewertung abzugeben.";"**Number of rating points**
+
+Specifies the maximum number of rating points a user can assign to an article.
+
+If the value is less than 1, users are not able to submit a rating."
+"helpful_count";"shop_article_review";"**Anzahl der positiven Bewertungen, die angeben, dass diese Rezension hilfreich ist.**";"Number of positive ratings indicating that this review is helpful."
+"comment_on_delete";"pkg_comment_module_config";"**Anzeige bei gelöschtem Kommentar**
+
+Wenn ein Kommentar gelöscht wird, erscheint an seiner Stelle der hier festgelegte Text.
+
+Wird dieses Feld leer gelassen, wird der Kommentar vollständig aus dem System entfernt.";"**Notification for Deleted Comment**
+
+When a comment is deleted, the text specified here will appear in its place.
+
+If this field is left empty, the comment will be completely removed from the system."
+"display_column";"cms_tbl_conf";"**Anzeigefeld**
+
+Mit diesem Feld legst du fest, welche Spalte zur Darstellung eines Eintrags verwendet wird, wenn dieser nicht standardmäßig über den Namen identifiziert wird  beispielsweise durch ein Bild oder ein alternatives Feld, wie bei einem erweiterten Lookup.
+
+Gib hier den exakten SQL-Spaltennamen oder einen Feld-Alias an (zum Beispiel feld).
+
+> Hinweis: Verwende nur den Spaltennamen, nicht die Schreibweise tabelle.feld.
+
+Bleibt dieses Feld leer, wird automatisch das Namensfeld verwendet.";"**Display Field**
+
+With this field, you specify which column is used to represent an entry when it is not identified by its name by defaultfor example, by an image or an alternative field, as in an advanced lookup.
+
+Enter the exact SQL column name or a field alias here (for example, field).
+
+> Note: Use only the column name, not the format table.field.
+
+If this field is left blank, the name field will be used automatically."
+"exclude_from_shipping_cost_calculation";"shop_article";"**Artikel, die immer versandkostenfrei behandelt werden müssen, wie beispielsweise ein Hörbuch-Download, können hier von der Versandkostenberechnung ausgeschlossen werden.**
+
+Bitte beachten Sie:
+
+- Versandkostenarten, die für den gesamten Warenkorb gelten, betreffen auch Artikel mit dieser Markierung.
+- Um sicherzustellen, dass dieser Artikel tatsächlich versandkostenfrei bleibt, passen Sie die Einstellungen Ihrer Versandkostenarten so an, dass sie nicht auf den gesamten Warenkorb angewendet werden.";"Articles that must always be treated as free of shipping costs, such as an audiobook download, can be excluded from shipping cost calculation here.
+
+Please note:
+
+- Shipping methods that apply to the entire shopping cart also affect items with this designation.
+- To ensure that this item actually remains free of shipping costs, adjust the settings of your shipping methods so that they are not applied to the entire shopping cart."
+"align";"cms_tbl_display_list_fields";"**Ausrichtung**  
+Bestimmt, wie der Inhalt einer Zelle angezeigt wird: linksbündig, zentriert oder rechtsbündig. Die möglichen Werte sind: 
+
+- left
+- right
+- center
+
+Verwenden Sie einen dieser Werte, um die gewünschte Ausrichtung festzulegen.";"**Alignment**  
+Determines how the content of a cell is displayed: left-aligned, centered, or right-aligned. The possible values are:
+
+- left
+- right
+- center
+
+Use one of these values to specify the desired alignment."
+"auto_assign_active";"data_extranet_group";"**Autozuweisung aktiv**
+
+Dieses Feld legt fest, ob eine Kundengruppe automatisch zugewiesen wird. Außerdem kann, abhängig von den Einstellungen, die automatische Zuweisung auch wieder aufgehoben werden.";"**Auto-assignment active**
+
+This field determines whether a customer group is assigned automatically. Additionally, depending on the settings, the automatic assignment can also be revoked."
+"processed";"shop_order_basket";"**Bearbeitet**
+
+Zeigt an, ob der Warenkorb bereits statistisch erfasst und zusätzlich per E-Mail versendet wurde.";"Indicates whether the shopping cart has already been statistically recorded and additionally sent by email."
+"capture_now";"amazon_payment_id_mapping";"**Bei einer Autorisierung gibt dieses Feld an, ob es sich um eine kombinierte Autorisierung und Abrechnung handelt.**
+
+Handelt es sich um eine Abrechnung, zeigt das Feld an, ob diese durch eine vorherige kombinierte Autorisierung und Abrechnung erstellt wurde.";"In the case of an authorization, this field indicates whether it is a combined authorization and settlement.
+
+If it is a settlement, the field shows whether it was created by a previous combined authorization and settlement."
+"test_identifier";"pkg_external_tracker";"**Benutzer/Site-Code im DEMO-MODUS**
+
+Der vom Anbieter vergebene Code wird verwendet, wenn der Tracker im Demo-Modus aktiv ist  beispielsweise auf Staging- oder Entwicklungssystemen.
+
+Um den Demo-Modus zu aktivieren, setzen Sie die Einstellung:
+
+```twig
+chameleon_system_external_tracker.demo_mode
+```
+
+auf `true`.";"**User/Site Code in DEMO MODE**
+
+The code provided by the vendor is used when the tracker is active in demo modefor example, on staging or development systems.
+
+To activate demo mode, set the configuration:
+
+```twig
+chameleon_system_external_tracker.demo_mode
+```
+
+to `true`."
+"description";"cms_interface_manager";"**Beschreibung**
+
+Hier finden Sie eine ausführliche Beschreibung des Managers. Alle verfügbaren Parameter sollten aufgeführt und verständlich erklärt werden, damit eine umfassende Nutzung und Konfiguration möglich ist.
+
+Verwenden Sie für die Auflistung der Parameter beispielsweise folgendes Format:
+
+- Parametername: Erklärung, Anwendungsbeispiel und mögliche Werte
+- Beispiel:
+  - api_key: Schlüssel zur Authentifizierung des Zugriffs. Beispielwert: {api_key}
+  - mode: Gibt den Betriebsmodus an. Mögliche Werte: ""test"", ""live""
+
+Nutzen Sie bei technischen Angaben, Variablen oder Platzhaltern entsprechend die Markierung mit Syntax-Hervorhebung, zum Beispiel:
+
+```sql
+SELECT * FROM cms_interface_manager WHERE id = {id}
+```
+
+Vergessen Sie nicht, auch optionale und erweiterte Einstellungsmöglichkeiten zu dokumentieren, um die Konfigurationsmöglichkeiten vollständig darzustellen.";"**Description**
+
+Here you will find a detailed description of the manager. All available parameters should be listed and explained in an understandable way to enable comprehensive use and configuration.
+
+For listing the parameters, use the following format as an example:
+
+- Parameter name: Explanation, usage example, and possible values
+- Example:
+  - api_key: Key for authentication of access. Example value: {api_key}
+  - mode: Indicates the operating mode. Possible values: ""test"", ""live""
+
+For technical information, variables, or placeholders, use syntax highlighting as appropriate, for example:
+
+```sql
+SELECT * FROM cms_interface_manager WHERE id = {id}
+```
+
+Do not forget to also document optional and advanced configuration options to fully outline the configuration possibilities."
+"description";"shop_discount";"**Beschreibung:**  
+Geben Sie eine verständliche und ansprechende Beschreibung ein. Diese wird den Kunden auf der Produktdetailseite angezeigt und sollte die wichtigsten Informationen übersichtlich darstellen. Achten Sie darauf, die Vorzüge des Angebots klar hervorzuheben.";"**Description:**  
+Enter a clear and appealing description. This will be displayed to customers on the product detail page and should present the most important information in a concise manner. Make sure to clearly highlight the advantages of the offer."
+"system_order_save_completed";"shop_order";"**Bestellung wurde komplett gespeichert**
+
+Der Wert dieses Feldes wird gesetzt, sobald sämtliche Daten der Bestellung erfolgreich und vollständig in der Datenbank gespeichert wurden.
+
+Dies dient der Überprüfung, ob der gesamte Bestellvorgang technisch abgeschlossen ist.";"**Order has been completely saved**
+
+The value of this field is set once all order data has been successfully and fully stored in the database.
+
+This serves to verify whether the entire order process has been technically completed."
+"rating";"shop_article_review";"**Bewertung des Produktes:**
+
+Der Wert kann zwischen 0 und 5 liegen.";"**Product Rating:**
+
+The value can range from 0 to 5."
+"img_width";"cms_font_image";"**Bildbreite**
+
+Gibt die Breite des Bildes in Pixeln an.
+
+Wird der Wert auf -1 gesetzt, wird die Breite dynamisch bestimmt  abhängig von der Schriftgröße und/oder dem Hintergrundbild.";"**Image Width**
+
+Specifies the width of the image in pixels.
+
+If the value is set to -1, the width is determined dynamicallydepending on the font size and/or the background image."
+"img_height";"cms_font_image";"**Bildhöhe**
+
+Die Höhe des Bildes wird in Pixeln angegeben.
+
+Wird der Wert -1 eingegeben, passt sich die Höhe automatisch an die Schriftgröße und/oder das Hintergrundbild an.";"**Image Height**
+
+The height of the image is specified in pixels.
+
+If the value -1 is entered, the height will automatically adjust to the font size and/or the background image."
+"width";"shop_article_image_size";"**Breite**
+
+Gibt die maximale Breite der Bilder dieses Typs an.";"**Width**
+
+Specifies the maximum width of images of this type."
+"cms_portal_mlt";"cms_master_pagedef";"**CMS Modulerweiterung**
+
+Hier können Sie auswählen, welche CMS-Module durch eigene Versionen ersetzt werden sollen.
+
+Eigene CMS-Module müssen zuvor im Verzeichnis  ./extensions/modules  angelegt werden.";"**CMS Module Extension**
+
+Here you can select which CMS modules should be replaced by your own versions.
+
+Custom CMS modules must first be created in the ./extensions/modules directory."
+"date_format";"cms_locals";"**Datumsformat**
+
+Verwenden Sie die folgenden Platzhalter, um das gewünschte Format für das Datum festzulegen:
+
+- y für das Jahr
+- m für den Monat
+- d für den Tag
+
+Beispiel: Mit dem Format y-m-d wird das Datum als Jahr-Monat-Tag angezeigt, zum Beispiel 2024-06-01.";"**Date format**
+
+Use the following placeholders to specify the desired date format:
+
+- y for the year
+- m for the month
+- d for the day
+
+Example: With the format y-m-d, the date will be displayed as year-month-day, for example 2024-06-01."
+"cms_master_pagedef_spot";"pkg_cms_theme_block";"**Definition von Template-Spots, wie sie in den Seitenlayouts verwendet werden.**
+
+Template-Spots sind Bereiche innerhalb eines Seitenlayouts, die als Platzhalter für individuelle Inhalte oder Module dienen. Sie ermöglichen eine flexible Gestaltung der Webseite, indem Inhalte an festgelegten Positionen dynamisch eingefügt werden können. Dadurch kann das Layout einfach angepasst und auf spezifische Anforderungen zugeschnitten werden.";"**Definition of template spots as used in page layouts.**
+
+Template spots are areas within a page layout that serve as placeholders for individual content or modules. They enable flexible website design by allowing content to be dynamically inserted at designated positions. As a result, the layout can be easily adjusted and tailored to specific requirements."
+"css_class";"pkg_shop_primary_navi";"**Eigene CSS-Klasse**
+
+Hier kann eine individuelle CSS-Klasse eingetragen werden, die auf den jeweiligen Navigationspunkt angewendet wird.
+
+Beispielsweise kann ""onSale"" verwendet werden, um spezielle Angebote optisch hervorzuheben.
+
+Auch weitere eigene Klassennamen sind möglich, um die Darstellung gezielt zu gestalten.";"**Custom CSS Class**
+
+You can enter a custom CSS class here, which will be applied to the respective navigation item.
+
+For example, ""onSale"" can be used to visually highlight special offers.
+
+You can also use additional custom class names to specifically design the appearance."
+"name";"cms_config_parameter";"**Eine kurze Beschreibung oder ein erklärender Name für den Parameter.**  
+Der angegebene Wert sollte eindeutig sein und präzise darstellen, wofür der jeweilige Parameter verwendet wird. So ist eine schnelle Identifikation und Zuordnung innerhalb des Systems möglich.";"A brief description or explanatory name for the parameter.  
+The specified value should be unique and clearly represent what the respective parameter is used for. This enables quick identification and assignment within the system."
+"shopreviewmail_percent_of_customers";"shop";"**Empfängerkunden (Prozent):**  
+Legt fest, welcher Prozentsatz aller Kunden eine Einladung zur Abgabe einer Bewertung erhält.";"**Recipient customers (percent):**  
+Specifies the percentage of all customers who receive an invitation to submit a review."
+"filetypes";"cms_media";"**Erlaubte Dateitypen**
+
+Geben Sie eine durch Kommas getrennte Liste der erlaubten Dateiformate an, zum Beispiel jpg, gif, png, flv, swf.
+
+Diese Einstellung bezieht sich ausschließlich auf Template-Bilder.";"**Allowed file types**
+
+Enter a comma-separated list of the permitted file formats, for example jpg, gif, png, flv, swf.
+
+This setting applies exclusively to template images."
+"views";"cms_master_pagedef_spot_access";"**Erlaubte Views:**  
+Geben Sie in diesem Feld die erlaubten Views an, jeweils einen View pro Zeile. Die Endung .view.php sollten Sie dabei weglassen. Wenn das Feld leer bleibt, wird automatisch ""standard"" verwendet.
+
+**Beispiel:**
+```
+standard
+vBox
+```";"**Allowed Views:**  
+Enter the allowed views in this field, one view per line. You should omit the .view.php extension. If the field is left empty, ""standard"" will be used automatically.
+
+**Example:**
+```
+standard
+vBox
+```"
+"restrict_to_groups";"cms_field_conf";"**Feldzugriff einschränken**
+
+Wenn diese Option aktiviert ist, wird das jeweilige Feld für Nutzer, die nicht zu den freigegebenen Benutzergruppen gehören, nur im Lesemodus (read-only) angezeigt.
+
+Dies gilt allerdings nur, wenn der Anzeigemodus auf {""none""} gesetzt wurde. In allen anderen Fällen wird der hier hinterlegte Wert zur Steuerung des Feldzugriffs verwendet.";"**Restrict field access**
+
+When this option is enabled, the respective field will be displayed in read-only mode for users who do not belong to the assigned user groups.
+
+However, this only applies if the display mode is set to {""none""}. In all other cases, the value specified here is used to control field access."
+"is_workflow";"cms_tbl_conf";"**Freigabe Workflow aktivieren**  
+Das Aktivieren des Freigabe-Workflows ist beim erstmaligen Anlegen einer Tabelle noch nicht möglich. Diese Funktion kann erst genutzt werden, nachdem die Konfiguration der Tabelle gespeichert wurde.";"**Enable Approval Workflow**  
+Enabling the approval workflow is not possible when creating a table for the first time. This feature can only be used after the table configuration has been saved."
+"active_for_front_end";"cms_language";"**Für Frontend freigeschaltet**
+
+Wenn diese Option aktiviert ist und in der Portal- oder CMS-Konfiguration die feldbasierte Mehrsprachigkeit gewählt wurde, steht die entsprechende Sprache im Frontend zur Verfügung.
+
+Ist die Option deaktiviert, kann die Sprache im Frontend nicht ausgewählt werden. Über den Button Inaktive Sprachen aktivieren im Portal kann die Sprache jedoch für die aktuelle Sitzung freigeschaltet werden.";"**Enabled for frontend**
+
+If this option is enabled and field-based multilingualism is selected in the portal or CMS configuration, the corresponding language will be available in the frontend.
+
+If the option is disabled, the language cannot be selected in the frontend. However, the language can be enabled for the current session via the ""Activate inactive languages"" button in the portal."
+"value_vouchers";"shop_order";"**Gesamtwert der Gutscheine (gesponsert)**
+
+Dies ist die Summe aller gesponserten Gutscheine, die wie Barmittel behandelt werden. Diese Gutscheine werden nach dem Abzug der Steuer verrechnet.";"**Total value of vouchers (sponsored)**
+
+This is the sum of all sponsored vouchers, which are treated as cash equivalents. These vouchers are accounted for after deducting tax."
+"value_total";"shop_order";"**Gesamtwert**
+
+Der tatsächlich zu zahlende Betrag. Sämtliche Rabatte, Versandkosten und Zusatzgebühren sind hier bereits berücksichtigt.";"**Total Value**
+
+The actual amount to be paid. All discounts, shipping costs, and additional fees are already included here."
+"weight";"shop_search_field_weight";"**Gewichtung**  
+Gibt an, wie stark dieses Feld bei der Suche berücksichtigt wird. Der Wert kann zwischen 0 und 1 liegen, wobei 1 die höchste Gewichtung darstellt. Ein höherer Wert sorgt dafür, dass Treffer in diesem Feld bei Suchanfragen als relevanter eingestuft werden.";"**Weighting**  
+Indicates how strongly this field is considered in searches. The value can range from 0 to 1, with 1 representing the highest weighting. A higher value ensures that matches in this field are considered more relevant in search queries."
+"shop_category_id";"shop_article";"**Hauptkategorie des Artikels**
+
+Sie können optional eine Hauptkategorie für den Artikel auswählen. Wird keine Hauptkategorie festgelegt, übernimmt das System automatisch die erste dem Artikel zugeordnete Kategorie.
+
+Bitte beachten Sie, dass Sie als Hauptkategorie nur eine der Kategorien auswählen sollten, die dem Artikel bereits über das Feld Produktkategorien zugewiesen wurden.";"**Main Category of the Article**
+
+You can optionally select a main category for the article. If no main category is specified, the system will automatically use the first category assigned to the article.
+
+Please note that you should only select one of the categories already assigned to the article via the Product Categories field as the main category."
+"action_plugin_list";"cms_portal";"**Hier können Action-Plugins angegeben werden, die in der Seitenvorlage zur Verfügung stehen sollen.**
+
+Public-Methoden der eingetragenen Klassen lassen sich über die Syntax
+
+```plaintext
+module_fnc[name]=>Methode
+```
+
+aufrufen. Beachten Sie, dass Modul-Spots mit gleichem Namen vorrangig behandelt werden.
+
+Das Format für die Plugin-Angabe lautet:
+
+```plaintext
+name=Klasse
+name2=Klasse
+...
+```
+
+Bitte beachten Sie, dass die hier angegebenen Plugins durch eine aktive Seitendefinition überschrieben werden können.";"**Here you can specify action plugins that should be available in the page template.**
+
+Public methods of the registered classes can be called using the syntax
+
+```plaintext
+module_fnc[name]=>Method
+```
+
+Please note that module spots with the same name take precedence.
+
+The format for specifying the plugin is as follows:
+
+```plaintext
+name=Class
+name2=Class
+...
+```
+
+Please note that the plugins specified here can be overridden by an active page definition."
+"max_value";"pkg_shop_listfilter_item";"**Höchster Wert**
+
+Dies ist der maximale Wert, der ausgewählt werden kann.";"**Highest Value**
+
+This is the maximum value that can be selected."
+"name_internal";"shop_payment_method";"**Interner Name (System)**
+
+Dieser Wert sollte nicht verändert werden, da das System ihn für die eindeutige Identifikation der einzelnen Zahlungsmethoden benötigt.";"**Internal Name (System)**
+
+This value should not be changed, as the system requires it for the unique identification of each payment method."
+"systemname";"cms_wizard_step";"**Interner Name**
+
+Der interne Name identifiziert den Schritt eindeutig im System. Wird dieser Name geändert, ist es erforderlich, den zugehörigen Code entsprechend anzupassen, um die korrekte Zuordnung weiterhin zu gewährleisten.";"**Internal Name**
+
+The internal name uniquely identifies the step within the system. If this name is changed, it is necessary to adapt the corresponding code accordingly to ensure correct assignment is maintained."
+"ipn_group_identifier";"shop_payment_handler_group";"**IPN Identifier**
+
+Die IPN-Adresse folgt immer diesem Format:
+
+```plaintext
+https://mydomain.tld/_api_pkgshopipn_[IPN Identifier][__order-cmsident]
+```
+
+Der Abschnitt `[__order-cmsident]` ist optional und kommt dann zum Einsatz, wenn die IPN für jede Bestellung über Chameleon individuell festgelegt werden kann.
+
+Wird kein IPN Identifier eingetragen, verwendet das System stattdessen den Gruppennamen.";"**IPN Identifier**
+
+The IPN address always follows this format:
+
+```plaintext
+https://mydomain.tld/_api_pkgshopipn_[IPN Identifier][__order-cmsident]
+```
+
+The section `[__order-cmsident]` is optional and is used when the IPN can be defined individually for each order via Chameleon.
+
+If no IPN Identifier is entered, the system will use the group name instead."
+"show_not_tanslated";"cms_portal";"**JA**  
+Links, für die keine Übersetzung vorhanden ist, werden in der Standardsprache angezeigt.
+
+**NEIN**  
+Links ohne Übersetzung werden nicht angezeigt und ausgeblendet.";"**YES**  
+Links for which no translation is available are displayed in the default language.
+
+**NO**  
+Links without a translation are not displayed and are hidden."
+"shop_category_mlt";"shop_article_catalog_conf_default_order";"**Kategorien:**  
+Für diese Kategorien gilt die alternative Standardsortierung. Dabei werden auch alle zugehörigen Unterkategorien automatisch berücksichtigt.";"**Categories:**  
+The alternative default sorting applies to these categories. All associated subcategories are automatically taken into account as well."
+"name";"cms_tbl_extension";"**Klassenname**
+
+Gibt den Namen der Klasse an, die von TAdbTableName abgeleitet wird. Üblicherweise folgt dieser dem Format TTableName, wobei ""TableName"" dem Namen der zu erweiternden Tabelle entspricht.";"**Class Name**
+
+Specifies the name of the class derived from TAdbTableName. This usually follows the format TTableName, where ""TableName"" corresponds to the name of the table to be extended."
+"data_extranet_group_mlt";"data_extranet_user";"**Kundengruppen**
+
+Hier sind die Kundengruppen angegeben, denen der Kunde angehört.
+
+Wird der Kunde der Gruppe Vertriebspartner zugeordnet, sollten im Profil zusätzlich ein Salescode sowie das Beitrittsdatum hinterlegt werden.";"**Customer Groups**
+
+Here, the customer groups to which the customer belongs are specified.
+
+If the customer is assigned to the ""Sales Partner"" group, a sales code and the date of joining should also be recorded in the profile."
+"description_short";"shop_article";"**Kurzbeschreibung**
+
+Eine kurze Beschreibung des Artikels, die üblicherweise auch in der Artikelliste angezeigt wird.";"**Short Description**
+
+A brief description of the item, which is usually also displayed in the item list."
+"pkg_cms_theme_block_layout";"pkg_cms_theme_block";"**Layouts**
+
+Dieses Feld beschreibt die verschiedenen Möglichkeiten, wie der Block dargestellt werden kann.";"**Layouts**
+
+This field describes the different ways in which the block can be displayed."
+"data_extranet_user_address";"data_extranet_user";"**Liefer- und Rechnungsadressen**
+
+Hier können Sie Ihre Lieferadresse sowie Ihre Rechnungsadresse angeben. Sollten sich diese Adressen unterscheiden, tragen Sie bitte beide entsprechend ein. Dadurch wird eine korrekte Zustellung und Abrechnung Ihrer Bestellungen gewährleistet.";"**Shipping and Billing Addresses**
+
+Here you can enter your shipping address as well as your billing address. If these addresses differ, please enter both accordingly. This ensures correct delivery and invoicing of your orders."
+"positiv_list_loose_match";"shop_payment_method";"**Lose Positiv-Listen-Übereinstimmung verwenden**
+
+Wenn diese Option aktiviert ist, reicht es aus, dass mindestens ein Artikel im Warenkorb mit den Vorgaben der jeweiligen Zahlungsmethode übereinstimmt, damit die Zahlungsmethode verfügbar wird.
+
+Die Negativ-Liste bleibt davon unberührt: Befindet sich ein Artikel im Warenkorb, der auf der Negativ-Liste steht, wird die Zahlungsmethode unabhängig von anderen Treffern deaktiviert.";"**Use Loose Positive List Matching**
+
+When this option is enabled, it is sufficient for at least one item in the shopping cart to match the criteria of the respective payment method for the payment method to be made available.
+
+The negative list remains unaffected by this: If there is an item in the shopping cart that is on the negative list, the payment method will be deactivated regardless of any other matches."
+"object_mail";"shop_order";"**Mail Objekt**
+
+Falls die Bestellbestätigung nicht versendet werden konnte, wird hier das zugehörige Mail-Objekt gespeichert. Dadurch besteht die Möglichkeit, den Versand der E-Mail zu einem späteren Zeitpunkt erneut zu versuchen.
+
+Außerdem wird dokumentiert, wie oft der Versand bereits versucht wurde.";"**Mail Object**
+
+If the order confirmation could not be sent, the associated mail object will be saved here. This allows you to attempt sending the email again at a later time.
+
+Additionally, it is recorded how many times the sending has already been attempted."
+"mapper_config";"pkg_generic_table_export";"**Mapper Konfiguration**
+
+Hier können verschiedene Mapper eingetragen werden. Verwenden Sie dazu folgendes Format:
+
+```
+Name,Ordnerpfad,Typ;Name,Ordnerpfad,Typ
+```
+
+Jeder Mapper-Eintrag besteht aus:
+
+- einem Namen, zum Beispiel Mapper_1,
+- einem Pfad zum Mapper, wie path/to/mapper,
+- einem Typ, beispielsweise Core oder Customer.
+
+Mehrere Mapper-Einträge werden mit einem Semikolon (;) voneinander getrennt.";"**Mapper Configuration**
+
+Here you can enter various mappers. Use the following format:
+
+```
+Name,FolderPath,Type;Name,FolderPath,Type
+```
+
+Each mapper entry consists of:
+
+- a name, for example Mapper_1,
+- a path to the mapper, such as path/to/mapper,
+- a type, for example Core or Customer.
+
+Multiple mapper entries are separated by a semicolon (;)."
+"message";"cms_message_manager_message";"**Meldung**
+
+Die Meldung, die vom System angezeigt wird.
+
+Innerhalb der Meldung können Platzhalter im folgenden Format verwendet werden:
+
+```twig
+[{name:formatierung}]
+```
+
+Für die Formatierung stehen folgende Optionen zur Verfügung:
+
+- string
+- date
+- number
+
+Bei der Option number kann zusätzlich die Anzahl der Nachkommastellen nach einem Doppelpunkt angegeben werden. Beispiel:
+
+```twig
+[{kosten:number:2}]
+```
+
+In diesem Beispiel wird die Variable kosten als Zahl mit zwei Nachkommastellen angezeigt.";"**Message**
+
+The message displayed by the system.
+
+Within the message, placeholders can be used in the following format:
+
+```twig
+[{name:formatting}]
+```
+
+The following options are available for formatting:
+
+- string
+- date
+- number
+
+For the number option, the number of decimal places can also be specified after a colon. Example:
+
+```twig
+[{cost:number:2}]
+```
+
+In this example, the variable cost is displayed as a number with two decimal places."
+"message";"cms_message_manager_backend_message";"**Meldung**
+
+Die Meldung, die vom System angezeigt wird. In der Meldung können Platzhalter im folgenden Format verwendet werden:
+
+```twig
+[{name:formatierung}]
+```
+
+Die Formatierung kann einen der folgenden Werte annehmen:
+
+- string
+- date
+- number
+
+Wird die Formatierung number verwendet, kann zusätzlich die Anzahl der Nachkommastellen angegeben werden. Dies geschieht, indem nach das Schlüsselwort number ein Doppelpunkt und die gewünschte Anzahl der Nachkommastellen ergänzt werden.
+
+Beispiel:
+
+```twig
+[{kosten:number:2}]
+```
+
+Dieser Platzhalter formatiert die Variable kosten als Zahl mit zwei Nachkommastellen.";"**Message**
+
+The message displayed by the system. Placeholders can be used in the message in the following format:
+
+```twig
+[{name:formatting}]
+```
+
+The formatting can have one of the following values:
+
+- string
+- date
+- number
+
+If the formatting number is used, the number of decimal places can also be specified. This is done by adding a colon and the desired number of decimal places after the keyword number.
+
+Example:
+
+```twig
+[{cost:number:2}]
+```
+
+This placeholder formats the variable cost as a number with two decimal places."
+"shop_user_notice_list";"data_extranet_user";"**Merkzettel**
+
+Auf dem Merkzettel werden alle Artikel angezeigt, die der Kunde für eine spätere Ansicht gespeichert hat. So können interessante Produkte einfach gesammelt und bei Bedarf schnell wiedergefunden werden.";"**Wishlist**
+
+The wishlist displays all items that the customer has saved for later viewing. This way, interesting products can be easily collected and quickly found again when needed."
+"classname";"cms_tbl_list_class";"**Name der TCMSListManager-Klasse**, die für die Anzeige der Liste verwendet wird.
+
+Standardmäßig wird im Core die Klasse TCMSListManagerFullGroupTable genutzt.";"**Name of the TCMSListManager class** used for displaying the list.
+
+By default, the TCMSListManagerFullGroupTable class is used in the core."
+"option_show_author_name";"pkg_shop_article_review_module_shop_article_review_configuration";"**Name des Autors**
+
+Mit dieser Option wird festgelegt, wie der Autorenname bei verfassten Rezensionen angezeigt wird. Die Einstellung gilt nur, wenn Rezensionen von angemeldeten Benutzern erstellt werden dürfen.
+
+Falls auch Rezensionen ohne Anmeldung möglich sind, erscheint beim Verfassen der Rezension ein Namensfeld. Wird dieses Feld leer gelassen, wird ""Anonym"" als Autorenname angezeigt.
+
+Folgende Möglichkeiten stehen zur Auswahl:
+
+- **Vorname und Nachname**: Der echte Vor- und Nachname des Benutzers wird als Autorenname angezeigt.
+- **Aliasname**: Der bei der Registrierung angegebene Aliasname wird als Autorenname verwendet. Diese Option steht nur zur Verfügung, wenn die Angabe eines Aliasnamens bei der Registrierung verpflichtend ist.
+- **Anonym**: Unabhängig von anderen Einstellungen wird immer ""Anonym"" als Autorenname angezeigt.
+- **Eingegebener Name**: Ein zusätzliches Eingabefeld ermöglicht es dem Benutzer, einen Wunschnamen für die Rezension einzugeben. Wird dieses Feld nicht ausgefüllt, erscheint ebenfalls ""Anonym"" als Autorenname.";"**Author Name**
+
+This option determines how the author's name is displayed for submitted reviews. The setting applies only if reviews may be created by registered users.
+
+If reviews are also allowed without registration, a name field will appear when writing the review. If this field is left blank, ""Anonymous"" will be displayed as the author's name.
+
+The following options are available:
+
+- **First and Last Name**: The user's real first and last name are displayed as the author's name.
+- **Alias Name**: The alias name provided during registration is used as the author's name. This option is only available if providing an alias name during registration is mandatory.
+- **Anonymous**: Regardless of other settings, ""Anonymous"" will always be displayed as the author's name.
+- **Entered Name**: An additional input field allows the user to enter any desired name for the review. If this field is not filled in, ""Anonymous"" will be displayed as the author's name."
+"header_view";"pkg_generic_table_export";"**Name des zu verwendenden Twig-Templates für den Seiten-Header**
+
+Gib hier den Namen des gewünschten Twig-Templates ohne die Endung .twig an. Der Header wird nur angezeigt, wenn eine Liste exportiert wird.";"**Name of the Twig template to use for the page header**
+
+Enter the name of the desired Twig template here without the .twig extension. The header will only be displayed when a list is exported."
+"name";"shop_article_type";"**Name**
+
+Der Name des Artikeltyps, der angezeigt wird, zum Beispiel Buch, CD oder DVD.";"**Name**
+
+The name of the item type that is displayed, for example book, CD, or DVD."
+"cms_tree_id";"shop_system_page";"**Navigationspunkt**
+
+Dieser Navigationspunkt gibt an, welchem Menüpunkt die Seite zugeordnet ist. So kann die Seite gezielt innerhalb der Navigation angezeigt und strukturiert werden.";"**Navigation item**
+
+This navigation item specifies which menu item the page is assigned to. This allows the page to be displayed and structured specifically within the navigation."
+"allow_write_review_loggedin_users_only";"pkg_shop_article_review_module_shop_article_review_configuration";"**Nur wenn diese Einstellung aktiviert ist, können ausschließlich angemeldete Benutzer Rezensionen oder Kommentare verfassen.**
+
+Wird die Einstellung deaktiviert, dürfen alle Besucher, unabhängig von einer Anmeldung, Rezensionen oder Kommentare hinterlassen. In diesem Fall wird automatisch eine Anti-Spam-Maßnahme, wie beispielsweise eine Eingabeprüfung, aktiviert, um unerwünschte Beiträge zu verhindern.";"**Only when this setting is enabled, only registered users can write reviews or comments.**
+
+If the setting is disabled, all visitorsregardless of registrationare allowed to leave reviews or comments. In this case, an anti-spam measure such as an input check is automatically activated to prevent unwanted posts."
+"name_public";"shop_module_articlelist_orderby";"**Öffentlicher Name**
+
+Dieser Name ist für die Nutzer sichtbar und wird auf der Webseite angezeigt.";"**Public Name**
+
+This name is visible to users and will be displayed on the website."
+"deactive_portal";"cms_portal";"**Portal deaktivieren**
+
+Wenn dieses Feld aktiviert ist, ist das Portal nur für Benutzer sichtbar, die gleichzeitig im CMS angemeldet sind. Andere Besucher erhalten keinen Zugriff auf das Portal.";"**Deactivate Portal**
+
+If this field is enabled, the portal is only visible to users who are simultaneously logged into the CMS. Other visitors will not have access to the portal."
+"position";"shop_category";"**Position der Kategorie innerhalb einer Kategorieebene**
+
+Die Position legt fest, an welchem Platz sich die Kategorie innerhalb ihrer Ebene befindet. Die Reihenfolge kann durch Ziehen und Ablegen (Drag & Drop) ganz einfach angepasst werden.
+
+Dadurch steuern Sie, wie die Kategorien im Shop für Ihre Kunden dargestellt werden.";"**Position of the category within a category level**
+
+The position determines the place of the category within its level. The order can be easily adjusted by dragging and dropping.
+
+This allows you to control how the categories are displayed in the shop for your customers."
+"top";"pkg_image_hotspot_item_spot";"**Position von oben**  
+Bestimmt, wie viele Pixel das Hotspot-Icon vom oberen Rand des Bildes entfernt ist (Y-Koordinate).";"**Position from top**  
+Determines how many pixels the hotspot icon is offset from the top edge of the image (Y-coordinate)."
+"position";"shop_order_step";"**Position**
+
+Die Reihenfolge der Schritte bestimmt lediglich, wie sie im CMS dargestellt werden, ohne Auswirkungen auf den eigentlichen Ablauf der Bestellung.";"**Position**
+
+The order of the steps only determines how they are displayed in the CMS, without affecting the actual ordering process."
+"price";"shop_article";"**Preis**
+
+Der reguläre Brutto-Preis des Artikels bezeichnet den vollständigen Verkaufspreis, der bereits die Mehrwertsteuer enthält.";"**Price**
+
+The regular gross price of the item refers to the full sale price, which already includes value-added tax (VAT)."
+"sync_profile_data_with_billing_data";"shop";"**Profiladresse mit der Rechnungsadresse synchronisieren**
+
+Mit dieser Einstellung legen Sie fest, ob die Profildaten eines Kunden automatisch mit der Rechnungsadresse abgeglichen werden. Ist die Synchronisierung aktiviert, werden Änderungen an der Rechnungsadresse direkt auch auf die Profiladresse übernommen. Wenn die Option deaktiviert ist, können beide Adressen unabhängig voneinander verwaltet und geändert werden.";"**Synchronize profile address with billing address**
+
+With this setting, you determine whether a customer's profile data is automatically matched with the billing address. If synchronization is enabled, changes to the billing address are also directly applied to the profile address. If the option is disabled, both addresses can be managed and changed independently of each other."
+"direction";"module_customlist_config_sortfields";"**Richtung**
+
+Legt fest, ob die Sortierung in aufsteigender (ASC) oder absteigender (DESC) Reihenfolge erfolgt.";"**Direction**
+
+Specifies whether the sorting is in ascending (ASC) or descending (DESC) order."
+"font_color";"cms_font_image";"**Schriftfarbe:**  
+Die Schriftfarbe wird im RGB- oder HEX-Format angegeben, wobei das Rautezeichen (#) weggelassen wird. Beispiel: FFFFFF steht für Weiß.";"**Font color:**  
+The font color is specified in RGB or HEX format, with the hash symbol (#) omitted. Example: FFFFFF stands for white."
+"active";"cms_tree_node";"**Seitenverbindung aktiv**
+
+Wählen Sie ""Ja"", um diese Seite mit dem entsprechenden Navigationspunkt zu verknüpfen.";"**Page link active**
+
+Select ""Yes"" to link this page with the corresponding navigation item."
+"seo_pattern";"shop_category";"**SEO Pattern**
+
+Dieses Feld wird verwendet, um die Überschrift (Title) der Seite suchmaschinenoptimiert zu gestalten.
+
+Um alle verfügbaren Platzhalter anzuzeigen, geben Sie [{SHOW}] in dieses Feld ein und laden Sie die Seite neu. Anschließend werden Ihnen alle Platzhalter angezeigt, die Sie an dieser Stelle verwenden können.";"**SEO Pattern**
+
+This field is used to optimize the page title for search engines.
+
+To display all available placeholders, enter [{SHOW}] in this field and reload the page. All the placeholders you can use here will then be displayed."
+"data_extranet_user_id";"shop_order";"**Shop-Kunde**
+
+Handelt es sich bei der Bestellung um einen registrierten Benutzer, wird dieser hier gespeichert.";"**Shop Customer**
+
+If the order is placed by a registered user, they will be saved here."
+"width";"cms_tbl_display_list_fields";"**Spaltenbreite für Listenansichten**
+
+Legt fest, wie breit eine Spalte in der Listenansicht angezeigt wird. Durch die Anpassung der Spaltenbreite kann die Übersichtlichkeit und Lesbarkeit der dargestellten Daten verbessert werden.";"**Column Width for List Views**
+
+Determines how wide a column is displayed in the list view. Adjusting the column width can improve the clarity and readability of the displayed data."
+"data_country_id";"shop";"**Standardland**
+
+Dieses Land wird automatisch ausgewählt, sofern der Kunde noch kein anderes Land ausgewählt hat.";"This country is selected by default unless the customer has already chosen a different country."
+"shop_vat_id";"shop";"**Standardumsatzsteuergruppe**
+
+Diese Umsatzsteuergruppe wird standardmäßig verwendet, sofern keine spezifische Steuergruppe zugeordnet wurde.";"**Standard VAT Group**
+
+This VAT group is used by default unless a specific tax group has been assigned."
+"pkg_shop_rating_service_mail_sent";"shop_order";"**Steht auf Ja, wenn eine Bewertungs-E-Mail versendet wurde.**
+
+Bitte beachten: Nicht bei jeder Bestellung wird automatisch eine Bewertungs-E-Mail verschickt.";"Displays ""Yes"" if a review email has been sent.
+
+Please note: A review email is not automatically sent for every order."
+"meta_keywords";"cms_tpl_page";"**Suchbegriffe**
+
+Geben Sie relevante Suchbegriffe für Ihre Seite ein, jeweils durch ein Komma getrennt. Vermeiden Sie es, einzelne Wörter zu oft zu wiederholen, da dies die Auffindbarkeit in Suchmaschinen beeinträchtigen kann.
+
+Empfohlen wird, nicht mehr als 10 bis 15 Suchbegriffe zu verwenden.";"**Search Terms**
+
+Enter relevant search terms for your page, separated by commas. Avoid repeating individual words too often, as this can negatively affect search engine visibility.
+
+It is recommended not to use more than 10 to 15 search terms."
+"identifier";"shop_article_type";"**Systembezeichner**
+
+Ein eindeutiger Name, mit dem der Artikeltyp im System identifiziert wird, zum Beispiel book, cd oder mc.
+
+- Vermeide Sonderzeichen und Leerzeichen.
+- Der Systembezeichner wird häufig für interne Referenzen oder bei Integrationen genutzt.
+
+Beispiel:  
+book, cd, mc";"**System identifier**
+
+A unique name used to identify the item type in the system, for example book, cd, or mc.
+
+- Avoid special characters and spaces.
+- The system identifier is often used for internal references or in integrations.
+
+Example:  
+book, cd, mc"
+"name_internal";"shop_article_image_size";"**Systemname**
+
+Der interne Name der Bildgröße.
+
+Verwenden Sie diesen Namen, um in der Artikelklasse ein Bild in der gewünschten Größe abzurufen.";"**System name**
+
+The internal name of the image size.
+
+Use this name to retrieve an image in the desired size within the article class."
+"cms_portal_system_page";"cms_portal";"**Systemseiten**
+
+Hier besteht die Möglichkeit, auf bestimmte Seiten zu verweisen, auf die Systemmodule zugreifen  zum Beispiel ein AGB-Pop-up. Diese Seiten werden beim Erstellen der Website festgelegt.
+
+Die im Seitenbaum gespeicherte Verlinkung kann jedoch nachträglich angepasst werden.";"**System Pages**
+
+Here you have the option to reference certain pages accessed by system modules  for example, a terms and conditions pop-up. These pages are defined when the website is created.
+
+However, the stored link in the page tree can be adjusted later."
+"cms_tags_mlt";"shop_article";"**Tag / Schlagworte**
+
+Schlagworte können verwendet werden, um auf der Detailseite vordefinierte Suchanfragen anzuzeigen. Außerdem helfen sie dabei, ähnliche Produkte zu gruppieren und die Auswahl sowie das Auffinden verwandter Artikel zu erleichtern.";"**Tag / Keywords**
+
+Keywords can be used to display predefined search queries on the detail page. They also help group similar products and make it easier to select and find related items."
+"name";"cms_portal_navigation";"**Titel der Navigation:**  
+Der Titel ermöglicht die eindeutige Identifikation der jeweiligen Navigation im Portal und steuert, welche Navigationsinhalte angezeigt werden.";"**Title of the navigation:**  
+The title enables the unique identification of each navigation item in the portal and determines which navigation content is displayed."
+"name";"pkg_newsletter_campaign";"**Titel des Newsletters**
+
+Beispiel: Newsletter Februar
+
+Geben Sie hier den Namen des Newsletters ein, wie er den Empfängerinnen und Empfängern angezeigt wird. So lassen sich verschiedene Kampagnen eindeutig voneinander unterscheiden. Erlaubt sind beliebige Titel, zum Beispiel der Versandmonat oder das Schwerpunktthema.";"**Title of the Newsletter**
+
+Example: February Newsletter
+
+Enter the name of the newsletter here, as it will be displayed to the recipients. This makes it possible to clearly distinguish between different campaigns. Any title is allowed, such as the month of distribution or the main topic."
+"title";"cms_portal";"**Titel des Portals**
+
+Geben Sie den Text ein, der im Title-Tag der Website angezeigt wird. Dieser Titel erscheint sowohl im Browser-Tab als auch in Suchergebnissen. Achten Sie darauf, eine prägnante und aussagekräftige Formulierung zu wählen, damit Nutzer und Suchmaschinen den Inhalt der Seite schnell erfassen können.";"**Portal Title**
+
+Enter the text that will be displayed in the website's title tag. This title appears both in the browser tab and in search results. Make sure to choose a concise and meaningful wording so that users and search engines can quickly grasp the content of the page."
+"titel";"shop_system_info";"**Titel**
+
+Ein optionaler Titel erscheint als Überschrift für die jeweilige Information. Die Angabe eines Titels ist möglich, jedoch nicht verpflichtend.";"**Title**
+
+An optional title appears as a heading for the respective information. Providing a title is possible, but not mandatory."
+"vat_id";"shop_order";"**Umsatzsteuer-Identifikationsnummer für Unternehmen**
+
+Dieses Feld dient zur Speicherung der Umsatzsteuer-Identifikationsnummer eines Unternehmens. Es erfolgt keine automatische Verarbeitung, beispielsweise zur Berechnung von Nettopreisen.";"**VAT Identification Number for Companies**
+
+This field is used to store a company's VAT identification number. There is no automatic processing, such as calculating net prices."
+"shopreviewmail_mail_delay";"shop";"**Versandverzögerung (Tage)**
+
+Legt fest, wie viele Tage nach der vollständigen Auslieferung einer Bestellung abgewartet werden, bevor eine Bewertungsanfrage per E-Mail verschickt wird.
+
+Dadurch haben Kundinnen und Kunden ausreichend Zeit, ihre Produkte zu testen, bevor sie um eine Bewertung gebeten werden.";"**Shipping Delay (Days)**
+
+Specifies how many days after an order has been fully delivered are waited before a review request is sent via email.
+
+This gives customers enough time to test their products before being asked for a review."
+"date_sent";"pkg_newsletter_queue";"**Versandzeitpunkt**
+
+Dieses Feld gibt an, wann die E-Mail tatsächlich verschickt wurde  nicht, wann der Versand ursprünglich geplant war.
+
+Wenn der Wert 0000-00-00 angezeigt wird, bedeutet dies, dass der Newsletter bisher nicht versendet wurde.";"**Shipping Time**
+
+This field indicates when the email was actually sentnot when it was originally scheduled to be sent.
+
+If the value 0000-00-00 is displayed, this means that the newsletter has not been sent yet."
+"pkg_cms_theme_id";"cms_portal";"**Website Darstellung / Theme**  
+Legt fest, wie die Website im Frontend angezeigt wird. Ein Theme umfasst die Auswahl verschiedener Snippets, zugehöriger Ressourcen sowie Theme-Blöcken wie Header und Footer.";"**Website Display / Theme**  
+Defines how the website is presented on the frontend. A theme includes the selection of various snippets, associated resources, and ""theme blocks"" such as header and footer."
+"value_used";"shop_voucher_use";"**Wert verbraucht**
+
+Der angezeigte Wert bezieht sich stets auf die Originalwährung des Shops. Dies bedeutet, dass der ausgewiesene Betrag nicht zwangsläufig der Währung entspricht, in der die Kundin oder der Kunde das Produkt tatsächlich erworben hat.
+
+*Beispiel:*  
+Wenn der Shop die Standardwährung Euro verwendet, wird der verbrauchte Wert immer in Euro dargestellt  selbst wenn der Kauf beispielsweise in US-Dollar erfolgt ist.";"**Value Consumed**
+
+The displayed value always refers to the shop's original currency. This means that the stated amount does not necessarily correspond to the currency in which the customer actually purchased the product.
+
+*Example:*  
+If the shop uses Euro as the default currency, the consumed value will always be shown in euros  even if the purchase was made in US dollars, for example."
+"value";"shop_voucher_series";"**Wert**
+
+Der Wert eines generierten Gutscheins aus dieser Serie kann entweder als fester Betrag oder als Prozentsatz des Warenkorbwerts angegeben werden. Die genaue Berechnungsart richtet sich nach der eingestellten Wertart.
+
+Bei prozentual definierten Werten bezieht sich der Gutscheineffekt stets auf alle vom Gutschein abgedeckten Artikel.";"**Value**
+
+The value of a generated voucher from this series can be specified either as a fixed amount or as a percentage of the cart value. The exact calculation method depends on the set value type.
+
+For percentage-based values, the effect of the voucher always applies to all items covered by the voucher."
+"value";"shop_discount";"**Wert**
+
+Der Wert kann entweder als absoluter Betrag oder als Prozentsatz angegeben werden.
+
+- Prozentuale Rabatte beziehen sich immer auf die Summe aller betroffenen Artikel.
+- Die Art des Werts (absolut oder prozentual) wird separat definiert.
+
+Absolute Beträge werden nicht auf den gesamten Warenkorb verteilt, sondern nacheinander auf die einzelnen Artikel angewendet.  
+Beispiel:  
+Bei einem Rabatt von 10  und zwei Artikeln im Warenkorb wird zunächst der gesamte Betrag auf den ersten Artikel angewendet. Sofern danach noch ein Restwert verbleibt, wird dieser auf den zweiten Artikel übertragen.";"**Value**
+
+The value can be specified either as an absolute amount or as a percentage.
+
+- Percentage discounts always refer to the sum of all affected items.
+- The type of value (absolute or percentage) is defined separately.
+
+Absolute amounts are not distributed across the entire shopping cart, but are applied to each item consecutively.
+Example:  
+For a discount of 10 and two items in the shopping cart, the entire amount is first applied to the first item. If a remainder remains afterwards, it is transferred to the second item."
+"shop_variant_type_value_cmsfieldname";"shop_variant_type";"**Werte sortieren nach**
+
+Geben Sie an, nach welchem Kriterium die Variantenwerte auf der Webseite angezeigt werden sollen. Wählen Sie das Feld aus, das zur Sortierung der Werte verwendet wird, um die Darstellung für Ihre Kunden zu optimieren.";"**Sort values by**
+
+Specify the criterion by which the variant values should be displayed on the website. Select the field to be used for sorting the values in order to optimize the presentation for your customers."
+"time_format";"cms_locals";"**Zeitformat**
+
+Mit Hilfe von Platzhaltern wird das gewünschte Zeitformat festgelegt:
+
+-  h steht für Stunden  
+-  m steht für Minuten  
+-  s steht für Sekunden  
+
+Diese Platzhalter können beliebig kombiniert und angeordnet werden, um das Zeitformat individuell zu gestalten.";"**Time Format**
+
+The desired time format is defined using placeholders:
+
+-  h stands for hours  
+-  m stands for minutes  
+-  s stands for seconds  
+
+These placeholders can be combined and arranged in any order to customize the time format as needed."
+"extranet_page";"cms_tpl_page";"**Zugriff einschränken**
+
+Mit diesem Feld können Sie festlegen, dass die Seite ausschließlich für angemeldete Benutzer sichtbar ist. Zusätzlich können Sie den Zugang weiter beschränken, indem Sie im Feld Auf folgende Extranet-Gruppen einschränken die gewünschten Benutzergruppen auswählen.
+
+Nutzen Sie diese Einstellung, um sensible Inhalte gezielt bestimmten Nutzerkreisen zugänglich zu machen.";"**Restrict Access**
+
+This field allows you to specify that the page is only visible to logged-in users. Additionally, you can further restrict access by selecting the desired user groups in the ""Restrict to the following extranet groups"" field.
+
+Use this setting to make sensitive content accessible to specific user groups only."
+"value";"shop_shipping_type";"**Zusatzkosten**
+
+Die bei Auswahl dieser Versandart anfallenden Zusatzkosten können entweder als fester Betrag oder als prozentualer Anteil des Preises der jeweiligen Artikel berechnet werden. Die Berechnungsart wird durch die Einstellung für die Zusatzkostenart bestimmt.
+
+Beispiel (Twig-Syntax):
+
+```
+{{ versand.zusatzkosten }}
+```";"**Additional Costs**
+
+The additional costs incurred when selecting this shipping method can be calculated either as a fixed amount or as a percentage of the price of the respective items. The calculation method is determined by the setting for the type of additional cost.
+
+Example (Twig syntax):
+
+```
+
+```"
+"value";"shop_payment_method";"**Zusatzkosten**
+
+Hier werden zusätzliche Kosten angegeben, die bei der Nutzung dieser Zahlungsmethode anfallen können.";"**Additional Costs**
+
+Here, any extra costs that may be incurred when using this payment method are specified."
+"value_type";"shop_shipping_type";"**Zusatzkostenart**
+
+Mit der Zusatzkostenart wird festgelegt, ob die anfallenden Zusatzkosten als absoluter Betrag oder als prozentualer Wert berechnet werden. Bei Wahl der prozentualen Berechnung prüft das System während der Versandkostenberechnung für jeden Artikel, ob dieser  beispielsweise direkt, über eine Kategorie oder auf ähnliche Weise  von der jeweiligen Zusatzkostenart betroffen ist. In diesem Fall dient nur der entsprechende Artikel als Grundlage für die prozentuale Berechnung.
+
+Beachte: Das Verhalten kann durch die Einstellung  Wert bezieht sich auf ganzen Warenkorb geändert werden.";"**Additional Cost Type**
+
+The additional cost type determines whether the incurred additional costs are calculated as an absolute amount or as a percentage value. If the percentage calculation is selected, the system checks during the shipping cost calculation for each item whether it is affected by the respective additional cost typeeither directly, through a category, or in a similar way. In this case, only the relevant item is used as the basis for the percentage calculation.
+
+Note: This behavior can be changed by the setting Value refers to the entire shopping cart."
+"use_save_forgot_password";"data_extranet";"@deprecated since 6.1.0  Dieses Feld wird nicht mehr verwendet, bleibt jedoch zur Sicherstellung der Rückwärtskompatibilität erhalten.
+
+Wenn diese Option aktiviert ist, erhält der Benutzer eine E-Mail mit einem Link zu einem Formular, in dem er ein neues Passwort festlegen kann. Dieser Link ist für 2 Stunden gültig. Falls der Benutzer das Passwort innerhalb dieses Zeitraums nicht ändert, bleibt das alte Passwort weiterhin bestehen.
+
+Wird die Option nicht aktiviert, erhält der Benutzer unmittelbar ein neues Passwort per E-Mail. Das alte Passwort wird dadurch sofort ersetzt.";"@deprecated since 6.1.0  This field is no longer used but is retained to ensure backward compatibility.
+
+If this option is enabled, the user will receive an email with a link to a form where they can set a new password. This link is valid for 2 hours. If the user does not change the password within this period, the old password will remain in effect.
+
+If the option is not enabled, the user will immediately receive a new password by email. The old password will be replaced immediately."
+"use_multilanguage";"cms_portal";"Aktiviert die prefixbasierte Mehrsprachigkeit für dieses Portal.
+
+Wenn diese Funktion eingeschaltet ist, erhalten alle Links, die nicht in der Standard- oder Grundsprache angezeigt werden, ein Länderkürzel als Präfix in der URL.
+
+Beispiel:
+```
+/en/meine_seite
+```
+
+Dadurch ist eindeutig erkennbar, in welcher Sprache die jeweilige Seite aufgerufen wird.";"Enables prefix-based multilingualism for this portal.
+
+When this feature is enabled, all links that are not displayed in the default or base language receive a country code as a prefix in the URL.
+
+Example:
+```
+/en/my_page
+```
+
+This makes it clear in which language the respective page is being accessed."
+"restrict_to_volume_from";"shop_shipping_type";"Alle Artikel, die von dieser Versandkostenart betroffen sind, müssen zusammen mindestens das angegebene Volumen erreichen, damit diese Versandkostenart angewendet werden kann.";"All items affected by this shipping method must together reach at least the specified volume for this shipping method to be applicable."
+"restrict_to_weight_from";"shop_shipping_type";"Alle Artikel, für die diese Versandkostenart gilt, müssen zusammen mindestens das angegebene Gewicht in Gramm erreichen, damit diese Versandkostenart angewendet wird.";"All items for which this shipping method applies must together reach at least the specified weight in grams in order for this shipping method to be used."
+"restrict_to_weight_to";"shop_shipping_type";"Alle betroffenen Artikel dürfen zusammen höchstens das angegebene Gewicht in Gramm erreichen, damit diese Versandkostenart angewendet werden kann.";"All affected items may together reach at most the specified weight in grams for this shipping method to be applicable."
+"restrict_to_volume_to";"shop_shipping_type";"Alle betroffenen Artikel dürfen zusammen höchstens das angegebene Volumen (in Kubikmetern) erreichen, damit diese Versandkostenart angewendet werden kann.";"All affected items may together reach a maximum of the specified volume (in cubic meters) in order for this shipping cost type to be applied."
+"shop_article_image";"shop_article";"Alle Detailbilder des Artikels. Standardmäßig wird das erste Bild für die Vorschaubilder verwendet. Dieses Verhalten kann jedoch über die Vorschaubildliste angepasst werden.
+
+- Das erste Bild dient als Standard-Vorschaubild.
+- Die Auswahl des Vorschaubilds kann individuell über die Liste der Vorschaubilder geändert werden.";"All detail images of the item. By default, the first image is used for the preview images. However, this behavior can be adjusted via the preview image list.
+
+- The first image serves as the default preview image.
+- The selection of the preview image can be individually changed via the preview image list."
+"data_extranet_user_login_history";"data_extranet_user";"Bei jedem Loginversuch wird ein Eintrag gespeichert. Dadurch kann nachvollzogen werden, wann und von welchem Ort sich ein Benutzer angemeldet hat.";"An entry is saved with every login attempt. This makes it possible to trace when and from which location a user has logged in."
+"usp";"shop_article";"Beschreiben Sie das besondere Alleinstellungsmerkmal (USP) des Artikels. Legen Sie dar, wodurch sich dieses Produkt von anderen unterscheidet und was es einzigartig macht.";"Describe the unique selling proposition (USP) of the product. Explain what distinguishes this product from others and what makes it unique."
+"quantity_in_units";"shop_article";"Beschreibt die im Artikel enthaltene Menge, gemessen in einer bestimmten Maßeinheit. Diese Information wird für die Berechnung des Grundpreises verwendet.";"Describes the quantity contained in the article, measured in a specific unit of measurement. This information is used for calculating the base price."
+"restrict_to_articles_to";"shop_discount";"Bestimmt die maximale Anzahl von Artikeln, für die der Rabatt angewendet werden kann. Sobald diese Anzahl erreicht ist, wird der Rabatt auf weitere Artikel nicht mehr angerechnet.";"Determines the maximum number of items for which the discount can be applied. Once this number is reached, the discount will no longer be applied to additional items."
+"menu_stop_level";"cms_division";"Bestimmt die maximale Ebene, bis zu der in der Hover-Ausklappnavigation Untermenüpunkte sichtbar sind.
+
+Level 0 kennzeichnet die oberste (Root-)Ebene. Alle Unterebenen, die über den angegebenen Wert hinausgehen, werden nicht mehr als Untermenüs angezeigt.";"Determines the maximum level up to which submenu items are visible in the hover drop-down navigation.
+
+Level 0 designates the top (root) level. All sub-levels beyond the specified value are no longer displayed as submenus."
+"restrict_to_value_to";"shop_discount";"Bis zu welchem Warenwert die betroffenen Artikel für den Rabatt berücksichtigt werden. Grundlage für die Berechnung ist die Summe aller relevanten Produkte, bevor andere Rabatte abgezogen werden.";"Up to which merchandise value the affected items are considered for the discount. The calculation is based on the total of all relevant products before other discounts are deducted."
+"name";"cms_portal_domains";"Bitte geben Sie die Domain ohne ""http://"" oder ""https://"" ein. Beispiele: www.beispiel.de oder beispiel.de.";"Please enter the domain without ""http://"" or ""https://"". Examples: www.example.com or example.com."
+"render_view_subtype";"cms_wizard_step";"Bitte gib hier einen Pfad an, der relativ zu den objectview-Ordnern (beispielsweise ""dbobjects"") liegt. Falls der Schritt als Package-Schritt definiert wurde, verwende stattdessen einen Pfad relativ zu den Classes-Ordnern.";"Please specify a path here that is relative to the objectview folders (for example, ""dbobjects""). If the step was defined as a package step, use a path relative to the Classes folders instead."
+"is_bundle";"shop_article";"Bundles werden im Shop als eigenständige Produkte behandelt. Sie erhalten eine eigene Beschreibung, individuelle Bilder und einen eigenen Preis. Damit ein Produkt als Bundle erkannt wird, kann es entsprechend markiert werden.
+
+Alle Produkte, die zu einem Bundle gehören, werden explizit zugeordnet. Für jeden enthaltenen Artikel lässt sich die gewünschte Menge festlegen.
+
+Im Warenkorb sowie bei allen Berechnungen wird das Bundle als einzelnes Produkt behandelt. Die einzeln zugeordneten Produkte werden dabei innerhalb der Berechnung nicht berücksichtigt. Das bedeutet:
+
+- Rabatte, Gutscheine, Zahlungsarten, Versandkosten und Mehrwertsteuerregeln beziehen sich ausschließlich auf das Bundle-Produkt.
+- Auf die im Bundle enthaltenen Einzelprodukte werden diese Regeln nicht direkt angewendet.";"Bundles are treated as independent products in the shop. They receive their own description, individual images, and a separate price. To be recognized as a bundle, a product can be marked accordingly.
+
+All products belonging to a bundle are explicitly assigned. For each included item, the desired quantity can be specified.
+
+In the shopping cart as well as in all calculations, the bundle is treated as a single product. The individually assigned products are not taken into account within the calculation. This means:
+
+- Discounts, vouchers, payment methods, shipping costs, and VAT rules apply exclusively to the bundle product.
+- These rules do not apply directly to the individual products included in the bundle."
+"scharpen";"cms_config_imagemagick";"Das Bild wird mithilfe des Parameters -unsharp 1.5×1.0+1.5+0.02 geschärft.";"The image is sharpened using the parameter -unsharp 1.5×1.0+1.5+0.02."
+"active_to";"shop_voucher_series";"Das Datum bestimmt, bis zu welchem Zeitpunkt die Gutscheine dieser Serie gültig sind und eingelöst werden können.
+
+Nach Ablauf dieses Datums können die Gutscheine nicht mehr verwendet werden.";"The date determines until when the vouchers of this series are valid and can be redeemed.
+
+After this date has passed, the vouchers can no longer be used."
+"password_change_time_stamp";"data_extranet_user";"Das Datum, an dem eine Passwortänderungsanfrage gestellt wurde, wird hier gespeichert. Anhand dieses Zeitpunkts wird überprüft, ob der Schlüssel zum Ändern des Passworts noch gültig ist.
+
+Die akzeptierte Zeitspanne zur Änderung kann individuell in der Konfiguration des Extranets festgelegt werden.";"The date on which a password change request was made is stored here. This timestamp is used to verify whether the key for changing the password is still valid.
+
+The accepted time period for making changes can be individually set in the configuration of the extranet."
+"hotspot_type";"pkg_image_hotspot_item_spot";"Das eingeblendete Pfeil-Icon kann wahlweise nach links oder nach rechts zeigen.";"The displayed arrow icon can point either to the left or to the right."
+"cms_media_id";"shop_manufacturer";"Das erste Bild wird als Symbol für den Hersteller oder die Marke verwendet. Zusätzlich kann ein zweites Bild als Logo hinterlegt werden.
+
+Falls kein separates Logo angegeben ist, verwendet das System automatisch das Symbolbild auch als Logo.";"The first image is used as a symbol for the manufacturer or brand. Additionally, a second image can be stored as a logo.
+
+If no separate logo is specified, the system automatically uses the symbol image as the logo as well."
+"list_group_field_column";"cms_tbl_conf";"Das Feld gibt an, welcher Spaltenname für die Gruppierung in einer Abfrage verwendet wird. Üblicherweise wird dabei ein Alias genutzt, zum Beispiel:
+
+```sql
+K.`name` AS Kategoriename
+```
+
+Achte darauf, dass der in der Abfrage verwendete Alias auch tatsächlich in den Ergebnissen enthalten ist, damit die Gruppierung korrekt durchgeführt werden kann.";"The field specifies which column name is used for grouping in a query. Typically, an alias is used, for example:
+
+```sql
+K.`name` AS CategoryName
+```
+
+Make sure that the alias used in the query is actually included in the results so that the grouping can be performed correctly."
+"list_group_field";"cms_tbl_conf";"Das Gruppierungsfeld gibt den Namen des relevanten Datenbankfelds an, zum Beispiel `K.meinfeld`. Wenn die Abfrage mehrere Tabellen umfasst, ist es erforderlich, den Tabellenalias sowie Backticks (`) zu verwenden.";"The grouping field specifies the name of the relevant database field, for example `K.meinfeld`. If the query involves multiple tables, it is necessary to use the table alias as well as backticks (`)."
+"name";"cms_message_manager_message";"Das System nutzt diesen Wert, um die Meldung eindeutig zu identifizieren.";"The system uses this value to uniquely identify the message."
+"name_internal";"shop_system_info";"Das System verwendet diesen Namen zur eindeutigen Identifikation des Eintrags.";"The system uses this name to uniquely identify the entry."
+"body";"data_mail_profile";"Das Textfeld unterstützt die Verwendung von [TWIG](http://twig.sensiolabs.org/), einer Template-Engine.
+
+Um alle verfügbaren Platzhalter einzusehen, kann der Wert von sModuleSpotName verwendet werden.
+
+```twig
+{{ sModuleSpotName }}
+```
+
+Platzhalter werden dabei in geschweiften Klammern angegeben und ermöglichen die dynamische Ausgabe von Daten im Template.";"The text field supports the use of [TWIG](http://twig.sensiolabs.org/), a template engine.
+
+To view all available placeholders, the value of sModuleSpotName can be used.
+
+```twig
+
+```
+
+Placeholders are specified within curly braces and allow for the dynamic output of data in the template."
+"value_type";"shop_voucher_series";"Definiert, ob der Wert als fester Betrag oder als prozentualer Anteil angegeben wird.
+
+Bei prozentualen Angaben wird stets der gesamte Warenkorbwert als Berechnungsgrundlage herangezogen.";"Defines whether the value is specified as a fixed amount or as a percentage.
+
+For percentage values, the total shopping cart value is always used as the calculation basis."
+"shop_module_article_list_filter_id";"shop_module_article_list";"Der ausgewählte Filter legt fest, welche Inhalte in dieser Liste angezeigt werden.";"The selected filter determines which content is displayed in this list."
+"category_hits";"shop_search_cache";"Der Cache speichert die Anzahl der Treffer, die einer bestimmten Kategorie zugeordnet sind. Dies ermöglicht es, Suchergebnisse innerhalb von Kategorien schneller anzuzeigen und zu verarbeiten.
+
+**Vorteile:**
+
+- Verbesserte Performance bei der Suche innerhalb von Kategorien.
+- Schnellere Reaktionszeiten für Nutzeranfragen.";"The cache stores the number of hits assigned to a specific category. This allows search results within categories to be displayed and processed more quickly.
+
+**Advantages:**
+
+- Improved performance when searching within categories.
+- Faster response times for user requests."
+"identifier";"shop_contributor_type";"Der Code ermöglicht die eindeutige Identifizierung einer bestimmten Art von Beitragendem. Das System sowie der Datenimport nutzen diesen Code zur klaren Zuordnung der jeweiligen Kategorie.
+
+**Beispiel:**
+```sql
+SELECT * FROM shop_contributor_type WHERE identifier = 'supplier';
+```
+
+- Der Code wird für die automatische Kategorisierung verwendet.
+- Eine eindeutige Vergabe ist erforderlich, um Konflikte zu vermeiden.";"The code enables the unique identification of a specific type of contributor. Both the system and the data import use this code for clear assignment to the respective category.
+
+**Example:**
+```sql
+SELECT * FROM shop_contributor_type WHERE identifier = 'supplier';
+```
+
+- The code is used for automatic categorization.
+- Unique assignment is required to avoid conflicts."
+"optincode";"pkg_newsletter_user";"Der Code wird intern verwendet, um das Double-Opt-In-Verfahren zu ermöglichen. Dadurch wird gewährleistet, dass eine Anmeldung zum Newsletter erst nach einer zusätzlichen Bestätigung abgeschlossen wird.
+
+Nachdem sich Nutzer angemeldet haben, erhalten sie eine E-Mail mit einem persönlichen Bestätigungslink, der diesen Code enthält. Erst wenn dieser Link angeklickt wurde, gilt die Anmeldung als vollständig und ist somit gültig.";"The code is used internally to enable the double opt-in process. This ensures that registration for the newsletter is only completed after an additional confirmation.
+
+After users sign up, they receive an email with a personal confirmation link that contains this code. Only when this link has been clicked is the registration considered complete and therefore valid."
+"font_filename";"cms_font_image";"Der Dateiname der Schriftdatei bestimmt, welche Schriftart im System verwendet wird.
+
+Die Schriftdateien befinden sich im Ordner  /private/framework/fonts/ . Stelle sicher, dass die gewünschte Datei dort abgelegt ist, damit sie korrekt eingebunden werden kann.";"The filename of the font file determines which font is used in the system.
+
+The font files are located in the /private/framework/fonts/ folder. Make sure that the desired file is placed there so that it can be properly integrated."
+"iso4217";"pkg_shop_currency";"Der dreistellige ISO-4217-Code gibt an, um welche Währung es sich handelt. Eine Übersicht der Codes finden Sie beispielsweise auf der Wikipedia-Seite zu ISO 4217.";"The three-digit ISO 4217 code indicates which currency is being referred to. An overview of the codes can be found, for example, on the Wikipedia page for ISO 4217."
+"cart_info_text";"shop";"Der eingegebene Text sollte alle rechtlich relevanten Hinweise zum Warenkorb sowie zum Versand enthalten.
+
+Beispiel:
+
+Alle Preise verstehen sich inklusive gesetzlicher Mehrwertsteuer. Zuzüglich Versandkostenpauschale von 3,50  pro Bestellung. Ab einem Bestellwert von 20,00  erfolgt der Versand kostenfrei.";"All prices include statutory VAT. A shipping fee of 3.50 per order will be added. For orders of 20.00 or more, shipping is free."
+"name_internal";"cms_portal_system_page";"Der hier eingetragene Wert ermöglicht es dem System, den entsprechenden Eintrag korrekt zu identifizieren.";"The value entered here enables the system to correctly identify the corresponding entry."
+"model";"cms_master_pagedef_spot_access";"Der Klassenname gibt an, welches Modul für die jeweilige Seite verwendet wird. Er stammt aus dem Verzeichnis framework/modules, zum Beispiel MTTextField.";"The class name indicates which module is used for the respective page. It originates from the directory framework/modules, for example, MTTextField."
+"shop_stock_message_id";"shop_article";"Der Lieferstatus zeigt an, wie verfügbar ein Artikel aktuell ist. Diese Information wird in verständlicher Form dargestellt und entspricht genau den Angaben, die von der angebundenen Schnittstelle übermittelt werden.";"The delivery status indicates how available an item currently is. This information is presented in an understandable format and corresponds exactly to the details provided by the connected interface."
+"name";"cms_tbl_conf_restrictions";"Der Name des betroffenen Feldes sollte stets im vollständigen Format angegeben werden, das sowohl den Tabellennamen als auch das Feld enthält (zum Beispiel: meine_tabelle.mein_feld). Dadurch ist eine eindeutige Identifizierung des Feldes gewährleistet.";"The name of the affected field should always be specified in the full format, including both the table name and the field (for example: my_table.my_field). This ensures unambiguous identification of the field."
+"display_name";"cms_wizard_step";"Der Name dient dazu, den Schritt im CMS anzuzeigen. Dies ist besonders wichtig, da nicht jeder Schritt zwingend eine eigene Überschrift besitzt.";"The name is used to display the step in the CMS. This is especially important because not every step necessarily has its own heading."
+"description_end";"shop_module_article_list";"Der optionale Abschlusstext wird in der Regel am Ende der Liste angezeigt.";"The optional closing text is usually displayed at the end of the list."
+"active_from";"shop_discount";"Der Rabatt gilt ab diesem Zeitpunkt.";"The discount applies from this point onwards."
+"restrict_to_value_from";"shop_discount";"Der Rabatt wird ab dem angegebenen Mindestwarenwert der betroffenen Artikel angewendet.
+
+Für die Berechnung zählt die Summe der entsprechenden Produkte, ohne dass bereits andere Rabatte abgezogen wurden.";"The discount is applied starting from the specified minimum order value of the relevant items.
+
+For the calculation, the sum of the corresponding products is taken into account, without any other discounts already deducted."
+"restrict_to_articles_from";"shop_discount";"Der Rabatt wird erst angewendet, wenn die festgelegte Mindestanzahl an Artikeln im Warenkorb erreicht wurde. Liegt die Anzahl der betroffenen Artikel darunter, wird der Rabatt nicht gewährt.";"The discount is only applied once the specified minimum number of items has been added to the cart. If the number of eligible items is below this threshold, the discount will not be granted."
+"url_name";"cms_wizard_step";"Der URL-Name wird beispielsweise für die Rewrite-Engine genutzt. Jeder Schritt sollte einen eigenen URL-Namen festlegen, damit individuelle Adressen generiert werden können.";"The URL name is used, for example, by the rewrite engine. Each step should define its own URL name so that individual addresses can be generated."
+"url_name";"shop_variant_type";"Der URL-Name wird genutzt, um eine suchmaschinenfreundliche Adresse für die Detailansicht im Webshop zu generieren.
+
+Beispiel:  
+Aus dem angegebenen URL-Namen wird automatisch ein SEO-optimierter Link erstellt.";"The URL name is used to generate a search engine-friendly address for the detail view in the webshop.
+
+Example:  
+An SEO-optimized link is automatically created from the specified URL name."
+"url_path";"shop_category";"Der URL-Pfad zur jeweiligen Kategorie wird automatisch vom System verwaltet. Änderungen an diesem Feld sind nicht erforderlich, da das System die korrekten Werte selbstständig generiert und pflegt.";"The URL path for each category is managed automatically by the system. Changes to this field are not necessary, as the system independently generates and maintains the correct values."
+"name";"cms_message_manager_backend_message";"Der vom System eindeutig verwendete Name dient zur Identifikation der jeweiligen Meldung.";"The unique name used by the system serves to identify the respective message."
+"display_column_callback";"cms_tbl_conf";"Die angegebene Funktion wird auf das Anzeigefeld angewendet.
+
+Verwende entweder gcf_functionname für globale oder ccf_functionname für kundenspezifische Funktionen.
+
+Der erste Parameter ist der Wert des Anzeigefelds, der zweite ein assoziatives Array der aktuellen Zeile.";"The specified function is applied to the display field.
+
+Use either gcf_functionname for global functions or ccf_functionname for custom functions.
+
+The first parameter is the value of the display field, the second is an associative array of the current row."
+"view";"pkg_shop_listfilter_item_type";"Die Ansicht, die für das Filterelement verwendet wird, befindet sich im gleichen Bereich wie die zugehörige Klasse. Sie liegt entweder in Core, Custom-Core oder Customer und ist im Verzeichnis pkgShopListfilter/views/db/ListfilterItems abgelegt.
+
+Falls die Ansicht in einem Unterverzeichnis gespeichert ist, sollte der Name dieses Unterverzeichnisses im Namen der Ansicht mit angegeben werden.";"The view used for the filter element is located in the same area as the associated class. It is stored either in Core, Custom-Core, or Customer and can be found in the directory pkgShopListfilter/views/db/ListfilterItems.
+
+If the view is stored in a subdirectory, the name of this subdirectory should be included in the name of the view."
+"amount";"shop_order_bundle_article";"Die Anzahl der Artikel, die im Bundle enthalten sind.";"The number of items included in the bundle."
+"class";"shop_order_step";"Die anzugebende Klasse muss von der Tabellenklasse abgeleitet sein. Es können mehrere Klassen angegeben werden, die durch Kommas getrennt werden. In diesem Fall wird zuerst die Klasse verwendet, die gemäß der Methode isApplicableForBasket für den Warenkorb geeignet ist.";"The specified class must be derived from the table class. Multiple classes can be specified, separated by commas. In this case, the class that is suitable for the shopping basket according to the isApplicableForBasket method will be used first."
+"field_width";"cms_field_conf";"Die Breite des Eingabefelds wird in Pixeln angegeben.";"The width of the input field is specified in pixels."
+"destination_table_name";"pkg_csv2sql";"Die Daten aus allen festgelegten Quellen werden in diese Tabelle importiert.";"The data from all specified sources is imported into this table."
+"from_email";"module_feedback";"Die E-Mail-Adresse des Absenders. Bleibt dieses Feld leer, wird automatisch die E-Mail-Adresse des Empfängers als Absender verwendet.";"The sender's email address. If this field is left empty, the recipient's email address will automatically be used as the sender."
+"user_email";"shop_order";"Die E-Mail-Adresse des Kunden, der die Bestellung aufgegeben hat.";"The email address of the customer who placed the order."
+"email";"pkg_newsletter_user";"Die E-Mail-Adresse des Newsletterempfängers wird gespeichert. Sie dient der eindeutigen Identifikation und wird für den Versand des Newsletters verwendet.
+
+- Die angegebene Adresse muss ein gültiges E-Mail-Format aufweisen.
+- Über diese Adresse erhält der Empfänger alle Benachrichtigungen und Informationen.";"The email address of the newsletter recipient is stored. It serves for unique identification and is used to send the newsletter.
+
+- The provided address must have a valid email format.
+- The recipient will receive all notifications and information via this address."
+"list_rank";"shop_article";"Die Gewichtung gibt an, welche Position ein Artikel im Vergleich zu anderen innerhalb von Listen einnimmt. Ein höherer Wert sorgt dafür, dass der Artikel weiter oben in der Liste angezeigt wird; ein niedrigerer Wert führt zu einer weiter hinten liegenden Platzierung.
+
+Mit dieser Zahl lässt sich die Reihenfolge der Artikel gezielt steuern.";"The weighting indicates the position an item holds compared to others within lists. A higher value ensures that the item appears higher up in the list; a lower value results in a position further down.
+
+This number allows you to specifically control the order of the items."
+"class";"cms_message_manager_message_type";"Die hier angegebene Klasse, wie beispielsweise myClass, wird im XHTML-Code allen Nachrichten dieses Typs hinzugefügt. Das erfolgt in folgender Form:
+
+```html
+<div class=""cmsmessage myClass"">Nachricht</div>
+```
+
+Dadurch können Nachrichten gezielt über CSS gestaltet werden.";"The class specified here, such as myClass, is added in the XHTML code to all messages of this type. This is done as follows:
+
+```html
+<div class=""cmsmessage myClass"">Message</div>
+```
+
+This allows messages to be styled specifically using CSS."
+"class";"shop_stock_message";"Die hier eingetragene Klasse wird vom System als CSS-Klasse auf das Nachrichten-Element angewendet. Dadurch kannst du das Aussehen der Mitteilung individuell gestalten.
+
+**Beispiel:**
+```html
+<div class=""info-message"">Dein Artikel ist wieder verfügbar!</div>
+```
+
+Du kannst mehrere CSS-Klassen durch Leerzeichen getrennt angeben, um verschiedene Gestaltungsoptionen zu kombinieren.";"The class entered here is applied by the system as a CSS class to the message element. This allows you to customize the appearance of the notification.
+
+**Example:**
+```html
+<div class=""info-message"">Your item is available again!</div>
+```
+
+You can specify multiple CSS classes separated by spaces to combine different styling options."
+"img_background_color";"cms_font_image";"Die Hintergrundfarbe des Bildes kann im RGB- oder HEX-Format angegeben werden, zum Beispiel FFFFFF für Weiß. Bitte das #-Zeichen weglassen.
+
+Wird der Wert auf -1 gesetzt, bleibt der Hintergrund transparent.";"The background color of the image can be specified in RGB or HEX format, for example FFFFFF for white. Please omit the # sign.
+
+If the value is set to -1, the background remains transparent."
+"name";"cms_smart_url_handler";"Die Klasse muss von der abstrakten Klasse TCMSSmartURLHandler erben. Diese befindet sich in der Core-Klassenbibliothek im Verzeichnis ./classes/TCMSSmartURLHandler.
+
+Das System sucht die von dir angegebene Klasse im Verzeichnis, das dem gewählten Klasstyp (Core, Custom, Customer) entspricht.";"The class must inherit from the abstract class TCMSSmartURLHandler. This class is located in the core class library in the directory ./classes/TCMSSmartURLHandler.
+
+The system searches for the class you specified in the directory corresponding to the selected class type (Core, Custom, Customer)."
+"comment";"shop_article_review";"Die Meinung eines Kunden zu diesem Artikel.";"The opinion of a customer about this item."
+"fieldclass";"cms_field_conf";"Die PHP-Klasse, die für diesen Feldtyp verwendet wird. Sie überschreibt die Standardklasse, die normalerweise durch den Feldtyp festgelegt wird.";"The PHP class used for this field type. It overrides the default class that is normally defined by the field type."
+"position";"pkg_cms_class_manager_extension";"Die Reihenfolge bestimmt, welche Klassen die Eigenschaften und Methoden von zuvor gelisteten Klassen übernehmen. Eine durchdachte Sortierung ist daher entscheidend, um eine korrekte Vererbungshierarchie sicherzustellen.
+
+Klassen, die weiter unten in der Liste stehen, erben automatisch von den weiter oben platzierten Klassen.";"The order determines which classes inherit the properties and methods of previously listed classes. Therefore, a well-considered sorting is crucial to ensure a correct inheritance hierarchy.
+
+Classes that appear further down the list automatically inherit from the classes positioned above them."
+"value_vouchers_not_sponsored";"shop_order";"Die Summe aller nicht gesponserten Gutscheine, die als Rabatt auf den Bestellwert vor Steuern angerechnet werden.";"The sum of all non-sponsored vouchers that are applied as a discount to the order value before taxes."
+"vat_id";"data_extranet_user_address";"Die Umsatzsteuer-Identifikationsnummer für Unternehmen.
+
+Bitte beachten: Dieses Feld dient ausschließlich der Erfassung. Automatische Prozesse, wie etwa die Berechnung von Nettopreisen, werden durch dieses Feld nicht ausgelöst.";"The VAT identification number for businesses.
+
+Please note: This field is for recording purposes only. Automated processes, such as the calculation of net prices, are not triggered by this field."
+"restrict_to_articles_to";"shop_shipping_type";"Die Versandkostenart wird nur angewendet, wenn die Anzahl der betroffenen Artikel die hier festgelegte Maximalzahl nicht überschreitet. Die Stückzahl aller zugeordneten Artikel im Warenkorb wird hierfür zusammengezählt.
+
+Beispiel:  
+Befinden sich zwei unterschiedliche Produkte mit dieser Versandkostenart im Warenkorb und von einem Produkt wurden zwei Stück gewählt, ergibt das insgesamt drei betroffene Artikel.";"The shipping method will only be applied if the number of applicable items does not exceed the maximum quantity specified here. The total quantity of all assigned items in the shopping cart will be added together for this purpose.
+
+Example:  
+If there are two different products with this shipping method in the shopping cart and two units of one product are selected, this results in a total of three applicable items."
+"position";"shop_shipping_type";"Die Versandkostenarten werden in der festgelegten Reihenfolge abgearbeitet.
+
+Mit diesem Feld kann die Reihenfolge bestimmt werden.";"The shipping cost types are processed in the specified order.
+
+This field can be used to determine the order."
+"render_view_name";"shop_order_step";"Die Views befinden sich im Verzeichnis classes/pkgShop/views/db/TShopOrderStep/KLASSEN-NAME.";"The views are located in the directory classes/pkgShop/views/db/TShopOrderStep/CLASS-NAME."
+"shop_article_preview_image";"shop_article";"Die Vorschaubilder eines Artikels werden beispielsweise in Listenansichten genutzt.
+
+Ist für eine bestimmte Bildgröße kein eigenes Vorschaubild hinterlegt, wird automatisch das erste Bild aus der Artikelbildtabelle in die gewünschte Größe umgewandelt.";"The preview images of an article are used, for example, in list views.
+
+If a specific preview image is not available for a certain image size, the first image from the article image table is automatically converted to the desired size."
+"class";"pkg_run_frontend_action";"Die zu verwendende Klasse muss das Interface IPkgRunFrontendAction implementieren.";"The class to be used must implement the IPkgRunFrontendAction interface."
+"meta_robots";"cms_tpl_page";"Diese Einstellung bestimmt, wie Suchmaschinen mit der Seite und ihren Links umgehen.
+
+Die folgenden Optionen stehen zur Verfügung:
+
+- index: Die Seite wird von Suchmaschinen erfasst und erscheint im Suchindex.
+- noindex: Die Seite wird nicht von Suchmaschinen erfasst und taucht nicht im Suchindex auf.
+- follow: Suchmaschinen folgen den auf dieser Seite enthaltenen Links und durchsuchen die verlinkten Seiten.
+- nofollow: Suchmaschinen folgen den auf dieser Seite enthaltenen Links nicht.
+
+Durch die Kombination dieser Werte wird festgelegt, ob die Seite gefunden werden kann und ob Suchmaschinen den Links auf der Seite folgen dürfen.";NULL
+"category_hightlight";"shop_category";"Diese Kategorie wird farblich hervorgehoben dargestellt, wodurch sie in der Navigation besonders auffällt und die Aufmerksamkeit der Nutzer gezielt auf sich zieht.";"This category is highlighted in color, making it stand out in the navigation and specifically drawing users' attention to it."
+"meta_description";"cms_tpl_page";"Diese Kurzbeschreibung erscheint in Suchmaschinenergebnissen. Integrieren Sie relevante Schlüsselbegriffe sinnvoll und formulieren Sie präzise. Maximal 200 Zeichen.";"This short description appears in search engine results. Integrate relevant keywords appropriately and use concise wording. Maximum 200 characters."
+"node_confirm_registration";"data_extranet";"Diese Seite bildet das Ziel der Bestätigung einer doppelten Einwilligung (Double-Opt-In) während der Registrierung. Nachdem der Nutzer sich angemeldet und auf den Bestätigungslink in der E-Mail geklickt hat, wird er auf diese Seite weitergeleitet.
+
+Sie stellt einen wichtigen Schritt dar, um die Registrierung erfolgreich abzuschließen und die Identität des Nutzers eindeutig zu verifizieren.";"This page serves as the destination for confirming a double opt-in during registration. After the user has signed up and clicked the confirmation link in the email, they are redirected to this page.
+
+It represents an important step in successfully completing the registration and clearly verifying the user's identity."
+"shop_order_item_id";"shop_order_bundle_article";"Dieser Eintrag ist dem entsprechenden Bundle-Artikel der Bestellung zugeordnet.";"This entry is assigned to the corresponding bundle item of the order."
+"signedup_headline";"pkg_newsletter_module_signup_config";"Dieser Text wird nach der erfolgreichen Anmeldung zum Abonnement angezeigt.";"This text will be displayed after successfully signing up for the subscription."
+"name";"cms_tbl_display_orderfields";"Dieser Wert entspricht dem Namen, unter dem das Feld in der Datenbankabfrage eingebunden wurde.
+
+Beispiel:
+
+```sql
+SELECT K.feld AS name
+```
+
+Hier wäre der Wert für dieses Feld name.";"This value corresponds to the name under which the field was included in the database query.
+
+Example:
+
+```sql
+SELECT K.feld AS name
+```
+
+Here, the value for this field would be name."
+"amount";"shop_stock_message_trigger";"Dieser Wert legt eine Obergrenze für den Lagerbestand fest. Sobald der aktuelle Bestand auf den angegebenen Wert sinkt oder diesen unterschreitet, wird eine entsprechende Nachricht angezeigt.
+
+**Beispiel:**  
+Wenn die Menge auf 5 eingestellt ist, erscheint die hinterlegte Meldung, sobald der Bestand 5 oder weniger beträgt.";"This value sets an upper limit for the inventory. As soon as the current stock reaches or falls below the specified value, a corresponding message is displayed.
+
+**Example:**  
+If the quantity is set to 5, the stored message will appear as soon as the stock is 5 or less."
+"value_wrapping";"shop_order";"Dieser Wert zeigt die Kosten für eine Geschenkverpackung an.";"This value indicates the cost of gift wrapping."
+"shop_voucher_use";"shop_voucher";"Dieses Feld dokumentiert, wann ein Gutschein verwendet wurde, durch welche Person die Nutzung erfolgte und welchen Betrag der Gutschein dabei abgedeckt hat.
+
+Die folgenden Informationen werden hierbei gespeichert:
+
+- Das Verwendungsdatum des Gutscheins
+- Die Person, welche den Gutschein eingelöst hat
+- Der Betrag, den der Gutschein im jeweiligen Vorgang abgedeckt hat";"This field documents when a voucher was used, by which person the voucher was redeemed, and the amount covered by the voucher.
+
+The following information is stored:
+
+- The date the voucher was used
+- The person who redeemed the voucher
+- The amount covered by the voucher in the respective transaction"
+"icon_font_css_class";"cms_tbl_conf";"Dieses Feld ermöglicht es, ein Icon aus einer Icon-Schriftart für Menüeinträge anzuzeigen.
+
+Um ein Icon aus Font Awesome zu verwenden, kann beispielsweise die Klasse verwendet werden:
+
+```plaintext
+fas fa-check
+```
+
+@deprecated since 6.3.0  Konfigurieren Sie CSS-Klassen stattdessen in der Haupt-Konfiguration des Menüeintrags.";"This field allows you to display an icon from an icon font for menu items.
+
+To use an icon from Font Awesome, for example, you can use the following class:
+
+```plaintext
+fas fa-check
+```
+
+@deprecated since 6.3.0  Configure CSS classes in the main configuration of the menu item instead."
+"basket_spot_name";"shop";"Dieses Feld gibt an, an welcher Stelle im Layout das Warenkorbmodul integriert ist. Diese Information ist erforderlich, damit das System erkennt, wo das Warenkorbmodul angezeigt werden soll.
+
+Bitte überprüfen Sie, dass in jeder Layout-Variante des Shops die angegebene Position tatsächlich das Warenkorbmodul (MTShopBasket) enthält. Nur so kann der Warenkorb einwandfrei funktionieren.";"This field specifies the position in the layout where the shopping cart module is integrated. This information is required so that the system knows where to display the shopping cart module.
+
+Please ensure that the specified position in every layout variant of the shop actually contains the shopping cart module (MTShopBasket). Only then can the shopping cart function properly."
+"extranet_spot_name";"data_extranet";"Dieses Feld gibt an, zu welchem Spot Anfragen gesendet werden können. Das ist beispielsweise notwendig, wenn Formulare wie Login oder Registrierung über ein anderes Modul angezeigt werden, die Anfragen jedoch an ein bestimmtes Extranet-Modul weitergeleitet werden müssen.
+
+Dadurch erkennt das System den richtigen Zielort für entsprechende Aktionen, selbst wenn Darstellung und Verarbeitung über verschiedene Module erfolgen.";"This field indicates to which spot requests can be sent. This is necessary, for example, when forms such as login or registration are displayed via a different module, but the requests need to be forwarded to a specific extranet module.
+
+This enables the system to recognize the correct target location for the corresponding actions, even if display and processing are handled by different modules."
+"created_timestamp";"pkg_comment";"Dieses Feld gibt an, zu welchem Zeitpunkt der Kommentar verfasst wurde.";"This field indicates when the comment was written."
+"pkg_shop_rating_service_mail_processed";"shop_order";"Dieses Feld steht auf Ja, wenn der automatisierte Prozess (Cronjob) zur Verarbeitung von Bewertungsemails die Bestellung bearbeitet hat.
+
+Beachte jedoch, dass ein gesetzter Wert nicht garantiert, dass tatsächlich eine E-Mail versendet wurde. Das Feld zeigt lediglich an, dass der Vorgang zur Verarbeitung durchgeführt wurde.";"This field is set to ""Yes"" when the automated process (cron job) for handling review emails has processed the order.
+
+However, note that a set value does not guarantee that an email was actually sent. The field merely indicates that the processing operation was carried out."
+"variant_parent_is_active";"shop_article";"Dieses Feld wird bei Varianten automatisch durch den zugehörigen Hauptartikel gesteuert. Es dient dazu, Varianten auszublenden, wenn der Hauptartikel im Shop deaktiviert ist.
+
+Wenn der Hauptartikel inaktiv ist, werden dessen zugehörige Varianten ebenfalls nicht angezeigt. Auf diese Weise stellt das Feld sicher, dass nur Varianten aktiver Artikel im Shop sichtbar sind.";"This field is automatically managed by the associated main product for variants. It is used to hide variants when the main product is deactivated in the shop.
+
+If the main product is inactive, its associated variants will also not be displayed. In this way, the field ensures that only variants of active products are visible in the shop."
+"date_restriction_field";"pkg_shop_statistic_group";"Dieses Feld wird verwendet, um den Zeitraum der Auswertung einzuschränken. Zum Beispiel kann damit festgelegt werden, auf welches Datum sich die Auswertung bezieht, beispielsweise wann eine Bestellung erstellt wurde.
+
+- Damit lässt sich bestimmen, welche Datumsangaben bei der Filterung der Daten relevant sind, wie etwa das Erstellungsdatum einer Bestellung oder ein anderes relevantes Datum.
+- Je nach Auswahl wird das entsprechende Feld bei der Auswertung berücksichtigt.";"This field is used to limit the evaluation period. For example, it can specify the date to which the evaluation refers, such as when an order was created.
+
+- This allows you to determine which dates are relevant for filtering the data, such as the creation date of an order or another relevant date.
+- Depending on the selection, the corresponding field will be taken into account during the evaluation."
+"action_id";"shop_article_review";"Dieses Feld wird vom System verwendet, um eine bestimmte Aktion, wie das Löschen oder Bearbeiten eines Kommentars, eindeutig zu identifizieren und auszuführen.
+
+**Beispiel-Anwendung:**
+
+```sql
+UPDATE shop_article_review
+SET [Aktion] = 'delete'
+WHERE action_id = 12345;
+```
+
+Dadurch wird sichergestellt, dass nur die gewünschte Aktion auf den entsprechenden Kommentar angewendet wird.";"This field is used by the system to uniquely identify and execute a specific action, such as deleting or editing a comment.
+
+**Example application:**
+
+```sql
+UPDATE shop_article_review
+SET [action] = 'delete'
+WHERE action_id = 12345;
+```
+
+This ensures that only the desired action is applied to the corresponding comment."
+"token_protected";"cms_document";"Dokumente mit zeitlich begrenztem Zugriff erhalten beim Download eine URL, die einen temporären Schlüssel enthält. Dieser Schlüssel ist nur für einen bestimmten Zeitraum gültig.
+
+Die Gültigkeitsdauer wird durch die in der CMS-Konfiguration festgelegte Einstellung CHAMELEON_DOCUMENT_AUTH_TOKEN_LIFE_TIME_IN_MINUTES bestimmt.";"Documents with time-limited access receive a URL containing a temporary key when downloaded. This key is valid only for a specific period of time.
+
+The validity period is defined by the setting CHAMELEON_DOCUMENT_AUTH_TOKEN_LIFE_TIME_IN_MINUTES configured in the CMS."
+"meta_keyword_language";"cms_tpl_page";"Durch die Auswahl eines Sprachbereichs legen Sie fest, welcher Sprache Ihre Suchbegriffe zugeordnet werden. Wenn Sie beispielsweise Englisch angeben, werden diese Suchbegriffe bei Suchanfragen in anderen Sprachen, wie etwa Spanisch, nicht berücksichtigt.
+
+Lassen Sie das Feld leer, gelten Ihre Suchbegriffe für alle Sprachen und werden bei jeder Suche einbezogen.";"By selecting a language area, you determine which language your search terms will be assigned to. For example, if you specify ""English,"" these search terms will not be considered in searches conducted in other languages, such as Spanish.
+
+If you leave the field blank, your search terms will apply to all languages and will be included in every search."
+"identifier";"cms_portal";"Durch die Kennung kann zwischen verschiedenen Portalen auf derselben Domain unterschieden werden. Sie wird an die Domain angehängt, zum Beispiel:
+
+```text
+https://mein-shop.de/portal1/Warenkorb/
+```
+
+In diesem Beispiel steht ""portal1"" für die Kennung des Portals auf der Warenkorb-Seite.";"The identifier can be used to distinguish between different portals on the same domain. It is appended to the domain, for example:
+
+```text
+https://mein-shop.de/portal1/Warenkorb/
+```
+
+In this example, ""portal1"" represents the portal's identifier on the shopping cart page."
+"name";"shop_article_image_size";"Ein kurzer Name, der die Nutzung dieser Bildgröße beschreibt, beispielsweise ein Listenvorschaubild. Der Name sollte eindeutig und verständlich gewählt werden, damit direkt ersichtlich ist, für welche Anwendung oder Ansicht die Bildgröße vorgesehen ist.";"A short name that describes the use of this image size, for example, a list preview image. The name should be chosen clearly and unambiguously so that it is immediately apparent for which application or view the image size is intended."
+"comment";"pkg_shop_wishlist_article";"Ein persönlicher Kommentar des Wunschlistenbesitzers zum gewünschten Artikel.";"A personal comment from the wishlist owner about the desired item."
+"description";"cms_message_manager_message";"Ein Text erläutert die Nutzung dieser Meldung und beschreibt die verfügbaren Platzhalter.
+
+**Verfügbare Platzhalter:**  
+Platzhalter sind spezielle Variablen im Text, die beim Versand der Meldung automatisch durch entsprechende Werte ersetzt werden.  
+Beispiel:  
+{Name} wird durch den tatsächlichen Namen des Empfängers ersetzt.
+
+Achten Sie darauf, nur die dokumentierten Platzhalter zu verwenden, um korrekte und personalisierte Meldungen zu gewährleisten.";"A text explains the use of this message and describes the available placeholders.
+
+**Available placeholders:**  
+Placeholders are special variables in the text that are automatically replaced with corresponding values when the message is sent.  
+Example:  
+{Name} is replaced by the actual name of the recipient.
+
+Be sure to use only the documented placeholders to ensure correct and personalized messages."
+"description";"cms_message_manager_backend_message";"Ein Text erläutert die Verwendung dieser Meldung und beschreibt die verfügbaren Platzhalter, die innerhalb der Nachricht eingesetzt werden können.
+
+Bei Bedarf werden Beispiele für Platzhalter angegeben, die den Einsatz verdeutlichen, zum Beispiel:
+
+- `{username}`  Platzhalter für den Namen des Nutzers
+- `{date}`  Platzhalter für das aktuelle Datum
+
+Die Beschreibung ist so formuliert, dass sie für Anwender nachvollziehbar ist und eine korrekte Verwendung der Meldung unterstützt.";"A text explains the use of this message and describes the available placeholders that can be used within the message.
+
+If necessary, examples of placeholders are provided to illustrate their use, for example:
+
+- `{username}`  Placeholder for the user's name
+- `{date}`  Placeholder for the current date
+
+The description is formulated in a way that is understandable for users and supports the correct use of the message."
+"pkg_shop_payment_ipn_trigger";"shop_payment_handler_group";"Eine Weiterleitung gilt als erfolgreich, wenn der Zielserver einen HTTP-Statuscode 200 zurückliefert und im Body ausschließlich OK ohne weiteren Inhalt steht.
+
+Sollte eine Weiterleitung fehlschlagen, wird sie vom System automatisch wiederholt  insgesamt neun Mal beziehungsweise solange, bis die Weiterleitung erfolgreich ausgeführt werden konnte. Die Wiederholungen werden über den CMS-CronJob ausgelöst, wodurch es zu zeitlichen Verzögerungen kommen kann.
+
+Die Wiederholungszeiten sind wie folgt gestaffelt:
+
+- Versuch 1: sofort
+- Versuch 2: nach 5 Minuten
+- Versuch 3: nach 15 Minuten
+- Versuch 4: nach 1 Stunde
+- Versuch 5: nach 4 Stunden
+- Versuch 6: nach weiteren 4 Stunden
+- Versuch 7: nach 8 Stunden
+- Versuch 8: nach 24 Stunden
+- Versuch 9: nach weiteren 24 Stunden
+- Versuch 10: nach weiteren 24 Stunden";"A redirect is considered successful if the target server returns an HTTP status code 200 and the body contains only OK with no additional content.
+
+If a redirect fails, it is automatically retried by the systema total of nine times or until the redirect is successfully completed. The retries are triggered by the CMS cron job, which may result in time delays.
+
+The retry intervals are as follows:
+
+- Attempt 1: immediately
+- Attempt 2: after 5 minutes
+- Attempt 3: after 15 minutes
+- Attempt 4: after 1 hour
+- Attempt 5: after 4 hours
+- Attempt 6: after another 4 hours
+- Attempt 7: after 8 hours
+- Attempt 8: after 24 hours
+- Attempt 9: after another 24 hours
+- Attempt 10: after another 24 hours"
+"sql_order_by";"shop_module_articlelist_orderby";"Enthält nur ein einzelnes Feld oder eine Berechnung, sodass die Sortierrichtung (DESC/ASC) einfach hinzugefügt werden kann.";"Contains only a single field or calculation, so that the sort direction (DESC/ASC) can be easily added."
+"cron_class";"cms_cronjobs";"Entweder die ID eines Services, der mit dem Tag  chameleon_system.cronjob  versehen wurde und dessen Implementierung von  TCMSCronJob  abgeleitet ist, oder der Name einer Klasse, die von  TCMSCronJob  abgeleitet ist.";"Either the ID of a service that is tagged with chameleon_system.cronjob and whose implementation is derived from TCMSCronJob, or the name of a class that is derived from TCMSCronJob."
+"allow_purchase_of_variant_parents";"shop";"Erlauben Sie den Kauf von Artikeln, die Varianten besitzen (z. B. Größe, Farbe usw.), ohne dass der Kunde zuerst eine Variante auswählen muss.
+
+Setzen Sie diesen Wert auf Ja, wenn der Hauptartikel auch ohne Auswahl einer spezifischen Variante direkt gekauft werden kann.";"Allow the purchase of items that have variants (e.g., size, color, etc.) without requiring the customer to select a variant first.
+
+Set this value to ""Yes"" if the main item can be purchased directly without selecting a specific variant."
+"length_set";"cms_field_type";"Falls es sich um ENUM-Werte handelt, müssen diese im folgenden Format angegeben werden:
+
+'wert1', 'wert2', 'wert3'
+
+Achten Sie darauf, dass die einzelnen Werte jeweils in einfache Anführungszeichen gesetzt und durch Kommas getrennt werden.";"If these are ENUM values, they must be specified in the following format:
+
+'value1', 'value2', 'value3'
+
+Make sure that each value is enclosed in single quotes and separated by commas."
+"shop_order_payment_method_parameter";"shop_order";"Falls für die Bestellung zusätzliche Angaben erforderlich sind, die speziell für die gewählte Bezahlmethode benötigt werden, sind diese Informationen hier hinterlegt.";"If additional information is required for the order that is specifically needed for the chosen payment method, this information is provided here."
+"shop_order_shipping_group_parameter";"shop_order";"Falls für die Versandkostengruppe zusätzliche Angaben des Benutzers benötigt werden, werden diese Informationen hier gespeichert.";"If additional information from the user is required for the shipping cost group, this information will be stored here."
+"modifier";"cms_field_conf";"Felder vom Typ hidden und readonly werden beim Speichern nicht berücksichtigt.
+
+Readonly-Felder sind zwar sichtbar, können jedoch nicht bearbeitet werden. Hidden-Felder werden vollständig ausgeblendet.
+
+Der Modus readonly-if-filled bewirkt, dass das Feld nur dann im schreibgeschützten Modus angezeigt wird, wenn die Methode  HasContent  mit  true  zurückgegeben wird.";"Fields of the type ""hidden"" and ""readonly"" are not taken into account when saving.
+
+Readonly fields are visible but cannot be edited. Hidden fields are completely hidden.
+
+The ""readonly-if-filled"" mode ensures that the field is only displayed in read-only mode if the HasContent method returns true."
+"fieldtype_config";"cms_field_conf";"Feldtypspezifische Konfigurationsparameter werden hier eingetragen. Jeder Parameter sowie der zugehörige Wert stehen in einer eigenen Zeile im Format:
+
+Parameter=Wert;
+
+Bitte auf die korrekte Schreibweise achten und darauf, dass jeder Eintrag mit einem Semikolon abgeschlossen wird. Mehrere Parameter können so untereinander angegeben werden.
+
+**Beispiel:**
+```text
+max_length=50;
+required=true;
+default=testwert;
+```";"Field-type specific configuration parameters are entered here. Each parameter and its corresponding value should be on a separate line in the following format:
+
+Parameter=Value;
+
+Please ensure correct spelling and that each entry ends with a semicolon. Multiple parameters can be listed one below the other in this way.
+
+**Example:**
+```text
+max_length=50;
+required=true;
+default=testvalue;
+```"
+"cms_usergroup_mlt";"cms_tpl_page";"Für Mitglieder dieser Gruppen ist der Eintrag immer sichtbar.";"For members of these groups, the entry is always visible."
+"function";"cms_tbl_conf_restrictions";"Geben Sie den Namen einer Callback-Funktion an, die zur dynamischen Erstellung von SQL-Einschränkungen verwendet wird. Die Funktion erhält zwei Parameter: das Tabellenkonfigurationsobjekt und die Definition der Einschränkung. Als Rückgabewert wird ein passender SQL-Teil erwartet, zum Beispiel:
+
+```sql
+`meine_tabelle`.`mein_feld` IN ('a', 'b')
+```
+
+Die Callback-Funktion muss sich entweder im globalen Callback-Verzeichnis (`./cms/global_callback_functions/gcf_[CALLBACKNAME].fun.php`) oder im kundenbezogenen Callback-Verzeichnis (`./cms/customer/[KUNDE]/callback_functions/ccf_[CALLBACKNAME].fun.php`) befinden.
+
+Beachten Sie dabei folgende Namenskonventionen:
+
+- Globale Funktionen: `gcf_[CALLBACKNAME]`
+- Kundenfunktionen: `ccf_[CALLBACKNAME]`
+
+Beispiel für eine Funktionsdeklaration:
+
+```php
+function gcf_date($oTableConf, $oTableRestriction) {
+    // Ihre Logik hier
+}
+```
+
+Diese Vorgaben stellen sicher, dass die Funktion an der richtigen Stelle gefunden und ausgeführt werden kann.";"Specify the name of a callback function used for the dynamic creation of SQL constraints. The function receives two parameters: the table configuration object and the constraint definition. The return value should be an appropriate SQL fragment, for example:
+
+```sql
+`my_table`.`my_field` IN ('a', 'b')
+```
+
+The callback function must be located either in the global callback directory (`./cms/global_callback_functions/gcf_[CALLBACKNAME].fun.php`) or in the customer-specific callback directory (`./cms/customer/[CUSTOMER]/callback_functions/ccf_[CALLBACKNAME].fun.php`).
+
+Please observe the following naming conventions:
+
+- Global functions: `gcf_[CALLBACKNAME]`
+- Customer functions: `ccf_[CALLBACKNAME]`
+
+Example of a function declaration:
+
+```php
+function gcf_date($oTableConf, $oTableRestriction) {
+    // Your logic here
+}
+```
+
+These requirements ensure that the function can be found and executed in the correct location."
+"link";"cms_tree";"Geben Sie eine vollständige Internetadresse an, die mit http:// oder https:// beginnt. Verwenden Sie dieses Feld, wenn der Navigationspunkt auf eine externe Website weiterleiten soll. 
+
+Beispiel:
+```text
+https://www.beispielseite.de
+```";"Enter a complete internet address that begins with http:// or https://. Use this field if the navigation item should redirect to an external website.
+
+Example:
+```text
+https://www.examplepage.com
+```"
+"meta_page_topic";"cms_tpl_page";"Geben Sie hier das Thema Ihrer Seite an.
+
+Diese Information wird zwar nicht von allen Diensten unterstützt, jedoch nutzen einige Suchmaschinen diese Angabe, um Ihre Seite besser zuzuordnen und auffindbar zu machen.";"Enter the topic of your page here.
+
+Although this information is not supported by all services, some search engines use it to better categorize and make your page more discoverable."
+"db_alias";"cms_tbl_display_list_fields";"Geben Sie hier den Aliasnamen an, den das Feld in der SQL-Abfrage zurückliefert  ohne Tabellenpräfix und ohne Anführungszeichen.
+
+Beispiel: Wird in der Abfrage  
+```sql
+A.`name` AS name
+```
+verwendet, tragen Sie einfach  
+```text
+name
+```
+ein.";"Enter here the alias name that the field returns in the SQL querywithout table prefix and without quotation marks.
+
+Example: If the query uses  
+```sql
+A.`name` AS name
+```
+simply enter  
+```text
+name
+```"
+"allowed_domains";NULL;"Geben Sie in diesem Feld alle Domains an, die vom Suchroboter indiziert werden dürfen. Tragen Sie pro Zeile eine Domain ein. Beachten Sie, dass auch Subdomains separat angegeben werden müssen.
+
+Beispiel:
+
+```
+test.de
+www.test.de
+bilder.test.de
+```";"Enter all domains that may be indexed by the search robot in this field. Enter one domain per line. Note that subdomains must also be listed separately.
+
+Example:
+
+```
+test.de
+www.test.de
+bilder.test.de
+```"
+"shop_voucher_series_sponsor_id";"shop_voucher_series";"Gesponserte Gutscheine können auch für Artikel verwendet werden, bei denen normalerweise keine Gutscheine zugelassen sind.
+
+Gesponserte Gutscheine gelten als Zahlungsmittel und haben daher keinen Einfluss auf die berechnete Mehrwertsteuer. Diese Option sollte ausschließlich für Gutscheine aktiviert werden, die tatsächlich von einem Kunden oder Partner bezahlt wurden, beispielsweise bei einem gekauften Gutschein.";"Sponsored vouchers can also be used for items for which vouchers are normally not permitted.
+
+Sponsored vouchers are considered a means of payment and therefore do not affect the calculated VAT. This option should only be activated for vouchers that have actually been paid for by a customer or partner, for example in the case of a purchased voucher."
+"subtype";"cms_tbl_extension";"Gib den Pfad relativ zum Verzeichnis classes an, ohne den Klassennamen selbst zu nennen.
+
+Beispiel:  
+Liegt die Klasse im Verzeichnis /framework/classes/dbobjects, ist der Pfad entsprechend dbobjects.";"Specify the path relative to the classes directory, without including the class name itself.
+
+Example:  
+If the class is located in the directory /framework/classes/dbobjects, the path should be dbobjects."
+"meta_pragma";"cms_tpl_page";"Gibt an, ob diese Seite zwischengespeichert werden darf.
+
+Dadurch wird festgelegt, ob der Browser oder Proxy-Server die Seite temporär speichern (cachen) darf. Dies kann die Leistungsfähigkeit der Website verbessern, beeinflusst aber auch, wie aktuell die angezeigten Inhalte sind.";"Indicates whether this page may be cached.
+
+This determines whether the browser or proxy server is allowed to temporarily store (cache) the page. This can improve the performance of the website but also affects how up-to-date the displayed content is."
+"hasCurrency";"pkg_shop_statistic_group";"Gibt an, ob für diese Gruppe eine Währung benötigt wird.
+
+In der Regel ist dies erforderlich, wenn es sich um Zahlungsstatistiken handelt.";"Indicates whether a currency is required for this group.
+
+This is usually necessary when dealing with payment statistics."
+"class";"cms_wizard_step";"Gibt an, welche Klasse verwendet werden soll. Sie muss von der zugehörigen Tabellenklasse abgeleitet sein.";"Specifies which class should be used. It must be derived from the corresponding table class."
+"data_extranet_user_id";"shop_search_log";"Gibt an, welcher Benutzer die Suchanfrage durchgeführt hat.";"Indicates which user performed the search query."
+"name_list";"cms_tbl_extension";"Gibt den Namen der Klasse an, mit der die Standardfunktionen von TCMSRecordList erweitert oder überschrieben werden können.
+
+Beispiel:
+
+```php
+'MyCustomRecordList'
+```
+
+Hiermit kann individuelle Logik für Listenansichten eingebunden werden.";"Specifies the name of the class that can be used to extend or override the standard functions of TCMSRecordList.
+
+Example:
+
+```php
+'MyCustomRecordList'
+```
+
+This allows custom logic to be incorporated into list views."
+"height";"cms_image_crop_preset";"Gibt die Höhe in Pixeln an.";"Specifies the height in pixels."
+"show_scrollbars";"pkg_shop_listfilter_item";"Gilt nur, wenn die Option Beim Öffnen der Seite alles zeigen? auf NEIN eingestellt ist.
+
+Wenn diese Einstellung aktiviert ist, wird innerhalb des Filterelements ein Scrollbalken angezeigt, anstelle des Buttons ""Alle anzeigen"".";"Applies only if the option Show everything when opening the page? is set to NO.
+
+If this setting is enabled, a scrollbar will be displayed within the filter element instead of the ""Show all"" button."
+"restrict_to_other_series";"shop_voucher_series";"Gutscheine aus dieser Serie können ausschließlich zusammen mit Gutscheinen aus anderen Serien eingelöst werden. Mehrere Gutscheine derselben Serie können nicht gemeinsam verwendet werden.";"Vouchers from this series can only be redeemed together with vouchers from other series. Multiple vouchers from the same series cannot be used together."
+"allow_no_other_vouchers";"shop_voucher_series";"Gutscheine dieser Serie können ausschließlich einzeln eingelöst werden. Sie sind nicht mit anderen Gutscheinen kombinierbar, unabhängig davon, aus welcher Serie die weiteren Gutscheine stammen.";"Vouchers from this series can only be redeemed individually. They cannot be combined with other vouchers, regardless of which series the other vouchers are from."
+"restrict_to_value";"shop_voucher_series";"Gutscheine dieser Serie können erst eingelöst werden, wenn der angegebene Mindestbestellwert erreicht ist.";"Vouchers from this series can only be redeemed once the specified minimum order value has been reached."
+"description";"cms_interface_manager_parameter";"Hier finden Sie eine Hilfestellung oder eine Erklärung zum jeweiligen Parameter.";"Here you will find guidance or an explanation for the respective parameter."
+"cms_portal_mlt";"pkg_external_tracker";"Hier kann ausgewählt werden, für welches Portal der Webstatistikdienst verwendet werden soll.
+
+Wird kein Portal ausgewählt, gilt der Webstatistikdienst automatisch für alle Portale.
+
+Falls mehrere Portale denselben Benutzer- oder Site-Code verwenden, kann der Webstatistikdienst für diese Portale gemeinsam genutzt werden.
+
+Verwendet hingegen jedes Portal einen eigenen Benutzer- oder Site-Code, muss der Webstatistikdienst separat für jedes Portal eingerichtet werden.";"Here you can select which portal the web analytics service should be used for.
+
+If no portal is selected, the web analytics service will automatically apply to all portals.
+
+If multiple portals use the same user or site code, the web analytics service can be shared for these portals.
+
+However, if each portal uses its own user or site code, the web analytics service must be set up separately for each portal."
+"detail_page_cms_tree_id";"shop_category";"Hier kann eine Seite ausgewählt werden, die anstelle der Standard-Detailseite für die Anzeige der Kategorie-Detailseite verwendet wird.";"Here you can select a page to be used as the category detail page instead of the default detail page."
+"name_column_callback";"cms_tbl_conf";"Hier kannst du eine Funktion angeben, die auf das Namensfeld angewendet wird. Gib entweder gcf_functionname für globale oder ccf_functionname für kundenspezifische Funktionen an.
+
+Die Funktion erhält zwei Parameter:
+
+1. Den Wert des Namensfeldes
+2. Ein assoziatives Array mit den Daten der aktuellen Zeile
+
+Beispiel für einen Funktionsaufruf:
+```php
+gcf_beispielFunktion($name, $daten);
+```";"Here you can specify a function to be applied to the name field. Specify either gcf_functionname for global functions or ccf_functionname for customer-specific functions.
+
+The function receives two parameters:
+
+1. The value of the name field
+2. An associative array with the data of the current row
+
+Example of a function call:
+```php
+gcf_exampleFunction($name, $data);
+```"
+"botlist";"cms_config";"Hier kannst du eine Liste von Suchmaschinen-Robots eintragen. Trenne jeden Eintrag durch einen Zeilenumbruch. Das System erkennt Besucher als Robot, wenn eine der angegebenen Zeichenketten im User-Agent enthalten ist.
+
+**Beispiel für die Einträge:**
+
+```
+googlebot
+ultraseek
+crawl
+spider
+fireball
+```
+
+So stellst du sicher, dass relevante Bots korrekt identifiziert werden.";"Here you can enter a list of search engine robots. Separate each entry with a line break. The system recognizes a visitor as a robot if one of the specified strings is contained in the user agent.
+
+**Example entries:**
+
+```
+googlebot
+ultraseek
+crawl
+spider
+fireball
+```
+
+This ensures that relevant bots are correctly identified."
+"shop_article_mlt";"shop_article";"Hier können Artikel ausgewählt werden, die inhaltlich mit dem aktuellen Artikel verwandt sind.
+
+Die Zuordnung ist einseitig: Wenn Artikel B als ähnlich zu Artikel A markiert wird, gilt dies nicht automatisch umgekehrt.";"Here you can select articles that are related in content to the current article.
+
+The assignment is one-way: If Article B is marked as similar to Article A, this does not automatically apply the other way around."
+"cms_tbl_list_class";"cms_tbl_conf";"Hier können Erweiterungen für die Listenansicht definiert werden.
+
+- Standardmäßig wird die unter Listenansicht Standard Klasse definierte Liste verwendet.
+- Um die Suchliste für MLT-Felder zu überschreiben, kann hier eine Erweiterung mit dem Namen mltsearch hinterlegt werden.";"Here, extensions for the list view can be defined.
+
+- By default, the list defined under ""List View Standard Class"" is used.
+- To override the search list for MLT fields, an extension named mltsearch can be stored here."
+"cms_tbl_conf_index";"cms_tbl_conf";"Hier können Indizes für mehrere Felder gleichzeitig angelegt werden. Beachten Sie, dass einige Feldtypen bereits eigene Indizes besitzen, die an dieser Stelle nicht angezeigt werden.";"Here you can create indexes for multiple fields simultaneously. Please note that some field types already have their own indexes, which are not displayed here."
+"stars";"shop_article";"Hier können Sie angeben, wie viele Bewertungssterne (zwischen 0 und 5) vergeben werden sollen.";"Here you can specify how many rating stars (between 0 and 5) should be assigned."
+"external_embed_code";"cms_media";"Hier können Sie den HTML-Code eines externen Video-Hosters einfügen, um das Video direkt auf Ihrer Website einzubinden. 
+
+Achten Sie darauf, den vollständigen und korrekten Einbettungscode zu verwenden, damit das Video einwandfrei dargestellt wird.
+
+Beispiel:
+```html
+<iframe src=""https://www.youtube.com/embed/BeispielID"" width=""560"" height=""315"" frameborder=""0"" allowfullscreen></iframe>
+```
+Vermeiden Sie unvollständige oder fehlerhafte Codes, da dies zu Problemen bei der Anzeige führen kann.";"Here you can insert the HTML code of an external video host to embed the video directly on your website.
+
+Make sure to use the complete and correct embed code so that the video is displayed properly.
+
+Example:
+```html
+<iframe src=""https://www.youtube.com/embed/ExampleID"" width=""560"" height=""315"" frameborder=""0"" allowfullscreen></iframe>
+```
+Avoid incomplete or incorrect codes, as this can cause display issues."
+"robots";"cms_portal";"Hier können Sie den Inhalt der robots.txt festlegen.
+
+Bitte beachten Sie, dass der hier eingegebene Text nur verwendet wird, wenn im Document Root keine eigene robots.txt-Datei vorhanden ist.";"Here you can define the contents of the robots.txt file.
+
+Please note that the text entered here will only be used if there is no separate robots.txt file present in the document root."
+"list_query";"cms_tbl_conf";"Hier können Sie ein SQL-Statement hinterlegen, mit dem die angezeigten Daten in der Listenansicht gesteuert werden. Achten Sie darauf, dass Ihre Abfrage mindestens ein ID-Feld bereitstellt.
+
+Bitte beachten Sie folgende Hinweise:
+
+- Es dürfen keine Aliase verwendet werden (zum Beispiel:  
+  ```sql
+  LEFT JOIN tablex AS x
+  ```
+  ist nicht erlaubt).
+- Greifen Sie immer mit vollständigen Tabellennamen auf Felder und Tabellen zu, zum Beispiel:
+  ```sql
+  LEFT JOIN tablex ON myothertable.id = tablex.myid
+  ```
+
+Nur gültige SQL-Abfragen ohne Alias-Nutzung sind erlaubt.";"Here you can provide an SQL statement to control the data displayed in the list view. Make sure that your query provides at least one ID field.
+
+Please note the following instructions:
+
+- No aliases may be used (for example:
+  ```sql
+  LEFT JOIN tablex AS x
+  ```
+  is not allowed).
+- Always reference fields and tables using their full table names, for example:
+  ```sql
+  LEFT JOIN tablex ON myothertable.id = tablex.myid
+  ```
+
+Only valid SQL queries without the use of aliases are allowed."
+"download";"shop_article";"Hier können Sie eine Datei aus der Dokumentenverwaltung diesem Artikel zuordnen. Nach einem erfolgreichen Kauf wird die Datei dem Benutzer zum Download angeboten.
+
+Bitte beachten Sie:
+
+- Diese Funktion steht auch für Produkte zur Verfügung, die nicht explizit als Download-Artikel ausgewiesen sind (zum Beispiel durch die Zuweisung zu einem Lager mit dem Namen Download).
+- Sie haben daher die Möglichkeit, auch andere für den Artikel relevante Dateien  wie beispielsweise Firmware-Upgrades für Hardware  bereitzustellen.";"Here you can associate a file from the document management system with this item. After a successful purchase, the file will be offered to the user for download.
+
+Please note:
+
+- This function is also available for products that are not explicitly designated as ""download"" items (for example, by assigning them to a warehouse named ""Download"").
+- Therefore, you also have the option of providing other files relevant to the item  such as firmware upgrades for hardware."
+"allow_multiple_shipping_addresses";"shop";"Hier können Sie festlegen, ob Benutzer die Möglichkeit haben, mehrere Lieferadressen zu speichern, oder ob ihnen immer nur eine Lieferadresse zur Verfügung steht.
+
+**Hinweis:** Aktivieren Sie diese Option, wenn Ihre Kunden häufig an verschiedene Adressen liefern lassen möchten, zum Beispiel für Geschenke oder bei wechselnden Aufenthaltsorten. Deaktivieren Sie diese Option, wenn für jeden Kunden stets nur eine Lieferadresse gespeichert werden soll.";"Here you can specify whether users have the option to save multiple delivery addresses, or whether only one delivery address is available to them at all times.
+
+**Note:** Enable this option if your customers frequently wish to deliver to different addresses, for example for gifts or when staying at various locations. Disable this option if only one delivery address should be saved for each customer at all times."
+"allow_multiple_billing_addresses";"shop";"Hier können Sie festlegen, ob Benutzer mehrere Rechnungsadressen verwalten dürfen oder ob stets nur eine Rechnungsadresse auswählbar ist.";"Here you can specify whether users are allowed to manage multiple billing addresses, or whether only one billing address can be selected at a time."
+"cms_config_cmsmodule_extensions";"cms_config";"Hier können Sie festlegen, welche CMS-Module durch eigene Versionen ersetzt werden sollen.
+
+Legen Sie Ihre eigenen CMS-Module entweder im Verzeichnis  ./extensions/modules  ab oder  für Anpassungen am Custom Core  im Ordner  ./custom-core/modules .";"Here you can specify which CMS modules should be replaced by your own versions.
+
+Place your own CMS modules either in the ./extensions/modules directory orin case of custom core modificationsin the ./custom-core/modules folder."
+"url_exclusion";NULL;"Hier können Sie Parameter angeben, die in Links nicht enthalten sein dürfen. Seiten mit diesen Parametern werden nicht indiziert. Trennen Sie die einzelnen Werte durch $$.
+
+Beispiel:
+
+- URL: foo.php?id=15&moduleName=Event+Kalendar  
+- Nicht erlaubt: moduleName=Event+Kalendar  
+- Eintrag in der Konfiguration: &moduleName=Event+Kalendar$$weitere Parameter";"Here you can specify parameters that must not be included in links. Pages with these parameters will not be indexed. Separate the individual values using $$.
+
+Example:
+
+- URL: foo.php?id=15&moduleName=Event+Kalendar  
+- Not allowed: moduleName=Event+Kalendar  
+- Entry in the configuration: &moduleName=Event+Kalendar$$additional parameters"
+"notes";"cms_tbl_conf";"Hier können Sie zusätzliche Informationen zur Nutzung oder zu den Beziehungen dieser Tabelle festhalten.
+
+Dies ist hilfreich für die Dokumentation und spätere Nachvollziehbarkeit.";"Here you can record additional information about the use or relationships of this table.
+
+This is helpful for documentation and future traceability."
+"text_exclusion";NULL;"Hier können Textteile angegeben werden, die beim Aufbau des Suchindexes nicht mit indiziert werden sollen.
+
+Wichtig: Trennen Sie die einzelnen Textteile durch $$.
+
+Beispiel:
+```
+zurück zur Übersicht$$Sie sind hier$$
+```";"Here you can specify text sections that should not be indexed when building the search index.
+
+Important: Separate the individual text sections with $$.
+
+Example:
+```
+back to overview$$You are here$$
+```"
+"shop_article_document";"shop_article";"Hier können verschiedene Dateien, wie zum Beispiel PDF-Probeartikel, zu einem Artikel hochgeladen werden.
+
+**Hinweis:** Akzeptierte Dateiformate und die maximale Dateigröße können je nach Systemkonfiguration variieren.";"Various files, such as PDF sample articles, can be uploaded to an article here.
+
+**Note:** Accepted file formats and the maximum file size may vary depending on the system configuration."
+"filter_parameter";"pkg_shop_listfilter_module_config";"Hier legst du fest, welche Filter mit welchen Werten bereits vorausgefüllt sind. Wenn ein Filter hier definiert ist, steht er dem Kunden später nicht mehr zur freien Auswahl zur Verfügung.
+
+Die Angaben müssen exakt wie in der URL verwendet werden.
+
+Beispiel:
+
+aPkgShopListfilter%5B859ee3f0-941d-ebfa-3e8b-fe29a4fc17f6%5D%5B%5D=mittel  
+aPkgShopListfilter%5Bcf018666-8178-4887-cd00-010ea230179c%5D%5B%5D=ESONO+AG";"Here you specify which filters are already pre-filled with which values. If a filter is defined here, it will no longer be available for free selection by the customer later.
+
+The entries must be used exactly as in the URL.
+
+Example:
+
+aPkgShopListfilter%5B859ee3f0-941d-ebfa-3e8b-fe29a4fc17f6%5D%5B%5D=medium  
+aPkgShopListfilter%5Bcf018666-8178-4887-cd00-010ea230179c%5D%5B%5D=ESONO+AG"
+"shop_system_info";"shop";"Hier sind alle shop-spezifischen Informationen, wie zum Beispiel die Allgemeinen Geschäftsbedingungen (AGB), hinterlegt.";"Here you will find all shop-specific information, such as the terms and conditions (T&Cs)."
+"shop_order_bundle_article";"shop_order_item";"Hier werden die Produkte aufgeführt, die zu einem Bundle in der Bestellung gehören. Ist ein Bundle enthalten, lässt sich damit nachvollziehen, welche einzelnen Artikel diesem Bundle zugeordnet sind.";"Here, the products that are part of a bundle in the order are listed. If a bundle is included, this allows you to see which individual items are assigned to that bundle."
+"dbobject_extend_subtype";"cms_tbl_conf";"Hier wird angegeben, in welchem Verzeichnis die zugehörige übergeordnete Klasse abgelegt ist.";"This specifies the directory in which the corresponding parent class is stored."
+"module_location";"cms_module";"Hier wird definiert, in welchem Pfad das System nach den zugehörigen Moduldaten sucht, etwa für Seitendefinitionen und Views.
+
+Der Wert sollte idealerweise in der Symfony Bundle-Syntax angegeben werden, zum Beispiel:
+
+@ChameleonSystemCoreBundle
+
+Für systemeigene Bundles sind auch folgende Werte möglich:
+
+- Core
+- Custom-Core
+- Ein Paketname, beispielsweise pkgshop
+
+Befindet sich das Modul im AppBundle, kann alternativ der Wert Customer benutzt werden. Es wird jedoch empfohlen, die Bundle-Syntax wie oben beschrieben zu verwenden.";"This defines the path in which the system searches for the corresponding module data, for example for page definitions and views.
+
+The value should ideally be specified in Symfony bundle syntax, for example:
+
+@ChameleonSystemCoreBundle
+
+For system-native bundles, the following values are also possible:
+
+- Core
+- Custom-Core
+- A package name, for example pkgshop
+
+If the module is located in the AppBundle, the value Customer can be used as an alternative. However, it is recommended to use the bundle syntax as described above."
+"path_cache";"cms_media_tree";"Hier wird der Pfad zur Bilddatei gespeichert. Im Dateisystem existiert ein entsprechender Pfad; das Bild selbst wird jedoch lediglich über einen Symlink referenziert.";"The path to the image file is stored here. A corresponding path exists in the file system; however, the image itself is only referenced via a symlink."
+"file";"pkg_cms_core_log";"Hier wird der vollständige Pfad zur Datei gespeichert.";"The complete path to the file is stored here."
+"default_shipping_address_id";"data_extranet_user";"Hier wird die zuletzt verwendete Lieferadresse gespeichert.";"The most recently used delivery address is saved here."
+"smtp_server";"cms_config";"Hostname des Servers, der zum Versenden von E-Mails verwendet wird, anstelle des PHP-internen Mailers.
+
+@deprecated since 6.2.0  SMTP credentials are now handled via parameters.yml";"Hostname of the server used to send emails instead of the PHP internal mailer.
+
+@deprecated since 6.2.0  SMTP credentials are now handled via parameters.yml"
+"shop_search_word_bonus";"shop";"Im Suchindex erhalten ganze Wörter bei der Suche einen Bonus. Das Gewicht eines vollständigen Wortes wird dabei um den Wert (1 + Gesamtwortbonus) erhöht.
+
+Beispiel:
+
+Angenommen, der Gesamtwortbonus beträgt 0,3, dann ergibt sich ein Faktor von 1,3 für das Vorkommen eines ganzen Wortes.
+So werden exakte Treffer bei der Suche höher gewichtet als Wortteile.";"In the search index, whole words receive a bonus during searches. The weight of a complete word is increased by a value of (1 + total word bonus).
+
+Example:
+
+Assuming the total word bonus is 0.3, the factor for the occurrence of a whole word would be 1.3.
+This means that exact matches in searches are weighted more highly than parts of words."
+"affiliate_code";"shop_order";"In den Shop-Einstellungen kann ein Parametername definiert werden, der vom System als Affiliate-Code erkannt wird. Wenn ein Kunde den Shop mit diesem Parameter in der URL besucht, wird der entsprechende Code bei allen Bestellungen gespeichert, die der Kunde während derselben Sitzung aufgibt.
+
+Auf diese Weise bleibt der Affiliate-Code für alle Bestellungen des Kunden innerhalb dieser Sitzung erhalten.";"In the shop settings, a parameter name can be defined that the system recognizes as an affiliate code. When a customer visits the shop with this parameter in the URL, the corresponding code is saved for all orders the customer places during the same session.
+
+In this way, the affiliate code is retained for all of the customers orders within that session."
+"icon_font_css_class";"cms_module";"In diesem Feld kann eine CSS-Klasse angegeben werden, um bei Menüeinträgen ein Icon aus dem verwendeten Icon-Font, wie zum Beispiel Font Awesome, anzuzeigen.
+
+Beispiel:
+```html
+fas fa-check
+```
+
+@deprecated since 6.3.0  Die Konfiguration von CSS-Klassen sollte stattdessen direkt in der Einstellung des Hauptelements im Menü erfolgen.";"In this field, a CSS class can be specified to display an icon from the used icon font, such as Font Awesome, for menu items.
+
+Example:
+```html
+fas fa-check
+```
+
+@deprecated since 6.3.0  The configuration of CSS classes should instead be done directly in the main element setting in the menu."
+"orderinfo";"module_customlist_config";"In diesem Feld kann festgelegt werden, nach welchen Kriterien die Daten sortiert werden sollen.
+
+Wenn ein Gruppierungsfeld ausgewählt ist, erfolgt die Sortierung standardmäßig zunächst nach diesem Feld. Erst danach werden weitere ausgewählte Sortieroptionen angewendet.
+
+Nutzen Sie die Möglichkeit, die Reihenfolge der Daten individuell anzupassen, indem Sie eine oder mehrere Sortierkriterien wie etwa Name, Datum oder Status wählen. Bei Kombination mit Gruppierung ist die Sortierung innerhalb der jeweiligen Gruppen möglich.";"In this field, you can specify the criteria by which the data should be sorted.
+
+If a grouping field is selected, sorting will, by default, first be based on this field. Only afterwards will any additional selected sorting options be applied.
+
+Take advantage of the option to customize the order of the data by selecting one or more sorting criteria, such as name, date, or status. When combined with grouping, sorting within the respective groups is possible."
+"icon_font_css_class";"cms_menu_item";"In diesem Feld können Sie eine Font-Icon-Klasse angeben, die neben dem Menüeintrag angezeigt wird. Geben Sie dazu den Klassennamen ein, beispielsweise für Font Awesome: fas fa-check.
+
+Beispielnutzung:
+
+```html
+<i class=""fas fa-check""></i>
+```
+
+Tragen Sie einfach den entsprechenden Klassennamen ein, um das gewünschte Symbol im Menü anzeigen zu lassen.";"In this field, you can specify a font icon class that will be displayed next to the menu item. To do so, enter the class name, for example for Font Awesome: fas fa-check.
+
+Example usage:
+
+```html
+<i class=""fas fa-check""></i>
+```
+
+Simply enter the corresponding class name to display the desired icon in the menu."
+"query";"shop_search_query";"Jede Anfrage muss für jeden Eintrag eine Artikel-ID im entsprechenden Feld bereitstellen. Sollte das Feld bereits in der jeweiligen Tabelle vergeben sein, verwende stattdessen die alternative Bezeichnung.";"Each request must provide an article ID for every entry in the corresponding field. If the field is already assigned in the respective table, use the alternative designation instead."
+"shop_article_id";"shop_wrapping_card";"Jede Grußkarte muss einem zugeordneten Artikel entsprechen. Wichtige Details wie Preis, Bild und Umsatzsteuergruppe werden über diesen Artikel festgelegt.
+
+**Hinweis:**
+- Die Zuweisung stellt sicher, dass alle relevanten Informationen zentral über den jeweiligen Artikel verwaltet werden.";"Each greeting card must correspond to an assigned item. Important details such as price, image, and VAT group are defined through this item.
+
+**Note:**
+- The assignment ensures that all relevant information is managed centrally via the respective item."
+"basket_item_key";"shop_order_item";"Jedes Produkt, das dem Warenkorb hinzugefügt wird, erhält einen eindeutigen Schlüssel. Dieser eindeutige Schlüssel ermöglicht es, mögliche Abhängigkeiten zwischen den Produkten im Warenkorb nachzuvollziehen und korrekt zuzuordnen.";"Each product added to the shopping cart is assigned a unique key. This unique key makes it possible to track and correctly assign potential dependencies between the products in the shopping cart."
+"active";"shop_category";"Kategorien, die nicht aktiv sind, erscheinen weder in der Navigation noch können sie Produkten neu zugeordnet werden. Bereits mit der Kategorie verknüpfte Produkte bleiben weiterhin aktiv, jedoch steht die Kategorie für neue Zuordnungen nicht mehr zur Auswahl.";"Categories that are not active do not appear in the navigation and cannot be newly assigned to products. Products that are already linked to the category remain active, but the category is no longer available for new assignments."
+"exit_class";"pkg_cms_class_manager";"Lassen Sie dieses Feld leer, um die Vererbung unbegrenzt fortzuführen. Wenn Sie möchten, dass die Vererbung an dieser Stelle endet, tragen Sie einen Wert ein.";"Leave this field blank to continue the inheritance indefinitely. If you want the inheritance to end at this point, enter a value."
+"cms_language_id";"cms_tpl_page";"Legt fest, in welcher Sprache die Seite angezeigt wird. Die zuvor im Bereich oder Portal definierte Sprache wird dadurch überschrieben.";"Specifies the language in which the page is displayed. This overrides the language previously defined in the section or portal."
+"value_type";"shop_discount";"Legt fest, ob der Wert als fester Betrag oder als prozentualer Anteil berücksichtigt wird.";"Specifies whether the value is considered as a fixed amount or as a percentage."
+"list_is_package";"cms_wizard_config";"Legt fest, ob die Ansichten für die Schritt-Liste relativ zum Verzeichnis ./classes oder zu ./objectviews gesucht werden.
+
+Ist diese Option aktiviert, werden die Views innerhalb eines Pakets unter ./classes gesucht. Andernfalls befindet sich die Zuordnung in ./objectviews.";"Specifies whether the views for the step list are searched relative to the ./classes directory or to ./objectviews.
+
+If this option is enabled, the views within a package are searched under ./classes. Otherwise, the mapping is located in ./objectviews."
+"value_based_on_entire_basket";"shop_shipping_type";"Legt fest, ob die Versandkosten für alle Artikel im Warenkorb gemeinsam oder nur für die jeweils betroffenen Artikel berechnet werden.
+
+Wenn diese Option aktiviert ist, werden die Versandkosten auf Basis des gesamten Warenkorbwerts berechnet. Ist sie deaktiviert, erfolgt die Berechnung nur für bestimmte Artikel, die von der Versandart betroffen sind.";"Determines whether shipping costs are calculated for all items in the cart together or only for the affected items.
+
+If this option is enabled, the shipping costs are calculated based on the total cart value. If it is disabled, the calculation is only applied to specific items affected by the shipping method."
+"translation_base_language_id";"cms_config";"Legt fest, welche Sprache für Felder ohne spezifischen Sprachcode verwendet wird.
+
+Für diese Sprache wird kein zusätzliches, verstecktes Feld erzeugt.";"Specifies which language is used for fields without a specific language code.
+
+No additional hidden field is created for this language."
+"task_show_count";"cms_user";"Legt fest, wie viele Aufgaben maximal dargestellt werden.  
+Wird der Wert auf **-1** gesetzt, erscheinen alle Aufgaben.";"Specifies the maximum number of tasks to be displayed.  
+If the value is set to **-1**, all tasks will appear."
+"shop_search_max_index_length";"shop";"Legt fest, wie viele Buchstaben eines Suchbegriffs maximal berücksichtigt werden. Nur Teilwörter bis zu dieser Länge werden für die Suche verwendet.";"Specifies the maximum number of letters in a search term that are taken into account. Only partial words up to this length are used for the search."
+"records_per_page";"module_customlist_config";"Legt fest, wie viele Einträge auf einer Seite angezeigt werden.
+
+Wird der Wert auf 0 gesetzt, werden alle Einträge auf einer Seite dargestellt.";"Specifies how many entries are displayed on a page.
+
+If the value is set to 0, all entries are displayed on one page."
+"password_change_key_time_validity";"data_extranet";"Legt fest, wie viele Stunden ein Passwortänderungsschlüssel nach seiner Erstellung gültig bleibt. Die Werte 0 oder -1 bedeuten, dass der Schlüssel unbegrenzt gültig ist.
+
+**Beispiele:**
+
+- Wert 8: Der Schlüssel ist 8 Stunden lang gültig.
+- Wert 0 oder -1: Der Schlüssel verliert seine Gültigkeit nie und bleibt unbegrenzt nutzbar.
+
+**Hinweis:**  
+Eine zeitlich unbegrenzte Gültigkeit kann ein Sicherheitsrisiko darstellen, daher sollte im Regelfall eine angemessene Stundenzahl gewählt werden.";"Specifies how many hours a password change key remains valid after its creation. Values of 0 or -1 mean that the key is valid indefinitely.
+
+**Examples:**
+
+- Value 8: The key is valid for 8 hours.
+- Value 0 or -1: The key never expires and remains usable indefinitely.
+
+**Note:**  
+Unlimited validity can pose a security risk, so an appropriate number of hours should generally be selected."
+"type";"cms_config_cmsmodule_extensions";"Legt fest, wo das jeweilige Modul gespeichert ist:
+
+- Core: Standardmodule im Verzeichnis PATH_MODULES
+- Custom-Core: Benutzerdefinierte Core-Module im Verzeichnis PATH_MODULES_CUSTOM
+- Customer: Kundenspezifische Module im Verzeichnis PATH_MODULES_CUSTOMER";"Defines where the respective module is stored:
+
+- Core: Standard modules in the PATH_MODULES directory
+- Custom-Core: Custom core modules in the PATH_MODULES_CUSTOM directory
+- Customer: Customer-specific modules in the PATH_MODULES_CUSTOMER directory"
+"shop_category_id";"shop";"Markiert die wichtigste Kategorie, von der alle weiteren Produktkategorien abgeleitet werden. Sie stellt die oberste Ebene im Kategoriebaum dar.";"Marks the main category from which all other product categories are derived. It represents the top level in the category tree."
+"utm_source";"pkg_newsletter_campaign";"Mit **utm_source** geben Sie beispielsweise den Namen des Newsletters oder eine andere eindeutige Quelle an, über die der Versand erfolgt. So kann die Herkunft des Traffics in Analyse-Tools präzise zugeordnet werden.
+
+**Beispiel:**
+```url
+https://www.beispielseite.de/?utm_source=mein_newsletter
+```
+
+**Hinweis:**  
+Verwenden Sie eindeutige und aussagekräftige Bezeichnungen, um später eine klare Auswertung zu ermöglichen.";"With **utm_source**, for example, you specify the name of the newsletter or another unique source through which the distribution takes place. This allows the origin of the traffic to be precisely identified in analytics tools.
+
+**Example:**
+```url
+https://www.examplepage.com/?utm_source=my_newsletter
+```
+
+**Note:**  
+Use unique and meaningful labels to enable clear analysis later on."
+"active";"shop_article";"Mit dem Aktivschalter kann der Artikel vorübergehend aus dem Shop entfernt werden.";"The active switch allows the item to be temporarily removed from the shop."
+"systemname";"shop_order_step";"Mit dem internen Namen wird der jeweilige Schritt im Warenkorb eindeutig vom System erkannt. Wenn dieser Name geändert wird, muss sichergestellt werden, dass auch der entsprechende Code angepasst wird, damit die Abläufe weiterhin korrekt funktionieren.";"The internal name allows the system to clearly identify each step in the shopping cart. If this name is changed, it must be ensured that the corresponding code is also adjusted so that processes continue to function correctly."
+"date_format_calendar";"cms_locals";"Mit den ersten drei Buchstaben (Y, M, D) legst du die Reihenfolge von Jahr, Monat und Tag fest. Danach wählst du das gewünschte Trennzeichen für diese Angaben.";"With the first three letters (Y, M, D) you determine the order of year, month, and day. After that, you choose the desired separator for this information."
+"private";"cms_document";"Mit der Einstellung geschützt werden Dateien nicht direkt zum Download angeboten, sondern über einen speziellen Download-Manager bereitgestellt. Die Auslieferung erfolgt über eine individuell konfigurierbare URL.
+
+Es besteht die Möglichkeit, den Zugriff auf diese Dateien ausschließlich für angemeldete Benutzer zu erlauben.
+
+Alternativ kann der Zugang  zum Beispiel bei kostenpflichtigen Downloads  über temporäre, zeitlich begrenzte Zugriffsschlüssel (Tokens) gesteuert werden. Die Lebensdauer dieser Tokens ist flexibel einstellbar.";"With the protected setting, files are not offered for direct download but are provided through a special download manager. The delivery takes place via an individually configurable URL.
+
+It is possible to allow access to these files exclusively for registered users.
+
+Alternatively, accesssuch as for paid downloadscan be controlled via temporary, time-limited access keys (tokens). The lifespan of these tokens can be flexibly adjusted."
+"html_template";"cms_export_profiles_fields";"Mit diesem Beispiel lässt sich die Textausgabe individuell gestalten. Verwenden Sie Platzhalter wie @text@, um exportierte Inhalte einzufügen. HTML-Attribute wie <b> sorgen für Fettdruck, während Schriftart, -größe und Farbe über font-Angaben definiert werden können (Farbe im Hexadezimalformat, z. B. #000000 für Schwarz).
+
+Beispiel:
+```html
+<b><font size=""14"" face=""Arial"" color=""#000000"">@text@</font></b>
+```
+
+Der Platzhalter @text@ wird beim Export durch den gewünschten Text ersetzt.";"This example allows you to customize the text output individually. Use placeholders like @text@ to insert exported content. HTML attributes such as <b> provide bold formatting, while font, size, and color can be defined using font specifications (color in hexadecimal format, e.g., #000000 for black).
+
+Example:
+```html
+<b><font size=""14"" face=""Arial"" color=""#000000"">@text@</font></b>
+```
+
+The placeholder @text@ will be replaced by the desired text during export."
+"allow_multi_selection";"pkg_shop_listfilter_item";"Mit diesem Feld kann festgelegt werden, ob bei nicht-numerischen Einträgen mehrere Werte gleichzeitig ausgewählt werden können.
+
+- Ist die Option aktiviert, können Nutzer:innen mehr als einen Wert auswählen.
+- Bei deaktivierter Option ist jeweils nur eine Auswahl möglich.";"This field allows you to specify whether multiple values can be selected simultaneously for non-numeric entries.
+
+- If the option is enabled, users can select more than one value.
+- If the option is disabled, only one selection is possible at a time."
+"utm_content";"pkg_newsletter_campaign";"Mit diesem Feld können Sie verschiedene Anzeigen oder Links voneinander unterscheiden, die auf die gleiche Ziel-URL führen.
+
+Besonders nützlich ist es für A/B-Tests sowie zur Analyse spezifischer Inhalte innerhalb einer Kampagne.";"This field allows you to distinguish between different ads or links that lead to the same target URL.
+
+It is especially useful for A/B tests as well as for analyzing specific content within a campaign."
+"export_key";"shop";"Mit diesem Feld lässt sich der Zugriff auf Exportdateien, beispielsweise für Dienste wie Froogle, absichern. Der hier festgelegte Schlüssel muss in der Feed-URL stehen, damit der Zugriff funktioniert.
+
+Beispiel einer Feed-URL:
+
+```text
+http://www.meine-domain.de/Pfad/Zur/Export/Seite/sModuleSpotName/spota/view/csv/key/KEYVALUE.txt
+```
+
+- Der Wert für den Schlüssel sollte individuell gewählt werden, um unberechtigte Zugriffe zu vermeiden.
+- Der korrekte Pfad zur Exportseite kann auf der Shopsystemseite productexport eingesehen werden.";"This field can be used to secure access to export files, for example for services like Froogle. The key specified here must be included in the feed URL for access to work.
+
+Example of a feed URL:
+
+```text
+http://www.my-domain.com/Path/To/Export/Page/sModuleSpotName/spota/view/csv/key/KEYVALUE.txt
+```
+
+- The value for the key should be chosen individually to prevent unauthorized access.
+- The correct path to the export page can be viewed on the shop systems productexport page."
+"number_of_articles";"shop_module_article_list";"Mit diesem Feld legen Sie fest, wie viele Artikel insgesamt angezeigt werden sollen. Möchten Sie alle Artikel anzeigen, geben Sie -1 ein.";"Use this field to specify the total number of items to be displayed. If you want to display all items, enter -1."
+"number_of_articles_per_page";"shop_module_article_list";"Mit diesem Feld legst du fest, wie viele Artikel pro Seite angezeigt werden. Möchtest du alle Artikel auf einer Seite darstellen, gib den Wert -1 ein.";"Use this field to specify how many items are displayed per page. If you want to display all items on a single page, enter the value -1."
+"pkg_dhl_packstation_allow_for_packstation";"shop_payment_method";"Mit diesem Feld wird festgelegt, ob die ausgewählte Zahlungsmethode auch für Kunden verfügbar ist, die eine Packstation als Lieferadresse angegeben haben.
+
+Dies ist zum Beispiel bei der Zahlungsmethode Nachnahme relevant, da nicht alle Zahlungsarten mit Packstationen kombiniert werden können.";"This field determines whether the selected payment method is also available to customers who have specified a parcel locker as their delivery address.
+
+This is relevant, for example, for the payment method cash on delivery, as not all payment methods can be combined with parcel lockers."
+"restrict_to_portals";"cms_master_pagedef";"Mit diesem Feld wird festgelegt, ob die Vorlage auf allen Portalen sichtbar ist oder ausschließlich auf den Portalen, die in der freigegebenen Portalliste aufgeführt werden.";"This field determines whether the template is visible on all portals or only on the portals listed in the approved portal list."
+"system_name";"pkg_cms_theme_block";"Mit diesem Namen lässt sich der Block in der Layout-Datei referenzieren.";"This name can be used to reference the block in the layout file."
+"shutdown_websites";"cms_config";"Mit dieser Funktion können alle durch das CMS verwalteten Websites unmittelbar deaktiviert werden. Jeder Zugriff auf eine der Seiten wird automatisch auf die Datei maintenance.php im Webroot umgeleitet.
+
+Sie haben die Möglichkeit, das Design dieser Wartungsseite individuell anzupassen.";"This feature allows all websites managed by the CMS to be immediately deactivated. Any access to one of the sites is automatically redirected to the maintenance.php file in the webroot.
+
+You have the option to customize the design of this maintenance page."
+"google_analytic_number";"cms_portal";"Mit Google Analytics erhalten Sie detaillierte Informationen über die Besucher Ihrer Website.
+
+Weitere Informationen finden Sie unter [http://www.google.com/analytics/de-DE/](http://www.google.com/analytics/de-DE/).";"With Google Analytics, you get detailed information about the visitors to your website.
+
+For more information, visit [http://www.google.com/analytics/de-DE/](http://www.google.com/analytics/de-DE/)."
+"utm_medium";"pkg_newsletter_campaign";"Mit utm_medium kennzeichnen Sie das Medium, über das die Kampagne verbreitet wird.
+
+Beispiele hierfür sind:
+
+- E-Mail
+- Cost-per-Click (CPC)
+- Social Media
+- Weitere Kanäle
+
+So behalten Sie den Überblick darüber, über welche Kanäle Nutzer auf Ihre Inhalte aufmerksam werden.";"With utm_medium, you identify the medium through which the campaign is distributed.
+
+Examples include:
+
+- Email
+- Cost-per-Click (CPC)
+- Social media
+- Other channels
+
+This allows you to keep track of which channels users use to discover your content."
+"logout_success_node_id";"data_extranet";"Nach dem Abmelden wird der Benutzer automatisch auf die angegebene Seite weitergeleitet, zum Beispiel auf die Startseite.
+
+**Hinweis:** Sie können hier die gewünschte Zielseite als Weiterleitungsziel nach dem Logout festlegen.";"After logging out, the user will automatically be redirected to the specified page, for example to the homepage.
+
+**Note:** You can specify the desired target page here as the redirect destination after logout."
+"node_registration_success_id";"data_extranet";"Nach erfolgreichem Abschluss der Registrierung wird die Nutzerin oder der Nutzer automatisch auf diese Seite weitergeleitet.";"After successful completion of the registration, the user will be automatically redirected to this page."
+"confirm_title";"pkg_newsletter_module_signup_config";"Nach erfolgreicher Anmeldung wird dieser Text als Überschrift angezeigt.";"After successful login, this text will be displayed as a headline."
+"confirm_text";"pkg_newsletter_module_signup_config";"Nach erfolgreicher Anmeldung wird dieser Text angezeigt.";"After successful login, this text will be displayed."
+"author_name";"shop_article_review";"Name oder Alias der Person, die die Rezension verfasst hat.";"Name or alias of the person who wrote the review."
+"force_size";"shop_article_image_size";"Normalerweise werden Bilder so skaliert, dass sowohl die Höhe als auch die Breite den Maximalwerten entsprechen, wobei die ursprünglichen Proportionen erhalten bleiben.
+
+Mit dieser Einstellung kann das Bild jedoch gezwungen werden, exakt die vorgegebenen Maße für Breite und Höhe zu übernehmen. Dabei wird das Bild entweder in der Höhe oder in der Breite abgeschnitten, um eine Verzerrung zu vermeiden. Die Proportionen des Originals werden dabei zugunsten des gewünschten Ausschnitts angepasst.";"Normally, images are scaled so that both the height and width correspond to the maximum values, while maintaining the original proportions.
+
+With this setting, however, the image can be forced to adopt the exact specified dimensions for width and height. In this process, either the height or the width of the image is cropped to avoid distortion. The proportions of the original are thus adjusted in favor of the desired section."
+"optin";"pkg_newsletter_user";"Nur dann auf ""Ja"" gesetzt, wenn der Kunde die Anmeldung zum Newsletter bestätigt hat.";"Only set to ""Yes"" if the customer has confirmed the newsletter subscription."
+"allow_sending_emails";"pkg_shop_rating_service";"Nur wenn diese Option aktiviert ist, werden E-Mails mit einer Aufforderung zur Bewertung versendet.
+
+In einigen Systemen, wie beispielsweise eKomi, erfolgt der Versand automatisch. In solchen Fällen sollte die Option deaktiviert werden, um doppelte E-Mail-Benachrichtigungen zu vermeiden.";"Emails requesting a review will only be sent if this option is enabled.
+
+In some systems, such as eKomi, emails are sent automatically. In such cases, the option should be disabled to avoid duplicate email notifications."
+"class";"pkg_shop_affiliate";"Optional: Falls gewünscht, kann eine spezielle Klasse angegeben werden, mit der der Code für den Bestellerfolg generiert wird.";"Optional: If desired, a specific class can be specified with which the code for order success is generated."
+"pkg_image_hotspot_item_marker";"pkg_image_hotspot_item";"Sie können zusätzliche Bilder, Icons oder Buttons hinzufügen. Diese Elemente werden über das Hintergrundbild gelegt und lassen sich mit individuellen Links verknüpfen.
+
+Dadurch entstehen interaktive Bereiche (Hotspots) auf dem Bild, über die Sie zu weiterführenden Informationen oder bestimmten Aktionen leiten können.";"You can add additional images, icons, or buttons. These elements are placed on top of the background image and can be linked to individual URLs.
+
+This creates interactive areas (hotspots) on the image, which you can use to guide users to further information or specific actions."
+"data_extranet_user_id";"shop_article_review";"Sollte die Kundenrezension von einem registrierten Kunden verfasst worden sein, wird ein Verweis auf das entsprechende Kundenkonto hinterlegt. Handelt es sich um eine Bewertung eines nicht registrierten Kunden, bleibt dieses Feld leer.";"If the customer review was written by a registered customer, a reference to the corresponding customer account will be provided. If it is a review from a non-registered customer, this field will remain empty."
+"add_value_for_each_article";"shop_shipping_type";"Standardmäßig werden die Versandkosten auf die gesamte Anzahl der betroffenen Artikel angewendet. Wenn diese Option aktiviert ist, werden die Versandkosten jedoch für jeden einzelnen Artikel separat berechnet.
+
+Ein Beispiel:
+
+- Sind von dieser Versandkostenart zwei Artikel betroffen und die Versandkosten betragen normalerweise insgesamt 4 , würden durch das Aktivieren dieser Option 8  berechnet (also 4  pro betroffenem Artikel).";"By default, the shipping costs are applied to the total number of affected items. However, if this option is enabled, the shipping costs will be calculated separately for each individual item.
+
+An example:
+
+- If two items are affected by this shipping method and the shipping costs are normally a total of 4, enabling this option would result in a charge of 8 (i.e., 4 per affected item)."
+"template_node_cms_tree_id";"shop_order_step";"Standardmäßig wird für diesen Schritt im Warenkorb die Systemseite ""checkout"" verwendet. Wenn jedoch ein Baumknoten ausgewählt wird, dient die beim jeweiligen Schritt hinterlegte Seite als Vorlage.
+
+**Hinweis:**  
+Dadurch ist es möglich, individuelle Vorlagen für einzelne Schritte im Warenkorbprozess zu verwenden.";"By default, the system page ""checkout"" is used for this step in the shopping cart. However, if a tree node is selected, the page specified for the respective step serves as a template.
+
+**Note:**  
+This makes it possible to use individual templates for specific steps in the shopping cart process."
+"shop_shipping_group_handler_id";"shop_shipping_group";"Über den Versandkostenhandler wird festgelegt, ob zusätzliche Informationen vom Kunden benötigt werden und welche konkreten Angaben abgefragt werden.
+
+Beispiel für die Verwendung im Twig-Template:
+```twig
+{{ shippingGroup.handler.id }}
+```
+
+Typische zusätzliche Informationen können sein:
+
+- Auswahl der Versandart (Standard, Express, etc.)
+- Angabe eines Wunsch-Lieferdatums
+- Auswahl besonderer Zustelloptionen";"The shipping cost handler determines whether additional information is required from the customer and specifies exactly which details are requested.
+
+Example of use in the Twig template:
+```twig
+
+```
+
+Typical additional information can include:
+
+- Selection of the shipping method (standard, express, etc.)
+- Indication of a preferred delivery date
+- Selection of special delivery options"
+"sort_order";"cms_portal";"Über die Sortierung kann festgelegt werden, welches Portal verwendet wird, wenn mehrere Portale derselben Domain zugeordnet sind und ein Aufruf ohne weitere Kennzeichnung (identifier) erfolgt. Ein niedrigerer Wert bedeutet dabei eine höhere Priorität.";"The sorting determines which portal is used when multiple portals are assigned to the same domain and a call is made without further identification (identifier). A lower value indicates a higher priority."
+"cms_language_id";"cms_division";"Überschreibt die im Portal voreingestellte Sprache für diesen Bereich.
+
+Dadurch können individuelle Spracheinstellungen festgelegt werden, die unabhängig von der Hauptsprache des Portals gelten.";"Overrides the language preset in the portal for this section.
+
+This allows individual language settings to be defined, which apply independently of the portal's main language."
+"page_size";"shop_article_catalog_conf";"Um alle Artikel auf einer Seite darzustellen, tragen Sie bitte -1 ein.";"To display all items on one page, please enter -1."
+"body_text";"data_mail_profile";"Um alle verfügbaren Platzhalter einzusehen, kann sModuleSpotName verwendet werden.
+
+Das Textfeld unterstützt die Template-Sprache Twig (weitere Informationen unter: http://twig.sensiolabs.org/).
+
+Sie können im Text eigene Platzhalter einfügen und Logik mittels Twig einsetzen, um Inhalte dynamisch anzupassen.";"To view all available placeholders, you can use sModuleSpotName.
+
+The text field supports the Twig template language (for more information, see: http://twig.sensiolabs.org/).
+
+You can insert your own placeholders into the text and use logic via Twig to dynamically adjust content."
+"groups";"pkg_shop_statistic_group";"Um Gruppen gemeinsam mit ihren Untergruppen anzuzeigen, müssen die entsprechenden Felder, die die Untergruppen bestimmen, durch Kommas getrennt eingetragen werden.
+
+Beispiel:
+```plaintext
+gruppe1,untergruppe1,untergruppe2
+```
+
+Dadurch wird festgelegt, wie die Hierarchie der Gruppen und Untergruppen dargestellt wird.";"To display groups together with their subgroups, the corresponding fields that define the subgroups must be entered, separated by commas.
+
+Example:
+```plaintext
+group1,subgroup1,subgroup2
+```
+
+This determines how the hierarchy of groups and subgroups is displayed."
+"start_url";NULL;"URL der Seite, auf der mit dem Aufbau des Index begonnen werden soll.  
+Dies ist normalerweise Ihre Hauptdomain, z. B.: www.test.de (http:// kann weggelassen werden).";"URL of the page where the indexing should begin.  
+This is usually your main domain, e.g.: www.test.de (http:// can be omitted)."
+"php_local_name";"cms_locals";"Verwenden Sie den für die jeweilige Sprache und das Gebietsschema gültigen Namen. Weitere Informationen finden Sie in der offiziellen PHP-Dokumentation zur Funktion setlocale:
+
+[https://www.php.net/manual/en/function.setlocale.php](https://www.php.net/manual/en/function.setlocale.php)
+
+Beachten Sie die länderspezifischen Schreibweisen, zum Beispiel ""de_DE"" für Deutsch (Deutschland) oder ""en_US"" für Englisch (USA).";"Use the name valid for the respective language and locale. For more information, refer to the official PHP documentation for the setlocale function:
+
+[https://www.php.net/manual/en/function.setlocale.php](https://www.php.net/manual/en/function.setlocale.php)
+
+Pay attention to country-specific spellings, for example ""de_DE"" for German (Germany) or ""en_US"" for English (USA)."
+"virtual_article";"shop_article";"Virtuelle Artikel erscheinen weder in Suchergebnissen noch in Artikelübersichten. Sie werden beispielsweise verwendet, um Informationen zu Gutscheinen, Verpackungen, Grußkarten oder ähnlichen Produkten bereitzustellen.";"Virtual items do not appear in search results or product overviews. They are used, for example, to provide information about vouchers, packaging, greeting cards, or similar products."
+"linkTarget";"cms_tree";"Wählen Sie **Ja**, wenn externe Links in einem neuen Fenster geöffnet werden sollen (`_blank`). Standardmäßig werden Links im gleichen Fenster geöffnet (`_self`).";"Select **Yes** if you want external links to open in a new window (`_blank`). By default, links are opened in the same window (`_self`)."
+"shop_article_mlt";"shop_shipping_type";"Wenn an dieser Stelle Artikel ausgewählt werden, gilt die Versandkostenart ausschließlich für diese Artikel.";"If items are selected at this point, the shipping method applies exclusively to these items."
+"data_extranet_group_mlt";"shop_shipping_type";"Wenn bestimmte Kundengruppen ausgewählt werden, steht diese Versandkostenart ausschließlich Kunden zur Verfügung, die mindestens einer dieser Gruppen zugeordnet sind.
+
+Um die Benutzerfreundlichkeit zu erhöhen, kann die Auswahl dazu genutzt werden, Versandoptionen gezielt für unterschiedliche Kundensegmente anzubieten  beispielsweise für Geschäftskunden, Stammkunden oder spezielle Partnergruppen. Dadurch lässt sich die Versandgestaltung individuell an die Bedürfnisse Ihrer Kundschaft anpassen.";"If specific customer groups are selected, this shipping method will only be available to customers who belong to at least one of these groups.
+
+To enhance user-friendliness, this selection can be used to offer shipping options tailored to different customer segmentsfor example, business clients, regular customers, or special partner groups. This allows you to individually adapt your shipping options to the needs of your customers."
+"shop_article_mlt";"shop_discount";"Wenn der Rabatt auf bestimmte Produkte eingeschränkt wird und eines dieser Produkte später gelöscht wird (zum Beispiel durch einen Produktimport), wird dieses automatisch aus der Liste entfernt. Dadurch entfällt die Einschränkung und der Rabatt gilt für alle Produkte.
+
+Falls dies nicht gewünscht ist, sollte die Option Bei leerer Liste Datensatz sperren aktiviert werden. So bleibt die Rabatteinschränkung auch dann bestehen, wenn das ausgewählte Produkt nicht mehr existiert  in diesem Fall gilt der Rabatt für kein Produkt.";"If the discount is restricted to certain products and one of these products is later deleted (for example, through a product import), it will automatically be removed from the list. As a result, the restriction no longer applies and the discount is valid for all products.
+
+If this is not desired, the option Lock record when list is empty should be activated. This way, the discount restriction will remain in effect even if the selected product no longer existsin this case, the discount will not apply to any product."
+"user_ip";"shop_article_review";"Wenn diese Einstellung aktiviert ist, werden die IP-Adressen nicht vollständig gespeichert, sondern in einer Form abgelegt, die keinen Rückschluss auf einzelne Personen zulässt. Dies dient dem Datenschutz und dem Schutz der Privatsphäre der Nutzer.";"If this setting is enabled, IP addresses are not stored in their entirety but are instead saved in a form that does not allow any conclusions to be drawn about individual persons. This serves data protection and the privacy of users."
+"show_empty_categories";"shop";"Wenn diese Einstellung deaktiviert ist, werden Kategorien und ihre Unterkategorien ausgeblendet, sobald sie keine Artikel enthalten.";"If this setting is disabled, categories and their subcategories will be hidden as soon as they contain no articles."
+"seo_nofollow";"cms_tree";"Wenn dieser Wert auf ""Ja"" gesetzt ist (Standard: ""Nein""), wird das NoFollow-Attribut für Links zu dieser Seite hinzugefügt. Suchmaschinen werden dadurch angewiesen, diesen Links nicht zu folgen und die Zielseiten nicht in den Index aufzunehmen.";"If this value is set to ""Yes"" (default: ""No""), the NoFollow attribute will be added to links to this page. This instructs search engines not to follow these links and not to include the target pages in their index."
+"cms_tbl_extension";"cms_tbl_conf";"Wenn ein bestehendes Datenbankobjekt erweitert werden soll, werden die Erweiterungen in diesem Feld eingetragen.
+
+In Fällen, in denen eine Klasse nicht direkt von TAdb erben soll, sondern dynamisch entweder von TAdb oder von einer der eingetragenen Erweiterungen, sollte sie stattdessen von einer automatisch generierten Klasse mit dem Namen MyClassNameAutoParent erben.
+
+Was macht MyClassNameAutoParent?
+
+Das System erzeugt diese Klasse automatisch. Dabei entscheidet es  je nach Reihenfolge der eingetragenen Erweiterungen , ob MyClassNameAutoParent von TAdb oder von einer anderen Erweiterungsklasse erbt.
+
+So ist es möglich, mehrere unabhängige Erweiterungen für eine Klasse zu definieren und flexibel zu kombinieren.
+
+Beispiel:
+
+Angenommen, die Klasse TAdbTest soll durch zwei Erweiterungen, A und B, ergänzt werden:
+
+- Beide Erweiterungen sollen unabhängig voneinander oder gemeinsam aktivierbar sein.
+- Daher erben A und B nicht direkt von TAdbTest, sondern:
+    - A erbt von AAutoParent
+    - B erbt von BAutoParent
+
+Fall 1: Wenn A zuerst eingetragen ist:  
+A -> AAutoParent -> B -> BAutoParent -> TAdbTest
+
+Fall 2: Wenn nur A eingetragen ist:  
+A -> AAutoParent -> TAdbTest
+
+Wichtig:
+
+Wenn A selbst eine Erweiterung einer anderen Klasse, zum Beispiel C, ist, muss AAutoParent in diesem Feld eingetragen werden. Nur so kann Chameleon die richtige Vererbungskette generieren.";"If an existing database object is to be extended, the extensions are entered in this field.
+
+In cases where a class should not directly inherit from TAdb, but should dynamically inherit either from TAdb or from one of the registered extensions, it should instead inherit from an automatically generated class called MyClassNameAutoParent.
+
+What does MyClassNameAutoParent do?
+
+The system generates this class automatically. Depending on the order of the registered extensions, it decides whether MyClassNameAutoParent inherits from TAdb or from another extension class.
+
+This makes it possible to define several independent extensions for a class and flexibly combine them.
+
+Example:
+
+Suppose the class TAdbTest is to be extended by two extensions, A and B:
+
+- Both extensions should be able to be activated independently of each other or together.
+- Therefore, A and B do not inherit directly from TAdbTest, but instead:
+    - A inherits from AAutoParent
+    - B inherits from BAutoParent
+
+Case 1: If A is registered first:
+A -> AAutoParent -> B -> BAutoParent -> TAdbTest
+
+Case 2: If only A is registered:
+A -> AAutoParent -> TAdbTest
+
+Important:
+
+If A itself is an extension of another class, for example C, then AAutoParent must be entered in this field. Only in this way can Chameleon generate the correct inheritance chain."
+"free_shipping";"shop_voucher_series";"Wenn ein Gutschein mit dieser Markierung eingelöst wird, entfallen die Versandkosten vollständig.
+
+Käuferinnen und Käufer zahlen dann keine Versandgebühren für ihre Bestellung.";"If a voucher with this marking is redeemed, the shipping costs are completely waived.
+
+Buyers then do not pay any shipping fees for their order."
+"affiliate_parameter_name";"shop";"Wenn ein Kunde mit diesem Parameter in der URL den Shop besucht, wird der zugehörige Code bei allen Bestellungen gespeichert, die der Kunde während derselben Sitzung tätigt.";"If a customer visits the shop with this parameter in the URL, the associated code will be stored for all orders the customer places during the same session."
+"shop_vat_id";"shop_category";"Wenn ein Produkt mehreren Kategorien zugeordnet ist, wird die Umsatzsteuergruppe mit dem höchsten Wert aus den zugewiesenen Kategorien verwendet.";"If a product is assigned to multiple categories, the tax group with the highest value from the assigned categories will be used."
+"cms_language_id";"shop_search_field_weight";"Wenn einem Feld keine bestimmte Sprache zugeordnet werden soll, sollte keine Sprache ausgewählt werden.";"If a field should not be assigned a specific language, no language should be selected."
+"shop_bundle_article";"shop_article";"Wenn es sich um ein Bundle handelt, können hier die zugehörigen Produkte ausgewählt werden.
+
+Im Warenkorb sowie bei sämtlichen Berechnungen wird das Bundle immer als ein einzelnes Produkt behandelt. Produkte, die dem Bundle zugeordnet sind, bleiben bei der Berechnung unberücksichtigt. Das bedeutet:
+
+- **Rabatte** gelten ausschließlich für das Bundle-Produkt, nicht für die enthaltenen Einzelprodukte.
+- **Gutscheine**, verschiedene **Zahlarten**, **Versandkosten** sowie die **Mehrwertsteuer** werden ebenfalls nur auf das Bundle-Produkt angewendet.
+
+Die im Bundle enthaltenen Einzelprodukte erscheinen im Warenkorb nicht separat und werden dort nicht einzeln berücksichtigt.";"If this is a bundle, the associated products can be selected here.
+
+In the shopping cart and in all calculations, the bundle is always treated as a single product. Products assigned to the bundle are not taken into account in calculations. This means:
+
+- **Discounts** apply exclusively to the bundle product, not to the individual products contained within it.
+- **Vouchers**, various **payment methods**, **shipping costs**, and **VAT** are also only applied to the bundle product.
+
+The individual products included in the bundle do not appear separately in the shopping cart and are not considered individually there."
+"cms_tbl_list_class_id";"cms_tbl_conf";"Wenn kein Wert angegeben wird, wird standardmäßig die Klasse TCMSListManagerFullGroupTable verwendet.";"If no value is specified, the TCMSListManagerFullGroupTable class is used by default."
+"cms_portal_id";"cms_tpl_page";"Wenn Sie mehrere Portale, zum Beispiel verschiedene Sprachversionen, verwalten, können Sie hier festlegen, zu welchem Portal diese Seite gehört.";"If you manage multiple portals, such as different language versions, you can specify here which portal this page belongs to."
+"auto_limit_results";"cms_tbl_conf";"Wenn Sie mit sehr großen Tabellen arbeiten, kann es sinnvoll sein, ein Ergebnislimit einzutragen. Dadurch können Sortieroperationen häufig deutlich beschleunigt werden.
+
+Geben Sie -1 ein, um das Limit zu deaktivieren.
+
+Das hier festgelegte Limit dient als Standardeinstellung und kann bei Bedarf durch die entsprechende Klasse überschrieben werden.";"If you are working with very large tables, it may be useful to set a result limit. This can often significantly speed up sorting operations.
+
+Enter -1 to disable the limit.
+
+The limit set here serves as the default setting and can be overridden if necessary by the corresponding class."
+"shop_category_mlt";"shop_shipping_type";"Wenn Sie Produktkategorien auswählen, gilt die Versandkostenart nur für Produkte, die in mindestens einer der ausgewählten Kategorien enthalten sind.
+
+Bitte beachten Sie:
+
+- Die Hauptkategorie eines Artikels wird hierbei nicht berücksichtigt.
+- Nur die zusätzlich zugeordneten Kategorien eines Produkts werden für diese Einschränkung verwendet.";"If you select product categories, the shipping cost type will only apply to products that are included in at least one of the selected categories.
+
+Please note:
+
+- The main category of an item is not taken into account.
+- Only the additional categories assigned to a product are used for this restriction."
+"cms_media_default_preview_image_id";"shop_article";"Wird als Vorschaubild angezeigt, wenn im Bereich ""Artikelvorschaubild"" kein Bild für einen bestimmten Vorschautyp, wie beispielsweise Bildgröße oder -format, festgelegt wurde.
+
+Falls hier kein Bild ausgewählt ist, wird automatisch das erste Bild aus den Artikelbildern verwendet.";"Is displayed as a preview image if no image has been assigned for a specific preview type, such as image size or format, in the ""Article Preview Image"" section.
+
+If no image is selected here, the first image from the article images will be used automatically."
+"external_url";"pkg_image_hotspot_item_spot";"Wird als Ziel-URL verwendet, falls kein CMS-Objekt gewählt wurde.";"Is used as the target URL if no CMS object has been selected."
+"shop_search_use_boolean_and";"shop";"Wird diese Option aktiviert, werden ausschließlich Suchergebnisse angezeigt, die alle eingegebenen Suchbegriffe enthalten. Die Klangwortsuche ist in diesem Modus deaktiviert.
+
+Bitte beachten Sie, dass der bestehende Such-Cache erhalten bleibt. Die Änderung wird erst wirksam, sobald der aktuelle Cache abgelaufen ist.";"If this option is enabled, only search results containing all entered search terms will be displayed. Sound word search is disabled in this mode.
+
+Please note that the existing search cache will be retained. The change will only take effect once the current cache has expired."
+"include_all_newsletter_users";"pkg_newsletter_group";"Wird diese Option aktiviert, werden automatisch alle Newsletter-Empfänger zur Empfängerliste hinzugefügt.";"If this option is enabled, all newsletter recipients will automatically be added to the recipient list."
+"end_shipping_type_chain";"shop_shipping_type";"Wird diese Versandkostenart angewendet, werden alle nachfolgenden Versandkostenarten nicht mehr berücksichtigt.";"If this shipping method is applied, all subsequent shipping methods will no longer be considered."
+"access_refused_node_id";"data_extranet";"Wird ein nicht angemeldeter Benutzer auf eine als geschützt markierte Seite zugreifen, erfolgt eine automatische Weiterleitung auf diese Seite.";"If an unauthenticated user attempts to access a page marked as protected, they will be automatically redirected to this page."
+"data_mail_profile_id";"shop_order_status_code";"Wird keine Vorlage hinterlegt, wird automatisch die Vorlage mit dem Code shop-order-status-update verwendet.";"If no template is stored, the template with the code shop-order-status-update will be used automatically."
+"seo_pattern";"cms_tpl_page";"Wird verwendet, um die Überschrift (Title) der Seite suchmaschinenoptimiert zu gestalten.
+
+Um alle an dieser Stelle verfügbaren Platzhalter anzuzeigen, tragen Sie [{SHOW}] ein und rufen die Seite erneut auf.";"Is used to optimize the page's headline (title) for search engines.
+
+To display all placeholders available at this point, enter [{SHOW}] and reload the page."
+"pkg_newsletter_confirmation_mlt";"pkg_newsletter_user";"Zeigt alle Bestätigungen der Anmeldung zum Newsletter an.";"Displays all confirmations of newsletter registrations."
+"shop_user_purchased_voucher";"data_extranet_user";"Zeigt alle Gutscheine an, die im Shop erworben wurden.";"Displays all vouchers that have been purchased in the shop."
