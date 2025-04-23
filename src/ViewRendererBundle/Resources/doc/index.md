@@ -1,8 +1,6 @@
-Chameleon System ViewRendererBundle
-===================================
+# Chameleon System ViewRendererBundle
 
-URL Sanitation
---------------
+## URL Sanitation
 
 URLs are automatically sanitized by Twig (depending on the context, the filters escape('html_attr') or escape('js) need
 to be used). This sanitation does however NOT include protection from malicious "javascript:" and "data:" URLs. To

@@ -13,29 +13,24 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * used to render module views. makes data as $data and under the key name available in the view.
-/**/
+ * /**/
 class TViewParser
 {
     /**
      * the template data.
-     *
-     * @var array
      */
-    protected $aTemplateData = array();
+    protected array $aTemplateData = [];
 
     /**
      * shows a comment hint block with the template path.
-     *
-     * @var bool - default true
      */
-    public $bShowTemplatePathAsHTMLHint = true;
+    public bool $bShowTemplatePathAsHTMLHint = true;
 
     /**
      * add a variable to the system. the variable will be accessible in the view
      * under $data[$key], and the key name.
      *
      * @param string $key
-     * @param mixed  $var
      */
     public function AddVar($key, $var)
     {
@@ -58,7 +53,7 @@ class TViewParser
      * render content.
      *
      * @param string $sModuleName - module name
-     * @param string $sViewName   - view name
+     * @param string $sViewName - view name
      *
      * @return string -rendert view
      */
@@ -73,8 +68,8 @@ class TViewParser
      * Render current data using sViewName in sSubType for either Core, Custom, or Customer.
      *
      * @param string $sViewName - name of the view (do not include .view.php)
-     * @param string $sSubType  - path relative to objectviews
-     * @param string $sType     - @deprecated since 7.1.6
+     * @param string $sSubType - path relative to objectviews
+     * @param string $sType - @deprecated since 7.1.6
      *
      * @example RenderObjectView('metadata','dbobjects/TCMSActivePage','Core')
      *
@@ -90,9 +85,9 @@ class TViewParser
     /**
      * Render current data using sViewName in sSubType for either Core, Custom, or Customer.
      *
-     * @param string $sViewName   - name of the view (do not include .view.php)
+     * @param string $sViewName - name of the view (do not include .view.php)
      * @param string $sModuleName - name of the CMS backend module
-     * @param string $sType       - Core, Custom, Customer
+     * @param string $sType - Core, Custom, Customer
      *
      * @return string
      */
@@ -118,9 +113,9 @@ class TViewParser
     }
 
     /**
-     * @param string $sViewName   - name of the view (do not include .view.php, include subdirs if neccessary)
+     * @param string $sViewName - name of the view (do not include .view.php, include subdirs if neccessary)
      * @param string $sModuleName - name of the web module
-     * @param string $sType       - Core, Custom, Customer
+     * @param string $sType - Core, Custom, Customer
      *
      * @example RenderWebModuleView('includes/atom','MTBlogPostList','Customer')
      *
@@ -137,10 +132,9 @@ class TViewParser
      * Render current data using sViewName in sSubType for either Core, Custom, or Customer
      * but assumes that the path is in ./classes.
      *
-     *
      * @param string $sViewName - name of the view (do not include .view.php)
-     * @param string $sSubType  - path relative to objectviews
-     * @param string $sType     - Core, Custom, Customer
+     * @param string $sSubType - path relative to objectviews
+     * @param string $sType - Core, Custom, Customer
      *
      * @example RenderObjectPackageView('metadata','pkgShop/dbobjects/TCMSActivePage','Core')
      *
@@ -194,7 +188,7 @@ class TViewParser
             }
         }
         $bAllowHint = false;
-        $showViewSourceHtmlHints = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.debug.show_view_source_html_hints');
+        $showViewSourceHtmlHints = ServiceLocator::getParameter('chameleon_system_core.debug.show_view_source_html_hints');
         if ($showViewSourceHtmlHints && !empty($content) && _DEVELOPMENT_MODE) {
             $bAllowHint = true;
         }
@@ -220,10 +214,7 @@ class TViewParser
         return $sTemplatePath;
     }
 
-    /**
-     * @return IViewPathManager
-     */
-    private function getViewPathManager()
+    private function getViewPathManager(): IViewPathManager
     {
         return ServiceLocator::get('chameleon_system_core.viewPathManager');
     }
