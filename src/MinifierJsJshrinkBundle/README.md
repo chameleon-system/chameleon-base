@@ -1,27 +1,57 @@
-Chameleon System MinifierJsJshrinkBundle
-========================================
+# Chameleon System MinifierJsJshrinkBundle
 
-General
--------
+This bundle uses JShrink to minify JavaScript content. To do this, the bundle requires an external bundle called JShrink.
 
-This bundle uses JShrink to minify JavaScript content.
+## Installation
 
-Documentation
--------------
+### Step 1: Download the Bundle
 
-The documentation is stored in the `Resources/doc` folder in this bundle.
- 
-Installation
-------------
+Open a command console in the project directory and execute the following command to download the latest stable version of this bundle:
 
-The installation instructions are stored in the `Installation` section of the documentation.
+```bash
+$ composer require chameleon-system/minifier-js-jshrink-bundle "@stable"
+```
 
-License
--------
+This command requires you to have Composer installed globally, as explained in the [installation chapter](https://getcomposer.org/doc/00-intro.md) of the Composer documentation. Be sure to adjust the version information "@stable" to the actual version you need.
 
-The ChameleonSystemMinifierJsJshrinkBundle is licensed under the MIT License. See the complete license under `LICENSE` for details.
+### Step 2: Enable the Bundle
 
-Reporting an issue or a feature request
----------------------------------------
+Then, enable the bundle by adding the following line in the `app/AppKernel.php` file of your project:
 
-TODO
+```php
+<?php
+// app/AppKernel.php
+
+// ...
+
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+        new \ChameleonSystem\MinifierJsJshrinkBundle\ChameleonSystemMinifierJsJshrinkBundle(),
+    );
+}
+```
+
+### Step 3: Configure JShrink as JavaScript Minifier to Use
+
+To enable jshrink as js minifier add this to your config.yml
+
+```yaml
+chameleon_system_java_script_minification:
+    js_minifier_to_use: "jshrink"
+```
+
+### Optional Step 4: Chameleon Special Configuration
+
+Enable resource collection and resource collection minify (both are by default enabled for the prod environment):
+
+```yaml
+parameters:
+    chameleon_system_core.resources.enable_external_resource_collection: true
+    chameleon_system_core.resources.enable_external_resource_collection_minify: true
+```
+
+## Usage
+
+This bundle does not require explicit usage. See the documentation of the JavaScriptMinificationBundle for information on the JavaScript minification process.

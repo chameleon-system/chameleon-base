@@ -14,7 +14,7 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
     /**
      * @var array<string, string>
      */
-    private $aSubstitutes = array();
+    private $aSubstitutes = [];
 
     /**
      * @var bool
@@ -22,9 +22,9 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
     private $bCapturing = false;
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $sCapturingVar = null;
+    private $sCapturingVar;
 
     /**
      * @var IResourceHandler
@@ -34,17 +34,17 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
     /**
      * @var string|null
      */
-    private $sSource = null;
+    private $sSource;
 
     /**
      * @var string|null
      */
-    private $sFile = null;
+    private $sFile;
 
     /**
      * @var TModelBase|null
      */
-    private $oSourceModule = null;
+    private $oSourceModule;
 
     /**
      * @var int
@@ -65,15 +65,15 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
 
         switch ($iSourceType) {
             case IPkgSnippetRenderer::SOURCE_TYPE_STRING:
-                /** @var string $sSource */
-            $this->setSource($sSource);
+                /* @var string $sSource */
+                $this->setSource($sSource);
                 break;
             case IPkgSnippetRenderer::SOURCE_TYPE_FILE:
-                /** @var string $sSource */
+                /* @var string $sSource */
                 $this->setFilename($sSource);
                 break;
             case IPkgSnippetRenderer::SOURCE_TYPE_CMSMODULE:
-                /** @var TModelBase $sSource */
+                /* @var TModelBase $sSource */
                 $this->setSourceModule($sSource);
                 break;
             default:
@@ -130,9 +130,9 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
     }
 
     /**
-     * @return void
-     *
      * @param TModelBase $oModuleInstance
+     *
+     * @return void
      */
     public function setSourceModule($oModuleInstance)
     {
@@ -164,9 +164,9 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
      *
      * @param string $sName - the variable/block name
      *
-     * @throws BadMethodCallException
-     *
      * @return void
+     *
+     * @throws BadMethodCallException
      */
     public function setCapturedVarStart($sName)
     {
@@ -183,9 +183,9 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
      *
      * The method will throw a <code>badMethodCallException</code> if it is called while no capturing session is active.
      *
-     * @throws BadMethodCallException
-     *
      * @return void
+     *
+     * @throws BadMethodCallException
      */
     public function setCapturedVarStop()
     {
@@ -194,7 +194,7 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
         }
         $sResult = ob_get_clean();
         $this->bCapturing = false;
-        /**
+        /*
          * @psalm-suppress InvalidPropertyAssignmentValue
          */
         $this->aSubstitutes[$this->sCapturingVar] = $sResult;
@@ -225,8 +225,6 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
     }
 
     /**
-     * @param IResourceHandler $oResourceHandler
-     *
      * @return void
      */
     public function setResourceHandler(IResourceHandler $oResourceHandler)
@@ -241,6 +239,6 @@ abstract class PkgAbstractSnippetRenderer implements IPkgSnippetRenderer
      */
     public function clear()
     {
-        $this->aSubstitutes = array();
+        $this->aSubstitutes = [];
     }
 }

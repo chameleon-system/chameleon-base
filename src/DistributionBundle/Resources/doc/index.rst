@@ -1,2 +1,0 @@
-Chameleon System DistributionBundle
-===================================

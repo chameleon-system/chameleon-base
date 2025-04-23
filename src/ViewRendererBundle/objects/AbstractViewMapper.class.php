@@ -10,8 +10,8 @@
  */
 
 /**
- * extend all your mappers from this class!
-/**/
+ * Extend all your mappers from this class!
+ */
 abstract class AbstractViewMapper implements IViewMapper
 {
 }
