@@ -42,6 +42,9 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 
 # Twig Changes
 
+The twig environment service now is inlined.
+To access it without service injection, you need to use ServiceLocator::get('chameleon_system_snippet_renderer.snippet_renderer')::getTwigEnvironment() as wrapper.
+
 Change the twig error routing from `config/routing_dev.yml`
 
 ```yaml
