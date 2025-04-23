@@ -11,9 +11,9 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\MarkdownCmsBundle\Bridge\Chameleon\Service\MarkdownParserService;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ChameleonSystem\MarkdownCmsBundle\Bridge\Chameleon\Service\MarkdownParserService;
 
 /**
  * shows help texts from all table fields.
