@@ -1,8 +1,8 @@
+# Bootstrap Colorpicker
+
 <a class="readme-logo" href="https://farbelous.io/bootstrap-colorpicker">
     <img alt="Logo by @reallinfo" src="logo.png" width="128px" />
 </a>
-
-# Bootstrap Colorpicker
 
 <!--version-->
 

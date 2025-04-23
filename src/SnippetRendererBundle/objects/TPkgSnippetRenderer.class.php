@@ -70,26 +70,20 @@ use Twig\Error\LoaderError;
  */
 class TPkgSnippetRenderer extends PkgAbstractSnippetRenderer
 {
-    /**
-     * @var Environment
-     */
-    private $twigEnvironment;
-
-    /**
-     * @var Environment
-     */
-    private $twigStringEnvironment;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private Environment $twigEnvironment;
+    private Environment $twigStringEnvironment;
+    private LoggerInterface $logger;
 
     public function __construct(Environment $twigEnvironment, Environment $twigStringEnvironment, LoggerInterface $logger)
     {
         $this->twigEnvironment = $twigEnvironment;
         $this->twigStringEnvironment = $twigStringEnvironment;
         $this->logger = $logger;
+    }
+
+    public function getTwigEnvironment(): Environment
+    {
+        return $this->twigEnvironment;
     }
 
     /**
