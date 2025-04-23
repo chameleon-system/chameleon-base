@@ -59,7 +59,7 @@ class DataMailProfileTableEditor extends \TCMSTableEditor
                 'chameleon_system.table_editor_twig_body_text_parse_error',
                 [
                     'sFieldName' => 'body_text',
-                    'message' => $e->getMessage()
+                    'message' => $e->getMessage(),
                 ]
             );
 
