@@ -32,41 +32,17 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class ViewRenderer
 {
-    /**
-     * @var DataMappingServiceInterface
-     */
-    private $dataMappingService;
-
-    /**
-     * @var DataMappingServiceInterface
-     */
-    private $mapperChainMappingService;
-
-    /**
-     * @var bool
-     */
-    private $showHTMLHints = false;
-    /**
-     * @var DataMappingServiceResponseInterface
-     */
-    private $dataMappingServiceResponse;
+    private ?DataMappingServiceInterface $dataMappingService = null;
+    private ?DataMappingServiceInterface $mapperChainMappingService = null;
+    private bool $showHTMLHints = false;
+    private ?DataMappingServiceResponseInterface $dataMappingServiceResponse = null;
     /**
      * @var TPkgViewRendererMapper_ListHandlerData[]
      */
-    private $listMapHandler = [];
-    /**
-     * @var IPkgSnippetRenderer
-     */
-    private $snippetRenderer;
-    /**
-     * @var Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
-     * @var MapperLoaderInterface
-     */
-    private $mapperLoader;
-
+    private array $listMapHandler = [];
+    private ?IPkgSnippetRenderer $snippetRenderer = null;
+    private ?EventDispatcherInterface $eventDispatcher = null;
+    private ?MapperLoaderInterface $mapperLoader = null;
     protected bool $isBackendMode = false;
 
     /**
@@ -74,13 +50,11 @@ class ViewRenderer
      */
     private ?int $oldRequestType = null;
 
-    /**
-     * @param DataMappingServiceInterface|null $dataMappingService
-     * @param IPkgSnippetRenderer|null         $snippetRenderer
-     * @param EventDispatcherInterface|null    $eventDispatcher
-     * @param MapperLoaderInterface|null       $mapperLoader
-     */
-    public function __construct(DataMappingServiceInterface $dataMappingService = null, IPkgSnippetRenderer $snippetRenderer = null, EventDispatcherInterface $eventDispatcher = null, MapperLoaderInterface $mapperLoader = null)
+    public function __construct(
+        ?DataMappingServiceInterface $dataMappingService = null,
+        ?IPkgSnippetRenderer $snippetRenderer = null,
+        ?EventDispatcherInterface $eventDispatcher = null,
+        ?MapperLoaderInterface $mapperLoader = null)
     {
         $showViewSourceHtmlHints = ServiceLocator::getParameter('chameleon_system_core.debug.show_view_source_html_hints');
         $this->showHTMLHints = ($showViewSourceHtmlHints && _DEVELOPMENT_MODE);
@@ -109,14 +83,13 @@ class ViewRenderer
 
     /**
      * @param string $mapperChainName
-     * @param array $mapperIdentifiers
      *
      * @return void
      */
     public function addMapperChain($mapperChainName, array $mapperIdentifiers)
     {
         $mapperService = clone $this->mapperChainMappingService;
-        $mapperList = array();
+        $mapperList = [];
         foreach ($mapperIdentifiers as $identifier) {
             $mapperList[] = $this->mapperLoader->getMapper($identifier);
         }
@@ -131,7 +104,7 @@ class ViewRenderer
      */
     public function getPostRenderMapperCacheTrigger()
     {
-        return (null !== $this->dataMappingServiceResponse) ? $this->dataMappingServiceResponse->getCacheTrigger() : array();
+        return (null !== $this->dataMappingServiceResponse) ? $this->dataMappingServiceResponse->getCacheTrigger() : [];
     }
 
     /**
@@ -145,7 +118,6 @@ class ViewRenderer
     }
 
     /**
-     * @param IViewMapper $oMapper
      * @param array<string, string>|null $transformations
      * @param string|null $mapToArray
      *
@@ -159,22 +131,21 @@ class ViewRenderer
     /**
      * Adds a mapper by either its service ID or fully qualified class name.
      *
-     * @param string     $identifier
+     * @param string $identifier
      * @param array<string, string>|null $transformations
      * @param string|null $mapToArray
      *
-     * @throws LogicException if no service could be found for the passed identifier
-     *
      * @return void
+     *
+     * @throws LogicException if no service could be found for the passed identifier
      */
-    public function addMapperFromIdentifier($identifier, array $transformations = null, $mapToArray = null)
+    public function addMapperFromIdentifier($identifier, ?array $transformations = null, $mapToArray = null)
     {
         $this->AddMapper($this->mapperLoader->getMapper($identifier), $transformations, $mapToArray);
     }
 
     /**
      * @param string $key
-     * @param mixed  $value
      *
      * @return ViewRenderer
      */
@@ -200,11 +171,11 @@ class ViewRenderer
     /**
      * generate an array of strings as source.
      *
-     * @param string $sTargetName     - the array will have this name
+     * @param string $sTargetName - the array will have this name
      * @param string $sSourceListName - the data is generated from this list
      * @param string $sSourceItemName - each item in the list will be passed by this name to the snippet used to render each item
-     * @param string $sSnippet        - the snippet path (relative to the ./snippet folder)
-     * @param array  $aMapperChain    - the mapper chain used to generate the data for each item in the list
+     * @param string $sSnippet - the snippet path (relative to the ./snippet folder)
+     * @param array $aMapperChain - the mapper chain used to generate the data for each item in the list
      *
      * @return void
      */
@@ -221,9 +192,9 @@ class ViewRenderer
     }
 
     /**
-     * @param string                   $sView            the path to the view
+     * @param string $sView the path to the view
      * @param IPkgSnippetRenderer|null $oSnippetRenderer used to inject a renderer
-     * @param bool                     $bEnableCaching
+     * @param bool $bEnableCaching
      *
      * @return string the rendered snippet
      *
