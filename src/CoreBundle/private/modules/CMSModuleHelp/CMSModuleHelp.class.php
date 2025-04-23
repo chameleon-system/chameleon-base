@@ -13,23 +13,13 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use ChameleonSystem\MarkdownCmsBundle\Bridge\Chameleon\Service\MarkdownParserService;
 
 /**
  * shows help texts from all table fields.
  */
 class CMSModuleHelp extends TCMSModelBase
 {
-    protected $listParams;
-    protected $oTableManager;
-
-    /**
-     * TCMSTableConf object of table based on "tableID".
-     *
-     * @var TCMSTableConf
-     */
-    protected $oTableConf;
-    protected $oTableList;
-
     public function Execute()
     {
         $this->data = parent::Execute();
@@ -76,16 +66,7 @@ class CMSModuleHelp extends TCMSModelBase
                                         <div class="d-flex align-items-baseline">
                                         <h4>'.TGlobal::OutHTML($translator->trans('chameleon_system_core.cms_module_help_text.header_table')).': ';
 
-                    if (!empty($oTable->fieldCmsContentBoxId)) {
-                        $sURL = PATH_CMS_CONTROLLER.'?pagedef=tablemanager&id='.$oTable->id;
-                        $sTableHTML .= '<a href="'.$sURL.'" class="" target="_top"><i class="fas fa-th-list"></i> ';
-                    }
-
                     $sTableHTML .= TGlobal::OutHTML($oTable->GetName()).' <span>['.TGlobal::OutHTML($oTable->fieldName).']</span>';
-
-                    if (!empty($oTable->fieldCmsContentBoxId)) {
-                        $sTableHTML .= '</a>';
-                    }
 
                     $sTableHTML .= '   </h4>
                                       </div>
@@ -109,7 +90,10 @@ class CMSModuleHelp extends TCMSModelBase
                         $sTableHTML .= '<tr>';
                         $sTableHTML .= '<td>'.TGlobal::OutHTML($oField->GetName())."</td>\n";
                         if (!empty($oField->field049Helptext)) {
-                            $sTableHTML .= '<td>'.nl2br(TGlobal::OutHTML($oField->field049Helptext))."</td>\n";
+                            $markdownParserService = $this->getMarkDownParserService();
+                            $markdownText = $markdownParserService->getMarkdownParser()->convert($oField->field049Helptext);
+
+                            $sTableHTML .= '<td>'.$markdownText."</td>\n";
                         } else {
                             $sTableHTML .= "<td>&nbsp;</td>\n";
                         }
@@ -154,9 +138,7 @@ class CMSModuleHelp extends TCMSModelBase
 
     public function GetHtmlHeadIncludes()
     {
-        $aIncludes = parent::GetHtmlHeadIncludes();
-
-        return $aIncludes;
+        return parent::GetHtmlHeadIncludes();
     }
 
     private function getInputFilter(): InputFilterUtilInterface
@@ -167,5 +149,10 @@ class CMSModuleHelp extends TCMSModelBase
     private function getTranslator(): TranslatorInterface
     {
         return ServiceLocator::get('translator');
+    }
+
+    private function getMarkDownParserService(): MarkdownParserService
+    {
+        return ServiceLocator::get('chameleon_system_markdown_cms.markdown_parser_service');
     }
 }
