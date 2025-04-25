@@ -224,7 +224,8 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             $userRights,
             $userGroups,
             $userPortals,
-            $ssoList
+            $ssoList,
+            $userRow['dashboard_widget_config']
         );
     }
 
@@ -244,7 +245,9 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
                 'date_modified' => $user->getDateModified()->format('Y-m-d H:i:s'),
                 'cms_current_edit_language' => $user->getCurrentEditLanguageIsoCode(),
                 'languages' => implode(', ', $user->getAvailableLanguagesIsoCodes()),
+                'dashboard_widget_config' => $user->getDashboardWidgetConfig(),
             ]);
+            
             foreach ($user->getSsoIds() as $ssoId) {
                 $ssoData = [
                     'cms_user_id' => $ssoId->getCmsUserId(),
@@ -263,6 +266,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
                     'target_id' => $id,
                 ]);
             }
+            
             foreach ($user->getGroups() as $id => $code) {
                 $this->connection->insert('cms_user_cms_usergroup_mlt', [
                     'source_id' => $user->getId(),

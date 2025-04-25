@@ -33,7 +33,8 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
         readonly private array $rights = [],
         readonly private array $groups = [],
         readonly private array $portals = [],
-        private array $ssoIds = []
+        private array $ssoIds = [],
+        private string $dashboardWidgetConfig = '',
     ) {
     }
 
@@ -163,6 +164,11 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
     public function getCurrentEditLanguageIsoCode(): ?string
     {
         return $this->currentEditLanguageIsoCode;
+    }
+
+    public function getDashboardWidgetConfig(): string
+    {
+        return $this->dashboardWidgetConfig;
     }
 
     public function withId(string $id): self
