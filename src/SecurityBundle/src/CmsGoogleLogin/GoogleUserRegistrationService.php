@@ -45,6 +45,8 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
         } catch (GuidCreationFailedException $e) {
             throw new RegisterUserErrorException('Failed to register user - unable to obtain a uuid for the cms_user table.', 0, $e);
         }
+
+        try {
         $user = $this->cmsUserDataAccess->loadUserByIdentifier($baseUserName)
                 ->withId($userId)
                 ->withUserIdentifier($googleUser->getEmail())
@@ -54,6 +56,9 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
                 ->withFirstname($googleUser->getFirstName())
                 ->withLastname($googleUser->getLastName())
                 ->withSsoId(new CmsUserSSOModel($userId, self::SSO_TYPE, $googleUser->getId(), $this->guidService->findUnusedId('cms_user_sso')));
+        } catch (\Throwable $e) {
+            throw new RegisterUserErrorException('Failed to register user - unable to load base user: '.$baseUserName, 0, $e);
+        }
 
         try {
             return $this->cmsUserDataAccess->createUser($user);
