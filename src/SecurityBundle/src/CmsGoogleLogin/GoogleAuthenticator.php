@@ -56,7 +56,6 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
             throw new AuthenticationException('No hosted domain found.');
         }
 
-
         return new SelfValidatingPassport(
             new UserBadge($accessToken->getToken(), function() use ($accessToken, $client) {
                 /** @var GoogleUser $googleUser */

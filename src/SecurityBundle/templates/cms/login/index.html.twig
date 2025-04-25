@@ -40,7 +40,7 @@
                                 </div>
                                 <input class="btn btn-lg btn-dark btn-block" type="submit" value="{{ 'chameleon_system_core.cms_module_login.action_login' | trans | e('html_attr') }}">
 
-                                {% if googleLoginUrl %}<a href="{{ googleLoginUrl |e('html_attr') }}" class="btn btn-md btn-info btn-block">{{ 'chameleon_system_core.security.action_login_google' | trans }}</a>{% endif %}
+                                {% if googleLoginUrl %}<a href="{{ googleLoginUrl |e('html_attr') }}" class="btn btn-lg btn-secondary btn-block"><span class="fab fa-google mr-2"></span> {{ 'chameleon_system_core.security.action_login_google' | trans }}</a>{% endif %}
                             </fieldset>
                         </form>
                     </div>
