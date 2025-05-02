@@ -416,7 +416,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.memory_usage">
                 <source>chameleon_system_cms_dashboard.widget.server_status.memory_usage</source>
-                <target>Seicher Auslastung</target>
+                <target>Speicher Auslastung</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.server_status.load_average">
                 <source>chameleon_system_cms_dashboard.widget.server_status.load_average</source>
