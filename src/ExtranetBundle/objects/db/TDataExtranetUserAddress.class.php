@@ -154,6 +154,12 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
     public function ContainsData()
     {
         $bContainsData = false;
+
+        if (false === $this->sqlData)
+        {
+            return false;
+        }
+
         reset($this->sqlData);
         foreach ($this->sqlData as $sKey => $sValue) {
             $sValue = trim($sValue);
@@ -181,13 +187,15 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
         $aRequiredFields = $this->GetRequiredFields();
         foreach ($aRequiredFields as $sFieldName) {
             $bFieldValid = true;
-            if (!array_key_exists($sFieldName, $this->sqlData)) {
-                $bFieldValid = false;
-            } else {
-                $this->sqlData[$sFieldName] = trim($this->sqlData[$sFieldName]);
-            }
-            if ($bFieldValid && empty($this->sqlData[$sFieldName])) {
-                $bFieldValid = false;
+            if (false !== $this->sqlData) {
+                if (!array_key_exists($sFieldName, $this->sqlData)) {
+                    $bFieldValid = false;
+                } else {
+                    $this->sqlData[$sFieldName] = trim($this->sqlData[$sFieldName]);
+                }
+                if ($bFieldValid && empty($this->sqlData[$sFieldName])) {
+                    $bFieldValid = false;
+                }
             }
             if (!$bFieldValid) {
                 if ('' != $sFormDataName) {
@@ -197,49 +205,51 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
             }
         }
 
-        // check postal code for country
-        $bHasCountry = (array_key_exists('data_country_id', $this->sqlData) && !empty($this->sqlData['data_country_id']));
-        $bHasPostalcode = (array_key_exists('postalcode', $this->sqlData) && !empty($this->sqlData['postalcode']));
-        if ($bHasCountry && $bHasPostalcode) {
-            $oCountry = TdbDataCountry::GetNewInstance();
-            if ($oCountry->Load($this->sqlData['data_country_id'])) {
-                if (!$oCountry->IsValidPostalcode($this->sqlData['postalcode'])) {
+        if (false !== $this->sqlData) {
+            // check postal code for country
+            $bHasCountry = (array_key_exists('data_country_id', $this->sqlData) && !empty($this->sqlData['data_country_id']));
+            $bHasPostalcode = (array_key_exists('postalcode', $this->sqlData) && !empty($this->sqlData['postalcode']));
+            if ($bHasCountry && $bHasPostalcode) {
+                $oCountry = TdbDataCountry::GetNewInstance();
+                if ($oCountry->Load($this->sqlData['data_country_id'])) {
+                    if (!$oCountry->IsValidPostalcode($this->sqlData['postalcode'])) {
+                        if ('' != $sFormDataName) {
+                            $oMsgManager->AddMessage($sFormDataName.'-postalcode', 'ERROR-USER-FIELD-INVALID-POSTALCODE');
+                        }
+                        $bIsValid = false;
+                    }
+                }
+            }
+
+            if (array_key_exists('vat_id', $this->sqlData) && !empty($this->sqlData['vat_id'])) {
+                if (false == TTools::IsVatIdValid($this->sqlData['vat_id'], null, $this->sqlData['data_country_id'])) {
                     if ('' != $sFormDataName) {
-                        $oMsgManager->AddMessage($sFormDataName.'-postalcode', 'ERROR-USER-FIELD-INVALID-POSTALCODE');
+                        $oMsgManager->AddMessage($sFormDataName.'-vat_id', 'ERROR-USER-VAT-ID-INVALID');
                     }
                     $bIsValid = false;
                 }
             }
-        }
 
-        if (array_key_exists('vat_id', $this->sqlData) && !empty($this->sqlData['vat_id'])) {
-            if (false == TTools::IsVatIdValid($this->sqlData['vat_id'], null, $this->sqlData['data_country_id'])) {
-                if ('' != $sFormDataName) {
-                    $oMsgManager->AddMessage($sFormDataName.'-vat_id', 'ERROR-USER-VAT-ID-INVALID');
-                }
-                $bIsValid = false;
-            }
-        }
-
-        // validate field length for all char fields
-        $sQuery = "SELECT `cms_field_conf`.*
+            // validate field length for all char fields
+            $sQuery = "SELECT `cms_field_conf`.*
                      FROM `cms_field_conf`
                INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
                INNER JOIN `cms_field_type` on `cms_field_conf`.`cms_field_type_id` = `cms_field_type`.`id`
                     WHERE `cms_tbl_conf`.`name` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->table)."'
                       AND `cms_field_type`.`constname` = 'CMSFIELD_STRING'";
-        $oFields = TdbCmsFieldConfList::GetList($sQuery);
-        while ($oField = $oFields->Next()) {
-            if (isset($this->sqlData[$oField->fieldName])) {
-                $iLength = $oField->fieldLengthSet;
-                if (empty($iLength)) {
-                    $iLength = 255;
-                } // default is 255 chars
-                if (mb_strlen($this->sqlData[$oField->fieldName]) > $iLength) {
-                    if ('' != $sFormDataName) {
-                        $oMsgManager->AddMessage($sFormDataName.'-'.$oField->fieldName, 'ERROR-USER-FIELD-TO-LONG', ['iLengthAllowed' => $iLength, 'iUserLength' => mb_strlen($this->sqlData[$oField->fieldName])]);
+            $oFields = TdbCmsFieldConfList::GetList($sQuery);
+            while ($oField = $oFields->Next()) {
+                if (isset($this->sqlData[$oField->fieldName])) {
+                    $iLength = $oField->fieldLengthSet;
+                    if (empty($iLength)) {
+                        $iLength = 255;
+                    } // default is 255 chars
+                    if (mb_strlen($this->sqlData[$oField->fieldName]) > $iLength) {
+                        if ('' != $sFormDataName) {
+                            $oMsgManager->AddMessage($sFormDataName.'-'.$oField->fieldName, 'ERROR-USER-FIELD-TO-LONG', ['iLengthAllowed' => $iLength, 'iUserLength' => mb_strlen($this->sqlData[$oField->fieldName])]);
+                        }
+                        $bIsValid = false;
                     }
-                    $bIsValid = false;
                 }
             }
         }
