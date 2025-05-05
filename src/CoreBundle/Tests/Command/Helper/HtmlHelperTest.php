@@ -20,7 +20,7 @@ class HtmlHelperTest extends TestCase
     /**
      * @test
      */
-    public function it_renders_text_unaltered()
+    public function itRendersTextUnaltered()
     {
         $output = new BufferedOutput();
         $helper = new HtmlHelper($output);
@@ -32,7 +32,7 @@ class HtmlHelperTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_br_to_newline()
+    public function itConvertsBrToNewline()
     {
         $output = new BufferedOutput();
         $helper = new HtmlHelper($output);
@@ -44,7 +44,7 @@ class HtmlHelperTest extends TestCase
     /**
      * @test
      */
-    public function it_trims_whitespace()
+    public function itTrimsWhitespace()
     {
         $output = new BufferedOutput();
         $helper = new HtmlHelper($output);
@@ -56,7 +56,7 @@ class HtmlHelperTest extends TestCase
     /**
      * @test
      */
-    public function it_highlights_headers()
+    public function itHighlightsHeaders()
     {
         $output = new BufferedOutput();
         $output->setDecorated(true);
@@ -69,7 +69,7 @@ class HtmlHelperTest extends TestCase
     /**
      * @test
      */
-    public function it_writes_a_new_line_after_every_header_and_resets_header_style()
+    public function itWritesANewLineAfterEveryHeaderAndResetsHeaderStyle()
     {
         $output = new BufferedOutput();
         $output->setDecorated(true);
@@ -82,7 +82,7 @@ class HtmlHelperTest extends TestCase
     /**
      * @test
      */
-    public function it_throws_away_all_other_tags()
+    public function itThrowsAwayAllOtherTags()
     {
         $output = new BufferedOutput();
         $output->setDecorated(true);
@@ -95,7 +95,7 @@ class HtmlHelperTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_a_stdClass()
+    public function itHandlesAStdClass()
     {
         $output = new BufferedOutput();
         $output->setDecorated(true);
@@ -111,7 +111,7 @@ class HtmlHelperTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_an_array()
+    public function itHandlesAnArray()
     {
         $output = new BufferedOutput();
         $output->setDecorated(true);

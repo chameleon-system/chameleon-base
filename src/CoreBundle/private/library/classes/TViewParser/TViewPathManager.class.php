@@ -24,10 +24,6 @@ class TViewPathManager implements IViewPathManager
      */
     private $viewRendererSnippetDirectory;
 
-    /**
-     * @param PortalDomainServiceInterface              $portalDomainService
-     * @param TPkgViewRendererSnippetDirectoryInterface $viewRendererSnippetDirectory
-     */
     public function __construct(PortalDomainServiceInterface $portalDomainService, TPkgViewRendererSnippetDirectoryInterface $viewRendererSnippetDirectory)
     {
         $this->portalDomainService = $portalDomainService;
@@ -79,9 +75,9 @@ class TViewPathManager implements IViewPathManager
     }
 
     /**
-     * @param string      $sViewName
-     * @param string      $sModuleName
-     * @param string      $sType
+     * @param string $sViewName
+     * @param string $sModuleName
+     * @param string $sType
      * @param string|null $sMappedPath - if there is already a mapped path replacing PATH_CUSTOMER_FRAMEWORK
      *
      * @return string
@@ -91,7 +87,7 @@ class TViewPathManager implements IViewPathManager
         if (null === $sMappedPath) {
             $sMappedPath = PATH_CUSTOMER_FRAMEWORK.'/modules/';
         }
-        $baseModuleName = baseName(str_replace('\\', '/', $sModuleName));
+        $baseModuleName = basename(str_replace('\\', '/', $sModuleName));
         $sModuleName = str_replace('\\', '_', $sModuleName);
         // try to get it first from customer module path
         $sTemplatePath = $sMappedPath.$sModuleName.'/views/'.$sViewName.'.view.php';
@@ -99,9 +95,9 @@ class TViewPathManager implements IViewPathManager
             $sViewFileName = $sModuleName.'/'.$sViewName.'.view.php';
             $sTemplatePath = $this->getTemplateFilePathFromTheme($sViewFileName, TPkgViewRendererSnippetDirectory::PATH_MODULES);
             if (false === file_exists($sTemplatePath)) {
-                //maybe the view is from a bundle
+                // maybe the view is from a bundle
                 $sMappedPath = str_replace('//', '/', $sMappedPath);
-                $templatePathBundle = $sMappedPath . $baseModuleName . '/views/' . $sViewName . '.view.php';
+                $templatePathBundle = $sMappedPath.$baseModuleName.'/views/'.$sViewName.'.view.php';
                 if (file_exists($templatePathBundle)) {
                     return $templatePathBundle;
                 } else {
@@ -175,13 +171,11 @@ class TViewPathManager implements IViewPathManager
      * individual packages. This is an unfortunate change and should not really concern the core.
      * Renaming bundles again is a massiv amount of work and would re-introduce bad names. So we keep
      * the mapping - In order to be able to remove the mapping `\TViewPathManager::getObjectPackageViewPath`
-     * needs to be deprecated - and replaced by a method that expects the bundle name instead of a path mapping
-     * @param string $privatePackageName
-     * @return string
+     * needs to be deprecated - and replaced by a method that expects the bundle name instead of a path mapping.
      */
     private function mapChameleonPrivatePackageToMonoRepoPath(string $privatePackageName): string
     {
-        return match($privatePackageName) {
+        return match ($privatePackageName) {
             'articleparagraphbundle' => 'article-paragraph',
             'artificial-intelligence-bundle' => 'artificial-intelligence',
             'chameleon-shop-theme-sell' => 'theme-sell',
@@ -318,6 +312,7 @@ class TViewPathManager implements IViewPathManager
             default => $privatePackageName
         };
     }
+
     /**
      * @param string $sViewName
      * @param string $sSubType
@@ -340,7 +335,7 @@ class TViewPathManager implements IViewPathManager
 
             if (false === is_dir($sPath.'/'.$sSubType)) {
                 // it must be a chameleon-system-private package.
-                $sPath = realpath(rtrim(ESONO_PACKAGES, '/'). '-private');
+                $sPath = realpath(rtrim(ESONO_PACKAGES, '/').'-private');
                 if (false === is_dir($sPath.'/'.$sSubType)) {
                     // They were renamed if installed as mono repos -so we need to remap
                     // fetch new package name
@@ -351,7 +346,7 @@ class TViewPathManager implements IViewPathManager
                     $parts[0] = \strtolower($parts[0]);
                     $parts[0] = $this->mapChameleonPrivatePackageToMonoRepoPath($parts[0]);
                     $sSubType = \implode('/', $parts);
-                    $sPath = realpath($sPath . '/monorepo/packages');
+                    $sPath = realpath($sPath.'/monorepo/packages');
                 }
             }
         }
@@ -414,7 +409,7 @@ class TViewPathManager implements IViewPathManager
         if (null !== $sTemplatePathFromTheme) {
             return $sTemplatePathFromTheme;
         }
-        
+
         /**
          * @deprecated all object views should move to a theme directory
          */
@@ -430,10 +425,10 @@ class TViewPathManager implements IViewPathManager
         }
 
         $templatePath = $path.'/'.$viewFileName;
-    
+
         if (file_exists($templatePath)) {
             return $templatePath;
-        } 
+        }
 
         // fallback to core
         $path = _CMS_CORE.'/rendering/objectviews/';

@@ -18,9 +18,6 @@ class PasswordHashGenerator implements PasswordHashGeneratorInterface
      */
     private $hashAlgorithm;
 
-    /**
-     * @param HashAlgorithmInterface $hashAlgorithm
-     */
     public function __construct(HashAlgorithmInterface $hashAlgorithm)
     {
         $this->hashAlgorithm = $hashAlgorithm;

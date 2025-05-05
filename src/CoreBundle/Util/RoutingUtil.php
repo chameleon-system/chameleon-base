@@ -13,12 +13,6 @@ namespace ChameleonSystem\CoreBundle\Util;
 
 use ChameleonSystem\CoreBundle\DataModel\Routing\PagePath;
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
-use TCMSPortal;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsPortalDomains;
-use TdbCmsPortalDomainsList;
-use TdbCmsTree;
 
 class RoutingUtil implements RoutingUtilInterface
 {
@@ -35,11 +29,6 @@ class RoutingUtil implements RoutingUtilInterface
      */
     private $urlPrefixGenerator;
 
-    /**
-     * @param RoutingUtilDataAccessInterface $routingUtilDataAccess
-     * @param TreeServiceInterface           $treeService
-     * @param UrlPrefixGeneratorInterface    $urlPrefixGenerator
-     */
     public function __construct(RoutingUtilDataAccessInterface $routingUtilDataAccess, TreeServiceInterface $treeService, UrlPrefixGeneratorInterface $urlPrefixGenerator)
     {
         $this->routingUtilDataAccess = $routingUtilDataAccess;
@@ -50,7 +39,7 @@ class RoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkForTreeNode(TdbCmsTree $tree, TdbCmsLanguage $language)
+    public function getLinkForTreeNode(\TdbCmsTree $tree, \TdbCmsLanguage $language)
     {
         $url = null;
         $linkedPage = $tree->GetLinkedPageObject();
@@ -84,11 +73,11 @@ class RoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getDomainRequirement(TdbCmsPortal $portal, TdbCmsLanguage $language, $secure)
+    public function getDomainRequirement(\TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
-        $domainList = TdbCmsPortalDomainsList::GetListForCmsPortalId($portal->id, $language->id);
+        $domainList = \TdbCmsPortalDomainsList::GetListForCmsPortalId($portal->id, $language->id);
         $primaryDomain = null;
-        $otherDomains = array();
+        $otherDomains = [];
         while ($domain = $domainList->Next()) {
             if (!empty($domain->fieldCmsLanguageId) && $domain->fieldCmsLanguageId !== $language->id) {
                 continue;
@@ -100,7 +89,7 @@ class RoutingUtil implements RoutingUtilInterface
             }
         }
 
-        $domains = array();
+        $domains = [];
         if (null !== $primaryDomain) {
             $domainNames = $this->getDomainNames($primaryDomain, $secure);
             if ('' !== $domainNames) {
@@ -118,12 +107,11 @@ class RoutingUtil implements RoutingUtilInterface
     }
 
     /**
-     * @param TdbCmsPortalDomains $domain
-     * @param bool                $secure
+     * @param bool $secure
      *
      * @return string
      */
-    private function getDomainNames(TdbCmsPortalDomains $domain, $secure)
+    private function getDomainNames(\TdbCmsPortalDomains $domain, $secure)
     {
         if (!empty($domain->fieldSslname)) {
             if ($secure) {
@@ -141,12 +129,12 @@ class RoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllPageRoutes(TdbCmsPortal $portal, TdbCmsLanguage $language)
+    public function getAllPageRoutes(\TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
         /**
          * @var PagePath[] $routes
          */
-        $routes = array();
+        $routes = [];
 
         /** @var string $homePagedef */
         $homePagedef = $this->treeService->getById($portal->fieldHomeNodeId)->GetLinkedPage();
@@ -172,14 +160,14 @@ class RoutingUtil implements RoutingUtilInterface
         return $routes;
     }
 
-    private function getPathForPageAssignment(string $treeId, TdbCmsPortal $portal, TdbCmsLanguage $language): ?string
+    private function getPathForPageAssignment(string $treeId, \TdbCmsPortal $portal, \TdbCmsLanguage $language): ?string
     {
         $pathNode = $this->treeService->getById($treeId, $language->id);
         if (null === $pathNode) {
             return null;
         }
 
-        $aPath = $pathNode->GetPath(TCMSPortal::GetStopNodes($portal->id));
+        $aPath = $pathNode->GetPath(\TCMSPortal::GetStopNodes($portal->id));
 
         $navigationRootDepth = $this->getNavigationRootDepth($portal, $aPath);
         /*
@@ -189,8 +177,8 @@ class RoutingUtil implements RoutingUtilInterface
             return null;
         }
 
-        $pathParts = array();
-        for ($i = $navigationRootDepth + 1; $i < $pathPartCount = \count($aPath); $i++) {
+        $pathParts = [];
+        for ($i = $navigationRootDepth + 1; $i < $pathPartCount = \count($aPath); ++$i) {
             $node = $aPath[$i];
             $pathPart = $node->fieldUrlname;
 
@@ -210,13 +198,14 @@ class RoutingUtil implements RoutingUtilInterface
     /**
      * Returns the depth of the first node in $pathElements that is also registered as navigation root for $portal (0-based).
      *
-     * @param TdbCmsPortal $portal
-     * @param TdbCmsTree[] $pathElements
-     * @return string|null The depth of a navigation root node, or null if $pathElements does not contain a navigation
-     *                     root node.
+     * @param \TdbCmsTree[] $pathElements
+     *
+     * @return string|null the depth of a navigation root node, or null if $pathElements does not contain a navigation
+     *                     root node
+     *
      * @psalm-return numeric-string
      */
-    private function getNavigationRootDepth(TdbCmsPortal $portal, array $pathElements): ?string
+    private function getNavigationRootDepth(\TdbCmsPortal $portal, array $pathElements): ?string
     {
         $naviNodeIdList = $portal->GetNaviNodeIds();
         foreach ($pathElements as $i => $node) {
@@ -231,7 +220,7 @@ class RoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function normalizeRoutePath($path, TdbCmsPortal $portal)
+    public function normalizeRoutePath($path, \TdbCmsPortal $portal)
     {
         if ('' === $path || '/' === $path) {
             return '/';

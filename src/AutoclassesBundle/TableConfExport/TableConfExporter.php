@@ -2,8 +2,6 @@
 
 namespace ChameleonSystem\AutoclassesBundle\TableConfExport;
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\AutoClassConfigurationDataModel;
-use ChameleonSystem\AutoclassesBundle\TableConfExport\AutoClassConfigurationDefinition;
 use ChameleonSystem\AutoclassesBundle\DataAccess\AutoclassesDataAccessInterface;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\CoreBundle\DataModel\TableConfigurationDataModel;
@@ -31,14 +29,12 @@ class TableConfExporter implements TableConfExporterInterface
         string $metaConfigDir,
         array $tableNamespaceMapping
     ): string {
-
-
         $tableConf = $this->autoclassesDataAccess->getTableConfigData()[$table->id] ?? null;
 
         if (null === $tableConf) {
             throw new \Exception(
                 sprintf(
-                    "Unable to generate data class for table %s - no config found for table id %s",
+                    'Unable to generate data class for table %s - no config found for table id %s',
                     $table->name,
                     $table->id
                 )
@@ -49,7 +45,7 @@ class TableConfExporter implements TableConfExporterInterface
         if (null === $fieldConfig) {
             throw new \Exception(
                 sprintf(
-                    "Unable to generate data class for table %s - no fields found for table id id %s",
+                    'Unable to generate data class for table %s - no fields found for table id id %s',
                     $table->name,
                     $table->id
                 )
@@ -104,27 +100,22 @@ class TableConfExporter implements TableConfExporterInterface
         }
 
         if (false === file_put_contents($targetDir.'/'.$className.'.php', $dataModelCode)) {
-            throw new \RuntimeException(sprintf("Failed to write data model code to file (%s).", $targetDir.'/'.$className.'.php'));
+            throw new \RuntimeException(sprintf('Failed to write data model code to file (%s).', $targetDir.'/'.$className.'.php'));
         }
         if (false === file_put_contents($mappingCleanPath.'/'.$mappingClass.'.orm.xml', $dataModelMapping)) {
-            throw new \RuntimeException(sprintf("Failed to write data model mapping to file (%s).", $mappingCleanPath.'/'.$mappingClass.'.orm.xml'));
+            throw new \RuntimeException(sprintf('Failed to write data model mapping to file (%s).', $mappingCleanPath.'/'.$mappingClass.'.orm.xml'));
         }
 
         // todo: re-enable once we move to another admin that may need this data.
-        //file_put_contents($metaConfigDir.'/'.$mappingClass.'.yaml', $autoClassConfig);
+        // file_put_contents($metaConfigDir.'/'.$mappingClass.'.yaml', $autoClassConfig);
 
         return $fqn;
-
     }
 
     /**
      * @param array $tableConf
-     * @param string $className
-     * @param string $fqn
-     * @param string $namespace
      * @param \TCMSField[] $fields
-     * @param DataModelParts[] $classProperties
-     * @return string
+     *
      * @throws \TPkgSnippetRenderer_SnippetRenderingException
      */
     public function generateDataModelMapping(
@@ -148,11 +139,11 @@ class TableConfExporter implements TableConfExporterInterface
         $snippetRenderer->setVar('fields', $fields);
         $snippetRenderer->setVar(
             'propertyMappings',
-            array_map(static fn(DataModelParts $part) => $part->getMappingXml(), $propertyMappings)
+            array_map(static fn (DataModelParts $part) => $part->getMappingXml(), $propertyMappings)
         );
         $snippetRenderer->setVar(
             'liveCycleCallbacks',
-            array_map(static fn(DataModelParts $part) => $part->getLiveCycleCallbacks(), $propertyMappings)
+            array_map(static fn (DataModelParts $part) => $part->getLiveCycleCallbacks(), $propertyMappings)
         );
 
         return $snippetRenderer->render();
@@ -160,12 +151,9 @@ class TableConfExporter implements TableConfExporterInterface
 
     /**
      * @param array $tableConf
-     * @param string $className
-     * @param string $fqn
-     * @param string $namespace
      * @param \TCMSField[] $fields
      * @param DataModelParts[] $dataModelPartsList
-     * @return string
+     *
      * @throws \TPkgSnippetRenderer_SnippetRenderingException
      */
     public function generateDataModelCode(

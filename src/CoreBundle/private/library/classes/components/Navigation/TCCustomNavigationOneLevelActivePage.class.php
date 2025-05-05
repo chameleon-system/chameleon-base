@@ -13,13 +13,13 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 /**
  * show only the active page and its first sublevel.
-/**/
+ * /**/
 class TCCustomNavigationOneLevelActivePage extends TCCustomNavigationOnlyOneLevel
 {
     /**
      * overwrite load to use the active page node instead of the passed rootNodeId.
      *
-     * @param int $rootNodeId   - root navi id. we will overwrite this
+     * @param int $rootNodeId - root navi id. we will overwrite this
      * @param int $iCurrentPage - current page id
      */
     public function Load($rootNodeId, $iCurrentPage)
@@ -63,6 +63,6 @@ class TCCustomNavigationOneLevelActivePage extends TCCustomNavigationOnlyOneLeve
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

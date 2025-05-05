@@ -11,24 +11,16 @@
 
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\MediaManager\Exception\DataAccessException;
 use ChameleonSystem\MediaManager\Interfaces\MediaItemDataAccessInterface;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
-use TdbCmsLanguage;
 
-class MediaManagerSearchAutoCompleteMapper extends AbstractViewMapper
+class MediaManagerSearchAutoCompleteMapper extends \AbstractViewMapper
 {
     /**
      * @var MediaItemDataAccessInterface
      */
     private $mediaItemDataAccess;
 
-    /**
-     * @param MediaItemDataAccessInterface $mediaItemDataAccess
-     */
     public function __construct(MediaItemDataAccessInterface $mediaItemDataAccess)
     {
         $this->mediaItemDataAccess = $mediaItemDataAccess;
@@ -37,23 +29,23 @@ class MediaManagerSearchAutoCompleteMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('searchTerm', 'string');
-        $oRequirements->NeedsSourceObject('language', TdbCmsLanguage::class);
+        $oRequirements->NeedsSourceObject('language', \TdbCmsLanguage::class);
     }
 
     /**
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
          * @var string $searchTerm
-         * @var TdbCmsLanguage $language
+         * @var \TdbCmsLanguage $language
          */
         $searchTerm = $oVisitor->GetSourceObject('searchTerm');
         $language = $oVisitor->GetSourceObject('language');

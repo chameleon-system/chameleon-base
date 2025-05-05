@@ -20,19 +20,15 @@ interface QueryInterface
      * Executes a query defined by the given $migrationQueryData object. Internally calls getQuery() which determines the
      * query type by calling the concrete subclasses' getBaseQuery() method.
      *
-     * @param MigrationQueryData $migrationQueryData
-     *
      * @return array An array consisting of the executed query (string) and and parameters (array)
      *
      * @throws \Doctrine\DBAL\DBALException if a database error occurs while executing
-     * @throws \InvalidArgumentException    see assertPrerequisites()
+     * @throws \InvalidArgumentException see assertPrerequisites()
      */
     public function execute(MigrationQueryData $migrationQueryData);
 
     /**
      * Generates and returns a query and query parameters for the passed $migrationQueryData object.
-     *
-     * @param MigrationQueryData $migrationQueryData
      *
      * @return array An array consisting of the query (string) and and parameters (array)
      */

@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class CmsLocals
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -67,7 +66,6 @@ class CmsLocals
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDateFormat(): string
     {
@@ -80,7 +78,6 @@ class CmsLocals
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTimeFormat(): string
@@ -95,7 +92,6 @@ class CmsLocals
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getPhpLocalName(): string
     {
@@ -108,7 +104,6 @@ class CmsLocals
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getDateFormatCalendar(): string
@@ -123,7 +118,6 @@ class CmsLocals
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getNumbers(): string
     {
@@ -136,6 +130,4 @@ class CmsLocals
 
         return $this;
     }
-
-
 }

@@ -15,14 +15,12 @@
  * - request (b) finishes and updates session
  * - request (a) finishes and tries to update session. since the last write is newer than the read from (a) the write will fail
  *   protecting the newer data written by (b).
-/**/
-class TPkgCmsSessionHandler_Decorator_EnforceWriteSequence extends \Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy
+ * /**/
+class TPkgCmsSessionHandler_Decorator_EnforceWriteSequence extends Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy
 {
     private $writeSequenceCounter = 0;
 
     /**
-     * @param string $sSessionId
-     *
      * @return mixed
      *
      * @throws TPkgCmsSessionStorageLockException
@@ -68,7 +66,7 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequence extends \Symfony\Comp
 
         ++$this->writeSequenceCounter; // = microtime(true);
 
-        $aNewSessionData = array('lastWrite' => $this->writeSequenceCounter, 'data' => $aSessionData);
+        $aNewSessionData = ['lastWrite' => $this->writeSequenceCounter, 'data' => $aSessionData];
         $sSessionData = serialize($aNewSessionData);
 
         return parent::write($sSessionId, $sSessionData);

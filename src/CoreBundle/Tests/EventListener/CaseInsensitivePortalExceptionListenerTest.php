@@ -56,8 +56,6 @@ class CaseInsensitivePortalExceptionListenerTest extends TestCase
 
     /**
      * @dataProvider provideDataForTestOnKernelException
-     *
-     * @param RedirectResponse|null $expectedResponse
      */
     public function testOnKernelException(string $currentPath, string $requestMethod, ?RedirectResponse $expectedResponse): void
     {
@@ -128,7 +126,7 @@ class CaseInsensitivePortalExceptionListenerTest extends TestCase
         ];
     }
 
-    private function givenRequest(string $currentPath, string $requestMethod, string $content = null): void
+    private function givenRequest(string $currentPath, string $requestMethod, ?string $content = null): void
     {
         $this->request = $this->prophesize(Request::class);
         $this->request->getHost()->willReturn('such-host');

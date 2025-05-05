@@ -11,7 +11,7 @@
 
 /**
  * ;.
-/**/
+ * /**/
 class TPkgCommentType extends TPkgCommentTypeAutoParent
 {
     /**
@@ -46,7 +46,9 @@ class TPkgCommentType extends TPkgCommentTypeAutoParent
 
     /**
      * @param string $sCommentTypeId
+     *
      * @return string
+     *
      * @throws TPkgCmsException_Log
      */
     public static function GetCommentTypeTableName($sCommentTypeId)

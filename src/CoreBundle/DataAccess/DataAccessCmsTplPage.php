@@ -24,9 +24,6 @@ class DataAccessCmsTplPage implements DataAccessInterface
      */
     private $databaseConnection;
 
-    /**
-     * @param Connection $databaseConnection
-     */
     public function __construct(Connection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
@@ -42,10 +39,10 @@ class DataAccessCmsTplPage implements DataAccessInterface
                      ORDER BY `cms_tpl_page`.`cmsident`';
 
         $pages = $this->databaseConnection->fetchAllAssociative($query);
-        $pageList = array();
+        $pageList = [];
         foreach ($pages as $page) {
             $pageId = $page['id'];
-            $pageList[$pageId] = TdbCmsTplPage::GetNewInstance($page, $languageId);
+            $pageList[$pageId] = \TdbCmsTplPage::GetNewInstance($page, $languageId);
         }
 
         return $pageList;
@@ -56,9 +53,9 @@ class DataAccessCmsTplPage implements DataAccessInterface
      */
     public function getCacheTriggers()
     {
-        return array(
+        return [
             'cms_tpl_page',
             'cms_tree_node',
-        );
+        ];
     }
 }

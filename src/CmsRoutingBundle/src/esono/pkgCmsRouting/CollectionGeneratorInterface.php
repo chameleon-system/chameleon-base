@@ -16,9 +16,7 @@ use Symfony\Component\Routing\RouteCollection;
 interface CollectionGeneratorInterface
 {
     /**
-     * @param array           $config
-     * @param \TdbCmsPortal   $portal
-     * @param \TdbCmsLanguage $language
+     * @param array $config
      *
      * @return RouteCollection
      */

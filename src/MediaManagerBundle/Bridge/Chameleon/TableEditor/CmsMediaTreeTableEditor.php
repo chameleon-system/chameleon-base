@@ -16,10 +16,8 @@ use ChameleonSystem\MediaManager\Exception\DataAccessException;
 use ChameleonSystem\MediaManager\Interfaces\MediaItemDataAccessInterface;
 use ChameleonSystem\MediaManager\Interfaces\MediaTreeDataAccessInterface;
 use ErrorException;
-use TCMSTableEditorMediaTree;
-use TTools;
 
-class CmsMediaTreeTableEditor extends TCMSTableEditorMediaTree
+class CmsMediaTreeTableEditor extends \TCMSTableEditorMediaTree
 {
     /**
      * {@inheritDoc}
@@ -32,17 +30,17 @@ class CmsMediaTreeTableEditor extends TCMSTableEditorMediaTree
             /**
              * @var CmsMediaTableEditor $imageTableEditor
              */
-            $imageTableEditor = TTools::GetTableEditorManager('cms_media')->oTableEditor;
+            $imageTableEditor = \TTools::GetTableEditorManager('cms_media')->oTableEditor;
 
             try {
                 $images = $this->getMediaItemDataAccess()->getMediaItemsInMediaTreeNode($mediaTreeNode, $languageId);
             } catch (DataAccessException $e) {
-                /**
+                /*
                  * @psalm-suppress InvalidArgument
                  * @FIXME Incorrect constructor arguments to `ErrorException`. Should be the following:
                  * throw new ErrorException($e->getMessage(), 0, 1, $e->getFile(), $e->getLine(), $e);
                  */
-                throw new ErrorException($e->getMessage(), 0, $e);
+                throw new \ErrorException($e->getMessage(), 0, $e);
             }
             foreach ($images as $image) {
                 $imageTableEditor->ClearCacheOfObjectsUsingImage($image->getId());

@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMarkerInterface;
 
 /**
@@ -18,7 +17,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMa
  * input field for every public variable of the referenced class
  * the values are stored as key=val pairs (one per line).
  *
-/**/
+ * /**/
 class TCMSFieldClassParams extends TCMSField implements DoctrineNotTransformableMarkerInterface
 {
     // not in the cms_field_type table
@@ -31,7 +30,7 @@ class TCMSFieldClassParams extends TCMSField implements DoctrineNotTransformable
         $html .= '</textarea>';
 
         // get current parameter data
-        $aParams = array();
+        $aParams = [];
         $aParamRows = explode("\n", $this->data);
         foreach ($aParamRows as $sParamRow) {
             if (!empty($sParamRow)) {
@@ -88,10 +87,10 @@ class TCMSFieldClassParams extends TCMSField implements DoctrineNotTransformable
                 // get all public variables
                 $class_vars = get_class_vars($sClass);
 
-                $filterArray = array('table', 'sqlData', 'id', '_oTableConf');
+                $filterArray = ['table', 'sqlData', 'id', '_oTableConf'];
 
                 // filter default TCMSRecord parameters
-                $aFilteredVars = array();
+                $aFilteredVars = [];
                 foreach ($class_vars as $key => $val) {
                     if ('field' != substr($key, 0, 5) && !in_array($key, $filterArray)) {
                         $aFilteredVars[$key] = $val;
@@ -118,8 +117,6 @@ class TCMSFieldClassParams extends TCMSField implements DoctrineNotTransformable
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
-     *
-     * @return mixed
      */
     public function ConvertPostDataToSQL()
     {

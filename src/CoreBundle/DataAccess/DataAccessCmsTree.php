@@ -13,7 +13,6 @@ namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Doctrine\DBAL\Connection;
-use TdbCmsTree;
 
 class DataAccessCmsTree implements DataAccessCmsTreeInterface
 {
@@ -26,10 +25,6 @@ class DataAccessCmsTree implements DataAccessCmsTreeInterface
      */
     private $languageService;
 
-    /**
-     * @param Connection               $databaseConnection
-     * @param LanguageServiceInterface $languageService
-     */
     public function __construct(Connection $databaseConnection, LanguageServiceInterface $languageService)
     {
         $this->databaseConnection = $databaseConnection;
@@ -44,13 +39,13 @@ class DataAccessCmsTree implements DataAccessCmsTreeInterface
         $query = 'SELECT * FROM `cms_tree` ORDER BY `lft`';
 
         $result = $this->databaseConnection->fetchAllAssociative($query);
-        $trees = array();
+        $trees = [];
         if (null === $languageId) {
             $languageId = $this->languageService->getActiveLanguageId();
         }
         foreach ($result as $row) {
             $treeId = $row['id'];
-            $tree = TdbCmsTree::GetNewInstance();
+            $tree = \TdbCmsTree::GetNewInstance();
             $tree->SetLanguage($languageId);
             $tree->LoadFromRow($row);
             $trees[$treeId] = $tree;
@@ -67,20 +62,20 @@ class DataAccessCmsTree implements DataAccessCmsTreeInterface
         $rows = $this->databaseConnection->fetchAllAssociative('SELECT `source_id`, `target_id` FROM `cms_tree_cms_tpl_page_mlt`');
 
         if (false === $rows) {
-            return array();
+            return [];
         }
 
         return array_reduce(
             $rows,
             function (array $carry, array $row) {
                 if (!isset($carry[$row['source_id']])) {
-                    $carry[$row['source_id']] = array();
+                    $carry[$row['source_id']] = [];
                 }
                 $carry[$row['source_id']][] = $row['target_id'];
 
                 return $carry;
             },
-            array()
+            []
         );
     }
 
@@ -93,6 +88,6 @@ class DataAccessCmsTree implements DataAccessCmsTreeInterface
     {
         $query = 'SELECT `target_id` FROM `cms_tree_cms_tpl_page_mlt` WHERE `source_id` = :treeId';
 
-        return $this->databaseConnection->fetchOne($query, array('treeId' => $cmsTreeId));
+        return $this->databaseConnection->fetchOne($query, ['treeId' => $cmsTreeId]);
     }
 }

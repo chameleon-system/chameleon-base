@@ -11,7 +11,7 @@
 
 /**
  * lookup.
-/**/
+ * /**/
 class TCMSFieldLookupMediaTree extends TCMSFieldLookup
 {
     protected function GetOptionsQuery()

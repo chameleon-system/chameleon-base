@@ -24,14 +24,9 @@ use ChameleonSystem\MediaManager\MediaManagerListResult;
 use ChameleonSystem\MediaManager\SortColumnCollection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Statement;
-use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
-use TCMSstdClass;
-use TCMSTableEditorManager;
-use TdbCmsMedia;
+use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use TdbCmsMessageManagerBackendMessage;
-use TTools;
 
 class MediaItemDataAccess implements MediaItemDataAccessInterface
 {
@@ -41,7 +36,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     private $databaseConnection;
 
     /**
-     * @var TTools
+     * @var \TTools
      */
     private $tools;
 
@@ -65,17 +60,9 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
      */
     private $languageService;
 
-    /**
-     * @param Connection                   $databaseConnection
-     * @param TTools                       $tools
-     * @param FlashMessageServiceInterface $flashMessageService
-     * @param SortColumnCollection         $sortColumnCollection
-     * @param FieldTranslationUtil         $fieldTranslationUtil
-     * @param LanguageServiceInterface     $languageService
-     */
     public function __construct(
         Connection $databaseConnection,
-        TTools $tools,
+        \TTools $tools,
         FlashMessageServiceInterface $flashMessageService,
         SortColumnCollection $sortColumnCollection,
         FieldTranslationUtil $fieldTranslationUtil,
@@ -97,8 +84,8 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         $languageId,
         $includeSubtree = true
     ) {
-        $mediaItems = array();
-        $treeIds = array($mediaTreeNode->getId());
+        $mediaItems = [];
+        $treeIds = [$mediaTreeNode->getId()];
         if (true === $includeSubtree) {
             $treeIds = array_merge($treeIds, $this->getSubTreeIdsFromMediaTreeNode($mediaTreeNode));
         }
@@ -106,8 +93,8 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         try {
             $stm = $this->databaseConnection->executeQuery(
                 'SELECT * FROM `cms_media` WHERE `cms_media_tree_id` IN (:mediaTreeIds)',
-                array('mediaTreeIds' => $treeIds),
-                array('mediaTreeIds' => Connection::PARAM_STR_ARRAY)
+                ['mediaTreeIds' => $treeIds],
+                ['mediaTreeIds' => Connection::PARAM_STR_ARRAY]
             );
             $rows = $stm->fetchAllAssociative();
         } catch (DBALException $e) {
@@ -116,20 +103,18 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             );
         }
         foreach ($rows as $row) {
-            $mediaItems[] = $this->createDataModelFromTableObject(TdbCmsMedia::GetNewInstance($row, $languageId));
+            $mediaItems[] = $this->createDataModelFromTableObject(\TdbCmsMedia::GetNewInstance($row, $languageId));
         }
 
         return $mediaItems;
     }
 
     /**
-     * @param MediaTreeNodeDataModel $mediaTreeNode
-     *
      * @return array
      */
     private function getSubTreeIdsFromMediaTreeNode(MediaTreeNodeDataModel $mediaTreeNode)
     {
-        $ids = array();
+        $ids = [];
         $children = $mediaTreeNode->getChildren();
         foreach ($children as $child) {
             $ids[] = $child->getId();
@@ -140,16 +125,14 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     }
 
     /**
-     * @param TdbCmsMedia $cmsMediaTableObject
-     *
      * @return MediaItemDataModel
      */
-    private function createDataModelFromTableObject(TdbCmsMedia $cmsMediaTableObject)
+    private function createDataModelFromTableObject(\TdbCmsMedia $cmsMediaTableObject)
     {
         $dataModel = new MediaItemDataModel($cmsMediaTableObject->id, $cmsMediaTableObject->fieldPath);
         $dataModel->setName($cmsMediaTableObject->fieldDescription);
 
-        $tags = array();
+        $tags = [];
         $tagsList = $cmsMediaTableObject->GetFieldCmsTagsList();
         while ($tag = $tagsList->Next()) {
             $tags[] = $tag->fieldName;
@@ -185,11 +168,11 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     {
         $tableEditor = $this->tools->GetTableEditorManager('cms_media', $id);
         if (false === $tableEditor->Delete($id)) {
-            $messageTexts = array();
-            $messages = $this->flashMessageService->consumeMessages(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER);
+            $messageTexts = [];
+            $messages = $this->flashMessageService->consumeMessages(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER);
             if (null !== $messages) {
                 while ($message = $messages->Next()) {
-                    /** @var TdbCmsMessageManagerBackendMessage $message */
+                    /* @var TdbCmsMessageManagerBackendMessage $message */
                     $messageTexts[] = $message->fieldMessage;
                 }
             }
@@ -198,14 +181,14 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             );
         }
 
-        //eat delete success messages
-        $messages = $this->flashMessageService->consumeMessages(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER);
+        // eat delete success messages
+        $messages = $this->flashMessageService->consumeMessages(\TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER);
         if (null === $messages) {
             return;
         }
 
         while ($message = $messages->Next()) {
-            /** @var TdbCmsMessageManagerBackendMessage $message */
+            /** @var \TdbCmsMessageManagerBackendMessage $message */
             if ('TABLEEDITOR_DELETE_RECORD_SUCCESS' !== $message->fieldName) {
                 throw new DataAccessException(
                     sprintf(
@@ -225,9 +208,9 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     public function getMediaItemList(MediaManagerListRequest $mediaManagerListRequest, $languageId)
     {
         $query = 'SELECT * FROM `cms_media`';
-        $queryRestrictions = array();
-        $params = array();
-        $paramTypes = array();
+        $queryRestrictions = [];
+        $params = [];
+        $paramTypes = [];
 
         $this->addMediaTreeNodeRestrictions($mediaManagerListRequest, $queryRestrictions, $params, $paramTypes);
         $this->addSearchRestrictions($mediaManagerListRequest, $languageId, $queryRestrictions, $params, $paramTypes);
@@ -249,11 +232,6 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     }
 
     /**
-     * @param MediaManagerListRequest $mediaManagerListRequest
-     * @param array                   $queryRestrictions
-     * @param array                   $params
-     * @param array                   $paramTypes
-     *
      * @return void
      */
     private function addMediaTreeNodeRestrictions(
@@ -267,7 +245,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             return;
         }
 
-        $treeIds = array($mediaTreeNode->getId());
+        $treeIds = [$mediaTreeNode->getId()];
         if (true === $mediaManagerListRequest->isSubTreeIncluded()) {
             $treeIds = array_merge($treeIds, $this->getSubTreeIdsFromMediaTreeNode($mediaTreeNode));
         }
@@ -277,11 +255,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     }
 
     /**
-     * @param MediaManagerListRequest $mediaManagerListRequest
-     * @param string                  $languageId
-     * @param array                   $queryRestrictions
-     * @param array                   $params
-     * @param array                   $paramTypes
+     * @param string $languageId
      *
      * @return void
      */
@@ -350,7 +324,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         }
 
         $i = 0;
-        $tagParts = array();
+        $tagParts = [];
         foreach ($terms as $term) {
             ++$i;
             $tagParts[] = '`cms_tags`.'.$this->databaseConnection->quoteIdentifier($tagNameFieldName).' LIKE :term'.(string) $i;
@@ -363,16 +337,15 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         }
 
         $parts[] = '`id` IN (SELECT `source_id` FROM `cms_media_cms_tags_mlt` INNER JOIN `cms_tags` ON `cms_media_cms_tags_mlt`.`target_id` = `cms_tags`.`id` WHERE '.implode(
-                ' OR ',
-                $tagParts
-            ).' '.$tagMatch.')';
+            ' OR ',
+            $tagParts
+        ).' '.$tagMatch.')';
 
         $queryRestrictions[] = implode(' OR ', $parts);
     }
 
     /**
-     * @param MediaManagerListRequest $mediaManagerListRequest
-     * @param string                  $languageId
+     * @param string $languageId
      *
      * @return string
      */
@@ -393,16 +366,13 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         return sprintf(
             'ORDER BY %s %s',
             $this->databaseConnection->quoteIdentifier($sortColumnFieldName),
-            ((SortColumnInterface::DIRECTION_DESCENDING === $sortColumn->getSortDirection()) ? 'DESC' : 'ASC')
+            (SortColumnInterface::DIRECTION_DESCENDING === $sortColumn->getSortDirection()) ? 'DESC' : 'ASC'
         );
     }
 
     /**
-     * @param MediaManagerListRequest $mediaManagerListRequest
-     * @param string                  $query
-     * @param array                   $params
-     * @param array                   $paramTypes
-     * @param string                  $languageId
+     * @param string $query
+     * @param string $languageId
      *
      * @return MediaManagerListResult
      *
@@ -426,10 +396,10 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             $result = $this->transformStatementForPaging($result, $mediaManagerListRequest, $query, $params, $paramTypes);
             $numberOfPages = (int) ceil($numberOfRecords / $mediaManagerListRequest->getPageSize());
 
-            $mediaItems = array();
+            $mediaItems = [];
             $rows = $result->fetchAllAssociative();
             foreach ($rows as $row) {
-                $mediaItems[] = $this->createDataModelFromTableObject(TdbCmsMedia::GetNewInstance($row, $languageId));
+                $mediaItems[] = $this->createDataModelFromTableObject(\TdbCmsMedia::GetNewInstance($row, $languageId));
             }
         } catch (DBALException $e) {
             throw new DataAccessException(sprintf('error getting media item list: %s', $e->getMessage()));
@@ -444,10 +414,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
 
     /**
      * @param DriverStatement|DriverResultStatement $stm
-     * @param MediaManagerListRequest $mediaManagerListRequest
-     * @param string                  $query
-     * @param array                   $params
-     * @param array                   $paramTypes
+     * @param string $query
      *
      * @return DriverStatement|DriverResultStatement|\PDOStatement
      *
@@ -503,7 +470,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         try {
             $row = $this->databaseConnection->fetchAssociative(
                 'SELECT * FROM `cms_media` WHERE `id` = :id',
-                array('id' => $id)
+                ['id' => $id]
             );
         } catch (DBALException $e) {
             throw new DataAccessException(
@@ -515,7 +482,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         if (false === is_array($row)) {
             return null;
         }
-        $tableObject = TdbCmsMedia::GetNewInstance($row, $languageId);
+        $tableObject = \TdbCmsMedia::GetNewInstance($row, $languageId);
 
         return $this->createDataModelFromTableObject($tableObject);
     }
@@ -529,17 +496,17 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         try {
             $result = $this->databaseConnection->executeQuery(
                 $query,
-                array('ids' => $ids),
-                array('ids' => Connection::PARAM_STR_ARRAY)
+                ['ids' => $ids],
+                ['ids' => Connection::PARAM_STR_ARRAY]
             );
         } catch (DBALException $e) {
             throw new DataAccessException(
                 sprintf('Could not get media items with IDs %s: %s', implode(', ', $ids), $e->getMessage())
             );
         }
-        $items = array();
+        $items = [];
         while ($row = $result->fetchAssociative()) {
-            $tableObject = TdbCmsMedia::GetNewInstance($row, $languageId);
+            $tableObject = \TdbCmsMedia::GetNewInstance($row, $languageId);
             $items[] = $this->createDataModelFromTableObject($tableObject);
         }
 
@@ -571,12 +538,12 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     }
 
     /**
-     * @param string      $mediaItemId
-     * @param string      $fieldName
-     * @param string      $value
+     * @param string $mediaItemId
+     * @param string $fieldName
+     * @param string $value
      * @param string|null $languageId
      *
-     * @return bool|TCMSstdClass
+     * @return bool|\TCMSstdClass
      *
      * @throws DBALException
      */
@@ -584,17 +551,17 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
     {
         $row = $this->databaseConnection->fetchAssociative(
             'SELECT * FROM `cms_media` WHERE `id` = :id',
-            array('id' => $mediaItemId)
+            ['id' => $mediaItemId]
         );
         if (false === is_array($row)) {
             return false;
         }
-        $tableObject = TdbCmsMedia::GetNewInstance($row, $languageId);
+        $tableObject = \TdbCmsMedia::GetNewInstance($row, $languageId);
         $data = $tableObject->sqlData;
         $data[$fieldName] = $value;
         $tableEditor = \TTools::GetTableEditorManager('cms_media', $mediaItemId, $languageId);
 
-        //we have to use Save() instead of SaveField() so PostSaveHook doesn't break image path (https://redmine.esono.de/issues/37163)
+        // we have to use Save() instead of SaveField() so PostSaveHook doesn't break image path (https://redmine.esono.de/issues/37163)
         return $tableEditor->Save($data, true);
     }
 
@@ -635,13 +602,13 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
 
             $this->databaseConnection->executeQuery(
                 'DELETE FROM `cms_media_cms_tags_mlt` WHERE `source_id` = :id',
-                array('id' => $mediaItemId)
+                ['id' => $mediaItemId]
             );
             $i = 0;
             foreach (array_keys($tags) as $tagId) {
                 $this->databaseConnection->insert(
                     'cms_media_cms_tags_mlt',
-                    array('source_id' => $mediaItemId, 'target_id' => $tagId, 'entry_sort' => $i)
+                    ['source_id' => $mediaItemId, 'target_id' => $tagId, 'entry_sort' => $i]
                 );
                 ++$i;
             }
@@ -652,7 +619,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
 
     /**
      * @param string[] $tagNames
-     * @param string   $languageId
+     * @param string $languageId
      *
      * @return string[] - id => name
      *
@@ -689,7 +656,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         $language = $this->languageService->getLanguage($languageId);
         $tagNameFieldName = $this->fieldTranslationUtil->getTranslatedFieldName('cms_tags', 'name', $language);
         $id = \TTools::GetUUID();
-        $this->databaseConnection->insert('cms_tags', array('id' => $id, $tagNameFieldName => $tagName));
+        $this->databaseConnection->insert('cms_tags', ['id' => $id, $tagNameFieldName => $tagName]);
 
         return $id;
     }
@@ -712,7 +679,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
             );
             $rows = $this->databaseConnection->fetchAllAssociative(
                 $query,
-                array('termLike' => '%'.$searchTerm.'%', 'termPre' => $searchTerm.'%')
+                ['termLike' => '%'.$searchTerm.'%', 'termPre' => $searchTerm.'%']
             );
         } catch (DBALException $e) {
             throw new DataAccessException(

@@ -9,7 +9,7 @@ class CmsMigrationCounter
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -57,8 +57,6 @@ class CmsMigrationCounter
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -90,6 +88,4 @@ class CmsMigrationCounter
 
         return $this;
     }
-
-
 }

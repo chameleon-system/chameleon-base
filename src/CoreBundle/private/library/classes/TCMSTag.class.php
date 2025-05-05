@@ -22,7 +22,7 @@ class TCMSTag extends TAdbCmsTags
         if (empty($sURLName)) {
             $sURLName = $this->sqlData['name'];
         }
-        $sSearchLink = self::getPageService()->getLinkToPortalHomePageRelative().'/tag/'.urlencode($sURLName); //error?!?
+        $sSearchLink = self::getPageService()->getLinkToPortalHomePageRelative().'/tag/'.urlencode($sURLName); // error?!?
 
         $sSearchLink = str_replace('//', '/', $sSearchLink);
 

@@ -16,7 +16,7 @@ namespace ChameleonSystem\MediaManager;
  */
 class AccessRightsModel
 {
-    //public properties to be able to use the class in js too
+    // public properties to be able to use the class in js too
 
     /**
      * @var bool

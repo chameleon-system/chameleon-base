@@ -12,38 +12,34 @@
 namespace ChameleonSystem\CoreBundle\Interfaces;
 
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
-use TIterator;
 
 interface FlashMessageServiceInterface
 {
     /**
      * @param string $consumer
      * @param string $code
-     * @param array  $parameter
      *
      * @return void
      */
-    public function addMessage($consumer, $code, array $parameter = array());
+    public function addMessage($consumer, $code, array $parameter = []);
 
     /**
      * @param string $consumer
      * @param bool $remove
-     * @param bool $includeGlobal
      *
-     * @return TIterator
+     * @return \TIterator
      */
     public function consumeMessages($consumer, $remove = true, bool $includeGlobal = true);
 
     /**
-     * @param string      $sConsumerName
+     * @param string $sConsumerName
      * @param string|null $sViewName
      * @param string|null $sViewType
-     * @param array       $aCallTimeVars
-     * @param bool        $bRemove
+     * @param bool $bRemove
      *
      * @return string
      */
-    public function renderMessages($sConsumerName, $sViewName = null, $sViewType = null, array $aCallTimeVars = array(), $bRemove = true);
+    public function renderMessages($sConsumerName, $sViewName = null, $sViewType = null, array $aCallTimeVars = [], $bRemove = true);
 
     /**
      * @param string|null $sConsumerName
@@ -54,7 +50,6 @@ interface FlashMessageServiceInterface
 
     /**
      * @param string $sConsumerName
-     * @param bool $includeGlobal
      *
      * @return bool
      */
@@ -62,7 +57,6 @@ interface FlashMessageServiceInterface
 
     /**
      * @param string $sConsumerName
-     * @param bool $includeGlobal
      *
      * @return int
      */
@@ -96,10 +90,9 @@ interface FlashMessageServiceInterface
     /**
      * @param string $id
      * @param string $type
-     * @param array  $parameters
      * @param string $domain
      *
      * @return void
      */
-    public function addBackendToasterMessage($id, $type = 'ERROR', array $parameters = array(), $domain = TranslationConstants::DOMAIN_BACKEND);
+    public function addBackendToasterMessage($id, $type = 'ERROR', array $parameters = [], $domain = TranslationConstants::DOMAIN_BACKEND);
 }

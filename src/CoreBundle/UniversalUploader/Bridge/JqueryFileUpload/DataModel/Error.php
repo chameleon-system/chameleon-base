@@ -21,5 +21,5 @@ class Error
     /**
      * @var array
      */
-    public $variables = array();
+    public $variables = [];
 }

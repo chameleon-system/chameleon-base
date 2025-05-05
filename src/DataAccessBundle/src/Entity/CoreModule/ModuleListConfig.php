@@ -9,12 +9,11 @@ class ModuleListConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Teaser target page */
-        private ?CmsTree $targetPage = null
-        ,
+        private ?CmsTree $targetPage = null,
         // TCMSFieldTablefieldname
         /** @var string - Sort list by */
         private string $moduleListCmsfieldname = '',
@@ -23,8 +22,7 @@ class ModuleListConfig
         private string $sortOrderDirection = '',
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Title */
         private string $name = '',
@@ -74,7 +72,6 @@ class ModuleListConfig
         return $this;
     }
 
-
     // TCMSFieldTablefieldname
     public function getModuleListCmsfieldname(): string
     {
@@ -87,7 +84,6 @@ class ModuleListConfig
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getSortOrderDirection(): string
@@ -102,7 +98,6 @@ class ModuleListConfig
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
     {
@@ -115,7 +110,6 @@ class ModuleListConfig
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -130,7 +124,6 @@ class ModuleListConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSubHeadline(): string
     {
@@ -144,7 +137,6 @@ class ModuleListConfig
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -157,6 +149,4 @@ class ModuleListConfig
 
         return $this;
     }
-
-
 }

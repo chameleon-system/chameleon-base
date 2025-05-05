@@ -5,7 +5,7 @@
 /** @var $oMLTRecords TCMSRecordList* */
 $aRecordsConnected = $oConnectedMLTRecords->GetIdList();
 ?>
-<select name="<?=TGlobal::OutHTML($oField->name); ?>[]" multiple size="10" id="<?=TGlobal::OutHTML($oField->name); ?>">
+<select name="<?php echo TGlobal::OutHTML($oField->name); ?>[]" multiple size="10" id="<?php echo TGlobal::OutHTML($oField->name); ?>">
     <?php
     while ($oRecord = $oMLTRecords->Next()) {
         $selected = '';
@@ -15,5 +15,5 @@ $aRecordsConnected = $oConnectedMLTRecords->GetIdList();
         echo '<option value="'.TGlobal::OutHTML($oRecord->id).'" '.$selected.'>'.TGlobal::OutHTML($oRecord->GetName()).'</option>';
         echo "\n";
     }
-    ?>
+?>
 </select>

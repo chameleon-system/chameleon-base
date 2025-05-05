@@ -16,19 +16,19 @@ class ViewMapperConfigTest extends TestCase
     public function testGetConfigs()
     {
         $config = new ViewMapperConfig("one=foobar.html.twig;MapperOne,MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo");
-        $this->assertEquals(array('one', 'two'), $config->getConfigs());
+        $this->assertEquals(['one', 'two'], $config->getConfigs());
     }
 
     public function testGetMappers()
     {
         $config = new ViewMapperConfig("one=foobar.html.twig;MapperOne,MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo");
-        $this->assertEquals(array('MapperOne', 'MapperTwo'), $config->getMappersForConfig('one'));
+        $this->assertEquals(['MapperOne', 'MapperTwo'], $config->getMappersForConfig('one'));
     }
 
     public function testGetMappersWithAdditionalConfig()
     {
         $config = new ViewMapperConfig("one=foobar.html.twig;MapperOne[foo->bar][baz->chucknorris],MapperTwo{aFoo}[foo->bar][baz->chucknorris]\ntwo=foobaz.html.twig;MapperOne,MapperTwo");
-        $this->assertEquals(array('MapperOne', 'MapperTwo'), $config->getMappersForConfig('one'));
+        $this->assertEquals(['MapperOne', 'MapperTwo'], $config->getMappersForConfig('one'));
     }
 
     public function testGetSnippet()
@@ -40,8 +40,8 @@ class ViewMapperConfigTest extends TestCase
     public function testGetTransformationsForMapper()
     {
         $config = new ViewMapperConfig("one=foobar.html.twig;MapperOne[foo->bar][baz->chucknorris],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo");
-        $this->assertEquals(array('foo' => 'bar', 'baz' => 'chucknorris'), $config->getTransformationsForMapper('one', 'MapperOne'));
-        $this->assertEquals(array(), $config->getTransformationsForMapper('one', 'MapperTwo'));
+        $this->assertEquals(['foo' => 'bar', 'baz' => 'chucknorris'], $config->getTransformationsForMapper('one', 'MapperOne'));
+        $this->assertEquals([], $config->getTransformationsForMapper('one', 'MapperTwo'));
     }
 
     public function testGetArrayMappingForMapper()
@@ -66,41 +66,41 @@ class ViewMapperConfigTest extends TestCase
     {
         $config = new ViewMapperConfig("one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo");
 
-        $expected = array(
-            'one' => array(
+        $expected = [
+            'one' => [
                 'snippet' => 'foobar.html.twig',
-                'aMapper' => array(
-                    0 => array(
+                'aMapper' => [
+                    0 => [
                             'arrayMapping' => 'arraymapping',
-                            'varMapping' => array(
+                            'varMapping' => [
                                 'foo' => 'bar',
                                 'baz' => 'chucknorris',
-                            ),
+                            ],
                             'name' => 'MapperOne',
-                    ),
-                    1 => array(
+                    ],
+                    1 => [
                             'arrayMapping' => null,
-                            'varMapping' => array(),
+                            'varMapping' => [],
                             'name' => 'MapperTwo',
-                        ),
-                    ),
-            ),
-            'two' => array(
+                        ],
+                    ],
+            ],
+            'two' => [
                 'snippet' => 'foobaz.html.twig',
-                'aMapper' => array(
-                    0 => array(
+                'aMapper' => [
+                    0 => [
                         'arrayMapping' => null,
-                        'varMapping' => array(),
+                        'varMapping' => [],
                         'name' => 'MapperOne',
-                    ),
-                    1 => array(
+                    ],
+                    1 => [
                         'arrayMapping' => null,
-                        'varMapping' => array(),
+                        'varMapping' => [],
                         'name' => 'MapperTwo',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->assertEquals($expected, $config->getPlainParsedConfig());
     }
@@ -140,11 +140,11 @@ class ViewMapperConfigTest extends TestCase
         $configString = "one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperOne1[foo->bar]{arraymapping}[baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo";
         $config = new ViewMapperConfig($configString);
         $config->addMapper('two',
-            array(
+            [
                 'arrayMapping' => null,
-                'varMapping' => array(),
+                'varMapping' => [],
                 'name' => 'A-NEW-MAPPER',
-            )
+            ]
         );
         $expected = "one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperOne1{arraymapping}[foo->bar][baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo,A-NEW-MAPPER";
         $string = $config->getAsString();
@@ -197,7 +197,7 @@ class ViewMapperConfigTest extends TestCase
         $expected = "one=foobar.html.twig;MapperOne{arraymapping}[foo->bar][baz->chucknorris],MapperOne1{arraymapping}[foo->bar][baz->chucknorris],MapperOne2{arraymapping},MapperOne3[foo->bar],MapperTwo\ntwo=foobaz.html.twig;MapperOne,MapperTwo\nthree=three.html.twig;mapper1,mapper2";
         $config = new ViewMapperConfig($configString);
         $config->addConfig('three', 'three.html.twig',
-            array('mapper1', 'mapper2')
+            ['mapper1', 'mapper2']
         );
         $string = $config->getAsString();
         $this->assertEquals($expected, $string);
@@ -206,22 +206,22 @@ class ViewMapperConfigTest extends TestCase
     public function testVisitorTransformation()
     {
         $visitor = new MapperVisitor();
-        $visitor->setTransformations(array('foo' => 'bar'));
+        $visitor->setTransformations(['foo' => 'bar']);
         $visitor->SetMappedValue('foo', 'baz');
-        $expected = array(
+        $expected = [
             'bar' => 'baz',
-        );
+        ];
         $this->assertEquals($expected, $visitor->GetMappedValues());
     }
 
     public function testVisitorTransformationFromArray()
     {
         $visitor = new MapperVisitor();
-        $visitor->setTransformations(array('foo' => 'bar'));
-        $visitor->SetMappedValueFromArray(array('foo' => 'baz'));
-        $expected = array(
+        $visitor->setTransformations(['foo' => 'bar']);
+        $visitor->SetMappedValueFromArray(['foo' => 'baz']);
+        $expected = [
             'bar' => 'baz',
-        );
+        ];
         $this->assertEquals($expected, $visitor->GetMappedValues());
     }
 
@@ -230,11 +230,11 @@ class ViewMapperConfigTest extends TestCase
         $visitor = new MapperVisitor();
         $visitor->setMapToArray('aFoo');
         $visitor->SetMappedValue('foo', 'baz');
-        $expected = array(
-            'aFoo' => array(
+        $expected = [
+            'aFoo' => [
                 'foo' => 'baz',
-            ),
-        );
+            ],
+        ];
         $this->assertEquals($expected, $visitor->GetMappedValues());
     }
 
@@ -242,13 +242,13 @@ class ViewMapperConfigTest extends TestCase
     {
         $visitor = new MapperVisitor();
         $visitor->setMapToArray('aFoo');
-        $visitor->setTransformations(array('foo' => 'bar'));
+        $visitor->setTransformations(['foo' => 'bar']);
         $visitor->SetMappedValue('foo', 'baz');
-        $expected = array(
-            'aFoo' => array(
+        $expected = [
+            'aFoo' => [
                 'bar' => 'baz',
-            ),
-        );
+            ],
+        ];
         $this->assertEquals($expected, $visitor->GetMappedValues());
     }
 }

@@ -16,13 +16,12 @@ interface ModuleExecutionStrategyInterface
     /**
      * Invoke TModelBase::__invoke() using the implemented strategy.
      *
-     * @param TModelBase $module
-     * @param string     $spotName
-     * @param bool       $isLegacyModule
+     * @param string $spotName
+     * @param bool $isLegacyModule
      *
      * @return Response
      *
      * @throws ModuleException
      */
-    public function execute(Request $request, TModelBase $module, $spotName, $isLegacyModule);
+    public function execute(Request $request, \TModelBase $module, $spotName, $isLegacyModule);
 }

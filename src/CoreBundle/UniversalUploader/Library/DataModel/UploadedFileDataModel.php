@@ -47,7 +47,7 @@ class UploadedFileDataModel
     /**
      * @var array
      */
-    private $errorMessages = array();
+    private $errorMessages = [];
 
     /**
      * @var bool
@@ -141,15 +141,15 @@ class UploadedFileDataModel
 
     /**
      * @param string $errorMessage
-     * @param int    $code
-     * @param array  $context
+     * @param int $code
+     * @param array $context
      *
      * @return void
      */
-    public function addErrorMessage($errorMessage, $code = 0, $context = array())
+    public function addErrorMessage($errorMessage, $code = 0, $context = [])
     {
         $this->hasError = true;
-        $this->errorMessages[] = array('code' => $code, 'message' => $errorMessage, 'context' => $context);
+        $this->errorMessages[] = ['code' => $code, 'message' => $errorMessage, 'context' => $context];
     }
 
     /**

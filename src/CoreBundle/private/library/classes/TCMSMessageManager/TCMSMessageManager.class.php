@@ -145,7 +145,7 @@ class TCMSMessageManager
             $sCallingPage = $activePageService->getLinkToActivePageRelative();
         }
 
-        $sDescription = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+        $sDescription = ServiceLocator::get('translator')->trans(
             self::AUTO_CREATED_MARKER.'chameleon_system_core.cms_message_manager.auto_entry_description',
             [
                 '%consumerName%' => $sConsumerName,
@@ -197,7 +197,7 @@ class TCMSMessageManager
             $oTmpTable->AllowEditByAll(true);
 
             $oGlobal = TGlobal::instance();
-            $description = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+            $description = ServiceLocator::get('translator')->trans(
                 self::AUTO_CREATED_MARKER.'chameleon_system_core.cms_message_manager.auto_entry_description',
                 [
                     '%consumerName%' => $sConsumerName,
@@ -207,7 +207,7 @@ class TCMSMessageManager
             );
             $description .= "\nCMSPage: ".$oGlobal->GetUserData('pagedef');
 
-            $sErrorMessage = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_message_manager.invalid_code').'['.$sMessageCode.']';
+            $sErrorMessage = ServiceLocator::get('translator')->trans('chameleon_system_core.cms_message_manager.invalid_code').'['.$sMessageCode.']';
 
             $aPostData = ['cms_config_id' => 1, 'name' => $sMessageCode, 'description' => $description, 'message' => $sErrorMessage];
 

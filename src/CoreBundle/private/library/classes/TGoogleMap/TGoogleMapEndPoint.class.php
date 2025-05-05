@@ -19,9 +19,9 @@ class TGoogleMapEndPoint
      *
      * @var array
      */
-    protected $aMarkers = array();
+    protected $aMarkers = [];
 
-    protected $aIcons = array();
+    protected $aIcons = [];
     protected $sMapType = 'HYBRID';
 
     /**
@@ -72,7 +72,7 @@ class TGoogleMapEndPoint
      *
      * @var array
      */
-    protected $aStyles = array();
+    protected $aStyles = [];
 
     /**
      * Contains overview map. If false no overview map will be shown.
@@ -100,21 +100,21 @@ class TGoogleMapEndPoint
      *
      * @var int|null
      */
-    protected $iZoomLevel = null;
+    protected $iZoomLevel;
 
     /**
      * Minimal Zoom-Level is a number between 0-17 from rough to fine.
      *
      * @var string
      */
-    protected $iMinZoomLevel = null;
+    protected $iMinZoomLevel;
 
     /**
      * Maximal Zoom-Level is a number between 0-17 from rough to fine.
      *
      * @var string
      */
-    protected $iMaxZoomLevel = null;
+    protected $iMaxZoomLevel;
 
     /**
      * if set true, renders the list of marker's target links in <noscript> container.
@@ -128,7 +128,7 @@ class TGoogleMapEndPoint
      *
      * @var array
      */
-    protected $aInfoWindowOptions = array();
+    protected $aInfoWindowOptions = [];
 
     /**
      * init google map with unique map id.
@@ -311,11 +311,11 @@ class TGoogleMapEndPoint
      *
      * @param string $sFeatureType
      * @param string $sElementType
-     * @param array  $aStyles      List of styles for FeatureType and Element Type (array("visibility" => "off"))
+     * @param array $aStyles List of styles for FeatureType and Element Type (array("visibility" => "off"))
      */
     public function SetStyle($sFeatureType, $sElementType, $aStyles)
     {
-        $aNewStyle = array();
+        $aNewStyle = [];
         $aNewStyle['featureType'] = $sFeatureType;
         $aNewStyle['elementType'] = $sElementType;
         $aNewStyle['stylers'] = $aStyles;
@@ -467,7 +467,7 @@ class TGoogleMapEndPoint
      */
     protected function RenderV3($bIncludeHTMLContainer = false)
     {
-        $aOut = array();
+        $aOut = [];
         $aOut = $this->getGoogleMapV3JsIncludes($aOut);
         if ($bIncludeHTMLContainer) {
             $aOut[] = $this->RenderMapContainer(true);
@@ -555,7 +555,7 @@ class TGoogleMapEndPoint
      *
      * @return array
      */
-    public function getGoogleMapV3JsIncludes($aOut = array())
+    public function getGoogleMapV3JsIncludes($aOut = [])
     {
         /**
          * prevents double loading of google maps include files.
@@ -601,7 +601,7 @@ class TGoogleMapEndPoint
         $sOut[] = '});';
 
         if ($this->bShowResizeBar) {
-            //Zoom map
+            // Zoom map
             $sOut[] = '';
             $sOut[] = 'function switchMapSize() {';
             $sOut[] = '	if (!isZoomed) {';
@@ -713,7 +713,7 @@ class TGoogleMapEndPoint
                     }
                 }
 
-                if ((!empty($oMarker->latitude) && !empty($oMarker->longitude))) {
+                if (!empty($oMarker->latitude) && !empty($oMarker->longitude)) {
                     $sIconObject = '';
                     if ('' !== $oMarker->iconIndex && array_key_exists($oMarker->iconIndex, $this->aIcons)) {
                         $sIconObject = $this->aIcons[$oMarker->iconIndex]->getIconID();
@@ -812,7 +812,7 @@ class TGoogleMapEndPoint
     /**
      * Add javascript for marker events.
      *
-     * @param array            $sOut
+     * @param array $sOut
      * @param TGoogleMapMarker $oMarker
      *
      * @return array $sOut
@@ -826,7 +826,7 @@ class TGoogleMapEndPoint
                 $sOut[] = 'google.maps.event.addListener(marker_'.TGlobal::OutJS($sMarkerId).',"'.$sOnEvent.'",function(){'.$sEventFunction.'});';
 
                 if ($this->bHookMenueLinks) {
-                    //Generate link controls
+                    // Generate link controls
                     $sOut[] = ' $("#mapItem'.$sMarkerId.'").bind(\''.$sOnEvent.'\', function() { '.$sEventFunction.' });';
                 }
             }
@@ -835,13 +835,13 @@ class TGoogleMapEndPoint
             $sOut[] = 'google.maps.event.addListener(marker_'.TGlobal::OutJS($sMarkerId).',"click",function(){ callDefaultMarkerEvent("'.$oMarker->getDescription().'",marker_'.$sMarkerId.') });';
 
             if ($this->bHookMenueLinks) {
-                //Generate link controls
+                // Generate link controls
                 $sOut[] = ' $("#mapItem'.$sMarkerId.'").bind(\'click\', function() { callDefaultMarkerEvent("'.$oMarker->getDescription().'",marker_'.$sMarkerId.'); });';
             }
         }
 
         if ($this->bHookMenueLinks) {
-            //Generate link controls
+            // Generate link controls
             $sOut[] = ' $("#mapItem'.$sMarkerId.'").addClass("gMapItemActiveLink");';
         }
 
@@ -869,7 +869,7 @@ class TGoogleMapEndPoint
      */
     public function RenderMapContainer($bUseV3 = false)
     {
-        $aOut = array();
+        $aOut = [];
         if ($this->bShowResizeBar) {
             // Resize bar
             $aOut[] = '<div id="'.TGlobal::OutHTML($this->getMapID()).'_zoomBar" style="width: '.TGlobal::OutHTML($this->width).'px; height: 25px; background-color: #336699;">';
@@ -904,7 +904,7 @@ class TGoogleMapEndPoint
      */
     public function RenderMapJS($bUseV3 = true)
     {
-        $aOut = $this->getGoogleMapV3JsIncludes(array());
+        $aOut = $this->getGoogleMapV3JsIncludes([]);
         $sIncludes = implode("\n", $aOut);
 
         return $sIncludes;
@@ -917,7 +917,7 @@ class TGoogleMapEndPoint
      *
      * @return string
      */
-    public function RenderNoJSMarkerTargetLinkList($aMarkers = array())
+    public function RenderNoJSMarkerTargetLinkList($aMarkers = [])
     {
         $sOut = '';
         if (empty($aMarkers)) {
@@ -974,5 +974,4 @@ class TGoogleMapEndPoint
     {
         return ServiceLocator::get('chameleon_system_core.geocoding.geocoder');
     }
-
 }

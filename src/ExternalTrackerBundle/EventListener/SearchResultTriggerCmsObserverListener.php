@@ -28,11 +28,11 @@ class SearchResultTriggerCmsObserverListener
         $oPkgExternalTracker = \TdbPkgExternalTrackerList::GetActiveInstance();
         $oPkgExternalTracker->AddEvent(
             \TPkgExternalTrackerState::EVENT_PKG_SHOP_SEARCH_WITH_ITEMS,
-            array(
+            [
                 'search' => $this->getSearchParameters($event),
                 'numberOfResults' => $this->getNumberOfResults($event),
                 'items' => $this->getResultItems($event),
-            )
+            ]
         );
     }
 
@@ -55,7 +55,6 @@ class SearchResultTriggerCmsObserverListener
     }
 
     /**
-     * @param ArticleListFilterExecutedEvent $event
      * @return int
      */
     private function getNumberOfResults(ArticleListFilterExecutedEvent $event)
@@ -68,12 +67,12 @@ class SearchResultTriggerCmsObserverListener
      */
     private function getSearchParameters(ArticleListFilterExecutedEvent $event)
     {
-        $stateQuery = $event->getState()->getState(StateInterface::QUERY, array());
+        $stateQuery = $event->getState()->getState(StateInterface::QUERY, []);
 
-        $searchParameter = array(
+        $searchParameter = [
             \TShopModuleArticlelistFilterSearch::PARAM_QUERY => isset($stateQuery[\TShopModuleArticlelistFilterSearch::PARAM_QUERY]) ? $stateQuery[\TShopModuleArticlelistFilterSearch::PARAM_QUERY] : '',
-            \TShopModuleArticlelistFilterSearch::URL_FILTER => isset($stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER]) ? $stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER] : array(),
-        );
+            \TShopModuleArticlelistFilterSearch::URL_FILTER => isset($stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER]) ? $stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER] : [],
+        ];
 
         return $searchParameter;
     }

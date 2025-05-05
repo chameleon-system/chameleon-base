@@ -13,7 +13,6 @@ interface IMapperPostRenderVisitor extends IMapperPayload
 {
     /**
      * @param string $key
-     * @param mixed  $value
      *
      * @return void
      */

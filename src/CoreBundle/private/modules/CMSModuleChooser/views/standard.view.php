@@ -24,7 +24,6 @@
  * @var ?\Titerator $moduleViews
  * @var ?\TdbCmsMasterPagedefSpot $cmsMasterPageDefSpot
  */
-
 $viewRenderer = new ViewRenderer();
 $viewRenderer->AddSourceObject('module', $module);
 $viewRenderer->AddSourceObject('moduleInstance', $moduleInstance);

@@ -2,9 +2,9 @@
 /** @var $oField TCMSField* */
 /** @var $bFieldHasErrors boolean* */
 /** @var $aOptions array* */
-$oActivePage = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service')->getActivePage();
+$oActivePage = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service')->getActivePage();
 $oGlobal = TGlobal::instance();
-$aAutocompleteParams = array('module_fnc' => array($oGlobal->GetExecutingModulePointer()->sModuleSpotName => 'ExecuteAjaxCall'), '_fnc' => 'GetAutoCompleteList', 'sTableName' => $oField->GetConnectedTableName(), 'sOutputMode' => 'Plain');
+$aAutocompleteParams = ['module_fnc' => [$oGlobal->GetExecutingModulePointer()->sModuleSpotName => 'ExecuteAjaxCall'], '_fnc' => 'GetAutoCompleteList', 'sTableName' => $oField->GetConnectedTableName(), 'sOutputMode' => 'Plain'];
 $sAutoCompleteURL = $oActivePage->GetRealURLPlain($aAutocompleteParams, true);
 $sValue = '';
 $sId = '';
@@ -19,9 +19,9 @@ echo '<input type="hidden" name="'.TGlobal::OutHTML($oField->name).'" id="'.TGlo
 ?>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#<?=TGlobal::OutHTML($oField->name); ?>_autocompleter').autocomplete("<?=str_replace('&amp;', '&', urldecode($sAutoCompleteURL)); ?>", {'mustMatch':true}).result(function (event, item) {
-            if (typeof(item) == 'undefined' || typeof(item[1]) == 'undefined') $('#<?=TGlobal::OutHTML($oField->name); ?>').val(''); else {
-                $('#<?=TGlobal::OutHTML($oField->name); ?>').val(item[1]);
+        $('#<?php echo TGlobal::OutHTML($oField->name); ?>_autocompleter').autocomplete("<?php echo str_replace('&amp;', '&', urldecode($sAutoCompleteURL)); ?>", {'mustMatch':true}).result(function (event, item) {
+            if (typeof(item) == 'undefined' || typeof(item[1]) == 'undefined') $('#<?php echo TGlobal::OutHTML($oField->name); ?>').val(''); else {
+                $('#<?php echo TGlobal::OutHTML($oField->name); ?>').val(item[1]);
             }
         });
     });

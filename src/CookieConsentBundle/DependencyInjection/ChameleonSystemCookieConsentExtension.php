@@ -19,12 +19,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class ChameleonSystemCookieConsentExtension extends Extension
 {
     /**
-     * @param array            $configs
-     * @param ContainerBuilder $container
+     * @return void
      *
      * @throws \Exception
-     *
-     * @return void
      */
     public function load(array $configs, ContainerBuilder $container)
     {

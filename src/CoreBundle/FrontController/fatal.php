@@ -13,6 +13,7 @@ header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error', true, 500);
 
 /**
  * @param string $nonEscapedString
+ *
  * @return string
  */
 function OutHTML($nonEscapedString)
@@ -111,10 +112,10 @@ if (isset($_GET['sIdentifier'])) {
     <?php
     if (isset($identifier)) {
         ?>
-        Error identifier: <strong><?= OutHTML($identifier); ?></strong>
+        Error identifier: <strong><?php echo OutHTML($identifier); ?></strong>
         <?php
     }
-    ?>
+?>
 </p>
 </body>
 </html>

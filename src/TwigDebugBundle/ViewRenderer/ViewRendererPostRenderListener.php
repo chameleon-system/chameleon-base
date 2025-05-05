@@ -25,10 +25,10 @@ class ViewRendererPostRenderListener
     }
 
     /**
-     * @return string
-     *
      * @param string $viewName
      * @param string $content
+     *
+     * @return string
      */
     private function addHTMLHintsToResponse(array $mappersUsed, $viewName, $content)
     {

@@ -16,7 +16,7 @@ class BicValidator extends \Symfony\Component\Validator\ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param mixed                                   $value      The value that should be validated
+     * @param mixed $value The value that should be validated
      * @param \Symfony\Component\Validator\Constraint $constraint The constraint for the validation
      *
      * @see http://www.iban.de/bic.html
@@ -36,20 +36,20 @@ class BicValidator extends \Symfony\Component\Validator\ConstraintValidator
         // must be either 11 or 8 char long
         $length = mb_strlen($value);
         if (8 !== $length && 11 !== $length) {
-            $this->context->addViolation($constraint->getRawMessage(), array('[{value}]' => $value));
+            $this->context->addViolation($constraint->getRawMessage(), ['[{value}]' => $value]);
 
             return;
         }
 
         if (!preg_match('/^[a-zA-Z0-9]+$/', $value, $matches)) {
-            $this->context->addViolation($constraint->getRawMessage(), array('[{value}]' => $value));
+            $this->context->addViolation($constraint->getRawMessage(), ['[{value}]' => $value]);
 
             return;
         }
 
         $countryCode = substr($value, 4, 2);
         if (true === is_numeric($countryCode)) {
-            $this->context->addViolation($constraint->getRawMessage(), array('[{value}]' => $value));
+            $this->context->addViolation($constraint->getRawMessage(), ['[{value}]' => $value]);
 
             return;
         }

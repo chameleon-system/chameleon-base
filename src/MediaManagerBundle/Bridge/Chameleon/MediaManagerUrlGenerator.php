@@ -35,9 +35,7 @@ class MediaManagerUrlGenerator implements MediaManagerUrlGeneratorInterface
     private $inputFilterUtil;
 
     /**
-     * @param UrlUtil                  $urlUtil
-     * @param bool                     $openInNewWindow
-     * @param InputFilterUtilInterface $inputFilterUtil
+     * @param bool $openInNewWindow
      */
     public function __construct(
         UrlUtil $urlUtil,
@@ -54,10 +52,10 @@ class MediaManagerUrlGenerator implements MediaManagerUrlGeneratorInterface
      */
     public function getStandaloneMediaManagerUrl()
     {
-        $parameters = array(
+        $parameters = [
             'pagedef' => MediaManagerBackendModule::PAGEDEF_NAME,
             '_pagedefType' => MediaManagerBackendModule::PAGEDEF_TYPE,
-        );
+        ];
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
     }
@@ -81,13 +79,13 @@ class MediaManagerUrlGenerator implements MediaManagerUrlGeneratorInterface
         $recordId = null,
         $position = 0
     ) {
-        $parameters = array(
+        $parameters = [
             'pagedef' => MediaManagerBackendModule::PAGEDEF_NAME_PICK_IMAGE,
             '_pagedefType' => MediaManagerBackendModule::PAGEDEF_TYPE,
             MediaManagerListState::URL_NAME_PICK_IMAGE_MODE => '1',
             MediaManagerListState::URL_NAME_PICK_IMAGE_CALLBACK => $javaScriptCallbackFunctionName,
             MediaManagerListState::URL_NAME_PICK_IMAGE_WITH_CROP => true === $canUseCrop ? '1' : '0',
-        );
+        ];
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
     }
@@ -97,13 +95,13 @@ class MediaManagerUrlGenerator implements MediaManagerUrlGeneratorInterface
      */
     public function getUrlToPickImageForWysiwyg($javaScriptCallbackFunctionName = 'selectImage')
     {
-        $parameters = array(
+        $parameters = [
             'pagedef' => MediaManagerBackendModule::PAGEDEF_NAME_PICK_IMAGE,
             '_pagedefType' => MediaManagerBackendModule::PAGEDEF_TYPE,
             MediaManagerListState::URL_NAME_PICK_IMAGE_MODE => '1',
             MediaManagerListState::URL_NAME_PICK_IMAGE_CALLBACK => $javaScriptCallbackFunctionName,
             MediaManagerListState::URL_NAME_PICK_IMAGE_WITH_CROP => '0',
-        );
+        ];
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
     }

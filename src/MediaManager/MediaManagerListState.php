@@ -13,34 +13,34 @@ namespace ChameleonSystem\MediaManager;
 
 class MediaManagerListState
 {
-    const STATE_PARAM_NAME_PAGE = 'p';
+    public const STATE_PARAM_NAME_PAGE = 'p';
 
-    const STATE_PARAM_NAME_PAGE_SIZE = 'ps';
+    public const STATE_PARAM_NAME_PAGE_SIZE = 'ps';
 
-    const STATE_PARAM_NAME_SEARCH_TERM = 's';
+    public const STATE_PARAM_NAME_SEARCH_TERM = 's';
 
-    const STATE_PARAM_NAME_MEDIA_TREE_NODE_ID = 'mediaTreeId';
+    public const STATE_PARAM_NAME_MEDIA_TREE_NODE_ID = 'mediaTreeId';
 
-    const STATE_PARAM_NAME_LIST_VIEW = 'listView';
+    public const STATE_PARAM_NAME_LIST_VIEW = 'listView';
 
-    const STATE_PARAM_NAME_SHOW_SUBTREE = 'subtree';
+    public const STATE_PARAM_NAME_SHOW_SUBTREE = 'subtree';
 
-    const STATE_PARAM_NAME_DELETE_WITH_USAGE_SEARCH = 'enableUsageSearch';
+    public const STATE_PARAM_NAME_DELETE_WITH_USAGE_SEARCH = 'enableUsageSearch';
 
-    const STATE_PARAM_NAME_SORT = 'sr';
+    public const STATE_PARAM_NAME_SORT = 'sr';
 
-    const URL_NAME_PICK_IMAGE_MODE = 'pickImage';
+    public const URL_NAME_PICK_IMAGE_MODE = 'pickImage';
 
-    const URL_NAME_PICK_IMAGE_CALLBACK = 'pickImageCallback';
+    public const URL_NAME_PICK_IMAGE_CALLBACK = 'pickImageCallback';
 
-    const URL_NAME_PARENT_IFRAME = 'parentIFrame';
+    public const URL_NAME_PARENT_IFRAME = 'parentIFrame';
 
-    const URL_NAME_PICK_IMAGE_WITH_CROP = 'pickImageWithCrop';
+    public const URL_NAME_PICK_IMAGE_WITH_CROP = 'pickImageWithCrop';
 
     /**
      * @var array
      */
-    private $stateParameters = array();
+    private $stateParameters = [];
 
     /**
      * @param int $pageNumber
@@ -54,7 +54,6 @@ class MediaManagerListState
 
     /**
      * @param string $stateParameterName
-     * @param mixed  $stateParameterValue
      *
      * @return void
      */
@@ -140,9 +139,9 @@ class MediaManagerListState
     }
 
     /**
-     * @param bool   $isPickImageMode
+     * @param bool $isPickImageMode
      * @param string $callback
-     * @param bool   $hasCrop
+     * @param bool $hasCrop
      * @param string $parentIFrame
      *
      * @return void
@@ -166,7 +165,7 @@ class MediaManagerListState
     }
 
     /**
-     * @param string     $stateParameterName
+     * @param string $stateParameterName
      * @param mixed|null $default
      *
      * @return mixed|null
@@ -269,11 +268,9 @@ class MediaManagerListState
     }
 
     /**
-     * @param array $excludeParameters
-     *
      * @return array
      */
-    public function getStateParameters(array $excludeParameters = array())
+    public function getStateParameters(array $excludeParameters = [])
     {
         return array_diff_key($this->stateParameters, array_flip($excludeParameters));
     }

@@ -60,6 +60,5 @@ class TableMenuItemProvider implements MenuItemProviderInterface
         }
 
         return false;
-
     }
 }

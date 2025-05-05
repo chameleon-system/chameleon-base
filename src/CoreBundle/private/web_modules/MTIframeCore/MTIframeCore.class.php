@@ -56,7 +56,7 @@ class MTIframeCore extends TUserCustomModelBase
      */
     public function _GetCacheTableInfos()
     {
-        $tableInfo = array(array('table' => 'module_iframe', 'id' => $this->oTableRow->id));
+        $tableInfo = [['table' => 'module_iframe', 'id' => $this->oTableRow->id]];
 
         return $tableInfo;
     }

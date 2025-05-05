@@ -8,12 +8,11 @@ class CmsPortalNavigation
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsPortal|null - Belongs to portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldVarchar
         /** @var string - Navigation title */
         private string $name = 'neue Navigation',
@@ -60,7 +59,6 @@ class CmsPortalNavigation
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -74,7 +72,6 @@ class CmsPortalNavigation
         return $this;
     }
 
-
     // TCMSFieldNavigationTreeNode
     public function getTreeNode(): ?CmsTree
     {
@@ -87,6 +84,4 @@ class CmsPortalNavigation
 
         return $this;
     }
-
-
 }

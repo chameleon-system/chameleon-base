@@ -1,5 +1,7 @@
-<?php declare(strict_types=1);
-require_once __DIR__ . '/mocks/EntityListMock.php';
+<?php
+
+declare(strict_types=1);
+require_once __DIR__.'/mocks/EntityListMock.php';
 
 use ChameleonSystem\core\DatabaseAccessLayer\EntityList;
 use ChameleonSystem\core\DatabaseAccessLayer\EntityListInterface;
@@ -29,11 +31,11 @@ class TCMSRecordListTest extends TestCase
 
     public function testIterates(): void
     {
-        self::$entityList = new EntityListMock([ 1, 2, 3 ]);
+        self::$entityList = new EntityListMock([1, 2, 3]);
         $list = $this->mockRecordList();
 
         // Iterating multiple times checks if `rewind` behaves correctly
-        $items = [ ];
+        $items = [];
         foreach ($list as $item) {
             $items[] = $item;
         }
@@ -41,7 +43,7 @@ class TCMSRecordListTest extends TestCase
             $items[] = $item;
         }
 
-        $this->assertEquals([ 1, 2, 3, 1, 2, 3 ], $items);
+        $this->assertEquals([1, 2, 3, 1, 2, 3], $items);
     }
 
     public function testIteratesInCombinationWithEntityList(): void
@@ -50,8 +52,9 @@ class TCMSRecordListTest extends TestCase
         self::$queryModifier->method('getQueryWithOrderBy')->willReturnArgument(0);
         self::$queryModifier->method('getQueryWithoutOrderBy')->willReturnArgument(0);
 
-        self::$entityList = new class ($this->connection, 'SELECT * FROM foo') extends EntityList {
-            protected function getQueryModifierOrderByService(): QueryModifierOrderByInterface {
+        self::$entityList = new class($this->connection, 'SELECT * FROM foo') extends EntityList {
+            protected function getQueryModifierOrderByService(): QueryModifierOrderByInterface
+            {
                 return TCMSRecordListTest::$queryModifier;
             }
         };
@@ -69,10 +72,10 @@ class TCMSRecordListTest extends TestCase
         $this->connection
             ->method('fetchArray')
             ->with($this->matchesRegularExpression('/COUNT\(\*\)/'))
-            ->willReturn([ 3 ]);
+            ->willReturn([3]);
 
         // Iterating multiple times checks if `rewind` behaves correctly
-        $items = [ ];
+        $items = [];
         foreach ($list as $item) {
             $items[] = $item;
         }
@@ -80,30 +83,30 @@ class TCMSRecordListTest extends TestCase
             $items[] = $item;
         }
 
-        $this->assertEquals([ 1, 2, 3, 1, 2, 3 ], $items);
+        $this->assertEquals([1, 2, 3, 1, 2, 3], $items);
     }
 
     /**
-     * Assumes, that `entityList` was set before
+     * Assumes, that `entityList` was set before.
      */
     private function mockRecordList(): TCMSRecordList
     {
-        return new class extends TCMSRecordList {
-
+        return new class() extends TCMSRecordList {
             // Mocks away container parameter
             protected $estimationLowerLimit = 0;
 
             // Swaps out the iterator to a mock
-            protected function getEntityList() {
+            protected function getEntityList()
+            {
                 return TCMSRecordListTest::$entityList;
             }
 
             // Does not create a new Tdb for the data returned from the iterator
             // but returns the data 1:1
-            protected function _NewElement($aData) {
+            protected function _NewElement($aData)
+            {
                 return $aData;
             }
         };
     }
-
 }

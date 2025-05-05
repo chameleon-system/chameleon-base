@@ -17,7 +17,7 @@ class TCMSInterfaceManager extends TAdbCmsInterfaceManager
      *
      * @param int $id
      *
-     * @return null|TCMSInterfaceManagerBase
+     * @return TCMSInterfaceManagerBase|null
      */
     public static function GetInterfaceManagerObject($id)
     {
@@ -27,7 +27,7 @@ class TCMSInterfaceManager extends TAdbCmsInterfaceManager
         if ($oInterfaceData->Load($id)) {
             $sClassName = $oInterfaceData->fieldClass;
             $oInterface = new $sClassName();
-            /** @var TCMSInterfaceManagerBase $oInterface */
+            /* @var TCMSInterfaceManagerBase $oInterface */
             $oInterface->LoadFromRow($oInterfaceData->sqlData);
         }
 
@@ -40,7 +40,7 @@ class TCMSInterfaceManager extends TAdbCmsInterfaceManager
      *
      * @param int $sSystemName
      *
-     * @return null|TCMSInterfaceManagerBase
+     * @return TCMSInterfaceManagerBase|null
      */
     public static function GetInterfaceManagerObjectBySystemName($sSystemName)
     {
@@ -50,7 +50,7 @@ class TCMSInterfaceManager extends TAdbCmsInterfaceManager
         if ($oInterfaceData->LoadFromField('systemname', $sSystemName)) {
             $sClassName = $oInterfaceData->fieldClass;
             $oInterface = new $sClassName();
-            /** @var TCMSInterfaceManagerBase $oInterface */
+            /* @var TCMSInterfaceManagerBase $oInterface */
             $oInterface->LoadFromRow($oInterfaceData->sqlData);
         }
 

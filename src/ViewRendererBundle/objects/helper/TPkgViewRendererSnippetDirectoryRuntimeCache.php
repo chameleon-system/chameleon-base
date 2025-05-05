@@ -12,7 +12,7 @@
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 
 /**
- * TPkgViewRendererSnippetDirectoryRuntimeCache caches the results for `getBasePaths` and `getSnippetBaseDirectory`
+ * TPkgViewRendererSnippetDirectoryRuntimeCache caches the results for `getBasePaths` and `getSnippetBaseDirectory`.
  *
  * `getBasePaths` in particular bases its runtime cache on the given/active portal.
  * A bundle extending the theme logic where the active theme depends on more than just the portal needs to implement
@@ -20,7 +20,6 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
  */
 class TPkgViewRendererSnippetDirectoryRuntimeCache implements TPkgViewRendererSnippetDirectoryInterface
 {
-
     /**
      * @var TPkgViewRendererSnippetDirectoryInterface
      */
@@ -33,8 +32,7 @@ class TPkgViewRendererSnippetDirectoryRuntimeCache implements TPkgViewRendererSn
     public function __construct(
         TPkgViewRendererSnippetDirectoryInterface $subject,
         PortalDomainServiceInterface $portalDomainService
-    )
-    {
+    ) {
         $this->subject = $subject;
         $this->portalDomainService = $portalDomainService;
     }

@@ -26,16 +26,12 @@ class ArrayUtilityServiceTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderArrayEqual
      *
-     * @param $compareName
-     * @param $array1
-     * @param $array2
-     * @param $expectedResult
+     * @dataProvider dataProviderArrayEqual
      *
      * @internal param $expectedDiff
      */
-    public function it_should_be_able_to_determine_if_two_arrays_are_equal($compareName, $array1, $array2, $expectedResult)
+    public function itShouldBeAbleToDetermineIfTwoArraysAreEqual($compareName, $array1, $array2, $expectedResult)
     {
         $this->given_two_arrays($array1, $array2);
         $this->given_an_instance_of_the_array_service();
@@ -45,40 +41,40 @@ class ArrayUtilityServiceTest extends TestCase
 
     public function dataProviderArrayEqual()
     {
-        return array(
-            array(
+        return [
+            [
                 'empty with empty',
-                array(),
-                array(),
+                [],
+                [],
                 true,
-            ),
-            array(
+            ],
+            [
                 'empty with array',
-                array(),
-                array('foo' => 'bar'),
+                [],
+                ['foo' => 'bar'],
                 false,
-            ),
-            array(
+            ],
+            [
                 'empty with complex array',
-                array(),
-                array('foo' => 'bar', 'test', 'subarray' => array('foo', 'bar' => 'foobar')),
+                [],
+                ['foo' => 'bar', 'test', 'subarray' => ['foo', 'bar' => 'foobar']],
                 false,
-            ),
+            ],
 
-            array(
+            [
                 'two arrays with mixed keys',
-                array('foo', 'bar' => 'foobar', 'inboth', 'inbotharray' => array('foo')),
-                array('foo2', 'bar' => 'foobar2', 'inboth', 'inbotharray' => array('foo')),
+                ['foo', 'bar' => 'foobar', 'inboth', 'inbotharray' => ['foo']],
+                ['foo2', 'bar' => 'foobar2', 'inboth', 'inbotharray' => ['foo']],
                 false,
-            ),
+            ],
 
-            array(
+            [
                 'two equal complex arrays with mixed keys',
-                array('foo', 'bar' => 'foobar', 'inboth', 'inbotharray' => array('foo', 'subsub' => 'somevalue', 'subsubarray' => array('foo' => 'bar'))),
-                array('bar' => 'foobar', 'foo', 'inbotharray' => array('subsub' => 'somevalue', 'foo', 'subsubarray' => array('foo' => 'bar')), 'inboth'),
+                ['foo', 'bar' => 'foobar', 'inboth', 'inbotharray' => ['foo', 'subsub' => 'somevalue', 'subsubarray' => ['foo' => 'bar']]],
+                ['bar' => 'foobar', 'foo', 'inbotharray' => ['subsub' => 'somevalue', 'foo', 'subsubarray' => ['foo' => 'bar']], 'inboth'],
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     private function given_two_arrays($array1, $array2)

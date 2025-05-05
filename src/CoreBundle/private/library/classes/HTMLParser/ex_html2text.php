@@ -5,7 +5,7 @@
 // Run with: php < ex_html2text.php
 include 'html2text.inc';
 
-$htmlText = 'Html2text is a tool that allows you to<br>'.'convert HTML to text.<p>'.'Does it work?';
+$htmlText = 'Html2text is a tool that allows you to<br>convert HTML to text.<p>Does it work?';
 
 $htmlToText = new Html2Text($htmlText, 15);
 $text = $htmlToText->convert();

@@ -24,8 +24,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use TCMSActivePage;
-use TdbCmsLanguage;
 
 class ActivePageService implements ActivePageServiceInterface
 {
@@ -50,7 +48,7 @@ class ActivePageService implements ActivePageServiceInterface
      */
     private $frontendRouter;
     /**
-     * @var TCMSActivePage
+     * @var \TCMSActivePage
      */
     private $activePage;
     /**
@@ -116,7 +114,7 @@ class ActivePageService implements ActivePageServiceInterface
         if (null === $activePageId || '' === $activePageId) {
             return;
         }
-        $activePage = new TCMSActivePage();
+        $activePage = new \TCMSActivePage();
         if (false === $activePage->Load($activePageId)) {
             // try the referrer
             if (null === $referrerPageId || '' === $referrerPageId) {
@@ -143,21 +141,19 @@ class ActivePageService implements ActivePageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToActivePageRelative(array $additionalParameters = array(), array $excludeParameters = array(), TdbCmsLanguage $language = null)
+    public function getLinkToActivePageRelative(array $additionalParameters = [], array $excludeParameters = [], ?\TdbCmsLanguage $language = null)
     {
         return $this->getLinkToActivePage($additionalParameters, $excludeParameters, $language, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
     /**
-     * @param array               $additionalParameters
-     * @param array               $excludeParameters
-     * @param TdbCmsLanguage|null $language
-     * @param int                 $referenceType
+     * @param int $referenceType
+     *
      * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      */
-    private function getLinkToActivePage(array $additionalParameters = array(), array $excludeParameters = array(), TdbCmsLanguage $language = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    private function getLinkToActivePage(array $additionalParameters = [], array $excludeParameters = [], ?\TdbCmsLanguage $language = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $request = $this->requestStack->getMainRequest();
         $route = $request->attributes->get('_route');
@@ -206,15 +202,11 @@ class ActivePageService implements ActivePageServiceInterface
      * will be added as long as they are not contained in the $excludeParameters list. Afterwards, the $additionalParameters
      * will always be added.
      *
-     * @param Request $request
-     * @param array   $additionalParameters
-     * @param array   $excludeParameters
-     *
      * @return array
      */
-    private function getFinalParameterList(Request $request, array $additionalParameters, array $excludeParameters, TdbCmsLanguage $language = null)
+    private function getFinalParameterList(Request $request, array $additionalParameters, array $excludeParameters, ?\TdbCmsLanguage $language = null)
     {
-        $parameters = array();
+        $parameters = [];
         if ($request->attributes->has('_route_params')) {
             $parameters = array_merge($parameters, $request->attributes->get('_route_params'));
             $this->modifyRouteParameters($parameters, $language);
@@ -245,12 +237,9 @@ class ActivePageService implements ActivePageServiceInterface
     }
 
     /**
-     * @param array          $parameters
-     * @param TdbCmsLanguage $language
-     *
      * @return void
      */
-    private function modifyRouteParameters(array &$parameters, TdbCmsLanguage $language = null)
+    private function modifyRouteParameters(array &$parameters, ?\TdbCmsLanguage $language = null)
     {
         /*
          * _locale is set automatically to the new value and would be appended to the resulting link
@@ -285,10 +274,6 @@ class ActivePageService implements ActivePageServiceInterface
     /**
      * Routes have the form "routeName" or "routeName-portalId-languageIso". We remove portalId and languageIso here
      * because they will be re-added by the router.
-     *
-     * @param string $route
-     *
-     * @return string
      */
     private function getBaseRouteName(string $route): string
     {
@@ -304,7 +289,7 @@ class ActivePageService implements ActivePageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToActivePageAbsolute(array $additionalParameters = array(), array $excludeParameters = array(), TdbCmsLanguage $language = null, $forceSecure = false)
+    public function getLinkToActivePageAbsolute(array $additionalParameters = [], array $excludeParameters = [], ?\TdbCmsLanguage $language = null, $forceSecure = false)
     {
         $url = $this->getLinkToActivePage($additionalParameters, $excludeParameters, $language, UrlGeneratorInterface::ABSOLUTE_URL);
 
@@ -319,12 +304,11 @@ class ActivePageService implements ActivePageServiceInterface
      * Symfony currently does not allow to enforce generation of secure URLs (a secure URL will only be generated if the
      * route requires HTTPS or if the current request is secure), therefore we turn the URL secure manually.
      *
-     * @param string              $url
-     * @param TdbCmsLanguage|null $language
+     * @param string $url
      *
      * @return string
      */
-    private function getSecureUrlIfNeeded($url, TdbCmsLanguage $language = null)
+    private function getSecureUrlIfNeeded($url, ?\TdbCmsLanguage $language = null)
     {
         if (false === $this->urlUtil->isUrlSecure($url)) {
             $url = $this->urlUtil->getAbsoluteUrl($url, true, null, null, $language);

@@ -67,9 +67,9 @@ class TCmsConfigImagemagick extends TCmsConfigImagemagickAutoParent
      */
     public static function GetSizeDefinitionAsArray()
     {
-        $aSizeDef = array();
+        $aSizeDef = [];
         $oSizes = TdbCmsConfigImagemagickList::GetList();
-        $oSizes->ChangeOrderBy(array('`cms_config_imagemagick`.`from_image_size`' => 'DESC'));
+        $oSizes->ChangeOrderBy(['`cms_config_imagemagick`.`from_image_size`' => 'DESC']);
         while ($oSize = $oSizes->Next()) {
             $aSizeDef[$oSize->fieldFromImageSize] = $oSize;
         }

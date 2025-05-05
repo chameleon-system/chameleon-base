@@ -11,19 +11,19 @@
 
 class TCMSMessageManagerBackendMessage extends TAdbCmsMessageManagerBackendMessage
 {
-    const VIEW_PATH = 'TCMSMessageManagerMessage';
-    protected $aMessageParameters = array();
+    public const VIEW_PATH = 'TCMSMessageManagerMessage';
+    protected $aMessageParameters = [];
 
     /**
      * render the message.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
@@ -57,7 +57,7 @@ class TCMSMessageManagerBackendMessage extends TAdbCmsMessageManagerBackendMessa
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -70,7 +70,7 @@ class TCMSMessageManagerBackendMessage extends TAdbCmsMessageManagerBackendMessa
     public function GetMessageString()
     {
         $matchString = '/\[\{(.*?)(:(string|number|date))*(:(.*?))*\}\]/si';
-        $sMessage = preg_replace_callback($matchString, array($this, 'InsertVariablesIntoMessageString'), $this->fieldMessage);
+        $sMessage = preg_replace_callback($matchString, [$this, 'InsertVariablesIntoMessageString'], $this->fieldMessage);
 
         return $sMessage;
     }
@@ -139,7 +139,7 @@ class TCMSMessageManagerBackendMessage extends TAdbCmsMessageManagerBackendMessa
 
     public function __sleep()
     {
-        return array('table', 'id', 'iLanguageId', 'aMessageParameters');
+        return ['table', 'id', 'iLanguageId', 'aMessageParameters'];
     }
 
     public function __wakeup()

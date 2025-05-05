@@ -20,8 +20,7 @@ class BreadcrumbGeneratorUtils implements BreadcrumbGeneratorUtilsInterface
         BreadcrumbDataModel $breadcrumb,
         \TdbCmsTree $tree,
         bool $ignoreHiddenTree = true
-    ): void
-    {
+    ): void {
         if ($ignoreHiddenTree && $tree->fieldHidden) {
             return;
         }

@@ -30,8 +30,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     *
      * @return void
      */
     public function saveComposerFile(ComposerData $composerData)
@@ -40,9 +38,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $newElements
-     *
      * @return void
      */
     public function addAutoloadClassmap(ComposerData $composerData, array $newElements)
@@ -63,9 +58,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $newElements
-     *
      * @return void
      */
     public function addRequire(ComposerData $composerData, array $newElements)
@@ -74,9 +66,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $newElements
-     *
      * @return void
      */
     public function addRequireDev(ComposerData $composerData, array $newElements)
@@ -85,9 +74,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $newElements
-     *
      * @return void
      */
     public function addSuggest(ComposerData $composerData, array $newElements)
@@ -96,9 +82,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $newElements
-     *
      * @return void
      */
     public function addScripts(ComposerData $composerData, array $newElements)
@@ -107,9 +90,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $newElements
-     *
      * @return void
      */
     public function addConfig(ComposerData $composerData, array $newElements)
@@ -118,9 +98,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $newElements
-     *
      * @return void
      */
     public function addExtra(ComposerData $composerData, array $newElements)
@@ -129,10 +106,8 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param string       $section
-     * @param array        $newElements
-     * @param bool         $forceUpdate
+     * @param string $section
+     * @param bool $forceUpdate
      *
      * @return void
      */
@@ -151,9 +126,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToRemove
-     *
      * @return void
      */
     public function removeRequire(ComposerData $composerData, array $elementsToRemove)
@@ -162,9 +134,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToRemove
-     *
      * @return void
      */
     public function removeRequireDev(ComposerData $composerData, array $elementsToRemove)
@@ -173,9 +142,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToRemove
-     *
      * @return void
      */
     public function removeSuggest(ComposerData $composerData, array $elementsToRemove)
@@ -184,9 +150,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToRemove
-     *
      * @return void
      */
     public function removeScripts(ComposerData $composerData, array $elementsToRemove)
@@ -195,9 +158,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToRemove
-     *
      * @return void
      */
     public function removeConfig(ComposerData $composerData, array $elementsToRemove)
@@ -206,9 +166,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToRemove
-     *
      * @return void
      */
     public function removeExtra(ComposerData $composerData, array $elementsToRemove)
@@ -217,9 +174,7 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param string       $section
-     * @param array        $elementsToRemove
+     * @param string $section
      *
      * @return void
      */
@@ -242,9 +197,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToAdd
-     *
      * @return void
      */
     public function addPostInstallCommands(ComposerData $composerData, array $elementsToAdd)
@@ -253,9 +205,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToAdd
-     *
      * @return void
      */
     public function addPostUpdateCommands(ComposerData $composerData, array $elementsToAdd)
@@ -264,9 +213,7 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param string       $commandType
-     * @param array        $elementsToAdd
+     * @param string $commandType
      *
      * @return void
      */
@@ -286,9 +233,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToRemove
-     *
      * @return void
      */
     public function removePostInstallCommands(ComposerData $composerData, array $elementsToRemove)
@@ -297,9 +241,6 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param array        $elementsToRemove
-     *
      * @return void
      */
     public function removePostUpdateCommands(ComposerData $composerData, array $elementsToRemove)
@@ -308,9 +249,7 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param string       $commandType
-     * @param array        $elementsToRemove
+     * @param string $commandType
      *
      * @return void
      */
@@ -322,10 +261,9 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param string       $key
-     * @param string       $value
-     * @param bool         $forceOverwrite
+     * @param string $key
+     * @param string $value
+     * @param bool $forceOverwrite
      *
      * @return void
      */
@@ -340,8 +278,7 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param string       $key
+     * @param string $key
      *
      * @return void
      */
@@ -353,8 +290,7 @@ class ComposerJsonModifier
     }
 
     /**
-     * @param ComposerData $composerData
-     * @param string       $url
+     * @param string $url
      *
      * @return void
      */

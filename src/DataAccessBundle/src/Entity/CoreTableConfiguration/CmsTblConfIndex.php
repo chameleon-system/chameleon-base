@@ -6,12 +6,11 @@ class CmsTblConfIndex
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTblConf|null - Belongs to table */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -61,7 +60,6 @@ class CmsTblConfIndex
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -74,7 +72,6 @@ class CmsTblConfIndex
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getDefinition(): string
@@ -89,7 +86,6 @@ class CmsTblConfIndex
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getType(): string
     {
@@ -102,6 +98,4 @@ class CmsTblConfIndex
 
         return $this;
     }
-
-
 }

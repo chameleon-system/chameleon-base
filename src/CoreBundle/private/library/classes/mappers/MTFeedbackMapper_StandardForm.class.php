@@ -20,7 +20,7 @@ class MTFeedbackMapper_StandardForm extends AbstractViewMapper
     {
         $oRequirements->NeedsSourceObject('oFeedbackModuleConfiguration', 'TdbModuleFeedback');
         $oRequirements->NeedsSourceObject('oFeedbackErrorList', 'MTFeedbackErrorsCore');
-        $oRequirements->NeedsSourceObject('aFieldInput', 'array', array());
+        $oRequirements->NeedsSourceObject('aFieldInput', 'array', []);
         $oRequirements->NeedsSourceObject('sSpotName');
     }
 
@@ -36,7 +36,7 @@ class MTFeedbackMapper_StandardForm extends AbstractViewMapper
         $oFeedbackErrorList = $oVisitor->GetSourceObject('oFeedbackErrorList');
         $aFieldInput = $oVisitor->GetSourceObject('aFieldInput');
         $sSpotName = $oVisitor->GetSourceObject('sSpotName');
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sHeadline'] = $oFeedbackModuleConfiguration->fieldName;
         $aTextData['sText'] = $oFeedbackModuleConfiguration->GetTextField('text');
         $aFieldList = $this->SetInputFields($aFieldList, $oFeedbackErrorList, $aFieldInput);
@@ -50,39 +50,39 @@ class MTFeedbackMapper_StandardForm extends AbstractViewMapper
      */
     protected function getFieldList()
     {
-        return array(
+        return [
             'aFieldName' => 'name',
             'aFieldEMail' => 'email',
             'aFieldSubject' => 'subject',
             'aFieldMessage' => 'body',
-        );
+        ];
     }
 
     /**
      * Init field data with errors and user data.
      *
-     * @param array                $aFieldList
+     * @param array $aFieldList
      * @param MTFeedbackErrorsCore $oFeedbackErrorList
-     * @param array                $aFieldInput
-     * @param string               $sFieldType
-     * @param TCMSRecordList       $oFieldOptionList
+     * @param array $aFieldInput
+     * @param string $sFieldType
+     * @param TCMSRecordList $oFieldOptionList
      *
      * @return array
      */
     protected function SetInputFields($aFieldList, $oFeedbackErrorList, $aFieldInput, $sFieldType = 'text', $oFieldOptionList = null)
     {
         foreach ($aFieldList as $sMappedFieldName => $sRealFieldName) {
-            $aFieldList[$sMappedFieldName] = array();
+            $aFieldList[$sMappedFieldName] = [];
             switch ($sFieldType) {
                 case 'text':
                     $aFieldList[$sMappedFieldName]['sValue'] = isset($aFieldInput[$sRealFieldName]) ? $aFieldInput[$sRealFieldName] : '';
                     break;
                 case 'select':
                     $aFieldList[$sMappedFieldName]['sValue'] = isset($aFieldInput[$sRealFieldName]) ? $aFieldInput[$sRealFieldName] : '';
-                    $aFieldList[$sMappedFieldName]['aValueList'] = array();
+                    $aFieldList[$sMappedFieldName]['aValueList'] = [];
                     if (null !== $oFieldOptionList) {
                         while ($oFieldOption = $oFieldOptionList->Next()) {
-                            $aFieldOption = array();
+                            $aFieldOption = [];
                             $aFieldOption['sName'] = $oFieldOption->GetName();
                             $aFieldOption['sValue'] = $oFieldOption->id;
                             $aFieldList[$sMappedFieldName]['aValueList'][] = $aFieldOption;
@@ -104,6 +104,6 @@ class MTFeedbackMapper_StandardForm extends AbstractViewMapper
      */
     private function getTranslationService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }

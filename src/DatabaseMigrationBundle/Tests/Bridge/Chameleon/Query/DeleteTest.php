@@ -25,13 +25,10 @@ class DeleteTest extends AbstractQueryTestCase
 
     /**
      * @test
-     * @dataProvider getData
      *
-     * @param MigrationQueryData $migrationQueryData
-     * @param $expectedQuery
-     * @param array $expectedQueryParams
+     * @dataProvider getData
      */
-    public function it_should_get_query_params(MigrationQueryData $migrationQueryData, $expectedQuery, array $expectedQueryParams)
+    public function itShouldGetQueryParams(MigrationQueryData $migrationQueryData, $expectedQuery, array $expectedQueryParams)
     {
         $this->givenDependencies();
         $this->givenADeleter();
@@ -44,9 +41,6 @@ class DeleteTest extends AbstractQueryTestCase
         $this->delete = new Delete($this->databaseConnection->reveal(), $this->dataAccess->reveal());
     }
 
-    /**
-     * @param MigrationQueryData $migrationQueryData
-     */
     private function whenICallGetQuery(MigrationQueryData $migrationQueryData)
     {
         list($this->actualQuery, $this->actualQueryParams) = $this->delete->getQuery($migrationQueryData);
@@ -57,124 +51,124 @@ class DeleteTest extends AbstractQueryTestCase
      */
     public function getData()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->createParam('foo_table', 'en'),
                 'DELETE FROM `foo_table`',
-                array(
-                ),
-            ),
-            array(
+                [
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setWhereEquals(array(
+                    ->setWhereEquals([
                         'stringId' => 'xyz',
                         'suchField' => 'veryValue',
-                    )),
+                    ]),
                 'DELETE FROM `foo_table` WHERE `stringId` = ? AND `suchField` = ?',
-                array(
+                [
                     'xyz',
                     'veryValue',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'bar' => 'baz',
-                    ))
-                    ->setWhereExpressions(array(
+                    ])
+                    ->setWhereExpressions([
                         new Comparison('stringId', Comparison::EQ, 'xyz'),
-                    )),
+                    ]),
                 'DELETE FROM `foo_table` WHERE `stringId` = ?',
-                array(
+                [
                     'xyz',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setWhereEquals(array(
+                    ->setWhereEquals([
                         'stringId' => 'xyz',
                         'suchField' => 'veryValue',
-                    ))
-                    ->setWhereExpressions(array(
+                    ])
+                    ->setWhereExpressions([
                         new Comparison('muchField', Comparison::EQ, 'wow'),
-                    )),
+                    ]),
                 'DELETE FROM `foo_table` WHERE `stringId` = ? AND `suchField` = ? AND `muchField` = ?',
-                array(
+                [
                     'xyz',
                     'veryValue',
                     'wow',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setWhereExpressions(array(
+                    ->setWhereExpressions([
                         new Comparison('id1', Comparison::EQ, 'id2'),
                         new Comparison('suchField', Comparison::GT, 'veryValue'),
-                    ))
-                    ->setWhereExpressionsFieldTypes(array(
+                    ])
+                    ->setWhereExpressionsFieldTypes([
                         'id1' => 'column',
-                    )),
+                    ]),
                 'DELETE FROM `foo_table` WHERE `id1` = `id2` AND `suchField` > ?',
-                array(
+                [
                     'veryValue',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setWhereExpressions(array(
+                    ->setWhereExpressions([
                         new Comparison('bar', Comparison::IN, '(SELECT `id` FROM `bar_table`)'),
-                    ))
-                    ->setWhereExpressionsFieldTypes(array(
+                    ])
+                    ->setWhereExpressionsFieldTypes([
                         'bar' => 'literal',
-                    )),
+                    ]),
                 'DELETE FROM `foo_table` WHERE `bar` IN (SELECT `id` FROM `bar_table`)',
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setWhereEquals(array(
+                    ->setWhereEquals([
                         'translatedField' => 'baz',
-                    )),
+                    ]),
                 'DELETE FROM `foo_table` WHERE `translatedField__de` = ?',
-                array(
+                [
                     'baz',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setFields(array(
+                    ->setFields([
                         'foo' => 'bar',
                         'translatedField' => 'baz',
-                    ))
-                    ->setWhereExpressions(array(
+                    ])
+                    ->setWhereExpressions([
                         new Comparison('stringId', Comparison::EQ, 'xyz'),
                         new Comparison('translatedField', Comparison::GT, 'veryValue'),
-                    )),
+                    ]),
                 'DELETE FROM `foo_table` WHERE `stringId` = ? AND `translatedField__de` > ?',
-                array(
+                [
                     'xyz',
                     'veryValue',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setWhereExpressions(array(
-                        new Comparison('stringId', Comparison::IN, array('xyz', 'abc')),
-                    )),
+                    ->setWhereExpressions([
+                        new Comparison('stringId', Comparison::IN, ['xyz', 'abc']),
+                    ]),
                 "DELETE FROM `foo_table` WHERE `stringId` IN ('xyz', 'abc')",
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setWhereExpressions(array(
-                        new Comparison('stringId', Comparison::IN, array('xyz', 'abc')),
-                    ))
-                    ->setWhereExpressionsFieldTypes(array(
+                    ->setWhereExpressions([
+                        new Comparison('stringId', Comparison::IN, ['xyz', 'abc']),
+                    ])
+                    ->setWhereExpressionsFieldTypes([
                         'stringId' => QueryConstants::FIELDTYPE_ARRAY,
-                    )),
+                    ]),
                 "DELETE FROM `foo_table` WHERE `stringId` IN ('xyz', 'abc')",
-                array(),
-            ),
-        );
+                [],
+            ],
+        ];
     }
 }

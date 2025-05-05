@@ -64,12 +64,11 @@ class ImageCropDataModel
     private $targetHeight;
 
     /**
-     * @param string|null       $id
-     * @param CmsMediaDataModel $cmsMedia
-     * @param int               $posX
-     * @param int               $posY
-     * @param int               $width
-     * @param int               $height
+     * @param string|null $id
+     * @param int $posX
+     * @param int $posY
+     * @param int $width
+     * @param int $height
      */
     public function __construct(
         $id,
@@ -114,8 +113,6 @@ class ImageCropDataModel
     }
 
     /**
-     * @param CmsMediaDataModel $cmsMedia
-     *
      * @return void
      */
     public function setCmsMedia(CmsMediaDataModel $cmsMedia)

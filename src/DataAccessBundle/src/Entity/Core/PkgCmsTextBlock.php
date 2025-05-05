@@ -10,12 +10,11 @@ class PkgCmsTextBlock
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - Available in selected portals */
-        private Collection $cmsPortalCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - System name */
         private string $systemname = '',
@@ -83,7 +82,6 @@ class PkgCmsTextBlock
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemname(): string
     {
@@ -96,7 +94,6 @@ class PkgCmsTextBlock
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -111,7 +108,6 @@ class PkgCmsTextBlock
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getContent(): string
     {
@@ -124,6 +120,4 @@ class PkgCmsTextBlock
 
         return $this;
     }
-
-
 }

@@ -11,14 +11,12 @@
 
 namespace ChameleonSystem\NewsletterBundle\PostProcessing\Bridge;
 
-use TdbPkgNewsletterUser;
-
 class NewsletterUserDataFactory implements NewsletterUserDataFactoryInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function createNewsletterUserData(\TdbPkgNewsletterCampaign $campaign, TdbPkgNewsletterUser $user, $newsletterGroupId = null, $newsletterGroups = null, $addAllUnsubscribeLinks = false)
+    public function createNewsletterUserData(\TdbPkgNewsletterCampaign $campaign, \TdbPkgNewsletterUser $user, $newsletterGroupId = null, $newsletterGroups = null, $addAllUnsubscribeLinks = false)
     {
         $salutationObject = $user->GetFieldDataExtranetSalutation();
         $salutation = $salutationObject ? $salutationObject->GetName() : '';
@@ -53,7 +51,7 @@ class NewsletterUserDataFactory implements NewsletterUserDataFactoryInterface
         if ('' !== $user->fieldDataExtranetUserId) {
             $newsletterUserDataModel->setExtranetUserId($user->fieldDataExtranetUserId);
         }
-        
+
         return $newsletterUserDataModel;
     }
 }

@@ -31,13 +31,10 @@ class StripNonExistingFieldsFromQueryTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderVirtualFields
      *
-     * @param $query
-     * @param $expectedResult
-     * @param $virtualFields
+     * @dataProvider dataProviderVirtualFields
      */
-    public function it_should_strip_virtual_fields($query, $expectedResult, $virtualFields)
+    public function itShouldStripVirtualFields($query, $expectedResult, $virtualFields)
     {
         $this->given_the_virtual_fields($virtualFields);
         $this->given_a_query($query);
@@ -79,54 +76,54 @@ class StripNonExistingFieldsFromQueryTest extends TestCase
 
     public function dataProviderVirtualFields()
     {
-        return array(
-            array(
+        return [
+            [
                 "INSERT INTO `cms_tpl_module` SET `name` = '', `description` = '', `cms_tbl_conf_mlt` = '',",
                 "INSERT INTO `cms_tpl_module` SET `name` = '', `cms_tbl_conf_mlt` = '',",
-                array('cms_tpl_module' => array('description')),
-            ),
-            array(
+                ['cms_tpl_module' => ['description']],
+            ],
+            [
                 "INSERT INTO `cms_tpl_module` SET `name` = '', `description` = '', `cms_tbl_conf_mlt` = '',",
                 "INSERT INTO `cms_tpl_module` SET `description` = '', `cms_tbl_conf_mlt` = '',",
-                array('cms_tpl_module' => array('name')),
-            ),
-            array(
+                ['cms_tpl_module' => ['name']],
+            ],
+            [
                 "UPDATE `cms_tpl_module` SET `name` = '', `description` = '', `cms_tbl_conf_mlt` = '',",
                 "UPDATE `cms_tpl_module` SET `name` = '', `cms_tbl_conf_mlt` = '',",
-                array('cms_tpl_module' => array('description')),
-            ),
-            array(
+                ['cms_tpl_module' => ['description']],
+            ],
+            [
                 "UPDATE `cms_tpl_module` SET `name` = '', `description` = '', `cms_tbl_conf_mlt` = '',",
                 "UPDATE `cms_tpl_module` SET `description` = '', `cms_tbl_conf_mlt` = '',",
-                array('cms_tpl_module' => array('name')),
-            ),
+                ['cms_tpl_module' => ['name']],
+            ],
 
-            array(
+            [
                 "INSERT INTO `cms_tpl_module` SET `name` = '', `description` = 'asdfasdfsdf', `cms_tbl_conf_mlt` = ''",
                 "INSERT INTO `cms_tpl_module` SET `name` = '', `description` = 'asdfasdfsdf'",
-                array('cms_tpl_module' => array('cms_tbl_conf_mlt')),
-            ),
-            array(
+                ['cms_tpl_module' => ['cms_tbl_conf_mlt']],
+            ],
+            [
                 "INSERT INTO `cms_tpl_module` SET `name` = '', `description` = 'asdfasdfsdf', `cms_tbl_conf_mlt` = '' WHERE",
                 "INSERT INTO `cms_tpl_module` SET `name` = '', `description` = 'asdfasdfsdf' WHERE",
-                array('cms_tpl_module' => array('cms_tbl_conf_mlt')),
-            ),
+                ['cms_tpl_module' => ['cms_tbl_conf_mlt']],
+            ],
 
-            array(
+            [
                 "UPDATE `cms_tpl_module` SET `name` = '', `description` = 'asdfasdfsdf', `cms_tbl_conf_mlt` = ''",
                 "UPDATE `cms_tpl_module` SET `name` = '', `description` = 'asdfasdfsdf'",
-                array('cms_tpl_module' => array('cms_tbl_conf_mlt')),
-            ),
-            array(
+                ['cms_tpl_module' => ['cms_tbl_conf_mlt']],
+            ],
+            [
                 "UPDATE `cms_tpl_module` SET `name` = '', `description` = 'asdfasdfsdf', `cms_tbl_conf_mlt` = '' WHERE",
                 "UPDATE `cms_tpl_module` SET `name` = '', `description` = 'asdfasdfsdf' WHERE",
-                array('cms_tpl_module' => array('cms_tbl_conf_mlt')),
-            ),
-            array(
+                ['cms_tpl_module' => ['cms_tbl_conf_mlt']],
+            ],
+            [
                 "INSERT INTO `cms_tpl_module` SET `name` = '', `description` = '', `cms_tbl_conf_mlt` = '', `icon_list` = 'application.png', `classname` = '', `view_mapper_config` = '', `view_mapping` = '', `revision_management_active` = '0', `is_copy_allowed` = '0', `show_in_template_engine` = '1', `position` = '', `is_restricted` = '0', `cms_usergroup_mlt` = '', `id`='a79843ef-6814-1ac8-a20f-0dceccd3281d'",
                 "INSERT INTO `cms_tpl_module` SET `name` = '', `description` = '', `icon_list` = 'application.png', `classname` = '', `view_mapper_config` = '', `view_mapping` = '', `revision_management_active` = '0', `is_copy_allowed` = '0', `show_in_template_engine` = '1', `position` = '', `is_restricted` = '0', `cms_usergroup_mlt` = '', `id`='a79843ef-6814-1ac8-a20f-0dceccd3281d'",
-                array('cms_tpl_module' => array('cms_tbl_conf_mlt')),
-            ),
-        );
+                ['cms_tpl_module' => ['cms_tbl_conf_mlt']],
+            ],
+        ];
     }
 }

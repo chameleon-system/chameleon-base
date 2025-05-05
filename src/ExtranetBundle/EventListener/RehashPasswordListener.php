@@ -26,10 +26,6 @@ class RehashPasswordListener
      */
     private $passwordHashGenerator;
 
-    /**
-     * @param InputFilterUtilInterface       $inputFilterUtil
-     * @param PasswordHashGeneratorInterface $passwordHashGenerator
-     */
     public function __construct(InputFilterUtilInterface $inputFilterUtil, PasswordHashGeneratorInterface $passwordHashGenerator)
     {
         $this->inputFilterUtil = $inputFilterUtil;
@@ -37,8 +33,6 @@ class RehashPasswordListener
     }
 
     /**
-     * @param ExtranetUserEvent $extranetUserEvent
-     *
      * @return void
      */
     public function rehashPassword(ExtranetUserEvent $extranetUserEvent)
@@ -55,9 +49,9 @@ class RehashPasswordListener
 
         $hashedPassword = $this->passwordHashGenerator->hash($plainPassword);
 
-        $user->SaveFieldsFast(array(
+        $user->SaveFieldsFast([
             'password' => $hashedPassword,
-        ));
+        ]);
         $user->fieldPassword = $hashedPassword;
     }
 }

@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
 /**
  * holds a news article item.
-/**/
+ * /**/
 class TMDataArticle extends TCMSRecord
 {
     /**
@@ -22,15 +22,15 @@ class TMDataArticle extends TCMSRecord
      *
      * @var TCMSImage
      */
-    public $oTeaserImage = null;
+    public $oTeaserImage;
 
-    public $sArticleLink = null;
+    public $sArticleLink;
 
-    public $sDivisionLink = null;
+    public $sDivisionLink;
 
-    public $sDivisionName = null;
+    public $sDivisionName;
 
-    public $sChangedDate = null;
+    public $sChangedDate;
 
     /**
      * this class may be used without an active page set (RSS), so we can not use the activePage singleton
@@ -39,7 +39,7 @@ class TMDataArticle extends TCMSRecord
      *
      * @var TCMSPage
      */
-    public $oActivePage = null;
+    public $oActivePage;
 
     public function __construct($id = null)
     {
@@ -97,7 +97,7 @@ class TMDataArticle extends TCMSRecord
         // we get the link target from the division of the article...
         $oDivisions = $this->GetDivisions();
         $oDivision = $oDivisions->Current();
-        /** @var $oDivision TdbCmsDivision */
+        /* @var $oDivision TdbCmsDivision */
         $this->sDivisionLink = static::getTreeService()->getLinkToPageForTreeRelative($oDivision->GetDivisionNode());
         $this->sDivisionName = $oDivision->GetName();
 
@@ -108,9 +108,9 @@ class TMDataArticle extends TCMSRecord
 
     protected function GetListPageUrl()
     {
-        return self::getPageService()->getLinkToPageObjectRelative($this->oActivePage, array(
+        return self::getPageService()->getLinkToPageObjectRelative($this->oActivePage, [
             'ipage' => $this->iPage,
-        ));
+        ]);
     }
 
     /**
@@ -118,7 +118,7 @@ class TMDataArticle extends TCMSRecord
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -126,6 +126,6 @@ class TMDataArticle extends TCMSRecord
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }

@@ -24,5 +24,5 @@ interface EntityListLengthCalculationStrategyInterface
      */
     public function isValidStrategyFor($normalizedQuery);
 
-    public function calculateLength($query, array $queryParameters = array(), array $queryParameterTypes = array());
+    public function calculateLength($query, array $queryParameters = [], array $queryParameterTypes = []);
 }

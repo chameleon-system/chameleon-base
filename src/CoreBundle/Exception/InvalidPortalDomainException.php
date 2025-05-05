@@ -11,12 +11,10 @@
 
 namespace ChameleonSystem\CoreBundle\Exception;
 
-use Exception;
-
 /**
  * InvalidPortalDomainException is thrown if a client requests an invalid domain or the system's domain configuration
  * is invalid.
  */
-class InvalidPortalDomainException extends Exception
+class InvalidPortalDomainException extends \Exception
 {
 }

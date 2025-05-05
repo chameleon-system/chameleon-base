@@ -54,7 +54,6 @@ class ResponseVariableReplacerTest extends TestCase
      * @dataProvider provideDataForTestReplaceVariables
      *
      * @param object|array|string $input
-     * @param array               $placeholders
      * @param object|array|string $expectedResult
      */
     public function testReplaceVariables($input, array $placeholders, $expectedResult): void
@@ -90,9 +89,9 @@ class ResponseVariableReplacerTest extends TestCase
                 'This is my string and I am proud of it.',
             ],
             'basic-variable-types' => [
-                [ true, 1 ],
+                [true, 1],
                 [],
-                [ true, 1 ],
+                [true, 1],
             ],
             'string-with-placeholders' => [
                 'This is my string with [{two}] [{placeholders}] and I am proud of it.',
@@ -138,7 +137,7 @@ class ResponseVariableReplacerTest extends TestCase
     public function testBasicTypesDoNotGetConverted(): void
     {
         $this->givenResponseVariableReplacer([]);
-        $this->whenReplaceVariablesIsCalled([ true, 1 ]);
+        $this->whenReplaceVariablesIsCalled([true, 1]);
         $this->assertCount(2, $this->actualResult);
         $this->assertSame(true, $this->actualResult[0]);
         $this->assertSame(1, $this->actualResult[1]);

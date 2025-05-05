@@ -11,7 +11,7 @@
 
 /**
  * only show the children of the active node.
-/**/
+ * /**/
 class TCCustomNavigationSkipRoot extends TCCustomNavigation
 {
     /**
@@ -32,14 +32,14 @@ class TCCustomNavigationSkipRoot extends TCCustomNavigation
             $menu .= '<ul>';
         }
         while ($oRootNode = $oChildren->Next()) {
-            /** @var $oRootNode TCMSTreeNode */
+            /* @var $oRootNode TCMSTreeNode */
             $this->FetchTreeDataForCacheTriggers($oRootNode);
             if ($oRootNode->IsInBreadcrumb()) {
                 $oChildrenLevel2 = $oRootNode->GetChildren();
                 $oChildrenLevel2->GoToStart();
                 $tTotalSubNodeChildren = $oChildrenLevel2->Length();
                 while ($oNode = $oChildrenLevel2->Next()) {
-                    /** @var $oNode TCMSTreeNode */
+                    /* @var $oNode TCMSTreeNode */
                     $this->FetchTreeDataForCacheTriggers($oNode);
                     if ($this->_ShowNode($oNode, 0, $count)) {
                         if ($this->bPlaceEachRootNodeInASeparateBlock) {

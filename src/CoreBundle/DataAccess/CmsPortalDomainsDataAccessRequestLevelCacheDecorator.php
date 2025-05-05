@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
-use TdbCmsPortalDomains;
-
 class CmsPortalDomainsDataAccessRequestLevelCacheDecorator implements CmsPortalDomainsDataAccessInterface
 {
     /**
@@ -20,7 +18,7 @@ class CmsPortalDomainsDataAccessRequestLevelCacheDecorator implements CmsPortalD
      */
     private $subject;
     /**
-     * @var array<string, TdbCmsPortalDomains|null>
+     * @var array<string, \TdbCmsPortalDomains|null>
      */
     private $cache = [];
 
@@ -29,9 +27,6 @@ class CmsPortalDomainsDataAccessRequestLevelCacheDecorator implements CmsPortalD
      */
     private $domainNamesCache;
 
-    /**
-     * @param CmsPortalDomainsDataAccessInterface $subject
-     */
     public function __construct(CmsPortalDomainsDataAccessInterface $subject)
     {
         $this->subject = $subject;

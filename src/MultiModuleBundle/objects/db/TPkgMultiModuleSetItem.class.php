@@ -22,7 +22,7 @@ class TPkgMultiModuleSetItem extends TPkgMultiModuleSetItemAutoParent
     {
         $oGlobal = TGlobal::instance();
         $oExecutingModule = $oGlobal->GetExecutingModulePointer();
-        $aAdditionalParameters = array('module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'RenderModuleAjax', 'sShowModuleInstanceId' => $this->fieldCmsTplModuleInstanceId);
+        $aAdditionalParameters = ['module_fnc['.$oExecutingModule->sModuleSpotName.']' => 'ExecuteAjaxCall', '_fnc' => 'RenderModuleAjax', 'sShowModuleInstanceId' => $this->fieldCmsTplModuleInstanceId];
         $sLink = '?'.TTools::GetArrayAsURL($aAdditionalParameters);
         if ($bGetAsJSFunction) {
             $sLink = "CHAMELEONPKGMULTIMODULE.GetPkgMultiModuleAjaxCall('{$sLink}', CHAMELEONPKGMULTIMODULE.RenderModule)";

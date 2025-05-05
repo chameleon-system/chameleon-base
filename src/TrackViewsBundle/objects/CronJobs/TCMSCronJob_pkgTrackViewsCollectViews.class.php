@@ -12,7 +12,7 @@
 /**
  * Collect all views from history and add them to view count.
  *
-/**/
+ * /**/
 class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
 {
     /**
@@ -45,7 +45,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
      *
      * @var array<string, int>
      */
-    protected $aTableTTL = array();
+    protected $aTableTTL = [];
 
     /**
      * this array defines date groups for specific tables.
@@ -64,7 +64,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
      *
      * @var array
      */
-    protected $aTableDateGroups = array();
+    protected $aTableDateGroups = [];
 
     /**
      * @return void
@@ -99,7 +99,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
     /**
      * update or insert a new entry to view count and return the id of the inserted record.
      *
-     * @param array  $aHistoryRow
+     * @param array $aHistoryRow
      * @param string $sDate
      *
      * @return string
@@ -108,7 +108,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
     {
         $targetTable = $this->targetTable;
         // Custom Timestamp Format YYYYMMWWDD
-        $aDateGroup = array('day' => date('YmWd'), 'week' => date('YmWxx'), 'month' => date('Ymxxxx'), 'year' => date('Yxxxxxx'), 'all' => 'xxxxxxxxxx');
+        $aDateGroup = ['day' => date('YmWd'), 'week' => date('YmWxx'), 'month' => date('Ymxxxx'), 'year' => date('Yxxxxxx'), 'all' => 'xxxxxxxxxx'];
         $query = 'SELECT *
                     FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($targetTable)."`
                    WHERE `table_name` = '".MySqlLegacySupport::getInstance()->real_escape_string($aHistoryRow['table_name'])."'
@@ -116,10 +116,11 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
                      AND `time_block` = '".$aDateGroup[$sDate]."'";
         $res = MySqlLegacySupport::getInstance()->query($query);
         if (!MySqlLegacySupport::getInstance()->num_rows($res) || 0 == MySqlLegacySupport::getInstance()->num_rows($res)) {
-            $aData = array('table_name' => $aHistoryRow['table_name'], 'owner_id' => $aHistoryRow['owner_id'], 'count' => $aHistoryRow['views'], 'time_block' => $aDateGroup[$sDate]);
+            $aData = ['table_name' => $aHistoryRow['table_name'], 'owner_id' => $aHistoryRow['owner_id'], 'count' => $aHistoryRow['views'], 'time_block' => $aDateGroup[$sDate]];
 
             /**
              * @var string $sClassName
+             *
              * @psalm-var class-string<TCMSRecordWritable> $sClassName
              */
             $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $targetTable);
@@ -158,7 +159,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
     protected function getDateGroupsForTableName($sTableName)
     {
         // Custom Timestamp Format YYYYMMWWDD
-        $aDateGroup = array('day', 'week', 'month', 'year', 'all');
+        $aDateGroup = ['day', 'week', 'month', 'year', 'all'];
         if (array_key_exists($sTableName, $this->aTableDateGroups)) {
             $aDateGroup = $this->aTableDateGroups[$sTableName];
         }
@@ -193,7 +194,7 @@ class TCMSCronJob_pkgTrackViewsCollectViews extends TdbCmsCronjobs
      * delete counted items that are expired.
      *
      * @param string $sTableName
-     * @param int    $dTime
+     * @param int $dTime
      *
      * @return void
      */

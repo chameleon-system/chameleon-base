@@ -11,7 +11,7 @@
 
 class SnippetRendererMock_ReturnRawInput extends PkgAbstractSnippetRenderer
 {
-    private $aVars = array();
+    private $aVars = [];
     private $sTestContent = '';
 
     public function __construct($sTestContent)
@@ -40,7 +40,7 @@ class SnippetRendererMock_ReturnRawInput extends PkgAbstractSnippetRenderer
      *
      * @return TPkgSnippetRenderer
      */
-    public static function GetNewInstance($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING, IResourceHandler $oResourceHandler = null)
+    public static function GetNewInstance($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING, ?IResourceHandler $oResourceHandler = null)
     {
         // TODO: Implement GetNewInstance() method.
     }

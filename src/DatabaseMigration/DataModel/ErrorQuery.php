@@ -11,9 +11,7 @@
 
 namespace ChameleonSystem\DatabaseMigration\DataModel;
 
-use JsonSerializable;
-
-class ErrorQuery implements JsonSerializable
+class ErrorQuery implements \JsonSerializable
 {
     /**
      * @var string
@@ -30,7 +28,7 @@ class ErrorQuery implements JsonSerializable
 
     /**
      * @param string $query
-     * @param int    $line
+     * @param int $line
      * @param string $error
      */
     public function __construct($query, $line, $error)

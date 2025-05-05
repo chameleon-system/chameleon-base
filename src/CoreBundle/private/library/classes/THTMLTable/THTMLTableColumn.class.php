@@ -11,14 +11,14 @@
 
 /**
  * holds all relevant information for a column within the table.
-/**/
+ * /**/
 class THTMLTableColumn
 {
-    const SELF_FIELD_DEF = 'THTMLTableColumn';
-    const FIELD_TYPE_TEXT = 'THTMLTableColumn';
-    const FIELD_TYPE_NUMBER = 'THTMLTableColumnNumber';
-    const FIELD_TYPE_DATE = 'THTMLTableColumnDate';
-    const FIELD_TYPE_LOOKUP = 'THTMLTableColumnLookup';
+    public const SELF_FIELD_DEF = 'THTMLTableColumn';
+    public const FIELD_TYPE_TEXT = 'THTMLTableColumn';
+    public const FIELD_TYPE_NUMBER = 'THTMLTableColumnNumber';
+    public const FIELD_TYPE_DATE = 'THTMLTableColumnDate';
+    public const FIELD_TYPE_LOOKUP = 'THTMLTableColumnLookup';
 
     /**
      * the column db alias in the query.
@@ -46,7 +46,7 @@ class THTMLTableColumn
      *
      * @var THTMLTable
      */
-    public $oOwningTable = null;
+    public $oOwningTable;
 
     /**
      * set to false if you want to prevent the user from filtering this field.
@@ -67,14 +67,14 @@ class THTMLTableColumn
      *
      * @var string
      */
-    protected $sFormatCallbackFunction = null;
+    protected $sFormatCallbackFunction;
 
     /**
      * the current order by direction for the column. set to null if the column is not ordered.
      *
      * @var string
      */
-    protected $sOrderByDirection = null;
+    protected $sOrderByDirection;
 
     /**
      * any search data for the column.
@@ -116,11 +116,11 @@ class THTMLTableColumn
     /**
      * Return field object.
      *
-     * @param string $sColumnAlias  - db alias
+     * @param string $sColumnAlias - db alias
      * @param string $sColumnDBName - full db name (`table`.`field`) of the field
-     * @param string $sTitle        - field title
-     * @param string $sType         - field type (must be of the form: Class,SubType,Type)
-     * @param string $sCallback     - callback to use for formating
+     * @param string $sTitle - field title
+     * @param string $sType - field type (must be of the form: Class,SubType,Type)
+     * @param string $sCallback - callback to use for formating
      *
      * @return THTMLTableColumn
      */
@@ -192,7 +192,7 @@ class THTMLTableColumn
     /**
      * method used to format the given value. overwrite this method for every column type you write.
      *
-     * @param string     $sValue
+     * @param string $sValue
      * @param TCMSRecord $oTableRow
      *
      * @return string
@@ -261,13 +261,13 @@ class THTMLTableColumn
     /**
      * used to display the column.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $oView->AddVar('oColumn', $this);
@@ -291,7 +291,7 @@ class THTMLTableColumn
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }

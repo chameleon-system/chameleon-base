@@ -31,9 +31,8 @@ class CmsTableNameVoter extends Voter
     }
 
     /**
-     * @param string $attribute
      * @param string $subject
-     * @param TokenInterface $token
+     *
      * @return bool|void
      */
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -70,14 +69,13 @@ class CmsTableNameVoter extends Voter
         return $this->userHasRoleForTable($attribute, $subject, $user);
     }
 
-
     private function userHasRoleForTable(string $attribute, string $tableName, CmsUserModel $user): bool
     {
         $permittedRoleIds = $this->accessCmsTblConf->getPermittedRoles($attribute, $tableName);
         $userRoleIds = array_keys($user->getRoles());
 
         $roleIntersection = array_intersect($permittedRoleIds, $userRoleIds);
-        return (count($roleIntersection) > 0);
-    }
 
+        return count($roleIntersection) > 0;
+    }
 }

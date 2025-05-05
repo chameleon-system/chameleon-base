@@ -24,9 +24,6 @@ class DataAccessCmsPortalSystemPage implements DataAccessInterface
      */
     private $databaseConnection;
 
-    /**
-     * @param Connection $databaseConnection
-     */
     public function __construct(Connection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
@@ -42,10 +39,10 @@ class DataAccessCmsPortalSystemPage implements DataAccessInterface
                      ORDER BY `cms_portal_system_page`.`cmsident`';
 
         $systemPages = $this->databaseConnection->fetchAllAssociative($query);
-        $systemPageList = array();
+        $systemPageList = [];
         foreach ($systemPages as $systemPage) {
             $pageId = $systemPage['id'];
-            $systemPageList[$pageId] = TdbCmsPortalSystemPage::GetNewInstance($systemPage, $languageId);
+            $systemPageList[$pageId] = \TdbCmsPortalSystemPage::GetNewInstance($systemPage, $languageId);
         }
 
         return $systemPageList;
@@ -56,9 +53,9 @@ class DataAccessCmsPortalSystemPage implements DataAccessInterface
      */
     public function getCacheTriggers()
     {
-        return array(
+        return [
             'cms_portal_system_page',
             'cms_tree',
-        );
+        ];
     }
 }

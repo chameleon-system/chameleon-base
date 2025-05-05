@@ -14,12 +14,12 @@ class TPkgCmsCoreParameterContainerParameterDefinition
     /**
      * @var string
      */
-    private $propertyName = null;
+    private $propertyName;
 
     /**
      * @var class-string|null
      */
-    private $type = null;
+    private $type;
 
     /**
      * @var bool
@@ -39,7 +39,8 @@ class TPkgCmsCoreParameterContainerParameterDefinition
     }
 
     /**
-     * @param object|null $val - Instance of $this->type or null.
+     * @param object|null $val - Instance of $this->type or null
+     *
      * @return void
      */
     public function validate($val)
@@ -49,10 +50,10 @@ class TPkgCmsCoreParameterContainerParameterDefinition
             if (false === ($val instanceof $sType)) {
                 throw new TPkgCmsException_Log(
                     "property {$this->propertyName} is not of type ".$sType,
-                    array(
+                    [
                          'property' => $this,
                          'value' => $val,
-                    )
+                    ]
                 );
             }
         }
@@ -60,10 +61,10 @@ class TPkgCmsCoreParameterContainerParameterDefinition
         if (true === $this->required && null === $val) {
             throw new TPkgCmsException_Log(
                 "property {$this->propertyName} is required ",
-                array(
+                [
                      'property' => $this,
                      'value' => $val,
-                )
+                ]
             );
         }
     }

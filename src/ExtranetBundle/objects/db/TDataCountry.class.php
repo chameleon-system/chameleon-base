@@ -11,8 +11,8 @@
 
 class TDataCountry extends TDataCountryAutoParent
 {
-    const ISO_3166_ALPHA2 = 'iso_code_2';
-    const ISO_3166_ALPHA3 = 'iso_code_3';
+    public const ISO_3166_ALPHA2 = 'iso_code_2';
+    public const ISO_3166_ALPHA3 = 'iso_code_3';
 
     /**
      * validates a zip code.

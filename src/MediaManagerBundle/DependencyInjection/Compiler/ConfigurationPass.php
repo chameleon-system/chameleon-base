@@ -12,7 +12,6 @@
 namespace ChameleonSystem\MediaManagerBundle\DependencyInjection\Compiler;
 
 use ChameleonSystem\MediaManagerBundle\DependencyInjection\Configuration;
-use LogicException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,11 +23,11 @@ class ConfigurationPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      *
+     * @return void
+     *
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     *
-     * @return void
+     * @throws \LogicException
      */
     public function process(ContainerBuilder $container)
     {
@@ -51,8 +50,6 @@ class ConfigurationPass implements CompilerPassInterface
     }
 
     /**
-     * @param array $configs
-     *
      * @return array
      */
     private function getMergedConfiguration(array $configs)

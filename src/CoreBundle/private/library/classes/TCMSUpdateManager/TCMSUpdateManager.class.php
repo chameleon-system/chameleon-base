@@ -32,25 +32,25 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * update file management, loads and executes database updates.
  *
-/**/
+ * /**/
 class TCMSUpdateManager
 {
     /**
      * @var array
      */
-    private $updateMessages = array();
+    private $updateMessages = [];
     /**
      * @var array
      */
-    private $successQueries = array();
+    private $successQueries = [];
     /**
      * @var array
      */
-    private $errorQueries = array();
+    private $errorQueries = [];
     /**
      * @var array
      */
-    private $exceptions = array();
+    private $exceptions = [];
 
     /**
      * needs to be overwritten in the child class. should return a pointer to
@@ -95,7 +95,7 @@ class TCMSUpdateManager
 
     /**
      * @param string $bundleName
-     * @param int    $buildNumber
+     * @param int $buildNumber
      *
      * @return bool
      */
@@ -125,7 +125,7 @@ class TCMSUpdateManager
      * highest build number, or updates for all bundles if null is passed as bundle alias.
      *
      * @param string|null $bundleNameToRun
-     * @param int|null    $highestBuildNumberToExecute
+     * @param int|null $highestBuildNumberToExecute
      *
      * @return string
      *
@@ -156,7 +156,7 @@ class TCMSUpdateManager
         }
 
         $translator = $this->getTranslator();
-        $updateFileResults = array();
+        $updateFileResults = [];
 
         foreach ($allUpdateFilesToProcess as $updateFile) {
             if (null === $highestBuildNumberToExecute || $updateFile->buildNumber <= $highestBuildNumberToExecute) {
@@ -174,10 +174,10 @@ class TCMSUpdateManager
             }
             $result .= '</script>';
 
-            $result .= sprintf('<div class="info">%s</div>', $translator->trans('chameleon_system_core.cms_module_update.updates_executed_up_to_build_number', array(
+            $result .= sprintf('<div class="info">%s</div>', $translator->trans('chameleon_system_core.cms_module_update.updates_executed_up_to_build_number', [
                 '%bundleName%' => $bundleNameToRun,
                 '%highestBuildNumber%' => $highestBuildNumberToExecute,
-            )));
+            ]));
 
             return $result;
         }
@@ -189,9 +189,9 @@ class TCMSUpdateManager
      * run a single update file and builds a JS response object for the file
      * records the file as "processed" in the database.
      *
-     * @param string      $sFileName  string full file name (e.g. "build6.inc.php)
+     * @param string $sFileName string full file name (e.g. "build6.inc.php)
      * @param string|null $bundleName
-     * @param string|null $sSubdir    @deprecated since 6.2.0 - no longer used
+     * @param string|null $sSubdir @deprecated since 6.2.0 - no longer used
      *
      * @return MigrationResult
      */
@@ -216,10 +216,10 @@ class TCMSUpdateManager
         if ($this->updateIsBlacklisted($bundleName, $buildNumber)) {
             $result->setResponseStatus(DatabaseMigrationConstants::RESPONSE_STATE_SUCCESS);
             $result->setUpdateStatus(DatabaseMigrationConstants::UPDATE_STATE_SKIPPED);
-            $result->setMessage($this->getTranslator()->trans('chameleon_system_core.cms_module_update.update_blacklisted_notice', array(
+            $result->setMessage($this->getTranslator()->trans('chameleon_system_core.cms_module_update.update_blacklisted_notice', [
                 '%fileName%' => $sFileName,
                 '%bundleName%' => $bundleName,
-            )));
+            ]));
 
             return $result;
         }
@@ -249,16 +249,16 @@ class TCMSUpdateManager
         $this->getMigrationCounterManager()->markMigrationFileAsProcessed($bundleName, $buildNumber);
 
         if ('' !== $result->getFileContents()) {
-            $result->setFileContents(str_replace(array("\n", "\r", "\t"), '', $result->getFileContents()));
+            $result->setFileContents(str_replace(["\n", "\r", "\t"], '', $result->getFileContents()));
         }
         $result->setInfoMessages($this->updateMessages);
-        $this->updateMessages = array();
+        $this->updateMessages = [];
         $result->setExceptions($this->exceptions);
-        $this->exceptions = array();
+        $this->exceptions = [];
         $result->setSuccessQueries($this->successQueries);
-        $this->successQueries = array();
+        $this->successQueries = [];
         $result->setErrorQueries($this->errorQueries);
-        $this->errorQueries = array();
+        $this->errorQueries = [];
 
         $this->renderMessageOutputToResult($result, $bundleName, $sFileName);
 
@@ -329,9 +329,9 @@ class TCMSUpdateManager
         $completeDataModels = $this->getAllMigrationDataModels();
         $converter = $this->getDataModelConverter();
 
-        return $converter->convertDataModelsToLegacySystem(array(
+        return $converter->convertDataModelsToLegacySystem([
             $completeDataModels[$bundleName],
-        ));
+        ]);
     }
 
     /**
@@ -340,12 +340,12 @@ class TCMSUpdateManager
     public function getUpdateBlacklist()
     {
         if (false === $this->getServiceContainer()->hasParameter('updateBlacklist')) {
-            return array();
+            return [];
         }
         $updateBlacklist = ServiceLocator::getParameter('updateBlacklist');
 
         if (!is_array($updateBlacklist)) {
-            return array();
+            return [];
         }
 
         return $updateBlacklist;
@@ -353,7 +353,7 @@ class TCMSUpdateManager
 
     /**
      * @param string $bundleName
-     * @param int    $buildNumber
+     * @param int $buildNumber
      *
      * @return bool
      */
@@ -376,7 +376,7 @@ class TCMSUpdateManager
 
     /**
      * @param string $updateMessage
-     * @param int    $level
+     * @param int $level
      */
     public function addUpdateMessage($updateMessage, $level)
     {
@@ -385,7 +385,7 @@ class TCMSUpdateManager
 
     /**
      * @param string $query
-     * @param int    $line
+     * @param int $line
      */
     public function addSuccessQuery($query, $line)
     {
@@ -394,7 +394,7 @@ class TCMSUpdateManager
 
     /**
      * @param string $query
-     * @param int    $line
+     * @param int $line
      * @param string $error
      */
     public function addErrorQuery($query, $line, $error)
@@ -402,9 +402,6 @@ class TCMSUpdateManager
         $this->errorQueries[] = new ErrorQuery($query, $line, $error);
     }
 
-    /**
-     * @param Exception $exception
-     */
     public function addException(Exception $exception)
     {
         $this->exceptions[] = new UpdateException($exception);
@@ -459,7 +456,7 @@ class TCMSUpdateManager
     }
 
     /**
-     * @return \Symfony\Component\EventDispatcher\EventDispatcher
+     * @return Symfony\Component\EventDispatcher\EventDispatcher
      */
     private function getEventDispatcher()
     {

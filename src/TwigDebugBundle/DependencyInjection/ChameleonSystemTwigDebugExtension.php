@@ -21,14 +21,14 @@ class ChameleonSystemTwigDebugExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array            $config    An array of configuration values
+     * @param array $config An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
+     *
+     * @return void
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      *
      * @api
-     *
-     * @return void
      */
     public function load(array $config, ContainerBuilder $container)
     {

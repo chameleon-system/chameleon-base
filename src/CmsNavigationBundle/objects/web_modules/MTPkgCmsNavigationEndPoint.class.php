@@ -69,7 +69,7 @@ class MTPkgCmsNavigationEndPoint extends MTPkgViewRendererAbstractModuleMapper
     {
         $activeUser = $this->getActiveUser();
         if (null === $activeUser) {
-            return array();
+            return [];
         }
 
         return $activeUser->GetUserGroupIds();
@@ -101,7 +101,7 @@ class MTPkgCmsNavigationEndPoint extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -109,6 +109,6 @@ class MTPkgCmsNavigationEndPoint extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

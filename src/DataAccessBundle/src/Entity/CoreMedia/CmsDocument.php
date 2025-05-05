@@ -3,13 +3,12 @@
 namespace ChameleonSystem\DataAccessBundle\Entity\CoreMedia;
 
 use ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser;
-use DateTime;
 
 class CmsDocument
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -27,12 +26,11 @@ class CmsDocument
         /** @var bool - Time-limited download authorization */
         private bool $tokenProtected = false,
         // TCMSFieldTimestamp
-        /** @var DateTime|null - Last changed on */
-        private ?DateTime $timeStamp = null,
+        /** @var \DateTime|null - Last changed on */
+        private ?\DateTime $timeStamp = null,
         // TCMSFieldCMSUser
         /** @var CmsUser|null - Last changed by */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldNumber
         /** @var int - Image width */
         private int $hiddenImageWidth = 0,
@@ -44,8 +42,7 @@ class CmsDocument
         private int $counter = 0,
         // TCMSFieldLookup
         /** @var CmsDocumentTree|null - Folder */
-        private ?CmsDocumentTree $cmsDocumentTree = null
-        ,
+        private ?CmsDocumentTree $cmsDocumentTree = null,
         // TCMSFieldNumber
         /** @var int - File size */
         private int $filesize = 0,
@@ -92,7 +89,6 @@ class CmsDocument
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFilename(): string
     {
@@ -105,7 +101,6 @@ class CmsDocument
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getDescription(): string
@@ -120,7 +115,6 @@ class CmsDocument
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isPrivate(): bool
     {
@@ -133,7 +127,6 @@ class CmsDocument
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isTokenProtected(): bool
@@ -148,20 +141,18 @@ class CmsDocument
         return $this;
     }
 
-
     // TCMSFieldTimestamp
-    public function getTimeStamp(): ?DateTime
+    public function getTimeStamp(): ?\DateTime
     {
         return $this->timeStamp;
     }
 
-    public function setTimeStamp(?DateTime $timeStamp): self
+    public function setTimeStamp(?\DateTime $timeStamp): self
     {
         $this->timeStamp = $timeStamp;
 
         return $this;
     }
-
 
     // TCMSFieldCMSUser
     public function getCmsUser(): ?CmsUser
@@ -176,7 +167,6 @@ class CmsDocument
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getHiddenImageWidth(): int
     {
@@ -189,7 +179,6 @@ class CmsDocument
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getHiddenImageHeight(): int
@@ -204,7 +193,6 @@ class CmsDocument
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getCounter(): int
     {
@@ -217,7 +205,6 @@ class CmsDocument
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsDocumentTree(): ?CmsDocumentTree
@@ -232,7 +219,6 @@ class CmsDocument
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getFilesize(): int
     {
@@ -246,7 +232,6 @@ class CmsDocument
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSeoName(): string
     {
@@ -259,6 +244,4 @@ class CmsDocument
 
         return $this;
     }
-
-
 }

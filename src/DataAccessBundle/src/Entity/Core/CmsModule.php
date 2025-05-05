@@ -6,7 +6,7 @@ class CmsModule
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Description */
@@ -16,12 +16,10 @@ class CmsModule
         private string $uniquecmsname = '',
         // TCMSFieldLookup
         /** @var CmsContentBox|null - Show in category window */
-        private ?CmsContentBox $cmsContentBox = null
-        ,
+        private ?CmsContentBox $cmsContentBox = null,
         // TCMSFieldLookup
         /** @var CmsUsergroup|null - Module belongs to group */
-        private ?CmsUsergroup $cmsUsergroup = null
-        ,
+        private ?CmsUsergroup $cmsUsergroup = null,
         // TCMSFieldVarchar
         /** @var string - Module page configuration */
         private string $module = '',
@@ -86,7 +84,6 @@ class CmsModule
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUniquecmsname(): string
     {
@@ -99,7 +96,6 @@ class CmsModule
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsContentBox(): ?CmsContentBox
@@ -114,7 +110,6 @@ class CmsModule
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsUsergroup(): ?CmsUsergroup
     {
@@ -127,7 +122,6 @@ class CmsModule
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getModule(): string
@@ -142,7 +136,6 @@ class CmsModule
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getParameter(): string
     {
@@ -155,7 +148,6 @@ class CmsModule
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getModuleLocation(): string
@@ -170,7 +162,6 @@ class CmsModule
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowAsPopup(): bool
     {
@@ -183,7 +174,6 @@ class CmsModule
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getWidth(): int
@@ -198,7 +188,6 @@ class CmsModule
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getHeight(): int
     {
@@ -211,7 +200,6 @@ class CmsModule
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -226,7 +214,6 @@ class CmsModule
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIconFontCssClass(): string
     {
@@ -239,6 +226,4 @@ class CmsModule
 
         return $this;
     }
-
-
 }

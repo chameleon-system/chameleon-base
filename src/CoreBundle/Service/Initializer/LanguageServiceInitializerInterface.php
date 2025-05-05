@@ -19,15 +19,11 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 interface LanguageServiceInitializerInterface
 {
     /**
-     * @param LanguageServiceInterface $languageService
-     *
      * @return void
      */
     public function initialize(LanguageServiceInterface $languageService);
 
     /**
-     * @param LanguageServiceInterface $languageService
-     *
      * @return void
      */
     public function initializeFallbackLanguage(LanguageServiceInterface $languageService);

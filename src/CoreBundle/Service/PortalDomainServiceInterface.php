@@ -13,11 +13,6 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TCMSPortal;
-use TCMSPortalDomain;
-use TdbCmsPortal;
-use TdbCmsPortalDomains;
-use TdbCmsTree;
 
 /**
  * PortalDomainServiceInterface defines a service that provides information for the currently active portal and domain.
@@ -25,26 +20,26 @@ use TdbCmsTree;
 interface PortalDomainServiceInterface
 {
     /**
-     * @return TdbCmsPortalDomains|null
+     * @return \TdbCmsPortalDomains|null
      */
     public function getActiveDomain();
 
     /**
-     * @return TdbCmsPortal|null
+     * @return \TdbCmsPortal|null
      */
     public function getActivePortal();
 
     /**
      * Returns the primary portal (cms config).
      *
-     * @return TdbCmsPortal|null
+     * @return \TdbCmsPortal|null
      */
     public function getDefaultPortal();
 
     /**
      * Returns the tree node for the file-not-found page (HTTP error 404) that is set for the active portal.
      *
-     * @return TdbCmsTree
+     * @return \TdbCmsTree
      *
      * @throws ResourceNotFoundException
      */
@@ -63,7 +58,7 @@ interface PortalDomainServiceInterface
      * @param string|null $portalId
      * @param string|null $languageId
      *
-     * @return TdbCmsPortalDomains
+     * @return \TdbCmsPortalDomains
      *
      * @throws InvalidPortalDomainException if no primary domain was found.
      *                                      Is also thrown if no portal ID or language ID was given and no active values
@@ -86,18 +81,18 @@ interface PortalDomainServiceInterface
     /**
      * Sets the currently active portal.
      *
-     * @param ?TCMSPortal $portal
-
+     * @param ?\TCMSPortal $portal
+     *
      * @return void
      */
-    public function setActivePortal(?TCMSPortal $portal);
+    public function setActivePortal(?\TCMSPortal $portal);
 
     /**
      * Sets the currently active domain.
      *
-     * @param ?TCMSPortalDomain $domain
+     * @param ?\TCMSPortalDomain $domain
      *
      * @return void
      */
-    public function setActiveDomain(?TCMSPortalDomain $domain);
+    public function setActiveDomain(?\TCMSPortalDomain $domain);
 }

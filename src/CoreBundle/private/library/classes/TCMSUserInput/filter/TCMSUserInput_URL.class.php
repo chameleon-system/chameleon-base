@@ -25,7 +25,7 @@ class TCMSUserInput_URL extends TCMSUserInput_BaseText
             $sValue = filter_var($sValue, FILTER_SANITIZE_URL);
         }
 
-        $aEscaped = array("'", '&#039;', '&#39;', '"', '&quot;', '&#034;', '&#34;');
+        $aEscaped = ["'", '&#039;', '&#39;', '"', '&quot;', '&#034;', '&#34;'];
         $sValue = str_replace($aEscaped, '', $sValue);
 
         return $sValue;

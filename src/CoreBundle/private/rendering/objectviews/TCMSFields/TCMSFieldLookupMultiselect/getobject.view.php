@@ -1,1 +1,1 @@
-        return $this->GetMLT('<?= $aFieldData['sFieldDatabaseName']; ?>', '<?= $sClassName; ?>',$sOrderBy,'<?= $sClassSubType; ?>','<?= $sClassType; ?>','<?= $sClassName; ?>List',false,'<?= $sTargetTableName; ?>');
+        return $this->GetMLT('<?php echo $aFieldData['sFieldDatabaseName']; ?>', '<?php echo $sClassName; ?>',$sOrderBy,'<?php echo $sClassSubType; ?>','<?php echo $sClassType; ?>','<?php echo $sClassName; ?>List',false,'<?php echo $sTargetTableName; ?>');

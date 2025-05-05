@@ -25,6 +25,7 @@ class ActiveCmsUserPermission implements ActiveCmsUserPermissionInterface
     {
         /** @var SecurityHelperAccess $securityHelper */
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-        return  $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
+
+        return $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
     }
 }

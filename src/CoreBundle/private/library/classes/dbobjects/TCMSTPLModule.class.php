@@ -9,8 +9,8 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * holds a record from the "cms_tpl_module" table.
@@ -41,7 +41,7 @@ class TCMSTPLModule extends TCMSRecord
         $portalDomainService = $this->getPortalDomainService();
 
         if (null !== $this->activePortalId) {
-            $activePortal = \TdbCmsPortal::GetNewInstance();
+            $activePortal = TdbCmsPortal::GetNewInstance();
             $activePortal->Load($this->activePortalId);
 
             return $activePortal;
@@ -85,8 +85,6 @@ class TCMSTPLModule extends TCMSRecord
 
     /**
      * returns an iterator holding all the views of the module.
-     *
-     * @return TIterator
      */
     public function GetViewsLegacy(): TIterator
     {
@@ -113,8 +111,8 @@ class TCMSTPLModule extends TCMSRecord
 
         // get default view location (view folder in the module directory - or theme if defined)
         $defaultViewLocation = PATH_CUSTOMER_FRAMEWORK_MODULES.'/'.$this->sqlData['classname'].'/views/';
-        /** @var ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface $portalDomainService */
-        $portalDomainService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        /** @var PortalDomainServiceInterface $portalDomainService */
+        $portalDomainService = ServiceLocator::get('chameleon_system_core.portal_domain_service');
         $activePortal = $portalDomainService->getActivePortal();
         if (!is_null($activePortal)) {
             $sThemePath = $activePortal->GetThemeBaseModuleViewsPath();
@@ -261,11 +259,11 @@ class TCMSTPLModule extends TCMSRecord
 
     private function getViewRendererSnippetDirectory(): TPkgViewRendererSnippetDirectoryInterface
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
+        return ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
     }
 
     private function getPortalDomainService(): PortalDomainServiceInterface
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

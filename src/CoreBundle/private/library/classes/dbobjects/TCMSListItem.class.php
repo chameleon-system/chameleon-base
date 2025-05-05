@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 /**
  * module_list item.
  *
-/**/
+ * /**/
 class TCMSListItem extends TCMSRecord
 {
     /**
@@ -24,9 +24,9 @@ class TCMSListItem extends TCMSRecord
      */
     public function GetDetailURL()
     {
-        $sDetailURL = $this->getActivePageService()->getLinkToActivePageRelative(array(
+        $sDetailURL = $this->getActivePageService()->getLinkToActivePageRelative([
             'article'.$this->sqlData['cms_tpl_module_instance_id'] => $this->id,
-        ));
+        ]);
 
         return $sDetailURL;
     }
@@ -36,6 +36,6 @@ class TCMSListItem extends TCMSRecord
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

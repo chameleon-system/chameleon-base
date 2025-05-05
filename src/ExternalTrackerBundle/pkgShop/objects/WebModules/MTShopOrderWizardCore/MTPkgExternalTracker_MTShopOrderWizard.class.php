@@ -14,6 +14,6 @@ class MTPkgExternalTracker_MTShopOrderWizard extends MTPkgExternalTracker_MTShop
     public function Init()
     {
         parent::Init();
-        TdbPkgExternalTrackerList::GetActiveInstance()->AddStateData('oShopOrderStep', array('oStep' => $this->oActiveOrderStep, 'oStepList' => TdbShopOrderStepList::GetNavigationStepList($this->oActiveOrderStep)));
+        TdbPkgExternalTrackerList::GetActiveInstance()->AddStateData('oShopOrderStep', ['oStep' => $this->oActiveOrderStep, 'oStepList' => TdbShopOrderStepList::GetNavigationStepList($this->oActiveOrderStep)]);
     }
 }

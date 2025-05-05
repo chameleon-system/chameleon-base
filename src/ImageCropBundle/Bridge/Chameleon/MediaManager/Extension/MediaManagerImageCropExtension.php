@@ -20,12 +20,12 @@ class MediaManagerImageCropExtension implements MediaManagerExtensionInterface
      */
     public function registerDetailMappers()
     {
-        return array(
+        return [
             'chameleon_system_image_crop.mapper.media_manager_image_crop_access_rights',
             'chameleon_system_image_crop.mapper.media_manager_image_crop_editor_url',
             'chameleon_system_image_crop.mapper.media_manager_media_item_crops',
             'chameleon_system_image_crop.mapper.usages_add_crops_mapper',
-        );
+        ];
     }
 
     /**
@@ -33,7 +33,7 @@ class MediaManagerImageCropExtension implements MediaManagerExtensionInterface
      */
     public function registerAdditionalTemplatesForDetailViewButtons()
     {
-        return array('imageCrop/mediaManager/detailButtons.html.twig');
+        return ['imageCrop/mediaManager/detailButtons.html.twig'];
     }
 
     /**
@@ -41,6 +41,6 @@ class MediaManagerImageCropExtension implements MediaManagerExtensionInterface
      */
     public function registerAdditionalTemplatesForDetailView()
     {
-        return array('imageCrop/mediaManager/detailCrops.html.twig');
+        return ['imageCrop/mediaManager/detailCrops.html.twig'];
     }
 }

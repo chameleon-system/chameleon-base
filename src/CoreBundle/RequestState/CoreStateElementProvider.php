@@ -20,10 +20,6 @@ class CoreStateElementProvider implements RequestStateElementProviderInterface
      */
     private $languageService;
 
-    /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param LanguageServiceInterface     $languageService
-     */
     public function __construct(
         PortalDomainServiceInterface $portalDomainService,
         LanguageServiceInterface $languageService

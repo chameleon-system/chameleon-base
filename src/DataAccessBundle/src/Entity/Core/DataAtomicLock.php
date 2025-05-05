@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class DataAtomicLock
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarcharUnique
         /** @var string - */
@@ -51,6 +50,4 @@ class DataAtomicLock
 
         return $this;
     }
-
-
 }

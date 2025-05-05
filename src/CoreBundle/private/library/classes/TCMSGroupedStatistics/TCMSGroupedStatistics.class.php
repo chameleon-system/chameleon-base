@@ -11,19 +11,19 @@
 
 /**
  * used to generate grouped statistics.
-/**/
+ * /**/
 class TCMSGroupedStatistics
 {
-    private $aBlocks = array();
+    private $aBlocks = [];
     public $bShowDiffColumn = false;
-    private $sBlockName = null;
+    private $sBlockName;
 
-    const VIEW_SUBTYPE = 'TCMSGroupedStatistics';
+    public const VIEW_SUBTYPE = 'TCMSGroupedStatistics';
 
     /*
      * add a new block to the list
     */
-    public function AddBlock($sBlockName, $sQuery, $aSubGroups = array())
+    public function AddBlock($sBlockName, $sQuery, $aSubGroups = [])
     {
         $tRes = MySqlLegacySupport::getInstance()->query($sQuery);
         $sMySqlError = MySqlLegacySupport::getInstance()->error();
@@ -35,7 +35,7 @@ class TCMSGroupedStatistics
             $this->aBlocks[$sBlockName]->Init($sBlockName);
         }
         while ($aDataRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
-            $aRealNames = array();
+            $aRealNames = [];
             if (is_array($aSubGroups)) {
                 foreach ($aSubGroups as $sGroupName) {
                     if (strlen($aDataRow[$sGroupName]) > 0) {
@@ -52,7 +52,7 @@ class TCMSGroupedStatistics
     public function Render($sViewName, $sType = 'Core')
     {
         $oView = new TViewParser();
-        /** @var $oView TViewParser */
+        /* @var $oView TViewParser */
         $oView->AddVar('oStats', $this);
         $oView->AddVar('aBlocks', $this->aBlocks);
         $oView->AddVar('sBlockName', $this->sBlockName);
@@ -71,7 +71,7 @@ class TCMSGroupedStatistics
 
     protected function GetNameColumns()
     {
-        $aNameColumns = array();
+        $aNameColumns = [];
         foreach (array_keys($this->aBlocks) as $iBlockIndex) {
             $aTmpNames = $this->aBlocks[$iBlockIndex]->GetColumnNames();
             foreach ($aTmpNames as $sName) {

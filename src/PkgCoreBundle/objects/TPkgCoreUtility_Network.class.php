@@ -11,15 +11,16 @@
 
 class TPkgCoreUtility_Network
 {
-    const IP_RANGE_TYPE_CIDR = 1;
-    const IP_RANGE_TYPE_WILDCARD = 2;
-    const IP_RANGE_TYPE_RANGE = 3;
-    const IP_RANGE_TYPE_NONE = 4;
+    public const IP_RANGE_TYPE_CIDR = 1;
+    public const IP_RANGE_TYPE_WILDCARD = 2;
+    public const IP_RANGE_TYPE_RANGE = 3;
+    public const IP_RANGE_TYPE_NONE = 4;
 
     /**
      * @param string $string
      *
      * @return int
+     *
      * @psalm-return self::IP_RANGE_TYPE_*
      */
     public function getRangeType($string)
@@ -79,6 +80,7 @@ class TPkgCoreUtility_Network
     /**
      * @param string $ip
      * @param string $range
+     *
      * @return bool
      */
     public function ipIsInRange($ip, $range)
@@ -120,10 +122,10 @@ class TPkgCoreUtility_Network
                 $ip_dec = ip2long($ip);
 
                 // Strategy 1 - Create the netmask with 'netmask' 1s and then fill it to 32 with 0s
-                //$netmask_dec = bindec(str_pad('', $netmask, '1') . str_pad('', 32-$netmask, '0'));
+                // $netmask_dec = bindec(str_pad('', $netmask, '1') . str_pad('', 32-$netmask, '0'));
 
                 // Strategy 2 - Use math to create it
-                $wildcard_dec = pow(2, (32 - $netmask)) - 1;
+                $wildcard_dec = pow(2, 32 - $netmask) - 1;
                 $netmask_dec = ~$wildcard_dec;
 
                 return ($ip_dec & $netmask_dec) == ($range_dec & $netmask_dec);

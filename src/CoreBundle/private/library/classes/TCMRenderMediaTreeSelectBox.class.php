@@ -12,7 +12,7 @@
 class TCMRenderMediaTreeSelectBox
 {
     public $treeHTML = '';
-    protected $selectedID = null;
+    protected $selectedID;
 
     /**
      * if set to true, the class should show only folders writable to the user
@@ -25,7 +25,7 @@ class TCMRenderMediaTreeSelectBox
     /**
      * render selectbox for the tree.
      *
-     * @param int  $selectedID
+     * @param int $selectedID
      * @param bool $bShowOnlyWritableFolders
      *
      * @return string
@@ -42,8 +42,8 @@ class TCMRenderMediaTreeSelectBox
     /**
      * renders one tree level as <option>.
      *
-     * @param int    $parent_id
-     * @param int    $level
+     * @param int $parent_id
+     * @param int $level
      * @param string $levelDirectoryName
      */
     protected function RenderMediaTree($parent_id = 1, $level = 0, $levelDirectoryName = '')
@@ -58,8 +58,8 @@ class TCMRenderMediaTreeSelectBox
 
         ++$level;
 
-        static $internalCache = array();
-        /** @var $oCmsMediaTreeList TdbCmsMediaTreeList */
+        static $internalCache = [];
+        /* @var $oCmsMediaTreeList TdbCmsMediaTreeList */
         if (array_key_exists($parent_id, $internalCache)) {
             $oCmsMediaTreeList = $internalCache[$parent_id];
             $oCmsMediaTreeList->GoToStart();
@@ -104,7 +104,7 @@ class TCMRenderMediaTreeSelectBox
     public function AddTree($iTreeId)
     {
         $oNode = new TCMSRecord();
-        /** @var $oNode TCMSRecord */
+        /* @var $oNode TCMSRecord */
         $oNode->table = 'cms_media_tree';
         $level = 1;
         $levelDirectoryName = '';

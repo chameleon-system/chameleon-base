@@ -14,8 +14,8 @@ if (!is_null($data['oBreadcrumb'])) {
         } elseif ($currentNode == $numberOfNodes) {
             $class = 'class="lastNode"';
         } ?>
-            <li <?=$class; ?>><a href="<?=$oNode->getLink(); ?>" target="<?=$oNode->GetTarget(); ?>"
-                               title="<?=TGlobal::OutHTML($oNode->GetName()); ?>"><?=TGlobal::OutHTML($oNode->GetName()); ?></a>
+            <li <?php echo $class; ?>><a href="<?php echo $oNode->getLink(); ?>" target="<?php echo $oNode->GetTarget(); ?>"
+                               title="<?php echo TGlobal::OutHTML($oNode->GetName()); ?>"><?php echo TGlobal::OutHTML($oNode->GetName()); ?></a>
             </li>
             <?php
             ++$currentNode;

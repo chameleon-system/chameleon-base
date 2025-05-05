@@ -1,6 +1,6 @@
 <?php
 
 $layoutTemplate = 'popup_iframe';
-$moduleList = array('contentmodule' => array('model' => 'CMSiconList', 'view' => 'standard', 'iconPath' => '/images/icons/'));
+$moduleList = ['contentmodule' => ['model' => 'CMSiconList', 'view' => 'standard', 'iconPath' => '/images/icons/']];
 
 addDefaultPageTitle($moduleList);

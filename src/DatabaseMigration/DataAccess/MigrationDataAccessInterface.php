@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\DatabaseMigration\DataAccess;
 
-use InvalidArgumentException;
-
 /**
  * MigrationDataAccessInterface provides methods for data access for migration script related data.
  */
@@ -37,11 +35,11 @@ interface MigrationDataAccessInterface
      * Marks a migration file as processed, so that it is not executed twice.
      *
      * @param string $counterId
-     * @param int    $buildNumber
+     * @param int $buildNumber
      *
      * @return void
      *
-     * @throws InvalidArgumentException if the bundle name could not be found
+     * @throws \InvalidArgumentException if the bundle name could not be found
      */
     public function markMigrationFileAsProcessed($counterId, $buildNumber);
 

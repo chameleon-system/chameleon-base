@@ -12,7 +12,7 @@
 /**
  * holds one menu item for the editor page and possible sub menu items
  * items are rendered from TWIG templates.
-/**/
+ * /**/
 class TCMSTableEditorMenuItem
 {
     /**
@@ -20,7 +20,7 @@ class TCMSTableEditorMenuItem
      *
      * @var string
      */
-    public $sItemKey = null;
+    public $sItemKey;
 
     /**
      * the button title
@@ -30,7 +30,7 @@ class TCMSTableEditorMenuItem
      *
      * @var string
      */
-    public $sDisplayName = null;
+    public $sDisplayName;
 
     /**
      * the button title
@@ -40,28 +40,28 @@ class TCMSTableEditorMenuItem
      *
      * @var string|null
      */
-    protected $sTitle = null;
+    protected $sTitle;
 
     /**
      * button icon (mandatory).
      *
      * @var string
      */
-    public $sIcon = null;
+    public $sIcon;
 
     /**
      * onClick event (mandatory).
      *
      * @var string
      */
-    public $sOnClick = null;
+    public $sOnClick;
 
     /**
      * The menu item should be a simple link with this value.
      *
-     * @var null|string
+     * @var string|null
      */
-    public $href = null;
+    public $href;
 
     /**
      * one or more additional CSS style classes
@@ -69,7 +69,7 @@ class TCMSTableEditorMenuItem
      *
      * @var string
      */
-    public $sCSSClass = null;
+    public $sCSSClass;
 
     /**
      * bootstrap button style (default: btn-primary)
@@ -86,7 +86,7 @@ class TCMSTableEditorMenuItem
      *
      * @var array
      */
-    protected $aSubMenuItems = array();
+    protected $aSubMenuItems = [];
 
     /**
      * expects an already translated string.
@@ -202,7 +202,7 @@ class TCMSTableEditorMenuItem
         $oViewRenderer = new ViewRenderer();
         $oViewRenderer->AddSourceObjectsFromArray($this->getViewVariables($this));
 
-        $aSubItems = array();
+        $aSubItems = [];
 
         /**
          * @var $oSubItem TCMSTableEditorMenuItem
@@ -210,16 +210,16 @@ class TCMSTableEditorMenuItem
         foreach ($this->aSubMenuItems as $oSubItem) {
             $aSubItems[] = $this->getViewVariables($oSubItem);
         }
-        
+
         $oViewRenderer->AddSourceObject('aSubItems', $aSubItems);
 
         return $oViewRenderer->Render('MTTableEditor/menuButtonWithDropdown.html.twig', null, false);
     }
-    
+
     private function getViewVariables(TCMSTableEditorMenuItem $item): array
     {
         $viewVariables = [];
-        
+
         $viewVariables['sTitle'] = $item->getTitle();
         $viewVariables['sItemKey'] = $item->sItemKey;
         $viewVariables['sCSSClass'] = $item->sCSSClass;
@@ -271,12 +271,12 @@ class TCMSTableEditorMenuItem
      * if no position is set it will be added to the last position.
      *
      * @param TCMSTableEditorMenuItem $oItem
-     * @param int|null                $iPos  - position to place the item in the array (starting with index 0)
+     * @param int|null $iPos - position to place the item in the array (starting with index 0)
      */
     public function addSubMenuItem($oItem, $iPos = null)
     {
         if (is_int($iPos) && count($this->aSubMenuItems) <= $iPos) {
-            $aNewSubMenuItems = array();
+            $aNewSubMenuItems = [];
             foreach ($this->aSubMenuItems as $key => $oStoredItem) {
                 if ($key == $iPos) {
                     $aNewSubMenuItems[] = $oItem;

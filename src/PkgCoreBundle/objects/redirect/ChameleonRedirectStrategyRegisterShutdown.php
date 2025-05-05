@@ -27,11 +27,12 @@ class ChameleonRedirectStrategyRegisterShutdown implements ChameleonRedirectStra
     /**
      * @param string $url
      * @param int $status
+     *
      * @return never-returns
      */
     public function redirect($url, $status)
     {
-        /**
+        /*
          * if we sent the header directly, then the users browser will start the redirect PARALLEL to the execution of the shutdown functions followed by session close
          * which MAY result in a session read after the redirect BEFORE the current call had a chance to write the session again.
          * we can avoid this by
@@ -51,6 +52,6 @@ class ChameleonRedirectStrategyRegisterShutdown implements ChameleonRedirectStra
                     }, $url, $status, $request);
             }, $url, $status, $this->requestStack->getCurrentRequest()
         );
-        exit();
+        exit;
     }
 }

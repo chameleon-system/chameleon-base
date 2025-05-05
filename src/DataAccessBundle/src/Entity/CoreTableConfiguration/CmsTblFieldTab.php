@@ -6,12 +6,11 @@ class CmsTblFieldTab
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTblConf|null - Belongs to table */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -64,7 +63,6 @@ class CmsTblFieldTab
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -77,7 +75,6 @@ class CmsTblFieldTab
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -92,7 +89,6 @@ class CmsTblFieldTab
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemname(): string
     {
@@ -106,7 +102,6 @@ class CmsTblFieldTab
         return $this;
     }
 
-
     // TCMSFieldText
     public function getDescription(): string
     {
@@ -119,6 +114,4 @@ class CmsTblFieldTab
 
         return $this;
     }
-
-
 }

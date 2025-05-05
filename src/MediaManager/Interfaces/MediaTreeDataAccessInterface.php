@@ -85,7 +85,7 @@ interface MediaTreeDataAccessInterface
      *
      * @param string $id
      * @param string $parentId
-     * @param int    $position
+     * @param int $position
      * @param string $languageId
      *
      * @return void

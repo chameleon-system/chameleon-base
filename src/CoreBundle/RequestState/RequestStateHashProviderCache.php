@@ -3,9 +3,9 @@
 namespace ChameleonSystem\CoreBundle\RequestState;
 
 use ChameleonSystem\CoreBundle\RequestState\Interfaces\RequestStateHashProviderInterface;
-use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class RequestStateHashProviderCache implements RequestStateHashProviderInterface
 {
@@ -22,10 +22,6 @@ class RequestStateHashProviderCache implements RequestStateHashProviderInterface
      */
     private $requestStack;
 
-    /**
-     * @param RequestStateHashProviderInterface $subject
-     * @param RequestStack                      $requestStack
-     */
     public function __construct(RequestStateHashProviderInterface $subject, RequestStack $requestStack)
     {
         $this->subject = $subject;
@@ -37,7 +33,7 @@ class RequestStateHashProviderCache implements RequestStateHashProviderInterface
      * after session start.
      * {@inheritdoc}
      */
-    public function getHash(Request $request = null)
+    public function getHash(?Request $request = null)
     {
         if (null !== $this->cache) {
             return $this->cache;
@@ -67,8 +63,6 @@ class RequestStateHashProviderCache implements RequestStateHashProviderInterface
     }
 
     /**
-     * @param Event $event
-     *
      * @return void
      */
     public function onStateDataChanged(Event $event)

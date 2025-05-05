@@ -13,7 +13,7 @@ use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 
 /**
  * fetches breadcrumb navi.
-/**/
+ * /**/
 class TCMSBreadcrumbNavi
 {
     /**
@@ -28,14 +28,14 @@ class TCMSBreadcrumbNavi
      *
      * @var string|null
      */
-    public $pageId = null;
+    public $pageId;
 
     /**
      * array of nodes 0=rootNode.
      *
      * @var array
      */
-    public $nodes = array();
+    public $nodes = [];
 
     /* ------------------------------------------------------------------------
      *
@@ -75,7 +75,7 @@ class TCMSBreadcrumbNavi
      */
     public function GetBreadcrumbNaviIds()
     {
-        $returnArray = array();
+        $returnArray = [];
 
         foreach (array_keys($this->nodes) as $nodeId) {
             $returnArray[] = $this->nodes[$nodeId]->id;
@@ -90,7 +90,7 @@ class TCMSBreadcrumbNavi
     public function LoadData($stopNodeArray)
     {
         if (!is_array($stopNodeArray)) {
-            $stopNodeArray = array($stopNodeArray);
+            $stopNodeArray = [$stopNodeArray];
         }
         // fetch start node in tree from the page info
         $pageObj = $this->getPageService()->getById($this->pageId);
@@ -99,10 +99,10 @@ class TCMSBreadcrumbNavi
 
         $done = false;
         $nodes = TCmsTree::GetNewInstance($pageTreeId);
-        $this->nodes = array();
+        $this->nodes = [];
 
         while (!$done && ($node = MySqlLegacySupport::getInstance()->fetch_assoc($nodes))) {
-            $done = (in_array($node['id'], $stopNodeArray));
+            $done = in_array($node['id'], $stopNodeArray);
             $nodeObj = $this->CreateNode($node);
             $this->nodes[] = $nodeObj;
             $nodes = TCmsTree::GetNewInstance($node['parent_id']);
@@ -132,6 +132,6 @@ class TCMSBreadcrumbNavi
      */
     private function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
     }
 }

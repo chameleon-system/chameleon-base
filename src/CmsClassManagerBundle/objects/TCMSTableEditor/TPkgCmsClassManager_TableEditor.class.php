@@ -18,7 +18,7 @@ class TPkgCmsClassManager_TableEditor extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      *
      * @return void
@@ -26,7 +26,7 @@ class TPkgCmsClassManager_TableEditor extends TCMSTableEditor
     protected function PostSaveHook($oFields, $oPostTable)
     {
         parent::PostSaveHook($oFields, $oPostTable);
-        $classManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_class_manager.manager');
+        $classManager = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_cms_class_manager.manager');
         $classManager->load($this->oTable->fieldNameOfEntryPoint);
         if ($this->oTablePreChangeData && $this->oTablePreChangeData->fieldNameOfEntryPoint != $this->oTable->fieldNameOfEntryPoint) {
             $classManager->recreateAutoclasses();
@@ -43,7 +43,7 @@ class TPkgCmsClassManager_TableEditor extends TCMSTableEditor
     protected function DeleteExecute()
     {
         /** @var ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer $classManager */
-        $classManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
+        $classManager = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_autoclasses.cache_warmer');
         $classManager->updateAllTables();
         parent::DeleteExecute();
     }

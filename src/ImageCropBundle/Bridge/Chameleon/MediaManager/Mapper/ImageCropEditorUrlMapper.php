@@ -11,15 +11,11 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\ImageCropBundle\Bridge\Chameleon\BackendModule\ImageCropEditorModule;
 use ChameleonSystem\MediaManager\DataModel\MediaItemDataModel;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 
-class ImageCropEditorUrlMapper extends AbstractViewMapper
+class ImageCropEditorUrlMapper extends \AbstractViewMapper
 {
     /**
      * @var UrlUtil
@@ -35,7 +31,7 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('mediaItem', MediaItemDataModel::class);
     }
@@ -44,9 +40,9 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
      * {@inheritdoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
          * @var MediaItemDataModel $mediaItem
@@ -63,22 +59,22 @@ class ImageCropEditorUrlMapper extends AbstractViewMapper
      */
     private function getCropEditorUrl($mediaItemId)
     {
-        $parameters = array(
+        $parameters = [
             'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
             '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
             ImageCropEditorModule::URL_PARAM_IMAGE_ID => $mediaItemId,
-        );
+        ];
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
     }
 
     private function getDeleteCropUrl(): string
     {
-        $parameters = array(
+        $parameters = [
             'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
             '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
-            'module_fnc' => array('contentmodule' => 'deleteCrop'),
-        );
+            'module_fnc' => ['contentmodule' => 'deleteCrop'],
+        ];
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
     }

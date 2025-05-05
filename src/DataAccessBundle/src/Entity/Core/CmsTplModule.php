@@ -11,7 +11,7 @@ class CmsTplModule
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldText
         /** @var string - Description */
@@ -45,19 +45,16 @@ class CmsTplModule
         private bool $isRestricted = false,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsUsergroup> - Allow for these groups */
-        private Collection $cmsUsergroupCollection = new ArrayCollection()
-        ,
+        private Collection $cmsUsergroupCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - Display in portal */
-        private Collection $cmsPortalCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Module name */
         private string $name = '',
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, CmsTblConf> - Connected tables */
-        private Collection $cmsTblConfCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTblConfCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Class name / service ID */
         private string $classname = ''
@@ -101,7 +98,6 @@ class CmsTplModule
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIconFontCssClass(): string
     {
@@ -114,7 +110,6 @@ class CmsTplModule
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getViewMapperConfig(): string
@@ -129,7 +124,6 @@ class CmsTplModule
         return $this;
     }
 
-
     // TCMSFieldText
     public function getMapperChain(): string
     {
@@ -142,7 +136,6 @@ class CmsTplModule
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getViewMapping(): string
@@ -157,7 +150,6 @@ class CmsTplModule
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRevisionManagementActive(): bool
     {
@@ -170,7 +162,6 @@ class CmsTplModule
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isIsCopyAllowed(): bool
@@ -185,7 +176,6 @@ class CmsTplModule
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowInTemplateEngine(): bool
     {
@@ -198,7 +188,6 @@ class CmsTplModule
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -213,7 +202,6 @@ class CmsTplModule
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsRestricted(): bool
     {
@@ -226,8 +214,6 @@ class CmsTplModule
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -261,8 +247,6 @@ class CmsTplModule
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselectCheckboxes
 
     /**
@@ -295,7 +279,6 @@ class CmsTplModule
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -308,8 +291,6 @@ class CmsTplModule
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -343,7 +324,6 @@ class CmsTplModule
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassname(): string
     {
@@ -356,6 +336,4 @@ class CmsTplModule
 
         return $this;
     }
-
-
 }

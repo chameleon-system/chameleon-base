@@ -11,7 +11,6 @@
 
 class TCMSCronjob_ClearAtomicLocks extends TdbCmsCronjobs
 {
-
     /**
      * @return void
      */

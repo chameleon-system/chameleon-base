@@ -19,14 +19,14 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
      *
      * @var TdbModuleFeedback
      */
-    protected $_oTableRow = null;
+    protected $_oTableRow;
 
     /**
      * all input errors get placed here.
      *
      * @var MTFeedbackErrorsCore
      */
-    protected $_oErrors = null;
+    protected $_oErrors;
 
     public function __construct()
     {
@@ -58,7 +58,7 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
 
     public function SetDefaultInputParameters()
     {
-        $this->data['aInput'] = array();
+        $this->data['aInput'] = [];
         // set defaults
         $this->data['aInput']['name'] = '';
         $this->data['aInput']['email'] = '';
@@ -72,7 +72,7 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('SendEMail');
+        $externalFunctions = ['SendEMail'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -183,7 +183,7 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
      */
     protected function GetRedirectToSuccessPageParameters()
     {
-        return array('success' => '1');
+        return ['success' => '1'];
     }
 
     /**
@@ -305,7 +305,7 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
      */
     public function _GetMailBody()
     {
-        $mailBody = "Kundenkontakt:\n".'Name:    '.$this->data['aInput']['name']."\n".'E-Mail:  '.$this->data['aInput']['email']."\n".'Betreff: '.$this->data['aInput']['subject']."\n"."\n"."Nachricht:\n".$this->data['aInput']['body'];
+        $mailBody = "Kundenkontakt:\n".'Name:    '.$this->data['aInput']['name']."\n".'E-Mail:  '.$this->data['aInput']['email']."\n".'Betreff: '.$this->data['aInput']['subject']."\n\nNachricht:\n".$this->data['aInput']['body'];
 
         return $mailBody;
     }
@@ -334,8 +334,8 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
         // load optional custm css from /chameleon/web_modules/ directory
         if (file_exists(PATH_USER_CMS_PUBLIC.'/web_modules/MTFeedbackCore/css/MTFeedbackCore.css')) {
             $aIncludes[] = '<link href="'.TGlobal::GetStaticURL(
-                    '/chameleon/web_modules/MTFeedbackCore/css/MTFeedbackCore.css'
-                ).'" rel="stylesheet" type="text/css" media="screen" />';
+                '/chameleon/web_modules/MTFeedbackCore/css/MTFeedbackCore.css'
+            ).'" rel="stylesheet" type="text/css" media="screen" />';
         }
 
         return $aIncludes;
@@ -351,7 +351,7 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -359,7 +359,7 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
      */
     private function getMailer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.mailer');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.mailer');
     }
 
     /**
@@ -367,7 +367,7 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 
     /**
@@ -375,6 +375,6 @@ class MTFeedbackCoreEndPoint extends TUserCustomModelBase
      */
     private function getTranslationService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }

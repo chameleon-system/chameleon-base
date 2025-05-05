@@ -20,7 +20,7 @@ class MapperCacheTriggerTest extends TestCase
 
         $aTrigger = $oTrigger->getTrigger();
 
-        $this->assertEquals(array(array('table' => 'table', 'id' => 'id')), $aTrigger);
+        $this->assertEquals([['table' => 'table', 'id' => 'id']], $aTrigger);
     }
 
     public function testGetTriggerBeforeSet()

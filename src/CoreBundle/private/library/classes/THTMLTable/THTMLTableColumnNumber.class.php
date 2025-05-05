@@ -11,9 +11,9 @@
 
 class THTMLTableColumnNumber extends THTMLTableColumn
 {
-    const SELF_FIELD_DEF = 'THTMLTableColumnNumber,THTMLTable,Core';
-    const FILTER_FROM = 'from';
-    const FILTER_TO = 'to';
+    public const SELF_FIELD_DEF = 'THTMLTableColumnNumber,THTMLTable,Core';
+    public const FILTER_FROM = 'from';
+    public const FILTER_TO = 'to';
 
     /**
      * number of decimals to show. if set to null it will format each number with the
@@ -21,7 +21,7 @@ class THTMLTableColumnNumber extends THTMLTableColumn
      *
      * @var int
      */
-    public $iNumberOfDecimals = null;
+    public $iNumberOfDecimals;
 
     /**
      * return sql restriction for the acting filter.
@@ -38,7 +38,7 @@ class THTMLTableColumnNumber extends THTMLTableColumn
         if (is_null($sSearchFilter)) {
             $sSearchFilter = $this->searchFilter;
         } elseif (!is_array($sSearchFilter)) {
-            $sSearchFilter = array(self::FILTER_FROM => $sSearchFilter, self::FILTER_TO => $sSearchFilter);
+            $sSearchFilter = [self::FILTER_FROM => $sSearchFilter, self::FILTER_TO => $sSearchFilter];
         }
         if (is_array($sSearchFilter)) {
             $sStartVal = '';
@@ -72,7 +72,7 @@ class THTMLTableColumnNumber extends THTMLTableColumn
     /**
      * method used to format the given value. overwrite this method for every column type you write.
      *
-     * @param string     $sValue
+     * @param string $sValue
      * @param TCMSRecord $oTableRow
      *
      * @return string

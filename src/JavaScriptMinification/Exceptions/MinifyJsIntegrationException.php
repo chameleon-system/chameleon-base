@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\JavaScriptMinification\Exceptions;
 
-use Exception;
-
-class MinifyJsIntegrationException extends Exception
+class MinifyJsIntegrationException extends \Exception
 {
 }

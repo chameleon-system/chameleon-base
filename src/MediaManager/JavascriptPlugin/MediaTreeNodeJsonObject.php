@@ -39,8 +39,8 @@ class MediaTreeNodeJsonObject
     /**
      * MediaTreeNodeJsonObject constructor.
      *
-     * @param string      $id
-     * @param string      $name
+     * @param string $id
+     * @param string $name
      * @param string|null $icon
      */
     public function __construct($id, $name, $icon = null)

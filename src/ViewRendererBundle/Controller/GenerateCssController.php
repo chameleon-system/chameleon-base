@@ -26,8 +26,7 @@ class GenerateCssController
     private $isCssCacheEnabled;
 
     /**
-     * @param TPkgViewRendererLessCompiler $lessCompiler
-     * @param bool                         $cacheLessFiles
+     * @param bool $cacheLessFiles
      */
     public function __construct(TPkgViewRendererLessCompiler $lessCompiler, $cacheLessFiles)
     {

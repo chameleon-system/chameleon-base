@@ -8,16 +8,14 @@ class PkgNewsletterModuleSignupTeaser
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldModuleInstance
         /** @var CmsTplModuleInstance|null - Login takes place via the following instance */
-        private ?CmsTplModuleInstance $configForSignupModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $configForSignupModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Heading */
         private string $name = '',
@@ -64,7 +62,6 @@ class PkgNewsletterModuleSignupTeaser
         return $this;
     }
 
-
     // TCMSFieldModuleInstance
     public function getConfigForSignupModuleInstance(): ?CmsTplModuleInstance
     {
@@ -77,7 +74,6 @@ class PkgNewsletterModuleSignupTeaser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -92,7 +88,6 @@ class PkgNewsletterModuleSignupTeaser
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getIntro(): string
     {
@@ -105,6 +100,4 @@ class PkgNewsletterModuleSignupTeaser
 
         return $this;
     }
-
-
 }

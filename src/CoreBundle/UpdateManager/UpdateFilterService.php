@@ -16,9 +16,9 @@ class UpdateFilterService implements UpdateFilterServiceInterface
     /**
      * @var array<string, string[]>
      */
-    private $excludeFolders = array(
-        'module' => array('dbbuilds'),
-    );
+    private $excludeFolders = [
+        'module' => ['dbbuilds'],
+    ];
 
     /**
      * {@inheritdoc}

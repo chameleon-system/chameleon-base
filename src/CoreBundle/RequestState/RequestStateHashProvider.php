@@ -29,9 +29,6 @@ class RequestStateHashProvider implements RequestStateHashProviderInterface
     private $hashCalculationLock;
 
     /**
-     * @param HashInterface                          $hashArray
-     * @param HashCalculationLockInterface           $hashCalculationLock
-     * @param RequestStack                           $requestStack
      * @param RequestStateElementProviderInterface[] $elementProviderList
      */
     public function __construct(
@@ -49,7 +46,7 @@ class RequestStateHashProvider implements RequestStateHashProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getHash(Request $request = null)
+    public function getHash(?Request $request = null)
     {
         if (null === $request) {
             $request = $this->requestStack->getCurrentRequest();

@@ -20,10 +20,6 @@ class TPkgMultiModuleMapper_Tabs extends AbstractViewMapper
      * $oRequirements->NeedsSourceObject("foo",'stdClass','default-value');
      * $oRequirements->NeedsSourceObject("bar");
      * $oRequirements->NeedsMappedValue("baz");
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
-     *
-     * @return void
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
@@ -47,15 +43,11 @@ class TPkgMultiModuleMapper_Tabs extends AbstractViewMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return void
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
-        $aTabHeaderList = array();
+        $aTabHeaderList = [];
         $oVisitor->SetMappedValue('sContent', $oVisitor->GetSourceObject('sContent'));
 
         /** @var array<string, TdbPkgMultiModuleSetItem>  $aSetItems */
@@ -78,14 +70,14 @@ class TPkgMultiModuleMapper_Tabs extends AbstractViewMapper
                 $sURL = '#';
             }
 
-            $aTabHeader = array(
+            $aTabHeader = [
                 'sTitle' => $oSetItem->fieldName,
                 'bIsActive' => $bActive,
                 'sURL' => $sURL,
                 'sAjaxURL' => $oSetItem->GetAjaxURLForContainingModule(false),
                 'sClass' => str_replace(' ', '', $oSetItem->fieldName),
                 'sSystemName' => $oSetItem->fieldSystemName,
-            );
+            ];
             $aTabHeaderList[] = $aTabHeader;
             $bActive = false;
         }

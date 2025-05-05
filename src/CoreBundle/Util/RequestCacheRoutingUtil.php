@@ -11,10 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Util;
 
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsTree;
-
 class RequestCacheRoutingUtil implements RoutingUtilInterface
 {
     /**
@@ -22,9 +18,6 @@ class RequestCacheRoutingUtil implements RoutingUtilInterface
      */
     private $routingUtil;
 
-    /**
-     * @param RoutingUtilInterface $routingUtil
-     */
     public function __construct(RoutingUtilInterface $routingUtil)
     {
         $this->routingUtil = $routingUtil;
@@ -33,7 +26,7 @@ class RequestCacheRoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkForTreeNode(TdbCmsTree $tree, TdbCmsLanguage $language = null)
+    public function getLinkForTreeNode(\TdbCmsTree $tree, ?\TdbCmsLanguage $language = null)
     {
         return $this->routingUtil->getLinkForTreeNode($tree, $language);
     }
@@ -49,14 +42,14 @@ class RequestCacheRoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getDomainRequirement(TdbCmsPortal $portal, TdbCmsLanguage $language, $secure)
+    public function getDomainRequirement(\TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
-        $cacheKey = $this->getCacheKey(array(
+        $cacheKey = $this->getCacheKey([
             $portal->id,
             $language->id,
             $secure,
-        ));
-        static $cache = array();
+        ]);
+        static $cache = [];
         if (isset($cache[$cacheKey])) {
             return $cache[$cacheKey];
         }
@@ -69,13 +62,13 @@ class RequestCacheRoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllPageRoutes(TdbCmsPortal $portal, TdbCmsLanguage $language)
+    public function getAllPageRoutes(\TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
-        $cacheKey = $this->getCacheKey(array(
+        $cacheKey = $this->getCacheKey([
             $portal->id,
             $language->id,
-        ));
-        static $cache = array();
+        ]);
+        static $cache = [];
         if (isset($cache[$cacheKey])) {
             return $cache[$cacheKey];
         }
@@ -86,8 +79,6 @@ class RequestCacheRoutingUtil implements RoutingUtilInterface
     }
 
     /**
-     * @param array $params
-     *
      * @return string
      */
     private function getCacheKey(array $params)
@@ -98,7 +89,7 @@ class RequestCacheRoutingUtil implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function normalizeRoutePath($path, TdbCmsPortal $portal)
+    public function normalizeRoutePath($path, \TdbCmsPortal $portal)
     {
         return $this->routingUtil->normalizeRoutePath($path, $portal);
     }

@@ -25,7 +25,7 @@ class TCMSTableEditorDocumentTree extends TCMSTableEditorTreeShared
         $oCmsDocumentList = TdbCmsDocumentList::GetList($query);
         /** @var $oCmsDocumentList TdbCmsDocumentList */
         while ($oCmsDocument = $oCmsDocumentList->Next()) {
-            /** @var $oCmsDocument TdbCmsDocument */
+            /* @var $oCmsDocument TdbCmsDocument */
             $oDocumentEditor->Init($sDocumentTableID, $oCmsDocument->id);
             $oDocumentEditor->Delete($oCmsDocument->id);
         }

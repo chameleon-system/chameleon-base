@@ -14,12 +14,10 @@ class TPkgShopServiceType_Giftcard extends TdbPkgShopServiceType
     /**
      * filter the user data. make sure you overwrite this method for each type to allow the parameter that you want to
      * let through.
-     *
-     * @param array &$aUserInput
      */
     public function FilterUserInput(array &$aUserInput): void
     {
-        $aPermittedData = array('cardtext');
+        $aPermittedData = ['cardtext'];
         $aKeys = array_keys($aUserInput);
         foreach ($aKeys as $sKey) {
             if (!in_array($sKey, $aPermittedData)) {

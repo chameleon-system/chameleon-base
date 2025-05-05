@@ -15,9 +15,9 @@ use ChameleonSystem\CoreBundle\UniversalUploader\Exception\InvalidParameterValue
 
 class UploaderParametersDataModel
 {
-    const PARAMETER_VALUE_MODE_MEDIA = 'media';
+    public const PARAMETER_VALUE_MODE_MEDIA = 'media';
 
-    const PARAMETER_VALUE_MODE_DOCUMENT = 'document';
+    public const PARAMETER_VALUE_MODE_DOCUMENT = 'document';
 
     /**
      * @var bool
@@ -113,9 +113,9 @@ class UploaderParametersDataModel
     /**
      * @param int $maxUploadHeight
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setMaxUploadHeight($maxUploadHeight)
     {
@@ -139,9 +139,9 @@ class UploaderParametersDataModel
     /**
      * @param int $maxUploadWidth
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setMaxUploadWidth($maxUploadWidth)
     {
@@ -165,13 +165,13 @@ class UploaderParametersDataModel
     /**
      * @param string $mode
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setMode($mode)
     {
-        if (false === in_array($mode, array(self::PARAMETER_VALUE_MODE_MEDIA, self::PARAMETER_VALUE_MODE_DOCUMENT))) {
+        if (false === in_array($mode, [self::PARAMETER_VALUE_MODE_MEDIA, self::PARAMETER_VALUE_MODE_DOCUMENT])) {
             throw new InvalidParameterValueException('Invalid mode, see constants in UploaderParametersDataModel.');
         }
         $this->mode = $mode;
@@ -188,9 +188,9 @@ class UploaderParametersDataModel
     /**
      * @param string $queueCompleteCallback
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setQueueCompleteCallback($queueCompleteCallback)
     {
@@ -212,9 +212,9 @@ class UploaderParametersDataModel
     /**
      * @param string|null $recordID
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setRecordID($recordID)
     {
@@ -235,9 +235,9 @@ class UploaderParametersDataModel
     /**
      * @param array|null $allowedFileTypes
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setAllowedFileTypes($allowedFileTypes)
     {
@@ -258,9 +258,9 @@ class UploaderParametersDataModel
     /**
      * @param string $uploadDescription
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setUploadDescription($uploadDescription)
     {
@@ -281,9 +281,9 @@ class UploaderParametersDataModel
     /**
      * @param string $uploadName
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setUploadName($uploadName)
     {
@@ -304,9 +304,9 @@ class UploaderParametersDataModel
     /**
      * @param string|null $treeNodeID
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setTreeNodeID($treeNodeID)
     {
@@ -363,9 +363,9 @@ class UploaderParametersDataModel
     /**
      * @param string|null $uploadSuccessCallback
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function setUploadSuccessCallback($uploadSuccessCallback)
     {
@@ -377,11 +377,12 @@ class UploaderParametersDataModel
 
     /**
      * @param string[] $excludeParameters
+     *
      * @return array<string, int|string>
      */
-    public function getAsArray($excludeParameters = array())
+    public function getAsArray($excludeParameters = [])
     {
-        $parameterArray = array();
+        $parameterArray = [];
 
         $parameterArray['sAllowedFileTypes'] = implode(',', $this->getAllowedFileTypes());
         $parameterArray['recordID'] = $this->getRecordID();
@@ -412,7 +413,7 @@ class UploaderParametersDataModel
             $parameterArray['showMetaFields'] = '0';
         }
 
-        $parameterArray = array_filter($parameterArray, function ($value) {return null !== $value; }); //remove null-values
+        $parameterArray = array_filter($parameterArray, function ($value) {return null !== $value; }); // remove null-values
 
         foreach ($excludeParameters as $excludedParameter) {
             if (isset($parameterArray[$excludedParameter])) {
@@ -426,9 +427,9 @@ class UploaderParametersDataModel
     /**
      * Check the inner validity of all the parameters currently set and throw exception if invalid.
      *
-     * @throws InvalidParameterValueException
-     *
      * @return void
+     *
+     * @throws InvalidParameterValueException
      */
     public function validate()
     {

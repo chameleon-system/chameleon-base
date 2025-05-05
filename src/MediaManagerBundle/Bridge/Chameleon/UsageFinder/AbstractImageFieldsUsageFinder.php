@@ -18,10 +18,6 @@ use ChameleonSystem\MediaManager\Exception\UsageFinderException;
 use ChameleonSystem\MediaManager\Interfaces\MediaItemUsageFinderInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use TCMSRecord;
-use TCMSTableToClass;
-use TdbCmsFieldConf;
-use TdbCmsTblConf;
 
 abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInterface
 {
@@ -35,10 +31,6 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
      */
     protected $urlUtil;
 
-    /**
-     * @param Connection $databaseConnection
-     * @param UrlUtil    $urlUtil
-     */
     public function __construct(Connection $databaseConnection, UrlUtil $urlUtil)
     {
         $this->databaseConnection = $databaseConnection;
@@ -50,7 +42,7 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
      */
     public function findUsages(MediaItemDataModel $mediaItem)
     {
-        $usages = array();
+        $usages = [];
 
         try {
             $fields = $this->getFields();
@@ -73,11 +65,11 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
                 continue;
             }
 
-            $table = TdbCmsTblConf::GetNewInstance();
+            $table = \TdbCmsTblConf::GetNewInstance();
             if (false === $table->Load($row['tableId'])) {
                 throw new UsageFinderException(sprintf('Table with ID %s could not be found.', $row['tableId']));
             }
-            $field = TdbCmsFieldConf::GetNewInstance();
+            $field = \TdbCmsFieldConf::GetNewInstance();
             if (false === $field->Load($row['fieldId'])) {
                 throw new UsageFinderException(sprintf('Field config with ID %s could not be found.', $row['fieldId']));
             }
@@ -103,9 +95,9 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
      *  array('tableId' => '', 'tableName' => '', 'fieldId' => '', 'fieldName' => '', 'fieldTypeConstantName' => '')
      * ).
      *
-     * @throws DBALException
-     *
      * @return array
+     *
+     * @throws DBALException
      */
     protected function getFields()
     {
@@ -121,8 +113,8 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
 
         $stm = $this->databaseConnection->executeQuery(
             $query,
-            array('fieldTypes' => $fieldTypes),
-            array('fieldTypes' => Connection::PARAM_STR_ARRAY)
+            ['fieldTypes' => $fieldTypes],
+            ['fieldTypes' => Connection::PARAM_STR_ARRAY]
         );
 
         return $stm->fetchAllAssociative();
@@ -148,9 +140,8 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
     /**
      * Returns records containing usages as rows from the database.
      *
-     * @param string             $fieldTypeConstantName - constant name as defined in table `cms_field_type`, field `constname`
-     * @param array              $fieldRow              - an array containing information about the field in the form [['tableId' => '', 'tableName' => '', 'fieldId' => '', 'fieldName' => '', 'fieldTypeConstantName' => '']]
-     * @param MediaItemDataModel $mediaItem
+     * @param string $fieldTypeConstantName - constant name as defined in table `cms_field_type`, field `constname`
+     * @param array $fieldRow - an array containing information about the field in the form [['tableId' => '', 'tableName' => '', 'fieldId' => '', 'fieldName' => '', 'fieldTypeConstantName' => '']]
      *
      * @return array - rows from the database
      *
@@ -162,12 +153,12 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
      * @param string $tableName
      * @param string $id
      *
-     * @return TCMSRecord|null
+     * @return \TCMSRecord|null
      */
     private function getTableObject($tableName, $id)
     {
-        $autoClassName = TCMSTableToClass::GetClassName('Tdb', $tableName);
-        $tableObject = call_user_func(array($autoClassName, 'GetNewInstance'));
+        $autoClassName = \TCMSTableToClass::GetClassName('Tdb', $tableName);
+        $tableObject = call_user_func([$autoClassName, 'GetNewInstance']);
         if (false === $tableObject->Load($id)) {
             return null;
         }
@@ -176,18 +167,13 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
     }
 
     /**
-     * @param MediaItemDataModel $mediaItem
-     * @param TCMSRecord         $tableObject
-     * @param TdbCmsTblConf      $table
-     * @param TdbCmsFieldConf    $field
-     *
      * @return MediaItemUsageDataModel
      */
     private function createUsageDataModel(
         MediaItemDataModel $mediaItem,
-        TCMSRecord $tableObject,
-        TdbCmsTblConf $table,
-        TdbCmsFieldConf $field
+        \TCMSRecord $tableObject,
+        \TdbCmsTblConf $table,
+        \TdbCmsFieldConf $field
     ) {
         $usage = new MediaItemUsageDataModel($mediaItem->getId(), $table->fieldName, $tableObject->id);
         $usage->setTargetFieldName($field->fieldName);
@@ -203,9 +189,9 @@ abstract class AbstractImageFieldsUsageFinder implements MediaItemUsageFinderInt
         $usage->setUrl(
             URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($urlParams, '?', '&')
         );
-        $cropFieldName = TCMSTableToClass::PREFIX_PROPERTY.TCMSTableToClass::ConvertToClassString(
-                $field->fieldName
-            ).'ImageCropId';
+        $cropFieldName = \TCMSTableToClass::PREFIX_PROPERTY.\TCMSTableToClass::ConvertToClassString(
+            $field->fieldName
+        ).'ImageCropId';
         if (property_exists($tableObject, $cropFieldName)) {
             $usage->setCropId($tableObject->$cropFieldName);
         }

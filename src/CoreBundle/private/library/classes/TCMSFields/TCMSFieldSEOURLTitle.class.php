@@ -13,7 +13,7 @@ use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
 /**
  * varchar field with javascript to set the navigation url.
-/**/
+ * /**/
 class TCMSFieldSEOURLTitle extends TCMSFieldVarchar
 {
     public function GetHTML()
@@ -40,7 +40,7 @@ class TCMSFieldSEOURLTitle extends TCMSFieldVarchar
         function GetSEOURLTitle(value) {
           if(value == '') {
             var title = $('#".TGlobal::OutJS($sourceFieldName)."').val();
-            GetAjaxCallTransparent('".$this->GenerateAjaxURL(array('_fnc' => 'GetFilteredSEOURLTitle', '_fieldName' => $this->name))."&title=' + encodeURIComponent(title), GetSEOURLTitleFinal);
+            GetAjaxCallTransparent('".$this->GenerateAjaxURL(['_fnc' => 'GetFilteredSEOURLTitle', '_fieldName' => $this->name])."&title=' + encodeURIComponent(title), GetSEOURLTitleFinal);
           }
         }
 
@@ -84,8 +84,6 @@ class TCMSFieldSEOURLTitle extends TCMSFieldVarchar
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
-     *
-     * @return mixed
      */
     public function ConvertPostDataToSQL()
     {
@@ -122,6 +120,6 @@ class TCMSFieldSEOURLTitle extends TCMSFieldVarchar
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }

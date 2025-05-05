@@ -18,8 +18,6 @@ class MapperRequirementsRestrictedProxy implements IMapperRequirementsRestricted
 
     /**
      * notice that we pass by reference. we WANT the modification cause by this class to affect the object outside of this class.
-     *
-     * @param IMapperRequirements $oRequirements
      */
     public function __construct(IMapperRequirements $oRequirements)
     {

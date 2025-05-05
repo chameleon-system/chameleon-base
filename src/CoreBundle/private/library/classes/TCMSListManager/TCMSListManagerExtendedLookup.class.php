@@ -11,7 +11,7 @@
 
 /**
  * uses the TFullGroupTable to manage the list.
-/**/
+ * /**/
 class TCMSListManagerExtendedLookup extends TCMSListManagerFullGroupTable
 {
     public function _AddFunctionColumn()
@@ -30,7 +30,7 @@ class TCMSListManagerExtendedLookup extends TCMSListManagerFullGroupTable
         $oGlobal = TGlobal::instance();
         if ($oGlobal->UserDataExists('fieldName')) {
             $oCmsFieldConf = TdbCmsFieldConf::GetNewInstance();
-            $oCmsFieldConf->LoadFromFields(array('name' => $oGlobal->GetUserData('fieldName'), 'cms_tbl_conf_id' => $oGlobal->GetUserData('sourceTblConfId')));
+            $oCmsFieldConf->LoadFromFields(['name' => $oGlobal->GetUserData('fieldName'), 'cms_tbl_conf_id' => $oGlobal->GetUserData('sourceTblConfId')]);
 
             $oCmsFieldType = $oCmsFieldConf->GetFieldCmsFieldType();
             if ('CMSFIELD_EXTENDEDMULTITABLELIST' == $oCmsFieldType->fieldConstname) {

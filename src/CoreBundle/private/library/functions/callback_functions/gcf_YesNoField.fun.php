@@ -12,18 +12,18 @@
 /**
  * converts boolean 0/1 field values to human readable form yes/no.
  *
- * @param string $field     - the field value
- * @param array  $row       - the complete record
+ * @param string $field - the field value
+ * @param array $row - the complete record
  * @param string $fieldName
  *
  * @return string
  */
 function gcf_YesNoField($field, $row, $fieldName)
 {
-    $result = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.no'));
+    $result = TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.no'));
 
     if ('1' == $field) {
-        $result = TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.yes'));
+        $result = TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.yes'));
     }
 
     return $result;

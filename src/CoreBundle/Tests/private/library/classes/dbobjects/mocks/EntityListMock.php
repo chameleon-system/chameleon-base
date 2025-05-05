@@ -1,13 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace mocks;
 
 use ChameleonSystem\core\DatabaseAccessLayer\EntityListInterface;
-use function count;
 
 class EntityListMock implements EntityListInterface
 {
-
     public array $items;
     public int $pointer = 0;
 
@@ -18,12 +18,12 @@ class EntityListMock implements EntityListInterface
 
     public function next(): void
     {
-        $this->pointer++;
+        ++$this->pointer;
     }
 
     public function valid(): bool
     {
-        return $this->pointer < count($this->items);
+        return $this->pointer < \count($this->items);
     }
 
     public function rewind(): void
@@ -33,7 +33,7 @@ class EntityListMock implements EntityListInterface
 
     public function count(): int
     {
-        return count($this->items);
+        return \count($this->items);
     }
 
     public function getCurrentPosition(): int
@@ -43,7 +43,7 @@ class EntityListMock implements EntityListInterface
 
     public function end(): void
     {
-        $this->pointer = count($this->items) - 1;
+        $this->pointer = \count($this->items) - 1;
     }
 
     public function setQuery(string $query): void
@@ -53,12 +53,12 @@ class EntityListMock implements EntityListInterface
 
     public function previous(): void
     {
-        $this->pointer--;
+        --$this->pointer;
     }
 
     public function estimateCount(): int
     {
-        return count($this->items);
+        return \count($this->items);
     }
 
     public function setPageSize(int $pageSize): self
@@ -71,7 +71,7 @@ class EntityListMock implements EntityListInterface
         // Does nothing
     }
 
-    public function setMaxAllowedResults(int $maxNumberOfResults):void
+    public function setMaxAllowedResults(int $maxNumberOfResults): void
     {
         // Does nothing
     }

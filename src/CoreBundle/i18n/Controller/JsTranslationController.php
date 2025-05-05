@@ -28,10 +28,6 @@ class JsTranslationController
      */
     private $activeUserPermission;
 
-    /**
-     * @param TranslationDomainExportInterface $exporter
-     * @param ActiveCmsUserPermissionInterface $activeUserPermission
-     */
     public function __construct(
         TranslationDomainExportInterface $exporter,
         ActiveCmsUserPermissionInterface $activeUserPermission

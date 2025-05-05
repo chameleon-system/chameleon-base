@@ -19,7 +19,7 @@ class TCMSSpellcheck
      *
      * @var TdbCmsLanguage
      */
-    protected $oLanguage = null;
+    protected $oLanguage;
 
     /**
      * return instance of spellchecker.
@@ -57,7 +57,7 @@ class TCMSSpellcheck
      */
     public function SuggestCorrection($sString, $sCorrectionSelectCallback = null)
     {
-        $aResult = array('string' => '', 'corrections' => array());
+        $aResult = ['string' => '', 'corrections' => []];
 
         $sString = strip_tags($sString);
         $aErrors = $this->GetMisspelled($sString);
@@ -72,14 +72,14 @@ class TCMSSpellcheck
     }
 
     /**
-     * @param array  $aWords
+     * @param array $aWords
      * @param callable(string[]): string $sCorrectionSelectCallback - callback to improve suggestion (must take a word as input). you can also use: array($this,'somemethod')
      *
      * @return array
      */
     protected function Correct($aWords, $sCorrectionSelectCallback = '')
     {
-        $aCorrections = array();
+        $aCorrections = [];
         $sList = implode(' ', $aWords);
         $aTmp = $this->RunASpell($sList, '-a');
         $iWordPointer = 0;
@@ -123,27 +123,27 @@ class TCMSSpellcheck
 
     protected function RunASpell($sInput, $sArgs)
     {
-        $aStreams = array(0 => array('pipe', 'r'), // stdin
-            1 => array('pipe', 'w'), // stdout
-            2 => array('pipe', 'w'), // stderr
-        );
+        $aStreams = [0 => ['pipe', 'r'], // stdin
+            1 => ['pipe', 'w'], // stdout
+            2 => ['pipe', 'w'], // stderr
+        ];
         $out = '';
         $err = '';
 
         $pipes = null;
         $process = proc_open('aspell -l '.TTools::GetActiveLanguageIsoName().' --ignore-case --encoding=utf-8 --sug-mode=bad-spellers '.escapeshellarg($sArgs), $aStreams, $pipes);
         if (is_resource($process)) {
-            //write to stdin
+            // write to stdin
             fwrite($pipes[0], $sInput);
             fclose($pipes[0]);
 
-            //read stdout
+            // read stdout
             while (!feof($pipes[1])) {
                 $out .= fread($pipes[1], 8192);
             }
             fclose($pipes[1]);
 
-            //read stderr
+            // read stderr
             while (!feof($pipes[2])) {
                 $err .= fread($pipes[2], 8192);
             }
@@ -155,11 +155,11 @@ class TCMSSpellcheck
         if (!empty($err)) {
             $this->getLogger()->warning(sprintf('aspell returned an error: %s', $err));
 
-            return array();
+            return [];
         }
 
         $aLines = explode("\n", $out);
-        $aFinal = array();
+        $aFinal = [];
         foreach ($aLines as $sLine) {
             $sLine = trim($sLine);
             if (!empty($sLine)) {
@@ -175,11 +175,11 @@ class TCMSSpellcheck
      */
     private static function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     private function getLogger(): LoggerInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
     }
 }

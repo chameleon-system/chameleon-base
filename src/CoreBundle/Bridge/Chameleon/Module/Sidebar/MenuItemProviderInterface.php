@@ -18,10 +18,6 @@ interface MenuItemProviderInterface
 {
     /**
      * Returns a new menu item based on the passed menu item database object.
-     *
-     * @param \TdbCmsMenuItem $menuItem
-     *
-     * @return MenuItem|null
      */
     public function createMenuItem(\TdbCmsMenuItem $menuItem): ?MenuItem;
 }

@@ -28,7 +28,7 @@ class LoginTokenServiceTest extends TestCase
         $this->timeProvider = $this->createMock(TimeProviderInterface::class);
         $this->timeProvider
             ->method('getUnixTimestamp')
-            ->willReturnCallback(function() {
+            ->willReturnCallback(function () {
                 return $this->currentTime;
             });
     }
@@ -67,7 +67,7 @@ class LoginTokenServiceTest extends TestCase
         $this->logger
             ->expects($this->once())
             ->method('error')
-            ->with($this->callback(function($message) {
+            ->with($this->callback(function ($message) {
                 return str_contains($message, 'Refusing to encode or decode tokens with default secret');
             }));
 
@@ -88,7 +88,7 @@ class LoginTokenServiceTest extends TestCase
 
     private function service(string $secret): LoginTokenService
     {
-        return new LoginTokenService (
+        return new LoginTokenService(
             $this->timeProvider,
             $this->logger,
             $secret,
@@ -100,5 +100,4 @@ class LoginTokenServiceTest extends TestCase
     {
         $this->currentTime = (new \DateTime($time))->getTimestamp();
     }
-
 }

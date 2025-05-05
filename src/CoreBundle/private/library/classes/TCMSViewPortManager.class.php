@@ -20,18 +20,18 @@ class TCMSViewPortManager
     private $requestStack;
 
     /**
-     * @param RequestStack|null             $requestStack    can be null to avoid a BC break
+     * @param RequestStack|null $requestStack can be null to avoid a BC break
      * @param InputFilterUtilInterface|null $inputFilterUtil can be null to avoid a BC break
      */
-    public function __construct(RequestStack $requestStack = null, InputFilterUtilInterface $inputFilterUtil = null)
+    public function __construct(?RequestStack $requestStack = null, ?InputFilterUtilInterface $inputFilterUtil = null)
     {
         if (null === $requestStack) {
-            $this->requestStack = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack');
+            $this->requestStack = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack');
         } else {
             $this->requestStack = $requestStack;
         }
         if (null === $inputFilterUtil) {
-            $this->inputFilterUtil = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+            $this->inputFilterUtil = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
         } else {
             $this->inputFilterUtil = $inputFilterUtil;
         }

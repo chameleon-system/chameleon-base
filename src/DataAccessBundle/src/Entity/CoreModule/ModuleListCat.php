@@ -8,12 +8,11 @@ class ModuleListCat
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsTplModuleInstance|null - Module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Title */
         private string $name = '',
@@ -60,7 +59,6 @@ class ModuleListCat
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -74,7 +72,6 @@ class ModuleListCat
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getSortOrder(): int
     {
@@ -87,6 +84,4 @@ class ModuleListCat
 
         return $this;
     }
-
-
 }

@@ -20,6 +20,7 @@ class DatabaseAccessLayerCmsMedia extends AbstractDatabaseAccessLayer
 
     /**
      * @param string $mediaId
+     *
      * @return \TdbCmsMedia
      */
     public function loadMediaFromId($mediaId)

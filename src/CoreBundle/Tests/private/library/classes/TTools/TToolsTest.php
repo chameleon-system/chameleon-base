@@ -11,11 +11,11 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 class TToolsTest extends TestCase
 {
@@ -32,13 +32,14 @@ class TToolsTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider getIsValidEMailData
      *
-     * @param string    $emailAddress
+     * @param string $emailAddress
      * @param Countable $expectedValidatorResult
-     * @param bool      $expectedResult
+     * @param bool $expectedResult
      */
-    public function it_should_check_if_email_addresses_are_valid($emailAddress, $expectedValidatorResult, $expectedResult)
+    public function itShouldCheckIfEmailAddressesAreValid($emailAddress, $expectedValidatorResult, $expectedResult)
     {
         $this->givenAValidator($emailAddress, $expectedValidatorResult);
         $this->whenIsValidEMailIsCalled($emailAddress);
@@ -46,17 +47,17 @@ class TToolsTest extends TestCase
     }
 
     /**
-     * @param string    $emailAddress
+     * @param string $emailAddress
      * @param Countable $expectedValidatorResult
      */
     private function givenAValidator($emailAddress, $expectedValidatorResult)
     {
         $container = $this->prophesize(ContainerInterface::class);
         $validator = $this->prophesize(ValidatorInterface::class);
-        $validator->validate($emailAddress, array(
+        $validator->validate($emailAddress, [
             new Email(),
             new NotBlank(),
-        ))->willReturn($expectedValidatorResult);
+        ])->willReturn($expectedValidatorResult);
         $container->get('validator')->willReturn($validator->reveal());
         ServiceLocator::setContainer($container->reveal());
     }
@@ -82,60 +83,61 @@ class TToolsTest extends TestCase
      */
     public function getIsValidEMailData()
     {
-        return array(
-            array(
+        return [
+            [
                 'test@example.com',
-                new ArrayObject(array()),
+                new ArrayObject([]),
                 true,
-            ),
-            array(
+            ],
+            [
                 'test@exampleä.com',
-                new ArrayObject(array()),
+                new ArrayObject([]),
                 true,
-            ),
-            array(
+            ],
+            [
                 'testä@example.com',
-                new ArrayObject(array()),
+                new ArrayObject([]),
                 false,
-            ),
-            array(
+            ],
+            [
                 'test@example.com,test2@example.com',
-                new ArrayObject(array()),
+                new ArrayObject([]),
                 false,
-            ),
-            array(
+            ],
+            [
                 'testwithescaped\@character@example.com',
-                new ArrayObject(array()),
+                new ArrayObject([]),
                 true,
-            ),
-            array(
+            ],
+            [
                 'space test@example.com',
-                new ArrayObject(array()),
+                new ArrayObject([]),
                 false,
-            ),
-            array(
+            ],
+            [
                 'space\ test@example.com',
-                new ArrayObject(array()),
+                new ArrayObject([]),
                 false,
-            ),
-            array(
+            ],
+            [
                 'spacetest@ex ample.com',
-                new ArrayObject(array()),
+                new ArrayObject([]),
                 false,
-            ),
-            array(
+            ],
+            [
                 't<>e<st>@example.com',
-                new ArrayObject(array()),
+                new ArrayObject([]),
                 false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
      * @test
+     *
      * @dataProvider sanitize_filenameDataProvider
      */
-    public function it_should_sanitize_filenames($filenameToSanitize, $forceExtension, $expectedSanitizedFilename)
+    public function itShouldSanitizeFilenames($filenameToSanitize, $forceExtension, $expectedSanitizedFilename)
     {
         $this->whenSanitize_filenameIsCalled($filenameToSanitize, $forceExtension);
         $this->thenItShouldReturnTheExpectedSanitizedFilename($expectedSanitizedFilename, $filenameToSanitize);
@@ -153,41 +155,41 @@ class TToolsTest extends TestCase
 
     public function sanitize_filenameDataProvider()
     {
-        return array(
-            array('', null, 'none'),
-            array('foo', null, 'foo'),
-            array('foo.bar', null, 'foo.bar'),
-            array('foé.bar', null, 'fo_.bar'),
-            array('foé bár.baz', null, 'fo__b_r.baz'),
-            array('foo🄬 .bar', null, 'foo__.bar'),
-            array('föö', null, 'f__'),
-            array('foo   ', null, 'foo'),
-            array(' foo  ', null, 'foo'),
-            array('  foo  ', null, 'foo'),
-            array('  .  .  foo . ', null, 'foo'),
-            array('foo-bar', null, 'foo-bar'),
-            array('foo\/§%&bar', null, 'foo_____bar'),
-            array('http://foo', null, 'foo'),
-            array('xxx://foo', null, 'foo'),
-            array(' xxx://foo', null, 'foo'),
-            array('/////', null, '_____'),
-            array('..foo', null, 'foo'),
-            array('../foo', null, '_foo'),
-            array('foo..', null, 'foo'),
-            array('foo/..', null, 'foo_'),
-            array('...', null, 'none'),
-            array('foo()', null, 'foo__'),
+        return [
+            ['', null, 'none'],
+            ['foo', null, 'foo'],
+            ['foo.bar', null, 'foo.bar'],
+            ['foé.bar', null, 'fo_.bar'],
+            ['foé bár.baz', null, 'fo__b_r.baz'],
+            ['foo🄬 .bar', null, 'foo__.bar'],
+            ['föö', null, 'f__'],
+            ['foo   ', null, 'foo'],
+            [' foo  ', null, 'foo'],
+            ['  foo  ', null, 'foo'],
+            ['  .  .  foo . ', null, 'foo'],
+            ['foo-bar', null, 'foo-bar'],
+            ['foo\/§%&bar', null, 'foo_____bar'],
+            ['http://foo', null, 'foo'],
+            ['xxx://foo', null, 'foo'],
+            [' xxx://foo', null, 'foo'],
+            ['/////', null, '_____'],
+            ['..foo', null, 'foo'],
+            ['../foo', null, '_foo'],
+            ['foo..', null, 'foo'],
+            ['foo/..', null, 'foo_'],
+            ['...', null, 'none'],
+            ['foo()', null, 'foo__'],
 
-            array('foo', 'bar', 'foo.bar'),
-            array('foo.', 'bar', 'foo.bar'),
-            array('foo..', 'bar', 'foo.bar'),
-            array('foo.bar', 'bar', 'foo.bar'),
-            array('foo.baz', 'bar', 'foo.bar'),
-            array('foé.baz', 'bar', 'fo_.bar'),
-            array('foo...baz', 'bar', 'foo__.bar'),
-            array(' ', 'bar', 'none.bar'),
-            array('"%§&&§"', 'bar', '_______.bar'),
-            array(' ../such/directory/very/path', 'bar', '_such_directory_very_path.bar'),
-        );
+            ['foo', 'bar', 'foo.bar'],
+            ['foo.', 'bar', 'foo.bar'],
+            ['foo..', 'bar', 'foo.bar'],
+            ['foo.bar', 'bar', 'foo.bar'],
+            ['foo.baz', 'bar', 'foo.bar'],
+            ['foé.baz', 'bar', 'fo_.bar'],
+            ['foo...baz', 'bar', 'foo__.bar'],
+            [' ', 'bar', 'none.bar'],
+            ['"%§&&§"', 'bar', '_______.bar'],
+            [' ../such/directory/very/path', 'bar', '_such_directory_very_path.bar'],
+        ];
     }
 }

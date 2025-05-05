@@ -1,6 +1,6 @@
 <?php
 
 $layoutTemplate = 'frame';
-$moduleList = array('contentmodule' => array('model' => 'CMSModuleImageManager', 'view' => 'selectimage'));
+$moduleList = ['contentmodule' => ['model' => 'CMSModuleImageManager', 'view' => 'selectimage']];
 
 addDefaultPageTitle($moduleList);

@@ -155,8 +155,7 @@ class TDataExtranetUserAddress extends TDataExtranetUserAddressAutoParent
     {
         $bContainsData = false;
 
-        if (false === $this->sqlData)
-        {
+        if (false === $this->sqlData) {
             return false;
         }
 

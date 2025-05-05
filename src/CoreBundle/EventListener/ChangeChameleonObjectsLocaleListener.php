@@ -29,10 +29,6 @@ class ChangeChameleonObjectsLocaleListener
      */
     private $languageService;
 
-    /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param LanguageServiceInterface     $languageService
-     */
     public function __construct(PortalDomainServiceInterface $portalDomainService, LanguageServiceInterface $languageService)
     {
         $this->portalDomainService = $portalDomainService;
@@ -40,8 +36,6 @@ class ChangeChameleonObjectsLocaleListener
     }
 
     /**
-     * @param LocaleChangedEvent $event
-     *
      * @return void
      */
     public function onLocaleChangedEvent(LocaleChangedEvent $event)

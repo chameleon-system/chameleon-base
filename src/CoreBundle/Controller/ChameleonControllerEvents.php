@@ -13,5 +13,5 @@ namespace ChameleonSystem\CoreBundle\Controller;
 
 final class ChameleonControllerEvents
 {
-    const INVOKE = 'chameleon.controller.invoke';
+    public const INVOKE = 'chameleon.controller.invoke';
 }

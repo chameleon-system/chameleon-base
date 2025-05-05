@@ -1,4 +1,4 @@
 <?php
 
 $layoutTemplate = 'JSON';
-$moduleList = array('module' => array('model' => 'CMSModuleImageManager', 'view' => 'standard'));
+$moduleList = ['module' => ['model' => 'CMSModuleImageManager', 'view' => 'standard']];

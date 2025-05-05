@@ -16,13 +16,10 @@ class TMapper_ViewPortMeta extends AbstractViewMapper
      */
     private $viewPortManager;
 
-    /**
-     * @param TCMSViewPortManager $viewPortManager
-     */
-    public function __construct(TCMSViewPortManager $viewPortManager = null)
+    public function __construct(?TCMSViewPortManager $viewPortManager = null)
     {
         if (null === $viewPortManager) {
-            $this->viewPortManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.view_port_manager');
+            $this->viewPortManager = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.view_port_manager');
         } else {
             $this->viewPortManager = $viewPortManager;
         }

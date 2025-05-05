@@ -19,8 +19,8 @@ use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
-use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
+use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use esono\pkgCmsCache\CacheInterface;
 
 /**
@@ -935,7 +935,9 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
     /**
      * returns the E-Mail encoded so that it can not be harvested by a spambot.
+     *
      * @deprecated
+     *
      * @param string $sFieldName - field name
      * @param string $sDisplayText - link text to show instead of email address
      *

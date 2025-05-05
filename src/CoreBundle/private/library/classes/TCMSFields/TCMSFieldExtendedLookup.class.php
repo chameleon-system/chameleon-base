@@ -66,7 +66,7 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         if ($this->bShowSwitchToRecord && $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $tableName)) {
             $sHTML .= TCMSRender::DrawButton(
-                \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.switch_to'),
+                ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.switch_to'),
                 $this->getSelectedEntryLink($this->data),
                 'far fa-edit',
                 'lookup-button',
@@ -135,10 +135,10 @@ class TCMSFieldExtendedLookup extends TCMSFieldLookup
 
         $sHTML = '<div class="row button-element mt-1">';
         $sHTML .= '<div class="button-item col-auto">';
-        $sHTML .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), 'far fa-check-circle', 'float-left');
+        $sHTML .= TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.select_item'), 'javascript:'.$this->_GetOpenWindowJS($oCmsTblConf), 'far fa-check-circle', 'float-left');
         $sHTML .= '</div>';
         $sHTML .= '<div class="button-item col-auto">';
-        $sHTML .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected'))."')", 'far fa-times-circle', '');
+        $sHTML .= TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.action.reset'), "javascript:resetExtendedListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected'))."')", 'far fa-times-circle', '');
         $sHTML .= '</div>';
         $sHTML .= '</div>';
 

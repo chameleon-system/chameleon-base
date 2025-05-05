@@ -24,8 +24,6 @@ interface ImageCropDataAccessInterface
     /**
      * Insert a crop definition.
      *
-     * @param ImageCropDataModel $imageCrop
-     *
      * @return string - the inserted id
      *
      * @throws ImageCropDataAccessException
@@ -35,8 +33,6 @@ interface ImageCropDataAccessInterface
     /**
      * Update a crop definition.
      *
-     * @param ImageCropDataModel $imageCrop
-     *
      * @return void
      *
      * @throws ImageCropDataAccessException
@@ -45,9 +41,6 @@ interface ImageCropDataAccessInterface
 
     /**
      * Get the crop definition for an image and a preset.
-     *
-     * @param CmsMediaDataModel        $cmsMedia
-     * @param ImageCropPresetDataModel $preset
      *
      * @return ImageCropDataModel|null
      */
@@ -66,8 +59,6 @@ interface ImageCropDataAccessInterface
     /**
      * Get all crop definitions for an image.
      *
-     * @param CmsMediaDataModel $cmsMedia
-     *
      * @return ImageCropDataModel[]
      *
      * @throws ImageCropDataAccessException
@@ -76,8 +67,6 @@ interface ImageCropDataAccessInterface
 
     /**
      * @throws ImageCropDataAccessException
-     *
-     * @param string $cropId
      */
     public function deleteCrop(string $cropId): void;
 }

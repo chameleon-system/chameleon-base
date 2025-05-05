@@ -21,7 +21,7 @@ class TPkgCmsTheme_PkgViewRendererSnippetResourceCollector extends TPkgCmsTheme_
      */
     protected function getAdditionalLessResources($oPortal = null)
     {
-        $aLayoutLess = array();
+        $aLayoutLess = [];
         if (null === $oPortal) {
             $oPortal = $this->getPortalDomainService()->getActivePortal();
         }

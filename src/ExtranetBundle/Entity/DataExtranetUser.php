@@ -13,7 +13,6 @@ use ChameleonSystem\ShopBundle\Entity\ShopCore\ShopUserNoticeList;
 use ChameleonSystem\ShopBundle\Entity\ShopOrder\ShopOrder;
 use ChameleonSystem\ShopBundle\Entity\ShopVoucher\ShopUserPurchasedVoucher;
 use ChameleonSystem\ShopWishlistBundle\Entity\PkgShopWishlist;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -21,16 +20,14 @@ class DataExtranetUser
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var Shop|null - Belongs to shop */
-        private ?Shop $shop = null
-        ,
+        private ?Shop $shop = null,
         // TCMSFieldLookup
         /** @var CmsPortal|null - Belongs to portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldNumber
         /** @var int - Customer number */
         private int $customerNumber = 0,
@@ -44,12 +41,11 @@ class DataExtranetUser
         /** @var string - Password change key */
         private string $passwordChangeKey = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Date of the request to change password */
-        private ?DateTime $passwordChangeTimeStamp = null,
+        /** @var \DateTime|null - Date of the request to change password */
+        private ?\DateTime $passwordChangeTimeStamp = null,
         // TCMSFieldLookup
         /** @var DataExtranetSalutation|null - Name */
-        private ?DataExtranetSalutation $dataExtranetSalutation = null
-        ,
+        private ?DataExtranetSalutation $dataExtranetSalutation = null,
         // TCMSFieldVarchar
         /** @var string - First name */
         private string $firstname = '',
@@ -73,8 +69,7 @@ class DataExtranetUser
         private string $city = '',
         // TCMSFieldLookup
         /** @var DataCountry|null - Country */
-        private ?DataCountry $dataCountry = null
-        ,
+        private ?DataCountry $dataCountry = null,
         // TCMSFieldVarchar
         /** @var string - USTID */
         private string $vatId = '',
@@ -95,15 +90,13 @@ class DataExtranetUser
         private string $email = '',
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, DataExtranetGroup> - Customer groups */
-        private Collection $dataExtranetGroupCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetGroupCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Fax */
         private string $fax = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, DataExtranetUserAddress> - Addresses */
-        private Collection $dataExtranetUserAddressCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetUserAddressCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Session key */
         private string $sessionKey = '',
@@ -115,19 +108,16 @@ class DataExtranetUser
         private int $loginSalt = 0,
         // TCMSFieldPropertyTable
         /** @var Collection<int, DataExtranetUserLoginHistory> - Login process */
-        private Collection $dataExtranetUserLoginHistoryCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetUserLoginHistoryCollection = new ArrayCollection(),
         // TCMSFieldLookup
         /** @var DataExtranetUserAddress|null - Last billing address */
-        private ?DataExtranetUserAddress $defaultBillingAddress = null
-        ,
+        private ?DataExtranetUserAddress $defaultBillingAddress = null,
         // TCMSFieldLookup
         /** @var DataExtranetUserAddress|null - Last used shipping address */
-        private ?DataExtranetUserAddress $defaultShippingAddress = null
-        ,
+        private ?DataExtranetUserAddress $defaultShippingAddress = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Date of subscription */
-        private ?DateTime $datecreated = null,
+        /** @var \DateTime|null - Date of subscription */
+        private ?\DateTime $datecreated = null,
         // TCMSFieldBoolean
         /** @var bool - Confirmed */
         private bool $confirmed = false,
@@ -135,46 +125,38 @@ class DataExtranetUser
         /** @var string - Confirmation key */
         private string $tmpconfirmkey = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Confirmed on */
-        private ?DateTime $confirmedon = null,
+        /** @var \DateTime|null - Confirmed on */
+        private ?\DateTime $confirmedon = null,
         // TCMSFieldBoolean
         /** @var bool - Registration email sent */
         private bool $regEmailSend = false,
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopUserPurchasedVoucher> - Bought vouchers */
-        private Collection $shopUserPurchasedVoucherCollection = new ArrayCollection()
-        ,
+        private Collection $shopUserPurchasedVoucherCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopUserNoticeList> - Notice list */
-        private Collection $shopUserNoticeListCollection = new ArrayCollection()
-        ,
+        private Collection $shopUserNoticeListCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopOrder> - Orders */
-        private Collection $shopOrderCollection = new ArrayCollection()
-        ,
+        private Collection $shopOrderCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, DataExtranetUserShopArticleHistory> - Last viewed */
-        private Collection $dataExtranetUserShopArticleHistoryCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetUserShopArticleHistoryCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopSearchLog> - Searches executed by customer */
-        private Collection $shopSearchLogCollection = new ArrayCollection()
-        ,
+        private Collection $shopSearchLogCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopSuggestArticleLog> - Customer recommendations */
-        private Collection $shopSuggestArticleLogCollection = new ArrayCollection()
-        ,
+        private Collection $shopSuggestArticleLogCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, ShopArticleReview> - Reviews */
-        private Collection $shopArticleReviewCollection = new ArrayCollection()
-        ,
+        private Collection $shopArticleReviewCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgShopWishlist> - Wish list */
-        private Collection $pkgShopWishlistCollection = new ArrayCollection()
-        ,
+        private Collection $pkgShopWishlistCollection = new ArrayCollection(),
         // TCMSFieldDate
-        /** @var DateTime|null - Date of birth */
-        private ?DateTime $birthdate = null,
+        /** @var \DateTime|null - Date of birth */
+        private ?\DateTime $birthdate = null,
         // TCMSFieldExtendedLookup
         /** @var PkgShopCurrency|null - Currency */
         private ?PkgShopCurrency $pkgShopCurrency = null
@@ -218,7 +200,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -231,7 +212,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getCustomerNumber(): int
@@ -246,7 +226,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -259,7 +238,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldPasswordEncrypted
     public function getPassword(): string
@@ -274,7 +252,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldPasswordEncrypted
     public function getPasswordChangeKey(): string
     {
@@ -288,20 +265,18 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getPasswordChangeTimeStamp(): ?DateTime
+    public function getPasswordChangeTimeStamp(): ?\DateTime
     {
         return $this->passwordChangeTimeStamp;
     }
 
-    public function setPasswordChangeTimeStamp(?DateTime $passwordChangeTimeStamp): self
+    public function setPasswordChangeTimeStamp(?\DateTime $passwordChangeTimeStamp): self
     {
         $this->passwordChangeTimeStamp = $passwordChangeTimeStamp;
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getDataExtranetSalutation(): ?DataExtranetSalutation
@@ -316,7 +291,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFirstname(): string
     {
@@ -329,7 +303,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getLastname(): string
@@ -344,7 +317,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCompany(): string
     {
@@ -357,7 +329,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getStreet(): string
@@ -372,7 +343,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getStreetnr(): string
     {
@@ -385,7 +355,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getPostalcode(): string
@@ -400,7 +369,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCity(): string
     {
@@ -413,7 +381,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getDataCountry(): ?DataCountry
@@ -428,7 +395,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getVatId(): string
     {
@@ -441,7 +407,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTelefon(): string
@@ -456,7 +421,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getMobile(): string
     {
@@ -469,7 +433,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAddressAdditionalInfo(): string
@@ -484,7 +447,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAliasName(): string
     {
@@ -498,7 +460,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldEmail
     public function getEmail(): string
     {
@@ -511,8 +472,6 @@ class DataExtranetUser
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -546,7 +505,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFax(): string
     {
@@ -559,8 +517,6 @@ class DataExtranetUser
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -594,7 +550,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSessionKey(): string
     {
@@ -607,7 +562,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getLoginTimestamp(): int
@@ -622,7 +576,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getLoginSalt(): int
     {
@@ -635,8 +588,6 @@ class DataExtranetUser
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -671,7 +622,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getDefaultBillingAddress(): ?DataExtranetUserAddress
     {
@@ -684,7 +634,6 @@ class DataExtranetUser
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getDefaultShippingAddress(): ?DataExtranetUserAddress
@@ -699,20 +648,18 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isConfirmed(): bool
@@ -727,7 +674,6 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTmpconfirmkey(): string
     {
@@ -741,20 +687,18 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getConfirmedon(): ?DateTime
+    public function getConfirmedon(): ?\DateTime
     {
         return $this->confirmedon;
     }
 
-    public function setConfirmedon(?DateTime $confirmedon): self
+    public function setConfirmedon(?\DateTime $confirmedon): self
     {
         $this->confirmedon = $confirmedon;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isRegEmailSend(): bool
@@ -768,8 +712,6 @@ class DataExtranetUser
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -803,8 +745,6 @@ class DataExtranetUser
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -837,8 +777,6 @@ class DataExtranetUser
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -870,8 +808,6 @@ class DataExtranetUser
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -907,8 +843,6 @@ class DataExtranetUser
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -940,8 +874,6 @@ class DataExtranetUser
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -975,8 +907,6 @@ class DataExtranetUser
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -1008,8 +938,6 @@ class DataExtranetUser
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1043,20 +971,18 @@ class DataExtranetUser
         return $this;
     }
 
-
     // TCMSFieldDate
-    public function getBirthdate(): ?DateTime
+    public function getBirthdate(): ?\DateTime
     {
         return $this->birthdate;
     }
 
-    public function setBirthdate(?DateTime $birthdate): self
+    public function setBirthdate(?\DateTime $birthdate): self
     {
         $this->birthdate = $birthdate;
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getPkgShopCurrency(): ?PkgShopCurrency
@@ -1070,6 +996,4 @@ class DataExtranetUser
 
         return $this;
     }
-
-
 }

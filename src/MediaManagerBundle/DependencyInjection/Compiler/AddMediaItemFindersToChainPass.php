@@ -12,7 +12,6 @@
 namespace ChameleonSystem\MediaManagerBundle\DependencyInjection\Compiler;
 
 use ChameleonSystem\MediaManager\Interfaces\MediaItemUsageFinderInterface;
-use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -23,11 +22,11 @@ class AddMediaItemFindersToChainPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      *
+     * @return void
+     *
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     *
-     * @return void
+     * @throws \LogicException
      */
     public function process(ContainerBuilder $container)
     {
@@ -39,14 +38,14 @@ class AddMediaItemFindersToChainPass implements CompilerPassInterface
             $finderServiceDefinition = $container->getDefinition($serviceId);
             $interfaces = class_implements($finderServiceDefinition->getClass(), true);
             if (false === in_array(MediaItemUsageFinderInterface::class, $interfaces, true)) {
-                throw new LogicException(
+                throw new \LogicException(
                     sprintf(
                         'Usage finder service must implement MediaItemUsageFinderInterface in service %s',
                         $serviceId
                     )
                 );
             }
-            $serviceDefinitionChain->addMethodCall('addFinder', array($finderServiceDefinition));
+            $serviceDefinitionChain->addMethodCall('addFinder', [$finderServiceDefinition]);
         }
     }
 }

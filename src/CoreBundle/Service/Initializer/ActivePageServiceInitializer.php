@@ -31,10 +31,6 @@ class ActivePageServiceInitializer implements ActivePageServiceInitializerInterf
      */
     private $container;
 
-    /**
-     * @param ContainerInterface       $container
-     * @param InputFilterUtilInterface $inputFilterUtil
-     */
     public function __construct(ContainerInterface $container, InputFilterUtilInterface $inputFilterUtil)
     {
         $this->container = $container;

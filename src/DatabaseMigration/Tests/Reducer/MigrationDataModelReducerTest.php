@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-//todo: add namespace
+// todo: add namespace
 use ChameleonSystem\DatabaseMigration\DataModel\MigrationDataModel;
 use ChameleonSystem\DatabaseMigration\Reducer\MigrationDataModelReducer;
 use PHPUnit\Framework\TestCase;
@@ -53,18 +53,19 @@ class MigrationDataModelReducerTest extends TestCase
         $reducedModel1 = new MigrationDataModel('ChameleonSystemFooBundle');
         $reducedModel1->addFile('3', 'file3');
 
-        return array(
-            array(
+        return [
+            [
                 $originalModel1, $reducerModel1, $reducedModel1,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
      * @test
+     *
      * @dataProvider getModels
      */
-    public function it_reduces_a_model(MigrationDataModel $model, MigrationDataModel $modelToReduceBy, MigrationDataModel $expectedOutcome)
+    public function itReducesAModel(MigrationDataModel $model, MigrationDataModel $modelToReduceBy, MigrationDataModel $expectedOutcome)
     {
         $this->givenADataModel($model);
         $this->givenAModelToReduceBy($modelToReduceBy);
@@ -95,31 +96,32 @@ class MigrationDataModelReducerTest extends TestCase
 
     public function getModelLists()
     {
-        return array(
-            array(
-                array(
-                    'ChameleonSystemFooBundle' => new MigrationDataModel('ChameleonSystemFooBundle', array('1' => '', '2' => '')),
-                    'ChameleonSystemBarBundle' => new MigrationDataModel('ChameleonSystemBarBundle', array('1' => '', '2' => '')),
-                    'ChameleonSystemBazBundle' => new MigrationDataModel('ChameleonSystemBazBundle', array('1' => '', '2' => '')),
-                ),
-                array(
-                    'ChameleonSystemFooBundle' => new MigrationDataModel('ChameleonSystemFooBundle', array('1' => '')),
-                    'ChameleonSystemBazBundle' => new MigrationDataModel('ChameleonSystemBazBundle', array('2' => '')),
-                ),
-                array(
-                    'ChameleonSystemFooBundle' => new MigrationDataModel('ChameleonSystemFooBundle', array('2' => '')),
-                    'ChameleonSystemBarBundle' => new MigrationDataModel('ChameleonSystemBarBundle', array('1' => '', '2' => '')),
-                    'ChameleonSystemBazBundle' => new MigrationDataModel('ChameleonSystemBazBundle', array('1' => '')),
-                ),
-            ),
-        );
+        return [
+            [
+                [
+                    'ChameleonSystemFooBundle' => new MigrationDataModel('ChameleonSystemFooBundle', ['1' => '', '2' => '']),
+                    'ChameleonSystemBarBundle' => new MigrationDataModel('ChameleonSystemBarBundle', ['1' => '', '2' => '']),
+                    'ChameleonSystemBazBundle' => new MigrationDataModel('ChameleonSystemBazBundle', ['1' => '', '2' => '']),
+                ],
+                [
+                    'ChameleonSystemFooBundle' => new MigrationDataModel('ChameleonSystemFooBundle', ['1' => '']),
+                    'ChameleonSystemBazBundle' => new MigrationDataModel('ChameleonSystemBazBundle', ['2' => '']),
+                ],
+                [
+                    'ChameleonSystemFooBundle' => new MigrationDataModel('ChameleonSystemFooBundle', ['2' => '']),
+                    'ChameleonSystemBarBundle' => new MigrationDataModel('ChameleonSystemBarBundle', ['1' => '', '2' => '']),
+                    'ChameleonSystemBazBundle' => new MigrationDataModel('ChameleonSystemBazBundle', ['1' => '']),
+                ],
+            ],
+        ];
     }
 
     /**
      * @test
+     *
      * @dataProvider getModelLists
      */
-    public function it_reduces_a_model_list(array $model, array $modelToReduceBy, array $expectedOutcome)
+    public function itReducesAModelList(array $model, array $modelToReduceBy, array $expectedOutcome)
     {
         $reducer = new MigrationDataModelReducer();
         $actual = $reducer->reduceModelListByModelList($model, $modelToReduceBy);

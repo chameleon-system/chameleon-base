@@ -35,13 +35,13 @@ class MapperVisitorTest extends TestCase
     /**
      * @test
      */
-    public function it_should_be_possible_to_run_mapper_a_mapper_chain_on_data()
+    public function itShouldBePossibleToRunMapperAMapperChainOnData()
     {
-        $sourceData = array('foo' => 'bar');
-        $itemData = array('item' => array('foo' => 'bar'));
-        $expectedTransformedItemData = array('bar' => 'foo');
+        $sourceData = ['foo' => 'bar'];
+        $itemData = ['item' => ['foo' => 'bar']];
+        $expectedTransformedItemData = ['bar' => 'foo'];
         $mapperChainName = 'mockMapperChain';
-        $cacheTriggers = array();
+        $cacheTriggers = [];
         $this->given_a_visitor_with_source_data($sourceData);
         $this->given_a_mock_mapper_chain_that_returns_x_and_adds_cache_triggers_y($expectedTransformedItemData, $cacheTriggers);
         $this->when_we_run_the_mapper_chain_with($mapperChainName, $itemData);
@@ -71,7 +71,7 @@ class MapperVisitorTest extends TestCase
     {
         $this->mockDataTransformationService->reset()->shouldBeCalled();
         $this->mockDataTransformationService->addSourceObjectsFromArray($itemData)->shouldBeCalled();
-        $this->visitor->addMapperChains(array($mapperChainName => $this->mockDataTransformationService->reveal()));
+        $this->visitor->addMapperChains([$mapperChainName => $this->mockDataTransformationService->reveal()]);
         $this->mapperChainResponse = $this->visitor->runMapperChainOn($mapperChainName, $itemData);
     }
 

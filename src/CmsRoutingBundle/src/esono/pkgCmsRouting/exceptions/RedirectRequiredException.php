@@ -16,7 +16,7 @@ class RedirectRequiredException extends \Exception
     /**
      * @var string
      */
-    private $url = null;
+    private $url;
 
     /**
      * @var bool

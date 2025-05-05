@@ -8,12 +8,11 @@ class DataExtranetUserAddress
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Belongs to customer */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldVarchar
         /** @var string - User-defined name for the address */
         private string $name = '',
@@ -31,8 +30,7 @@ class DataExtranetUserAddress
         private string $addressAdditionalInfo = '',
         // TCMSFieldLookup
         /** @var DataExtranetSalutation|null - Salutation */
-        private ?DataExtranetSalutation $dataExtranetSalutation = null
-        ,
+        private ?DataExtranetSalutation $dataExtranetSalutation = null,
         // TCMSFieldVarchar
         /** @var string - First name */
         private string $firstname = '',
@@ -53,8 +51,7 @@ class DataExtranetUserAddress
         private string $postalcode = '',
         // TCMSFieldLookup
         /** @var DataCountry|null - Country */
-        private ?DataCountry $dataCountry = null
-        ,
+        private ?DataCountry $dataCountry = null,
         // TCMSFieldVarchar
         /** @var string - Telephone */
         private string $telefon = '',
@@ -101,7 +98,6 @@ class DataExtranetUserAddress
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -114,7 +110,6 @@ class DataExtranetUserAddress
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isIsDhlPackstation(): bool
@@ -129,7 +124,6 @@ class DataExtranetUserAddress
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCompany(): string
     {
@@ -142,7 +136,6 @@ class DataExtranetUserAddress
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getVatId(): string
@@ -157,7 +150,6 @@ class DataExtranetUserAddress
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getAddressAdditionalInfo(): string
     {
@@ -170,7 +162,6 @@ class DataExtranetUserAddress
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getDataExtranetSalutation(): ?DataExtranetSalutation
@@ -185,7 +176,6 @@ class DataExtranetUserAddress
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFirstname(): string
     {
@@ -198,7 +188,6 @@ class DataExtranetUserAddress
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getLastname(): string
@@ -213,7 +202,6 @@ class DataExtranetUserAddress
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getStreet(): string
     {
@@ -226,7 +214,6 @@ class DataExtranetUserAddress
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getStreetnr(): string
@@ -241,7 +228,6 @@ class DataExtranetUserAddress
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCity(): string
     {
@@ -254,7 +240,6 @@ class DataExtranetUserAddress
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getPostalcode(): string
@@ -269,7 +254,6 @@ class DataExtranetUserAddress
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getDataCountry(): ?DataCountry
     {
@@ -282,7 +266,6 @@ class DataExtranetUserAddress
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTelefon(): string
@@ -297,7 +280,6 @@ class DataExtranetUserAddress
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFax(): string
     {
@@ -310,6 +292,4 @@ class DataExtranetUserAddress
 
         return $this;
     }
-
-
 }

@@ -85,7 +85,7 @@ class TCMSTableEditorTreeShared extends TCMSTableEditor
                 // edit
                 if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                     $oMenuItem = new TCMSTableEditorMenuItem();
-                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.save');
+                    $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.save');
                     $oMenuItem->sItemKey = 'save';
                     $oMenuItem->sIcon = 'far fa-save';
                     $oMenuItem->sOnClick = 'SaveTreeNodeAjax();';

@@ -17,7 +17,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class ChameleonControllerInvokeListener implements EventSubscriberInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     private $container;
 
@@ -36,6 +36,6 @@ class ChameleonControllerInvokeListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        return array(ChameleonControllerEvents::INVOKE => 'onInvoke');
+        return [ChameleonControllerEvents::INVOKE => 'onInvoke'];
     }
 }

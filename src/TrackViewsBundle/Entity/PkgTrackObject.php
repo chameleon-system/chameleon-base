@@ -2,14 +2,11 @@
 
 namespace ChameleonSystem\TrackViewsBundle\Entity;
 
-
-use DateTime;
-
 class PkgTrackObject
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldNumber
         /** @var int - */
@@ -21,8 +18,8 @@ class PkgTrackObject
         /** @var string - */
         private string $ownerId = '',
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - */
-        private ?DateTime $datecreated = new DateTime(),
+        /** @var \DateTime|null - */
+        private ?\DateTime $datecreated = new \DateTime(),
         // TCMSFieldVarchar
         /** @var string - */
         private string $timeBlock = ''
@@ -66,7 +63,6 @@ class PkgTrackObject
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTableName(): string
     {
@@ -79,7 +75,6 @@ class PkgTrackObject
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getOwnerId(): string
@@ -94,20 +89,18 @@ class PkgTrackObject
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTimeBlock(): string
@@ -121,6 +114,4 @@ class PkgTrackObject
 
         return $this;
     }
-
-
 }

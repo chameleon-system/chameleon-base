@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\AutoclassesBundle\DataAccess;
 
-use TCMSConfig;
-
 class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterface
 {
     /**
@@ -28,7 +26,7 @@ class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterfac
      */
     private $fieldData;
     /**
-     * @var TCMSConfig
+     * @var \TCMSConfig
      */
     private $config;
     /**
@@ -40,9 +38,6 @@ class AutoclassesRequestCacheDataAccess implements AutoclassesDataAccessInterfac
      */
     private $tableConfigData;
 
-    /**
-     * @param AutoclassesDataAccessInterface $decorated
-     */
     public function __construct(AutoclassesDataAccessInterface $decorated)
     {
         $this->decorated = $decorated;

@@ -18,7 +18,7 @@ use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
  */
 class TCMSFieldPasswordEncrypted extends TCMSFieldPassword
 {
-    const ENCRYPTED_PASSWORD_RAW_FIELD_PREFIX = 'password_encrypted_raw_';
+    public const ENCRYPTED_PASSWORD_RAW_FIELD_PREFIX = 'password_encrypted_raw_';
 
     public function __construct()
     {
@@ -39,7 +39,7 @@ class TCMSFieldPasswordEncrypted extends TCMSFieldPassword
         if (MySqlLegacySupport::getInstance()->num_rows($res) > 0) {
             $aTableRow = MySqlLegacySupport::getInstance()->fetch_assoc($res);
             if ('' != trim($aTableRow[$this->oDefinition->sqlData['name']])) {
-                $sRawValue = ($aTableRow[$this->oDefinition->sqlData['name']]);
+                $sRawValue = $aTableRow[$this->oDefinition->sqlData['name']];
             }
         }
         $passwordHashGenerator = $this->getPasswordHashGenerator();
@@ -79,6 +79,6 @@ class TCMSFieldPasswordEncrypted extends TCMSFieldPassword
      */
     private function getPasswordHashGenerator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.security.password.password_hash_generator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.security.password.password_hash_generator');
     }
 }

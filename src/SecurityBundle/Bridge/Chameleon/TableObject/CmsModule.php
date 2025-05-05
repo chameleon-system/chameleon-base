@@ -10,5 +10,4 @@ class CmsModule extends \ChameleonSystemSecurityBundleBridgeChameleonTableObject
     {
         return [$this->fieldCmsUsergroupId];
     }
-
 }

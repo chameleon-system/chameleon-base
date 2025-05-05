@@ -11,9 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\MapperLoader;
 
-use IViewMapper;
-use LogicException;
-
 /**
  * MapperLoaderInterface defines a services that loads mapper instances.
  */
@@ -26,9 +23,9 @@ interface MapperLoaderInterface
      *
      * @param string $identifier
      *
-     * @return IViewMapper
+     * @return \IViewMapper
      *
-     * @throws LogicException if no mapper could be found for the passed identifier
+     * @throws \LogicException if no mapper could be found for the passed identifier
      */
     public function getMapper($identifier);
 }

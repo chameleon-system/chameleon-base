@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\ViewRenderer\Exception;
 
-use Exception;
-
-class DataAccessException extends Exception
+class DataAccessException extends \Exception
 {
 }

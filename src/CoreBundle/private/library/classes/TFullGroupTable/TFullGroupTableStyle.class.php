@@ -20,56 +20,56 @@ class TFullGroupTableStyle extends TGroupTableStyle
      *
      * @var string|null
      */
-    public $header = null;
+    public $header;
 
     /**
      * style class name to use for the search line (default = NULL).
      *
      * @var string|null
      */
-    public $search = null;
+    public $search;
 
     /**
      * style class name to use for the navigation line (default = NULL).
      *
      * @var string|null
      */
-    public $navigation = null;
+    public $navigation;
 
     /**
      * style class name to use for the not found text line line (default = NULL).
      *
      * @var string|null
      */
-    public $notFoundText = null;
+    public $notFoundText;
 
     /**
      * style class name to use for the group select field (default = NULL).
      *
      * @var string|null
      */
-    public $groupSelector = null;
+    public $groupSelector;
 
     /**
      * style class name to use for the filter table (default = NULL).
      *
      * @var string|null
      */
-    public $filterTable = null;
+    public $filterTable;
 
     /**
      * CSS style to use in searchfield TD.
      *
      * @var string|null
      */
-    public $searchFieldTDstyle = null;
+    public $searchFieldTDstyle;
 
     /**
      * CSS style to use in search button TD.
      *
      * @var string|null
      */
-    public $searchButtonTDstyle = null;
+    public $searchButtonTDstyle;
 
     public function __construct()
     {
@@ -92,7 +92,6 @@ class TFullGroupTableStyle extends TGroupTableStyle
     {
         $this->callConstructorAndLogDeprecation(func_get_args());
     }
-
 
     public function GetHeader()
     {

@@ -8,16 +8,14 @@ class PkgCmsChangelogItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgCmsChangelogSet|null - Changeset */
-        private ?PkgCmsChangelogSet $pkgCmsChangelogSet = null
-        ,
+        private ?PkgCmsChangelogSet $pkgCmsChangelogSet = null,
         // TCMSFieldLookupParentID
         /** @var CmsFieldConf|null - Changed field */
-        private ?CmsFieldConf $cmsFieldConf = null
-        ,
+        private ?CmsFieldConf $cmsFieldConf = null,
         // TCMSFieldText
         /** @var string - Old value */
         private string $valueOld = '',
@@ -64,7 +62,6 @@ class PkgCmsChangelogItem
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsFieldConf(): ?CmsFieldConf
     {
@@ -77,7 +74,6 @@ class PkgCmsChangelogItem
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getValueOld(): string
@@ -92,7 +88,6 @@ class PkgCmsChangelogItem
         return $this;
     }
 
-
     // TCMSFieldText
     public function getValueNew(): string
     {
@@ -105,6 +100,4 @@ class PkgCmsChangelogItem
 
         return $this;
     }
-
-
 }

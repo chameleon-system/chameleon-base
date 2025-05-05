@@ -11,7 +11,7 @@
 
 /**
  * ;.
-/**/
+ * /**/
 class TPkgMultiModule_CMSTPLModuleInstanceList extends TPkgMultiModule_CMSTPLModuleInstanceListAutoParent
 {
 }

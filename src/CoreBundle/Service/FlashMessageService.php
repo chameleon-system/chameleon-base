@@ -18,15 +18,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class FlashMessageService implements FlashMessageServiceInterface
 {
-    const SESSION_KEY_NAME = 'core/cmsmessagemanager';
+    public const SESSION_KEY_NAME = 'core/cmsmessagemanager';
     /**
      * @var RequestStack
      */
     private $requestStack;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -71,7 +68,7 @@ class FlashMessageService implements FlashMessageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function addMessage($consumer, $code, array $parameter = array())
+    public function addMessage($consumer, $code, array $parameter = [])
     {
         $handler = $this->getHandler();
         if (null === $handler) {
@@ -101,7 +98,7 @@ class FlashMessageService implements FlashMessageServiceInterface
         $sConsumerName,
         $sViewName = null,
         $sViewType = null,
-        array $aCallTimeVars = array(),
+        array $aCallTimeVars = [],
         $bRemove = true
     ) {
         $handler = $this->getHandler();
@@ -206,7 +203,7 @@ class FlashMessageService implements FlashMessageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function addBackendToasterMessage($id, $type = 'ERROR', array $parameters = array(), $domain = TranslationConstants::DOMAIN_BACKEND)
+    public function addBackendToasterMessage($id, $type = 'ERROR', array $parameters = [], $domain = TranslationConstants::DOMAIN_BACKEND)
     {
         $handler = $this->getHandler();
         if (null === $handler) {

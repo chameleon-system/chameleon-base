@@ -22,10 +22,6 @@ class Mapper_ShopOrder extends AbstractViewMapper
      * $oRequirements->NeedsMappedValue("baz");
      *
      * @abstract
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
-     *
-     * @return void
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
@@ -47,11 +43,7 @@ class Mapper_ShopOrder extends AbstractViewMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return void
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
@@ -81,7 +73,7 @@ class Mapper_ShopOrder extends AbstractViewMapper
             $oVisitor->SetMappedValue('adr_shipping_country', $oShippingCountry->fieldName);
         }
 
-        $aOrderItems = array();
+        $aOrderItems = [];
         $oOrderItemList = $oExportData->GetFieldShopOrderItemList();
         while ($oOrderItem = $oOrderItemList->Next()) {
             $aOrderItems[$oOrderItem->id] = $oOrderItem->sqlData;

@@ -13,8 +13,8 @@ namespace ChameleonSystem\CoreBundle\i18n;
 
 final class TranslationConstants
 {
-    const DOMAIN_BACKEND = 'admin';
-    const DOMAIN_FRONTEND = 'messages';
-    const DOMAIN_BACKEND_JS = 'admin-js';
-    const DOMAIN_BACKEND_ENUM = 'admin-enum';
+    public const DOMAIN_BACKEND = 'admin';
+    public const DOMAIN_FRONTEND = 'messages';
+    public const DOMAIN_BACKEND_JS = 'admin-js';
+    public const DOMAIN_BACKEND_ENUM = 'admin-enum';
 }

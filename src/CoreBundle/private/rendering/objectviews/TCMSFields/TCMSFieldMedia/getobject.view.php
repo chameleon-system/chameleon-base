@@ -1,1 +1,1 @@
-            return $this->GetImage($imagePos, '<?= $aFieldData['sFieldDatabaseName']; ?>', $includeDummyImages);
+            return $this->GetImage($imagePos, '<?php echo $aFieldData['sFieldDatabaseName']; ?>', $includeDummyImages);

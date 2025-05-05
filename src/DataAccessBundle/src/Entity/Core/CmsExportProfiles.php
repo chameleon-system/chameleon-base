@@ -11,22 +11,20 @@ class CmsExportProfiles
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Profile name */
         private string $name = '',
         // TCMSFieldLookup
         /** @var CmsPortal|null - Editorial department */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldOption
         /** @var string - Export format */
         private string $exportType = 'TABs',
         // TCMSFieldLookup
         /** @var CmsTblConf|null - Table */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsExportProfilesFields> - Fields to be exported */
         private Collection $cmsExportProfilesFieldsCollection = new ArrayCollection()
@@ -70,7 +68,6 @@ class CmsExportProfiles
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -83,7 +80,6 @@ class CmsExportProfiles
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getExportType(): string
@@ -98,7 +94,6 @@ class CmsExportProfiles
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsTblConf(): ?CmsTblConf
     {
@@ -111,8 +106,6 @@ class CmsExportProfiles
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -145,6 +138,4 @@ class CmsExportProfiles
 
         return $this;
     }
-
-
 }

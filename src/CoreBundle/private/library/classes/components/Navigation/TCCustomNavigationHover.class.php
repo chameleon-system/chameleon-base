@@ -16,14 +16,14 @@ class TCCustomNavigationHover extends TCCustomNavigation
      *
      * @var array
      */
-    protected $aDivisionNodeIdList = array();
+    protected $aDivisionNodeIdList = [];
 
     /**
      * current division of the level being parsed.
      *
      * @var TdbCmsDivision
      */
-    protected $oCurrentDivision = null;
+    protected $oCurrentDivision;
 
     public $bPlaceEachRootNodeInASeparateBlock = false;
 
@@ -44,7 +44,7 @@ class TCCustomNavigationHover extends TCCustomNavigation
             $menu .= '<ul>';
         }
         while ($oNode = $oChildren->Next()) {
-            /** @var $oNode TCMSTreeNode */
+            /* @var $oNode TCMSTreeNode */
             $this->FetchTreeDataForCacheTriggers($oNode);
             if ($this->_ShowNode($oNode, 0, $count)) {
                 if ($this->bPlaceEachRootNodeInASeparateBlock) {
@@ -105,9 +105,9 @@ class TCCustomNavigationHover extends TCCustomNavigation
      * The recursive function that renders all subnodes. returns the complete subnavi
      * for the root node oParentNode.
      *
-     * @param TIterator    $oSubnodes
+     * @param TIterator $oSubnodes
      * @param TCMSTreeNode $oParentNode
-     * @param int          $level
+     * @param int $level
      *
      * @return string
      */
@@ -122,7 +122,7 @@ class TCCustomNavigationHover extends TCCustomNavigation
             $menuContent = '';
             $totalSiblings = $oParentNode->CountChildren();
             while ($oNode = $oSubnodes->Next()) {
-                /** @var $oNode TCMSTreeNode */
+                /* @var $oNode TCMSTreeNode */
                 $this->FetchTreeDataForCacheTriggers($oNode);
                 if ($this->_ShowNode($oNode, $level, $row)) {
                     $oChildren = $oNode->GetChildren();
@@ -175,7 +175,7 @@ class TCCustomNavigationHover extends TCCustomNavigation
     {
         /** @var $oPagePortal TdbCmsPortal */
         $oPagePortal = TdbCmsPortal::GetPagePortal($iCurrentPage);
-        $this->aDivisionNodeIdList = array();
+        $this->aDivisionNodeIdList = [];
         if ($oPagePortal) {
             $oDivisions = $oPagePortal->GetFieldCmsPortalDivisionsList();
             while ($oDivision = $oDivisions->Next()) {

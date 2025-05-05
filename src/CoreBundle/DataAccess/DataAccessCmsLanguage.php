@@ -12,7 +12,6 @@
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use Doctrine\DBAL\Connection;
-use TdbCmsLanguage;
 
 /**
  * DataAccessCmsLanguage provides an implementation of DataAccessCmsLanguageInterface for the default database backend.
@@ -27,9 +26,6 @@ class DataAccessCmsLanguage implements DataAccessCmsLanguageInterface
      */
     private $databaseConnection;
 
-    /**
-     * @param Connection $databaseConnection
-     */
     public function __construct(Connection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
@@ -40,7 +36,7 @@ class DataAccessCmsLanguage implements DataAccessCmsLanguageInterface
      */
     public function getLanguage($id, $targetLanguageId)
     {
-        $language = TdbCmsLanguage::GetNewInstance();
+        $language = \TdbCmsLanguage::GetNewInstance();
         $languageRaw = $this->getLanguageRaw($id);
         if (null === $languageRaw) {
             return null;
@@ -56,7 +52,7 @@ class DataAccessCmsLanguage implements DataAccessCmsLanguageInterface
      */
     public function getLanguageRaw($id)
     {
-        $language = TdbCmsLanguage::GetNewInstance();
+        $language = \TdbCmsLanguage::GetNewInstance();
         $language->DisablePostLoadHook(true);
         if (false === $language->Load($id)) {
             return null;
@@ -71,13 +67,13 @@ class DataAccessCmsLanguage implements DataAccessCmsLanguageInterface
     public function getLanguageFromIsoCode($isoCode, $targetLanguageId)
     {
         $query = 'SELECT * FROM `cms_language` WHERE `iso_6391` = :isoCode';
-        $row = $this->databaseConnection->fetchAssociative($query, array(
+        $row = $this->databaseConnection->fetchAssociative($query, [
             'isoCode' => $isoCode,
-        ));
+        ]);
         if (false === $row) {
             return null;
         }
-        $language = TdbCmsLanguage::GetNewInstance();
+        $language = \TdbCmsLanguage::GetNewInstance();
         $language->SetLanguage($targetLanguageId);
         $language->LoadFromRow($row);
 

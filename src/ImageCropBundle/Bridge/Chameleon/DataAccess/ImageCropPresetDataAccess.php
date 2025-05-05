@@ -13,7 +13,6 @@ namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess;
 
 use ChameleonSystem\ImageCrop\DataModel\ImageCropPresetDataModel;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropPresetDataAccessInterface;
-use TdbCmsImageCropPreset;
 
 class ImageCropPresetDataAccess implements ImageCropPresetDataAccessInterface
 {
@@ -22,7 +21,7 @@ class ImageCropPresetDataAccess implements ImageCropPresetDataAccessInterface
      */
     public function getPresetById($id, $languageId = null)
     {
-        $tableObject = TdbCmsImageCropPreset::GetNewInstance(null, $languageId);
+        $tableObject = \TdbCmsImageCropPreset::GetNewInstance(null, $languageId);
         if (false === $tableObject->Load($id)) {
             return null;
         }
@@ -31,11 +30,9 @@ class ImageCropPresetDataAccess implements ImageCropPresetDataAccessInterface
     }
 
     /**
-     * @param TdbCmsImageCropPreset $tableObject
-     *
      * @return ImageCropPresetDataModel
      */
-    private function createDataModelFromTableObject(TdbCmsImageCropPreset $tableObject)
+    private function createDataModelFromTableObject(\TdbCmsImageCropPreset $tableObject)
     {
         return new ImageCropPresetDataModel(
             $tableObject->id,
@@ -51,7 +48,7 @@ class ImageCropPresetDataAccess implements ImageCropPresetDataAccessInterface
      */
     public function getPresetBySystemName($systemName, $languageId = null)
     {
-        $tableObject = TdbCmsImageCropPreset::GetNewInstance(null, $languageId);
+        $tableObject = \TdbCmsImageCropPreset::GetNewInstance(null, $languageId);
         if (false === $tableObject->LoadFromField('system_name', $systemName)) {
             return null;
         }

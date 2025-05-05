@@ -2,13 +2,11 @@
 
 namespace ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Breadcrumb;
 
-use ChameleonSystem\BreadcrumbBundle\Interfaces\BreadcrumbGeneratorInterface;
 use ChameleonSystem\BreadcrumbBundle\Interfaces\BreadcrumbGeneratorUtilsInterface;
 use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbDataModel;
 use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbItemDataModel;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\TreeService;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use esono\pkgCmsCache\Cache;
 
 class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
@@ -42,7 +40,7 @@ class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
 
         $activePage = $this->getActivePage();
         $portal = $activePage->GetPortal();
-        
+
         // Never show the Breadcrumb on the HomePage.
         if ($activePage->IsHomePage()) {
             return $breadcrumb;
@@ -60,7 +58,7 @@ class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
     private function attachBreadcrumbByCmsTree(BreadcrumbDataModel $breadcrumb, \TCMSActivePage $activePage): void
     {
         $portal = $activePage->GetPortal();
-        if (null === $portal){
+        if (null === $portal) {
             return;
         }
 
@@ -101,13 +99,13 @@ class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
             .\MySqlLegacySupport::getInstance()->real_escape_string($portal->id)."'";
         $navis = \MySqlLegacySupport::getInstance()->query($query);
         $naviStopNodes = [];
-    
+
         while ($navi = \MySqlLegacySupport::getInstance()->fetch_assoc($navis)) {
             $naviStopNodes[] = $navi['tree_node'];
         }
 
         $stopNodes = array_merge($naviStopNodes, $stopNodes);
-        
+
         return $stopNodes;
     }
 

@@ -20,14 +20,14 @@ class TCCustomNavigation
      *
      * @var TdbCmsTree
      */
-    public $oRootNode = null;
+    public $oRootNode;
 
     /**
      * current active page.
      *
      * @var int
      */
-    public $iCurrentPage = null;
+    public $iCurrentPage;
 
     /**
      * added as linefeed after TAGs. sometimes the IE6 needs it.
@@ -41,7 +41,7 @@ class TCCustomNavigation
      *
      * @var TCMSPage
      */
-    public $oActiveBreadcrumb = null;
+    public $oActiveBreadcrumb;
 
     /**
      * if set to true, each main node is placed within a <ul>.
@@ -64,7 +64,7 @@ class TCCustomNavigation
      *
      * @var array
      */
-    public $aNodeIDs = array();
+    public $aNodeIDs = [];
 
     /**
      * array of all connected pages of the rendered tree nodes
@@ -73,7 +73,7 @@ class TCCustomNavigation
      *
      * @var array
      */
-    public $aPageIDs = array();
+    public $aPageIDs = [];
 
     /**
      * you may add a "<span>[{sLinkText}]</span>" here or any other HTML
@@ -97,7 +97,7 @@ class TCCustomNavigation
 
     /**
      * @param string $rootNodeId
-     * @param int    $iCurrentPage
+     * @param int $iCurrentPage
      */
     public function Load($rootNodeId, $iCurrentPage)
     {
@@ -191,7 +191,7 @@ class TCCustomNavigation
             $menu .= '<ul>';
         }
         while ($oNode = $oChildren->Next()) {
-            /** @var $oNode TdbCmsTree */
+            /* @var $oNode TdbCmsTree */
             $this->FetchTreeDataForCacheTriggers($oNode);
 
             if ($this->_ShowNode($oNode, 0, $count)) {
@@ -259,10 +259,10 @@ class TCCustomNavigation
     /**
      * called for each submenu (<ul>) block.
      *
-     * @param string     $sSubmenuBlock   - the submenu block (including its children)
+     * @param string $sSubmenuBlock - the submenu block (including its children)
      * @param TdbCmsTree $oParentNode
-     * @param int        $activeNodeLevel - the level of the active node within the block
-     * @param int        $level           - the level of the block
+     * @param int $activeNodeLevel - the level of the active node within the block
+     * @param int $level - the level of the block
      *
      * @return string
      */
@@ -285,9 +285,9 @@ class TCCustomNavigation
      * The recursive function that renders all subnodes. returns the complete subnavi
      * for the root node oParentNode.
      *
-     * @param TIterator  $oSubnodes
+     * @param TIterator $oSubnodes
      * @param TdbCmsTree $oParentNode
-     * @param int        $level
+     * @param int $level
      *
      * @return string
      */
@@ -306,7 +306,7 @@ class TCCustomNavigation
             $oSubnodes->GoToStart();
 
             while ($oNode = $oSubnodes->Next()) {
-                /** @var $oNode TdbCmsTree */
+                /* @var $oNode TdbCmsTree */
                 $this->FetchTreeDataForCacheTriggers($oNode);
                 if ($this->_ShowNode($oNode, $level, $row)) {
                     if ($this->oActiveBreadcrumb->NodeInBreadcrumb($oNode->id)) {
@@ -329,9 +329,9 @@ class TCCustomNavigation
 
                     $nodeStyle = $this->_GetNodeStyle($oNode, $level, $row, $bHasChildren, $totalSiblings);
 
-                    $isLast = (($totalSiblings) - 1 == $row + 1);
-                    //echo $row;
-                    //echo ($totalSiblings)-1;
+                    $isLast = ($totalSiblings - 1 == $row + 1);
+                    // echo $row;
+                    // echo ($totalSiblings)-1;
                     if ($this->iLevelSplitCounter > 0 && 0 == $row) {
                         if (empty($submenuCSS)) {
                             $submenuCSS = "class='firstul'";
@@ -410,14 +410,14 @@ class TCCustomNavigation
      * depending on which sibling it is within its parent.
      *
      * @param TdbCmsTree $oNode
-     * @param int        $siblingCount  - at what position within the parent <li> is it
-     * @param int        $totalSiblings - total number of <ul> in the parent <li>
+     * @param int $siblingCount - at what position within the parent <li> is it
+     * @param int $totalSiblings - total number of <ul> in the parent <li>
      *
      * @return string
      */
     protected function _WriteSubmenuStyle($oNode, $siblingCount, $totalSiblings)
     {
-        $nodeCssClasses = array();
+        $nodeCssClasses = [];
         if ($oNode->IsInBreadcrumb()) {
             $nodeCssClasses[] = 'expanded';
         }
@@ -445,16 +445,16 @@ class TCCustomNavigation
      * around the root node given by oNode.
      *
      * @param TdbCmsTree $oNode
-     * @param bool       $bHasChildren  - set to true if the node has children and is allowed to show them
-     * @param int        $row
-     * @param int        $totalSiblings
+     * @param bool $bHasChildren - set to true if the node has children and is allowed to show them
+     * @param int $row
+     * @param int $totalSiblings
      *
      * @return string
      */
     protected function _WriteRootNodeListClass($oNode, $bHasChildren = false, $row = 0, $totalSiblings = 0)
     {
-        $nodeCssClasses = array();
-        $nodeCssClasses[] = 'liNavi'.str_replace(array('-', '_'), '', $oNode->sqlData['urlname']);
+        $nodeCssClasses = [];
+        $nodeCssClasses[] = 'liNavi'.str_replace(['-', '_'], '', $oNode->sqlData['urlname']);
 
         $isFirst = (0 == $row);
         $isLast = (($totalSiblings - 1) == $row);
@@ -496,17 +496,17 @@ class TCCustomNavigation
      * while row is the row within one level (first point = 0).
      *
      * @param TdbCmsTree $oNode
-     * @param int        $level
-     * @param int        $row
-     * @param bool       $bHasChildren  - set to true if the node has children, and they are allowed to be displayed
-     * @param int        $totalSiblings
+     * @param int $level
+     * @param int $row
+     * @param bool $bHasChildren - set to true if the node has children, and they are allowed to be displayed
+     * @param int $totalSiblings
      *
      * @return string
      */
     protected function _GetNodeStyle($oNode, $level, $row, $bHasChildren = false, $totalSiblings = 0)
     {
-        $nodeCssClasses = array();
-        $nodeCssClasses[] = 'liNavi'.str_replace(array('-', '_'), '', $oNode->sqlData['urlname']);
+        $nodeCssClasses = [];
+        $nodeCssClasses[] = 'liNavi'.str_replace(['-', '_'], '', $oNode->sqlData['urlname']);
 
         if (1 == $level && 0 == $row) {
             $nodeCssClasses[] = 'firstrow';
@@ -619,8 +619,8 @@ class TCCustomNavigation
      */
     protected function AddLinkStyle($oNode)
     {
-        $nodeCssClasses = array();
-        $nodeCssClasses[] = 'aNavi'.str_replace(array('-', '_'), '', $oNode->sqlData['urlname']);
+        $nodeCssClasses = [];
+        $nodeCssClasses[] = 'aNavi'.str_replace(['-', '_'], '', $oNode->sqlData['urlname']);
 
         if ($oNode->IsActiveNode()) {
             $nodeCssClasses[] = 'activelink';
@@ -651,7 +651,7 @@ class TCCustomNavigation
      * allows one to modify the submenu block (the <ul> around the submenu) for a given node.
      *
      * @param TdbCmsTree $oParentNode
-     * @param int        $level
+     * @param int $level
      *
      * @return string
      */
@@ -662,7 +662,7 @@ class TCCustomNavigation
 
     protected function _GetSelectBoxWorkAround()
     {
-        return ''; //"<iframe src=\"javascript:;\"></iframe>";
+        return ''; // "<iframe src=\"javascript:;\"></iframe>";
     }
 
     /**
@@ -670,7 +670,7 @@ class TCCustomNavigation
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -678,7 +678,7 @@ class TCCustomNavigation
      */
     private function getTreeService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
     }
 
     /**
@@ -686,6 +686,6 @@ class TCCustomNavigation
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }

@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
  * making use of the template engine
  * this class definition will be preloaded in TUserController, so you can just use the
  * GetInstance method without having to load the class definition again.
-/**/
+ * /**/
 class TCMSActivePage extends TdbCmsTplPage
 {
     /**
@@ -38,19 +38,19 @@ class TCMSActivePage extends TdbCmsTplPage
     /**
      * returns the link to the current page including all current parameters.
      *
-     * @var array  $aAdditionalParameters additional parameters will be added to the exclude parameter list. Note that
-     *             a pagedef parameter in this list will never be appended to the returned URL.
-     *             Possible input: real array (array("level1"=>array("level2"=>"value"))). This will delete all url array parameters with key level1.
-     *             string array (Myarray[level1][level2]). This will delete only url array parameter level2.
-     * @var array  $aExcludeParameters
-     * @var bool   $bUseFullURL - adds http to url if true
-     * @var string $sLanguageIsoName
+     * @var array additional parameters will be added to the exclude parameter list. Note that
+     *            a pagedef parameter in this list will never be appended to the returned URL.
+     *            Possible input: real array (array("level1"=>array("level2"=>"value"))). This will delete all url array parameters with key level1.
+     *            string array (Myarray[level1][level2]). This will delete only url array parameter level2.
+     * @var array
+     * @var bool - adds http to url if true
+     * @var string
      *
      * @return string
      *
      * @deprecated since 6.1.0 - use chameleon_system_core.active_page_service::getLinkToActivePage*() instead.
      */
-    public function GetRealURL($aAdditionalParameters = array(), $aExcludeParameters = array(), $bUseFullURL = false, $sLanguageIsoName = '')
+    public function GetRealURL($aAdditionalParameters = [], $aExcludeParameters = [], $bUseFullURL = false, $sLanguageIsoName = '')
     {
         $language = null;
         if (!empty($sLanguageIsoName)) {
@@ -70,13 +70,13 @@ class TCMSActivePage extends TdbCmsTplPage
      * returns the real url to the current page WITHOUT any parameters aside from
      * the paramters you add via $aAdditionalParameters.
      *
-     * @param array  $aAdditionalParameters
-     * @param bool   $bUseFullURL
+     * @param array $aAdditionalParameters
+     * @param bool $bUseFullURL
      * @param string $sLanguageIsoName
      *
      * @return string
      */
-    public function GetRealURLPlain($aAdditionalParameters = array(), $bUseFullURL = false, $sLanguageIsoName = '')
+    public function GetRealURLPlain($aAdditionalParameters = [], $bUseFullURL = false, $sLanguageIsoName = '')
     {
         $oGlobal = TGlobal::instance();
         $aExcludes = array_keys($oGlobal->GetUserData());

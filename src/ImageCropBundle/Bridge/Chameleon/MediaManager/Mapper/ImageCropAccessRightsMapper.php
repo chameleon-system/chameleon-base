@@ -11,21 +11,17 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\MediaManager\AccessRightsModel;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 
-class ImageCropAccessRightsMapper extends AbstractViewMapper
+class ImageCropAccessRightsMapper extends \AbstractViewMapper
 {
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
     }
 
@@ -33,9 +29,9 @@ class ImageCropAccessRightsMapper extends AbstractViewMapper
      * {@inheritdoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         $oVisitor->SetMappedValue('accessRightsCrop', $this->createAccessRightsModel('cms_image_crop'));
     }

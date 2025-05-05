@@ -11,7 +11,7 @@
 
 /**
  * manages a wysiwyxg textfield.
-/**/
+ * /**/
 class TCMSTidyHTMLCleaner
 {
     protected $sTidyPath = '';
@@ -20,16 +20,16 @@ class TCMSTidyHTMLCleaner
      * Sanitize text for HTML using the PHP tidy extension.
      *
      * @param string $sUncleanedText
-     * @param array  $aOverwiteOptions
+     * @param array $aOverwiteOptions
      *
      * @return string
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
-    public function CleanText($sUncleanedText, $aOverwiteOptions = array())
+    public function CleanText($sUncleanedText, $aOverwiteOptions = [])
     {
         if (!extension_loaded('tidy')) {
-            throw new \LogicException('tidy PHP extension is not loaded but was called in TCMSTidyHTMLCleaner.');
+            throw new LogicException('tidy PHP extension is not loaded but was called in TCMSTidyHTMLCleaner.');
         }
 
         return $this->TidyClean($sUncleanedText, $this->GetOptions($aOverwiteOptions));
@@ -44,7 +44,7 @@ class TCMSTidyHTMLCleaner
      */
     protected function GetOptions($aOverwiteOptions)
     {
-        $aDefaulOptions = array(
+        $aDefaulOptions = [
             'clean' => false,
             'drop-proprietary-attributes' => false,
             'drop-empty-paras' => false,
@@ -69,7 +69,7 @@ class TCMSTidyHTMLCleaner
             'doctype' => 'omit',
             'break-before-br' => true,
             'enclose-block-text' => true,
-        );
+        ];
         if (count($aOverwiteOptions) > 0) {
             foreach ($aOverwiteOptions as $sOption => $sValue) {
                 if (array_key_exists($sOption, $aDefaulOptions) && $aDefaulOptions[$sOption] != $aOverwiteOptions[$sOption]) {
@@ -85,7 +85,7 @@ class TCMSTidyHTMLCleaner
      * Clean text to a html save text with php extension tidy.
      *
      * @param string $sUncleanedText
-     * @param array  $aOptions
+     * @param array $aOptions
      *
      * @return string
      */

@@ -19,40 +19,40 @@ class MapperVisitor implements IMapperVisitor
     /**
      * @var array
      */
-    private $aSourceObjects = array();
+    private $aSourceObjects = [];
     /**
      * @var array
      */
-    private $aMappedValues = array();
+    private $aMappedValues = [];
     /**
      * @var MapperRequirements
      */
-    private $oCurrentRequirements = null;
+    private $oCurrentRequirements;
     /**
      * @var string|null
      */
-    private $sSnippetName = null;
+    private $sSnippetName;
     /**
      * @var array|null
      */
-    private $transformations = null;
+    private $transformations;
     /**
      * @var string|null
      */
-    private $mapToArray = null;
+    private $mapToArray;
     /**
      * @var DataMappingServiceInterface[]
      */
-    private $mapperChains = array();
+    private $mapperChains = [];
     /**
      * @var array
      */
-    private $mapperChainCacheTriggerCollection = array();
+    private $mapperChainCacheTriggerCollection = [];
 
     /**
      * @param array $aSourceObjects
      */
-    public function __construct($aSourceObjects = array())
+    public function __construct($aSourceObjects = [])
     {
         $this->AddSourceObjects($aSourceObjects);
     }
@@ -71,8 +71,6 @@ class MapperVisitor implements IMapperVisitor
 
     /**
      * @param string $key
-     *
-     * @return mixed
      *
      * @throws MapperException
      */
@@ -95,7 +93,7 @@ class MapperVisitor implements IMapperVisitor
         }
         if (null !== $this->mapToArray) {
             if (!isset($this->aMappedValues[$this->mapToArray]) || !is_array($this->aMappedValues[$this->mapToArray])) {
-                $this->aMappedValues[$this->mapToArray] = array();
+                $this->aMappedValues[$this->mapToArray] = [];
             }
             $this->aMappedValues[$this->mapToArray][$key] = $value;
         } else {
@@ -187,8 +185,8 @@ class MapperVisitor implements IMapperVisitor
     public function hasSetRequirementWithDefaultValue($key)
     {
         return $this->oCurrentRequirements->CanHaveSourceObject(
-                $key
-            ) && (null !== $this->oCurrentRequirements->getSourceObjectDefault($key));
+            $key
+        ) && (null !== $this->oCurrentRequirements->getSourceObjectDefault($key));
     }
 
     /**
@@ -218,9 +216,9 @@ class MapperVisitor implements IMapperVisitor
     /**
      * {@inheritdoc}
      *
-     * @return void
+     * @param array<string, string>|null $transformations
      *
-     * @param null|array<string, string> $transformations
+     * @return void
      */
     public function setTransformations($transformations)
     {
@@ -287,7 +285,7 @@ class MapperVisitor implements IMapperVisitor
     private function mergeCacheTrigger($mapperChainCacheTriggerCollection, $cacheTrigger)
     {
         $completeList = array_merge($mapperChainCacheTriggerCollection, $cacheTrigger);
-        $finalList = array();
+        $finalList = [];
         foreach ($completeList as $cacheTrigger) {
             $id = (true === isset($cacheTrigger['id']) && null !== $cacheTrigger['id'] && '' !== $cacheTrigger['id']) ? $cacheTrigger['id'] : '-';
             $triggerKey = $cacheTrigger['table'].':'.$id;

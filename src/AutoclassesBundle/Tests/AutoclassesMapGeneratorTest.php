@@ -42,13 +42,13 @@ class AutoclassesMapGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function it_should_generate_a_complete_autoclasses_classmap()
+    public function itShouldGenerateACompleteAutoclassesClassmap()
     {
         $cacheDir = __DIR__.'/cache/';
 
         $actual = $this->mapGenerator->generateAutoclassesMap($cacheDir);
 
-        $expected = array();
+        $expected = [];
         $expected['TestClass'] = 'TestType';
 
         $this->assertEquals($expected, $actual);

@@ -11,7 +11,7 @@ class CmsMasterPagedef
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -24,12 +24,10 @@ class CmsMasterPagedef
         private string $layout = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsMasterPagedefSpot> - Spots */
-        private Collection $cmsMasterPagedefSpotCollection = new ArrayCollection()
-        ,
+        private Collection $cmsMasterPagedefSpotCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, PkgCmsThemeBlock> - Theme blocks */
-        private Collection $pkgCmsThemeBlockCollection = new ArrayCollection()
-        ,
+        private Collection $pkgCmsThemeBlockCollection = new ArrayCollection(),
         // TCMSFieldText
         /** @var string - Action-Plugins */
         private string $actionPluginList = '',
@@ -38,8 +36,7 @@ class CmsMasterPagedef
         private bool $restrictToPortals = false,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - CMS module extension */
-        private Collection $cmsPortalCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - WYSIWYG CSS URL */
         private string $wysiwygCssUrl = '',
@@ -86,7 +83,6 @@ class CmsMasterPagedef
         return $this;
     }
 
-
     // TCMSFieldText
     public function getDescription(): string
     {
@@ -100,7 +96,6 @@ class CmsMasterPagedef
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getLayout(): string
     {
@@ -113,8 +108,6 @@ class CmsMasterPagedef
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -148,8 +141,6 @@ class CmsMasterPagedef
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselect
 
     /**
@@ -182,7 +173,6 @@ class CmsMasterPagedef
         return $this;
     }
 
-
     // TCMSFieldText
     public function getActionPluginList(): string
     {
@@ -196,7 +186,6 @@ class CmsMasterPagedef
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRestrictToPortals(): bool
     {
@@ -209,8 +198,6 @@ class CmsMasterPagedef
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -244,7 +231,6 @@ class CmsMasterPagedef
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getWysiwygCssUrl(): string
     {
@@ -258,7 +244,6 @@ class CmsMasterPagedef
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -271,6 +256,4 @@ class CmsMasterPagedef
 
         return $this;
     }
-
-
 }

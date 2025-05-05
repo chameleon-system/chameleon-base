@@ -13,14 +13,14 @@ use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 
 class MTExtranetMyAccountCore extends TUserCustomModelBase
 {
-    const MSG_BASE_NAME = 'msgMTExtranetMyAccountCore';
+    public const MSG_BASE_NAME = 'msgMTExtranetMyAccountCore';
 
     /**
      * config data for the module.
      *
      * @var TdbDataExtranetModuleMyAccount
      */
-    protected $oModuleConfig = null;
+    protected $oModuleConfig;
 
     /**
      * @var bool
@@ -65,6 +65,6 @@ class MTExtranetMyAccountCore extends TUserCustomModelBase
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 }

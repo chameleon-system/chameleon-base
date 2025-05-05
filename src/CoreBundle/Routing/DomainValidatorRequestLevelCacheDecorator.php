@@ -2,9 +2,6 @@
 
 namespace ChameleonSystem\CoreBundle\Routing;
 
-use TdbCmsLanguage;
-use TdbCmsPortal;
-
 class DomainValidatorRequestLevelCacheDecorator implements DomainValidatorInterface
 {
     /**
@@ -14,11 +11,8 @@ class DomainValidatorRequestLevelCacheDecorator implements DomainValidatorInterf
     /**
      * @var array
      */
-    private $cache = array();
+    private $cache = [];
 
-    /**
-     * @param DomainValidatorInterface $subject
-     */
     public function __construct(DomainValidatorInterface $subject)
     {
         $this->subject = $subject;
@@ -27,7 +21,7 @@ class DomainValidatorRequestLevelCacheDecorator implements DomainValidatorInterf
     /**
      * {@inheritdoc}
      */
-    public function getValidDomain($domain, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $secure = true)
+    public function getValidDomain($domain, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $secure = true)
     {
         $cacheKey = $this->getCacheKey($domain, $portal, $language, $secure);
         if (false === isset($this->cache[$cacheKey])) {
@@ -38,16 +32,14 @@ class DomainValidatorRequestLevelCacheDecorator implements DomainValidatorInterf
     }
 
     /**
-     * @param string              $domain
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
-     * @param bool                $secure
+     * @param string $domain
+     * @param bool $secure
      *
      * @return string
      */
-    private function getCacheKey($domain, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $secure = true)
+    private function getCacheKey($domain, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $secure = true)
     {
-        $keyParts = array();
+        $keyParts = [];
         $keyParts[] = $domain;
         $keyParts[] = null === $portal ? 'xx' : $portal->id;
         $keyParts[] = null === $language ? 'xx' : $language->id;

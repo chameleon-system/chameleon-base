@@ -23,9 +23,6 @@ class MediaManagerListRequestFactory implements MediaManagerListRequestFactoryIn
      */
     private $mediaTreeDataAccess;
 
-    /**
-     * @param MediaTreeDataAccessInterface $mediaTreeDataAccess
-     */
     public function __construct(MediaTreeDataAccessInterface $mediaTreeDataAccess)
     {
         $this->mediaTreeDataAccess = $mediaTreeDataAccess;

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-/**
+/*
  * {@inheritdoc}
  */
 
@@ -23,23 +23,23 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
      *
      * @var array
      */
-    private $aConfigMediaToTargetMapping = null;
+    private $aConfigMediaToTargetMapping;
 
     /**
      * access via GetDefaultValue.
      *
      * @var array
      */
-    private $aConfigDefaultValues = null;
+    private $aConfigDefaultValues;
 
     /**
      * max height of images uploaded in frontend.
      */
-    const MAX_IMAGE_HEIGHT = 4000;
+    public const MAX_IMAGE_HEIGHT = 4000;
     /**
      * max width of images uploaded in frontend.
      */
-    const MAX_IMAGE_WIDTH = 4000;
+    public const MAX_IMAGE_WIDTH = 4000;
 
     /**
      * view path for frontend.
@@ -59,7 +59,7 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
     protected function GetImageControlButtons()
     {
         $oViewParser = new TViewParser();
-        $aData = array('oField' => $this);
+        $aData = ['oField' => $this];
         $oViewParser->AddVarArray($aData);
 
         return $oViewParser->RenderObjectView('vControlButtons', 'TCMSFields/TCMSFieldPropertyTable_CmsMedia');
@@ -102,7 +102,7 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
     protected function ConfigGetFieldMapping($sSourceField)
     {
         if (is_null($this->aConfigMediaToTargetMapping)) {
-            $this->aConfigMediaToTargetMapping = array();
+            $this->aConfigMediaToTargetMapping = [];
             $sMapping = $this->oDefinition->GetFieldtypeConfigKey('mapping');
             if ($sMapping && !empty($sMapping)) {
                 $sMapping = str_replace(' ', '', $sMapping);
@@ -121,7 +121,7 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
     }
 
     /**
-     * @param string     $sSourceField
+     * @param string $sSourceField
      * @param TCMSRecord $oSourceRecord
      *
      * @return string
@@ -134,7 +134,7 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
     protected function ConfigGetTargetDefaults()
     {
         if (is_null($this->aConfigDefaultValues)) {
-            $this->aConfigDefaultValues = array();
+            $this->aConfigDefaultValues = [];
             $sMapping = $this->oDefinition->GetFieldtypeConfigKey('default');
             if ($sMapping && !empty($sMapping)) {
                 $aMapping = explode('|,', $sMapping);
@@ -155,11 +155,11 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
         $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         $js = "saveCMSRegistryEntry('_currentFieldName','".TGlobal::OutHTML($this->name)."');";
         if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
-            $parentIFrame = $parentField . '_iframe';
+            $parentIFrame = $parentField.'_iframe';
             $js .= "saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutHTML($parentIFrame)."');
-                    TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value,'".TGlobal::OutJS($parentIFrame)."');";
+                    TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name).'(document.cmseditform.'.TGlobal::OutHTML($this->name)."__cms_media_tree_id.value,'".TGlobal::OutJS($parentIFrame)."');";
         } else {
-            $js .= "TCMSFieldPropertyTableCmsMediaOpenUploadWindow_".TGlobal::OutJS($this->name)."(document.cmseditform.".TGlobal::OutHTML($this->name)."__cms_media_tree_id.value);";
+            $js .= 'TCMSFieldPropertyTableCmsMediaOpenUploadWindow_'.TGlobal::OutJS($this->name).'(document.cmseditform.'.TGlobal::OutHTML($this->name).'__cms_media_tree_id.value);';
         }
 
         return $js;
@@ -175,36 +175,36 @@ class TCMSFieldPropertyTable_CmsMedia extends TCMSFieldPropertyTable
     public function GetCMSHtmlHeadIncludes()
     {
         $aIncludes = parent::GetCMSHtmlHeadIncludes();
-        $aRequest = array(
+        $aRequest = [
             'pagedef' => 'CMSUniversalUploader',
             'mode' => 'media',
             'callback' => 'CMSFieldPropertyTableCmsMediaPostUploadHook_'.$this->name,
             'queueCompleteCallback' => 'CMSFieldPropertyTableCmsMediaQueueCompleteHook_'.$this->name,
-        );
+        ];
         $singleMode = $this->oDefinition->GetFieldtypeConfigKey('singleMode');
         if (!empty($singleMode)) {
             $aRequest['singleMode'] = '1';
         }
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
         if (null !== $parentField && '' !== $parentField) {
-            $aRequest['parentIFrame'] = $parentField . '_iframe';
+            $aRequest['parentIFrame'] = $parentField.'_iframe';
             $aRequest['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         }
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aRequest);
         $sErrorMessage = TGlobal::OutJS(
-            \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.error_missing_target')
+            ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.error_missing_target')
         );
         $oGlobal = TGlobal::instance();
 
-        $aParam = $oGlobal->GetUserData(null, array('module_fnc', '_rmhist', '_histid', '_fnc'));
+        $aParam = $oGlobal->GetUserData(null, ['module_fnc', '_rmhist', '_histid', '_fnc']);
         $aParam['pagedef'] = $oGlobal->GetUserData('pagedef');
-        $aParam['module_fnc'] = array('contentmodule' => 'ExecuteAjaxCall');
+        $aParam['module_fnc'] = ['contentmodule' => 'ExecuteAjaxCall'];
         $aParam['_fnc'] = 'ConnectImageObject';
         $aParam['callFieldMethod'] = '1';
         $aParam['_fieldName'] = $this->name;
         if (null !== $parentField && '' !== $parentField) {
-            $aParam['parentIFrame'] = $parentField . '_iframe';
+            $aParam['parentIFrame'] = $parentField.'_iframe';
             $aParam['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         }
 
@@ -256,10 +256,10 @@ JAVASCRIPTCODE;
     {
         $oGlobal = TGlobal::instance();
         $sMediaId = $oGlobal->GetUserData('cms_media_id');
-        $aData = array(
+        $aData = [
             $this->GetMatchingParentFieldName() => $this->recordId,
             $this->ConfigGetMediaFieldName() => $sMediaId,
-        );
+        ];
 
         // now set defaults
         $aDefaults = $this->ConfigGetTargetDefaults();
@@ -283,9 +283,9 @@ JAVASCRIPTCODE;
         }
 
         if (empty($oTableEditor->oTableEditor->sId)) {
-            $sReturn = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.error_creating');
+            $sReturn = ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.error_creating');
         } else {
-            $sReturn = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.created');
+            $sReturn = ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.created');
         }
 
         return $sReturn;
@@ -307,7 +307,7 @@ JAVASCRIPTCODE;
         }
         $sForeignTableName = $this->GetPropertyTableNameFrontend();
         if (!empty($sForeignTableName) && TTools::FieldExists($sForeignTableName, $this->sTableName.'_id')) {
-            $aConnectedRecordIdsToDelete = array();
+            $aConnectedRecordIdsToDelete = [];
             if (!empty($this->oTableRow->id)) {
                 $sSql = 'SELECT *
                            FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sForeignTableName).'`
@@ -321,9 +321,9 @@ JAVASCRIPTCODE;
                 foreach ($this->data as $aRow) {
                     $sRecordId = null;
                     if (array_key_exists('id', $aRow) && TTools::RecordExistsArray(
-                            $sForeignTableName,
-                            array('id' => $aRow['id'], $this->sTableName.'_id' => $sId)
-                        )
+                        $sForeignTableName,
+                        ['id' => $aRow['id'], $this->sTableName.'_id' => $sId]
+                    )
                     ) {
                         unset($aConnectedRecordIdsToDelete[$aRow['id']]);
                         $sRecordId = $aRow['id'];
@@ -362,9 +362,9 @@ JAVASCRIPTCODE;
                 foreach ($this->data as $key => $value) {
                     if (!array_key_exists('presaveimage', $value)) {
                         if (array_key_exists($this->name.'image', $_FILES) && array_key_exists(
-                                $key,
-                                $_FILES[$this->name.'image']['name']
-                            ) && UPLOAD_ERR_NO_FILE != $_FILES[$this->name.'image']['error'][$key]
+                            $key,
+                            $_FILES[$this->name.'image']['name']
+                        ) && UPLOAD_ERR_NO_FILE != $_FILES[$this->name.'image']['error'][$key]
                         ) {
                             if (UPLOAD_ERR_OK != $_FILES[$this->name.'image']['error'][$key]) {
                                 $bIsValid = false;
@@ -390,10 +390,10 @@ JAVASCRIPTCODE;
                                         $oMsgManager->AddMessage(
                                             $sConsumerName,
                                             'ERROR-INVALID-IMAGE-DIMENSIONS',
-                                            array(
+                                            [
                                                 'allowedWidth' => self::MAX_IMAGE_WIDTH,
                                                 'allowedHeight' => self::MAX_IMAGE_HEIGHT,
-                                            )
+                                            ]
                                         );
                                     }
 
@@ -404,10 +404,10 @@ JAVASCRIPTCODE;
                                         $oMsgManager->AddMessage(
                                             $sConsumerName,
                                             'ERROR-INVALID-IMAGE-SIZE',
-                                            array(
+                                            [
                                                 'fileSize' => $_FILES[$this->name.'image']['size'][$key],
                                                 'allowedSize' => $imageUploadMaxSize,
-                                            )
+                                            ]
                                         );
                                     }
                                 } else {
@@ -442,16 +442,16 @@ JAVASCRIPTCODE;
             foreach ($this->data as $key => $value) {
                 if (array_key_exists('presaveimage', $value)) {
                     if (!empty($value['presaveimage']) && array_key_exists(
-                            'pkgFormUploadedImagesByUser',
-                            $_SESSION
-                        ) && is_array($_SESSION['pkgFormUploadedImagesByUser']) && in_array(
-                            $value['presaveimage'],
-                            $_SESSION['pkgFormUploadedImagesByUser']
-                        )
+                        'pkgFormUploadedImagesByUser',
+                        $_SESSION
+                    ) && is_array($_SESSION['pkgFormUploadedImagesByUser']) && in_array(
+                        $value['presaveimage'],
+                        $_SESSION['pkgFormUploadedImagesByUser']
+                    )
                     ) {
                         $this->data[$key][$this->ConfigGetMediaFieldName()] = $value['presaveimage'];
                         // now set defaults
-                        $aData = array();
+                        $aData = [];
                         $aDefaults = $this->ConfigGetTargetDefaults();
                         foreach ($aDefaults as $sField => $sValue) {
                             $aData[$sField] = $sValue;
@@ -470,10 +470,10 @@ JAVASCRIPTCODE;
                         unset($this->data[$key]);
                     }
                 } else {
-                    //upload image already when its valid so user doesn't have to upload it again when something else goes wrong
+                    // upload image already when its valid so user doesn't have to upload it again when something else goes wrong
                     $sNewMediaId = $this->UploadImage($key);
                     if ($sNewMediaId) {
-                        $aData = array();
+                        $aData = [];
                         $this->data[$key][$this->ConfigGetMediaFieldName()] = $sNewMediaId;
                         // now set defaults
                         $aDefaults = $this->ConfigGetTargetDefaults();
@@ -518,23 +518,23 @@ JAVASCRIPTCODE;
                     $aSizeOfImage = getimagesize($oFile->sPath);
                     $oFile->Load($oFile->sPath);
                     $sContentType = image_type_to_mime_type($aSizeOfImage[2]);
-                    $aImageFileData = array(
+                    $aImageFileData = [
                         'name' => $_FILES[$this->name.'image']['name'][$sKey],
                         'type' => $sContentType,
                         'size' => $oFile->dSizeByte,
                         'tmp_name' => $oFile->sPath,
                         'error' => 0,
-                    );
+                    ];
                     $oMediaTableConf = new TCMSTableConf();
                     $oMediaTableConf->LoadFromField('name', 'cms_media');
                     $oMediaManagerEditor = new TCMSTableEditorMedia();
                     $oMediaManagerEditor->AllowEditByAll(true);
                     $oMediaManagerEditor->Init($oMediaTableConf->id);
                     $oMediaManagerEditor->SetUploadData($aImageFileData, true);
-                    $aImage = array(
+                    $aImage = [
                         'description' => $_FILES[$this->name.'image']['name'][$sKey],
                         $this->ConfigGetMediaFieldName() => 1,
-                    );
+                    ];
                     $sMediaTreeId = $this->ConfigGetDefaultCategoryId();
                     if (!empty($sMediaTreeId)) {
                         $aImage['cms_media_tree_id'] = $sMediaTreeId;
@@ -543,8 +543,8 @@ JAVASCRIPTCODE;
                     try {
                         $oMediaManagerEditor->Save($aImage);
                     } catch (Exception $e) {
-                        //we have already added the error message to message manager function this->PkgCmsFormDataIsValid()
-                        //echo 'Message: ' .$e->getMessage();
+                        // we have already added the error message to message manager function this->PkgCmsFormDataIsValid()
+                        // echo 'Message: ' .$e->getMessage();
                     }
 
                     if (!empty($oMediaManagerEditor->sId)) {
@@ -578,7 +578,7 @@ JAVASCRIPTCODE;
      */
     protected function GetAdditionalFormFieldsFrontend()
     {
-        return array('name');
+        return ['name'];
     }
 
     private function getInputFilterUtil(): InputFilterUtilInterface

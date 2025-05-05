@@ -10,20 +10,17 @@ class PkgNewsletterModuleSignupConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldModuleInstance
         /** @var CmsTplModuleInstance|null - Belongs to newsletter module */
-        private ?CmsTplModuleInstance $mainModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $mainModuleInstance = null,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, PkgNewsletterGroup> - Subscription possible for */
-        private Collection $pkgNewsletterGroupCollection = new ArrayCollection()
-        ,
+        private Collection $pkgNewsletterGroupCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Use double opt-in */
         private bool $useDoubleoptin = true,
@@ -91,7 +88,6 @@ class PkgNewsletterModuleSignupConfig
         return $this;
     }
 
-
     // TCMSFieldModuleInstance
     public function getMainModuleInstance(): ?CmsTplModuleInstance
     {
@@ -104,8 +100,6 @@ class PkgNewsletterModuleSignupConfig
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -139,7 +133,6 @@ class PkgNewsletterModuleSignupConfig
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isUseDoubleoptin(): bool
     {
@@ -152,7 +145,6 @@ class PkgNewsletterModuleSignupConfig
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSignupHeadline(): string
@@ -167,7 +159,6 @@ class PkgNewsletterModuleSignupConfig
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getSignupText(): string
     {
@@ -180,7 +171,6 @@ class PkgNewsletterModuleSignupConfig
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getConfirmTitle(): string
@@ -195,7 +185,6 @@ class PkgNewsletterModuleSignupConfig
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getConfirmText(): string
     {
@@ -208,7 +197,6 @@ class PkgNewsletterModuleSignupConfig
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSignedupHeadline(): string
@@ -223,7 +211,6 @@ class PkgNewsletterModuleSignupConfig
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getSignedupText(): string
     {
@@ -236,7 +223,6 @@ class PkgNewsletterModuleSignupConfig
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getNonewsignupTitle(): string
@@ -251,7 +237,6 @@ class PkgNewsletterModuleSignupConfig
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getNonewsignupText(): string
     {
@@ -264,6 +249,4 @@ class PkgNewsletterModuleSignupConfig
 
         return $this;
     }
-
-
 }

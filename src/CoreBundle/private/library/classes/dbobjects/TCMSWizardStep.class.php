@@ -16,14 +16,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TCMSWizardStep extends TAdbCmsWizardStep
 {
-    const SESSION_KEY_NAME = 'esono/core/_TCMSWizardStep';
+    public const SESSION_KEY_NAME = 'esono/core/_TCMSWizardStep';
 
     /**
      * internal cache for field infos (text and name infos for each field that can be set via the wizard config).
      *
      * @var array
      */
-    protected $aFieldInfo = null;
+    protected $aFieldInfo;
 
     /**
      * set to true for the currently active step.
@@ -66,14 +66,14 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      *
      * @var TdbCmsWizardConfig
      */
-    protected $oWizardConf = null;
+    protected $oWizardConf;
 
     /**
      * store all view data here so that it can be used in the description text.
      *
      * @var array
      */
-    protected $aViewData = array();
+    protected $aViewData = [];
 
     /**
      * return string shown over wizard navi.
@@ -114,7 +114,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
         } else {
             $oStepData = TdbCmsWizardStep::GetNewInstance();
             /** @var $oStepData TdbCmsWizardStep */
-            if (!$oStepData->LoadFromFields(array('systemname' => $sStepName, 'cms_tpl_module_instance_id' => $iInstanceId))) {
+            if (!$oStepData->LoadFromFields(['systemname' => $sStepName, 'cms_tpl_module_instance_id' => $iInstanceId])) {
                 $oStepData = null;
             }
         }
@@ -176,10 +176,10 @@ class TCMSWizardStep extends TAdbCmsWizardStep
         $oGlobal = TGlobal::instance();
         $sSpotName = $oGlobal->GetExecutingModulePointer()->sModuleSpotName;
 
-        return $this->getActivePageService()->getLinkToActivePageRelative(array(
+        return $this->getActivePageService()->getLinkToActivePageRelative([
             MTCMSWizardCore::URL_PARAM_STEP_SYSTEM_NAME => $this->fieldSystemname,
             MTCMSWizardCore::URL_PARAM_MODULE_SPOT => $sSpotName,
-        ));
+        ]);
     }
 
     /**
@@ -245,7 +245,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     protected function ProcessStep()
     {
         if (Request::METHOD_POST !== $this->getRequest()->getMethod()) {
-            throw new \LogicException('Wizard step forms may only be submitted using the POST method. Please adjust your form accordingly.');
+            throw new LogicException('Wizard step forms may only be submitted using the POST method. Please adjust your form accordingly.');
         }
 
         return true;
@@ -288,7 +288,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      */
     public function AllowedMethods()
     {
-        return array('ExecuteStep');
+        return ['ExecuteStep'];
     }
 
     /**
@@ -298,7 +298,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      */
     public function GetHtmlHeadIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -332,7 +332,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     {
         if (is_null($this->oWizardConf)) {
             $this->oWizardConf = TdbCmsWizardConfig::GetNewInstance();
-            /** @var $oWizardConf TdbCmsWizardConfig */
+            /* @var $oWizardConf TdbCmsWizardConfig */
             if (!$this->oWizardConf->LoadFromField('cms_tpl_module_instance_id', $this->fieldCmsTplModuleInstanceId)) {
                 $this->oWizardConf = null;
             }
@@ -344,14 +344,14 @@ class TCMSWizardStep extends TAdbCmsWizardStep
     /**
      * used to display the step.
      *
-     * @param string $sSpotName          - name of the spot the step is in
-     * @param array  $aCallTimeVars      - place any custom vars that you want to pass through the call here
-     * @param string $sViewName          - optional view - will be loaded from db if not set
-     * @param bool   $bTriggerClearCache - clear any render cache for this view
+     * @param string $sSpotName - name of the spot the step is in
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - optional view - will be loaded from db if not set
+     * @param bool $bTriggerClearCache - clear any render cache for this view
      *
      * @return string
      */
-    public function Render($sSpotName = null, $aCallTimeVars = array(), $sViewName = null, $bTriggerClearCache = false)
+    public function Render($sSpotName = null, $aCallTimeVars = [], $sViewName = null, $bTriggerClearCache = false)
     {
         $oView = new TViewParser();
 
@@ -416,7 +416,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -426,7 +426,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
     /**
@@ -434,7 +434,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -442,7 +442,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      */
     protected function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -450,7 +450,7 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      */
     protected function getRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -458,6 +458,6 @@ class TCMSWizardStep extends TAdbCmsWizardStep
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

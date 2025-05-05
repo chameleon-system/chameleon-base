@@ -11,7 +11,7 @@
 
 /**
  * lookup.
-/**/
+ * /**/
 class TCMSFieldLookupListClass extends TCMSFieldLookup
 {
     protected function GetOptionsQuery()

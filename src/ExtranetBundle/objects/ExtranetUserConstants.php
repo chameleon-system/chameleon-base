@@ -13,5 +13,5 @@ namespace ChameleonSystem\ExtranetBundle\objects;
 
 final class ExtranetUserConstants
 {
-    const LOGIN_FORM_FIELD_LOGIN_NAME = 'slogin';
+    public const LOGIN_FORM_FIELD_LOGIN_NAME = 'slogin';
 }

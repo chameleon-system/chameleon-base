@@ -15,19 +15,17 @@ class CmsTplPage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldText
         /** @var string - Navigation path image for searches */
         private string $treePathSearchString = '',
         // TCMSFieldLookup
         /** @var CmsMasterPagedef|null - Page template */
-        private ?CmsMasterPagedef $cmsMasterPagedef = null
-        ,
+        private ?CmsMasterPagedef $cmsMasterPagedef = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsTplPageCmsMasterPagedefSpot> - Spots */
-        private Collection $cmsTplPageCmsMasterPagedefSpotCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTplPageCmsMasterPagedefSpotCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Page name */
         private string $name = '',
@@ -36,27 +34,22 @@ class CmsTplPage
         private string $seoPattern = '',
         // TCMSFieldLookup
         /** @var CmsPortal|null - Belongs to portal / website */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldPageTreeNode
         /** @var CmsTree|null - Primary navigation tree node */
-        private ?CmsTree $primaryTreeIdHidden = null
-        ,
+        private ?CmsTree $primaryTreeIdHidden = null,
         // TCMSFieldMedia
         /** @var array<string> - Page image */
         private array $images = ['1', '1', '1', '1'],
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Background image */
-        private ?CmsMedia $backgroundImage = null
-        ,
+        private ?CmsMedia $backgroundImage = null,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, CmsUsergroup> - Additional authorized groups */
-        private Collection $cmsUsergroupCollection = new ArrayCollection()
-        ,
+        private Collection $cmsUsergroupCollection = new ArrayCollection(),
         // TCMSFieldCMSUser
         /** @var CmsUser|null - Created by */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldBoolean
         /** @var bool - Use SSL */
         private bool $usessl = false,
@@ -68,15 +61,13 @@ class CmsTplPage
         private bool $accessNotConfirmedUser = false,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, DataExtranetGroup> - Restrict to the following extranet groups */
-        private Collection $dataExtranetGroupCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetGroupCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - IVW page code */
         private string $ivwCode = '',
         // TCMSFieldLookup
         /** @var CmsLanguage|null - Content language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldVarchar
         /** @var string - Short description */
         private string $metaDescription = '',
@@ -144,7 +135,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsMasterPagedef(): ?CmsMasterPagedef
     {
@@ -157,8 +147,6 @@ class CmsTplPage
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -194,7 +182,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -207,7 +194,6 @@ class CmsTplPage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSeoPattern(): string
@@ -222,7 +208,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -235,7 +220,6 @@ class CmsTplPage
 
         return $this;
     }
-
 
     // TCMSFieldPageTreeNode
     public function getPrimaryTreeIdHidden(): ?CmsTree
@@ -250,7 +234,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldMedia
     public function getImages(): array
     {
@@ -264,7 +247,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getBackgroundImage(): ?CmsMedia
     {
@@ -277,8 +259,6 @@ class CmsTplPage
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -312,7 +292,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldCMSUser
     public function getCmsUser(): ?CmsUser
     {
@@ -325,7 +304,6 @@ class CmsTplPage
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isUsessl(): bool
@@ -340,7 +318,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isExtranetPage(): bool
     {
@@ -354,7 +331,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAccessNotConfirmedUser(): bool
     {
@@ -367,8 +343,6 @@ class CmsTplPage
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -402,7 +376,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIvwCode(): string
     {
@@ -415,7 +388,6 @@ class CmsTplPage
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsLanguage(): ?CmsLanguage
@@ -430,7 +402,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getMetaDescription(): string
     {
@@ -443,7 +414,6 @@ class CmsTplPage
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getMetaKeywords(): string
@@ -458,7 +428,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getMetaKeywordLanguage(): string
     {
@@ -471,7 +440,6 @@ class CmsTplPage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMetaAuthor(): string
@@ -486,7 +454,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getMetaPublisher(): string
     {
@@ -499,7 +466,6 @@ class CmsTplPage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMetaPageTopic(): string
@@ -514,7 +480,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getMetaPragma(): string
     {
@@ -527,7 +492,6 @@ class CmsTplPage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMetaRobots(): string
@@ -542,7 +506,6 @@ class CmsTplPage
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getMetaRevisitAfter(): int
     {
@@ -555,6 +518,4 @@ class CmsTplPage
 
         return $this;
     }
-
-
 }

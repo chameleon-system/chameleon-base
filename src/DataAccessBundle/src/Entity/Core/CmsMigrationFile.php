@@ -6,7 +6,7 @@ class CmsMigrationFile
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Build number */
@@ -54,7 +54,6 @@ class CmsMigrationFile
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsMigrationCounter(): ?CmsMigrationCounter
     {
@@ -67,6 +66,4 @@ class CmsMigrationFile
 
         return $this;
     }
-
-
 }

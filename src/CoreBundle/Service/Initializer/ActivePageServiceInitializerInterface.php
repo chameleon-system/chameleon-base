@@ -21,8 +21,6 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 interface ActivePageServiceInitializerInterface
 {
     /**
-     * @param ActivePageServiceInterface $activePageService
-     *
      * @return void
      */
     public function initialize(ActivePageServiceInterface $activePageService);

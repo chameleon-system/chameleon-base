@@ -16,9 +16,9 @@ namespace ChameleonSystem\MediaManager\Interfaces;
  */
 interface SortColumnInterface
 {
-    const DIRECTION_DESCENDING = 'desc';
+    public const DIRECTION_DESCENDING = 'desc';
 
-    const DIRECTION_ASCENDING = 'asc';
+    public const DIRECTION_ASCENDING = 'asc';
 
     /**
      * @return string

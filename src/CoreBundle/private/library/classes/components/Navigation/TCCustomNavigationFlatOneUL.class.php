@@ -11,7 +11,7 @@
 
 /**
  * each main node and its children is forced into ONE UL.
-/**/
+ * /**/
 class TCCustomNavigationFlatOneUL extends TCCustomNavigation
 {
     /**
@@ -29,7 +29,7 @@ class TCCustomNavigationFlatOneUL extends TCCustomNavigation
         $oChildren->GoToStart();
         $menu .= '<ul>'.$this->linefeed;
         while ($oNode = $oChildren->Next()) {
-            /** @var $oNode TCMSTreeNode */
+            /* @var $oNode TCMSTreeNode */
             $this->FetchTreeDataForCacheTriggers($oNode);
             if ($this->_ShowNode($oNode, 0, $count)) {
                 $oGrandChildren = $oNode->GetChildren();
@@ -57,9 +57,9 @@ class TCCustomNavigationFlatOneUL extends TCCustomNavigation
      * The recursive funktion that renders all subnodes. returns the complete subnavi
      * for the root node oParentNode.
      *
-     * @param TIterator    $oSubnodes
+     * @param TIterator $oSubnodes
      * @param TCMSTreeNode $oParentNode
-     * @param int          $level
+     * @param int $level
      *
      * @return string
      */
@@ -73,7 +73,7 @@ class TCCustomNavigationFlatOneUL extends TCCustomNavigation
             $row = 0;
             $menuContent = '';
             while ($oNode = $oSubnodes->Next()) {
-                /** @var $oNode TCMSTreeNode */
+                /* @var $oNode TCMSTreeNode */
                 $this->FetchTreeDataForCacheTriggers($oNode);
                 if ($this->_ShowNode($oNode, $level, $row)) {
                     $oGrandChildren = $oNode->GetChildren();

@@ -36,7 +36,7 @@ class TCMSMasterPagedefSpot extends TCMSRecord
     public $sModel = '';
 
     /**
-     * @param string      $table
+     * @param string $table
      * @param string|null $id
      * @param string|null $iLanguageId
      */
@@ -68,7 +68,7 @@ class TCMSMasterPagedefSpot extends TCMSRecord
         if (null !== $this->aParameter) {
             return $this->aParameter;
         }
-        $this->aParameter = array();
+        $this->aParameter = [];
         $this->aParameter['name'] = $this->sName;
         $this->aParameter['model'] = $this->sModel;
         $this->aParameter['view'] = $this->sView;
@@ -184,7 +184,7 @@ class TCMSMasterPagedefSpot extends TCMSRecord
      */
     private function getPagedefSpotParameterDataAccess()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_master_pagedef_spot_parameter');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_master_pagedef_spot_parameter');
     }
 
     /**
@@ -192,6 +192,6 @@ class TCMSMasterPagedefSpot extends TCMSRecord
      */
     private function getPagedefSpotAccessDataAccess()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_master_pagedef_spot_access');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_master_pagedef_spot_access');
     }
 }

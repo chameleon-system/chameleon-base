@@ -22,13 +22,12 @@ class VirtualFieldManager implements VirtualFieldManagerInterface
 
     /**
      * Uses tablename as key and fieldnames as values.
+     *
      * @var array<string, string[]>
      */
     private $virtualFields;
 
     /**
-     * @param Connection $connection
-     *
      * @return void
      */
     public function setDatabaseConnection(Connection $connection)
@@ -43,7 +42,7 @@ class VirtualFieldManager implements VirtualFieldManagerInterface
     {
         $virtualFields = $this->getVirtualFields();
 
-        return isset($virtualFields[$tableName]) ? $virtualFields[$tableName] : array();
+        return isset($virtualFields[$tableName]) ? $virtualFields[$tableName] : [];
     }
 
     /**
@@ -57,7 +56,7 @@ class VirtualFieldManager implements VirtualFieldManagerInterface
             return $this->virtualFields;
         }
 
-        $this->virtualFields = array();
+        $this->virtualFields = [];
         $query = "select cms_tbl_conf.name AS tablename, cms_field_conf.name AS fieldname
 FROM cms_field_conf
 INNER JOIN cms_tbl_conf on cms_field_conf.cms_tbl_conf_id = cms_tbl_conf.id
@@ -67,7 +66,7 @@ WHERE cms_field_type.mysql_type = ''";
         foreach ($all as $data) {
             $tablename = $data['tablename'];
             if (!isset($this->virtualFields[$tablename])) {
-                $this->virtualFields[$tablename] = array();
+                $this->virtualFields[$tablename] = [];
             }
             $this->virtualFields[$tablename][] = $data['fieldname'];
         }

@@ -22,7 +22,7 @@ class UrlUtilityService implements UrlUtilityServiceInterface
     {
         $urlParts = parse_url($url);
         $queryParameterString = isset($urlParts['query']) ? $urlParts['query'] : '';
-        $queryParameter = array();
+        $queryParameter = [];
         parse_str($queryParameterString, $queryParameter);
         $queryParameter = array_merge_recursive($queryParameter, $parameter);
         $urlParts['query'] = http_build_query($queryParameter);

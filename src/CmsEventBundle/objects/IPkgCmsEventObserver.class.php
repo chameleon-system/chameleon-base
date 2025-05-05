@@ -14,8 +14,6 @@ interface IPkgCmsEventObserver
     /**
      * This method is called when an event is triggered.
      *
-     * @param IPkgCmsEvent $oEvent
-     *
      * @return IPkgCmsEvent
      */
     public function PkgCmsEventNotify(IPkgCmsEvent $oEvent);

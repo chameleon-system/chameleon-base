@@ -13,7 +13,6 @@ namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
-use TdbCmsPortalDomains;
 
 class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
 {
@@ -48,7 +47,7 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
             return null;
         }
 
-        return TdbCmsPortalDomains::GetNewInstance($rows[0]);
+        return \TdbCmsPortalDomains::GetNewInstance($rows[0]);
     }
 
     /**

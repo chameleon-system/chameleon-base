@@ -35,12 +35,12 @@ class TGoogleMapIcon
     /**
      * @var int|null
      */
-    public $width = null;
+    public $width;
 
     /**
      * @var int|null
      */
-    public $height = null;
+    public $height;
 
     /**
      * returns the icon ID
@@ -73,7 +73,6 @@ class TGoogleMapIcon
      * fallback for direct write access to $id.
      *
      * @param string $property
-     * @param mixed $value
      *
      * @return $this
      */

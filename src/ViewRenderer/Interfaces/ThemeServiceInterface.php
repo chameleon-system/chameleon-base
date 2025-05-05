@@ -16,8 +16,6 @@ interface ThemeServiceInterface
     /**
      * Gets the current theme.
      * This correctly considers the portal or backend but can also be overwritten by setting the theme beforehand - which is then always returned.
-     *
-     * @return \TdbPkgCmsTheme|null
      */
     public function getTheme(?\TdbCmsPortal $portal): ?\TdbPkgCmsTheme;
 }

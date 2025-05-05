@@ -2,20 +2,18 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\CoreMedia;
 
-
 class CmsDocumentTree
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Category name */
         private string $name = '',
         // TCMSFieldLookup
         /** @var CmsDocumentTree|null - Parent ID */
-        private ?CmsDocumentTree $parent = null
-        ,
+        private ?CmsDocumentTree $parent = null,
         // TCMSFieldNumber
         /** @var int - Depth */
         private int $depth = 0,
@@ -65,7 +63,6 @@ class CmsDocumentTree
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getParent(): ?CmsDocumentTree
     {
@@ -78,7 +75,6 @@ class CmsDocumentTree
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getDepth(): int
@@ -93,7 +89,6 @@ class CmsDocumentTree
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isHidden(): bool
     {
@@ -107,7 +102,6 @@ class CmsDocumentTree
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getEntrySort(): int
     {
@@ -120,6 +114,4 @@ class CmsDocumentTree
 
         return $this;
     }
-
-
 }

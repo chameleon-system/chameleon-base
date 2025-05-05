@@ -21,7 +21,6 @@ class LegacyTableExportConfig
                     'tables' => 'string[]',
                 ],
             ]
-
         )]
         array $tableClassMapping
     ) {
@@ -58,9 +57,7 @@ class LegacyTableExportConfig
         return $this->legacyTableExportConfig;
     }
 
-
     /**
-     * @param string $tableName
      * @return array{
      *               targetDir: string,
      *               configDir: string,

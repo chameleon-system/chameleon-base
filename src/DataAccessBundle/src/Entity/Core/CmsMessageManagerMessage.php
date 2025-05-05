@@ -8,19 +8,17 @@ class CmsMessageManagerMessage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsPortal|null - Belongs to portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldVarchar
         /** @var string - Code */
         private string $name = '',
         // TCMSFieldLookup
         /** @var CmsMessageManagerMessageType|null - Message type */
-        private ?CmsMessageManagerMessageType $cmsMessageManagerMessageType = null
-        ,
+        private ?CmsMessageManagerMessageType $cmsMessageManagerMessageType = null,
         // TCMSFieldText
         /** @var string - Message description */
         private string $description = '',
@@ -73,7 +71,6 @@ class CmsMessageManagerMessage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -86,7 +83,6 @@ class CmsMessageManagerMessage
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsMessageManagerMessageType(): ?CmsMessageManagerMessageType
@@ -101,7 +97,6 @@ class CmsMessageManagerMessage
         return $this;
     }
 
-
     // TCMSFieldText
     public function getDescription(): string
     {
@@ -114,7 +109,6 @@ class CmsMessageManagerMessage
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getMessage(): string
@@ -129,7 +123,6 @@ class CmsMessageManagerMessage
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getMessageLocationType(): string
     {
@@ -143,7 +136,6 @@ class CmsMessageManagerMessage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getMessageView(): string
     {
@@ -156,6 +148,4 @@ class CmsMessageManagerMessage
 
         return $this;
     }
-
-
 }

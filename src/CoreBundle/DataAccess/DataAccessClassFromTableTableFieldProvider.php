@@ -22,9 +22,6 @@ class DataAccessClassFromTableTableFieldProvider implements DataAccessClassFromT
      */
     private $databaseConnection;
 
-    /**
-     * @param Connection $databaseConnection
-     */
     public function __construct(Connection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
@@ -38,10 +35,10 @@ class DataAccessClassFromTableTableFieldProvider implements DataAccessClassFromT
         $query = $this->getFieldClassRowQuery();
 
         try {
-            $fieldClassName = $this->databaseConnection->fetchOne($query, array(
+            $fieldClassName = $this->databaseConnection->fetchOne($query, [
                 'tableName' => $tableName,
                 'fieldName' => $fieldName,
-            ));
+            ]);
             if (false === $fieldClassName) {
                 return null;
             }

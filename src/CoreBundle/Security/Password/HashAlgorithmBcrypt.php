@@ -34,9 +34,9 @@ class HashAlgorithmBcrypt implements HashAlgorithmInterface
      */
     public function hash($plainPassword)
     {
-        return password_hash($plainPassword, PASSWORD_BCRYPT, array(
+        return password_hash($plainPassword, PASSWORD_BCRYPT, [
             'cost' => $this->cost,
-        ));
+        ]);
     }
 
     /**

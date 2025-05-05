@@ -14,7 +14,7 @@
  * shows a list of all available languages based on the languages that are configured in CMS config table
  * for field based translation.
  *
-/**/
+ * /**/
 class TCMSFieldLookupMultiselectCheckboxesPossibleLanguages extends TCMSFieldLookupMultiselectCheckboxes
 {
     protected function GetMLTRecordRestrictions()

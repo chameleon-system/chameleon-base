@@ -16,7 +16,7 @@ function gcf_MltLookupAllOnEmpty($field, $row, $fieldName)
     $oRecord = call_user_func($sTableName = $sClassName.'::GetNewInstance', $row['id']);
     /** @var $oMltTargetList TCMSRecordList */
     $oMltTargetList = $oRecord->GetMLT($fieldName);
-    $aConnectedRecordNames = array();
+    $aConnectedRecordNames = [];
     if ($oMltTargetList->Length() > 0) {
         while ($oTargetRecord = $oMltTargetList->Next()) {
             $aConnectedRecordNames[] = $oTargetRecord->GetName();

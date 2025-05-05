@@ -15,6 +15,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * @psalm-suppress InvalidReturnStatement, InvalidReturnType
+ *
  * @FIXME Default value of `$content` is an empty array, when everything outside of this class expects `getContent` to return a string.
  */
 class ResourceCollectionJavaScriptCollectedEvent extends Event implements ResourceCollectionJavaScriptCollectedEventInterface
@@ -22,7 +23,7 @@ class ResourceCollectionJavaScriptCollectedEvent extends Event implements Resour
     /**
      * @var array|string
      */
-    private $content = array();
+    private $content = [];
 
     /**
      * @param string|null $content

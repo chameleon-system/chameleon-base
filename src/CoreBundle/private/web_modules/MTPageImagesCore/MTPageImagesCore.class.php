@@ -17,7 +17,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
  * and page via the property tables data_division_images/data_bereich_images and data_page_images
  * we will always take the images from the page first. only if we find none will
  * we move to division.
-/**/
+ * /**/
 class MTPageImagesCore extends TUserModelBase
 {
     /**
@@ -25,21 +25,21 @@ class MTPageImagesCore extends TUserModelBase
      *
      * @var string|null
      */
-    protected $iPageId = null;
+    protected $iPageId;
 
     /**
      * the page object.
      *
      * @var TCMSPage
      */
-    protected $oPage = null;
+    protected $oPage;
 
     /**
      * the portal division object.
      *
      * @var TdbCmsDivision
      */
-    protected $oDivision = null;
+    protected $oDivision;
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -108,6 +108,6 @@ class MTPageImagesCore extends TUserModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

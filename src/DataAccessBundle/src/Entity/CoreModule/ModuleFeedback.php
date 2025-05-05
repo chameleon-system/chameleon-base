@@ -8,12 +8,11 @@ class ModuleFeedback
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsTplModuleInstance|null - Belongs to module */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Headline */
         private string $name = '',
@@ -78,7 +77,6 @@ class ModuleFeedback
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -91,7 +89,6 @@ class ModuleFeedback
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getText(): string
@@ -106,7 +103,6 @@ class ModuleFeedback
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDoneText(): string
     {
@@ -119,7 +115,6 @@ class ModuleFeedback
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getToEmail(): string
@@ -134,7 +129,6 @@ class ModuleFeedback
         return $this;
     }
 
-
     // TCMSFieldText
     public function getBccEmail(): string
     {
@@ -147,7 +141,6 @@ class ModuleFeedback
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getFromEmail(): string
@@ -162,7 +155,6 @@ class ModuleFeedback
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDefaultSubject(): string
     {
@@ -176,7 +168,6 @@ class ModuleFeedback
         return $this;
     }
 
-
     // TCMSFieldText
     public function getDefaultBody(): string
     {
@@ -189,6 +180,4 @@ class ModuleFeedback
 
         return $this;
     }
-
-
 }

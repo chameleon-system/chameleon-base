@@ -11,16 +11,14 @@
 
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\ListManager;
 
-use TCMSListManagerMediaSelector;
-
-class TCMSListManagerMediaManager extends TCMSListManagerMediaSelector
+class TCMSListManagerMediaManager extends \TCMSListManagerMediaSelector
 {
     /**
      * {@inheritdoc}
      *
-     * @return void
-     *
      * @param \TCMSImage $oImage
+     *
+     * @return void
      */
     public function Init($oImage)
     {

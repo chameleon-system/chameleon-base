@@ -11,16 +11,12 @@
 
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\MediaManager\DataModel\MediaItemDataModel;
 use ChameleonSystem\MediaManager\Exception\UsageFinderException;
 use ChameleonSystem\MediaManager\MediaItemChainUsageFinder;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class MediaManagerMediaItemUsagesMapper extends AbstractViewMapper
+class MediaManagerMediaItemUsagesMapper extends \AbstractViewMapper
 {
     /**
      * @var MediaItemChainUsageFinder
@@ -32,10 +28,6 @@ class MediaManagerMediaItemUsagesMapper extends AbstractViewMapper
      */
     private $translator;
 
-    /**
-     * @param MediaItemChainUsageFinder $mediaItemChainUsageFinder
-     * @param TranslatorInterface       $translator
-     */
     public function __construct(MediaItemChainUsageFinder $mediaItemChainUsageFinder, TranslatorInterface $translator)
     {
         $this->mediaItemChainUsageFinder = $mediaItemChainUsageFinder;
@@ -45,7 +37,7 @@ class MediaManagerMediaItemUsagesMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('mediaItem', MediaItemDataModel::class);
     }
@@ -54,9 +46,9 @@ class MediaManagerMediaItemUsagesMapper extends AbstractViewMapper
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
          * @var MediaItemDataModel $mediaItem

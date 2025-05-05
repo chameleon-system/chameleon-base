@@ -13,19 +13,19 @@ namespace ChameleonSystem\core\DatabaseAccessLayer;
 
 use ChameleonSystem\core\DatabaseAccessLayer\LengthCalculationStrategy\EntityListLengthCalculationStrategyInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
-
+use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 
 /**
  * @template T
+ *
  * @implements EntityListInterface<T>
  */
 class EntityList implements EntityListInterface
 {
     private Connection $databaseConnection;
 
-    private array $entityList = array();
+    private array $entityList = [];
 
     private int $entityIndex = 0;
     private string $query;
@@ -33,7 +33,7 @@ class EntityList implements EntityListInterface
     /**
      * @var Statement|null
      */
-    private $databaseEntityListStatement = null;
+    private $databaseEntityListStatement;
 
     private ?int $entityCount = null;
     private ?int $entityCountEstimate = null;
@@ -46,10 +46,8 @@ class EntityList implements EntityListInterface
     private array $queryParameterTypes = [];
 
     /**
-     * @param string     $query
-     * @param array      $queryParameters     - same as the parameters parameter of the Connection
-     * @param array      $queryParameterTypes - same as the parameters types of the Connection
-     * @param Connection $databaseConnection
+     * @param array $queryParameters - same as the parameters parameter of the Connection
+     * @param array $queryParameterTypes - same as the parameters types of the Connection
      */
     public function __construct(Connection $databaseConnection, string $query, array $queryParameters = [], array $queryParameterTypes = [])
     {
@@ -75,9 +73,6 @@ class EntityList implements EntityListInterface
         return $this->databaseEntityListStatement;
     }
 
-    /**
-     * @return Connection
-     */
     protected function getDatabaseConnection(): Connection
     {
         return $this->databaseConnection;
@@ -148,10 +143,10 @@ class EntityList implements EntityListInterface
 
         $normalizedQuery = $this->getNormalizeQuery($this->query);
         $normalizedQuery = $this->removeOrderByFromQuery($normalizedQuery);
-        $strategyList = array(
+        $strategyList = [
             'ChameleonSystem\core\DatabaseAccessLayer\LengthCalculationStrategy\SqlCountStrategy',
             'ChameleonSystem\core\DatabaseAccessLayer\LengthCalculationStrategy\SqlCountWithSubqueryStrategy',
-        );
+        ];
         $queryWithoutOrderBy = $this->removeOrderByFromQuery($this->query);
         foreach ($strategyList as $strategyName) {
             /** @var $strategy EntityListLengthCalculationStrategyInterface */
@@ -169,10 +164,6 @@ class EntityList implements EntityListInterface
         return $this->correctCountUsingMaxNumberOfResultsAllowed($this->entityCount);
     }
 
-    /**
-     * @param int $count
-     * @return int
-     */
     private function correctCountUsingMaxNumberOfResultsAllowed(int $count): int
     {
         if (null === $this->maxNumberOfResults) {
@@ -203,19 +194,11 @@ class EntityList implements EntityListInterface
         return $this->correctCountUsingMaxNumberOfResultsAllowed($this->entityCountEstimate);
     }
 
-    /**
-     * @param string $query
-     * @return string
-     */
     private function getNormalizeQuery(string $query): string
     {
-        return str_replace(array("\n", "\n\r", "\t"), ' ', mb_strtoupper($query));
+        return str_replace(["\n", "\n\r", "\t"], ' ', mb_strtoupper($query));
     }
 
-    /**
-     * @param string $query
-     * @return string
-     */
     private function removeOrderByFromQuery(string $query): string
     {
         $queryModifier = $this->getQueryModifierOrderByService();
@@ -223,9 +206,6 @@ class EntityList implements EntityListInterface
         return $queryModifier->getQueryWithoutOrderBy($query);
     }
 
-    /**
-     * @return QueryModifierOrderByInterface
-     */
     protected function getQueryModifierOrderByService(): QueryModifierOrderByInterface
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.query_modifier.order_by');
@@ -253,29 +233,19 @@ class EntityList implements EntityListInterface
         return $this;
     }
 
-    /**
-     * @return void
-     */
-    private function resetList():void
+    private function resetList(): void
     {
         $this->databaseEntityListStatement = null;
-        $this->entityList = array();
+        $this->entityList = [];
         $this->entityIndex = 0;
     }
 
-    /**
-     * @return void
-     */
     private function resetListCounts(): void
     {
         $this->entityCount = null;
         $this->entityCountEstimate = null;
     }
 
-    /**
-     * @param string $query
-     * @return string
-     */
     private function getExecutableQuery(string $query): string
     {
         if (null !== $this->pager) {
@@ -289,10 +259,6 @@ class EntityList implements EntityListInterface
         return $query;
     }
 
-    /**
-     * @param int $position
-     * @return void
-     */
     public function seek(int $position): void
     {
         // backwards seek
@@ -308,9 +274,6 @@ class EntityList implements EntityListInterface
         }
     }
 
-    /**
-     * @return int
-     */
     public function getCurrentPosition(): int
     {
         return $this->entityIndex;
@@ -341,7 +304,6 @@ class EntityList implements EntityListInterface
 
     /**
      * limit results to - pass null to remove the restriction.
-
      */
     public function setMaxAllowedResults(?int $maxNumberOfResults): void
     {
@@ -349,7 +311,6 @@ class EntityList implements EntityListInterface
         $this->resetList();
         $this->resetListCounts();
     }
-
 
     private function addMaxNumberOfResultsRestrictionToQuery(string $query): string
     {

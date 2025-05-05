@@ -14,11 +14,11 @@ use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
 class MTGlobalListItem extends TCMSRecord
 {
-    public $sDetailLink = null;
+    public $sDetailLink;
 
-    public $sListLink = null;
+    public $sListLink;
 
-    public $sLinkParameters = null;
+    public $sLinkParameters;
 
     public $iPage = 0;
 
@@ -55,9 +55,9 @@ class MTGlobalListItem extends TCMSRecord
      */
     protected function GetListPageUrl()
     {
-        return $this->getActivePageService()->getLinkToActivePageRelative(array(
+        return $this->getActivePageService()->getLinkToActivePageRelative([
             'ipage' => $this->iPage,
-        ));
+        ]);
     }
 
     /**
@@ -76,7 +76,7 @@ class MTGlobalListItem extends TCMSRecord
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 
     /**
@@ -84,6 +84,6 @@ class MTGlobalListItem extends TCMSRecord
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

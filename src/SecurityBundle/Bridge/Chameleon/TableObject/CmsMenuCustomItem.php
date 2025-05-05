@@ -10,5 +10,4 @@ class CmsMenuCustomItem extends \ChameleonSystemSecurityBundleBridgeChameleonTab
     {
         return $this->GetFieldCmsRightIdList();
     }
-
 }

@@ -45,14 +45,12 @@ class AtomicLock
     private static $LOCK_FIELD = 'lockkey';
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $key = null;
+    private $key;
 
     /**
      * Helps in getting a unique key for a given object.
-     *
-     * @param mixed $oObject
      *
      * @return string key you can use for acquireLock()
      */
@@ -66,7 +64,7 @@ class AtomicLock
      *
      * @param string $key
      *
-     * @return null|static if the lock has been created successfully. Null, if there is already an active lock for this key
+     * @return static|null if the lock has been created successfully. Null, if there is already an active lock for this key
      */
     public function acquireLock($key)
     {
@@ -75,10 +73,10 @@ class AtomicLock
         }
 
         try {
-            $this->getDatabaseConnection()->insert(self::$LOCK_TABLE, array(
+            $this->getDatabaseConnection()->insert(self::$LOCK_TABLE, [
                 'id' => TTools::GetUUID(),
                 self::$LOCK_FIELD => $key,
-            ));
+            ]);
             $this->key = $key;
 
             return $this;
@@ -98,9 +96,9 @@ class AtomicLock
             return false;
         }
         try {
-            $this->getDatabaseConnection()->delete(self::$LOCK_TABLE, array(
+            $this->getDatabaseConnection()->delete(self::$LOCK_TABLE, [
                 self::$LOCK_FIELD => $this->key,
-            ));
+            ]);
         } catch (DBALException $e) {
             // mimicking the old behaviour by ignoring the exception.
         }
@@ -113,6 +111,6 @@ class AtomicLock
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
     }
 }

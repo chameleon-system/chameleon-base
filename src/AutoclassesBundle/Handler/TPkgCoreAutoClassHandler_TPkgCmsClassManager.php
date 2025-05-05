@@ -81,7 +81,7 @@ class TPkgCoreAutoClassHandler_TPkgCmsClassManager extends TPkgCoreAutoClassHand
     {
         $sClassName = false;
         $query = 'SELECT `name_of_entry_point` FROM `pkg_cms_class_manager` WHERE `id` = :key';
-        //@TODO This might not work? fetchAssociative returns an associative array
+        // @TODO This might not work? fetchAssociative returns an associative array
         if ($aClass = $this->getDatabaseConnection()->fetchAssociative($query, ['key' => $sKey])) {
             /** @psalm-suppress InvalidArrayOffset */
             $sClassName = $aClass[0];

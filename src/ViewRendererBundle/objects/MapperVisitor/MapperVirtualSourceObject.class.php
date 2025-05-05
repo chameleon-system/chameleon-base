@@ -14,6 +14,7 @@ class MapperVirtualSourceObject
     /**
      * @param string $name
      * @param mixed[] $arguments
+     *
      * @return $this
      */
     public function __call($name, $arguments)
@@ -24,6 +25,7 @@ class MapperVirtualSourceObject
     /**
      * @param string $name
      * @param mixed[] $arguments
+     *
      * @return MapperVirtualSourceObject
      */
     public static function __callStatic($name, $arguments)
@@ -33,7 +35,7 @@ class MapperVirtualSourceObject
 
     /**
      * @param string $name
-     * @param mixed $value
+     *
      * @return void
      */
     public function __set($name, $value)
@@ -42,6 +44,7 @@ class MapperVirtualSourceObject
 
     /**
      * @param string $name
+     *
      * @return $this
      */
     public function __get($name)

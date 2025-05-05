@@ -26,13 +26,10 @@ class UpdateTest extends AbstractQueryTestCase
 
     /**
      * @test
-     * @dataProvider getData
      *
-     * @param MigrationQueryData $migrationQueryData
-     * @param $expectedQuery
-     * @param array $expectedQueryParams
+     * @dataProvider getData
      */
-    public function it_should_get_query_params(MigrationQueryData $migrationQueryData, $expectedQuery, array $expectedQueryParams)
+    public function itShouldGetQueryParams(MigrationQueryData $migrationQueryData, $expectedQuery, array $expectedQueryParams)
     {
         $this->givenDependencies();
         $this->givenAnUpdater();
@@ -45,9 +42,6 @@ class UpdateTest extends AbstractQueryTestCase
         $this->update = new Update($this->databaseConnection->reveal(), $this->dataAccess->reveal());
     }
 
-    /**
-     * @param MigrationQueryData $migrationQueryData
-     */
     private function whenICallGetQuery(MigrationQueryData $migrationQueryData)
     {
         list($this->actualQuery, $this->actualQueryParams) = $this->update->getQuery($migrationQueryData);
@@ -58,212 +52,212 @@ class UpdateTest extends AbstractQueryTestCase
      */
     public function getData()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'bar' => 'baz',
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `bar` = ?',
-                array(
+                [
                     'baz',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'bar' => 'baz',
-                    ))
-                    ->setWhereEquals(array(
+                    ])
+                    ->setWhereEquals([
                         'stringId' => 'xyz',
                         'suchField' => 'veryValue',
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `bar` = ? WHERE `stringId` = ? AND `suchField` = ?',
-                array(
+                [
                     'baz',
                     'xyz',
                     'veryValue',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'bar' => 'baz',
-                    ))
-                    ->setWhereExpressions(array(
+                    ])
+                    ->setWhereExpressions([
                         new Comparison('stringId', Comparison::EQ, 'xyz'),
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `bar` = ? WHERE `stringId` = ?',
-                array(
+                [
                     'baz',
                     'xyz',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'bar' => 'baz',
-                    ))
-                    ->setWhereEquals(array(
+                    ])
+                    ->setWhereEquals([
                         'stringId' => 'xyz',
                         'suchField' => 'veryValue',
-                    ))
-                    ->setWhereExpressions(array(
+                    ])
+                    ->setWhereExpressions([
                         new Comparison('muchField', Comparison::EQ, 'wow'),
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `bar` = ? WHERE `stringId` = ? AND `suchField` = ? AND `muchField` = ?',
-                array(
+                [
                     'baz',
                     'xyz',
                     'veryValue',
                     'wow',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'bar' => 'baz',
-                    ))
-                    ->setWhereExpressions(array(
+                    ])
+                    ->setWhereExpressions([
                         new Comparison('stringId', Comparison::EQ, 'xyz'),
                         new Comparison('suchField', Comparison::GT, 'veryValue'),
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `bar` = ? WHERE `stringId` = ? AND `suchField` > ?',
-                array(
+                [
                     'baz',
                     'xyz',
                     'veryValue',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'bar' => 'baz',
-                    ))
-                    ->setFieldTypes(array(
+                    ])
+                    ->setFieldTypes([
                         'bar' => QueryConstants::FIELDTYPE_COLUMN,
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `bar` = `baz`',
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'bar' => '`baz` + 1',
-                    ))
-                    ->setFieldTypes(array(
+                    ])
+                    ->setFieldTypes([
                         'bar' => QueryConstants::FIELDTYPE_LITERAL,
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `bar` = `baz` + 1',
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'standardValue' => 'baz',
                         'columnValue' => 'baz',
                         'literalValue' => '`baz` + 1',
-                    ))
-                    ->setFieldTypes(array(
+                    ])
+                    ->setFieldTypes([
                         'columnValue' => QueryConstants::FIELDTYPE_COLUMN,
                         'literalValue' => QueryConstants::FIELDTYPE_LITERAL,
-                    ))
-                    ->setWhereExpressions(array(
+                    ])
+                    ->setWhereExpressions([
                         new Comparison('stringId', Comparison::EQ, 'xyz'),
                         new Comparison('suchField', Comparison::GT, 'veryValue'),
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `standardValue` = ?, `columnValue` = `baz`, `literalValue` = `baz` + 1 WHERE `stringId` = ? AND `suchField` > ?',
-                array(
+                [
                     'baz',
                     'xyz',
                     'veryValue',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setFields(array(
+                    ->setFields([
                         'translatedField' => 'baz',
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `translatedField__de` = ?',
-                array(
+                [
                     'baz',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setFields(array(
+                    ->setFields([
                         'foo' => 'bar',
                         'translatedField' => 'baz',
-                    ))
-                    ->setWhereExpressions(array(
+                    ])
+                    ->setWhereExpressions([
                         new Comparison('stringId', Comparison::EQ, 'xyz'),
                         new Comparison('suchField', Comparison::GT, 'veryValue'),
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `foo` = ?, `translatedField__de` = ? WHERE `stringId` = ? AND `suchField` > ?',
-                array(
+                [
                     'bar',
                     'baz',
                     'xyz',
                     'veryValue',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setFields(array(
+                    ->setFields([
                         'foo' => 'bar',
-                    ))
-                    ->setWhereEquals(array(
+                    ])
+                    ->setWhereEquals([
                         'whereEqualsField' => 'whereEqualsValue',
-                    ))
-                    ->setWhereExpressions(array(
-                        new CompositeExpression(CompositeExpression::TYPE_OR, array(
+                    ])
+                    ->setWhereExpressions([
+                        new CompositeExpression(CompositeExpression::TYPE_OR, [
                             new Comparison('orField1', Comparison::EQ, 'orValue1'),
                             new Comparison('orField2', Comparison::GT, 'orValue2'),
-                        )),
+                        ]),
                         new Comparison('stringId', '=', 'xyz'),
                         new Comparison('translatedField', '>', 'veryValue'),
-                    ))
-                    ->setWhereExpressionsFieldTypes(array(
+                    ])
+                    ->setWhereExpressionsFieldTypes([
                         'stringId' => 'column',
-                    )),
+                    ]),
                 'UPDATE `foo_table` SET `foo` = ? WHERE `whereEqualsField` = ? AND (`orField1` = ? OR `orField2` > ?) AND `stringId` = `xyz` AND `translatedField__de` > ?',
-                array(
+                [
                     'bar',
                     'whereEqualsValue',
                     'orValue1',
                     'orValue2',
                     'veryValue',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setFields(array(
+                    ->setFields([
                         'foo' => 'bar',
-                    ))
-                    ->setWhereExpressions(array(
-                        new Comparison('stringId', Comparison::IN, array('xyz', 'abc')),
-                    )),
+                    ])
+                    ->setWhereExpressions([
+                        new Comparison('stringId', Comparison::IN, ['xyz', 'abc']),
+                    ]),
                 "UPDATE `foo_table` SET `foo` = ? WHERE `stringId` IN ('xyz', 'abc')",
-                array(
+                [
                     'bar',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setFields(array(
+                    ->setFields([
                         'foo' => 'bar',
-                    ))
-                    ->setWhereExpressions(array(
-                        new Comparison('stringId', Comparison::IN, array('xyz', 'abc')),
-                    ))
-                    ->setWhereExpressionsFieldTypes(array(
+                    ])
+                    ->setWhereExpressions([
+                        new Comparison('stringId', Comparison::IN, ['xyz', 'abc']),
+                    ])
+                    ->setWhereExpressionsFieldTypes([
                         'stringId' => QueryConstants::FIELDTYPE_ARRAY,
-                    )),
+                    ]),
                 "UPDATE `foo_table` SET `foo` = ? WHERE `stringId` IN ('xyz', 'abc')",
-                array(
+                [
                     'bar',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

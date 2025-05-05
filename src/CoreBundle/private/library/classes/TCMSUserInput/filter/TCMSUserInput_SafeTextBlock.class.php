@@ -23,7 +23,7 @@ class TCMSUserInput_SafeTextBlock extends TCMSUserInput_BaseText
         $sValue = parent::FilterItem($sValue);
 
         // also remove data not likely part of the usual text input...
-        $aInvalid = array('<', '>', '%', '\\', '[', ']', chr(127));
+        $aInvalid = ['<', '>', '%', '\\', '[', ']', chr(127)];
         $sValue = str_replace($aInvalid, '', $sValue);
 
         return $sValue;

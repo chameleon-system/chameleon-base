@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\DatabaseMigration\Util;
 
-use InvalidArgumentException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -20,12 +19,12 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class MigrationPathUtil implements MigrationPathUtilInterface
 {
-    const UPDATE_FILENAME_PATTERN_WITH_GROUPED_BUILDNUMBER = '/.*?(\d+)\.inc\.php$/';
+    public const UPDATE_FILENAME_PATTERN_WITH_GROUPED_BUILDNUMBER = '/.*?(\d+)\.inc\.php$/';
 
     /**
      * @var array
      */
-    private $pathsInBundle = array();
+    private $pathsInBundle = [];
 
     /**
      * @param string $pathInBundle
@@ -43,20 +42,20 @@ class MigrationPathUtil implements MigrationPathUtilInterface
     public function getUpdateFoldersFromBundlePath($pathToBundle)
     {
         if (0 === count($this->pathsInBundle)) {
-            return array();
+            return [];
         }
         if (false === file_exists($pathToBundle) || false === is_dir($pathToBundle)) {
-            return array();
+            return [];
         }
 
-        $collectedUpdateFolders = array();
+        $collectedUpdateFolders = [];
         $finder = new Finder();
         $finder->directories()->in($pathToBundle);
         foreach ($this->pathsInBundle as $pathInBundle) {
             $finder->path($pathInBundle);
         }
         foreach ($finder as $file) {
-            /** @var SplFileInfo $file */
+            /* @var SplFileInfo $file */
             $collectedUpdateFolders[] = $file->getPath().DIRECTORY_SEPARATOR.$file->getFilename();
         }
 
@@ -69,13 +68,13 @@ class MigrationPathUtil implements MigrationPathUtilInterface
     public function getUpdateFilesFromFolder($updateFolder)
     {
         if (false === file_exists($updateFolder) || false === is_dir($updateFolder)) {
-            return array();
+            return [];
         }
-        $updateFiles = array();
+        $updateFiles = [];
         $finder = new Finder();
         $finder->name(self::UPDATE_FILENAME_PATTERN_WITH_GROUPED_BUILDNUMBER)->in($updateFolder)->depth(0);
         foreach ($finder as $file) {
-            /** @var SplFileInfo $file */
+            /* @var SplFileInfo $file */
             $updateFiles[] = $file->getPath().DIRECTORY_SEPARATOR.$file->getFilename();
         }
 
@@ -87,11 +86,11 @@ class MigrationPathUtil implements MigrationPathUtilInterface
      */
     public function getBuildNumberFromUpdateFile($updateFile)
     {
-        $matches = array();
+        $matches = [];
         preg_match(self::UPDATE_FILENAME_PATTERN_WITH_GROUPED_BUILDNUMBER, $updateFile, $matches);
 
         if (2 > count($matches)) {
-            throw new InvalidArgumentException('File does not contain a build number: '.$updateFile);
+            throw new \InvalidArgumentException('File does not contain a build number: '.$updateFile);
         }
 
         return (int) $matches[1];

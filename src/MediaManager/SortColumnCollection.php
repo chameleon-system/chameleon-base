@@ -18,12 +18,10 @@ class SortColumnCollection
     /**
      * @var SortColumnInterface[]
      */
-    private $sortColumns = array();
+    private $sortColumns = [];
 
     /**
      * Add a sort column, there can be only one per system name.
-     *
-     * @param SortColumnInterface $sortColumn
      *
      * @return void
      */

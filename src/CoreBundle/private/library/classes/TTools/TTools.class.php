@@ -790,7 +790,7 @@ class TTools
      *
      * @param bool $forceLoad - if true the local cache is ignored
      *
-     * @throws InvalidArgumentException|\Doctrine\DBAL\Exception if no table was found for $tableName
+     * @throws InvalidArgumentException|Doctrine\DBAL\Exception if no table was found for $tableName
      */
     public static function GetCMSTableId(string $tableName, bool $forceLoad = false): string
     {

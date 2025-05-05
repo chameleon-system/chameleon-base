@@ -13,13 +13,13 @@ use esono\pkgCmsCache\CacheInterface;
 
 /**
  * clear cache.
-/**/
+ * /**/
 class TCMSCronJob_ClearCompleteCache extends TdbCmsCronjobs
 {
     protected function _ExecuteCron()
     {
         /** @var CacheInterface $cache */
-        $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        $cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
         $cache->clearAll();
     }
 }

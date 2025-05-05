@@ -2,15 +2,12 @@
 
 namespace ChameleonSystem\CoreBundle\CronJob;
 
-use TCMSCronJob;
-
 interface CronJobFactoryInterface
 {
     /**
      * @param string $identifier
-     * @param array  $data
      *
-     * @return TCMSCronJob
+     * @return \TCMSCronJob
      *
      * @throws \InvalidArgumentException
      */

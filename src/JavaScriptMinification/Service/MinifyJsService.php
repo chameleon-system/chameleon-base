@@ -19,7 +19,7 @@ class MinifyJsService implements MinifyJsServiceInterface
     /**
      * @var MinifyJsIntegrationInterface
      */
-    private $minifyJsIntegration = null;
+    private $minifyJsIntegration;
 
     /**
      * {@inheritdoc}

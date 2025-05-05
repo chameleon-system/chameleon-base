@@ -29,10 +29,6 @@ class DataAccessCmsTreeNode implements DataAccessInterface
      */
     private $languageService;
 
-    /**
-     * @param Connection               $databaseConnection
-     * @param LanguageServiceInterface $languageService
-     */
     public function __construct(Connection $databaseConnection, LanguageServiceInterface $languageService)
     {
         $this->databaseConnection = $databaseConnection;
@@ -47,13 +43,13 @@ class DataAccessCmsTreeNode implements DataAccessInterface
         $query = 'SELECT * FROM `cms_tree_node`';
 
         $result = $this->databaseConnection->fetchAllAssociative($query);
-        $treeNodes = array();
+        $treeNodes = [];
         if (null === $languageId) {
             $languageId = $this->languageService->getActiveLanguageId();
         }
         foreach ($result as $row) {
             $treeNodeId = $row['id'];
-            $tree = TdbCmsTreeNode::GetNewInstance();
+            $tree = \TdbCmsTreeNode::GetNewInstance();
             $tree->SetLanguage($languageId);
             $tree->LoadFromRow($row);
             $treeNodes[$treeNodeId] = $tree;
@@ -67,8 +63,8 @@ class DataAccessCmsTreeNode implements DataAccessInterface
      */
     public function getCacheTriggers()
     {
-        return array(
+        return [
             'cms_tree_node',
-        );
+        ];
     }
 }

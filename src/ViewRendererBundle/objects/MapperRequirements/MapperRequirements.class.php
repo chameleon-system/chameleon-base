@@ -21,17 +21,17 @@ class MapperRequirements implements IMapperRequirements
     /**
      * @var array
      */
-    protected $aRequiredSourceObjects = array();
+    protected $aRequiredSourceObjects = [];
 
     /**
      * {@inheritdoc}
      */
     public function NeedsSourceObject($key, $sType = null, $sDefault = null, $bOptional = false)
     {
-        $this->aRequiredSourceObjects[$key] = array(
+        $this->aRequiredSourceObjects[$key] = [
             'aTypes' => null === $sType ? null : explode('|', $sType),
             'sDefault' => $sDefault,
-            'bOptional' => $bOptional, );
+            'bOptional' => $bOptional, ];
     }
 
     /**

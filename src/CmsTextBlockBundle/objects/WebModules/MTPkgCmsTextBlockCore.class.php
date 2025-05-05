@@ -15,7 +15,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 /**
  * loads and renders a wysiwyg text block from pkg_cms_text_block based
  * usable for static text blocks like footer bars that is placed on every page.
-/**/
+ * /**/
 class MTPkgCmsTextBlockCore extends TUserCustomModelBase
 {
     /**
@@ -31,7 +31,7 @@ class MTPkgCmsTextBlockCore extends TUserCustomModelBase
      *
      * @var TdbPkgCmsTextBlock
      */
-    protected $oPkgCmsTextBlock = null;
+    protected $oPkgCmsTextBlock;
 
     public function Execute()
     {
@@ -66,10 +66,10 @@ class MTPkgCmsTextBlockCore extends TUserCustomModelBase
     {
         $aTrigger = parent::_GetCacheTableInfos();
         if (!is_array($aTrigger)) {
-            $aTrigger = array();
+            $aTrigger = [];
         }
         if (!is_null($this->oPkgCmsTextBlock)) {
-            $aTrigger[] = array('table' => 'pkg_cms_text_block', 'id' => $this->oPkgCmsTextBlock->id);
+            $aTrigger[] = ['table' => 'pkg_cms_text_block', 'id' => $this->oPkgCmsTextBlock->id];
         }
 
         return $aTrigger;

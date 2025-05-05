@@ -14,7 +14,7 @@ use ChameleonSystem\CmsChangeLog\Interfaces\CmsChangeLogDataAccessInterface;
 use Psr\Log\LoggerInterface;
 
 // TODO rename this and it's id as it only deletes now?
-class TCMSCronJob_ArchiveChangeLog extends \TdbCmsCronjobs
+class TCMSCronJob_ArchiveChangeLog extends TdbCmsCronjobs
 {
     private int $days;
     private CmsChangeLogDataAccessInterface $changeLogDataAccess;
@@ -44,7 +44,7 @@ class TCMSCronJob_ArchiveChangeLog extends \TdbCmsCronjobs
                 $this->logger->info(sprintf('Deleted %s change log entries older than %s days.', $changedEntries, $this->days));
             }
         } catch (CmsChangeLogDataAccessFailedException $exception) {
-            $this->logger->error($exception->getMessage(), ['exception'=>$exception]);
+            $this->logger->error($exception->getMessage(), ['exception' => $exception]);
         }
     }
 }

@@ -14,15 +14,11 @@ namespace esono\pkgCmsRouting;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use LogicException;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use TdbCmsConfig;
-use TdbCmsLanguage;
-use TdbCmsPortal;
 
 class CmsRouteLoader extends Loader
 {
@@ -43,12 +39,6 @@ class CmsRouteLoader extends Loader
      */
     private $urlUtil;
 
-    /**
-     * @param ContainerInterface          $container
-     * @param UrlPrefixGeneratorInterface $urlPrefixGenerator
-     * @param RoutingUtilInterface        $routingUtil
-     * @param UrlUtil                     $urlUtil
-     */
     public function __construct(
         ContainerInterface $container,
         UrlPrefixGeneratorInterface $urlPrefixGenerator,
@@ -64,12 +54,12 @@ class CmsRouteLoader extends Loader
     /**
      * Loads a resource.
      *
-     * @param mixed  $resource The resource
-     * @param string $type     The resource type
+     * @param mixed $resource The resource
+     * @param string $type The resource type
      *
      * @return RouteCollection
      *
-     * @throws LogicException
+     * @throws \LogicException
      */
     public function load(mixed $resource, $type = null)
     {
@@ -80,7 +70,7 @@ class CmsRouteLoader extends Loader
         foreach ($resource as $routeConfig) {
             $portal = null;
             if (isset($routeConfig['portal_id'])) {
-                $portal = TdbCmsPortal::GetNewInstance();
+                $portal = \TdbCmsPortal::GetNewInstance();
                 $portal->Load($routeConfig['portal_id']);
                 $languageList = $portal->GetFieldCmsLanguageList();
                 $defaultLanguage = $this->getDefaultPortalLanguage($portal);
@@ -92,7 +82,7 @@ class CmsRouteLoader extends Loader
                     }
                     $this->importRoutes($collection, $routeConfig, $portal, $language);
                 }
-                /**
+                /*
                  * For the default language no language prefix will be generated. Therefore we generate the default
                  * language routes last for the following reasons:
                  * - route matching is slightly more performant because large "blocks" of routes starting with language
@@ -112,28 +102,24 @@ class CmsRouteLoader extends Loader
     }
 
     /**
-     * @param TdbCmsPortal $portal
-     *
-     * @return TdbCmsLanguage|null
+     * @return \TdbCmsLanguage|null
      */
-    private function getDefaultPortalLanguage(TdbCmsPortal $portal)
+    private function getDefaultPortalLanguage(\TdbCmsPortal $portal)
     {
         if ('' !== $portal->fieldCmsLanguageId) {
             return $portal->GetFieldCmsLanguage();
         }
 
-        return TdbCmsConfig::GetInstance()->GetFieldTranslationBaseLanguage();
+        return \TdbCmsConfig::GetInstance()->GetFieldTranslationBaseLanguage();
     }
 
     /**
-     * @param RouteCollection     $collection
-     * @param array               $routeConfig
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
-     *
-     * @throws LogicException
+     * @param \TdbCmsPortal|null $portal
+     * @param \TdbCmsLanguage|null $language
      *
      * @return void
+     *
+     * @throws \LogicException
      */
     private function importRoutes(RouteCollection $collection, array $routeConfig, $portal = null, $language = null)
     {
@@ -142,34 +128,30 @@ class CmsRouteLoader extends Loader
     }
 
     /**
-     * @param array               $routeConfig
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
-     *
      * @return RouteCollection
      *
-     * @throws LogicException
+     * @throws \LogicException
      */
-    private function getImportedRoutes(array $routeConfig, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    private function getImportedRoutes(array $routeConfig, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
         switch ($routeConfig['type']) {
             case 'service':
             case 'class':
                 if (null === $portal || null === $language) {
-                    throw new LogicException('portal and language must be given when importing routes.');
+                    throw new \LogicException('portal and language must be given when importing routes.');
                 }
-                /** @var CollectionGeneratorInterface $collectionGenerator */
+                /* @var CollectionGeneratorInterface $collectionGenerator */
                 if ('service' === $routeConfig['type']) {
                     try {
                         $collectionGenerator = $this->container->get($routeConfig['resource']);
                     } catch (ServiceNotFoundException $e) {
-                        throw new LogicException('Routing service resource not found: '.$routeConfig['resource']);
+                        throw new \LogicException('Routing service resource not found: '.$routeConfig['resource']);
                     }
                 } else {
                     $collectionGenerator = new $routeConfig['resource']();
                 }
                 if (!$collectionGenerator instanceof CollectionGeneratorInterface) {
-                    throw new LogicException(
+                    throw new \LogicException(
                         sprintf(
                             "Collection generator '%s' does not implement interface esono\\pkgCmsRouting\\CollectionGeneratorInterface.",
                             $routeConfig['resource']
@@ -193,7 +175,7 @@ class CmsRouteLoader extends Loader
                 $systemPageId = $portal->GetSystemPageId($routeConfig['system_page_name'], $language);
                 /** @var Route $route */
                 foreach ($importedRoutes->all() as $route) {
-                    $route->addDefaults(array('pagedef' => $systemPageId));
+                    $route->addDefaults(['pagedef' => $systemPageId]);
                 }
             }
         }
@@ -218,16 +200,12 @@ class CmsRouteLoader extends Loader
     }
 
     /**
-     * @param RouteCollection $importedRoutes
-     * @param TdbCmsPortal    $portal
-     * @param TdbCmsLanguage  $language
-     *
      * @return RouteCollection
      */
     private function getRoutesWithFinalNames(
         RouteCollection $importedRoutes,
-        TdbCmsPortal $portal,
-        TdbCmsLanguage $language
+        \TdbCmsPortal $portal,
+        \TdbCmsLanguage $language
     ) {
         $adjustedRoutes = new RouteCollection();
         foreach ($importedRoutes->all() as $name => $route) {
@@ -239,19 +217,16 @@ class CmsRouteLoader extends Loader
     }
 
     /**
-     * @param string         $name
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
+     * @param string $name
      *
      * @return string
      */
-    private function getRouteNameWithPortalAndLanguageInformation($name, TdbCmsPortal $portal, TdbCmsLanguage $language)
+    private function getRouteNameWithPortalAndLanguageInformation($name, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
         return $name.'-'.$portal->id.'-'.$language->fieldIso6391;
     }
 
     /**
-     * @param Route  $route
      * @param string $prefix
      *
      * @return void
@@ -271,7 +246,6 @@ class CmsRouteLoader extends Loader
     }
 
     /**
-     * @param Route  $route
      * @param string $prefix
      *
      * @return void
@@ -282,7 +256,6 @@ class CmsRouteLoader extends Loader
     }
 
     /**
-     * @param Route $route
      * @param string $urlPrefix
      * @param bool $hasTrailingSlash
      *
@@ -300,46 +273,38 @@ class CmsRouteLoader extends Loader
     }
 
     /**
-     * @param Route          $route
-     * @param string         $domainRequirementPlaceholder
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     *
-     * @throws LogicException if no primary domain is set
+     * @param string $domainRequirementPlaceholder
      *
      * @return void
+     *
+     * @throws \LogicException if no primary domain is set
      */
     private function handleDomainRequirements(
         Route $route,
         $domainRequirementPlaceholder,
-        TdbCmsPortal $portal,
-        TdbCmsLanguage $language
+        \TdbCmsPortal $portal,
+        \TdbCmsLanguage $language
     ) {
         $route->setHost('{'.$domainRequirementPlaceholder.'}');
         $requirements = $route->getRequirements();
         $secure = in_array('https', $route->getSchemes(), true);
         $domainRequirementValue = $this->routingUtil->getDomainRequirement($portal, $language, $secure);
         if ('' === $domainRequirementValue) {
-            throw new LogicException(sprintf('There is no primary domain configured for the portal with ID %s. Route generation will only work with a primary domain.', $portal->id));
+            throw new \LogicException(sprintf('There is no primary domain configured for the portal with ID %s. Route generation will only work with a primary domain.', $portal->id));
         }
         $requirements[$domainRequirementPlaceholder] = $domainRequirementValue;
         $route->setRequirements($requirements);
     }
 
     /**
-     * @param Route          $route
-     * @param TdbCmsLanguage $language
-     *
      * @return void
      */
-    private function handleLocale(Route $route, TdbCmsLanguage $language)
+    private function handleLocale(Route $route, \TdbCmsLanguage $language)
     {
         $route->setDefault('_locale', $language->fieldIso6391);
     }
 
     /**
-     * @param Route $route
-     *
      * @return void
      */
     private function handleSecurityAndFinalRoutePath(Route $route)
@@ -352,7 +317,7 @@ class CmsRouteLoader extends Loader
             return;
         }
         if ($this->urlUtil->isUrlSecure($path)) {
-            $route->setSchemes(array('https'));
+            $route->setSchemes(['https']);
         }
         $route->setPath($this->urlUtil->getRelativeUrl($path));
     }
@@ -360,7 +325,7 @@ class CmsRouteLoader extends Loader
     /**
      * {@inheritdoc}
      */
-    public function supports($resource, string $type = null): bool
+    public function supports($resource, ?string $type = null): bool
     {
         return 'chameleon' === $type;
     }

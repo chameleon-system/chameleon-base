@@ -16,7 +16,6 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\ImageCrop\Interfaces\CropImageServiceInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropPresetDataAccessInterface;
-use TCMSImage;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -42,12 +41,6 @@ class CropImageExtension extends AbstractExtension
      */
     private $requestInfoService;
 
-    /**
-     * @param ImageCropPresetDataAccessInterface $imageCropPresetDataAccess
-     * @param CropImageServiceInterface          $cropImageService
-     * @param LanguageServiceInterface           $languageService
-     * @param RequestInfoServiceInterface        $requestInfoService
-     */
     public function __construct(
         ImageCropPresetDataAccessInterface $imageCropPresetDataAccess,
         CropImageServiceInterface $cropImageService,
@@ -66,18 +59,18 @@ class CropImageExtension extends AbstractExtension
      */
     public function getFilters()
     {
-        return array(
+        return [
             new TwigFilter('imageUrlWithCropFallbackPreset', $this->imageUrlWithCropFallbackPreset(...)),
             new TwigFilter('imageUrlWithCropFallbackSize', $this->imageUrlWithCropFallbackSize(...)),
             new TwigFilter('imageHasCropDataForPreset', $this->imageHasCropDataForPreset(...)),
             new TwigFilter('imageUrlWithCropSize', $this->imageUrlWithCropSize(...)),
-        );
+        ];
     }
 
     /**
-     * @param string      $imageId
+     * @param string $imageId
      * @param string|null $cropId
-     * @param string      $presetIdOrSystemName
+     * @param string $presetIdOrSystemName
      *
      * @return string|null
      */
@@ -111,7 +104,7 @@ class CropImageExtension extends AbstractExtension
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getLanguageId()
     {
@@ -148,8 +141,8 @@ class CropImageExtension extends AbstractExtension
     /**
      * @param string $imageId
      * @param string $cropId
-     * @param int    $width
-     * @param int    $height
+     * @param int $width
+     * @param int $height
      *
      * @return string
      */
@@ -170,16 +163,16 @@ class CropImageExtension extends AbstractExtension
 
     /**
      * @param string $imageId
-     * @param int    $width
-     * @param int    $height
+     * @param int $width
+     * @param int $height
      *
      * @return string
      */
     private function getTrimmedImage($imageId, $width, $height)
     {
-        $image = new TCMSImage();
+        $image = new \TCMSImage();
         if (false === $image->Load($imageId)) {
-            $image->Load(-1); //error image
+            $image->Load(-1); // error image
         }
 
         $thumb = $image->GetForcedSizeThumbnail($width, $height);
@@ -188,10 +181,10 @@ class CropImageExtension extends AbstractExtension
     }
 
     /**
-     * @param string      $imageId
+     * @param string $imageId
      * @param string|null $cropId
-     * @param int         $targetWidth
-     * @param int         $targetHeight
+     * @param int $targetWidth
+     * @param int $targetHeight
      *
      * @return string|null
      */

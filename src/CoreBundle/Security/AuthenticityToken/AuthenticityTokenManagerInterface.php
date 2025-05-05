@@ -7,11 +7,11 @@ namespace ChameleonSystem\CoreBundle\Security\AuthenticityToken;
  */
 interface AuthenticityTokenManagerInterface
 {
-    const TOKEN_ID = 'cmsauthenticitytoken';
+    public const TOKEN_ID = 'cmsauthenticitytoken';
 
-    const TOKEN_FORMAT_GET = 0;
-    const TOKEN_FORMAT_POST = 1;
-    const TOKEN_FORMAT_ARRAY = 2;
+    public const TOKEN_FORMAT_GET = 0;
+    public const TOKEN_FORMAT_POST = 1;
+    public const TOKEN_FORMAT_ARRAY = 2;
 
     /**
      * Returns true if the protection by authenticity token is enabled. Implementations may introduce fancy handling

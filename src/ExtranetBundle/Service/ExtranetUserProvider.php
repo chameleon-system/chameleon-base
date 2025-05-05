@@ -17,16 +17,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ExtranetUserProvider implements ExtranetUserProviderInterface
 {
-    const SESSION_KEY_NAME = 'esono/pkgExtranet/frontendUser';
+    public const SESSION_KEY_NAME = 'esono/pkgExtranet/frontendUser';
 
     /**
      * @var RequestStack
      */
     private $requestStack;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;

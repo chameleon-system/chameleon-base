@@ -13,5 +13,5 @@ class TPkgRunFrontendActionStatus
 {
     public $sMessage = 'An error occured';
 
-    public $sMessageType = 'ERROR'; //one of MESSAGE (default), WARNING, ERROR, FATAL
+    public $sMessageType = 'ERROR'; // one of MESSAGE (default), WARNING, ERROR, FATAL
 }

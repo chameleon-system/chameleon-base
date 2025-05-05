@@ -34,11 +34,11 @@ class TPkgExtranetMapper_Login extends AbstractViewMapper
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         // no field messages on login. Need only one overall message
-        $aFieldUserName = array();
+        $aFieldUserName = [];
         $aFieldUserName['sError'] = '';
         $aFieldUserName['sValue'] = $this->getExtranetAuthenticationUtil()->getLastLoginName();
 
-        $aFieldPassword = array();
+        $aFieldPassword = [];
         $aFieldPassword['sError'] = '';
         $aFieldPassword['sValue'] = '';
 
@@ -66,7 +66,7 @@ class TPkgExtranetMapper_Login extends AbstractViewMapper
         $aTextData['sLinkURL'] = $oExtranetConfiguration->GetFieldForgotPasswordTreenodeIdPageURL();
         $oVisitor->SetMappedValue('aLinkForgotPassword', $aTextData);
 
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sTitle'] = $oVisitor->GetSourceObject('sTitle');
         $aTextData['sText'] = $oVisitor->GetSourceObject('sText');
 
@@ -83,7 +83,7 @@ class TPkgExtranetMapper_Login extends AbstractViewMapper
         $oVisitor->SetMappedValue('bIsLoggedIn', $bIsLoggedIn);
 
         if (true === $bIsLoggedIn) {
-            $oVisitor->SetMappedValue('aTextData', array('sTitle' => $oVisitor->GetSourceObject('sTitle')));
+            $oVisitor->SetMappedValue('aTextData', ['sTitle' => $oVisitor->GetSourceObject('sTitle')]);
 
             $oVisitor->SetMappedValue('sUsername', $user->GetName());
             $sLogoutLink = $oExtranetConfiguration->GetLinkLogout($oVisitor->GetSourceObject('sSpotName'));
@@ -96,7 +96,7 @@ class TPkgExtranetMapper_Login extends AbstractViewMapper
      */
     private function getExtranetAuthenticationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.util.extranet_authentication');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.util.extranet_authentication');
     }
 
     /**
@@ -104,6 +104,6 @@ class TPkgExtranetMapper_Login extends AbstractViewMapper
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 }

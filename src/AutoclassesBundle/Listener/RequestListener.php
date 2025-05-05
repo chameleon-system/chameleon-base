@@ -23,11 +23,11 @@ class RequestListener
      */
     private $autoclassesDir;
     /**
-     * @var \ChameleonSystem\AutoclassesBundle\CacheWarmer\AutoclassesCacheWarmer
+     * @var AutoclassesCacheWarmer
      */
     private $cacheWarmer;
     /**
-     * @var \ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface
+     * @var RequestInfoServiceInterface
      */
     private $requestInfoService;
 

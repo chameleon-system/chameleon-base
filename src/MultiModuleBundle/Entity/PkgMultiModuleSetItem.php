@@ -9,19 +9,17 @@ class PkgMultiModuleSetItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Module name */
         private string $name = '',
         // TCMSFieldLookupParentID
         /** @var PkgMultiModuleSet|null - Belongs to set */
-        private ?PkgMultiModuleSet $pkgMultiModuleSet = null
-        ,
+        private ?PkgMultiModuleSet $pkgMultiModuleSet = null,
         // TCMSFieldModuleInstance
         /** @var CmsTplModuleInstance|null - Module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldPosition
         /** @var int - Sorting */
         private int $sortOrder = 0,
@@ -71,7 +69,6 @@ class PkgMultiModuleSetItem
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getPkgMultiModuleSet(): ?PkgMultiModuleSet
     {
@@ -84,7 +81,6 @@ class PkgMultiModuleSetItem
 
         return $this;
     }
-
 
     // TCMSFieldModuleInstance
     public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
@@ -99,7 +95,6 @@ class PkgMultiModuleSetItem
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getSortOrder(): int
     {
@@ -112,7 +107,6 @@ class PkgMultiModuleSetItem
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSystemName(): string
@@ -127,7 +121,6 @@ class PkgMultiModuleSetItem
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getAlternativeTabUrlForAjax(): ?CmsTree
     {
@@ -140,6 +133,4 @@ class PkgMultiModuleSetItem
 
         return $this;
     }
-
-
 }

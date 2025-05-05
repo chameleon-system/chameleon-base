@@ -2,27 +2,24 @@
 
 namespace ChameleonSystem\NewsletterBundle\Entity;
 
-use DateTime;
-
 class PkgNewsletterConfirmation
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldDateTime
-        /** @var DateTime|null - Registration date */
-        private ?DateTime $registrationDate = null,
+        /** @var \DateTime|null - Registration date */
+        private ?\DateTime $registrationDate = null,
         // TCMSFieldBoolean
         /** @var bool - Registration confirmed */
         private bool $confirmation = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Registration confirmed on */
-        private ?DateTime $confirmationDate = null,
+        /** @var \DateTime|null - Registration confirmed on */
+        private ?\DateTime $confirmationDate = null,
         // TCMSFieldLookup
         /** @var PkgNewsletterGroup|null - Subscription to newsletter group */
-        private ?PkgNewsletterGroup $pkgNewsletterGroup = null
-        ,
+        private ?PkgNewsletterGroup $pkgNewsletterGroup = null,
         // TCMSFieldVarchar
         /** @var string - Double opt-out key */
         private string $optoutKey = ''
@@ -54,18 +51,17 @@ class PkgNewsletterConfirmation
     }
 
     // TCMSFieldDateTime
-    public function getRegistrationDate(): ?DateTime
+    public function getRegistrationDate(): ?\DateTime
     {
         return $this->registrationDate;
     }
 
-    public function setRegistrationDate(?DateTime $registrationDate): self
+    public function setRegistrationDate(?\DateTime $registrationDate): self
     {
         $this->registrationDate = $registrationDate;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isConfirmation(): bool
@@ -80,20 +76,18 @@ class PkgNewsletterConfirmation
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getConfirmationDate(): ?DateTime
+    public function getConfirmationDate(): ?\DateTime
     {
         return $this->confirmationDate;
     }
 
-    public function setConfirmationDate(?DateTime $confirmationDate): self
+    public function setConfirmationDate(?\DateTime $confirmationDate): self
     {
         $this->confirmationDate = $confirmationDate;
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getPkgNewsletterGroup(): ?PkgNewsletterGroup
@@ -108,7 +102,6 @@ class PkgNewsletterConfirmation
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getOptoutKey(): string
     {
@@ -121,6 +114,4 @@ class PkgNewsletterConfirmation
 
         return $this;
     }
-
-
 }

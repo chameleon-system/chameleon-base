@@ -16,14 +16,12 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      *
      * @var int
      */
-    public $iModuleInstanceId = null;
+    public $iModuleInstanceId;
 
     /**
      * factory returning an element for the list.
      *
      * @param array $aData
-     *
-     * @return TdbCmsWizardStep
      */
     protected function _NewElement($aData): TdbCmsWizardStep
     {
@@ -34,7 +32,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      * Return all records belonging to the Template Modul Instanzen.
      *
      * @param string $iCmsTplModuleInstanceId - ID for the record in: Template Modul Instanzen
-     * @param string $iLanguageId             - set language id for list - if null, the default language will be used instead
+     * @param string $iLanguageId - set language id for list - if null, the default language will be used instead
      *
      * @return TdbCmsWizardStepList
      */
@@ -118,7 +116,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      */
     public static function GetListNavigationForInstance(TdbCmsWizardStep $oActiveStep)
     {
-        //$this->getf
+        // $this->getf
         $oList = TdbCmsWizardStepList::GetCmsWizardStepListForCmsTplModuleInstance($oActiveStep->fieldCmsTplModuleInstanceId);
         $oList->GoToStart();
         $iStepCount = 0;
@@ -149,7 +147,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewSubType = 'dbobjects', $sViewType = 'Customer', $sSpotName = null, $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewSubType = 'dbobjects', $sViewType = 'Customer', $sSpotName = null, $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
@@ -187,7 +185,7 @@ class TCMSWizardStepList extends TAdbCmsWizardStepList
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }

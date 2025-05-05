@@ -21,13 +21,13 @@ class TPkgExtranetMapper_ChangePassword extends AbstractViewMapper
         $oRequirements->NeedsSourceObject('sToken');
         $oRequirements->NeedsSourceObject('sTitle', null, '');
         $oRequirements->NeedsSourceObject('sText', null, '');
-        /**
+        /*
          * @psalm-suppress InvalidArgument
          * @FIXME Passing `false` as a type is not correct. This should probably be the following:
          * $oRequirements->NeedsSourceObject('bPasswordChanged', 'boolean',false);
          */
         $oRequirements->NeedsSourceObject('bPasswordChanged', false);
-        /**
+        /*
          * @psalm-suppress InvalidArgument
          * @FIXME Passing `false` as a type is not correct. This should probably be the following:
          * $oRequirements->NeedsSourceObject('bPasswordChangeKeyValid', 'boolean', false);
@@ -41,9 +41,9 @@ class TPkgExtranetMapper_ChangePassword extends AbstractViewMapper
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
-        $aFieldUserName = array();
-        $aFieldPassword = array();
-        $aFieldPasswordCheck = array();
+        $aFieldUserName = [];
+        $aFieldPassword = [];
+        $aFieldPasswordCheck = [];
 
         $oGlobal = TGlobal::instance();
         $aUser = $oGlobal->GetUserData('aUser');
@@ -64,7 +64,7 @@ class TPkgExtranetMapper_ChangePassword extends AbstractViewMapper
             $oVisitor->SetMappedValue('sGlobalMessages', $sGlobalMessages);
         }
 
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sTitle'] = $oVisitor->GetSourceObject('sTitle');
         if (!$oVisitor->GetSourceObject('bPasswordChanged')) {
             $aTextData['sText'] = $oVisitor->GetSourceObject('sText');

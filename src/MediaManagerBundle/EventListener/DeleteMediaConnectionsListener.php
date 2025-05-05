@@ -55,12 +55,7 @@ class DeleteMediaConnectionsListener
     private $logger;
 
     /**
-     * @param bool                             $deleteReferences
-     * @param MediaItemChainUsageFinder        $mediaItemChainUsageFinder
-     * @param MediaItemDataAccessInterface     $mediaItemDataAccess
-     * @param MediaItemUsageChainDeleteService $mediaItemUsageChainDeleteService
-     * @param LanguageServiceInterface         $languageService
-     * @param LoggerInterface                  $logger
+     * @param bool $deleteReferences
      */
     public function __construct(
         $deleteReferences,
@@ -80,8 +75,6 @@ class DeleteMediaConnectionsListener
     }
 
     /**
-     * @param DeleteMediaEvent $deleteMediaEvent
-     *
      * @return void
      */
     public function onDeleteMedia(DeleteMediaEvent $deleteMediaEvent)

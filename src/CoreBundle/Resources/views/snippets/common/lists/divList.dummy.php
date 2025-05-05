@@ -1,8 +1,9 @@
 <?php
-  $bla = array(
-      'aList' => array(
-          'itemOne', 'itemTwo',
-      ),
-  );
 
-  return $bla;
+$bla = [
+    'aList' => [
+        'itemOne', 'itemTwo',
+    ],
+];
+
+return $bla;

@@ -31,12 +31,12 @@ class MTTextFieldMapper_Text extends AbstractViewMapper
         }
         $oDownloadList = $oTextModuleConfiguration->GetDownloads('data_pool');
         if ($oDownloadList && $oDownloadList->Length() > 0) {
-            $aLinkList = array();
+            $aLinkList = [];
             while ($oDownload = $oDownloadList->Next()) {
                 if ($bCachingEnabled) {
                     $oCacheTriggerManager->addTrigger('cms_document', $oDownload->id);
                 }
-                $aLink = array();
+                $aLink = [];
                 $aLink['sLinkURL'] = $oDownload->GetPlainDownloadLink();
                 $aLink['sTitle'] = $oDownload->GetName().' '.TCMSDownloadFile::GetHumanReadableFileSize($oDownload->sqlData['filesize']);
                 $aLinkList[] = $aLink;

@@ -11,14 +11,12 @@
 
 /**
  * std varchar text field (max 255 chars and index unique).
-/**/
+ * /**/
 class TCMSFieldVarcharUnique extends TCMSFieldVarchar
 {
     /**
      * returns the field value for database storage
      * overwrite this method to modify data on save.
-     *
-     * @return mixed
      */
     public function GetSQLOnCopy()
     {

@@ -18,9 +18,6 @@ class ArrayUtilityService implements ArrayUtilityServiceInterface
     /**
      * return true if two arrays are equal.
      *
-     * @param array $array1
-     * @param array $array2
-     *
      * @return bool
      */
     public function equal(array $array1, array $array2)

@@ -11,7 +11,7 @@
 
 class MTFeedbackErrorsCore
 {
-    public $_errorRegister = array();
+    public $_errorRegister = [];
 
     /**
      * @param string $field
@@ -20,7 +20,7 @@ class MTFeedbackErrorsCore
     public function AddError($field, $error)
     {
         if (!array_key_exists($field, $this->_errorRegister)) {
-            $this->_errorRegister[$field] = array();
+            $this->_errorRegister[$field] = [];
         }
         $this->_errorRegister[$field][] = $error;
     }

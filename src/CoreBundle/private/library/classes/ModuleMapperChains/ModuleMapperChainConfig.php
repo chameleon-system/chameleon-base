@@ -14,7 +14,7 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
     /**
      * @var array
      */
-    private $mapperChains = array();
+    private $mapperChains = [];
 
     /**
      * {@inheritdoc}
@@ -65,7 +65,7 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
         $mapperString = substr($line, $aliasIdent + 1);
         $rawMapperList = explode(',', $mapperString);
 
-        $mapperList = array();
+        $mapperList = [];
         foreach ($rawMapperList as $mapper) {
             if ('' === $mapper) {
                 continue;
@@ -78,7 +78,7 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
             throw new ErrorException("Invalid pattern [{$line}] for mapper chain: Alias {$alias} has no mappers.", 0, E_USER_WARNING, __FILE__, __LINE__);
         }
 
-        return array($alias => $mapperList);
+        return [$alias => $mapperList];
     }
 
     /**
@@ -86,7 +86,7 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
      */
     public function getAsString()
     {
-        $mapperChains = array();
+        $mapperChains = [];
         foreach ($this->mapperChains as $mapperName => $mapperChain) {
             $tmp = $this->getMapperChainAsString($mapperName, $mapperChain);
             if (null === $tmp) {
@@ -100,7 +100,7 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
 
     /**
      * @param string $mapperName
-     * @param array  $mapperChain
+     * @param array $mapperChain
      *
      * @return string|null
      */
@@ -133,7 +133,7 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
             throw new ErrorException("Unable to position {$newMapper} in chain {$mapperChainName} after {$positionAfter} because {$positionAfter} was not found.");
         }
 
-        array_splice($mapperChain, $positionAfterIndex + 1, 0, array($newMapper));
+        array_splice($mapperChain, $positionAfterIndex + 1, 0, [$newMapper]);
         $this->mapperChains[$mapperChainName] = $mapperChain;
     }
 
@@ -155,8 +155,8 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
     }
 
     /**
-     * @param string      $oldMapperName
-     * @param string      $newMapperName
+     * @param string $oldMapperName
+     * @param string $newMapperName
      * @param string|null $mapperChainName
      *
      * @return bool
@@ -178,7 +178,7 @@ class ModuleMapperChainConfig implements ModuleMapperChainConfigInterface
             ];
         }
         foreach ($mapperChainsToChange as $name => $mapperChainToChange) {
-            $newMapperChain = array();
+            $newMapperChain = [];
             foreach ($mapperChainToChange as $originalMapperName) {
                 if ($oldMapperName === $originalMapperName) {
                     $newMapperChain[] = $newMapperName;

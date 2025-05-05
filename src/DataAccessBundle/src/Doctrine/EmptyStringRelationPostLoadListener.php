@@ -18,13 +18,13 @@ class EmptyStringRelationPostLoadListener
         $metadata = $event->getObjectManager()->getClassMetadata($event->getObject()::class);
         $object = $event->getObject();
         foreach ($metadata->getAssociationMappings() as $mapping) {
-            if ($mapping['type'] !== ClassMetadataInfo::MANY_TO_ONE) {
+            if (ClassMetadataInfo::MANY_TO_ONE !== $mapping['type']) {
                 continue;
             }
             $name = $mapping['fieldName'];
-            $relation = $object->{'get' . ucfirst($name)}();
-            if ($relation->getId() === '') {
-                $object->{'set' . ucfirst($name)}(null);
+            $relation = $object->{'get'.ucfirst($name)}();
+            if ('' === $relation->getId()) {
+                $object->{'set'.ucfirst($name)}(null);
             }
         }
 

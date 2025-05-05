@@ -11,16 +11,16 @@
 
 class TCMSGroupedStatisticsGroup
 {
-    protected $sGroupTitle = null;
+    protected $sGroupTitle;
     public $sSubGroupColumn = '';
-    protected $aGroupTotals = array();
-    protected $aSubGroups = array();
-    protected $aDataColumns = array();
+    protected $aGroupTotals = [];
+    protected $aSubGroups = [];
+    protected $aDataColumns = [];
 
-    protected $aColumnNames = array();
+    protected $aColumnNames = [];
 
-    private $aDataBlock = null;
-    const VIEW_SUBTYPE = 'TCMSGroupedStatistics/TCMSGroupedStatisticsGroup';
+    private $aDataBlock;
+    public const VIEW_SUBTYPE = 'TCMSGroupedStatistics/TCMSGroupedStatisticsGroup';
 
     public static $iCurrentLevel = 0;
 
@@ -106,6 +106,7 @@ class TCMSGroupedStatisticsGroup
                 $iDepth += $this->aSubGroups[$sGroupIndex]->GetRowCount();
             }
         }
+
         // else $iDepth += count($this->GetDataBlock());
         return $iDepth;
     }
@@ -113,7 +114,7 @@ class TCMSGroupedStatisticsGroup
     public function Render($sViewName, $aColumnNames, $iMaxGroupDepth = null, $bShowDiffColumn = false, $sRowPrefix = '', $sSeparator = ';', $sType = 'Core')
     {
         $oView = new TViewParser();
-        /** @var $oView TViewParser */
+        /* @var $oView TViewParser */
         $oView->AddVar('oGroup', $this);
         $oView->AddVar('sGroupTitle', $this->sGroupTitle);
         $oView->AddVar('aGroupTotals', $this->aGroupTotals);
@@ -125,10 +126,10 @@ class TCMSGroupedStatisticsGroup
         $oView->AddVar('bShowDiffColumn', $bShowDiffColumn);
         $oView->AddVar('sRowPrefix', $sRowPrefix);
         $oView->AddVar('sSeparator', $sSeparator);
-        self::$iCurrentLevel += 1;
+        ++self::$iCurrentLevel;
 
         $sContent = $oView->RenderObjectView($sViewName, self::VIEW_SUBTYPE, $sType);
-        self::$iCurrentLevel -= 1;
+        --self::$iCurrentLevel;
 
         return $sContent;
     }
@@ -136,7 +137,7 @@ class TCMSGroupedStatisticsGroup
     /**
      * init the object.
      *
-     * @param string $sGroupTitle     - name of the group
+     * @param string $sGroupTitle - name of the group
      * @param string $sSubGroupColumn
      */
     public function Init($sGroupTitle, $sSubGroupColumn = '')
@@ -158,7 +159,7 @@ class TCMSGroupedStatisticsGroup
             if (!in_array($aDataCell['sColumnName'], $this->aColumnNames)) {
                 $this->aColumnNames[] = $aDataCell['sColumnName'];
             }
-            //$this->AddDataColumn($aDataCell); // disabled to keep low footprint
+        // $this->AddDataColumn($aDataCell); // disabled to keep low footprint
         } else {
             while (count($aSubGroupDef) > 0) {
                 $sSubGroupName = array_shift($aSubGroupDef);
@@ -212,12 +213,12 @@ class TCMSGroupedStatisticsGroup
     public function GetDataBlock()
     {
         if (is_null($this->aDataBlock)) {
-            $this->aDataBlock = array();
+            $this->aDataBlock = [];
             reset($this->aDataColumns);
             foreach ($this->aDataColumns as $sFieldName => $aRows) {
                 foreach ($aRows as $iRowNumber => $dRowValue) {
                     if (!array_key_exists($iRowNumber, $this->aDataBlock)) {
-                        $this->aDataBlock[$iRowNumber] = array();
+                        $this->aDataBlock[$iRowNumber] = [];
                     }
                     $this->aDataBlock[$iRowNumber][$sFieldName] = $dRowValue;
                 }

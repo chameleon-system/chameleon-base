@@ -12,7 +12,7 @@
 /**
  * the tablemanager that can be used within other components (like a popup). it will
  * not add any info to the history stack.
-/**/
+ * /**/
 class MTTableManagerComponent extends MTTableManager
 {
     /**

@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class PkgCsv2sql
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - */
@@ -64,7 +63,6 @@ class PkgCsv2sql
         return $this;
     }
 
-
     // TCMSFieldText
     public function getColumnMapping(): string
     {
@@ -77,7 +75,6 @@ class PkgCsv2sql
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSource(): string
@@ -92,7 +89,6 @@ class PkgCsv2sql
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSourceCharset(): string
     {
@@ -106,7 +102,6 @@ class PkgCsv2sql
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDestinationTableName(): string
     {
@@ -119,6 +114,4 @@ class PkgCsv2sql
 
         return $this;
     }
-
-
 }

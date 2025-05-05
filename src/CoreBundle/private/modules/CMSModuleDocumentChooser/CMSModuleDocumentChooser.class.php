@@ -28,13 +28,13 @@ class CMSModuleDocumentChooser extends TModelBase
     {
         // need to pass the parameters (modulespotname) back to the view
         $oListTable = new TCMSListManagerDocumentChooser();
-        /** @var $oListTable TCMSListManagerMediaSelector */
+        /* @var $oListTable TCMSListManagerMediaSelector */
         if ($this->global->UserDataExists('sRestriction')) {
             $oListTable->sRestriction = $this->global->GetUserData('sRestriction');
         }
 
         $oTableConf = new TCMSTableConf();
-        /** @var $oTableConf TCMSTableConf */
+        /* @var $oTableConf TCMSTableConf */
         $oTableConf->LoadFromField('name', 'cms_document');
 
         $oListTable->Init($oTableConf);

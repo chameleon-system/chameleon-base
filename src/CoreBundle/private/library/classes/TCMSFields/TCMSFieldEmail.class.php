@@ -11,7 +11,7 @@
 
 /**
  * std varchar text field (max 255 chars).
-/**/
+ * /**/
 class TCMSFieldEmail extends TCMSFieldVarchar
 {
     protected $sFieldHTMLInputType = 'email';
@@ -41,7 +41,7 @@ class TCMSFieldEmail extends TCMSFieldVarchar
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_EMAIL_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_EMAIL_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 

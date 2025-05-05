@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class TCountry
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Wikipedia name */
@@ -79,7 +78,6 @@ class TCountry
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -92,7 +90,6 @@ class TCountry
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIsoCode2(): string
@@ -107,7 +104,6 @@ class TCountry
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIsoCode3(): string
     {
@@ -120,7 +116,6 @@ class TCountry
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getInternationalDiallingCode(): string
@@ -135,7 +130,6 @@ class TCountry
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getGermanName(): string
     {
@@ -148,7 +142,6 @@ class TCountry
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getGermanPostalcode(): string
@@ -163,7 +156,6 @@ class TCountry
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isEuMember(): bool
     {
@@ -176,7 +168,6 @@ class TCountry
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getToplevelDomain(): string
@@ -191,7 +182,6 @@ class TCountry
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getPrimaryCurrencyIso4217(): string
     {
@@ -204,6 +194,4 @@ class TCountry
 
         return $this;
     }
-
-
 }

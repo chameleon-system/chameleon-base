@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\CoreMedia;
 
-
 class CmsFiletype
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Content type */
@@ -58,7 +57,6 @@ class CmsFiletype
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -72,7 +70,6 @@ class CmsFiletype
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFileExtension(): string
     {
@@ -85,6 +82,4 @@ class CmsFiletype
 
         return $this;
     }
-
-
 }

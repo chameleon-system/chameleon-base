@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration;
 
-
 class CmsFieldType
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -88,7 +87,6 @@ class CmsFieldType
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isForceAutoIncrement(): bool
     {
@@ -101,7 +99,6 @@ class CmsFieldType
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClassSubtype(): string
@@ -116,7 +113,6 @@ class CmsFieldType
         return $this;
     }
 
-
     // TCMSFieldVarcharUnique
     public function getConstname(): string
     {
@@ -129,7 +125,6 @@ class CmsFieldType
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMysqlType(): string
@@ -144,7 +139,6 @@ class CmsFieldType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getLengthSet(): string
     {
@@ -157,7 +151,6 @@ class CmsFieldType
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getBaseType(): string
@@ -172,7 +165,6 @@ class CmsFieldType
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getHelpText(): string
     {
@@ -185,7 +177,6 @@ class CmsFieldType
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMysqlStandardValue(): string
@@ -200,7 +191,6 @@ class CmsFieldType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFieldclass(): string
     {
@@ -213,7 +203,6 @@ class CmsFieldType
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getClassType(): string
@@ -228,7 +217,6 @@ class CmsFieldType
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isContainsImages(): bool
     {
@@ -242,7 +230,6 @@ class CmsFieldType
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getIndextype(): string
     {
@@ -255,6 +242,4 @@ class CmsFieldType
 
         return $this;
     }
-
-
 }

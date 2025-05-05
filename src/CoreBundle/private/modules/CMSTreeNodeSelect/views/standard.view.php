@@ -38,7 +38,7 @@
     <ul>
         <?php
         echo $data['treeHTML'];
-        ?>
+?>
     </ul>
 </div>
 <?php

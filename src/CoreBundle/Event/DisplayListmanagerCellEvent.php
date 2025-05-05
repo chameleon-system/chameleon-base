@@ -27,11 +27,6 @@ class DisplayListmanagerCellEvent extends Event
     private string $cellValue = '';
     private string $cellValueWithDetailLink = '';
 
-    /**
-     * @param \TGroupTableField $tableCell
-     * @param array             $rowData
-     * @param bool              $isHeader
-     */
     public function __construct(\TGroupTableField $tableCell, array $rowData, bool $isHeader)
     {
         $this->tableCell = $tableCell;
@@ -103,5 +98,4 @@ class DisplayListmanagerCellEvent extends Event
     {
         $this->cellValueWithDetailLink = $cellValueWithDetailLink;
     }
-
 }

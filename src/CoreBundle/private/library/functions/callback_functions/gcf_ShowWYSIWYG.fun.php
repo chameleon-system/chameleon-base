@@ -12,8 +12,9 @@
 function gcf_ShowWYSIWYG($content, $row, $fieldName)
 {
     $oWYSIWYGField = new TCMSTextField();
-    /** @var $oWYSIWYGField TCMSTextField */
+    /* @var $oWYSIWYGField TCMSTextField */
     $oWYSIWYGField->content = $content;
-    //return $content."!!";
+
+    // return $content."!!";
     return $oWYSIWYGField->GetText();
 }

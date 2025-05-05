@@ -16,7 +16,6 @@ use ChameleonSystem\CoreBundle\Util\PageServiceUtil;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -31,15 +30,15 @@ class PageServiceUtilTest extends TestCase
      */
     private $pageServiceUtil;
     /**
-     * @var \TdbCmsLanguage|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsLanguage|\PHPUnit_Framework_MockObject_MockObject
      */
     private $languageMock;
     /**
-     * @var \TdbCmsPortal|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsPortal|\PHPUnit_Framework_MockObject_MockObject
      */
     private $portalMock;
     /**
-     * @var \TdbCmsTplPage|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsTplPage|\PHPUnit_Framework_MockObject_MockObject
      */
     private $pageMock;
     /**
@@ -61,7 +60,7 @@ class PageServiceUtilTest extends TestCase
 
     /**
      * @param string $persistedPath
-     * @param bool   $useTrailingSlashInsteadOfDotHtml
+     * @param bool $useTrailingSlashInsteadOfDotHtml
      * @param string $expectedPath
      *
      * @dataProvider getTestGetPagePathData
@@ -84,7 +83,7 @@ class PageServiceUtilTest extends TestCase
         $this->portalMock = $this->getMockBuilder('TdbCmsPortal')->disableAutoload()->getMock();
         $this->portalMock->fieldUseSlashInSeoUrls = $useTrailingSlash;
         $this->getMockBuilder('TdbCmsTree')->disableAutoload()->getMock();
-        $this->pageMock = $this->getMockBuilder('TdbCmsTplPage')->disableAutoload()->setMethods(array('GetPortal'))->getMock();
+        $this->pageMock = $this->getMockBuilder('TdbCmsTplPage')->disableAutoload()->setMethods(['GetPortal'])->getMock();
         $this->pageMock->id = '42';
         $this->pageMock->method('GetPortal')->willReturn($this->portalMock);
         $this->urlUtilMock = $this->prophesize('ChameleonSystem\CoreBundle\Util\UrlUtil');
@@ -98,9 +97,9 @@ class PageServiceUtilTest extends TestCase
      */
     private function givenPersistedRoutes($persistedPath)
     {
-        $this->routingUtilMock->getAllPageRoutes($this->portalMock, $this->languageMock)->willReturn(array(
+        $this->routingUtilMock->getAllPageRoutes($this->portalMock, $this->languageMock)->willReturn([
             '42' => new PagePath('42', $persistedPath),
-        ));
+        ]);
     }
 
     /**
@@ -133,45 +132,45 @@ class PageServiceUtilTest extends TestCase
      */
     public function getTestGetPagePathData()
     {
-        return array(
-            array(
+        return [
+            [
                 'foo/bar',
                 true,
                 'foo/bar',
-            ),
-            array(
+            ],
+            [
                 'foo/bar',
                 false,
                 'foo/bar.html',
-            ),
-            array(
+            ],
+            [
                 '/',
                 true,
                 '',
-            ),
-            array(
+            ],
+            [
                 '/',
                 false,
                 '',
-            ),
-            array(
+            ],
+            [
                 '',
                 true,
                 '',
-            ),
-            array(
+            ],
+            [
                 '',
                 false,
                 '',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
      * @param string $url
      * @param string $expectedUrl
-     * @param bool   $useTrailingSlashInsteadOfDotHtml
-     * @param bool   $removeTrailingSlash
+     * @param bool $useTrailingSlashInsteadOfDotHtml
+     * @param bool $removeTrailingSlash
      *
      * @dataProvider getTestPostProcessUrlData
      */
@@ -185,7 +184,7 @@ class PageServiceUtilTest extends TestCase
 
     /**
      * @param string $url
-     * @param bool   $forceSecure
+     * @param bool $forceSecure
      */
     private function whenICallPostProcessUrl($url, $forceSecure)
     {
@@ -208,98 +207,98 @@ class PageServiceUtilTest extends TestCase
      */
     public function getTestPostProcessUrlData()
     {
-        return array(
-            array(
+        return [
+            [
                 '/foo/',
                 '/foo/',
                 true,
                 false,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo/',
                 '/foo',
                 true,
                 true,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo/',
                 '/foo',
                 false,
                 true,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo',
                 '/foo',
                 false,
                 true,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo',
                 '/foo',
                 true,
                 true,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo',
                 '/foo/',
                 true,
                 false,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo?bar=baz',
                 '/foo/?bar=baz',
                 true,
                 false,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo/?bar=baz',
                 '/foo/?bar=baz',
                 true,
                 false,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo/bar?baz=quuz',
                 '/foo/bar/?baz=quuz',
                 true,
                 false,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo/bar/?baz=quuz',
                 '/foo/bar/?baz=quuz',
                 true,
                 false,
                 false,
-            ),
-            array(
+            ],
+            [
                 '/foo/',
                 'https://example.com/foo/',
                 true,
                 false,
                 true,
-            ),
-            array(
+            ],
+            [
                 '/foo',
                 'https://example.com/foo',
                 true,
                 true,
                 true,
-            ),
-            array(
+            ],
+            [
                 '/foo',
                 'https://example.com/foo',
                 false,
                 true,
                 true,
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -16,7 +16,7 @@ use Doctrine\DBAL\Connection;
 class SqlCountStrategy implements EntityListLengthCalculationStrategyInterface
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $databaseConnection;
 
@@ -29,16 +29,13 @@ class SqlCountStrategy implements EntityListLengthCalculationStrategyInterface
     {
         return
             false === $this->queryContainsGroupBy($normalizedQuery)
-            &&
-            false === $this->queryHasLimit($normalizedQuery)
-            &&
-            false === $this->queryUsesUnion($normalizedQuery)
-            &&
-            false === $this->queryUsesDistinct($normalizedQuery)
+            && false === $this->queryHasLimit($normalizedQuery)
+            && false === $this->queryUsesUnion($normalizedQuery)
+            && false === $this->queryUsesDistinct($normalizedQuery)
         ;
     }
 
-    public function calculateLength($query, array $queryParameters = array(), array $queryParameterTypes = array())
+    public function calculateLength($query, array $queryParameters = [], array $queryParameterTypes = [])
     {
         $queryWithoutFields = substr($query, $this->getFromPosition($query));
         $sCountQuery = "SELECT COUNT(*) AS matches {$queryWithoutFields}";
@@ -69,7 +66,7 @@ class SqlCountStrategy implements EntityListLengthCalculationStrategyInterface
 
     private function getFromPosition($query)
     {
-        $normalizedQuery = str_replace(array("\n", "\n\r", "\t"), ' ', $query);
+        $normalizedQuery = str_replace(["\n", "\n\r", "\t"], ' ', $query);
 
         return stripos($normalizedQuery, ' FROM ');
     }

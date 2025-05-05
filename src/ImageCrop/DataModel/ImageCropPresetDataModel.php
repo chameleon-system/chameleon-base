@@ -42,8 +42,8 @@ class ImageCropPresetDataModel
      * @param string $id
      * @param string $systemName
      * @param string $name
-     * @param int    $width
-     * @param int    $height
+     * @param int $width
+     * @param int $height
      */
     public function __construct($id, $systemName, $name, $width, $height)
     {

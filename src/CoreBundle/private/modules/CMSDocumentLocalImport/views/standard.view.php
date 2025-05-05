@@ -5,11 +5,11 @@ if (!empty($data['errorMessage'])) {
     if (count($data['dirListing']) > 0) {
         ?>
     <div style="padding-bottom: 10px;">
-        <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.select_target_folder'); ?>:
+        <?php echo ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.select_target_folder'); ?>:
     </div>
-    <form method="get" name="importForm" action="<?=PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8">
+    <form method="get" name="importForm" action="<?php echo PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8">
         <input type="hidden" name="pagedef" value="CMSDocumentLocalImport"/>
-        <input type="hidden" name="nodeID" value="<?=$data['nodeID']; ?>"/>
+        <input type="hidden" name="nodeID" value="<?php echo $data['nodeID']; ?>"/>
         <input type="hidden" name="module_fnc[contentmodule]" value="ImportFiles"/>
         <select name="directory" class="form-control form-control-sm">
             <?php
@@ -21,27 +21,27 @@ if (!empty($data['errorMessage'])) {
 
                 $sName = $aDir['directory'];
                 if ('base' == $aDir['directory']) {
-                    $sName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.root_path');
+                    $sName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.root_path');
                 }
                 echo '<option value="'.$sValue.'">'.$sName.' ('.
-                    \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
+                    ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
                         'chameleon_system_core.document_local_import.file_count',
-                        array(
+                        [
                             '%count%' => $aDir['filecount'],
-                        )
+                        ]
                     )
                     .")</option>\n";
             } ?>
         </select>
 
         <div style="padding-top: 10px;">
-            <div><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.mark_as_private')); ?></div>
+            <div><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.mark_as_private')); ?></div>
             <input type="radio" name="private" value="1"
-                   checked="checked"> <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.yes')); ?>&nbsp;&nbsp;
-            <input type="radio" name="private" value="0"> <?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.no')); ?>
+                   checked="checked"> <?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.yes')); ?>&nbsp;&nbsp;
+            <input type="radio" name="private" value="0"> <?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.no')); ?>
         </div>
         <div style="padding-top: 10px;"><?php
-            echo TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.action_import'), 'javascript:CHAMELEON.CORE.showProcessingModal();document.importForm.submit();', 'fas fa-file-import'); ?></div>
+            echo TCMSRender::DrawButton(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.action_import'), 'javascript:CHAMELEON.CORE.showProcessingModal();document.importForm.submit();', 'fas fa-file-import'); ?></div>
     </form>
 
     <?php
@@ -56,9 +56,9 @@ if (!empty($data['errorMessage'])) {
     if (isset($data['importSuccess'])) {
         ?>
     <div style="padding-top: 20px; padding-bottom: 10px;">
-        <h1><?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.import_result'); ?>:</h1></div>
+        <h1><?php echo ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_local_import.import_result'); ?>:</h1></div>
     <script type="text/javascript">
-        top.showFileList('<?=$nodeID; ?>');
+        top.showFileList('<?php echo $nodeID; ?>');
     </script>
     <?php
         foreach ($data['importSuccess'] as $fileName) {

@@ -29,6 +29,6 @@ class Delete extends AbstractQuery
      */
     protected function getSetQueryPart(MigrationQueryData $migrationQueryData, array $translatedFields)
     {
-        return array('', array());
+        return ['', []];
     }
 }

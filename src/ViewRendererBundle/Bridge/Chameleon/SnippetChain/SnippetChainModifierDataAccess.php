@@ -23,9 +23,6 @@ class SnippetChainModifierDataAccess implements SnippetChainModifierDataAccessIn
      */
     private $databaseConnection;
 
-    /**
-     * @param Connection $databaseConnection
-     */
     public function __construct(Connection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;

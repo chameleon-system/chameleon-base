@@ -6,6 +6,5 @@ use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbDataModel;
 
 interface BreadcrumbGeneratorProviderInterface
 {
-
     public function generateBreadcrumb(): ?BreadcrumbDataModel;
 }

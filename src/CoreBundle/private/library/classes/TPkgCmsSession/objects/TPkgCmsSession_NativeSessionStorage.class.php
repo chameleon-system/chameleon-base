@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class TPkgCmsSession_NativeSessionStorage extends \Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage
+class TPkgCmsSession_NativeSessionStorage extends Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage
 {
     /**
      * @return bool

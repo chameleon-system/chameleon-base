@@ -6,12 +6,11 @@ class PkgCmsClassManagerExtension
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgCmsClassManager|null - Belongs to */
-        private ?PkgCmsClassManager $pkgCmsClassManager = null
-        ,
+        private ?PkgCmsClassManager $pkgCmsClassManager = null,
         // TCMSFieldVarchar
         /** @var string - Class */
         private string $class = '',
@@ -64,7 +63,6 @@ class PkgCmsClassManagerExtension
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClass(): string
     {
@@ -77,7 +75,6 @@ class PkgCmsClassManagerExtension
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClassSubtype(): string
@@ -92,7 +89,6 @@ class PkgCmsClassManagerExtension
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -106,7 +102,6 @@ class PkgCmsClassManagerExtension
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -119,6 +114,4 @@ class PkgCmsClassManagerExtension
 
         return $this;
     }
-
-
 }

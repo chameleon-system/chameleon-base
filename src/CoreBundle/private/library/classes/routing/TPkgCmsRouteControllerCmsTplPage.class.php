@@ -11,11 +11,8 @@
 
 use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\TreeNodeServiceInterface;
-use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 use esono\pkgCmsRouting\AbstractRouteController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -26,8 +23,7 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
     private ?PageServiceInterface $pageService = null;
 
     /**
-     * @param Request $request
-     * @param string  $pagePath
+     * @param string $pagePath
      *
      * @return Response
      *
@@ -48,8 +44,7 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
     }
 
     /**
-     * @param Request $request
-     * @param string  $pagePath
+     * @param string $pagePath
      *
      * @return string|null
      *
@@ -62,7 +57,7 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
         if (null === $pagedef) {
             $pagedef = TCMSSmartURL::run($request);
         } else {
-            if (in_array($request->getMethod(), array('GET', 'HEAD'), true)) {
+            if (in_array($request->getMethod(), ['GET', 'HEAD'], true)) {
                 $canonicalUrl = $this->getCanonicalUrl($pagedef);
                 if ($request->getPathInfo() !== $canonicalUrl) {
                     $this->redirectToCanonicalUrl($request, $canonicalUrl);
@@ -122,9 +117,6 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
         $this->redirect->redirect($redirectUrl, Response::HTTP_MOVED_PERMANENTLY);
     }
 
-    /**
-     * @param ChameleonControllerInterface $controller
-     */
     public function setMainController(ChameleonControllerInterface $controller)
     {
         $this->controller = $controller;

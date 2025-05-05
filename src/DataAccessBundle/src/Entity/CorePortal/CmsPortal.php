@@ -16,7 +16,7 @@ class CmsPortal
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -32,8 +32,7 @@ class CmsPortal
         private string $externalIdentifier = '',
         // TCMSFieldLookup
         /** @var CmsLanguage|null - Portal language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldBoolean
         /** @var bool - Enable multi-language ability */
         private bool $useMultilanguage = false,
@@ -42,58 +41,46 @@ class CmsPortal
         private bool $showNotTanslated = false,
         // ChameleonSystem\CoreBundle\Field\FieldTreeNodePortalSelect
         /** @var CmsTree|null - Navigation start node */
-        private ?CmsTree $mainNodeTree = null
-        ,
+        private ?CmsTree $mainNodeTree = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsPortalNavigation> - Navigations */
-        private Collection $propertyNavigationsCollection = new ArrayCollection()
-        ,
+        private Collection $propertyNavigationsCollection = new ArrayCollection(),
         // TCMSFieldPortalHomeTreeNode
         /** @var CmsTree|null - Portal home page */
-        private ?CmsTree $homeNode = null
-        ,
+        private ?CmsTree $homeNode = null,
         // TCMSFieldPortalHomeTreeNode
         /** @var CmsTree|null - Page not found */
-        private ?CmsTree $pageNotFoundNode = null
-        ,
+        private ?CmsTree $pageNotFoundNode = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsDivision> - Sections */
-        private Collection $cmsPortalDivisionsCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalDivisionsCollection = new ArrayCollection(),
         // TCMSFieldPosition
         /** @var int - Sorting */
         private int $sortOrder = 0,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsPortalDomains> - Domains */
-        private Collection $cmsPortalDomainsCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalDomainsCollection = new ArrayCollection(),
         // TCMSFieldURL
         /** @var string - Favicon URL */
         private string $faviconUrl = '/favicon.ico',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Logo */
-        private ?CmsMedia $images = null
-        ,
+        private ?CmsMedia $images = null,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Logo for watermarking */
-        private ?CmsMedia $watermarkLogo = null
-        ,
+        private ?CmsMedia $watermarkLogo = null,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Background image */
-        private ?CmsMedia $backgroundImage = null
-        ,
+        private ?CmsMedia $backgroundImage = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsMessageManagerMessage> - System messages / error codes */
-        private Collection $cmsMessageManagerMessageCollection = new ArrayCollection()
-        ,
+        private Collection $cmsMessageManagerMessageCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsPortalSystemPage> - System pages */
-        private Collection $cmsPortalSystemPageCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalSystemPageCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxesPossibleLanguages
         /** @var Collection<int, CmsLanguage> - Portal languages */
-        private Collection $cmsLanguageCollection = new ArrayCollection()
-        ,
+        private Collection $cmsLanguageCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Google sitemap */
         private bool $useGooglesitemap = true,
@@ -111,15 +98,13 @@ class CmsPortal
         private string $metaPublisher = '',
         // TCMSFieldLookup
         /** @var CmsLocals|null - Locale */
-        private ?CmsLocals $cmsLocals = null
-        ,
+        private ?CmsLocals $cmsLocals = null,
         // TCMSFieldText
         /** @var string - Your meta data */
         private string $customMetadata = '',
         // TCMSFieldExtendedLookup
         /** @var PkgCmsTheme|null - Website presentation / theme */
-        private ?PkgCmsTheme $pkgCmsTheme = null
-        ,
+        private ?PkgCmsTheme $pkgCmsTheme = null,
         // TCMSFieldText
         /** @var string - Action-Plugins */
         private string $actionPluginList = '',
@@ -146,8 +131,7 @@ class CmsPortal
         private string $wysiwygCssUrl = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsUrlAlias> - URL alias list */
-        private Collection $cmsUrlAliasCollection = new ArrayCollection()
-        ,
+        private Collection $cmsUrlAliasCollection = new ArrayCollection(),
         // TCMSFieldText
         /** @var string - robots.txt */
         private string $robots = ''
@@ -191,7 +175,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTitle(): string
     {
@@ -204,7 +187,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIdentifier(): string
@@ -219,7 +201,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getExternalIdentifier(): string
     {
@@ -232,7 +213,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsLanguage(): ?CmsLanguage
@@ -247,7 +227,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isUseMultilanguage(): bool
     {
@@ -260,7 +239,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isShowNotTanslated(): bool
@@ -275,7 +253,6 @@ class CmsPortal
         return $this;
     }
 
-
     // ChameleonSystem\CoreBundle\Field\FieldTreeNodePortalSelect
     public function getMainNodeTree(): ?CmsTree
     {
@@ -288,8 +265,6 @@ class CmsPortal
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -323,7 +298,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldPortalHomeTreeNode
     public function getHomeNode(): ?CmsTree
     {
@@ -337,7 +311,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldPortalHomeTreeNode
     public function getPageNotFoundNode(): ?CmsTree
     {
@@ -350,8 +323,6 @@ class CmsPortal
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -385,7 +356,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getSortOrder(): int
     {
@@ -398,8 +368,6 @@ class CmsPortal
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -433,7 +401,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldURL
     public function getFaviconUrl(): string
     {
@@ -446,7 +413,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMedia
     public function getImages(): ?CmsMedia
@@ -461,7 +427,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getWatermarkLogo(): ?CmsMedia
     {
@@ -475,7 +440,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getBackgroundImage(): ?CmsMedia
     {
@@ -488,8 +452,6 @@ class CmsPortal
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -523,8 +485,6 @@ class CmsPortal
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -556,8 +516,6 @@ class CmsPortal
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxesPossibleLanguages
 
@@ -591,7 +549,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isUseGooglesitemap(): bool
     {
@@ -604,7 +561,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMetaDescription(): string
@@ -619,7 +575,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldText
     public function getMetaKeywords(): string
     {
@@ -632,7 +587,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMetaAuthor(): string
@@ -647,7 +601,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getMetaPublisher(): string
     {
@@ -660,7 +613,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsLocals(): ?CmsLocals
@@ -675,7 +627,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldText
     public function getCustomMetadata(): string
     {
@@ -688,7 +639,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getPkgCmsTheme(): ?PkgCmsTheme
@@ -703,7 +653,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldText
     public function getActionPluginList(): string
     {
@@ -716,7 +665,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getGoogleAnalyticNumber(): string
@@ -731,7 +679,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getEtrackerId(): string
     {
@@ -744,7 +691,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIvwId(): string
@@ -759,7 +705,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIndexSearch(): bool
     {
@@ -772,7 +717,6 @@ class CmsPortal
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isUseSlashInSeoUrls(): bool
@@ -787,7 +731,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isDeactivePortal(): bool
     {
@@ -801,7 +744,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getWysiwygCssUrl(): string
     {
@@ -814,8 +756,6 @@ class CmsPortal
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -849,7 +789,6 @@ class CmsPortal
         return $this;
     }
 
-
     // TCMSFieldText
     public function getRobots(): string
     {
@@ -862,6 +801,4 @@ class CmsPortal
 
         return $this;
     }
-
-
 }

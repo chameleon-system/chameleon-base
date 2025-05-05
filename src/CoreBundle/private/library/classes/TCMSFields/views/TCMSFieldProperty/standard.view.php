@@ -24,7 +24,7 @@ if (!empty($sForeignTableName) && TTools::FieldExists($sForeignTableName, $oFiel
             if (array_key_exists('id', $aRow)) {
                 $sConnectedRecordsHTML .= '<input type="hidden" name="'.TGlobal::OutHTML($oField->name).'['.TGlobal::OutHTML($iCount).'][id]" value="'.TGlobal::OutHTML($aRow['id']).'"';
             }
-            $sConnectedRecordsHTML .= '<div class="remove '.TGlobal::OutHTML($oField->name).'remove"><span class="removebutton" onclick="$(this).parent().parent().remove();return false;">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property.remove')).'</span></div></div>';
+            $sConnectedRecordsHTML .= '<div class="remove '.TGlobal::OutHTML($oField->name).'remove"><span class="removebutton" onclick="$(this).parent().parent().remove();return false;">'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property.remove')).'</span></div></div>';
             $oFieldsTargetTable->GoToStart();
             ++$iCount;
         }
@@ -45,7 +45,7 @@ if (!empty($sForeignTableName) && TTools::FieldExists($sForeignTableName, $oFiel
         }
     }
     $sHTML .= '
-            sAppendHTML += "<div class=\"remove '.TGlobal::OutJS($oField->name).'remove\"><span class=\"removebutton\" onclick=\"$(this).parent().parent().remove();return false;\">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property.remove')).'<\/span><\/div>";
+            sAppendHTML += "<div class=\"remove '.TGlobal::OutJS($oField->name).'remove\"><span class=\"removebutton\" onclick=\"$(this).parent().parent().remove();return false;\">'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property.remove')).'<\/span><\/div>";
             $("#'.TGlobal::OutJS($oField->name).'").append(sAppendHTML);
             top.Counter'.TGlobal::OutJS($sForeignTableName).'++;
             '.$sJSCalls.'
@@ -53,7 +53,7 @@ if (!empty($sForeignTableName) && TTools::FieldExists($sForeignTableName, $oFiel
         </script>
         <div id="'.TGlobal::OutHTML($oField->name).'">
           <input type="hidden" name="'.TGlobal::OutHTML($oField->name).'[x]" value="x" />
-          <div class="add '.TGlobal::OutHTML($oField->name).'add"><span class="addbutton" onclick="AddNew'.TGlobal::OutHTML($sForeignTableName).'();return false;">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property.add_new')).'</span></div>
+          <div class="add '.TGlobal::OutHTML($oField->name).'add"><span class="addbutton" onclick="AddNew'.TGlobal::OutHTML($sForeignTableName).'();return false;">'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property.add_new')).'</span></div>
           '.$sConnectedRecordsHTML.'
         </div>
       ';

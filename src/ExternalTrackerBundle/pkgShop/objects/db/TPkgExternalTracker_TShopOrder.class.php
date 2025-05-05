@@ -24,7 +24,7 @@ class TPkgExternalTracker_TShopOrder extends TPkgExternalTracker_TShopOrderAutoP
             unset($oCopyOfOrder->fieldObjectMail);
             unset($oCopyOfOrder->sqlData['object_mail']);
             unset($oCopyOfOrder->aResultCache);
-            $oCopyOfOrder->aResultCache = array();
+            $oCopyOfOrder->aResultCache = [];
             TdbPkgExternalTrackerList::GetActiveInstance()->AddEvent(TPkgExternalTrackerState::EVENT_PKG_SHOP_CREATE_ORDER, $oCopyOfOrder);
         }
     }

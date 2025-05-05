@@ -8,10 +8,10 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class RequestStateHashProviderCacheTest extends TestCase
 {
@@ -162,8 +162,6 @@ class RequestStateHashProviderCacheTest extends TestCase
     }
 
     /**
-     * @param $expectedResult
-     *
      * @return $this
      */
     private function thenTheResultShouldBe($expectedResult)

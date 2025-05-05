@@ -49,7 +49,7 @@ abstract class AbstractPkgCmsNavigationNode
     /**
      * @var string|null
      */
-    public $sNavigationIconId = null;
+    public $sNavigationIconId;
     /**
      * @var int
      */
@@ -61,19 +61,19 @@ abstract class AbstractPkgCmsNavigationNode
     /**
      * @var AbstractPkgCmsNavigationNode[]|null
      */
-    protected $aChildren = null;
+    protected $aChildren;
     /**
      * @var bool|null
      */
-    protected $bIsActive = null;
+    protected $bIsActive;
     /**
      * @var bool|null
      */
-    protected $bIsExpanded = null;
+    protected $bIsExpanded;
     /**
      * @var T|null
      */
-    private $oNodeCopy = null;
+    private $oNodeCopy;
     /**
      * @var bool
      */

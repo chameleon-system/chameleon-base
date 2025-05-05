@@ -10,30 +10,26 @@ class CmsDivision
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsPortal|null - Belongs to portal / website */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldVarchar
         /** @var string - Area name */
         private string $name = '',
         // TCMSFieldNavigationTreeNode
         /** @var CmsTree|null - Navigation node */
-        private ?CmsTree $cmsTreeIdTree = null
-        ,
+        private ?CmsTree $cmsTreeIdTree = null,
         // TCMSFieldLookup
         /** @var CmsLanguage|null - Area language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldMedia
         /** @var array<string> - Images */
         private array $images = ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6'],
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Background image */
-        private ?CmsMedia $backgroundImage = null
-        ,
+        private ?CmsMedia $backgroundImage = null,
         // TCMSFieldColorpicker
         /** @var string - Main color */
         private string $colorPrimaryHexcolor = '',
@@ -98,7 +94,6 @@ class CmsDivision
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -111,7 +106,6 @@ class CmsDivision
 
         return $this;
     }
-
 
     // TCMSFieldNavigationTreeNode
     public function getCmsTreeIdTree(): ?CmsTree
@@ -126,7 +120,6 @@ class CmsDivision
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsLanguage(): ?CmsLanguage
     {
@@ -139,7 +132,6 @@ class CmsDivision
 
         return $this;
     }
-
 
     // TCMSFieldMedia
     public function getImages(): array
@@ -154,7 +146,6 @@ class CmsDivision
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getBackgroundImage(): ?CmsMedia
     {
@@ -167,7 +158,6 @@ class CmsDivision
 
         return $this;
     }
-
 
     // TCMSFieldColorpicker
     public function getColorPrimaryHexcolor(): string
@@ -182,7 +172,6 @@ class CmsDivision
         return $this;
     }
 
-
     // TCMSFieldColorpicker
     public function getColorSecondaryHexcolor(): string
     {
@@ -195,7 +184,6 @@ class CmsDivision
 
         return $this;
     }
-
 
     // TCMSFieldColorpicker
     public function getColorTertiaryHexcolor(): string
@@ -210,7 +198,6 @@ class CmsDivision
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -223,7 +210,6 @@ class CmsDivision
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getMenuDirection(): string
@@ -238,7 +224,6 @@ class CmsDivision
         return $this;
     }
 
-
     // TCMSFieldText
     public function getKeywords(): string
     {
@@ -251,7 +236,6 @@ class CmsDivision
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIvwCode(): string
@@ -266,7 +250,6 @@ class CmsDivision
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getMenuStopLevel(): int
     {
@@ -279,6 +262,4 @@ class CmsDivision
 
         return $this;
     }
-
-
 }

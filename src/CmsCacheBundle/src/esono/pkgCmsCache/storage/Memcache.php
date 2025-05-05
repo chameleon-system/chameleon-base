@@ -18,7 +18,7 @@ class Memcache implements StorageInterface
     /**
      * @var \TCMSMemcache
      */
-    private $memcache = null;
+    private $memcache;
 
     public function __construct(\TCMSMemcache $memcache)
     {

@@ -12,9 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Util;
 
 use esono\pkgCmsCache\CacheInterface;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsTree;
 
 class RoutingUtilCacheDecorator implements RoutingUtilInterface
 {
@@ -27,10 +24,6 @@ class RoutingUtilCacheDecorator implements RoutingUtilInterface
      */
     private $cache;
 
-    /**
-     * @param RoutingUtilInterface $routingUtil
-     * @param CacheInterface       $cache
-     */
     public function __construct(RoutingUtilInterface $routingUtil, CacheInterface $cache)
     {
         $this->subject = $routingUtil;
@@ -40,7 +33,7 @@ class RoutingUtilCacheDecorator implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkForTreeNode(TdbCmsTree $tree, TdbCmsLanguage $language)
+    public function getLinkForTreeNode(\TdbCmsTree $tree, \TdbCmsLanguage $language)
     {
         return $this->subject->getLinkForTreeNode($tree, $language);
     }
@@ -56,7 +49,7 @@ class RoutingUtilCacheDecorator implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getDomainRequirement(TdbCmsPortal $portal, TdbCmsLanguage $language, $secure)
+    public function getDomainRequirement(\TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
         return $this->subject->getDomainRequirement($portal, $language, $secure);
     }
@@ -64,25 +57,25 @@ class RoutingUtilCacheDecorator implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllPageRoutes(TdbCmsPortal $portal, TdbCmsLanguage $language)
+    public function getAllPageRoutes(\TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
-        $aKey = array(
+        $aKey = [
             'class' => __CLASS__,
             'function' => 'getAllPageRoutes',
             'portal' => $portal->id,
             'language' => $language->id,
-        );
+        ];
         $key = $this->cache->getKey($aKey, false);
         $lookup = $this->cache->get($key);
         if (null === $lookup) {
             $lookup = $this->subject->getAllPageRoutes($portal, $language);
 
-            $this->cache->set($key, $lookup, array(
-                array('table' => 'cms_tpl_page', 'id' => null),
-                array('table' => 'cms_tree', 'id' => null),
-                array('table' => 'cms_tree_node', 'id' => null),
-                array('table' => 'cms_portal', 'id' => $portal->id),
-            ));
+            $this->cache->set($key, $lookup, [
+                ['table' => 'cms_tpl_page', 'id' => null],
+                ['table' => 'cms_tree', 'id' => null],
+                ['table' => 'cms_tree_node', 'id' => null],
+                ['table' => 'cms_portal', 'id' => $portal->id],
+            ]);
         }
 
         return $lookup;
@@ -91,7 +84,7 @@ class RoutingUtilCacheDecorator implements RoutingUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function normalizeRoutePath($path, TdbCmsPortal $portal)
+    public function normalizeRoutePath($path, \TdbCmsPortal $portal)
     {
         return $this->subject->normalizeRoutePath($path, $portal);
     }

@@ -18,11 +18,6 @@ use ChameleonSystem\MediaManager\Exception\UsageDeleteException;
 use ChameleonSystem\MediaManager\Interfaces\MediaItemUsageDeleteServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use InvalidArgumentException;
-use TCMSTableEditorManager;
-use TdbCmsConfig;
-use TdbCmsFieldConf;
-use TTools;
 
 class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterface
 {
@@ -41,11 +36,6 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
      */
     private $fieldTranslationUtil;
 
-    /**
-     * @param Connection               $databaseConnection
-     * @param LanguageServiceInterface $languageService
-     * @param FieldTranslationUtil     $fieldTranslationUtil
-     */
     public function __construct(
         Connection $databaseConnection,
         LanguageServiceInterface $languageService,
@@ -96,25 +86,23 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
     }
 
     /**
-     * @param MediaItemUsageDataModel $usage
-     *
-     * @return TdbCmsFieldConf|null
+     * @return \TdbCmsFieldConf|null
      */
     private function getFieldDefinitionFromUsage(MediaItemUsageDataModel $usage)
     {
         try {
-            $fieldConf = TdbCmsFieldConf::GetNewInstance();
+            $fieldConf = \TdbCmsFieldConf::GetNewInstance();
             if (false === $fieldConf->LoadFromFields(
-                    array(
-                        'cms_tbl_conf_id' => $this->getTableId($usage->getTargetTableName()),
-                        'name' => $usage->getTargetFieldName(),
-                    )
-                )
+                [
+                    'cms_tbl_conf_id' => $this->getTableId($usage->getTargetTableName()),
+                    'name' => $usage->getTargetFieldName(),
+                ]
+            )
             ) {
                 return null;
             }
-        } catch (InvalidArgumentException $e) {
-            //table not found
+        } catch (\InvalidArgumentException $e) {
+            // table not found
             return null;
         }
 
@@ -126,11 +114,11 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
      *
      * @return string
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     private function getTableId($tableName)
     {
-        return TTools::GetCMSTableId($tableName);
+        return \TTools::GetCMSTableId($tableName);
     }
 
     /**
@@ -138,7 +126,7 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
      */
     private function getAvailableLanguageIds()
     {
-        $config = TdbCmsConfig::GetNewInstance();
+        $config = \TdbCmsConfig::GetNewInstance();
         $languageIds = [$config->GetFieldTranslationBaseLanguage()->id];
         $otherLanguages = $config->GetFieldBasedTranslationLanguageArray();
 
@@ -146,15 +134,13 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
     }
 
     /**
-     * @param MediaItemUsageDataModel $usage
-     * @param TdbCmsFieldConf         $fieldConf
-     * @param string[]                $availableLanguageIds
+     * @param string[] $availableLanguageIds
      *
      * @return bool
      */
     private function deleteUsageFieldTableList(
         MediaItemUsageDataModel $usage,
-        TdbCmsFieldConf $fieldConf,
+        \TdbCmsFieldConf $fieldConf,
         array $availableLanguageIds
     ) {
         $baseLanguageId = $this->languageService->getCmsBaseLanguageId();
@@ -163,28 +149,25 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
             if (false === $fieldConf->fieldIsTranslatable && $languageId !== $baseLanguageId) {
                 continue;
             }
-            $tableEditor = new TCMSTableEditorManager();
+            $tableEditor = new \TCMSTableEditorManager();
             $tableEditor->AllowEditByAll(true);
             $tableEditor->Init($fieldConf->fieldCmsTblConfId, $usage->getTargetRecordId(), $languageId);
 
             $success = $tableEditor->SaveField(
-                    $usage->getTargetFieldName(),
-                    $fieldConf->sqlData['field_default_value']
-                ) && $success;
+                $usage->getTargetFieldName(),
+                $fieldConf->sqlData['field_default_value']
+            ) && $success;
         }
 
         return $success;
     }
 
     /**
-     * @param MediaItemUsageDataModel $usage
-     * @param TdbCmsFieldConf         $fieldConf
-     *
      * @return bool
      */
-    private function deleteUsageFieldMultiTableList(MediaItemUsageDataModel $usage, TdbCmsFieldConf $fieldConf)
+    private function deleteUsageFieldMultiTableList(MediaItemUsageDataModel $usage, \TdbCmsFieldConf $fieldConf)
     {
-        $tableEditor = new TCMSTableEditorManager();
+        $tableEditor = new \TCMSTableEditorManager();
         $tableEditor->AllowEditByAll(true);
         $tableEditor->Init($fieldConf->fieldCmsTblConfId, $usage->getTargetRecordId());
         $tableEditor->RemoveMLTConnection($fieldConf->sqlData['name'], $usage->getMediaItemId());
@@ -193,17 +176,13 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
     }
 
     /**
-     * @param MediaItemUsageDataModel $usage
-     * @param TdbCmsFieldConf         $fieldConf
-     * @param array                   $availableLanguageIds
-     *
      * @return bool
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     private function deleteUsageFieldExtendedTableListMedia(
         MediaItemUsageDataModel $usage,
-        TdbCmsFieldConf $fieldConf,
+        \TdbCmsFieldConf $fieldConf,
         array $availableLanguageIds
     ) {
         $defaultImages = explode(',', $fieldConf->sqlData['field_default_value']);
@@ -227,7 +206,7 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
                 $this->databaseConnection->quoteIdentifier($fieldNameTranslated),
                 $this->databaseConnection->quoteIdentifier($usage->getTargetTableName())
             );
-            $row = $this->databaseConnection->fetchAssociative($query, array('id' => $usage->getTargetRecordId()));
+            $row = $this->databaseConnection->fetchAssociative($query, ['id' => $usage->getTargetRecordId()]);
             $images = explode(',', $row['fieldValue']);
             foreach ($images as $key => $imageId) {
                 if ($imageId === $usage->getMediaItemId()) {
@@ -239,7 +218,7 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
                 }
             }
             $newValue = implode(',', $images);
-            $tableEditor = new TCMSTableEditorManager();
+            $tableEditor = new \TCMSTableEditorManager();
             $tableEditor->AllowEditByAll(true);
             $tableEditor->Init($fieldConf->fieldCmsTblConfId, $usage->getTargetRecordId(), $languageId);
 
@@ -250,17 +229,13 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
     }
 
     /**
-     * @param MediaItemUsageDataModel $usage
-     * @param TdbCmsFieldConf         $fieldConf
-     * @param array                   $availableLanguageIds
-     *
      * @return bool
      *
      * @throws DBALException
      */
     private function deleteUsageFieldWysiwyg(
         MediaItemUsageDataModel $usage,
-        TdbCmsFieldConf $fieldConf,
+        \TdbCmsFieldConf $fieldConf,
         array $availableLanguageIds
     ) {
         $matchString = "/<img([^>]+?)cmsmedia=['\"]".$usage->getMediaItemId()."['\"](.*?)\\/>/usi";
@@ -286,11 +261,11 @@ class CoreFieldsUsageDeleteService implements MediaItemUsageDeleteServiceInterfa
             );
             $row = $this->databaseConnection->fetchAssociative(
                 $query,
-                array('id' => $usage->getTargetRecordId())
+                ['id' => $usage->getTargetRecordId()]
             );
             $newValue = preg_replace($matchString, '', $row['fieldValue']);
 
-            $tableEditor = new TCMSTableEditorManager();
+            $tableEditor = new \TCMSTableEditorManager();
             $tableEditor->AllowEditByAll(true);
             $tableEditor->Init($fieldConf->fieldCmsTblConfId, $usage->getTargetRecordId(), $languageId);
 

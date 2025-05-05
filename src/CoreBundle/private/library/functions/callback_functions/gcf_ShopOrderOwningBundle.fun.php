@@ -13,7 +13,7 @@ function gcf_ShopOrderOwningBundle($iShopOrderItemId, $row, $fieldName)
 {
     $sOwner = '&nbsp;';
     $oOrdeItem = TdbShopOrderItem::GetNewInstance();
-    /** @var $oOrdeItem TdbShopOrderItem */
+    /* @var $oOrdeItem TdbShopOrderItem */
     $oOrdeItem->Load($iShopOrderItemId);
     $oOwner = $oOrdeItem->GetOwningBundleOrderItem();
     if ($oOwner) {

@@ -36,11 +36,11 @@ class TCMSFieldLookupFieldTypes extends TCMSFieldLookup
     {
         $tblName = $this->GetConnectedTableName();
         $listClass = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $tblName).'List';
-        $this->options = array();
+        $this->options = [];
         $query = $this->GetOptionsQuery();
 
         /** @var TCMSRecordList $sourceList */
-        $sourceList = call_user_func(array($listClass, 'GetList'), $query);
+        $sourceList = call_user_func([$listClass, 'GetList'], $query);
 
         while ($oRow = $sourceList->Next()) {
             $name = $oRow->GetName();

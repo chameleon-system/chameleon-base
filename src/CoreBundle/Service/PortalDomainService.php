@@ -19,12 +19,6 @@ use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use ChameleonSystem\CoreBundle\Service\Initializer\PortalDomainServiceInitializerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use TCMSPortal;
-use TCMSPortalDomain;
-use TdbCmsPortal;
-use TdbCmsPortalDomains;
-use TdbCmsPortalList;
-use TdbCmsTree;
 
 /**
  * Class PortalDomainService.
@@ -32,11 +26,11 @@ use TdbCmsTree;
 class PortalDomainService implements PortalDomainServiceInterface
 {
     /**
-     * @var TdbCmsPortal|null
+     * @var \TdbCmsPortal|null
      */
     private $portal;
     /**
-     * @var TdbCmsPortalDomains
+     * @var \TdbCmsPortalDomains
      */
     private $domain;
     /**
@@ -64,12 +58,6 @@ class PortalDomainService implements PortalDomainServiceInterface
      */
     private $languageService;
 
-    /**
-     * @param EventDispatcherInterface                $eventDispatcher
-     * @param PortalDomainServiceInitializerInterface $portalDomainServiceInitializer
-     * @param CmsPortalDomainsDataAccessInterface     $domainDataAccess
-     * @param LanguageServiceInterface                $languageService
-     */
     public function __construct(EventDispatcherInterface $eventDispatcher, PortalDomainServiceInitializerInterface $portalDomainServiceInitializer, CmsPortalDomainsDataAccessInterface $domainDataAccess, LanguageServiceInterface $languageService)
     {
         $this->eventDispatcher = $eventDispatcher;
@@ -122,7 +110,7 @@ class PortalDomainService implements PortalDomainServiceInterface
     {
         $tcmsPortal = \TdbCmsConfig::GetInstance()->GetPrimaryPortal();
 
-        $tdbPortal = TdbCmsPortal::GetNewInstance();
+        $tdbPortal = \TdbCmsPortal::GetNewInstance();
         if (false === $tdbPortal->Load($tcmsPortal->id)) {
             return null;
         }
@@ -136,7 +124,7 @@ class PortalDomainService implements PortalDomainServiceInterface
     public function getFileNotFoundPage()
     {
         $portal = $this->getActivePortal();
-        $fileNotFoundPage = TdbCmsTree::GetNewInstance($portal->fieldPageNotFoundNode);
+        $fileNotFoundPage = \TdbCmsTree::GetNewInstance($portal->fieldPageNotFoundNode);
         if (false === $fileNotFoundPage->sqlData) {
             throw new ResourceNotFoundException('No file-not-found page found.');
         }
@@ -152,7 +140,7 @@ class PortalDomainService implements PortalDomainServiceInterface
         if (null !== $this->portalDomainNames) {
             return $this->portalDomainNames;
         }
-        $this->portalDomainNames = array();
+        $this->portalDomainNames = [];
 
         $portal = $this->getActivePortal();
 
@@ -202,7 +190,7 @@ class PortalDomainService implements PortalDomainServiceInterface
      * @param string|null $portalId
      * @param string|null $languageId
      *
-     * @return TdbCmsPortalDomains|null
+     * @return \TdbCmsPortalDomains|null
      *
      * @throws InvalidPortalDomainException
      */
@@ -228,7 +216,7 @@ class PortalDomainService implements PortalDomainServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function setActivePortal(TCMSPortal $portal = null)
+    public function setActivePortal(?\TCMSPortal $portal = null)
     {
         $oldActivePortal = $this->portal;
         $this->portal = $portal;
@@ -242,7 +230,7 @@ class PortalDomainService implements PortalDomainServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function setActiveDomain(TCMSPortalDomain $domain = null)
+    public function setActiveDomain(?\TCMSPortalDomain $domain = null)
     {
         $oldActiveDomain = $this->domain;
         $this->domain = $domain;

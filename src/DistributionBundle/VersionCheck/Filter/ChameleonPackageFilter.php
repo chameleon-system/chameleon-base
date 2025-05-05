@@ -14,7 +14,7 @@ namespace ChameleonSystem\DistributionBundle\VersionCheck\Filter;
 class ChameleonPackageFilter implements PackageNameFilterInterface
 {
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
     public function filter($name)
     {

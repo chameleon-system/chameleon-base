@@ -2,7 +2,6 @@
 
 namespace ChameleonSystem\SecurityBundle\Voter;
 
-use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -14,7 +13,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class CmsTableObjectVoter extends Voter
 {
-
     public function __construct(
         readonly private Connection $connection,
         readonly private CmsTableNameVoter $cmsTableNameVoter
@@ -35,9 +33,8 @@ class CmsTableObjectVoter extends Voter
     }
 
     /**
-     * @param string $attribute
      * @param \TCMSRecord|string $subject
-     * @param TokenInterface $token
+     *
      * @return bool|void
      */
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -85,7 +82,7 @@ class CmsTableObjectVoter extends Voter
 
     private function getRecordOwner(string $table, string $id): ?string
     {
-        $query = sprintf("SELECT * FROM %s WHERE `id` = :id", $this->connection->quoteIdentifier($table));
+        $query = sprintf('SELECT * FROM %s WHERE `id` = :id', $this->connection->quoteIdentifier($table));
         $row = $this->connection->fetchAssociative($query, ['id' => $id]);
         if (false === $row) {
             return null;

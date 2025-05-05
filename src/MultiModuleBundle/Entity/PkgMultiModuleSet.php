@@ -9,7 +9,7 @@ class PkgMultiModuleSet
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name of the set */
@@ -57,8 +57,6 @@ class PkgMultiModuleSet
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -90,6 +88,4 @@ class PkgMultiModuleSet
 
         return $this;
     }
-
-
 }

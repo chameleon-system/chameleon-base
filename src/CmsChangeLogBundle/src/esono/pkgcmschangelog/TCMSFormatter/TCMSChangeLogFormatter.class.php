@@ -11,7 +11,7 @@
 
 /**
  * Formats values for display in e.g. a table or an export.
-/**/
+ * /**/
 class TCMSChangeLogFormatter
 {
     /**
@@ -65,14 +65,14 @@ class TCMSChangeLogFormatter
     /**
      * @param string $sChangeType
      *
-     * @return null|string
+     * @return string|null
      */
     public static function formatChangeType($sChangeType)
     {
         switch ($sChangeType) {
-            case 'UPDATE': return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.state.changed');
-            case 'INSERT': return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.state.new');
-            case 'DELETE': return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.state.removed');
+            case 'UPDATE': return ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.state.changed');
+            case 'INSERT': return ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.state.new');
+            case 'DELETE': return ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.state.removed');
         }
     }
 

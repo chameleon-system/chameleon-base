@@ -30,11 +30,10 @@ class ModuleMapperChainConfigTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderConfigStrings
      *
-     * @param $input
+     * @dataProvider dataProviderConfigStrings
      */
-    public function it_is_loaded_from_string($input, $expectedConfig)
+    public function itIsLoadedFromString($input, $expectedConfig)
     {
         $this->given_a_mapping_chain_config_instance();
         $this->when_we_call_loadFromString_with($input);
@@ -43,57 +42,57 @@ class ModuleMapperChainConfigTest extends TestCase
 
     public function dataProviderConfigStrings()
     {
-        return array(
-            array(
+        return [
+            [
                 <<<'EOD'
                 alias=myMapper
 EOD
-            , array('alias' => array('myMapper')),
-            ),
-            array(
+            , ['alias' => ['myMapper']],
+            ],
+            [
                 <<<'EOD'
                 alias = myMapper
 EOD
-            , array('alias' => array('myMapper')),
-            ),
-            array(
+            , ['alias' => ['myMapper']],
+            ],
+            [
                 <<<'EOD'
                 alias= myMapper
 EOD
-            , array('alias' => array('myMapper')),
-            ),
-            array(
+            , ['alias' => ['myMapper']],
+            ],
+            [
                 <<<'EOD'
                 alias =myMapper
 EOD
-            , array('alias' => array('myMapper')),
-            ),
-            array(
+            , ['alias' => ['myMapper']],
+            ],
+            [
                 <<<'EOD'
                 alias =myMapper,
 EOD
-            , array('alias' => array('myMapper')),
-            ),
-            array(
+            , ['alias' => ['myMapper']],
+            ],
+            [
                 <<<'EOD'
                 alias =myMapper,myMapper2
 EOD
-            , array('alias' => array('myMapper', 'myMapper2')),
-            ),
-            array(
+            , ['alias' => ['myMapper', 'myMapper2']],
+            ],
+            [
                 <<<'EOD'
                 alias =myMapper,myMapper2,
 EOD
-            , array('alias' => array('myMapper', 'myMapper2')),
-            ),
-            array(
+            , ['alias' => ['myMapper', 'myMapper2']],
+            ],
+            [
                 <<<'EOD'
                 alias =myMapper,myMapper2,
                 alias2 = newMapper,foo\bar\mapper
 EOD
-            , array('alias' => array('myMapper', 'myMapper2'), 'alias2' => array('newMapper', 'foo\bar\mapper')),
-            ),
-        );
+            , ['alias' => ['myMapper', 'myMapper2'], 'alias2' => ['newMapper', 'foo\bar\mapper']],
+            ],
+        ];
     }
 
     private function given_a_mapping_chain_config_instance()
@@ -113,12 +112,10 @@ EOD
 
     /**
      * @test
-     * @dataProvider dataProviderConfigStringToConfigString
      *
-     * @param $inputString
-     * @param $configAsArray
+     * @dataProvider dataProviderConfigStringToConfigString
      */
-    public function it_converts_configuration_to_string($input, $expectedConfig)
+    public function itConvertsConfigurationToString($input, $expectedConfig)
     {
         $this->given_a_mapping_chain_config_instance();
         $this->when_we_call_loadFromString_with($input);
@@ -127,13 +124,13 @@ EOD
 
     public function dataProviderConfigStringToConfigString()
     {
-        return array(
-            array('alias = foo', 'alias = foo'),
-            array('alias = foo,', 'alias = foo'),
-            array('alias = foo,bar', 'alias = foo, bar'),
-            array('alias = foo,bar,\\foo\\bar\\mapper', 'alias = foo, bar, \\foo\\bar\\mapper'),
-            array("alias = foo,bar,\\foo\\bar\\mapper\nalias2 = mapper2", "alias = foo, bar, \\foo\\bar\\mapper\nalias2 = mapper2"),
-        );
+        return [
+            ['alias = foo', 'alias = foo'],
+            ['alias = foo,', 'alias = foo'],
+            ['alias = foo,bar', 'alias = foo, bar'],
+            ['alias = foo,bar,\\foo\\bar\\mapper', 'alias = foo, bar, \\foo\\bar\\mapper'],
+            ["alias = foo,bar,\\foo\\bar\\mapper\nalias2 = mapper2", "alias = foo, bar, \\foo\\bar\\mapper\nalias2 = mapper2"],
+        ];
     }
 
     private function then_we_expect_that_getAsString_returns($input)
@@ -143,13 +140,8 @@ EOD
 
     /**
      * @test
-     * @dataProvider dataProviderAddMapperToChain
      *
-     * @param $initialStateAsString
-     * @param $expectedState
-     * @param $mapperChainName
-     * @param $newMapper
-     * @param $positionAfter
+     * @dataProvider dataProviderAddMapperToChain
      */
     public function addMapperToChain($initialStateAsString, $expectedState, $mapperChainName, $newMapper, $positionAfter)
     {
@@ -161,29 +153,29 @@ EOD
 
     public function dataProviderAddMapperToChain()
     {
-        return array(
-            array(
+        return [
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, newMapper, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'someAlias', // $mapperChainName
                 'newMapper', // $newMapper
                 'myMapper1', // $positionAfter
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3, newMapper\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'someAlias', // $mapperChainName
                 'newMapper', // $newMapper
                 null, // $positionAfter
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b, newMapper", // $expectedState
                 'someAlias2', // $mapperChainName
                 'newMapper', // $newMapper
                 'myMapper3b', // $positionAfter
-            ),
-        );
+            ],
+        ];
     }
 
     private function when_we_call_addMapperToChain_with($mapperChainName, $newMapper, $positionAfter)
@@ -193,14 +185,10 @@ EOD
 
     /**
      * @test
-     * @dataProvider dataProviderRemoveMapperFromMapperChain
      *
-     * @param $initialStateAsString
-     * @param $expectedState
-     * @param $mapperChainName
-     * @param $mapperName
+     * @dataProvider dataProviderRemoveMapperFromMapperChain
      */
-    public function id_should_be_able_to_remove_a_mapper_from_a_mapper_chain($initialStateAsString, $expectedState, $mapperChainName, $mapperName, $expectedExceptionType)
+    public function idShouldBeAbleToRemoveAMapperFromAMapperChain($initialStateAsString, $expectedState, $mapperChainName, $mapperName, $expectedExceptionType)
     {
         $this->given_a_mapping_chain_config_instance();
         $this->when_we_call_loadFromString_with($initialStateAsString);
@@ -211,50 +199,50 @@ EOD
 
     public function dataProviderRemoveMapperFromMapperChain()
     {
-        return array(
-            array(
+        return [
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'someAlias', // $mapperChainName
                 'myMapper1', // $mapperName
                 null,
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'someAlias', // $mapperChainName
                 'myMapper2', // $mapperName
                 null,
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'someAlias', // $mapperChainName
                 'myMapper3', // $mapperName
                 null,
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b", // $expectedState
                 'someAlias2', // $mapperChainName
                 'myMapper3b', // $mapperName
                 null,
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'someAlias3', // $mapperChainName
                 'myMapper3b', // $mapperName
                 '\ErrorException',
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'someAlias', // $mapperChainName
                 'myMapper3b', // $mapperName
                 '\ErrorException',
-            ),
-        );
+            ],
+        ];
     }
 
     private function when_we_call_removeMapperFromMapperChain_with($mapperChainName, $mapperName)
@@ -277,13 +265,10 @@ EOD
 
     /**
      * @test
-     * @dataProvider dataProviderRemoveMapperChain
      *
-     * @param $initialStateAsString
-     * @param $expectedState
-     * @param $mapperChainName
+     * @dataProvider dataProviderRemoveMapperChain
      */
-    public function it_should_be_able_to_remove_a_mapper_chain($initialStateAsString, $expectedState, $mapperChainName, $expectedExceptionType)
+    public function itShouldBeAbleToRemoveAMapperChain($initialStateAsString, $expectedState, $mapperChainName, $expectedExceptionType)
     {
         $this->given_a_mapping_chain_config_instance();
         $this->when_we_call_loadFromString_with($initialStateAsString);
@@ -294,26 +279,26 @@ EOD
 
     public function dataProviderRemoveMapperChain()
     {
-        return array(
-            array(
+        return [
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 'someAlias2 = myMapper1b, myMapper2b, myMapper3b', // $expectedState
                 'someAlias', // $mapperChainName
                 null,
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 'someAlias = myMapper1, myMapper2, myMapper3', // $expectedState
                 'someAlias2', // $mapperChainName
                 null,
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'someAlias3', // $mapperChainName
                 '\ErrorException',
-            ),
-        );
+            ],
+        ];
     }
 
     private function when_we_call_removeMapperChain_with($mapperChainName)
@@ -327,15 +312,10 @@ EOD
 
     /**
      * @test
-     * @dataProvider dataProviderAddMapperChain
      *
-     * @param $initialStateAsString
-     * @param $expectedState
-     * @param $newMapperChainName
-     * @param $newMapperChainList
-     * @param $expectedExceptionType
+     * @dataProvider dataProviderAddMapperChain
      */
-    public function it_should_add_a_new_mapper_chain($initialStateAsString, $expectedState, $newMapperChainName, $newMapperChainList, $expectedExceptionType)
+    public function itShouldAddANewMapperChain($initialStateAsString, $expectedState, $newMapperChainName, $newMapperChainList, $expectedExceptionType)
     {
         $this->given_a_mapping_chain_config_instance();
         $this->when_we_call_loadFromString_with($initialStateAsString);
@@ -346,36 +326,36 @@ EOD
 
     public function dataProviderAddMapperChain()
     {
-        return array(
-            array(
+        return [
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b\nnewAlias = mapper1, mapper2, \\mapper\\three", // $expectedState
                 'newAlias', // $newMapperChainName
-                array('mapper1', 'mapper2', '\\mapper\\three'), // $newMapperChainList
+                ['mapper1', 'mapper2', '\\mapper\\three'], // $newMapperChainList
                 null,
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b\nnewAlias = mapper1", // $expectedState
                 'newAlias', // $newMapperChainName
-                array('mapper1'), // $newMapperChainList
+                ['mapper1'], // $newMapperChainList
                 null,
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'newAlias', // $newMapperChainName
-                array(), // $newMapperChainList
+                [], // $newMapperChainList
                 '\ErrorException',
-            ),
-            array(
+            ],
+            [
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $initialStateAsString
                 "someAlias = myMapper1, myMapper2, myMapper3\nsomeAlias2 = myMapper1b, myMapper2b, myMapper3b", // $expectedState
                 'someAlias', // $newMapperChainName
-                array('foo', 'bar'), // $newMapperChainList
+                ['foo', 'bar'], // $newMapperChainList
                 '\ErrorException',
-            ),
-        );
+            ],
+        ];
     }
 
     private function when_we_call_addMapperChain_with($newMapperChainName, $newMapperChainList)
@@ -389,16 +369,17 @@ EOD
 
     /**
      * @test
+     *
      * @dataProvider dataProviderReplaceMapper
      *
-     * @param string      $initialStateAsString
-     * @param string      $expectedState
-     * @param string      $oldMapperName
-     * @param string      $newMapperName
+     * @param string $initialStateAsString
+     * @param string $expectedState
+     * @param string $oldMapperName
+     * @param string $newMapperName
      * @param string|null $mapperChainName
      * @param string|null $expectedExceptionType
      */
-    public function it_should_replace_mappers($initialStateAsString, $expectedState, $oldMapperName, $newMapperName, $mapperChainName, $expectedExceptionType)
+    public function itShouldReplaceMappers($initialStateAsString, $expectedState, $oldMapperName, $newMapperName, $mapperChainName, $expectedExceptionType)
     {
         $this->given_a_mapping_chain_config_instance();
         $this->when_we_call_loadFromString_with($initialStateAsString);
@@ -408,8 +389,8 @@ EOD
     }
 
     /**
-     * @param string      $oldMapperName
-     * @param string      $newMapperName
+     * @param string $oldMapperName
+     * @param string $newMapperName
      * @param string|null $mapperChainName
      */
     private function when_we_call_replaceMapper_with($oldMapperName, $newMapperName, $mapperChainName)

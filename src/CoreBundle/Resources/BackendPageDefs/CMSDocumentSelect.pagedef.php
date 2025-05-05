@@ -1,6 +1,6 @@
 <?php
 
 $layoutTemplate = 'frame';
-$moduleList = array('contentmodule' => array('model' => 'CMSModuleDocumentChooser', 'view' => 'standard'));
+$moduleList = ['contentmodule' => ['model' => 'CMSModuleDocumentChooser', 'view' => 'standard']];
 
 addDefaultPageTitle($moduleList);

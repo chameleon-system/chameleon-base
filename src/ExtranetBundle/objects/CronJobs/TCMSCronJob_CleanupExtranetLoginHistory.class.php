@@ -12,7 +12,7 @@
 /**
  * removes all entries in login history below CHAMELEON_EXTRANET_LOGIN_HISTORY_LIMIT
  * false = no limit.
-/**/
+ * /**/
 class TCMSCronJob_CleanupExtranetLoginHistory extends TdbCmsCronjobs
 {
     /**

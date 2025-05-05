@@ -19,7 +19,7 @@ class TCMSListManagerShowChanges extends TCMSListManagerShowChangesAutoParent
         parent::GetCustomMenuItems();
 
         if ($this->oTableConf->fieldChangelogActive) {
-            $aParam = array();
+            $aParam = [];
             $aParam['pagedef'] = 'tablemanager';
             $aParam['id'] = TTools::GetCMSTableId('pkg_cms_changelog_set');
             $aParam['sRestrictionField'] = 'cms_tbl_conf';
@@ -27,7 +27,7 @@ class TCMSListManagerShowChanges extends TCMSListManagerShowChangesAutoParent
 
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'getdisplayvalue';
-            $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.action.show_changes');
+            $oMenuItem->sDisplayName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.action.show_changes');
             $oMenuItem->sIcon = 'far fa-edit';
             $oMenuItem->href = '?'.TTools::GetArrayAsURL($aParam);
             $this->oMenuItems->AddItem($oMenuItem);

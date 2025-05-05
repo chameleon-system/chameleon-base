@@ -10,7 +10,7 @@ class CmsMenuCustomItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -61,7 +61,6 @@ class CmsMenuCustomItem
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUrl(): string
     {
@@ -74,8 +73,6 @@ class CmsMenuCustomItem
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -108,6 +105,4 @@ class CmsMenuCustomItem
 
         return $this;
     }
-
-
 }

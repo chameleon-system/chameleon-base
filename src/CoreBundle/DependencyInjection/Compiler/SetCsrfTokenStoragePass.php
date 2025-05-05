@@ -4,8 +4,6 @@ namespace ChameleonSystem\CoreBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
-use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenStorage;
 
 /**
  * Replace the token storage service of Symfony as that one uses "session" directly - which does not work with our own session handling.

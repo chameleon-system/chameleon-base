@@ -184,7 +184,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                 }
             }
             $sHTML .= '<div>';
-            $sHTML .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.reset'), "javascript:resetExtendedMultiTableListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected'))."');", 'fas fa-undo');
+            $sHTML .= TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.action.reset'), "javascript:resetExtendedMultiTableListField('".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->oDefinition->sqlData['field_default_value'])."','".TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected'))."');", 'fas fa-undo');
             $sHTML .= '</div>';
         } else {
             $sHTML = parent::GetExtendedListButtons();
@@ -217,7 +217,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         ];
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParams);
-        $sWindowTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected');
+        $sWindowTitle = ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected');
 
         $js = "CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($sURL)."',0,0,'".$sWindowTitle."');return false;";
 
@@ -293,7 +293,7 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
                 $sReturnValue = $oCmsTblConf->fieldTranslation.' - '.$oRecord->GetDisplayValue();
             }
         } else {
-            $sReturnValue = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected');
+            $sReturnValue = ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup.nothing_selected');
         }
 
         return $sReturnValue;

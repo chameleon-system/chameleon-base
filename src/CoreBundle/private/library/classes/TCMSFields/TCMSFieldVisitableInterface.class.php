@@ -13,8 +13,6 @@ interface TCMSFieldVisitableInterface
 {
     /**
      * @param TCMSFieldVisitorInterface $visitor
-     *
-     * @return mixed
      */
     public function accept($visitor);
 }

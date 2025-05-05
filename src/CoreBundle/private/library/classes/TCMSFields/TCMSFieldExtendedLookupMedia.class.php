@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+
 /**
  * The image pool.
  * /**/
@@ -88,11 +89,11 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
         // add +6 to width and height to get over zoom threshold to activate zoom light box
         $viewRenderer->AddSourceObject(
             'aTagProperties',
-            array(
+            [
                 'width' => $iWidth + 6,
                 'height' => $iHeight + 6,
                 'cmsshowfull' => '1',
-            )
+            ]
         );
 
         return $viewRenderer->Render('TCMSFieldMedia/mediaSingleItemUploader.html.twig', null, false);
@@ -105,7 +106,7 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
      */
     protected function getMediaFieldMappers($isReadOnly)
     {
-        $mapper = array();
+        $mapper = [];
         if (false === $isReadOnly) {
             $mapper[] = 'chameleon_system_core.mapper.media_field_upload';
         }
@@ -124,7 +125,7 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
             'SELECT * FROM '.$this->getDatabaseConnection()->quoteIdentifier(
                 $this->oTableRow->table
             ).' WHERE `id` = :id',
-            array('id' => $this->oTableRow->id)
+            ['id' => $this->oTableRow->id]
         );
 
         return $row[$this->name];
@@ -135,7 +136,7 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
      */
     protected function getViewRenderer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
     /**
@@ -184,30 +185,30 @@ class TCMSFieldExtendedLookupMedia extends TCMSFieldExtendedLookup
      */
     protected function getFieldJSFunctions()
     {
-        $aRequest = array(
+        $aRequest = [
             'pagedef' => 'CMSUniversalUploader',
             'mode' => 'media',
             'callback' => 'CMSFieldPropertyTableCmsMediaPostUploadHook_'.$this->name,
-        );
+        ];
         $aRequest['singleMode'] = '1';
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
         if (null !== $parentField && '' !== $parentField) {
-            $aRequest['parentIFrame'] = $parentField . '_iframe';
+            $aRequest['parentIFrame'] = $parentField.'_iframe';
             $aRequest['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         }
 
         $sURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aRequest);
-        $sErrorMessage = TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.error_missing_target'));
+        $sErrorMessage = TGlobal::OutJS(ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.error_missing_target'));
         $oGlobal = TGlobal::instance();
 
-        $aParam = $oGlobal->GetUserData(null, array('module_fnc', '_rmhist', '_histid', '_fnc'));
+        $aParam = $oGlobal->GetUserData(null, ['module_fnc', '_rmhist', '_histid', '_fnc']);
         $aParam['pagedef'] = $oGlobal->GetUserData('pagedef');
-        $aParam['module_fnc'] = array('contentmodule' => 'ExecuteAjaxCall');
+        $aParam['module_fnc'] = ['contentmodule' => 'ExecuteAjaxCall'];
         $aParam['_fnc'] = 'connectImageObject';
         $aParam['callFieldMethod'] = '1';
         $aParam['_fieldName'] = $this->name;
         if (null !== $parentField && '' !== $parentField) {
-            $aParam['parentIFrame'] = $parentField . '_iframe';
+            $aParam['parentIFrame'] = $parentField.'_iframe';
             $aParam['parentIsInModal'] = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         }
 
@@ -279,9 +280,9 @@ JAVASCRIPTCODE;
         $oTableManager = TTools::GetTableEditorManager($this->sTableName, $this->recordId);
         $oTableManager->AllowEditByAll(true);
         if (true === $oTableManager->SaveField($this->name, $sMediaId)) {
-            $sReturn = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_image_lookup.created');
+            $sReturn = ServiceLocator::get('translator')->trans('chameleon_system_core.field_image_lookup.created');
         } else {
-            $sReturn = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_image_lookup.error_creating');
+            $sReturn = ServiceLocator::get('translator')->trans('chameleon_system_core.field_image_lookup.error_creating');
         }
         $oTableManager->AllowDeleteByAll(false);
 
@@ -310,17 +311,17 @@ JAVASCRIPTCODE;
         $oViewRenderer->AddSourceObject('sFullImageURL', $oImage->GetFullURL());
         $oViewRenderer->AddSourceObject(
             'aTagProperties',
-            array(
+            [
                 'width' => $iWidth + 6,
                 'height' => $iHeight + 6,
                 'cmsshowfull' => '1',
-            )
+            ]
         );
-        $aData = array(
+        $aData = [
             'id' => $oImage->id,
             'name' => $this->name,
             'sHtml' => $oViewRenderer->Render('/common/media/pkgCmsTextFieldImageResponsive.html.twig', null, false),
-        );
+        ];
 
         return $aData;
     }

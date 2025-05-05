@@ -2,5 +2,5 @@
 /** @var $sBackendTitle string */
 ?>
 <title>
-    <?=$sBackendTitle; ?>
+    <?php echo $sBackendTitle; ?>
 </title>

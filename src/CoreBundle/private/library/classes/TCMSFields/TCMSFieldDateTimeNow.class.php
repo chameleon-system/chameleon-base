@@ -30,8 +30,8 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => 'new \\DateTime()',
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -91,7 +91,7 @@ class TCMSFieldDateTimeNow extends TCMSFieldDateTime
 
             $html = $this->_GetHiddenField();
             $html .= '<div class="form-content-simple">';
-            $html .= TGlobal::OutHTML($date.' '.$hour.':'.$minutes.' '.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.time'));
+            $html .= TGlobal::OutHTML($date.' '.$hour.':'.$minutes.' '.ServiceLocator::get('translator')->trans('chameleon_system_core.field_date_time.time'));
             $html .= '</div>';
         }
 

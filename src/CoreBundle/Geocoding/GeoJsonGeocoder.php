@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace ChameleonSystem\CoreBundle\Geocoding;
 
@@ -7,14 +9,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GeoJsonGeocoder implements GeocoderInterface
 {
-
     /** @var string */
     private $endpoint;
 
     /** @var HttpClientInterface */
     private $httpClient;
 
-    /**  @var LoggerInterface */
+    /** @var LoggerInterface */
     private $logger;
 
     public function __construct(
@@ -29,6 +30,7 @@ class GeoJsonGeocoder implements GeocoderInterface
 
     /**
      * @return GeocodingResult[]
+     *
      * @psalm-return list<GeocodingResult>
      */
     public function geocode(string $query): array
@@ -37,16 +39,18 @@ class GeoJsonGeocoder implements GeocoderInterface
         $response = $this->httpClient->request('GET', $url, [
             'headers' => [
                 'User-Agent' => 'Chameleon System / https://chameleon-system.com',
-            ]
+            ],
         ]);
 
         if (200 !== $response->getStatusCode()) {
-            $this->logger->warning('Received non-200 response from geocoding endpoint {url}: {statusCode} {body}', [ 'url' => $url, 'statusCode' => $response->getStatusCode(), 'body' => $response->getContent() ]);
-            return [ ];
+            $this->logger->warning('Received non-200 response from geocoding endpoint {url}: {statusCode} {body}', ['url' => $url, 'statusCode' => $response->getStatusCode(), 'body' => $response->getContent()]);
+
+            return [];
         }
 
         /**
          * @see https://geojson.org/
+         *
          * @psalm-var array{
          *      type: "FeatureCollection",
          *      features: list<array{
@@ -63,7 +67,7 @@ class GeoJsonGeocoder implements GeocoderInterface
 
         /** @psalm-var list<GeocodingResult|null> $results */
         $results = array_map(
-            function(array $item) {
+            function (array $item) {
                 $name = $item['properties']['display_name'] ?? null;
                 $longitude = $item['geometry']['coordinates'][0] ?? null;
                 $latitude = $item['geometry']['coordinates'][1] ?? null;

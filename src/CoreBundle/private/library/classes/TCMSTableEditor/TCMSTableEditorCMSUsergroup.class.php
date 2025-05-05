@@ -11,7 +11,7 @@
 
 /**
  * add a menu item to switch to any user if the current user has that right.
-/**/
+ * /**/
 class TCMSTableEditorCMSUsergroup extends TCMSTableEditor
 {
     /**

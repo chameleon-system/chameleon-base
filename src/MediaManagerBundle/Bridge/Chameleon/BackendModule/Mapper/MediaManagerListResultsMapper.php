@@ -11,18 +11,12 @@
 
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\MediaManager\Exception\DataAccessException;
 use ChameleonSystem\MediaManager\Interfaces\MediaItemDataAccessInterface;
 use ChameleonSystem\MediaManager\Interfaces\MediaManagerListRequestFactoryInterface;
 use ChameleonSystem\MediaManager\MediaManagerListState;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
-use MapperException;
-use TdbCmsLanguage;
 
-class MediaManagerListResultsMapper extends AbstractViewMapper
+class MediaManagerListResultsMapper extends \AbstractViewMapper
 {
     /**
      * @var MediaManagerListRequestFactoryInterface
@@ -34,10 +28,6 @@ class MediaManagerListResultsMapper extends AbstractViewMapper
      */
     private $mediaItemDataAccess;
 
-    /**
-     * @param MediaManagerListRequestFactoryInterface $mediaManagerListRequestService
-     * @param MediaItemDataAccessInterface            $mediaItemDataAccess
-     */
     public function __construct(
         MediaManagerListRequestFactoryInterface $mediaManagerListRequestService,
         MediaItemDataAccessInterface $mediaItemDataAccess
@@ -49,23 +39,23 @@ class MediaManagerListResultsMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('listState', MediaManagerListState::class);
-        $oRequirements->NeedsSourceObject('language', TdbCmsLanguage::class);
+        $oRequirements->NeedsSourceObject('language', \TdbCmsLanguage::class);
     }
 
     /**
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
          * @var MediaManagerListState $listState
-         * @var TdbCmsLanguage $language
+         * @var \TdbCmsLanguage $language
          */
         $listState = $oVisitor->GetSourceObject('listState');
         $language = $oVisitor->GetSourceObject('language');
@@ -76,7 +66,7 @@ class MediaManagerListResultsMapper extends AbstractViewMapper
             );
             $result = $this->mediaItemDataAccess->getMediaItemList($listRequest, $language->id);
         } catch (DataAccessException $e) {
-            throw new MapperException(
+            throw new \MapperException(
                 sprintf('Error getting media manager list result: %s', $e->getMessage()),
                 $e->getCode(),
                 $e

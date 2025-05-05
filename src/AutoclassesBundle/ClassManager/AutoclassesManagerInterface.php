@@ -35,8 +35,6 @@ interface AutoclassesManagerInterface
     /**
      * Registers a handler that is able to create autoclasses of a certain type.
      *
-     * @param IPkgCmsCoreAutoClassHandler $handler
-     *
      * @return void
      */
     public function registerHandler(IPkgCmsCoreAutoClassHandler $handler);

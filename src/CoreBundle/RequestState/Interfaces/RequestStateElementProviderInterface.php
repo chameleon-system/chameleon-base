@@ -15,8 +15,6 @@ interface RequestStateElementProviderInterface
     /**
      * Returns an associative array of state relevant request based data.
      *
-     * @param Request $request
-     *
      * @return array<string, mixed>
      */
     public function getStateElements(Request $request);

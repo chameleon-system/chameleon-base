@@ -8,7 +8,6 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 class ListManagerWithMarkdownEditorCallback extends \TCMSListManagerFullGroupTable
 {
-
     public function _GetRecordClickJavaScriptFunctionName(): string
     {
         return 'selectRecordForMarkdown';
@@ -19,10 +18,10 @@ class ListManagerWithMarkdownEditorCallback extends \TCMSListManagerFullGroupTab
      */
     public function GetHtmlHeadIncludes(): array
     {
-        $editorId = $this->getInputFilterUtil()->getFilteredGetInput('editorId','');
-        $pagedef = $this->getInputFilterUtil()->getFilteredGetInput('pagedef','');
-        $pagedefType = $this->getInputFilterUtil()->getFilteredGetInput('_pagedefType','');
-        $tableId = $this->getInputFilterUtil()->getFilteredGetInput('id','');
+        $editorId = $this->getInputFilterUtil()->getFilteredGetInput('editorId', '');
+        $pagedef = $this->getInputFilterUtil()->getFilteredGetInput('pagedef', '');
+        $pagedefType = $this->getInputFilterUtil()->getFilteredGetInput('_pagedefType', '');
+        $tableId = $this->getInputFilterUtil()->getFilteredGetInput('id', '');
 
         $url = PATH_CMS_CONTROLLER.'?';
         $url = $this->getUrlUtilService()->addParameterToUrl($url,
@@ -52,9 +51,9 @@ class ListManagerWithMarkdownEditorCallback extends \TCMSListManagerFullGroupTab
         }
         
         function selectRecordForMarkdown(id) {
-            let editorId = "'. $editorId .'";
-            let tableId = "'. $tableId .'";
-            let url = "'. $url .'";
+            let editorId = "'.$editorId.'";
+            let tableId = "'.$tableId.'";
+            let url = "'.$url.'";
             let getNameAjaxUrl = url+"&recordId="+id;            
             GetAjaxCall(getNameAjaxUrl, addLinkToEditorInstance);
         }
@@ -91,7 +90,7 @@ class ListManagerWithMarkdownEditorCallback extends \TCMSListManagerFullGroupTab
     }
 
     /**
-     * Handles special cases of target tables where GetName can't be used to get the displayed name 
+     * Handles special cases of target tables where GetName can't be used to get the displayed name
      * for the frontend like documents table.
      */
     protected function getRecordNameForLink(\TCMSRecord $tdbObject): string
@@ -99,7 +98,7 @@ class ListManagerWithMarkdownEditorCallback extends \TCMSListManagerFullGroupTab
         if (\is_a($tdbObject, 'TdbCmsDocument')) {
             return $tdbObject->GetFileNameWithExtension();
         }
-        
+
         return $tdbObject->GetName();
     }
 

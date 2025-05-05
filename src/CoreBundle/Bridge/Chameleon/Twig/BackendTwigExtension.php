@@ -4,7 +4,6 @@ namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig;
 
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
-use TModuleLoader;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -12,8 +11,8 @@ class BackendTwigExtension extends AbstractExtension
 {
     public function __construct(
         private readonly SecurityHelperAccess $securityHelper,
-        private readonly TModuleLoader $moduleLoader
-    ){
+        private readonly \TModuleLoader $moduleLoader
+    ) {
     }
 
     public function getFunctions()

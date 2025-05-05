@@ -14,7 +14,7 @@ class TDataCountryList extends TDataCountryListAutoParent
     /**
      * {@inheritdoc}
      */
-    public function Load($sQuery, array $queryParameters = array(), array $queryParameterTypes = array()): void
+    public function Load($sQuery, array $queryParameters = [], array $queryParameterTypes = []): void
     {
         parent::Load($sQuery, $queryParameters, $queryParameterTypes);
         if (true === TGlobal::IsCMSMode()) {

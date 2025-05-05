@@ -59,9 +59,9 @@ interface ViewMapperConfigInterface
     public function getConfigCount();
 
     /**
-     * @param string       $config
-     * @param object|array $mapper           - may be an object or a mapper config in the form array('arrayMapping'=>array(),'varMapping'=>'','name'=>'')
-     * @param string|null  $placeAfterMapper
+     * @param string $config
+     * @param object|array $mapper - may be an object or a mapper config in the form array('arrayMapping'=>array(),'varMapping'=>'','name'=>'')
+     * @param string|null $placeAfterMapper
      *
      * @return bool
      */
@@ -76,8 +76,8 @@ interface ViewMapperConfigInterface
     public function removeMapper($config, $mapper);
 
     /**
-     * @param string      $oldMapper
-     * @param string      $newMapper
+     * @param string $oldMapper
+     * @param string $newMapper
      * @param string|null $config
      *
      * @return bool
@@ -93,8 +93,8 @@ interface ViewMapperConfigInterface
     public function changeSnippet($config, $newSnippet);
 
     /**
-     * @param string       $config
-     * @param string       $snippetName
+     * @param string $config
+     * @param string $snippetName
      * @param array|string $mapperChain - array of mapper names or control strings (ie. this my be myMapperClass or myMapperClass{arrayMapName}[key1->key2][key2->key4] for every mapper
      *
      * @return void

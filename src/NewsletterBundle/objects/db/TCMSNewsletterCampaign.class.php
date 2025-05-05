@@ -22,12 +22,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 {
-    const URL_USER_ID_PARAMETER = 'TPkgNewsletterCampaign';
+    public const URL_USER_ID_PARAMETER = 'TPkgNewsletterCampaign';
 
     /**
      * @param TdbPkgNewsletterUser|false|null $newsletterUser
      *
-     * @return false|null|string
+     * @return false|string|null
      */
     protected function CreateEmailFromTemplate($newsletterUser = null)
     {
@@ -75,7 +75,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
             $newsletter = str_replace('encoding="UTF-8"', 'encoding="ISO-8859-15"', $newsletter);
 
             // also replace umlaute
-            $replaceableChars = array('ä' => '&auml;', 'ü' => '&uuml;', 'ö' => '&ouml;', 'ß' => '&szlig;', 'Ä' => '&Auml;', 'Ü' => '&Uuml;', 'Ö' => '&Ouml;');
+            $replaceableChars = ['ä' => '&auml;', 'ü' => '&uuml;', 'ö' => '&ouml;', 'ß' => '&szlig;', 'Ä' => '&Auml;', 'Ü' => '&Uuml;', 'Ö' => '&Ouml;'];
             $newsletter = str_replace(array_keys($replaceableChars), array_values($replaceableChars), $newsletter);
 
             // change relative links to absolute
@@ -103,7 +103,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         // replace float in img style attribute
         $imageFloatReplacementPattern = '/(?<imageTagStart><img)(?<beforeStyle>.*)(?<styleAttr>style=)(?<styleAttrDelimiterStart>\'|")(?<beforeFloat>.*)(?<float>float:\s?(?<floatValue>left|right)\s?(;)?)(?<styleAttrDelimiterEndWithRest>[^\>]*)(?<imageTagEnd>\/>)/';
 
-        return preg_replace_callback($imageFloatReplacementPattern, array($this, 'replaceFloatInStyleAttributesCallback'), $sNewsletter);
+        return preg_replace_callback($imageFloatReplacementPattern, [$this, 'replaceFloatInStyleAttributesCallback'], $sNewsletter);
     }
 
     /**
@@ -135,7 +135,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     public function SendNewsletter()
     {
         $tableId = TTools::GetCMSTableId('pkg_newsletter_campaign');
-        $tableEditor = new TCMSTableEditorManager(); /*@var $oTableEditor TCMSTableEditorManager*/
+        $tableEditor = new TCMSTableEditorManager(); /* @var $oTableEditor TCMSTableEditorManager */
         $tableEditor->AllowEditByAll(true);
         $tableEditor->Init($tableId, $this->id);
         if ('0000-00-00 00:00:00' == $this->fieldSendStartDate) {
@@ -147,16 +147,16 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         while ($newsletterUser = $newsletterUserList->Next()) {
             $newsletterGroup = $this->GetNewsletterGroupForNewsletterUserBestFit($newsletterUser, $newsletterGroupList);
             $foundGroup = false;
-            $newsletterGroups = array();
+            $newsletterGroups = [];
             $addAllUnsubscribeLinks = false;
             while ($newsletterGroupTmp = $newsletterGroupList->Next()) {
                 $newsletterGroupUserGroupList = $newsletterGroupTmp->GetFieldDataExtranetGroupList();
-                if ($newsletterGroup->fieldIncludeAllNewsletterUsers ||
-                    $newsletterGroup->fieldIncludeNewsletterUserNotAssignedToAnyGroup ||
-                    $newsletterGroup->fieldIncludeAllNewsletterUsersWithNoExtranetAccount ||
-                    $newsletterGroupUserGroupList->Length() > 0) {
-                        $addAllUnsubscribeLinks = true;
-                    }
+                if ($newsletterGroup->fieldIncludeAllNewsletterUsers
+                    || $newsletterGroup->fieldIncludeNewsletterUserNotAssignedToAnyGroup
+                    || $newsletterGroup->fieldIncludeAllNewsletterUsersWithNoExtranetAccount
+                    || $newsletterGroupUserGroupList->Length() > 0) {
+                    $addAllUnsubscribeLinks = true;
+                }
                 if ($newsletterUser->isInGroup($newsletterGroupTmp->id)) {
                     $newsletterGroups[] = $newsletterGroupTmp->id;
                     if (!$foundGroup) {
@@ -190,9 +190,6 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     /**
      * If user is direct member of a list, return first one. Then evaluate other options and extranet groups.
      *
-     * @param TdbPkgNewsletterUser      $newsletterUser
-     * @param TdbPkgNewsletterGroupList $newsletterGroupList
-     *
      * @return TdbPkgNewsletterGroup|false
      */
     protected function GetNewsletterGroupForNewsletterUserBestFit(TdbPkgNewsletterUser $newsletterUser, TdbPkgNewsletterGroupList $newsletterGroupList)
@@ -204,25 +201,25 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
         while ($newsletterGroupTmp = $newsletterGroupList->Previous()) {
             $groupIsMatch = false;
             if ($newsletterUser->isInGroup($newsletterGroupTmp->id)) {
-                //we have a direct match
+                // we have a direct match
                 $newsletterGroup = $newsletterGroupTmp;
                 break;
             }
             if ($newsletterGroupTmp->fieldIncludeAllNewsletterUsers) {
-                //list sends to ALL users
+                // list sends to ALL users
                 $newsletterGroup = $newsletterGroupTmp;
                 $groupIsMatch = true;
             }
             if (!$groupIsMatch && $newsletterGroupTmp->fieldIncludeNewsletterUserNotAssignedToAnyGroup) {
                 $aGroupList = $newsletterUser->GetFieldPkgNewsletterGroupIdList();
                 if (0 == count($aGroupList)) {
-                    //user is not member of a group
+                    // user is not member of a group
                     $newsletterGroup = $newsletterGroupTmp;
                     $groupIsMatch = true;
                 }
             }
             if (!$groupIsMatch && !$extranetUser && $newsletterGroupTmp->fieldIncludeAllNewsletterUsersWithNoExtranetAccount) {
-                //user has no extranet account
+                // user has no extranet account
                 $newsletterGroup = $newsletterGroupTmp;
                 $groupIsMatch = true;
             }
@@ -233,7 +230,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
                         $userExtranetGroups = $extranetUser->GetFieldDataExtranetGroupIdList();
                         $intersect = array_intersect($newsletterUserGroups, $userExtranetGroups);
                         if (count($intersect) > 0) {
-                            //user is member of an extranet group the list sends to
+                            // user is member of an extranet group the list sends to
                             $newsletterGroup = $newsletterGroupTmp;
                         }
                     }
@@ -241,7 +238,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
             }
         }
         if (null === $newsletterGroup) {
-            //first group
+            // first group
             $newsletterGroupList->GoToStart();
             $newsletterGroup = $newsletterGroupList->Current();
         }
@@ -254,10 +251,10 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      * send the personalized newsletter to the user. return true on success, or an error message on error.
      *
      * @param TdbPkgNewsletterGroup $oNewsletterGroup
-     * @param TdbPkgNewsletterUser  $newsletterUser
-     * @param string                $generatedNewsletter
-     * @param array                 $aNewsletterGroups
-     * @param bool                  $bAddAllUnsubscribeLinks
+     * @param TdbPkgNewsletterUser $newsletterUser
+     * @param string $generatedNewsletter
+     * @param array $aNewsletterGroups
+     * @param bool $bAddAllUnsubscribeLinks
      *
      * @return bool
      */
@@ -287,7 +284,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 
             $logger = $this->getLogger();
             if (false === $this->isNewsletterAlreadySent($newsletterUser)) {
-                if (!$mailObject->Send(array('sBody' => $generatedNewsletter, 'sTextBody' => $plaintext))) {
+                if (!$mailObject->Send(['sBody' => $generatedNewsletter, 'sTextBody' => $plaintext])) {
                     $logger->warning(sprintf('Unable to send Newsletter: %s', $mailObject->ErrorInfo));
                 } else {
                     $send = true;
@@ -310,8 +307,8 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     protected function isNewsletterAlreadySent($oNewsletterUser)
     {
         $isNewsletterAlreadySent = true;
-        if (isset($oNewsletterUser->sqlData['pkg_newsletter_queue_id']) &&
-           '' != $oNewsletterUser->sqlData['pkg_newsletter_queue_id']) {
+        if (isset($oNewsletterUser->sqlData['pkg_newsletter_queue_id'])
+           && '' != $oNewsletterUser->sqlData['pkg_newsletter_queue_id']) {
             $newsletterQueue = TdbPkgNewsletterQueue::GetNewInstance();
             $newsletterQueue->SetEnableObjectCaching(false);
             if ($newsletterQueue->Load($oNewsletterUser->sqlData['pkg_newsletter_queue_id'])) {
@@ -327,10 +324,8 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     /**
      * This is done on both Plain Text and HTML-Version.
      *
-     * @param string               $sText
+     * @param string $sText
      * @param TdbPkgNewsletterUser $oNewsletterUser
-     *
-     * @return mixed
      */
     protected function ReplaceVariablesInTextHook($sText, $oNewsletterUser)
     {
@@ -391,6 +386,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 
     /**
      * @param array<string, string> $matches
+     *
      * @return string
      */
     public function replaceFloatInStyleAttributesCallback($matches)
@@ -467,7 +463,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     }
 
     /**
-     * @return \ChameleonSystem\NewsletterBundle\PostProcessing\Bridge\NewsletterUserDataFactoryInterface
+     * @return ChameleonSystem\NewsletterBundle\PostProcessing\Bridge\NewsletterUserDataFactoryInterface
      */
     private function getNewsletterUserDataFactory()
     {

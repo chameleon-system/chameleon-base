@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\UniversalUploader\Exception;
 
-use Exception;
-
-class AccessDeniedException extends Exception
+class AccessDeniedException extends \Exception
 {
 }

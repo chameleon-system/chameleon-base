@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class PkgCmsCoreLogChannel
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarcharUnique
         /** @var string - Name */
@@ -55,7 +54,6 @@ class PkgCmsCoreLogChannel
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getMaxLogAgeInSeconds(): int
     {
@@ -68,6 +66,4 @@ class PkgCmsCoreLogChannel
 
         return $this;
     }
-
-
 }

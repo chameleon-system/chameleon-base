@@ -11,26 +11,20 @@
 
 namespace ChameleonSystem\ViewRendererBundle\objects\interfaces;
 
-use IMapperCacheTrigger;
-use IMapperRequirements;
-use IMapperVisitor;
-
 interface DataMappingServiceHelperFactoryInterface
 {
     /**
-     * @param array $sourceObjects
-     *
-     * @return IMapperVisitor
+     * @return \IMapperVisitor
      */
     public function createMapperVisitor(array $sourceObjects);
 
     /**
-     * @return IMapperCacheTrigger
+     * @return \IMapperCacheTrigger
      */
     public function createCacheTriggerCollector();
 
     /**
-     * @return IMapperRequirements
+     * @return \IMapperRequirements
      */
     public function createRequirementsVisitor();
 }

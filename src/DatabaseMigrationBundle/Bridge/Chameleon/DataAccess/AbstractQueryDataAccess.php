@@ -20,9 +20,6 @@ class AbstractQueryDataAccess implements AbstractQueryDataAccessInterface
      */
     private $databaseConnection;
 
-    /**
-     * @param Connection $databaseConnection
-     */
     public function __construct(Connection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
@@ -31,7 +28,7 @@ class AbstractQueryDataAccess implements AbstractQueryDataAccessInterface
     /**
      * {@inheritdoc}
      *
-     * @return null|string
+     * @return string|null
      */
     public function getBaseLanguageIso()
     {
@@ -48,9 +45,9 @@ class AbstractQueryDataAccess implements AbstractQueryDataAccessInterface
           ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
           WHERE `cms_tbl_conf`.`name` = :tableName
           AND `cms_field_conf`.`is_translatable` = '1'";
-        $result = $this->databaseConnection->fetchAllAssociative($query, array(
+        $result = $this->databaseConnection->fetchAllAssociative($query, [
             'tableName' => $tableName,
-        ));
+        ]);
 
         return array_map(function (array $array) {
             return $array['name'];

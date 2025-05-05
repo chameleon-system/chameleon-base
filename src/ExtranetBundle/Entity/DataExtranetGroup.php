@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ExtranetBundle\Entity;
 
-
 class DataExtranetGroup
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -61,7 +60,6 @@ class DataExtranetGroup
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAutoAssignActive(): bool
     {
@@ -74,7 +72,6 @@ class DataExtranetGroup
 
         return $this;
     }
-
 
     // TCMSFieldDecimal
     public function getAutoAssignOrderValueStart(): string
@@ -89,7 +86,6 @@ class DataExtranetGroup
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getAutoAssignOrderValueEnd(): string
     {
@@ -102,6 +98,4 @@ class DataExtranetGroup
 
         return $this;
     }
-
-
 }

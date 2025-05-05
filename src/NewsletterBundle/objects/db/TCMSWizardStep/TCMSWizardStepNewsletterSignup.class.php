@@ -11,14 +11,14 @@
 
 class TCMSWizardStepNewsletterSignup extends TdbCmsWizardStep
 {
-    const INPUT_DATA_NAME = 'aNewsletter';
-    const NEWSLETTEROPTINSEND = 'sNewsletterOptInSend';
+    public const INPUT_DATA_NAME = 'aNewsletter';
+    public const NEWSLETTEROPTINSEND = 'sNewsletterOptInSend';
     /**
      * current newsletter signup form.
      *
      * @var TdbPkgNewsletterUser
      */
-    protected $oNewsletterSignup = null;
+    protected $oNewsletterSignup;
 
     /**
      * lazzy load newsletter object.
@@ -61,7 +61,7 @@ class TCMSWizardStepNewsletterSignup extends TdbCmsWizardStep
         // validate data...
         $aRequiredFields = $this->oNewsletterSignup->GetRequiredFields();
         if (!is_array($this->oNewsletterSignup->sqlData)) {
-            $this->oNewsletterSignup->sqlData = array();
+            $this->oNewsletterSignup->sqlData = [];
         }
         foreach ($aRequiredFields as $sFieldName) {
             $sVal = '';
@@ -112,7 +112,7 @@ class TCMSWizardStepNewsletterSignup extends TdbCmsWizardStep
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
         if (is_null($this->oNewsletterSignup)) {
             $this->oNewsletterSignup = TdbPkgNewsletterUser::GetNewInstance();
         }

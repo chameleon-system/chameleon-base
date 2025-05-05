@@ -1,8 +1,8 @@
             $oMap = $this->GetFromInternalCache('oGoogleMap'.$sWidth.$sHeight.$sMapType.$iZoom.$bShowResizeBar.$bHookMenuLinks.$bShowStreetViewControl);
             if(!$oMap) {
                 $oMap = null;
-                if(is_array($this->sqlData) && isset($this->sqlData['<?= $aFieldData['sFieldDatabaseName']; ?>'])) {
-                    $sCoordinates = $this->sqlData['<?= $aFieldData['sFieldDatabaseName']; ?>'];
+                if(is_array($this->sqlData) && isset($this->sqlData['<?php echo $aFieldData['sFieldDatabaseName']; ?>'])) {
+                    $sCoordinates = $this->sqlData['<?php echo $aFieldData['sFieldDatabaseName']; ?>'];
                     if(!empty($sCoordinates)) {
                         $aCoordinates = explode("|",$sCoordinates);
                         if($aCoordinates[0]>0) {

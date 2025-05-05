@@ -88,7 +88,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
         parent::PostInsertHook($oFields);
 
         $changedDomain = new TdbCmsPortalDomains($this->sId);
-        $event = new ChangeDomainEvent(array($changedDomain));
+        $event = new ChangeDomainEvent([$changedDomain]);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::ADD_DOMAIN);
     }
 
@@ -100,7 +100,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
         parent::PostSaveHook($oFields, $oPostTable);
 
         $changedDomain = new TdbCmsPortalDomains($this->sId);
-        $event = new ChangeDomainEvent(array($changedDomain));
+        $event = new ChangeDomainEvent([$changedDomain]);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::UPDATE_DOMAIN);
     }
 
@@ -112,7 +112,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
         parent::Delete($sId);
 
         $changedDomain = new TdbCmsPortalDomains($this->sId);
-        $event = new ChangeDomainEvent(array($changedDomain));
+        $event = new ChangeDomainEvent([$changedDomain]);
         $this->getEventDispatcher()->dispatch($event, CoreEvents::DELETE_DOMAIN);
     }
 
@@ -121,7 +121,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
      */
     private function getFlashMessageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
     /**
@@ -129,7 +129,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
      */
     private function getLogger()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
     }
 
     /**
@@ -137,6 +137,6 @@ class TCMSTableEditorDomain extends TCMSTableEditor
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

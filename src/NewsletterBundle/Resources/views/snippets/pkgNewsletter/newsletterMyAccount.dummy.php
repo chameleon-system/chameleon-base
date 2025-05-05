@@ -1,7 +1,7 @@
 <?php
 
 $oDummyData = new TPkgViewRendererSnippetDummyData();
-$aIncludes = array('/common/textBlock/textBlockSmallHeadline.dummy.php');
+$aIncludes = ['/common/textBlock/textBlockSmallHeadline.dummy.php'];
 foreach ($aIncludes as $sInclude) {
     $oDummyData->addDummyDataFromFile($sInclude);
 }

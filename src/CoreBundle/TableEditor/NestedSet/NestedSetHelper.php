@@ -40,7 +40,6 @@ class NestedSetHelper implements NestedSetHelperInterface
     private $nodeFactory;
 
     /**
-     * @param NodeFactoryInterface $nodeFactory
      * @param string $tableName
      * @param string $parentIdField
      * @param string $nodeSortField
@@ -54,8 +53,6 @@ class NestedSetHelper implements NestedSetHelperInterface
     }
 
     /**
-     * @param Connection $connection
-     *
      * @return void
      */
     public function setDatabaseConnection(Connection $connection)
@@ -130,11 +127,11 @@ class NestedSetHelper implements NestedSetHelperInterface
                      SET lft = lft + :distanceFromOldPosition, rgt = rgt + :distanceFromOldPosition
                    WHERE lft >= :tmppos AND rgt < :tmppos + :subtreeWidth";
         $this->connection->executeUpdate($query,
-            array(
+            [
                 'distanceFromOldPosition' => $distanceFromOldPosition,
                 'tmppos' => $tmppos,
                 'subtreeWidth' => $subtreeWidth,
-            )
+            ]
         );
 
         // remove old space vacated by subtree
@@ -151,17 +148,17 @@ class NestedSetHelper implements NestedSetHelperInterface
     {
         $query = "update `{$this->tableName}` SET lft = lft + :subtreeWidth WHERE lft >= :newPosition";
         $this->connection->executeUpdate($query,
-            array(
+            [
                 'subtreeWidth' => $subtreeWidth,
                 'newPosition' => $subtreePosition,
-            )
+            ]
         );
         $query = "update `{$this->tableName}` SET rgt = rgt + :subtreeWidth WHERE rgt >= :newPosition";
         $this->connection->executeUpdate($query,
-            array(
+            [
                 'subtreeWidth' => $subtreeWidth,
                 'newPosition' => $subtreePosition,
-            )
+            ]
         );
     }
 
@@ -178,6 +175,7 @@ class NestedSetHelper implements NestedSetHelperInterface
     /**
      * @param int $subtreeRightValue
      * @param int $subtreeWidth
+     *
      * @return void
      */
     private function removeSubtreeSpace($subtreeRightValue, $subtreeWidth)
@@ -213,6 +211,7 @@ class NestedSetHelper implements NestedSetHelperInterface
 
     /**
      * @param int $left
+     *
      * @return int
      */
     private function initializeNode(NodeInterface $node, $left)
@@ -251,12 +250,12 @@ class NestedSetHelper implements NestedSetHelperInterface
         $quotedNodeSortField = $this->connection->quoteIdentifier($this->nodeSortField);
         $query = "SELECT * FROM $quotedTableName WHERE $quotedParentIdField = :parentId ORDER BY $quotedNodeSortField ASC";
         $children = $this->connection->fetchAllAssociative($query,
-            array(
+            [
                 'parentId' => (null !== $parentId) ? $parentId : '',
-            )
+            ]
         );
 
-        $childrenObject = array();
+        $childrenObject = [];
         foreach ($children as $child) {
             $childrenObject[] = $this->nodeFactory->createNodeFromArray($this->tableName, $child);
         }
@@ -275,11 +274,11 @@ class NestedSetHelper implements NestedSetHelperInterface
     {
         $query = "UPDATE {$this->tableName} SET rgt = :newRight, lft = :newLeft WHERE id = :nodeId";
         $this->connection->executeUpdate($query,
-            array(
+            [
                 'newLeft' => $newLeft,
                 'newRight' => $newRight,
                 'nodeId' => $nodeId,
-            )
+            ]
         );
     }
 
@@ -293,10 +292,10 @@ class NestedSetHelper implements NestedSetHelperInterface
     {
         $query = "UPDATE {$this->tableName} SET lft = :newLeft WHERE id = :nodeId";
         $this->connection->executeUpdate($query,
-            array(
+            [
                 'newLeft' => $newLeft,
                 'nodeId' => $nodeId,
-            )
+            ]
         );
     }
 
@@ -310,10 +309,10 @@ class NestedSetHelper implements NestedSetHelperInterface
     {
         $query = "UPDATE {$this->tableName} SET rgt = :newRight WHERE id = :nodeId";
         $this->connection->executeUpdate($query,
-            array(
+            [
                 'newRight' => $newRight,
                 'nodeId' => $nodeId,
-            )
+            ]
         );
     }
 
@@ -322,8 +321,6 @@ class NestedSetHelper implements NestedSetHelperInterface
      *      if we have a parent, then newPos = parent.lft + 1
      *      else newPos = 1
      * else newPos = previousSibling.rgt + 1.
-     *
-     * @param NodeInterface $node
      *
      * @return int
      */

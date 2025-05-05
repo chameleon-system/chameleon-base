@@ -10,7 +10,7 @@ class PkgCmsRouting
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarcharUnique
         /** @var string - System name */
@@ -32,8 +32,7 @@ class PkgCmsRouting
         private string $systemPageName = '',
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - Restrict to the following portals */
-        private Collection $cmsPortalCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Active */
         private bool $active = true
@@ -77,7 +76,6 @@ class PkgCmsRouting
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getShortDescription(): string
     {
@@ -90,7 +88,6 @@ class PkgCmsRouting
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getType(): string
@@ -105,7 +102,6 @@ class PkgCmsRouting
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getResource(): string
     {
@@ -118,7 +114,6 @@ class PkgCmsRouting
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -133,7 +128,6 @@ class PkgCmsRouting
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemPageName(): string
     {
@@ -146,8 +140,6 @@ class PkgCmsRouting
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -181,7 +173,6 @@ class PkgCmsRouting
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isActive(): bool
     {
@@ -194,6 +185,4 @@ class PkgCmsRouting
 
         return $this;
     }
-
-
 }
