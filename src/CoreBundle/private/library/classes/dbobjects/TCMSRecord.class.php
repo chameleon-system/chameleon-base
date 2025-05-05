@@ -1845,9 +1845,11 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                 }
             }
         }
-        foreach (array_keys($aItemData) as $sKey) {
-            if (empty($aItemData[$sKey])) {
-                unset($aItemData[$sKey]);
+        if (false !== $aItemData) {
+            foreach (array_keys($aItemData) as $sKey) {
+                if (empty($aItemData[$sKey])) {
+                    unset($aItemData[$sKey]);
+                }
             }
         }
         $bIsSame = ($bIsSame && (count($aThisData) == count($aItemData)));
