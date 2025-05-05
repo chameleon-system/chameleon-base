@@ -124,13 +124,8 @@ class TCMSLogChange
 
     /**
      * fetches the id for a tablename.
-     *
-     * @param string $sTableName
-     * @param bool $bForceLoad
-     *
-     * @return int
      */
-    public static function GetTableId($sTableName, $bForceLoad = false)
+    public static function GetTableId(string $sTableName, bool $bForceLoad = false): string
     {
         return TTools::GetCMSTableId($sTableName, $bForceLoad);
     }
@@ -177,8 +172,8 @@ class TCMSLogChange
         $fieldTypeCodename = trim($fieldTypeCodename);
         $dbConnection = self::getDatabaseConnection(); // Assuming this returns a DBAL Connection
 
-        $sql = "SELECT `id` FROM `cms_field_type` WHERE constname = ?";
-        $stmt = $dbConnection->executeQuery($sql, [$fieldTypeCodename], [\Doctrine\DBAL\ParameterType::STRING]);
+        $sql = 'SELECT `id` FROM `cms_field_type` WHERE constname = ?';
+        $stmt = $dbConnection->executeQuery($sql, [$fieldTypeCodename], [Doctrine\DBAL\ParameterType::STRING]);
         $aType = $stmt->fetchAssociative();
 
         if (false !== $aType) {
@@ -189,7 +184,6 @@ class TCMSLogChange
 
         return $fieldTypeId;
     }
-
 
     /**
      * @param string $sMessage
@@ -668,11 +662,6 @@ class TCMSLogChange
 
     /**
      * checks if a field exists.
-     *
-     * @param string|int $table
-     * @param string $sFieldName
-     *
-     * @return bool
      */
     public static function FieldExists(string|int $table, string $sFieldName, bool $checkFieldConfig = true): bool
     {

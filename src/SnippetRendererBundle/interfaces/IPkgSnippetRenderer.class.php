@@ -11,9 +11,9 @@
 
 interface IPkgSnippetRenderer
 {
-    const SOURCE_TYPE_STRING = 0;
-    const SOURCE_TYPE_FILE = 1;
-    const SOURCE_TYPE_CMSMODULE = 2;
+    public const SOURCE_TYPE_STRING = 0;
+    public const SOURCE_TYPE_FILE = 1;
+    public const SOURCE_TYPE_CMSMODULE = 2;
 
     /**
      * Returns a new instance. The instance uses the given string as snippet source.
@@ -99,7 +99,7 @@ interface IPkgSnippetRenderer
      *
      * @return string - the rendered content
      *
-     * @throws \TPkgSnippetRenderer_SnippetRenderingException|\Exception
+     * @throws TPkgSnippetRenderer_SnippetRenderingException|Exception
      */
     public function render();
 

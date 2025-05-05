@@ -35,6 +35,7 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface,
         readonly private array $groups = [],
         readonly private array $portals = [],
         private array $ssoIds = [],
+        private string $dashboardWidgetConfig = '',
         private ?string $googleAuthenticatorSecret = null
     ) {
     }
@@ -165,6 +166,11 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface,
     public function getCurrentEditLanguageIsoCode(): ?string
     {
         return $this->currentEditLanguageIsoCode;
+    }
+
+    public function getDashboardWidgetConfig(): string
+    {
+        return $this->dashboardWidgetConfig;
     }
 
     public function isGoogleAuthenticatorEnabled(): bool

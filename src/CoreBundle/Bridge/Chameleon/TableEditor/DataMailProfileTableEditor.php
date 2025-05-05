@@ -1,33 +1,30 @@
 <?php
-namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\TableEditor;
 
+namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\TableEditor;
 
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
-use TCMSTableEditor;
 use Twig\Error\SyntaxError;
-use Twig\Environment;
 use Twig\Source;
 
-class DataMailProfileTableEditor extends TCMSTableEditor
+class DataMailProfileTableEditor extends \TCMSTableEditor
 {
-    const MESSAGE_MANAGER_CONSUMER = 'DataMailProfileTableEditorMessages';
+    public const MESSAGE_MANAGER_CONSUMER = 'DataMailProfileTableEditorMessages';
 
     protected function DataIsValid($postData, $oFields = null)
     {
-        $twig = $this->getTwigEnvironment();
+        $snippetRenderer = $this->getSnippetRenderer();
+        $twig = $snippetRenderer->getTwigEnvironment();
         try {
             $twig->tokenize(new Source($postData['body'], 'body'));
-        }catch (SyntaxError $e) {
-
+        } catch (SyntaxError $e) {
             $this->getLogger()->error(
                 sprintf('failed to parse body field in E-Mail Template %s', $postData['name']),
                 [
                     'sFieldName' => 'body',
                     'message' => $e->getMessage(),
-                    'guess' => $e->guess(),
-                    'context' => $e->getSourceContext()->getCode(),
+                    'context' => $e->getSourceContext()?->getCode() ?? '',
                     'exception' => $e,
                 ]
             );
@@ -38,24 +35,21 @@ class DataMailProfileTableEditor extends TCMSTableEditor
                 [
                     'sFieldName' => 'body',
                     'message' => $e->getMessage(),
-                    'guess' => $e->guess(),
                 ]
             );
+
             return false;
         }
 
-
         try {
             $twig->tokenize(new Source($postData['body_text'], 'body_text'));
-        }catch (SyntaxError $e) {
-
+        } catch (SyntaxError $e) {
             $this->getLogger()->error(
                 sprintf('failed to parse body_text field in E-Mail Template %s', $postData['name']),
                 [
                     'sFieldName' => 'body_text',
                     'message' => $e->getMessage(),
-                    'guess' => $e->guess(),
-                    'context' => $e->getSourceContext()->getCode(),
+                    'context' => $e->getSourceContext()?->getCode() ?? '',
                     'exception' => $e,
                 ]
             );
@@ -66,9 +60,9 @@ class DataMailProfileTableEditor extends TCMSTableEditor
                 [
                     'sFieldName' => 'body_text',
                     'message' => $e->getMessage(),
-                    'guess' => $e->guess(),
                 ]
             );
+
             return false;
         }
 
@@ -80,9 +74,9 @@ class DataMailProfileTableEditor extends TCMSTableEditor
         return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 
-    private function getTwigEnvironment(): Environment
+    private function getSnippetRenderer(): \TPkgSnippetRenderer
     {
-        return ServiceLocator::get('twig');
+        return ServiceLocator::get('chameleon_system_snippet_renderer.snippet_renderer');
     }
 
     private function getLogger(): LoggerInterface
