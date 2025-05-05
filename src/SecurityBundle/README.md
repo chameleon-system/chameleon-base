@@ -25,7 +25,7 @@ deactivate the 2fa, set `enabled` to `true` or `false`.
 
 ### `app/config/config.yml`
 
-Two change the form, adjust the "template".
+To change the form, adjust the "template".
 
 ```yaml
 scheb_two_factor:

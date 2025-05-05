@@ -5,6 +5,7 @@ namespace ChameleonSystem\SecurityBundle\Service;
 use ChameleonSystem\SecurityBundle\ChameleonSystemSecurityConstants;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Exception\TwoFactorNotAvailableException;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
@@ -24,7 +25,7 @@ class TwoFactorService
     public function cloneUserWithTwoFactorSecret(CmsUserModel $user, string $secret = ''): CmsUserModel
     {
         if (null === $this->googleAuthenticator) {
-            throw new \LogicException('2FA GoogleAuthenticator is not available.');
+            throw new TwoFactorNotAvailableException('2FA GoogleAuthenticator is not available.');
         }
 
         if ('' === $secret) {
@@ -47,7 +48,7 @@ class TwoFactorService
     public function generateQrCodeDataUri(CmsUserModel $user): string
     {
         if (null === $this->googleAuthenticator) {
-            throw new \LogicException('2FA GoogleAuthenticator is not available.');
+            throw new TwoFactorNotAvailableException('2FA GoogleAuthenticator is not available.');
         }
 
         $qrContent = $this->googleAuthenticator->getQRContent($user);

@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\SecurityBundle\Controller;
 
+use ChameleonSystem\SecurityBundle\Exception\TwoFactorNotAvailableException;
 use ChameleonSystem\SecurityBundle\Service\TwoFactorService;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,7 +57,7 @@ class CmsLoginController extends AbstractController
         $user = $this->getUser();
 
         if (false === ($user instanceof TwoFactorInterface)) {
-            throw new \LogicException('User does not implement required 2FA interface.');
+            throw new TwoFactorNotAvailableException('User does not implement required 2FA interface.');
         }
 
         if (true === $request->isMethod('POST')) {
@@ -69,13 +70,13 @@ class CmsLoginController extends AbstractController
                 $this->twoFactorService->adjustSessionUser($userWithSecret);
                 $this->addFlash('success', 'Two-factor authentication successfully activated.');
 
-                return $this->redirectToRoute('cms_backend'); // Or wherever you'd like
+                return $this->redirectToRoute('cms_backend');
             } else {
                 $this->addFlash('error', 'Invalid authentication code. Please try again.');
             }
         } else {
             if ('' !== $user->getGoogleAuthenticatorSecret()) {
-                return $this->redirectToRoute('cms_login'); // Adjust target as needed
+                return $this->redirectToRoute('cms_login');
             }
 
             $userWithSecret = $this->twoFactorService->cloneUserWithTwoFactorSecret($user);

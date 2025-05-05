@@ -33,7 +33,6 @@ class Configuration implements ConfigurationInterface
                 ->canBeEnabled()
                 ->children()
                 ->scalarNode('enabled')
-                    ->isRequired()
                     ->defaultValue(false)
                 ->end()
             ->end();

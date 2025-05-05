@@ -373,7 +373,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
-    public function setGoogleAuthenticatorSecret(UserInterface $user, string $secret): void
+    public function setGoogleAuthenticatorSecret(CmsUserModel $user, string $secret): void
     {
         $this->connection->update('cms_user', [
             'google_authenticator_secret' => $secret,
