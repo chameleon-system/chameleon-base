@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="Bootstrap.php"
+         backupGlobals="false"
+         verbose="true">
+    <testsuites>
+        <testsuite name="twofactorTests">
+            <directory suffix="Test.php">TwoFactorServiceTests</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <const name="TESTSUITE" value="true"/>
+    </php>
+
+</phpunit>

@@ -4,7 +4,6 @@ namespace ChameleonSystem\SecurityBundle\CmsUser;
 
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
-use SebastianBergmann\Diff\Exception;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -75,7 +74,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
     private function userHasBeenModified(CmsUserModel $user): bool
     {
-        try { 
+        try {
             // during upgrade from chameleon 7.1 to 8.0 the field does not yet exist @todo remove try/catch in chameleon 9.0
             $query = 'SELECT `date_modified` FROM `cms_user` WHERE `id` = :userId';
             $dateModified = $this->connection->fetchOne($query, ['userId' => $user->getId()]);
@@ -225,7 +224,8 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             $userGroups,
             $userPortals,
             $ssoList,
-            $userRow['dashboard_widget_config']
+            $userRow['dashboard_widget_config'],
+            $userRow['google_authenticator_secret']
         );
     }
 
@@ -247,7 +247,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
                 'languages' => implode(', ', $user->getAvailableLanguagesIsoCodes()),
                 'dashboard_widget_config' => $user->getDashboardWidgetConfig(),
             ]);
-            
+
             foreach ($user->getSsoIds() as $ssoId) {
                 $ssoData = [
                     'cms_user_id' => $ssoId->getCmsUserId(),
@@ -266,7 +266,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
                     'target_id' => $id,
                 ]);
             }
-            
+
             foreach ($user->getGroups() as $id => $code) {
                 $this->connection->insert('cms_user_cms_usergroup_mlt', [
                     'source_id' => $user->getId(),
@@ -371,5 +371,12 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         $this->connection->commit();
 
         return $this->loadUserByIdentifier($user->getUserIdentifier());
+    }
+
+    public function setGoogleAuthenticatorSecret(CmsUserModel $user): void
+    {
+        $this->connection->update('cms_user', [
+            'google_authenticator_secret' => $user->getGoogleAuthenticatorSecret(),
+        ], ['id' => $user->getId()]);
     }
 }

@@ -2,9 +2,14 @@
 
 namespace ChameleonSystem\SecurityBundle\Controller;
 
+use ChameleonSystem\SecurityBundle\Exception\TwoFactorNotAvailableException;
+use ChameleonSystem\SecurityBundle\Service\TwoFactorService;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -20,11 +25,12 @@ class CmsLoginController extends AbstractController
         private readonly AuthenticationUtils $authenticationUtils,
         readonly RouterInterface $router,
         private readonly RequestStack $requestStack,
+        private readonly TwoFactorService $twoFactorService,
         readonly bool $enableGoogleLogin = false,
     ) {
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route('/cms/login', name: 'cms_login')]
+    #[Route('/cms/login', name: 'cms_login')]
     public function index(): Response
     {
         $googleLoginUrl = null;
@@ -42,6 +48,55 @@ class CmsLoginController extends AbstractController
             'last_username' => $lastUsername,
             'error' => $error,
             'googleLoginUrl' => $googleLoginUrl,
+        ]);
+    }
+
+    #[Route('/cms/2fa/setup', name: '2fa_setup')]
+    public function setup(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if (false === ($user instanceof TwoFactorInterface)) {
+            throw new TwoFactorNotAvailableException('User does not implement required 2FA interface.');
+        }
+
+        if (true === $request->isMethod('POST')) {
+            return $this->twoFactorSetupFormSubmission($request, $user);
+        }
+
+        if ('' !== $user->getGoogleAuthenticatorSecret()) {
+            return $this->redirectToRoute('cms_login');
+        }
+
+        $userWithSecret = $this->twoFactorService->cloneUserWithTwoFactorSecret($user);
+
+        return $this->renderTwoFactorSetupForm($userWithSecret);
+    }
+
+    private function twoFactorSetupFormSubmission(Request $request, TwoFactorInterface $user): Response
+    {
+        $code = $request->get('code');
+        $usedSecret = $request->get('secret');
+
+        $userWithSecret = $this->twoFactorService->cloneUserWithTwoFactorSecret($user, $usedSecret);
+        if (true === $this->twoFactorService->checkAuthorizationCode($userWithSecret, $code)) {
+            $this->twoFactorService->saveCmsUserAuthenticatorSecret($userWithSecret);
+            $this->twoFactorService->setTwoFactorTokenForSessionUser($userWithSecret);
+            $this->addFlash('success', 'Two-factor authentication successfully activated.');
+
+            return $this->redirectToRoute('cms_backend');
+        }
+
+        $this->addFlash('error', 'Invalid authentication code. Please try again.');
+
+        return $this->renderTwoFactorSetupForm($userWithSecret);
+    }
+
+    private function renderTwoFactorSetupForm(TwoFactorInterface $user): Response
+    {
+        return $this->render('@ChameleonSystemSecurity/cms/2fa/setup.html.twig', [
+            'qrCode' => $this->twoFactorService->generateQrCodeDataUri($user),
+            'secret' => $user->getGoogleAuthenticatorSecret(),
         ]);
     }
 
@@ -66,9 +121,15 @@ class CmsLoginController extends AbstractController
 
         $referer = $request->headers->get('referer');
 
-        if (null !== $referer && false === $this->isDefaultPath($referer) && false === $this->isLoginPath($referer)) { // logout from subpage
+        if (null !== $referer && false === $this->isDefaultPath($referer)
+            && false === $this->isLoginPath(
+                $referer
+            )) { // logout from subpage
             $session->set(self::LAST_USED_URL_COOKIE_NAME, $referer);
-            $session->set(self::FIREWALL_BACKEND_COOKIE_NAME, $referer); // used by symfony if directly login after logout
+            $session->set(
+                self::FIREWALL_BACKEND_COOKIE_NAME,
+                $referer
+            ); // used by symfony if directly login after logout
             $redirectUrl = $referer; // used if directly login after logout if update available
         } else {
             // use redirect path if defined; for default login, restore last used path if any
@@ -80,11 +141,19 @@ class CmsLoginController extends AbstractController
 
     protected function isDefaultPath(?string $url): bool
     {
-        return null !== $url && self::DEFAULT_PATH === parse_url($url, PHP_URL_PATH) && null === parse_url($url, PHP_URL_QUERY);
+        return null !== $url && self::DEFAULT_PATH === parse_url($url, PHP_URL_PATH)
+            && null === parse_url(
+                $url,
+                PHP_URL_QUERY
+            );
     }
 
     protected function isLoginPath(?string $url): bool
     {
-        return null !== $url && self::LOGIN_PATH === parse_url($url, PHP_URL_PATH) && null === parse_url($url, PHP_URL_QUERY);
+        return null !== $url && self::LOGIN_PATH === parse_url($url, PHP_URL_PATH)
+            && null === parse_url(
+                $url,
+                PHP_URL_QUERY
+            );
     }
 }

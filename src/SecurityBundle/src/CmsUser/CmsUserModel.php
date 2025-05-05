@@ -2,10 +2,11 @@
 
 namespace ChameleonSystem\SecurityBundle\CmsUser;
 
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
+class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
 {
     /**
      * @param array<string> $availableLanguagesIsoCodes
@@ -35,6 +36,7 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
         readonly private array $portals = [],
         private array $ssoIds = [],
         private string $dashboardWidgetConfig = '',
+        private ?string $googleAuthenticatorSecret = null
     ) {
     }
 
@@ -169,6 +171,29 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface
     public function getDashboardWidgetConfig(): string
     {
         return $this->dashboardWidgetConfig;
+    }
+
+    public function isGoogleAuthenticatorEnabled(): bool
+    {
+        return '' !== $this->googleAuthenticatorSecret;
+    }
+
+    public function getGoogleAuthenticatorUsername(): string
+    {
+        return $this->email;
+    }
+
+    public function getGoogleAuthenticatorSecret(): ?string
+    {
+        return $this->googleAuthenticatorSecret;
+    }
+
+    public function withGoogleAuthenticatorSecret(string $secret): self
+    {
+        $user = clone $this;
+        $user->googleAuthenticatorSecret = $secret;
+
+        return $user;
     }
 
     public function withId(string $id): self

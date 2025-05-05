@@ -30,3 +30,14 @@ backend_geocoder:
 chameleon_system_core.log_viewer.api:
   path: /cms/api/logViewer/{filename}/{lineCount}
   defaults: { _controller: chameleon_system_core.controller.log_view_controller::fetchLogContent }
+
+2fa_login:
+  path: /cms/2fa{trailingSlash}
+  defaults: { _controller: "scheb_two_factor.form_controller::form", trailingSlash: '' }
+  methods: [GET, POST]
+  requirements:
+    trailingSlash: "[/]?"
+  schemes: ["https"]
+
+2fa_login_check:
+  path: /cms/2fa_check

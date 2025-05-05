@@ -21,6 +21,12 @@ class ChameleonSystemSecurityExtension extends ConfigurableExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../config/'));
         $loader->load('services.xml');
 
+        $this->configureGoogleLogin($mergedConfig, $container);
+        $this->configureTwoFactorLogin($mergedConfig, $container);
+    }
+
+    private function configureGoogleLogin(array $mergedConfig, ContainerBuilder $container): void
+    {
         $enableGoogleLogin = $mergedConfig['google_login']['enabled'];
 
         $loginController = $container->getDefinition(CmsLoginController::class);
@@ -41,5 +47,11 @@ class ChameleonSystemSecurityExtension extends ConfigurableExtension
             '$allowedDomains',
             array_keys($mergedConfig['google_login']['domain_to_base_user_mapping'] ?? [])
         );
+    }
+
+    private function configureTwoFactorLogin(array $mergedConfig, ContainerBuilder $container): void
+    {
+        $enabled = $mergedConfig['two_factor']['enabled'] ?? false;
+        $container->setParameter('chameleon_system_security.two_factor.enabled', $enabled);
     }
 }
