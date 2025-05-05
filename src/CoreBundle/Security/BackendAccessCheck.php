@@ -108,7 +108,7 @@ class BackendAccessCheck
         $aModuleFNC = $request->get('module_fnc');
         if (is_array($aModuleFNC) && array_key_exists('contentmodule', $aModuleFNC)
             && 'ExecuteAjaxCall' === $aModuleFNC['contentmodule']) {
-            $aJson = ['logedoutajax', $this->router->generate('app_logout')];
+            $aJson = ['loggedoutajax', $this->router->generate('app_logout')];
             echo json_encode($aJson);
             exit;
         }

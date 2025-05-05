@@ -656,13 +656,17 @@ class MTHeader extends TCMSModelBase
 
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
 
+
         $sessionTimeout = @ini_get('session.gc_maxlifetime');
         if (!empty($sessionTimeout)) {
+            $router = $this->getRouter();
+            $logout = $router->generate('app_logout');
+
             $sessionTimeout = ($sessionTimeout - 60) * 1000; // cut 1min to be sure the logout will be processed before the server kicks the session / convert to milliseconds for JS
             $includes[] = '
       <script type="text/javascript">
         $(document).ready(function() {
-          setTimeout("window.location = \''.PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(['pagedef' => 'login', 'module_fnc' => ['contentmodule' => 'Logout']]).'\'",'.$sessionTimeout.');
+          setTimeout("window.location = \''.$logout.'\'",'.$sessionTimeout.');
         });
       </script>';
         }
@@ -764,5 +768,9 @@ class MTHeader extends TCMSModelBase
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
+    }
+
+    private function getRouter(): RouterInterface{
+        return ServiceLocator::get('router');
     }
 }
