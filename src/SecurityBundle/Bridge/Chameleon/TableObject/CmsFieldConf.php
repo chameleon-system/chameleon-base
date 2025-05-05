@@ -10,5 +10,4 @@ class CmsFieldConf extends \ChameleonSystemSecurityBundleBridgeChameleonTableObj
     {
         return $this->GetPermissionGroups();
     }
-
 }

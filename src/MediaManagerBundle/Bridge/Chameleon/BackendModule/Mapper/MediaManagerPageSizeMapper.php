@@ -11,15 +11,10 @@
 
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
-use InvalidArgumentException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class MediaManagerPageSizeMapper extends AbstractViewMapper
+class MediaManagerPageSizeMapper extends \AbstractViewMapper
 {
     /**
      * @var array
@@ -31,10 +26,6 @@ class MediaManagerPageSizeMapper extends AbstractViewMapper
      */
     private $translator;
 
-    /**
-     * @param array               $pageSizes
-     * @param TranslatorInterface $translator
-     */
     public function __construct(array $pageSizes, TranslatorInterface $translator)
     {
         $this->pageSizes = $pageSizes;
@@ -44,7 +35,7 @@ class MediaManagerPageSizeMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
     }
 
@@ -52,9 +43,9 @@ class MediaManagerPageSizeMapper extends AbstractViewMapper
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         $oVisitor->SetMappedValue('pageSizes', $this->getPageSizes());
     }
@@ -74,11 +65,11 @@ class MediaManagerPageSizeMapper extends AbstractViewMapper
         try {
             $translation = $this->translator->trans(
                 'chameleon_system_media_manager.paging.page_size_show_all',
-                array(),
+                [],
                 TranslationConstants::DOMAIN_BACKEND
             );
             $pageSizes[$translation] = -1;
-        } catch (InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             $pageSizes['Show all'] = -1;
         }
         unset($pageSizes[$keyShowAll]);

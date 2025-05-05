@@ -13,9 +13,6 @@ namespace ChameleonSystem\core\DatabaseAccessLayer;
 
 class QueryModifierRestrictNumberOfResults implements QueryModifierRestrictNumberOfResultsInterface
 {
-    /**
-     * @var
-     */
     private $query;
     private $queryWithoutLimit;
     private $existingLimit;
@@ -72,17 +69,17 @@ class QueryModifierRestrictNumberOfResults implements QueryModifierRestrictNumbe
         }
         $this->queryWithoutLimit = mb_substr($this->query, 0, $limitPosition);
         $existingLimit = trim(mb_substr($this->query, $limitPosition + 6));
-        $existingLimit = str_replace(array("\n", ' '), '', $existingLimit);
+        $existingLimit = str_replace(["\n", ' '], '', $existingLimit);
         $parts = explode(',', $existingLimit);
-        $this->existingLimit = array(
+        $this->existingLimit = [
             'start' => (int) $parts[0],
             'length' => (2 == count($parts)) ? (int) $parts[1] : null,
-        );
+        ];
     }
 
     private function getLimitPosition()
     {
-        $normalizedQuery = str_replace(array("\n", "\r", "\t"), ' ', $this->query);
+        $normalizedQuery = str_replace(["\n", "\r", "\t"], ' ', $this->query);
         $normalizedQuery = mb_strtoupper($normalizedQuery);
         $limitPos = strrpos($normalizedQuery, ' LIMIT ');
         if (false === $limitPos) {

@@ -30,5 +30,4 @@ final class SystemTimeProvider implements TimeProviderInterface
     {
         return new \DateTime('now', $timeZone);
     }
-
 }

@@ -34,22 +34,21 @@ class ChameleonStandardExtension extends AbstractExtension
 
     public function getFunctions()
     {
-        return array(
+        return [
             new TwigFunction(
-                'cmsGetPathTheme', static fn () => \TGlobal::GetPathTheme(), array(
-                    'is_safe' => array('html'),
-                )
+                'cmsGetPathTheme', static fn () => \TGlobal::GetPathTheme(), [
+                    'is_safe' => ['html'],
+                ]
             ),
-        );
+        ];
     }
-
 
     /**
      * {@inheritdoc}
      */
     public function getFilters()
     {
-        return array(
+        return [
             'cmsthumb' => new TwigFilter('cmsthumb', 'TPkgSnippetRendererFilter::getThumbnail'),
             'staticurl' => new TwigFilter('staticurl', 'TGlobal::getStaticUrl'),
             'cms_static_url_web_lib' => new TwigFilter('cms_static_url_web_lib', 'TGlobal::GetStaticURLToWebLib'),
@@ -58,32 +57,28 @@ class ChameleonStandardExtension extends AbstractExtension
             'escape' => new TwigFilter(
                 'escape',
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::chameleonTwigEscapeFilter',
-                array('needs_environment' => true, 'is_safe' => ['html', 'js', 'css'])
+                ['needs_environment' => true, 'is_safe' => ['html', 'js', 'css']]
             ),
             'e' => new TwigFilter(
                 'e',
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::chameleonTwigEscapeFilter',
-                array('needs_environment' => true, 'is_safe' => ['html', 'js', 'css'])
+                ['needs_environment' => true, 'is_safe' => ['html', 'js', 'css']]
             ),
             'sanitizeurl' => new TwigFilter(
                 'sanitizeurl',
                 '\ChameleonSystem\ViewRendererBundle\Twig\Extension\ChameleonStandardExtension::sanitizeUrl',
-                array('needs_environment' => true, 'is_safe' => ['html', 'js', 'css'])
+                ['needs_environment' => true, 'is_safe' => ['html', 'js', 'css']]
             ),
-        );
+        ];
     }
 
     /**
      * chameleonTwigEscapeFilter wraps the original twig escape extension to make sure the authenticity token string
      * won't get escaped by Twig and thus be rendered useless.
      *
-     * @param Environment      $env
-     * @param mixed            $string
-     * @param string|null      $strategy
-     * @param string|null      $charset
-     * @param bool|null        $autoescape
-     *
-     * @return mixed
+     * @param string|null $strategy
+     * @param string|null $charset
+     * @param bool|null $autoescape
      *
      * @throws RuntimeError
      */
@@ -113,6 +108,7 @@ class ChameleonStandardExtension extends AbstractExtension
 
     /**
      * @param mixed $string can be a string, a \Twig\Markup, an object with `__toString` method, or any other type
+     *
      * @throws RuntimeError
      */
     private static function escape(Environment $env, mixed $string, string $strategy, ?string $charset, bool $autoescape): mixed
@@ -132,11 +128,9 @@ class ChameleonStandardExtension extends AbstractExtension
     }
 
     /**
-     * @param Environment      $env
-     * @param mixed            $string
-     * @param string           $strategy
-     * @param string|null      $charset
-     * @param bool             $autoescape
+     * @param string $strategy
+     * @param string|null $charset
+     * @param bool $autoescape
      *
      * @return string
      *

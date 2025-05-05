@@ -47,7 +47,7 @@ class ModuleResolverTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_modules(): void
+    public function itReturnsModules(): void
     {
         $this->assertEquals('success', $this->subject->getModule('service_id'));
     }
@@ -55,7 +55,7 @@ class ModuleResolverTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_null_on_nonexisting_module()
+    public function itReturnsNullOnNonexistingModule()
     {
         $this->assertNull($this->subject->getModule('foo'));
     }
@@ -63,7 +63,7 @@ class ModuleResolverTest extends TestCase
     /**
      * @test
      */
-    public function it_lets_you_check_if_a_module_exists()
+    public function itLetsYouCheckIfAModuleExists()
     {
         $this->assertTrue($this->subject->hasModule('service_id'));
         $this->assertFalse($this->subject->hasModule('name2'));

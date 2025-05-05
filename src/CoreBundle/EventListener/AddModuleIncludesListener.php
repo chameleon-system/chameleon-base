@@ -29,11 +29,6 @@ class AddModuleIncludesListener
      */
     private $userModuleLoader;
 
-    /**
-     * @param RequestInfoServiceInterface $requestInfoService
-     * @param \TModuleLoader              $moduleLoader
-     * @param \TUserModuleLoader          $userModuleLoader
-     */
     public function __construct(RequestInfoServiceInterface $requestInfoService, \TModuleLoader $moduleLoader, \TUserModuleLoader $userModuleLoader)
     {
         $this->requestInfoService = $requestInfoService;

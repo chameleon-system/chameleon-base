@@ -14,24 +14,24 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
     /**
      * @var string|null
      */
-    private $sTableName = null;
+    private $sTableName;
     /**
      * @var string[]
      */
-    private $aFields = array();
+    private $aFields = [];
     /**
      * @var string|null
      */
-    private $sFileName = null;
+    private $sFileName;
     /**
      * @var resource|closed-resource|false|null
      */
-    private $rFile = null;
+    private $rFile;
 
     /**
      * @var mysqli|null
      */
-    private $dbConnection = null;
+    private $dbConnection;
     /**
      * @var string|null
      */
@@ -59,19 +59,19 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
     {
         $this->dbHost = $dbHost;
         if (null === $this->dbHost) {
-            $this->dbHost = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('database_host');
+            $this->dbHost = ChameleonSystem\CoreBundle\ServiceLocator::getParameter('database_host');
         }
         $this->dbName = $dbName;
         if (null === $this->dbName) {
-            $this->dbName = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('database_name');
+            $this->dbName = ChameleonSystem\CoreBundle\ServiceLocator::getParameter('database_name');
         }
         $this->dbUser = $dbUser;
         if (null === $this->dbUser) {
-            $this->dbUser = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('database_user');
+            $this->dbUser = ChameleonSystem\CoreBundle\ServiceLocator::getParameter('database_user');
         }
         $this->dbPassword = $dbPassword;
         if (null === $this->dbPassword) {
-            $this->dbPassword = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('database_password');
+            $this->dbPassword = ChameleonSystem\CoreBundle\ServiceLocator::getParameter('database_password');
         }
     }
 
@@ -129,7 +129,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
 
         $databaseConnection = $this->getDbConnection();
         $quotedTableName = $databaseConnection->real_escape_string($this->sTableName);
-        $quotedFields = array_map(array($databaseConnection, 'real_escape_string'), $this->aFields);
+        $quotedFields = array_map([$databaseConnection, 'real_escape_string'], $this->aFields);
         $query = "LOAD DATA LOCAL INFILE '{$this->sFileName}'
                          REPLACE
                       INTO TABLE `$quotedTableName`
@@ -174,7 +174,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
                 ' -p'.$this->dbPassword.
                 ' '.$this->dbName.
                 ' --local-infile';
-            $aOutput = array();
+            $aOutput = [];
             exec($sCommand, $aOutput, $iRetVal);
             if (0 != $iRetVal) {
                 trigger_error('Import via shell reported an error: '.implode("\n", $aOutput), E_USER_WARNING);
@@ -189,6 +189,7 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
 
     /**
      * @param string[] $aData
+     *
      * @return string[]
      */
     protected function EscapeData($aData)
@@ -200,9 +201,6 @@ class TPkgCmsBulkSql_LoadDataInfile implements IPkgCmsBulkSql
         return $aData;
     }
 
-    /**
-     * @param mysqli $dbConnection
-     */
     public function setDbConnection(mysqli $dbConnection): void
     {
         $this->dbConnection = $dbConnection;

@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\JavaScriptMinificationBundle\DependencyInjection\Compiler;
 
-use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -44,12 +43,12 @@ class JsMinifyPass implements CompilerPassInterface
                 }
                 $minifierServiceDefinition->addMethodCall(
                     'setMinifierJsIntegration',
-                    array(new Reference($minifierIntegrationServiceId))
+                    [new Reference($minifierIntegrationServiceId)]
                 );
 
                 return;
             }
         }
-        throw new LogicException('Js minifier was configured ('.$jsMinifierIntegrationToUse.'), but no service for this was found');
+        throw new \LogicException('Js minifier was configured ('.$jsMinifierIntegrationToUse.'), but no service for this was found');
     }
 }

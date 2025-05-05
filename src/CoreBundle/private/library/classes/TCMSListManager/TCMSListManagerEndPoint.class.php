@@ -12,10 +12,10 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
-use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -24,9 +24,9 @@ use Doctrine\DBAL\Connection;
  */
 class TCMSListManagerEndPoint
 {
-    public $sRestriction = null;
-    public $sRestrictionField = null;
-    public $fieldCount = null; // nr. of appearance of this field
+    public $sRestriction;
+    public $sRestrictionField;
+    public $fieldCount; // nr. of appearance of this field
 
     /**
      * table definition object.
@@ -40,7 +40,7 @@ class TCMSListManagerEndPoint
      *
      * @var TIterator
      */
-    protected $oMenuItems = null;
+    protected $oMenuItems;
 
     /**
      * set this to false if you want to prevent table list caching (session).
@@ -55,7 +55,7 @@ class TCMSListManagerEndPoint
      *
      * @var array
      */
-    protected $methodCallAllowed = array();
+    protected $methodCallAllowed = [];
 
     /**
      * init the list class.
@@ -209,7 +209,7 @@ class TCMSListManagerEndPoint
      */
     protected function GetCustomGroupBy()
     {
-        $oRecordList = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->sqlData['name']).'List', 'GetList'));
+        $oRecordList = call_user_func([TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->sqlData['name']).'List', 'GetList']);
         $sQuery = $oRecordList->GetListManagerCustomGroupBy($this);
 
         return $sQuery;
@@ -222,7 +222,7 @@ class TCMSListManagerEndPoint
      */
     protected function GetFilterQueryCustomJoins()
     {
-        $oRecordList = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->sqlData['name']).'List', 'GetList'));
+        $oRecordList = call_user_func([TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->sqlData['name']).'List', 'GetList']);
         $sQuery = $oRecordList->GetListManagerFilterQueryCustomJoins($this);
 
         return $sQuery;
@@ -275,13 +275,11 @@ class TCMSListManagerEndPoint
             return false;
         }
 
-
         $portals = $securityHelper->getUser()?->getPortals();
         if (null === $portals) {
             $portals = [];
         }
-        $portalRestrictions = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quote($id), array_keys($portals)));
-
+        $portalRestrictions = implode(', ', array_map(fn ($id) => $this->getDatabaseConnection()->quote($id), array_keys($portals)));
 
         // we add the portal restriction ONLY if the user does not have the cms_admin role (admins may see all portals)
         if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_ADMIN)) {
@@ -337,7 +335,7 @@ class TCMSListManagerEndPoint
             }
         }
 
-        $oRecordList = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->sqlData['name']).'List', 'GetList'));
+        $oRecordList = call_user_func([TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oTableConf->sqlData['name']).'List', 'GetList']);
         $query = $oRecordList->GetListManagerPortalRestriction($this, $query);
 
         return $query;
@@ -375,7 +373,7 @@ class TCMSListManagerEndPoint
         if (0 === count($userGroupIds)) {
             $groupList = false;
         } else {
-            $groupList = implode(', ',array_map(fn($id) => $this->getDatabaseConnection()->quote($id), array_keys($userGroupIds)));
+            $groupList = implode(', ', array_map(fn ($id) => $this->getDatabaseConnection()->quote($id), array_keys($userGroupIds)));
         }
 
         $restrictionQuery = '';
@@ -393,7 +391,7 @@ class TCMSListManagerEndPoint
 
             // check for user groups
             $tmpQuery = "SELECT * FROM `cms_field_conf` WHERE `name` LIKE 'cms_usergroup_mlt' AND `cms_tbl_conf_id` = '".$this->oTableConf->id."' ";
-            //$tmpQuery = "SHOW FIELDS FROM `{$this->oTableConf->sqlData['name']}` LIKE 'cms_usergroup_mlt'";
+            // $tmpQuery = "SHOW FIELDS FROM `{$this->oTableConf->sqlData['name']}` LIKE 'cms_usergroup_mlt'";
             $userField = MySqlLegacySupport::getInstance()->query($tmpQuery);
             if (MySqlLegacySupport::getInstance()->num_rows($userField) > 0) {
                 if (false !== $groupList) {
@@ -420,7 +418,7 @@ class TCMSListManagerEndPoint
             $quotedMltTableName = $databaseConnection->quoteIdentifier($mltTableName);
             $quotedTableName = $databaseConnection->quoteIdentifier($this->oTableConf->sqlData['name']);
 
-            return  " LEFT JOIN $quotedMltTableName ON $quotedTableName.`id` = $quotedMltTableName.`source_id`";
+            return " LEFT JOIN $quotedMltTableName ON $quotedTableName.`id` = $quotedMltTableName.`source_id`";
         }
 
         return '';
@@ -430,7 +428,8 @@ class TCMSListManagerEndPoint
      * any custom restrictions can be added to the query by overwriting this function.
      *
      * @return string
-     * @throws \Doctrine\DBAL\Exception
+     *
+     * @throws Doctrine\DBAL\Exception
      */
     public function GetCustomRestriction()
     {
@@ -452,7 +451,7 @@ class TCMSListManagerEndPoint
             return '1=0'; // mlt table does not exist, so the restriction is invalid
         }
 
-        $query = sprintf("SELECT target_id FROM %s WHERE source_id = :value", $connection->quoteIdentifier($mltTable));
+        $query = sprintf('SELECT target_id FROM %s WHERE source_id = :value', $connection->quoteIdentifier($mltTable));
 
         $idList = $connection->fetchFirstColumn($query, ['value' => $this->sRestriction]);
         if ([] === $idList) {
@@ -531,7 +530,7 @@ class TCMSListManagerEndPoint
                 if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $this->oTableConf->fieldName)) {
                     // new
                     $oMenuItem = new TCMSTableEditorMenuItem();
-                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.new');
+                    $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.new');
                     $oMenuItem->sIcon = 'fas fa-plus';
                     $oMenuItem->sItemKey = 'new';
                     $oMenuItem->sOnClick = "document.cmsform.elements['module_fnc[contentmodule]'].value='Insert';document.cmsform.submit();";
@@ -541,11 +540,11 @@ class TCMSListManagerEndPoint
                 // if we have edit access to the table editor, then we also show a link to it
                 if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, 'cms_tbl_conf')) {
                     $oTableEditorConf = new TCMSTableConf();
-                    /** @var $oTableEditorConf TCMSTableConf */
+                    /* @var $oTableEditorConf TCMSTableConf */
                     $oTableEditorConf->LoadFromField('name', 'cms_tbl_conf');
                     $oMenuItem = new TCMSTableEditorMenuItem();
                     $oMenuItem->sItemKey = 'edittableconf';
-                    $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.open_table_configuration');
+                    $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.open_table_configuration');
                     $oMenuItem->sIcon = 'fas fa-cogs';
                     $oMenuItem->setButtonStyle('btn-warning');
 
@@ -554,7 +553,7 @@ class TCMSListManagerEndPoint
                         $pagedef = 'tableeditorPopup';
                     }
 
-                    $aParameter = array('pagedef' => $pagedef, 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id);
+                    $aParameter = ['pagedef' => $pagedef, 'id' => $this->oTableConf->id, 'tableid' => $oTableEditorConf->id];
                     $aAdditionalParams = $this->GetHiddenFieldsHook();
                     if (is_array($aAdditionalParams) && count($aAdditionalParams) > 0) {
                         $aParameter = array_merge($aParameter, $aAdditionalParams);
@@ -595,7 +594,7 @@ class TCMSListManagerEndPoint
      */
     public function GetHtmlHeadIncludes()
     {
-        $aIncludes = array();
+        $aIncludes = [];
 
         return $aIncludes;
     }
@@ -616,8 +615,8 @@ class TCMSListManagerEndPoint
     public function GetHiddenFieldsHook()
     {
         $oGlobal = TGlobal::instance();
-        $aAdditionalParameterData = array();
-        $aAdditionalParameters = array('sRestrictionField', 'sRestriction', 'bIsLoadedFromIFrame');
+        $aAdditionalParameterData = [];
+        $aAdditionalParameters = ['sRestrictionField', 'sRestriction', 'bIsLoadedFromIFrame'];
         foreach ($aAdditionalParameters as $sKey) {
             if ($oGlobal->UserDataExists($sKey)) {
                 $aAdditionalParameterData[$sKey] = $oGlobal->GetUserData($sKey);

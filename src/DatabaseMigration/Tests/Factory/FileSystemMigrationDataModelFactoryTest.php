@@ -24,7 +24,7 @@ class FileSystemMigrationDataModelFactoryTest extends TestCase
     /**
      * @test
      */
-    public function it_produces_the_correct_models()
+    public function itProducesTheCorrectModels()
     {
         $testBundle = new TestBundle();
         $migrationPathUtilMock = $this->prophesize('\ChameleonSystem\DatabaseMigration\Util\MigrationPathUtilInterface');

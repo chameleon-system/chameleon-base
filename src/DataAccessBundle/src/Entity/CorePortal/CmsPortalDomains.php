@@ -8,12 +8,11 @@ class CmsPortalDomains
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsPortal|null - Portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldVarchar
         /** @var string - Domain name */
         private string $name = '',
@@ -22,8 +21,7 @@ class CmsPortalDomains
         private string $sslname = '',
         // TCMSFieldLookup
         /** @var CmsLanguage|null - Language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldUniqueMarker
         /** @var bool - Primary domain of the portal */
         private bool $isMasterDomain = false,
@@ -70,7 +68,6 @@ class CmsPortalDomains
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -83,7 +80,6 @@ class CmsPortalDomains
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSslname(): string
@@ -98,7 +94,6 @@ class CmsPortalDomains
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsLanguage(): ?CmsLanguage
     {
@@ -111,7 +106,6 @@ class CmsPortalDomains
 
         return $this;
     }
-
 
     // TCMSFieldUniqueMarker
     public function isIsMasterDomain(): bool
@@ -126,7 +120,6 @@ class CmsPortalDomains
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getGoogleApiKey(): string
     {
@@ -139,6 +132,4 @@ class CmsPortalDomains
 
         return $this;
     }
-
-
 }

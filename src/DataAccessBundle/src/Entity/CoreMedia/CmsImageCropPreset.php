@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\CoreMedia;
 
-
 class CmsImageCropPreset
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -64,7 +63,6 @@ class CmsImageCropPreset
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getWidth(): int
     {
@@ -77,7 +75,6 @@ class CmsImageCropPreset
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getHeight(): int
@@ -92,7 +89,6 @@ class CmsImageCropPreset
         return $this;
     }
 
-
     // TCMSFieldVarcharUnique
     public function getSystemName(): string
     {
@@ -106,7 +102,6 @@ class CmsImageCropPreset
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -119,6 +114,4 @@ class CmsImageCropPreset
 
         return $this;
     }
-
-
 }

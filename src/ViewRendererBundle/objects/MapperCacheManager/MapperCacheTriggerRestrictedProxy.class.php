@@ -16,9 +16,6 @@ class MapperCacheTriggerRestrictedProxy implements IMapperCacheTriggerRestricted
      */
     private $oMapperCacheTrigger;
 
-    /**
-     * @param IMapperCacheTrigger $oMapperCacheTrigger
-     */
     public function __construct(IMapperCacheTrigger $oMapperCacheTrigger)
     {
         $this->oMapperCacheTrigger = $oMapperCacheTrigger;

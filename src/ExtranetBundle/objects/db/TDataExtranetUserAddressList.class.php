@@ -11,14 +11,14 @@
 
 class TDataExtranetUserAddressList extends TDataExtranetUserAddressListAutoParent
 {
-    const VIEW_PATH = 'pkgExtranet/views/db/TdbDataExtranetUserAddressList';
+    public const VIEW_PATH = 'pkgExtranet/views/db/TdbDataExtranetUserAddressList';
 
     /**
      * user id for the current address list. Set by GetUserAddressList.
      *
      * @var string
      */
-    protected $iUserId = null;
+    protected $iUserId;
 
     /**
      * return user addresses.
@@ -55,13 +55,13 @@ class TDataExtranetUserAddressList extends TDataExtranetUserAddressListAutoParen
     /**
      * used to display the user address list.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = array())
+    public function Render($sViewName = 'standard', $sViewType = 'Core', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
@@ -93,7 +93,7 @@ class TDataExtranetUserAddressList extends TDataExtranetUserAddressListAutoParen
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }

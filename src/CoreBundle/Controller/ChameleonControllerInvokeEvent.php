@@ -26,7 +26,7 @@ class ChameleonControllerInvokeEvent extends Event
     }
 
     /**
-     * @return \ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface
+     * @return ChameleonControllerInterface
      */
     public function getController()
     {

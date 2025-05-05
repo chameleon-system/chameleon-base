@@ -3,7 +3,6 @@
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\DataModel\TableConfigurationDataModel;
-use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use Doctrine\DBAL\Connection;
 
 class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
@@ -14,7 +13,7 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
 
     public function getTableConfigurations(): array
     {
-        $query = "SELECT `id`, `name`, `cms_usergroup_id` FROM `cms_tbl_conf`";
+        $query = 'SELECT `id`, `name`, `cms_usergroup_id` FROM `cms_tbl_conf`';
         $tableRows = $this->connection->fetchAllAssociative($query);
 
         return array_reduce($tableRows, static function (array $carry, array $row) {
@@ -22,7 +21,6 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
 
             return $carry;
         }, []);
-
     }
 
     public function isTableName(string $tableName): bool
@@ -32,9 +30,8 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
             ['tableName' => $tableName]
         );
 
-        return (bool)$tableExists;
+        return (bool) $tableExists;
     }
-
 
     public function getPermittedRoles(string $action, string $tableName): array
     {
@@ -42,7 +39,7 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
             return [];
         }
 
-        $permissionTable = sprintf('cms_tbl_conf_%s',self::PERMISSION_MAPPING[$action]);
+        $permissionTable = sprintf('cms_tbl_conf_%s', self::PERMISSION_MAPPING[$action]);
 
         $query = sprintf(
             'SELECT %1$s.`target_id`
@@ -57,7 +54,7 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
         );
 
         return array_map(
-            static fn(array $row) => $row['target_id'],
+            static fn (array $row) => $row['target_id'],
             $permittedRoleRows
         );
     }
@@ -75,6 +72,4 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
 
         return $groupId;
     }
-
-
 }

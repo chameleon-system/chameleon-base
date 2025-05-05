@@ -14,17 +14,15 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 
 /**
  * std varchar text field (max 255 chars).
-/**/
+ * /**/
 class TCMSFieldPosition extends TCMSField implements DoctrineTransformableInterface
 {
-
     /**
      * conf of the table holding the position field.
      *
      * @var TCMSTableConf
      */
-    protected $oTableConf = null;
-
+    protected $oTableConf;
 
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
@@ -38,10 +36,10 @@ class TCMSFieldPosition extends TCMSField implements DoctrineTransformableInterf
             'docCommentType' => 'int',
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($this->name),
-            'defaultValue' => sprintf("%s", addslashes($defaultValue)),
+            'defaultValue' => sprintf('%s', addslashes($defaultValue)),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -83,7 +81,7 @@ class TCMSFieldPosition extends TCMSField implements DoctrineTransformableInterf
             $restrictionValue = '';
         }
 
-        $html = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_position.change'), "javascript:loadPositionList('".TGlobal::OutJS($this->oTableConf->id)."','".TGlobal::OutJS($this->sTableName)."','".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->recordId)."','".TGlobal::OutJS($restrictionValue)."','".TGlobal::OutJS($restrictionField)."');", 'fas fa-sort');
+        $html = TCMSRender::DrawButton(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_position.change'), "javascript:loadPositionList('".TGlobal::OutJS($this->oTableConf->id)."','".TGlobal::OutJS($this->sTableName)."','".TGlobal::OutJS($this->name)."','".TGlobal::OutJS($this->recordId)."','".TGlobal::OutJS($restrictionValue)."','".TGlobal::OutJS($restrictionField)."');", 'fas fa-sort');
         $html .= '<span id="'.TGlobal::OutHTML($this->name).'_dummy"></span>
       <input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data)."\" />\n";
 
@@ -146,7 +144,7 @@ class TCMSFieldPosition extends TCMSField implements DoctrineTransformableInterf
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_SORT_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_SORT_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 

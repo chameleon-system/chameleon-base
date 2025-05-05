@@ -1,4 +1,4 @@
 <?php
 
 $layoutTemplate = 'frame';
-$moduleList = array('contentmodule' => array('model' => 'CMSFieldPositionRPC', 'view' => 'standard'));
+$moduleList = ['contentmodule' => ['model' => 'CMSFieldPositionRPC', 'view' => 'standard']];

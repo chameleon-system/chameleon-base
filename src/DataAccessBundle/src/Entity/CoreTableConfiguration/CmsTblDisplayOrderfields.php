@@ -6,7 +6,7 @@ class CmsTblDisplayOrderfields
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Database field name */
@@ -60,7 +60,6 @@ class CmsTblDisplayOrderfields
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getSortOrderDirection(): string
     {
@@ -73,7 +72,6 @@ class CmsTblDisplayOrderfields
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -88,7 +86,6 @@ class CmsTblDisplayOrderfields
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsTblConf(): ?CmsTblConf
     {
@@ -101,6 +98,4 @@ class CmsTblDisplayOrderfields
 
         return $this;
     }
-
-
 }

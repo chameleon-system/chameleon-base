@@ -3,13 +3,12 @@
 namespace ChameleonSystem\TrackViewsBundle\Entity;
 
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
-use DateTime;
 
 class PkgTrackObjectHistory
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - */
@@ -18,12 +17,11 @@ class PkgTrackObjectHistory
         /** @var string - */
         private string $ownerId = '',
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - */
-        private ?DateTime $datecreated = new DateTime(),
+        /** @var \DateTime|null - */
+        private ?\DateTime $datecreated = new \DateTime(),
         // TCMSFieldLookup
         /** @var DataExtranetUser|null - */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldVarchar
         /** @var string - */
         private string $sessionId = '',
@@ -35,8 +33,7 @@ class PkgTrackObjectHistory
         private string $requestChecksum = '',
         // TCMSFieldLookupParentID
         /** @var PkgTrackObject|null - */
-        private ?PkgTrackObject $pkgTrackObject = null
-        ,
+        private ?PkgTrackObject $pkgTrackObject = null,
         // TCMSFieldBoolean
         /** @var bool - */
         private bool $itemCounted = false
@@ -80,7 +77,6 @@ class PkgTrackObjectHistory
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getOwnerId(): string
     {
@@ -94,20 +90,18 @@ class PkgTrackObjectHistory
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getDataExtranetUser(): ?DataExtranetUser
@@ -122,7 +116,6 @@ class PkgTrackObjectHistory
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSessionId(): string
     {
@@ -135,7 +128,6 @@ class PkgTrackObjectHistory
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIp(): string
@@ -150,7 +142,6 @@ class PkgTrackObjectHistory
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getRequestChecksum(): string
     {
@@ -163,7 +154,6 @@ class PkgTrackObjectHistory
 
         return $this;
     }
-
 
     // TCMSFieldLookupParentID
     public function getPkgTrackObject(): ?PkgTrackObject
@@ -178,7 +168,6 @@ class PkgTrackObjectHistory
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isItemCounted(): bool
     {
@@ -191,6 +180,4 @@ class PkgTrackObjectHistory
 
         return $this;
     }
-
-
 }

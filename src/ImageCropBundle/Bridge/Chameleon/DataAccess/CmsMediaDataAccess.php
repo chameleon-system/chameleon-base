@@ -13,7 +13,6 @@ namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\DataAccess;
 
 use ChameleonSystem\ImageCrop\DataModel\CmsMediaDataModel;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
-use TdbCmsMedia;
 
 class CmsMediaDataAccess implements CmsMediaDataAccessInterface
 {
@@ -22,7 +21,7 @@ class CmsMediaDataAccess implements CmsMediaDataAccessInterface
      */
     public function getCmsMedia($id, $languageId)
     {
-        $tableObject = TdbCmsMedia::GetNewInstance(null, $languageId);
+        $tableObject = \TdbCmsMedia::GetNewInstance(null, $languageId);
         if (false === $tableObject->Load($id)) {
             return null;
         }
@@ -31,11 +30,9 @@ class CmsMediaDataAccess implements CmsMediaDataAccessInterface
     }
 
     /**
-     * @param TdbCmsMedia $tableObject
-     *
      * @return CmsMediaDataModel
      */
-    private function createDataModelFromTableObject(TdbCmsMedia $tableObject)
+    private function createDataModelFromTableObject(\TdbCmsMedia $tableObject)
     {
         return new CmsMediaDataModel(
             $tableObject->id,

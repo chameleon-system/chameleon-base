@@ -12,10 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Util;
 
 use Doctrine\DBAL\DBALException;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsTplPage;
-use TdbCmsTree;
 
 /**
  * A data access interface for the RoutingUtil class.
@@ -25,33 +21,26 @@ interface RoutingUtilDataAccessInterface
     /**
      * Returns a list of navigation paths, along with some information on these paths (especially the pagedef ID).
      *
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     *
      * @return array
      */
-    public function getNaviLookup(TdbCmsPortal $portal, TdbCmsLanguage $language);
+    public function getNaviLookup(\TdbCmsPortal $portal, \TdbCmsLanguage $language);
 
     /**
      * Returns a list of tree nodes that are assigned to the passed $page in the given $language. The primary node is
      * always the first one in the returned list.
      *
-     * @param TdbCmsTplPage       $page
-     * @param TdbCmsLanguage|null $language if null, the default language is used
+     * @param \TdbCmsLanguage|null $language if null, the default language is used
      *
-     * @return TdbCmsTree[]
+     * @return \TdbCmsTree[]
      */
-    public function getPageTreeNodes(TdbCmsTplPage $page, TdbCmsLanguage $language = null);
+    public function getPageTreeNodes(\TdbCmsTplPage $page, ?\TdbCmsLanguage $language = null);
 
     /**
      * Returns a list of all PageAssignments for the passed $portal in the given $language.
-     *
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
      *
      * @return string[]
      *
      * @throws DBALException
      */
-    public function getAllPageAssignments(TdbCmsPortal $portal, TdbCmsLanguage $language);
+    public function getAllPageAssignments(\TdbCmsPortal $portal, \TdbCmsLanguage $language);
 }

@@ -45,10 +45,10 @@ interface CacheInterface
     /**
      * adds or updates a cache object.
      *
-     * @param string $key               - the cache key
-     * @param mixed  $content           - content to be stored
-     * @param array  $trigger           - cache trigger array(array('table'=>'','id'=>''),array('table'=>'','id'=>''),...);
-     * @param int    $iMaxLiveInSeconds - max age in seconds before the cache content expires - default = 30 days
+     * @param string $key - the cache key
+     * @param mixed $content - content to be stored
+     * @param array $trigger - cache trigger array(array('table'=>'','id'=>''),array('table'=>'','id'=>''),...);
+     * @param int $iMaxLiveInSeconds - max age in seconds before the cache content expires - default = 30 days
      *
      * @return void
      */
@@ -73,7 +73,7 @@ interface CacheInterface
     /**
      * removes all cached objects based on table and optional record id.
      *
-     * @param string     $table
+     * @param string $table
      * @param int|string $id
      *
      * @return void
@@ -84,7 +84,7 @@ interface CacheInterface
      * returns a cache key for given parameter array.
      *
      * @param array $aParameters
-     * @param bool  $addStateKey
+     * @param bool $addStateKey
      *
      * @return string
      *

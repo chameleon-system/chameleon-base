@@ -3,22 +3,19 @@
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
 use ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf;
-use DateTime;
 
 class CmsRecordRevision
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsRecordRevision|null - belongs to revision */
-        private ?CmsRecordRevision $cmsRecordRevision = null
-        ,
+        private ?CmsRecordRevision $cmsRecordRevision = null,
         // TCMSFieldLookup
         /** @var CmsTblConf|null - Table */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldVarchar
         /** @var string - Record ID */
         private string $recordid = '',
@@ -33,14 +30,13 @@ class CmsRecordRevision
         private int $revisionNr = 0,
         // TCMSFieldCMSUser
         /** @var CmsUser|null - Editor */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldTimestamp
-        /** @var DateTime|null - Created on */
-        private ?DateTime $createTimestamp = null,
+        /** @var \DateTime|null - Created on */
+        private ?\DateTime $createTimestamp = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Time of last activation */
-        private ?DateTime $lastActiveTimestamp = null,
+        /** @var \DateTime|null - Time of last activation */
+        private ?\DateTime $lastActiveTimestamp = null,
         // TCMSFieldText
         /** @var string - Serialized record */
         private string $data = ''
@@ -84,7 +80,6 @@ class CmsRecordRevision
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsTblConf(): ?CmsTblConf
     {
@@ -97,7 +92,6 @@ class CmsRecordRevision
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getRecordid(): string
@@ -112,7 +106,6 @@ class CmsRecordRevision
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -125,7 +118,6 @@ class CmsRecordRevision
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getDescription(): string
@@ -140,7 +132,6 @@ class CmsRecordRevision
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getRevisionNr(): int
     {
@@ -153,7 +144,6 @@ class CmsRecordRevision
 
         return $this;
     }
-
 
     // TCMSFieldCMSUser
     public function getCmsUser(): ?CmsUser
@@ -168,34 +158,31 @@ class CmsRecordRevision
         return $this;
     }
 
-
     // TCMSFieldTimestamp
-    public function getCreateTimestamp(): ?DateTime
+    public function getCreateTimestamp(): ?\DateTime
     {
         return $this->createTimestamp;
     }
 
-    public function setCreateTimestamp(?DateTime $createTimestamp): self
+    public function setCreateTimestamp(?\DateTime $createTimestamp): self
     {
         $this->createTimestamp = $createTimestamp;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getLastActiveTimestamp(): ?DateTime
+    public function getLastActiveTimestamp(): ?\DateTime
     {
         return $this->lastActiveTimestamp;
     }
 
-    public function setLastActiveTimestamp(?DateTime $lastActiveTimestamp): self
+    public function setLastActiveTimestamp(?\DateTime $lastActiveTimestamp): self
     {
         $this->lastActiveTimestamp = $lastActiveTimestamp;
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getData(): string
@@ -209,6 +196,4 @@ class CmsRecordRevision
 
         return $this;
     }
-
-
 }

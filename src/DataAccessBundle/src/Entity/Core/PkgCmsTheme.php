@@ -10,7 +10,7 @@ class PkgCmsTheme
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Descriptive name */
@@ -23,8 +23,7 @@ class PkgCmsTheme
         private string $lessFile = '',
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, PkgCmsThemeBlockLayout> - Theme block layouts */
-        private Collection $pkgCmsThemeBlockLayoutCollection = new ArrayCollection()
-        ,
+        private Collection $pkgCmsThemeBlockLayoutCollection = new ArrayCollection(),
         // TCMSFieldLookupDirectory
         /** @var string - Directory */
         private string $directory = '',
@@ -71,7 +70,6 @@ class PkgCmsTheme
         return $this;
     }
 
-
     // TCMSFieldText
     public function getSnippetChain(): string
     {
@@ -85,7 +83,6 @@ class PkgCmsTheme
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getLessFile(): string
     {
@@ -98,8 +95,6 @@ class PkgCmsTheme
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -133,7 +128,6 @@ class PkgCmsTheme
         return $this;
     }
 
-
     // TCMSFieldLookupDirectory
     public function getDirectory(): string
     {
@@ -147,7 +141,6 @@ class PkgCmsTheme
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -160,6 +153,4 @@ class PkgCmsTheme
 
         return $this;
     }
-
-
 }

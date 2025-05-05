@@ -48,7 +48,7 @@ interface MigrationCounterManagerInterface
      * Marks a migration file with the passed $bundleName and $buildNumber as processed in the data storage.
      *
      * @param string $bundleName
-     * @param int    $buildNumber
+     * @param int $buildNumber
      *
      * @return void
      */

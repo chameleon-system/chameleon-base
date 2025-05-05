@@ -13,7 +13,7 @@ class CmsTblConf
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - SQL table name */
@@ -29,15 +29,13 @@ class CmsTblConf
         private string $engine = 'InnoDB',
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsTblFieldTab> - Field category/tabs */
-        private Collection $cmsTblFieldTabCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTblFieldTabCollection = new ArrayCollection(),
         // TCMSFieldText
         /** @var string - List query */
         private string $listQuery = '',
         // TCMSFieldLookup
         /** @var CmsContentBox|null - View in category window */
-        private ?CmsContentBox $cmsContentBox = null
-        ,
+        private ?CmsContentBox $cmsContentBox = null,
         // TCMSFieldBoolean
         /** @var bool - Table contains only one record */
         private bool $onlyOneRecordTbl = false,
@@ -58,16 +56,13 @@ class CmsTblConf
         private bool $revisionManagementActive = false,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsFieldConf> - Record fields */
-        private Collection $cmsFieldConfMltCollection = new ArrayCollection()
-        ,
+        private Collection $cmsFieldConfMltCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsTblDisplayListFields> - List fields */
-        private Collection $propertyListFieldsCollection = new ArrayCollection()
-        ,
+        private Collection $propertyListFieldsCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsTblDisplayOrderfields> - Sort fields */
-        private Collection $propertyOrderFieldsCollection = new ArrayCollection()
-        ,
+        private Collection $propertyOrderFieldsCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Name field */
         private string $nameColumn = '',
@@ -91,12 +86,10 @@ class CmsTblConf
         private string $listGroupFieldColumn = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsTblListClass> - List views */
-        private Collection $cmsTblListClassCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTblListClassCollection = new ArrayCollection(),
         // TCMSFieldLookupListClass
         /** @var CmsTblListClass|null - List view default class */
-        private ?CmsTblListClass $cmsTblListClass = null
-        ,
+        private ?CmsTblListClass $cmsTblListClass = null,
         // TCMSFieldVarchar
         /** @var string - Table editor php class */
         private string $tableEditorClass = '',
@@ -108,54 +101,43 @@ class CmsTblConf
         private string $tableEditorClassType = 'Core',
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsTblConfRestrictions> - List restrictions */
-        private Collection $cmsTblConfRestrictionsCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTblConfRestrictionsCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Show preview button in records */
         private bool $showPreviewbutton = false,
         // TCMSFieldExtendedLookup
         /** @var CmsTplPage|null - Preview page */
-        private ?CmsTplPage $cmsTplPage = null
-        ,
+        private ?CmsTplPage $cmsTplPage = null,
         // TCMSFieldBoolean
         /** @var bool - Rename on copy */
         private bool $renameOnCopy = false,
         // TCMSFieldLookup
         /** @var CmsUsergroup|null - Table belongs to group */
-        private ?CmsUsergroup $cmsUsergroup = null
-        ,
+        private ?CmsUsergroup $cmsUsergroup = null,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRole> - Rights - Create new record */
-        private Collection $cmsRoleCollection = new ArrayCollection()
-        ,
+        private Collection $cmsRoleCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRole> - Rights - Modify record */
-        private Collection $cmsRole1Collection = new ArrayCollection()
-        ,
+        private Collection $cmsRole1Collection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRole> - Rights - Delete record */
-        private Collection $cmsRole2Collection = new ArrayCollection()
-        ,
+        private Collection $cmsRole2Collection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRole> - Rights - Show all records */
-        private Collection $cmsRole3Collection = new ArrayCollection()
-        ,
+        private Collection $cmsRole3Collection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRole> - Rights – Show all records (readonly) */
-        private Collection $cmsRole6Collection = new ArrayCollection()
-        ,
+        private Collection $cmsRole6Collection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRole> - Rights - Create new language */
-        private Collection $cmsRole4Collection = new ArrayCollection()
-        ,
+        private Collection $cmsRole4Collection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRole> - Rights – Publish record via workflow */
-        private Collection $cmsRole5Collection = new ArrayCollection()
-        ,
+        private Collection $cmsRole5Collection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRole> - Right - Revision management */
-        private Collection $cmsRole7Collection = new ArrayCollection()
-        ,
+        private Collection $cmsRole7Collection = new ArrayCollection(),
         // TCMSFieldText
         /** @var string - Notes */
         private string $notes = '',
@@ -173,15 +155,13 @@ class CmsTblConf
         private string $dbobjectExtendType = 'Core',
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsTblExtension> - Extensions */
-        private Collection $cmsTblExtensionCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTblExtensionCollection = new ArrayCollection(),
         // TCMSFieldNumber
         /** @var int - Automatically limit list object to this number of entries */
         private int $autoLimitResults = -1,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsTblConfIndex> - Index definitions */
-        private Collection $cmsTblConfIndexCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTblConfIndexCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Icon Font CSS class */
         private string $iconFontCssClass = ''
@@ -225,7 +205,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getDbobjectType(): string
     {
@@ -238,7 +217,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTranslation(): string
@@ -253,7 +231,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getEngine(): string
     {
@@ -266,8 +243,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -301,7 +276,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldText
     public function getListQuery(): string
     {
@@ -314,7 +288,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsContentBox(): ?CmsContentBox
@@ -329,7 +302,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isOnlyOneRecordTbl(): bool
     {
@@ -342,7 +314,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isIsMultilanguage(): bool
@@ -357,7 +328,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsWorkflow(): bool
     {
@@ -370,7 +340,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isLockingActive(): bool
@@ -385,7 +354,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isChangelogActive(): bool
     {
@@ -399,7 +367,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRevisionManagementActive(): bool
     {
@@ -412,8 +379,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -447,8 +412,6 @@ class CmsTblConf
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -480,8 +443,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -515,7 +476,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getNameColumn(): string
     {
@@ -528,7 +488,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getNameColumnCallback(): string
@@ -543,7 +502,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDisplayColumn(): string
     {
@@ -556,7 +514,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getDisplayColumnCallback(): string
@@ -571,7 +528,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getListGroupField(): string
     {
@@ -584,7 +540,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getListGroupFieldHeader(): string
@@ -599,7 +554,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getListGroupFieldColumn(): string
     {
@@ -612,8 +566,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -647,7 +599,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldLookupListClass
     public function getCmsTblListClass(): ?CmsTblListClass
     {
@@ -660,7 +611,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTableEditorClass(): string
@@ -675,7 +625,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTableEditorClassSubtype(): string
     {
@@ -689,7 +638,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getTableEditorClassType(): string
     {
@@ -702,8 +650,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -737,7 +683,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowPreviewbutton(): bool
     {
@@ -750,7 +695,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getCmsTplPage(): ?CmsTplPage
@@ -765,7 +709,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRenameOnCopy(): bool
     {
@@ -779,7 +722,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsUsergroup(): ?CmsUsergroup
     {
@@ -792,8 +734,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -827,8 +767,6 @@ class CmsTblConf
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselectCheckboxes
 
     /**
@@ -860,8 +798,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -895,8 +831,6 @@ class CmsTblConf
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselectCheckboxes
 
     /**
@@ -928,8 +862,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -963,8 +895,6 @@ class CmsTblConf
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselectCheckboxes
 
     /**
@@ -996,8 +926,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -1031,8 +959,6 @@ class CmsTblConf
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselectCheckboxes
 
     /**
@@ -1065,7 +991,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldText
     public function getNotes(): string
     {
@@ -1078,7 +1003,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isFrontendAutoCacheClearEnabled(): bool
@@ -1093,7 +1017,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDbobjectExtendClass(): string
     {
@@ -1106,7 +1029,6 @@ class CmsTblConf
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getDbobjectExtendSubtype(): string
@@ -1121,7 +1043,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getDbobjectExtendType(): string
     {
@@ -1134,8 +1055,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1169,7 +1088,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getAutoLimitResults(): int
     {
@@ -1182,8 +1100,6 @@ class CmsTblConf
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -1217,7 +1133,6 @@ class CmsTblConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIconFontCssClass(): string
     {
@@ -1230,6 +1145,4 @@ class CmsTblConf
 
         return $this;
     }
-
-
 }

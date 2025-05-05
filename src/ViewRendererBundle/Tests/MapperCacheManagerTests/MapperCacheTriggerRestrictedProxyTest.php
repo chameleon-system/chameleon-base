@@ -18,6 +18,6 @@ class MapperCacheTriggerRestrictedProxyTest extends TestCase
         $oTriggerManager = new MapperCacheTrigger();
         $oProxy = new MapperCacheTriggerRestrictedProxy($oTriggerManager);
         $oProxy->addTrigger('table', 'id');
-        $this->assertEquals(array(array('table' => 'table', 'id' => 'id')), $oTriggerManager->getTrigger());
+        $this->assertEquals([['table' => 'table', 'id' => 'id']], $oTriggerManager->getTrigger());
     }
 }

@@ -18,8 +18,6 @@ class NewsletterPostProcessorCompiler implements CompilerPassInterface
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
      * @api
      *
      * @return void
@@ -30,7 +28,7 @@ class NewsletterPostProcessorCompiler implements CompilerPassInterface
         $processorCollectorService = $container->getDefinition('chameleon_system_newsletter.post_processor_collector');
 
         foreach (array_keys($processorIds) as $processorId) {
-            $processorCollectorService->addMethodCall('addPostProcessor', array($container->getDefinition($processorId)));
+            $processorCollectorService->addMethodCall('addPostProcessor', [$container->getDefinition($processorId)]);
         }
     }
 }

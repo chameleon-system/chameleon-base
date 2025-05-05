@@ -3,28 +3,25 @@
 namespace ChameleonSystem\DataAccessBundle\Entity\CoreMedia;
 
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
-use DateTime;
 
 class CmsDocumentSecurityHash
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldDocument
         /** @var CmsDocument|null - */
-        private ?CmsDocument $cmsDocument = null
-        ,
+        private ?CmsDocument $cmsDocument = null,
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - */
-        private ?DateTime $publishdate = new DateTime(),
+        /** @var \DateTime|null - */
+        private ?\DateTime $publishdate = new \DateTime(),
         // TCMSFieldDateTime
-        /** @var DateTime|null - */
-        private ?DateTime $enddate = null,
+        /** @var \DateTime|null - */
+        private ?\DateTime $enddate = null,
         // TCMSFieldUID
         /** @var string - */
         private string $token = ''
@@ -68,7 +65,6 @@ class CmsDocumentSecurityHash
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getDataExtranetUser(): ?DataExtranetUser
     {
@@ -82,34 +78,31 @@ class CmsDocumentSecurityHash
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getPublishdate(): ?DateTime
+    public function getPublishdate(): ?\DateTime
     {
         return $this->publishdate;
     }
 
-    public function setPublishdate(?DateTime $publishdate): self
+    public function setPublishdate(?\DateTime $publishdate): self
     {
         $this->publishdate = $publishdate;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getEnddate(): ?DateTime
+    public function getEnddate(): ?\DateTime
     {
         return $this->enddate;
     }
 
-    public function setEnddate(?DateTime $enddate): self
+    public function setEnddate(?\DateTime $enddate): self
     {
         $this->enddate = $enddate;
 
         return $this;
     }
-
 
     // TCMSFieldUID
     public function getToken(): string
@@ -123,6 +116,4 @@ class CmsDocumentSecurityHash
 
         return $this;
     }
-
-
 }

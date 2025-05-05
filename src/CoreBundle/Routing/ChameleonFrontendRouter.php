@@ -20,11 +20,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsPortalList;
-use TdbPkgCmsRoutingList;
-use UnexpectedValueException;
 
 class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLanguageAwareRouterInterface
 {
@@ -73,8 +68,6 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
     /**
      * Returns a match if there is no specific path, but a pagedef argument (GET or POST).
      *
-     * @param Request $request
-     *
      * @return array|null
      */
     private function getPagedefParamRoute(Request $request)
@@ -84,7 +77,7 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
             return null;
         }
 
-        $match = array();
+        $match = [];
         $match['pagedef'] = $pagedef;
         $match['_route'] = 'cms_pagedef';
         $match['_controller'] = $this->controllerId;
@@ -94,8 +87,7 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
     }
 
     /**
-     * @param Request $request
-     * @param string  $pagedef
+     * @param string $pagedef
      *
      * @return bool
      */
@@ -113,7 +105,9 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
 
         return true;
     }
-    protected function generateCacheDirPath(string $baseCacheDir): string {
+
+    protected function generateCacheDirPath(string $baseCacheDir): string
+    {
         return sprintf('%s/frontend', $baseCacheDir);
     }
 
@@ -122,7 +116,7 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
      */
     protected function getRouterConfig()
     {
-        $configArray = array();
+        $configArray = [];
         $query = <<<SQL
 SELECT `pkg_cms_routing`.*, `cms_portal`.`id` AS portal_id
 FROM `pkg_cms_routing`
@@ -132,7 +126,7 @@ WHERE (`pkg_cms_routing_cms_portal_mlt`.`target_id` IS NULL OR `pkg_cms_routing_
   AND `pkg_cms_routing`.`active` = '1'
 ORDER BY `cms_portal`.`identifier` DESC, `pkg_cms_routing`.`position` ASC
 SQL;
-        $configList = TdbPkgCmsRoutingList::GetList($query);
+        $configList = \TdbPkgCmsRoutingList::GetList($query);
         while ($config = $configList->Next()) {
             $configArray[] = $config->sqlData;
         }
@@ -142,7 +136,7 @@ SQL;
          * all requests before the other portals had a chance (the portal identfier would be considered part of the
          * route).
          */
-        $portalList = TdbCmsPortalList::GetList('SELECT `cms_portal`.* FROM `cms_portal` ORDER BY `identifier` DESC');
+        $portalList = \TdbCmsPortalList::GetList('SELECT `cms_portal`.* FROM `cms_portal` ORDER BY `identifier` DESC');
         while ($portal = $portalList->Next()) {
             $configArray = array_merge($configArray, $this->getAdditionalRoutingResources($portal));
         }
@@ -151,25 +145,23 @@ SQL;
     }
 
     /**
-     * @param TdbCmsPortal $portal
-     *
      * @return array
      */
-    protected function getAdditionalRoutingResources(TdbCmsPortal $portal)
+    protected function getAdditionalRoutingResources(\TdbCmsPortal $portal)
     {
-        $routerConfig[] = array(
+        $routerConfig[] = [
             'name' => 'cms_image_not_found',
             'resource' => '@ChameleonSystemCoreBundle/Resources/config/route_image_not_found.yml',
             'type' => 'yaml',
             'portal_id' => $portal->id,
-        );
+        ];
 
-        $routerConfig[] = array(
+        $routerConfig[] = [
             'name' => 'cms_tpl_page',
             'resource' => '@ChameleonSystemCoreBundle/Resources/config/route_final.yml',
             'type' => 'yaml',
             'portal_id' => $portal->id,
-        );
+        ];
 
         return $routerConfig;
     }
@@ -186,7 +178,7 @@ SQL;
      * UrlGeneratorInterface::ABSOLUTE_URL if the domain differs from the current domain and $referenceType is
      * RELATIVE_PATH or ABSOLUTE_PATH.
      */
-    public function generateWithPrefixes($name, array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $referenceType = self::ABSOLUTE_PATH)
+    public function generateWithPrefixes($name, array $parameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $referenceType = self::ABSOLUTE_PATH)
     {
         if (null === $portal) {
             $portal = $this->portalDomainService->getActivePortal();
@@ -213,29 +205,25 @@ SQL;
     }
 
     /**
-     * @param string         $name
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
+     * @param string $name
      *
      * @return string
      */
-    private function getFinalRouteName($name, TdbCmsPortal $portal, TdbCmsLanguage $language)
+    private function getFinalRouteName($name, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
         return $name.'-'.$portal->id.'-'.$language->fieldIso6391;
     }
 
     /**
-     * @param string         $routeName
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     * @param array          $parameters
-     * @param string         $domainParamName
-     * @param int                 $referenceType
+     * @param string $routeName
+     * @param string $domainParamName
+     * @param int $referenceType
+     *
      * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      */
-    private function getUrlForCustomDomain($routeName, TdbCmsPortal $portal, TdbCmsLanguage $language, array $parameters, $domainParamName, $referenceType)
+    private function getUrlForCustomDomain($routeName, \TdbCmsPortal $portal, \TdbCmsLanguage $language, array $parameters, $domainParamName, $referenceType)
     {
         $parameters[$domainParamName] = $this->domainValidator->getValidDomain($parameters[$domainParamName], $portal, $language, $this->isForceSecure());
         if ($this->isRelativeReferenceType($referenceType)) {
@@ -250,6 +238,7 @@ SQL;
 
     /**
      * @param int $referenceType
+     *
      * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return bool
@@ -260,17 +249,15 @@ SQL;
     }
 
     /**
-     * @param string         $routeName
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     * @param array          $parameters
-     * @param string         $domainParamName
-     * @param int            $referenceType
+     * @param string $routeName
+     * @param string $domainParamName
+     * @param int $referenceType
+     *
      * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      */
-    private function getUrlForDefaultDomain($routeName, TdbCmsPortal $portal, TdbCmsLanguage $language, array $parameters, $domainParamName, $referenceType)
+    private function getUrlForDefaultDomain($routeName, \TdbCmsPortal $portal, \TdbCmsLanguage $language, array $parameters, $domainParamName, $referenceType)
     {
         $secure = $this->isForceSecure();
         $request = $this->requestStack->getCurrentRequest();
@@ -279,7 +266,7 @@ SQL;
         } else {
             try {
                 $domain = $request->getHost();
-            } catch (UnexpectedValueException $e) {
+            } catch (\UnexpectedValueException $e) {
                 $domain = $this->getDomainFromActiveDomain();
             }
         }
@@ -330,8 +317,6 @@ SQL;
     }
 
     /**
-     * @param LanguageServiceInterface $languageService
-     *
      * @return void
      */
     public function setLanguageService(LanguageServiceInterface $languageService)
@@ -340,8 +325,6 @@ SQL;
     }
 
     /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     *
      * @return void
      */
     public function setPortalDomainService(PortalDomainServiceInterface $portalDomainService)
@@ -350,8 +333,6 @@ SQL;
     }
 
     /**
-     * @param RequestStack $requestStack
-     *
      * @return void
      */
     public function setRequestStack(RequestStack $requestStack)
@@ -360,8 +341,6 @@ SQL;
     }
 
     /**
-     * @param RoutingUtilInterface $routingUtil
-     *
      * @return void
      */
     public function setRoutingUtil(RoutingUtilInterface $routingUtil)
@@ -380,8 +359,6 @@ SQL;
     }
 
     /**
-     * @param RequestInfoServiceInterface $requestInfoService
-     *
      * @return void
      */
     public function setRequestInfoService(RequestInfoServiceInterface $requestInfoService)
@@ -390,8 +367,6 @@ SQL;
     }
 
     /**
-     * @param DomainValidatorInterface $domainValidator
-     *
      * @return void
      */
     public function setDomainValidator(DomainValidatorInterface $domainValidator)

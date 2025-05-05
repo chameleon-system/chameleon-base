@@ -15,12 +15,12 @@
  */
 class SQLParser
 {
-    public $reserved = array();
-    public $functions = array();
+    public $reserved = [];
+    public $functions = [];
 
     public function __construct($sql = false)
     {
-        //LOAD THE LIST OF RESERVED WORDS
+        // LOAD THE LIST OF RESERVED WORDS
         $this->load_reserved_words();
         if ($sql) {
             $this->parse($sql);
@@ -31,27 +31,27 @@ class SQLParser
     {
         $sql = trim($sql);
 
-        //lex the SQL statement
+        // lex the SQL statement
         $in = $this->split_sql($sql);
 
-        //sometimes the parser needs to skip ahead until a particular
-        //token is found
+        // sometimes the parser needs to skip ahead until a particular
+        // token is found
         $skip_until = false;
 
-        //this is the output tree which is being parsed
-        $out = array();
+        // this is the output tree which is being parsed
+        $out = [];
 
-        //This is the last type of union used (UNION or UNION ALL)
-        //indicates a) presence of at least one union in this query
+        // This is the last type of union used (UNION or UNION ALL)
+        // indicates a) presence of at least one union in this query
         //          b) the type of union if this is the first or last query
         $union = false;
 
-        //Sometimes a "query" consists of more than one query (like a UNION query)
-        //this array holds all the queries
-        $queries = array();
+        // Sometimes a "query" consists of more than one query (like a UNION query)
+        // this array holds all the queries
+        $queries = [];
 
-        //This is the highest level lexical analysis.  This is the part of the
-        //code which finds UNION and UNION ALL query parts
+        // This is the highest level lexical analysis.  This is the part of the
+        // code which finds UNION and UNION ALL query parts
         foreach ($in as $key => $token) {
             $token = trim($token);
 
@@ -82,7 +82,7 @@ class SQLParser
                 }
 
                 $queries[$union][] = $out;
-                $out = array();
+                $out = [];
             } else {
                 $out[] = $token;
             }
@@ -105,7 +105,7 @@ class SQLParser
               is supported in each UNION block.  (select)(select)union(select) is not legal.
               The extra queries will be silently ignored.
               */
-        $union_types = array('UNION', 'UNION ALL');
+        $union_types = ['UNION', 'UNION ALL'];
         foreach ($union_types as $union_type) {
             if (!empty($queries[$union_type])) {
                 foreach ($queries[$union_type] as $i => $tok_list) {
@@ -142,13 +142,13 @@ class SQLParser
         return $this->parsed;
     }
 
-    //This function counts open and close parenthesis and
-    //returns their location.  This might be faster as a regex
-    private function count_paren($token, $chars = array('(', ')'))
+    // This function counts open and close parenthesis and
+    // returns their location.  This might be faster as a regex
+    private function count_paren($token, $chars = ['(', ')'])
     {
         $len = strlen($token);
-        $open = array();
-        $close = array();
+        $open = [];
+        $close = [];
         for ($i = 0; $i < $len; ++$i) {
             if ($token[$i] == $chars[0]) {
                 $open[] = $i;
@@ -157,11 +157,11 @@ class SQLParser
             }
         }
 
-        return array('open' => $open, 'close' => $close, 'balanced' => (count($close) - count($open)));
+        return ['open' => $open, 'close' => $close, 'balanced' => (count($close) - count($open))];
     }
 
-    //This function counts open and close parenthesis and
-    //returns their location.  This might be faster as a regex
+    // This function counts open and close parenthesis and
+    // returns their location.  This might be faster as a regex
     private function count_backtick($token)
     {
         $len = strlen($token);
@@ -175,9 +175,9 @@ class SQLParser
         return $cnt;
     }
 
-    //This is the lexer
-    //this function splits up a SQL statement into easy to "parse"
-    //tokens for the SQL processor
+    // This is the lexer
+    // this function splits up a SQL statement into easy to "parse"
+    // tokens for the SQL processor
     private function split_sql($sql)
     {
         if (!is_string($sql)) {
@@ -186,7 +186,7 @@ class SQLParser
             exit;
         }
 
-        $sql = str_replace(array('\\\'', '\\"', "\r\n", "\n", '()'), array("''", '""', ' ', ' ', ' '), $sql);
+        $sql = str_replace(['\\\'', '\\"', "\r\n", "\n", '()'], ["''", '""', ' ', ' ', ' '], $sql);
         $regex = <<<EOREGEX
 /(`(?:[^`]|``)`|[@A-Za-z0-9_.`-]+(?:\(\s*\)){0,1})
 |(\+|-|\*|\/|!=|>=|<=|<>|>|<|&&|\|\||=|\^)
@@ -231,12 +231,12 @@ EOREGEX;
                     continue;
                 }
 
-                //we need to find this many closing parens
+                // we need to find this many closing parens
                 $needed = abs($info['balanced']);
                 $n = $i;
                 while ($needed > 0 && $n < $token_count - 1) {
                     ++$n;
-                    //echo "LOOKING FORWARD TO $n [ " . $tokens[$n] . "]\n";
+                    // echo "LOOKING FORWARD TO $n [ " . $tokens[$n] . "]\n";
                     $token2 = $tokens[$n];
                     $info2 = $this->count_paren($token2);
                     $closes = count($info2['close']);
@@ -248,7 +248,7 @@ EOREGEX;
                         $needed = abs($info2['balanced']);
                     //	echo "CLOSES LESS THAN NEEDED (still need $needed)\n";
                     } else {
-                        /*get the string pos of the last close paren we need*/
+                        /* get the string pos of the last close paren we need */
                         $pos = $info2['close'][count($info2['close']) - 1];
                         $str1 = $str2 = '';
                         if (0 == $pos) {
@@ -257,7 +257,7 @@ EOREGEX;
                             $str1 = substr($tokens[$n], 0, $pos).')';
                             $str2 = substr($tokens[$n], $pos + 1);
                         }
-                        //echo "CLOSES FOUND AT $n, offset:$pos  [$str1] [$str2]\n";
+                        // echo "CLOSES FOUND AT $n, offset:$pos  [$str1] [$str2]\n";
                         if (strlen($str2) > 0) {
                             $tokens[$n] = $str2;
                         } else {
@@ -272,7 +272,7 @@ EOREGEX;
             }
         }
 
-        //the same problem appears with backticks :(
+        // the same problem appears with backticks :(
 
         /* reset the array if we deleted any tokens above */
         if ($reset) {
@@ -289,7 +289,7 @@ EOREGEX;
             $reset = false;
             if ($needed && $token && false !== strpos($token, '`')) {
                 $info = $this->count_backtick($token);
-                if (0 == $info % 2) { //even number of backticks means we are balanced
+                if (0 == $info % 2) { // even number of backticks means we are balanced
                     continue;
                 }
                 $needed = 1;
@@ -297,7 +297,7 @@ EOREGEX;
                 $n = $i;
                 while ($needed && $n < $token_count - 1) {
                     $reset = true;
-                    //echo "BACKTICK COUNT[$i]: $info old: {$tokens[$i]}, new: ($token)\n";
+                    // echo "BACKTICK COUNT[$i]: $info old: {$tokens[$i]}, new: ($token)\n";
                     ++$n;
                     $token .= $tokens[$n];
                     unset($tokens[$n]);
@@ -341,12 +341,12 @@ EOREGEX;
                    token, that is we ignore whitespace.
                            */
             if ($skip_next) {
-                //whitespace does not count as a next token
+                // whitespace does not count as a next token
                 if ('' == $token) {
                     continue;
                 }
 
-                //to skip the token we replace it with whitespace
+                // to skip the token we replace it with whitespace
                 $new_token = '';
                 $skip_next = false;
             }
@@ -401,16 +401,16 @@ EOREGEX;
                     }
 
                     $token_category = $upper;
-                    //$join_type = 'JOIN';
+                    // $join_type = 'JOIN';
                     if ('FROM' == $upper && 'FROM' == $token_category) {
-                        /* DO NOTHING*/
+                        /* DO NOTHING */
                     } else {
                         continue 2;
                     }
                     break;
 
-                /* These tokens get their own section, but have no subclauses.
-                                       These tokens identify the statement but have no specific subclauses of their own. */
+                    /* These tokens get their own section, but have no subclauses.
+                                           These tokens identify the statement but have no specific subclauses of their own. */
                 case 'DELETE':
                 case 'ALTER':
                 case 'INSERT':
@@ -445,7 +445,7 @@ EOREGEX;
                     continue 2;
                     break;
 
-                /* This is either LOCK TABLES or SELECT ... LOCK IN SHARE MODE*/
+                    /* This is either LOCK TABLES or SELECT ... LOCK IN SHARE MODE */
                 case 'LOCK':
                     if ('' == $token_category) {
                         $token_category = $upper;
@@ -459,7 +459,7 @@ EOREGEX;
                     break;
 
                 case 'USING':
-                    /* USING in FROM clause is different from USING w/ prepared statement*/
+                    /* USING in FROM clause is different from USING w/ prepared statement */
                     if ('EXECUTE' == $token_category) {
                         $token_category = $upper;
                         continue 2;
@@ -470,7 +470,7 @@ EOREGEX;
                     }
                     break;
 
-                /* DROP TABLE is different from ALTER TABLE DROP ... */
+                    /* DROP TABLE is different from ALTER TABLE DROP ... */
                 case 'DROP':
                     if ('ALTER' != $token_category) {
                         $token_category = $upper;
@@ -502,13 +502,12 @@ EOREGEX;
                     $skip_next = true;
                     break;
 
-                /* These tokens are ignored. */
+                    /* These tokens are ignored. */
                 case 'BY':
                 case 'ALL':
                 case 'SHARE':
                 case 'MODE':
                 case 'TO':
-
                 case ';':
                     continue 2;
                     break;
@@ -519,7 +518,7 @@ EOREGEX;
                     }
                     break;
 
-                /* These tokens set particular options for the statement.  They never stand alone.*/
+                    /* These tokens set particular options for the statement.  They never stand alone. */
                 case 'DISTINCTROW':
                     $token = 'DISTINCT';
                     // no break
@@ -572,7 +571,7 @@ EOREGEX;
             return false;
         }
 
-        //process the SELECT clause
+        // process the SELECT clause
         if (!empty($out['SELECT'])) {
             $out['SELECT'] = $this->process_select($out['SELECT']);
         }
@@ -646,7 +645,7 @@ EOREGEX;
             }
 
             if (',' == $token) {
-                $expr[] = array('column' => trim($column), 'expr' => trim($expression));
+                $expr[] = ['column' => trim($column), 'expr' => trim($expression)];
                 $expression = $column = '';
                 continue;
             }
@@ -654,7 +653,7 @@ EOREGEX;
             $expression .= $token;
         }
         if ($expression) {
-            $expr[] = array('column' => trim($column), 'expr' => trim($expression));
+            $expr[] = ['column' => trim($column), 'expr' => trim($expression)];
         }
 
         return $expr;
@@ -688,7 +687,7 @@ EOREGEX;
             }
         }
 
-        return array('start' => $start, 'end' => $end);
+        return ['start' => $start, 'end' => $end];
     }
 
     /* This function processes the SELECT section.  It splits the clauses at the commas.
@@ -700,7 +699,7 @@ EOREGEX;
     private function process_select($tokens)
     {
         $expression = '';
-        $expr = array();
+        $expr = [];
         foreach ($tokens as $token) {
             if (',' == $token) {
                 $expr[] = $this->process_select_expr(trim($expression));
@@ -728,9 +727,9 @@ EOREGEX;
         $alias = '';
         $base_expression = $expression;
         $upper = trim(strtoupper($expression));
-        //if necessary, unpack the expression
+        // if necessary, unpack the expression
         if ('(' == $upper[0]) {
-            //$expression = substr($expression,1,-1);
+            // $expression = substr($expression,1,-1);
             $base_expression = $expression;
         }
 
@@ -742,7 +741,7 @@ EOREGEX;
               The tokens after (and including) the AS are removed.
               */
         $base_expr = '';
-        $stripped = array();
+        $stripped = [];
         $capture = false;
         $alias = '';
         $processed = false;
@@ -772,12 +771,12 @@ EOREGEX;
         $last = array_pop($stripped);
         if (!$alias && 'colref' == $last['expr_type']) {
             $prev = array_pop($stripped);
-            if ('operator' == $prev['expr_type'] || 'const' == $prev['expr_type'] || 'function' == $prev['expr_type'] || 'expression' == $prev['expr_type'] || //$prev['expr_type'] == 'aggregate_function' ||
-                'subquery' == $prev['expr_type'] || 'colref' == $prev['expr_type']
+            if ('operator' == $prev['expr_type'] || 'const' == $prev['expr_type'] || 'function' == $prev['expr_type'] || 'expression' == $prev['expr_type'] // $prev['expr_type'] == 'aggregate_function' ||
+                || 'subquery' == $prev['expr_type'] || 'colref' == $prev['expr_type']
             ) {
                 $alias = $last['base_expr'];
 
-                //remove the last token
+                // remove the last token
                 array_pop($tokens);
 
                 $base_expr = implode('', $tokens);
@@ -812,13 +811,13 @@ EOREGEX;
             $processed = false;
         }
 
-        return array('expr_type' => $type, 'alias' => $alias, 'base_expr' => $base_expr, 'sub_tree' => $processed);
+        return ['expr_type' => $type, 'alias' => $alias, 'base_expr' => $base_expr, 'sub_tree' => $processed];
     }
 
     private function process_from($tokens)
     {
         $expression = '';
-        $expr = array();
+        $expr = [];
         $token_count = 0;
         $table = '';
         $alias = '';
@@ -885,7 +884,7 @@ EOREGEX;
                         ++$n;
                     }
 
-                    continue;
+                    break;
                     break;
 
                 case 'INDEX':
@@ -910,13 +909,13 @@ EOREGEX;
                 case 'OUTER':
                     //	$expression .= $token;
                     $token_count++;
-                    continue;
+                    break;
                     break;
 
                 case 'FOR':
                     $token_count++;
                     $skip_next = true;
-                    continue;
+                    break;
                     break;
 
                 case 'LEFT':
@@ -932,7 +931,6 @@ EOREGEX;
 
                     // no break
                 case 'JOIN':
-
                     if ($first_join) {
                         $join_type = 'JOIN';
                         $saved_join_type = ($modifier ? $modifier : 'JOIN');
@@ -964,9 +962,9 @@ EOREGEX;
                     if ('' == $join_type) {
                         $join_type = 'JOIN';
                     }
-                    $expr[] = array('table' => $table, 'alias' => $alias, 'join_type' => $join_type, 'ref_type' => $ref_type, 'ref_clause' => trim($ref_expr, '() '), 'base_expr' => $base_expr, 'sub_tree' => $sub_tree);
+                    $expr[] = ['table' => $table, 'alias' => $alias, 'join_type' => $join_type, 'ref_type' => $ref_type, 'ref_clause' => trim($ref_expr, '() '), 'base_expr' => $base_expr, 'sub_tree' => $sub_tree];
                     $modifier = '';
-                    //$join_type=$saved_join_type;
+                    // $join_type=$saved_join_type;
 
                     $token_count = 0;
                     $table = $alias = $expression = $base_expr = $ref_type = $ref_expr = '';
@@ -977,7 +975,7 @@ EOREGEX;
 
                 default:
                     if (false === $token || empty($token) || '' === $token) {
-                        continue;
+                        break;
                     }
 
                     if (0 == $token_count) {
@@ -1008,14 +1006,14 @@ EOREGEX;
             $saved_join_type = 'JOIN';
         }
 
-        $expr[] = array('table' => $table, 'alias' => $alias, 'join_type' => $saved_join_type, 'ref_type' => $ref_type, 'ref_clause' => trim($ref_expr, '() '), 'base_expr' => $base_expr, 'sub_tree' => $sub_tree);
+        $expr[] = ['table' => $table, 'alias' => $alias, 'join_type' => $saved_join_type, 'ref_type' => $ref_type, 'ref_clause' => trim($ref_expr, '() '), 'base_expr' => $base_expr, 'sub_tree' => $sub_tree];
 
         return $expr;
     }
 
     private function process_group($tokens, $select)
     {
-        $out = array();
+        $out = [];
         $expression = '';
         $direction = 'ASC';
         $type = 'expression';
@@ -1037,7 +1035,7 @@ EOREGEX;
                     if (is_numeric(trim($expression))) {
                         $type = 'pos';
                     } else {
-                        //search to see if the expression matches an alias
+                        // search to see if the expression matches an alias
                         foreach ($select as $clause) {
                             if ($clause['alias'] == $escaped) {
                                 $type = 'alias';
@@ -1049,7 +1047,7 @@ EOREGEX;
                         }
                     }
 
-                    $out[] = array('type' => $type, 'base_expr' => $expression, 'direction' => $direction);
+                    $out[] = ['type' => $type, 'base_expr' => $expression, 'direction' => $direction];
                     $escaped = '';
                     $expression = '';
                     $direction = 'ASC';
@@ -1076,7 +1074,7 @@ EOREGEX;
             if (is_numeric(trim($expression))) {
                 $type = 'pos';
             } else {
-                //search to see if the expression matches an alias
+                // search to see if the expression matches an alias
                 if (!$type && $select) {
                     foreach ($select as $clause) {
                         if (!is_array($clause)) {
@@ -1095,7 +1093,7 @@ EOREGEX;
                 }
             }
 
-            $out[] = array('type' => $type, 'base_expr' => $expression, 'direction' => $direction);
+            $out[] = ['type' => $type, 'base_expr' => $expression, 'direction' => $direction];
         }
 
         return $out;
@@ -1112,7 +1110,7 @@ EOREGEX;
         $skip_next = false;
         $sub_expr = '';
 
-        $in_lists = array();
+        $in_lists = [];
         foreach ($tokens as $key => $token) {
             if (0 == strlen(trim($token))) {
                 continue;
@@ -1128,18 +1126,18 @@ EOREGEX;
                 $token = trim($token);
             }
 
-            /* is it a subquery?*/
+            /* is it a subquery? */
             if (preg_match('/^\\s*\\(\\s*SELECT/i', $token)) {
                 $type = 'subquery';
-                //tokenize and parse the subquery.
-                //we remove the enclosing parenthesis for the tokenizer
+                // tokenize and parse the subquery.
+                // we remove the enclosing parenthesis for the tokenizer
                 $processed = $this->parse(trim($token, ' ()'));
             /* is it an inlist */
             } elseif ('(' == $upper[0] && ')' == substr($upper, -1)) {
                 if ('IN' == $prev_token) {
                     $type = 'in-list';
                     $processed = $this->split_sql(substr($token, 1, -1));
-                    $list = array();
+                    $list = [];
                     foreach ($processed as $v) {
                         if (',' == $v) {
                             continue;
@@ -1154,13 +1152,13 @@ EOREGEX;
                     $list = $this->split_sql(substr($token, 1, -1));
                     if (count($list) > 1) {
                         $match_mode = implode('', array_slice($list, 1));
-                        $processed = array($list[0], $match_mode);
+                        $processed = [$list[0], $match_mode];
                     } else {
                         $processed = $list[0];
                     }
                     $prev_token = '';
                 }
-                /* it is either an operator, a colref or a constant */
+            /* it is either an operator, a colref or a constant */
             } else {
                 switch ($upper) {
                     case 'AND':
@@ -1223,7 +1221,7 @@ EOREGEX;
                                 }
                                 break;
                         }
-                        //$processed = $token;
+                        // $processed = $token;
                         $processed = false;
                 }
             }
@@ -1253,7 +1251,7 @@ EOREGEX;
                             if (!empty($tokens[$key + 1])) {
                                 $sub_expr = $tokens[$key + 1];
                             }
-                            //$skip_next=true;
+                            // $skip_next=true;
                             break;
 
                         default:
@@ -1263,7 +1261,7 @@ EOREGEX;
                             } else {
                                 $sub_expr = '()';
                             }
-                            //$skip_next=true;
+                            // $skip_next=true;
 
                             break;
                     }
@@ -1289,7 +1287,7 @@ EOREGEX;
             $sub_expr = trim($sub_expr);
             $sub_expr = '';
 
-            $expr[] = array('expr_type' => $type, 'base_expr' => $token, 'sub_tree' => $processed);
+            $expr[] = ['expr_type' => $type, 'base_expr' => $token, 'sub_tree' => $processed];
             $prev_token = $upper;
             $expr_type = '';
             $type = '';
@@ -1304,7 +1302,7 @@ EOREGEX;
         }
 
         if ($expr_type) {
-            $expr[] = array('expr_type' => $type, 'base_expr' => $token, 'sub_tree' => $processed);
+            $expr[] = ['expr_type' => $type, 'base_expr' => $token, 'sub_tree' => $processed];
         }
         $mod = false;
 
@@ -1338,7 +1336,7 @@ EOREGEX;
 
     private function process_delete($tokens)
     {
-        $tables = array();
+        $tables = [];
         $del = $tokens['DELETE'];
 
         foreach ($tokens['DELETE'] as $expression) {
@@ -1353,7 +1351,7 @@ EOREGEX;
             }
         }
 
-        $tokens['DELETE'] = array('TABLES' => $tables);
+        $tokens['DELETE'] = ['TABLES' => $tables];
 
         return $tokens;
     }
@@ -1381,17 +1379,17 @@ EOREGEX;
             $cols = explode(',', trim($cols, '() '));
         }
         unset($tokens['INTO']);
-        $tokens[$token_category] = array('table' => $table, 'cols' => $cols);
+        $tokens[$token_category] = ['table' => $table, 'cols' => $cols];
 
         return $tokens;
     }
 
     public function load_reserved_words()
     {
-        $this->functions = array('abs', 'acos', 'adddate', 'addtime', 'aes_encrypt', 'aes_decrypt', 'against', 'ascii', 'asin', 'atan', 'avg', 'benchmark', 'bin', 'bit_and', 'bit_or', 'bitcount', 'bitlength', 'cast', 'ceiling', 'char', 'char_length', 'character_length', 'charset', 'coalesce', 'coercibility', 'collation', 'compress', 'concat', 'concat_ws', 'conection_id', 'conv', 'convert', 'convert_tz', 'cos', 'cot', 'count', 'crc32', 'curdate', 'current_user', 'currval', 'curtime', 'database', 'date_add', 'date_diff', 'date_format', 'date_sub', 'day', 'dayname', 'dayofmonth', 'dayofweek', 'dayofyear', 'decode', 'default', 'degrees', 'des_decrypt', 'des_encrypt', 'elt', 'encode', 'encrypt', 'exp', 'export_set', 'extract', 'field', 'find_in_set', 'floor', 'format', 'found_rows', 'from_days', 'from_unixtime', 'get_format', 'get_lock', 'group_concat', 'greatest', 'hex', 'hour', 'if', 'ifnull', 'in', 'inet_aton', 'inet_ntoa', 'insert', 'instr', 'interval', 'is_free_lock', 'is_used_lock', 'last_day', 'last_insert_id', 'lcase', 'least', 'left', 'length', 'ln', 'load_file', 'localtime', 'localtimestamp', 'locate', 'log', 'log2', 'log10', 'lower', 'lpad', 'ltrim', 'make_set', 'makedate', 'maketime', 'master_pos_wait', 'match', 'max', 'md5', 'microsecond', 'mid', 'min', 'minute', 'mod', 'month', 'monthname', 'nextval', 'now', 'nullif', 'oct', 'octet_length', 'old_password', 'ord', 'password', 'period_add', 'period_diff', 'pi', 'position', 'pow', 'power', 'quarter', 'quote', 'radians', 'rand', 'release_lock', 'repeat', 'replace', 'reverse', 'right', 'round', 'row_count', 'rpad', 'rtrim', 'sec_to_time', 'second', 'session_user', 'sha', 'sha1', 'sign', 'soundex', 'space', 'sqrt', 'std', 'stddev', 'stddev_pop', 'stddev_samp', 'strcmp', 'str_to_date', 'subdate', 'substring', 'substring_index', 'subtime', 'sum', 'sysdate', 'system_user', 'tan', 'time', 'timediff', 'timestamp', 'timestampadd', 'timestampdiff', 'time_format', 'time_to_sec', 'to_days', 'trim', 'truncate', 'ucase', 'uncompress', 'uncompressed_length', 'unhex', 'unix_timestamp', 'upper', 'user', 'utc_date', 'utc_time', 'utc_timestamp', 'uuid', 'var_pop', 'var_samp', 'variance', 'version', 'week', 'weekday', 'weekofyear', 'year', 'yearweek');
+        $this->functions = ['abs', 'acos', 'adddate', 'addtime', 'aes_encrypt', 'aes_decrypt', 'against', 'ascii', 'asin', 'atan', 'avg', 'benchmark', 'bin', 'bit_and', 'bit_or', 'bitcount', 'bitlength', 'cast', 'ceiling', 'char', 'char_length', 'character_length', 'charset', 'coalesce', 'coercibility', 'collation', 'compress', 'concat', 'concat_ws', 'conection_id', 'conv', 'convert', 'convert_tz', 'cos', 'cot', 'count', 'crc32', 'curdate', 'current_user', 'currval', 'curtime', 'database', 'date_add', 'date_diff', 'date_format', 'date_sub', 'day', 'dayname', 'dayofmonth', 'dayofweek', 'dayofyear', 'decode', 'default', 'degrees', 'des_decrypt', 'des_encrypt', 'elt', 'encode', 'encrypt', 'exp', 'export_set', 'extract', 'field', 'find_in_set', 'floor', 'format', 'found_rows', 'from_days', 'from_unixtime', 'get_format', 'get_lock', 'group_concat', 'greatest', 'hex', 'hour', 'if', 'ifnull', 'in', 'inet_aton', 'inet_ntoa', 'insert', 'instr', 'interval', 'is_free_lock', 'is_used_lock', 'last_day', 'last_insert_id', 'lcase', 'least', 'left', 'length', 'ln', 'load_file', 'localtime', 'localtimestamp', 'locate', 'log', 'log2', 'log10', 'lower', 'lpad', 'ltrim', 'make_set', 'makedate', 'maketime', 'master_pos_wait', 'match', 'max', 'md5', 'microsecond', 'mid', 'min', 'minute', 'mod', 'month', 'monthname', 'nextval', 'now', 'nullif', 'oct', 'octet_length', 'old_password', 'ord', 'password', 'period_add', 'period_diff', 'pi', 'position', 'pow', 'power', 'quarter', 'quote', 'radians', 'rand', 'release_lock', 'repeat', 'replace', 'reverse', 'right', 'round', 'row_count', 'rpad', 'rtrim', 'sec_to_time', 'second', 'session_user', 'sha', 'sha1', 'sign', 'soundex', 'space', 'sqrt', 'std', 'stddev', 'stddev_pop', 'stddev_samp', 'strcmp', 'str_to_date', 'subdate', 'substring', 'substring_index', 'subtime', 'sum', 'sysdate', 'system_user', 'tan', 'time', 'timediff', 'timestamp', 'timestampadd', 'timestampdiff', 'time_format', 'time_to_sec', 'to_days', 'trim', 'truncate', 'ucase', 'uncompress', 'uncompressed_length', 'unhex', 'unix_timestamp', 'upper', 'user', 'utc_date', 'utc_time', 'utc_timestamp', 'uuid', 'var_pop', 'var_samp', 'variance', 'version', 'week', 'weekday', 'weekofyear', 'year', 'yearweek'];
 
         /* includes functions */
-        $this->reserved = array('abs', 'acos', 'adddate', 'addtime', 'aes_encrypt', 'aes_decrypt', 'against', 'ascii', 'asin', 'atan', 'avg', 'benchmark', 'bin', 'bit_and', 'bit_or', 'bitcount', 'bitlength', 'cast', 'ceiling', 'char', 'char_length', 'character_length', 'charset', 'coalesce', 'coercibility', 'collation', 'compress', 'concat', 'concat_ws', 'conection_id', 'conv', 'convert', 'convert_tz', 'cos', 'cot', 'count', 'crc32', 'curdate', 'current_user', 'currval', 'curtime', 'database', 'date_add', 'date_diff', 'date_format', 'date_sub', 'day', 'dayname', 'dayofmonth', 'dayofweek', 'dayofyear', 'decode', 'default', 'degrees', 'des_decrypt', 'des_encrypt', 'elt', 'encode', 'encrypt', 'exp', 'export_set', 'extract', 'field', 'find_in_set', 'floor', 'format', 'found_rows', 'from_days', 'from_unixtime', 'get_format', 'get_lock', 'group_concat', 'greatest', 'hex', 'hour', 'if', 'ifnull', 'in', 'inet_aton', 'inet_ntoa', 'insert', 'instr', 'interval', 'is_free_lock', 'is_used_lock', 'last_day', 'last_insert_id', 'lcase', 'least', 'left', 'length', 'ln', 'load_file', 'localtime', 'localtimestamp', 'locate', 'log', 'log2', 'log10', 'lower', 'lpad', 'ltrim', 'make_set', 'makedate', 'maketime', 'master_pos_wait', 'match', 'max', 'md5', 'microsecond', 'mid', 'min', 'minute', 'mod', 'month', 'monthname', 'nextval', 'now', 'nullif', 'oct', 'octet_length', 'old_password', 'ord', 'password', 'period_add', 'period_diff', 'pi', 'position', 'pow', 'power', 'quarter', 'quote', 'radians', 'rand', 'release_lock', 'repeat', 'replace', 'reverse', 'right', 'round', 'row_count', 'rpad', 'rtrim', 'sec_to_time', 'second', 'session_user', 'sha', 'sha1', 'sign', 'soundex', 'space', 'sqrt', 'std', 'stddev', 'stddev_pop', 'stddev_samp', 'strcmp', 'str_to_date', 'subdate', 'substring', 'substring_index', 'subtime', 'sum', 'sysdate', 'system_user', 'tan', 'time', 'timediff', 'timestamp', 'timestampadd', 'timestampdiff', 'time_format', 'time_to_sec', 'to_days', 'trim', 'truncate', 'ucase', 'uncompress', 'uncompressed_length', 'unhex', 'unix_timestamp', 'upper', 'user', 'utc_date', 'utc_time', 'utc_timestamp', 'uuid', 'var_pop', 'var_samp', 'variance', 'version', 'week', 'weekday', 'weekofyear', 'year', 'yearweek', 'add', 'all', 'alter', 'analyze', 'and', 'as', 'asc', 'asensitive', 'auto_increment', 'bdb', 'before', 'berkeleydb', 'between', 'bigint', 'binary', 'blob', 'both', 'by', 'call', 'cascade', 'case', 'change', 'char', 'character', 'check', 'collate', 'column', 'columns', 'condition', 'connection', 'constraint', 'continue', 'create', 'cross', 'current_date', 'current_time', 'current_timestamp', 'cursor', 'database', 'databases', 'day_hour', 'day_microsecond', 'day_minute', 'day_second', 'dec', 'decimal', 'declare', 'default', 'delayed', 'delete', 'desc', 'describe', 'deterministic', 'distinct', 'distinctrow', 'div', 'double', 'drop', 'else', 'elseif', 'enclosed', 'escaped', 'exists', 'exit', 'explain', 'false', 'fetch', 'fields', 'float', 'for', 'force', 'foreign', 'found', 'frac_second', 'from', 'fulltext', 'grant', 'group', 'having', 'high_priority', 'hour_microsecond', 'hour_minute', 'hour_second', 'if', 'ignore', 'in', 'index', 'infile', 'inner', 'innodb', 'inout', 'insensitive', 'insert', 'int', 'integer', 'interval', 'into', 'io_thread', 'is', 'iterate', 'join', 'key', 'keys', 'kill', 'leading', 'leave', 'left', 'like', 'limit', 'lines', 'load', 'localtime', 'localtimestamp', 'lock', 'long', 'longblob', 'longtext', 'loop', 'low_priority', 'master_server_id', 'match', 'mediumblob', 'mediumint', 'mediumtext', 'middleint', 'minute_microsecond', 'minute_second', 'mod', 'natural', 'not', 'no_write_to_binlog', 'null', 'numeric', 'on', 'optimize', 'option', 'optionally', 'or', 'order', 'out', 'outer', 'outfile', 'precision', 'primary', 'privileges', 'procedure', 'purge', 'read', 'real', 'references', 'regexp', 'rename', 'repeat', 'replace', 'require', 'restrict', 'return', 'revoke', 'right', 'rlike', 'second_microsecond', 'select', 'sensitive', 'separator', 'set', 'show', 'smallint', 'some', 'soname', 'spatial', 'specific', 'sql', 'sqlexception', 'sqlstate', 'sqlwarning', 'sql_big_result', 'sql_calc_found_rows', 'sql_small_result', 'sql_tsi_day', 'sql_tsi_frac_second', 'sql_tsi_hour', 'sql_tsi_minute', 'sql_tsi_month', 'sql_tsi_quarter', 'sql_tsi_second', 'sql_tsi_week', 'sql_tsi_year', 'ssl', 'starting', 'straight_join', 'striped', 'table', 'tables', 'terminated', 'then', 'timestampadd', 'timestampdiff', 'tinyblob', 'tinyint', 'tinytext', 'to', 'trailing', 'true', 'undo', 'union', 'unique', 'unlock', 'unsigned', 'update', 'usage', 'use', 'user_resources', 'using', 'utc_date', 'utc_time', 'utc_timestamp', 'values', 'varbinary', 'varchar', 'varcharacter', 'varying', 'when', 'where', 'while', 'with', 'write', 'xor', 'year_month', 'zerofill');
+        $this->reserved = ['abs', 'acos', 'adddate', 'addtime', 'aes_encrypt', 'aes_decrypt', 'against', 'ascii', 'asin', 'atan', 'avg', 'benchmark', 'bin', 'bit_and', 'bit_or', 'bitcount', 'bitlength', 'cast', 'ceiling', 'char', 'char_length', 'character_length', 'charset', 'coalesce', 'coercibility', 'collation', 'compress', 'concat', 'concat_ws', 'conection_id', 'conv', 'convert', 'convert_tz', 'cos', 'cot', 'count', 'crc32', 'curdate', 'current_user', 'currval', 'curtime', 'database', 'date_add', 'date_diff', 'date_format', 'date_sub', 'day', 'dayname', 'dayofmonth', 'dayofweek', 'dayofyear', 'decode', 'default', 'degrees', 'des_decrypt', 'des_encrypt', 'elt', 'encode', 'encrypt', 'exp', 'export_set', 'extract', 'field', 'find_in_set', 'floor', 'format', 'found_rows', 'from_days', 'from_unixtime', 'get_format', 'get_lock', 'group_concat', 'greatest', 'hex', 'hour', 'if', 'ifnull', 'in', 'inet_aton', 'inet_ntoa', 'insert', 'instr', 'interval', 'is_free_lock', 'is_used_lock', 'last_day', 'last_insert_id', 'lcase', 'least', 'left', 'length', 'ln', 'load_file', 'localtime', 'localtimestamp', 'locate', 'log', 'log2', 'log10', 'lower', 'lpad', 'ltrim', 'make_set', 'makedate', 'maketime', 'master_pos_wait', 'match', 'max', 'md5', 'microsecond', 'mid', 'min', 'minute', 'mod', 'month', 'monthname', 'nextval', 'now', 'nullif', 'oct', 'octet_length', 'old_password', 'ord', 'password', 'period_add', 'period_diff', 'pi', 'position', 'pow', 'power', 'quarter', 'quote', 'radians', 'rand', 'release_lock', 'repeat', 'replace', 'reverse', 'right', 'round', 'row_count', 'rpad', 'rtrim', 'sec_to_time', 'second', 'session_user', 'sha', 'sha1', 'sign', 'soundex', 'space', 'sqrt', 'std', 'stddev', 'stddev_pop', 'stddev_samp', 'strcmp', 'str_to_date', 'subdate', 'substring', 'substring_index', 'subtime', 'sum', 'sysdate', 'system_user', 'tan', 'time', 'timediff', 'timestamp', 'timestampadd', 'timestampdiff', 'time_format', 'time_to_sec', 'to_days', 'trim', 'truncate', 'ucase', 'uncompress', 'uncompressed_length', 'unhex', 'unix_timestamp', 'upper', 'user', 'utc_date', 'utc_time', 'utc_timestamp', 'uuid', 'var_pop', 'var_samp', 'variance', 'version', 'week', 'weekday', 'weekofyear', 'year', 'yearweek', 'add', 'all', 'alter', 'analyze', 'and', 'as', 'asc', 'asensitive', 'auto_increment', 'bdb', 'before', 'berkeleydb', 'between', 'bigint', 'binary', 'blob', 'both', 'by', 'call', 'cascade', 'case', 'change', 'char', 'character', 'check', 'collate', 'column', 'columns', 'condition', 'connection', 'constraint', 'continue', 'create', 'cross', 'current_date', 'current_time', 'current_timestamp', 'cursor', 'database', 'databases', 'day_hour', 'day_microsecond', 'day_minute', 'day_second', 'dec', 'decimal', 'declare', 'default', 'delayed', 'delete', 'desc', 'describe', 'deterministic', 'distinct', 'distinctrow', 'div', 'double', 'drop', 'else', 'elseif', 'enclosed', 'escaped', 'exists', 'exit', 'explain', 'false', 'fetch', 'fields', 'float', 'for', 'force', 'foreign', 'found', 'frac_second', 'from', 'fulltext', 'grant', 'group', 'having', 'high_priority', 'hour_microsecond', 'hour_minute', 'hour_second', 'if', 'ignore', 'in', 'index', 'infile', 'inner', 'innodb', 'inout', 'insensitive', 'insert', 'int', 'integer', 'interval', 'into', 'io_thread', 'is', 'iterate', 'join', 'key', 'keys', 'kill', 'leading', 'leave', 'left', 'like', 'limit', 'lines', 'load', 'localtime', 'localtimestamp', 'lock', 'long', 'longblob', 'longtext', 'loop', 'low_priority', 'master_server_id', 'match', 'mediumblob', 'mediumint', 'mediumtext', 'middleint', 'minute_microsecond', 'minute_second', 'mod', 'natural', 'not', 'no_write_to_binlog', 'null', 'numeric', 'on', 'optimize', 'option', 'optionally', 'or', 'order', 'out', 'outer', 'outfile', 'precision', 'primary', 'privileges', 'procedure', 'purge', 'read', 'real', 'references', 'regexp', 'rename', 'repeat', 'replace', 'require', 'restrict', 'return', 'revoke', 'right', 'rlike', 'second_microsecond', 'select', 'sensitive', 'separator', 'set', 'show', 'smallint', 'some', 'soname', 'spatial', 'specific', 'sql', 'sqlexception', 'sqlstate', 'sqlwarning', 'sql_big_result', 'sql_calc_found_rows', 'sql_small_result', 'sql_tsi_day', 'sql_tsi_frac_second', 'sql_tsi_hour', 'sql_tsi_minute', 'sql_tsi_month', 'sql_tsi_quarter', 'sql_tsi_second', 'sql_tsi_week', 'sql_tsi_year', 'ssl', 'starting', 'straight_join', 'striped', 'table', 'tables', 'terminated', 'then', 'timestampadd', 'timestampdiff', 'tinyblob', 'tinyint', 'tinytext', 'to', 'trailing', 'true', 'undo', 'union', 'unique', 'unlock', 'unsigned', 'update', 'usage', 'use', 'user_resources', 'using', 'utc_date', 'utc_time', 'utc_timestamp', 'values', 'varbinary', 'varchar', 'varcharacter', 'varying', 'when', 'where', 'while', 'with', 'write', 'xor', 'year_month', 'zerofill'];
 
         for ($i = 0; $i < count($this->reserved); ++$i) {
             $this->reserved[$i] = strtoupper($this->reserved[$i]);

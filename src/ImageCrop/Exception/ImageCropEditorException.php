@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\ImageCrop\Exception;
 
-use Exception;
-
-class ImageCropEditorException extends Exception
+class ImageCropEditorException extends \Exception
 {
 }

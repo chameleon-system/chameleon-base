@@ -20,7 +20,7 @@ interface UrlNormalizerInterface
     /**
      * Runs this normalizer and returns the normalized URL.
      *
-     * @param string $url    the URL to be normalized
+     * @param string $url the URL to be normalized
      * @param string $spacer character that is used to replace certain special characters (depending on the implementation)
      *
      * @return string The normalized URL

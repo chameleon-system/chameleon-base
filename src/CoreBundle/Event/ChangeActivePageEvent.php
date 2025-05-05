@@ -3,21 +3,20 @@
 namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use TCMSActivePage;
 
 class ChangeActivePageEvent extends Event
 {
     /**
-     * @var TCMSActivePage
+     * @var \TCMSActivePage
      */
     private $newActivePage;
     /**
-     * @var TCMSActivePage|null
+     * @var \TCMSActivePage|null
      */
     private $oldActivePage;
 
     /**
-     * @return TCMSActivePage
+     * @return \TCMSActivePage
      */
     public function getNewActivePage()
     {
@@ -25,18 +24,14 @@ class ChangeActivePageEvent extends Event
     }
 
     /**
-     * @return TCMSActivePage|null
+     * @return \TCMSActivePage|null
      */
     public function getOldActivePage()
     {
         return $this->oldActivePage;
     }
 
-    /**
-     * @param TCMSActivePage      $newActivePage
-     * @param TCMSActivePage|null $oldActivePage
-     */
-    public function __construct(TCMSActivePage $newActivePage, TCMSActivePage $oldActivePage = null)
+    public function __construct(\TCMSActivePage $newActivePage, ?\TCMSActivePage $oldActivePage = null)
     {
         $this->newActivePage = $newActivePage;
         $this->oldActivePage = $oldActivePage;

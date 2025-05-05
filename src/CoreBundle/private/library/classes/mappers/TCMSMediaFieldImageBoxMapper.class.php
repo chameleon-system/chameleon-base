@@ -11,9 +11,9 @@
 
 use ChameleonSystem\CoreBundle\Interfaces\MediaManagerUrlGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
 {
@@ -27,11 +27,7 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
      */
     private $mediaManagerUrlGenerator;
 
-    /**
-     * @param UrlUtil|null                           $urlUtil
-     * @param MediaManagerUrlGeneratorInterface|null $mediaManagerUrlGenerator
-     */
-    public function __construct(UrlUtil $urlUtil = null, MediaManagerUrlGeneratorInterface $mediaManagerUrlGenerator = null)
+    public function __construct(?UrlUtil $urlUtil = null, ?MediaManagerUrlGeneratorInterface $mediaManagerUrlGenerator = null)
     {
         if (null === $urlUtil) {
             $this->urlUtil = ServiceLocator::get('chameleon_system_core.util.url');
@@ -81,8 +77,8 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
      * renders one image slot.
      *
      * @param TCMSImage $oImage
-     * @param int       $position
-     * @param bool      $bReadOnly - set to true to disable the action buttons
+     * @param int $position
+     * @param bool $bReadOnly - set to true to disable the action buttons
      * @param string $sFieldName
      * @param string $sTableId
      * @param string $sRecordId
@@ -92,7 +88,7 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
     protected function GetImageBox($oImage, $position, $bReadOnly, $sFieldName, $sTableId, $sRecordId)
     {
         $bImageIsSet = false;
-        $aImageData = array();
+        $aImageData = [];
         $aImageData['sDeleteVisibleType'] = 'hidden';
         $aImageData['sImageURL'] = $oImage->GetFullURL();
         $aImageData['sThumbImageURL'] = '';
@@ -122,19 +118,19 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
         $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('parent._SetImage', false, $sFieldName, $sTableId, $sRecordId, $position);
         $js = "
             var width = $(window).width() - 50;
-            saveCMSRegistryEntry('_currentFieldName', '" . TGlobal::OutJS($sFieldName) . "');
-            saveCMSRegistryEntry('_currentPosition', '" . TGlobal::OutJS($position) . "');
+            saveCMSRegistryEntry('_currentFieldName', '".TGlobal::OutJS($sFieldName)."');
+            saveCMSRegistryEntry('_currentPosition', '".TGlobal::OutJS($position)."');
         ";
 
         if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
-            $parentIFrame = $parentField . '_iframe';
-            $extensionUrl = '&parentIFrame=' . $parentIFrame;
-            $js .= "var url = '" . TGlobal::OutJS($url) . TGlobal::OutJS($extensionUrl) . "';
+            $parentIFrame = $parentField.'_iframe';
+            $extensionUrl = '&parentIFrame='.$parentIFrame;
+            $js .= "var url = '".TGlobal::OutJS($url).TGlobal::OutJS($extensionUrl)."';
                     url = url.replace('parent._SetImage', '_SetImage');
-                    saveCMSRegistryEntry('_parentIFrame', '" . TGlobal::OutJS($parentIFrame) . "');
-                    parent.CreateModalIFrameDialogCloseButton(url, width, 0, '" . TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title')) . "');";
+                    saveCMSRegistryEntry('_parentIFrame', '".TGlobal::OutJS($parentIFrame)."');
+                    parent.CreateModalIFrameDialogCloseButton(url, width, 0, '".TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title'))."');";
         } else {
-            $js .= "CreateModalIFrameDialogCloseButton('" . TGlobal::OutJS($url) . "', width, 0, '" . TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title')) . "');";
+            $js .= "CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."', width, 0, '".TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.select_dialog_title'))."');";
         }
 
         return $js;
@@ -158,18 +154,18 @@ class TCMSMediaFieldImageBoxMapper extends AbstractViewMapper
             $oCmsTblConf->LoadFromField('name', 'cms_media');
             $internalCache = $oCmsTblConf;
         }
-        $aParam = array('pagedef' => 'tableeditorPopup', 'id' => $sRecordId, 'tableid' => $oCmsTblConf->id, 'position' => $position);
+        $aParam = ['pagedef' => 'tableeditorPopup', 'id' => $sRecordId, 'tableid' => $oCmsTblConf->id, 'position' => $position];
         $url = $this->urlUtil->getArrayAsUrl($aParam, PATH_CMS_CONTROLLER.'?', '&');
 
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
         $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
-        $js = "var width=$(window).width() - 50;";
+        $js = 'var width=$(window).width() - 50;';
         if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
-            $parentIFrame = $parentField . '_iframe';
+            $parentIFrame = $parentField.'_iframe';
             $js .= "saveCMSRegistryEntry('_parentIFrame','".TGlobal::OutJS($parentIFrame)."');
-                    parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');";
+                    parent.CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');";
         } else {
-            $js .= "CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".\TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');";
+            $js .= "CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0,'".TGlobal::OutJS($this->getTranslator()->trans('chameleon_system_core.field_media.image_details_title'))."');";
         }
 
         return $js;

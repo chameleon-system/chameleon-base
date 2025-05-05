@@ -22,7 +22,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 class DataMappingServiceTest extends TestCase
 {
     use ProphecyTrait;
-    
+
     /**
      * @var DataMappingService
      */
@@ -46,9 +46,10 @@ class DataMappingServiceTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderTransformData
      */
-    public function it_should_transform_data($mockSourceData, $mockMappedData, $expectedResponse, $expectedCacheTrigger)
+    public function itShouldTransformData($mockSourceData, $mockMappedData, $expectedResponse, $expectedCacheTrigger)
     {
         $this->given_a_mock_helper_factory($mockSourceData, $mockMappedData, $expectedCacheTrigger);
         $this->given_a_new_data_mapping_service_with_source_data($mockSourceData);
@@ -60,14 +61,14 @@ class DataMappingServiceTest extends TestCase
 
     public function dataProviderTransformData()
     {
-        return array(
-            array(
-                array('source' => 'somevalue'), // $mockSourceData,
-                array('mapperitemkey' => 'mapperitemvalue'), // $mockMappedData,
-                array('mapperitemkey' => 'mapperitemvalue'), // $expectedResponse,
-                array(array('table' => 'sometable', 'id' => '1234')), // $expectedCacheTrigger
-            ),
-        );
+        return [
+            [
+                ['source' => 'somevalue'], // $mockSourceData,
+                ['mapperitemkey' => 'mapperitemvalue'], // $mockMappedData,
+                ['mapperitemkey' => 'mapperitemvalue'], // $expectedResponse,
+                [['table' => 'sometable', 'id' => '1234']], // $expectedCacheTrigger
+            ],
+        ];
     }
 
     private function given_a_new_data_mapping_service_with_source_data($mockSourceData)

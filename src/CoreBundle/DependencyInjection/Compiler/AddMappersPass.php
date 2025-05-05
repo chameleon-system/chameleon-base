@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\DependencyInjection\Compiler;
 
-use IViewMapper;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -31,7 +30,7 @@ class AddMappersPass implements CompilerPassInterface
 
         foreach (\array_keys($mapperServiceIds) as $mapperId) {
             $mapperDefinition = $container->getDefinition($mapperId);
-            if (false === \is_subclass_of($mapperDefinition->getClass(), IViewMapper::class)) {
+            if (false === \is_subclass_of($mapperDefinition->getClass(), \IViewMapper::class)) {
                 throw new \LogicException('Chameleon mappers must implement IViewMapper. This one doesn\'t: '.$mapperId);
             }
 

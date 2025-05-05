@@ -22,8 +22,6 @@ use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploadedFileD
 interface SaveToMediaLibraryServiceInterface
 {
     /**
-     * @param UploadedFileDataModel $uploadedFile
-     *
      * @return UploadedFileDataModel
      */
     public function saveUploadedFile(UploadedFileDataModel $uploadedFile);

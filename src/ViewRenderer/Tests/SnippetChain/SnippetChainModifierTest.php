@@ -3,8 +3,8 @@
 namespace ChameleonSystem\ViewRendererBundle\Tests\Library\SnippetChain;
 
 use ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifier;
-use PHPUnit\Framework\TestCase;
 use ChameleonSystem\ViewRenderer\SnippetChain\SnippetChainModifierDataAccessInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -37,9 +37,6 @@ class SnippetChainModifierTest extends TestCase
      *
      * @param string $pathToAdd
      * @param string $afterThisPath
-     * @param array  $toTheseThemes
-     * @param array  $existingThemes
-     * @param array  $expectedResult
      */
     public function testAddToSnippetChain($pathToAdd, $afterThisPath, array $toTheseThemes, array $existingThemes, array $expectedResult)
     {
@@ -48,9 +45,6 @@ class SnippetChainModifierTest extends TestCase
         $this->thenTheModifiedSnippetChainsShouldBePersisted($expectedResult);
     }
 
-    /**
-     * @param array $existingThemes
-     */
     private function givenASnippetChainModifier(array $toTheseThemes, array $existingThemes, array $expectedResult)
     {
         $this->dataAccessMock = $this->prophesize(SnippetChainModifierDataAccessInterface::class);
@@ -68,7 +62,7 @@ class SnippetChainModifierTest extends TestCase
     /**
      * @param string $pathToAdd
      * @param string $afterThisPath
-     * @param array  $toTheseThemes
+     * @param array $toTheseThemes
      */
     private function whenICallAddToSnippetChain($pathToAdd, $afterThisPath, $toTheseThemes)
     {
@@ -211,9 +205,6 @@ class SnippetChainModifierTest extends TestCase
      * @dataProvider getDataForTestRemoveFromSnippetChain
      *
      * @param string $pathToRemove
-     * @param array  $fromTheseThemes
-     * @param array  $existingThemes
-     * @param array  $expectedResult
      */
     public function testRemoveFromSnippetChain($pathToRemove, array $fromTheseThemes, array $existingThemes, array $expectedResult)
     {
@@ -224,7 +215,7 @@ class SnippetChainModifierTest extends TestCase
 
     /**
      * @param string $pathToRemove
-     * @param array  $fromTheseThemes
+     * @param array $fromTheseThemes
      */
     private function whenICallRemoveFromSnippetChain($pathToRemove, $fromTheseThemes)
     {

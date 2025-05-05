@@ -21,7 +21,7 @@ class MediaItemChainUsageFinder
     /**
      * @var MediaItemUsageFinderInterface[]
      */
-    private $finders = array();
+    private $finders = [];
 
     /**
      * @return void
@@ -32,15 +32,13 @@ class MediaItemChainUsageFinder
     }
 
     /**
-     * @param MediaItemDataModel $mediaItem
-     *
      * @return MediaItemUsageDataModel[]
      *
      * @throws UsageFinderException
      */
     public function findUsages(MediaItemDataModel $mediaItem)
     {
-        $usages = array();
+        $usages = [];
         foreach ($this->finders as $finder) {
             $usages = array_merge($usages, $finder->findUsages($mediaItem));
         }

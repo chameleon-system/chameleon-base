@@ -41,10 +41,10 @@ class TPkgExtranetMapper_AddressSelector extends AbstractPkgExtranetMapper_Addre
             $isActiveBillingAddress = ($oUserForAddress->fieldDefaultBillingAddressId === $oAddress->id);
             $isActiveShippingAddress = ($oUserForAddress->fieldDefaultShippingAddressId === $oAddress->id);
             $oVisitor->SetMappedValueFromArray(
-                array(
+                [
                     'isActiveBillingAddress' => $isActiveBillingAddress,
                     'isActiveShippingAddress' => $isActiveShippingAddress,
-                )
+                ]
             );
         }
 
@@ -85,6 +85,6 @@ class TPkgExtranetMapper_AddressSelector extends AbstractPkgExtranetMapper_Addre
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

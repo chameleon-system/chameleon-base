@@ -81,6 +81,7 @@ class FieldSidebarConnected extends \TCMSFieldVarchar
 
     /**
      * {@inheritDoc}
+     *
      * @return void
      */
     public function DeleteFieldDefinition()

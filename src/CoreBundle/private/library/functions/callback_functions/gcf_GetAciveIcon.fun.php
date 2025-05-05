@@ -12,8 +12,8 @@
 function gcf_GetAciveIcon($value, $row)
 {
     if ('1' == $value) {
-        return '<i class="fas fa-check-circle text-success" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.yes')).'"></i>';
+        return '<i class="fas fa-check-circle text-success" title="'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.yes')).'"></i>';
     }
 
-    return '<i class="fas fa-times-circle text-danger" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.no')).'"></i>';
+    return '<i class="fas fa-times-circle text-danger" title="'.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_boolean.no')).'"></i>';
 }

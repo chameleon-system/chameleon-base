@@ -19,9 +19,6 @@ class MTUpdateRecorder extends AbstractViewMapper
      */
     private $migrationRecorderStateHandler;
 
-    /**
-     * @param MigrationRecorderStateHandler $migrationRecorderStateHandler
-     */
     public function __construct(MigrationRecorderStateHandler $migrationRecorderStateHandler)
     {
         $this->migrationRecorderStateHandler = $migrationRecorderStateHandler;

@@ -3,7 +3,6 @@
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
 use ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -11,19 +10,17 @@ class PkgCmsChangelogSet
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - Change date */
-        private ?DateTime $modifyDate = new DateTime(),
+        /** @var \DateTime|null - Change date */
+        private ?\DateTime $modifyDate = new \DateTime(),
         // TCMSFieldCMSUser
         /** @var CmsUser|null - User who made the change */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldExtendedLookup
         /** @var CmsTblConf|null - The main table that was changed */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldVarchar
         /** @var string - ID of the changed data record */
         private string $modifiedId = '',
@@ -64,18 +61,17 @@ class PkgCmsChangelogSet
     }
 
     // TCMSFieldDateTimeNow
-    public function getModifyDate(): ?DateTime
+    public function getModifyDate(): ?\DateTime
     {
         return $this->modifyDate;
     }
 
-    public function setModifyDate(?DateTime $modifyDate): self
+    public function setModifyDate(?\DateTime $modifyDate): self
     {
         $this->modifyDate = $modifyDate;
 
         return $this;
     }
-
 
     // TCMSFieldCMSUser
     public function getCmsUser(): ?CmsUser
@@ -90,7 +86,6 @@ class PkgCmsChangelogSet
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getCmsTblConf(): ?CmsTblConf
     {
@@ -103,7 +98,6 @@ class PkgCmsChangelogSet
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getModifiedId(): string
@@ -118,7 +112,6 @@ class PkgCmsChangelogSet
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getModifiedName(): string
     {
@@ -132,7 +125,6 @@ class PkgCmsChangelogSet
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getChangeType(): string
     {
@@ -145,8 +137,6 @@ class PkgCmsChangelogSet
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -179,6 +169,4 @@ class PkgCmsChangelogSet
 
         return $this;
     }
-
-
 }

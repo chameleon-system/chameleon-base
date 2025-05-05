@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\DependencyInjection;
 
-use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\Interfaces\FieldExtensionInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
@@ -35,11 +34,11 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
         $config = $this->processConfiguration(new Configuration(), $config);
 
         // get standard configs
-        $aConfigDirs = array(
+        $aConfigDirs = [
             PATH_CORE_CONFIG,
             _CMS_CUSTOM_CORE.'/config/',
             _CMS_CUSTOMER_CORE.'/../config/',
-        );
+        ];
         foreach ($aConfigDirs as $sConfigDir) {
             $this->loadConfigFile($container, $sConfigDir, 'services.xml');
             $this->loadConfigFile($container, $sConfigDir, 'mail.xml');
@@ -66,7 +65,7 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
         $this->addResources($container);
 
         $this->configureResourceCollectorService($config['resource_collection'], $container);
-        
+
         $container->registerForAutoconfiguration(FieldExtensionInterface::class)->addTag('chameleon_system_core.field_extension');
     }
 
@@ -116,7 +115,7 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
     private function addCronjobConfig(array $cronjobConfig, ContainerBuilder $container): void
     {
         $backendAccessCheckDefinition = $container->getDefinition('chameleon_system_core.security.backend_access_check');
-        $backendAccessCheckDefinition->addMethodCall('unrestrictPagedef', array('runcrons', $cronjobConfig['ip_whitelist']));
+        $backendAccessCheckDefinition->addMethodCall('unrestrictPagedef', ['runcrons', $cronjobConfig['ip_whitelist']]);
 
         $failOnErrorLevel = $cronjobConfig['fail_on_error_level'];
         if (-1 === $failOnErrorLevel) {
@@ -182,9 +181,9 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
         }
         $mailerDefinition = $container->getDefinition('chameleon_system_core.mailer');
 
-        $mailerDefinition->addMethodCall('setSmtpHost', array($mailerConfig['host']));
-        $mailerDefinition->addMethodCall('setSmtpUser', array($mailerConfig['user']));
-        $mailerDefinition->addMethodCall('setSmtpPassword', array($mailerConfig['password']));
+        $mailerDefinition->addMethodCall('setSmtpHost', [$mailerConfig['host']]);
+        $mailerDefinition->addMethodCall('setSmtpUser', [$mailerConfig['user']]);
+        $mailerDefinition->addMethodCall('setSmtpPassword', [$mailerConfig['password']]);
 
         if ('permissive' === $mailerConfig['peer_security']) {
             $security = 'chameleon_system_core.security.mail.permissive_mail_peer_security';
@@ -204,9 +203,6 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
     }
 
     /**
-     * @param array            $googleApiConfig
-     * @param ContainerBuilder $container
-     *
      * @return void
      */
     private function addGoogleApiConfig(array $googleApiConfig, ContainerBuilder $container)
@@ -228,9 +224,6 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
     }
 
     /**
-     * @param array            $moduleExecutionConfig
-     * @param ContainerBuilder $container
-     *
      * @return void
      */
     private function addModuleExecutionConfig(array $moduleExecutionConfig, ContainerBuilder $container)
@@ -240,8 +233,6 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
     }
 
     /**
-     * @param ContainerBuilder $container
-     *
      * @return void
      */
     private function addResources(ContainerBuilder $container)
@@ -294,8 +285,8 @@ class ChameleonSystemCoreExtension extends Extension implements PrependExtension
             'dbal' => [
                 'options' => [
                     \PDO::ATTR_STRINGIFY_FETCHES => true,
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

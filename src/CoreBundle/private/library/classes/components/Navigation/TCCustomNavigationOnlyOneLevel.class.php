@@ -11,7 +11,7 @@
 
 /**
  * show only the root nodes of the navi.
-/**/
+ * /**/
 class TCCustomNavigationOnlyOneLevel extends TCCustomNavigation
 {
     /**

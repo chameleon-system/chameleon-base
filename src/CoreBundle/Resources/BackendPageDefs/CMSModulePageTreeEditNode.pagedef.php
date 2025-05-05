@@ -1,4 +1,4 @@
 <?php
 
 $layoutTemplate = 'JSON';
-$moduleList = array('module' => array('model' => 'CMSModuleTreeNodeEdit', 'view' => 'standard'));
+$moduleList = ['module' => ['model' => 'CMSModuleTreeNodeEdit', 'view' => 'standard']];

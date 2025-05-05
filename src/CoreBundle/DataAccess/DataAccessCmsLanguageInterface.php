@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
-use TdbCmsLanguage;
-
 interface DataAccessCmsLanguageInterface
 {
     /**
@@ -23,7 +21,7 @@ interface DataAccessCmsLanguageInterface
      * @param string $id
      * @param string $targetLanguageId
      *
-     * @return TdbCmsLanguage|null
+     * @return \TdbCmsLanguage|null
      */
     public function getLanguage($id, $targetLanguageId);
 
@@ -45,7 +43,7 @@ interface DataAccessCmsLanguageInterface
      * @param string $isoCode
      * @param string $targetLanguageId
      *
-     * @return TdbCmsLanguage|null
+     * @return \TdbCmsLanguage|null
      */
     public function getLanguageFromIsoCode($isoCode, $targetLanguageId);
 }

@@ -11,23 +11,23 @@
 
 /**
  * this class can manage rss feeds and output them in different formats.
-/**/
+ * /**/
 class TCMSRssHandler
 {
     /**
      * @var string rss/atom
      */
     protected $sFeedType = 'rss';
-    protected $aItems = array();
+    protected $aItems = [];
     public $sFeedTitle = '';
     public $sFeedSubtitle = '';
-    protected $aFeedLinks = array();
-    protected $aFeedAuthors = array();
+    protected $aFeedLinks = [];
+    protected $aFeedAuthors = [];
     public $sFeedDescription = '';
     public $sFeedHeadlineImageURL = '';
     public $sFeedId = '';
     public $sFeedUpdated = '';
-    protected $aItemMapping = array('name' => 'title');
+    protected $aItemMapping = ['name' => 'title'];
 
     /**
      * set a title for the feed.
@@ -72,7 +72,7 @@ class TCMSRssHandler
      */
     public function AddLink($sURL, $sRel = 'alternate', $sType = 'text/html')
     {
-        $aLink = array('rel' => $sRel, 'type' => $sType, 'href' => $sURL, 'url');
+        $aLink = ['rel' => $sRel, 'type' => $sType, 'href' => $sURL, 'url'];
         $this->aFeedLinks[] = $aLink;
     }
 
@@ -84,7 +84,7 @@ class TCMSRssHandler
      */
     public function AddAuthor($sName, $sEmail = '')
     {
-        $aAuthor = array('name' => $sName, 'email' => $sEmail);
+        $aAuthor = ['name' => $sName, 'email' => $sEmail];
         $this->aFeedAuthors[] = $aAuthor;
     }
 
@@ -112,7 +112,7 @@ class TCMSRssHandler
     public function AddItem($aItem)
     {
         if ($aItem && is_array($aItem)) {
-            $aNewItem = array();
+            $aNewItem = [];
             $aMapping = $this->GetItemMapping();
             foreach ($aItem as $sItemName => $sItemValue) {
                 if (array_key_exists($sItemName, $aMapping)) {
@@ -148,10 +148,7 @@ class TCMSRssHandler
     }
 
     /**
-     * @param mixed  $mValue
      * @param string $sType
-     *
-     * @return mixed
      */
     public function EscapeFeedData($mValue, $sType = 'text')
     {
@@ -174,7 +171,7 @@ class TCMSRssHandler
     {
         $this->sFeedType = 'atom';
         $oSimpleXMLElement = new SimpleXMLElement('<?xml version="1.0"  encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"></feed>');
-        //$namespaces = $oSimpleXMLElement->getNamespaces(true);
+        // $namespaces = $oSimpleXMLElement->getNamespaces(true);
 
         if (!empty($this->sFeedTitle)) {
             $oSimpleXMLElement->addChild('title', $this->EscapeFeedData($this->sFeedTitle, 'text'));
@@ -241,7 +238,7 @@ class TCMSRssHandler
         $this->sFeedType = 'rss';
         $oSimpleXMLElement = new SimpleXMLElement('<?xml version="1.0"  encoding="UTF-8"?><rss version="2.0"></rss>');
         $oChannel = $oSimpleXMLElement->addChild('channel');
-        //$namespaces = $oSimpleXMLElement->getNamespaces(true);
+        // $namespaces = $oSimpleXMLElement->getNamespaces(true);
 
         if (!empty($this->sFeedTitle)) {
             $oChannel->addChild('title', $this->EscapeFeedData($this->sFeedTitle, 'text'));

@@ -8,12 +8,11 @@ class CmsIpWhitelist
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsConfig|null - Belongs to cms settings */
-        private ?CmsConfig $cmsConfig = null
-        ,
+        private ?CmsConfig $cmsConfig = null,
         // TCMSFieldVarchar
         /** @var string - IP */
         private string $ip = ''
@@ -57,7 +56,6 @@ class CmsIpWhitelist
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIp(): string
     {
@@ -70,6 +68,4 @@ class CmsIpWhitelist
 
         return $this;
     }
-
-
 }

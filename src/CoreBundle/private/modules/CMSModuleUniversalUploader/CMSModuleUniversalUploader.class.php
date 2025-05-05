@@ -12,11 +12,11 @@
 use ChameleonSystem\CoreBundle\UniversalUploader\Interfaces\UploaderPluginIntegrationServiceInterface;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderParameterServiceInterface;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
 class CMSModuleUniversalUploader extends TCMSModelBase
 {
@@ -25,7 +25,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
      *
      * @var TCMSTableEditorManager
      */
-    protected $oTableEditorManager = null;
+    protected $oTableEditorManager;
 
     /**
      * pass config params to view.
@@ -54,10 +54,10 @@ class CMSModuleUniversalUploader extends TCMSModelBase
 
             $this->data['hiddenFields'] = $this->getHiddenFields($parameterBag);
             $this->data['parameterBag'] = $parameterBag;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->data['hasError'] = true;
-            if ($e instanceof \ChameleonSystem\CoreBundle\UniversalUploader\Exception\InvalidParameterValueException) {
-                $this->data['errorMessage'] = $this->getTranslator()->trans('chameleon_system_core.cms_module_universal_uploader.invalid_parameter', array(), \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND);
+            if ($e instanceof ChameleonSystem\CoreBundle\UniversalUploader\Exception\InvalidParameterValueException) {
+                $this->data['errorMessage'] = $this->getTranslator()->trans('chameleon_system_core.cms_module_universal_uploader.invalid_parameter', [], ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND);
             } else {
                 $this->data['errorMessage'] = $e->getMessage();
             }
@@ -68,7 +68,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
 
     private function getUploaderConfiguration()
     {
-        $configuration = new \ChameleonSystem\CoreBundle\UniversalUploader\Bridge\Chameleon\UploaderConfiguration(TdbCmsConfig::GetInstance());
+        $configuration = new ChameleonSystem\CoreBundle\UniversalUploader\Bridge\Chameleon\UploaderConfiguration(TdbCmsConfig::GetInstance());
 
         return $configuration;
     }
@@ -78,7 +78,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
      */
     private function getUploaderFormAction()
     {
-        return PATH_CMS_CONTROLLER; //we add all the parameters like pagedef as hidden input fields because form is sent via post
+        return PATH_CMS_CONTROLLER; // we add all the parameters like pagedef as hidden input fields because form is sent via post
     }
 
     private function getUploadUrl()
@@ -91,7 +91,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
      */
     private function getRouter()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('router');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('router');
     }
 
     /**
@@ -99,7 +99,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
      */
     private function getUploaderParameterService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.universal_uploader.uploader_parameter_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.universal_uploader.uploader_parameter_service');
     }
 
     /**
@@ -117,16 +117,16 @@ class CMSModuleUniversalUploader extends TCMSModelBase
      */
     private function getHiddenFields($parameterBag)
     {
-        $hiddenFields = array();
-        $parameters = $parameterBag->getAsArray(array('sUploadName', 'sUploadDescription'));
+        $hiddenFields = [];
+        $parameters = $parameterBag->getAsArray(['sUploadName', 'sUploadDescription']);
         foreach ($parameters as $parameterName => $parameterValue) {
             if (false === is_array($parameterValue) && false === is_object($parameterValue) && null !== $parameterValue) {
-                $hiddenFields[] = array('name' => $parameterName, 'value' => $parameterValue);
+                $hiddenFields[] = ['name' => $parameterName, 'value' => $parameterValue];
             }
         }
 
-        $hiddenFields[] = array('name' => 'pagedef', 'value' => 'CMSUniversalUploader');
-        $hiddenFields[] = array('name' => '_pagedefType', 'value' => $this->getPagedefType());
+        $hiddenFields[] = ['name' => 'pagedef', 'value' => 'CMSUniversalUploader'];
+        $hiddenFields[] = ['name' => '_pagedefType', 'value' => $this->getPagedefType()];
 
         return $hiddenFields;
     }
@@ -147,7 +147,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
         /**
          * @var RequestStack $requestStack
          */
-        $requestStack = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack');
+        $requestStack = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack');
 
         return $requestStack->getCurrentRequest();
     }
@@ -156,7 +156,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
     {
         parent::DefineInterface();
 
-        $externalFunctions = array('GetDownloadHTML');
+        $externalFunctions = ['GetDownloadHTML'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -175,7 +175,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
      */
     private function getPluginIntegrationService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.universal_uploader.plugin_integration_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.universal_uploader.plugin_integration_service');
     }
 
     /**
@@ -183,12 +183,12 @@ class CMSModuleUniversalUploader extends TCMSModelBase
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -205,7 +205,7 @@ class CMSModuleUniversalUploader extends TCMSModelBase
         $sDocumentID = $this->global->GetUserData('documentID');
         if (!empty($sDocumentID) && 'undefined' != $sDocumentID && !is_null($sDocumentID)) {
             $oRecord = new TCMSDownloadFile();
-            /** @var $oRecord TCMSDownloadFile* */
+            /* @var $oRecord TCMSDownloadFile* */
             $oRecord->table = 'cms_document';
             $oRecord->Load($this->global->GetUserData('documentID'));
             $returnVal = $oRecord->getDownloadHtmlTag();

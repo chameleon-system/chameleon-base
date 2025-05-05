@@ -18,10 +18,10 @@ class TCMSTextFieldEndPointTest extends TestCase
     /**
      * @var TCMSTextFieldEndPoint
      */
-    protected $oCmsTextFieldEndPoint = null;
+    protected $oCmsTextFieldEndPoint;
 
     /** @var ReflectionMethod */
-    protected $_GetDownloadSpans = null;
+    protected $_GetDownloadSpans;
 
     public function setUp(): void
     {
@@ -39,91 +39,91 @@ class TCMSTextFieldEndPointTest extends TestCase
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar');
 
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     public function testNoDownloadSpansPresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar<span>baz</span>bar');
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     public function testOneDownloadSpanWithWrongAttributePresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar<span class="cmsdocument">baz</span>bar');
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     public function testOneDownloadSpanPresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar<span class="cmsdocument_">baz</span>bar');
-        $this->assertEquals(array('<span class="cmsdocument_">baz</span>'), $result);
+        $this->assertEquals(['<span class="cmsdocument_">baz</span>'], $result);
     }
 
     public function testTwoDownloadSpanPresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar<span class="cmsdocument_">baz</span>bar<span class="cmsdocument_">foo</span>baz');
-        $this->assertEquals(array('<span class="cmsdocument_">baz</span>', '<span class="cmsdocument_">foo</span>'), $result);
+        $this->assertEquals(['<span class="cmsdocument_">baz</span>', '<span class="cmsdocument_">foo</span>'], $result);
     }
 
     public function testNestedSpanPresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar<span class="cmsdocument_"><span>baz</span></span>bar');
-        $this->assertEquals(array('<span class="cmsdocument_"><span>baz</span></span>'), $result);
+        $this->assertEquals(['<span class="cmsdocument_"><span>baz</span></span>'], $result);
     }
 
     public function testNestedSpanWithAttributePresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar<span class="cmsdocument_"><span class="bar">baz</span></span>bar');
-        $this->assertEquals(array('<span class="cmsdocument_"><span class="bar">baz</span></span>'), $result);
+        $this->assertEquals(['<span class="cmsdocument_"><span class="bar">baz</span></span>'], $result);
     }
 
     public function testTwoNestedSpanPresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar<span class="cmsdocument_"><span><span>foo</span>baz</span></span>bar');
-        $this->assertEquals(array('<span class="cmsdocument_"><span><span>foo</span>baz</span></span>'), $result);
+        $this->assertEquals(['<span class="cmsdocument_"><span><span>foo</span>baz</span></span>'], $result);
     }
 
     public function testUpperCaseDownloadSpanPresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar<SPAN class="cmsdocument_">baz</SPAN>bar');
-        $this->assertEquals(array('<SPAN class="cmsdocument_">baz</SPAN>'), $result);
+        $this->assertEquals(['<SPAN class="cmsdocument_">baz</SPAN>'], $result);
     }
 
     public function testUnicodeCharsPresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, '产品种类<SPAN class="cmsdocument_">品种类</SPAN>bar');
-        $this->assertEquals(array('<SPAN class="cmsdocument_">品种类</SPAN>'), $result);
+        $this->assertEquals(['<SPAN class="cmsdocument_">品种类</SPAN>'], $result);
     }
 
     public function testEmptyLink()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, '产品种类<SPAN class="cmsdocument_"></SPAN>bar');
-        $this->assertEquals(array('<SPAN class="cmsdocument_"></SPAN>'), $result);
+        $this->assertEquals(['<SPAN class="cmsdocument_"></SPAN>'], $result);
     }
 
     public function testEmptyNestedLink()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, '产品种类<SPAN class="cmsdocument_"><span></span></SPAN>bar');
-        $this->assertEquals(array('<SPAN class="cmsdocument_"><span></span></SPAN>'), $result);
+        $this->assertEquals(['<SPAN class="cmsdocument_"><span></span></SPAN>'], $result);
     }
 
     public function testNewLineLink()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, "foo<SPAN class=\"cmsdocument_\">with\nnewline</SPAN>bar");
-        $this->assertEquals(array("<SPAN class=\"cmsdocument_\">with\nnewline</SPAN>"), $result);
+        $this->assertEquals(["<SPAN class=\"cmsdocument_\">with\nnewline</SPAN>"], $result);
     }
 
     public function testBrokenHTMLLink()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foo<SPAN class="cmsdocument_"><span></SPAN>bar<span class="cmsdocument_"></span>');
-        $this->assertEquals(array('<SPAN class="cmsdocument_"><span></SPAN>bar<span class="cmsdocument_"></span>'), $result);
+        $this->assertEquals(['<SPAN class="cmsdocument_"><span></SPAN>bar<span class="cmsdocument_"></span>'], $result);
     }
 
     public function testMassiveHTMLLink()
     {
         $sTestHTML = '';
-        $aExpectedResult = array();
+        $aExpectedResult = [];
         for ($i = 0; $i < 200; ++$i) {
             $sTestHTML .= 'foobar<span class=\"cmsdocument_\">baz</span>bar';
             $aExpectedResult[] = '<span class=\"cmsdocument_\">baz</span>';
@@ -135,13 +135,13 @@ class TCMSTextFieldEndPointTest extends TestCase
     public function testNeverendingHTMLLink()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foo<SPAN class="cmsdocument_"><span></SPAN>bar<span class="cmsdocument_"></span><span>');
-        $this->assertEquals(array('<SPAN class="cmsdocument_"><span></SPAN>bar<span class="cmsdocument_"></span><span>'), $result);
+        $this->assertEquals(['<SPAN class="cmsdocument_"><span></SPAN>bar<span class="cmsdocument_"></span><span>'], $result);
     }
 
     public function testNotClosedLinkAtEndPresent()
     {
         $result = $this->_GetDownloadSpans->invoke($this->oCmsTextFieldEndPoint, 'foobar<span class="cmsdocument_">baz</span>bar<span class="cmsdocument_">foo');
-        $this->assertEquals(array('<span class="cmsdocument_">baz</span>', '<span class="cmsdocument_">foo'), $result);
+        $this->assertEquals(['<span class="cmsdocument_">baz</span>', '<span class="cmsdocument_">foo'], $result);
     }
 
     public function testReplaceMultipleWidthButNotBorderWidth()
@@ -151,7 +151,7 @@ class TCMSTextFieldEndPointTest extends TestCase
         $oMyTextField = new TCMSTextFieldEndPoint();
         $reflectionMethod = new ReflectionMethod('TCMSTextFieldEndPoint', 'removeAllOccurences');
         $reflectionMethod->setAccessible(true);
-        $sResult = $reflectionMethod->invokeArgs($oMyTextField, array($sSubject, 'width'));
+        $sResult = $reflectionMethod->invokeArgs($oMyTextField, [$sSubject, 'width']);
         $this->assertEquals($sExpectedResult, $sResult);
     }
 }

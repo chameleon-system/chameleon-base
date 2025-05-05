@@ -9,11 +9,9 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
-
 /**
  * auto incrementing field.
-/**/
+ * /**/
 class TCMSFieldAutoIncrement extends TCMSFieldNumber
 {
     protected function getDoctrineDataModelXml(string $namespace, $tableNamespaceMapping): string

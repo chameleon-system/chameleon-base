@@ -20,8 +20,7 @@ use ChameleonSystem\MediaManager\MediaManagerListState;
 interface MediaManagerListRequestFactoryInterface
 {
     /**
-     * @param MediaManagerListState $listState
-     * @param string                $languageId
+     * @param string $languageId
      *
      * @return MediaManagerListRequest
      */

@@ -14,11 +14,11 @@ class TDbChangeLogManagerForModules
     /**
      * @var string|null
      */
-    private $className = null;
+    private $className;
     /**
      * @var TdbCmsTplModule
      */
-    private $config = null;
+    private $config;
 
     /**
      * @param string $moduleClassName
@@ -51,18 +51,15 @@ class TDbChangeLogManagerForModules
         return $this->getConfig()->getViewMapperConfig();
     }
 
-    /**
-     * @param ViewMapperConfig $mapperConfig
-     */
     public function updateMapperConfig(ViewMapperConfig $mapperConfig)
     {
         $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
             ->setFields([
                 'view_mapper_config' => $mapperConfig->getAsString(),
             ])
-            ->setWhereEquals(array(
+            ->setWhereEquals([
                 'id' => $this->getConfig()->id,
-            ));
+            ]);
         TCMSLogChange::update(__LINE__, $data);
         $this->config = null;
     }
@@ -86,8 +83,8 @@ class TDbChangeLogManagerForModules
     }
 
     /**
-     * @param string      $mapperChainName
-     * @param string      $newMapper
+     * @param string $mapperChainName
+     * @param string $newMapper
      * @param string|null $positionAfter
      *
      * @throws ErrorException
@@ -115,8 +112,8 @@ class TDbChangeLogManagerForModules
     }
 
     /**
-     * @param string      $oldMapperName
-     * @param string      $newMapperName
+     * @param string $oldMapperName
+     * @param string $newMapperName
      * @param string|null $mapperChainName
      *
      * @throws ErrorException
@@ -133,7 +130,6 @@ class TDbChangeLogManagerForModules
 
     /**
      * @param string $mapperChainName
-     * @param array  $mapperList
      *
      * @throws ErrorException
      */
@@ -164,7 +160,7 @@ class TDbChangeLogManagerForModules
     protected function commitMapperChainConfigurationToDatabase($newMapperChain)
     {
         $query = 'UPDATE `cms_tpl_module` SET `mapper_chain` = :newMapperChain WHERE `id` = :id';
-        $parameter = array('newMapperChain' => $newMapperChain, 'id' => $this->getConfig()->id);
+        $parameter = ['newMapperChain' => $newMapperChain, 'id' => $this->getConfig()->id];
         TCMSLogChange::RunQuery(
             __LINE__,
             $query,

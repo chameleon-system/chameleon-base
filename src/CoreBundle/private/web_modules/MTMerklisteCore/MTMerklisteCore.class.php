@@ -13,8 +13,8 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 
 class MTMerklisteCore extends TUserModelBase
 {
-    const SESSION_STORE_NAME = __CLASS__;
-    protected $aMerklistenItems = array();
+    public const SESSION_STORE_NAME = __CLASS__;
+    protected $aMerklistenItems = [];
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -38,7 +38,7 @@ class MTMerklisteCore extends TUserModelBase
         $oItems = false;
         if (count($this->aMerklistenItems) > 0) {
             $oItems = new TCMSRecordList();
-            /** @var $oItems TCMSRecordList */
+            /* @var $oItems TCMSRecordList */
             $oItems->sTableName = $this->GetItemTableName();
 
             $oItems->sTableObject = 'MTGlobalListItem';
@@ -63,7 +63,7 @@ class MTMerklisteCore extends TUserModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('Add', 'Remove');
+        $externalFunctions = ['Add', 'Remove'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -71,7 +71,7 @@ class MTMerklisteCore extends TUserModelBase
     {
         $itemId = $this->global->GetUserData('item');
         if (!array_key_exists($itemId, $this->aMerklistenItems)) {
-            $this->aMerklistenItems[$itemId] = array('set' => true);
+            $this->aMerklistenItems[$itemId] = ['set' => true];
         }
         $this->SaveListToSession();
     }
@@ -101,9 +101,10 @@ class MTMerklisteCore extends TUserModelBase
     public static function GetListFromSession()
     {
         if (!array_key_exists(self::SESSION_STORE_NAME, $_SESSION)) {
-            $_SESSION[self::SESSION_STORE_NAME] = array();
+            $_SESSION[self::SESSION_STORE_NAME] = [];
         }
-        //$this->aMerklistenItems = $_SESSION[self::SESSION_STORE_NAME];
+
+        // $this->aMerklistenItems = $_SESSION[self::SESSION_STORE_NAME];
         return $_SESSION[self::SESSION_STORE_NAME];
     }
 
@@ -112,6 +113,6 @@ class MTMerklisteCore extends TUserModelBase
      */
     private function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 }

@@ -32,8 +32,6 @@ interface MinifyJsServiceInterface
     /**
      * Set the JavaScript minify integration.
      *
-     * @param MinifyJsIntegrationInterface $minifyJsIntegration
-     *
      * @return void
      */
     public function setMinifierJsIntegration(MinifyJsIntegrationInterface $minifyJsIntegration);

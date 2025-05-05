@@ -19,13 +19,13 @@
  */
 interface IPkgCmsEvent
 {
-    const CONTEXT_CORE = 'core';
-    const CONTEXT_CUSTOM_CORE = 'custom-core';
-    const CONTEXT_CUSTOMER = 'customer';
+    public const CONTEXT_CORE = 'core';
+    public const CONTEXT_CUSTOM_CORE = 'custom-core';
+    public const CONTEXT_CUSTOMER = 'customer';
 
-    const NAME_PRE_OUTPUT_CALLBACK_FUNCTION = 'PreOutputCallbackFunction';
-    const NAME_GET_CUSTOM_FOOTER_DATA = 'getCustomFooterData';
-    const NAME_GET_CUSTOM_HEADER_DATA = 'getCustomHeaderData';
+    public const NAME_PRE_OUTPUT_CALLBACK_FUNCTION = 'PreOutputCallbackFunction';
+    public const NAME_GET_CUSTOM_FOOTER_DATA = 'getCustomFooterData';
+    public const NAME_GET_CUSTOM_HEADER_DATA = 'getCustomHeaderData';
 
     /**
      * @abstract
@@ -38,8 +38,6 @@ interface IPkgCmsEvent
      * @abstract
      *
      * @param object $oSubject -the object that created the event
-     *
-     * @return mixed
      */
     public function SetSubject($oSubject);
 
@@ -85,7 +83,6 @@ interface IPkgCmsEvent
      * @param string $sName
      *
      * @return $this
-     *
      */
     public function SetName($sName);
 
@@ -111,5 +108,5 @@ interface IPkgCmsEvent
      *                      returns a new instance of an event for the defined context.
      *                      the returned instance will be of the type used to call the method. So calling a subclass will return an instance of this subclass
      */
-    public static function GetNewInstance($oSubject, $sContext, $sName, $aData = array());
+    public static function GetNewInstance($oSubject, $sContext, $sName, $aData = []);
 }

@@ -19,7 +19,7 @@ class MTTrackingIVWCore extends TUserCustomModelBase
      *
      * @var TCMSActivePage
      */
-    protected $oActivePage = null;
+    protected $oActivePage;
 
     /**
      * IVW Customer ID.
@@ -155,19 +155,19 @@ class MTTrackingIVWCore extends TUserCustomModelBase
         $oActivePage = self::getMyActivePageService()->getActivePage();
 
         if (!is_array($aClearCacheInfo)) {
-            $aClearCacheInfo = array();
+            $aClearCacheInfo = [];
         }
-        $aAdditionalClearCacheInfo = array(array(
+        $aAdditionalClearCacheInfo = [[
             'table' => 'cms_portal',
-            'id' => $this->getPortalDomainService()->getActivePortal()->id, ),
-            array(
+            'id' => $this->getPortalDomainService()->getActivePortal()->id, ],
+            [
                 'table' => 'cms_division',
                 'id' => $oActivePage->getDivision()->id,
-            ),
-            array(
+            ],
+            [
                 'table' => 'cms_tpl_page',
                 'id' => $oActivePage->id,
-        ), );
+        ], ];
 
         $aClearCacheInfo = array_merge($aClearCacheInfo, $aAdditionalClearCacheInfo);
 
@@ -190,7 +190,7 @@ class MTTrackingIVWCore extends TUserCustomModelBase
      */
     private static function getMyActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -198,6 +198,6 @@ class MTTrackingIVWCore extends TUserCustomModelBase
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

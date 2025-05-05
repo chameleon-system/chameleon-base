@@ -19,16 +19,16 @@ class TPkgCmsBulkSql_SimpleSql implements IPkgCmsBulkSql
     /**
      * the target table name.
      *
-     * @var null|string
+     * @var string|null
      */
-    private $sTableName = null;
+    private $sTableName;
 
     /**
      * list of fields in target table.
      *
      * @var string[]
      */
-    private $aFields = array();
+    private $aFields = [];
 
     /**
      * returns true if the init was ok - else false.

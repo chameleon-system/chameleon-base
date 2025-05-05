@@ -12,12 +12,11 @@
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon;
 
 use ChameleonSystem\ImageCrop\Exception\ImagickException;
-use imageMagick;
 
 /**
  * {@inheritdoc}
  */
-class ImageCropImageMagick extends imageMagick
+class ImageCropImageMagick extends \imageMagick
 {
     /**
      * @param int $width
@@ -56,9 +55,9 @@ class ImageCropImageMagick extends imageMagick
      * @param int $xPos
      * @param int $yPos
      *
-     * @throws ImagickException
-     *
      * @return void
+     *
+     * @throws ImagickException
      */
     protected function cropImageWithCoordinatesUsingImagickExtension($width, $height, $xPos = 0, $yPos = 0)
     {
@@ -81,17 +80,17 @@ class ImageCropImageMagick extends imageMagick
      * @param int $xPos
      * @param int $yPos
      *
-     * @throws ImagickException
-     *
      * @return void
+     *
+     * @throws ImagickException
      */
     protected function cropImageWithCoordinatesUsingImagickViaShellCommand($width, $height, $xPos = 0, $yPos = 0)
     {
         $command = $this->sImageMagickDir.'/convert '.escapeshellarg(
-                $this->oSourceFile->sPath
-            ).' -auto-orient -crop '.escapeshellarg($width.'x'.$height.'+'.$xPos.'+'.$yPos).' +repage '.escapeshellarg(
-                $this->sTempDir.'/'.$this->sTempFileName
-            );
+            $this->oSourceFile->sPath
+        ).' -auto-orient -crop '.escapeshellarg($width.'x'.$height.'+'.$xPos.'+'.$yPos).' +repage '.escapeshellarg(
+            $this->sTempDir.'/'.$this->sTempFileName
+        );
         $command = str_replace('//', '/', $command);
         exec($command, $returnArray, $returnValue);
 

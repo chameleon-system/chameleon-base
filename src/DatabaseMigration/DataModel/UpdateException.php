@@ -11,26 +11,20 @@
 
 namespace ChameleonSystem\DatabaseMigration\DataModel;
 
-use Exception;
-use JsonSerializable;
-
-class UpdateException implements JsonSerializable
+class UpdateException implements \JsonSerializable
 {
     /**
-     * @var Exception
+     * @var \Exception
      */
     private $exception;
 
-    /**
-     * @param Exception $exception
-     */
-    public function __construct(Exception $exception)
+    public function __construct(\Exception $exception)
     {
         $this->exception = $exception;
     }
 
     /**
-     * @return Exception
+     * @return \Exception
      */
     public function getException()
     {
@@ -63,13 +57,13 @@ class UpdateException implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return array(
+        return [
             'class' => get_class($this->exception),
             'message' => $this->exception->getMessage(),
             'code' => $this->exception->getCode(),
             'file' => $this->exception->getFile(),
             'line' => $this->exception->getLine(),
             'trace' => $this->exception->getTrace(),
-        );
+        ];
     }
 }

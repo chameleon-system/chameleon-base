@@ -13,19 +13,19 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 
 class TPkgCmsTextBlock extends TPkgCmsTextBlockAutoParent
 {
-    const VIEW_PATH = 'pkgCmsTextBlock/views/db/TPkgCmsTextBlock';
+    public const VIEW_PATH = 'pkgCmsTextBlock/views/db/TPkgCmsTextBlock';
 
     /**
      * Renders a text block.
      * You can set width of text block by adding "iWidth" to $aCallTimeVars.(default width 600).
      *
-     * @return string
-     *
      * @param string $sViewName
      * @param string $sSubtype
      * @param int[] $aCallTimeVars
+     *
+     * @return string
      */
-    public function Render($sViewName, $sSubtype = 'Customer', $aCallTimeVars = array())
+    public function Render($sViewName, $sSubtype = 'Customer', $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $iWidth = 600;
@@ -43,14 +43,14 @@ class TPkgCmsTextBlock extends TPkgCmsTextBlockAutoParent
     /**
      * return text object for active portal.
      *
-     * @param string      $sSystemName
-     * @param string|null $sPortalId   - uses active portal if null is passed
+     * @param string $sSystemName
+     * @param string|null $sPortalId - uses active portal if null is passed
      *
      * @return TdbPkgCmsTextBlock|null
      */
     public static function GetInstanceFromSystemName($sSystemName, $sPortalId = null)
     {
-        static $aCache = array();
+        static $aCache = [];
         if (array_key_exists($sSystemName, $aCache)) {
             return $aCache[$sSystemName];
         }
@@ -71,9 +71,9 @@ class TPkgCmsTextBlock extends TPkgCmsTextBlockAutoParent
                AND `pkg_cms_text_block`.`systemname` = :systemName
              LIMIT 0,1
                  ';
-        $aRow = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection')->fetchAssociative(
+        $aRow = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection')->fetchAssociative(
             $query,
-            array('portalId' => $sPortalId, 'systemName' => $sSystemName)
+            ['portalId' => $sPortalId, 'systemName' => $sSystemName]
         );
         if (false !== $aRow) {
             $oObject = TdbPkgCmsTextBlock::GetNewInstance($aRow);
@@ -88,6 +88,6 @@ class TPkgCmsTextBlock extends TPkgCmsTextBlockAutoParent
      */
     private static function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

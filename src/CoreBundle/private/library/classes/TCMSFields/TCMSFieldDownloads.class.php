@@ -14,7 +14,7 @@
 /***************************************************************************/
 class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
 {
-    protected $oTableConf = null;
+    protected $oTableConf;
 
     /**
      * view path for frontend.
@@ -28,7 +28,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
         $html = '<input type="hidden" id="'.TGlobalBase::OutHTML($this->name).'" name="'.TGlobalBase::OutHTML($this->name).'" value="'.TGlobalBase::OutHTML($this->data).'" />
       <div>';
 
-        $html .= TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.link.open_document_manager'), "javascript:loadDocumentManager('".$this->recordId."','".$this->oTableConf->id."','".$this->name."');", 'fas fa-file');
+        $html .= TCMSRender::DrawButton(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.link.open_document_manager'), "javascript:loadDocumentManager('".$this->recordId."','".$this->oTableConf->id."','".$this->name."');", 'fas fa-file');
         $html .= '</div>
       <div class="cleardiv">&nbsp;</div>';
 
@@ -76,12 +76,12 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
                                     <i class="far fa-trash-alt mr-2"></i>%s
                                 </button>';
                 $html .= sprintf($deleteButton,
-                    TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.confirm_removal')),
+                    TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.confirm_removal')),
                     TGlobal::OutJS($this->name),
                     TGlobal::OutJS($oDownload->id),
                     TGlobal::OutJS($this->recordId),
                     TGlobal::OutJS($this->oTableConf->id),
-                    TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.remove'))
+                    TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.remove'))
                 );
 
                 $detailsButton = '<button type="button" class="btn info btn-sm" onClick="CreateModalIFrameDialog(\'%s?tableid=%s&pagedef=tableeditorPopup&id=%s\', 0, 0, \'%s\');">
@@ -91,8 +91,8 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
                     TGlobal::OutJS(PATH_CMS_CONTROLLER),
                     TGlobal::OutJS($oDocumentTableConf->id),
                     TGlobal::OutJS($oDownload->id),
-                    TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.document_details')),
-                    TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.document_details'))
+                    TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.document_details')),
+                    TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_download.document_details'))
                 );
 
                 $html .= '</td>';
@@ -165,12 +165,12 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
      */
     protected function GetRecordsConnectedArrayFrontend()
     {
-        $aData = array();
+        $aData = [];
         $sForeignTableName = $this->GetForeignTableNameFrontend();
         $sMLTTableName = $this->GetMLTTableNameFrontend();
         $iCounter = 0;
         if (is_array($this->data) && count($this->data) > 0) {
-            //we assume data was already posted
+            // we assume data was already posted
             foreach ($this->data as $aRow) {
                 $aData[$iCounter] = $aRow;
                 ++$iCounter;
@@ -203,7 +203,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
      */
     protected function GetAdditionalFormFieldsFrontend()
     {
-        return array('name', 'description');
+        return ['name', 'description'];
     }
 
     /**
@@ -259,7 +259,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
                     if (!empty($value['presavedocument']) && array_key_exists('pkgFormUploadedDocumentsByUser', $_SESSION) && is_array($_SESSION['pkgFormUploadedDocumentsByUser']) && in_array($value['presavedocument'], $_SESSION['pkgFormUploadedDocumentsByUser'])
                     ) {
                         $this->data[$key]['id'] = $value['presavedocument'];
-                        $aData = array();
+                        $aData = [];
                         $oDocumentObject = TdbCmsDocument::GetNewInstance($value['presavedocument']);
                         if ($oDocumentObject && false !== $oDocumentObject->sqlData) {
                             $aAllowedFields = $this->GetAdditionalFormFieldsFrontend();
@@ -274,7 +274,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
                         unset($this->data[$key]);
                     }
                 } else {
-                    //upload document already when its valid so user doesn't have to upload it again when something else goes wrong
+                    // upload document already when its valid so user doesn't have to upload it again when something else goes wrong
                     $sNewDocumentId = $this->UploadDocument($key);
                     if ($sNewDocumentId) {
                         $this->data[$key]['id'] = $sNewDocumentId;
@@ -296,14 +296,14 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
     public function UploadDocument($sKey)
     {
         if (is_array($this->data) && array_key_exists($sKey, $this->data)) {
-            $aFileUploadData = array('name' => $_FILES[$this->name.'document']['name'][$sKey], 'type' => 'application/octet-stream', 'tmp_name' => $_FILES[$this->name.'document']['tmp_name'][$sKey], 'error' => 0, 'size' => filesize($_FILES[$this->name.'document']['tmp_name'][$sKey]));
-            $oMediaTableConf = new TCMSTableConf(); /*@var $oMediaTableConf TCMSTableConf*/
+            $aFileUploadData = ['name' => $_FILES[$this->name.'document']['name'][$sKey], 'type' => 'application/octet-stream', 'tmp_name' => $_FILES[$this->name.'document']['tmp_name'][$sKey], 'error' => 0, 'size' => filesize($_FILES[$this->name.'document']['tmp_name'][$sKey])];
+            $oMediaTableConf = new TCMSTableConf(); /* @var $oMediaTableConf TCMSTableConf */
             $oMediaTableConf->LoadFromField('name', 'cms_document');
             $oMediaManagerEditor = new TCMSTableEditorDocument();
             $oMediaManagerEditor->AllowEditByAll(true);
             $oMediaManagerEditor->Init($oMediaTableConf->id);
             $oMediaManagerEditor->SetUploadData($aFileUploadData, true);
-            $aDocument = array('description' => $_FILES[$this->name.'document']['name'][$sKey]);
+            $aDocument = ['description' => $_FILES[$this->name.'document']['name'][$sKey]];
             $aAdditionalFields = $this->GetAdditionalFormFieldsFrontend();
             foreach ($aAdditionalFields as $sFieldName) {
                 if (array_key_exists($sFieldName, $this->data[$sKey])) {
@@ -345,7 +345,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
         $sForeignTableName = $this->GetForeignTableNameFrontend();
         $sMLTTableName = $this->GetMLTTableNameFrontend();
         if (!empty($sForeignTableName)) {
-            $aConnectedRecordIdsToDelete = array();
+            $aConnectedRecordIdsToDelete = [];
             if (!empty($this->oTableRow->id)) {
                 $sSql = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sForeignTableName).'`
                   LEFT JOIN `'.MySqlLegacySupport::getInstance()->real_escape_string($sMLTTableName).'` ON `'.MySqlLegacySupport::getInstance()->real_escape_string($sMLTTableName).'`.`target_id` = `'.MySqlLegacySupport::getInstance()->real_escape_string($sForeignTableName).'`.`id`
@@ -358,7 +358,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
             if (is_array($this->data) && count($this->data) > 0) {
                 foreach ($this->data as $aRow) {
                     $sRecordId = null;
-                    if (array_key_exists('id', $aRow) && TTools::RecordExistsArray($sForeignTableName, array('id' => $aRow['id']))) {
+                    if (array_key_exists('id', $aRow) && TTools::RecordExistsArray($sForeignTableName, ['id' => $aRow['id']])) {
                         unset($aConnectedRecordIdsToDelete[$aRow['id']]);
                         $sRecordId = $aRow['id'];
                     } else {

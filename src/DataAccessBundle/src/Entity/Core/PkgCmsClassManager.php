@@ -9,7 +9,7 @@ class PkgCmsClassManager
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Class names of the virtual entry class */
@@ -66,7 +66,6 @@ class PkgCmsClassManager
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getExitClass(): string
     {
@@ -79,7 +78,6 @@ class PkgCmsClassManager
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getExitClassSubtype(): string
@@ -94,7 +92,6 @@ class PkgCmsClassManager
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getExitClassType(): string
     {
@@ -107,8 +104,6 @@ class PkgCmsClassManager
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -141,6 +136,4 @@ class PkgCmsClassManager
 
         return $this;
     }
-
-
 }

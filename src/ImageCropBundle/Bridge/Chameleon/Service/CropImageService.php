@@ -18,7 +18,6 @@ use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
 use ChameleonSystem\ImageCrop\Interfaces\CropImageServiceInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropDataAccessInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropPresetDataAccessInterface;
-use TCMSImage;
 
 class CropImageService implements CropImageServiceInterface
 {
@@ -37,11 +36,6 @@ class CropImageService implements CropImageServiceInterface
      */
     private $imageCropDataAccess;
 
-    /**
-     * @param CmsMediaDataAccessInterface        $cmsMediaDataAccess
-     * @param ImageCropPresetDataAccessInterface $imageCropPresetDataAccess
-     * @param ImageCropDataAccessInterface       $imageCropDataAccess
-     */
     public function __construct(
         CmsMediaDataAccessInterface $cmsMediaDataAccess,
         ImageCropPresetDataAccessInterface $imageCropPresetDataAccess,
@@ -81,7 +75,7 @@ class CropImageService implements CropImageServiceInterface
             if (false === $fallbackOnNoCrop) {
                 return null;
             }
-            $cmsImage = new TCMSImage($cmsMedia->getId());
+            $cmsImage = new \TCMSImage($cmsMedia->getId());
 
             return new ImageDataModel(
                 $cmsImage->GetForcedSizeThumbnail($preset->getWidth(), $preset->getHeight())->GetFullURL()
@@ -96,7 +90,7 @@ class CropImageService implements CropImageServiceInterface
      */
     public function getCroppedImage(ImageCropDataModel $imageCrop)
     {
-        $image = new TCMSImage($imageCrop->getCmsMedia()->getId());
+        $image = new \TCMSImage($imageCrop->getCmsMedia()->getId());
 
         $targetWidth = $imageCrop->getWidth();
         $targetHeight = $imageCrop->getHeight();

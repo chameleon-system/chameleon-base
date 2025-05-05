@@ -1,5 +1,5 @@
 <?php
-$oLocal = TCMSLocal::GetActive(); /*@var $oLocal TCMSLocal*/
+$oLocal = TCMSLocal::GetActive(); /* @var $oLocal TCMSLocal */
 $oUser = TdbDataExtranetUser::GetInstance();
 $sReportCommentURL = $oComment->GetURLToReportComment($aCallTimeVars['iAktPage'], true);
 $bAllowReportComment = $aCallTimeVars['bAllowReportComment'];
@@ -13,46 +13,46 @@ $oModulePointer = $oGlobal->GetExecutingModulePointer();
     <div class="standard">
         <div class="comment">
             <div class="comment_inner">
-                <div class="commentheader commentheader<?=$oComment->id; ?>">
-                    <div class="time"><?= TGlobal::OutHTML($oLocal->FormatDate($oComment->fieldCreatedTimestamp, 224)); ?>
+                <div class="commentheader commentheader<?php echo $oComment->id; ?>">
+                    <div class="time"><?php echo TGlobal::OutHTML($oLocal->FormatDate($oComment->fieldCreatedTimestamp, 224)); ?>
                         <span></div>
                     <div class="name">
                         <?php
                         $sCommentName = $oCommentUser->fieldFirstname.$oCommentUser->fieldLastname;
-                        if (!empty($oCommentUser->fieldAliasName)) {
-                            echo TGlobal::OutHTML($oCommentUser->fieldAliasName);
-                        } else {
-                            echo TGlobal::OutHTML($sCommentName);
-                        }
-                        ?>
+if (!empty($oCommentUser->fieldAliasName)) {
+    echo TGlobal::OutHTML($oCommentUser->fieldAliasName);
+} else {
+    echo TGlobal::OutHTML($sCommentName);
+}
+?>
                     </div>
                     <?php if (!$oComment->fieldMarkAsDeleted) {
-                            ?>
+                        ?>
                     <?php if ($oComment->fieldMarkAsReported) {
-                                ?>
+                        ?>
                         <div
-                            class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.text.marked_as_inappropriate')); ?></div>
+                            class="notification <?php echo $sCmsIdent; ?>  inapplicable"><?php echo TGlobal::OutHtml(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.text.marked_as_inappropriate')); ?></div>
                         <?php
-                            } else {
-                                ?>
+                    } else {
+                        ?>
                         <div class="comment_inner"
-                             id="'.$sCommentCmsIdent.'"><?= TGlobal::OutHTML($oComment->fieldComment); ?></div>
+                             id="'.$sCommentCmsIdent.'"><?php echo TGlobal::OutHTML($oComment->fieldComment); ?></div>
                         <?php if ($sReportCommentURL && $bAllowReportComment) {
-                                    ?>
-                            <div class="notification <?=$sCmsIdent; ?>"><a
-                                href="<?=$sReportCommentURL; ?>"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.mark_as_inappropriate')); ?></a>
+                            ?>
+                            <div class="notification <?php echo $sCmsIdent; ?>"><a
+                                href="<?php echo $sReportCommentURL; ?>"><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.mark_as_inappropriate')); ?></a>
                             </div>
                             <?php
-                                } ?>
-                        <?php
-                            } ?>
-                    <?php
-                        } else {
-                            ?>
-                    <div
-                        class="notification <?=$sCmsIdent; ?>  inapplicable"><?=TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.text.is_deleted_comment')); ?></div>
-                    <?php
                         } ?>
+                        <?php
+                    } ?>
+                    <?php
+                    } else {
+                        ?>
+                    <div
+                        class="notification <?php echo $sCmsIdent; ?>  inapplicable"><?php echo TGlobal::OutHtml(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.text.is_deleted_comment')); ?></div>
+                    <?php
+                    } ?>
                 </div>
             </div>
         </div>

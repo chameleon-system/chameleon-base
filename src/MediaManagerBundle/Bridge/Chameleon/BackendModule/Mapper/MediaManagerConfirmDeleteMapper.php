@@ -11,19 +11,14 @@
 
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\MediaManager\Exception\DataAccessException;
 use ChameleonSystem\MediaManager\Exception\UsageFinderException;
 use ChameleonSystem\MediaManager\Interfaces\MediaItemDataAccessInterface;
 use ChameleonSystem\MediaManager\MediaItemChainUsageFinder;
 use ChameleonSystem\MediaManager\MediaManagerListState;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use TdbCmsLanguage;
 
-class MediaManagerConfirmDeleteMapper extends AbstractViewMapper
+class MediaManagerConfirmDeleteMapper extends \AbstractViewMapper
 {
     /**
      * @var MediaItemChainUsageFinder
@@ -40,11 +35,6 @@ class MediaManagerConfirmDeleteMapper extends AbstractViewMapper
      */
     private $translator;
 
-    /**
-     * @param MediaItemChainUsageFinder    $mediaItemChainUsageFinder
-     * @param MediaItemDataAccessInterface $mediaItemDataAccess
-     * @param TranslatorInterface          $translator
-     */
     public function __construct(
         MediaItemChainUsageFinder $mediaItemChainUsageFinder,
         MediaItemDataAccessInterface $mediaItemDataAccess,
@@ -58,25 +48,25 @@ class MediaManagerConfirmDeleteMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('mediaItemIds', 'array');
         $oRequirements->NeedsSourceObject('listState', MediaManagerListState::class);
-        $oRequirements->NeedsSourceObject('language', TdbCmsLanguage::class);
+        $oRequirements->NeedsSourceObject('language', \TdbCmsLanguage::class);
     }
 
     /**
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
          * @var MediaManagerListState $listState
          * @var string[] $mediaItemIds
-         * @var TdbCmsLanguage $language
+         * @var \TdbCmsLanguage $language
          */
         $listState = $oVisitor->GetSourceObject('listState');
         $enableUsageSearch = $listState->isDeleteWithUsageSearch();
@@ -92,9 +82,9 @@ class MediaManagerConfirmDeleteMapper extends AbstractViewMapper
             );
         }
 
-        $mediaItemsWithUsages = array();
+        $mediaItemsWithUsages = [];
         foreach ($mediaItems as $mediaItem) {
-            $usages = array();
+            $usages = [];
             if (true === $enableUsageSearch) {
                 try {
                     $usages = $this->mediaItemChainUsageFinder->findUsages($mediaItem);
@@ -105,10 +95,10 @@ class MediaManagerConfirmDeleteMapper extends AbstractViewMapper
                     );
                 }
             }
-            $mediaItemsWithUsages[] = array(
+            $mediaItemsWithUsages[] = [
                 'usages' => $usages,
                 'mediaItem' => $mediaItem,
-            );
+            ];
         }
 
         $oVisitor->SetMappedValue('mediaItems', $mediaItemsWithUsages);

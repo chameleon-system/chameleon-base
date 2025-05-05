@@ -23,19 +23,15 @@ class TPkgViewRendererConfigToLessMapper extends AbstractViewMapper
      */
     private $portalDomainService;
 
-    /**
-     * @param TPkgViewRendererLessCompiler|null $lessCompiler
-     * @param PortalDomainServiceInterface|null $portalDomainService
-     */
-    public function __construct(TPkgViewRendererLessCompiler $lessCompiler = null, PortalDomainServiceInterface $portalDomainService = null)
+    public function __construct(?TPkgViewRendererLessCompiler $lessCompiler = null, ?PortalDomainServiceInterface $portalDomainService = null)
     {
         if (null === $lessCompiler) {
-            $this->lessCompiler = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
+            $this->lessCompiler = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.less_compiler');
         } else {
             $this->lessCompiler = $lessCompiler;
         }
         if (null === $portalDomainService) {
-            $this->portalDomainService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+            $this->portalDomainService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
         } else {
             $this->portalDomainService = $portalDomainService;
         }

@@ -35,13 +35,10 @@ class UrlUtilityServiceTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderAddParameterToUrl
      *
-     * @param $url
-     * @param $parameter
-     * @param $expectedUrl
+     * @dataProvider dataProviderAddParameterToUrl
      */
-    public function it_should_add_parameters_to_a_url($url, $parameter, $expectedUrl)
+    public function itShouldAddParametersToAUrl($url, $parameter, $expectedUrl)
     {
         $this->given_the_url($url);
         $this->given_the_parameters($parameter);
@@ -77,66 +74,66 @@ class UrlUtilityServiceTest extends TestCase
 
     public function dataProviderAddParameterToUrl()
     {
-        return array(
-            array(
+        return [
+            [
                 'http://suer:password@www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar#anchor',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 'http://suer:password@www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar&'.urlencode('param2[newparam]').'=value#anchor',
-            ),
-            array(
+            ],
+            [
                 '//suer:password@www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar#anchor',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 '//suer:password@www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar&'.urlencode('param2[newparam]').'=value#anchor',
-            ),
-            array(
+            ],
+            [
                 'http://:password@www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar#anchor',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 'http://:password@www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar&'.urlencode('param2[newparam]').'=value#anchor',
-            ),
-            array(
+            ],
+            [
                 'http://suer@www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar#anchor',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 'http://suer@www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar&'.urlencode('param2[newparam]').'=value#anchor',
-            ),
-            array(
+            ],
+            [
                 'http://www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar#anchor',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 'http://www.foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar&'.urlencode('param2[newparam]').'=value#anchor',
-            ),
-            array(
+            ],
+            [
                 'http://foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar#anchor',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 'http://foo.bar/my/path?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar&'.urlencode('param2[newparam]').'=value#anchor',
-            ),
+            ],
 
-            array(
+            [
                 'http://foo.bar/?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar#anchor',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 'http://foo.bar/?parameter1=foo&'.urlencode('param2[one]').'=foo&'.urlencode('param2[two]').'=bar&'.urlencode('param2[newparam]').'=value#anchor',
-            ),
+            ],
 
-            array(
+            [
                 'http://suer:password@www.foo.bar/my/path#anchor',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 'http://suer:password@www.foo.bar/my/path?'.urlencode('param2[newparam]').'=value#anchor',
-            ),
+            ],
 
-            array(
+            [
                 'http://suer:password@www.foo.bar/my/path?#anchor',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 'http://suer:password@www.foo.bar/my/path?'.urlencode('param2[newparam]').'=value#anchor',
-            ),
+            ],
 
-            array(
+            [
                 'http://suer:password@www.foo.bar/my/path',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 'http://suer:password@www.foo.bar/my/path?'.urlencode('param2[newparam]').'=value',
-            ),
-            array(
+            ],
+            [
                 '/my/path',
-                array('param2' => array('newparam' => 'value')),
+                ['param2' => ['newparam' => 'value']],
                 '/my/path?'.urlencode('param2[newparam]').'=value',
-            ),
-        );
+            ],
+        ];
     }
 }

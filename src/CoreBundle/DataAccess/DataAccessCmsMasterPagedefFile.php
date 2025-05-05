@@ -4,7 +4,6 @@ namespace ChameleonSystem\CoreBundle\DataAccess;
 
 use ChameleonSystem\CoreBundle\DataModel\CmsMasterPagdef;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use TCMSPageDefinitionFile;
 
 class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterface
 {
@@ -25,7 +24,7 @@ class DataAccessCmsMasterPagedefFile implements DataAccessCmsMasterPagedefInterf
 
     public function get(string $id): ?CmsMasterPagdef
     {
-        $oPageDefinitionFile = new TCMSPageDefinitionFile();
+        $oPageDefinitionFile = new \TCMSPageDefinitionFile();
         $fullPageDefPath = $this->PageDefinitionFile($id);
         $pagePath = substr($fullPageDefPath, 0, -strlen($id.'.pagedef.php'));
 

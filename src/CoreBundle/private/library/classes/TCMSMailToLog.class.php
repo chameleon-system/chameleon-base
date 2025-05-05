@@ -23,13 +23,13 @@ class TCMSMailToLog extends TCMSMail
      *
      * @return bool
      */
-    public function Send($aData = array())
+    public function Send($aData = [])
     {
         $bNeedsToSend = $this->prepareMailData($aData);
         if ($bNeedsToSend) {
-            $aTo = array();
-            $aCc = array();
-            $aBcc = array();
+            $aTo = [];
+            $aCc = [];
+            $aBcc = [];
             foreach ($this->to as $key => $aRecipient) {
                 $aTo[] = $aRecipient[1].'('.$aRecipient[0].')';
             }

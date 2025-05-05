@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\SnippetRendererBundle;
 
-use ChameleonSystem\SnippetRendererBundle\DependencyInjection\Compiler\UnregisterTwigTemplateCacheWarmerPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ChameleonSystemSnippetRendererBundle extends Bundle

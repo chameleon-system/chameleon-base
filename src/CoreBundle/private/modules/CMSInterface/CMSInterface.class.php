@@ -18,13 +18,13 @@ class CMSInterface extends TCMSModelBase
     {
         $oGlobal = TGlobal::instance();
         $iInterfaceId = $oGlobal->GetUserData('iInterfaceId');
-        $this->data['aMessages'] = array();
+        $this->data['aMessages'] = [];
         if ('' != $iInterfaceId) {
             $oInterface = TdbCmsInterfaceManager::GetInterfaceManagerObject($iInterfaceId);
             $oInterface->Init();
             $oInterface->RunImport();
-            $this->data['aMessages'] = $oInterface->GetEventInfos(); //"oh no, my import or export failed!";
-            //else echo "juhuuu! My import or export worked!";
+            $this->data['aMessages'] = $oInterface->GetEventInfos(); // "oh no, my import or export failed!";
+            // else echo "juhuuu! My import or export worked!";
         }
 
         parent::Execute();

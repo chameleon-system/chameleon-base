@@ -17,7 +17,7 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
  * portals assigned to the user.
  *
  * @param TCMSTableConf $oTableConf
- * @param TCMSRecord    $oTableRestriction
+ * @param TCMSRecord $oTableRestriction
  */
 function gcf_GetPortalRestriction($oTableConf, $oTableRestriction)
 {
@@ -25,7 +25,7 @@ function gcf_GetPortalRestriction($oTableConf, $oTableRestriction)
     /** @var SecurityHelperAccess $securityHelper */
     $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
     $portals = $securityHelper->getUser()?->getPortals();
-    $sPortalList = implode(', ', array_map(static fn(string $portalId) => $portalId, array_keys($portals)));
+    $sPortalList = implode(', ', array_map(static fn (string $portalId) => $portalId, array_keys($portals)));
 
     if (!empty($sPortalList)) {
         $sRestriction = "{$oTableRestriction->sqlData['name']} IN (".$sPortalList.')';

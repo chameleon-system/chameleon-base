@@ -13,7 +13,6 @@ namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\DataAccess;
 
 use ChameleonSystem\DatabaseMigration\DataAccess\MigrationDataAccessInterface;
 use Doctrine\DBAL\Connection;
-use TTools;
 
 class MigrationDataAccess implements MigrationDataAccessInterface
 {
@@ -22,9 +21,6 @@ class MigrationDataAccess implements MigrationDataAccessInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -50,7 +46,7 @@ class MigrationDataAccess implements MigrationDataAccessInterface
     public function markMigrationFileAsProcessed($counterId, $buildNumber)
     {
         $this->connection->insert('cms_migration_file', [
-            'id' => TTools::GetUUID(),
+            'id' => \TTools::GetUUID(),
             'cms_migration_counter_id' => $counterId,
             'build_number' => $buildNumber,
         ]);
@@ -76,7 +72,7 @@ class MigrationDataAccess implements MigrationDataAccessInterface
     public function createMigrationCounter($bundleName)
     {
         $this->connection->insert('cms_migration_counter', [
-           'id' => TTools::GetUUID(),
+           'id' => \TTools::GetUUID(),
            'name' => $bundleName,
        ]);
     }

@@ -33,7 +33,7 @@ class TCMSFieldDuration extends TCMSFieldNumber
         $iSeconds = $this->_GetHTMLValue();
         $aFields = $this->IntToField($iSeconds);
         $html = $this->_GetHiddenField();
-        $html .= TGlobal::OutHTML($aFields['hours'].':'.$aFields['minutes'].':'.$aFields['seconds'].' '.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field.time_format'));
+        $html .= TGlobal::OutHTML($aFields['hours'].':'.$aFields['minutes'].':'.$aFields['seconds'].' '.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field.time_format'));
 
         return $html;
     }
@@ -43,8 +43,6 @@ class TCMSFieldDuration extends TCMSFieldNumber
      * to sql format.
      *
      * @param bool $bAsSplittetValues - if set to true the method returns an array with the normalised (empty values filled) value parts
-     *
-     * @return mixed
      */
     public function ConvertPostDataToSQL($bAsSplittetValues = false)
     {
@@ -54,7 +52,7 @@ class TCMSFieldDuration extends TCMSFieldNumber
         $bSecondsPassed = (false !== $this->oTableRow->sqlData && array_key_exists($this->name.'_sec', $this->oTableRow->sqlData) && '' != $this->oTableRow->sqlData[$this->name.'_sec']);
         if (!empty($bHourPassed) && !empty($bMinutesPassed) && !empty($bSecondsPassed)) {
             if ($bAsSplittetValues) {
-                $returnVal = array('hours' => $this->oTableRow->sqlData[$this->name.'_hour'], 'minutes' => $this->oTableRow->sqlData[$this->name.'_min'], 'seconds' => $this->oTableRow->sqlData[$this->name.'_sec']);
+                $returnVal = ['hours' => $this->oTableRow->sqlData[$this->name.'_hour'], 'minutes' => $this->oTableRow->sqlData[$this->name.'_min'], 'seconds' => $this->oTableRow->sqlData[$this->name.'_sec']];
             } else {
                 $returnVal = $this->FieldToInt($this->oTableRow->sqlData[$this->name.'_hour'], $this->oTableRow->sqlData[$this->name.'_min'], $this->oTableRow->sqlData[$this->name.'_sec']);
             }
@@ -110,7 +108,7 @@ class TCMSFieldDuration extends TCMSFieldNumber
      */
     public function IntToField($iSeconds)
     {
-        $aFields = array();
+        $aFields = [];
         if (0 == $iSeconds) {
             $aFields['seconds'] = 0;
             $aFields['hours'] = 0;
@@ -161,7 +159,7 @@ class TCMSFieldDuration extends TCMSFieldNumber
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_DURATION_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_DURATION_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 

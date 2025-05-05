@@ -49,14 +49,10 @@ class DataMappingServiceResponseFactoryTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProvider
      *
-     * @param $responseData
-     * @param $mapperCacheTrigger
-     * @param $cacheTriggerFromSubCalls
-     * @param $expectedCacheTrigger
+     * @dataProvider dataProvider
      */
-    public function it_should_create_a_response($responseData, $mapperCacheTrigger, $cacheTriggerFromSubCalls, $expectedCacheTrigger)
+    public function itShouldCreateAResponse($responseData, $mapperCacheTrigger, $cacheTriggerFromSubCalls, $expectedCacheTrigger)
     {
         $this->given_a_response_factory();
         $this->given_a_mock_mapper_cache_trigger_with($mapperCacheTrigger);
@@ -68,32 +64,32 @@ class DataMappingServiceResponseFactoryTest extends TestCase
 
     public function dataProvider()
     {
-        return array(
-            array(
-                array('item' => 'value'), // responseData
-                array(array('table' => 'tab1', 'id' => '123')), // mapperCacheTrigger
-                array(array('table' => 'tab2', 'id' => '1234')), // $cacheTriggerFromSubCalls
-                array(array('table' => 'tab1', 'id' => '123'), array('table' => 'tab2', 'id' => '1234')), // $expectedCacheTrigger
-            ),
-            array(
-                array('item' => 'value'), // responseData
-                array(array('table' => 'tab1', 'id' => '123')), // mapperCacheTrigger
-                array(), // $cacheTriggerFromSubCalls
-                array(array('table' => 'tab1', 'id' => '123')), // $expectedCacheTrigger
-            ),
-            array(
-                array('item' => 'value'), // responseData
-                array(), // mapperCacheTrigger
-                array(array('table' => 'tab2', 'id' => '1233')), // $cacheTriggerFromSubCalls
-                array(array('table' => 'tab2', 'id' => '1233')), // $expectedCacheTrigger
-            ),
-            array(
-                array('item' => 'value'), // responseData
+        return [
+            [
+                ['item' => 'value'], // responseData
+                [['table' => 'tab1', 'id' => '123']], // mapperCacheTrigger
+                [['table' => 'tab2', 'id' => '1234']], // $cacheTriggerFromSubCalls
+                [['table' => 'tab1', 'id' => '123'], ['table' => 'tab2', 'id' => '1234']], // $expectedCacheTrigger
+            ],
+            [
+                ['item' => 'value'], // responseData
+                [['table' => 'tab1', 'id' => '123']], // mapperCacheTrigger
+                [], // $cacheTriggerFromSubCalls
+                [['table' => 'tab1', 'id' => '123']], // $expectedCacheTrigger
+            ],
+            [
+                ['item' => 'value'], // responseData
+                [], // mapperCacheTrigger
+                [['table' => 'tab2', 'id' => '1233']], // $cacheTriggerFromSubCalls
+                [['table' => 'tab2', 'id' => '1233']], // $expectedCacheTrigger
+            ],
+            [
+                ['item' => 'value'], // responseData
                 null, // mapperCacheTrigger
-                array(array('table' => 'tab2', 'id' => '1233')), // $cacheTriggerFromSubCalls
-                array(array('table' => 'tab2', 'id' => '1233')), // $expectedCacheTrigger
-            ),
-        );
+                [['table' => 'tab2', 'id' => '1233']], // $cacheTriggerFromSubCalls
+                [['table' => 'tab2', 'id' => '1233']], // $expectedCacheTrigger
+            ],
+        ];
     }
 
     private function given_a_response_factory()

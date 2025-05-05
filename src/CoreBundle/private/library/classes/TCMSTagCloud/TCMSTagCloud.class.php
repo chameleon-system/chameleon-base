@@ -11,31 +11,31 @@
 
 /**
  * represents an abstract tag cloud.
-/**/
+ * /**/
 class TCMSTagCloud extends TIterator
 {
-    const QUERY_ITEM_KEY_NAME = 'cmsCloudItemKey';
-    const QUERY_ITEM_COUNT_NAME = 'cmsCloudItemCount';
-    const QUERY_ITEM_SIZE_NAME = 'cmsCloudItemSize';
+    public const QUERY_ITEM_KEY_NAME = 'cmsCloudItemKey';
+    public const QUERY_ITEM_COUNT_NAME = 'cmsCloudItemCount';
+    public const QUERY_ITEM_SIZE_NAME = 'cmsCloudItemSize';
 
     /**
      * return a cloud for the query. make sure the query includes the following:
      * _cloud_hits and any data needed for the data object used for the items.
      *
-     * @param string $sQuery       - must return at least a key for the cloud and a count as well as any other data
-     *                             to use for the sCmsDbClassName object
-     * @param string $sClassName   - class name (must be a decendent of TCMSRecord) for each item
-     * @param array  $aCustomItems - (name=>relative weight) allows you to add custom tags to the list
+     * @param string $sQuery - must return at least a key for the cloud and a count as well as any other data
+     *                       to use for the sCmsDbClassName object
+     * @param string $sClassName - class name (must be a decendent of TCMSRecord) for each item
+     * @param array $aCustomItems - (name=>relative weight) allows you to add custom tags to the list
      *
      * @return TCMSTagCloud
      */
-    public static function GetCloud($sQuery, $sClassName, $aCustomItems = array(), $iMinSize = 100, $iMaxSize = 250)
+    public static function GetCloud($sQuery, $sClassName, $aCustomItems = [], $iMinSize = 100, $iMaxSize = 250)
     {
         $oCloud = new self();
 
-        $aData = array();
+        $aData = [];
         $tRes = MySqlLegacySupport::getInstance()->query($sQuery);
-        $tags = array();
+        $tags = [];
         while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($tRes)) {
             if (!empty($aRow[self::QUERY_ITEM_KEY_NAME])) {
                 $tags[$aRow[self::QUERY_ITEM_KEY_NAME]] = $aRow[self::QUERY_ITEM_COUNT_NAME];
@@ -54,7 +54,7 @@ class TCMSTagCloud extends TIterator
             $spread = 1;
         }
 
-        $step = ($iMaxSize - $iMinSize) / ($spread);
+        $step = ($iMaxSize - $iMinSize) / $spread;
 
         foreach ($tags as $key => $value) {
             $aData[$key][self::QUERY_ITEM_SIZE_NAME] = $iMinSize + (($value - $iMinCount) * $step);
@@ -65,7 +65,7 @@ class TCMSTagCloud extends TIterator
         foreach (array_keys($aCustomItems) as $sCustomWord) {
             $aCustomItems[$sCustomWord] = $iMaxSize * ($aCustomItems[$sCustomWord] / 100);
             if (!array_key_exists($sCustomWord, $aData)) {
-                $aData[$sCustomWord] = array(self::QUERY_ITEM_KEY_NAME => $sCustomWord);
+                $aData[$sCustomWord] = [self::QUERY_ITEM_KEY_NAME => $sCustomWord];
             }
             $aData[$sCustomWord][self::QUERY_ITEM_SIZE_NAME] = $aCustomItems[$sCustomWord];
         }

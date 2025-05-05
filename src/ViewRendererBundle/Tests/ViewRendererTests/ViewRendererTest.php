@@ -19,8 +19,8 @@ class ViewRendererTest extends TestCase
     /**
      * @var ViewRenderer
      */
-    protected $oViewRenderer = null;
-    protected $oTestRenderer = null;
+    protected $oViewRenderer;
+    protected $oTestRenderer;
 
     public function setUp(): void
     {
@@ -49,23 +49,23 @@ class ViewRendererTest extends TestCase
                         return false;
                         break;
                     default:
-                        throw new \InvalidArgumentException('Invalid container parameter requested: '.$value);
+                        throw new InvalidArgumentException('Invalid container parameter requested: '.$value);
                 }
             }));
-        /** @var \Symfony\Component\DependencyInjection\ContainerInterface $container */
+        /* @var \Symfony\Component\DependencyInjection\ContainerInterface $container */
         ServiceLocator::setContainer($container);
     }
 
     public function testRenderNoMappers()
     {
         $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
-        $expected = array('testView', array());
+        $expected = ['testView', []];
         $this->assertEquals($expected, $result);
     }
 
     public function testOneMapper()
     {
-        $this->oViewRenderer->AddMappers(array(new ArticleToTitleMapper()));
+        $this->oViewRenderer->AddMappers([new ArticleToTitleMapper()]);
         $this->oViewRenderer->AddSourceObject('article', new Article());
         $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
         $this->assertEquals('testView', $result[0]);
@@ -75,7 +75,7 @@ class ViewRendererTest extends TestCase
 
     public function testChainedModifyingMappers()
     {
-        $this->oViewRenderer->AddMappers(array(new ArticleToTitleMapper(), new ModifyingViewMapper()));
+        $this->oViewRenderer->AddMappers([new ArticleToTitleMapper(), new ModifyingViewMapper()]);
         $this->oViewRenderer->AddSourceObject('article', new Article());
         $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
         $this->assertEquals('testView', $result[0]);
@@ -85,7 +85,7 @@ class ViewRendererTest extends TestCase
 
     public function testDefaultValueInRequirements()
     {
-        $this->oViewRenderer->AddMappers(array(new DefaultValueMapper()));
+        $this->oViewRenderer->AddMappers([new DefaultValueMapper()]);
         $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
         $this->assertEquals('testView', $result[0]);
         $this->assertTrue(array_key_exists('title', $result[1]));
@@ -96,14 +96,14 @@ class ViewRendererTest extends TestCase
     {
         $this->expectException(MapperException::class);
 
-        $this->oViewRenderer->AddMappers(array(new ModifyingViewMapper()));
+        $this->oViewRenderer->AddMappers([new ModifyingViewMapper()]);
         $this->oViewRenderer->AddSourceObject('article', new Article());
         $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
     }
 
     public function testChainedMappers()
     {
-        $this->oViewRenderer->AddMappers(array(new ArticleToTitleMapper(), new UserToUsernameMapper()));
+        $this->oViewRenderer->AddMappers([new ArticleToTitleMapper(), new UserToUsernameMapper()]);
         $this->oViewRenderer->AddSourceObject('article', new Article());
         $this->oViewRenderer->AddSourceObject('user', new User());
         $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
@@ -118,7 +118,7 @@ class ViewRendererTest extends TestCase
     {
         $oTestObject = new stdClass();
 
-        $oVisitor = new MapperVisitor(array('oTest' => $oTestObject));
+        $oVisitor = new MapperVisitor(['oTest' => $oTestObject]);
         $oRequirements = new MapperRequirements();
         $oRequirements->NeedsSourceObject('oTest', 'stdClass');
 
@@ -134,7 +134,7 @@ class ViewRendererTest extends TestCase
 
         $oTestObject = new stdClass();
 
-        $oVisitor = new MapperVisitor(array('oTest' => $oTestObject));
+        $oVisitor = new MapperVisitor(['oTest' => $oTestObject]);
         $oRequirements = new MapperRequirements();
         $oRequirements->NeedsSourceObject('oTest', 'footype');
 
@@ -146,7 +146,7 @@ class ViewRendererTest extends TestCase
     public function testObjectInputNoType()
     {
         $oTestObject = new stdClass();
-        $oVisitor = new MapperVisitor(array('oTest' => $oTestObject));
+        $oVisitor = new MapperVisitor(['oTest' => $oTestObject]);
         $oRequirements = new MapperRequirements();
         $oRequirements->NeedsSourceObject('oTest');
 
@@ -159,7 +159,7 @@ class ViewRendererTest extends TestCase
     public function testNonObjectInputValidType()
     {
         $oTestObject = 'bla';
-        $oVisitor = new MapperVisitor(array('oTest' => $oTestObject));
+        $oVisitor = new MapperVisitor(['oTest' => $oTestObject]);
         $oRequirements = new MapperRequirements();
         $oRequirements->NeedsSourceObject('oTest', 'string');
 
@@ -172,7 +172,7 @@ class ViewRendererTest extends TestCase
     public function testNonObjectInputInValidType()
     {
         $oTestObject = 'bla';
-        $oVisitor = new MapperVisitor(array('oTest' => $oTestObject));
+        $oVisitor = new MapperVisitor(['oTest' => $oTestObject]);
         $oRequirements = new MapperRequirements();
         $oRequirements->NeedsSourceObject('oTest', 'int');
 
@@ -185,7 +185,7 @@ class ViewRendererTest extends TestCase
     public function testNonObjectInputNoType()
     {
         $oTestObject = 'bla';
-        $oVisitor = new MapperVisitor(array('oTest' => $oTestObject));
+        $oVisitor = new MapperVisitor(['oTest' => $oTestObject]);
         $oRequirements = new MapperRequirements();
         $oRequirements->NeedsSourceObject('oTest');
         $oVisitor->SetCurrentRequirements($oRequirements);
@@ -206,7 +206,7 @@ class ViewRendererTest extends TestCase
     public function testInputWithDefault()
     {
         $oTestObject = 10;
-        $oVisitor = new MapperVisitor(array('oTest' => $oTestObject));
+        $oVisitor = new MapperVisitor(['oTest' => $oTestObject]);
         $oRequirements = new MapperRequirements();
         $oRequirements->NeedsSourceObject('oTest', 'int', 5);
         $oVisitor->SetCurrentRequirements($oRequirements);
@@ -269,7 +269,7 @@ class ViewRendererTest extends TestCase
     public function testMapperTransformations()
     {
         $mapper = new ArticleToTitleMapper();
-        $this->oViewRenderer->AddMapper($mapper, array('title' => 'transformedTitle'));
+        $this->oViewRenderer->AddMapper($mapper, ['title' => 'transformedTitle']);
         $this->oViewRenderer->AddSourceObject('article', new Article());
         $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
         $this->assertEquals('testView', $result[0]);
@@ -286,25 +286,25 @@ class ViewRendererTest extends TestCase
 
         $this->assertEquals('testView', $result[0]);
         $this->assertTrue(array_key_exists('aFoo', $result[1]));
-        $this->assertEquals($result[1]['aFoo'], array('title' => 'my nice title'));
+        $this->assertEquals($result[1]['aFoo'], ['title' => 'my nice title']);
     }
 
     public function testMapToArrayAndTransformation()
     {
         $mapper = new ArticleToTitleMapper();
-        $this->oViewRenderer->AddMapper($mapper, array('title' => 'transformedTitle'), 'aFoo');
+        $this->oViewRenderer->AddMapper($mapper, ['title' => 'transformedTitle'], 'aFoo');
         $this->oViewRenderer->AddSourceObject('article', new Article());
         $result = $this->oViewRenderer->Render('testView', $this->oTestRenderer);
 
         $this->assertEquals('testView', $result[0]);
         $this->assertTrue(array_key_exists('aFoo', $result[1]));
-        $this->assertEquals($result[1]['aFoo'], array('transformedTitle' => 'my nice title'));
+        $this->assertEquals($result[1]['aFoo'], ['transformedTitle' => 'my nice title']);
     }
 
     public function testMapToArrayAndTransformationAndReset()
     {
         $mapper = new ArticleToTitleMapper();
-        $this->oViewRenderer->AddMapper($mapper, array('title' => 'transformedTitle'), 'aFoo');
+        $this->oViewRenderer->AddMapper($mapper, ['title' => 'transformedTitle'], 'aFoo');
         $mapper = new ArticleToTitleMapper();
         $this->oViewRenderer->AddMapper($mapper);
         $this->oViewRenderer->AddSourceObject('article', new Article());
@@ -312,7 +312,7 @@ class ViewRendererTest extends TestCase
 
         $this->assertEquals('testView', $result[0]);
         $this->assertTrue(array_key_exists('aFoo', $result[1]));
-        $this->assertEquals($result[1]['aFoo'], array('transformedTitle' => 'my nice title'));
+        $this->assertEquals($result[1]['aFoo'], ['transformedTitle' => 'my nice title']);
         $this->assertTrue(array_key_exists('title', $result[1]));
         $this->assertEquals($result[1]['title'], 'my nice title');
     }

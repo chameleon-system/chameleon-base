@@ -1,14 +1,14 @@
 <?php
 /**
- * @var string                                                                                      $sModuleSpotName
- * @var string                                                                                      $errorMessage
- * @var bool                                                                                        $hasError
- * @var string                                                                                      $uploaderFormAction
- * @var string                                                                                      $uploadUrl
- * @var array                                                                                       $hiddenFields
- * @var int                                                                                         $chunkSize
- * @var int                                                                                         $maxUploadSize
- * @var \ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel $parameterBag
+ * @var string $sModuleSpotName
+ * @var string $errorMessage
+ * @var bool $hasError
+ * @var string $uploaderFormAction
+ * @var string $uploadUrl
+ * @var array $hiddenFields
+ * @var int $chunkSize
+ * @var int $maxUploadSize
+ * @var ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel $parameterBag
  */
 $oViewRenderer = new ViewRenderer();
 

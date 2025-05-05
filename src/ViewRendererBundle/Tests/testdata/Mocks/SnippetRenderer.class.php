@@ -11,7 +11,7 @@
 
 class SnippetRenderer implements IPkgSnippetRenderer
 {
-    private $aVars = array();
+    private $aVars = [];
     private $sViewName = '';
 
     public function __construct($viewName)
@@ -26,7 +26,7 @@ class SnippetRenderer implements IPkgSnippetRenderer
 
     public function Render()
     {
-        return array($this->sViewName, $this->aVars);
+        return [$this->sViewName, $this->aVars];
     }
 
     /**
@@ -40,7 +40,7 @@ class SnippetRenderer implements IPkgSnippetRenderer
      *
      * @return TPkgSnippetRenderer
      */
-    public static function GetNewInstance($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING, IResourceHandler $oResourceHandler = null)
+    public static function GetNewInstance($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING, ?IResourceHandler $oResourceHandler = null)
     {
         // TODO: Implement GetNewInstance() method.
     }

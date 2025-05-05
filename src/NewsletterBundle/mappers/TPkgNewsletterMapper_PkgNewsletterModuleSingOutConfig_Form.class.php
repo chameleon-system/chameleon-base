@@ -40,8 +40,6 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
     }
 
     /**
-     * @param IMapperVisitorRestricted $oVisitor
-     *
      * @return void
      */
     protected function mapFormFields(IMapperVisitorRestricted $oVisitor)
@@ -51,10 +49,10 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
         /** @var TdbDataExtranetUser $oUser */
         $oUser = $oVisitor->GetSourceObject('oUser');
         $oMessageManager = TCMSMessageManager::GetInstance();
-        $aFieldEmail = array(
+        $aFieldEmail = [
             'sError' => $oMessageManager->RenderMessages(MTPkgNewsletterSignoutCore::INPUT_DATA_NAME.'-newsletteremail'),
             'sValue' => ('' != $oNewsletterUser->fieldEmail) ? ($oNewsletterUser->fieldEmail) : ($oUser->fieldEmail),
-        );
+        ];
         $bShowEmailField = true;
         if ($oUser->IsLoggedIn()) {
             $bShowEmailField = false;
@@ -65,7 +63,6 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
 
     /**
      * @param TdbPkgNewsletterGroupList $oSignedInNewsletterList
-     * @param IMapperVisitorRestricted $oVisitor
      *
      * @return void
      */
@@ -73,15 +70,15 @@ class TPkgNewsletterMapper_PkgNewsletterModuleSingOutConfig_Form extends Abstrac
     {
         /** @var TdbPkgNewsletterUser $oNewsletterUser */
         $oNewsletterUser = $oVisitor->GetSourceObject('oNewsletterUser');
-        $aGroupList = array();
+        $aGroupList = [];
         while ($oGroup = $oSignedInNewsletterList->Next()) {
-            $aUserGroups = (null !== $oNewsletterUser) ? ($oSignedInNewsletterList->GetIdList()) : (array());
-            $aGroupList[] = array(
+            $aUserGroups = (null !== $oNewsletterUser) ? ($oSignedInNewsletterList->GetIdList()) : ([]);
+            $aGroupList[] = [
                 'id' => $oGroup->id,
                 'sName' => $oGroup->GetName(),
                 'sError' => '',
                 'bIsChecked' => (is_array($aUserGroups) && 0 < count($aUserGroups) && in_array($oGroup->id, $aUserGroups)),
-            );
+            ];
         }
         $oVisitor->SetMappedValue('aGroupList', $aGroupList);
     }

@@ -6,7 +6,7 @@ class CmsTblListClass
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Alias name */
@@ -63,7 +63,6 @@ class CmsTblListClass
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -76,7 +75,6 @@ class CmsTblListClass
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getClasslocation(): string
@@ -91,7 +89,6 @@ class CmsTblListClass
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassname(): string
     {
@@ -105,7 +102,6 @@ class CmsTblListClass
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsTblConf(): ?CmsTblConf
     {
@@ -118,6 +114,4 @@ class CmsTblListClass
 
         return $this;
     }
-
-
 }

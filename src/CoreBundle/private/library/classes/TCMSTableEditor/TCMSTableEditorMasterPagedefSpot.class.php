@@ -21,9 +21,9 @@ class TCMSTableEditorMasterPagedefSpot extends TCMSTableEditor
         /** @var $oCmsTplPageCmsMasterPagedefSpotList TdbCmsTplPageCmsMasterPagedefSpotList */
         $iTableID = TTools::GetCMSTableId('cms_tpl_page_cms_master_pagedef_spot');
         $oTableEditor = new TCMSTableEditorManager();
-        /** @var $oTableEditor TCMSTableEditorManager */
+        /* @var $oTableEditor TCMSTableEditorManager */
         while ($oCmsTplPageCmsMasterPagedefSpot = $oCmsTplPageCmsMasterPagedefSpotList->Next()) {
-            /** @var $oCmsTplPageCmsMasterPagedefSpot TdbCmsTplPageCmsMasterPagedefSpot */
+            /* @var $oCmsTplPageCmsMasterPagedefSpot TdbCmsTplPageCmsMasterPagedefSpot */
             $oTableEditor->Init($iTableID, $oCmsTplPageCmsMasterPagedefSpot->id);
             $oTableEditor->Delete($oCmsTplPageCmsMasterPagedefSpot->id);
         }

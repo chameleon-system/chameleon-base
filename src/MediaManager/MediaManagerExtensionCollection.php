@@ -18,7 +18,7 @@ class MediaManagerExtensionCollection
     /**
      * @var MediaManagerExtensionInterface[]
      */
-    private $extensions = array();
+    private $extensions = [];
 
     /**
      * @return void

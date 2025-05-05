@@ -15,6 +15,7 @@ interface PackageNameFilterInterface
 {
     /**
      * @param string $name
+     *
      * @return bool
      */
     public function filter($name);

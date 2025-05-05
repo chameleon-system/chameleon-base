@@ -26,7 +26,7 @@ class TPkgViewRendererMapper_ListHandlerData
     /**
      * @var array
      */
-    private $mapperChain = array();
+    private $mapperChain = [];
     /**
      * @var string
      */

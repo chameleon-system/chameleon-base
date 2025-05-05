@@ -1,4 +1,4 @@
 <?php
 
 $layoutTemplate = 'JSON';
-$moduleList = array('module' => array('model' => 'CMSDocumentManagerTreeRPC', 'view' => 'standard'));
+$moduleList = ['module' => ['model' => 'CMSDocumentManagerTreeRPC', 'view' => 'standard']];

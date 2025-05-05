@@ -12,17 +12,16 @@
 namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use TdbCmsPortalDomains;
 
 class ChangeDomainEvent extends Event
 {
     /**
-     * @var TdbCmsPortalDomains[]
+     * @var \TdbCmsPortalDomains[]
      */
     private $changedDomains;
 
     /**
-     * @param TdbCmsPortalDomains[] $changedDomains
+     * @param \TdbCmsPortalDomains[] $changedDomains
      */
     public function __construct(array $changedDomains)
     {
@@ -30,7 +29,7 @@ class ChangeDomainEvent extends Event
     }
 
     /**
-     * @return TdbCmsPortalDomains[]
+     * @return \TdbCmsPortalDomains[]
      */
     public function getChangedDomains()
     {

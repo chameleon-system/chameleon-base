@@ -8,4 +8,4 @@ $oViewRender->AddSourceObject('oObject', $oStep);
 $oViewRender->AddSourceObject('sWizardModuleModuleSpot', MTCMSWizardCore::URL_PARAM_MODULE_SPOT);
 $oViewRender->AddSourceObject('aUserInput', $aUserInput);
 $oViewRender->AddSourceObject('aFieldMessages', $aFieldMessages);
-echo  $oViewRender->Render('/common/userInput/form/formUserProfile.html.twig');
+echo $oViewRender->Render('/common/userInput/form/formUserProfile.html.twig');

@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\ExtranetBundle\Entity;
 
-
 class DataExtranetSalutation
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -58,7 +57,6 @@ class DataExtranetSalutation
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -72,7 +70,6 @@ class DataExtranetSalutation
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getGender(): string
     {
@@ -85,6 +82,4 @@ class DataExtranetSalutation
 
         return $this;
     }
-
-
 }

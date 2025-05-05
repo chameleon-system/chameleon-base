@@ -12,7 +12,7 @@
 /**
  * chameleon custom php5 stdClass width id and name set by default.
  *
-/**/
+ * /**/
 class TCMSstdClass extends stdClass
 {
     /**
@@ -20,12 +20,12 @@ class TCMSstdClass extends stdClass
      *
      * @var string
      */
-    public $id = null;
+    public $id;
 
     /**
      * record name.
      *
      * @var string
      */
-    public $name = null;
+    public $name;
 }

@@ -12,12 +12,11 @@
 namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use TCMSPortal;
 
 class ChangeActiveLanguagesForPortalEvent extends Event
 {
     /**
-     * @var TCMSPortal
+     * @var \TCMSPortal
      */
     private $portal;
     /**
@@ -30,11 +29,10 @@ class ChangeActiveLanguagesForPortalEvent extends Event
     private $newLanguages;
 
     /**
-     * @param TCMSPortal $portal
-     * @param string[]   $oldLanguages list of language IDs for languages that were active before the change
-     * @param string[]   $newLanguages list of language IDs for languages that are active before the change
+     * @param string[] $oldLanguages list of language IDs for languages that were active before the change
+     * @param string[] $newLanguages list of language IDs for languages that are active before the change
      */
-    public function __construct(TCMSPortal $portal, array $oldLanguages, array $newLanguages)
+    public function __construct(\TCMSPortal $portal, array $oldLanguages, array $newLanguages)
     {
         $this->portal = $portal;
         $this->oldLanguages = $oldLanguages;
@@ -42,7 +40,7 @@ class ChangeActiveLanguagesForPortalEvent extends Event
     }
 
     /**
-     * @return TCMSPortal
+     * @return \TCMSPortal
      */
     public function getPortal()
     {

@@ -17,7 +17,6 @@ namespace ChameleonSystem\CoreBundle\DataAccess;
 interface UserMenuItemDataAccessInterface
 {
     /**
-     * @param string $userId
      * @return string[] - the menu items used by the user sorted by click count
      */
     public function getMenuItemIds(string $userId): array;

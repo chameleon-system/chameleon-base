@@ -1,9 +1,9 @@
 <?php echo "<?php\n"; ?>
 
 /****************************************************************************
-* Table: <?=$sTableName; ?> - write any extensions for this table object into this file
+* Table: <?php echo $sTableName; ?> - write any extensions for this table object into this file
 /***************************************************************************/
-class <?=$sAutoCustomClassName; ?>List extends <?=$sAutoClassName; ?>List
+class <?php echo $sAutoCustomClassName; ?>List extends <?php echo $sAutoClassName; ?>List
 {
 
 

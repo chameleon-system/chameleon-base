@@ -13,7 +13,7 @@
  * "only-one-record tables should derive from this class. is a singleton version
  * of the TCMSRecord class
  * NOTE: you MUST overwrite the GetInstance function so that the correct sObjectName can be passed.
-/**/
+ * /**/
 class TCMSFlatRecord extends TCMSRecord
 {
     /**
@@ -21,22 +21,22 @@ class TCMSFlatRecord extends TCMSRecord
      *
      * @var array
      */
-    private static $aInstance = array();
+    private static $aInstance = [];
 
     /**
      * Get a specific instance of a one-record-only table.
      *
-     * @param string $sTableName   - the table name
+     * @param string $sTableName - the table name
      * @param string $sFilterField - name of the field from which to load
-     * @param mixed  $sFilterValue - the field value identifying the record
-     * @param int    $iLanguageId  - the language to load (if we are dealing with a multi-language table)
-     * @param string $sObjectName  - the class name from which we want to create an instance
+     * @param mixed $sFilterValue - the field value identifying the record
+     * @param int $iLanguageId - the language to load (if we are dealing with a multi-language table)
+     * @param string $sObjectName - the class name from which we want to create an instance
      *
      * @return TCMSFlatRecord
      */
     public static function GetInstance($sTableName, $sFilterField = 'id', $sFilterValue = 1, $iLanguageId = null, $sObjectName = 'TCMSFlatRecord')
     {
-        //static $aInstance = array();
+        // static $aInstance = array();
         $sKey = $sObjectName.$sFilterField.$sFilterValue;
         if (!array_key_exists($sKey, self::$aInstance) || is_null(self::$aInstance[$sKey])) {
             $oInstance = new $sObjectName();

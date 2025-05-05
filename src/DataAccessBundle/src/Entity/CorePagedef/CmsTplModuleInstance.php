@@ -11,19 +11,17 @@ class CmsTplModuleInstance
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Instance name */
         private string $name = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsTplPageCmsMasterPagedefSpot> - CMS pages dynamic spots */
-        private Collection $cmsTplPageCmsMasterPagedefSpotCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTplPageCmsMasterPagedefSpotCollection = new ArrayCollection(),
         // TCMSFieldLookup
         /** @var CmsPortal|null - was created in portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldVarchar
         /** @var string - File name of the module template */
         private string $template = '',
@@ -70,8 +68,6 @@ class CmsTplModuleInstance
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -106,7 +102,6 @@ class CmsTplModuleInstance
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -119,7 +114,6 @@ class CmsTplModuleInstance
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTemplate(): string
@@ -134,7 +128,6 @@ class CmsTplModuleInstance
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsTplModule(): ?CmsTplModule
     {
@@ -147,6 +140,4 @@ class CmsTplModuleInstance
 
         return $this;
     }
-
-
 }

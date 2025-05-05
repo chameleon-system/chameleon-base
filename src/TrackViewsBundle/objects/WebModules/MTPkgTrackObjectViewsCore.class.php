@@ -17,7 +17,7 @@ class MTPkgTrackObjectViewsCore extends TUserCustomModelBase
     public function Execute()
     {
         parent::Execute();
-        $isEnabled = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_track_views.enabled');
+        $isEnabled = ServiceLocator::getParameter('chameleon_system_track_views.enabled');
         if ($isEnabled) {
             if (false === $this->getRequestInfoService()->isCmsTemplateEngineEditMode()) {
                 $oTracker = TPkgTrackObjectViews::GetInstance();

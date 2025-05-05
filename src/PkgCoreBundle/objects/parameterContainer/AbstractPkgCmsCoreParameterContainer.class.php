@@ -14,7 +14,7 @@ abstract class AbstractPkgCmsCoreParameterContainer
     /**
      * @var TPkgCmsCoreParameterContainerParameterDefinition[]
      */
-    private $aRequirements = array();
+    private $aRequirements = [];
 
     /**
      * @var bool
@@ -29,8 +29,6 @@ abstract class AbstractPkgCmsCoreParameterContainer
     abstract protected function defineRequirements();
 
     /**
-     * @param TPkgCmsCoreParameterContainerParameterDefinition $oRequirement
-     *
      * @return $this
      */
     final protected function addRequirement(TPkgCmsCoreParameterContainerParameterDefinition $oRequirement)
@@ -42,6 +40,7 @@ abstract class AbstractPkgCmsCoreParameterContainer
 
     /**
      * @return void
+     *
      * @throws TPkgCmsException_Log
      */
     final public function checkRequirements()
@@ -56,7 +55,7 @@ abstract class AbstractPkgCmsCoreParameterContainer
                 $sVal = $this->$sGetter();
             } else {
                 throw new TPkgCmsException_Log("getter [{$sGetter}] for [".$oRequirement->getPropertyName(
-                ).'] not defined', array('this' => $this));
+                ).'] not defined', ['this' => $this]);
             }
             $oRequirement->validate($sVal);
         }
@@ -65,7 +64,7 @@ abstract class AbstractPkgCmsCoreParameterContainer
 
     /**
      * @param string $sPropertyName
-     * @return mixed
+     *
      * @throws TPkgCmsException_Log
      */
     protected function get($sPropertyName)

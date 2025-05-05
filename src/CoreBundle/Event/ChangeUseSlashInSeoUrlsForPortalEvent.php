@@ -12,12 +12,11 @@
 namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use TCMSPortal;
 
 class ChangeUseSlashInSeoUrlsForPortalEvent extends Event
 {
     /**
-     * @var TCMSPortal
+     * @var \TCMSPortal
      */
     private $portal;
     /**
@@ -30,11 +29,10 @@ class ChangeUseSlashInSeoUrlsForPortalEvent extends Event
     private $newValue;
 
     /**
-     * @param TCMSPortal $portal
-     * @param bool       $oldValue
-     * @param bool       $newValue
+     * @param bool $oldValue
+     * @param bool $newValue
      */
-    public function __construct(TCMSPortal $portal, $oldValue, $newValue)
+    public function __construct(\TCMSPortal $portal, $oldValue, $newValue)
     {
         $this->portal = $portal;
         $this->oldValue = $oldValue;
@@ -42,7 +40,7 @@ class ChangeUseSlashInSeoUrlsForPortalEvent extends Event
     }
 
     /**
-     * @return TCMSPortal
+     * @return \TCMSPortal
      */
     public function getPortal()
     {

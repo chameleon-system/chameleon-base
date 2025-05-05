@@ -147,6 +147,7 @@ class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
      * @throws InvalidTokenFormatException
      *
      * @psalm-param AuthenticityTokenManagerInterface::TOKEN_FORMAT_* $format
+     *
      * @psalm-suppress NoValue
      */
     private function getAuthenticityTokenAsParameter(int $format, string $tokenValue): array|string
@@ -173,7 +174,7 @@ class AuthenticityTokenManager implements AuthenticityTokenManagerInterface
     {
         $pcreConstants = \get_defined_constants(true)['pcre'];
 
-        $filteredConstants = array_filter($pcreConstants, function($value) {
+        $filteredConstants = array_filter($pcreConstants, function ($value) {
             return is_int($value) || is_string($value);
         });
 

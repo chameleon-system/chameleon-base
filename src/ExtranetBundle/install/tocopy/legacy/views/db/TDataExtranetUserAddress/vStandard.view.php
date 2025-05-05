@@ -4,7 +4,7 @@ if (!empty($oUserAddress->fieldCompany)) {
     echo TGlobal::OutHTML($oUserAddress->fieldCompany).'<br />';
 }
 $oSal = $oUserAddress->GetFieldDataExtranetSalutation();
-$aName = array();
+$aName = [];
 if ($oSal) {
     $aName[] = $oSal->fieldName;
 }
@@ -24,7 +24,7 @@ if (!empty($oUserAddress->fieldLastname) || !empty($oUserAddress->fieldFirstname
 if (!empty($oUserAddress->fieldAddressAdditionalInfo)) {
     echo TGlobal::OutHTML($oUserAddress->fieldAddressAdditionalInfo).'<br />';
 }
-$aParts = array();
+$aParts = [];
 if (!empty($oUserAddress->fieldStreet)) {
     $aParts[] = $oUserAddress->fieldStreet;
 }
@@ -36,7 +36,7 @@ if (!empty($sStreet)) {
     echo TGlobal::OutHTML($sStreet).'<br />';
 }
 
-$aParts = array();
+$aParts = [];
 if (!empty($oUserAddress->fieldPostalcode)) {
     $aParts[] = $oUserAddress->fieldPostalcode;
 }

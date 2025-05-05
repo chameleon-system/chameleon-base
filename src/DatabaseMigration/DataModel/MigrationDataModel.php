@@ -31,9 +31,9 @@ class MigrationDataModel
 
     /**
      * @param string $bundleName
-     * @param array  $buildNumberToFileMap
+     * @param array $buildNumberToFileMap
      */
-    public function __construct($bundleName, $buildNumberToFileMap = array())
+    public function __construct($bundleName, $buildNumberToFileMap = [])
     {
         $this->bundleName = $bundleName;
         $this->buildNumberToFileMap = $buildNumberToFileMap;
@@ -64,7 +64,7 @@ class MigrationDataModel
     }
 
     /**
-     * @param int    $buildNumber
+     * @param int $buildNumber
      * @param string $path
      *
      * @return void
@@ -84,7 +84,7 @@ class MigrationDataModel
     }
 
     /**
-     * @param int    $buildNumber
+     * @param int $buildNumber
      * @param string $path
      *
      * @return void

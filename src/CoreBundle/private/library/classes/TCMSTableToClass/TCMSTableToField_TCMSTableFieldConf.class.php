@@ -13,11 +13,11 @@ use Doctrine\DBAL\Connection;
 
 class TCMSTableToField_TCMSTableFieldConf extends TCMSTableToClass_MockRecord
 {
-    private $oFieldType = null;
+    private $oFieldType;
     /**
      * @var TPkgCmsStringUtilities_ReadConfig
      */
-    private $oCacheExtraConfigFieldObject = null;
+    private $oCacheExtraConfigFieldObject;
 
     public function __construct(Connection $connection, TCMSTableToField_TCMSFieldType $oFieldType)
     {

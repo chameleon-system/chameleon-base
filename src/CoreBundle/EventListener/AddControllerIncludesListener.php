@@ -30,11 +30,6 @@ class AddControllerIncludesListener
      */
     private $frontendController;
 
-    /**
-     * @param RequestInfoServiceInterface $requestInfoService
-     * @param ChameleonController         $backendController
-     * @param ChameleonController         $frontendController
-     */
     public function __construct(RequestInfoServiceInterface $requestInfoService, ChameleonController $backendController, ChameleonController $frontendController)
     {
         $this->requestInfoService = $requestInfoService;
@@ -43,8 +38,6 @@ class AddControllerIncludesListener
     }
 
     /**
-     * @param HtmlIncludeEventInterface $event
-     *
      * @return void
      */
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
@@ -57,8 +50,6 @@ class AddControllerIncludesListener
     }
 
     /**
-     * @param HtmlIncludeEventInterface $event
-     *
      * @return void
      */
     public function onGlobalHtmlFooterInclude(HtmlIncludeEventInterface $event)

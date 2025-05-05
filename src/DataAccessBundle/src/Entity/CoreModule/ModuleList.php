@@ -4,7 +4,6 @@ namespace ChameleonSystem\DataAccessBundle\Entity\CoreModule;
 
 use ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsDocument;
 use ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTplModuleInstance;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -12,12 +11,11 @@ class ModuleList
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsTplModuleInstance|null - Belongs to module */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Title */
         private string $name = '',
@@ -25,12 +23,11 @@ class ModuleList
         /** @var string - Sub headline */
         private string $subHeadline = '',
         // TCMSFieldDateToday
-        /** @var DateTime|null - Date */
-        private ?DateTime $dateToday = null,
+        /** @var \DateTime|null - Date */
+        private ?\DateTime $dateToday = null,
         // TCMSFieldLookup
         /** @var ModuleListCat|null - Category */
-        private ?ModuleListCat $moduleListCat = null
-        ,
+        private ?ModuleListCat $moduleListCat = null,
         // TCMSFieldWYSIWYG
         /** @var string - Introduction */
         private string $teaserText = '',
@@ -39,8 +36,7 @@ class ModuleList
         private string $description = '',
         // TCMSFieldDownloads
         /** @var Collection<int, CmsDocument> - Document pool */
-        private Collection $dataPoolCollection = new ArrayCollection()
-        ,
+        private Collection $dataPoolCollection = new ArrayCollection(),
         // TCMSFieldPosition
         /** @var int - Position */
         private int $position = 0
@@ -84,7 +80,6 @@ class ModuleList
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -97,7 +92,6 @@ class ModuleList
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSubHeadline(): string
@@ -112,20 +106,18 @@ class ModuleList
         return $this;
     }
 
-
     // TCMSFieldDateToday
-    public function getDateToday(): ?DateTime
+    public function getDateToday(): ?\DateTime
     {
         return $this->dateToday;
     }
 
-    public function setDateToday(?DateTime $dateToday): self
+    public function setDateToday(?\DateTime $dateToday): self
     {
         $this->dateToday = $dateToday;
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getModuleListCat(): ?ModuleListCat
@@ -140,7 +132,6 @@ class ModuleList
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getTeaserText(): string
     {
@@ -154,7 +145,6 @@ class ModuleList
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -167,8 +157,6 @@ class ModuleList
 
         return $this;
     }
-
-
 
     // TCMSFieldDownloads
 
@@ -202,7 +190,6 @@ class ModuleList
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -215,6 +202,4 @@ class ModuleList
 
         return $this;
     }
-
-
 }

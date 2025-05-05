@@ -6,12 +6,11 @@ class CmsTblExtension
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTblConf|null - Text template */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldVarchar
         /** @var string - Classname */
         private string $name = '',
@@ -73,7 +72,6 @@ class CmsTblExtension
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -86,7 +84,6 @@ class CmsTblExtension
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getNameList(): string
@@ -101,7 +98,6 @@ class CmsTblExtension
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSubtype(): string
     {
@@ -114,7 +110,6 @@ class CmsTblExtension
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getType(): string
@@ -129,7 +124,6 @@ class CmsTblExtension
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -142,7 +136,6 @@ class CmsTblExtension
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getVirtualItemClassName(): string
@@ -157,7 +150,6 @@ class CmsTblExtension
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getVirtualItemClassListName(): string
     {
@@ -170,6 +162,4 @@ class CmsTblExtension
 
         return $this;
     }
-
-
 }

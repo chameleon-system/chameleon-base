@@ -2,14 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
-use DateTime;
-
 class PkgCmsResultCache
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Owner identification */
@@ -18,11 +15,11 @@ class PkgCmsResultCache
         /** @var string - Identification */
         private string $hash = '',
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - Creation date */
-        private ?DateTime $dateCreated = new DateTime(),
+        /** @var \DateTime|null - Creation date */
+        private ?\DateTime $dateCreated = new \DateTime(),
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - Entry invalid from */
-        private ?DateTime $dateExpireAfter = new DateTime(),
+        /** @var \DateTime|null - Entry invalid from */
+        private ?\DateTime $dateExpireAfter = new \DateTime(),
         // TCMSFieldText
         /** @var string - Content */
         private string $data = '',
@@ -69,7 +66,6 @@ class PkgCmsResultCache
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getHash(): string
     {
@@ -83,34 +79,31 @@ class PkgCmsResultCache
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getDateCreated(): ?DateTime
+    public function getDateCreated(): ?\DateTime
     {
         return $this->dateCreated;
     }
 
-    public function setDateCreated(?DateTime $dateCreated): self
+    public function setDateCreated(?\DateTime $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getDateExpireAfter(): ?DateTime
+    public function getDateExpireAfter(): ?\DateTime
     {
         return $this->dateExpireAfter;
     }
 
-    public function setDateExpireAfter(?DateTime $dateExpireAfter): self
+    public function setDateExpireAfter(?\DateTime $dateExpireAfter): self
     {
         $this->dateExpireAfter = $dateExpireAfter;
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getData(): string
@@ -125,7 +118,6 @@ class PkgCmsResultCache
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isGarbageCollectWhenExpired(): bool
     {
@@ -138,6 +130,4 @@ class PkgCmsResultCache
 
         return $this;
     }
-
-
 }

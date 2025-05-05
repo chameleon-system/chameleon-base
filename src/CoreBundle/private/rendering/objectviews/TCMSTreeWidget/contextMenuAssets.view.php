@@ -19,7 +19,7 @@ if(NODE.attr('rel').indexOf('bHasUploadPermission') != -1) bHasUploadPermission 
 
 if(bHasNewPermission) {
 obj['create'] = {
-"label"             : "<?= TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_new_node')); ?>",
+"label"             : "<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_new_node')); ?>",
 "action"            : function (obj) { CreateNode(obj); },
 "separator_before"  : false,
 "separator_after"   : true,
@@ -30,7 +30,7 @@ obj['create'] = {
 if (sNodeType != 'rootNode') {
 if(bHasDeletePermission) {
 obj['remove'] = {
-"label"             : "<?= TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_delete')); ?>",
+"label"             : "<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_delete')); ?>",
 "action"            : function (obj) { this.remove(obj); },
 "separator_before"  : false,
 "separator_after"   : true,
@@ -43,14 +43,14 @@ obj['ccp'] = {
 "separator_before"    : true,
 "icon"        : 'fas fa-sign-out-alt',
 "separator_after"    : false,
-"label"                : "<?= TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_move')); ?>",
+"label"                : "<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_move')); ?>",
 "action"            : false,
 "submenu" : {
 "copy" : false,
 "cut" : {
 "separator_before"    : false,
 "separator_after"    : false,
-"label"                : "<?= TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_cut')); ?>",
+"label"                : "<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_cut')); ?>",
 "icon"        : 'fas fa-cut',
 "action"            : function (obj) { this.cut(obj); }
 },
@@ -58,7 +58,7 @@ obj['ccp'] = {
 "separator_before"    : false,
 "icon"                : false,
 "separator_after"    : false,
-"label"                : "<?= TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_paste')); ?>",
+"label"                : "<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_paste')); ?>",
 "icon"        : 'fas fa-paste',
 "action"            : function (obj) { this.paste(obj); }
 }
@@ -68,7 +68,7 @@ obj['ccp'] = {
 
 if(bHasUploadPermission) {
 obj['upload'] = {
-"label"             : "<?= TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_upload')); ?>",
+"label"             : "<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_upload')); ?>",
 "action"            : function (obj) {
 var sNodeID = obj.attr("id").replace("node","");
 UploadFiles(sNodeID);
@@ -79,7 +79,7 @@ UploadFiles(sNodeID);
 }
 
 obj['uploadlocal'] = {
-"label"             : "<?= TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_import_ftp')); ?>",
+"label"             : "<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_import_ftp')); ?>",
 "action"            : function (obj) {
 var sNodeID = obj.attr("id").replace("node","");
 UploadFilesFromLocal(sNodeID);
@@ -92,7 +92,7 @@ UploadFilesFromLocal(sNodeID);
 
 if(bHasEditPermission) {
 obj['pastefiles'] = {
-"label"             : "<?= TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_move_to_here')); ?>",
+"label"             : "<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_move_to_here')); ?>",
 "action"            : function (obj) {
 var sNodeID = obj.attr("id").replace("node","");
 PasteFiles(sNodeID);
@@ -108,7 +108,7 @@ PasteFiles(sNodeID);
 if(bHasEditPermission) {
 obj['rename'] = {
 // The item label
-"label"             : "<?= TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_rename')); ?>",
+"label"             : "<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.action_rename')); ?>",
 // The function to execute upon a click
 "action"            : function (obj) { this.rename(obj); },
 // All below are optional

@@ -2,14 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
-use DateTime;
-
 class CmsCronjobs
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldBoolean
         /** @var bool - Is running at the moment (locked) */
@@ -18,8 +15,8 @@ class CmsCronjobs
         /** @var string - Last executed on */
         private string $lastExecution = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Last excecuted (real) */
-        private ?DateTime $realLastExecution = null,
+        /** @var \DateTime|null - Last excecuted (real) */
+        private ?\DateTime $realLastExecution = null,
         // TCMSFieldVarchar
         /** @var string - Class name/service ID */
         private string $cronClass = '',
@@ -36,11 +33,11 @@ class CmsCronjobs
         /** @var string - Execute every N minutes */
         private string $executeEveryNMinutes = '',
         // TCMSFieldDate
-        /** @var DateTime|null - Active until */
-        private ?DateTime $endExecution = null,
+        /** @var \DateTime|null - Active until */
+        private ?\DateTime $endExecution = null,
         // TCMSFieldDate
-        /** @var DateTime|null - Active from */
-        private ?DateTime $startExecution = null,
+        /** @var \DateTime|null - Active from */
+        private ?\DateTime $startExecution = null,
         // TCMSFieldBoolean
         /** @var bool - Active */
         private bool $active = false,
@@ -87,7 +84,6 @@ class CmsCronjobs
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getLastExecution(): string
     {
@@ -101,20 +97,18 @@ class CmsCronjobs
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getRealLastExecution(): ?DateTime
+    public function getRealLastExecution(): ?\DateTime
     {
         return $this->realLastExecution;
     }
 
-    public function setRealLastExecution(?DateTime $realLastExecution): self
+    public function setRealLastExecution(?\DateTime $realLastExecution): self
     {
         $this->realLastExecution = $realLastExecution;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getCronClass(): string
@@ -129,7 +123,6 @@ class CmsCronjobs
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassLocation(): string
     {
@@ -142,7 +135,6 @@ class CmsCronjobs
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClassSubtype(): string
@@ -157,7 +149,6 @@ class CmsCronjobs
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUnlockAfterNMinutes(): string
     {
@@ -170,7 +161,6 @@ class CmsCronjobs
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getExecuteEveryNMinutes(): string
@@ -185,34 +175,31 @@ class CmsCronjobs
         return $this;
     }
 
-
     // TCMSFieldDate
-    public function getEndExecution(): ?DateTime
+    public function getEndExecution(): ?\DateTime
     {
         return $this->endExecution;
     }
 
-    public function setEndExecution(?DateTime $endExecution): self
+    public function setEndExecution(?\DateTime $endExecution): self
     {
         $this->endExecution = $endExecution;
 
         return $this;
     }
 
-
     // TCMSFieldDate
-    public function getStartExecution(): ?DateTime
+    public function getStartExecution(): ?\DateTime
     {
         return $this->startExecution;
     }
 
-    public function setStartExecution(?DateTime $startExecution): self
+    public function setStartExecution(?\DateTime $startExecution): self
     {
         $this->startExecution = $startExecution;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -227,7 +214,6 @@ class CmsCronjobs
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -240,6 +226,4 @@ class CmsCronjobs
 
         return $this;
     }
-
-
 }

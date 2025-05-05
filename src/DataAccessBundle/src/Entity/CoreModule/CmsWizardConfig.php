@@ -8,12 +8,11 @@ class CmsWizardConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Title / headline */
         private string $name = '',
@@ -60,7 +59,6 @@ class CmsWizardConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -74,7 +72,6 @@ class CmsWizardConfig
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isListIsPackage(): bool
     {
@@ -87,6 +84,4 @@ class CmsWizardConfig
 
         return $this;
     }
-
-
 }

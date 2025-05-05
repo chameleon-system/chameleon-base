@@ -56,12 +56,12 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
         if (null === $pagedefData) {
             return null;
         }
-        $aTrigger = array(
-            array('table' => 'cms_tpl_page', 'id' => $id),
-            array('table' => 'cms_tree', 'id' => null),
-            array('table' => 'cms_tree_node', 'id' => null),
-            array('table' => 'cms_master_pagedef', 'id' => null),
-        );
+        $aTrigger = [
+            ['table' => 'cms_tpl_page', 'id' => $id],
+            ['table' => 'cms_tree', 'id' => null],
+            ['table' => 'cms_tree_node', 'id' => null],
+            ['table' => 'cms_master_pagedef', 'id' => null],
+        ];
         $this->cache->set($cacheKey, $pagedefData, $aTrigger);
 
         return $pagedefData;
@@ -73,13 +73,13 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $security = $securityHelper->getSecurity();
 
-        $cacheKey = array(
+        $cacheKey = [
             'type' => 'pagedefdata',
             'pagedef' => $pagedef,
             'requestMasterPageDef' => $this->inputFilterUtil->getFilteredInput('__masterPageDef', false),
             'isTemplateEngineMode' => $this->requestInfoService->isCmsTemplateEngineEditMode(),
             'cmsuserdefined' => null !== $security->getToken() && $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER),
-        );
+        ];
 
         if ($cacheKey['cmsuserdefined'] && $cacheKey['requestMasterPageDef']) {
             $cacheKey['get_id'] = $this->inputFilterUtil->getFilteredInput('id');

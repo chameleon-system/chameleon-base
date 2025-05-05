@@ -2,23 +2,15 @@
 
 namespace ChameleonSystem\ExternalTrackerGoogleAnalyticsBundle\Bridge\Chameleon\ExternalTracker;
 
-use TdbPkgExternalTracker;
-use TdbShopOrder;
-use TdbShopOrderItem;
-use TdbShopOrderItemList;
-use TGlobal;
-use TPkgExternalTrackerState;
-use TShopBasketArticle;
-
 /**
  * @deprecated Google Universal Analytics will be removed in July 2023. Use {@see ExternalTrackerGoogleAnalyticsGa4} instead.
  */
-class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
+class ExternalTrackerGoogleUniversalAnalytics extends \TdbPkgExternalTracker
 {
     /**
      * {@inheritdoc}
      */
-    public function GetPreBodyClosingCode(TPkgExternalTrackerState $oState)
+    public function GetPreBodyClosingCode(\TPkgExternalTrackerState $oState)
     {
         $lines = parent::GetPreBodyClosingCode($oState);
         $identifier = $this->getIdentifierCode($oState);
@@ -27,7 +19,7 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
             return $lines;
         }
 
-        $quotedIdentifier = TGlobal::OutJS($identifier);
+        $quotedIdentifier = \TGlobal::OutJS($identifier);
 
         $orderComplete = '';
         if (is_a($oState, 'TPkgExternalTrackerState_PkgShop')) {
@@ -119,11 +111,9 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
     /**
      * Get identifier from active portal with fallback to tracker identifier.
      *
-     * @param TPkgExternalTrackerState $state
-     *
      * @return string|null
      */
-    protected function getIdentifierCode(TPkgExternalTrackerState $state)
+    protected function getIdentifierCode(\TPkgExternalTrackerState $state)
     {
         $identifier = $this->fieldIdentifier;
         $page = $state->GetActivePage();
@@ -139,13 +129,11 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
     }
 
     /**
-     * @param TPkgExternalTrackerState $state
-     *
      * @return string
      */
-    protected function getEvents(TPkgExternalTrackerState $state)
+    protected function getEvents(\TPkgExternalTrackerState $state)
     {
-        $events = array();
+        $events = [];
         $addToBasketEvent = $this->getAddToBasketEvent($state);
         if (null !== $addToBasketEvent) {
             $events[] = $addToBasketEvent;
@@ -155,23 +143,21 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
     }
 
     /**
-     * @param TPkgExternalTrackerState $state
-     *
      * @return string|null
      */
-    protected function getAddToBasketEvent(TPkgExternalTrackerState $state)
+    protected function getAddToBasketEvent(\TPkgExternalTrackerState $state)
     {
         $event = null;
         if (is_a($state, 'TPkgExternalTrackerState_PkgShop')) {
             // basket event
 
-            /** @var TShopBasketArticle|false $addToBasketEvent */
-            $addToBasketEvent = $state->GetEventData(TPkgExternalTrackerState::EVENT_PKG_SHOP_ADD_TO_BASKET);
+            /** @var \TShopBasketArticle|false $addToBasketEvent */
+            $addToBasketEvent = $state->GetEventData(\TPkgExternalTrackerState::EVENT_PKG_SHOP_ADD_TO_BASKET);
 
             if (false !== $addToBasketEvent) {
                 $event = sprintf("ga('send', 'event', 'products', 'AddToBasket', '%s','%s');",
-                    TGlobal::OutJS($addToBasketEvent->fieldArticlenumber),
-                    TGlobal::OutJS($addToBasketEvent->dAmount));
+                    \TGlobal::OutJS($addToBasketEvent->fieldArticlenumber),
+                    \TGlobal::OutJS($addToBasketEvent->dAmount));
             }
         }
 
@@ -179,18 +165,16 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
     }
 
     /**
-     * @param TPkgExternalTrackerState $state
-     *
      * @return string
      */
-    protected function getOrderCompleteEvent(TPkgExternalTrackerState $state)
+    protected function getOrderCompleteEvent(\TPkgExternalTrackerState $state)
     {
         $html = '';
-        /** @var TdbShopOrder|false $orderEvent */
-        $orderEvent = $state->GetEventData(TPkgExternalTrackerState::EVENT_PKG_SHOP_CREATE_ORDER);
+        /** @var \TdbShopOrder|false $orderEvent */
+        $orderEvent = $state->GetEventData(\TPkgExternalTrackerState::EVENT_PKG_SHOP_CREATE_ORDER);
 
         if (false !== $orderEvent) {
-            $htmlLines = array();
+            $htmlLines = [];
             $htmlLines[] = "ga('require', 'ecommerce');";
 
             $htmlLines[] = $this->getOrderCompleteEventOrderDetails($orderEvent);
@@ -208,41 +192,36 @@ class ExternalTrackerGoogleUniversalAnalytics extends TdbPkgExternalTracker
     }
 
     /**
-     * @param TdbShopOrder $orderEvent
-     *
      * @return string
      */
-    protected function getOrderCompleteEventOrderDetails(TdbShopOrder $orderEvent)
+    protected function getOrderCompleteEventOrderDetails(\TdbShopOrder $orderEvent)
     {
-        $params = array(
+        $params = [
             'id' => $orderEvent->fieldOrdernumber,
             'affiliation' => $orderEvent->fieldAffiliateCode,
             'revenue' => $orderEvent->fieldValueTotal,
             'tax' => $orderEvent->fieldValueVatTotal,
             'shipping' => $orderEvent->fieldShopShippingGroupPrice,
-        );
+        ];
 
         return sprintf("ga('ecommerce:addTransaction', %s );", json_encode($params));
     }
 
     /**
-     * @param TdbShopOrder     $orderEvent
-     * @param TdbShopOrderItem $orderItem
-     *
      * @return string
      */
-    protected function getOrderCompleteEventOrderItemDetails(TdbShopOrder $orderEvent, TdbShopOrderItem $orderItem)
+    protected function getOrderCompleteEventOrderItemDetails(\TdbShopOrder $orderEvent, \TdbShopOrderItem $orderItem)
     {
         $dUnitPrice = $orderItem->fieldOrderPriceAfterDiscounts / $orderItem->fieldOrderAmount;
 
-        $params = array(
+        $params = [
             'id' => $orderEvent->fieldOrdernumber,
             'sku' => $orderItem->fieldArticlenumber,
             'name' => $orderItem->fieldName,
             'category' => $orderItem->fieldNameVariantInfo,
             'price' => $dUnitPrice,
             'quantity' => $orderItem->fieldOrderAmount,
-        );
+        ];
 
         return sprintf("ga('ecommerce:addItem', %s );", json_encode($params));
     }

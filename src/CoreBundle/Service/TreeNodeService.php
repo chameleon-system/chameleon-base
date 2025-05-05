@@ -12,7 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessInterface;
-use TdbCmsTreeNode;
 
 class TreeNodeService implements TreeNodeServiceInterface
 {
@@ -21,9 +20,6 @@ class TreeNodeService implements TreeNodeServiceInterface
      */
     private $dataAccess;
 
-    /**
-     * @param DataAccessInterface $dataAccess
-     */
     public function __construct(DataAccessInterface $dataAccess)
     {
         $this->dataAccess = $dataAccess;
@@ -47,7 +43,7 @@ class TreeNodeService implements TreeNodeServiceInterface
      */
     public function getByTreeId($treeId, $languageId = null)
     {
-        /** @var TdbCmsTreeNode[] $treeNodeList */
+        /** @var \TdbCmsTreeNode[] $treeNodeList */
         $treeNodeList = $this->dataAccess->loadAll($languageId);
         foreach ($treeNodeList as $treeNode) {
             if ($treeNode->fieldCmsTreeId === $treeId) {

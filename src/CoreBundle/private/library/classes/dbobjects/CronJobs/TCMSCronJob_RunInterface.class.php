@@ -11,7 +11,7 @@
 
 /**
  * Executes an Inteface. Which interface to run is set via the parameter "systemname".
-/**/
+ * /**/
 class TCMSCronJob_RunInterface extends TdbCmsCronjobs
 {
     protected function _ExecuteCron()

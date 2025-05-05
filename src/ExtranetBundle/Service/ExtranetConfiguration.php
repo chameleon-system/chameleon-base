@@ -13,24 +13,19 @@ namespace ChameleonSystem\ExtranetBundle\Service;
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetConfigurationInterface;
-use TdbDataExtranet;
-use TdbDataExtranetList;
 
 class ExtranetConfiguration implements ExtranetConfigurationInterface
 {
     /**
-     * @var TdbDataExtranet
+     * @var \TdbDataExtranet
      */
-    private $configObject = null;
+    private $configObject;
 
     /**
      * @var PortalDomainServiceInterface
      */
     private $portalDomainService;
 
-    /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     */
     public function __construct(
         PortalDomainServiceInterface $portalDomainService
     ) {
@@ -98,10 +93,10 @@ class ExtranetConfiguration implements ExtranetConfigurationInterface
 
         $portal = $this->portalDomainService->getActivePortal();
         if ($portal) {
-            $this->configObject = TdbDataExtranet::GetNewInstance();
+            $this->configObject = \TdbDataExtranet::GetNewInstance();
             $this->configObject->LoadFromField('cms_portal_id', $portal->id);
         } else {
-            $configList = TdbDataExtranetList::GetList();
+            $configList = \TdbDataExtranetList::GetList();
             $this->configObject = $configList->Current();
         }
 

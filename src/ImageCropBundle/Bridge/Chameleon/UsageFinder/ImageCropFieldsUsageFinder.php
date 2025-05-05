@@ -21,7 +21,7 @@ class ImageCropFieldsUsageFinder extends AbstractImageFieldsUsageFinder
      */
     protected function getFieldTypeConstantNamesToHandle()
     {
-        return array('CMSFIELD_EXTENDEDTABLELIST_MEDIA_CROP');
+        return ['CMSFIELD_EXTENDEDTABLELIST_MEDIA_CROP'];
     }
 
     /**
@@ -29,7 +29,7 @@ class ImageCropFieldsUsageFinder extends AbstractImageFieldsUsageFinder
      */
     protected function getRecordsForField($fieldTypeConstantName, $fieldRow, MediaItemDataModel $mediaItem)
     {
-        $records = array();
+        $records = [];
         switch ($fieldTypeConstantName) {
             case 'CMSFIELD_EXTENDEDTABLELIST_MEDIA_CROP':
                 $query = sprintf(
@@ -40,9 +40,9 @@ class ImageCropFieldsUsageFinder extends AbstractImageFieldsUsageFinder
                 );
                 $records = $this->databaseConnection->fetchAllAssociative(
                     $query,
-                    array(
+                    [
                         'mediaItemId' => $mediaItem->getId(),
-                    )
+                    ]
                 );
                 break;
             default:

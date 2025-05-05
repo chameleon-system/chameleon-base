@@ -15,7 +15,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ViewRendererEvent extends Event
 {
-    const EVENT_POST_RENDER = 'chameleon_system.viewrenderer.post_render';
+    public const EVENT_POST_RENDER = 'chameleon_system.viewrenderer.post_render';
 
     /**
      * @var string

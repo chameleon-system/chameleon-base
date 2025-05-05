@@ -11,9 +11,9 @@
 
 class THTMLTableColumnDate extends THTMLTableColumn
 {
-    const SELF_FIELD_DEF = 'THTMLTableColumnDate,THTMLTable,Core';
-    const FILTER_FROM = 'from';
-    const FILTER_TO = 'to';
+    public const SELF_FIELD_DEF = 'THTMLTableColumnDate,THTMLTable,Core';
+    public const FILTER_FROM = 'from';
+    public const FILTER_TO = 'to';
 
     /**
      * set this to controll wich parts of the date should be shown (use the constants from TCMSLocal::DATEFORMAT_*).
@@ -37,7 +37,7 @@ class THTMLTableColumnDate extends THTMLTableColumn
         if (is_null($sSearchFilter)) {
             $sSearchFilter = $this->searchFilter;
         } elseif (!is_array($sSearchFilter)) {
-            $sSearchFilter = array(self::FILTER_FROM => $sSearchFilter, self::FILTER_TO => $sSearchFilter);
+            $sSearchFilter = [self::FILTER_FROM => $sSearchFilter, self::FILTER_TO => $sSearchFilter];
         }
         if (is_array($sSearchFilter)) {
             $sStartVal = '';
@@ -76,7 +76,7 @@ class THTMLTableColumnDate extends THTMLTableColumn
     /**
      * method used to format the given value. overwrite this method for every column type you write.
      *
-     * @param string     $sValue
+     * @param string $sValue
      * @param TCMSRecord $oTableRow
      *
      * @return string

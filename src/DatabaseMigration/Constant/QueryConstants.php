@@ -13,7 +13,7 @@ namespace ChameleonSystem\DatabaseMigration\Constant;
 
 class QueryConstants
 {
-    const FIELDTYPE_ARRAY = 'array';
-    const FIELDTYPE_COLUMN = 'column';
-    const FIELDTYPE_LITERAL = 'literal';
+    public const FIELDTYPE_ARRAY = 'array';
+    public const FIELDTYPE_COLUMN = 'column';
+    public const FIELDTYPE_LITERAL = 'literal';
 }

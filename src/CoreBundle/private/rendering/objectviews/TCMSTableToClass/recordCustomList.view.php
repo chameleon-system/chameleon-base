@@ -1,2 +1,2 @@
 <?php echo "<?php\n"; ?>
-class <?=$sClassName; ?>List extends <?=$sExtendsClassName; ?>List {}
+class <?php echo $sClassName; ?>List extends <?php echo $sExtendsClassName; ?>List {}

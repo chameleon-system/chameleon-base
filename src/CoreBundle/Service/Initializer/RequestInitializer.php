@@ -14,7 +14,6 @@ namespace ChameleonSystem\CoreBundle\Service\Initializer;
 use ChameleonSystem\CoreBundle\Response\ResponseVariableReplacerInterface;
 use ChameleonSystem\CoreBundle\Session\ChameleonSessionManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use TGlobal;
 
 class RequestInitializer
 {
@@ -33,8 +32,6 @@ class RequestInitializer
     }
 
     /**
-     * @param Request $request
-     *
      * @return void
      */
     public function initialize(Request $request)
@@ -50,12 +47,13 @@ class RequestInitializer
 
     /**
      * @psalm-suppress InvalidArgument TCMSErrorHandler::ShutdownHandler exists
+     *
      * @return void
      */
     protected function registerErrorHandler()
     {
         if (!_DEVELOPMENT_MODE && USE_DEFAULT_ERROR_HANDLER) {
-            register_shutdown_function(array('TCMSErrorHandler', 'ShutdownHandler'));
+            register_shutdown_function(['TCMSErrorHandler', 'ShutdownHandler']);
         }
     }
 
@@ -74,9 +72,9 @@ class RequestInitializer
      */
     protected function addStaticURLs()
     {
-        $aStaticURLs = TGlobal::GetStaticURLPrefix();
+        $aStaticURLs = \TGlobal::GetStaticURLPrefix();
         if (!is_array($aStaticURLs)) {
-            $aStaticURLs = array($aStaticURLs);
+            $aStaticURLs = [$aStaticURLs];
         }
         $iCount = 0;
         foreach ($aStaticURLs as $sStaticURL) {
@@ -91,8 +89,6 @@ class RequestInitializer
     }
 
     /**
-     * @param Request $request
-     *
      * @return void
      */
     protected function transformParameters(Request $request)

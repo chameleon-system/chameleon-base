@@ -23,16 +23,12 @@ class DataAccessCmsTreeRequestLevelCacheDecorator implements DataAccessCmsTreeIn
     /**
      * @var array
      */
-    private $cache = array();
+    private $cache = [];
     /**
      * @var LanguageServiceInterface
      */
     private $languageService;
 
-    /**
-     * @param DataAccessCmsTreeInterface $subject
-     * @param LanguageServiceInterface   $languageService
-     */
     public function __construct(DataAccessCmsTreeInterface $subject, LanguageServiceInterface $languageService)
     {
         $this->subject = $subject;
@@ -77,7 +73,7 @@ class DataAccessCmsTreeRequestLevelCacheDecorator implements DataAccessCmsTreeIn
     {
         $all = $this->getAllInvertedNoFollowRulePageIds();
         if (false === isset($all[$cmsTreeId])) {
-            return array();
+            return [];
         }
 
         return $all[$cmsTreeId];

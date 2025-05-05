@@ -49,7 +49,7 @@ class ChameleonControllerBackendCallDecisionTest extends TestCase
     /**
      * @test
      */
-    public function it_ignores_host()
+    public function itIgnoresHost()
     {
         $_SERVER['HTTP_HOST'] = 'cms.foo.bar';
         $requestUri = '/foobar';
@@ -59,7 +59,7 @@ class ChameleonControllerBackendCallDecisionTest extends TestCase
     /**
      * @test
      */
-    public function it_ignores_host_with_admin()
+    public function itIgnoresHostWithAdmin()
     {
         $_SERVER['HTTP_HOST'] = 'admin.foo.bar';
         $requestUri = '/foobar';
@@ -69,7 +69,7 @@ class ChameleonControllerBackendCallDecisionTest extends TestCase
     /**
      * @test
      */
-    public function it_uses_request_uri()
+    public function itUsesRequestUri()
     {
         $_SERVER['HTTP_HOST'] = 'cms.foo.bar';
         $requestUri = '/cms';
@@ -79,7 +79,7 @@ class ChameleonControllerBackendCallDecisionTest extends TestCase
     /**
      * @test
      */
-    public function it_uses_request_uri_that_only_ends_with_cms()
+    public function itUsesRequestUriThatOnlyEndsWithCms()
     {
         $_SERVER['HTTP_HOST'] = 'cms.foo.bar';
         $requestUri = '/foobar/cms';
@@ -89,7 +89,7 @@ class ChameleonControllerBackendCallDecisionTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_frontend_calls()
+    public function itAcceptsFrontendCalls()
     {
         $_SERVER['HTTP_HOST'] = 'cms.foo.bar';
         $requestUri = '/cmsfoobar';

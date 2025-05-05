@@ -36,7 +36,6 @@ class SessionIdProcessorTest extends TestCase
         $this->subject = new SessionIdProcessor($this->mockRequestStack);
     }
 
-
     public function testInvokeAddsTheSessionId(): void
     {
         $this->mockRequestWithSessionId('session-id');
@@ -96,5 +95,4 @@ class SessionIdProcessorTest extends TestCase
         $this->assertArrayHasKey('session_id', $result['extra']);
         $this->assertContains($sessionId, $result['extra']);
     }
-
 }

@@ -12,22 +12,21 @@
 namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use TCMSPortal;
 
 class ChangeActivePortalEvent extends Event
 {
     /**
-     * @var TCMSPortal|null
+     * @var \TCMSPortal|null
      */
     private $oldActivePortal;
 
     /**
-     * @var TCMSPortal|null
+     * @var \TCMSPortal|null
      */
     private $newActivePortal;
 
     /**
-     * @return TCMSPortal|null
+     * @return \TCMSPortal|null
      */
     public function getNewActivePortal()
     {
@@ -35,14 +34,14 @@ class ChangeActivePortalEvent extends Event
     }
 
     /**
-     * @return TCMSPortal|null
+     * @return \TCMSPortal|null
      */
     public function getOldActivePortal()
     {
         return $this->oldActivePortal;
     }
 
-    public function __construct(?TCMSPortal $oldActivePortal = null, ?TCMSPortal $newActivePortal = null)
+    public function __construct(?\TCMSPortal $oldActivePortal = null, ?\TCMSPortal $newActivePortal = null)
     {
         $this->oldActivePortal = $oldActivePortal;
         $this->newActivePortal = $newActivePortal;

@@ -1,2 +1,4 @@
-<?php echo $data['jsonEncodedReturnData']
+<?php
+
+echo $data['jsonEncodedReturnData']
 ;

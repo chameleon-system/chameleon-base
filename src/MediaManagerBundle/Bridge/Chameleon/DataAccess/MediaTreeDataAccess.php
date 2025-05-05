@@ -17,8 +17,6 @@ use ChameleonSystem\MediaManager\Exception\DataAccessException;
 use ChameleonSystem\MediaManager\Interfaces\MediaTreeDataAccessInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use TdbCmsMediaTree;
-use TTools;
 
 class MediaTreeDataAccess implements MediaTreeDataAccessInterface
 {
@@ -28,15 +26,11 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
     private $databaseConnection;
 
     /**
-     * @var TTools
+     * @var \TTools
      */
     private $tools;
 
-    /**
-     * @param Connection $databaseConnection
-     * @param TTools     $tools
-     */
-    public function __construct(Connection $databaseConnection, TTools $tools)
+    public function __construct(Connection $databaseConnection, \TTools $tools)
     {
         $this->databaseConnection = $databaseConnection;
         $this->tools = $tools;
@@ -52,7 +46,7 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
                 "SELECT * FROM `cms_media_tree` WHERE `parent_id` = ''"
             );
             $rootNode = $this->createMediaTreeNodeModelFromTableObject(
-                TdbCmsMediaTree::GetNewInstance($rowRootNode, $languageId)
+                \TdbCmsMediaTree::GetNewInstance($rowRootNode, $languageId)
             );
         } catch (DBALException $e) {
             throw new DataAccessException(sprintf('Error fetching media tree: %s', $e->getMessage()), 0, $e);
@@ -62,13 +56,11 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
     }
 
     /**
-     * @param TdbCmsMediaTree $tableObject
-     *
      * @return MediaTreeNodeDataModel
      *
      * @throws DBALException
      */
-    private function createMediaTreeNodeModelFromTableObject(TdbCmsMediaTree $tableObject)
+    private function createMediaTreeNodeModelFromTableObject(\TdbCmsMediaTree $tableObject)
     {
         $children = $this->getChildrenForMediaTreeNodeId($tableObject->id, $tableObject->GetLanguage());
 
@@ -90,14 +82,14 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
      */
     private function getChildrenForMediaTreeNodeId($id, $languageId)
     {
-        $children = array();
+        $children = [];
         $rows = $this->databaseConnection->fetchAllAssociative(
             'SELECT * FROM `cms_media_tree` WHERE `parent_id` = :parentId ORDER BY `entry_sort`',
-            array('parentId' => $id)
+            ['parentId' => $id]
         );
         foreach ($rows as $row) {
             $children[] = $this->createMediaTreeNodeModelFromTableObject(
-                TdbCmsMediaTree::GetNewInstance($row, $languageId)
+                \TdbCmsMediaTree::GetNewInstance($row, $languageId)
             );
         }
 
@@ -111,13 +103,13 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
     {
         $tableEditor = $this->tools->GetTableEditorManager('cms_media_tree', null, $languageId);
         if (false === $tableEditor->Save(
-                array(
-                    'parent_id' => $parentId,
-                    'icon' => '',
-                    'entry_sort' => $this->getMaxEntrySort($parentId) + 1,
-                    'name' => $name,
-                )
-            )
+            [
+                'parent_id' => $parentId,
+                'icon' => '',
+                'entry_sort' => $this->getMaxEntrySort($parentId) + 1,
+                'name' => $name,
+            ]
+        )
         ) {
             throw new DataAccessException(sprintf("Could not create '%s' with parent %s", $name, $parentId));
         }
@@ -133,7 +125,7 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
     private function getMaxEntrySort($parentId)
     {
         $query = 'SELECT MAX(entry_sort) AS entry_sort FROM `cms_media_tree` WHERE `parent_id` = :parentId';
-        $row = $this->databaseConnection->fetchAssociative($query, array('parentId' => $parentId));
+        $row = $this->databaseConnection->fetchAssociative($query, ['parentId' => $parentId]);
 
         return (int) $row['entry_sort'];
     }
@@ -146,13 +138,13 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
         try {
             $row = $this->databaseConnection->fetchAssociative(
                 'SELECT * FROM `cms_media_tree` WHERE `id` = :id',
-                array('id' => $id)
+                ['id' => $id]
             );
             if (false === is_array($row)) {
                 return null;
             }
 
-            return $this->createMediaTreeNodeModelFromTableObject(TdbCmsMediaTree::GetNewInstance($row, $languageId));
+            return $this->createMediaTreeNodeModelFromTableObject(\TdbCmsMediaTree::GetNewInstance($row, $languageId));
         } catch (DBALException $e) {
             throw new DataAccessException(
                 sprintf('Error fetching media tree node with ID %s: %s', $id, $e->getMessage()), 0, $e
@@ -167,11 +159,11 @@ class MediaTreeDataAccess implements MediaTreeDataAccessInterface
     {
         $tableEditor = $this->tools->GetTableEditorManager('cms_media_tree', $id, $languageId);
         if (false === $tableEditor->Save(
-                array(
-                    'id' => $id,
-                    'name' => $name,
-                )
-            )
+            [
+                'id' => $id,
+                'name' => $name,
+            ]
+        )
         ) {
             throw new DataAccessException(sprintf("Could not rename media tree node '%s'.", $id));
         }

@@ -49,5 +49,5 @@ class File
     /**
      * @var Error[]
      */
-    public $errors = array();
+    public $errors = [];
 }

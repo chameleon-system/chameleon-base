@@ -12,9 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Util;
 
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsTplPage;
 
 /**
  * PageServiceUtilInterface is a utility containing helper methods only meant to be used by the PageService.
@@ -28,17 +25,15 @@ interface PageServiceUtilInterface
      *
      * @throws RouteNotFoundException
      */
-    public function getPagePath(TdbCmsTplPage $page, TdbCmsLanguage $language);
+    public function getPagePath(\TdbCmsTplPage $page, \TdbCmsLanguage $language);
 
     /**
      * Adds things like trailing slashes and HTTPS usage to URLs.
      *
-     * @param string         $url
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     * @param bool           $forceSecure
+     * @param string $url
+     * @param bool $forceSecure
      *
      * @return string
      */
-    public function postProcessUrl($url, TdbCmsPortal $portal, TdbCmsLanguage $language, $forceSecure);
+    public function postProcessUrl($url, \TdbCmsPortal $portal, \TdbCmsLanguage $language, $forceSecure);
 }

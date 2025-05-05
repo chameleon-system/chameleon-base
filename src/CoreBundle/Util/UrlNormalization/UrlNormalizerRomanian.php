@@ -16,7 +16,7 @@ class UrlNormalizerRomanian implements UrlNormalizerInterface
     /**
      * @var array<string, string>
      */
-    private static $romanianCharNormalization = array(
+    private static $romanianCharNormalization = [
         'Ă' => 'A',
         'ă' => 'a',
         'Ș' => 'S',
@@ -27,7 +27,7 @@ class UrlNormalizerRomanian implements UrlNormalizerInterface
         'ț' => 't',
         'Ţ' => 'T',
         'ţ' => 't',
-    );
+    ];
 
     /**
      * {@inheritdoc}

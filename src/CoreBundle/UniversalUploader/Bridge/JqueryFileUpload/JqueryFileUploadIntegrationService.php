@@ -20,28 +20,28 @@ class JqueryFileUploadIntegrationService implements UploaderPluginIntegrationSer
      */
     public function getHtmlHeadIncludes()
     {
-        $includes = array();
+        $includes = [];
 
         $includes[] = '<link href="'.\TGlobal::GetStaticURLToWebLib('/components/jqueryFileUpload/css/jquery.fileupload.css').'" rel="stylesheet" type="text/css" />';
         $includes[] = '<link href="'.\TGlobal::GetStaticURLToWebLib('/universalUploader/jqueryFileUpload/uploader.css').'" rel="stylesheet" type="text/css" />';
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/javascript/jquery-ui-1.12.1.custom/jquery-ui.js').'" type="text/javascript"></script>';
 
-        //The Iframe Transport is required for browsers without support for XHR file uploads
+        // The Iframe Transport is required for browsers without support for XHR file uploads
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/components/jqueryFileUpload/js/jquery.iframe-transport.js').'" type="text/javascript"></script>';
 
-        //The File Upload library
+        // The File Upload library
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/components/jqueryFileUpload/js/jquery.fileupload.js').'" type="text/javascript"></script>';
 
-        //The File Upload processing plugin
+        // The File Upload processing plugin
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/components/jqueryFileUpload/js/jquery.fileupload-process.js').'" type="text/javascript"></script>';
 
-        //The File Upload validator plugin
+        // The File Upload validator plugin
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/components/jqueryFileUpload/js/jquery.fileupload-validate.js').'" type="text/javascript"></script>';
 
-        //Chameleon plugin
+        // Chameleon plugin
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/universalUploader/jqueryFileUpload/jquery.fileupload-chameleon.js').'" type="text/javascript"></script>';
 
-        //Chameleon integration plugin
+        // Chameleon integration plugin
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/universalUploader/jqueryFileUpload/uploader.js').'" type="text/javascript"></script>';
 
         return $includes;

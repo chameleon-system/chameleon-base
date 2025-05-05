@@ -1,7 +1,7 @@
-<title><?=TGlobal::OutHTML($data['sTitle']); ?></title>
+<title><?php echo TGlobal::OutHTML($data['sTitle']); ?></title>
 <?php if ($sCanonical) {
     ?>
-<link rel="canonical" href="<?=$sCanonical; ?>"/> <?php echo "\n";
+<link rel="canonical" href="<?php echo $sCanonical; ?>"/> <?php echo "\n";
 } ?>
 <?php
 foreach ($data['aMetaData'] as $metaType => $metaData) {

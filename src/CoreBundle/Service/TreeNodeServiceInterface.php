@@ -21,20 +21,20 @@ interface TreeNodeServiceInterface
     /**
      * Returns the tree node with the passed $treeNodeId.
      *
-     * @param string      $treeNodeId
+     * @param string $treeNodeId
      * @param string|null $languageId if null, the active language is used
      *
-     * @return TdbCmsTreeNode|null
+     * @return \TdbCmsTreeNode|null
      */
     public function getById($treeNodeId, $languageId = null);
 
     /**
      * Returns the tree node with the passed $treeId.
      *
-     * @param string      $treeId
+     * @param string $treeId
      * @param string|null $languageId if null, the active language is used
      *
-     * @return TdbCmsTreeNode|null
+     * @return \TdbCmsTreeNode|null
      */
     public function getByTreeId($treeId, $languageId = null);
 }

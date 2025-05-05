@@ -21,7 +21,7 @@ interface ImageCropPresetDataAccessInterface
     /**
      * Get a crop preset by id.
      *
-     * @param string      $id
+     * @param string $id
      * @param string|null $languageId
      *
      * @return ImageCropPresetDataModel|null
@@ -31,7 +31,7 @@ interface ImageCropPresetDataAccessInterface
     /**
      * Get a crop preset by its system name.
      *
-     * @param string      $systemName
+     * @param string $systemName
      * @param string|null $languageId
      *
      * @return ImageCropPresetDataModel|null

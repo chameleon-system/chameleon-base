@@ -12,7 +12,6 @@
 namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Converter;
 
 use ChameleonSystem\DatabaseMigration\DataModel\MigrationDataModel;
-use stdClass;
 
 class DataModelConverter
 {
@@ -30,17 +29,15 @@ class DataModelConverter
     }
 
     /**
-     * @param MigrationDataModel $dataModel
-     *
-     * @return stdClass[]
+     * @return \stdClass[]
      */
     private function convertModelToStdObjects(MigrationDataModel $dataModel)
     {
-        $classes = array();
+        $classes = [];
         $map = $dataModel->getBuildNumberToFileMap();
         ksort($map);
         foreach ($map as $buildNumber => $path) {
-            $class = new stdClass();
+            $class = new \stdClass();
             $class->fileName = $path;
             $class->buildNumber = $buildNumber;
             $class->bundleName = $dataModel->getBundleName();
@@ -57,7 +54,7 @@ class DataModelConverter
      */
     public function convertDataModelsToLegacySystem(array $models)
     {
-        $oldModel = array();
+        $oldModel = [];
         foreach ($models as $bundleName => $model) {
             $oldModel[$bundleName] = $this->convertModelToStdObjects($model);
         }

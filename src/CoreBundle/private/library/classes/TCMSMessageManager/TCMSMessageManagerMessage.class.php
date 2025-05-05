@@ -11,25 +11,25 @@
 
 class TCMSMessageManagerMessage extends TAdbCmsMessageManagerMessage
 {
-    const VIEW_PATH = 'TCMSMessageManagerMessage';
+    public const VIEW_PATH = 'TCMSMessageManagerMessage';
 
     /**
      * optional variables that will be replaced in the message.
      *
      * @var array
      */
-    protected $aMessageParameters = array();
+    protected $aMessageParameters = [];
 
     /**
      * render the message.
      *
-     * @param string $sViewName     - the view to use
-     * @param string $sViewType     - where the view is located (Core, Custom-Core, Customer)
-     * @param array  $aCallTimeVars - place any custom vars that you want to pass through the call here
+     * @param string $sViewName - the view to use
+     * @param string $sViewType - where the view is located (Core, Custom-Core, Customer)
+     * @param array $aCallTimeVars - place any custom vars that you want to pass through the call here
      *
      * @return string
      */
-    public function Render($sViewName = null, $sViewType = null, $aCallTimeVars = array())
+    public function Render($sViewName = null, $sViewType = null, $aCallTimeVars = [])
     {
         $oView = new TViewParser();
 
@@ -46,7 +46,7 @@ class TCMSMessageManagerMessage extends TAdbCmsMessageManagerMessage
         $oView->AddVar('sMessageString', $sMessage);
         $oView->AddVar('aCallTimeVars', $aCallTimeVars);
 
-        //view and viewtype
+        // view and viewtype
         if (!isset($sViewType) || is_null($sViewType) || empty($sViewType)) {
             if (!empty($this->fieldMessageLocationType)) {
                 $sViewType = $this->fieldMessageLocationType;
@@ -80,7 +80,7 @@ class TCMSMessageManagerMessage extends TAdbCmsMessageManagerMessage
      */
     protected function GetAdditionalViewVariables($sViewName, $sViewType)
     {
-        $aViewVariables = array();
+        $aViewVariables = [];
 
         return $aViewVariables;
     }
@@ -95,7 +95,7 @@ class TCMSMessageManagerMessage extends TAdbCmsMessageManagerMessage
         $sMessage = $this->fieldMessage;
         $sMessage = nl2br($sMessage);
         $matchString = '/\[\{(.*?)(:(string|number|date))*(:(.*?))*\}\]/si';
-        $sMessage = preg_replace_callback($matchString, array($this, 'InsertVariablesIntoMessageString'), $sMessage);
+        $sMessage = preg_replace_callback($matchString, [$this, 'InsertVariablesIntoMessageString'], $sMessage);
 
         return $sMessage;
     }
@@ -164,7 +164,7 @@ class TCMSMessageManagerMessage extends TAdbCmsMessageManagerMessage
 
     public function __sleep()
     {
-        return array('table', 'id', 'iLanguageId', 'aMessageParameters');
+        return ['table', 'id', 'iLanguageId', 'aMessageParameters'];
     }
 
     public function __wakeup()

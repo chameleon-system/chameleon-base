@@ -24,9 +24,6 @@ interface ResponseVariableReplacerInterface
      * Add a variable that can then be replaced by replaceVariables(). Note that variables MUST already be escaped by
      * the caller, as implementations of this interface do not know the context in which the variables are used and are
      * therefore unable to perform the correct escaping.
-     *
-     * @param string $key
-     * @param string $value
      */
     public function addVariable(string $key, string $value): void;
 
@@ -37,7 +34,9 @@ interface ResponseVariableReplacerInterface
      * Independent from defined variables, the method will also inject the authenticity token into the content.
      *
      * @template T of \stdClass|array|string
+     *
      * @param T $content
+     *
      * @return T
      *
      * @throws TokenInjectionFailedException

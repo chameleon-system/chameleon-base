@@ -50,7 +50,7 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
             if (false !== $rootDir) {
                 $sFile = str_replace($rootDir, '', $sFile);
             }
-            $requestData = array(
+            $requestData = [
                 'uid' => $aRequestDetails['uid'],
                 'session' => $aRequestDetails['session'],
                 'file' => $sFile,
@@ -63,9 +63,9 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
                 'data_extranet_user_id' => $aRequestDetails['data_extranet_user_id'],
                 'cms_user_id' => $aRequestDetails['cms_user_id'],
                 'data_extranet_user_name' => $aRequestDetails['data_extranet_user_name'],
-            );
+            ];
         } else {
-            $requestData = array();
+            $requestData = [];
         }
 
         foreach ($cleanContext as $key => $value) {
@@ -74,14 +74,14 @@ class TPkgCmsCoreLogMonologHandler_Database extends AbstractProcessingHandler
             }
         }
 
-        $data = array(
+        $data = [
             'id' => TTools::GetUUID(),
             'timestamp' => $oDate->getTimestamp(),
             'channel' => $record['channel'],
             'message' => $record['message'],
             'level' => $record['level'],
-            'context' => serialize(array('context' => $cleanContext, 'extra' => $record['extra'])),
-        );
+            'context' => serialize(['context' => $cleanContext, 'extra' => $record['extra']]),
+        ];
 
         $data = array_merge($data, $requestData);
 

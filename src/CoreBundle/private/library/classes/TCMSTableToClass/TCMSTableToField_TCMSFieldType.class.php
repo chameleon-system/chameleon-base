@@ -15,7 +15,7 @@
  */
 class TCMSTableToField_TCMSFieldType extends TCMSTableToClass_MockRecord
 {
-    public function __construct(\Doctrine\DBAL\Connection $connection, )
+    public function __construct(Doctrine\DBAL\Connection $connection)
     {
         parent::__construct($connection, 'cms_field_type');
     }

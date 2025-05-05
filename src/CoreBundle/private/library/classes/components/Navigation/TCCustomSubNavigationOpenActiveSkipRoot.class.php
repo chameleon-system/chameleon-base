@@ -11,7 +11,7 @@
 
 /**
  * only show the children of the active node.
-/**/
+ * /**/
 class TCCustomSubNavigationOpenActiveSkipRoot extends TCCustomNavigationOpenActiveSkipRoot
 {
     protected function ShowOnlyBreadcrumbNodes()

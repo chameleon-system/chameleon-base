@@ -11,16 +11,14 @@
 
 namespace ChameleonSystem\MediaManager\Exception;
 
-use Exception;
-
-class DataAccessException extends Exception
+class DataAccessException extends \Exception
 {
     /**
      * @param string $mediaItemId
      *
-     * @throws DataAccessException
-     *
      * @return never
+     *
+     * @throws DataAccessException
      */
     public static function throwMediaItemNotFoundException($mediaItemId)
     {

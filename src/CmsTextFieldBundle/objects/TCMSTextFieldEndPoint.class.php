@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * manages a wysiwyxg textfield.
-/**/
+ * /**/
 class TCMSTextFieldEndPoint
 {
     /**
@@ -32,7 +32,7 @@ class TCMSTextFieldEndPoint
      *
      * @var string - default = null
      */
-    public $content = null;
+    public $content;
 
     /**
      * max width of a thumbnail inside the wysiwyg text content block
@@ -55,7 +55,7 @@ class TCMSTextFieldEndPoint
      *
      * @var array
      */
-    protected $aEffects = array();
+    protected $aEffects = [];
 
     /**
      * max width of zoom images (thickbox/lightbox)
@@ -78,10 +78,10 @@ class TCMSTextFieldEndPoint
      *
      * @var array
      */
-    protected $aEnclosedMediaIDs = array();
+    protected $aEnclosedMediaIDs = [];
 
     /**
-     * if set to true, the replace functions will force full urls
+     * if set to true, the replace functions will force full urls.
      *
      * @var bool
      */
@@ -93,7 +93,7 @@ class TCMSTextFieldEndPoint
     /**
      * @var array
      */
-    protected $aProcessStack = array();
+    protected $aProcessStack = [];
 
     /**
      * @param string $content
@@ -121,7 +121,7 @@ class TCMSTextFieldEndPoint
     /**
      * sets the maximum width and height of zoomed images (thickbox/lightbox).
      *
-     * @param int $width  - default 780
+     * @param int $width - default 780
      * @param int $height - default 600
      *
      * @return void
@@ -140,15 +140,15 @@ class TCMSTextFieldEndPoint
      * "string", "date", or "number". It is possible to specify the number of decimals used when formating a number:
      * [{variable:number:decimalplaces}] - example: [{costs:number:2}].
      *
-     * @param int    $thumbnailWidth   - max image width within the text
-     * @param bool   $includeClearDiv  - include a clear div at the end of the text block (is true by default)
-     * @param array  $aCustomVariables - any custom variables you want to replace
+     * @param int $thumbnailWidth - max image width within the text
+     * @param bool $includeClearDiv - include a clear div at the end of the text block (is true by default)
+     * @param array $aCustomVariables - any custom variables you want to replace
      * @param string $sImageGroupName
-     * @param array  $aEffects         - See method TCMSImage::GetThumbnailPointer for available effects
+     * @param array $aEffects - See method TCMSImage::GetThumbnailPointer for available effects
      *
      * @return string
      */
-    public function GetText($thumbnailWidth = 1200, $includeClearDiv = true, $aCustomVariables = null, $sImageGroupName = 'lightbox', $aEffects = array())
+    public function GetText($thumbnailWidth = 1200, $includeClearDiv = true, $aCustomVariables = null, $sImageGroupName = 'lightbox', $aEffects = [])
     {
         $this->sImageGroupName = $sImageGroupName;
         $this->iMaxThumbWidth = $thumbnailWidth;
@@ -203,11 +203,11 @@ class TCMSTextFieldEndPoint
      *
      * @see TCMSTextFieldEndPoint::GetText()
      *
-     * @param int   $thumbnailWidth   - max image width within the text
-     * @param bool  $includeClearDiv  - include a clear div at the end of the text block (is false by default)
+     * @param int $thumbnailWidth - max image width within the text
+     * @param bool $includeClearDiv - include a clear div at the end of the text block (is false by default)
      * @param array $aCustomVariables - any custom variables you want to replace
-     * @param bool  $bClearThickBox   - remove all a href with class thickbox
-     * @param bool  $bClearScriptTags - clear all script tags
+     * @param bool $bClearThickBox - remove all a href with class thickbox
+     * @param bool $bClearScriptTags - clear all script tags
      *
      * @return string
      */
@@ -286,7 +286,7 @@ class TCMSTextFieldEndPoint
      * used when formating a number: [{variable:number:decimalplaces}]
      * example [{costs:number:2}].
      *
-     * @param int   $length           - max length of the text
+     * @param int $length - max length of the text
      * @param array $aCustomVariables - any custom variables you want to replace
      *
      * @return string - the cutted plain text
@@ -294,7 +294,7 @@ class TCMSTextFieldEndPoint
     public function GetPlainTextWordSave($length = null, $aCustomVariables = null)
     {
         $content = html_entity_decode(strip_tags(trim($this->_ReplaceCmsTextBlockInString($this->content))), null, 'UTF-8');
-        //$content = preg_replace('/\s+/', ' ', $content); // remove double whitespaces // but don't remove all CR's!
+        // $content = preg_replace('/\s+/', ' ', $content); // remove double whitespaces // but don't remove all CR's!
         while (strpos($content, '  ')) {
             $content = str_replace('  ', ' ', $content);
         }
@@ -309,7 +309,7 @@ class TCMSTextFieldEndPoint
 
     /**
      * @param string $content
-     * @param bool   $bClearThickbox
+     * @param bool $bClearThickbox
      *
      * @return string
      */
@@ -317,18 +317,18 @@ class TCMSTextFieldEndPoint
     {
         if (false !== stripos($content, 'cmsmedia')) {
             $matchString = "/<img([^>]+?)cmsmedia=['\"]([^'\"]+?)['\"](.*?)\\/>/usi";
-            $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_imageparser'), $content);
+            $content = preg_replace_callback($matchString, [$this, '_callback_cmstextfield_imageparser'], $content);
         }
 
         if ($bClearThickbox) {
             if (false !== stripos($content, 'thickbox')) {
                 $matchString = "/<a([^>]+?)class=['\"]([^'\"]*?)thickbox([^'\"]*?)['\"]([^>]*?)>(.*?)<\\/a>/usi";
-                $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_image_thickbox_clear'), $content);
+                $content = preg_replace_callback($matchString, [$this, '_callback_cmstextfield_image_thickbox_clear'], $content);
             }
         } else {
             if (false !== stripos($content, 'cmsLinkSurroundsImage')) {
                 $matchString = "/(<a[^>]+?class=['\"][^'\"]*?cmsLinkSurroundsImage[^'\"]*?['\"][^>]*?>.*?<figure[^>]+?class=['\"][^'\"]*?cssmedia[^'\"]*?['\"][^>]*?>.*?)(<a[^>]+?class=['\"][^'\"]*?thickbox[^'\"]*?['\"][^>]*?>)(.*?)(<\\/a>)(.*?<\\/figure>.*?<\\/a>)/usi";
-                $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_image_thickbox_clear_inHREF'), $content);
+                $content = preg_replace_callback($matchString, [$this, '_callback_cmstextfield_image_thickbox_clear_inHREF'], $content);
             }
         }
 
@@ -346,7 +346,7 @@ class TCMSTextFieldEndPoint
             return $content;
         }
         $matchString = '/\\'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'\\?pagedef=([^&#"]+)([^"]+)?/si';
-        $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_linkparser'), $content);
+        $content = preg_replace_callback($matchString, [$this, '_callback_cmstextfield_linkparser'], $content);
 
         return $content;
     }
@@ -364,7 +364,7 @@ class TCMSTextFieldEndPoint
             return $content;
         }
         $sPatter = '#<a.+?>(|.+?)</a>#';
-        $content = preg_replace_callback($sPatter, array($this, '_callback_cmstextfield_anchorparser'), $content);
+        $content = preg_replace_callback($sPatter, [$this, '_callback_cmstextfield_anchorparser'], $content);
 
         return $content;
     }
@@ -382,7 +382,7 @@ class TCMSTextFieldEndPoint
             return $content;
         }
         $matchString = '#<a.+?>(|.+?)</a>#';
-        $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_externallinkparser'), $content);
+        $content = preg_replace_callback($matchString, [$this, '_callback_cmstextfield_externallinkparser'], $content);
 
         return $content;
     }
@@ -390,9 +390,9 @@ class TCMSTextFieldEndPoint
     /**
      * add cms class to set css for links that surround an <img /> tag.
      *
-     * @return null|string
-     *
      * @param string $content
+     *
+     * @return string|null
      */
     protected function _AddCMSClassToLinkedImages($content)
     {
@@ -400,7 +400,7 @@ class TCMSTextFieldEndPoint
             return $content;
         }
         $sPatter = '#(<a.+?>)([^</a>]*?(<img.+?>).*?</a>|.*?</a>|([^<img]*?)</a>)#si';
-        $content = preg_replace_callback($sPatter, array($this, 'CallbackCmsTextfieldLinkSurroundImageParser'), $content);
+        $content = preg_replace_callback($sPatter, [$this, 'CallbackCmsTextfieldLinkSurroundImageParser'], $content);
 
         return $content;
     }
@@ -414,7 +414,7 @@ class TCMSTextFieldEndPoint
      */
     protected function CallbackCmsTextfieldLinkSurroundImageParser($aMatch)
     {
-        if (count($aMatch) > 3 && '' !== (trim($aMatch[3]))) {
+        if (count($aMatch) > 3 && '' !== trim($aMatch[3])) {
             $sClassName = 'cmsLinkSurroundsImage';
             if (strstr($aMatch[1], 'class')) {
                 $sReturnString = preg_replace('#class[[:space:]]*=[[:space:]]*"#', 'class="'.$sClassName.' ', $aMatch[0]);
@@ -452,7 +452,7 @@ class TCMSTextFieldEndPoint
         $returnString = $aMatch[0];
         if (isset($aMatch[2]) && false !== strpos($aMatch[2], 'thickbox')) {
             $galleryMatchString = "/<a([^>]+?)class=['\"]([^'\"]*?)thickbox([^'\"]*?)['\"]([^>]*?)>(.*?)<\\/a>/usi";
-            $returnString = preg_replace_callback($galleryMatchString, array($this, '_callback_cmstextfield_image_thickbox_clear'), $aMatch[0]);
+            $returnString = preg_replace_callback($galleryMatchString, [$this, '_callback_cmstextfield_image_thickbox_clear'], $aMatch[0]);
         }
 
         return $returnString;
@@ -468,7 +468,7 @@ class TCMSTextFieldEndPoint
         if (false !== stripos($content, 'cmsdocument')) {
             // old download links
             $matchString = "/<span([^>]+?)cmsdocument=[\"]([^'\"]+?)[\"]([^>]*?)><a([^>]+?)href=['\"]([^'\"]*?)['\"]([^>]*?)>([^<]*?)<\\/a>\\s*<span([^>]*?)>([^<]*?)<\\/span><\\/span>/usi";
-            $content = preg_replace_callback($matchString, array($this, '_callback_cmstextfield_downloadparser'), $content);
+            $content = preg_replace_callback($matchString, [$this, '_callback_cmstextfield_downloadparser'], $content);
 
             // new shorter download links
             $aDownloadSpans = $this->_GetDownloadSpans($content);
@@ -479,7 +479,7 @@ class TCMSTextFieldEndPoint
         }
 
         $oStringReplace = new TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads();
-        $content = $oStringReplace->replace($content, array(), false, false);
+        $content = $oStringReplace->replace($content, [], false, false);
 
         return $content;
     }
@@ -491,7 +491,7 @@ class TCMSTextFieldEndPoint
      */
     protected function _GetDownloadLinkFromSpan($sSpan)
     {
-        $aMatch = array();
+        $aMatch = [];
         $aMatch[0] = $sSpan;
 
         preg_match('#<span([^>]+?)cmsdocument_(.+?)">(.+?)</span>#', $sSpan, $aMatches);
@@ -510,7 +510,7 @@ class TCMSTextFieldEndPoint
      */
     protected function _GetDownloadSpans($content)
     {
-        $aFoundLinks = array();
+        $aFoundLinks = [];
         while (null != $content) {
             $aResult = $this->_DoGetDownloadSpans($content);
             $content = $aResult['content'];
@@ -551,16 +551,16 @@ class TCMSTextFieldEndPoint
                     }
                 }
 
-                return array('content' => $content, 'span' => $spanbuffer);
+                return ['content' => $content, 'span' => $spanbuffer];
             } else {
                 $nextEndTag = stripos($content, '</span>');
                 $content = substr($content, $nextEndTag + 7);
 
-                return array('content' => $content);
+                return ['content' => $content];
             }
         }
 
-        return array('content' => null);
+        return ['content' => null];
     }
 
     /**
@@ -651,7 +651,7 @@ class TCMSTextFieldEndPoint
         if (isset($aMatch[2])) {
             $itemId = $aMatch[2];
         }
-        $oItem = new TCMSDownloadFile(); /*@var $oItem TCMSDownloadFile */
+        $oItem = new TCMSDownloadFile(); /* @var $oItem TCMSDownloadFile */
         if (!empty($itemId) && $oItem->Load($itemId)) {
             $bHideSize = true;
             $bHideName = false;
@@ -727,7 +727,7 @@ class TCMSTextFieldEndPoint
         if (isset($aLinkAttributes) && isset($aLinkAttributes[0])) {
             return $aLinkAttributes[0];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -761,7 +761,7 @@ class TCMSTextFieldEndPoint
         // other parameters in url? keep them
         $iOtherParamPos = strpos($urlParams, '&');
         if (false === $iOtherParamPos) {
-            $parameters = array();
+            $parameters = [];
         } else {
             $otherParams = substr($urlParams, $iOtherParamPos);
             $parameters = $this->getUrlUtil()->getUrlParametersAsArray($otherParams);
@@ -914,8 +914,6 @@ class TCMSTextFieldEndPoint
     }
 
     /**
-     * @param TCMSImage $oImage
-     *
      * @return bool
      */
     protected function isImageBiggerThanMobileScreenSize(TCMSImage $oImage)
@@ -986,7 +984,7 @@ class TCMSTextFieldEndPoint
     protected function _callback_cmstextfield_externallinkparser($aMatch)
     {
         $sPattern = '/\\'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'\\?pagedef=([^&]+?)(&|&amp;)__treeNode=([^"]+?)"/si';
-        $aTmpMatches = array();
+        $aTmpMatches = [];
         if (0 === preg_match($sPattern, trim($aMatch[0]), $aTmpMatches)) {
             if (strstr($aMatch[0], 'class="')) {
                 $sReturnString = preg_replace('#class="#', 'class="external ', $aMatch[0]);
@@ -1021,7 +1019,7 @@ class TCMSTextFieldEndPoint
      * returns the path to the zoom image.
      *
      * @param TCMSImage $oImage
-     * @param array     $tags
+     * @param array $tags
      *
      * @return string
      */
@@ -1089,7 +1087,7 @@ class TCMSTextFieldEndPoint
      * Hook for pkg CmsTextBlock to replace text blocks from string.
      *
      * @param string $sString
-     * @param int    $iWidth
+     * @param int $iWidth
      *
      * @return string
      */
@@ -1117,7 +1115,7 @@ class TCMSTextFieldEndPoint
      */
     private function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ServiceLocator::get('chameleon_system_core.page_service');
     }
 
     /**
@@ -1125,7 +1123,7 @@ class TCMSTextFieldEndPoint
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
     /**

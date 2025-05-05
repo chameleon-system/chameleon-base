@@ -12,8 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Util;
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
-use TdbCmsLanguage;
-use TdbCmsPortal;
 
 class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
 {
@@ -22,9 +20,6 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
      */
     private $portalDomainService;
 
-    /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     */
     public function __construct(PortalDomainServiceInterface $portalDomainService)
     {
         $this->portalDomainService = $portalDomainService;
@@ -33,12 +28,12 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generatePrefixParts(TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function generatePrefixParts(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
         $portalPrefix = $this->getPortalPrefix($portal);
         $languagePrefix = $this->getLanguagePrefix($portal, $language);
 
-        $prefixParts = array();
+        $prefixParts = [];
         if (!empty($portalPrefix)) {
             $prefixParts[] = $portalPrefix;
         }
@@ -52,7 +47,7 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generatePrefix(TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function generatePrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
         $prefixParts = $this->generatePrefixParts($portal, $language);
         if (empty($prefixParts)) {
@@ -71,7 +66,7 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
      *                - the given portal is not set to support multi-language
      *                - the domain associated with the portal has a language setting
      */
-    public function getLanguagePrefix(TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function getLanguagePrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
         if (null === $portal) {
             return '';
@@ -100,7 +95,7 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function getPortalPrefix(TdbCmsPortal $portal = null)
+    public function getPortalPrefix(?\TdbCmsPortal $portal = null)
     {
         if (null === $portal) {
             return '';

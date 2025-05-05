@@ -6,16 +6,14 @@ class CmsImageCrop
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldExtendedLookup
         /** @var CmsMedia|null - Image */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldLookup
         /** @var CmsImageCropPreset|null - Preset */
-        private ?CmsImageCropPreset $cmsImageCropPreset = null
-        ,
+        private ?CmsImageCropPreset $cmsImageCropPreset = null,
         // TCMSFieldNumber
         /** @var int - X position of crop */
         private int $posX = 0,
@@ -71,7 +69,6 @@ class CmsImageCrop
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsImageCropPreset(): ?CmsImageCropPreset
     {
@@ -84,7 +81,6 @@ class CmsImageCrop
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getPosX(): int
@@ -99,7 +95,6 @@ class CmsImageCrop
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getPosY(): int
     {
@@ -112,7 +107,6 @@ class CmsImageCrop
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getWidth(): int
@@ -127,7 +121,6 @@ class CmsImageCrop
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getHeight(): int
     {
@@ -141,7 +134,6 @@ class CmsImageCrop
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -154,6 +146,4 @@ class CmsImageCrop
 
         return $this;
     }
-
-
 }

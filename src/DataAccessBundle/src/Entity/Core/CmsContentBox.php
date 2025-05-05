@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class CmsContentBox
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Widget class */
@@ -70,7 +69,6 @@ class CmsContentBox
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -83,7 +81,6 @@ class CmsContentBox
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClassPath(): string
@@ -98,7 +95,6 @@ class CmsContentBox
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemName(): string
     {
@@ -111,7 +107,6 @@ class CmsContentBox
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -126,7 +121,6 @@ class CmsContentBox
         return $this;
     }
 
-
     // TCMSFieldColorpicker
     public function getHeadlinecolHexcolor(): string
     {
@@ -140,7 +134,6 @@ class CmsContentBox
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getShowInCol(): string
     {
@@ -153,6 +146,4 @@ class CmsContentBox
 
         return $this;
     }
-
-
 }

@@ -21,7 +21,7 @@ while ($oField = $oFields->Next()) {
 */
 
 /****************************************************************************
-* Copyright <?=$year; ?> by ESONO AG, Freiburg, Germany
+* Copyright <?php echo $year; ?> by ESONO AG, Freiburg, Germany
 <?php
   if (is_array($aTableNotes)) {
       foreach ($aTableNotes as $sLine) {
@@ -30,7 +30,7 @@ while ($oField = $oFields->Next()) {
   }
 ?>
 /***************************************************************************/
-class <?=$sAutoClassName; ?> extends <?=$sParentClass; ?>
+class <?php echo $sAutoClassName; ?> extends <?php echo $sParentClass; ?>
 
 {
     private static $translatableFields = array(
@@ -48,7 +48,7 @@ class <?=$sAutoClassName; ?> extends <?=$sParentClass; ?>
      */
     static public function GetOwningCmsTblConfId()
     {
-        return '<?=$aTableConf['id']; ?>';
+        return '<?php echo $aTableConf['id']; ?>';
     }
 
     /**
@@ -57,10 +57,10 @@ class <?=$sAutoClassName; ?> extends <?=$sParentClass; ?>
     */
     static public function isFrontendAutoCacheClearEnabled() {
         return <?php if (isset($aTableConf['frontend_auto_cache_clear_enabled']) && '1' == $aTableConf['frontend_auto_cache_clear_enabled']) {
-    echo 'true';
-} else {
-    echo 'false';
-} ?>;
+            echo 'true';
+        } else {
+            echo 'false';
+        } ?>;
     }
 
 <?php
@@ -82,16 +82,16 @@ if (isset($aTableConf['frontend_auto_cache_clear_enabled']) && '0' == $aTableCon
 <?php
 
 $oFields->GoToStart();
-  while ($oField = $oFields->Next()) {
-      if (is_a($oField, 'stdClass')) {
-          trigger_error('Error in field config of field '.$oField->name.' in table '.$oField->sTableName, E_USER_ERROR);
-      } else {
-          $sProp = $oField->RenderFieldPropertyString();
-          if (!empty($sProp)) {
-              echo $sProp."\n";
-          }
-      }
-  }
+while ($oField = $oFields->Next()) {
+    if (is_a($oField, 'stdClass')) {
+        trigger_error('Error in field config of field '.$oField->name.' in table '.$oField->sTableName, E_USER_ERROR);
+    } else {
+        $sProp = $oField->RenderFieldPropertyString();
+        if (!empty($sProp)) {
+            echo $sProp."\n";
+        }
+    }
+}
 ?>
     /**
      * @return string
@@ -125,16 +125,16 @@ $oFields->GoToStart();
     <?php
 
       $aMapping = [];
-      $oFields->GoToStart();
-      while ($oField = $oFields->Next()) {
-          $oFieldType = $oField->oDefinition->GetFieldType();
-          if ('mlt' == $oFieldType->sqlData['base_type']) {
-              /** @var $oField TCMSFieldLookupMultiselect */
-              $aMapping[$oField->oDefinition->sqlData['name']] = "'{$oField->oDefinition->sqlData['name']}'=>'".$oField->GetMLTTableName()."'";
-          }
-      }
-          echo implode(', ', $aMapping);
-    ?>
+$oFields->GoToStart();
+while ($oField = $oFields->Next()) {
+    $oFieldType = $oField->oDefinition->GetFieldType();
+    if ('mlt' == $oFieldType->sqlData['base_type']) {
+        /* @var $oField TCMSFieldLookupMultiselect */
+        $aMapping[$oField->oDefinition->sqlData['name']] = "'{$oField->oDefinition->sqlData['name']}'=>'".$oField->GetMLTTableName()."'";
+    }
+}
+echo implode(', ', $aMapping);
+?>
         );
 
         return $aFieldMapping;
@@ -150,40 +150,40 @@ $oFields->GoToStart();
         $aFieldMapping = array(
     <?php
 
-      /** @var \Doctrine\DBAL\Connection $databaseConnection */
-      $aMapping = array();
-      $oFields->GoToStart();
-      while ($oField = $oFields->Next()) {
-          $oFieldType = $oField->oDefinition->GetFieldType();
-          if ('mlt' == $oFieldType->sqlData['base_type']) {
-              $sOrderBy = '';
-              /** @var $oField TCMSFieldLookupMultiselect */
-              if (true == $oField->oDefinition->GetFieldtypeConfigKey('bAllowCustomSortOrder')) {
-                  $sOrderBy = $databaseConnection->quoteIdentifier($oField->GetMLTTableName()).'.`entry_sort` ASC';
-              } else {
-                  $sTargetTable = $oField->GetConnectedTableName();
-                  $query = 'SELECT `cms_tbl_display_orderfields`.*
+  /** @var Doctrine\DBAL\Connection $databaseConnection */
+  $aMapping = [];
+$oFields->GoToStart();
+while ($oField = $oFields->Next()) {
+    $oFieldType = $oField->oDefinition->GetFieldType();
+    if ('mlt' == $oFieldType->sqlData['base_type']) {
+        $sOrderBy = '';
+        /** @var $oField TCMSFieldLookupMultiselect */
+        if (true == $oField->oDefinition->GetFieldtypeConfigKey('bAllowCustomSortOrder')) {
+            $sOrderBy = $databaseConnection->quoteIdentifier($oField->GetMLTTableName()).'.`entry_sort` ASC';
+        } else {
+            $sTargetTable = $oField->GetConnectedTableName();
+            $query = 'SELECT `cms_tbl_display_orderfields`.*
                         FROM `cms_tbl_display_orderfields`
                   INNER JOIN `cms_tbl_conf` ON `cms_tbl_display_orderfields`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
                        WHERE `cms_tbl_conf`.`name` = :targetTableName
                     ORDER BY `cms_tbl_display_orderfields`.`position` ASC
                      ';
-                  $tRes = $databaseConnection->executeQuery($query, array('targetTableName' => $sTargetTable));
-                  $aOrderByList = array();
-                  while ($aOrder = $tRes->fetchAssociative()) {
-                      $aOrderByList[] = "{$aOrder['name']} {$aOrder['sort_order_direction']}";
-                  }
-                  if (count($aOrderByList) > 0) {
-                      $sOrderBy = implode(',', array_map(array($databaseConnection, 'quote'), $aOrderByList));
-                  }
-              }
-              if (!empty($sOrderBy)) {
-                  $aMapping[$oField->oDefinition->sqlData['name']] = '"'.$oField->oDefinition->sqlData['name'].'" => "'.$sOrderBy.'"';
-              }
-          }
-      }
-          echo implode(', ', $aMapping);
-    ?>
+            $tRes = $databaseConnection->executeQuery($query, ['targetTableName' => $sTargetTable]);
+            $aOrderByList = [];
+            while ($aOrder = $tRes->fetchAssociative()) {
+                $aOrderByList[] = "{$aOrder['name']} {$aOrder['sort_order_direction']}";
+            }
+            if (count($aOrderByList) > 0) {
+                $sOrderBy = implode(',', array_map([$databaseConnection, 'quote'], $aOrderByList));
+            }
+        }
+        if (!empty($sOrderBy)) {
+            $aMapping[$oField->oDefinition->sqlData['name']] = '"'.$oField->oDefinition->sqlData['name'].'" => "'.$sOrderBy.'"';
+        }
+    }
+}
+echo implode(', ', $aMapping);
+?>
         );
         if (array_key_exists($sMLTField, $aFieldMapping)) return $aFieldMapping[$sMLTField];
         else return false;
@@ -214,11 +214,11 @@ $oFields->GoToStart();
      *
      * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
      * @param string $sLanguage - init with the language passed
-     * @return <?=$sClassName."\n"; ?>
+     * @return <?php echo $sClassName."\n"; ?>
      */
     static public function GetNewInstance($sData = null, $sLanguage = null)
     {
-        $oObject = new <?=$sClassName; ?>();
+        $oObject = new <?php echo $sClassName; ?>();
         if (!is_null($sLanguage)) {
             $oObject->SetLanguage($sLanguage);
         }
@@ -241,7 +241,7 @@ $oFields->GoToStart();
      */
     public function __construct($id=null,$sLanguageId=null)
     {
-        $this->table = '<?=$sTableDBName; ?>';
+        $this->table = '<?php echo $sTableDBName; ?>';
         $this->id = $id;
         if (null !== $sLanguageId) {
             $this->SetLanguage($sLanguageId);
@@ -249,30 +249,30 @@ $oFields->GoToStart();
         parent::__construct();
     }
 <?php
-  $aLines = array();
-  $oFields->GoToStart();
-  while ($oField = $oFields->Next()) {
-      if (is_a($oField, 'stdClass')) {
-          trigger_error('Error in field config of field '.$oField->name.' in table '.$oField->sTableName, E_USER_ERROR);
-      } else {
-          $sProp = $oField->RenderFieldPostWakeupString();
-          if (!empty($sProp)) {
-              $aLines[] = $sProp."\n";
-          }
-      }
-  }
-  if (count($aLines) > 0) {
-      ?>
+  $aLines = [];
+$oFields->GoToStart();
+while ($oField = $oFields->Next()) {
+    if (is_a($oField, 'stdClass')) {
+        trigger_error('Error in field config of field '.$oField->name.' in table '.$oField->sTableName, E_USER_ERROR);
+    } else {
+        $sProp = $oField->RenderFieldPostWakeupString();
+        if (!empty($sProp)) {
+            $aLines[] = $sProp."\n";
+        }
+    }
+}
+if (count($aLines) > 0) {
+    ?>
     protected function PostWakeUpHook()
     {
         parent::PostWakeUpHook();
 <?php
     echo "\n";
-      echo implode("    \n", $aLines);
-      echo "\n"; ?>
+    echo implode("    \n", $aLines);
+    echo "\n"; ?>
     }
 <?php
-  }
+}
 ?>
 
     protected function PostLoadHook() 
@@ -286,16 +286,16 @@ $oFields->GoToStart();
         }
       <?php
       $needsLanguageHandling = false;
-      $oFields->GoToStart();
-      if (true === ACTIVE_TRANSLATION) {
-          while (!$needsLanguageHandling && ($oField = $oFields->Next())) {
-              if ($oField->oDefinition && '1' == $oField->oDefinition->sqlData['is_translatable']) {
-                  $needsLanguageHandling = true;
-              }
-          }
-      }
-      if ($needsLanguageHandling) {
-          ?>
+$oFields->GoToStart();
+if (true === ACTIVE_TRANSLATION) {
+    while (!$needsLanguageHandling && ($oField = $oFields->Next())) {
+        if ($oField->oDefinition && '1' == $oField->oDefinition->sqlData['is_translatable']) {
+            $needsLanguageHandling = true;
+        }
+    }
+}
+if ($needsLanguageHandling) {
+    ?>
         $sActiveLanguagePrefix = '';
         $skipPrefixLoading = false;
 <?php
@@ -305,11 +305,11 @@ $oFields->GoToStart();
         <?php
         }
 
-          /**
-           * Avoid endless recursion for TAdbCmsLanguage, but still enable language support for cms_language itself.
-           */
-          if ('TAdbCmsLanguage' === $sAutoClassName) {
-              ?>
+    /*
+     * Avoid endless recursion for TAdbCmsLanguage, but still enable language support for cms_language itself.
+     */
+    if ('TAdbCmsLanguage' === $sAutoClassName) {
+        ?>
             static $languageLoading = false;
 
             if (true === $languageLoading) {
@@ -317,7 +317,7 @@ $oFields->GoToStart();
             }
             $languageLoading = true;
             <?php
-          } ?>
+    } ?>
         if (false === $skipPrefixLoading) {
             $activeLanguageId = self::getLanguageService()->getActiveLanguageId();
             if (null === $this->iLanguageId || $activeLanguageId === $this->iLanguageId) {
@@ -333,36 +333,36 @@ $oFields->GoToStart();
             $languageLoading = false;
             <?php
         }
-      }
+}
 ?>
 <?php
-  $oFields->GoToStart();
-  while ($oField = $oFields->Next()) {
-      if (is_a($oField, 'stdClass')) {
-          trigger_error('Error in field config of field '.$oField->name.' in table '.$oField->sTableName, E_USER_ERROR);
-      } else {
-          $sProp = $oField->RenderFieldPostLoadString();
-          if (!empty($sProp)) {
-              echo $sProp."\n";
-          }
-      }
-  }
+$oFields->GoToStart();
+while ($oField = $oFields->Next()) {
+    if (is_a($oField, 'stdClass')) {
+        trigger_error('Error in field config of field '.$oField->name.' in table '.$oField->sTableName, E_USER_ERROR);
+    } else {
+        $sProp = $oField->RenderFieldPostLoadString();
+        if (!empty($sProp)) {
+            echo $sProp."\n";
+        }
+    }
+}
 ?>
 
     }
 
 <?php
   $oFields->GoToStart();
-  while ($oField = $oFields->Next()) {
-      if (is_a($oField, 'stdClass')) {
-          trigger_error('Error in field config of field '.$oField->name.' in table '.$oField->sTableName, E_USER_ERROR);
-      } else {
-          $sProp = $oField->RenderFieldMethodsString();
-          if (!empty($sProp)) {
-              echo $sProp."\n";
-          }
-      }
-  }
+while ($oField = $oFields->Next()) {
+    if (is_a($oField, 'stdClass')) {
+        trigger_error('Error in field config of field '.$oField->name.' in table '.$oField->sTableName, E_USER_ERROR);
+    } else {
+        $sProp = $oField->RenderFieldMethodsString();
+        if (!empty($sProp)) {
+            echo $sProp."\n";
+        }
+    }
+}
 ?>
 
     /**
@@ -379,10 +379,10 @@ $oFields->GoToStart();
             $sContent = $this->GetFromInternalCache('recordName');
             if (is_null($sContent)) {
                 $sNameColumn = '<?php if (!empty($aTableConf['name_column'])) {
-    echo $aTableConf['name_column'];
-} else {
-    echo 'name';
-} ?>';
+                    echo $aTableConf['name_column'];
+                } else {
+                    echo 'name';
+                } ?>';
                 $sActiveLanguagePrefix = '';
                 $sAutoClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS,$this->table);
                 $isMultiLanguageField = call_user_func(array($sAutoClassName,'CMSFieldIsTranslated'), $sNameColumn);
@@ -396,25 +396,25 @@ $oFields->GoToStart();
                 }
                 $fieldExists = (is_array($this->sqlData) && array_key_exists($sNameColumn, $this->sqlData));
           <?php
-          $sListQueryFiltered = str_replace('"', '\"', $aTableConf['list_query']);
-          $sListQueryFiltered = str_replace('$$langID$$', '".$this->iLanguageId."', $sListQueryFiltered);
-          ?>
-                $sListQuery = "<?=$sListQueryFiltered; ?>";
+                          $sListQueryFiltered = str_replace('"', '\"', $aTableConf['list_query']);
+$sListQueryFiltered = str_replace('$$langID$$', '".$this->iLanguageId."', $sListQueryFiltered);
+?>
+                $sListQuery = "<?php echo $sListQueryFiltered; ?>";
                 $databaseConnection = $this->getDatabaseConnection();
                 // if it does not exist, we will need to try to fetch it using the query...
                 if (!$fieldExists && !empty($sListQuery)) {
 
               <?php
-              if (!stristr($sListQueryFiltered, 'WHERE ')) {
-                  ?>
+    if (!stristr($sListQueryFiltered, 'WHERE ')) {
+        ?>
                     $listQuery = $sListQuery." WHERE ".$databaseConnection->quoteIdentifier($this->table).".`id` = ".$databaseConnection->quote($this->id);
               <?php
-              } else {
-                  $sListQueryFiltered = str_replace('WHERE ', 'WHERE ".$databaseConnection->quoteIdentifier($this->table).".`id` = ".$databaseConnection->quote($this->id)." AND ', $sListQueryFiltered); ?>
-                    $listQuery = "<?=$sListQueryFiltered; ?>";
+    } else {
+        $sListQueryFiltered = str_replace('WHERE ', 'WHERE ".$databaseConnection->quoteIdentifier($this->table).".`id` = ".$databaseConnection->quote($this->id)." AND ', $sListQueryFiltered); ?>
+                    $listQuery = "<?php echo $sListQueryFiltered; ?>";
               <?php
-              }
-              ?>
+    }
+?>
 
                     if ($nameRecord = $databaseConnection->fetchAssociative($listQuery)) {
                         if (array_key_exists($sNameColumn, $nameRecord)) {
@@ -436,13 +436,13 @@ $oFields->GoToStart();
                         }
                     }
 
-                    $sNameFieldCallbackFunction = '<?=$aTableConf['name_column_callback']; ?>';
+                    $sNameFieldCallbackFunction = '<?php echo $aTableConf['name_column_callback']; ?>';
                     if (!empty($sNameFieldCallbackFunction)) {
                         TGlobal::LoadCallbackFunction($sNameFieldCallbackFunction);
                         $sContent = $sNameFieldCallbackFunction($sContent, $this->sqlData, $sNameColumn);
                     }
                 } else {
-                    $sContent = "<?=$aTableConf['translation']; ?>";
+                    $sContent = "<?php echo $aTableConf['translation']; ?>";
                 }
 
                 $this->SetInternalCache('recordName', $sContent);
@@ -485,11 +485,11 @@ $oFields->GoToStart();
           if (!empty($sDisplayColumnCallbackFunctionName)) {
               ?>
 
-                if (!function_exists('<?=$sDisplayColumnCallbackFunctionName; ?>')) {
-                    TGlobal::LoadCallbackFunction('<?=$sDisplayColumnCallbackFunctionName; ?>');
+                if (!function_exists('<?php echo $sDisplayColumnCallbackFunctionName; ?>')) {
+                    TGlobal::LoadCallbackFunction('<?php echo $sDisplayColumnCallbackFunctionName; ?>');
                 }
 
-                $content = <?=$sDisplayColumnCallbackFunctionName; ?>($content, $this->sqlData, $displayColumn);
+                $content = <?php echo $sDisplayColumnCallbackFunctionName; ?>($content, $this->sqlData, $displayColumn);
 <?php
           } ?>
 

@@ -8,19 +8,17 @@ class CmsPortalSystemPage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsPortal|null - Belongs to portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Page */
-        private ?CmsTree $cmsTree = null
-        ,
+        private ?CmsTree $cmsTree = null,
         // TCMSFieldVarchar
         /** @var string - System name */
         private string $nameInternal = ''
@@ -64,7 +62,6 @@ class CmsPortalSystemPage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -77,7 +74,6 @@ class CmsPortalSystemPage
 
         return $this;
     }
-
 
     // TCMSFieldTreeNode
     public function getCmsTree(): ?CmsTree
@@ -92,7 +88,6 @@ class CmsPortalSystemPage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getNameInternal(): string
     {
@@ -105,6 +100,4 @@ class CmsPortalSystemPage
 
         return $this;
     }
-
-
 }

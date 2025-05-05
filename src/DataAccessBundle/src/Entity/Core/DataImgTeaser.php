@@ -9,12 +9,11 @@ class DataImgTeaser
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Title */
         private string $name = '',
@@ -67,7 +66,6 @@ class DataImgTeaser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -80,7 +78,6 @@ class DataImgTeaser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAltText(): string
@@ -95,7 +92,6 @@ class DataImgTeaser
         return $this;
     }
 
-
     // TCMSFieldURL
     public function getLink(): string
     {
@@ -109,7 +105,6 @@ class DataImgTeaser
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -122,6 +117,4 @@ class DataImgTeaser
 
         return $this;
     }
-
-
 }

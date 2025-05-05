@@ -30,7 +30,7 @@ class ChameleonHttpKernel extends HttpKernel
     {
         if ('' !== $this->trustedProxies) {
             $aProxies = explode(',', $this->trustedProxies);
-            $aTrustedProxies = array();
+            $aTrustedProxies = [];
             foreach ($aProxies as $val) {
                 $val = trim($val);
                 if ('' !== $val) {
@@ -54,5 +54,4 @@ class ChameleonHttpKernel extends HttpKernel
     {
         $this->trustedProxies = $trustedProxies;
     }
-
 }

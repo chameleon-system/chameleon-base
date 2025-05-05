@@ -11,12 +11,12 @@
 
 class THTMLTableColumnLookup extends THTMLTableColumn
 {
-    const SELF_FIELD_DEF = 'THTMLTableColumnLookup,THTMLTable,Core';
+    public const SELF_FIELD_DEF = 'THTMLTableColumnLookup,THTMLTable,Core';
 
     /**
      * method used to format the given value. overwrite this method for every column type you write.
      *
-     * @param string     $sValue
+     * @param string $sValue
      * @param TCMSRecord $oTableRow
      *
      * @return string

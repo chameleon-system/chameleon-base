@@ -19,7 +19,7 @@ class TPkgCmsNavigation_LanguageSelection extends AbstractViewMapper
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
-        $oRequirements->NeedsSourceObject('aTree', 'array', array());
+        $oRequirements->NeedsSourceObject('aTree', 'array', []);
     }
 
     /**
@@ -31,7 +31,7 @@ class TPkgCmsNavigation_LanguageSelection extends AbstractViewMapper
         if (count($aLanguageList) < 2) {
             return;
         }
-        /**
+        /*
          * disable if front end translation is disabled.
          */
         if (false === ACTIVE_TRANSLATION) {
@@ -46,10 +46,10 @@ class TPkgCmsNavigation_LanguageSelection extends AbstractViewMapper
         }
 
         // change language is part of the page meta module...
-        $aChangeLanguageParameter = array(
-            'module_fnc' => array('pkgLanguage' => 'changeLanguage'),
+        $aChangeLanguageParameter = [
+            'module_fnc' => ['pkgLanguage' => 'changeLanguage'],
             'l' => strtolower($oActiveLanguage->fieldIso6391),
-        );
+        ];
 
         $oNode = new TPkgCmsNavigationNode();
         $oNode->sLink = '#';
@@ -58,7 +58,7 @@ class TPkgCmsNavigation_LanguageSelection extends AbstractViewMapper
         $oNode->sNavigationIconClass = 'i-flag_'.TTools::GetActiveLanguageIsoName();
         $oNode->sRel = 'nofollow';
 
-        $aChildren = array();
+        $aChildren = [];
         foreach ($aLanguageList as $sLangIso => $sLangName) {
             if ($sLangIso === $oActiveLanguage->fieldIso6391) {
                 continue;
@@ -86,7 +86,7 @@ class TPkgCmsNavigation_LanguageSelection extends AbstractViewMapper
      */
     private function getLanguageList()
     {
-        $aLanguageList = array();
+        $aLanguageList = [];
         $oActivePortal = $this->getPortalDomainService()->getActivePortal();
         if (method_exists($oActivePortal, 'GetFieldBasedTranslationLanguageArray')) {
             $aLanguageList = $oActivePortal->GetFieldBasedTranslationLanguageArray();
@@ -112,7 +112,7 @@ class TPkgCmsNavigation_LanguageSelection extends AbstractViewMapper
      */
     private function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -120,6 +120,6 @@ class TPkgCmsNavigation_LanguageSelection extends AbstractViewMapper
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

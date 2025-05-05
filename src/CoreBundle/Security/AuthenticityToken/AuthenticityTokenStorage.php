@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\Exception\TokenNotFoundException;
 use Symfony\Component\Security\Csrf\TokenStorage\ClearableTokenStorageInterface;
 use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
-use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 /**
  * Mimics \Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage, but avoids injecting the session service
@@ -24,10 +23,6 @@ class AuthenticityTokenStorage implements ClearableTokenStorageInterface
      */
     private $namespace;
 
-    /**
-     * @param RequestStack $requestStack
-     * @param string       $namespace
-     */
     public function __construct(RequestStack $requestStack, string $namespace = SessionTokenStorage::SESSION_NAMESPACE)
     {
         $this->requestStack = $requestStack;
@@ -42,7 +37,7 @@ class AuthenticityTokenStorage implements ClearableTokenStorageInterface
         }
         $sessionKeys = $session->all();
         foreach ($sessionKeys as $key => $value) {
-            if (false === str_starts_with($this->namespace . '/', $key)) {
+            if (false === str_starts_with($this->namespace.'/', $key)) {
                 continue;
             }
 
@@ -87,8 +82,7 @@ class AuthenticityTokenStorage implements ClearableTokenStorageInterface
      * {@inheritDoc}
      *
      * @param string $tokenId The token ID
-     * @param string $token   The CSRF token
-     * @return void
+     * @param string $token The CSRF token
      */
     public function setToken(string $tokenId, string $token): void
     {

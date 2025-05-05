@@ -20,8 +20,6 @@ use ChameleonSystem\MediaManager\Exception\UsageDeleteException;
 interface MediaItemUsageDeleteServiceInterface
 {
     /**
-     * @param MediaItemUsageDataModel $usage
-     *
      * @return bool - return true if usage was deleted
      *
      * @throws UsageDeleteException

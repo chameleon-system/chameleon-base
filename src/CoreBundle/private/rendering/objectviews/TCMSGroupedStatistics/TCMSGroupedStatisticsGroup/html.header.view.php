@@ -4,7 +4,7 @@
     for ($i = 0; $i < $iMaxSubGroups; ++$i) {
         echo '<th>&nbsp;</th>';
     }
-//    $aNameColumns = $oGroup->GetColumnNames();
+    //    $aNameColumns = $oGroup->GetColumnNames();
     foreach ($aColumnNames as $sName) {
         echo '<td>'.$sName.'</td>';
     }

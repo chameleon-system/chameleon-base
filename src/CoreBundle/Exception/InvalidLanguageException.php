@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Exception;
 
-use Exception;
-
-class InvalidLanguageException extends Exception
+class InvalidLanguageException extends \Exception
 {
 }

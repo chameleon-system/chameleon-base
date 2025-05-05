@@ -16,10 +16,6 @@ interface MenuItemFactoryInterface
     /**
      * Creates a new menu item based on the passed database menu item.
      * Might return null, e.g. if the current user does not have permission to view this menu item.
-     *
-     * @param \TdbCmsMenuItem $menuItem
-     *
-     * @return MenuItem|null
      */
     public function createMenuItem(\TdbCmsMenuItem $menuItem): ?MenuItem;
 }

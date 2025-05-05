@@ -13,7 +13,7 @@
  * extends the standard listing so that a preview image is shown, and if the
  * class is called with the right parameters it will show an assign button to
  * assign an image from the list to the calling record.
-/**/
+ * /**/
 class TCMSListManagerImagedatabase extends TCMSListManagerFullGroupTable
 {
     /**
@@ -21,11 +21,11 @@ class TCMSListManagerImagedatabase extends TCMSListManagerFullGroupTable
      */
     public function AddFields()
     {
-        $jsParas = array('id');
+        $jsParas = ['id'];
         ++$this->columnCount;
-        $sTranslatedField = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_image_database.column_name_preview');
-        $this->tableObj->AddHeaderField(array('path' => $sTranslatedField), 'left', null, 1, false);
-        $this->tableObj->AddColumn('path', 'left', array($this, 'CallBackImageWithZoom'), $jsParas, 1);
+        $sTranslatedField = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_image_database.column_name_preview');
+        $this->tableObj->AddHeaderField(['path' => $sTranslatedField], 'left', null, 1, false);
+        $this->tableObj->AddColumn('path', 'left', [$this, 'CallBackImageWithZoom'], $jsParas, 1);
         parent::AddFields();
     }
 

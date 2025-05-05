@@ -38,7 +38,7 @@ class ModuleIconMigrator
     public function migrateModuleIcon(string $module, array $additionalIconMapping = [])
     {
         $query = 'SELECT * FROM `cms_tpl_module` WHERE `classname` = :module';
-        $row = $this->databaseConnection->fetchAssociative($query, array('module' => $module));
+        $row = $this->databaseConnection->fetchAssociative($query, ['module' => $module]);
 
         if (false === $row) {
             \TCMSLogChange::addInfoMessage(\sprintf('Template Module "%s" could not be found.', $module), \TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);

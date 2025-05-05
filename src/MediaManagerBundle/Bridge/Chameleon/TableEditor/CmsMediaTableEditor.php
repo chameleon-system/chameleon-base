@@ -18,9 +18,8 @@ use ChameleonSystem\MediaManager\Interfaces\MediaItemDataAccessInterface;
 use ChameleonSystem\MediaManager\MediaItemChainUsageFinder;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
-use TCMSTableEditorMedia;
 
-class CmsMediaTableEditor extends TCMSTableEditorMedia
+class CmsMediaTableEditor extends \TCMSTableEditorMedia
 {
     /**
      * Don't call parent - parent is completely replaced by this.

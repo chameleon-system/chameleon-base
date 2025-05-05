@@ -18,14 +18,14 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
      *
      * @var TCMSImage
      */
-    protected $oDefaultImage = null;
+    protected $oDefaultImage;
 
     /**
      * TGlobal object.
      *
      * @var TGlobal
      */
-    protected $oGlobal = null;
+    protected $oGlobal;
 
     /**
      * @param TCMSImage $oImage - the default image for the current selected position
@@ -77,7 +77,7 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
 
         if (!is_null($this->sRestriction)) {
             $oImage = new TCMSImage();
-            /** @var $oImage TCMSImage */
+            /* @var $oImage TCMSImage */
             $oImage->Load($this->sRestriction);
             if (!empty($oImage->aData['width']) && $oImage->aData['width'] > 0) {
                 $aCacheParameters['width'] = $oImage->aData['width'];
@@ -104,8 +104,6 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
 
     /**
      * restrict the list to show only images with given dimensions.
-     *
-     * @param string $query
      */
     public function GetCustomRestriction()
     {
@@ -129,7 +127,7 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
         $aAllowedFileTypeIDs = $this->GetAllowedFileTypeIDs();
         if (count($aAllowedFileTypeIDs) > 0) {
             $databaseConnection = $this->getDatabaseConnection();
-            $sAllowedFileTypeSearchString = implode(',', array_map(array($databaseConnection, 'quote'), $aAllowedFileTypeIDs));
+            $sAllowedFileTypeSearchString = implode(',', array_map([$databaseConnection, 'quote'], $aAllowedFileTypeIDs));
 
             if (!empty($query)) {
                 $query .= ' AND ';
@@ -139,7 +137,7 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
 
         if (!is_null($this->sRestriction)) {
             $oImage = new TCMSImage();
-            /** @var $oImage TCMSImage */
+            /* @var $oImage TCMSImage */
             $oImage->Load($this->sRestriction);
             if (!empty($oImage->aData['width']) && $oImage->aData['width'] > 0) {
                 $query .= '`'.MySqlLegacySupport::getInstance()->real_escape_string($this->oTableConf->sqlData['name'])."`.`width` = '".MySqlLegacySupport::getInstance()->real_escape_string($oImage->aData['width'])."'";
@@ -241,7 +239,7 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
      */
     protected function GetAllowedFileTypeIDs()
     {
-        $aAllowedFileTypeIDs = array();
+        $aAllowedFileTypeIDs = [];
 
         $sAllowedFileTypes = $this->GetAllowedFileTypes();
         if (!empty($sAllowedFileTypes)) {
@@ -267,9 +265,9 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
         $list_group_field_column = 'category';
 
         $this->tableObj->showGroupSelector = false;
-        $this->tableObj->AddGroupField(array($list_group_field_column => $groupField), 'left', null, null, $this->columnCount);
-        $this->tableObj->showAllGroupsText = '['.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
-        $tmpArray = array($list_group_field_column => 'ASC');
+        $this->tableObj->AddGroupField([$list_group_field_column => $groupField], 'left', null, null, $this->columnCount);
+        $this->tableObj->showAllGroupsText = '['.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
+        $tmpArray = [$list_group_field_column => 'ASC'];
         $this->tableObj->orderList = array_merge($tmpArray, $this->tableObj->orderList);
     }
 
@@ -278,6 +276,6 @@ class TCMSListManagerMediaSelector extends TCMSListManagerImagedatabase
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
     }
 }

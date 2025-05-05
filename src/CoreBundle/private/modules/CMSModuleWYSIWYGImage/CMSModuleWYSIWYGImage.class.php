@@ -14,14 +14,14 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
     /**
      * @deprecated since 6.3.0 - not used anymore
      */
-    protected $oMediaTreeNode = null;
+    protected $oMediaTreeNode;
 
     /**
      * the current tree node.
      *
      * @var int
      */
-    protected $directoryID = null;
+    protected $directoryID;
 
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
         $this->GetMediaTreeSelectBox();
 
         $oImageTableConf = new TCMSTableConf();
-        /** @var $oTable TCMSTableConf */
+        /* @var $oTable TCMSTableConf */
         $oImageTableConf->LoadFromField('name', 'cms_media');
         $this->data['id'] = $oImageTableConf->sqlData['id'];
         $this->data['cmsident'] = $oImageTableConf->sqlData['cmsident'];
@@ -67,7 +67,7 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('GetMediaProperties');
+        $externalFunctions = ['GetMediaProperties'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -81,7 +81,7 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
         $mediaID = $this->global->GetUserData('mediaID');
         if (!empty($mediaID)) {
             $oImage = new TCMSImage();
-            /** @var $oImage TCMSImage */
+            /* @var $oImage TCMSImage */
             $oImage->Load($mediaID);
 
             $oThumb = $oImage->GetThumbnail(100, 100);
@@ -94,7 +94,7 @@ class CMSModuleWYSIWYGImage extends TCMSModelBase
                 $fullImageURL = $oImage->GetRelativeURL();
             }
 
-            $returnArray = array();
+            $returnArray = [];
             $returnArray['image'] = $oImage;
             $returnArray['thumb'] = $oThumb;
             $sThumbURL = str_replace('&amp;', '&', $sThumbURL);

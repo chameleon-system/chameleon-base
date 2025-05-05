@@ -11,18 +11,14 @@
 
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\MediaManager\MediaManagerListState;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 
-class MediaManagerPickImagesMapper extends AbstractViewMapper
+class MediaManagerPickImagesMapper extends \AbstractViewMapper
 {
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('listState', MediaManagerListState::class);
     }
@@ -31,9 +27,9 @@ class MediaManagerPickImagesMapper extends AbstractViewMapper
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
          * @var MediaManagerListState $listState

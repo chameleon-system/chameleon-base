@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class MigrationDataModelTest extends TestCase
 {
-    const TESTBUNDLE = 'ChameleonSystemFooBundle';
+    public const TESTBUNDLE = 'ChameleonSystemFooBundle';
 
     /**
      * @var MigrationDataModel
@@ -38,7 +38,7 @@ class MigrationDataModelTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_the_correct_type()
+    public function itReturnsTheCorrectType()
     {
         $this->assertEquals(self::TESTBUNDLE, $this->model->getBundleName());
     }
@@ -46,24 +46,24 @@ class MigrationDataModelTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_an_empty_result()
+    public function itReturnsAnEmptyResult()
     {
-        $this->assertEquals(array(), $this->model->getBuildNumberToFileMap());
+        $this->assertEquals([], $this->model->getBuildNumberToFileMap());
     }
 
     /**
      * @test
      */
-    public function it_adds_build_files()
+    public function itAddsBuildFiles()
     {
         $this->model->addFile('1', 'foo/bar');
         $this->model->addFile('1', 'foo/baz');
         $this->model->addFile('2', 'foo/foobar');
 
-        $expected = array(
+        $expected = [
             '1' => 'foo/bar',
             '2' => 'foo/foobar',
-        );
+        ];
         $this->assertEquals($expected, $this->model->getBuildNumberToFileMap());
     }
 }

@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class MediaManagerListStateFromRequestService implements MediaManagerListStateServiceInterface
 {
-    const SESSION_KEY = 'mediaManagerState';
+    public const SESSION_KEY = 'mediaManagerState';
 
     /**
      * @var InputFilterUtilInterface
@@ -37,9 +37,7 @@ class MediaManagerListStateFromRequestService implements MediaManagerListStateSe
     private $defaultPageSize;
 
     /**
-     * @param InputFilterUtilInterface $inputFilterUtil
-     * @param RequestStack             $requestStack
-     * @param int                      $defaultPageSize
+     * @param int $defaultPageSize
      */
     public function __construct(InputFilterUtilInterface $inputFilterUtil, RequestStack $requestStack, $defaultPageSize)
     {

@@ -19,7 +19,7 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
  *   view - view to use
  *   refererPageId - from which page was the call made
  *   any other parameters that the module may expect to select the correct items.
-/**/
+ * /**/
 class MTCMSExportModuleCore extends TUserCustomModelBase
 {
     /**
@@ -27,11 +27,11 @@ class MTCMSExportModuleCore extends TUserCustomModelBase
      *
      * @var TCMSTPLModuleInstance
      */
-    protected $oListModule = null;
-    protected $iInstId = null;
-    protected $sView = null;
+    protected $oListModule;
+    protected $iInstId;
+    protected $sView;
 
-    const SESSION_INFO_NAME = '_moduleexportallowview';
+    public const SESSION_INFO_NAME = '_moduleexportallowview';
 
     public function Init()
     {

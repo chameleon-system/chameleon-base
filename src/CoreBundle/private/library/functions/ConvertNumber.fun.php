@@ -18,12 +18,12 @@
 *  output  : [return] (string) - converted string
 *  20.06.2002, v1.0
 */
-//..............................................................................
+// ..............................................................................
 function ConvertNumber($number, $dir, $digits = 2)
 {
     if (0 == strcmp($dir, 'sql2g')) {
         // numbers are stored as ints... convert to float
-        $cnumber = $number / (pow(10, $digits));
+        $cnumber = $number / pow(10, $digits);
         // and format
         $cnumber = number_format($cnumber, $digits, ',', '.');
 
@@ -50,9 +50,9 @@ function ConvertNumber($number, $dir, $digits = 2)
             $tempNum = '0';
         } // set to zero if empty
         if ($decimals > $digits) {
-            $tempNum = round($tempNum / (pow(10, $decimals - $digits)));
+            $tempNum = round($tempNum / pow(10, $decimals - $digits));
         } elseif ($decimals < $digits) {
-            $tempNum = round($tempNum * (pow(10, $digits - $decimals)));
+            $tempNum = round($tempNum * pow(10, $digits - $decimals));
         }
 
         return $sign.$tempNum;

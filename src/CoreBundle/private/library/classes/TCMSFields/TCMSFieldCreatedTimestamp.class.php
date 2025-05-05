@@ -11,7 +11,7 @@
 
 /**
  * a timestamp set only when the record is created (ie when the field is still empty).
-/**/
+ * /**/
 class TCMSFieldCreatedTimestamp extends TCMSFieldTimestamp
 {
     protected function getDoctrineDataModelXml(string $namespace): string
@@ -30,14 +30,14 @@ class TCMSFieldCreatedTimestamp extends TCMSFieldTimestamp
         $newdate = $this->ConvertPostDataToSQL();
         $html = '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($newdate).'" />';
 
-        $variablesArray = array();
+        $variablesArray = [];
         if (!empty($this->data) && '0000-00-00 00:00:00' != $this->data) {
             $valArray = explode(' ', $this->data);
             $dateArray = explode('-', $valArray[0]);
             $timeArray = explode(':', $valArray[1]);
 
             $variablesArray['%timestamp%'] = TGlobal::OutHTML($dateArray[2].'.'.$dateArray[1].'.'.$dateArray[0].' '.$timeArray[0].':'.$timeArray[1].':'.$timeArray[2]);
-            $html .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_timestamp.is_set_to', $variablesArray);
+            $html .= ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_timestamp.is_set_to', $variablesArray);
         } else {
             $year = date('Y');
             $month = date('m');
@@ -47,7 +47,7 @@ class TCMSFieldCreatedTimestamp extends TCMSFieldTimestamp
             $seconds = date('s');
 
             $variablesArray['%timestamp%'] = "{$day}.{$month}.{$year} {$hour}:{$minutes}:{$seconds}";
-            $html .= \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_timestamp.will_be_set_to', $variablesArray);
+            $html .= ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_timestamp.will_be_set_to', $variablesArray);
         }
 
         return $html;
@@ -68,8 +68,6 @@ class TCMSFieldCreatedTimestamp extends TCMSFieldTimestamp
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
-     *
-     * @return mixed
      */
     public function ConvertPostDataToSQL()
     {

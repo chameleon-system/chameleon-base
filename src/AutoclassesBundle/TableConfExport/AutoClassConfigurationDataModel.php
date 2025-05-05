@@ -8,8 +8,8 @@ class AutoClassConfigurationDataModel
         private readonly string $name,
         private readonly ?AutoClassConfigurationDefinition $record,
         private readonly ?AutoClassConfigurationDefinition $list
-    )
-    {}
+    ) {
+    }
 
     public function getRecord(): ?AutoClassConfigurationDefinition
     {
@@ -37,7 +37,7 @@ class AutoClassConfigurationDataModel
         }
 
         return [
-            $this->name => $result
+            $this->name => $result,
         ];
     }
 
@@ -45,5 +45,4 @@ class AutoClassConfigurationDataModel
     {
         return $this->name;
     }
-
 }

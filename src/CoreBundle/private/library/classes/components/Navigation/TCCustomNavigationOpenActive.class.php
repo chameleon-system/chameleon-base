@@ -11,7 +11,7 @@
 
 /**
  * only show the children of the active node.
-/**/
+ * /**/
 class TCCustomNavigationOpenActive extends TCCustomNavigation
 {
     /**

@@ -25,7 +25,7 @@ class TCMSSmartURLHandler_PkgCmsCaptcha extends TCMSSmartURLHandler
                 $oCaptcha = TdbPkgCmsCaptcha::GetInstanceFromCmsIdent(intval($sCaptchaId));
                 if ($oCaptcha) {
                     $oCaptcha->GenerateNewCaptchaImage($sCaptchaIdentifier, $oSmartURL->aParameters);
-                    die(0);
+                    exit(0);
                 }
             }
         }

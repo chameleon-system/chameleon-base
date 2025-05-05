@@ -9,4 +9,4 @@
 * <?php echo $sFieldFullName." Crop ID\n"; ?>
 * @var null|string
 */
-<?= $sFieldVisibility; ?> $<?= $additionalFieldPropertyName; ?> = null;
+<?php echo $sFieldVisibility; ?> $<?php echo $additionalFieldPropertyName; ?> = null;

@@ -11,10 +11,5 @@
 
 interface TCMSFieldVisitorInterface
 {
-    /**
-     * @param TCMSField $oField
-     *
-     * @return mixed
-     */
     public function visit(TCMSField $oField);
 }

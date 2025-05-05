@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class CmsTags
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Tag */
@@ -58,7 +57,6 @@ class CmsTags
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUrlname(): string
     {
@@ -72,7 +70,6 @@ class CmsTags
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getCount(): int
     {
@@ -85,6 +82,4 @@ class CmsTags
 
         return $this;
     }
-
-
 }

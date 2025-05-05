@@ -19,40 +19,29 @@ namespace ChameleonSystem\CoreBundle\Util;
 interface UrlPrefixGeneratorInterface
 {
     /**
-     * @param \TdbCmsPortal|null $portal
-     * @param \TdbCmsLanguage    $language
-     *
      * @return string[]
      */
-    public function generatePrefixParts(\TdbCmsPortal $portal = null, \TdbCmsLanguage $language = null);
+    public function generatePrefixParts(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null);
 
     /**
      * Generates the complete URL prefix, including a leading slash and slashes as separators between the different
      * URL parts. The result is of varying length, depending on if the prefix parts are needed.
      *
-     * @param \TdbCmsPortal|null $portal
-     * @param \TdbCmsLanguage    $language
-     *
      * @return string the combined URL prefix of getLanguagePrefix() and getPortalPrefix()
      */
-    public function generatePrefix(\TdbCmsPortal $portal = null, \TdbCmsLanguage $language = null);
+    public function generatePrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null);
 
     /**
      * Returns only the language-specific part of the URL prefix, without any slashes.
      *
-     * @param \TdbCmsPortal|null $portal
-     * @param \TdbCmsLanguage    $language
-     *
      * @return string the language ISO6391 code of the given language, or an empty string (depending on the implementation)
      */
-    public function getLanguagePrefix(\TdbCmsPortal $portal = null, \TdbCmsLanguage $language = null);
+    public function getLanguagePrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null);
 
     /**
      * Returns only the portal-specific part of the URL prefix, without any slashes.
      *
-     * @param \TdbCmsPortal $portal|null
-     *
      * @return string the portal prefix as defined in the portal backend configuration, or an empty string (depending on the implementation)
      */
-    public function getPortalPrefix(\TdbCmsPortal $portal = null);
+    public function getPortalPrefix(?\TdbCmsPortal $portal = null);
 }

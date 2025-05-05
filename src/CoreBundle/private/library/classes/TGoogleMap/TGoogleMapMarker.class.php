@@ -50,7 +50,7 @@ class TGoogleMapMarker
      *
      * @var array
      */
-    public $Event = array();
+    public $Event = [];
 
     /**
      * Adds a label on bottom of the marker with the value of the variable.

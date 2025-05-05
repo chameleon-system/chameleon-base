@@ -18,6 +18,7 @@ use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
  * @deprecated use \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest() instead
  *
  * Lots of magic properties through `__get` in this class:
+ *
  * @property string $sRelativeURL
  * @property string $sOriginalURL
  * @property TdbCmsPortalDomains|null $oActiveDomain
@@ -49,11 +50,11 @@ class TCMSSmartURLData
      *
      * @var array
      */
-    private $seoURLParameters = null;
+    private $seoURLParameters;
 
     public function __isset($var)
     {
-        $availableProperties = array('sRelativeURL',
+        $availableProperties = ['sRelativeURL',
             'sOriginalURL',
             'oActiveDomain',
             'sDomainName',
@@ -68,7 +69,7 @@ class TCMSSmartURLData
             'bPortalNotFound',
             'sLanguageId',
             'sLanguageIdentifier',
-            'bDomainBasedLanguage', );
+            'bDomainBasedLanguage', ];
 
         if (in_array($var, $availableProperties)) {
             return true;
@@ -79,7 +80,7 @@ class TCMSSmartURLData
 
     public function __get($var)
     {
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         $activeDomain = $this->getPortalDomainService()->getActiveDomain();
         $activeLanguage = $this->getLanguageService()->getActiveLanguage();
@@ -159,7 +160,7 @@ class TCMSSmartURLData
      */
     public function GetCacheKeyParameters()
     {
-        $aData = array('class' => __CLASS__, 'sRelativeURL' => $this->sRelativeURL, 'sDomainName' => $this->sDomainName, 'bIsSSLCall' => $this->bIsSSLCall, 'iPortalId' => $this->iPortalId, 'sOriginalDomainName' => $this->sOriginalDomainName, 'sLanguageId' => $this->sLanguageId);
+        $aData = ['class' => __CLASS__, 'sRelativeURL' => $this->sRelativeURL, 'sDomainName' => $this->sDomainName, 'bIsSSLCall' => $this->bIsSSLCall, 'iPortalId' => $this->iPortalId, 'sOriginalDomainName' => $this->sOriginalDomainName, 'sLanguageId' => $this->sLanguageId];
 
         return $aData;
     }
@@ -171,16 +172,16 @@ class TCMSSmartURLData
      */
     public function GetCacheTableInfos()
     {
-        $aData = array();
+        $aData = [];
 
         $oPortal = $this->GetPortal();
         /** @var $oPortal TdbCmsPortal */
         if (!is_null($oPortal)) {
-            $aData[] = array('table' => 'cms_portal', 'id' => $oPortal->id);
+            $aData[] = ['table' => 'cms_portal', 'id' => $oPortal->id];
         }
-        $aData[] = array('table' => 'cms_portal_domains', 'id' => '');
-        $aData[] = array('table' => 'cms_tree_node', 'id' => '');
-        $aData[] = array('table' => 'cms_portal_navigation', 'id' => '');
+        $aData[] = ['table' => 'cms_portal_domains', 'id' => ''];
+        $aData[] = ['table' => 'cms_tree_node', 'id' => ''];
+        $aData[] = ['table' => 'cms_portal_navigation', 'id' => ''];
 
         return $aData;
     }
@@ -211,7 +212,7 @@ class TCMSSmartURLData
     public static function GetUserIp()
     {
         $clientIp = '';
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         if (null !== $request) {
             $clientIp = $request->getClientIp();
         }
@@ -260,7 +261,7 @@ class TCMSSmartURLData
      */
     private function getRequestInfoService()
     {
-        $requestInfoService = \ChameleonSystem\CoreBundle\ServiceLocator::get(
+        $requestInfoService = ChameleonSystem\CoreBundle\ServiceLocator::get(
             'chameleon_system_core.request_info_service'
         );
 
@@ -272,7 +273,7 @@ class TCMSSmartURLData
      */
     private function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -280,7 +281,7 @@ class TCMSSmartURLData
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -288,6 +289,6 @@ class TCMSSmartURLData
      */
     private function getUrlPrefixGenerator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_prefix_generator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_prefix_generator');
     }
 }

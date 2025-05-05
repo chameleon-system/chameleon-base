@@ -77,18 +77,16 @@ class BackendSession implements BackendSessionInterface
             return;
         }
 
-
         $session->set(self::SESSION_KEY, $language);
 
         /** @var CmsUserModel $user */
         $user = $this->security->getUser();
         if (null === $user) {
-            return ;
+            return;
         }
 
-        $query = "UPDATE `cms_user` SET `cms_current_edit_language` = :language WHERE `id` = :userId";
+        $query = 'UPDATE `cms_user` SET `cms_current_edit_language` = :language WHERE `id` = :userId';
         $this->connection->executeQuery($query, ['language' => $language, 'userId' => $user->getId()]);
-
     }
 
     public function resetCurrentEditLanguage(): void
@@ -103,13 +101,12 @@ class BackendSession implements BackendSessionInterface
         /** @var CmsUserModel $user */
         $user = $this->security->getUser();
         if (null === $user) {
-            return ;
+            return;
         }
 
         $query = "UPDATE `cms_user` SET `cms_current_edit_language` = '' WHERE `id` = :userId";
         $this->connection->executeQuery($query, ['userId' => $user->getId()]);
     }
-
 
     private function getSession(): ?SessionInterface
     {

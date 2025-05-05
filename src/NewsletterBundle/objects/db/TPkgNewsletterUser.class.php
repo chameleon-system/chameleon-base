@@ -1035,6 +1035,7 @@ class TPkgNewsletterUser extends TPkgNewsletterUserAutoParent
      * return TdbPkgNewsletterUser if the email has already been registered otherwise null.
      *
      * @psalm-suppress TypeDoesNotContainNull
+     *
      * @FIXME This method currently ALWAYS returns `TdbPkgNewsletterUser`, irrespective of the registration state as `TdbPkgNewsletterUser::GetNewInstance` will also always return an instance.
      *
      * @return TdbPkgNewsletterUser|null

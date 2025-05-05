@@ -55,7 +55,6 @@ class MatchLevel
 
     /**
      * @param int $matchLevel
-     * @param array $missmatchlist
      */
     public function __construct($matchLevel, array $missmatchlist)
     {

@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implements IPkgCmsEventObserver
 {
-    const SESSION_KEY_NAME = 'esono/pkgExternalTracker/trackerData';
+    public const SESSION_KEY_NAME = 'esono/pkgExternalTracker/trackerData';
 
     /**
      * @param string|null $sQuery
@@ -54,8 +54,6 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     /**
      * this should be called just after the opening body tag. It outputs / injects the tracking code.
      *
-     * @param TdbCmsTplPage $oPage
-     *
      * @return void
      */
     public function TrackPage(TdbCmsTplPage $oPage)
@@ -71,11 +69,10 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
 
     /**
      * @param string $sEventName
-     * @param mixed $aParameter
      *
      * @return void
      */
-    public function AddEvent($sEventName, $aParameter = array())
+    public function AddEvent($sEventName, $aParameter = [])
     {
         $state = $this->GetStateData();
         if (null === $state) {
@@ -88,7 +85,6 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      * add an object to the state data.
      *
      * @param string $sStateDataKey
-     * @param mixed $oObject
      *
      * @return void
      */
@@ -122,7 +118,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     {
         $aHTMLHeadIncludes = $this->GetHTMLHeadIncludes();
         foreach ($aHTMLHeadIncludes as $sLine) {
-            $oController = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller');
+            $oController = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller');
             $oController->AddHTMLHeaderLine($sLine);
         }
     }
@@ -134,7 +130,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     {
         $aIncludes = $this->GetPreBodyClosingCode();
         foreach ($aIncludes as $sLine) {
-            $oController = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller');
+            $oController = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.chameleon_controller');
             $oController->AddHTMLFooterLine($sLine);
         }
     }
@@ -148,10 +144,10 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     {
         $stateData = $this->GetStateData();
         if (null === $stateData) {
-            return array();
+            return [];
         }
 
-        $aHTMLHeadIncludes = array();
+        $aHTMLHeadIncludes = [];
         $this->GoToStart();
         while ($oItem = $this->Next()) {
             $aIncFromItem = $oItem->GetHTMLHeadIncludes($stateData);
@@ -172,9 +168,9 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     {
         $stateData = $this->GetStateData();
         if (null === $stateData) {
-            return array();
+            return [];
         }
-        $aLines = array();
+        $aLines = [];
         $this->GoToStart();
         while ($oItem = $this->Next()) {
             $aIncFromItem = $oItem->GetPostBodyOpeningCode($stateData);
@@ -195,9 +191,9 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     {
         $stateData = $this->GetStateData();
         if (null === $stateData) {
-            return array();
+            return [];
         }
-        $aLines = array();
+        $aLines = [];
         $this->GoToStart();
         while ($oItem = $this->Next()) {
             $aIncFromItem = $oItem->GetPreBodyClosingCode($stateData);
@@ -217,7 +213,7 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     protected function GetStateData()
     {
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         if (null === $request || false === $request->hasSession() || false === $request->getSession()->isStarted()) {
             return null;
         }
@@ -232,13 +228,11 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     /**
      * return an instance for the query passed.
      *
-     * @param string $sQuery                                 - custom query instead of default query
-     * @param string $iLanguageId                            - the language id for record overloading
-     * @param bool   $bAllowCaching                          - set this to true if you want to cache the recordlist object
-     * @param bool   $bForceWorkflow                         - set this to true to force adding the workflow query part even in cms backend mode
-     * @param bool   $bUseGlobalFilterInsteadOfPreviewFilter - set this to true if you want to overload all workflow data instead of only the records that are marked for preview
-     *
-     * @return TdbPkgExternalTrackerList
+     * @param string $sQuery - custom query instead of default query
+     * @param string $iLanguageId - the language id for record overloading
+     * @param bool $bAllowCaching - set this to true if you want to cache the recordlist object
+     * @param bool $bForceWorkflow - set this to true to force adding the workflow query part even in cms backend mode
+     * @param bool $bUseGlobalFilterInsteadOfPreviewFilter - set this to true if you want to overload all workflow data instead of only the records that are marked for preview
      */
     public static function GetList($sQuery = null, $iLanguageId = null, $bAllowCaching = true, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false): TdbPkgExternalTrackerList
     {
@@ -298,10 +292,8 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     /**
      * return default query for the table.
      *
-     * @param int    $iLanguageId   - language used for query
+     * @param int $iLanguageId - language used for query
      * @param string $sFilterString - any filter conditions to add to the query
-     *
-     * @return string
      */
     public static function GetDefaultQuery($iLanguageId, $sFilterString = '1=1'): string
     {
@@ -319,8 +311,6 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
     }
 
     /**
-     * @param IPkgCmsEvent $oEvent
-     *
      * @return IPkgCmsEvent
      *                      the method is called when an event is triggered
      */
@@ -349,6 +339,6 @@ class TPkgExternalTrackerList extends TPkgExternalTrackerListAutoParent implemen
      */
     private static function getMyActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

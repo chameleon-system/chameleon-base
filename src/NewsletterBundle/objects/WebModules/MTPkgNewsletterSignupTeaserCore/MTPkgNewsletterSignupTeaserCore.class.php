@@ -18,14 +18,14 @@ use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
 {
     /**
-     * @var TdbPkgNewsletterModuleSignupTeaser|null|false
+     * @var TdbPkgNewsletterModuleSignupTeaser|false|null
      */
-    private $oModuleConfig = null;
+    private $oModuleConfig;
 
     /**
      * @var TdbPkgNewsletterModuleSignupConfig
      */
-    private $oTargetConfig = null;
+    private $oTargetConfig;
 
     public function Execute()
     {
@@ -97,7 +97,7 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
     {
         $aTrigger = parent::_GetCacheTableInfos();
         if (!is_array($aTrigger)) {
-            $aTrigger = array();
+            $aTrigger = [];
         }
         $sConfigId = null;
         $sTargetSignupId = null;
@@ -110,8 +110,8 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
         if ($oTargetConfig) {
             $sTargetSignupId = $oTargetConfig->id;
         }
-        $aTrigger[] = array('table' => 'pkg_newsletter_module_signup_teaser', 'id' => $sConfigId);
-        $aTrigger[] = array('table' => 'pkg_newsletter_module_signup_config', 'id' => $sTargetSignupId);
+        $aTrigger[] = ['table' => 'pkg_newsletter_module_signup_teaser', 'id' => $sConfigId];
+        $aTrigger[] = ['table' => 'pkg_newsletter_module_signup_config', 'id' => $sTargetSignupId];
 
         return $aTrigger;
     }
@@ -127,7 +127,7 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
     protected function GetMainModuleInfo($sModuleInstanceId)
     {
         $oPortal = $this->getActivePageService()->getActivePage()->GetPortal();
-        $aReturnArray = array();
+        $aReturnArray = [];
         $oModuleInstance = TdbCmsTplModuleInstance::GetNewInstance();
         $oModuleInstance->Load($sModuleInstanceId);
         if (method_exists($oModuleInstance, 'GetFieldCmsTplPageList')) {
@@ -176,7 +176,7 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -184,6 +184,6 @@ class MTPkgNewsletterSignupTeaserCore extends TUserCustomModelBase
      */
     private function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
     }
 }

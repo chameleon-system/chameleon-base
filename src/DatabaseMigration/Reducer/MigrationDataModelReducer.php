@@ -16,9 +16,6 @@ use ChameleonSystem\DatabaseMigration\DataModel\MigrationDataModel;
 class MigrationDataModelReducer
 {
     /**
-     * @param MigrationDataModel $modelToReduce
-     * @param MigrationDataModel $modelToReduceBy
-     *
      * @return MigrationDataModel
      */
     public function reduceModelByModel(MigrationDataModel $modelToReduce, MigrationDataModel $modelToReduceBy)
@@ -44,7 +41,7 @@ class MigrationDataModelReducer
      */
     public function reduceModelListByModelList(array $modelsToReduce, array $modelsToReduceBy)
     {
-        $reducedList = array();
+        $reducedList = [];
 
         foreach ($modelsToReduce as $bundleName => $modelToReduce) {
             if (false === isset($modelsToReduceBy[$bundleName])) {
@@ -53,7 +50,7 @@ class MigrationDataModelReducer
             }
 
             $modelsToReduceByFileMap = $modelsToReduceBy[$bundleName]->getBuildNumberToFileMap();
-            $reducedListByCounterName = array();
+            $reducedListByCounterName = [];
             foreach ($modelToReduce->getBuildNumberToFileMap() as $buildNumber => $path) {
                 if (false === isset($modelsToReduceByFileMap[$buildNumber])) {
                     $reducedListByCounterName[$buildNumber] = $path;

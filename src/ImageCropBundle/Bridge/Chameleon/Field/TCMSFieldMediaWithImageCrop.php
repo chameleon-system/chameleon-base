@@ -11,32 +11,23 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Field;
 
-use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
-use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropDataAccessInterface;
 use ChameleonSystem\ImageCropBundle\Bridge\Chameleon\BackendModule\ImageCropEditorModule;
 use Doctrine\DBAL\DBALException;
-use TCMSFieldExtendedLookupMedia;
-use TCMSLogChange;
-use TCMSTableToClass;
-use TdbCmsImageCrop;
-use TdbCmsImageCropPreset;
-use TdbCmsLanguage;
-use TGlobal;
-use TViewParser;
-use ViewRenderer;
 
 /**
  * {@inheritdoc}
  */
-class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
+class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
 {
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
@@ -70,12 +61,11 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         );
 
         return $lookupFieldDef->merge($cropImageDef);
-
     }
 
     protected function getDoctrineDataModelXml(string $namespace, array $tableNamespaceMapping): string
     {
-        $lookupFieldMapping =  parent::getDoctrineDataModelXml($namespace, $tableNamespaceMapping);
+        $lookupFieldMapping = parent::getDoctrineDataModelXml($namespace, $tableNamespaceMapping);
 
         $propertyName = $this->getFieldNameOfAdditionalField($this->name);
         if (str_ends_with($propertyName, '_id')) {
@@ -98,7 +88,6 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         return $lookupFieldMapping."\n".$additionalFieldMapping;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -113,7 +102,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
 
         $tableName = $databaseConnection->quoteIdentifier($this->sTableName);
         if (false !== $databaseConnection->fetchOne(sprintf('SHOW COLUMNS FROM %s LIKE :columnName', $tableName), ['columnName' => $additionalFieldNameOldFieldName])) {
-            //For new fields, the additional field already has the right name, but we have no way to check that here so we just check if the column exists.
+            // For new fields, the additional field already has the right name, but we have no way to check that here so we just check if the column exists.
             $query = sprintf(
                 'ALTER TABLE %s CHANGE %s %s CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL',
                 $tableName,
@@ -123,7 +112,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             $databaseConnection->executeQuery($query);
 
             $logChangeDataModels[] = new LogChangeDataModel($query);
-            TCMSLogChange::WriteTransaction($logChangeDataModels);
+            \TCMSLogChange::WriteTransaction($logChangeDataModels);
         }
 
         $translatedFieldDefinition = clone $this->oDefinition;
@@ -160,37 +149,37 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     private function saveCropId($recordId)
     {
         $cropId = '';
-        $crop = TdbCmsImageCrop::GetNewInstance();
+        $crop = \TdbCmsImageCrop::GetNewInstance();
         $additionalFieldName = $this->getFieldNameOfAdditionalField($this->name);
         $additionalFieldNameTranslated = $additionalFieldName;
 
         if (true === $this->oDefinition->isTranslatable()) {
-            $editLanguage = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
+            $editLanguage = \TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId());
             if (null !== $editLanguage && $this->getFieldTranslationUtil()->isTranslationNeeded($editLanguage)) {
                 $additionalFieldNameTranslated .= '__'.$editLanguage->fieldIso6391;
             }
         }
 
         if (true === isset($this->oTableRow->sqlData[$additionalFieldName]) && $crop->Load(
-                $this->oTableRow->sqlData[$additionalFieldName]
-            )) {
+            $this->oTableRow->sqlData[$additionalFieldName]
+        )) {
             $cropId = $crop->id;
         }
 
         $databaseConnection = $this->getDatabaseConnection();
-        $data = array($databaseConnection->quoteIdentifier($additionalFieldNameTranslated) => $cropId);
-        $identifier = array('id' => $recordId);
+        $data = [$databaseConnection->quoteIdentifier($additionalFieldNameTranslated) => $cropId];
+        $identifier = ['id' => $recordId];
         $databaseConnection->update($databaseConnection->quoteIdentifier($this->sTableName), $data, $identifier);
 
         $migrationQueryData = new MigrationQueryData(
             $this->sTableName,
-            TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId())->fieldIso6391
+            \TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId())->fieldIso6391
         );
         $migrationQueryData
             ->setFields($data)
             ->setWhereEquals($identifier);
-        $queryData = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE));
-        TCMSLogChange::WriteTransaction($queryData);
+        $queryData = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE)];
+        \TCMSLogChange::WriteTransaction($queryData);
     }
 
     /**
@@ -229,7 +218,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $databaseConnection->executeQuery($query);
 
         $logChangeDataModels[] = new LogChangeDataModel($query);
-        TCMSLogChange::WriteTransaction($logChangeDataModels);
+        \TCMSLogChange::WriteTransaction($logChangeDataModels);
     }
 
     /**
@@ -261,7 +250,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $databaseConnection->executeQuery($query);
 
         $logChangeDataModels[] = new LogChangeDataModel($query);
-        TCMSLogChange::WriteTransaction($logChangeDataModels);
+        \TCMSLogChange::WriteTransaction($logChangeDataModels);
     }
 
     /**
@@ -283,10 +272,10 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             $query = 'ALTER TABLE '.$quotedTableName.' DROP INDEX '.$quotedIndexName;
 
             $connection->executeQuery($query);
-            $transaction = array(new LogChangeDataModel($query));
-            TCMSLogChange::WriteTransaction($transaction);
+            $transaction = [new LogChangeDataModel($query)];
+            \TCMSLogChange::WriteTransaction($transaction);
         } catch (DBALException $e) {
-            //dropping the index can fail when first creating the field or changing the field
+            // dropping the index can fail when first creating the field or changing the field
         }
     }
 
@@ -311,8 +300,8 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         }
 
         $connection->executeQuery($query);
-        $transaction = array(new LogChangeDataModel($query));
-        TCMSLogChange::WriteTransaction($transaction);
+        $transaction = [new LogChangeDataModel($query)];
+        \TCMSLogChange::WriteTransaction($transaction);
 
         return null;
     }
@@ -323,12 +312,12 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     public function GetCMSHtmlFooterIncludes()
     {
         $includes = parent::getHtmlHeadIncludes();
-        $includes[] = '<script type="text/javascript" src="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemimagecrop/js/imageFieldWithCrop.js?v=1'
-            ).'"></script>';
-        $includes[] = '<link href="'.TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemimagecrop/css/imageCropField.css'
-            ).'" rel="stylesheet" />';
+        $includes[] = '<script type="text/javascript" src="'.\TGlobal::GetStaticURL(
+            '/bundles/chameleonsystemimagecrop/js/imageFieldWithCrop.js?v=1'
+        ).'"></script>';
+        $includes[] = '<link href="'.\TGlobal::GetStaticURL(
+            '/bundles/chameleonsystemimagecrop/css/imageCropField.css'
+        ).'" rel="stylesheet" />';
 
         return $includes;
     }
@@ -341,14 +330,14 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     public function RenderFieldPropertyString()
     {
         $fieldPropertyString = parent::RenderFieldPropertyString();
-        $viewParser = new TViewParser();
+        $viewParser = new \TViewParser();
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $viewData = $this->GetFieldWriterData();
         $additionalFieldName = $this->getFieldNameOfAdditionalField($this->name);
         $viewData['additionalFieldName'] = $additionalFieldName;
-        $viewData['additionalFieldPropertyName'] = TCMSTableToClass::PREFIX_PROPERTY.TCMSTableToClass::ConvertToClassString(
-                $additionalFieldName
-            );
+        $viewData['additionalFieldPropertyName'] = \TCMSTableToClass::PREFIX_PROPERTY.\TCMSTableToClass::ConvertToClassString(
+            $additionalFieldName
+        );
         $viewParser->AddVarArray($viewData);
         $fieldPropertyString .= $viewParser->RenderObjectView(
             'additionalProperties',
@@ -366,14 +355,14 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
      */
     public function RenderFieldPostLoadString()
     {
-        $viewParser = new TViewParser();
+        $viewParser = new \TViewParser();
         $viewParser->bShowTemplatePathAsHTMLHint = false;
         $viewData = $this->GetFieldWriterData();
         $additionalFieldName = $this->getFieldNameOfAdditionalField($this->name);
         $viewData['additionalFieldName'] = $additionalFieldName;
-        $viewData['additionalFieldPropertyName'] = TCMSTableToClass::PREFIX_PROPERTY.TCMSTableToClass::ConvertToClassString(
-                $additionalFieldName
-            );
+        $viewData['additionalFieldPropertyName'] = \TCMSTableToClass::PREFIX_PROPERTY.\TCMSTableToClass::ConvertToClassString(
+            $additionalFieldName
+        );
         $viewParser->AddVarArray($viewData);
 
         $postLoadString = $viewParser->RenderObjectView(
@@ -400,7 +389,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $fieldHtml .= $viewRenderer->Render('imageCrop/TCmsFieldMediaWithImageCrop/button.html.twig');
 
         $imageId = $this->_GetFieldValue();
-        $languageId = TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId())->id;
+        $languageId = \TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId())->id;
         $crop = null;
         $cmsMedia = $this->getCmsMediaDataAccess()->getCmsMedia($imageId, $languageId);
         if (null !== $cmsMedia) {
@@ -416,13 +405,13 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $viewRenderer->AddSourceObject('crop', $crop);
         $viewRenderer->AddSourceObject('imageId', $imageId);
 
-        $parameters = array(
+        $parameters = [
             'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
             ImageCropEditorModule::URL_PARAM_IMAGE_ID => $imageId,
             '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
-            'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'),
+            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
             '_fnc' => 'getImageFieldInformation',
-        );
+        ];
         $urlToGetImage = URL_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameters, '?', '&');
         $viewRenderer->AddSourceObject('urlToGetImage', $urlToGetImage);
 
@@ -434,7 +423,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     }
 
     /**
-     * @return ViewRenderer
+     * @return \ViewRenderer
      */
     protected function getViewRenderer()
     {
@@ -446,7 +435,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getImageCropPresetSystemName()
     {
@@ -458,14 +447,14 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
      */
     private function getImageCropEditorUrl()
     {
-        $parameters = array(
+        $parameters = [
             'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
             '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
-        );
+        ];
 
         $additionalFieldName = $this->getFieldNameOfAdditionalField($this->name);
         if ('' !== $this->oTableRow->sqlData[$additionalFieldName]) {
-            $preset = TdbCmsImageCropPreset::GetNewInstance();
+            $preset = \TdbCmsImageCropPreset::GetNewInstance();
             if ($preset->Load($this->oTableRow->sqlData[$additionalFieldName])) {
                 $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $preset->fieldSystemName;
             }
@@ -484,7 +473,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         $parentField = $this->getInputFilterUtil()->getFilteredGetInput('field');
         $isInModal = $this->getInputFilterUtil()->getFilteredGetInput('isInModal', '');
         if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
-            $parentIFrame = $parentField . '_iframe';
+            $parentIFrame = $parentField.'_iframe';
             $parameters[ImageCropEditorModule::URL_PARAM_PARENT_IFRAME] = $parentIFrame;
         }
 
@@ -498,7 +487,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
     {
         $systemNames = $this->getFieldTypeConfigKey('imageCropPresetRestrictionSystemNames');
         if ('' === $systemNames) {
-            return array();
+            return [];
         }
         $systemNames = explode(';', $systemNames);
         array_walk(

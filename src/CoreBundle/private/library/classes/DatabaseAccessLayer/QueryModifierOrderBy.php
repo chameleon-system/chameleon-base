@@ -82,7 +82,7 @@ class QueryModifierOrderBy implements QueryModifierOrderByInterface
 
     private function getOrderByString(array $orderBy)
     {
-        $orderByParts = array();
+        $orderByParts = [];
         foreach ($orderBy as $field => $direction) {
             $field = trim($field);
             $direction = \mb_strtoupper(\trim($direction));

@@ -36,6 +36,7 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
 
     /**
      * @param string $sContent
+     *
      * @return string[]
      */
     protected function getMatches($sContent)
@@ -61,14 +62,14 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
         foreach ($aParts as $sKey => $sPart) {
             $aParts[$sKey] = trim($sPart);
         }
-        //must contain at least 3 items
+        // must contain at least 3 items
         if (count($aParts) > 2) {
-            $aParsedResult = array(
+            $aParsedResult = [
                 'id' => $aParts[0],
                 'name' => $aParts[2],
                 'ico' => (false !== array_search('ico', $aParts)) ? (true) : (false),
                 'kb' => (false !== array_search('kb', $aParts)) ? (true) : (false),
-            );
+            ];
 
             $oItem = new TCMSDownloadFile();
             if ($oItem->Load($aParsedResult['id'])) {
@@ -83,12 +84,12 @@ class TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads extends TPkgCmsS
 
     /**
      * @param TCMSDownloadFile $oItem
-     * @param bool             $dummyLink
-     * @param bool             $bHideName
-     * @param bool             $bHideSize
-     * @param bool             $bCreateTmpLink
-     * @param bool             $bHideIcon
-     * @param string           $sDownloadLinkName
+     * @param bool $dummyLink
+     * @param bool $bHideName
+     * @param bool $bHideSize
+     * @param bool $bCreateTmpLink
+     * @param bool $bHideIcon
+     * @param string $sDownloadLinkName
      *
      * @return string
      */

@@ -16,7 +16,7 @@ class UrlNormalizerSlavic implements UrlNormalizerInterface
     /**
      * @var array<string, string>
      */
-    private static $slavicCharNormalization = array(
+    private static $slavicCharNormalization = [
         'Ż' => 'Z',
         'ż' => 'z',
         'Ź' => 'Z',
@@ -100,7 +100,7 @@ class UrlNormalizerSlavic implements UrlNormalizerInterface
         'ÿ' => 'y',
         'Ŕ' => 'R',
         'ŕ' => 'r',
-    );
+    ];
 
     /**
      * {@inheritdoc}

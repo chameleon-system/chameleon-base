@@ -15,9 +15,7 @@ use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 class BackendBreadcrumbListener
 {
@@ -65,21 +63,21 @@ class BackendBreadcrumbListener
         if (false === $this->requestInfoService->isBackendMode()) {
             return;
         }
-        
+
         if (false === $this->isValidBreadcrumbRequest()) {
             return;
         }
 
         $this->handleBreadcrumbHistory();
     }
-    
+
     private function isValidBreadcrumbRequest(): bool
     {
         $request = $this->requestStack->getCurrentRequest();
 
-       if (true === $request->isXmlHttpRequest()) {
-           return false;
-       }
+        if (true === $request->isXmlHttpRequest()) {
+            return false;
+        }
 
         return PATH_CMS_CONTROLLER === $request->getPathInfo();
     }

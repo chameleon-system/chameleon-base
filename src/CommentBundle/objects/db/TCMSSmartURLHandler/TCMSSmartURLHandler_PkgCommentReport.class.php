@@ -28,7 +28,7 @@ class TCMSSmartURLHandler_PkgCommentReport extends TCMSSmartURLHandler
         $oPortal->Load($oURLData->iPortalId);
 
         try {
-            $CompareLink = $this->getSystemPageService()->getLinkToSystemPageRelative('announcecomment', array(), $oPortal);
+            $CompareLink = $this->getSystemPageService()->getLinkToSystemPageRelative('announcecomment', [], $oPortal);
         } catch (RouteNotFoundException $e) {
             return false;
         }
@@ -65,6 +65,6 @@ class TCMSSmartURLHandler_PkgCommentReport extends TCMSSmartURLHandler
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 }

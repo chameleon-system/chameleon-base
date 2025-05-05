@@ -56,6 +56,7 @@ class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterfac
 
         return $this->tableNameToIdMap;
     }
+
     private function getTableConf(string $tableName): ?TableConfigurationDataModel
     {
         $mapping = $this->getTableNameToIdMap();
@@ -77,7 +78,6 @@ class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterfac
         return $tableConf->cmsUsergroupId;
     }
 
-
     public function getPermittedRoles(string $action, string $tableName): array
     {
         $keyParam = [
@@ -98,6 +98,4 @@ class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterfac
 
         return $permittedRoleIds;
     }
-
-
 }

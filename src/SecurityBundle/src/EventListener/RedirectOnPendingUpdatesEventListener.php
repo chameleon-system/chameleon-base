@@ -15,7 +15,7 @@ class RedirectOnPendingUpdatesEventListener
 
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
-        $url = PATH_CMS_CONTROLLER .'?'.http_build_query( ['pagedef' => 'CMSUpdateManager', 'module_fnc' => ['contentmodule' => 'RunUpdates']]);
+        $url = PATH_CMS_CONTROLLER.'?'.http_build_query(['pagedef' => 'CMSUpdateManager', 'module_fnc' => ['contentmodule' => 'RunUpdates']]);
 
         try {
             $allUpdateFilesToProcess = \TCMSUpdateManager::GetInstance()->getAllUpdateFilesToProcess();
@@ -24,7 +24,6 @@ class RedirectOnPendingUpdatesEventListener
                 $this->logger->info(sprintf('Post login success redirect to update manager because there are %d updates', $numberOfUpdates), ['updates' => $allUpdateFilesToProcess]);
                 $event->setResponse(new RedirectResponse($url));
             }
-
         } catch (InvalidMigrationCounterException $e) {
             $this->logger->error('Error checking pending updates post login success', ['exception' => $e]);
             $event->setResponse(new RedirectResponse($url));

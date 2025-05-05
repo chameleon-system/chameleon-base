@@ -23,7 +23,7 @@ abstract class TCMSSmartURLHandler
      *
      * @var array
      */
-    public $aCustomURLParameters = array();
+    public $aCustomURLParameters = [];
 
     /**
      * Set custom cache triggers for URL handler like  array('table'=>'tablename','id'=>'record_id').
@@ -31,7 +31,7 @@ abstract class TCMSSmartURLHandler
      *
      * @var array
      */
-    public $aCacheChangeTriggers = array();
+    public $aCacheChangeTriggers = [];
 
     /**
      * this method should parse the url and check which page matches
@@ -44,7 +44,7 @@ abstract class TCMSSmartURLHandler
     /**
      * @var Request
      */
-    private $request = null;
+    private $request;
 
     /**
      * @return Request
@@ -54,9 +54,6 @@ abstract class TCMSSmartURLHandler
         return $this->request;
     }
 
-    /**
-     * @param Request $request
-     */
     public function setRequest(Request $request)
     {
         $this->request = $request;
@@ -71,7 +68,7 @@ abstract class TCMSSmartURLHandler
      */
     protected function CleanPath($aPath)
     {
-        $cleanedPathElements = array();
+        $cleanedPathElements = [];
         foreach ($aPath as $pathElement) {
             $pathElement = trim($pathElement);
             if ('' === $pathElement) {
@@ -129,8 +126,8 @@ abstract class TCMSSmartURLHandler
      * checks if the current page url matches the systempage with name $sSystemPageName
      * if url match was found it returns the id of the page else false.
      *
-     * @param string           $sSystemPageName
-     * @param TCMSPortal       $oCmsPortal
+     * @param string $sSystemPageName
+     * @param TCMSPortal $oCmsPortal
      * @param TCMSSmartURLData $oURLData
      *
      * @return string|false - returns false if systempage does not match the url
@@ -139,7 +136,7 @@ abstract class TCMSSmartURLHandler
     {
         $sSystemPageID = false;
         try {
-            $sSystemPagePath = $this->getSystemPageService()->getLinkToSystemPageRelative($sSystemPageName, array(), $oCmsPortal);
+            $sSystemPagePath = $this->getSystemPageService()->getLinkToSystemPageRelative($sSystemPageName, [], $oCmsPortal);
         } catch (RouteNotFoundException $e) {
             return false;
         }
@@ -167,13 +164,12 @@ abstract class TCMSSmartURLHandler
      * by default all of the existing parameters in TCMSSmartURLData
      * this is maybe useful if you don't want to loose any tracking parameters from any tracking / analytics service.
      *
-     * @param string           $sUrl
-     * @param TCMSSmartURLData $oUrlData
-     * @param array            $aFilterParams blacklist of url parameters that will be ignored
+     * @param string $sUrl
+     * @param array $aFilterParams blacklist of url parameters that will be ignored
      *
      * @return string
      */
-    protected function addParametersToUrl($sUrl, TCMSSmartURLData $oUrlData = null, $aFilterParams = array())
+    protected function addParametersToUrl($sUrl, ?TCMSSmartURLData $oUrlData = null, $aFilterParams = [])
     {
         $iCount = 0;
         if (null === $oUrlData) {
@@ -212,7 +208,7 @@ abstract class TCMSSmartURLHandler
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 
     /**
@@ -220,6 +216,6 @@ abstract class TCMSSmartURLHandler
      */
     protected function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

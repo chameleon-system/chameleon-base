@@ -37,22 +37,22 @@ class CmsPortalDomainsDataAccessCacheDecorator implements CmsPortalDomainsDataAc
     public function getPrimaryDomain($portalId, $languageId)
     {
         $cache = $this->getCache();
-        $cacheKey = $cache->getKey(array(
+        $cacheKey = $cache->getKey([
             get_class(),
             'getPrimaryDomain',
             get_class($this->subject),
             $portalId,
             $languageId,
-        ));
+        ]);
         $primaryDomain = $cache->get($cacheKey);
         if (null !== $primaryDomain) {
             return $primaryDomain;
         }
 
         $primaryDomain = $this->subject->getPrimaryDomain($portalId, $languageId);
-        $cache->set($cacheKey, $primaryDomain, array(
-            array('table' => 'cms_portal_domains', 'id' => null),
-        ));
+        $cache->set($cacheKey, $primaryDomain, [
+            ['table' => 'cms_portal_domains', 'id' => null],
+        ]);
 
         return $primaryDomain;
     }

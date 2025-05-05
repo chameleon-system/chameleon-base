@@ -22,8 +22,6 @@ interface CropImageServiceInterface
     /**
      * Get the cropped image for a crop definition.
      *
-     * @param ImageCropDataModel $imageCrop
-     *
      * @return ImageDataModel|null
      */
     public function getCroppedImage(ImageCropDataModel $imageCrop);
@@ -34,7 +32,7 @@ interface CropImageServiceInterface
      * @param string $cmsMediaId
      * @param string $presetId
      * @param string $languageId
-     * @param bool   $fallbackOnNoCrop - create crop from original image based on preset height/width if there is no existing crop
+     * @param bool $fallbackOnNoCrop - create crop from original image based on preset height/width if there is no existing crop
      *
      * @return ImageDataModel|null
      */
@@ -51,8 +49,8 @@ interface CropImageServiceInterface
      * @param string $cmsMediaId
      * @param string $cropId
      * @param string $languageId
-     * @param int    $targetWidth  - 0 = not set
-     * @param int    $targetHeight - 0 = not set
+     * @param int $targetWidth - 0 = not set
+     * @param int $targetHeight - 0 = not set
      *
      * @return ImageDataModel|null
      */

@@ -18,7 +18,7 @@ class PostProcessorCollectionService implements PostProcessorInterface
     /**
      * @var PostProcessorInterface[]
      */
-    private $processors = array();
+    private $processors = [];
 
     /**
      * @return void

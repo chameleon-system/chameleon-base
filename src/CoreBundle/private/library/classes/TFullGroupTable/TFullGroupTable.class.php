@@ -103,7 +103,7 @@ class TFullGroupTable extends TGroupTable
      *
      * @var mixed - array or null as default
      */
-    public $searchFields = null;
+    public $searchFields;
 
     /**
      * text to display for the searchfield (default = 'search').
@@ -153,14 +153,14 @@ class TFullGroupTable extends TGroupTable
      *
      * @var mixed - string or null by default
      */
-    public $searchBoxContent = null;
+    public $searchBoxContent;
 
     /**
      * extra content to add into below the search box row (default = NULL).
      *
      * @var mixed - string or null by default
      */
-    public $searchBoxRow = null;
+    public $searchBoxRow;
 
     /**
      * has to be 'GET' or 'POST'. default is 'POST'
@@ -297,16 +297,16 @@ class TFullGroupTable extends TGroupTable
     /**
      * add a header cell.
      *
-     * @param string|non-empty-array<string, string> $name           - database name of the column name may be a string, or an array. if it is an array
-     *                                                               it should be of the form 'name'=>'full_name'
-     * @param string                                 $align          - horizontal alignment to use in the cell
-     * @param resource                               $format         - a callback function to use for the column (the function will get 2 parameters,
-     *                                                               the value, and the row. The string returned by the function will be displayed
-     *                                                               in the cell
-     * @param int                                    $colSpan        - the colSpan parameter of the cell
-     * @param bool                                   $allowSort      - allow sorting by that column
-     * @param mixed                                  $width          - force width to X pixels
-     * @param int                                    $columnPosition - the array key position where the header will be added (array key starts with 0)
+     * @param string|non-empty-array<string, string> $name - database name of the column name may be a string, or an array. if it is an array
+     *                                                     it should be of the form 'name'=>'full_name'
+     * @param string $align - horizontal alignment to use in the cell
+     * @param resource $format - a callback function to use for the column (the function will get 2 parameters,
+     *                         the value, and the row. The string returned by the function will be displayed
+     *                         in the cell
+     * @param int $colSpan - the colSpan parameter of the cell
+     * @param bool $allowSort - allow sorting by that column
+     * @param mixed $width - force width to X pixels
+     * @param int $columnPosition - the array key position where the header will be added (array key starts with 0)
      */
     public function AddHeaderField($name, $align = 'left', $format = null, $colSpan = 1, $allowSort = true, $width = false, $columnPosition = null)
     {
@@ -627,9 +627,9 @@ class TFullGroupTable extends TGroupTable
                         }
 
                         if ('ASC' == $tmpOrderList[$cellObj->name]) {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-down" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_sort_order_asc')).'"></i>';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-down" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_sort_order_asc')).'"></i>';
                         } else {
-                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-up" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_sort_order_desc')).'"></i>';
+                            $orderImage = '&nbsp;('.$orderCount.')&nbsp;<i class="fas fa-sort-alpha-up" style="font-size: 1.3em;" title="'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_sort_order_desc')).'"></i>';
                         }
 
                         $row[$cellObj->name] = '<nobr>'.$row[$cellObj->name].$orderImage;
@@ -764,7 +764,7 @@ class TFullGroupTable extends TGroupTable
         if ($this->showRowsPerPageChooser) {
             $tableNavigation .= '<div class="TFullGroupTablePerPageSelect">
             <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_records_per_page')).'</span></div>
+                <div class="input-group-prepend"><span class="input-group-text">'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.list.form_records_per_page')).'</span></div>
                 <select name="_limit" class="form-control" onChange="document.'.$this->listName.'._startRecord.value=0;document.'.$this->listName.'.submit();">
             ';
 

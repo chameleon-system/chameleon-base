@@ -24,7 +24,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
     /**
      * @var TCMSPagedef|null
      */
-    protected $oAssignedPage = null;
+    protected $oAssignedPage;
 
     /**
      * {@inheritdoc}
@@ -32,12 +32,12 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
     public function GetHTML()
     {
         $sHTML = '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML(
-                $this->name
-            ).'" value="'.TGlobal::OutHTML($this->data).'" />';
+            $this->name
+        ).'" value="'.TGlobal::OutHTML($this->data).'" />';
         $this->oAssignedPage = new TCMSPagedef();
         if ($this->hasLinkedPages()) {
             $translator = $this->getTranslator();
-            $sHTML .= $translator->trans('chameleon_system_core.field_tree_page_assignment.already_linked_pages', array(), \ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND);
+            $sHTML .= $translator->trans('chameleon_system_core.field_tree_page_assignment.already_linked_pages', [], ChameleonSystem\CoreBundle\i18n\TranslationConstants::DOMAIN_BACKEND);
         } else {
             $sHTML .= '<select name="'.TGlobal::OutHTML($this->name)."_pagedef\" class=\"form-control form-control-sm\">\n";
             $sHTML .= $this->GetPagedefSelectionOptions();
@@ -74,9 +74,9 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
      */
     protected function GetPagedefSelectionOptions()
     {
-        $sHTML = '<option value="">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans(
-                'chameleon_system_core.field_tree_page_assignment.select_page_template'
-            )."</option>\n";
+        $sHTML = '<option value="">'.ServiceLocator::get('translator')->trans(
+            'chameleon_system_core.field_tree_page_assignment.select_page_template'
+        )."</option>\n";
         $oMasterPagedefs = $this->getPageDefListForTreePortal();
         $iSelectedId = $this->GetDefaultSelectedLayout();
         while ($oMasterPagedef = $oMasterPagedefs->Next()) {
@@ -85,8 +85,8 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
                 $sSelected = 'selected="selected"';
             }
             $sHTML .= '<option value="'.TGlobal::OutHTML(
-                    $oMasterPagedef->id
-                ).'" '.$sSelected.'>'.TGlobal::OutHTML($oMasterPagedef->GetName())."</option>\n";
+                $oMasterPagedef->id
+            ).'" '.$sSelected.'>'.TGlobal::OutHTML($oMasterPagedef->GetName())."</option>\n";
         }
 
         return $sHTML;
@@ -177,13 +177,13 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
         $tableManager = new TCMSTableEditorManager();
         $tableManager->Init($connectedPageTableConfig->id, null);
         $tableManager->Insert();
-        $defaultData = array(
+        $defaultData = [
             'id' => $tableManager->sId,
             'name' => $this->oTableRow->sqlData['name'],
             'cms_portal_id' => $nodePortalId,
             'primary_tree_id_hidden' => $treeNodeId,
             'cms_user_id' => $securityHelper->getUser()?->getId(),
-        );
+        ];
 
         $additionalDefaultData = $this->getDefaultPageData();
         $defaultData = array_merge($defaultData, $additionalDefaultData);
@@ -198,7 +198,7 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
      */
     protected function getDefaultPageData()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -216,6 +216,6 @@ class TCMSFieldTreePageAssignment extends TCMSFieldVarchar
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ServiceLocator::get('translator');
     }
 }

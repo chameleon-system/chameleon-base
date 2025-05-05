@@ -15,9 +15,6 @@ class MigrationRecorderStateHandler
      */
     private $requestStack;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack, readonly private Security $security)
     {
         $this->requestStack = $requestStack;
@@ -45,10 +42,10 @@ class MigrationRecorderStateHandler
     }
 
     /**
+     * @return void
+     *
      * @throws AccessDeniedException
      * @throws \LogicException
-     *
-     * @return void
      */
     public function toggleDatabaseLogging()
     {
@@ -58,10 +55,10 @@ class MigrationRecorderStateHandler
     /**
      * @param bool $isActive
      *
+     * @return void
+     *
      * @throws AccessDeniedException
      * @throws \LogicException
-     *
-     * @return void
      */
     private function setDatabaseLoggingActive($isActive)
     {
@@ -92,9 +89,9 @@ class MigrationRecorderStateHandler
     /**
      * @param string $buildNumber
      *
-     * @throws \LogicException
-     *
      * @return void
+     *
+     * @throws \LogicException
      */
     public function setCurrentBuildNumber($buildNumber)
     {

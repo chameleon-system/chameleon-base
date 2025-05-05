@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use ChameleonSystem\core\DatabaseAccessLayer\EntityList;
 use Doctrine\DBAL\Connection;
@@ -32,7 +34,7 @@ class EntityListTest extends TestCase
             ->willReturn($result);
 
         // Iterating multiple times checks if `rewind` behaves correctly
-        $items = [ ];
+        $items = [];
         foreach ($this->subject as $item) {
             $items[] = $item;
         }
@@ -40,7 +42,6 @@ class EntityListTest extends TestCase
             $items[] = $item;
         }
 
-        $this->assertEquals([ 1, 2, 3, 1, 2, 3 ], $items);
+        $this->assertEquals([1, 2, 3, 1, 2, 3], $items);
     }
-
 }

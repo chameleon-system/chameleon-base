@@ -59,7 +59,7 @@ class DownloadLinkDataModel
      * @var bool
      */
     private $showFilename = true;
-    
+
     private ?string $fileType;
 
     public function __construct(

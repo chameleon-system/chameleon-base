@@ -3,10 +3,10 @@
 $oCategory = TdbCmsMediaTree::GetNewInstance();
 if (false != $oCategory->Load($oField->ConfigGetDefaultCategoryId()) || $oField->ConfigShowCategorySelector()) {
     ?>
-    <h4><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.upload_headline')); ?></h4>
+    <h4><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.upload_headline')); ?></h4>
 
     <div class="form-group">
-        <label for="<?=TGlobal::OutHTML($oField->name); ?>__cms_media_tree_id"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.target_folder')); ?></label>
+        <label for="<?php echo TGlobal::OutHTML($oField->name); ?>__cms_media_tree_id"><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.target_folder')); ?></label>
         <?php
         if ($oField->ConfigShowCategorySelector()) {
             // show category selector
@@ -26,7 +26,7 @@ if (false != $oCategory->Load($oField->ConfigGetDefaultCategoryId()) || $oField-
     </div>
     <div class="form-group">
 <?php
-    echo TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.action_upload_and_assign'), 'javascript:'.$oField->_GetOpenUploadWindowJS(), 'fas fa-file-upload'); ?>
+    echo TCMSRender::DrawButton(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_property_media.action_upload_and_assign'), 'javascript:'.$oField->_GetOpenUploadWindowJS(), 'fas fa-file-upload'); ?>
     </div>
 <?php
 }

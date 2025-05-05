@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\MediaManager\Exception;
 
-use Exception;
-
-class UsageDeleteException extends Exception
+class UsageDeleteException extends \Exception
 {
 }

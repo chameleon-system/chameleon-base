@@ -2,11 +2,11 @@
 
 $oData = new TPkgViewRendererSnippetDummyData();
 
-$aData = array(
+$aData = [
     'sNewsletterLink' => '#',
     'sModuleSpotName' => 'spota',
     'sFieldNamesPrefix' => 'newsletter',
-);
+];
 
 $oData->addDummyDataArray($aData);
 

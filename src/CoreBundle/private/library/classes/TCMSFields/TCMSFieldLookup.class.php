@@ -647,7 +647,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         try {
             $result = $databaseConnection->executeQuery($sQuery);
-        } catch (\Doctrine\DBAL\Exception $e) {
+        } catch (Doctrine\DBAL\Exception $e) {
             // If the query fails, handle it here
             return '';
         }

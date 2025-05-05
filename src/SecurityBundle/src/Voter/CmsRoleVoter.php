@@ -49,6 +49,6 @@ class CmsRoleVoter extends Voter
 
         $intersect = array_intersect(array_keys($roles), $permittedRoles);
 
-        return (count($intersect) > 0);
+        return count($intersect) > 0;
     }
 }

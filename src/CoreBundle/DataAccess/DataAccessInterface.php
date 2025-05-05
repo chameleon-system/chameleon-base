@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
-use TCMSRecord;
-
 /**
  * DataAccessInterface defines a generic service that reads data from a data source.
  * These assumptions were made while designing this interface:

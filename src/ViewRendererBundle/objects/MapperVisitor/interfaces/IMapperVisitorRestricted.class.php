@@ -13,7 +13,6 @@ interface IMapperVisitorRestricted
 {
     /**
      * @param string $key
-     * @param mixed  $value
      *
      * @return void
      */
@@ -42,7 +41,6 @@ interface IMapperVisitorRestricted
 
     /**
      * @param string $mapperChainName
-     * @param array  $mapperInputData
      *
      * @return array
      *

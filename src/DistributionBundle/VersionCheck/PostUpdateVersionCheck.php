@@ -29,7 +29,7 @@ class PostUpdateVersionCheck
 
         $packages = $localRepo->getPackages();
         /** @var ChameleonVersion[] $chameleonPackages */
-        $chameleonPackages = array();
+        $chameleonPackages = [];
         $filter = new ChameleonPackageFilter();
         $core = null;
         foreach ($packages as $package) {

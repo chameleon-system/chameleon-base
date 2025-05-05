@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 
 /**
  * holds an item of the custom list.
-/**/
+ * /**/
 class MTCustomListCoreItem extends TCMSRecord
 {
-    public $sDetailLink = null;
+    public $sDetailLink;
     public $iPage = 0;
-    public $sListLink = null;
-    public $sLinkParameters = null;
+    public $sListLink;
+    public $sLinkParameters;
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -42,7 +42,7 @@ class MTCustomListCoreItem extends TCMSRecord
             $sItemName = $this->getUrlNormalizationUtil()->normalizeUrl($sItemName);
 
             $itemId = $this->id;
-            $this->sLinkParameters = urlencode($this->GetURLFakeParameter()).'='.urlencode($sItemName).'&amp;itemid='.$itemId; //.'&amp;ipage='.$this->iPage;
+            $this->sLinkParameters = urlencode($this->GetURLFakeParameter()).'='.urlencode($sItemName).'&amp;itemid='.$itemId; // .'&amp;ipage='.$this->iPage;
             $this->sDetailLink = $this->sListLink.'&amp;'.$this->sLinkParameters;
         }
     }
@@ -60,9 +60,9 @@ class MTCustomListCoreItem extends TCMSRecord
      */
     protected function GetListPageUrl()
     {
-        return $this->getActivePageService()->getLinkToActivePageRelative(array(
+        return $this->getActivePageService()->getLinkToActivePageRelative([
             'ipage' => $this->iPage,
-        ));
+        ]);
     }
 
     /**
@@ -81,7 +81,7 @@ class MTCustomListCoreItem extends TCMSRecord
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 
     /**
@@ -89,6 +89,6 @@ class MTCustomListCoreItem extends TCMSRecord
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

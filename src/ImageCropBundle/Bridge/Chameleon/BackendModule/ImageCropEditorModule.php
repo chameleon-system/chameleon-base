@@ -27,37 +27,31 @@ use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
 use ChameleonSystem\ImageCrop\Interfaces\CropImageServiceInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropDataAccessInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropPresetDataAccessInterface;
-use ICmsCoreRedirect;
-use IMapperCacheTriggerRestricted;
-use IMapperVisitorRestricted;
-use MTPkgViewRendererAbstractModuleMapper;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use TdbCmsImageCropPresetList;
-use TGlobal;
 
-class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
+class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
 {
-    const PAGEDEF_NAME = 'imageCropEditor';
+    public const PAGEDEF_NAME = 'imageCropEditor';
 
-    const PAGEDEF_TYPE = '@ChameleonSystemImageCropBundle';
+    public const PAGEDEF_TYPE = '@ChameleonSystemImageCropBundle';
 
-    const URL_PARAM_IMAGE_ID = 'cmsMediaId';
+    public const URL_PARAM_IMAGE_ID = 'cmsMediaId';
 
-    const URL_PARAM_PRESET_NAME = 'preset';
+    public const URL_PARAM_PRESET_NAME = 'preset';
 
-    const URL_PARAM_PRESET_RESTRICTION = 'presetRestriction';
+    public const URL_PARAM_PRESET_RESTRICTION = 'presetRestriction';
 
-    const URL_PARAM_ENABLE_CALLBACK = 'enableCallback';
+    public const URL_PARAM_ENABLE_CALLBACK = 'enableCallback';
 
-    const URL_PARAM_FIELD_NAME = 'fieldName';
+    public const URL_PARAM_FIELD_NAME = 'fieldName';
 
-    const URL_PARAM_SAVED = 'saved';
+    public const URL_PARAM_SAVED = 'saved';
 
-    const URL_PARAM_CROP_ID = 'cropId';
+    public const URL_PARAM_CROP_ID = 'cropId';
 
-    const URL_PARAM_PARENT_IFRAME = 'parentIFrame';
+    public const URL_PARAM_PARENT_IFRAME = 'parentIFrame';
 
-    const MESSAGE_CONSUMER_NAME = 'imageCropEditor';
+    public const MESSAGE_CONSUMER_NAME = 'imageCropEditor';
 
     /**
      * @var ImageCropPresetDataAccessInterface
@@ -85,7 +79,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     private $urlUtil;
 
     /**
-     * @var ICmsCoreRedirect
+     * @var \ICmsCoreRedirect
      */
     private $redirectService;
 
@@ -109,24 +103,13 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
      */
     private $flashMessageService;
 
-    /**
-     * @param ImageCropPresetDataAccessInterface $imageCropPresetDataAccess
-     * @param CmsMediaDataAccessInterface        $cmsMediaDataAccess
-     * @param ImageCropDataAccessInterface       $imageCropDataAccess
-     * @param CropImageServiceInterface          $cropImageService
-     * @param UrlUtil                            $urlUtil
-     * @param ICmsCoreRedirect                   $redirectService
-     * @param InputFilterUtilInterface           $inputFilterUtil
-     * @param TranslatorInterface                $translator
-     * @param LanguageServiceInterface           $languageService
-     */
     public function __construct(
         ImageCropPresetDataAccessInterface $imageCropPresetDataAccess,
         CmsMediaDataAccessInterface $cmsMediaDataAccess,
         ImageCropDataAccessInterface $imageCropDataAccess,
         CropImageServiceInterface $cropImageService,
         UrlUtil $urlUtil,
-        ICmsCoreRedirect $redirectService,
+        \ICmsCoreRedirect $redirectService,
         InputFilterUtilInterface $inputFilterUtil,
         TranslatorInterface $translator,
         LanguageServiceInterface $languageService,
@@ -150,9 +133,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
         $cmsImage = $this->getCmsImage();
         $crop = $this->getCrop();
@@ -215,7 +198,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
             $parameters,
             $this->translator->trans(
                 'chameleon_system_image_crop.editor.edit_crop_window_title',
-                array('%cropName%' => $cmsImage->getName())
+                ['%cropName%' => $cmsImage->getName()]
             )
         );
     }
@@ -264,6 +247,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
 
     /**
      * @return string|null
+     *
      * @psalm-suppress InvalidReturnStatement - We know that this is string|null here
      */
     private function getPresetSystemName()
@@ -296,11 +280,11 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     private function getUrlParameters()
     {
         $cmsImage = $this->getCmsImage();
-        $parameters = array(
+        $parameters = [
             'pagedef' => self::PAGEDEF_NAME,
             '_pagedefType' => self::PAGEDEF_TYPE,
             self::URL_PARAM_IMAGE_ID => null !== $cmsImage ? $cmsImage->getId() : '1',
-        );
+        ];
 
         $presetSystemName = $this->getPresetSystemName();
         if (null !== $presetSystemName) {
@@ -334,26 +318,26 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         $presetSystemName = $this->getPresetSystemName();
         $parameters = $this->getUrlParameters();
 
-        $presetList = array();
-        $presets = TdbCmsImageCropPresetList::GetList();
+        $presetList = [];
+        $presets = \TdbCmsImageCropPresetList::GetList();
         $presetRestrictionCount = \count($presetRestriction);
         while ($presetAvailable = $presets->Next()) {
             if (0 !== $presetRestrictionCount && false === in_array(
-                    $presetAvailable->fieldSystemName,
-                    $presetRestriction,
-                    true
-                )) {
+                $presetAvailable->fieldSystemName,
+                $presetRestriction,
+                true
+            )) {
                 continue;
             }
             $parameters[self::URL_PARAM_PRESET_NAME] = $presetAvailable->fieldSystemName;
             if ($presetRestrictionCount > 0) {
                 $parameters[self::URL_PARAM_PRESET_RESTRICTION] = implode(';', $presetRestriction);
             }
-            $presetList[] = array(
+            $presetList[] = [
                 'name' => $presetAvailable->fieldName,
                 'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&'),
                 'active' => $presetAvailable->fieldSystemName === $presetSystemName,
-            );
+            ];
         }
 
         return $presetList;
@@ -366,7 +350,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $restriction = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PRESET_RESTRICTION, '');
         if ('' === $restriction) {
-            return array();
+            return [];
         }
         $restriction = explode(';', $restriction);
         array_walk(
@@ -388,7 +372,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
      */
     private function getCustomCropList($activeCrop = null)
     {
-        $customCropList = array();
+        $customCropList = [];
         $presetSystemName = $this->getPresetSystemName();
         $presetRestriction = $this->getPresetRestriction();
         $parameters = $this->getUrlParameters();
@@ -398,11 +382,11 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
             return $customCropList;
         }
 
-        $customCropList[] = array(
+        $customCropList[] = [
             'name' => $this->translator->trans('chameleon_system_image_crop.editor.custom_crop_new'),
             'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&'),
             'active' => null === $presetSystemName && null === $activeCrop,
-        );
+        ];
 
         $image = $this->getCmsImage();
         if (null === $image) {
@@ -413,11 +397,11 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
             $crops = $this->imageCropDataAccess->getExistingCrops($this->getCmsImage());
             foreach ($crops as $crop) {
                 $parameters[self::URL_PARAM_CROP_ID] = $crop->getId();
-                $customCropList[] = array(
+                $customCropList[] = [
                     'name' => $crop->getName(),
                     'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&'),
                     'active' => null !== $activeCrop && $crop->getId() === $activeCrop->getId(),
-                );
+                ];
             }
         } catch (ImageCropDataAccessException $e) {
             throw new ImageCropEditorException($e->getMessage(), 0, $e);
@@ -433,13 +417,13 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
      */
     private function generateUrlToGetImage($cmsImage)
     {
-        $parameters = array(
+        $parameters = [
             'pagedef' => self::PAGEDEF_NAME,
             self::URL_PARAM_IMAGE_ID => null !== $cmsImage ? $cmsImage->getId() : '1',
             '_pagedefType' => self::PAGEDEF_TYPE,
-            'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'),
+            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
             '_fnc' => 'getImageFieldInformation',
-        );
+        ];
 
         return URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&');
     }
@@ -451,9 +435,9 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = '
-            <link  href="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.css').'" rel="stylesheet">
-            <link  href="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/css/imageCropEditor.css').'" rel="stylesheet">
-            <script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.js').'"></script>
+            <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.css').'" rel="stylesheet">
+            <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/css/imageCropEditor.css').'" rel="stylesheet">
+            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.js').'"></script>
         ';
 
         return $includes;
@@ -466,7 +450,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     {
         $includes = parent::GetHtmlFooterIncludes();
         $includes[] = '
-            <script src="'.TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/js/imageCropEditor.js?v1').'"></script>
+            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/js/imageCropEditor.js?v1').'"></script>
         ';
 
         return $includes;
@@ -524,7 +508,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         header('HTTP/1.1 500 Internal Server Error');
         header('Content-Type: application/json');
         echo json_encode($returnValues);
-        exit();
+        exit;
     }
 
     /**
@@ -537,7 +521,7 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
         header('HTTP/1.1 200 OK');
         header('Content-Type: application/json');
         echo json_encode($returnValues);
-        exit();
+        exit;
     }
 
     /**
@@ -645,8 +629,6 @@ class ImageCropEditorModule extends MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @param ImageCropDataModel $imageCrop
-     *
      * @return ImageCropDataModel|null
      */
     private function getExistingCrop(ImageCropDataModel $imageCrop)

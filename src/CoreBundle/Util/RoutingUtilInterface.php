@@ -13,9 +13,6 @@ namespace ChameleonSystem\CoreBundle\Util;
 
 use ChameleonSystem\CoreBundle\DataModel\Routing\PagePath;
 use Symfony\Component\Routing\Route;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsTree;
 
 interface RoutingUtilInterface
 {
@@ -24,12 +21,9 @@ interface RoutingUtilInterface
      * This method is only intended for use during route generation or other tasks performed at compile time
      * as it may incorporate slow backend access. During runtime, use PortalAndLanguageAwareRouterInterface::generateWithPrefixes().
      *
-     * @param TdbCmsTree     $tree
-     * @param TdbCmsLanguage $language
-     *
      * @return string|null
      */
-    public function getLinkForTreeNode(TdbCmsTree $tree, TdbCmsLanguage $language);
+    public function getLinkForTreeNode(\TdbCmsTree $tree, \TdbCmsLanguage $language);
 
     /**
      * Returns the placeholder for domains that needs to be defined in each route.
@@ -41,34 +35,28 @@ interface RoutingUtilInterface
     /**
      * Returns the domain requirements part of a route (all domains for the given portal).
      *
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     * @param bool           $secure
+     * @param bool $secure
      *
      * @return string
      */
-    public function getDomainRequirement(TdbCmsPortal $portal, TdbCmsLanguage $language, $secure);
+    public function getDomainRequirement(\TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure);
 
     /**
      * Returns a list of routes for the passed $portal in the given $language. The list indexes are the page IDs, the
      * values are corresponding PagePath objects.
      *
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     *
      * @return PagePath[]
      */
-    public function getAllPageRoutes(TdbCmsPortal $portal, TdbCmsLanguage $language);
+    public function getAllPageRoutes(\TdbCmsPortal $portal, \TdbCmsLanguage $language);
 
     /**
      * Normalizes a route path in such a way that prefixes and suffixes are removed. This method may not be as
      * universal as you desire, for it relies on the system configuration to determine which transformations to perform.
      * Mostly this method will be used for page routes.
      *
-     * @param string       $path
-     * @param TdbCmsPortal $portal
+     * @param string $path
      *
      * @return string
      */
-    public function normalizeRoutePath($path, TdbCmsPortal $portal);
+    public function normalizeRoutePath($path, \TdbCmsPortal $portal);
 }

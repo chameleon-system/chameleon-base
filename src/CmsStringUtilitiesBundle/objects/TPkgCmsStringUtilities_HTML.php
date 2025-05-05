@@ -20,7 +20,7 @@ class TPkgCmsStringUtilities_HTML
      *
      * @return string
      */
-    public function convertEntitiesWithBlacklist($string, $blacklist = array())
+    public function convertEntitiesWithBlacklist($string, $blacklist = [])
     {
         /*
          * The number of arguments for get_html_translation_table is correct, PHPStorm stub is not (third argument was

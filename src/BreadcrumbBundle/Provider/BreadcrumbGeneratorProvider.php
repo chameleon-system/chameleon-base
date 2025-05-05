@@ -11,7 +11,7 @@ class BreadcrumbGeneratorProvider implements BreadcrumbGeneratorProviderInterfac
         private readonly array $breadcrumbGeneratorList = []
     ) {
     }
-    
+
     public function generateBreadcrumb(): ?BreadcrumbDataModel
     {
         $activeBreadcrumbGenerator = null;

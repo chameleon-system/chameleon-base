@@ -22,8 +22,6 @@ class MapperPostRenderVisitorProxy extends MapperVisitorPayloadProxy implements 
     /**
      * @param string $key
      *
-     * @return mixed
-     *
      * @throws MapperException
      */
     public function GetSourceObject($key)

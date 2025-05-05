@@ -8,12 +8,11 @@ class PkgCmsThemeBlockLayout
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var PkgCmsThemeBlock|null - Belongs to theme block */
-        private ?PkgCmsThemeBlock $pkgCmsThemeBlock = null
-        ,
+        private ?PkgCmsThemeBlock $pkgCmsThemeBlock = null,
         // TCMSFieldVarchar
         /** @var string - Descriptive name */
         private string $name = '',
@@ -66,7 +65,6 @@ class PkgCmsThemeBlockLayout
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -79,7 +77,6 @@ class PkgCmsThemeBlockLayout
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getLayoutFile(): string
@@ -94,7 +91,6 @@ class PkgCmsThemeBlockLayout
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getLessFile(): string
     {
@@ -108,7 +104,6 @@ class PkgCmsThemeBlockLayout
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -121,6 +116,4 @@ class PkgCmsThemeBlockLayout
 
         return $this;
     }
-
-
 }

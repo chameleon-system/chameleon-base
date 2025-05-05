@@ -15,7 +15,7 @@ class MTPkgExternalTracker_MTShopBasketCore extends MTPkgExternalTracker_MTShopB
      * hook ist called after a successfull change in the basket... oArticle is what was added/removed from the basket.
      *
      * @param TShopBasketArticle $oArticle
-     * @param bool               $bItemWasUpdated
+     * @param bool $bItemWasUpdated
      *
      * @return void
      */
@@ -31,6 +31,7 @@ class MTPkgExternalTracker_MTShopBasketCore extends MTPkgExternalTracker_MTShopB
 
     /**
      * @param TShopBasketArticle $oArticle
+     *
      * @return void
      */
     protected function PostRemoveItemInBasketHook($oArticle)

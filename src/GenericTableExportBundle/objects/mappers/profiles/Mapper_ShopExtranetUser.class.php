@@ -22,10 +22,6 @@ class Mapper_ShopExtranetUser extends AbstractViewMapper
      * $oRequirements->NeedsMappedValue("baz");
      *
      * @abstract
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
-     *
-     * @return void
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
@@ -35,7 +31,6 @@ class Mapper_ShopExtranetUser extends AbstractViewMapper
 
     /**
      * If you want to use this mapper add this query to query field in your export itme.
-     *
      *
      * SELECT  `pkg_newsletter_user`. * , `pkg_newsletter_confirmation` . `registration_date` AS regDate  ,
      * `pkg_newsletter_confirmation` . `confirmation` AS confirmed  ,
@@ -62,11 +57,7 @@ class Mapper_ShopExtranetUser extends AbstractViewMapper
      * To be able to access the desired source object in the visitor, the mapper has
      * to declare this requirement in its GetRequirements method (see IViewMapper)
      *
-     * @param \IMapperVisitorRestricted     $oVisitor
-     * @param bool                          $bCachingEnabled      - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
-     * @param IMapperCacheTriggerRestricted $oCacheTriggerManager
-     *
-     * @return void
+     * @param bool $bCachingEnabled - if set to true, you need to define your cache trigger that invalidate the view rendered via mapper. if set to false, you should NOT set any trigger
      */
     public function Accept(
         IMapperVisitorRestricted $oVisitor,
@@ -75,8 +66,8 @@ class Mapper_ShopExtranetUser extends AbstractViewMapper
     ): void {
         /** @var TdbDataExtranetUser $oExportData */
         $oExportData = $oVisitor->GetSourceObject('exportdata');
-        $aBilling = array();
-        $aShipping = array();
+        $aBilling = [];
+        $aShipping = [];
         if (null === $oExportData) {
             return;
         }

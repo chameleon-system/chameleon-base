@@ -16,7 +16,7 @@ class TPkgCmsStringUtilities_VariableInjection implements IPkgCmsStringUtilities
      *
      * @var array
      */
-    private $aInternalDataCache = null;
+    private $aInternalDataCache;
 
     /**
      * replaces custom var or cms text blocks in the text
@@ -39,7 +39,7 @@ class TPkgCmsStringUtilities_VariableInjection implements IPkgCmsStringUtilities
         $matchString = '/\[\{(.*?)\}\]/si';
         if (!empty($sString) && preg_match($matchString, $sString)) {
             if (is_array($aCustomVariables) && count($aCustomVariables) > 0) {
-                $this->aInternalDataCache = array();
+                $this->aInternalDataCache = [];
                 $this->aInternalDataCache = $aCustomVariables;
                 $this->aInternalDataCache['_FIELDS'] = implode("<br />\n", array_keys($aCustomVariables));
                 $this->aInternalDataCache['iTextReplaceWidth'] = $iWidth;
@@ -49,7 +49,7 @@ class TPkgCmsStringUtilities_VariableInjection implements IPkgCmsStringUtilities
                     $this->aInternalDataCache['__bPassVarsThroughOutHTML'] = false;
                 }
 
-                $sString = preg_replace_callback($matchString, array($this, 'InsertVariablesIntoMessageString'), $sString);
+                $sString = preg_replace_callback($matchString, [$this, 'InsertVariablesIntoMessageString'], $sString);
                 $this->aInternalDataCache = null;
             }
         }
@@ -119,7 +119,7 @@ class TPkgCmsStringUtilities_VariableInjection implements IPkgCmsStringUtilities
                 case 'string':
                 default:
                     $return = '';
-                    $allowedTypes = array('boolean', 'integer', 'double', 'string');
+                    $allowedTypes = ['boolean', 'integer', 'double', 'string'];
                     if (in_array(gettype($this->aInternalDataCache[$var]), $allowedTypes)) {
                         $return = $this->aInternalDataCache[$var];
                     }

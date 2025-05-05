@@ -16,12 +16,12 @@ class TPkgCmsTextfieldImage extends AbstractViewMapper
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {
-        $oRequirements->NeedsSourceObject('aTagProperties', 'array', array());
+        $oRequirements->NeedsSourceObject('aTagProperties', 'array', []);
         $oRequirements->NeedsSourceObject('oImage', 'TCMSImage', null);
         $oRequirements->NeedsSourceObject('sFullImageURL', 'string', null, true);
         $oRequirements->NeedsSourceObject('sImageGroupName', 'string', null, true);
         $oRequirements->NeedsSourceObject('iThumbnailSizeThreshold', 'integer', 5, true);
-        $oRequirements->NeedsSourceObject('aEffects', 'array', array(), true);
+        $oRequirements->NeedsSourceObject('aEffects', 'array', [], true);
         $oRequirements->NeedsSourceObject('isForceThumbnailGenerationOnFullSizeImagesEnabled', 'bool', false, false);
     }
 

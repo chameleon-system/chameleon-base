@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace ChameleonSystem\CoreBundle\Geocoding;
 
@@ -8,11 +10,10 @@ namespace ChameleonSystem\CoreBundle\Geocoding;
  */
 interface GeocoderInterface
 {
-
     /**
      * @return GeocodingResult[]
+     *
      * @psalm-return list<GeocodingResult>
      */
     public function geocode(string $query): array;
-
 }

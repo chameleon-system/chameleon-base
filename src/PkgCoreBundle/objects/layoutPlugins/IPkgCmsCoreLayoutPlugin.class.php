@@ -11,9 +11,6 @@
 
 interface IPkgCmsCoreLayoutPlugin
 {
-    /**
-     * @param TModuleLoader $oModuleLoader
-     */
     public function __construct(TModuleLoader $oModuleLoader);
 
     /**

@@ -11,7 +11,7 @@ class DataMailProfile
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - ID code */
@@ -45,8 +45,7 @@ class DataMailProfile
         private string $bodyText = '',
         // TCMSFieldDownloads
         /** @var Collection<int, CmsDocument> - Attach the following files to the email */
-        private Collection $attachmentCollection = new ArrayCollection()
-        ,
+        private Collection $attachmentCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Template */
         private string $template = '',
@@ -96,7 +95,6 @@ class DataMailProfile
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -109,7 +107,6 @@ class DataMailProfile
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSubject(): string
@@ -124,7 +121,6 @@ class DataMailProfile
         return $this;
     }
 
-
     // TCMSFieldEmail
     public function getMailto(): string
     {
@@ -137,7 +133,6 @@ class DataMailProfile
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMailtoName(): string
@@ -152,7 +147,6 @@ class DataMailProfile
         return $this;
     }
 
-
     // TCMSFieldEmail
     public function getMailfrom(): string
     {
@@ -165,7 +159,6 @@ class DataMailProfile
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getMailfromName(): string
@@ -180,7 +173,6 @@ class DataMailProfile
         return $this;
     }
 
-
     // TCMSFieldText
     public function getMailbcc(): string
     {
@@ -193,7 +185,6 @@ class DataMailProfile
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getBody(): string
@@ -208,7 +199,6 @@ class DataMailProfile
         return $this;
     }
 
-
     // TCMSFieldText
     public function getBodyText(): string
     {
@@ -221,8 +211,6 @@ class DataMailProfile
 
         return $this;
     }
-
-
 
     // TCMSFieldDownloads
 
@@ -256,7 +244,6 @@ class DataMailProfile
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTemplate(): string
     {
@@ -269,7 +256,6 @@ class DataMailProfile
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTemplateText(): string
@@ -284,7 +270,6 @@ class DataMailProfile
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -297,6 +282,4 @@ class DataMailProfile
 
         return $this;
     }
-
-
 }

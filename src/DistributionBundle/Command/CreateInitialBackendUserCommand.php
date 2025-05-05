@@ -43,7 +43,7 @@ class CreateInitialBackendUserCommand extends Command
     protected function configure()
     {
         $this
-            ->setDefinition(array())
+            ->setDefinition([])
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command creates the initial Chameleon backend user, either by accepting arguments from the environment
 or interactively. The user created by this command is a basic stub that is minimally configured to be able to log into the backend.

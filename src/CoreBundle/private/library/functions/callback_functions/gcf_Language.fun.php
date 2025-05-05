@@ -14,7 +14,7 @@ function gcf_Language($langID, $row, $fieldName)
     $name = 'keine Sprache gesetzt';
     if (!empty($langID)) {
         $oLanguage = new TCMSRecord();
-        /** @var $oLanguage TCMSRecord */
+        /* @var $oLanguage TCMSRecord */
         $oLanguage->table = 'cms_language';
         $oLanguage->Load($langID);
         $name = TGlobal::OutHTML($oLanguage->GetName());

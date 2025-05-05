@@ -11,17 +11,12 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\ImageCrop\Exception\ImageCropDataAccessException;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropDataAccessInterface;
 use ChameleonSystem\MediaManager\DataModel\MediaItemDataModel;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
-use TdbCmsLanguage;
 
-class MediaManagerMediaItemCropsMapper extends AbstractViewMapper
+class MediaManagerMediaItemCropsMapper extends \AbstractViewMapper
 {
     /**
      * @var ImageCropDataAccessInterface
@@ -33,10 +28,6 @@ class MediaManagerMediaItemCropsMapper extends AbstractViewMapper
      */
     private $cmsMediaDataAccess;
 
-    /**
-     * @param ImageCropDataAccessInterface $imageCropDataAccess
-     * @param CmsMediaDataAccessInterface  $cmsMediaDataAccess
-     */
     public function __construct(
         ImageCropDataAccessInterface $imageCropDataAccess,
         CmsMediaDataAccessInterface $cmsMediaDataAccess
@@ -48,23 +39,23 @@ class MediaManagerMediaItemCropsMapper extends AbstractViewMapper
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('mediaItem', MediaItemDataModel::class);
-        $oRequirements->NeedsSourceObject('language', TdbCmsLanguage::class);
+        $oRequirements->NeedsSourceObject('language', \TdbCmsLanguage::class);
     }
 
     /**
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
          * @var MediaItemDataModel $mediaItem
-         * @var TdbCmsLanguage $language
+         * @var \TdbCmsLanguage $language
          */
         $mediaItem = $oVisitor->GetSourceObject('mediaItem');
         $language = $oVisitor->GetSourceObject('language');

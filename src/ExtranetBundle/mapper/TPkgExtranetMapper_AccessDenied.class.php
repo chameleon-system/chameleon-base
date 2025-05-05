@@ -45,7 +45,7 @@ class TPkgExtranetMapper_AccessDenied extends AbstractViewMapper
             $oCacheTriggerManager->addTrigger($oExtranetConfiguration->table, $oExtranetConfiguration->id);
         }
 
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sTitle'] = $sRegisterLinkTitle;
         $aTextData['sLinkURL'] = $oExtranetConfiguration->GetFieldNodeRegisterIdPageURL().'?sSuccessURL='.urlencode($redirectURL);
         $oVisitor->SetMappedValue('aLinkRegister', $aTextData);
@@ -56,7 +56,7 @@ class TPkgExtranetMapper_AccessDenied extends AbstractViewMapper
             $sForgetPasswordLinkTitle = 'Anmelden';
         }
 
-        $aTextData = array();
+        $aTextData = [];
         $aTextData['sTitle'] = $sForgetPasswordLinkTitle;
         $aTextData['sLinkURL'] = $oExtranetConfiguration->GetFieldNodeLoginIdPageURL().'?sSuccessURL='.urlencode($redirectURL);
         $oVisitor->SetMappedValue('aLinkLogin', $aTextData);
@@ -67,7 +67,7 @@ class TPkgExtranetMapper_AccessDenied extends AbstractViewMapper
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -75,6 +75,6 @@ class TPkgExtranetMapper_AccessDenied extends AbstractViewMapper
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }

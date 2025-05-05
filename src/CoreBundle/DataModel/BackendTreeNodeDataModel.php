@@ -10,9 +10,7 @@
 
 namespace ChameleonSystem\CoreBundle\DataModel;
 
-use JsonSerializable;
-
-class BackendTreeNodeDataModel implements JsonSerializable
+class BackendTreeNodeDataModel implements \JsonSerializable
 {
     /**
      * @var string
@@ -145,9 +143,6 @@ class BackendTreeNodeDataModel implements JsonSerializable
         return $this->children;
     }
 
-    /**
-     * @param BackendTreeNodeDataModel $children
-     */
     public function addChildren(BackendTreeNodeDataModel $treeNodeDataModel): void
     {
         $this->children[] = $treeNodeDataModel;
@@ -275,7 +270,7 @@ class BackendTreeNodeDataModel implements JsonSerializable
     {
         $jsTreeItem = [
             'id' => $this->id,
-            'text' => $this->furtherIconsHTML . $this->name,
+            'text' => $this->furtherIconsHTML.$this->name,
             'type' => $this->type,
             'state' => [
                 'opened' => $this->opened,

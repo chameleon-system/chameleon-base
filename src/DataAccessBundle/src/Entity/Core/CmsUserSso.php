@@ -6,12 +6,11 @@ class CmsUserSso
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsUser|null - Belongs to */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldVarchar
         /** @var string - SSO Service */
         private string $type = '',
@@ -58,7 +57,6 @@ class CmsUserSso
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getType(): string
     {
@@ -72,7 +70,6 @@ class CmsUserSso
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSsoId(): string
     {
@@ -85,6 +82,4 @@ class CmsUserSso
 
         return $this;
     }
-
-
 }

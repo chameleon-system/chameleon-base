@@ -40,9 +40,9 @@ interface IViewPathManager
     public function getBackendModuleViewPath($sViewName, $sModuleName = '', $sType = 'Core');
 
     /**
-     * @param string      $sViewName
-     * @param string      $sModuleName
-     * @param string      $sType
+     * @param string $sViewName
+     * @param string $sModuleName
+     * @param string $sType
      * @param string|null $sMappedPath - if there is already a mapped path replacing PATH_CUSTOMER_FRAMEWORK
      *
      * @return string

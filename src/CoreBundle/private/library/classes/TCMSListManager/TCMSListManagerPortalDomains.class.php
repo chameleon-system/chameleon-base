@@ -17,7 +17,7 @@ class TCMSListManagerPortalDomains extends TCMSListManagerFullGroupTable
      * Allows deletion only if the domain is not the primary domain.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
@@ -38,6 +38,6 @@ class TCMSListManagerPortalDomains extends TCMSListManagerFullGroupTable
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }

@@ -18,77 +18,77 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      *
      * @var string
      */
-    protected $sToMail = null;
+    protected $sToMail;
 
     /**
      * recipient name.
      *
      * @var string
      */
-    protected $sToMailName = null;
+    protected $sToMailName;
 
     /**
      * sender email address.
      *
      * @var string
      */
-    protected $sFromMail = null;
+    protected $sFromMail;
 
     /**
      * sender name.
      *
      * @var string
      */
-    protected $sFromMailName = null;
+    protected $sFromMailName;
 
     /**
      * reply name.
      *
      * @var string
      */
-    protected $sReplyMailName = null;
+    protected $sReplyMailName;
 
     /**
      * array of variables that will be replaced in mail text [{varname}].
      *
      * @var array
      */
-    protected $aMailData = array();
+    protected $aMailData = [];
 
     /**
      * email subject.
      *
      * @var string
      */
-    protected $sSubject = null;
+    protected $sSubject;
 
     /**
      * reply mail.
      *
      * @var string
      */
-    protected $sReplyMail = null;
+    protected $sReplyMail;
 
     /**
      * array of all "TO" addresses.
      *
      * @var array - key = email, value = name (optional)
      */
-    protected $aReceiverEMails = array();
+    protected $aReceiverEMails = [];
 
     /**
      * list of all BCC emails set via addBccEmail() or via fieldMailbcc.
      *
      * @var array
      */
-    protected $bccEmails = array();
+    protected $bccEmails = [];
 
     /**
      * list of all CC emails set via addCcEmail().
      *
      * @var array
      */
-    protected $ccEmails = array();
+    protected $ccEmails = [];
 
     /**
      * adds data to the replacement variable array.
@@ -140,13 +140,13 @@ class TDataMailProfile extends TDataMailProfileAutoParent
         $oActivePortal = self::getMyPortalDomainService()->getActivePortal();
         if ($oActivePortal) {
             $sPortalQueryPart = " AND (`cms_portal_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
-                    $oActivePortal->id
-                )."' OR `cms_portal_id` = '') ORDER BY `cms_portal_id` DESC";
+                $oActivePortal->id
+            )."' OR `cms_portal_id` = '') ORDER BY `cms_portal_id` DESC";
         } else {
             $sPortalQueryPart = " AND `cms_portal_id` = ''";
         }
         $sQuery = "SELECT * FROM `data_mail_profile` WHERE `idcode` = '".MySqlLegacySupport::getInstance(
-            )->real_escape_string($sProfileName)."'".$sPortalQueryPart;
+        )->real_escape_string($sProfileName)."'".$sPortalQueryPart;
         $oProfileList = TdbDataMailProfileList::GetList($sQuery, $iLanguage);
         $oInstance = $oProfileList->Next();
         if (false === $oInstance) {
@@ -161,9 +161,9 @@ class TDataMailProfile extends TDataMailProfileAutoParent
     /**
      * Fetch a profile with the idcode $sProfileName for a portal.
      *
-     * @param string       $sProfileName
+     * @param string $sProfileName
      * @param TdbCmsPortal $oPortal
-     * @param string       $iLanguage
+     * @param string $iLanguage
      *
      * @return TDataMailProfile
      */
@@ -175,10 +175,10 @@ class TDataMailProfile extends TDataMailProfileAutoParent
             $oInstance = TdbDataMailProfile::GetNewInstance();
             $oInstance->SetLanguage($iLanguage);
             $sQuery = "SELECT * FROM `data_mail_profile` WHERE `idcode` = '".MySqlLegacySupport::getInstance(
-                )->real_escape_string($sProfileName)."'";
+            )->real_escape_string($sProfileName)."'";
             $sQuery .= " AND (`cms_portal_id` = '".MySqlLegacySupport::getInstance()->real_escape_string(
-                    $oPortal->id
-                )."' OR `cms_portal_id` = '') ORDER BY `cms_portal_id` DESC";
+                $oPortal->id
+            )."' OR `cms_portal_id` = '') ORDER BY `cms_portal_id` DESC";
             $oProfileList = TdbDataMailProfileList::GetList($sQuery, $iLanguage);
             $oInstance = $oProfileList->Next();
             if (false === $oInstance) {
@@ -297,7 +297,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      * sends an email if e-mail template location is set
      * Optional: array of files to be attached.
      *
-     * @param string     $sModuleInWhichTheViewsAreToBeFound
+     * @param string $sModuleInWhichTheViewsAreToBeFound
      * @param array|null $aAttachFiles
      *
      * @return bool
@@ -313,8 +313,8 @@ class TDataMailProfile extends TDataMailProfileAutoParent
     /**
      * sends an email using a template from object class path.
      *
-     * @param string     $sSubType     - subdirectory
-     * @param string     $sType        - Core/Customer
+     * @param string $sSubType - subdirectory
+     * @param string $sType - Core/Customer
      * @param array|null $aAttachFiles
      *
      * @return bool
@@ -329,8 +329,8 @@ class TDataMailProfile extends TDataMailProfileAutoParent
     }
 
     /**
-     * @param string     $sSubType
-     * @param string     $sType
+     * @param string $sSubType
+     * @param string $sType
      * @param array|null $aAttachFiles
      *
      * @return bool
@@ -350,7 +350,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      *
      * @return TCMSMail
      */
-    protected function GetMailObject(array $aAttachFiles = null)
+    protected function GetMailObject(?array $aAttachFiles = null)
     {
         $mailer = $this->getMailer();
         $this->aMailData['subject'] = $this->GetSubject();
@@ -404,7 +404,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
     }
 
     /**
-     * @param string      $email
+     * @param string $email
      * @param string|null $name
      */
     public function addBccEmail($email, $name = null)
@@ -417,7 +417,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
     }
 
     /**
-     * @param string      $email
+     * @param string $email
      * @param string|null $name
      */
     public function addCcEmail($email, $name = null)
@@ -436,7 +436,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      */
     protected function GetBCCList()
     {
-        $bccList = array();
+        $bccList = [];
         $bccLines = explode("\n", trim($this->sqlData['mailbcc']));
         foreach ($bccLines as $email) {
             $email = trim($email);
@@ -507,7 +507,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
         $sBody = $this->fieldBodyText;
 
         $oText = new TCMSTextField();
-        /** @var $oText TCMSTextField */
+        /* @var $oText TCMSTextField */
         $oText->content = $sBody;
         $sBody = $oText->GetPlainTextWordSave(null, $this->aMailData);
         reset($this->aMailData);
@@ -542,7 +542,7 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      */
     private static function getMyPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -550,6 +550,6 @@ class TDataMailProfile extends TDataMailProfileAutoParent
      */
     private function getMailer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.mailer');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.mailer');
     }
 }

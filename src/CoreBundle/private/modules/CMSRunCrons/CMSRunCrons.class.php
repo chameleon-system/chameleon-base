@@ -11,8 +11,8 @@
 
 use ChameleonSystem\CoreBundle\CronJob\CronjobEnablingServiceInterface;
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactoryInterface;
-use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\DataAccess\CronJobDataAccess;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Doctrine\DBAL\Connection;
@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * runs one explicit or all cronjobs.
  *
-/**/
+ * /**/
 class CMSRunCrons extends TModelBase
 {
     public function Execute()
@@ -105,7 +105,6 @@ class CMSRunCrons extends TModelBase
                 }
 
                 $this->RunCronJob($cronJobObject);
-
             }
         }
 
@@ -139,7 +138,7 @@ class CMSRunCrons extends TModelBase
      * load a cron job class (TCMSCronJob) and executes it (calls "RunScript").
      *
      * @param TdbCmsCronjobs $oTdbCmsCronJob
-     * @param bool           $bForceExecution
+     * @param bool $bForceExecution
      */
     protected function RunCronJob($oTdbCmsCronJob, $bForceExecution = false)
     {

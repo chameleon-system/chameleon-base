@@ -26,9 +26,6 @@ class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
      */
     private $original;
 
-    /**
-     * @param IncludeNode $original
-     */
     public function __construct(IncludeNode $original)
     {
         $this->original = $original;
@@ -71,9 +68,11 @@ class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
 
     /**
      * @psalm-suppress UndefinedMethod
+     *
      * @FIXME `setTemplateName` does not exist on the original class. This method should probably be removed.
      *
      * @param string $name
+     *
      * @return void
      */
     public function setTemplateName($name)

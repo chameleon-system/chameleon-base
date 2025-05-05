@@ -14,26 +14,26 @@ if (isset($oMessageType) && is_object($oMessageType) && !empty($sMessageString))
     <script type="text/javascript">
         /* <![CDATA[ */
         $(document).ready(function () {
-            $('#msg_btn_<?=$oMessageObject->id; ?>').click(function () {
-                $('#msg_<?=$oMessageObject->id; ?>').fadeOut();
+            $('#msg_btn_<?php echo $oMessageObject->id; ?>').click(function () {
+                $('#msg_<?php echo $oMessageObject->id; ?>').fadeOut();
             });
         });
         /* ]]> */
     </script>
 
-    <div class="cmsmessage <?=$oMessageType->fieldClass; ?>" id="msg_<?=$oMessageObject->id; ?>">
-        <?=$sMessageString; ?>
-        <input type="button" value="Weiter einkaufen" name="btn_close_msg" id="msg_btn_<?=$oMessageObject->id; ?>">
+    <div class="cmsmessage <?php echo $oMessageType->fieldClass; ?>" id="msg_<?php echo $oMessageObject->id; ?>">
+        <?php echo $sMessageString; ?>
+        <input type="button" value="Weiter einkaufen" name="btn_close_msg" id="msg_btn_<?php echo $oMessageObject->id; ?>">
     </div>
     <?php
     } else {
         ?>
-    <div class="cmsmessage" <?=$sStyle; ?>><?=$sMessageString; ?></div>
+    <div class="cmsmessage" <?php echo $sStyle; ?>><?php echo $sMessageString; ?></div>
     <?php
     }
 } elseif (!empty($sMessageString)) {
     ?>
-<div class="cmsmessage" <?=$sStyle; ?>><?=$sMessageString; ?></div>
+<div class="cmsmessage" <?php echo $sStyle; ?>><?php echo $sMessageString; ?></div>
 <?php
 }
 ?>

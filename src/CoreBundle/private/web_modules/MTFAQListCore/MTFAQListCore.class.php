@@ -36,7 +36,7 @@ class MTFAQListCore extends TUserCustomModelBase
      */
     protected function ChangeOrderByForList($oList)
     {
-        $oList->ChangeOrderBy(array('qdescription' => 'ASC'));
+        $oList->ChangeOrderBy(['qdescription' => 'ASC']);
     }
 
     public function GetHtmlHeadIncludes()
@@ -63,7 +63,7 @@ class MTFAQListCore extends TUserCustomModelBase
      */
     public function _GetCacheTableInfos()
     {
-        return array(array('table' => 'module_faq', 'id' => ''));
+        return [['table' => 'module_faq', 'id' => '']];
     }
 
     public function _GetCacheParameters()

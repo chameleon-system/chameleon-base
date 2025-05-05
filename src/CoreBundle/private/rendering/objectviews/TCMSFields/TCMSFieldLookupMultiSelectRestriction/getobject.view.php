@@ -1,10 +1,10 @@
         <?php
-            $aParamString = array();
-            foreach ($aParameters as $sParamName => $aParamData) {
-                $aParamString[] = "\${$sParamName}";
-            } ?>
-$itemList = $this-><?=$sParentMethodName; ?>(<?php echo implode(', ', $aParamString); ?>);
-        if(true === $this-><?=$inverseEmptyFieldName; ?> && 0 === $itemList->Length()) {
+            $aParamString = [];
+foreach ($aParameters as $sParamName => $aParamData) {
+    $aParamString[] = "\${$sParamName}";
+} ?>
+$itemList = $this-><?php echo $sParentMethodName; ?>(<?php echo implode(', ', $aParamString); ?>);
+        if(true === $this-><?php echo $inverseEmptyFieldName; ?> && 0 === $itemList->Length()) {
             return null;
         }
 

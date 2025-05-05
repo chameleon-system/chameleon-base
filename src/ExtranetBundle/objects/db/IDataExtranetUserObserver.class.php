@@ -11,7 +11,7 @@
 
 /**
  * defines an extranet user observer.
-/**/
+ * /**/
 interface IDataExtranetUserObserver
 {
     /**

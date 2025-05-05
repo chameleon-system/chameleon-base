@@ -8,7 +8,7 @@ class PkgGenericTableExport
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name of the profile */
@@ -33,8 +33,7 @@ class PkgGenericTableExport
         private string $exportFilename = '',
         // TCMSFieldExtendedLookup
         /** @var CmsTblConf|null - Source table */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldText
         /** @var string - Mapper configuration */
         private string $mapperConfig = '',
@@ -87,7 +86,6 @@ class PkgGenericTableExport
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemName(): string
     {
@@ -100,7 +98,6 @@ class PkgGenericTableExport
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getRestriction(): string
@@ -115,7 +112,6 @@ class PkgGenericTableExport
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getView(): string
     {
@@ -128,7 +124,6 @@ class PkgGenericTableExport
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getHeaderView(): string
@@ -143,7 +138,6 @@ class PkgGenericTableExport
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getViewPath(): string
     {
@@ -156,7 +150,6 @@ class PkgGenericTableExport
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getExportFilename(): string
@@ -171,7 +164,6 @@ class PkgGenericTableExport
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getCmsTblConf(): ?CmsTblConf
     {
@@ -184,7 +176,6 @@ class PkgGenericTableExport
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getMapperConfig(): string
@@ -199,7 +190,6 @@ class PkgGenericTableExport
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClass(): string
     {
@@ -212,7 +202,6 @@ class PkgGenericTableExport
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClassSubtype(): string
@@ -227,7 +216,6 @@ class PkgGenericTableExport
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -240,6 +228,4 @@ class PkgGenericTableExport
 
         return $this;
     }
-
-
 }

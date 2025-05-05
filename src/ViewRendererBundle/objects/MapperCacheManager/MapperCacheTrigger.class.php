@@ -14,7 +14,7 @@ class MapperCacheTrigger implements IMapperCacheTrigger
     /**
      * @var array<string, array{table: string, id: string}>
      */
-    private $aTrigger = array();
+    private $aTrigger = [];
 
     /**
      * {@inheritdoc}
@@ -40,6 +40,6 @@ class MapperCacheTrigger implements IMapperCacheTrigger
             $sIDKey = implode(',', $sId);
         }
         $sKey = 'x'.md5('table:'.$sTable.'-id:'.$sIDKey);
-        $this->aTrigger[$sKey] = array('table' => $sTable, 'id' => $sId);
+        $this->aTrigger[$sKey] = ['table' => $sTable, 'id' => $sId];
     }
 }

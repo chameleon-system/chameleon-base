@@ -20,9 +20,6 @@ class SupportedLanguagesService implements SupportedLanguagesServiceInterface
      */
     private $databaseConnection;
 
-    /**
-     * @param Connection $databaseConnection
-     */
     public function __construct(Connection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
@@ -35,7 +32,7 @@ class SupportedLanguagesService implements SupportedLanguagesServiceInterface
      */
     public function getSupportedLanguages()
     {
-        $locales = array();
+        $locales = [];
         $locales[] = $this->getTranslationBaseLanguageId();
         $locales = array_merge($locales, $this->getTranslationLanguageIdList());
 
@@ -44,6 +41,7 @@ class SupportedLanguagesService implements SupportedLanguagesServiceInterface
 
     /**
      * @return string
+     *
      * @psalm-suppress FalsableReturnStatement
      */
     private function getTranslationBaseLanguageId()
@@ -68,7 +66,7 @@ class SupportedLanguagesService implements SupportedLanguagesServiceInterface
                   ON mlt.`target_id` = l.`id`
         ';
         $result = $this->databaseConnection->fetchAllAssociative($query);
-        $localeList = array();
+        $localeList = [];
         foreach ($result as $row) {
             $localeList[] = $row['code'];
         }

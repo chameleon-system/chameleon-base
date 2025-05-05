@@ -9,6 +9,6 @@
  * file that was distributed with this source code.
  */
 
-class TPkgSnippetRenderer_SnippetRenderingException extends \Exception
+class TPkgSnippetRenderer_SnippetRenderingException extends Exception
 {
 }

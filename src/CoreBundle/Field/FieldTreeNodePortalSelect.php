@@ -13,7 +13,6 @@ namespace ChameleonSystem\CoreBundle\Field;
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use TGlobal;
 
 /**
  * Allows the selection of only the portal root tree nodes (level 1 of tree).
@@ -26,17 +25,17 @@ class FieldTreeNodePortalSelect extends \TCMSFieldTreeNode
     {
         $translator = $this->getTranslator();
         $path = $this->_GetTreePath();
-        $html = '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($this->data).'" />';
-        $html .= '<div id="'.TGlobal::OutHTML($this->name).'_path">'.$path.'</div>';
+        $html = '<input type="hidden" id="'.\TGlobal::OutHTML($this->name).'" name="'.\TGlobal::OutHTML($this->name).'" value="'.\TGlobal::OutHTML($this->data).'" />';
+        $html .= '<div id="'.\TGlobal::OutHTML($this->name).'_path">'.$path.'</div>';
         $html .= '<div class="cleardiv">&nbsp;</div>';
 
         $html .= \TCMSRender::DrawButton(
             $translator->trans('chameleon_system_core.field_tree_node.assign_node'),
-            "javascript:loadTreeNodePortalSelection('".TGlobal::OutJS($this->name)."');",
+            "javascript:loadTreeNodePortalSelection('".\TGlobal::OutJS($this->name)."');",
             'fas fa-check');
         $html .= \TCMSRender::DrawButton(
             $translator->trans('chameleon_system_core.action.reset'),
-            "javascript:ResetTreeNodeSelection('".TGlobal::OutJS($this->name)."');",
+            "javascript:ResetTreeNodeSelection('".\TGlobal::OutJS($this->name)."');",
             'fas fa-undo');
 
         return $html;

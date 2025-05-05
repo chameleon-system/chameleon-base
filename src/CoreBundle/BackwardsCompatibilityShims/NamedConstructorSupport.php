@@ -26,7 +26,7 @@ trait NamedConstructorSupport
      * Calls the main `__constructor` method and logs a deprecation message.
      * This method is meant to be called inside of deprecated named constructors
      * in order to provide backwards compatibility with extending classes in
-     * projects that may call the named constructor instead of `parent::__construct`;
+     * projects that may call the named constructor instead of `parent::__construct`;.
      */
     protected function callConstructorAndLogDeprecation(array $arguments): void
     {

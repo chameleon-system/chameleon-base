@@ -50,8 +50,6 @@ class MainMenuMigrator
 
     /**
      * Returns a mapping from old table icons based on file names to new icons based on an icon font.
-     *
-     * @return array
      */
     public function getIconMapping(): array
     {
@@ -151,14 +149,12 @@ class MainMenuMigrator
      * Creates a new main menu category with the same name as the content box with $oldContentBoxSystemName and the
      * same menu items.
      *
-     * @param string $oldContentBoxSystemName
-     *
      * @throws DBALException
      */
     public function migrateContentBox(string $oldContentBoxSystemName): void
     {
         $query = 'SELECT * FROM `cms_content_box` WHERE `system_name` = :systemName';
-        $row = $this->databaseConnection->fetchAssociative($query, array('systemName' => $oldContentBoxSystemName));
+        $row = $this->databaseConnection->fetchAssociative($query, ['systemName' => $oldContentBoxSystemName]);
         if (false === $row) {
             \TCMSLogChange::addInfoMessage(\sprintf('No content box found for system name "%s"', $oldContentBoxSystemName), \TCMSLogChange::INFO_MESSAGE_LEVEL_ERROR);
 

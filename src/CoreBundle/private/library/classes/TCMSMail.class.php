@@ -18,9 +18,9 @@ use PHPMailer\PHPMailer\PHPMailer;
  */
 class TCMSMail extends PHPMailer
 {
-    const TEMPLATETYPE_MODULE = 0;
-    const TEMPLATETYPE_OBJECT = 1;
-    const TEMPLATETYPE_PACKAGEOBJECT = 2;
+    public const TEMPLATETYPE_MODULE = 0;
+    public const TEMPLATETYPE_OBJECT = 1;
+    public const TEMPLATETYPE_PACKAGEOBJECT = 2;
 
     /**
      * @var string|null
@@ -37,7 +37,7 @@ class TCMSMail extends PHPMailer
     /**
      * @var array
      */
-    protected $aObjectTemplateData = array('sSubType' => '', 'sType' => '');
+    protected $aObjectTemplateData = ['sSubType' => '', 'sType' => ''];
     /**
      * @var int
      */
@@ -78,10 +78,10 @@ class TCMSMail extends PHPMailer
     public function __construct($exceptions = null)
     {
         parent::__construct($exceptions);
-        
+
         $this->XMailer = null;
     }
-    
+
     /**
      * @param TTools $oTools
      */
@@ -108,7 +108,7 @@ class TCMSMail extends PHPMailer
      * Set HTML and Text Template. if no html template is set, then the mail
      * will be send as text.
      *
-     * @param string      $sModuleName
+     * @param string $sModuleName
      * @param string|null $sHTMLTemplate - example "test/mail" for a template ".test/mail.view.php"
      * @param string|null $sTextTemplate
      */
@@ -261,7 +261,7 @@ class TCMSMail extends PHPMailer
      *
      * @return bool
      */
-    public function Send($aData = array())
+    public function Send($aData = [])
     {
         $bFoundBody = $this->prepareMailData($aData);
         $wasSent = false;
@@ -299,9 +299,6 @@ class TCMSMail extends PHPMailer
         $this->filterAddressBag($this->bcc);
     }
 
-    /**
-     * @param array $addressBag
-     */
     protected function filterAddressBag(array $addressBag)
     {
         foreach ($addressBag as $key => $aRecipient) {
@@ -324,7 +321,7 @@ class TCMSMail extends PHPMailer
      * @param string $host
      * @param string $login
      * @param string $password
-     * @param int    $port
+     * @param int $port
      */
     protected function SetSMTPLogin($host = '', $login = '', $password = '', $port = 25)
     {
@@ -391,7 +388,7 @@ class TCMSMail extends PHPMailer
         $this->From = $sMail;
         $this->FromName = $sName;
 
-        $this->ReplyTo = array();
+        $this->ReplyTo = [];
         $this->addReplyTo($sMail, $sName);
     }
 
@@ -424,7 +421,7 @@ class TCMSMail extends PHPMailer
             return $this->transformationService;
         }
 
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.mail_target_transformation_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.mail_target_transformation_service');
     }
 
     /**
@@ -436,12 +433,9 @@ class TCMSMail extends PHPMailer
             return $this->mailPeerSecurity;
         }
 
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.security.mail.mail_peer_security');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.security.mail.mail_peer_security');
     }
 
-    /**
-     * @param HttpsContextInterface $mailPeerSecurity
-     */
     public function setMailPeerSecurity(HttpsContextInterface $mailPeerSecurity)
     {
         $this->mailPeerSecurity = $mailPeerSecurity;

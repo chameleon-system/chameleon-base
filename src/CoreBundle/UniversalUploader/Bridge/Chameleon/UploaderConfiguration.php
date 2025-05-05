@@ -14,22 +14,15 @@ namespace ChameleonSystem\CoreBundle\UniversalUploader\Bridge\Chameleon;
 use ChameleonSystem\CoreBundle\UniversalUploader\Exception\UploaderConfigurationException;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploaderParametersDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Library\UploaderConfigurationInterface;
-use TCMSImage;
-use TCMSTableEditorMedia;
-use TdbCmsConfig;
-use TTools;
 
 class UploaderConfiguration implements UploaderConfigurationInterface
 {
     /**
-     * @var TdbCmsConfig
+     * @var \TdbCmsConfig
      */
     private $cmsConfig;
 
-    /**
-     * @param TdbCmsConfig $config
-     */
-    public function __construct(TdbCmsConfig $config)
+    public function __construct(\TdbCmsConfig $config)
     {
         $this->cmsConfig = $config;
     }
@@ -39,7 +32,7 @@ class UploaderConfiguration implements UploaderConfigurationInterface
      */
     public function getMaxUploadSize($uploaderParameter)
     {
-        $maxSizeMegaBytesFromServer = TTools::getUploadMaxSize(); // MB
+        $maxSizeMegaBytesFromServer = \TTools::getUploadMaxSize(); // MB
         $maxSizeKiloBytesFromServer = $maxSizeMegaBytesFromServer * 1024;
 
         switch ($uploaderParameter->getMode()) {
@@ -100,18 +93,18 @@ class UploaderConfiguration implements UploaderConfigurationInterface
      */
     private function getAllowedFileTypesMedia($recordId)
     {
-        $fileTypes = array();
+        $fileTypes = [];
         if (null !== $recordId) {
-            $image = new TCMSImage();
+            $image = new \TCMSImage();
             if (!$image->Load($recordId)) {
                 throw new UploaderConfigurationException('Image for recordID could not be loaded.');
             }
             $fileTypes[] = strtolower($image->GetImageType());
         } else {
             /**
-             * @var TCMSTableEditorMedia $tableEditor
+             * @var \TCMSTableEditorMedia $tableEditor
              */
-            $tableEditor = TTools::GetTableEditorManager('cms_media')->oTableEditor;
+            $tableEditor = \TTools::GetTableEditorManager('cms_media')->oTableEditor;
             $fileTypes = $tableEditor->GetAllowedMediaTypes();
         }
 
@@ -123,7 +116,7 @@ class UploaderConfiguration implements UploaderConfigurationInterface
      */
     private function getAllowedFileTypesDocument()
     {
-        return TTools::GetCMSFileTypes();
+        return \TTools::GetCMSFileTypes();
     }
 
     /**

@@ -9,9 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineNotTransformableMarkerInterface;
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 
@@ -37,7 +35,6 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
      */
     protected $sMatrixTableName = 'cms_portal_language_matrix';
 
-
     public function GetHTML()
     {
         $sEscapedNameField = TGlobal::OutHTML($this->name);
@@ -47,8 +44,8 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
           ';
 
         if (!$this->bReadOnlyMode) {
-            $html .= '<a href="javascript:markCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink"><i class="fas fa-check pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all').'</a>
-          <a href="javascript:invertCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-random pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>
+            $html .= '<a href="javascript:markCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink"><i class="fas fa-check pr-2"></i>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all').'</a>
+          <a href="javascript:invertCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-random pr-2"></i>'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>
           ';
         }
 
@@ -163,7 +160,7 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
 
             if (!$returnDDL) {
                 MySqlLegacySupport::getInstance()->query($query);
-                $aQuery = array(new LogChangeDataModel($query));
+                $aQuery = [new LogChangeDataModel($query)];
 
                 TCMSLogChange::WriteTransaction($aQuery);
             } else {
@@ -188,11 +185,11 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
         $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
         $migrationQueryData = new MigrationQueryData('cms_portal_language_matrix', $editLanguageIsoCode);
         $migrationQueryData
-            ->setWhereEquals(array(
+            ->setWhereEquals([
               'cms_tbl_conf_id' => $oTableConfig->id,
-            ))
+            ])
         ;
-        $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_DELETE));
+        $aQuery = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_DELETE)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -224,7 +221,7 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
             $sRecordID = $this->oTableRow->sqlData['id'];
 
             if (is_array($this->data)) {
-                $aConnectedIds = array();
+                $aConnectedIds = [];
 
                 $sAlreadyConnectedQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sMatrixTableName).'`
                 WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sMatrixTableName)."`.`record_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sRecordID)."'
@@ -335,8 +332,8 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
     /**
      * changes an existing field definition (alter table).
      *
-     * @param string     $sOldName
-     * @param string     $sNewName
+     * @param string $sOldName
+     * @param string $sNewName
      * @param array|null $postData
      */
     public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
@@ -348,7 +345,7 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
      *
      * @param string $sFieldDefaultValue
      * @param string $sFieldName
-     * @param bool   $bUpdateExistingRecords
+     * @param bool $bUpdateExistingRecords
      */
     protected function UpdateFieldDefaultValue($sFieldDefaultValue, $sFieldName, $bUpdateExistingRecords = false)
     {
@@ -357,7 +354,7 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
     /**
      * create a new field definition (alter table).
      *
-     * @param bool      $returnDDL
+     * @param bool $returnDDL
      * @param TCMSField $oField
      *
      * @return string

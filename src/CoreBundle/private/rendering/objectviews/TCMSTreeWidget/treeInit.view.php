@@ -6,8 +6,8 @@
          */
         $("#treePlacer").jstree({
             "plugins":[ "themes", "json_data", "cookies", "ui", "crrm", "dnd", <?php if (!empty($sContextMenuItems)) {
-    echo '"contextmenu",';
-} ?> ],
+                echo '"contextmenu",';
+            } ?> ],
 
             "core":{
                 "animation":0,
@@ -23,14 +23,14 @@
             "json_data":{
                 "ajax":{
                     // the URL to fetch the data
-                    "url":"<?=PATH_CMS_CONTROLLER; ?>?" + _cmsauthenticitytoken_parameter,
+                    "url":"<?php echo PATH_CMS_CONTROLLER; ?>?" + _cmsauthenticitytoken_parameter,
                     // this function is executed in the instance's scope (this refers to the tree instance)
                     // the parameter is the node being loaded (may be -1, 0, or undefined when loading the root nodes)
                     "data":function (n) {
                         // the result is fed to the AJAX request `data` option
                         return {
-                            "pagedef":'<?=$sAjaxPageDef; ?>',
-                            "module_fnc[<?=$sAjaxModuleSpot; ?>]":'ExecuteAjaxCall',
+                            "pagedef":'<?php echo $sAjaxPageDef; ?>',
+                            "module_fnc[<?php echo $sAjaxModuleSpot; ?>]":'ExecuteAjaxCall',
                             "_fnc":'GetChildren',
                             "id":n.attr ? n.attr("id").replace("node", "") : 1
                         };
@@ -53,16 +53,16 @@
                     }
                 }
             }<?php
-        if (!empty($sContextMenuItems)) {
-            ?>,
+                    if (!empty($sContextMenuItems)) {
+                        ?>,
 
             "contextmenu":{
                 select_node:true,
-                items: <?=$sContextMenuItems; ?>
+                items: <?php echo $sContextMenuItems; ?>
             }
             <?php
-        }
-        ?>
+                    }
+            ?>
         })
 
             .bind("move_node.jstree", function (e, data) {
@@ -72,10 +72,10 @@
                         cache:false,
                         dataType:'json',
                         type:'POST',
-                        url:"<?=PATH_CMS_CONTROLLER; ?>?" + _cmsauthenticitytoken_parameter,
+                        url:"<?php echo PATH_CMS_CONTROLLER; ?>?" + _cmsauthenticitytoken_parameter,
                         data:{
-                            "pagedef":'<?=$sAjaxPageDef; ?>',
-                            "module_fnc[<?=$sAjaxModuleSpot; ?>]":'ExecuteAjaxCall',
+                            "pagedef":'<?php echo $sAjaxPageDef; ?>',
+                            "module_fnc[<?php echo $sAjaxModuleSpot; ?>]":'ExecuteAjaxCall',
                             "_fnc":'MoveNode',
                             "sourceNodeID":$(this).attr("id").replace("node", ""),
                             "targetNodeID":data.rslt.np.attr("id").replace("node", ""),
@@ -103,10 +103,10 @@
                     cache:false,
                     dataType:'json',
                     type:'POST',
-                    url:"<?=PATH_CMS_CONTROLLER; ?>?" + _cmsauthenticitytoken_parameter,
+                    url:"<?php echo PATH_CMS_CONTROLLER; ?>?" + _cmsauthenticitytoken_parameter,
                     data:{
-                        "pagedef":'<?=$sAjaxPageDef; ?>',
-                        "module_fnc[<?=$sAjaxModuleSpot; ?>]":'ExecuteAjaxCall',
+                        "pagedef":'<?php echo $sAjaxPageDef; ?>',
+                        "module_fnc[<?php echo $sAjaxModuleSpot; ?>]":'ExecuteAjaxCall',
                         "_fnc":'RenameNode',
                         "sNodeID":data.rslt.obj.attr("id").replace("node", ""),
                         "sNewTitle":data.rslt.new_name
@@ -122,16 +122,16 @@
             })
 
             .bind("delete_node.jstree", function (e, data) {
-                if (confirm('<?php echo TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.confirm_delete_folder')); ?>')) {
+                if (confirm('<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_tree_widget.confirm_delete_folder')); ?>')) {
                     $.ajax({
                         async:false,
                         cache:false,
                         dataType:'json',
                         type:'POST',
-                        url:"<?=PATH_CMS_CONTROLLER; ?>?" + _cmsauthenticitytoken_parameter,
+                        url:"<?php echo PATH_CMS_CONTROLLER; ?>?" + _cmsauthenticitytoken_parameter,
                         data:{
-                            "pagedef":'<?=$sAjaxPageDef; ?>',
-                            "module_fnc[<?=$sAjaxModuleSpot; ?>]":'ExecuteAjaxCall',
+                            "pagedef":'<?php echo $sAjaxPageDef; ?>',
+                            "module_fnc[<?php echo $sAjaxModuleSpot; ?>]":'ExecuteAjaxCall',
                             "_fnc":'CheckDirItemsConnectionsAndDelete',
                             "sNodeID":data.rslt.obj.attr("id").replace("node", "")
                         },
@@ -148,7 +148,7 @@
                                         ShowConnectionDialog(1);
                                     }
                                 } else {
-                                    showFileList(<?=$sRootNodeID; ?>);
+                                    showFileList(<?php echo $sRootNodeID; ?>);
                                 }
                             }
                         }

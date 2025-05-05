@@ -1,1 +1,1 @@
-                return <?= $sReturnType; ?>::<?= $sCallMethodName; ?>($this->id, $this->iLanguageId);
+                return <?php echo $sReturnType; ?>::<?php echo $sCallMethodName; ?>($this->id, $this->iLanguageId);

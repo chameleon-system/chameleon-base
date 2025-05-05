@@ -2,21 +2,18 @@
 
 namespace ChameleonSystem\ExtranetBundle\Entity;
 
-use DateTime;
-
 class DataExtranetUserLoginHistory
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Corresponding user */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - Date */
-        private ?DateTime $datecreated = new DateTime(),
+        /** @var \DateTime|null - Date */
+        private ?\DateTime $datecreated = new \DateTime(),
         // TCMSFieldVarchar
         /** @var string - User IP */
         private string $userIp = ''
@@ -60,20 +57,18 @@ class DataExtranetUserLoginHistory
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getUserIp(): string
@@ -87,6 +82,4 @@ class DataExtranetUserLoginHistory
 
         return $this;
     }
-
-
 }

@@ -38,7 +38,7 @@ class ListUpdateCommand extends Command
     protected function configure()
     {
         $this
-            ->setDefinition(array())
+            ->setDefinition([])
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command lists Chameleon updates not executed yet
 EOF
@@ -55,19 +55,19 @@ EOF
         $updateList = $updateManager->getAllUpdateFilesToProcess();
 
         $table = new Table($output);
-        $table->setHeaders(array(
+        $table->setHeaders([
             'Bundle Name',
             'Build Number',
             'File Name',
-        ));
+        ]);
         $updateCount = 0;
         foreach ($updateList as $bundleName => $updates) {
             foreach ($updates as $update) {
-                $table->addRow(array(
+                $table->addRow([
                     $bundleName,
                     $update->buildNumber,
                     $update->fileName,
-                ));
+                ]);
                 ++$updateCount;
             }
         }

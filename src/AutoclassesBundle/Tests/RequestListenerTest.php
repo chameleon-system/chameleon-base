@@ -26,7 +26,7 @@ class RequestListenerTest extends TestCase
     /**
      * @test
      */
-    public function it_generates_autoclasses_if_there_arent_any()
+    public function itGeneratesAutoclassesIfThereArentAny()
     {
         $cacheWarmer = $this->getCacheWarmerProphet();
         $evt = $this->getResponseEventProphet(HttpKernelInterface::MAIN_REQUEST, RequestTypeInterface::REQUEST_TYPE_BACKEND);
@@ -40,7 +40,7 @@ class RequestListenerTest extends TestCase
     /**
      * @test
      */
-    public function it_leaves_existing_autoclasses_alone()
+    public function itLeavesExistingAutoclassesAlone()
     {
         $cacheWarmer = $this->getCacheWarmerProphet();
         $evt = $this->getResponseEventProphet(HttpKernelInterface::MAIN_REQUEST, RequestTypeInterface::REQUEST_TYPE_BACKEND);
@@ -54,7 +54,7 @@ class RequestListenerTest extends TestCase
     /**
      * @test
      */
-    public function it_only_checks_on_master_request()
+    public function itOnlyChecksOnMasterRequest()
     {
         $cacheWarmer = $this->getCacheWarmerProphet();
         $evt = $this->getResponseEventProphet(HttpKernelInterface::SUB_REQUEST, RequestTypeInterface::REQUEST_TYPE_BACKEND);
@@ -68,7 +68,7 @@ class RequestListenerTest extends TestCase
     /**
      * @test
      */
-    public function it_only_runs_on_backend_request()
+    public function itOnlyRunsOnBackendRequest()
     {
         $cacheWarmer = $this->getCacheWarmerProphet();
         $evt = $this->getResponseEventProphet(HttpKernelInterface::MAIN_REQUEST, RequestTypeInterface::REQUEST_TYPE_FRONTEND);

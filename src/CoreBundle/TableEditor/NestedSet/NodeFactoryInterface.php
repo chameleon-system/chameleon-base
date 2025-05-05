@@ -15,7 +15,6 @@ interface NodeFactoryInterface
 {
     /**
      * @param string $tableName
-     * @param array $nodeData
      *
      * @return NodeInterface
      */
@@ -24,8 +23,6 @@ interface NodeFactoryInterface
     /**
      * @param string $tableName
      * @param string $nodeId
-     *
-     * @return mixed
      */
     public function createNodeFromId($tableName, $nodeId);
 }

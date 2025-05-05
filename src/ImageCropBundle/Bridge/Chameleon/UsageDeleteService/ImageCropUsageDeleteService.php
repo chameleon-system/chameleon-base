@@ -18,9 +18,6 @@ use ChameleonSystem\MediaManager\Exception\UsageDeleteException;
 use ChameleonSystem\MediaManager\Interfaces\MediaItemUsageDeleteServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use TCMSTableEditorManager;
-use TdbCmsConfig;
-use TdbCmsFieldConf;
 
 class ImageCropUsageDeleteService implements MediaItemUsageDeleteServiceInterface
 {
@@ -39,11 +36,6 @@ class ImageCropUsageDeleteService implements MediaItemUsageDeleteServiceInterfac
      */
     private $fieldTranslationUtil;
 
-    /**
-     * @param Connection               $databaseConnection
-     * @param LanguageServiceInterface $languageService
-     * @param FieldTranslationUtil     $fieldTranslationUtil
-     */
     public function __construct(
         Connection $databaseConnection,
         LanguageServiceInterface $languageService,
@@ -92,7 +84,7 @@ class ImageCropUsageDeleteService implements MediaItemUsageDeleteServiceInterfac
             try {
                 $row = $this->databaseConnection->fetchAssociative(
                     $query,
-                    array('id' => $usage->getTargetRecordId())
+                    ['id' => $usage->getTargetRecordId()]
                 );
             } catch (DBALException $e) {
                 throw new UsageDeleteException(
@@ -115,7 +107,7 @@ class ImageCropUsageDeleteService implements MediaItemUsageDeleteServiceInterfac
                 }
             }
             $newValue = implode(',', $images);
-            $tableEditor = new TCMSTableEditorManager();
+            $tableEditor = new \TCMSTableEditorManager();
             $tableEditor->AllowEditByAll(true);
             $tableEditor->Init($fieldConf->fieldCmsTblConfId, $usage->getTargetRecordId(), $languageId);
 
@@ -126,19 +118,17 @@ class ImageCropUsageDeleteService implements MediaItemUsageDeleteServiceInterfac
     }
 
     /**
-     * @param MediaItemUsageDataModel $usage
-     *
-     * @return TdbCmsFieldConf|null
+     * @return \TdbCmsFieldConf|null
      */
     private function getFieldDefinitionFromUsage(MediaItemUsageDataModel $usage)
     {
-        $fieldConf = TdbCmsFieldConf::GetNewInstance();
+        $fieldConf = \TdbCmsFieldConf::GetNewInstance();
         if (false === $fieldConf->LoadFromFields(
-                array(
-                    'cms_tbl_conf_id' => $this->getTableId($usage->getTargetTableName()),
-                    'name' => $usage->getTargetFieldName(),
-                )
-            )) {
+            [
+                'cms_tbl_conf_id' => $this->getTableId($usage->getTargetTableName()),
+                'name' => $usage->getTargetFieldName(),
+            ]
+        )) {
             return null;
         }
 
@@ -164,7 +154,7 @@ class ImageCropUsageDeleteService implements MediaItemUsageDeleteServiceInterfac
      */
     private function getAvailableLanguageIds()
     {
-        $config = TdbCmsConfig::GetNewInstance();
+        $config = \TdbCmsConfig::GetNewInstance();
         $languageIds = [$config->GetFieldTranslationBaseLanguage()->id];
         $otherLanguages = $config->GetFieldBasedTranslationLanguageArray();
 

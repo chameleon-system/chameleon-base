@@ -15,7 +15,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 /**
  * a lookup field with special cases to prevent non admins to select roles they are not allowed to.
-/**/
+ * /**/
 class TCMSFieldLookupRoles extends TCMSFieldLookupMultiselectCheckboxes
 {
     protected function GetMLTRecordRestrictions()

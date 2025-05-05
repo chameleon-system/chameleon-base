@@ -15,10 +15,10 @@ class MarkdownParserService implements MarkdownParserServiceInterface
 {
     public function __construct(
         private readonly MarkdownCmsLinkParserInterface $markdownCmsLinkParser,
-        private readonly \IPkgCmsStringUtilities_VariableInjection $cmsStringUtilitiesVariableInjection )
+        private readonly \IPkgCmsStringUtilities_VariableInjection $cmsStringUtilitiesVariableInjection)
     {
     }
-    
+
     public function getMarkdownParser(): MarkdownConverter
     {
         $environment = new Environment($this->getConfig());
@@ -29,7 +29,7 @@ class MarkdownParserService implements MarkdownParserServiceInterface
 
         return new MarkdownConverter($environment);
     }
-    
+
     public function parse(?string $markdownText, ?array $replaceVariables = null): string
     {
         if (null === $markdownText) {
@@ -37,17 +37,17 @@ class MarkdownParserService implements MarkdownParserServiceInterface
         }
 
         $markdownText = $this->markdownCmsLinkParser->replaceCmsLinksInMarkdown($markdownText);
-        
+
         $markdownParser = $this->getMarkdownParser();
         $htmlText = $markdownParser->convert($markdownText);
 
         if (true === \is_array($replaceVariables)) {
             $htmlText = $this->cmsStringUtilitiesVariableInjection->replace($htmlText, $replaceVariables);
         }
-        
+
         return $htmlText;
     }
-    
+
     protected function getConfig(): array
     {
         return [
@@ -59,9 +59,9 @@ class MarkdownParserService implements MarkdownParserServiceInterface
                     'attributes' => [],
                 ],
                 'alignment_attributes' => [
-                    'left'   => ['align' => 'left'],
+                    'left' => ['align' => 'left'],
                     'center' => ['align' => 'center'],
-                    'right'  => ['align' => 'right'],
+                    'right' => ['align' => 'right'],
                 ],
             ],
         ];

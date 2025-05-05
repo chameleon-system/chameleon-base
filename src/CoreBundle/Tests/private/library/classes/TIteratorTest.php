@@ -4,10 +4,9 @@ use PHPUnit\Framework\TestCase;
 
 class TIteratorTest extends TestCase
 {
-
     public function testShouldBeAbleToIterateManually(): void
     {
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
 
         $this->assertEquals(0, $this->getItemPointer($iterator));
         $this->assertEquals('foo', $iterator->current());
@@ -27,7 +26,7 @@ class TIteratorTest extends TestCase
 
     public function testCanAppendItems(): void
     {
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
 
         $test = 'test';
         $iterator->AddItem($test);
@@ -41,7 +40,7 @@ class TIteratorTest extends TestCase
 
     public function testCanPrependItems(): void
     {
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
 
         $test = 'test';
         $iterator->AddItemToStart($test);
@@ -52,7 +51,7 @@ class TIteratorTest extends TestCase
 
     public function testCanBeReversed(): void
     {
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
         $iterator->ReverseItemList();
 
         $this->assertEquals(0, $this->getItemPointer($iterator));
@@ -63,7 +62,7 @@ class TIteratorTest extends TestCase
 
     public function testCanGoToStart(): void
     {
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
 
         $iterator->next();
         $iterator->next();
@@ -75,7 +74,7 @@ class TIteratorTest extends TestCase
 
     public function testCanGoToEnd(): void
     {
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
 
         $this->assertEquals(0, $this->getItemPointer($iterator));
 
@@ -86,8 +85,8 @@ class TIteratorTest extends TestCase
 
     public function testCanBeSortedByCallback(): void
     {
-        $iterator = $this->iterator([ 3, 7, 1 ,9 ]);
-        $iterator->usort(function($a, $b) {
+        $iterator = $this->iterator([3, 7, 1, 9]);
+        $iterator->usort(function ($a, $b) {
             return $a - $b;
         });
 
@@ -99,20 +98,20 @@ class TIteratorTest extends TestCase
 
     public function testCanFindOneItemBasedOnObjectProperty(): void
     {
-        $foo = (object) [ 'id' => 'foo' ];
-        $bar = (object) [ 'id' => 'bar' ];
-        $baz = (object) [ 'id' => 'baz' ];
-        $iterator = $this->iterator([ $foo, $bar, $baz ]);
+        $foo = (object) ['id' => 'foo'];
+        $bar = (object) ['id' => 'bar'];
+        $baz = (object) ['id' => 'baz'];
+        $iterator = $this->iterator([$foo, $bar, $baz]);
 
         $this->assertSame($bar, $iterator->FindItemWithProperty('id', 'bar'));
     }
 
     public function testCanFindMultipleItemBasedOnObjectProperty(): void
     {
-        $foo = (object) [ 'id' => 'foo', 'tag' => 1 ];
-        $bar = (object) [ 'id' => 'bar', 'tag' => 2 ];
-        $baz = (object) [ 'id' => 'baz', 'tag' => 1 ];
-        $iterator = $this->iterator([ $foo, $bar, $baz ]);
+        $foo = (object) ['id' => 'foo', 'tag' => 1];
+        $bar = (object) ['id' => 'bar', 'tag' => 2];
+        $baz = (object) ['id' => 'baz', 'tag' => 1];
+        $iterator = $this->iterator([$foo, $bar, $baz]);
 
         $items = $iterator->FindItemsWithProperty('tag', 1);
         $this->assertEquals(2, $items->Length());
@@ -122,10 +121,10 @@ class TIteratorTest extends TestCase
 
     public function testCanDeleteItemBasedOnObjectProperty(): void
     {
-        $foo = (object) [ 'id' => 'foo' ];
-        $bar = (object) [ 'id' => 'bar' ];
-        $baz = (object) [ 'id' => 'baz' ];
-        $iterator = $this->iterator([ $foo, $bar, $baz ]);
+        $foo = (object) ['id' => 'foo'];
+        $bar = (object) ['id' => 'bar'];
+        $baz = (object) ['id' => 'baz'];
+        $iterator = $this->iterator([$foo, $bar, $baz]);
 
         $iterator->RemoveItem('id', 'bar');
 
@@ -135,7 +134,7 @@ class TIteratorTest extends TestCase
 
     public function testCanBeIterated(): void
     {
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
 
         foreach ($iterator as $index => $item) {
             switch ($index) {
@@ -149,7 +148,7 @@ class TIteratorTest extends TestCase
                     $this->assertEquals('baz', $item);
                     break;
                 default:
-                    throw new \Exception('Invalid index ' . $index);
+                    throw new Exception('Invalid index '.$index);
             }
         }
     }
@@ -157,9 +156,9 @@ class TIteratorTest extends TestCase
     public function testCanBeIteratedMultipleTimes(): void
     {
         // Tests if the `reset` method correctly resets the item pointer
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
 
-        $items = [ ];
+        $items = [];
         foreach ($iterator as $item) {
             $items[] = $item;
         }
@@ -167,18 +166,18 @@ class TIteratorTest extends TestCase
             $items[] = $item;
         }
 
-        $this->assertEquals([ 'foo', 'bar', 'baz', 'foo', 'bar', 'baz' ], $items);
+        $this->assertEquals(['foo', 'bar', 'baz', 'foo', 'bar', 'baz'], $items);
     }
 
     public function testResetsItemPointerBeforeIterating(): void
     {
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
         $iterator->next();
 
         $this->assertEquals(1, $this->getItemPointer($iterator));
         $i = 0;
         foreach ($iterator as $_) {
-            $i++;
+            ++$i;
         }
 
         // If the item pointer wasn't reset we'd assume to see 2 here
@@ -188,7 +187,7 @@ class TIteratorTest extends TestCase
 
     public function testCanBeConvertedToArrayUsingIteratorMethods(): void
     {
-        $iterator = $this->iterator([ 'foo', 'bar', 'baz' ]);
+        $iterator = $this->iterator(['foo', 'bar', 'baz']);
         $array = iterator_to_array($iterator);
         $this->assertIsArray($array);
         $this->assertEquals('foo', $array[0]);
@@ -202,14 +201,15 @@ class TIteratorTest extends TestCase
         foreach ($items as $item) {
             $iterator->AddItem($item);
         }
+
         return $iterator;
     }
 
     private function getItemPointer(TIterator $iterator): int
     {
-        $reflection = new \ReflectionMethod($iterator, 'getItemPointer');
+        $reflection = new ReflectionMethod($iterator, 'getItemPointer');
         $reflection->setAccessible(true);
+
         return $reflection->invoke($iterator);
     }
-
 }

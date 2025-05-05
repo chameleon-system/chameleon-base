@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 
 /**
  * Used to display a single image.
-/**/
+ * /**/
 class MTImageCore extends TUserCustomModelBase
 {
     /**
@@ -22,7 +22,7 @@ class MTImageCore extends TUserCustomModelBase
      *
      * @var TdbModuleImage
      */
-    public $_oTableRow = null;
+    public $_oTableRow;
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -44,7 +44,7 @@ class MTImageCore extends TUserCustomModelBase
                 $link = $treeService->getLinkToPageForTreeRelative($treeNode);
             }
         }
-        $this->data = array('oTableRow' => $this->_oTableRow, 'oImage' => $oImage, 'sLink' => $link);
+        $this->data = ['oTableRow' => $this->_oTableRow, 'oImage' => $oImage, 'sLink' => $link];
 
         return $this->data;
     }
@@ -83,12 +83,12 @@ class MTImageCore extends TUserCustomModelBase
     public function _GetCacheTableInfos()
     {
         $tableInfo = parent::_GetCacheTableInfos();
-        $tableInfo[] = array('table' => 'module_image', 'id' => $this->_oTableRow->id);
+        $tableInfo[] = ['table' => 'module_image', 'id' => $this->_oTableRow->id];
 
         $this->LoadTableRow();
         $oImages = $this->_oTableRow->GetImages();
         while ($oImage = $oImages->Next()) {
-            $tableInfo[] = array('table' => 'cms_media', 'id' => $oImage->id);
+            $tableInfo[] = ['table' => 'cms_media', 'id' => $oImage->id];
         }
 
         return $tableInfo;
@@ -99,7 +99,7 @@ class MTImageCore extends TUserCustomModelBase
      */
     private function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -107,6 +107,6 @@ class MTImageCore extends TUserCustomModelBase
      */
     private function getTreeService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
     }
 }

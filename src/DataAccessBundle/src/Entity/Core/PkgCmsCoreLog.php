@@ -8,7 +8,7 @@ class PkgCmsCoreLog
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldNumber
         /** @var int - Time stamp */
@@ -51,15 +51,13 @@ class PkgCmsCoreLog
         private string $ip = '',
         // TCMSFieldExtendedLookup
         /** @var DataExtranetUser|null - Extranet user ID */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldVarchar
         /** @var string - Extranet user login */
         private string $dataExtranetUserName = '',
         // TCMSFieldExtendedLookup
         /** @var CmsUser|null - CMS user */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldBlob
         /** @var object|null - */
         private ?object $context = null
@@ -103,7 +101,6 @@ class PkgCmsCoreLog
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getChannel(): string
     {
@@ -116,7 +113,6 @@ class PkgCmsCoreLog
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getLevel(): int
@@ -131,7 +127,6 @@ class PkgCmsCoreLog
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getMessage(): string
     {
@@ -144,7 +139,6 @@ class PkgCmsCoreLog
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSession(): string
@@ -159,7 +153,6 @@ class PkgCmsCoreLog
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUid(): string
     {
@@ -172,7 +165,6 @@ class PkgCmsCoreLog
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getFile(): string
@@ -187,7 +179,6 @@ class PkgCmsCoreLog
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getLine(): int
     {
@@ -200,7 +191,6 @@ class PkgCmsCoreLog
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getRequestUrl(): string
@@ -215,7 +205,6 @@ class PkgCmsCoreLog
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getReferrerUrl(): string
     {
@@ -228,7 +217,6 @@ class PkgCmsCoreLog
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getHttpMethod(): string
@@ -243,7 +231,6 @@ class PkgCmsCoreLog
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getServer(): string
     {
@@ -256,7 +243,6 @@ class PkgCmsCoreLog
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIp(): string
@@ -271,7 +257,6 @@ class PkgCmsCoreLog
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getDataExtranetUser(): ?DataExtranetUser
     {
@@ -284,7 +269,6 @@ class PkgCmsCoreLog
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getDataExtranetUserName(): string
@@ -299,7 +283,6 @@ class PkgCmsCoreLog
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getCmsUser(): ?CmsUser
     {
@@ -313,7 +296,6 @@ class PkgCmsCoreLog
         return $this;
     }
 
-
     // TCMSFieldBlob
     public function getContext(): ?object
     {
@@ -326,6 +308,4 @@ class PkgCmsCoreLog
 
         return $this;
     }
-
-
 }

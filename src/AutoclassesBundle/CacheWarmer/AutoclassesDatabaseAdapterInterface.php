@@ -16,8 +16,6 @@ use Doctrine\DBAL\Connection;
 interface AutoclassesDatabaseAdapterInterface
 {
     /**
-     * @param Connection $conn
-     *
      * @return void
      */
     public function setConnection(Connection $conn);
@@ -34,6 +32,7 @@ interface AutoclassesDatabaseAdapterInterface
 
     /**
      * @param string $id
+     *
      * @return string|null
      */
     public function getTableNameForId($id);

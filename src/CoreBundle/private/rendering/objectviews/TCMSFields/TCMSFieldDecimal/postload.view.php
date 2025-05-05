@@ -2,11 +2,11 @@
 if ($oLocal === null && class_exists('TCMSLocal')) {
 $oLocal = TCMSLocal::GetActive();
 }
-if (isset($this->sqlData['<?= $sFieldDatabaseName; ?>'])) {
-$this-><?= $sFieldName; ?> = $this->sqlData['<?= $sFieldDatabaseName; ?>'];
+if (isset($this->sqlData['<?php echo $sFieldDatabaseName; ?>'])) {
+$this-><?php echo $sFieldName; ?> = $this->sqlData['<?php echo $sFieldDatabaseName; ?>'];
 } else {
-$this-><?= $sFieldName; ?> = 0;
+$this-><?php echo $sFieldName; ?> = 0;
 }
 if (false !== $oLocal) {
-$this-><?= $sFieldName; ?>Formated = $oLocal->FormatNumber($this-><?= $sFieldName; ?>,<?= $numberOfDecimals; ?>);
+$this-><?php echo $sFieldName; ?>Formated = $oLocal->FormatNumber($this-><?php echo $sFieldName; ?>,<?php echo $numberOfDecimals; ?>);
 }

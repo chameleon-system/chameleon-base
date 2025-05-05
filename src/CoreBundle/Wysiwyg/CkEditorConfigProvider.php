@@ -20,9 +20,6 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
      */
     private $mediaManagerUrlGenerator;
 
-    /**
-     * @param MediaManagerUrlGeneratorInterface $mediaManagerUrlGenerator
-     */
     public function __construct(MediaManagerUrlGeneratorInterface $mediaManagerUrlGenerator)
     {
         $this->mediaManagerUrlGenerator = $mediaManagerUrlGenerator;
@@ -47,7 +44,7 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
      */
     private function getDefaultCkEditorPlugins()
     {
-        return array(
+        return [
             'bidi',
             'dialogadvtab',
             'div',
@@ -63,7 +60,7 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
             'table',
             'tableresize',
             'tabletools',
-        );
+        ];
     }
 
     /**
@@ -73,7 +70,7 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
      */
     private function getAdditionalCkEditorPlugins()
     {
-        return array(
+        return [
 //            'autosave', // deactivated because of issues with language switching (#40622). Should only be enabled after #40632 is resolved or if the site does not use multiple languages.
             'backgrounds',
             'codemirror',
@@ -85,7 +82,7 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
             'oembed',
             'onchange',
             'youtube',
-        );
+        ];
     }
 
     /**
@@ -95,7 +92,7 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
      */
     private function getChameleonCkEditorPlugins()
     {
-        return array(
+        return [
             'chameleon_content_filter_diff',
             'chameleon_content_filter_extra',
             'chameleon_document_link',
@@ -103,7 +100,7 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
             'chameleon_image',
             'chameleon_link',
             'placeholder',
-        );
+        ];
     }
 
     /**
@@ -135,14 +132,13 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
     }
 
     /**
-     * @param array  $extraPlugins
      * @param string $pluginBaseDir
      *
      * @return array
      */
     private function getConfigurationForPlugins(array $extraPlugins, $pluginBaseDir)
     {
-        $extraPluginConfigurationList = array();
+        $extraPluginConfigurationList = [];
         foreach ($extraPlugins as $extraPlugin) {
             $extraPluginConfigurationList[] = $this->getConfigurationForPlugin($extraPlugin, $pluginBaseDir);
         }
@@ -155,11 +151,11 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
      */
     public function getConfigurationForPlugin($pluginName, $pluginBaseDir)
     {
-        return array(
+        return [
             'name' => $pluginName,
             'dir' => sprintf('%s/%s/', $pluginBaseDir, $pluginName),
             'jsFile' => 'plugin.js',
-        );
+        ];
     }
 
     /**
@@ -167,27 +163,27 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
      */
     public function getToolbar()
     {
-        return array(
-            array(
+        return [
+            [
                 'name' => 'document',
-                'items' => array('Source'),
-            ),
-            array(
+                'items' => ['Source'],
+            ],
+            [
                 'name' => 'clipboard',
-                'items' => array('Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'),
-            ),
-            array(
+                'items' => ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ],
+            [
                 'name' => 'editing',
-                'items' => array('Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'),
-            ),
-            array(
+                'items' => ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'],
+            ],
+            [
                 'name' => 'tools',
-                'items' => array('Maximize', 'ShowBlocks', '-', 'About'),
-            ),
+                'items' => ['Maximize', 'ShowBlocks', '-', 'About'],
+            ],
             '/',
-            array(
+            [
                 'name' => 'basicstyles',
-                'items' => array(
+                'items' => [
                     'Bold',
                     'Italic',
                     'Underline',
@@ -196,11 +192,11 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
                     'Superscript',
                     '-',
                     'RemoveFormat',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'name' => 'paragraph',
-                'items' => array(
+                'items' => [
                     'NumberedList',
                     'BulletedList',
                     '-',
@@ -217,24 +213,24 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
                     '-',
                     'BidiLtr',
                     'BidiRtl',
-                ),
-            ),
+                ],
+            ],
             '/',
-            array(
+            [
                 'name' => 'styles',
-                'items' => array('Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'),
-            ),
-            array(
+                'items' => ['Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'],
+            ],
+            [
                 'name' => 'links',
-                'items' => array('Link', 'Unlink', 'Anchor'),
-            ),
-            array(
+                'items' => ['Link', 'Unlink', 'Anchor'],
+            ],
+            [
                 'name' => 'custom_stuff',
-                'items' => array('CreatePlaceholder', '-', 'chameleon_document_link'),
-            ),
-            array(
+                'items' => ['CreatePlaceholder', '-', 'chameleon_document_link'],
+            ],
+            [
                 'name' => 'insert',
-                'items' => array(
+                'items' => [
                     'Image',
                     'Youtube',
                     'oembed',
@@ -245,9 +241,9 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
                     'PageBreak',
                     'Iframe',
                     'InsertPre',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -255,7 +251,7 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
      */
     public function getSettingsEditableMode()
     {
-        return array(
+        return [
             'bodyClass' => "'cmswysiwyg'",
             'toolbar' => "'ChameleonDefault'",
 
@@ -280,7 +276,7 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
             'filebrowserCreate_chameleon_document_linkWindowWidth' => '1200',
 
             'fillEmptyBlocks' => 'true',
-        );
+        ];
     }
 
     /**
@@ -288,11 +284,11 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
      */
     public function getSettingsReadonlyMode()
     {
-        return array(
+        return [
             'bodyClass' => "'cmswysiwyg'",
             'toolbar' => "'ChameleonDefault'",
             'toolbar_ChameleonDefault' => '[]',
-        );
+        ];
     }
 
     /**
@@ -300,12 +296,12 @@ class CkEditorConfigProvider implements CkEditorConfigProviderInterface
      */
     public function getDisabledPlugins()
     {
-        return array(
+        return [
             'elementspath',
             'save',
             'font',
             'colorbutton',
             'stylesheetparser',
-        );
+        ];
     }
 }

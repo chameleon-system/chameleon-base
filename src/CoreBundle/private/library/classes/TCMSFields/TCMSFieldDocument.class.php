@@ -31,7 +31,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
         $viewRenderer->AddSourceObject('currentFile', $currentFile);
 
         $viewRenderer->AddSourceObject('onClickDocument', $this->_GetOpenWindowJS());
-        $onClickReset = "_ResetDocument('".TGlobal::OutHTML($this->name)."', '".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.nothing_selected')."','".TGlobal::OutHTML($this->oDefinition->sqlData['field_default_value'])."')";
+        $onClickReset = "_ResetDocument('".TGlobal::OutHTML($this->name)."', '".ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.nothing_selected')."','".TGlobal::OutHTML($this->oDefinition->sqlData['field_default_value'])."')";
         $viewRenderer->AddSourceObject('onClickReset', $onClickReset);
         $viewRenderer->AddSourceObject('onClickNewFile', $this->_GetOpenUploadWindowJS());
 
@@ -73,7 +73,7 @@ class TCMSFieldDocument extends TCMSFieldLookup
         if(documentTreeID !== '') {
           CreateModalIFrameDialogCloseButton('".TGlobal::OutHTML($url)."' + documentTreeID);
         } else {
-          toasterMessage('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.error_missing_target').".','ERROR');
+          toasterMessage('".ServiceLocator::get('translator')->trans('chameleon_system_core.field_document.error_missing_target').".','ERROR');
         }
       }
       </script>";

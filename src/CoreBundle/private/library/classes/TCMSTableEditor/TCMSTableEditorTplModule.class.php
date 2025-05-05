@@ -32,7 +32,7 @@ class TCMSTableEditorTplModule extends TCMSTableEditor
 
             $iModuleInstanceTableID = TTools::GetCMSTableId('cms_tpl_module_instance');
             $oTableEditorModuleInstance = new TCMSTableEditorManager();
-            /** @var $oTableEditorModuleInstance TCMSTableEditorManager */
+            /* @var $oTableEditorModuleInstance TCMSTableEditorManager */
             // delete all module instances that are based on the deleted module
             while ($oCmsTplModuleInstance = $oCmsTplModuleInstanceList->Next()) {
                 $oTableEditorModuleInstance->Init($iModuleInstanceTableID, $oCmsTplModuleInstance->id);

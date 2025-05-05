@@ -19,28 +19,28 @@ use Psr\Log\LoggerInterface;
  */
 class TPkgCmsException_Log extends TPkgCmsException
 {
-    const LOG_FILE = 'exceptions.log';
+    public const LOG_FILE = 'exceptions.log';
 
     /**
      * @var int|null
      */
-    private $logLevel = null;
+    private $logLevel;
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    protected $logFilePath = null;
+    protected $logFilePath;
 
     /**
-     * @param string $message      - additional message string (shows up only in the log file)
-     * @param array  $aContextData - any data you want showing up in the log message to help you debug the exception
-     * @param int    $iLogLevel
+     * @param string $message - additional message string (shows up only in the log file)
+     * @param array $aContextData - any data you want showing up in the log message to help you debug the exception
+     * @param int $iLogLevel
      * @param string $sLogFilePath - path relative to ERROR_LOG_PATH to which the log entry should be added
      */
     public function __construct(
         $message = '',
-        $aContextData = array(), // any data you want showing up in the log message to help you debug the exception
-        $iLogLevel = \Monolog\Logger::ERROR,
+        $aContextData = [], // any data you want showing up in the log message to help you debug the exception
+        $iLogLevel = Monolog\Logger::ERROR,
         $sLogFilePath = self::LOG_FILE
     ) {
         parent::__construct($message, $aContextData);
@@ -58,19 +58,19 @@ class TPkgCmsException_Log extends TPkgCmsException
         $level = $this->getLogLevel();
         switch ($level) {
             case 1:
-                $level = \Monolog\Logger::ERROR;
+                $level = Monolog\Logger::ERROR;
                 break;
             case 2:
-                $level = \Monolog\Logger::WARNING;
+                $level = Monolog\Logger::WARNING;
                 break;
             case 3:
-                $level = \Monolog\Logger::NOTICE;
+                $level = Monolog\Logger::NOTICE;
                 break;
             case 4:
-                $level = \Monolog\Logger::INFO;
+                $level = Monolog\Logger::INFO;
                 break;
             case 5:
-                $level = \Monolog\Logger::DEBUG;
+                $level = Monolog\Logger::DEBUG;
                 break;
         }
 
@@ -101,7 +101,7 @@ class TPkgCmsException_Log extends TPkgCmsException
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getLogFilePath()
     {

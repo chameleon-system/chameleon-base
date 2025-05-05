@@ -24,7 +24,7 @@ class PagePath
     /**
      * @var string[]
      */
-    private $pathList = array();
+    private $pathList = [];
 
     /**
      * @param string $pageId

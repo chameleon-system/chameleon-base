@@ -13,13 +13,14 @@ class TPkgCmsStringUtilities_CleanPHPCode
 {
     /**
      * @param string $code
+     *
      * @return string
      */
     public function stripComments($code)
     {
         $newStr = '';
 
-        $commentTokens = array(T_COMMENT);
+        $commentTokens = [T_COMMENT];
 
         if (defined('T_DOC_COMMENT')) {
             $commentTokens[] = T_DOC_COMMENT; // PHP 5

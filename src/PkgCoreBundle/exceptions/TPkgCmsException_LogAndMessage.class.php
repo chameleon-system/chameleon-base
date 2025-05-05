@@ -17,28 +17,28 @@
 class TPkgCmsException_LogAndMessage extends TPkgCmsException_Log
 {
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $messageCode = null;
+    private $messageCode;
 
     /**
      * @var array|null
      */
-    private $additionalData = null;
+    private $additionalData;
 
     /**
-     * @param string $sMessageCode    - message code in chameleon
-     * @param array  $aAdditionalData - this is available in for the message generated via the smessageCode
-     * @param string $message         - additional message string (shows up only in the log file)
-     * @param array  $aContextData    - any data you want showing up in the log message to help you debug the exception
-     * @param int    $iLogLevel
-     * @param string $sLogFilePath    - path relative to cmsdata to which the log entry should be added
+     * @param string $sMessageCode - message code in chameleon
+     * @param array $aAdditionalData - this is available in for the message generated via the smessageCode
+     * @param string $message - additional message string (shows up only in the log file)
+     * @param array $aContextData - any data you want showing up in the log message to help you debug the exception
+     * @param int $iLogLevel
+     * @param string $sLogFilePath - path relative to cmsdata to which the log entry should be added
      */
     public function __construct(
         $sMessageCode,
-        $aAdditionalData = array(),
+        $aAdditionalData = [],
         $message = '',
-        $aContextData = array(), // any data you want showing up in the log message to help you debug the exception
+        $aContextData = [], // any data you want showing up in the log message to help you debug the exception
         $iLogLevel = 1,
         $sLogFilePath = self::LOG_FILE
     ) {
@@ -66,7 +66,7 @@ class TPkgCmsException_LogAndMessage extends TPkgCmsException_Log
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getMessageCode()
     {

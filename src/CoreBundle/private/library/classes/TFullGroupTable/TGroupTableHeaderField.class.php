@@ -30,12 +30,12 @@ class TGroupTableHeaderField extends TGroupTableField
     public $width = false;
 
     /**
-     * @param string|non-empty-array<string, string>  $name - if it is an array it should be of the form 'name'=>'full_name'
-     * @param string      $align
+     * @param string|non-empty-array<string, string> $name - if it is an array it should be of the form 'name'=>'full_name'
+     * @param string $align
      * @param string|null $format
-     * @param int         $colSpan
-     * @param bool        $allowSort
-     * @param bool        $width
+     * @param int $colSpan
+     * @param bool $allowSort
+     * @param bool $width
      * @param string|null $sOriginalField
      */
     public function __construct($name, $align = 'left', $format = null, $colSpan = 1, $allowSort = true, $width = false, $sOriginalField = null)

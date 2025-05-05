@@ -13,15 +13,15 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 /**
  * represents one step in the form wizzard.
-/**/
+ * /**/
 class TFormWizardStep extends TCMSRecord
 {
-    protected $aInput = null;
-    protected $aError = null;
+    protected $aInput;
+    protected $aError;
 
     protected $bInputValid = false;
 
-    protected $aRequiredFields = array();
+    protected $aRequiredFields = [];
 
     /**
      * return any variables you want available in your view in an assoc array here
@@ -31,7 +31,7 @@ class TFormWizardStep extends TCMSRecord
      */
     public function GetWizardViewData()
     {
-        $aData = array();
+        $aData = [];
         $aData['aRequiredFields'] = $this->aRequiredFields;
 
         return $aData;
@@ -79,9 +79,9 @@ class TFormWizardStep extends TCMSRecord
 
                 $sClassName = $item['class'];
                 $oWizardStep = new $sClassName();
-                /** @var $oWizardStep TFormWizardStep */
+                /* @var $oWizardStep TFormWizardStep */
                 $oWizardStep->LoadFromRow($item);
-                //$oWizardStep->InitDefaults();
+                // $oWizardStep->InitDefaults();
                 if (!$oWizardStep->ShowStep()) {
                     $nextStepId = $oWizardStep->GetNextStepId($nextStepId);
                 }
@@ -96,9 +96,9 @@ class TFormWizardStep extends TCMSRecord
      */
     public function GetLink()
     {
-        return $this->getActivePageService()->getLinkToActivePageRelative(array(
+        return $this->getActivePageService()->getLinkToActivePageRelative([
             'state' => $this->id,
-        ));
+        ]);
     }
 
     /**
@@ -134,9 +134,9 @@ class TFormWizardStep extends TCMSRecord
             $sClassName = $previousNode['class'];
 
             $oWizardStep = new $sClassName();
-            /** @var $oWizardStep TFormWizardStep */
+            /* @var $oWizardStep TFormWizardStep */
             $oWizardStep->LoadFromRow($previousNode);
-            //$oWizardStep->InitDefaults();
+            // $oWizardStep->InitDefaults();
             if (!$oWizardStep->ShowStep()) {
                 $iPreviousStepId = $oWizardStep->GetPreviousStepId($iPreviousStepId);
             }
@@ -146,10 +146,10 @@ class TFormWizardStep extends TCMSRecord
     }
 
     /**
-     * @param int   $iStepId
+     * @param int $iStepId
      * @param array $aParameters
      */
-    public function RedirectToStep($iStepId, $aParameters = array())
+    public function RedirectToStep($iStepId, $aParameters = [])
     {
         $aParameters['state'] = $iStepId;
         $this->getRedirect()->redirectToActivePage($aParameters);
@@ -181,7 +181,7 @@ class TFormWizardStep extends TCMSRecord
         if ($oGlobal->UserDataExists('aInput')) {
             $this->aInput = $oGlobal->GetUserData('aInput');
             if (!is_array($this->aInput)) {
-                $this->aInput = array();
+                $this->aInput = [];
             }
         }
     }
@@ -209,9 +209,9 @@ class TFormWizardStep extends TCMSRecord
     {
         $bDataFromSession = $this->FetchFromSession();
         if (!$bDataFromSession || !is_array($this->aInput)) {
-            $this->aInput = array();
+            $this->aInput = [];
         }
-        $this->aError = array();
+        $this->aError = [];
 
         return $bDataFromSession;
     }
@@ -255,20 +255,20 @@ class TFormWizardStep extends TCMSRecord
     public function StoreInSession()
     {
         if (!array_key_exists('_TFormWizardSteps', $_SESSION)) {
-            $_SESSION['_TFormWizardSteps'] = array();
+            $_SESSION['_TFormWizardSteps'] = [];
         }
         $_SESSION['_TFormWizardSteps'][$this->SessionStepName()] = $this->aInput;
     }
 
     public function ResetSession()
     {
-        $_SESSION['_TFormWizardSteps'] = array();
+        $_SESSION['_TFormWizardSteps'] = [];
     }
 
     public function FetchFromSession()
     {
         if (!array_key_exists('_TFormWizardSteps', $_SESSION)) {
-            $_SESSION['_TFormWizardSteps'] = array();
+            $_SESSION['_TFormWizardSteps'] = [];
         }
         if (array_key_exists($this->SessionStepName(), $_SESSION['_TFormWizardSteps'])) {
             $this->aInput = $_SESSION['_TFormWizardSteps'][$this->SessionStepName()];
@@ -327,9 +327,9 @@ class TFormWizardStep extends TCMSRecord
      * returns the link to a step with internal name $sName within the wizard.
      *
      * @param string $sName
-     * @param bool   $bSearchAllInstances - if set to true, the class will search for a match in all instances
-     *                                    (it will still prefere the current instance, but searches in the other
-     *                                    instances as a fallback)
+     * @param bool $bSearchAllInstances - if set to true, the class will search for a match in all instances
+     *                                  (it will still prefere the current instance, but searches in the other
+     *                                  instances as a fallback)
      *
      * @return string|bool
      */
@@ -341,9 +341,9 @@ class TFormWizardStep extends TCMSRecord
                  WHERE `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sqlData['cms_tpl_module_instance_id'])."'
                    AND `name_internal` = '".MySqlLegacySupport::getInstance()->real_escape_string($sName)."'";
         if ($trow = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-            $sLink = $this->getActivePageService()->getLinkToActivePageRelative(array(
+            $sLink = $this->getActivePageService()->getLinkToActivePageRelative([
                 'state' => $trow['id'],
-            ));
+            ]);
         } elseif ($bSearchAllInstances) {
             $query = "SELECT *
                     FROM `module_wizard`
@@ -352,9 +352,9 @@ class TFormWizardStep extends TCMSRecord
                 // get the page that holds the instance
                 $query = "SELECT * FROM cms_tpl_page_cms_master_pagedef_spot WHERE `cms_tpl_module_instance_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($trow['cms_tpl_module_instance_id'])."'";
                 if ($aPageSpot = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
-                    self::getPageService()->getLinkToPageRelative($aPageSpot['cms_tpl_page_id'], array(
+                    self::getPageService()->getLinkToPageRelative($aPageSpot['cms_tpl_page_id'], [
                         'state' => $trow['id'],
-                    ));
+                    ]);
                 }
             }
         }
@@ -379,7 +379,7 @@ class TFormWizardStep extends TCMSRecord
      */
     public function GetHtmlHeadIncludes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -387,7 +387,7 @@ class TFormWizardStep extends TCMSRecord
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -395,6 +395,6 @@ class TFormWizardStep extends TCMSRecord
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

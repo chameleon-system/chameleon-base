@@ -6,7 +6,7 @@ class CmsMenuItem
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -14,7 +14,7 @@ class CmsMenuItem
         // TCMSFieldExtendedLookupMultiTable
         /** @var string - Target */
         private string $target = '',
-// TCMSFieldExtendedLookupMultiTable
+        // TCMSFieldExtendedLookupMultiTable
         /** @var string - Target */
         private string $targetTableName = '',
         // TCMSFieldVarchar
@@ -66,7 +66,6 @@ class CmsMenuItem
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMultiTable
     public function getTarget(): string
     {
@@ -80,7 +79,7 @@ class CmsMenuItem
         return $this;
     }
 
-// TCMSFieldExtendedLookupMultiTable
+    // TCMSFieldExtendedLookupMultiTable
     public function getTargetTableName(): string
     {
         return $this->targetTableName;
@@ -92,7 +91,6 @@ class CmsMenuItem
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIconFontCssClass(): string
@@ -107,7 +105,6 @@ class CmsMenuItem
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -121,7 +118,6 @@ class CmsMenuItem
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsMenuCategory(): ?CmsMenuCategory
     {
@@ -134,6 +130,4 @@ class CmsMenuItem
 
         return $this;
     }
-
-
 }

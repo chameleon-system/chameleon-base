@@ -19,7 +19,6 @@ use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use TdbCmsConfig;
 
 class UploaderController
 {
@@ -33,16 +32,11 @@ class UploaderController
      */
     private $saveToMediaLibraryService;
 
-    /**
-     * @param UploaderPostHandlerServiceInterface $postHandlerService
-     * @param SaveToMediaLibraryServiceInterface  $saveToMediaLibraryService
-     */
     public function __construct(
         UploaderPostHandlerServiceInterface $postHandlerService,
         SaveToMediaLibraryServiceInterface $saveToMediaLibraryService,
         readonly private Security $security
-    )
-    {
+    ) {
         $this->postHandler = $postHandlerService;
         $this->saveToMediaLibraryService = $saveToMediaLibraryService;
     }
@@ -86,6 +80,6 @@ class UploaderController
      */
     private function getUploaderConfiguration()
     {
-        return new UploaderConfiguration(TdbCmsConfig::GetInstance());
+        return new UploaderConfiguration(\TdbCmsConfig::GetInstance());
     }
 }

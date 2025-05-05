@@ -20,8 +20,6 @@ interface CmsConfigDataAccessInterface
      *
      * This methods is necessary as TdbCmsConfig::GetFieldPkgCmsTheme() cannot be used directly as the field might not exist
      * yet during the first execution and rendering of updates.
-     *
-     * @return \TdbPkgCmsTheme|null
      */
     public function getBackendTheme(): ?\TdbPkgCmsTheme;
 }

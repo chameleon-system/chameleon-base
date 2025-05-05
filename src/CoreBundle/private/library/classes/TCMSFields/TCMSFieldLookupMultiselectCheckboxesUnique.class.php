@@ -14,14 +14,14 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 /**
  * allow mlt selection of fields. Target table is defined via sShowFieldsFromTable.
-/**/
+ * /**/
 class TCMSFieldLookupMultiselectCheckboxesUnique extends TCMSFieldLookupMultiselectCheckboxes
 {
     public function FetchMLTRecords()
     {
         $foreignTableName = $this->GetForeignTableName();
         $oTableConfig = new TCMSTableConf();
-        /** @var $oTableConf TCMSTableConf */
+        /* @var $oTableConf TCMSTableConf */
         $oTableConfig->LoadFromField('name', $foreignTableName);
 
         $oTableList = $oTableConfig->GetListObject();
@@ -38,7 +38,7 @@ class TCMSFieldLookupMultiselectCheckboxesUnique extends TCMSFieldLookupMultisel
         $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
         /** @var $oMLTRecords TCMSRecordList */
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List';
-        $oMLTRecords = call_user_func(array($sClassName, 'GetList'), $sFilterQuery, null, false);
+        $oMLTRecords = call_user_func([$sClassName, 'GetList'], $sFilterQuery, null, false);
         $oMLTRecords->SetLanguage($backendSession->getCurrentEditLanguageId());
 
         return $oMLTRecords;
@@ -46,7 +46,7 @@ class TCMSFieldLookupMultiselectCheckboxesUnique extends TCMSFieldLookupMultisel
 
     protected function GetUsedMltConnectionIds()
     {
-        $aUsedIdList = array();
+        $aUsedIdList = [];
         $sMltTableName = $this->GetMLTTableName();
         $Select = 'SELECT `'.MySqlLegacySupport::getInstance()->real_escape_string($sMltTableName).'`.`target_id` as restricted_id FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
                     INNER JOIN `'.MySqlLegacySupport::getInstance()->real_escape_string($sMltTableName).'` ON `'.MySqlLegacySupport::getInstance()->real_escape_string($sMltTableName).'`.`source_id` = `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`.`id`

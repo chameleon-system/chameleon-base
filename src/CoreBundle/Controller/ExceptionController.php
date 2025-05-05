@@ -56,8 +56,6 @@ class ExceptionController extends ErrorController
     private $pageService;
 
     /**
-     * @param ChameleonControllerInterface $mainController
-     *
      * @return void
      */
     public function setMainController(ChameleonControllerInterface $mainController)
@@ -90,8 +88,6 @@ class ExceptionController extends ErrorController
     }
 
     /**
-     * @param ExtranetConfigurationInterface $extranetConfiguration
-     *
      * @return void
      */
     public function setExtranetConfiguration(ExtranetConfigurationInterface $extranetConfiguration)
@@ -100,8 +96,6 @@ class ExceptionController extends ErrorController
     }
 
     /**
-     * @param ExtranetUserProviderInterface $extranetUserProvider
-     *
      * @return void
      */
     public function setExtranetUserProvider(ExtranetUserProviderInterface $extranetUserProvider)
@@ -110,8 +104,6 @@ class ExceptionController extends ErrorController
     }
 
     /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     *
      * @return void
      */
     public function setPortalDomainService(PortalDomainServiceInterface $portalDomainService)
@@ -120,8 +112,6 @@ class ExceptionController extends ErrorController
     }
 
     /**
-     * @param RequestInfoServiceInterface $requestInfoService
-     *
      * @return void
      */
     public function setRequestInfoService(RequestInfoServiceInterface $requestInfoService)
@@ -186,8 +176,6 @@ class ExceptionController extends ErrorController
     }
 
     /**
-     * @param PageServiceInterface $pageService
-     *
      * @return void
      */
     public function setPageService(PageServiceInterface $pageService)

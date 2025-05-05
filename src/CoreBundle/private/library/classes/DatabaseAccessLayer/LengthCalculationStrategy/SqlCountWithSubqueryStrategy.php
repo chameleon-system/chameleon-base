@@ -16,7 +16,7 @@ use Doctrine\DBAL\Connection;
 class SqlCountWithSubqueryStrategy implements EntityListLengthCalculationStrategyInterface
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $databaseConnection;
 
@@ -30,7 +30,7 @@ class SqlCountWithSubqueryStrategy implements EntityListLengthCalculationStrateg
         return true; // always valid
     }
 
-    public function calculateLength($query, array $queryParameters = array(), array $queryParameterTypes = array())
+    public function calculateLength($query, array $queryParameters = [], array $queryParameterTypes = [])
     {
         $sCountQuery = "SELECT COUNT(*) AS matches FROM ({$query}) AS _A_";
         $matchRow = $this->databaseConnection->fetchNumeric($sCountQuery, $queryParameters, $queryParameterTypes);

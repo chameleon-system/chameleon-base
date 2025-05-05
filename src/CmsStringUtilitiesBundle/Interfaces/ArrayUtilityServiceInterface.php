@@ -16,9 +16,6 @@ interface ArrayUtilityServiceInterface
     /**
      * return true if two arrays are equal.
      *
-     * @param $array1
-     * @param $array2
-     *
      * @return bool
      */
     public function equal(array $array1, array $array2);

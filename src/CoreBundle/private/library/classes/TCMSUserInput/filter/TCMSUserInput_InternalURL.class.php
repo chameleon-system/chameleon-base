@@ -21,7 +21,7 @@ class TCMSUserInput_InternalURL extends TCMSUserInput_URL
     protected function FilterItem($sValue)
     {
         $sValue = parent::FilterItem($sValue);
-        $redirect = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        $redirect = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
         if (true === $redirect->isInternalURL($sValue)) {
             return $sValue;
         }

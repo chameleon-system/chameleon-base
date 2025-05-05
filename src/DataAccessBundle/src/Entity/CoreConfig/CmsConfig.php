@@ -14,31 +14,26 @@ class CmsConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsConfigImagemagick> - ImageMagick settings */
-        private Collection $cmsConfigImagemagickCollection = new ArrayCollection()
-        ,
+        private Collection $cmsConfigImagemagickCollection = new ArrayCollection(),
         // TCMSFieldNumber
         /** @var int - Chunk size for uploader in KB */
         private int $uploaderChunkSize = 1024,
         // TCMSFieldLookup
         /** @var CmsLanguage|null - Basic language (needed for field-based translations) */
-        private ?CmsLanguage $translationBaseLanguage = null
-        ,
+        private ?CmsLanguage $translationBaseLanguage = null,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, CmsLanguage> - Supported languages (needed for field-based translations) */
-        private Collection $cmsLanguageCollection = new ArrayCollection()
-        ,
+        private Collection $cmsLanguageCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsConfigParameter> - Configuration settings */
-        private Collection $cmsConfigParameterCollection = new ArrayCollection()
-        ,
+        private Collection $cmsConfigParameterCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsMessageManagerBackendMessage> - System messages / error codes */
-        private Collection $cmsMessageManagerBackendMessageCollection = new ArrayCollection()
-        ,
+        private Collection $cmsMessageManagerBackendMessageCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - SMTP server */
         private string $smtpServer = '',
@@ -53,27 +48,22 @@ class CmsConfig
         private int $smtpPort = 25,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsConfigCmsmoduleExtensions> - CMS module extensions */
-        private Collection $cmsConfigCmsmoduleExtensionsCollection = new ArrayCollection()
-        ,
+        private Collection $cmsConfigCmsmoduleExtensionsCollection = new ArrayCollection(),
         // TCMSFieldLookup
         /** @var PkgCmsTheme|null - Backend Theme */
-        private ?PkgCmsTheme $pkgCmsTheme = null
-        ,
+        private ?PkgCmsTheme $pkgCmsTheme = null,
         // TCMSFieldLookup
         /** @var CmsConfigThemes|null - CMS themes */
-        private ?CmsConfigThemes $cmsConfigThemes = null
-        ,
+        private ?CmsConfigThemes $cmsConfigThemes = null,
         // TCMSFieldBoolean
         /** @var bool - Show template engine */
         private bool $showTemplateEngine = true,
         // TCMSFieldLookup
         /** @var CmsPortal|null - Main portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsIpWhitelist> - Permitted IPs */
-        private Collection $cmsIpWhitelistCollection = new ArrayCollection()
-        ,
+        private Collection $cmsIpWhitelistCollection = new ArrayCollection(),
         // TCMSFieldNumber
         /** @var int - Maximum file size of file uploads (in KB) */
         private int $maxDocumentUploadSize = 409600,
@@ -168,7 +158,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getUploaderChunkSize(): int
     {
@@ -182,7 +171,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getTranslationBaseLanguage(): ?CmsLanguage
     {
@@ -195,8 +183,6 @@ class CmsConfig
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -230,8 +216,6 @@ class CmsConfig
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -263,8 +247,6 @@ class CmsConfig
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -300,7 +282,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSmtpServer(): string
     {
@@ -313,7 +294,6 @@ class CmsConfig
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSmtpUser(): string
@@ -328,7 +308,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldPassword
     public function getSmtpPassword(): string
     {
@@ -342,7 +321,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getSmtpPort(): int
     {
@@ -355,8 +333,6 @@ class CmsConfig
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -391,7 +367,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getPkgCmsTheme(): ?PkgCmsTheme
     {
@@ -404,7 +379,6 @@ class CmsConfig
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsConfigThemes(): ?CmsConfigThemes
@@ -419,7 +393,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowTemplateEngine(): bool
     {
@@ -433,7 +406,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -446,8 +418,6 @@ class CmsConfig
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -481,7 +451,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getMaxDocumentUploadSize(): int
     {
@@ -494,7 +463,6 @@ class CmsConfig
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getAdditionalFilesToDeleteFromCache(): string
@@ -509,7 +477,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -522,7 +489,6 @@ class CmsConfig
 
         return $this;
     }
-
 
     // TCMSFieldURL
     public function getWysiwygeditorCssUrl(): string
@@ -537,7 +503,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getMaxImageUploadSize(): int
     {
@@ -550,7 +515,6 @@ class CmsConfig
 
         return $this;
     }
-
 
     // TCMSFieldURL
     public function getUpdateServer(): string
@@ -565,7 +529,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldText
     public function getBotlist(): string
     {
@@ -578,7 +541,6 @@ class CmsConfig
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isShutdownWebsites(): bool
@@ -593,7 +555,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isCronjobsEnabled(): bool
     {
@@ -606,7 +567,6 @@ class CmsConfig
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getEntryPerPage(): int
@@ -621,7 +581,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getDatabaseversion(): int
     {
@@ -635,7 +594,6 @@ class CmsConfig
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getBuild(): int
     {
@@ -648,6 +606,4 @@ class CmsConfig
 
         return $this;
     }
-
-
 }

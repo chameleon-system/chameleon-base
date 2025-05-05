@@ -10,12 +10,11 @@ class CmsFieldConf
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTblConf|null - Belongs to Table */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldVarchar
         /** @var string - Field name */
         private string $name = '',
@@ -24,12 +23,10 @@ class CmsFieldConf
         private string $translation = '',
         // TCMSFieldLookupFieldTypes
         /** @var CmsFieldType|null - Field type */
-        private ?CmsFieldType $cmsFieldType = null
-        ,
+        private ?CmsFieldType $cmsFieldType = null,
         // TCMSFieldLookup
         /** @var CmsTblFieldTab|null - Belongs to field-category / tab */
-        private ?CmsTblFieldTab $cmsTblFieldTab = null
-        ,
+        private ?CmsTblFieldTab $cmsTblFieldTab = null,
         // TCMSFieldBoolean
         /** @var bool - Mandatory field */
         private bool $isrequired = false,
@@ -59,8 +56,7 @@ class CmsFieldConf
         private bool $restrictToGroups = false,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsUsergroup> - Allowed user groups */
-        private Collection $cmsUsergroupCollection = new ArrayCollection()
-        ,
+        private Collection $cmsUsergroupCollection = new ArrayCollection(),
         // TCMSFieldNumber
         /** @var int - Input field width */
         private int $fieldWidth = 0,
@@ -119,7 +115,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -132,7 +127,6 @@ class CmsFieldConf
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTranslation(): string
@@ -147,7 +141,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldLookupFieldTypes
     public function getCmsFieldType(): ?CmsFieldType
     {
@@ -160,7 +153,6 @@ class CmsFieldConf
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsTblFieldTab(): ?CmsTblFieldTab
@@ -175,7 +167,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsrequired(): bool
     {
@@ -188,7 +179,6 @@ class CmsFieldConf
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getFieldclass(): string
@@ -203,7 +193,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFieldclassSubtype(): string
     {
@@ -216,7 +205,6 @@ class CmsFieldConf
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getClassType(): string
@@ -231,7 +219,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getModifier(): string
     {
@@ -244,7 +231,6 @@ class CmsFieldConf
 
         return $this;
     }
-
 
     // TCMSTextFieldVarcharDefaultValue
     public function getFieldDefaultValue(): string
@@ -259,7 +245,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldText
     public function getLengthSet(): string
     {
@@ -272,7 +257,6 @@ class CmsFieldConf
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getFieldtypeConfig(): string
@@ -287,7 +271,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRestrictToGroups(): bool
     {
@@ -300,8 +283,6 @@ class CmsFieldConf
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -335,7 +316,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getFieldWidth(): int
     {
@@ -348,7 +328,6 @@ class CmsFieldConf
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getPosition(): int
@@ -363,7 +342,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldText
     public function getHelptext(): string
     {
@@ -376,7 +354,6 @@ class CmsFieldConf
 
         return $this;
     }
-
 
     // TCMSFieldColorpicker
     public function getRowHexcolor(): string
@@ -391,7 +368,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsTranslatable(): bool
     {
@@ -405,7 +381,6 @@ class CmsFieldConf
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getValidationRegex(): string
     {
@@ -418,6 +393,4 @@ class CmsFieldConf
 
         return $this;
     }
-
-
 }

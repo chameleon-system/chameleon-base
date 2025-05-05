@@ -35,7 +35,7 @@ class TPkgCoreTeaserMapper_CmsTplPage extends AbstractViewMapper
         if ($oPageImage && $bCachingEnabled) {
             $oCacheTriggerManager->addTrigger('cms_media', $oPageImage->id);
         }
-        $aData = array();
+        $aData = [];
         $aData['sImageUrl'] = $oPageImage->GetRelativeURL();
         $aData['sHeadline'] = $oPage->fieldName;
         $aData['sLink'] = $oPage->GetRealURL();

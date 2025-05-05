@@ -28,9 +28,6 @@ class MigrationCounterManagerTest extends TestCase
      * @var MigrationCounterManager
      */
     private $migrationCounterManager;
-    /**
-     * @var mixed
-     */
     private $actualResult;
     /**
      * @var array
@@ -43,9 +40,9 @@ class MigrationCounterManagerTest extends TestCase
      * @dataProvider getMigrationCounterExistsData
      *
      * @param string $bundleName
-     * @param bool   $expectedResult
+     * @param bool $expectedResult
      */
-    public function it_tells_if_a_migration_counter_exists($bundleName, $expectedResult)
+    public function itTellsIfAMigrationCounterExists($bundleName, $expectedResult)
     {
         $this->givenAMigrationDataAccess();
         $this->givenAMigrationCounterManager();
@@ -82,9 +79,6 @@ class MigrationCounterManagerTest extends TestCase
         $this->actualResult = $this->migrationCounterManager->doesCounterExist($bundleName);
     }
 
-    /**
-     * @param mixed $expected
-     */
     private function thenTheExpectedResultShouldBeReturned($expected)
     {
         static::assertEquals($expected, $this->actualResult);
@@ -110,7 +104,7 @@ class MigrationCounterManagerTest extends TestCase
     /**
      * @test
      */
-    public function it_creates_migration_counters()
+    public function itCreatesMigrationCounters()
     {
         $this->givenAMigrationDataAccess();
         $this->givenAMigrationCounterManager();
@@ -137,7 +131,7 @@ class MigrationCounterManagerTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_create_duplicate_migration_counters()
+    public function itDoesNotCreateDuplicateMigrationCounters()
     {
         $this->givenAMigrationDataAccess();
         $this->givenAMigrationCounterManager();
@@ -153,7 +147,7 @@ class MigrationCounterManagerTest extends TestCase
     /**
      * @test
      */
-    public function it_deletes_migration_counters()
+    public function itDeletesMigrationCounters()
     {
         $this->givenAMigrationDataAccess();
         $this->givenAMigrationCounterExists('TestBundle', '2553');
@@ -192,7 +186,7 @@ class MigrationCounterManagerTest extends TestCase
     /**
      * @test
      */
-    public function it_ignores_delete_requests_for_nonexisting_migration_counters()
+    public function itIgnoresDeleteRequestsForNonexistingMigrationCounters()
     {
         $this->givenAMigrationDataAccess();
         $this->givenAMigrationCounterManager();
@@ -208,7 +202,7 @@ class MigrationCounterManagerTest extends TestCase
     /**
      * @test
      */
-    public function it_marks_migration_files_as_processed_when_the_counter_exists()
+    public function itMarksMigrationFilesAsProcessedWhenTheCounterExists()
     {
         $this->givenAMigrationDataAccess();
         $this->givenAMigrationCounterExists('TestBundle', '2553');
@@ -219,7 +213,7 @@ class MigrationCounterManagerTest extends TestCase
 
     /**
      * @param string $bundleName
-     * @param int    $buildNumber
+     * @param int $buildNumber
      */
     private function whenMarkMigrationFileAsProcessedIsCalled($bundleName, $buildNumber)
     {
@@ -228,7 +222,7 @@ class MigrationCounterManagerTest extends TestCase
 
     /**
      * @param string $counterId
-     * @param int    $buildNumber
+     * @param int $buildNumber
      */
     private function thenTheMigrationFileShouldBeMarkedAsProcessed($counterId, $buildNumber)
     {
@@ -238,7 +232,7 @@ class MigrationCounterManagerTest extends TestCase
     /**
      * @test
      */
-    public function it_marks_migration_files_as_processed_when_the_counter_does_not_exist()
+    public function itMarksMigrationFilesAsProcessedWhenTheCounterDoesNotExist()
     {
         $this->givenAMigrationDataAccessForMarkMigrationFilesAsProcessed();
         $this->givenAMigrationCounterManager();
@@ -253,9 +247,6 @@ class MigrationCounterManagerTest extends TestCase
         $this->migrationDataAccess->getMigrationCounterIdsByBundle()->will([$this, 'getMigrationCounterIdsByBundle']);
     }
 
-    /**
-     * @param array $arguments
-     */
     public function createCounterCalled(array $arguments)
     {
         $this->createCounterWasCalled[$arguments[0]] = true;

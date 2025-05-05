@@ -19,15 +19,15 @@ class ChameleonNameFilterTest extends TestCase
     /**
      * @test
      */
-    public function it_accepts_chameleon_packages()
+    public function itAcceptsChameleonPackages()
     {
         $filter = new ChameleonPackageFilter();
 
-        $test = array(
+        $test = [
             'chameleon-system/foo',
             'chameleon-system/bar',
             'chameleon-system/baz',
-        );
+        ];
 
         foreach ($test as $name) {
             $this->assertTrue($filter->filter($name));
@@ -37,16 +37,16 @@ class ChameleonNameFilterTest extends TestCase
     /**
      * @test
      */
-    public function it_denies_non_chameleon_packages()
+    public function itDeniesNonChameleonPackages()
     {
         $filter = new ChameleonPackageFilter();
 
-        $test = array(
+        $test = [
             'Chameleon-system/foo',
             'chameleon-systemm/bar',
             'foo/bar',
             'chameleon-system/chameleon-base',
-        );
+        ];
 
         foreach ($test as $name) {
             $this->assertFalse($filter->filter($name));

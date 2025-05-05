@@ -10,7 +10,7 @@ class PkgExternalTracker
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -76,7 +76,6 @@ class PkgExternalTracker
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isActive(): bool
     {
@@ -89,7 +88,6 @@ class PkgExternalTracker
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getIdentifier(): string
@@ -104,7 +102,6 @@ class PkgExternalTracker
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTestIdentifier(): string
     {
@@ -117,7 +114,6 @@ class PkgExternalTracker
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClass(): string
@@ -132,7 +128,6 @@ class PkgExternalTracker
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -146,7 +141,6 @@ class PkgExternalTracker
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -159,8 +153,6 @@ class PkgExternalTracker
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -193,6 +185,4 @@ class PkgExternalTracker
 
         return $this;
     }
-
-
 }

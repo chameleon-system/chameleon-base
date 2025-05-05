@@ -64,10 +64,6 @@ class CaseInsensitivePortalExceptionListener
     /**
      * Returns the path fragment between first and second slash (or everything after the first slash if there is no
      * second one) - this might be a portal prefix.
-     *
-     * @param string $relativePath
-     *
-     * @return string|null
      */
     private function getPortalPrefixCandidate(string $relativePath): ?string
     {

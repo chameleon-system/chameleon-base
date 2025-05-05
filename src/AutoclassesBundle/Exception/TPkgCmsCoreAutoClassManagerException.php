@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\AutoclassesBundle\Exception;
 
-use ErrorException;
-
-class TPkgCmsCoreAutoClassManagerException extends ErrorException
+class TPkgCmsCoreAutoClassManagerException extends \ErrorException
 {
 }

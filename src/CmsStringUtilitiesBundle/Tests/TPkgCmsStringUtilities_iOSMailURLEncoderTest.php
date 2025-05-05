@@ -35,7 +35,7 @@ class TPkgCmsStringUtilities_iOSMailURLEncoderTest extends TestCase
     /**
      * @test
      */
-    public function it_leaves_normal_urls_alone()
+    public function itLeavesNormalUrlsAlone()
     {
         $source = 'foo http://bar.bz?foo=bar baz';
         $this->assertEquals($source, $this->util->encode($source));
@@ -44,7 +44,7 @@ class TPkgCmsStringUtilities_iOSMailURLEncoderTest extends TestCase
     /**
      * @test
      */
-    public function it_fixes_image_urls()
+    public function itFixesImageUrls()
     {
         $source = 'foo <img src="http://bar.bz?foo=bar" /> bar';
         $expected = 'foo <img src="http://bar.bz?foo&#61;bar" /> bar';
@@ -54,7 +54,7 @@ class TPkgCmsStringUtilities_iOSMailURLEncoderTest extends TestCase
     /**
      * @test
      */
-    public function it_fixes_image_urls_with_single_quotes()
+    public function itFixesImageUrlsWithSingleQuotes()
     {
         $source = "foo <img src='http://bar.bz?foo=bar' /> bar";
         $expected = "foo <img src='http://bar.bz?foo&#61;bar' /> bar";
@@ -64,7 +64,7 @@ class TPkgCmsStringUtilities_iOSMailURLEncoderTest extends TestCase
     /**
      * @test
      */
-    public function it_fixes_multiple_parameters()
+    public function itFixesMultipleParameters()
     {
         $source = 'foo <img src="http://bar.bz?foo=bar&bar=baz" /> bar';
         $expected = 'foo <img src="http://bar.bz?foo&#61;bar&bar&#61;baz" /> bar';
@@ -74,7 +74,7 @@ class TPkgCmsStringUtilities_iOSMailURLEncoderTest extends TestCase
     /**
      * @test
      */
-    public function it_fixes_multiple_tags()
+    public function itFixesMultipleTags()
     {
         $source = 'foo <img src="http://bar.bz?foo=bar" /> bar <img src="http://bar.bz?foo=baz" />';
         $expected = 'foo <img src="http://bar.bz?foo&#61;bar" /> bar <img src="http://bar.bz?foo&#61;baz" />';
@@ -84,7 +84,7 @@ class TPkgCmsStringUtilities_iOSMailURLEncoderTest extends TestCase
     /**
      * @test
      */
-    public function it_leaves_anchors_alone()
+    public function itLeavesAnchorsAlone()
     {
         $source = 'foo <img src="http://bar.bz?foo=bar" /> bar <a href="http://bar.bz?foo=baz" />';
         $expected = 'foo <img src="http://bar.bz?foo&#61;bar" /> bar <a href="http://bar.bz?foo=baz" />';

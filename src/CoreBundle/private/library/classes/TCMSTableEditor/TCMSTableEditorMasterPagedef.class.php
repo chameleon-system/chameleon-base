@@ -31,10 +31,10 @@ class TCMSTableEditorMasterPagedef extends TCMSTableEditor
         foreach ($aMatches[1] as $sModuleSpotName) {
             // check if module spot is already in database
             $sQuery = 'SELECT COUNT(*) FROM cms_master_pagedef_spot WHERE cms_master_pagedef_id = :id AND name = :moduleSpotName';
-            $result = $databaseConnection->fetchOne($sQuery, array(
+            $result = $databaseConnection->fetchOne($sQuery, [
                 'id' => $this->sId,
                 'moduleSpotName' => $sModuleSpotName,
-            ));
+            ]);
             if (((int) $result) > 0) {
                 continue;
             }

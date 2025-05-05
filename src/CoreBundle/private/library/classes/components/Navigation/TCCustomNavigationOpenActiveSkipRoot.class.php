@@ -11,7 +11,7 @@
 
 /**
  * only show the children of the active node.
-/**/
+ * /**/
 class TCCustomNavigationOpenActiveSkipRoot extends TCCustomNavigationOpenActive
 {
     /**
@@ -28,14 +28,14 @@ class TCCustomNavigationOpenActiveSkipRoot extends TCCustomNavigationOpenActive
         $oChildren->GoToStart();
         // for each child, get is children, then run render...
         while ($oRootNode = $oChildren->Next()) {
-            /** @var $oRootNode TCMSTreeNode */
+            /* @var $oRootNode TCMSTreeNode */
             $this->FetchTreeDataForCacheTriggers($oRootNode);
             if (!$this->ShowOnlyBreadcrumbNodes() || $oRootNode->IsInBreadcrumb()) {
                 $oChildrenLevel2 = $oRootNode->GetChildren();
                 $oChildrenLevel2->GoToStart();
                 $totalSiblings = $oChildrenLevel2->Length();
                 while ($oNode = $oChildrenLevel2->Next()) {
-                    /** @var $oNode TCMSTreeNode */
+                    /* @var $oNode TCMSTreeNode */
                     $this->FetchTreeDataForCacheTriggers($oNode);
                     if ($this->_ShowNode($oNode, 0, $count)) {
                         $ulSiblingStyle = $this->_WriteSubmenuStyle($oNode, $count, $totalSiblings);

@@ -24,13 +24,10 @@ class InsertTest extends AbstractQueryTestCase
 
     /**
      * @test
-     * @dataProvider getData
      *
-     * @param MigrationQueryData $migrationQueryData
-     * @param $expectedQuery
-     * @param array $expectedQueryParams
+     * @dataProvider getData
      */
-    public function it_should_get_query_params(MigrationQueryData $migrationQueryData, $expectedQuery, array $expectedQueryParams)
+    public function itShouldGetQueryParams(MigrationQueryData $migrationQueryData, $expectedQuery, array $expectedQueryParams)
     {
         $this->givenDependencies();
         $this->givenAnInserter();
@@ -43,9 +40,6 @@ class InsertTest extends AbstractQueryTestCase
         $this->insert = new Insert($this->databaseConnection->reveal(), $this->dataAccess->reveal());
     }
 
-    /**
-     * @param MigrationQueryData $migrationQueryData
-     */
     private function whenICallGetQuery(MigrationQueryData $migrationQueryData)
     {
         list($this->actualQuery, $this->actualQueryParams) = $this->insert->getQuery($migrationQueryData);
@@ -56,65 +50,65 @@ class InsertTest extends AbstractQueryTestCase
      */
     public function getData()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->createParam('foo_table', 'en'),
                 'INSERT INTO `foo_table`',
-                array(
-                ),
-            ),
-            array(
+                [
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'bar' => 'baz',
-                    )),
+                    ]),
                 'INSERT INTO `foo_table` SET `bar` = ?',
-                array(
+                [
                     'baz',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'en')
-                    ->setFields(array(
+                    ->setFields([
                         'foo' => 'bar',
                         'bar' => 'baz',
-                    ))
-                    ->setWhereEquals(array(
+                    ])
+                    ->setWhereEquals([
                         'stringId' => 'xyz',
                         'suchField' => 'veryValue',
-                    )),
+                    ]),
                 'INSERT INTO `foo_table` SET `foo` = ?, `bar` = ?',
-                array(
+                [
                     'bar',
                     'baz',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setFields(array(
+                    ->setFields([
                         'translatedField' => 'baz',
-                    )),
+                    ]),
                 'INSERT INTO `foo_table` SET `translatedField__de` = ?',
-                array(
+                [
                     'baz',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 $this->createParam('foo_table', 'de')
-                    ->setFields(array(
+                    ->setFields([
                         'foo' => 'bar',
                         'translatedField' => 'baz',
-                    ))
-                    ->setWhereExpressions(array(
+                    ])
+                    ->setWhereExpressions([
                         new Comparison('stringId', '=', 'xyz'),
                         new Comparison('suchField', '>', 'veryValue'),
-                    )),
+                    ]),
                 'INSERT INTO `foo_table` SET `foo` = ?, `translatedField__de` = ?',
-                array(
+                [
                     'bar',
                     'baz',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

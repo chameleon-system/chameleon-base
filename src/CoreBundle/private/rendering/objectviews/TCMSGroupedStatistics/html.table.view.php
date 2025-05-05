@@ -20,11 +20,11 @@
             </tr>
             <?php
             foreach ($aBlocks as $oBlock) {
-                //TCMSGroupedStatisticsGroup::$iCurrentLevel = 0;
+                // TCMSGroupedStatisticsGroup::$iCurrentLevel = 0;
                 echo $oBlock->Render('html.body', $aNameColumns, $iMaxGroupCount, $bShowDiffColumn);
                 echo '<tr><td colspan="'.$iTotalWidth.'">&nbsp;</td></tr>';
             }
-            ?>
+                ?>
 
         </table>
     </div>

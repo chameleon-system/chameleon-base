@@ -8,12 +8,11 @@ class CmsWizardStep
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - CMS display name */
         private string $displayName = '',
@@ -93,7 +92,6 @@ class CmsWizardStep
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDisplayName(): string
     {
@@ -106,7 +104,6 @@ class CmsWizardStep
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -121,7 +118,6 @@ class CmsWizardStep
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getDescription(): string
     {
@@ -134,7 +130,6 @@ class CmsWizardStep
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSystemname(): string
@@ -149,7 +144,6 @@ class CmsWizardStep
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -162,7 +156,6 @@ class CmsWizardStep
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getUrlName(): string
@@ -177,7 +170,6 @@ class CmsWizardStep
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClass(): string
     {
@@ -190,7 +182,6 @@ class CmsWizardStep
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getClassType(): string
@@ -205,7 +196,6 @@ class CmsWizardStep
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -218,7 +208,6 @@ class CmsWizardStep
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getRenderViewName(): string
@@ -233,7 +222,6 @@ class CmsWizardStep
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getRenderViewType(): string
     {
@@ -246,7 +234,6 @@ class CmsWizardStep
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getRenderViewSubtype(): string
@@ -261,7 +248,6 @@ class CmsWizardStep
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsPackage(): bool
     {
@@ -274,6 +260,4 @@ class CmsWizardStep
 
         return $this;
     }
-
-
 }

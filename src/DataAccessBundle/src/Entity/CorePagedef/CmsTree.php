@@ -10,12 +10,11 @@ class CmsTree
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsTree|null - Is subnode of */
-        private ?CmsTree $parent = null
-        ,
+        private ?CmsTree $parent = null,
         // TCMSFieldNumber
         /** @var int - Nested set: left */
         private int $lft = 0,
@@ -48,22 +47,19 @@ class CmsTree
         private string $cmsTplPagePrimaryLink = '',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Icon for navigation */
-        private ?CmsMedia $naviIconCmsMedia = null
-        ,
+        private ?CmsMedia $naviIconCmsMedia = null,
         // TCMSFieldText
         /** @var string - Navigation path cache */
         private string $pathcache = '',
         // TCMSFieldModuleInstance
         /** @var CmsTplModuleInstance|null - Connect module to navigation */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldBoolean
         /** @var bool - SEO: no follow */
         private bool $seoNofollow = false,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, CmsTplPage> - SEO: no follow - page exclusion list */
-        private Collection $cmsTplPageCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTplPageCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Hotkeys */
         private string $htmlAccessKey = '',
@@ -113,7 +109,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getLft(): int
     {
@@ -126,7 +121,6 @@ class CmsTree
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -141,7 +135,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getRgt(): int
     {
@@ -154,7 +147,6 @@ class CmsTree
 
         return $this;
     }
-
 
     // TCMSFieldSEOURLTitle
     public function getUrlname(): string
@@ -169,7 +161,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isHidden(): bool
     {
@@ -182,7 +173,6 @@ class CmsTree
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isShowExtranetPage(): bool
@@ -197,7 +187,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getEntrySort(): int
     {
@@ -210,7 +199,6 @@ class CmsTree
 
         return $this;
     }
-
 
     // TCMSFieldURL
     public function getLink(): string
@@ -225,7 +213,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isLinkTarget(): bool
     {
@@ -238,7 +225,6 @@ class CmsTree
 
         return $this;
     }
-
 
     // TCMSFieldTreePageAssignment
     public function getCmsTplPagePrimaryLink(): string
@@ -253,7 +239,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getNaviIconCmsMedia(): ?CmsMedia
     {
@@ -266,7 +251,6 @@ class CmsTree
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getPathcache(): string
@@ -281,7 +265,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldModuleInstance
     public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
     {
@@ -295,7 +278,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isSeoNofollow(): bool
     {
@@ -308,8 +290,6 @@ class CmsTree
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -343,7 +323,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getHtmlAccessKey(): string
     {
@@ -357,7 +336,6 @@ class CmsTree
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCssClasses(): string
     {
@@ -370,8 +348,6 @@ class CmsTree
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -404,6 +380,4 @@ class CmsTree
 
         return $this;
     }
-
-
 }

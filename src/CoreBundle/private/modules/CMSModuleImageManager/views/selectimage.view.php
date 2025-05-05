@@ -20,20 +20,20 @@
     <tr>
         <td valign="top">
             <h1>
-                <?=\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_image_manager.folder_list'); ?>
+                <?php echo ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_image_manager.folder_list'); ?>
             </h1>
             <div>
                 <div id="mediaFolderSelectTree">
                     <ul>
                         <?php
                         echo $data['treeHTML'];
-                        ?>
+                ?>
                     </ul>
                 </div>
             </div>
         </td>
         <td valign="top">
-            <?=$data['sTable']; ?>
+            <?php echo $data['sTable']; ?>
         </td>
     </tr>
 </table>

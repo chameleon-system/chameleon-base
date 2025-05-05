@@ -3,18 +3,16 @@
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
 use ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal;
-use DateTime;
 
 class CmsUrlAlias
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsPortal|null - Belongs to portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldVarchar
         /** @var string - Name / notes */
         private string $name = '',
@@ -35,14 +33,13 @@ class CmsUrlAlias
         private string $parameterMapping = '',
         // TCMSFieldCMSUser
         /** @var CmsUser|null - Created by */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldCreatedTimestamp
-        /** @var DateTime|null - Creation date */
-        private ?DateTime $datecreated = null,
+        /** @var \DateTime|null - Creation date */
+        private ?\DateTime $datecreated = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Expiry date */
-        private ?DateTime $expirationDate = null,
+        /** @var \DateTime|null - Expiry date */
+        private ?\DateTime $expirationDate = null,
         // TCMSFieldBoolean
         /** @var bool - Active */
         private bool $active = true
@@ -86,7 +83,6 @@ class CmsUrlAlias
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -99,7 +95,6 @@ class CmsUrlAlias
 
         return $this;
     }
-
 
     // TCMSFieldURL
     public function getSourceUrl(): string
@@ -114,7 +109,6 @@ class CmsUrlAlias
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isExactMatch(): bool
     {
@@ -127,7 +121,6 @@ class CmsUrlAlias
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTargetUrl(): string
@@ -142,7 +135,6 @@ class CmsUrlAlias
         return $this;
     }
 
-
     // TCMSFieldText
     public function getIgnoreParameter(): string
     {
@@ -155,7 +147,6 @@ class CmsUrlAlias
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getParameterMapping(): string
@@ -170,7 +161,6 @@ class CmsUrlAlias
         return $this;
     }
 
-
     // TCMSFieldCMSUser
     public function getCmsUser(): ?CmsUser
     {
@@ -184,34 +174,31 @@ class CmsUrlAlias
         return $this;
     }
 
-
     // TCMSFieldCreatedTimestamp
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getExpirationDate(): ?DateTime
+    public function getExpirationDate(): ?\DateTime
     {
         return $this->expirationDate;
     }
 
-    public function setExpirationDate(?DateTime $expirationDate): self
+    public function setExpirationDate(?\DateTime $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -225,6 +212,4 @@ class CmsUrlAlias
 
         return $this;
     }
-
-
 }

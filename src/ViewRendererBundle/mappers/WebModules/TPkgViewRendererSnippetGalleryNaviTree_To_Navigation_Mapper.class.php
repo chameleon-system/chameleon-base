@@ -32,7 +32,7 @@ class TPkgViewRendererSnippetGalleryNaviTree_To_Navigation_Mapper extends Abstra
     }
 
     /**
-     * @param array  $aTree
+     * @param array $aTree
      * @param string $sCurrentPath
      * @param string $sActiveRelativePath
      *
@@ -40,20 +40,20 @@ class TPkgViewRendererSnippetGalleryNaviTree_To_Navigation_Mapper extends Abstra
      */
     protected function MapTree($aTree, $sCurrentPath, $sActiveRelativePath)
     {
-        $aNewTree = array();
+        $aNewTree = [];
         foreach ($aTree as $sDirectory => $varContent) {
             $sNewCurrentPath = $sCurrentPath;
             if (false === empty($sNewCurrentPath)) {
                 $sNewCurrentPath .= '/';
             }
             $sNewCurrentPath = $sNewCurrentPath.$sDirectory;
-            $aNewTreeItem = array(
+            $aNewTreeItem = [
                 'sTitle' => $sDirectory,
                 'bIsActive' => ($sNewCurrentPath == $sActiveRelativePath),
                 'bIsExpanded' => (substr($sActiveRelativePath, 0, strlen($sNewCurrentPath)) === $sNewCurrentPath),
-                'sLink' => '?'.TTools::GetArrayAsURL(array('sActiveRelativePath' => $sNewCurrentPath)),
-                'aChildren' => array(),
-            );
+                'sLink' => '?'.TTools::GetArrayAsURL(['sActiveRelativePath' => $sNewCurrentPath]),
+                'aChildren' => [],
+            ];
             if (is_array($varContent)) {
                 $aNewTreeItem['aChildren'] = $this->MapTree($varContent, $sNewCurrentPath, $sActiveRelativePath);
             }

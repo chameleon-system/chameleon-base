@@ -34,11 +34,11 @@ class MediaTreeNodeDataModel
     private $iconPath;
 
     /**
-     * @param string                   $id
-     * @param string                   $name
+     * @param string $id
+     * @param string $name
      * @param MediaTreeNodeDataModel[] $children
      */
-    public function __construct($id, $name, array $children = array())
+    public function __construct($id, $name, array $children = [])
     {
         $this->id = $id;
         $this->name = $name;

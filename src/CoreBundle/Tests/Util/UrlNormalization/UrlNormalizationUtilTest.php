@@ -41,9 +41,10 @@ class UrlNormalizationUtilTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider getData
      */
-    public function it_should_return_correctly_normalized_urls($url, $spacer, $expected)
+    public function itShouldReturnCorrectlyNormalizedUrls($url, $spacer, $expected)
     {
         $this->givenAUrlNormalizationUtil();
         $this->whenNormalizeUrlIsCalled($url, $spacer);
@@ -87,77 +88,77 @@ class UrlNormalizationUtilTest extends TestCase
      */
     public function getData()
     {
-        return array(
-            array(
+        return [
+            [
                 'this is a test',
                 '-',
                 'this-is-a-test',
-            ),
-            array(
+            ],
+            [
                 'Chameleon "Professional"',
                 '-',
                 'Chameleon-Professional',
-            ),
-            array(
+            ],
+            [
                 '  wöw such şÞêÇîäł characters!',
                 '-',
                 'woew-such-sBeCiael-characters',
-            ),
-            array(
+            ],
+            [
                 '¹²³',
                 '-',
                 '',
-            ),
-            array(
+            ],
+            [
                 '-¹²³',
                 '-',
                 '-',
-            ),
-            array(
+            ],
+            [
                 '',
                 '-',
                 '',
-            ),
-            array(
+            ],
+            [
                 '////////////////',
                 '-',
                 '-',
-            ),
-            array(
+            ],
+            [
                 '-----',
                 '-',
                 '-',
-            ),
-            array(
+            ],
+            [
                 '',
                 '',
                 '',
-            ),
-            array(
+            ],
+            [
                 '<h1>many HTML</h1>',
                 '-',
                 'h1many-HTML-h1',
-            ),
-            array(
+            ],
+            [
                 '联系',
                 '-',
                 '%E8%81%94%E7%B3%BB',
-            ),
-            array(
+            ],
+            [
                 '联系-such-chinese',
                 '-',
                 '%E8%81%94%E7%B3%BB-such-chinese',
-            ),
-            array(
+            ],
+            [
                 '€$¥₴',
                 '-',
                 '-EUR-USDYEN', // converter adds spaces before EUR and USD which are then converted to a spacer char
-            ),
-            array(
+            ],
+            [
                 '%E8%81%94%E7%B3%BB',
                 '-',
                 '%E8%81%94%E7%B3%BB', // converter adds spaces before EUR and USD which are then converted to a spacer char
-            ),
-        );
+            ],
+        ];
     }
 }

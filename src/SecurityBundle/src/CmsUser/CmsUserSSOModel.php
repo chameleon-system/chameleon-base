@@ -22,7 +22,6 @@ class CmsUserSSOModel
         $this->id = $id;
     }
 
-
     public function getCmsUserId(): string
     {
         return $this->cmsUserId;
@@ -52,5 +51,4 @@ class CmsUserSSOModel
     {
         $this->ssoId = $ssoId;
     }
-
 }

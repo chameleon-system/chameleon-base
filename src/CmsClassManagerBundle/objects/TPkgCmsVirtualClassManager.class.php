@@ -14,18 +14,19 @@ use Doctrine\DBAL\Connection;
 class TPkgCmsVirtualClassManager
 {
     /**
-     * @var null|array<string, mixed>
+     * @var array<string, mixed>|null
      */
-    private $config = null;
+    private $config;
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $entryPoint = null;
+    private $entryPoint;
     /**
      * @var Connection
      */
     private $databaseConnection;
+
     /**
      * @param string $entryPointClass
      *
@@ -44,6 +45,7 @@ class TPkgCmsVirtualClassManager
      * @param string $sClassSubType
      * @param string $sClassType
      * @param bool $bRefresh
+     *
      * @return false|class-string
      */
     public static function GetEntryPointClassForClass($sClassName, $sClassSubType, $sClassType, $bRefresh = false)
@@ -53,10 +55,10 @@ class TPkgCmsVirtualClassManager
             $aEntryPoints = null;
         }
         /** @var Connection $databaseConnection */
-        $databaseConnection = \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        $databaseConnection = ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
         $sEntryPointClass = false;
         if (is_null($aEntryPoints)) {
-            $aEntryPoints = array();
+            $aEntryPoints = [];
             $query = 'SELECT `pkg_cms_class_manager`.`name_of_entry_point`
                   FROM `pkg_cms_class_manager`
                ';
@@ -93,7 +95,7 @@ class TPkgCmsVirtualClassManager
 
         $aPrevious = null;
         $bFirst = true;
-        $aClasses = array();
+        $aClasses = [];
         foreach ($aExtensionList as $extension) {
             $sAutoClassName = $this->getAutoParentClassFromClass($extension['class']);
             if ($bFirst) {
@@ -123,6 +125,7 @@ class TPkgCmsVirtualClassManager
 
     /**
      * @param class-string $sClassName
+     *
      * @return string
      */
     private function getAutoParentClassFromClass($sClassName)
@@ -155,7 +158,7 @@ class TPkgCmsVirtualClassManager
     }
 
     /**
-     * @return null|array<string, mixed>
+     * @return array<string, mixed>|null
      */
     protected function getConfig()
     {
@@ -166,9 +169,9 @@ class TPkgCmsVirtualClassManager
                      ';
 
             try {
-                $rRes = $this->databaseConnection->executeQuery($query, array('nameOfEntryPoint' => $this->entryPoint));
+                $rRes = $this->databaseConnection->executeQuery($query, ['nameOfEntryPoint' => $this->entryPoint]);
                 $this->config = $rRes->fetchAssociative();
-            } catch (\Doctrine\DBAL\Exception $e) {
+            } catch (Doctrine\DBAL\Exception $e) {
                 $this->config = null;
             }
         }
@@ -178,6 +181,7 @@ class TPkgCmsVirtualClassManager
 
     /**
      * @param string $name
+     *
      * @return mixed|null
      */
     public function getConfigValue($name)
@@ -192,13 +196,13 @@ class TPkgCmsVirtualClassManager
      */
     public function getExtensionList()
     {
-        $aExtensionList = array();
+        $aExtensionList = [];
         $query = 'SELECT *
                     FROM pkg_cms_class_manager_extension
                    WHERE pkg_cms_class_manager_id = :classManagerId
                 ORDER BY `pkg_cms_class_manager_extension`.`position` ASC
                    ';
-        $tRes = $this->databaseConnection->executeQuery($query, array('classManagerId' => $this->getConfigValue('id')));
+        $tRes = $this->databaseConnection->executeQuery($query, ['classManagerId' => $this->getConfigValue('id')]);
         while ($extension = $tRes->fetchAssociative()) {
             $aExtensionList[] = $extension;
         }
@@ -214,7 +218,7 @@ class TPkgCmsVirtualClassManager
     private function getAutoDataObjectPath($basePath = null)
     {
         if (null === $basePath) {
-            $basePath = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_autoclasses.cache_warmer.autoclasses_dir');
+            $basePath = ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_autoclasses.cache_warmer.autoclasses_dir');
         }
         $path = $basePath.'CMSAutoDataObjects/';
         if (!file_exists($path)) {
@@ -227,8 +231,6 @@ class TPkgCmsVirtualClassManager
     }
 
     /**
-     * @param \Doctrine\DBAL\Connection $connection
-     *
      * @return void
      */
     public function setDatabaseConnection(Connection $connection)

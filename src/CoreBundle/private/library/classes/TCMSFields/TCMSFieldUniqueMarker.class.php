@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\Expr\Comparison;
 
 /**
  * A yes/no field that allows at most one record in the table to be set to yes.
-/**/
+ * /**/
 class TCMSFieldUniqueMarker extends TCMSFieldBoolean
 {
     /**
@@ -50,7 +50,7 @@ class TCMSFieldUniqueMarker extends TCMSFieldBoolean
         /**
          * @var TdbCmsFieldConfList $oFields
          */
-        $oFields = $oTableConf->GetFieldDefinitions(array('CMSFIELD_PROPERTY_PARENT_ID'), true);
+        $oFields = $oTableConf->GetFieldDefinitions(['CMSFIELD_PROPERTY_PARENT_ID'], true);
         if (1 === $oFields->Length()) {
             $oField = $oFields->Current();
             $nameField = $oField->sqlData['name'];
@@ -84,7 +84,7 @@ class TCMSFieldUniqueMarker extends TCMSFieldBoolean
         $migrationQueryData->setWhereEquals($whereEquals);
         $migrationQueryData->setWhereExpressions($whereExpressions);
 
-        $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE));
+        $aQuery = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE)];
         TCMSLogChange::WriteTransaction($aQuery);
 
         return true;
@@ -100,7 +100,7 @@ class TCMSFieldUniqueMarker extends TCMSFieldBoolean
             $oMessageManager = TCMSMessageManager::GetInstance();
             $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
             $sFieldTitle = $this->oDefinition->GetName();
-            $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_UNIQUEMARKER_CHANGE_TO_YES', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+            $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_UNIQUEMARKER_CHANGE_TO_YES', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
         }
 
         return $bDataIsValid;

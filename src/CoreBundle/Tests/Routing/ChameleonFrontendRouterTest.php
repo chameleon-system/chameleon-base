@@ -10,18 +10,14 @@ use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use PHPUnit\Framework\MockObject\Stub\ReturnStub;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsPortalDomains;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 class ChameleonFrontendRouterTest extends TestCase
 {
@@ -44,7 +40,7 @@ class ChameleonFrontendRouterTest extends TestCase
      */
     private $generatorMock;
     /**
-     * @var TdbCmsLanguage|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsLanguage|\PHPUnit_Framework_MockObject_MockObject
      */
     private $languageMock;
     /**
@@ -52,7 +48,7 @@ class ChameleonFrontendRouterTest extends TestCase
      */
     private $languageServiceMock;
     /**
-     * @var TdbCmsPortalDomains|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsPortalDomains|\PHPUnit_Framework_MockObject_MockObject
      */
     private $portalDomainMock;
     /**
@@ -60,7 +56,7 @@ class ChameleonFrontendRouterTest extends TestCase
      */
     private $portalDomainServiceMock;
     /**
-     * @var TdbCmsPortal|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsPortal|\PHPUnit_Framework_MockObject_MockObject
      */
     private $portalMock;
     /**
@@ -105,14 +101,14 @@ class ChameleonFrontendRouterTest extends TestCase
     /**
      * @dataProvider getDataForGenerateWithPrefixes
      *
-     * @param string      $routeName
+     * @param string $routeName
      * @param string|null $portalId
-     * @param string      $languageCode
-     * @param string      $activeDomain
+     * @param string $languageCode
+     * @param string $activeDomain
      * @param string|null $customDomain
-     * @param bool        $isCurrentRequestSecure
-     * @param string      $referenceType
-     * @param string      $expectedResult
+     * @param bool $isCurrentRequestSecure
+     * @param string $referenceType
+     * @param string $expectedResult
      */
     public function testGenerateWithPrefixes($routeName, $portalId, $languageCode, $activeDomain, $customDomain, $isCurrentRequestSecure, $referenceType, $expectedResult)
     {
@@ -123,7 +119,7 @@ class ChameleonFrontendRouterTest extends TestCase
 
     /**
      * @param string $activeDomain
-     * @param bool   $isCurrentRequestSecure
+     * @param bool $isCurrentRequestSecure
      */
     private function givenAChameleonFrontendRouter($activeDomain, $isCurrentRequestSecure)
     {
@@ -201,23 +197,23 @@ class ChameleonFrontendRouterTest extends TestCase
     }
 
     /**
-     * @param bool   $isCurrentRequestSecure
+     * @param bool $isCurrentRequestSecure
      * @param string $activeDomain
      */
     private function mockRequestStack($isCurrentRequestSecure, $activeDomain)
     {
         if ($isCurrentRequestSecure) {
-            $serverEnv = array(
+            $serverEnv = [
                 'HTTPS' => 'on',
-            );
+            ];
         } else {
-            $serverEnv = array(
+            $serverEnv = [
                 'HTTPS' => 'off',
-            );
+            ];
         }
         $serverEnv['HTTP_HOST'] = $activeDomain;
         $this->requestStack = new RequestStack();
-        $this->requestStack->push(new Request(array(), array(), array(), array(), array(), $serverEnv));
+        $this->requestStack->push(new Request([], [], [], [], [], $serverEnv));
     }
 
     private function mockUrlUtil()
@@ -232,7 +228,7 @@ class ChameleonFrontendRouterTest extends TestCase
     {
         $this->portalDomainMock = $this->getMockBuilder('TdbCmsPortalDomains')
             ->disableAutoload()
-            ->setMethods(array('GetActiveDomainName'))
+            ->setMethods(['GetActiveDomainName'])
             ->getMock();
         $this->portalDomainMock->method('GetActiveDomainName')->willReturn($activeDomain);
         $this->portalDomainServiceMock = $this->prophesize('\ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface');
@@ -251,12 +247,12 @@ class ChameleonFrontendRouterTest extends TestCase
     }
 
     /**
-     * @param string      $routeName
+     * @param string $routeName
      * @param string|null $portalId
-     * @param string      $languageCode
+     * @param string $languageCode
      * @param string|null $customDomain
-     * @param bool        $isCurrentRequestSecure
-     * @param string      $referenceType
+     * @param bool $isCurrentRequestSecure
+     * @param string $referenceType
      */
     private function whenGenerateWithPrefixesIsCalled($routeName, $portalId, $languageCode, $customDomain, $isCurrentRequestSecure, $referenceType)
     {
@@ -274,7 +270,7 @@ class ChameleonFrontendRouterTest extends TestCase
         } else {
             $languageArgument = $this->languageMock;
         }
-        $parameters = array();
+        $parameters = [];
         if (null !== $customDomain) {
             $parameters['domain'] = $customDomain;
         }
@@ -284,15 +280,15 @@ class ChameleonFrontendRouterTest extends TestCase
 
     /**
      * @param string|null $portalId
-     * @param bool        $isCurrentRequestSecure
+     * @param bool $isCurrentRequestSecure
      */
     private function mockPortal($portalId, $isCurrentRequestSecure)
     {
         $this->portalMock = $this->getMockBuilder('TdbCmsPortal')
             ->disableAutoload()
-            ->setMethods(array(
+            ->setMethods([
                 'GetPrimaryDomain',
-                ))
+                ])
             ->getMock();
         $this->portalMock->id = null === $portalId ? '7' : $portalId;
         $this->portalMock->method('GetPrimaryDomain')->will($this->getMockResultForGetPrimaryDomain($isCurrentRequestSecure));
@@ -344,11 +340,11 @@ class ChameleonFrontendRouterTest extends TestCase
      */
     public function getDataForGenerateWithPrefixes()
     {
-        return array(
+        return [
             /*
              * Relative URLs
              */
-            array(
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -357,8 +353,8 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => false,
                 'referenceType' => UrlGeneratorInterface::RELATIVE_PATH,
                 'expectedResult' => '/foo-42-en',
-            ),
-            array(
+            ],
+            [
                 'routeName' => 'bar',
                 'portalId' => '13',
                 'languageCode' => 'de',
@@ -367,8 +363,8 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => false,
                 'referenceType' => UrlGeneratorInterface::RELATIVE_PATH,
                 'expectedResult' => '/bar-13-de',
-            ),
-            array(
+            ],
+            [
                 'routeName' => 'bar',
                 'portalId' => null,
                 'languageCode' => 'de',
@@ -377,8 +373,8 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => false,
                 'referenceType' => UrlGeneratorInterface::RELATIVE_PATH,
                 'expectedResult' => '/bar-7-de',
-            ),
-            array(
+            ],
+            [
                 'routeName' => 'bar',
                 'portalId' => '42',
                 'languageCode' => null,
@@ -387,8 +383,8 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => false,
                 'referenceType' => UrlGeneratorInterface::RELATIVE_PATH,
                 'expectedResult' => '/bar-42-fr',
-            ),
-            array(
+            ],
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -397,13 +393,13 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => true,
                 'referenceType' => UrlGeneratorInterface::RELATIVE_PATH,
                 'expectedResult' => '/foo-42-en',
-            ),
+            ],
             /*
              * Relative URL, but the active domain is different from the one returned by the DomainValidator.
              * This case occurs if a URL for an HTTPS-only page is requested in an HTTP request and the HTTPS domain
              * configured in the backend differs from the HTTP domain.
              */
-            array(
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -412,11 +408,11 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => true,
                 'referenceType' => UrlGeneratorInterface::RELATIVE_PATH,
                 'expectedResult' => 'https://validated-domain.com/foo-42-en',
-            ),
+            ],
             /*
              * Absolute URLs
              */
-            array(
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -425,8 +421,8 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => false,
                 'referenceType' => UrlGeneratorInterface::ABSOLUTE_URL,
                 'expectedResult' => 'http://validated-domain.com/foo-42-en',
-            ),
-            array(
+            ],
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -435,11 +431,11 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => true,
                 'referenceType' => UrlGeneratorInterface::ABSOLUTE_URL,
                 'expectedResult' => 'https://validated-domain.com/foo-42-en',
-            ),
+            ],
             /*
              * Network path.
              */
-            array(
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -448,8 +444,8 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => false,
                 'referenceType' => UrlGeneratorInterface::NETWORK_PATH,
                 'expectedResult' => '//validated-domain.com/foo-42-en',
-            ),
-            array(
+            ],
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -458,8 +454,8 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => true,
                 'referenceType' => UrlGeneratorInterface::NETWORK_PATH,
                 'expectedResult' => '//validated-domain.com/foo-42-en',
-            ),
-            array(
+            ],
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -468,11 +464,11 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => true,
                 'referenceType' => UrlGeneratorInterface::NETWORK_PATH,
                 'expectedResult' => '//validated-domain.com/foo-42-en',
-            ),
+            ],
             /*
              * Custom domain.
              */
-            array(
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -481,12 +477,12 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => false,
                 'referenceType' => UrlGeneratorInterface::RELATIVE_PATH,
                 'expectedResult' => 'http://validated-domain.com/foo-42-en',
-            ),
+            ],
             /*
              * Custom domain is set, relative path is requested but an absolute URL needs to be returned.
              * Secure and insecure domain names do not differ.
              */
-            array(
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -495,8 +491,8 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => false,
                 'referenceType' => UrlGeneratorInterface::RELATIVE_PATH,
                 'expectedResult' => 'http://validated-domain.com/foo-42-en',
-            ),
-            array(
+            ],
+            [
                 'routeName' => 'foo',
                 'portalId' => '42',
                 'languageCode' => 'en',
@@ -505,16 +501,13 @@ class ChameleonFrontendRouterTest extends TestCase
                 'isCurrentRequestSecure' => true,
                 'referenceType' => UrlGeneratorInterface::RELATIVE_PATH,
                 'expectedResult' => 'https://validated-domain.com/foo-42-en',
-            ),
-        );
+            ],
+        ];
     }
 }
 
 class ChameleonFrontendRouterTestHelper extends ChameleonFrontendRouter
 {
-    /**
-     * @param UrlGeneratorInterface $generator
-     */
     public function setGenerator(UrlGeneratorInterface $generator)
     {
         $this->generator = $generator;

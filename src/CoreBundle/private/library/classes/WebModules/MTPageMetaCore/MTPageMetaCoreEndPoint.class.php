@@ -29,14 +29,14 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      *
      * @var array
      */
-    public $aAdditionalBreadcrumbNodes = array();
+    public $aAdditionalBreadcrumbNodes = [];
 
     /**
      * array holding all media file ids that may trigger a cache refresh.
      *
      * @var array
      */
-    protected $aCacheMediaIDs = array();
+    protected $aCacheMediaIDs = [];
 
     /**
      * object of the background image
@@ -44,7 +44,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      *
      * @var TCMSImage
      */
-    protected $oBackgroundImage = null;
+    protected $oBackgroundImage;
 
     /**
      *  set to true if you want the title in reversed order for SEO reasons
@@ -104,7 +104,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
      */
     protected function GetLanguageList()
     {
-        $aLanguageList = array();
+        $aLanguageList = [];
         $activePortal = $this->getPortalDomainService()->getActivePortal();
         if (null === $activePortal) {
             return $aLanguageList;
@@ -181,13 +181,13 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
 
         $activePage = $this->getActivePageService()->getActivePage();
         $oImage = $activePage->GetImage(0, 'background_image');
-        if ((is_null($oImage) || empty($oImage->id))) {
+        if (is_null($oImage) || empty($oImage->id)) {
             $pageDivision = $activePage->getDivision();
             if ($pageDivision) {
                 $oImage = $pageDivision->GetImage(0, 'background_image');
             }
         }
-        if ((is_null($oImage) || empty($oImage->id))) {
+        if (is_null($oImage) || empty($oImage->id)) {
             $activePortal = $this->getPortalDomainService()->getActivePortal();
             if ($activePortal) {
                 $oImage = $activePortal->GetImage(0, 'background_image');
@@ -339,7 +339,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
 
         if (strlen($sTitle) < 1) {
             $activePortal = $this->getPortalDomainService()->getActivePortal();
-            $sTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.page_meta_core.no_title');
+            $sTitle = ServiceLocator::get('translator')->trans('chameleon_system_core.page_meta_core.no_title');
             $sBreadcrumb = '';
             if (null !== $activePortal) {
                 $this->data['oActivePortal'] = $activePortal;
@@ -430,7 +430,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     protected function _GetActivePageURL()
     {
         if (null === $this->getPortalDomainService()->getActivePortal()) {
-            $url = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.page_meta_core.no_url');
+            $url = ServiceLocator::get('translator')->trans('chameleon_system_core.page_meta_core.no_url');
         } else {
             $url = $this->getActivePageService()->getLinkToActivePageRelative();
         }
@@ -450,14 +450,14 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         $activePortal = $this->getPortalDomainService()->getActivePortal();
 
         if (null === $activePage || null === $activePortal) {
-            return array();
+            return [];
         }
 
-        $aMetaData = array(
+        $aMetaData = [
             'charset' => 'UTF-8',
-            'http-equiv' => array(),
-            'name' => array(),
-        );
+            'http-equiv' => [],
+            'name' => [],
+        ];
         $aMetaData['name']['description'] = $activePortal->sqlData['meta_description'];
         $aMetaData['name']['author'] = $activePortal->sqlData['meta_author'];
         $aMetaData['name']['publisher'] = $activePortal->sqlData['meta_publisher'];
@@ -529,16 +529,16 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
         $activePage = $this->getActivePageService()->getActivePage();
         $activeDivision = $activePage->getDivision();
 
-        $tableInfo = array(array('table' => 'cms_tree', 'id' => ''),
-            array('table' => 'cms_tree_node', 'id' => ''),
-            array('table' => 'cms_tpl_page', 'id' => (null !== $activePage) ? ($activePage->id) : null),
-            array('table' => 'cms_portal', 'id' => (null !== $activePortal) ? ($activePortal->id) : null),
-            array('table' => 'cms_portal_navigation', 'id' => ''),
-            array('table' => 'cms_division', 'id' => (null !== $activeDivision) ? $activeDivision->id : null),
-        );
+        $tableInfo = [['table' => 'cms_tree', 'id' => ''],
+            ['table' => 'cms_tree_node', 'id' => ''],
+            ['table' => 'cms_tpl_page', 'id' => (null !== $activePage) ? ($activePage->id) : null],
+            ['table' => 'cms_portal', 'id' => (null !== $activePortal) ? ($activePortal->id) : null],
+            ['table' => 'cms_portal_navigation', 'id' => ''],
+            ['table' => 'cms_division', 'id' => (null !== $activeDivision) ? $activeDivision->id : null],
+        ];
 
         if (count($this->aCacheMediaIDs) > 0) {
-            $tableInfo[] = array('table' => 'cms_media', 'id' => $this->aCacheMediaIDs);
+            $tableInfo[] = ['table' => 'cms_media', 'id' => $this->aCacheMediaIDs];
         }
 
         return $tableInfo;
@@ -555,14 +555,14 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
     {
         $sPattern = '';
 
-        //default SEO pattern of actual page
+        // default SEO pattern of actual page
         $activePage = $this->getActivePageService()->getActivePage();
         if (is_object($activePage)) {
             if (!empty($activePage->sqlData['seo_pattern'])) {
                 $sPattern = $activePage->sqlData['seo_pattern'];
             }
 
-            $aReplace = array();
+            $aReplace = [];
             $aReplace['PAGE_NAME'] = $activePage->GetName();
 
             $activePortal = $this->getPortalDomainService()->getActivePortal();
@@ -599,7 +599,7 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             return '';
         }
 
-        return $activePage->GetRealURLPlain(array(), true);
+        return $activePage->GetRealURLPlain([], true);
     }
 
     private function isNotFoundPage(TCMSActivePage $activePage, TdbCmsPortal $activePortal): bool

@@ -27,8 +27,8 @@ interface ModuleMapperChainConfigInterface
     public function getAsString();
 
     /**
-     * @param string      $mapperChainName
-     * @param string      $newMapper
+     * @param string $mapperChainName
+     * @param string $newMapper
      * @param string|null $positionAfter
      *
      * @throws ErrorException
@@ -44,8 +44,8 @@ interface ModuleMapperChainConfigInterface
     public function removeMapperFromMapperChain($mapperChainName, $mapperName);
 
     /**
-     * @param string      $oldMapperName
-     * @param string      $newMapperName
+     * @param string $oldMapperName
+     * @param string $newMapperName
      * @param string|null $mapperChainName
      *
      * @return bool
@@ -56,7 +56,6 @@ interface ModuleMapperChainConfigInterface
 
     /**
      * @param string $mapperChainName
-     * @param array $mapperList
      *
      * @throws ErrorException
      */

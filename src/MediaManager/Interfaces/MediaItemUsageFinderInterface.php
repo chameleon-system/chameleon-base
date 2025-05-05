@@ -21,8 +21,6 @@ use ChameleonSystem\MediaManager\Exception\UsageFinderException;
 interface MediaItemUsageFinderInterface
 {
     /**
-     * @param MediaItemDataModel $mediaItem
-     *
      * @return MediaItemUsageDataModel[]
      *
      * @throws UsageFinderException

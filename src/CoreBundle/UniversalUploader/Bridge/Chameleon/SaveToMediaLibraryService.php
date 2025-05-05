@@ -40,19 +40,17 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
     }
 
     /**
-     * @param UploadedFileDataModel $uploadedFile
-     *
      * @return UploadedFileDataModel
      */
     public function saveUploadedFile(UploadedFileDataModel $uploadedFile)
     {
-        $fileUploadData = array(
+        $fileUploadData = [
             'name' => $uploadedFile->getOriginalClientFileName(),
             'type' => 'application/octet-stream',
             'tmp_name' => $uploadedFile->getTmpFilePath(),
             'error' => 0,
             'size' => $uploadedFile->getFileSize(),
-        );
+        ];
 
         $parameters = $this->uploadParameterService->getParameters();
 
@@ -67,7 +65,7 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
         /** @var \TCMSTableEditorFiles $tableEditor */
         $tableEditor = $tableManager->oTableEditor;
 
-        $postData = array();
+        $postData = [];
 
         $treeId = $parameters->getTreeNodeID();
         if (null !== $treeId) {
@@ -89,7 +87,7 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
         $postData = array_merge($postData, $this->getAdditionalPostData());
 
         try {
-            //fix until #39217 is resolved
+            // fix until #39217 is resolved
             if (false === $this->security->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_NEW, $tableName)) {
                 throw new AccessDeniedException(sprintf('Permission for user %s to add new records to %s has not been granted.', $this->security->getUser()?->getUserIdentifier(), $tableName));
             }
@@ -100,14 +98,14 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
                 $uploadedFile->setSavedRecordId($returnData->id);
             }
         } catch (\Exception $e) {
-            $context = array(
+            $context = [
                 'maxWidth' => $parameters->getMaxUploadWidth(),
                 'maxHeight' => $parameters->getMaxUploadHeight(),
-            );
+            ];
             $uploadedFile->addErrorMessage($e->getMessage(), (int) $e->getCode(), $context);
         }
 
-        //notice: if your image does not show up in media manager, chances are, its cmsident is below 1000... historically, these are not shown
+        // notice: if your image does not show up in media manager, chances are, its cmsident is below 1000... historically, these are not shown
 
         return $uploadedFile;
     }
@@ -117,7 +115,7 @@ class SaveToMediaLibraryService implements SaveToMediaLibraryServiceInterface
      */
     private function getAdditionalPostData()
     {
-        $postData = array();
+        $postData = [];
 
         $request = $this->requestStack->getCurrentRequest();
 

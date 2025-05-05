@@ -10,16 +10,14 @@ class CmsMasterPagedefSpot
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsMasterPagedef|null - Belongs to the CMS page template */
-        private ?CmsMasterPagedef $cmsMasterPagedef = null
-        ,
+        private ?CmsMasterPagedef $cmsMasterPagedef = null,
         // TCMSFieldLookupParentID
         /** @var PkgCmsThemeBlock|null - Belongs to theme block */
-        private ?PkgCmsThemeBlock $pkgCmsThemeBlock = null
-        ,
+        private ?PkgCmsThemeBlock $pkgCmsThemeBlock = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -34,8 +32,7 @@ class CmsMasterPagedefSpot
         private bool $static = true,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsMasterPagedefSpotParameter> - Parameter */
-        private Collection $cmsMasterPagedefSpotParameterCollection = new ArrayCollection()
-        ,
+        private Collection $cmsMasterPagedefSpotParameterCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsMasterPagedefSpotAccess> - Spot restrictions */
         private Collection $cmsMasterPagedefSpotAccessCollection = new ArrayCollection()
@@ -79,7 +76,6 @@ class CmsMasterPagedefSpot
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getPkgCmsThemeBlock(): ?PkgCmsThemeBlock
     {
@@ -92,7 +88,6 @@ class CmsMasterPagedefSpot
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -107,7 +102,6 @@ class CmsMasterPagedefSpot
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getModel(): string
     {
@@ -120,7 +114,6 @@ class CmsMasterPagedefSpot
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getView(): string
@@ -135,7 +128,6 @@ class CmsMasterPagedefSpot
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isStatic(): bool
     {
@@ -148,8 +140,6 @@ class CmsMasterPagedefSpot
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -185,8 +175,6 @@ class CmsMasterPagedefSpot
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -218,6 +206,4 @@ class CmsMasterPagedefSpot
 
         return $this;
     }
-
-
 }

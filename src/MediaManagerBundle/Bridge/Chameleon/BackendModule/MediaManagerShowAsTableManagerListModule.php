@@ -12,22 +12,18 @@
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule;
 
 use ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\ListManager\TCMSListManagerMediaManager;
-use IMapperCacheTriggerRestricted;
-use IMapperVisitorRestricted;
-use MTPkgViewRendererAbstractModuleMapper;
-use TCMSImage;
 
-class MediaManagerShowAsTableManagerListModule extends MTPkgViewRendererAbstractModuleMapper
+class MediaManagerShowAsTableManagerListModule extends \MTPkgViewRendererAbstractModuleMapper
 {
     /**
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ) {
-        $image = new TCMSImage();
+        $image = new \TCMSImage();
         $image->Load('1');
 
         $listManager = new TCMSListManagerMediaManager();

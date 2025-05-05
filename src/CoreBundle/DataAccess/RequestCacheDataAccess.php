@@ -16,14 +16,15 @@ use TCMSRecord;
 
 /**
  * @template T extends TCMSRecord
+ *
  * @implements DataAccessInterface<T>
  */
 class RequestCacheDataAccess implements DataAccessInterface
 {
     /**
-     * @var array<string, T[]> $elements
+     * @var array<string, T[]>
      */
-    private $cache = array();
+    private $cache = [];
     /**
      * @var LanguageServiceInterface
      */
@@ -34,8 +35,7 @@ class RequestCacheDataAccess implements DataAccessInterface
     private $decorated;
 
     /**
-     * @param LanguageServiceInterface $languageService
-     * @param DataAccessInterface<T>      $decorated
+     * @param DataAccessInterface<T> $decorated
      */
     public function __construct(LanguageServiceInterface $languageService, DataAccessInterface $decorated)
     {
@@ -78,6 +78,6 @@ class RequestCacheDataAccess implements DataAccessInterface
      */
     public function getCacheTriggers()
     {
-        return array();
+        return [];
     }
 }

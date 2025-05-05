@@ -2,21 +2,18 @@
 
 namespace ChameleonSystem\NewsletterBundle\Entity;
 
-use DateTime;
-
 class PkgNewsletterQueue
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var PkgNewsletterUser|null - Newsletter subscriber */
-        private ?PkgNewsletterUser $pkgNewsletterUser = null
-        ,
+        private ?PkgNewsletterUser $pkgNewsletterUser = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Shipped on */
-        private ?DateTime $dateSent = null,
+        /** @var \DateTime|null - Shipped on */
+        private ?\DateTime $dateSent = null,
         // TCMSFieldLookupParentID
         /** @var PkgNewsletterCampaign|null - Newsletter */
         private ?PkgNewsletterCampaign $pkgNewsletterCampaign = null
@@ -60,20 +57,18 @@ class PkgNewsletterQueue
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDateSent(): ?DateTime
+    public function getDateSent(): ?\DateTime
     {
         return $this->dateSent;
     }
 
-    public function setDateSent(?DateTime $dateSent): self
+    public function setDateSent(?\DateTime $dateSent): self
     {
         $this->dateSent = $dateSent;
 
         return $this;
     }
-
 
     // TCMSFieldLookupParentID
     public function getPkgNewsletterCampaign(): ?PkgNewsletterCampaign
@@ -87,6 +82,4 @@ class PkgNewsletterQueue
 
         return $this;
     }
-
-
 }

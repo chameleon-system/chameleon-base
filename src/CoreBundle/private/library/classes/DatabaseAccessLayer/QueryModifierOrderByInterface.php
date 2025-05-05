@@ -15,7 +15,7 @@ interface QueryModifierOrderByInterface
 {
     /**
      * @param string $query
-     * @param array  $orderBy - must be of the form `table`.`field` => ASC/DESC or fieldalias=>ASC/DESC - fields MUST be quoted!
+     * @param array $orderBy - must be of the form `table`.`field` => ASC/DESC or fieldalias=>ASC/DESC - fields MUST be quoted!
      *
      * @return string
      */

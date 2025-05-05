@@ -14,10 +14,9 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 
 /**
  * The image pool.
-/**/
-class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterface
+ * /**/
+class TCMSFieldMedia extends TCMSField implements DoctrineTransformableInterface
 {
-
     /**
      * view path for frontend.
      */
@@ -33,22 +32,22 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
      *
      * @var TCMSTableConf
      */
-    public $oTableConf = null;
+    public $oTableConf;
 
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $default = explode(',', $this->oDefinition->sqlData['field_default_value']);
-        $defaultEscaped = array_map(static fn(string $item) => sprintf("'%s'", trim($item)), $default);
+        $defaultEscaped = array_map(static fn (string $item) => sprintf("'%s'", trim($item)), $default);
         $parameters = [
             'source' => get_class($this),
             'type' => 'array',
             'docCommentType' => 'array<string>',
             'description' => $this->oDefinition->sqlData['translation'],
             'propertyName' => $this->snakeToCamelCase($this->name),
-            'defaultValue' => sprintf('[%s]',implode(', ',$defaultEscaped)),
+            'defaultValue' => sprintf('[%s]', implode(', ', $defaultEscaped)),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -99,10 +98,10 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
     {
         $oImages = $this->oTableRow->GetImages($this->name, true);
         parent::GetHTML();
-        $aImageData = array();
+        $aImageData = [];
         $iPosition = 0;
         $this->oTableConf = $this->oTableRow->GetTableConf();
-        
+
         /* @var $oImage TCMSImage */
         while ($oImage = $oImages->Next()) {
             $oViewRenderer = $this->getViewRenderer();
@@ -133,11 +132,11 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
             $oViewRenderer->AddSourceObject('sFullImageURL', $oImage->GetFullURL());
             $oViewRenderer->AddSourceObject(
                 'aTagProperties',
-                array(
+                [
                     'width' => $iWidth + 6,
                     'height' => $iHeight + 6,
                     'cmsshowfull' => '1',
-                )
+                ]
             );
             $aImageData[] = $oViewRenderer->Render('TCMSFieldMedia/mediaSingleItem.html.twig', null, false);
             ++$iPosition;
@@ -206,7 +205,7 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_MEDIA_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_MEDIA_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 
@@ -266,14 +265,14 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
                     $aSizeOfImage = getimagesize($oFile->sPath);
                     $oFile->Load($oFile->sPath);
                     $sContentType = image_type_to_mime_type($aSizeOfImage[2]);
-                    $aImageFileData = array('name' => $_FILES[$this->name.'image']['name'][$sKey], 'type' => $sContentType, 'size' => $oFile->dSizeByte, 'tmp_name' => $oFile->sPath, 'error' => 0);
+                    $aImageFileData = ['name' => $_FILES[$this->name.'image']['name'][$sKey], 'type' => $sContentType, 'size' => $oFile->dSizeByte, 'tmp_name' => $oFile->sPath, 'error' => 0];
                     $oMediaTableConf = new TCMSTableConf();
                     $oMediaTableConf->LoadFromField('name', 'cms_media');
                     $oMediaManagerEditor = new TCMSTableEditorMedia();
                     $oMediaManagerEditor->AllowEditByAll(true);
                     $oMediaManagerEditor->Init($oMediaTableConf->id);
                     $oMediaManagerEditor->SetUploadData($aImageFileData, true);
-                    $aImage = array('description' => $_FILES[$this->name.'image']['name'][$sKey], 'cms_media_id' => 1);
+                    $aImage = ['description' => $_FILES[$this->name.'image']['name'][$sKey], 'cms_media_id' => 1];
                     $oMediaManagerEditor->Save($aImage);
                     if (!empty($oMediaManagerEditor->sId)) {
                         $_SESSION['pkgFormUploadedImagesByUser'][] = $oMediaManagerEditor->sId;
@@ -298,7 +297,7 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
             }
             if (is_array($this->data) && count($this->data) > 0) {
                 foreach ($this->data as $key => $value) {
-                    //upload image already when its valid so user doesn't have to upload it again when something else goes wrong
+                    // upload image already when its valid so user doesn't have to upload it again when something else goes wrong
                     $sNewMediaId = $this->UploadImage($key);
                     if ($sNewMediaId) {
                         $this->data[$key]['cms_media_id'] = $sNewMediaId;
@@ -329,7 +328,7 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
     public function PkgCmsFormPreGetSQLHook()
     {
         if (is_array($this->data)) {
-            $aCmsIds = array();
+            $aCmsIds = [];
             foreach ($this->data as $key => $value) {
                 $aCmsIds[$key] = $value['cms_media_id'];
             }
@@ -344,10 +343,10 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
      */
     protected function GetRecordsConnectedArrayFrontend()
     {
-        $aData = array();
+        $aData = [];
         $iCounter = 0;
         if (is_array($this->data) && count($this->data) > 0) {
-            //we assume data was already posted
+            // we assume data was already posted
             foreach ($this->data as $aRow) {
                 $aData[$iCounter] = $aRow;
                 ++$iCounter;
@@ -367,7 +366,7 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
                     $aData[$iCounter]['cms_media_id'] = '1';
                 }
             } else {
-                //we haven't got a record yet, get default value for field and fake it...
+                // we haven't got a record yet, get default value for field and fake it...
                 $sDefault = $this->oDefinition->sqlData['field_default_value'];
                 $aValues = explode(',', $sDefault);
                 foreach ($aValues as $sImageId) {
@@ -387,7 +386,7 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
      */
     public function PkgCmsFormDataIsValid()
     {
-        //we handle this via PkgCmsFormUploadedImageDataIsValid() already before uploading images
+        // we handle this via PkgCmsFormUploadedImageDataIsValid() already before uploading images
         if (!$this->bPkgCmsFormImagesHadErrors) {
             return true;
         } else {
@@ -425,14 +424,14 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
                                 $aSizeOfImage = getimagesize($oFile->sPath);
                                 if ($aSizeOfImage[1] > 1000 or $aSizeOfImage[0] > 1000) {
                                     $bIsValid = false;
-                                    $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-IMAGE-DIMENSIONS', array('allowedWidth' => 1000, 'allowedHeight' => 1000));
+                                    $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-IMAGE-DIMENSIONS', ['allowedWidth' => 1000, 'allowedHeight' => 1000]);
                                 }
 
                                 $oConfig = TdbCmsConfig::GetInstance();
                                 $imageUploadMaxSize = $oConfig->sqlData['max_image_upload_size'] * 1024;
                                 if ($_FILES[$this->name.'image']['size'][$key] > $imageUploadMaxSize) {
                                     $bIsValid = false;
-                                    $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-IMAGE-SIZE', array('fileSize' => $_FILES[$this->name.'image']['size'][$key],  'allowedSize' => $imageUploadMaxSize));
+                                    $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-IMAGE-SIZE', ['fileSize' => $_FILES[$this->name.'image']['size'][$key],  'allowedSize' => $imageUploadMaxSize]);
                                 }
                             } else {
                                 $bIsValid = false;
@@ -456,20 +455,20 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
      *
      * @param string $sFieldDefaultValue
      * @param string $sFieldName
-     * @param bool   $bUpdateExistingRecords
+     * @param bool $bUpdateExistingRecords
      */
     protected function UpdateFieldDefaultValue($sFieldDefaultValue, $sFieldName, $bUpdateExistingRecords = false)
     {
         parent::UpdateFieldDefaultValue($sFieldDefaultValue, $sFieldName, $bUpdateExistingRecords);
 
-        //make default value string to an array so we can count and loop
+        // make default value string to an array so we can count and loop
         $aFieldDefaultValue = explode(',', $sFieldDefaultValue);
 
         $sQuery = 'SELECT `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`.*
                    FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`';
         $rResult = MySqlLegacySupport::getInstance()->query($sQuery);
         while ($aRow = MySqlLegacySupport::getInstance()->fetch_assoc($rResult)) {
-            //get the old value of the record and make it also to an array so we can count and loop through this one too
+            // get the old value of the record and make it also to an array so we can count and loop through this one too
             $aOldValues = explode(',', $aRow[$sFieldName]);
 
             if (count($aOldValues) > count($aFieldDefaultValue)) {
@@ -543,6 +542,6 @@ class TCMSFieldMedia extends \TCMSField implements DoctrineTransformableInterfac
      */
     private function getViewRenderer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

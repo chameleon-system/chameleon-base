@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 class TPkgCmsStringUtilities_HTMLTest extends TestCase
 {
     /** @var TPkgCmsStringUtilities_HTML */
-    protected $util = null;
+    protected $util;
 
     protected function setUp(): void
     {
@@ -43,12 +43,12 @@ class TPkgCmsStringUtilities_HTMLTest extends TestCase
     public function testAllBlacklisted()
     {
         $input = '<>öÖ';
-        $this->assertEquals('<>öÖ', $this->util->convertEntitiesWithBlacklist($input, array('<', '>', 'ö', 'Ö')));
+        $this->assertEquals('<>öÖ', $this->util->convertEntitiesWithBlacklist($input, ['<', '>', 'ö', 'Ö']));
     }
 
     public function testSomeBlacklisted()
     {
         $input = '<>öÖ';
-        $this->assertEquals('<&gt;&ouml;Ö', $this->util->convertEntitiesWithBlacklist($input, array('<', 'Ö')));
+        $this->assertEquals('<&gt;&ouml;Ö', $this->util->convertEntitiesWithBlacklist($input, ['<', 'Ö']));
     }
 }

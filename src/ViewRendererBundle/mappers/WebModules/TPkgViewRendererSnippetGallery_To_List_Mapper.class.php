@@ -24,17 +24,17 @@ class TPkgViewRendererSnippetGallery_To_List_Mapper extends AbstractViewMapper
      */
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
-        $aList = array();
+        $aList = [];
         /**
          * @var TPkgViewRendererSnippetGalleryItem[] $aSnippetList
          */
         $aSnippetList = $oVisitor->GetSourceObject('aSnippetList');
         foreach ($aSnippetList as $sSnippetName => $oSnippetData) {
             try {
-                $aList[] = array(
+                $aList[] = [
                     'sName' => $sSnippetName,
                     'sContent' => $this->renderListItem($oSnippetData),
-                );
+                ];
             } catch (TPkgSnippetRenderer_SnippetRenderingException $e) {
                 throw new MapperException(sprintf('Error while rendering: %s', $e->getMessage()), $e->getCode(), $e);
             }
@@ -44,8 +44,6 @@ class TPkgViewRendererSnippetGallery_To_List_Mapper extends AbstractViewMapper
     }
 
     /**
-     * @param TPkgViewRendererSnippetGalleryItem $oSnippetData
-     *
      * @return string
      *
      * @throws MapperException

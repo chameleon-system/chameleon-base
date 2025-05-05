@@ -24,7 +24,7 @@ class MTTableEditorComponent extends MTTableEditor
     {
         $this->oTableManager->Insert();
 
-        $parameter = array('pagedef' => $this->global->GetUserData('pagedef'), 'tableid' => $this->oTableManager->sTableId, 'id' => $this->oTableManager->sId);
+        $parameter = ['pagedef' => $this->global->GetUserData('pagedef'), 'tableid' => $this->oTableManager->sTableId, 'id' => $this->oTableManager->sId];
         if ('true' == $this->global->GetUserData('bOnlyOneRecord')) {
             $parameter['bOnlyOneRecord'] = 'true';
         }

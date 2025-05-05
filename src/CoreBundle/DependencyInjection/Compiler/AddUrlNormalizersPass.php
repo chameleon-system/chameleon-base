@@ -26,14 +26,14 @@ class AddUrlNormalizersPass implements CompilerPassInterface
         $utilServiceDefinition = $container->getDefinition('chameleon_system_core.util.url_normalization');
         $urlNormalizerServices = $container->findTaggedServiceIds('chameleon_system.url_normalizer');
 
-        $urlNormalizerList = array();
+        $urlNormalizerList = [];
 
         foreach ($urlNormalizerServices as $urlNormalizerServiceId => $tags) {
             $urlNormalizerDefinition = $container->getDefinition($urlNormalizerServiceId);
             foreach ($tags as $tag) {
                 $priority = isset($tag['priority']) ? $tag['priority'] : 0;
                 if (!isset($urlNormalizerList[$priority])) {
-                    $urlNormalizerList[$priority] = array();
+                    $urlNormalizerList[$priority] = [];
                 }
                 $urlNormalizerList[$priority][] = $urlNormalizerDefinition;
             }
@@ -41,7 +41,7 @@ class AddUrlNormalizersPass implements CompilerPassInterface
         krsort($urlNormalizerList);
         foreach ($urlNormalizerList as $urlNormalizerByPriorityList) {
             foreach ($urlNormalizerByPriorityList as $urlNormalizer) {
-                $utilServiceDefinition->addMethodCall('addNormalizer', array($urlNormalizer));
+                $utilServiceDefinition->addMethodCall('addNormalizer', [$urlNormalizer]);
             }
         }
     }

@@ -12,21 +12,20 @@
 namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use TCMSPortalDomain;
 
 class ChangeActiveDomainEvent extends Event
 {
     /**
-     * @var TCMSPortalDomain|null
+     * @var \TCMSPortalDomain|null
      */
     private $oldActiveDomain;
     /**
-     * @var TCMSPortalDomain|null
+     * @var \TCMSPortalDomain|null
      */
     private $newActiveDomain;
 
     /**
-     * @return TCMSPortalDomain|null
+     * @return \TCMSPortalDomain|null
      */
     public function getNewActiveDomain()
     {
@@ -34,14 +33,14 @@ class ChangeActiveDomainEvent extends Event
     }
 
     /**
-     * @return TCMSPortalDomain|null
+     * @return \TCMSPortalDomain|null
      */
     public function getOldActiveDomain()
     {
         return $this->oldActiveDomain;
     }
 
-    public function __construct(?TCMSPortalDomain $oldActiveDomain = null, ?TCMSPortalDomain $newActiveDomain = null)
+    public function __construct(?\TCMSPortalDomain $oldActiveDomain = null, ?\TCMSPortalDomain $newActiveDomain = null)
     {
         $this->oldActiveDomain = $oldActiveDomain;
         $this->newActiveDomain = $newActiveDomain;

@@ -13,7 +13,7 @@
  * represents a placeholder for a module. here no instance/module has been assigned
  * to the placeholder... so on the website we display nothing, and in the cms
  * view we just display the selector.
-/**/
+ * /**/
 class MTEmptyCore extends TUserCustomModelBase
 {
     /**

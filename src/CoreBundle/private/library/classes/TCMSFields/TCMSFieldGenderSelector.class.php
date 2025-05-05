@@ -15,10 +15,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * male or female.
-/**/
+ * /**/
 class TCMSFieldGenderSelector extends TCMSFieldOption implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
@@ -29,8 +28,8 @@ class TCMSFieldGenderSelector extends TCMSFieldOption implements DoctrineTransfo
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -64,8 +63,8 @@ class TCMSFieldGenderSelector extends TCMSFieldOption implements DoctrineTransfo
         parent::GetOptions();
 
         $translator = $this->getTranslationService();
-        $this->options['m'] = $translator->trans('chameleon_system_core.field_gender.male', array(), 'admin');
-        $this->options['f'] = $translator->trans('chameleon_system_core.field_gender.female', array(), 'admin');
+        $this->options['m'] = $translator->trans('chameleon_system_core.field_gender.male', [], 'admin');
+        $this->options['f'] = $translator->trans('chameleon_system_core.field_gender.female', [], 'admin');
     }
 
     /**
@@ -90,6 +89,6 @@ class TCMSFieldGenderSelector extends TCMSFieldOption implements DoctrineTransfo
      */
     private function getTranslationService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }

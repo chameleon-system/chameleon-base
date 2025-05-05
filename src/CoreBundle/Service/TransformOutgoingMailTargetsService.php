@@ -41,10 +41,9 @@ class TransformOutgoingMailTargetsService implements TransformOutgoingMailTarget
     private $subjectPrefix;
 
     /**
-     * @param string                       $transformationTarget
-     * @param string                       $whiteList
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param string                       $subjectPrefix
+     * @param string $transformationTarget
+     * @param string $whiteList
+     * @param string $subjectPrefix
      */
     public function __construct($transformationTarget, $whiteList, PortalDomainServiceInterface $portalDomainService, $subjectPrefix)
     {
@@ -85,8 +84,8 @@ class TransformOutgoingMailTargetsService implements TransformOutgoingMailTarget
      */
     private function extractWhiteList($whiteList)
     {
-        $this->whiteListedDomains = array();
-        $this->whiteListedAddresses = array();
+        $this->whiteListedDomains = [];
+        $this->whiteListedAddresses = [];
         $this->whiteListPortalDomains = false;
         $whiteList = str_replace(' ', '', $whiteList);
         $parts = explode(';', $whiteList);

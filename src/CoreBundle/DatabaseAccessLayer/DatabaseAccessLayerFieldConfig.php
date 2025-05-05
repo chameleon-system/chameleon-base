@@ -12,29 +12,26 @@
 namespace ChameleonSystem\CoreBundle\DatabaseAccessLayer;
 
 use TCMSField;
-use TCMSRecord;
-use TdbCmsFieldConf;
 
 class DatabaseAccessLayerFieldConfig extends AbstractDatabaseAccessLayer
 {
     /**
-     * @var TCMSField[][]
+     * @var \TCMSField[][]
      */
-    private $cache = array();
+    private $cache = [];
 
     /**
-     * @param string     $tableName
-     * @param string     $fieldName
-     * @param TCMSRecord $dataRow
-     * @param bool       $loadDefaults
+     * @param string $tableName
+     * @param string $fieldName
+     * @param bool $loadDefaults
      *
-     * @return TCMSField
+     * @return \TCMSField
      */
-    public function getFieldConfig($tableName, $fieldName, TCMSRecord $dataRow, $loadDefaults = false)
+    public function getFieldConfig($tableName, $fieldName, \TCMSRecord $dataRow, $loadDefaults = false)
     {
         $fieldObject = null;
         if (!isset($this->cache[$tableName])) {
-            $this->cache[$tableName] = array();
+            $this->cache[$tableName] = [];
         }
         if (isset($this->cache[$tableName][$fieldName])) {
             $fieldObject = $this->cache[$tableName][$fieldName];
@@ -56,7 +53,7 @@ class DatabaseAccessLayerFieldConfig extends AbstractDatabaseAccessLayer
      * @param string $tableName
      * @param string $fieldName
      *
-     * @return TCMSField|null
+     * @return \TCMSField|null
      */
     private function GetField($tableName, $fieldName)
     {
@@ -73,13 +70,11 @@ class DatabaseAccessLayerFieldConfig extends AbstractDatabaseAccessLayer
     }
 
     /**
-     * @param TCMSField  $oField
-     * @param TCMSRecord $oTableRow
-     * @param bool       $loadDefaultValue
+     * @param bool $loadDefaultValue
      *
-     * @return TCMSField
+     * @return \TCMSField
      */
-    private function setTableRowData(TCMSField $oField, TCMSRecord $oTableRow, $loadDefaultValue)
+    private function setTableRowData(\TCMSField $oField, \TCMSRecord $oTableRow, $loadDefaultValue)
     {
         $oField->recordId = $oTableRow->id;
         $oField->oTableRow = $oTableRow;
@@ -98,7 +93,7 @@ class DatabaseAccessLayerFieldConfig extends AbstractDatabaseAccessLayer
      * @param string $tableName
      * @param string $fieldName the sql name of the field
      *
-     * @return TdbCmsFieldConf|null
+     * @return \TdbCmsFieldConf|null
      */
     public function GetFieldDefinition($tableName, $fieldName)
     {
@@ -108,10 +103,10 @@ class DatabaseAccessLayerFieldConfig extends AbstractDatabaseAccessLayer
                  WHERE `cms_field_conf`.`name`= :fieldName
                    AND `cms_tbl_conf`.`name` = :tableName';
         $oFieldDefinition = null;
-        $row = $this->getDatabaseConnection()->fetchAssociative($query, array('fieldName' => $fieldName, 'tableName' => $tableName));
+        $row = $this->getDatabaseConnection()->fetchAssociative($query, ['fieldName' => $fieldName, 'tableName' => $tableName]);
 
         if (false !== $row) {
-            $oFieldDefinition = TdbCmsFieldConf::GetNewInstance($row);
+            $oFieldDefinition = \TdbCmsFieldConf::GetNewInstance($row);
         }
 
         return $oFieldDefinition;

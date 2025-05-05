@@ -8,19 +8,17 @@ class CmsMessageManagerBackendMessage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsMessageManagerMessageType|null - Message type */
-        private ?CmsMessageManagerMessageType $cmsMessageManagerMessageType = null
-        ,
+        private ?CmsMessageManagerMessageType $cmsMessageManagerMessageType = null,
         // TCMSFieldText
         /** @var string - Message */
         private string $message = '',
         // TCMSFieldLookupParentID
         /** @var CmsConfig|null - Belongs to CMS config */
-        private ?CmsConfig $cmsConfig = null
-        ,
+        private ?CmsConfig $cmsConfig = null,
         // TCMSFieldVarchar
         /** @var string - Code */
         private string $name = '',
@@ -67,7 +65,6 @@ class CmsMessageManagerBackendMessage
         return $this;
     }
 
-
     // TCMSFieldText
     public function getMessage(): string
     {
@@ -80,7 +77,6 @@ class CmsMessageManagerBackendMessage
 
         return $this;
     }
-
 
     // TCMSFieldLookupParentID
     public function getCmsConfig(): ?CmsConfig
@@ -95,7 +91,6 @@ class CmsMessageManagerBackendMessage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -109,7 +104,6 @@ class CmsMessageManagerBackendMessage
         return $this;
     }
 
-
     // TCMSFieldText
     public function getDescription(): string
     {
@@ -122,6 +116,4 @@ class CmsMessageManagerBackendMessage
 
         return $this;
     }
-
-
 }

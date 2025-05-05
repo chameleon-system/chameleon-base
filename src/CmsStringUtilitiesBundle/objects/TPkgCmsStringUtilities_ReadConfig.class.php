@@ -14,12 +14,12 @@ class TPkgCmsStringUtilities_ReadConfig
     /**
      * @var string
      */
-    private $sConfig = null;
+    private $sConfig;
 
     /**
      * @var array|null
      */
-    private $aConfig = null;
+    private $aConfig;
 
     /**
      * config params are separated by \n. Key from value by "=".
@@ -59,13 +59,13 @@ class TPkgCmsStringUtilities_ReadConfig
     /**
      * Get all config parameter as array.
      *
-     * @return array
-     *
      * @param string $configString
+     *
+     * @return array
      */
     private function convertToArray($configString)
     {
-        $aConfigParameters = array();
+        $aConfigParameters = [];
         if (!empty($configString)) {
             $aConfigRows = explode("\n", $configString);
             foreach ($aConfigRows as $row) {

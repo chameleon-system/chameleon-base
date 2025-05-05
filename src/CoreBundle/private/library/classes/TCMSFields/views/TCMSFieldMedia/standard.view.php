@@ -12,17 +12,17 @@ foreach ($aRecordsConnected as $aValue) {
         $oImage->Load($aValue['cms_media_id']);
         $oThumb = $oImage->GetThumbnail(100, 100); ?>
     <div class="image-connected">
-        <img src="<?=$oThumb->GetFullURL(); ?>" alt="<?=TGlobal::OutHTML($oImage->aData['description']); ?>" border="0"/>
+        <img src="<?php echo $oThumb->GetFullURL(); ?>" alt="<?php echo TGlobal::OutHTML($oImage->aData['description']); ?>" border="0"/>
         <span class="close"
-              onclick="$(this).parent().remove();$('#<?=TGlobal::OutHTML($oField->name).$iPosition; ?>cms_media_id').attr('value','1')"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_media.remove')); ?></span>
+              onclick="$(this).parent().remove();$('#<?php echo TGlobal::OutHTML($oField->name).$iPosition; ?>cms_media_id').attr('value','1')"><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_media.remove')); ?></span>
     </div>
     <?php
     } ?>
 <div class="image-input">
-    <input type="file" name="<?=TGlobal::OutHTML($oField->name); ?>image[<?=$iPosition; ?>]"/>
-    <input type="hidden" id="<?=TGlobal::OutHTML($oField->name).$iPosition; ?>cms_media_id"
-           name="<?=TGlobal::OutHTML($oField->name); ?>[<?=$iPosition; ?>][cms_media_id]"
-           value="<?=TGlobal::OutHTML($sValue); ?>"/>
+    <input type="file" name="<?php echo TGlobal::OutHTML($oField->name); ?>image[<?php echo $iPosition; ?>]"/>
+    <input type="hidden" id="<?php echo TGlobal::OutHTML($oField->name).$iPosition; ?>cms_media_id"
+           name="<?php echo TGlobal::OutHTML($oField->name); ?>[<?php echo $iPosition; ?>][cms_media_id]"
+           value="<?php echo TGlobal::OutHTML($sValue); ?>"/>
 </div>
 </div>
 <?php

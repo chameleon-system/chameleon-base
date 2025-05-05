@@ -15,7 +15,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
 /**
  * manages the webpage list (links to the template engine interface).
-/**/
+ * /**/
 class TCMSListManagerPagedefinitions extends TCMSListManagerFullGroupTable
 {
     /**
@@ -30,11 +30,11 @@ class TCMSListManagerPagedefinitions extends TCMSListManagerFullGroupTable
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $portals = $securityHelper->getUser()?->getPortals();
         if (null === $portals) {
-            $portals = array();
+            $portals = [];
         }
         $portalRestriction = implode(
             ', ',
-            array_map(static fn(string $portalId) => $portalId,
+            array_map(static fn (string $portalId) => $portalId,
                 array_keys($portals))
         );
 

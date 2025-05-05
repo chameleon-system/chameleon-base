@@ -26,7 +26,7 @@ class TCMSPageBreadcrumb extends TIterator
     /**
      * @var string|null
      */
-    protected $sPathString = null;
+    protected $sPathString;
 
     /**
      * returns true if the node id is found in the breadcrumb.
@@ -62,7 +62,7 @@ class TCMSPageBreadcrumb extends TIterator
             $this->sPathString = '';
             $this->GoToStart();
             while ($oNode = $this->Next()) {
-                /** @var $oNode TCMSTreeNode */
+                /* @var $oNode TCMSTreeNode */
                 $this->sPathString .= $sSeperator.$oNode->GetName();
             }
             $this->GoToStart();

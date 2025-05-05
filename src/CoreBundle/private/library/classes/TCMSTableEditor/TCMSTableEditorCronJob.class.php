@@ -20,12 +20,12 @@ class TCMSTableEditorCronJob extends TCMSTableEditor
 
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'runCronJob';
-        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_cron_jobs.action_run_job');
+        $oMenuItem->sDisplayName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_cron_jobs.action_run_job');
         $oMenuItem->sIcon = 'far fa-play-circle';
 
-        $sCallURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(array('pagedef' => 'runcrons', 'cronjobid' => $this->sId));
+        $sCallURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'runcrons', 'cronjobid' => $this->sId]);
 
-        $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".$sCallURL."',0,0,'".TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_cron_jobs.action_run_job_confirm'))."',true,true);";
+        $oMenuItem->sOnClick = "CreateModalIFrameDialogCloseButton('".$sCallURL."',0,0,'".TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_cron_jobs.action_run_job_confirm'))."',true,true);";
         $this->oMenuItems->AddItem($oMenuItem);
     }
 }

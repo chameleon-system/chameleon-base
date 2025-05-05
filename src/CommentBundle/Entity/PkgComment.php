@@ -3,35 +3,31 @@
 namespace ChameleonSystem\CommentBundle\Entity;
 
 use ChameleonSystem\ExtranetBundle\Entity\DataExtranetUser;
-use DateTime;
 
 class PkgComment
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldExtendedLookup
         /** @var PkgCommentType|null - Comment type */
-        private ?PkgCommentType $pkgCommentType = null
-        ,
+        private ?PkgCommentType $pkgCommentType = null,
         // TCMSFieldVarchar
         /** @var string - Object ID */
         private string $itemId = '',
         // TCMSFieldExtendedLookup
         /** @var DataExtranetUser|null - User */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Creation date */
-        private ?DateTime $createdTimestamp = null,
+        /** @var \DateTime|null - Creation date */
+        private ?\DateTime $createdTimestamp = null,
         // TCMSFieldText
         /** @var string - Comment text */
         private string $comment = '',
         // TCMSFieldExtendedLookup
         /** @var PkgComment|null - Comment feedback */
-        private ?PkgComment $pkgComment = null
-        ,
+        private ?PkgComment $pkgComment = null,
         // TCMSFieldBoolean
         /** @var bool - Comment has been deleted */
         private bool $markAsDeleted = false,
@@ -78,7 +74,6 @@ class PkgComment
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getItemId(): string
     {
@@ -91,7 +86,6 @@ class PkgComment
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookup
     public function getDataExtranetUser(): ?DataExtranetUser
@@ -106,20 +100,18 @@ class PkgComment
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getCreatedTimestamp(): ?DateTime
+    public function getCreatedTimestamp(): ?\DateTime
     {
         return $this->createdTimestamp;
     }
 
-    public function setCreatedTimestamp(?DateTime $createdTimestamp): self
+    public function setCreatedTimestamp(?\DateTime $createdTimestamp): self
     {
         $this->createdTimestamp = $createdTimestamp;
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getComment(): string
@@ -134,7 +126,6 @@ class PkgComment
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getPkgComment(): ?PkgComment
     {
@@ -147,7 +138,6 @@ class PkgComment
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isMarkAsDeleted(): bool
@@ -162,7 +152,6 @@ class PkgComment
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isMarkAsReported(): bool
     {
@@ -175,6 +164,4 @@ class PkgComment
 
         return $this;
     }
-
-
 }

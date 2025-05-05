@@ -24,13 +24,13 @@ class TCmsLanguage extends TCmsLanguageAutoParent
     {
         $activePageService = $this->getActivePageService();
 
-        return $activePageService->getLinkToActivePageAbsolute(array(
-        ), array(
+        return $activePageService->getLinkToActivePageAbsolute([
+        ], [
             'module_fnc' => 'pkgLanguage',
             'l',
             AuthenticityTokenManagerInterface::TOKEN_ID,
-        ),
-        $this);
+        ],
+            $this);
     }
 
     /**

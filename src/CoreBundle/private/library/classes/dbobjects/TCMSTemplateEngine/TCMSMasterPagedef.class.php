@@ -16,14 +16,14 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
      *
      * @var string
      */
-    public $templateName = null;
+    public $templateName;
 
     /**
      * a short text describing the layout to the user.
      *
      * @var string
      */
-    public $templateDescription = null;
+    public $templateDescription;
 
     /**
      * name of the layout to use (comes from the master pagedef).
@@ -31,14 +31,14 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
      *
      * @var string
      */
-    public $layoutTemplate = null;
+    public $layoutTemplate;
 
     /**
      * holds all spots that belong to the pagedef.
      *
      * @var TCMSMasterPagedefSpot[]
      */
-    protected $aSpots = null;
+    protected $aSpots;
     /**
      * the layout for that pagedef.
      *
@@ -90,7 +90,7 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
         $moduleList = $this->GetSpots();
 
         // now convert list to use the old spotname=>array('param'=>'val',...) format
-        $aModuleData = array();
+        $aModuleData = [];
         foreach ($moduleList as $sSpotName => $spot) {
             $aModuleData[$sSpotName] = $spot->GetParameters();
         }
@@ -109,7 +109,7 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
             return $this->aSpots;
         }
 
-        $aSpots = array();
+        $aSpots = [];
         $oSpots = $this->GetProperties('cms_master_pagedef_spot', 'TCMSMasterPagedefSpot');
         /**
          * @var TCMSMasterPagedefSpot $oSpot
@@ -122,7 +122,7 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
 
         // some methods access the content of $this->aSpots directly and modify it... to prevent a second call to a new pagedef from returning the modified content, we clone the cache
         // data and return it instead
-        $this->aSpots = array();
+        $this->aSpots = [];
         reset($aSpots);
         foreach ($aSpots as $sSpotIndex => $spot) {
             $this->aSpots[$sSpotIndex] = clone $spot;
@@ -150,7 +150,7 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
      */
     public function GetDynamicSpots()
     {
-        $aDynamicSpots = array();
+        $aDynamicSpots = [];
         $this->GetSpots();
         reset($this->aSpots);
         foreach ($this->aSpots as $sSpotName => $spot) {
@@ -170,7 +170,7 @@ class TCMSMasterPagedef extends TCMSMasterPagedefAutoParent
      */
     public function GetStaticSpots()
     {
-        $aStaticSpots = array();
+        $aStaticSpots = [];
         $this->GetSpots();
         reset($this->aSpots);
         foreach ($this->aSpots as $sSpotName => $spot) {

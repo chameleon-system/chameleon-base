@@ -16,7 +16,8 @@ final class BreadcrumbModule extends \MTPkgViewRendererAbstractModuleMapper
 
     /**
      * returns always false, because the Generators itself are providing
-     * a cache. therefore a cache in the module ist not needed
+     * a cache. therefore a cache in the module ist not needed.
+     *
      * @return false
      */
     public function _AllowCache()

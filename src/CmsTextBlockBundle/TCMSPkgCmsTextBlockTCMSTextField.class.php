@@ -18,7 +18,7 @@ class TCMSPkgCmsTextBlockTCMSTextField extends TCMSPkgCmsTextBlockTCMSTextFieldA
      * Replace CmsTextBlocks in String.
      *
      * @param string $sString
-     * @param int    $iWidth  - max image width
+     * @param int $iWidth - max image width
      *
      * @return string
      */

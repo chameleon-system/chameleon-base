@@ -31,10 +31,6 @@ class EntityListPager implements EntityListPagerInterface
         return $this->removeLimitFromQuery($query);
     }
 
-    /**
-     * @param string $query
-     * @return string
-     */
     private function removeLimitFromQuery(string $query): string
     {
         $normalizeQuery = $this->removeAllLineFeedsAndTabsFromQuery($query);
@@ -48,6 +44,6 @@ class EntityListPager implements EntityListPagerInterface
 
     private function removeAllLineFeedsAndTabsFromQuery(string $query): string
     {
-        return str_replace(array("\n", "\r", "\t"), ' ', $query);
+        return str_replace(["\n", "\r", "\t"], ' ', $query);
     }
 }

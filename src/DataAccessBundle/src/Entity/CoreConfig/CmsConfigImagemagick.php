@@ -6,12 +6,11 @@ class CmsConfigImagemagick
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsConfig|null - Configuration */
-        private ?CmsConfig $cmsConfig = null
-        ,
+        private ?CmsConfig $cmsConfig = null,
         // TCMSFieldNumber
         /** @var int - Is effective from this image size in pixel */
         private int $fromImageSize = 0,
@@ -67,7 +66,6 @@ class CmsConfigImagemagick
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getFromImageSize(): int
     {
@@ -80,7 +78,6 @@ class CmsConfigImagemagick
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isForceJpeg(): bool
@@ -95,7 +92,6 @@ class CmsConfigImagemagick
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getQuality(): int
     {
@@ -108,7 +104,6 @@ class CmsConfigImagemagick
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isScharpen(): bool
@@ -123,7 +118,6 @@ class CmsConfigImagemagick
         return $this;
     }
 
-
     // TCMSFieldDecimal
     public function getGamma(): string
     {
@@ -136,6 +130,4 @@ class CmsConfigImagemagick
 
         return $this;
     }
-
-
 }

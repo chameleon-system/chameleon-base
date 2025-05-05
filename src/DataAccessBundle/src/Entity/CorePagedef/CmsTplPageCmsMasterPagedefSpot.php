@@ -6,23 +6,20 @@ class CmsTplPageCmsMasterPagedefSpot
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Model */
         private string $model = '',
         // TCMSFieldLookupParentID
         /** @var CmsTplPage|null - Layout */
-        private ?CmsTplPage $cmsTplPage = null
-        ,
+        private ?CmsTplPage $cmsTplPage = null,
         // TCMSFieldLookupParentID
         /** @var CmsMasterPagedefSpot|null - Belongs to cms page template spot */
-        private ?CmsMasterPagedefSpot $cmsMasterPagedefSpot = null
-        ,
+        private ?CmsMasterPagedefSpot $cmsMasterPagedefSpot = null,
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Module view */
         private string $view = ''
@@ -66,7 +63,6 @@ class CmsTplPageCmsMasterPagedefSpot
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsTplPage(): ?CmsTplPage
     {
@@ -79,7 +75,6 @@ class CmsTplPageCmsMasterPagedefSpot
 
         return $this;
     }
-
 
     // TCMSFieldLookupParentID
     public function getCmsMasterPagedefSpot(): ?CmsMasterPagedefSpot
@@ -94,7 +89,6 @@ class CmsTplPageCmsMasterPagedefSpot
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsTplModuleInstance(): ?CmsTplModuleInstance
     {
@@ -108,7 +102,6 @@ class CmsTplPageCmsMasterPagedefSpot
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getView(): string
     {
@@ -121,6 +114,4 @@ class CmsTplPageCmsMasterPagedefSpot
 
         return $this;
     }
-
-
 }

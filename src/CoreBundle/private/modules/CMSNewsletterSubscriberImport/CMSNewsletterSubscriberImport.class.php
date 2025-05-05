@@ -16,7 +16,7 @@ use Doctrine\DBAL\Connection;
 
 class CMSNewsletterSubscriberImport extends TCMSModelBase
 {
-    const MESSAGE_MANAGER_CONSUMER = 'CMSNewsletterSubscriberImport';
+    public const MESSAGE_MANAGER_CONSUMER = 'CMSNewsletterSubscriberImport';
 
     /**
      * {@inheritdoc}
@@ -43,7 +43,7 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
         }
 
         $databaseConnection = $this->getDatabaseConnection();
-        $idListString = implode(',', array_map(array($databaseConnection, 'quote'), $aPortals));
+        $idListString = implode(',', array_map([$databaseConnection, 'quote'], $aPortals));
 
         $query = "SELECT `id`,`name` FROM `pkg_newsletter_group` WHERE `cms_portal_id` IN ($idListString) OR cms_portal_id = '' ORDER BY `name` ASC";
         $oPkgNewsletterGroupList = TdbPkgNewsletterGroupList::GetList($query);
@@ -56,13 +56,13 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
             $oMessageManager->addMessage($sConsumerName, $sMessageCode);
         }
 
-        $this->data['messages'] = $oMessageManager->renderMessages($sConsumerName, 'standard','Core');
+        $this->data['messages'] = $oMessageManager->renderMessages($sConsumerName, 'standard', 'Core');
     }
 
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('ParseFile');
+        $externalFunctions = ['ParseFile'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -104,8 +104,8 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
             // split file by finding right CR.
             $expr = "/\n(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/";
             $rows = preg_split($expr, trim($fileContent));
-            unset($fileContent); //Free up some memory
-            $aData = array();
+            unset($fileContent); // Free up some memory
+            $aData = [];
             foreach ($rows as $row) {
                 // find right semikolon
                 $expr = '/;(?=(?:[^"]*"[^"]*")*(?![^"]*"))/';
@@ -121,20 +121,20 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
 
             $iTableID = TTools::GetCMSTableId('pkg_newsletter_user');
             $oTableEditor = new TCMSTableEditorManager();
-            /** @var $oTableEditor TCMSTableEditorManager */
+            /* @var $oTableEditor TCMSTableEditorManager */
             if (isset($bReplaceAllSubscriber) && 'true' == $bReplaceAllSubscriber) {
                 $this->DeleteSubscriber($pkg_newsletter_group_id);
             }
 
-            $aListImported = array();
-            $aListUpdated = array();
-            $aListIgnored = array();
-            $aListErrorImport = array();
-            $aListErrorUpdate = array();
+            $aListImported = [];
+            $aListUpdated = [];
+            $aListIgnored = [];
+            $aListErrorImport = [];
+            $aListErrorUpdate = [];
 
             foreach ($aData as $key => $aDataSet) {
                 $errorOnCreatingNewsletterUser = false;
-                $aInsertData = array();
+                $aInsertData = [];
                 $aInsertData['from_import'] = '1';
                 $aInsertData['cms_portal_id'] = $sPortalId;
 
@@ -159,14 +159,14 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
               WHERE `email` = '".MySqlLegacySupport::getInstance()->real_escape_string($aInsertData['email'])."'
               AND `cms_portal_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($sPortalId)."'";
                         $checkResult = MySqlLegacySupport::getInstance()->query($checkQuery);
-                        $aNewsletterGroupList = array();
+                        $aNewsletterGroupList = [];
                         if (0 == MySqlLegacySupport::getInstance()->num_rows($checkResult)) { // email not yet in database so add it
                             // save new subscriber
                             $oTableEditor->Init($iTableID, null);
 
                             $aInsertData['signup_date'] = date('Y-m-d H:i:s');
                             if ('noGroup' != $pkg_newsletter_group_id) {
-                                $aNewsletterGroupList = array($pkg_newsletter_group_id);
+                                $aNewsletterGroupList = [$pkg_newsletter_group_id];
                             }
                             $newRecordData = $oTableEditor->Save($aInsertData);
                             if (false === $newRecordData) {
@@ -181,7 +181,7 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
                             $aInsertData['id'] = $subscriberRow['id'];
                             $oNewsletterGroupList = $oTableEditor->oTableEditor->oTable->GetFieldPkgNewsletterGroupList();
                             if ('noGroup' != $pkg_newsletter_group_id) {
-                                $aNewsletterGroupList = array($pkg_newsletter_group_id);
+                                $aNewsletterGroupList = [$pkg_newsletter_group_id];
                             }
                             while ($oNewsletterGroup = $oNewsletterGroupList->Next()) {
                                 if ($oNewsletterGroup->id != $pkg_newsletter_group_id) {
@@ -231,7 +231,7 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
      * Add the new newsletter group to the existing newsletter groups.
      *
      * @param array $aNewsletterGroupList
-     * @param array $aInsertData          was use for overwriting this function if you need to know imported for example email
+     * @param array $aInsertData was use for overwriting this function if you need to know imported for example email
      */
     protected function UpdateNewsletterGroups($oTableEditor, $aNewsletterGroupList, $aInsertData)
     {
@@ -269,8 +269,8 @@ class CMSNewsletterSubscriberImport extends TCMSModelBase
         // Frau = 1
         // Herr = 2
         $genderID = '';
-        $aGenderFemale = array('w', 'f', 'female', 'mrs', 'mrs.', 'frau');
-        $aGenderMale = array('m', 'male', 'mr', 'mr.', 'herr');
+        $aGenderFemale = ['w', 'f', 'female', 'mrs', 'mrs.', 'frau'];
+        $aGenderMale = ['m', 'male', 'mr', 'mr.', 'herr'];
         if (in_array($sGender, $aGenderFemale)) {
             $genderID = '1';
         } elseif (in_array($sGender, $aGenderMale)) {

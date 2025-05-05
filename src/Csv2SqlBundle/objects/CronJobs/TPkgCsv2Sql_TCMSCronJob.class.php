@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * install this job if you want to run the csv imports via cron job.
-/**/
+ * /**/
 class TPkgCsv2Sql_TCMSCronJob extends TdbCmsCronjobs
 {
     /**

@@ -31,7 +31,7 @@ class AutoClassConfigurationDefinition
         return [
             'entry_class' => $this->entryClass,
             'exit_class' => $this->exitClass,
-            'class_list' => $this->classList
+            'class_list' => $this->classList,
         ];
     }
 }
