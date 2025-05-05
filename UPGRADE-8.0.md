@@ -8,7 +8,7 @@ It is recommended to follow these steps in the given order.
 
 ## Update Code Style in Your Project
 
-Make sure to run your code through `php-cs-fixer` or other code quality tools to ensure all your userland extensions are compatible with the updated framework code style.
+Make sure to run your code through `php-cs-fixer` to ensure all your userland extensions are compatible with the updated framework code style.
 
 This is important due to a change in how global classes are referenced in the latest Symfony code style rules (which we are now using).
 
