@@ -463,7 +463,7 @@ function RefreshRecordEditLock() {
 
 function CheckRefreshReturn(data) {
     if (typeof (data) == 'object' && data instanceof Array && data.length == 2) {
-        if (data[0] == 'logedoutajax') {
+        if (data[0] == 'loggedoutajax') {
             document.location.href = data[1]
         }
     }

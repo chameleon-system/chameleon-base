@@ -314,6 +314,7 @@
         <service id="chameleon_system_core.request_type" synthetic="true" />
 
         <service id="chameleon_system_core.security.backend_access_check" class="ChameleonSystem\CoreBundle\Security\BackendAccessCheck" public="true">
+            <argument type="service" id="router" />
             <argument type="service" id="chameleon_system_core.redirect" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="security.helper" />
