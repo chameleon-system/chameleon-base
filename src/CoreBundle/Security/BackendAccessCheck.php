@@ -143,7 +143,6 @@ class BackendAccessCheck
             true === ($user instanceof TwoFactorInterface)
             && true === $user->isGoogleAuthenticatorEnabled()
             && '' !== $user->getGoogleAuthenticatorSecret()
-
         ) {
             return true;
         }
