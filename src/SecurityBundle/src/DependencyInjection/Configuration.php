@@ -30,10 +30,10 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
             ->arrayNode('two_factor')
-                ->canBeEnabled()
+                ->addDefaultsIfNotSet()
                 ->children()
-                ->scalarNode('enabled')
-                    ->defaultValue(false)
+                ->booleanNode('enabled')
+                    ->defaultFalse()
                 ->end()
             ->end();
 

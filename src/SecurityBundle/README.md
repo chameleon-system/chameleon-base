@@ -1,19 +1,12 @@
 # 2FA Setup with Google Authenticator in Chameleon
 
-## Requirements
-
-- Symfony >= 6.x
-- `scheb/2fa-bundle`
-- `scheb/2fa-google-authenticator`
-- `endroid/qr-code`
-- A user model that implements `Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface`
-
 ---
 
-##  Installation
+##  Register
 
-```bash
-composer require scheb/2fa-bundle scheb/2fa-google-authenticator endroid/qr-code
+Register SchebTwoFactorBundle to your `app/AppKernel.php` file:
+```php
+new \Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
 ```
 
 ---
@@ -24,8 +17,6 @@ Edit your config file to implement 2fa with Google Authenticator. To activate or
 deactivate the 2fa, set `enabled` to `true` or `false`.
 
 ### `app/config/config.yml`
-
-To change the form, adjust the "template".
 
 ```yaml
 scheb_two_factor:
@@ -38,6 +29,8 @@ scheb_two_factor:
         digits: 6
         template: '@ChameleonSystemSecurity/cms/2fa/form.html.twig'
 ```
+
+To change the form of the 2fa authentication, adjust the "template".
 
 ## Usage
 
