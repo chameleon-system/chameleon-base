@@ -38,7 +38,7 @@ class TwoFactorService
 
     public function saveCmsUserAuthenticatorSecret(CmsUserModel $user): void
     {
-        $this->cmsUserDataAccess->setGoogleAuthenticatorSecret($user, $user->getGoogleAuthenticatorSecret());
+        $this->cmsUserDataAccess->setGoogleAuthenticatorSecret($user);
     }
 
     /**
@@ -69,7 +69,7 @@ class TwoFactorService
         return $this->googleAuthenticator->checkCode($user, $code);
     }
 
-    public function adjustSessionUser(CmsUserModel $user): void
+    public function setTwoFactorTokenForSessionUser(CmsUserModel $user): void
     {
         $preAuthToken = new UsernamePasswordToken(
             $user,

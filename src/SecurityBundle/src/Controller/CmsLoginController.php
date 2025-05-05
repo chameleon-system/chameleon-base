@@ -61,30 +61,42 @@ class CmsLoginController extends AbstractController
         }
 
         if (true === $request->isMethod('POST')) {
-            $code = $request->get('code');
-            $usedSecret = $request->get('secret');
-
-            $userWithSecret = $this->twoFactorService->cloneUserWithTwoFactorSecret($user, $usedSecret);
-            if (true === $this->twoFactorService->checkAuthorizationCode($userWithSecret, $code)) {
-                $this->twoFactorService->saveCmsUserAuthenticatorSecret($userWithSecret);
-                $this->twoFactorService->adjustSessionUser($userWithSecret);
-                $this->addFlash('success', 'Two-factor authentication successfully activated.');
-
-                return $this->redirectToRoute('cms_backend');
-            } else {
-                $this->addFlash('error', 'Invalid authentication code. Please try again.');
-            }
-        } else {
-            if ('' !== $user->getGoogleAuthenticatorSecret()) {
-                return $this->redirectToRoute('cms_login');
-            }
-
-            $userWithSecret = $this->twoFactorService->cloneUserWithTwoFactorSecret($user);
+            return $this->twoFactorSetupFormSubmission($request, $user);
         }
 
+        if ('' !== $user->getGoogleAuthenticatorSecret()) {
+            return $this->redirectToRoute('cms_login');
+        }
+
+        $userWithSecret = $this->twoFactorService->cloneUserWithTwoFactorSecret($user);
+
+        return $this->renderTwoFactorSetupForm($userWithSecret);
+    }
+
+    private function twoFactorSetupFormSubmission(Request $request, TwoFactorInterface $user): Response
+    {
+        $code = $request->get('code');
+        $usedSecret = $request->get('secret');
+
+        $userWithSecret = $this->twoFactorService->cloneUserWithTwoFactorSecret($user, $usedSecret);
+        if (true === $this->twoFactorService->checkAuthorizationCode($userWithSecret, $code)) {
+            $this->twoFactorService->saveCmsUserAuthenticatorSecret($userWithSecret);
+            $this->twoFactorService->setTwoFactorTokenForSessionUser($userWithSecret);
+            $this->addFlash('success', 'Two-factor authentication successfully activated.');
+
+            return $this->redirectToRoute('cms_backend');
+        }
+
+        $this->addFlash('error', 'Invalid authentication code. Please try again.');
+
+        return $this->renderTwoFactorSetupForm($userWithSecret);
+    }
+
+    private function renderTwoFactorSetupForm(TwoFactorInterface $user): Response
+    {
         return $this->render('@ChameleonSystemSecurity/cms/2fa/setup.html.twig', [
-            'qrCode' => $this->twoFactorService->generateQrCodeDataUri($userWithSecret),
-            'secret' => $userWithSecret->getGoogleAuthenticatorSecret(),
+            'qrCode' => $this->twoFactorService->generateQrCodeDataUri($user),
+            'secret' => $user->getGoogleAuthenticatorSecret(),
         ]);
     }
 
