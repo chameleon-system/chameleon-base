@@ -6,6 +6,37 @@ UPGRADE FROM 7.1 to 8.0
 The steps in this chapter are required to get the project up and running in version 8.0.
 It is recommended to follow these steps in the given order.
 
+## Update Code Style in Your Project
+
+Make sure to run your code through `php-cs-fixer` to ensure all your userland extensions are compatible with the updated framework code style.
+
+This is important due to a change in how global classes are referenced in the latest Symfony code style rules (which we are now using).
+
+Previously, we relied on PHP’s fallback mechanism to resolve global classes, for example:
+
+```php
+// NB: There is no "use \TShopBasket" statement in this file.
+public function getAvailableShippingTypes($groupId, $countryId, TShopBasket $basket)
+{
+  // ...
+}
+```
+
+PHP would first look for a class named `TShopBasket` in the current namespace. If it wasn't found (as expected), it would then check the global namespace.
+
+However, the new Symfony code style rules treat global classes more explicitly: they must now be prefixed with a backslash (`\`) to clearly indicate they belong to the global namespace:
+
+```php
+public function getAvailableShippingTypes($groupId, $countryId, \TShopBasket $basket)
+{
+  // ...
+}
+```
+
+Since all core repositories have been updated to follow this new style, your project code must adopt it as well to maintain compatibility.
+
+In short, this is a great opportunity to update the code style across your entire project.
+
 ## PHP Version
 
 Minimum required PHP version is 8.2. The recommended PHP version is 8.3.
