@@ -7,4 +7,4 @@ $oViewRender->AddSourceObject('sSpotName', $oExtranetConfig->fieldExtranetSpotNa
 $oViewRender->AddSourceObject('oObject', $oStep);
 $oViewRender->AddSourceObject('sWizardModuleModuleSpot', MTCMSWizardCore::URL_PARAM_MODULE_SPOT);
 $oViewRender->AddSourceObject('sCustomMSGConsumer', 'editProfilePassword');
-echo  $oViewRender->Render('/common/userInput/form/formUserProfilePassword.html.twig');
+echo $oViewRender->Render('/common/userInput/form/formUserProfilePassword.html.twig');

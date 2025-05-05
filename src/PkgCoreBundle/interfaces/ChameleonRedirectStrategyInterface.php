@@ -14,6 +14,7 @@ interface ChameleonRedirectStrategyInterface
     /**
      * @param string $url
      * @param int $status
+     *
      * @return never-returns
      */
     public function redirect($url, $status);

@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class CmsFontImage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -97,7 +96,6 @@ class CmsFontImage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getProfileName(): string
     {
@@ -110,7 +108,6 @@ class CmsFontImage
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getImgHeight(): int
@@ -125,7 +122,6 @@ class CmsFontImage
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getImgWidth(): int
     {
@@ -138,7 +134,6 @@ class CmsFontImage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getImgBackgroundColor(): string
@@ -153,7 +148,6 @@ class CmsFontImage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFontColor(): string
     {
@@ -166,7 +160,6 @@ class CmsFontImage
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getFontSize(): int
@@ -181,7 +174,6 @@ class CmsFontImage
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getFontWeight(): string
     {
@@ -194,7 +186,6 @@ class CmsFontImage
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getFontAlign(): string
@@ -209,7 +200,6 @@ class CmsFontImage
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getFontVerticalAlign(): string
     {
@@ -222,7 +212,6 @@ class CmsFontImage
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getFontFilename(): string
@@ -237,7 +226,6 @@ class CmsFontImage
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getImgType(): string
     {
@@ -250,7 +238,6 @@ class CmsFontImage
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isImgBackgroundImg(): bool
@@ -265,7 +252,6 @@ class CmsFontImage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getBackgroundImgFile(): string
     {
@@ -278,7 +264,6 @@ class CmsFontImage
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getTextPositionX(): int
@@ -293,7 +278,6 @@ class CmsFontImage
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getTextPositionY(): int
     {
@@ -306,6 +290,4 @@ class CmsFontImage
 
         return $this;
     }
-
-
 }

@@ -9,13 +9,12 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * lookup.
-/**/
+ * /**/
 class TCMSFieldLookupTransLang extends TCMSFieldLookup
 {
     public function GetOptions()
@@ -24,16 +23,16 @@ class TCMSFieldLookupTransLang extends TCMSFieldLookup
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
         $languages = $securityHelper->getUser()?->getAvailableEditLanguages();
         if (null === $languages) {
-            $languages = array();
+            $languages = [];
         }
 
         $languageList = implode(
             ', ',
-            array_map(fn(string $languageId) => $this->getDatabaseConnection()->quote($languageId),
+            array_map(fn (string $languageId) => $this->getDatabaseConnection()->quote($languageId),
                 array_keys($languages))
         );
 
-        $this->options = array();
+        $this->options = [];
         $tblName = mb_substr($this->name, 0, -3);
         $oTableConf = new TCMSTableConf();
         $oTableConf->LoadFromField('name', $tblName);

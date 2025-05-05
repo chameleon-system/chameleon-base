@@ -27,8 +27,8 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
             $oCmsTplModule = $oCmsTplModuleInstance->GetFieldCmsTplModule();
             if ($oCmsTplModule->fieldIsCopyAllowed) {
                 // copy module instance
-                $sNewName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_page_def_spot.after_copy_name', array('%name%' => $oCmsTplModuleInstance->GetName()));
-                $aFieldValueOverloading = array('name' => $sNewName);
+                $sNewName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_page_def_spot.after_copy_name', ['%name%' => $oCmsTplModuleInstance->GetName()]);
+                $aFieldValueOverloading = ['name' => $sNewName];
 
                 $oTableEditor->Init($iTableID, $oCmsTplModuleInstance->id);
                 $oRecordInfo = $oTableEditor->DatabaseCopy(false, $aFieldValueOverloading, $this->bIsCopyAllLanguageValues);
@@ -42,7 +42,7 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     /**
      * Get all records from given table connected with given module instance.
      *
-     * @param TdbCmsTblConf           $oModuleTableConf
+     * @param TdbCmsTblConf $oModuleTableConf
      * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
      *
      * @return TCMSRecordList $oModuleContentRecordList
@@ -62,13 +62,13 @@ class TCMSTableEditorTplPageCmsMasterPageDefSpot extends TCMSTableEditor
     /**
      * copies a record using data from database instead of post data.
      *
-     * @param bool  $bLanguageCopy
+     * @param bool $bLanguageCopy
      * @param array $aOverloadedFields fields to copy with given value
-     * @param bool  $bCopyAllLanguages Set to true if you want top copy alle language fields
+     * @param bool $bCopyAllLanguages Set to true if you want top copy alle language fields
      *
      * @return TCMSstdClass - object from GetObjectShortInfo() method with id, error messages etc
      */
-    public function DatabaseCopy($bLanguageCopy = false, $aOverloadedFields = array(), $bCopyAllLanguages = false)
+    public function DatabaseCopy($bLanguageCopy = false, $aOverloadedFields = [], $bCopyAllLanguages = false)
     {
         $this->LoadDataFromDatabase();
         $returnVal = null;

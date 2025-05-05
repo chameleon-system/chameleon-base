@@ -1,6 +1,6 @@
 <?php
 
-$aRow = array();
+$aRow = [];
 $iTotalWidth = 0;
 for ($i = 0; $i < $iMaxGroupCount; ++$i) {
     ++$iTotalWidth;

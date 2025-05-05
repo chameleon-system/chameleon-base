@@ -18,9 +18,9 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
     /**
      * @var array
      */
-    private $data = array();
+    private $data = [];
 
-    public function __construct(array $data = null)
+    public function __construct(?array $data = null)
     {
         if (null !== $data) {
             $this->addData($data);
@@ -31,8 +31,6 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
      * only unique entries will be kept. unique will be determine as follows:
      *   - if an entry in the array has a key, that will be used to ensure uniqueness.
      *   - if it does not, the md5 sum of the content will be used.
-     *
-     * @param array $data
      *
      * @return void
      */
@@ -63,7 +61,7 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
         if (!isset($this->data[$key])) {
             return false;
         }
-    
+
         unset($this->data[$key]);
 
         return true;
@@ -74,14 +72,13 @@ class HtmlIncludeEvent extends Event implements HtmlIncludeEventInterface
         if (!isset($this->data[$key])) {
             return false;
         }
-        
+
         $this->data[$key] = $value;
 
         return true;
     }
 
     /**
-     * @param mixed $value
      * @psalm-assert-if-true string $value
      */
     private function isInteger(mixed $value): bool

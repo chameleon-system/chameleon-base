@@ -26,7 +26,7 @@ class CollectRequestStateElementProvidersPass implements CompilerPassInterface
             $providerClass = $providerDefinition->getClass();
             $clearStateEvents = array_merge(
                 $clearStateEvents,
-                \call_user_func(array($providerClass, 'getResetStateEvents'))
+                \call_user_func([$providerClass, 'getResetStateEvents'])
             );
 
             $elementProviderServiceDefinitions[] = $providerDefinition;

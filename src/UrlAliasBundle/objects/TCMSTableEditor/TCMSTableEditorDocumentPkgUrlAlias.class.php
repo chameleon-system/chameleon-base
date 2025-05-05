@@ -14,9 +14,9 @@ class TCMSTableEditorDocumentPkgUrlAlias extends TCMSTableEditorDocumentPkgUrlAl
     /**
      * saves only one field of a record (like the edit-on-click WYSIWYG).
      *
-     * @param string $sFieldName           the field name to save to
-     * @param string $sFieldContent        the content to save
-     * @param bool   $bTriggerPostSaveHook - if set to true, the PostSaveHook method will be called at the end of the call
+     * @param string $sFieldName the field name to save to
+     * @param string $sFieldContent the content to save
+     * @param bool $bTriggerPostSaveHook - if set to true, the PostSaveHook method will be called at the end of the call
      *
      * @return TCMSstdClass
      */
@@ -57,10 +57,10 @@ class TCMSTableEditorDocumentPkgUrlAlias extends TCMSTableEditorDocumentPkgUrlAl
                     if ($oURLAlias->fieldTargetUrl == $sNewDownloadURL) { // looks like someone moved a download and then moved it back to the original directory, so delete the redirect
                         $oTableEditorURLAlias->Delete($oURLAlias->id);
                     } else {
-                        $aPostData = array();
+                        $aPostData = [];
                         $aPostData['id'] = $oURLAlias->id;
                         $aPostData['datecreated'] = date('Y-m-d H:i:s');
-                        $aPostData['expiration_date'] = date('Y-m-d H:i:s', (time() + 259200)); // redirect expires after 3 days
+                        $aPostData['expiration_date'] = date('Y-m-d H:i:s', time() + 259200); // redirect expires after 3 days
                         $aPostData['target_url'] = $sNewDownloadURL;
                         $oTableEditorURLAlias->Save($aPostData);
                     }
@@ -71,12 +71,12 @@ class TCMSTableEditorDocumentPkgUrlAlias extends TCMSTableEditorDocumentPkgUrlAl
                 $oTableEditorURLAlias = TTools::GetTableEditorManager('cms_url_alias');
                 $oTableEditorURLAlias->AllowEditByAll(true);
 
-                $aPostData = array();
+                $aPostData = [];
                 $aPostData['name'] = 'reordered download '.$sOldDownloadURL;
                 $aPostData['source_url'] = $sOldDownloadURL;
                 $aPostData['target_url'] = $sNewDownloadURL;
                 $aPostData['datecreated'] = date('Y-m-d H:i:s');
-                $aPostData['expiration_date'] = date('Y-m-d H:i:s', (time() + 259200)); // redirect expires after 3 days
+                $aPostData['expiration_date'] = date('Y-m-d H:i:s', time() + 259200); // redirect expires after 3 days
                 $aPostData['active'] = '1';
                 $aPostData['exact_match'] = '1';
 

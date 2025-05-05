@@ -11,14 +11,14 @@
 
 class TCMSFileList extends TIterator
 {
-    public $sDir = null;
+    public $sDir;
 
     /**
      * get file list for a dir and a file pattern.
      *
      * @param string $sDir
-     * @param string $sPattern         - regex
-     * @param bool   $bUseRegexPattern - set to false if you want a standard file mask as used in glob
+     * @param string $sPattern - regex
+     * @param bool $bUseRegexPattern - set to false if you want a standard file mask as used in glob
      *
      * @return TCMSFileList
      */
@@ -34,8 +34,8 @@ class TCMSFileList extends TIterator
      * load the files in the dir.
      *
      * @param string $sDir
-     * @param bool   $bUseRegexPattern - set to false if you want a standard file mask as used in glob
-     * @param string $sPattern         - regex
+     * @param bool $bUseRegexPattern - set to false if you want a standard file mask as used in glob
+     * @param string $sPattern - regex
      */
     public function Load($sDir, $sPattern = null, $bUseRegexPattern = true)
     {
@@ -76,7 +76,7 @@ class TCMSFileList extends TIterator
     protected function StringMatchesPattern($sString, $sPattern)
     {
         $bMatch = false;
-        $aMatches = array();
+        $aMatches = [];
         $iMatches = preg_match($sPattern, $sString, $aMatches);
         if ($iMatches > 0) {
             return $aMatches;
@@ -100,7 +100,7 @@ class TCMSFileList extends TIterator
      *
      * @return TCMSFile|false
      */
-    public function next():TCMSFile|bool
+    public function next(): TCMSFile|bool
     {
         return parent::Next();
     }

@@ -13,7 +13,7 @@
  * extends the standard listing so that a preview image is shown, and if the
  * class is called with the right parameters it will show an assign button to
  * assign an image from the list to the calling record.
-/**/
+ * /**/
 class TCMSListManagerMediaManager extends TCMSListManagerImagedatabase
 {
     /**
@@ -40,8 +40,8 @@ class TCMSListManagerMediaManager extends TCMSListManagerImagedatabase
     public function AddFields()
     {
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('id' => '#'), 'left', null, 1, false);
-        $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackMediaSelectBox'), null, 1);
+        $this->tableObj->AddHeaderField(['id' => '#'], 'left', null, 1, false);
+        $this->tableObj->AddColumn('id', 'left', [$this, 'CallBackMediaSelectBox'], null, 1);
         parent::AddFields();
     }
 

@@ -18,8 +18,7 @@ interface PostProcessorInterface
     /**
      * returns a modified version of $text based on the data in $userData.
      *
-     * @param string                  $text
-     * @param NewsletterUserDataModel $userData
+     * @param string $text
      *
      * @return string
      */

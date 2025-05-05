@@ -16,9 +16,8 @@ use ChameleonSystem\ViewRendererBundle\Service\ThemeService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use TdbCmsPortalList;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generates Css from Less for all portals and writes it into appropriate files.
@@ -50,9 +49,9 @@ class CompileLessCommand extends Command
     protected function configure()
     {
         $this
-            ->setDefinition(array(
+            ->setDefinition([
                 new InputOption('minify-css', '', InputOption::VALUE_NONE, 'Minify output css'),
-            ))
+            ])
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command compiles LESS for all portals:
 <info>php %command.full_name% --minify-css</info>
@@ -66,7 +65,7 @@ EOF
     {
         $output->writeln('Compiling less...');
 
-        $portalList = TdbCmsPortalList::GetList();
+        $portalList = \TdbCmsPortalList::GetList();
         $minifyCss = true === $input->getOption('minify-css');
         while ($portal = $portalList->Next()) {
             $this->themeService->setOverrideTheme($portal->GetFieldPkgCmsTheme());

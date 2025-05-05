@@ -8,12 +8,11 @@ class DataExtranetModuleMyAccount
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Headline */
         private string $headline = '',
@@ -60,7 +59,6 @@ class DataExtranetModuleMyAccount
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getHeadline(): string
     {
@@ -74,7 +72,6 @@ class DataExtranetModuleMyAccount
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getIntro(): string
     {
@@ -87,6 +84,4 @@ class DataExtranetModuleMyAccount
 
         return $this;
     }
-
-
 }

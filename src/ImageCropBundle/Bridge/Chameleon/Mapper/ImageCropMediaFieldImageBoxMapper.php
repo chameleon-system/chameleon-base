@@ -11,27 +11,21 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\CoreBundle\Interfaces\MediaManagerUrlGeneratorInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtil;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
-use TGlobal;
 
-class ImageCropMediaFieldImageBoxMapper extends AbstractViewMapper
+class ImageCropMediaFieldImageBoxMapper extends \AbstractViewMapper
 {
     public function __construct(
-        private readonly MediaManagerUrlGeneratorInterface|null $mediaManagerUrlGenerator,
+        private readonly ?MediaManagerUrlGeneratorInterface $mediaManagerUrlGenerator,
         private readonly InputFilterUtil $inputFilterUtil,
-    )
-    {
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('sFieldName', 'string');
         $oRequirements->NeedsSourceObject('iPosition', 'int');
@@ -41,9 +35,9 @@ class ImageCropMediaFieldImageBoxMapper extends AbstractViewMapper
      * {@inheritdoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         $fieldName = $oVisitor->GetSourceObject('sFieldName');
         $position = $oVisitor->GetSourceObject('iPosition');
@@ -52,19 +46,19 @@ class ImageCropMediaFieldImageBoxMapper extends AbstractViewMapper
         $url = $this->mediaManagerUrlGenerator->getUrlToPickImage('parent.setImageWithCrop', true);
         $js = "
             var width = $(window).width() - 50;
-            saveCMSRegistryEntry('_currentFieldName', '" . TGlobal::OutJS($fieldName) . "');
-            saveCMSRegistryEntry('_currentPosition', '" . TGlobal::OutJS($position) . "');
+            saveCMSRegistryEntry('_currentFieldName', '".\TGlobal::OutJS($fieldName)."');
+            saveCMSRegistryEntry('_currentPosition', '".\TGlobal::OutJS($position)."');
         ";
 
         if (null !== $parentField && '' !== $parentField && '' === $isInModal) {
-            $parentIFrame = $parentField . '_iframe';
-            $extensionUrl = '&parentIFrame=' . $parentIFrame;
-            $js .= "var url = '" . TGlobal::OutJS($url) . TGlobal::OutJS($extensionUrl) . "';
+            $parentIFrame = $parentField.'_iframe';
+            $extensionUrl = '&parentIFrame='.$parentIFrame;
+            $js .= "var url = '".\TGlobal::OutJS($url).\TGlobal::OutJS($extensionUrl)."';
                     url = url.replace('parent.setImageWithCrop', 'setImageWithCrop');
-                    saveCMSRegistryEntry('_parentIFrame','" . TGlobal::OutJS($parentIFrame) . "');
+                    saveCMSRegistryEntry('_parentIFrame','".\TGlobal::OutJS($parentIFrame)."');
                     parent.CreateModalIFrameDialogCloseButton(url,width,0);";
         } else {
-            $js .= "CreateModalIFrameDialogCloseButton('".TGlobal::OutJS($url)."',width,0);";
+            $js .= "CreateModalIFrameDialogCloseButton('".\TGlobal::OutJS($url)."',width,0);";
         }
 
         $oVisitor->SetMappedValue('sOpenWindowJSSetImage', $js);

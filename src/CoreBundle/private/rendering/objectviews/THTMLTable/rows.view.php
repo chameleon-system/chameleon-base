@@ -24,7 +24,7 @@ while ($oRow = $oRecordList->Next()) {
     echo "<tr class=\"{$sRowStyle} rownum{$iRowCount} ".$oHTMLTable->GetRowCSSForItem($oRow).'">';
     if ($bShowActionCheckbox) {
         ?>
-    <th class="actionColumn"><input type="checkbox" name="aSelectedFiles[]" value="<?=TGlobal::OutHTML($oRow->id); ?>"/>
+    <th class="actionColumn"><input type="checkbox" name="aSelectedFiles[]" value="<?php echo TGlobal::OutHTML($oRow->id); ?>"/>
     </th><?php
     }
     $oColumns->GoToStart();

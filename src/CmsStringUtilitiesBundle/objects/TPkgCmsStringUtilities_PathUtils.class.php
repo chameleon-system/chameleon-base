@@ -85,7 +85,7 @@ class TPkgCmsStringUtilities_PathUtils
 
         array_shift($documentrootSegments);
 
-        $pathstack = array();
+        $pathstack = [];
         foreach ($pathsegments as $segment) {
             if ('..' === $segment) {
                 if (0 === count($pathstack)) {

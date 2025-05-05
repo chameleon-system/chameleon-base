@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\CoreMedia;
 
-
 class CmsMediaTree
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Directoy name */
@@ -17,8 +16,7 @@ class CmsMediaTree
         private string $pathCache = '',
         // TCMSFieldLookup
         /** @var CmsMediaTree|null - Is subitem of */
-        private ?CmsMediaTree $parent = null
-        ,
+        private ?CmsMediaTree $parent = null,
         // TCMSFieldNumber
         /** @var int - Position */
         private int $entrySort = 0
@@ -62,7 +60,6 @@ class CmsMediaTree
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getPathCache(): string
     {
@@ -75,7 +72,6 @@ class CmsMediaTree
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getParent(): ?CmsMediaTree
@@ -90,7 +86,6 @@ class CmsMediaTree
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getEntrySort(): int
     {
@@ -103,6 +98,4 @@ class CmsMediaTree
 
         return $this;
     }
-
-
 }

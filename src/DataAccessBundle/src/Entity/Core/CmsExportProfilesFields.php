@@ -6,12 +6,11 @@ class CmsExportProfilesFields
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsExportProfiles|null - Belongs to profile */
-        private ?CmsExportProfiles $cmsExportProfiles = null
-        ,
+        private ?CmsExportProfiles $cmsExportProfiles = null,
         // TCMSFieldTablefieldnameExport
         /** @var string - Field from table */
         private string $fieldname = '',
@@ -61,7 +60,6 @@ class CmsExportProfilesFields
         return $this;
     }
 
-
     // TCMSFieldTablefieldnameExport
     public function getFieldname(): string
     {
@@ -74,7 +72,6 @@ class CmsExportProfilesFields
 
         return $this;
     }
-
 
     // TCMSFieldPosition
     public function getSortOrder(): int
@@ -89,7 +86,6 @@ class CmsExportProfilesFields
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getHtmlTemplate(): string
     {
@@ -102,6 +98,4 @@ class CmsExportProfilesFields
 
         return $this;
     }
-
-
 }

@@ -15,16 +15,16 @@ class MarkdownCmsLinkParser implements MarkdownCmsLinkParserInterface
         private readonly PageServiceInterface $pageService,
     ) {
     }
-    
+
     public function replaceCmsLinksInMarkdown(string $markdownText): string
     {
         return \preg_replace_callback(
             '/\[([^\]]+)\]\(([^)|]+\|[^)]+)\)/',
-            array($this, 'replaceCmsLinks'),
+            [$this, 'replaceCmsLinks'],
             $markdownText
         );
     }
-    
+
     private function replaceCmsLinks(array $matches): string
     {
         $title = \trim($matches[1]);
@@ -40,11 +40,11 @@ class MarkdownCmsLinkParser implements MarkdownCmsLinkParserInterface
         }
 
         $target = '';
-        if ($table === 'cms_document') {
+        if ('cms_document' === $table) {
             $target = '{target=_blank}';
         }
 
-        return '[' . $title . '](' . $url . ')' . $target;
+        return '['.$title.']('.$url.')'.$target;
     }
 
     private function getLinkForType(string $table, string $recordId): string
@@ -68,12 +68,11 @@ class MarkdownCmsLinkParser implements MarkdownCmsLinkParserInterface
                 }
                 break;
             case 'cms_document':
-                $document = \TdbCmsDocument::GetNewInstance(); 
+                $document = \TdbCmsDocument::GetNewInstance();
                 if (false !== $document->Load($recordId)) {
                     $url = $document->GetPlainDownloadLink();
                 }
                 break;
-                
         }
 
         return $url;
@@ -81,7 +80,7 @@ class MarkdownCmsLinkParser implements MarkdownCmsLinkParserInterface
 
     private function getNotFoundPageUrl(): string
     {
-        if ($this->notFoundPageUrl === null) {
+        if (null === $this->notFoundPageUrl) {
             $portal = $this->portalDomainService->getActivePortal();
 
             if (null === $portal) {

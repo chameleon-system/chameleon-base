@@ -44,9 +44,6 @@ class ClassFromTableFieldProviderTest extends TestCase
 
     /**
      * @dataProvider provideDataForTestGetFieldClassNameFromTableField
-     *
-     * @param string      $tableField
-     * @param string|null $expectedClassName
      */
     public function testGetFieldClassNameFromTableField(string $tableField, ?string $expectedClassName): void
     {
@@ -75,8 +72,6 @@ class ClassFromTableFieldProviderTest extends TestCase
 
     /**
      * @dataProvider provideDataForTestGetFieldClassNameFromTableFieldInvalidArguments
-     *
-     * @param string $tableField
      */
     public function testGetFieldClassNameFromTableFieldInvalidArguments(string $tableField): void
     {
@@ -99,9 +94,6 @@ class ClassFromTableFieldProviderTest extends TestCase
 
     /**
      * @dataProvider getDataForTestGetDictionaryFromTableField
-     *
-     * @param string     $tableField
-     * @param array|null $expectedDictionary
      */
     public function testGetDictionaryFromTableField(string $tableField, ?array $expectedDictionary): void
     {

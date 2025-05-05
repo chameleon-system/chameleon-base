@@ -96,7 +96,7 @@ class TCMSFieldTime extends TCMSFieldNumber
         $html = $this->_GetHiddenField();
 
         $translator = $this->getTranslator();
-        $html .= TGlobal::OutHTML($aFields[0].':'.$aFields[1].':'.$aFields[2].' '.$translator->trans('chameleon_system_core.field.time_format', array(), 'admin'));
+        $html .= TGlobal::OutHTML($aFields[0].':'.$aFields[1].':'.$aFields[2].' '.$translator->trans('chameleon_system_core.field.time_format', [], 'admin'));
 
         return $html;
     }
@@ -176,6 +176,6 @@ class TCMSFieldTime extends TCMSFieldNumber
      */
     private function getTranslator()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
     }
 }

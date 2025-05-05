@@ -11,17 +11,16 @@
 
 namespace ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\MapCoordinates;
 
-use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
-use MTPkgViewRendererAbstractModuleMapper;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 
-
-class MapCoordinates extends MTPkgViewRendererAbstractModuleMapper
+class MapCoordinates extends \MTPkgViewRendererAbstractModuleMapper
 {
     public function __construct(
         private readonly InputFilterUtilInterface $inputFilterUtil
     ) {
     }
+
     /**
      * {@inheritdoc}
      */
@@ -39,6 +38,7 @@ class MapCoordinates extends MTPkgViewRendererAbstractModuleMapper
             $visitor->SetMappedValue('showGeocodingAttribution', false);
         }
     }
+
     /**
      * {@inheritdoc}
      */

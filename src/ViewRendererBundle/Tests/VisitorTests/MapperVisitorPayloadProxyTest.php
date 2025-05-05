@@ -17,7 +17,7 @@ class MapperVisitorPayloadProxyTest extends TestCase
     {
         $oRequirement = new MapperRequirements();
         $oRequirement->NeedsSourceObject('bar', 'string');
-        $aSource = array('bar' => 'foo');
+        $aSource = ['bar' => 'foo'];
         $oVisitor = new MapperVisitor($aSource);
         $oVisitor->SetCurrentRequirements($oRequirement);
         $oRestrictedProxy = new MapperVisitorPayloadProxy($oVisitor);
@@ -28,7 +28,7 @@ class MapperVisitorPayloadProxyTest extends TestCase
     {
         $oRequirement = new MapperRequirements();
         $oRequirement->NeedsSourceObject('bar', 'string');
-        $aSource = array('bar' => 'foo');
+        $aSource = ['bar' => 'foo'];
         $oVisitor = new MapperVisitor($aSource);
         $oVisitor->SetCurrentRequirements($oRequirement);
         $oRestrictedProxy = new MapperVisitorPayloadProxy($oVisitor);

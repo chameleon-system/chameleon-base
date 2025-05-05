@@ -29,20 +29,20 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
     /**
      * @var TdbPkgNewsletterUser|null
      */
-    protected $oNewsletterSignup = null;
+    protected $oNewsletterSignup;
 
     /**
      * @var bool
      */
     protected $bAllowHTMLDivWrapping = true;
 
-    const INPUT_DATA_NAME = 'aPkgNewsletter';
-    const NEWSLETTEROPTINSEND = 'sNewsletterOptInSend';
+    public const INPUT_DATA_NAME = 'aPkgNewsletter';
+    public const NEWSLETTEROPTINSEND = 'sNewsletterOptInSend';
 
     /**
      * @var TdbPkgNewsletterModuleSignupConfig
      */
-    private $oModuleConfig = null;
+    private $oModuleConfig;
 
     /**
      * set to true if you want a user to be able to sign up with an email that does not match the mail of the extranet user.
@@ -220,7 +220,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
         // validate data...
         $aRequiredFields = $this->getRequiredFields();
         if (!is_array($this->oNewsletterSignup->sqlData)) {
-            $this->oNewsletterSignup->sqlData = array();
+            $this->oNewsletterSignup->sqlData = [];
         }
 
         foreach ($aRequiredFields as $sFieldName) {
@@ -265,7 +265,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
         $oNewsletterConfig = $this->GetConfig();
         $bContinue = $this->ValidateInput();
         $oMsgManager = TCMSMessageManager::GetInstance();
-        $aData = array();
+        $aData = [];
         $bSaveConfirmations = false;
         if ($bContinue) {
             $oGlobal = TGlobal::instance();
@@ -338,11 +338,12 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
 
     /**
      * @param array $aNewsletterList
+     *
      * @return string[]
      */
     protected function TransformInputNewsletterList($aNewsletterList)
     {
-        $aNewNewsletterList = array();
+        $aNewNewsletterList = [];
         if (array_key_exists('all', $aNewsletterList)) {
             $oActivePortal = $this->getPortalDomainService()->getActivePortal();
             if (null === $oActivePortal) {
@@ -350,7 +351,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
             } else {
                 $oNewsletterGroupList = TdbPkgNewsletterGroupList::GetListForCmsPortalId($oActivePortal->id);
             }
-            $aNewsletterList = array();
+            $aNewsletterList = [];
             while ($oNewsletterGroup = $oNewsletterGroupList->Next()) {
                 $aNewsletterList[$oNewsletterGroup->id] = '1';
             }
@@ -367,7 +368,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
      */
     protected function getCacheManager()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
     }
 
     /**
@@ -380,11 +381,11 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
     protected function GetMainModuleInfo($sModuleInstanceId)
     {
         $oConfig = $this->GetConfig();
-        $aKey = array('class' => __CLASS__, 'method' => 'GetMainModuleInfo', 'sModuleInstanceId' => $sModuleInstanceId, 'sActivePageId' => '', 'instanceID' => $this->instanceID, 'sModuleSpotName' => $this->sModuleSpotName, 'sModuleConfigId' => $oConfig->id);
+        $aKey = ['class' => __CLASS__, 'method' => 'GetMainModuleInfo', 'sModuleInstanceId' => $sModuleInstanceId, 'sActivePageId' => '', 'instanceID' => $this->instanceID, 'sModuleSpotName' => $this->sModuleSpotName, 'sModuleConfigId' => $oConfig->id];
         $sKey = $this->getCacheManager()->getKey($aKey);
         $aReturnArray = $this->getCacheManager()->get($sKey);
         if (null === $aReturnArray) {
-            $aReturnArray = array();
+            $aReturnArray = [];
             if (!empty($this->instanceID) && $this->instanceID == $oConfig->fieldCmsTplModuleInstanceId) {
                 $aReturnArray['spotname'] = $this->sModuleSpotName;
                 $aReturnArray['URL'] = preg_replace(
@@ -435,7 +436,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
                     }
                 }
             }
-            $aTrigger = array(array('table' => 'cms_tpl_page_cms_master_pagedef_spot', 'id' => null), array('table' => 'cms_tpl_page', 'id' => null), array('table' => $oConfig->table, 'id' => $oConfig->id), array('table' => 'cms_tpl_module_instance', 'id' => null));
+            $aTrigger = [['table' => 'cms_tpl_page_cms_master_pagedef_spot', 'id' => null], ['table' => 'cms_tpl_page', 'id' => null], ['table' => $oConfig->table, 'id' => $oConfig->id], ['table' => 'cms_tpl_module_instance', 'id' => null]];
             $this->getCacheManager()->set($sKey, $aReturnArray, $aTrigger);
         }
 
@@ -489,7 +490,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -497,7 +498,7 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
      */
     private function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
     }
 
     /**
@@ -505,6 +506,6 @@ class MTPkgNewsletterSignupCoreEndPoint extends TUserCustomModelBase
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

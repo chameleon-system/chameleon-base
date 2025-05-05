@@ -27,25 +27,20 @@ class TMapper_ViewPortSwitch extends AbstractViewMapper
      */
     private $translator;
 
-    /**
-     * @param ActivePageServiceInterface $activePageService
-     * @param TCMSViewPortManager        $viewPortManager
-     * @param TranslatorInterface        $translator
-     */
-    public function __construct(ActivePageServiceInterface $activePageService = null, TCMSViewPortManager $viewPortManager = null, TranslatorInterface $translator = null)
+    public function __construct(?ActivePageServiceInterface $activePageService = null, ?TCMSViewPortManager $viewPortManager = null, ?TranslatorInterface $translator = null)
     {
         if (null === $activePageService) {
-            $this->activePageService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+            $this->activePageService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
         } else {
             $this->activePageService = $activePageService;
         }
         if (null === $viewPortManager) {
-            $this->viewPortManager = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.view_port_manager');
+            $this->viewPortManager = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.view_port_manager');
         } else {
             $this->viewPortManager = $viewPortManager;
         }
         if (null === $translator) {
-            $this->translator = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
+            $this->translator = ChameleonSystem\CoreBundle\ServiceLocator::get('translator');
         } else {
             $this->translator = $translator;
         }
@@ -74,10 +69,10 @@ class TMapper_ViewPortSwitch extends AbstractViewMapper
         $oActivePage = $oVisitor->GetSourceObject('oActivePAge');
         if (true === $this->viewPortManager->isDesktopViewPort()) {
             $sLinkText = $this->translator->trans('chameleon_system_core.mobile.mobile_version');
-            $sLinkURL = $oActivePage->GetRealURL(array('showDesktopMode' => false));
+            $sLinkURL = $oActivePage->GetRealURL(['showDesktopMode' => false]);
         } else {
             $sLinkText = $this->translator->trans('chameleon_system_core.mobile.desktop_version');
-            $sLinkURL = $oActivePage->GetRealURL(array('showDesktopMode' => true));
+            $sLinkURL = $oActivePage->GetRealURL(['showDesktopMode' => true]);
             $oVisitor->SetMappedValue('additionalCssClasses', 'hidden-sm hidden-md hidden-lg');
         }
         $oVisitor->SetMappedValue('sTitle', $sLinkText);

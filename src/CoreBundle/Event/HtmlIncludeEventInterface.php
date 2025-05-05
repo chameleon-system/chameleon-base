@@ -18,8 +18,6 @@ interface HtmlIncludeEventInterface
      *   - if an entry in the array has a key, that will be used to ensure uniqueness.
      *   - if it does not, the md5 sum of the content will be used.
      *
-     * @param array $data
-     *
      * @return void
      */
     public function addData(array $data);

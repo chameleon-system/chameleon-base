@@ -16,7 +16,7 @@ class TCMSTableEditorTag extends TCMSTableEditor
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      */
     protected function PostSaveHook($oFields, $oPostTable)
@@ -31,6 +31,6 @@ class TCMSTableEditorTag extends TCMSTableEditor
      */
     private function getUrlNormalizationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url_normalization');
     }
 }

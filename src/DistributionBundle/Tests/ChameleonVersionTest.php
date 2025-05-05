@@ -20,7 +20,7 @@ class ChameleonVersionTest extends TestCase
     /**
      * @test
      */
-    public function it_knows_its_version_and_name()
+    public function itKnowsItsVersionAndName()
     {
         $version = new ChameleonVersion('foo', '1.0.0');
         $this->assertEquals('1.0.0', $version->getPrettyVersion());
@@ -30,24 +30,24 @@ class ChameleonVersionTest extends TestCase
     /**
      * @test
      */
-    public function it_can_decide_if_it_is_a_dev_version()
+    public function itCanDecideIfItIsADevVersion()
     {
-        $devVersions = array(
+        $devVersions = [
             '6.0.x-dev',
             'dev-master',
             'dev-maintenance/1.0',
-        );
+        ];
 
         foreach ($devVersions as $devVersion) {
             $version = new ChameleonVersion('foo', $devVersion);
             $this->assertTrue($version->isDev());
         }
 
-        $stableVersions = array(
+        $stableVersions = [
             '6.0.x',
             '1.0.0',
             '5.0.3',
-        );
+        ];
 
         foreach ($stableVersions as $stableVersion) {
             $version = new ChameleonVersion('foo', $stableVersion);
@@ -58,16 +58,16 @@ class ChameleonVersionTest extends TestCase
     /**
      * @test
      */
-    public function it_finds_mismatches()
+    public function itFindsMismatches()
     {
-        $candidates = array(
-            array('1.0.0', '1.0.0', MatchLevel::$MATCH_SAME, array()),
-            array('1.0.0', '2.0.0', MatchLevel::$MATCH_LEVEL_2, array(MatchLevel::$MISSMATCH_TYPE_MAYOR_DIFF)),
-            array('1.0.0', '1.1.0', MatchLevel::$MATCH_LEVEL_1, array(MatchLevel::$MISSMATCH_TYPE_MINOR_DIFF)),
-            array('1.0.0-dev', '1.0.0', MatchLevel::$MATCH_LEVEL_2, array(MatchLevel::$MISSMATCH_TYPE_DEV_STABLE)),
-            array('1.0.0-dev', '1.1.0', MatchLevel::$MATCH_LEVEL_2, array(MatchLevel::$MISSMATCH_TYPE_DEV_STABLE, MatchLevel::$MISSMATCH_TYPE_MINOR_DIFF)),
-            array('1.0.0-dev', '2.0.0', MatchLevel::$MATCH_LEVEL_2, array(MatchLevel::$MISSMATCH_TYPE_DEV_STABLE, MatchLevel::$MISSMATCH_TYPE_MAYOR_DIFF)),
-        );
+        $candidates = [
+            ['1.0.0', '1.0.0', MatchLevel::$MATCH_SAME, []],
+            ['1.0.0', '2.0.0', MatchLevel::$MATCH_LEVEL_2, [MatchLevel::$MISSMATCH_TYPE_MAYOR_DIFF]],
+            ['1.0.0', '1.1.0', MatchLevel::$MATCH_LEVEL_1, [MatchLevel::$MISSMATCH_TYPE_MINOR_DIFF]],
+            ['1.0.0-dev', '1.0.0', MatchLevel::$MATCH_LEVEL_2, [MatchLevel::$MISSMATCH_TYPE_DEV_STABLE]],
+            ['1.0.0-dev', '1.1.0', MatchLevel::$MATCH_LEVEL_2, [MatchLevel::$MISSMATCH_TYPE_DEV_STABLE, MatchLevel::$MISSMATCH_TYPE_MINOR_DIFF]],
+            ['1.0.0-dev', '2.0.0', MatchLevel::$MATCH_LEVEL_2, [MatchLevel::$MISSMATCH_TYPE_DEV_STABLE, MatchLevel::$MISSMATCH_TYPE_MAYOR_DIFF]],
+        ];
 
         foreach ($candidates as $candidate) {
             $version1 = new ChameleonVersion('project1', $candidate[0]);

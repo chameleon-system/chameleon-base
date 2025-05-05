@@ -23,13 +23,10 @@ class HtmlIncludeEventTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderAddData
      *
-     * @param $initialData
-     * @param $newData
-     * @param $expectedData
+     * @dataProvider dataProviderAddData
      */
-    public function it_should_add_unique_content($initialData, $newData, $expectedData)
+    public function itShouldAddUniqueContent($initialData, $newData, $expectedData)
     {
         $this->given_we_have_an_event_with_the_following_data($initialData);
         $this->when_we_call_addData_with($newData);
@@ -38,28 +35,28 @@ class HtmlIncludeEventTest extends TestCase
 
     public function dataProviderAddData()
     {
-        return array(
-            array(
-                array(), // $initialData
-                array('foo' => 'bar', 'foobar'), // $newData
-                array('foo' => 'bar', md5('foobar') => 'foobar'), // $expectedData
-            ),
-            array(
-                array('barz' => 'foo'), // $initialData
-                array('foo' => 'bar', 'foobar'), // $newData
-                array('barz' => 'foo', 'foo' => 'bar', md5('foobar') => 'foobar'), // $expectedData
-            ),
-            array(
-                array('barz' => 'foo'), // $initialData
-                array('barz' => 'foo2', 'foo' => 'bar', 'foobar'), // $newData
-                array('barz' => 'foo', 'foo' => 'bar', md5('foobar') => 'foobar'), // $expectedData
-            ),
-            array(
-                array('barz' => 'foo', 'foobar'), // $initialData
-                array('barz' => 'foo2', 'foo' => 'bar', 'foobar'), // $newData
-                array('barz' => 'foo', 'foo' => 'bar', md5('foobar') => 'foobar'), // $expectedData
-            ),
-        );
+        return [
+            [
+                [], // $initialData
+                ['foo' => 'bar', 'foobar'], // $newData
+                ['foo' => 'bar', md5('foobar') => 'foobar'], // $expectedData
+            ],
+            [
+                ['barz' => 'foo'], // $initialData
+                ['foo' => 'bar', 'foobar'], // $newData
+                ['barz' => 'foo', 'foo' => 'bar', md5('foobar') => 'foobar'], // $expectedData
+            ],
+            [
+                ['barz' => 'foo'], // $initialData
+                ['barz' => 'foo2', 'foo' => 'bar', 'foobar'], // $newData
+                ['barz' => 'foo', 'foo' => 'bar', md5('foobar') => 'foobar'], // $expectedData
+            ],
+            [
+                ['barz' => 'foo', 'foobar'], // $initialData
+                ['barz' => 'foo2', 'foo' => 'bar', 'foobar'], // $newData
+                ['barz' => 'foo', 'foo' => 'bar', md5('foobar') => 'foobar'], // $expectedData
+            ],
+        ];
     }
 
     private function given_we_have_an_event_with_the_following_data($initialData)

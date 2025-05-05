@@ -11,7 +11,7 @@
 
 /**
  * ;.
-/**/
+ * /**/
 class TPkgCommentList extends TPkgCommentListAutoParent
 {
     /**
@@ -28,8 +28,6 @@ class TPkgCommentList extends TPkgCommentListAutoParent
      * factory returning an element for the list - return a child of that class (if the fields class, class_subtype and class_type have been set).
      *
      * @param array $aData
-     *
-     * @return TdbPkgComment
      */
     protected function _NewElement($aData): TdbPkgComment
     {

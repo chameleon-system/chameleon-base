@@ -26,7 +26,7 @@ if ($oUserAddresses->Length() > 0) {
     }
 
     // since we need to use the render select form method we need to collect the data for the address in an array
-    $aAddressData = array();
+    $aAddressData = [];
     $aAddressData['new'] = 'Neue Adresse anlegen';
     $oUserAddresses->GoToStart();
     while ($oAddress = $oUserAddresses->Next()) {
@@ -40,7 +40,7 @@ if ($oUserAddresses->Length() > 0) {
     }
     $sChangeEvent = 'onchange="SetSelectedAddress(this.options[this.selectedIndex].value,\''.TGlobal::OutHTML($sAddressName).'\')"';
 
-    echo TTemplateTools::SelectField($sFullFieldName, $aAddressData, 200, $iSelected, array($sChangeEvent)); ?>
+    echo TTemplateTools::SelectField($sFullFieldName, $aAddressData, 200, $iSelected, [$sChangeEvent]); ?>
 
 <?php
 }

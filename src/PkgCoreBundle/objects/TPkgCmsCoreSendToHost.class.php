@@ -197,7 +197,6 @@ class TPkgCmsCoreSendToHost
 
     /**
      * @param string $key
-     * @param mixed $val
      *
      * @return void
      */
@@ -416,9 +415,6 @@ class TPkgCmsCoreSendToHost
 
     /**
      * @param string $key
-     * @param mixed $default
-     *
-     * @return mixed
      */
     private function getConfigVar($key, $default = null)
     {

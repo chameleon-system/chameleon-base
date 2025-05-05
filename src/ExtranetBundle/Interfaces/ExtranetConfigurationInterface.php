@@ -13,16 +13,16 @@ namespace ChameleonSystem\ExtranetBundle\Interfaces;
 
 interface ExtranetConfigurationInterface
 {
-    const PAGE_LOGIN = 1;
-    const PAGE_LOGIN_SUCCESS = 2;
-    const PAGE_MY_ACCOUNT = 3;
-    const PAGE_REGISTER = 4;
-    const PAGE_CONFIRM_REGISTRATION = 5;
-    const PAGE_FORGOT_PASSWORD = 6;
-    const PAGE_ACCESS_DENIED_NOT_LOGGED_IN = 7;
-    const PAGE_ACCESS_DENIED_INVALID_PERMISSIONS = 8;
-    const PAGE_POST_LOGOUT = 9;
-    const PAGE_LOGOUT = 10;
+    public const PAGE_LOGIN = 1;
+    public const PAGE_LOGIN_SUCCESS = 2;
+    public const PAGE_MY_ACCOUNT = 3;
+    public const PAGE_REGISTER = 4;
+    public const PAGE_CONFIRM_REGISTRATION = 5;
+    public const PAGE_FORGOT_PASSWORD = 6;
+    public const PAGE_ACCESS_DENIED_NOT_LOGGED_IN = 7;
+    public const PAGE_ACCESS_DENIED_INVALID_PERMISSIONS = 8;
+    public const PAGE_POST_LOGOUT = 9;
+    public const PAGE_LOGOUT = 10;
 
     /**
      * @return string

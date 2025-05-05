@@ -15,14 +15,14 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 
 /**
  * picks a node from a tree. stores the tree id AND the generated path in a hidden field.
-/**/
+ * /**/
 class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
 {
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parts = parent::getDoctrineDataModelParts($namespace, $tableNamespaceMapping);
 
-        $pathFieldName = $this->name . '_path';
+        $pathFieldName = $this->name.'_path';
 
         $parameters = [
             'source' => get_class($this),
@@ -32,8 +32,8 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
             'propertyName' => $this->snakeToCamelCase($pathFieldName),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($pathFieldName),
-            'setterName' => 'set'. $this->snakeToPascalCase($pathFieldName),
+            'getterName' => 'get'.$this->snakeToPascalCase($pathFieldName),
+            'setterName' => 'set'.$this->snakeToPascalCase($pathFieldName),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -56,13 +56,12 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
         ));
     }
 
-
     /**
      * changes an existing field definition (alter table).
      *
      * @param string $sOldName
      * @param string $sNewName
-     * @param array  $postData
+     * @param array $postData
      */
     public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
     {
@@ -72,7 +71,7 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
                      CHANGE `'.MySqlLegacySupport::getInstance()->real_escape_string($sOldName).'_path`
                             `'.MySqlLegacySupport::getInstance()->real_escape_string($sNewName).'_path` TEXT NOT NULL';
         MySqlLegacySupport::getInstance()->query($query);
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
 
         TCMSLogChange::WriteTransaction($aQuery);
     }
@@ -98,14 +97,14 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
             $editLanguageIsoCode = $this->getBackendSession()->getCurrentEditLanguageIso6391();
             $migrationQueryData = new MigrationQueryData($this->sTableName, $editLanguageIsoCode);
             $migrationQueryData
-                ->setFields(array(
+                ->setFields([
                     $this->name.'_path' => $sPath,
-                ))
-                ->setWhereEquals(array(
+                ])
+                ->setWhereEquals([
                     'id' => $this->oTableRow->id,
-                ))
+                ])
             ;
-            $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE));
+            $aQuery = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE)];
             TCMSLogChange::WriteTransaction($aQuery);
         }
     }
@@ -133,7 +132,7 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
                        DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name.'_path').'` ';
 
         MySqlLegacySupport::getInstance()->query($query);
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -146,7 +145,7 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
                        DROP `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name.'_path').'` ';
 
         MySqlLegacySupport::getInstance()->query($query);
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
@@ -157,7 +156,7 @@ class TCMSFieldTreeNodeAndPath extends TCMSFieldTreeNode
     {
         $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
                         ADD `'.MySqlLegacySupport::getInstance()->real_escape_string($this->name).'_path` TEXT NOT NULL';
-        $aQuery = array(new LogChangeDataModel($query));
+        $aQuery = [new LogChangeDataModel($query)];
 
         TCMSLogChange::WriteTransaction($aQuery);
         MySqlLegacySupport::getInstance()->query($query);

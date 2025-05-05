@@ -11,7 +11,7 @@
 
 /**
  * You can create an overview map and add it to a google v3 map.
-/**/
+ * /**/
 class TGoogleOverviewMap
 {
     /**
@@ -64,7 +64,7 @@ class TGoogleOverviewMap
      *
      * @var TGoogleMap|null
      */
-    public $oGoogleMap = null;
+    public $oGoogleMap;
 
     /**
      * Renders the javascript for overview map.

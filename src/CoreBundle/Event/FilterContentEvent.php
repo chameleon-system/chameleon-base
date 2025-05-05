@@ -34,5 +34,4 @@ final class FilterContentEvent extends Event
     {
         $this->content = $content;
     }
-
 }

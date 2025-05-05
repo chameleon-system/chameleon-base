@@ -110,7 +110,7 @@ class cmsCoreRedirect implements ICmsCoreRedirect
             return;
         }
 
-        $redirectResponse = new \Symfony\Component\HttpFoundation\RedirectResponse($exception->getUrl());
+        $redirectResponse = new Symfony\Component\HttpFoundation\RedirectResponse($exception->getUrl());
         $redirectResponse->setStatusCode($exception->getStatus());
         $event->setResponse($redirectResponse);
     }

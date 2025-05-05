@@ -140,6 +140,7 @@ class MediaManagerListRequest
      * @FIXME `$this->sortColumn` is annotated as `SortColumnInterface|null` and `MediaItemDataAccess::getOrderBy()` uses it
      *         as such. But `MediaManagerListRequestFactory` fills it with `string|null` from `MediaManagerListState` which
      *         in turn is set to a string directly from the request in `MediaManagerListStateFromRequestService`.
+     *
      * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      *
      * @return string|null

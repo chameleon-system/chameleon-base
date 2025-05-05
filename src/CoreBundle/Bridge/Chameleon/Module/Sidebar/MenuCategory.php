@@ -31,9 +31,6 @@ class MenuCategory
     private $menuItems;
 
     /**
-     * @param string     $id
-     * @param string     $name
-     * @param string     $iconFontCssClass
      * @param MenuItem[] $menuItems
      */
     public function __construct(string $id, string $name, string $iconFontCssClass, array $menuItems)

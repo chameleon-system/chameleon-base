@@ -31,7 +31,7 @@ function gcf_CMSUserWithImage($name, $row, $fieldName)
     }
 
     if ('' !== $row['firstname']) {
-        $name .= ', ' . $row['firstname'];
+        $name .= ', '.$row['firstname'];
     }
 
     $returnVal = "{$imageTag}".TGlobal::OutHTML($name);

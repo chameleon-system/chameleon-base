@@ -74,9 +74,6 @@ class AddCookieConsentIncludesListener
      * @param string $buttonBgColor
      * @param string $buttonTextColor
      * @param string $privacyPolicySystemPageName
-     * @param RequestInfoServiceInterface $requestInfoService
-     * @param Environment $twig
-     * @param SystemPageServiceInterface $systemPageService
      */
     public function __construct(
         $position,
@@ -101,13 +98,11 @@ class AddCookieConsentIncludesListener
     }
 
     /**
-     * @param HtmlIncludeEventInterface $event
+     * @return void
      *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     *
-     * @return void
      */
     public function onGlobalHtmlHeaderInclude(HtmlIncludeEventInterface $event)
     {
@@ -120,13 +115,11 @@ class AddCookieConsentIncludesListener
     }
 
     /**
-     * @param HtmlIncludeEventInterface $event
+     * @return void
      *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     *
-     * @return void
      */
     public function onGlobalHtmlFooterInclude(HtmlIncludeEventInterface $event)
     {

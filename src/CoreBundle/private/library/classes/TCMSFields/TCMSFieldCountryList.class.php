@@ -11,7 +11,7 @@
 
 /**
  * a country selector.
-/**/
+ * /**/
 class TCMSFieldCountryList extends TCMSFieldLookup
 {
     public function GetOptions()

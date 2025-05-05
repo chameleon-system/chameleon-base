@@ -17,7 +17,6 @@ class DataModelParts
 
     public function merge(DataModelParts $additional): DataModelParts
     {
-
         $liveCycleCallbacks = $this->liveCycleCallbacks;
         foreach ($additional->liveCycleCallbacks as $event => $methods) {
             $newListOfMethods = $this->liveCycleCallbacks[$event] ?? [];
@@ -36,56 +35,33 @@ class DataModelParts
         );
     }
 
-    /**
-     * @return string
-     */
     public function getMappingXml(): string
     {
         return $this->mappingXml;
     }
 
-    /**
-     * @return array
-     */
     public function getLiveCycleCallbacks(): array
     {
         return $this->liveCycleCallbacks;
     }
 
-
-    /**
-     * @return string
-     */
     public function getProperty(): string
     {
         return $this->property;
     }
 
-    /**
-     * @return string
-     */
     public function getMethods(): string
     {
         return $this->methods;
     }
 
-    /**
-     * @return array
-     */
     public function getClassImports(): array
     {
         return $this->classImports;
     }
 
-
-
-    /**
-     * @return bool
-     */
     public function hasDefaultValue(): bool
     {
         return $this->defaultValue;
     }
-
-
 }

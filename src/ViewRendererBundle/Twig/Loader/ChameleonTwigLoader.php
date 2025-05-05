@@ -11,13 +11,12 @@
 
 namespace ChameleonSystem\ViewRendererBundle\Twig\Loader;
 
-use TPkgViewRendererSnippetDirectoryInterface;
 use Twig\Loader\FilesystemLoader;
 
 class ChameleonTwigLoader extends FilesystemLoader
 {
     /**
-     * @var TPkgViewRendererSnippetDirectoryInterface
+     * @var \TPkgViewRendererSnippetDirectoryInterface
      */
     private $snippetDirectory;
 
@@ -26,7 +25,7 @@ class ChameleonTwigLoader extends FilesystemLoader
      */
     private $initialized = false;
 
-    public function __construct(TPkgViewRendererSnippetDirectoryInterface $snippetDirectory)
+    public function __construct(\TPkgViewRendererSnippetDirectoryInterface $snippetDirectory)
     {
         $this->snippetDirectory = $snippetDirectory;
         parent::__construct();
@@ -47,7 +46,8 @@ class ChameleonTwigLoader extends FilesystemLoader
     /**
      * @param string $name
      * @param bool $throwException
-     * @return string|null|false
+     *
+     * @return string|false|null
      */
     protected function findTemplate($name, $throwException = true)
     {

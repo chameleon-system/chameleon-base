@@ -6,15 +6,14 @@ class CmsTblDisplayListFields
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Field name */
         private string $title = '',
         // TCMSFieldLookupParentID
         /** @var CmsTblConf|null - Belongs to table */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldVarchar
         /** @var string - Database field name */
         private string $name = '',
@@ -85,7 +84,6 @@ class CmsTblDisplayListFields
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsTblConf(): ?CmsTblConf
     {
@@ -98,7 +96,6 @@ class CmsTblDisplayListFields
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -113,7 +110,6 @@ class CmsTblDisplayListFields
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCmsTranslationFieldName(): string
     {
@@ -126,7 +122,6 @@ class CmsTblDisplayListFields
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getDbAlias(): string
@@ -141,7 +136,6 @@ class CmsTblDisplayListFields
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -154,7 +148,6 @@ class CmsTblDisplayListFields
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getWidth(): int
@@ -169,7 +162,6 @@ class CmsTblDisplayListFields
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getAlign(): string
     {
@@ -182,7 +174,6 @@ class CmsTblDisplayListFields
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getCallbackFnc(): string
@@ -197,7 +188,6 @@ class CmsTblDisplayListFields
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isUseCallback(): bool
     {
@@ -210,7 +200,6 @@ class CmsTblDisplayListFields
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isShowInList(): bool
@@ -225,7 +214,6 @@ class CmsTblDisplayListFields
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowInSort(): bool
     {
@@ -238,6 +226,4 @@ class CmsTblDisplayListFields
 
         return $this;
     }
-
-
 }

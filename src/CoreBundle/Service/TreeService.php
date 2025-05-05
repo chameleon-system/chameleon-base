@@ -14,9 +14,6 @@ namespace ChameleonSystem\CoreBundle\Service;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTreeInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use TdbCmsLanguage;
-use TdbCmsTree;
-use TIterator;
 
 class TreeService implements TreeServiceInterface
 {
@@ -33,11 +30,6 @@ class TreeService implements TreeServiceInterface
      */
     private $urlUtil;
 
-    /**
-     * @param PageServiceInterface       $pageService
-     * @param DataAccessCmsTreeInterface $dataAccess
-     * @param UrlUtil                    $urlUtil
-     */
     public function __construct(PageServiceInterface $pageService, DataAccessCmsTreeInterface $dataAccess, UrlUtil $urlUtil)
     {
         $this->pageService = $pageService;
@@ -64,21 +56,21 @@ class TreeService implements TreeServiceInterface
     public function getChildren($treeId, $includeHidden = false, $languageId = null)
     {
         /**
-         * @var TdbCmsTree[] $treeList
+         * @var \TdbCmsTree[] $treeList
          */
         $treeList = $this->dataAccess->loadAll($languageId);
-        $children = array();
+        $children = [];
         foreach ($treeList as $tree) {
             if ($treeId === $tree->fieldParentId && ($includeHidden || false === $tree->fieldHidden)) {
                 $children[] = $tree;
             }
         }
 
-        /**
+        /*
          * @psalm-suppress InvalidArgument
          * @FIXME returning `null` from a sorting method is not allowed, should probably return `0`.
          */
-        usort($children, function (TdbCmsTree $a, TdbCmsTree $b) {
+        usort($children, function (\TdbCmsTree $a, \TdbCmsTree $b) {
             if ($a->fieldEntrySort === $b->fieldEntrySort) {
                 return null;
             }
@@ -86,7 +78,7 @@ class TreeService implements TreeServiceInterface
             return ($a->fieldEntrySort < $b->fieldEntrySort) ? -1 : 1;
         });
 
-        $iterator = new TIterator();
+        $iterator = new \TIterator();
         foreach ($children as $child) {
             $iterator->AddItem($child);
         }
@@ -98,7 +90,7 @@ class TreeService implements TreeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToPageForTreeRelative(TdbCmsTree $tree, array $parameters = array(), TdbCmsLanguage $language = null)
+    public function getLinkToPageForTreeRelative(\TdbCmsTree $tree, array $parameters = [], ?\TdbCmsLanguage $language = null)
     {
         if (!empty($tree->fieldLink)) {
             $url = $this->urlUtil->encodeUrlParts($tree->fieldLink);
@@ -120,7 +112,7 @@ class TreeService implements TreeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToPageForTreeAbsolute(TdbCmsTree $tree, array $parameters = array(), TdbCmsLanguage $language = null, $forceSecure = false)
+    public function getLinkToPageForTreeAbsolute(\TdbCmsTree $tree, array $parameters = [], ?\TdbCmsLanguage $language = null, $forceSecure = false)
     {
         if (!empty($tree->fieldLink)) {
             return $this->urlUtil->encodeUrlParts($tree->fieldLink);

@@ -74,14 +74,10 @@ class TransformOutgoingMailTargetsServiceTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderTransformation
      *
-     * @param $inputMail
-     * @param $targetMail
-     * @param $whiteList
-     * @param $expected
+     * @dataProvider dataProviderTransformation
      */
-    public function it_should_transform_mails($inputMail, $targetMail, $whiteList, array $domainList, $expected)
+    public function itShouldTransformMails($inputMail, $targetMail, $whiteList, array $domainList, $expected)
     {
         $this->given_a_target_mail($targetMail);
         $this->given_a_white_list($whiteList);
@@ -93,17 +89,14 @@ class TransformOutgoingMailTargetsServiceTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProviderSubjects
      *
-     * @param $subject
-     * @param $prefix
-     * @param $expectedSubject
+     * @dataProvider dataProviderSubjects
      */
-    public function it_should_transform_the_subject($subject, $prefix, $expectedSubject)
+    public function itShouldTransformTheSubject($subject, $prefix, $expectedSubject)
     {
         $this->given_a_target_mail('');
         $this->given_a_white_list('');
-        $this->given_that_the_active_portal_has_the_following_domains(array());
+        $this->given_that_the_active_portal_has_the_following_domains([]);
         $this->given_a_subject_prefix($prefix);
         $this->given_an_instance_of_the_service();
         $this->when_we_call_transformSubject_with($subject);
@@ -146,96 +139,96 @@ class TransformOutgoingMailTargetsServiceTest extends TestCase
 
     public function dataProviderTransformation()
     {
-        return array(
+        return [
             // not white listed
-            array(
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 '', // $whiteList
-                array(), // array $domainList
+                [], // array $domainList
                 'debug@esono.de', // $expected
-            ),
-            array(
+            ],
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 'foo@bar.de', // $whiteList
-                array(), // array $domainList
+                [], // array $domainList
                 'debug@esono.de', // $expected
-            ),
-            array(
+            ],
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 'foo@bar.de;bar@esono.de', // $whiteList
-                array(), // array $domainList
+                [], // array $domainList
                 'debug@esono.de', // $expected
-            ),
-            array(
+            ],
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 '@PORTAL-DOMAINS', // $whiteList
-                array('foo.de', 'www.bar.de'), // array $domainList
+                ['foo.de', 'www.bar.de'], // array $domainList
                 'debug@esono.de', // $expected
-            ),
-            array(
+            ],
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 '@somedomain.de', // $whiteList
-                array('foo.de', 'www.bar.de'), // array $domainList
+                ['foo.de', 'www.bar.de'], // array $domainList
                 'debug@esono.de', // $expected
-            ),
-            array(
+            ],
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 '@swww.omedomain.de', // $whiteList
-                array('foo.de', 'www.bar.de'), // array $domainList
+                ['foo.de', 'www.bar.de'], // array $domainList
                 'debug@esono.de', // $expected
-            ),
+            ],
 
             // direct white list
-            array(
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 'test@esono.de', // $whiteList
-                array(), // array $domainList
+                [], // array $domainList
                 'test@esono.de', // $expected
-            ),
+            ],
 
             // via domain exact match
-            array(
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 '@esono.de', // $whiteList
-                array(), // array $domainList
+                [], // array $domainList
                 'test@esono.de', // $expected
-            ),
+            ],
 
             // via portal domain
-            array(
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 '@esono.de', // $whiteList
-                array(), // array $domainList
+                [], // array $domainList
                 'test@esono.de', // $expected
-            ),
+            ],
 
             // via portal domain with www
 
-            array(
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 '@PORTAL-DOMAINS', // $whiteList
-                array('esono.de', 'bar.de'), // array $domainList
+                ['esono.de', 'bar.de'], // array $domainList
                 'test@esono.de', // $expected
-            ),
+            ],
 
-            array(
+            [
                 'test@esono.de', // inputMail
                 'debug@esono.de', // $targetMail
                 '@PORTAL-DOMAINS', // $whiteList
-                array('www.esono.de', 'bar.de'), // array $domainList
+                ['www.esono.de', 'bar.de'], // array $domainList
                 'test@esono.de', // $expected
-            ),
-        );
+            ],
+        ];
     }
 
     private function given_a_subject_prefix($prefix)
@@ -256,17 +249,17 @@ class TransformOutgoingMailTargetsServiceTest extends TestCase
 
     public function dataProviderSubjects()
     {
-        return array(
-            array(
+        return [
+            [
                 'test', // subject,
                 null, // prefix,
                 'test', // expected,
-            ),
-            array(
+            ],
+            [
                 'test', // subject,
                 'foo', // prefix,
                 'footest', // expected,
-            ),
-        );
+            ],
+        ];
     }
 }

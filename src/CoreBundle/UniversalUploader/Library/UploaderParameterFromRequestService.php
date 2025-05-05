@@ -95,11 +95,11 @@ class UploaderParameterFromRequestService implements UploaderParameterServiceInt
         $parentIsInModal = $this->inputFilterUtil->getFilteredInput('parentIsInModal', '');
 
         if (null !== $callback) {
-           if (null !== $parentIFrame && '' !== $parentIFrame && '' === $parentIsInModal) {
-               $parameters->setUploadSuccessCallback("$(parent.document.getElementById('".$parentIFrame."')).prop('contentWindow').".$callback);
-           } else {
-               $parameters->setUploadSuccessCallback('parent.'.$callback);
-           }
+            if (null !== $parentIFrame && '' !== $parentIFrame && '' === $parentIsInModal) {
+                $parameters->setUploadSuccessCallback("$(parent.document.getElementById('".$parentIFrame."')).prop('contentWindow').".$callback);
+            } else {
+                $parameters->setUploadSuccessCallback('parent.'.$callback);
+            }
         }
 
         $singleMode = $this->inputFilterUtil->getFilteredInput('singleMode');

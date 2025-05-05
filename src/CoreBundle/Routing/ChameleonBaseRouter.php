@@ -14,7 +14,6 @@ namespace ChameleonSystem\CoreBundle\Routing;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -32,12 +31,11 @@ abstract class ChameleonBaseRouter extends Router
 
     /**
      * {@inheritdoc}
-     * @param mixed $resource
      */
-    public function __construct(ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null)
+    public function __construct(ContainerInterface $container, $resource, array $options = [], ?RequestContext $context = null)
     {
         parent::__construct($container, $resource, $options, $context);
-        /**
+        /*
          * @psalm-suppress InvalidPropertyAssignmentValue - We know that this is a string in this instance.
          */
         $this->environment = $container->getParameter('kernel.environment');
@@ -49,7 +47,6 @@ abstract class ChameleonBaseRouter extends Router
     }
 
     abstract protected function generateCacheDirPath(string $baseCacheDir): string;
-
 
     /**
      * {@inheritdoc}
@@ -79,8 +76,8 @@ abstract class ChameleonBaseRouter extends Router
         }
         $d = dir($currentDir);
         while (false !== ($entry = $d->read())) {
-            $fullName = sprintf('%s%s%s',$currentDir, DIRECTORY_SEPARATOR, $entry);
-            if ($entry === '.' || $entry === '..' || is_dir($fullName)) {
+            $fullName = sprintf('%s%s%s', $currentDir, DIRECTORY_SEPARATOR, $entry);
+            if ('.' === $entry || '..' === $entry || is_dir($fullName)) {
                 continue;
             }
             unlink($fullName);

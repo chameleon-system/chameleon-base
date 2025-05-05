@@ -26,14 +26,14 @@ class MTGlobalListCore extends TUserCustomModelBase
      *
      * @var TCMSRecordList
      */
-    protected $oItemList = null;
+    protected $oItemList;
 
     /**
      * active item.
      *
      * @var TCMSRecord
      */
-    protected $oItem = null;
+    protected $oItem;
 
     /**
      * current page count.
@@ -47,14 +47,14 @@ class MTGlobalListCore extends TUserCustomModelBase
      *
      * @var TCMSPage
      */
-    protected $oPage = null;
+    protected $oPage;
 
     /**
      * active language ID.
      *
      * @var int
      */
-    protected $languageID = null;
+    protected $languageID;
 
     /**
      * URL parameter to set current page.
@@ -168,14 +168,14 @@ class MTGlobalListCore extends TUserCustomModelBase
         $this->data['sNextPageLink'] = $sNextPageLink;
         $this->data['sPreviousPageLink'] = $sPreviousPageLink;
 
-        $this->aPaging = array();
+        $this->aPaging = [];
         $iNumberOfPages = 0;
         if (!is_null($this->oItemList)) {
             $iNumberOfPages = ceil($this->oItemList->Length() / $this->GetPageSize());
         }
         $activePageService = $this->getActivePageService();
         for ($iPage = 0; $iPage < $iNumberOfPages; ++$iPage) {
-            $this->aPaging[$iPage] = $activePageService->getLinkToActivePageRelative(array($this->ipageURLParam => $iPage));
+            $this->aPaging[$iPage] = $activePageService->getLinkToActivePageRelative([$this->ipageURLParam => $iPage]);
         }
     }
 
@@ -188,7 +188,7 @@ class MTGlobalListCore extends TUserCustomModelBase
     {
         $aLink = false;
         if (!is_null($this->oItem)) {
-            $aLink = array('link' => $this->oItem->sDetailLink, 'name' => $this->oItem->GetName());
+            $aLink = ['link' => $this->oItem->sDetailLink, 'name' => $this->oItem->GetName()];
         }
 
         return $aLink;
@@ -311,7 +311,7 @@ class MTGlobalListCore extends TUserCustomModelBase
      */
     public function GetHtmlHeadIncludes()
     {
-        $aIncludes = array();
+        $aIncludes = [];
         $aIncludes[] = '<link href="'.TGlobal::GetStaticURLToWebLib().'/web_modules/MTGlobalListCore/css/MTGlobalListCore.css" rel="stylesheet" type="text/css" />';
 
         // load optional custm css from /chameleon/web_modules/ directory
@@ -389,7 +389,7 @@ class MTGlobalListCore extends TUserCustomModelBase
      */
     public function _GetCacheTableInfos()
     {
-        return array(array('table' => $this->GetTableName(), 'id' => ''));
+        return [['table' => $this->GetTableName(), 'id' => '']];
     }
 
     private function getActivePageService(): ActivePageServiceInterface

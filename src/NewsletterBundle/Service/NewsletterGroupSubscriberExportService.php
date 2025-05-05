@@ -1,8 +1,8 @@
 <?php
+
 namespace ChameleonSystem\NewsletterBundle\Service;
 
 use Doctrine\DBAL\Connection;
-use TdbPkgNewsletterGroup;
 
 class NewsletterGroupSubscriberExportService
 {
@@ -13,7 +13,7 @@ class NewsletterGroupSubscriberExportService
 
     public function exportSubscriberAsCsv(string $newsletterGroupId): array
     {
-        $newsletterGroup = TdbPkgNewsletterGroup ::GetNewInstance();
+        $newsletterGroup = \TdbPkgNewsletterGroup::GetNewInstance();
         if (false === $newsletterGroup->Load($newsletterGroupId)) {
             return [];
         }
@@ -37,13 +37,13 @@ class NewsletterGroupSubscriberExportService
           LEFT JOIN `data_extranet_salutation` ON (`pkg_newsletter_user`.`data_extranet_salutation_id` = `data_extranet_salutation`.`id`)
           LEFT JOIN `pkg_newsletter_user_pkg_newsletter_group_mlt` ON (`pkg_newsletter_user_pkg_newsletter_group_mlt`.`source_id` = `pkg_newsletter_user`.`id`)
               WHERE `pkg_newsletter_user`.`optin` = '1'
-                AND `pkg_newsletter_user_pkg_newsletter_group_mlt`.`target_id` = ".$this->connection->quote($newsletterGroupId).";
-           ";
+                AND `pkg_newsletter_user_pkg_newsletter_group_mlt`.`target_id` = ".$this->connection->quote($newsletterGroupId).';
+           ';
 
         $newsletterSubscriberList = \TdbPkgNewsletterUserList::GetList($query);
         while ($newsletterSubscriber = $newsletterSubscriberList->Next()) {
             $subscriberListItem = [];
-            foreach($exportFields as $field) {
+            foreach ($exportFields as $field) {
                 if (isset($newsletterSubscriber->sqlData[$field])) {
                     $subscriberListItem[$field] = $newsletterSubscriber->sqlData[$field];
                 }
@@ -53,7 +53,7 @@ class NewsletterGroupSubscriberExportService
         }
 
         return $subscriberList;
-    }#
+    }
 
     protected function getSubscriberByExtranetGroupIds(array $extranetGroupIds): array
     {
@@ -69,13 +69,13 @@ class NewsletterGroupSubscriberExportService
               LEFT JOIN `data_extranet_user` ON (`pkg_newsletter_user`.`data_extranet_user_id` = `data_extranet_user`.`id`)
               LEFT JOIN `data_extranet_user_data_extranet_group_mlt` ON (`data_extranet_user_data_extranet_group_mlt`.`source_id` = `data_extranet_user`.`id`)                   
                   WHERE `pkg_newsletter_user`.`optin` = '1'
-                    AND `data_extranet_user_data_extranet_group_mlt`.`target_id` = ".$this->connection->quote($extranetGroupId).";
-               ";
+                    AND `data_extranet_user_data_extranet_group_mlt`.`target_id` = ".$this->connection->quote($extranetGroupId).';
+               ';
 
             $newsletterSubscriberList = \TdbPkgNewsletterUserList::GetList($query);
             while ($newsletterSubscriber = $newsletterSubscriberList->Next()) {
                 $subscriberListItem = [];
-                foreach($exportFields as $field) {
+                foreach ($exportFields as $field) {
                     if (isset($newsletterSubscriber->sqlData[$field])) {
                         $subscriberListItem[$field] = $newsletterSubscriber->sqlData[$field];
                     }
@@ -95,7 +95,7 @@ class NewsletterGroupSubscriberExportService
             'firstname',
             'lastname',
             'email',
-            'signup_date'
+            'signup_date',
         ];
     }
 }

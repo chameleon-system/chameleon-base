@@ -16,17 +16,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * class TGroupTable is used to display a flexible table with, and without data groupings.
-/**/
+ * /**/
 class TGroupTable
 {
-    use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+    use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 
     /**
      * TGroupTableStyle (see class definition to view available styles).
      *
      * @var TGroupTableStyle
      */
-    public $style = null;
+    public $style;
 
     /**
      * js function name to execute on an onClick event
@@ -34,21 +34,21 @@ class TGroupTable
      *
      * @var mixed - string or null by default
      */
-    public $onClick = null;
+    public $onClick;
 
     /**
      * array of TGroupTableField (in order of display).
      *
      * @var TGroupTableField[]
      */
-    public $columnList = array();
+    public $columnList = [];
 
     /**
      * TGroupTableField to group by.
      *
      * @var TGroupTableField|null
      */
-    public $groupByCell = null;
+    public $groupByCell;
 
     /**
      * sql string used to get results for table.
@@ -62,7 +62,7 @@ class TGroupTable
      *
      * @var array
      */
-    public $orderList = array();
+    public $orderList = [];
 
     /**
      * indicates whether the sql has a WHERE condition (default = false).
@@ -118,7 +118,7 @@ class TGroupTable
      *
      * @var string - null by default
      */
-    public $sTableName = null;
+    public $sTableName;
 
     /**
      * the full generated SQL query without GROUP BY.
@@ -140,7 +140,7 @@ class TGroupTable
      *
      * @var array - null by default
      */
-    public $rowCallback = null;
+    public $rowCallback;
 
     /**
      * you may fill this via $this->table->SetCustomOrderString($sMyOrderString);
@@ -149,9 +149,9 @@ class TGroupTable
      *
      * @var string - null by default
      */
-    protected $sCustomOrderString = null;
+    protected $sCustomOrderString;
 
-    private $languageId = null;
+    private $languageId;
 
     public function __construct()
     {
@@ -170,12 +170,12 @@ class TGroupTable
     /**
      * set the group by cell.
      *
-     * @param string $name         - database name of the column,  name may be a string, or an array. if it is an array it should be of the form 'name'=>'full_name'
-     * @param string $align        - horizontal alignment to use in the cell
-     * @param mixed  $format       - null by default or a callback function to use for the column (the function will get 2 parameters, the value, and the row. The string returned by the function will be displayed in the cell)
-     * @param mixed  $linkField    - array or null by default, array of dbfield names whoes value will be passed to the javascript function defined by $this->onClick
-     * @param int    $colSpan      - the colSpan parameter of the cell
-     * @param mixed  $selectFormat - string or null by default
+     * @param string $name - database name of the column,  name may be a string, or an array. if it is an array it should be of the form 'name'=>'full_name'
+     * @param string $align - horizontal alignment to use in the cell
+     * @param mixed $format - null by default or a callback function to use for the column (the function will get 2 parameters, the value, and the row. The string returned by the function will be displayed in the cell)
+     * @param mixed $linkField - array or null by default, array of dbfield names whoes value will be passed to the javascript function defined by $this->onClick
+     * @param int $colSpan - the colSpan parameter of the cell
+     * @param mixed $selectFormat - string or null by default
      */
     public function AddGroupField($name, $align = 'left', $format = null, $linkField = null, $colSpan = 1, $selectFormat = null)
     {
@@ -193,19 +193,19 @@ class TGroupTable
     /**
      * add a display column.
      *
-     * @param string   $name           - database name of the column
-     * @param string   $align          - horizontal alignment to use in the cell
-     * @param null|callable(string, array<string, mixed>, string):(string|null) $formatCallBack - a callback function to use for the column (the function will get 3 parameters,
-     *                                 the value, the row and the name. The string returned by the function will be displayed
-     *                                 in the cell
-     * @param array    $linkField      - an array of dbfield names whoes value will be passed to the javascript
-     *                                 function defined by $this->onClick
-     * @param int      $colSpan        - the colSpan parameter of the cell
-     * @param int      $selectFormat   - the colSpan parameter of the cell
-     * @param string   $sIdent         - column identifier name
-     * @param int      $columnPosition - the array key position where the header will be added (array key starts with 0)
-     * @param string   $originalField
-     * @param string   $originalTable
+     * @param string $name - database name of the column
+     * @param string $align - horizontal alignment to use in the cell
+     * @param callable(string, array<string, mixed>, string):(string|null)|null $formatCallBack - a callback function to use for the column (the function will get 3 parameters,
+     *                                                                                          the value, the row and the name. The string returned by the function will be displayed
+     *                                                                                          in the cell
+     * @param array $linkField - an array of dbfield names whoes value will be passed to the javascript
+     *                         function defined by $this->onClick
+     * @param int $colSpan - the colSpan parameter of the cell
+     * @param int $selectFormat - the colSpan parameter of the cell
+     * @param string $sIdent - column identifier name
+     * @param int $columnPosition - the array key position where the header will be added (array key starts with 0)
+     * @param string $originalField
+     * @param string $originalTable
      */
     public function AddColumn($name, $align = 'left', $formatCallBack = null, $linkField = null, $colSpan = 1, $selectFormat = null, $sIdent = null, $columnPosition = null, $originalField = null, $originalTable = null)
     {
@@ -214,7 +214,7 @@ class TGroupTable
 
         if (null !== $columnPosition && count($this->columnList) > 0) {
             $count = 0;
-            $aTmpFields = array();
+            $aTmpFields = [];
             reset($this->columnList);
             foreach ($this->columnList as $key => $oTmpField) {
                 ++$count;
@@ -250,7 +250,7 @@ class TGroupTable
         }
 
         reset($this->columnList);
-        $aTmpFields = array();
+        $aTmpFields = [];
         foreach ($this->columnList as $oTmpField) {
             $aTmpFields[] = $oTmpField;
         }
@@ -268,7 +268,7 @@ class TGroupTable
     public function Display($returnAsString = false)
     {
         $mainSQL = $this->_GetMainSQL();
-        $groupList = array();
+        $groupList = [];
 
         $this->recordCount = $this->GetNumberOfResultsForSubGroupQuery();
         if (is_null($mainSQL)) {
@@ -344,7 +344,7 @@ class TGroupTable
      * @param string $groupContent
      * @param string $group
      * @param string $groupRow
-     * @param int    $recordCount
+     * @param int $recordCount
      *
      * @return bool
      */
@@ -390,19 +390,19 @@ class TGroupTable
 
         $recordLimitOK = true;
         if ($showGroup) {
-            while (($recordLimitOK) && ($row = MySqlLegacySupport::getInstance()->fetch_assoc($rowRes))) {
+            while ($recordLimitOK && ($row = MySqlLegacySupport::getInstance()->fetch_assoc($rowRes))) {
                 $row = $this->getFieldTranslationUtil()->copyTranslationsToDefaultFields($row);
 
                 ++$recordsDisplayed;
                 ++$recordCount;
                 $recordLimitOK = (($this->showRecordCount <= 0) // no limit set
-                    || (($this->showRecordCount > 0) && // OR a limit is set AND
-                        ($recordCount - $this->startRecord < $this->showRecordCount) // the limit has not been overstepped
+                    || (($this->showRecordCount > 0) // OR a limit is set AND
+                        && ($recordCount - $this->startRecord < $this->showRecordCount) // the limit has not been overstepped
                     ));
 
                 $rowStyle = '';
                 if (!is_null($this->rowCallback)) {
-                    $sRowCSS = call_user_func(array($this->rowCallback[0], $this->rowCallback[1]), $row['id'], $row);
+                    $sRowCSS = call_user_func([$this->rowCallback[0], $this->rowCallback[1]], $row['id'], $row);
                     if (!empty($sRowCSS)) {
                         if (empty($rowStyle)) {
                             $rowStyle = 'class="'.$sRowCSS.'"';
@@ -460,7 +460,7 @@ class TGroupTable
      */
     protected function getGroupsAvailableForCurrentPage()
     {
-        $aGroups = array();
+        $aGroups = [];
         if (null !== $this->groupByCell) {
             $sql = $this->sql;
             $oRecordList = new TCMSRecordList();
@@ -653,11 +653,11 @@ class TGroupTable
     }
 
     /**
-     * @return \ChameleonSystem\CoreBundle\Util\FieldTranslationUtil
+     * @return ChameleonSystem\CoreBundle\Util\FieldTranslationUtil
      */
     protected function getFieldTranslationUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.field_translation');
+        return ServiceLocator::get('chameleon_system_core.util.field_translation');
     }
 
     /**
@@ -665,7 +665,7 @@ class TGroupTable
      */
     protected function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     private function getLogger(): LoggerInterface

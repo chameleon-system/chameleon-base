@@ -13,7 +13,7 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 
 /**
  * manages saving, inserting, and deleting data from a table.
-/**/
+ * /**/
 class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
 {
     /**
@@ -22,9 +22,9 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     protected $bIsUpdate;
 
     /**
-     * @var array $aForbiddenTables a list of tables for which logging is not allowed
+     * @var array a list of tables for which logging is not allowed
      */
-    protected $aForbiddenTables = array('pkg_cms_changelog_set', 'pkg_cms_changelog_item');
+    protected $aForbiddenTables = ['pkg_cms_changelog_set', 'pkg_cms_changelog_item'];
 
     /**
      * {@inheritDoc}
@@ -36,7 +36,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
         parent::GetCustomMenuItems();
 
         if ($this->oTableConf->fieldChangelogActive) {
-            $aParam = array();
+            $aParam = [];
             $aParam['pagedef'] = 'tablemanager';
             $aParam['id'] = TTools::GetCMSTableId('pkg_cms_changelog_set');
             $aParam['sRestrictionField'] = 'modified_id';
@@ -44,7 +44,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
 
             $oMenuItem = new TCMSTableEditorMenuItem();
             $oMenuItem->sItemKey = 'getdisplayvalue';
-            $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.action.show_changes');
+            $oMenuItem->sDisplayName = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_cms_change_log.action.show_changes');
             $oMenuItem->sIcon = 'far fa-edit';
             $oMenuItem->href = $this->getUrlUtil()->getArrayAsUrl($aParam, '?');
             $this->oMenuItems->AddItem($oMenuItem);
@@ -68,7 +68,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     /**
      * gets called after save if all posted data was valid.
      *
-     * @param TIterator  $oFields    holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $oFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      *
      * @return void
@@ -90,7 +90,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     /**
      * computes differences between new and old values.
      *
-     * @param TIterator  $newFields  holds an iterator of all field classes from DB table with the posted values or default if no post data is present
+     * @param TIterator $newFields holds an iterator of all field classes from DB table with the posted values or default if no post data is present
      * @param TCMSRecord $oPostTable holds the record object of all posted data
      *
      * @return array
@@ -104,7 +104,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
         $newFields->GoToStart();
         /** @var TCMSField $newField */
         while ($newField = $newFields->next()) {
-            /** @var TCMSField $oldField */
+            /* @var TCMSField $oldField */
             if (isset($oldFields[$newField->name])) {
                 $oldField = $oldFields[$newField->name];
 
@@ -142,9 +142,9 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             if (!$isEqual) {
                 $fieldId = $newField->oDefinition->id;
                 if ($newField->getBEncryptedData()) {
-                    $result[] = array($fieldId, '', '');
+                    $result[] = [$fieldId, '', ''];
                 } else {
-                    $result[] = array($fieldId, $oldField->data, $newField->data);
+                    $result[] = [$fieldId, $oldField->data, $newField->data];
                 }
             }
         }
@@ -159,17 +159,15 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      */
     protected function createChangeSet($sAction)
     {
-
         $oChangeSet = TdbPkgCmsChangelogSet::GetNewInstance();
         $oTableEditor = TTools::GetTableEditorManager($oChangeSet->table);
         $oTableEditor->AllowEditByAll(true);
         $oTableEditor->Insert();
 
-        /** @var \ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess $securityHelper */
-        $securityHelper = \ChameleonSystem\CoreBundle\ServiceLocator::get(\ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess::class);
+        /** @var ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess $securityHelper */
+        $securityHelper = ChameleonSystem\CoreBundle\ServiceLocator::get(ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess::class);
 
-
-        $aData = array();
+        $aData = [];
         $aData['id'] = $oTableEditor->sId;
         $aData['modify_date'] = date('Y-m-d H:i:s');
         $aData['cms_user'] = $securityHelper->getUser()?->getId();
@@ -185,7 +183,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
 
     /**
      * @param string $sChangeSetId
-     * @param array  $aDiff
+     * @param array $aDiff
      *
      * @return void
      */
@@ -198,7 +196,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             $oTableEditor->sId = $sChangeSetId;
             $oTableEditor->Insert();
 
-            $aData = array();
+            $aData = [];
             $aData['id'] = $oTableEditor->sId;
             $aData['pkg_cms_changelog_set_id'] = $sChangeSetId;
             $aData['cms_field_conf'] = $aDiff[$i][0];
@@ -241,10 +239,10 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             $this->failOnForbiddenTables();
             $sChangeSetId = $this->createChangeSet('INSERT');
 
-            $aDiff = array();
+            $aDiff = [];
             foreach ($oFields as $oField) {
                 if ('' !== $oField->data) {
-                    $aDiff[] = array($oField->id, '', $oField->data);
+                    $aDiff[] = [$oField->id, '', $oField->data];
                 }
             }
             $this->createChangeItems($sChangeSetId, $aDiff);
@@ -267,9 +265,9 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
     }
 
     /**
-     * @throws TPkgCmsException
-     *
      * @return void
+     *
+     * @throws TPkgCmsException
      */
     protected function failOnForbiddenTables()
     {
@@ -306,17 +304,17 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
         if ($this->oTableConf->fieldChangelogActive) {
             $this->failOnForbiddenTables();
             $sChangeSetId = $this->createChangeSet('UPDATE');
-            $change = array($oField->oDefinition->id, '', $iConnectedID);
-            /** @var TCMSField $oField */
-            $this->createChangeItems($sChangeSetId, array($change));
+            $change = [$oField->oDefinition->id, '', $iConnectedID];
+            /* @var TCMSField $oField */
+            $this->createChangeItems($sChangeSetId, [$change]);
         }
     }
 
     /**
      * removes one connection from mlt.
      *
-     * @param TCMSField $oField       mlt field object
-     * @param int       $iConnectedID the connected record id that will be removed
+     * @param TCMSField $oField mlt field object
+     * @param int $iConnectedID the connected record id that will be removed
      *
      * @return void
      */
@@ -327,15 +325,12 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
         if ($this->oTableConf->fieldChangelogActive) {
             $this->failOnForbiddenTables();
             $sChangeSetId = $this->createChangeSet('DELETE');
-            $change = array($oField->oDefinition->id, $iConnectedID, '');
-            /** @var TCMSField $oField */
-            $this->createChangeItems($sChangeSetId, array($change));
+            $change = [$oField->oDefinition->id, $iConnectedID, ''];
+            /* @var TCMSField $oField */
+            $this->createChangeItems($sChangeSetId, [$change]);
         }
     }
 
-    /**
-     * @return array
-     */
     private function getOldFields(): array
     {
         return $this->oTablePreChangeData->getFieldsIndexed();
@@ -346,6 +341,6 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

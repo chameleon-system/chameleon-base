@@ -8,11 +8,8 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\NewsletterBundle\Service\NewsletterGroupSubscriberExportService;
 use JetBrains\PhpStorm\NoReturn;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use TCMSTableEditor;
-use TCMSTableEditorMenuItem;
-use TGlobal;
 
-class TableEditorNewsletterGroup extends TCMSTableEditor
+class TableEditorNewsletterGroup extends \TCMSTableEditor
 {
     public function DefineInterface()
     {
@@ -24,7 +21,7 @@ class TableEditorNewsletterGroup extends TCMSTableEditor
     {
         parent::GetCustomMenuItems();
 
-        $menuItem = new TCMSTableEditorMenuItem();
+        $menuItem = new \TCMSTableEditorMenuItem();
         $menuItem->sItemKey = 'exportSubscriber';
         $menuItem->setTitle($this->getTranslatorService()->trans('chameleon_system_newsletter_group.action.export_subscriber'));
         $menuItem->sIcon = 'fas fa-file-export';
@@ -35,7 +32,8 @@ class TableEditorNewsletterGroup extends TCMSTableEditor
     /**
      * @psalm-suppress UndefinedAttributeClass
      */
-    #[NoReturn] public function exportSubscriber(): void
+    #[NoReturn]
+    public function exportSubscriber(): void
     {
         $newsletterSubscriberList = $this->getNewsletterGroupSubscriberExportService()->exportSubscriberAsCsv($this->sId);
 
@@ -60,7 +58,7 @@ class TableEditorNewsletterGroup extends TCMSTableEditor
             '_fnc' => 'exportSubscriber', '_noModuleFunction' => 'true',
             'pagedef' => $pagDef,
             'id' => $this->sId,
-            'tableid' => $this->oTableConf->id
+            'tableid' => $this->oTableConf->id,
         ];
         $ajaxUrl = PATH_CMS_CONTROLLER.'?'.$this->getUrlUtilService()->getArrayAsUrl($urlData, '', '&');
 
@@ -105,14 +103,14 @@ class TableEditorNewsletterGroup extends TCMSTableEditor
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
-    private function getGlobalService(): TGlobal
+    private function getGlobalService(): \TGlobal
     {
         return ServiceLocator::get('chameleon_system_core.global');
     }
 
     private function getInputFilterUtilService(): InputFilterUtilInterface
     {
-        return ServiceLocator::get('chameleon_system_core.util.input_filter');;
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     private function getNewsletterGroupSubscriberExportService(): NewsletterGroupSubscriberExportService

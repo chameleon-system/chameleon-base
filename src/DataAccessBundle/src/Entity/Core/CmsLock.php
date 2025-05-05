@@ -3,24 +3,22 @@
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
 use ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf;
-use DateTime;
 
 class CmsLock
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Record ID */
         private string $recordid = '',
         // TCMSFieldCMSUser
         /** @var CmsUser|null - Editor */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldTimestamp
-        /** @var DateTime|null - last changed by */
-        private ?DateTime $timeStamp = null,
+        /** @var \DateTime|null - last changed by */
+        private ?\DateTime $timeStamp = null,
         // TCMSFieldLookup
         /** @var CmsTblConf|null - Lock table */
         private ?CmsTblConf $cmsTblConf = null
@@ -64,7 +62,6 @@ class CmsLock
         return $this;
     }
 
-
     // TCMSFieldCMSUser
     public function getCmsUser(): ?CmsUser
     {
@@ -78,20 +75,18 @@ class CmsLock
         return $this;
     }
 
-
     // TCMSFieldTimestamp
-    public function getTimeStamp(): ?DateTime
+    public function getTimeStamp(): ?\DateTime
     {
         return $this->timeStamp;
     }
 
-    public function setTimeStamp(?DateTime $timeStamp): self
+    public function setTimeStamp(?\DateTime $timeStamp): self
     {
         $this->timeStamp = $timeStamp;
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsTblConf(): ?CmsTblConf
@@ -105,6 +100,4 @@ class CmsLock
 
         return $this;
     }
-
-
 }

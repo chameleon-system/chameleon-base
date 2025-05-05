@@ -14,36 +14,40 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
 {
-    const VIEW_PATH = 'pkgComment/views/db/TPkgCommentModuleConfig';
+    public const VIEW_PATH = 'pkgComment/views/db/TPkgCommentModuleConfig';
 
     /**
      * @var int|string
+     *
      * @psalm-var positive-int|0
      */
     protected $iPageSize = 0;
 
     /**
      * @var int
+     *
      * @psalm-var positive-int
      */
     protected $iPage = 1;
 
     /**
      * @var float|int
+     *
      * @psalm-var positive-int|0
      */
     protected $iMaxPage = 0;
 
     /**
      * @var int
+     *
      * @psalm-var positive-int|0
      */
     protected $iCommentNr = 0;
 
     /**
-     * @var null|mixed
+     * @var mixed|null
      */
-    protected $oActiveItem = null;
+    protected $oActiveItem;
 
     /**
      * allow users that are not signed in to comment.
@@ -56,7 +60,6 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
     }
 
     /**
-     * @param mixed $oActiveItem
      * @return void
      */
     public function SetActiveItem($oActiveItem)
@@ -120,7 +123,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
                 $oCommentList = $this->GetListForItemTable($oActiveCommentType->id, $oPkgCommentType->id);
                 $this->iCommentNr = $oCommentList->GetNrOfComments();
                 if ($this->iPageSize > 0) {
-                    /** @psalm-suppress InvalidPropertyAssignmentValue */
+                    /* @psalm-suppress InvalidPropertyAssignmentValue */
                     $this->iMaxPage = ceil($oCommentList->Length() / $this->iPageSize);
                 } else {
                     $this->iMaxPage = 1;
@@ -174,6 +177,7 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
      * set page size from db.
      *
      * @return void
+     *
      * @psalm-suppress InvalidPropertyAssignmentValue
      */
     protected function SetPageInfo()
@@ -198,8 +202,8 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
     /**
      * return comment list for item and type.
      *
-     * @param string      $sItemId
-     * @param string      $sTypeId
+     * @param string $sItemId
+     * @param string $sTypeId
      * @param string|null $iLanguageId
      *
      * @return TdbPkgCommentList
@@ -264,12 +268,12 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
     /**
      * render the list using a given view.
      *
-     * @param string $sViewName     - view name
-     * @param array  $aCallTimeVars - optional parameters passed from the calling method to the view
+     * @param string $sViewName - view name
+     * @param array $aCallTimeVars - optional parameters passed from the calling method to the view
      *
      * @return string
      */
-    public function Render($sViewName, $aCallTimeVars = array())
+    public function Render($sViewName, $aCallTimeVars = [])
     {
         $oView = new TViewParser();
         $this->SetPage();
@@ -288,21 +292,21 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
      */
     public function GetCacheTrigger()
     {
-        $aClearCacheParameter = array();
+        $aClearCacheParameter = [];
         $oCommentList = $this->GetComments();
         while ($oComment = $oCommentList->Next()) {
-            $aClearCacheParameter[] = array('table' => 'pkg_comment', 'id' => $oComment->id);
+            $aClearCacheParameter[] = ['table' => 'pkg_comment', 'id' => $oComment->id];
             $oChildCommentList = $oComment->GetChildComments();
             while ($oChildComment = $oChildCommentList->Next()) {
-                $aClearCacheParameter[] = array('table' => 'pkg_comment', 'id' => $oChildComment->id);
+                $aClearCacheParameter[] = ['table' => 'pkg_comment', 'id' => $oChildComment->id];
             }
             $oChildCommentList->GoToStart();
         }
         $oCommentList->GoToStart();
         if (!is_null($this->id)) {
-            $aClearCacheParameter[] = array('table' => 'pkg_comment_module_config', 'id' => $this->id);
+            $aClearCacheParameter[] = ['table' => 'pkg_comment_module_config', 'id' => $this->id];
         }
-        $aClearCacheParameter[] = array('table' => 'pkg_comment_type', 'id' => $this->fieldPkgCommentTypeId);
+        $aClearCacheParameter[] = ['table' => 'pkg_comment_type', 'id' => $this->fieldPkgCommentTypeId];
 
         return $aClearCacheParameter;
     }
@@ -354,6 +358,6 @@ class TPkgCommentModuleConfig extends TPkgCommentModuleConfigAutoParent
      */
     private function getSystemPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.system_page_service');
     }
 }

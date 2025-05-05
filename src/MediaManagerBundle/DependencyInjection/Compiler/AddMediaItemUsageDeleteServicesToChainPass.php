@@ -12,7 +12,6 @@
 namespace ChameleonSystem\MediaManagerBundle\DependencyInjection\Compiler;
 
 use ChameleonSystem\MediaManager\Interfaces\MediaItemUsageDeleteServiceInterface;
-use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -23,11 +22,11 @@ class AddMediaItemUsageDeleteServicesToChainPass implements CompilerPassInterfac
     /**
      * {@inheritdoc}
      *
+     * @return void
+     *
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     *
-     * @return void
+     * @throws \LogicException
      */
     public function process(ContainerBuilder $container)
     {
@@ -39,7 +38,7 @@ class AddMediaItemUsageDeleteServicesToChainPass implements CompilerPassInterfac
             $deleteServiceDefinition = $container->getDefinition($serviceId);
             $interfaces = class_implements($deleteServiceDefinition->getClass(), true);
             if (false === in_array(MediaItemUsageDeleteServiceInterface::class, $interfaces, true)) {
-                throw new LogicException(
+                throw new \LogicException(
                     sprintf(
                         'Usage delete service must implement MediaItemUsageDeleteServiceInterface in service %s',
                         $serviceId
@@ -48,7 +47,7 @@ class AddMediaItemUsageDeleteServicesToChainPass implements CompilerPassInterfac
             }
             $serviceDefinitionChain->addMethodCall(
                 'addUsageDeleteService',
-                array($deleteServiceDefinition)
+                [$deleteServiceDefinition]
             );
         }
     }

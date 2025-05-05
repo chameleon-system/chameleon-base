@@ -8,7 +8,7 @@ class PkgCommentType
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -21,8 +21,7 @@ class PkgCommentType
         private string $pkgCommentClassSubType = '',
         // TCMSFieldExtendedLookup
         /** @var CmsTblConf|null - Table */
-        private ?CmsTblConf $cmsTblConf = null
-        ,
+        private ?CmsTblConf $cmsTblConf = null,
         // TCMSFieldOption
         /** @var string - Class type for pkg_comment */
         private string $pkgCommentClassType = 'Customer',
@@ -75,7 +74,6 @@ class PkgCommentType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getPkgCommentClassName(): string
     {
@@ -88,7 +86,6 @@ class PkgCommentType
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getPkgCommentClassSubType(): string
@@ -103,7 +100,6 @@ class PkgCommentType
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getCmsTblConf(): ?CmsTblConf
     {
@@ -116,7 +112,6 @@ class PkgCommentType
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getPkgCommentClassType(): string
@@ -131,7 +126,6 @@ class PkgCommentType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassName(): string
     {
@@ -144,7 +138,6 @@ class PkgCommentType
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClassSubType(): string
@@ -159,7 +152,6 @@ class PkgCommentType
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -172,6 +164,4 @@ class PkgCommentType
 
         return $this;
     }
-
-
 }

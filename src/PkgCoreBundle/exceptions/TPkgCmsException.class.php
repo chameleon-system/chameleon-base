@@ -10,20 +10,20 @@
  */
 
 // TODO implement "Serializable" with magics "__serialize" and "__unserialize" using an more secure mechanism with associative arrays
-class TPkgCmsException extends \Exception implements Serializable
+class TPkgCmsException extends Exception implements Serializable
 {
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $contextData = null;
+    private $contextData;
 
     /**
-     * @param string $message      - additional message string (shows up only in the log file)
-     * @param array  $aContextData - any data you want showing up in the log message to help you debug the exception
+     * @param string $message - additional message string (shows up only in the log file)
+     * @param array $aContextData - any data you want showing up in the log message to help you debug the exception
      */
     public function __construct(
         $message = '',
-        $aContextData = array() // any data you want showing up in the log message to help you debug the exception
+        $aContextData = [] // any data you want showing up in the log message to help you debug the exception
     ) {
         parent::__construct($message);
 
@@ -41,7 +41,7 @@ class TPkgCmsException extends \Exception implements Serializable
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getContextData()
     {
@@ -58,7 +58,7 @@ class TPkgCmsException extends \Exception implements Serializable
      */
     public function serialize(): string
     {
-        $content = array();
+        $content = [];
         foreach ($this as $key => $value) {
             if ('trace' !== $key) {
                 $content[$key] = $value;

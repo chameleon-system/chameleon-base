@@ -89,7 +89,6 @@ class HashTest extends TestCase
     /**
      * @dataProvider dataProviderHashData
      *
-     * @param mixed  $input
      * @param string $expectedHash
      */
     public function testHash($input, $expectedHash)
@@ -98,8 +97,6 @@ class HashTest extends TestCase
     }
 
     /**
-     * @param mixed $data
-     *
      * @return string
      */
     private function createHash($data)

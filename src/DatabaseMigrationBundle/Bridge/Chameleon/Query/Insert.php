@@ -38,13 +38,10 @@ class Insert extends AbstractQuery
     /** @noinspection PhpMissingParentCallCommonInspection
      * Disables the WHERE query part as it is invalid for INSERT statements.
      *
-     * @param MigrationQueryData $migrationQueryData
-     * @param array              $translatedFields
-     *
      * @return array
      */
     protected function getWhereQueryPart(MigrationQueryData $migrationQueryData, array $translatedFields)
     {
-        return array('', array());
+        return ['', []];
     }
 }

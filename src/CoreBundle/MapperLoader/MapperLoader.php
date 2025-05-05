@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\MapperLoader;
 
-use LogicException;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
@@ -36,7 +35,7 @@ class MapperLoader implements MapperLoaderInterface
             $service = $this->serviceLocator->get($identifier);
         } catch (NotFoundExceptionInterface $exception) {
             if (false === \class_exists($identifier)) {
-                throw new LogicException(sprintf('Tried to instantiate mapper "%s", but neither a service with this ID nor a class with this name was found. Note it must be tagged with chameleon_system.mapper.', $identifier));
+                throw new \LogicException(sprintf('Tried to instantiate mapper "%s", but neither a service with this ID nor a class with this name was found. Note it must be tagged with chameleon_system.mapper.', $identifier));
             }
             $service = new $identifier();
         }

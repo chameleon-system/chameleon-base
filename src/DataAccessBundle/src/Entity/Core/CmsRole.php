@@ -9,12 +9,11 @@ class CmsRole
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRole> - Is subordinate role of */
-        private Collection $cmsRoleCollection = new ArrayCollection()
-        ,
+        private Collection $cmsRoleCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Is selectable */
         private bool $isChooseable = true,
@@ -23,8 +22,7 @@ class CmsRole
         private string $name = '',
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsRight> - CMS user rights */
-        private Collection $cmsRightCollection = new ArrayCollection()
-        ,
+        private Collection $cmsRightCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Required by the system */
         private bool $isSystem = false,
@@ -89,7 +87,6 @@ class CmsRole
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsChooseable(): bool
     {
@@ -103,7 +100,6 @@ class CmsRole
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -116,8 +112,6 @@ class CmsRole
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -151,7 +145,6 @@ class CmsRole
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsSystem(): bool
     {
@@ -165,7 +158,6 @@ class CmsRole
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTrans(): string
     {
@@ -178,6 +170,4 @@ class CmsRole
 
         return $this;
     }
-
-
 }

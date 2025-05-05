@@ -14,9 +14,9 @@ use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
 {
-    const TIMEOUT_IN_SECONDS = 60;
+    public const TIMEOUT_IN_SECONDS = 60;
 
-    const URL_IDENTIFIER = '__fronted_action__';
+    public const URL_IDENTIFIER = '__fronted_action__';
 
     public function runAction()
     {
@@ -27,7 +27,8 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
         if ($oMessageManager->ConsumeMessages(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER)) {
             $oMessageManager->ConsumeMessages(TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER);
         }
-        $oAction = new $this->fieldClass(); /** @var $oAction IPkgRunFrontendAction* */
+        $oAction = new $this->fieldClass(); /* @var $oAction IPkgRunFrontendAction* */
+
         return $oAction->runAction($aParams);
     }
 
@@ -36,7 +37,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
      */
     protected function getParameter()
     {
-        $aParameter = array();
+        $aParameter = [];
         if (!empty($this->fieldParameter)) {
             $aParameter = TTools::mb_safe_unserialize($this->fieldParameter);
         }
@@ -55,7 +56,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
     /**
      * @param string $sClass
      * @param string $sPortalId
-     * @param array  $aParameter
+     * @param array $aParameter
      * @param string $sLanguageId
      *
      * @return TdbPkgRunFrontendAction|null
@@ -63,11 +64,11 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
     public static function CreateAction($sClass, $sPortalId = null, $aParameter = null, $sLanguageId = null)
     {
         $oAction = null;
-        $logger = \ChameleonSystem\CoreBundle\ServiceLocator::get('logger');
+        $logger = ServiceLocator::get('logger');
         if (!class_exists($sClass)) {
             $logger->warning(sprintf('Class %s doesn\'t exist.', $sClass));
         } else {
-            $aData = array('class' => $sClass);
+            $aData = ['class' => $sClass];
             $aData['expire_date'] = date('Y-m-d H:i:s', time() + TdbPkgRunFrontendAction::TIMEOUT_IN_SECONDS);
             $aData['random_key'] = TTools::GenerateRandomPassword(200);
             if (null !== $sPortalId) {
@@ -79,7 +80,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
                 }
             }
             if (null === $aParameter || !is_array($aParameter)) {
-                $aParameter = array();
+                $aParameter = [];
             }
             $aData['parameter'] = TTools::mb_safe_serialize($aParameter);
             if (null === $sLanguageId) {
@@ -120,7 +121,7 @@ class TPkgRunFrontendAction extends TPkgRunFrontendActionAutoParent
         if (null === $forceSecure) {
             $forceSecure = false;
         }
-        $sUrl = self::getPageService()->getLinkToPortalHomePageAbsolute(array(), $portal, $language, $forceSecure);
+        $sUrl = self::getPageService()->getLinkToPortalHomePageAbsolute([], $portal, $language, $forceSecure);
         if ('/' !== substr($sUrl, -1)) {
             $sUrl .= '/';
         }

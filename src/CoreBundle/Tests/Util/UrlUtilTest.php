@@ -11,16 +11,16 @@
 
 namespace ChameleonSystem\CoreBundle\Tests\Util;
 
+use ChameleonSystem\CoreBundle\Routing\DomainValidatorInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\HttpFoundation\Request;
-use ChameleonSystem\CoreBundle\Routing\DomainValidatorInterface;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
-use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 
 class UrlUtilTest extends TestCase
 {
@@ -57,11 +57,9 @@ class UrlUtilTest extends TestCase
      * @param string $sourceUrl
      * @param string $expectedUrl
      * @param string $protocol
-     * @param array  $parameterBlacklist
-     * @param array  $additionalParameters
      */
-    public function testTransformHttpUrlToHttpsUrl($sourceUrl, $expectedUrl, $protocol, array $parameterBlacklist = array(),
-        array $additionalParameters = array()
+    public function testTransformHttpUrlToHttpsUrl($sourceUrl, $expectedUrl, $protocol, array $parameterBlacklist = [],
+        array $additionalParameters = []
     ) {
         $this->givenAUrlUtil();
         $this->givenARequestFrom($sourceUrl);
@@ -96,25 +94,25 @@ class UrlUtilTest extends TestCase
      */
     public function getDataForTestTransformHttpUrlToHttpsUrl()
     {
-        return array(
-            array('http://foo.de/', 'https://valid-domain.com/', 'https'),
-            array('http://foo.de/?foo=bar', 'https://valid-domain.com/?foo=bar', 'https'),
-            array('https://foo.de/', 'https://valid-domain.com/', 'https'),
-            array('http://foo.de/bar/baz', 'https://valid-domain.com/bar/baz', 'https'),
-            array('http://foo.de/bar/baz?wow=muchAttribute', 'https://valid-domain.com/bar/baz?wow=muchAttribute', 'https'),
-            array('http://foo.de/bar/baz?wow=muchAttribute&pagedef=bar', 'https://valid-domain.com/bar/baz?wow=muchAttribute&pagedef=bar', 'https'),
+        return [
+            ['http://foo.de/', 'https://valid-domain.com/', 'https'],
+            ['http://foo.de/?foo=bar', 'https://valid-domain.com/?foo=bar', 'https'],
+            ['https://foo.de/', 'https://valid-domain.com/', 'https'],
+            ['http://foo.de/bar/baz', 'https://valid-domain.com/bar/baz', 'https'],
+            ['http://foo.de/bar/baz?wow=muchAttribute', 'https://valid-domain.com/bar/baz?wow=muchAttribute', 'https'],
+            ['http://foo.de/bar/baz?wow=muchAttribute&pagedef=bar', 'https://valid-domain.com/bar/baz?wow=muchAttribute&pagedef=bar', 'https'],
 
-            array('https://foo.de/bar/baz?wow=muchAttribute', 'http://valid-domain.com/bar/baz?wow=muchAttribute', 'http'),
+            ['https://foo.de/bar/baz?wow=muchAttribute', 'http://valid-domain.com/bar/baz?wow=muchAttribute', 'http'],
 
-            array('http://foo.de/bar/baz?wow=muchAttribute&foo=bar', 'http://valid-domain.com/bar/baz?wow=muchAttribute', null, array('foo')),
+            ['http://foo.de/bar/baz?wow=muchAttribute&foo=bar', 'http://valid-domain.com/bar/baz?wow=muchAttribute', null, ['foo']],
 
-            array('http://foo.de/bar/baz?wow=muchAttribute', 'http://valid-domain.com/bar/baz?wow=muchAttribute&such=value', null, array(), array('such' => 'value')),
+            ['http://foo.de/bar/baz?wow=muchAttribute', 'http://valid-domain.com/bar/baz?wow=muchAttribute&such=value', null, [], ['such' => 'value']],
 
-            array('https://foo.de/bar/baz?wow=muchAttribute', 'http://valid-domain.com/bar/baz?such=value', 'http', array('wow'), array('such' => 'value')),
+            ['https://foo.de/bar/baz?wow=muchAttribute', 'http://valid-domain.com/bar/baz?such=value', 'http', ['wow'], ['such' => 'value']],
 
-            array('http://foo.de:8080/', 'https://valid-domain.com/', 'https'),
-            array('http://foo.de:8080/', 'http://valid-domain.com:8080/', 'http'),
-        );
+            ['http://foo.de:8080/', 'https://valid-domain.com/', 'https'],
+            ['http://foo.de:8080/', 'http://valid-domain.com:8080/', 'http'],
+        ];
     }
 
     /**
@@ -138,8 +136,6 @@ class UrlUtilTest extends TestCase
 
     /**
      * @param string $protocol
-     * @param array  $parameterBlacklist
-     * @param array  $additionalParameters
      */
     private function whenHttpsTransformationIsCalled($protocol, array $parameterBlacklist, array $additionalParameters)
     {
@@ -180,41 +176,41 @@ class UrlUtilTest extends TestCase
      */
     public function getDataForTestRemoveAuthenticityTokenFromUrl()
     {
-        return array(
-            array(
+        return [
+            [
                 'https://foo.com/bar',
                 'https://foo.com/bar',
-            ),
-            array(
+            ],
+            [
                 'https://foo.com/bar?baz=qux',
                 'https://foo.com/bar?baz=qux',
-            ),
-            array(
+            ],
+            [
                 'https://foo.com/bar?cmsauthenticitytoken=[{cmsauthenticitytoken}]',
                 'https://foo.com/bar',
-            ),
-            array(
+            ],
+            [
                 'https://foo.com/bar?cmsauthenticitytoken=[{cmsauthenticitytoken}]&baz=qux',
                 'https://foo.com/bar?baz=qux',
-            ),
-            array(
+            ],
+            [
                 'https://foo.com/bar?baz=qux&cmsauthenticitytoken=[{cmsauthenticitytoken}]',
                 'https://foo.com/bar?baz=qux',
-            ),
-            array(
+            ],
+            [
                 'https://foo.com/bar?baz=qux&cmsauthenticitytoken=[{cmsauthenticitytoken}]&quux=corge',
                 'https://foo.com/bar?baz=qux&quux=corge',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
      * @dataProvider getDataForTestGetAbsoluteUrl
      *
-     * @param string      $sourceUrl
-     * @param bool        $secure
+     * @param string $sourceUrl
+     * @param bool $secure
      * @param string|null $domain
-     * @param string      $expectedUrl
+     * @param string $expectedUrl
      */
     public function testGetAbsoluteUrl($sourceUrl, $secure, $domain, $expectedUrl)
     {
@@ -240,85 +236,85 @@ class UrlUtilTest extends TestCase
      */
     public function getDataForTestGetAbsoluteUrl()
     {
-        return array(
-            array(
+        return [
+            [
                 '/foo',
                 false,
                 null,
                 'http://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 'http://valid-domain.com/foo',
                 false,
                 null,
                 'http://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 'http://invalid-domain.com/foo',
                 false,
                 null,
                 'http://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 '/foo',
                 false,
                 'valid-domain.com',
                 'http://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 '/foo',
                 false,
                 'invalid-domain.com',
                 'http://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 '/foo',
                 true,
                 'valid-domain.com',
                 'https://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 '/foo',
                 true,
                 'invalid-domain.com',
                 'https://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 'http://valid-domain.com/foo',
                 true,
                 null,
                 'https://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 'https://valid-domain.com/foo',
                 true,
                 null,
                 'https://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 'https://valid-domain.com/foo',
                 false,
                 null,
                 'http://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 'https://invalid-domain.com/foo',
                 false,
                 null,
                 'http://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 'https://invalid-domain.com/foo',
                 true,
                 null,
                 'https://valid-domain.com/foo',
-            ),
-            array(
+            ],
+            [
                 '/foo?bar=baz',
                 false,
                 null,
                 'http://valid-domain.com/foo?bar=baz',
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -17,9 +17,9 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequenceTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
-    protected $oMockStorage = null;
+    protected $oMockStorage;
     private $mockExistingSessionData;
     private $mockNewSessionData;
     /**
@@ -28,14 +28,14 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequenceTest extends TestCase
     private $writeSequenceEnforcer;
     private $mockSessionId;
     /**
-     * @var \SessionHandlerInterface|\Prophecy\Prophecy\ObjectProphecy
+     * @var SessionHandlerInterface|Prophecy\Prophecy\ObjectProphecy
      */
-    private $mockStorage = null;
+    private $mockStorage;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->oMockStorage = $this->createMock('SessionHandlerInterface', array('read', 'write', 'open', 'close', 'gc', 'destroy'));
+        $this->oMockStorage = $this->createMock('SessionHandlerInterface', ['read', 'write', 'open', 'close', 'gc', 'destroy']);
     }
 
     public function tearDown(): void
@@ -51,59 +51,59 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequenceTest extends TestCase
     /**
      * @test
      */
-    public function it_will_return_stored_data()
+    public function itWillReturnStoredData()
     {
         $this->given_a_session_id('mock-session-id');
-        $this->given_an_old_session_exists_with_data(array('lastWrite' => 1, 'data' => array('foo' => 'bar')));
+        $this->given_an_old_session_exists_with_data(['lastWrite' => 1, 'data' => ['foo' => 'bar']]);
         $this->given_an_instance_of_the_write_sequence_enforcer();
-        $this->then_we_expect_session_to_contain(array('foo' => 'bar'));
+        $this->then_we_expect_session_to_contain(['foo' => 'bar']);
     }
 
     /**
      * @test
      */
-    public function it_will_write_data_into_an_empty_instance()
+    public function itWillWriteDataIntoAnEmptyInstance()
     {
         $this->given_a_session_id('mock-session-d');
         $this->given_an_old_session_exists_with_data(null); // empty string
-        $newSessionData = array('foo' => 'bar');
+        $newSessionData = ['foo' => 'bar'];
         $this->given_new_session_data($newSessionData);
         $this->given_an_instance_of_the_write_sequence_enforcer();
         $this->when_we_call_write();
         $this->then_we_expect_session_to_contain($newSessionData);
     }
 
-    public function testWrite_ExistingOlderEntry()
+    public function testWriteExistingOlderEntry()
     {
         $this->given_a_session_id('mock-session-id');
-        $this->given_an_old_session_exists_with_data(array('lastWrite' => 1, 'data' => array('foo' => 'bar')));
-        $this->given_new_session_data(array('foo' => 'bar2'));
+        $this->given_an_old_session_exists_with_data(['lastWrite' => 1, 'data' => ['foo' => 'bar']]);
+        $this->given_new_session_data(['foo' => 'bar2']);
         $this->given_an_instance_of_the_write_sequence_enforcer();
         $this->when_we_call_write();
-        $this->then_we_expect_session_to_contain(array('foo' => 'bar2'));
+        $this->then_we_expect_session_to_contain(['foo' => 'bar2']);
     }
 
-    public function testWrite_ExistingOlderEntryWithoutACounter()
+    public function testWriteExistingOlderEntryWithoutACounter()
     {
         $this->given_a_session_id('mock-session-id');
-        $this->given_an_old_session_exists_with_data(array('data' => array('foo' => 'bar')));
-        $this->given_new_session_data(array('foo' => 'bar2'));
+        $this->given_an_old_session_exists_with_data(['data' => ['foo' => 'bar']]);
+        $this->given_new_session_data(['foo' => 'bar2']);
         $this->given_an_instance_of_the_write_sequence_enforcer();
         $this->when_we_call_write();
-        $this->then_we_expect_session_to_contain(array('foo' => 'bar2'));
+        $this->then_we_expect_session_to_contain(['foo' => 'bar2']);
     }
 
-    public function testWrite_ExistingNewerEntry()
+    public function testWriteExistingNewerEntry()
     {
         $this->given_a_session_id('mock-session-id');
-        $this->given_an_old_session_exists_with_data(array('lastWrite' => 10, 'data' => array('foo' => 'bar')));
+        $this->given_an_old_session_exists_with_data(['lastWrite' => 10, 'data' => ['foo' => 'bar']]);
 
-        $this->given_new_session_data(array('foo' => 'bar2'));
+        $this->given_new_session_data(['foo' => 'bar2']);
         $this->given_an_instance_of_the_write_sequence_enforcer();
 
-        $this->given_the_session_data_was_changed_to(array('lastWrite' => 11, 'data' => array('foo' => 'bar3')));
+        $this->given_the_session_data_was_changed_to(['lastWrite' => 11, 'data' => ['foo' => 'bar3']]);
         $this->when_we_call_write();
-        $this->then_we_expect_session_to_contain(array('foo' => 'bar3'));
+        $this->then_we_expect_session_to_contain(['foo' => 'bar3']);
     }
 
     private function given_an_old_session_exists_with_data($sessionData)
@@ -119,15 +119,16 @@ class TPkgCmsSessionHandler_Decorator_EnforceWriteSequenceTest extends TestCase
     private function given_an_instance_of_the_write_sequence_enforcer()
     {
         $foo = null;
-        /** @var \SessionHandlerInterface|\Prophecy\Prophecy\ObjectProphecy $mockStorage */
+        /* @var \SessionHandlerInterface|\Prophecy\Prophecy\ObjectProphecy $mockStorage */
         $this->mockStorage = $this->prophesize('SessionHandlerInterface');
 
         $existingSessionPayload = (null !== $this->mockExistingSessionData) ? serialize($this->mockExistingSessionData) : '';
         $this->mockStorage->read($this->mockSessionId)->willReturn($existingSessionPayload);
 
-        $this->mockStorage->write(\Prophecy\Argument::any(), \Prophecy\Argument::any())->will(function ($args, $mockStorage) {
-            /** @var \SessionHandlerInterface|\Prophecy\Prophecy\ObjectProphecy $mockStorage */
+        $this->mockStorage->write(Prophecy\Argument::any(), Prophecy\Argument::any())->will(function ($args, $mockStorage) {
+            /* @var \SessionHandlerInterface|\Prophecy\Prophecy\ObjectProphecy $mockStorage */
             $mockStorage->read($args[0])->willReturn($args[1]);
+
             return true;
         }
         );

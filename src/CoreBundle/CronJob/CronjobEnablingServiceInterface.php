@@ -20,8 +20,6 @@ interface CronjobEnablingServiceInterface
 {
     /**
      * Checks if all cron jobs should be able to run.
-     *
-     * @return bool
      */
     public function isCronjobExecutionEnabled(): bool;
 

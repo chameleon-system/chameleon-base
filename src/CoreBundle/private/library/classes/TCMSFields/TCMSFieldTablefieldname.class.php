@@ -14,10 +14,9 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 
 /**
  * field name in a table.
-/**/
+ * /**/
 class TCMSFieldTablefieldname extends TCMSFieldOption implements DoctrineTransformableInterface
 {
-
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
     {
         $parameters = [
@@ -28,8 +27,8 @@ class TCMSFieldTablefieldname extends TCMSFieldOption implements DoctrineTransfo
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -68,7 +67,7 @@ class TCMSFieldTablefieldname extends TCMSFieldOption implements DoctrineTransfo
         $query = "SELECT id FROM `cms_tbl_conf` WHERE `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableName)."'";
         if ($tmp = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
             $oTableConf = new TCMSTableConf();
-            /** @var $oTableConf TCMSTableConf */
+            /* @var $oTableConf TCMSTableConf */
             $oTableConf->Load($tmp['id']);
 
             $oFields = $oTableConf->GetFieldDefinitions();

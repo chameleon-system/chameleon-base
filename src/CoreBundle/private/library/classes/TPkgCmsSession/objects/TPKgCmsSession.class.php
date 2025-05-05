@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class TPKgCmsSession extends \Symfony\Component\HttpFoundation\Session\Session
+class TPKgCmsSession extends Symfony\Component\HttpFoundation\Session\Session
 {
     private $sessionLockingEnabled = false;
 
@@ -29,8 +29,6 @@ class TPKgCmsSession extends \Symfony\Component\HttpFoundation\Session\Session
 
     /**
      * acquire write lock (will reload session from storage!).
-     *
-     * @return bool
      */
     public function restartSessionWithWriteLock(): bool
     {

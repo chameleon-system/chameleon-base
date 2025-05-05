@@ -37,7 +37,7 @@ class MigrationPathUtilTest extends TestCase
     /**
      * @test
      */
-    public function it_gets_all_update_paths_from_bundle_folder()
+    public function itGetsAllUpdatePathsFromBundleFolder()
     {
         $bundleFolder = __DIR__.'/fixtures/TestBundle';
         $result = $this->util->getUpdateFoldersFromBundlePath($bundleFolder);
@@ -49,7 +49,7 @@ class MigrationPathUtilTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_crash_when_unconfigured()
+    public function itDoesNotCrashWhenUnconfigured()
     {
         $util = new MigrationPathUtil();
         $folders = $util->getUpdateFoldersFromBundlePath(__DIR__.'/fixtures/TestBundle');
@@ -59,7 +59,7 @@ class MigrationPathUtilTest extends TestCase
     /**
      * @test
      */
-    public function it_gets_all_update_paths_from_bundle_folder_with_multiple_bases()
+    public function itGetsAllUpdatePathsFromBundleFolderWithMultipleBases()
     {
         $bundleFolder = __DIR__.'/fixtures/TestBundle';
         $this->util = new MigrationPathUtil();
@@ -76,7 +76,7 @@ class MigrationPathUtilTest extends TestCase
     /**
      * @test
      */
-    public function it_works_with_alternative_patterns()
+    public function itWorksWithAlternativePatterns()
     {
         $bundleFolder = __DIR__.'/fixtures/TestBundle';
         $this->util = new MigrationPathUtil();
@@ -89,10 +89,10 @@ class MigrationPathUtilTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_non_existent_paths()
+    public function itHandlesNonExistentPaths()
     {
         $bundleFolder = __DIR__.'/fixtures/TestBundleNonExistent';
-        $expected = array();
+        $expected = [];
 
         $this->assertEquals($expected, $this->util->getUpdateFoldersFromBundlePath($bundleFolder));
     }
@@ -100,7 +100,7 @@ class MigrationPathUtilTest extends TestCase
     /**
      * @test
      */
-    public function it_gets_all_update_files_from_folder()
+    public function itGetsAllUpdateFilesFromFolder()
     {
         $result = $this->util->getUpdateFilesFromFolder(__DIR__.'/fixtures/TestBundle/Bridge/Chameleon/Migration/Script/alternative-updates');
 
@@ -113,7 +113,7 @@ class MigrationPathUtilTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_crash_on_non_existent_folders()
+    public function itDoesNotCrashOnNonExistentFolders()
     {
         $result = $this->util->getUpdateFilesFromFolder(__DIR__.'/fixtures/TestBundle/I/do/not/exist');
 
@@ -122,19 +122,20 @@ class MigrationPathUtilTest extends TestCase
 
     public function buildNumberDataProvider()
     {
-        return array(
-            array('update-12345.inc.php', '12345'),
-            array('update-0.inc.php', '0'),
-            array('/with/a/path/update-12345.inc.php', '12345'),
-            array('12345.inc.php', '12345'),
-        );
+        return [
+            ['update-12345.inc.php', '12345'],
+            ['update-0.inc.php', '0'],
+            ['/with/a/path/update-12345.inc.php', '12345'],
+            ['12345.inc.php', '12345'],
+        ];
     }
 
     /**
      * @test
+     *
      * @dataProvider buildNumberDataProvider
      */
-    public function it_gets_the_build_number_from_file($file, $expectedBuildNumber)
+    public function itGetsTheBuildNumberFromFile($file, $expectedBuildNumber)
     {
         $this->assertEquals($expectedBuildNumber, $this->util->getBuildNumberFromUpdateFile($file));
     }
@@ -142,7 +143,7 @@ class MigrationPathUtilTest extends TestCase
     /**
      * @test
      */
-    public function it_throws_an_exception_if_no_build_number_can_be_extracted()
+    public function itThrowsAnExceptionIfNoBuildNumberCanBeExtracted()
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('File does not contain a build number');

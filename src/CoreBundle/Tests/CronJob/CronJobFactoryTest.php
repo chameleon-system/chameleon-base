@@ -3,7 +3,6 @@
 namespace ChameleonSystem\CoreBundle\Tests\CronJob;
 
 use ChameleonSystem\CoreBundle\CronJob\CronJobFactory;
-use ChameleonSystem\CoreBundle\CronJob\subject;
 use ChameleonSystem\CoreBundle\RequestState\Interfaces\RequestStateHashProviderInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatExtendsTCMSCronJob;
@@ -29,7 +28,7 @@ class CronJobFactoryTest extends TestCase
         $this->containerMock = $this->createMock(ContainerInterface::class);
         ServiceLocator::setContainer($this->containerMock);
         $this->addMockServices([
-            'existing_service' => fn() => new CronJobThatExtendsTCMSCronJob(),
+            'existing_service' => fn () => new CronJobThatExtendsTCMSCronJob(),
             'chameleon_system_core.request_state_hash_provider' => $this->createMock(
                 RequestStateHashProviderInterface::class
             ),
@@ -37,7 +36,7 @@ class CronJobFactoryTest extends TestCase
             'ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatExtendsTCMSCronJob' => null,
             'ChameleonSystem\CoreBundle\Tests\CronJob\fixtures\CronJobThatDoesNotExtendTCMSCronJob' => null,
             // Commented out because it is not known to the container.
-            //'service_that_is_unknown_to_the_service_container' => null,
+            // 'service_that_is_unknown_to_the_service_container' => null,
         ]);
         $this->subject = new CronJobFactory($this->containerMock);
     }
@@ -82,26 +81,25 @@ class CronJobFactoryTest extends TestCase
 
     /**
      * @param array $services - assoc array of service name to service object.
-     *          Use `null` as service object to mock not having that service.
-     *          Use a closure to generate services that cannot be created at declare time
-     * @return void
+     *                        Use `null` as service object to mock not having that service.
+     *                        Use a closure to generate services that cannot be created at declare time
      */
     private function addMockServices(array $services): void
     {
         $this->containerMock->method('has')->willReturnCallback(function (string $serviceName) use ($services) {
-                return null !== ($services[$serviceName] ?? null);
-            });
+            return null !== ($services[$serviceName] ?? null);
+        });
         $this->containerMock->method('get')->willReturnCallback(function (string $serviceName) use ($services) {
-                $service = $services[$serviceName] ?? null;
-                if (null === $service) {
-                    return null;
-                }
-                if (\is_callable($service)) {
-                    return $service();
-                }
+            $service = $services[$serviceName] ?? null;
+            if (null === $service) {
+                return null;
+            }
+            if (\is_callable($service)) {
+                return $service();
+            }
 
-                return $service;
-            });
+            return $service;
+        });
     }
 
     private function assertIsValidCronjobObject($value, array $expectedData): void
@@ -113,5 +111,4 @@ class CronJobFactoryTest extends TestCase
             $this->assertEquals($expectedValue, $value->sqlData[$key]);
         }
     }
-
 }

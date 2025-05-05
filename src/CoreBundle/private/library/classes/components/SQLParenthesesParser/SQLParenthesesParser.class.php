@@ -16,28 +16,28 @@ class SQLParenthesesParser
      *
      * @var array|null
      */
-    protected $aStack = null;
+    protected $aStack;
 
     /**
      * @var array|null
      */
-    protected $current = null;
+    protected $current;
 
     /**
      * @var string
      */
     protected $sQuery = '';
 
-    protected $iPosition = null;
+    protected $iPosition;
 
-    protected $iBufferStart = null;
+    protected $iBufferStart;
 
     /**
      * all query parts not in a bracket.
      *
      * @var array
      */
-    protected $aOuterQueryParts = array();
+    protected $aOuterQueryParts = [];
 
     /**
      * full query string length.
@@ -64,15 +64,15 @@ class SQLParenthesesParser
     public function parse($sString)
     {
         if (!$sString) {
-            return array();
+            return [];
         }
 
         if ('(' == $sString[0]) {
             $sString = substr($sString, 1, -1);
         }
 
-        $this->current = array();
-        $this->aStack = array();
+        $this->current = [];
+        $this->aStack = [];
 
         $this->sQuery = $sString;
         $this->iLength = strlen($this->sQuery);
@@ -83,7 +83,7 @@ class SQLParenthesesParser
                     $this->push();
                     ++$this->iCurrentLevel;
                     array_push($this->aStack, $this->current);
-                    $this->current = array();
+                    $this->current = [];
                     break;
 
                 case ')':

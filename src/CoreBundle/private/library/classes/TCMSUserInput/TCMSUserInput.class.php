@@ -11,20 +11,20 @@
 
 /**
  * manages all user input.
-/**/
+ * /**/
 class TCMSUserInput
 {
-    const FILTER_NONE = '';
-    const FILTER_DEFAULT = 'TCMSUserInput_BaseText';
-    const FILTER_SAFE_TEXT = 'TCMSUserInput_SafeText';
-    const FILTER_SAFE_TEXTBLOCK = 'TCMSUserInput_SafeTextBlock';
-    const FILTER_INT = 'TCMSUserInput_Int';
-    const FILTER_DECIMAL = 'TCMSUserInput_Decimal';
-    const FILTER_FILENAME = 'TCMSUserInput_Filename';
-    const FILTER_DATE = 'TCMSUserInput_Date';
-    const FILTER_URL = 'TCMSUserInput_URL';
-    const FILTER_PASSWORD = 'TCMSUserInput_Password';
-    const FILTER_URL_INTERNAL = 'TCMSUserInput_InternalURL';
+    public const FILTER_NONE = '';
+    public const FILTER_DEFAULT = 'TCMSUserInput_BaseText';
+    public const FILTER_SAFE_TEXT = 'TCMSUserInput_SafeText';
+    public const FILTER_SAFE_TEXTBLOCK = 'TCMSUserInput_SafeTextBlock';
+    public const FILTER_INT = 'TCMSUserInput_Int';
+    public const FILTER_DECIMAL = 'TCMSUserInput_Decimal';
+    public const FILTER_FILENAME = 'TCMSUserInput_Filename';
+    public const FILTER_DATE = 'TCMSUserInput_Date';
+    public const FILTER_URL = 'TCMSUserInput_URL';
+    public const FILTER_PASSWORD = 'TCMSUserInput_Password';
+    public const FILTER_URL_INTERNAL = 'TCMSUserInput_InternalURL';
 
     /**
      * return the filtered value.
@@ -38,7 +38,7 @@ class TCMSUserInput
      */
     public static function FilterValue($sValue, $sFilterClass)
     {
-        static $aFilteredValueCache = array();
+        static $aFilteredValueCache = [];
         $sCacheKey = '';
         if (is_array($sValue)) {
             $sCacheKey = md5(serialize($sValue));
@@ -72,7 +72,7 @@ class TCMSUserInput
      */
     public static function GetFilterObject($sFilterClass)
     {
-        $aFilters = array();
+        $aFilters = [];
         $aFilterClasses = explode('|', $sFilterClass);
         foreach ($aFilterClasses as $sFilter) {
             $aParts = explode(';', $sFilter);

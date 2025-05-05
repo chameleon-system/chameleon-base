@@ -45,7 +45,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
      */
     public function post(UploaderConfigurationInterface $uploaderConfiguration)
     {
-        $uploadedFiles = array();
+        $uploadedFiles = [];
         $postFiles = $this->getUploadedFile('files');
         if ($postFiles) {
             foreach ($postFiles as $uploadedFile) {
@@ -61,7 +61,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
      */
     public function getResponse($uploadedFiles)
     {
-        $filesResponse = array();
+        $filesResponse = [];
         foreach ($uploadedFiles as $uploadedFileModel) {
             $file = new File();
             $file->name = $uploadedFileModel->getOriginalClientFileName();
@@ -81,7 +81,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
             $filesResponse[] = $file;
         }
 
-        return new JsonResponse(array('files' => $filesResponse));
+        return new JsonResponse(['files' => $filesResponse]);
     }
 
     /**
@@ -97,7 +97,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
         if (1 !== preg_match('/(\d+)-(\d+)\/(\d+)/', $contentRangeHeader, $contentRange)) {
             return null;
         }
-        $mappedContentRange = array();
+        $mappedContentRange = [];
         $mappedContentRange['start'] = (int) $contentRange[1];
         $mappedContentRange['end'] = (int) $contentRange[2];
         $mappedContentRange['total'] = (int) $contentRange[3];
@@ -108,9 +108,6 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
     /**
      * Take a file upload, copy to tmp directory and provide a UploadedFileDataModel for further processing.
      *
-     * @param UploadedFile                   $uploadedFile
-     * @param UploaderConfigurationInterface $uploaderConfiguration
-     *
      * @return UploadedFileDataModel
      */
     private function handleFileUpload(UploadedFile $uploadedFile, UploaderConfigurationInterface $uploaderConfiguration)
@@ -119,7 +116,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
         $uploadedFileModel->setOriginalClientFileName($this->getClientOriginalName($uploadedFile));
         $uploadedFileModel->setMimeType($uploadedFile->getClientMimeType());
 
-        if (UPLOAD_ERR_OK !== $uploadedFile->getError()) { //we cannot use isValid() because it checks for is_uploaded_file
+        if (UPLOAD_ERR_OK !== $uploadedFile->getError()) { // we cannot use isValid() because it checks for is_uploaded_file
             $uploadedFileModel->addErrorMessage($uploadedFile->getErrorMessage(), $uploadedFile->getError());
 
             return $uploadedFileModel;
@@ -158,8 +155,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
     }
 
     /**
-     * @param array|null $contentRange
-     * @param string     $tmpFilePath
+     * @param string $tmpFilePath
      *
      * @return bool
      */
@@ -168,8 +164,8 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
         if (null === $contentRange) {
             return false;
         }
-        if (($contentRange['start'] > 0 && true === is_file($tmpFilePath)) ||
-            0 === $contentRange['start'] && false === $this->isUploadFinished($contentRange)
+        if (($contentRange['start'] > 0 && true === is_file($tmpFilePath))
+            || 0 === $contentRange['start'] && false === $this->isUploadFinished($contentRange)
         ) {
             return true;
         }
@@ -178,11 +174,9 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
     }
 
     /**
-     * @param array|null $contentRange
-     *
      * @return bool
      */
-    private function isUploadFinished(array $contentRange = null)
+    private function isUploadFinished(?array $contentRange = null)
     {
         if (null === $contentRange) {
             return true;
@@ -196,7 +190,7 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
 
     /**
      * @param string $filePath
-     * @param bool   $clearStatCache - stat cache needs to be cleared after we write into the file, so file size gets updated
+     * @param bool $clearStatCache - stat cache needs to be cleared after we write into the file, so file size gets updated
      *
      * @return int
      */
@@ -216,8 +210,6 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
     /**
      * Returns the filename, the file had on the client filesystem.
      *
-     * @param UploadedFile $uploadedFile
-     *
      * @return mixed|string|null
      */
     private function getClientOriginalName(UploadedFile $uploadedFile)
@@ -234,8 +226,6 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
     }
 
     /**
-     * @param UploadedFile $uploadedFile
-     *
      * @return string
      */
     private function getUniqueFileNameForUpload(UploadedFile $uploadedFile)
@@ -246,9 +236,9 @@ class UploaderPostHandlerService implements UploaderPostHandlerServiceInterface
     /**
      * @param string $fieldName
      *
-     * @throws UploaderPostDataException
-     *
      * @return array|null
+     *
+     * @throws UploaderPostDataException
      */
     private function getUploadedFile($fieldName)
     {

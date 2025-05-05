@@ -13,7 +13,7 @@
  * extends the standard listing so that a preview image is shown, and if the
  * class is called with the right parameters it will show an assign button to
  * assign an image from the list to the calling record.
-/**/
+ * /**/
 class TCMSListManagerWYSIWYGImage extends TCMSListManagerImagedatabase
 {
     /**
@@ -46,19 +46,19 @@ class TCMSListManagerWYSIWYGImage extends TCMSListManagerImagedatabase
 
         $oTreeSelect = new TCMRenderMediaTreeSelectBox();
 
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         $mediaTreeId = $request->get('cms_media_tree_id');
         if (null === $mediaTreeId) {
             $mediaTreeId = '';
         }
 
-        $options = '<option value="">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Bitte wählen')."</option>\n";
+        $options = '<option value="">'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Bitte wählen')."</option>\n";
         $options .= $oTreeSelect->GetTreeOptions($mediaTreeId);
 
         $oViewRenderer = new ViewRenderer();
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
         $oViewRenderer->AddSourceObject('sName', 'cms_media_tree_id');
-        $oViewRenderer->AddSourceObject('sLabelText', \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.image_chooser.tree_node'));
+        $oViewRenderer->AddSourceObject('sLabelText', ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.image_chooser.tree_node'));
         $oViewRenderer->AddSourceObject('onChange', "document.forms['".TGlobal::OutHTML($this->tableObj->listName)."'].submit();");
         $oViewRenderer->AddSourceObject('options', $options);
 
@@ -69,8 +69,8 @@ class TCMSListManagerWYSIWYGImage extends TCMSListManagerImagedatabase
 
         $this->tableObj->searchBoxContent = $filterSection;
 
-        $this->tableObj->aHiddenFieldIgnoreList = array('cms_media_tree_id');
-        $customSearchFieldParams = array('cms_media_tree_id' => $mediaTreeId);
+        $this->tableObj->aHiddenFieldIgnoreList = ['cms_media_tree_id'];
+        $customSearchFieldParams = ['cms_media_tree_id' => $mediaTreeId];
         $this->tableObj->AddCustomSearchFieldParameter($customSearchFieldParams);
     }
 
@@ -154,10 +154,10 @@ class TCMSListManagerWYSIWYGImage extends TCMSListManagerImagedatabase
         $list_group_field_column = 'category';
 
         $this->tableObj->showGroupSelector = false;
-        $this->tableObj->AddGroupField(array($list_group_field_column => $groupField), 'left', null, null, $this->columnCount);
+        $this->tableObj->AddGroupField([$list_group_field_column => $groupField], 'left', null, null, $this->columnCount);
         // $this->tableObj->showGroupSelectorText = 'Verzeichnis';
-        $this->tableObj->showAllGroupsText = '['.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
-        $tmpArray = array($list_group_field_column => 'ASC');
+        $this->tableObj->showAllGroupsText = '['.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
+        $tmpArray = [$list_group_field_column => 'ASC'];
         $this->tableObj->orderList = array_merge($tmpArray, $this->tableObj->orderList);
     }
 

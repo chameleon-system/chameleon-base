@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\MediaManager\Exception;
 
-use Exception;
-
-class UsageFinderException extends Exception
+class UsageFinderException extends \Exception
 {
 }

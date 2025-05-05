@@ -42,8 +42,8 @@ class TCMSErrorHandler
                     fwrite($pFile, "===============================================================================\n");
                     fwrite($pFile, $sIdentifier."\n");
                     fwrite($pFile, 'errordetail: '.self::GetErrorTypeAsString($aError['type']).' '.print_r($aError, true)."\n");
-                    fwrite($pFile, 'Request URI: '.' '.print_r($aServer['REQUEST_URI'], true)."\n");
-                    fwrite($pFile, 'GET/POST: '.' '.print_r($oGlobal->GetUserData(), true)."\n");
+                    fwrite($pFile, 'Request URI:  '.print_r($aServer['REQUEST_URI'], true)."\n");
+                    fwrite($pFile, 'GET/POST:  '.print_r($oGlobal->GetUserData(), true)."\n");
                     fwrite($pFile, "===============================================================================\n\n");
                     fclose($pFile);
                     if (E_ERROR == $aError['type']) {
@@ -86,10 +86,10 @@ class TCMSErrorHandler
      *
      * @return string
      */
-    protected static function GetErrorTypeAsString($iErrorType, $aErrorLookup = array())
+    protected static function GetErrorTypeAsString($iErrorType, $aErrorLookup = [])
     {
         if (!is_array($aErrorLookup) || 0 == count($aErrorLookup)) {
-            $aErrorLookup = array(1 => 'E_ERROR', 2 => 'E_WARNING', 4 => 'E_PARSE', 8 => 'E_NOTICE', 16 => 'E_NOTICE', 32 => 'E_COMPILE_ERROR', 64 => 'E_COMPILE_WARNING', 256 => 'E_USER_ERROR', 512 => 'E_USER_WARNING', 1024 => 'E_USER_NOTICE', 2048 => 'E_STRICT', 4096 => 'E_RECOVERABLE_ERROR', 8192 => 'E_DEPRECATED', 16384 => 'E_USER_DEPRECATED', 30719 => 'E_ALL');
+            $aErrorLookup = [1 => 'E_ERROR', 2 => 'E_WARNING', 4 => 'E_PARSE', 8 => 'E_NOTICE', 16 => 'E_NOTICE', 32 => 'E_COMPILE_ERROR', 64 => 'E_COMPILE_WARNING', 256 => 'E_USER_ERROR', 512 => 'E_USER_WARNING', 1024 => 'E_USER_NOTICE', 2048 => 'E_STRICT', 4096 => 'E_RECOVERABLE_ERROR', 8192 => 'E_DEPRECATED', 16384 => 'E_USER_DEPRECATED', 30719 => 'E_ALL'];
         }
         if (array_key_exists($iErrorType, $aErrorLookup)) {
             $sErrorType = $aErrorLookup[$iErrorType];
@@ -108,7 +108,7 @@ class TCMSErrorHandler
      */
     protected static function GetServerVariables()
     {
-        $aServerVariables = array();
+        $aServerVariables = [];
         $aServerVariables['REMOTE_ADDR'] = self::GetVariableFromServerArray('REMOTE_ADDR');
         $aServerVariables['HTTP_REFERER'] = self::GetVariableFromServerArray('HTTP_REFERER');
         $aServerVariables['REQUEST_URI'] = self::GetVariableFromServerArray('REQUEST_URI');
@@ -139,15 +139,15 @@ class TCMSErrorHandler
     /**
      * checks the given error type for being in whitelist or not.
      *
-     * @param int   $iErrorType
+     * @param int $iErrorType
      * @param array $aWhiteList - optional: your own whitelist with error types
      *
      * @return bool
      */
-    protected static function IsErrorTypeInWhitelist($iErrorType, $aWhiteList = array())
+    protected static function IsErrorTypeInWhitelist($iErrorType, $aWhiteList = [])
     {
         if (!is_array($aWhiteList) || 0 == count($aWhiteList)) {
-            $aWhiteList = array(E_ERROR, E_PARSE, E_USER_ERROR);
+            $aWhiteList = [E_ERROR, E_PARSE, E_USER_ERROR];
         }
 
         return in_array($iErrorType, $aWhiteList);
@@ -157,14 +157,14 @@ class TCMSErrorHandler
      * checks the given error message for being in blacklist or not with the use of a simple regex.
      *
      * @param string $sErrorMessage
-     * @param array  $aBlackList    - optional: your own blacklist with messages
+     * @param array $aBlackList - optional: your own blacklist with messages
      *
      * @return bool
      */
-    protected static function IsMessageBlacklisted($sErrorMessage = '', $aBlackList = array())
+    protected static function IsMessageBlacklisted($sErrorMessage = '', $aBlackList = [])
     {
         if (!is_array($aBlackList) || 0 == count($aBlackList)) {
-            $aBlackList = array('open_basedir restriction in effect');
+            $aBlackList = ['open_basedir restriction in effect'];
         }
 
         $bMessageIsBlacklisted = false;
@@ -246,7 +246,7 @@ class TCMSErrorHandler
     protected static function SendMailToDeveloper($sSubject, $sMessage)
     {
         $bWasSend = false;
-        $developmentEmail = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.development_email');
+        $developmentEmail = ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_core.development_email');
         if (false !== $developmentEmail) {
             $bWasSend = mail($developmentEmail, $sSubject, $sMessage);
         }
@@ -259,6 +259,6 @@ class TCMSErrorHandler
      */
     private static function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

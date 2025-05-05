@@ -148,8 +148,8 @@ class chameleon
      */
     private function isSymfonyProfiler($requestUri)
     {
-        return _DEVELOPMENT_MODE &&
-            ('/_wdt/' === substr($requestUri, 0, 6)
+        return _DEVELOPMENT_MODE
+            && ('/_wdt/' === substr($requestUri, 0, 6)
             || '/_profiler/' === substr($requestUri, 0, 11)
             || '/_configurator/' === substr($requestUri, 0, 15))
         ;
@@ -157,6 +157,7 @@ class chameleon
 
     /**
      * @param int $requestType
+     *
      * @psalm-param RequestTypeInterface::REQUEST_TYPE_* $requestType
      *
      * @return bool
@@ -187,10 +188,10 @@ class chameleon
         if (\file_exists(PATH_WEB.'/maintenance.php')) {
             require PATH_WEB.'/maintenance.php';
 
-            exit();
+            exit;
         }
 
-        die('Sorry! This page is down for maintenance.');
+        exit('Sorry! This page is down for maintenance.');
     }
 
     private function clearMaintenanceModeMarkerFileCache(): void

@@ -12,7 +12,6 @@
 namespace ChameleonSystem\MediaManagerBundle\DependencyInjection\Compiler;
 
 use ChameleonSystem\MediaManager\Interfaces\SortColumnInterface;
-use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -23,11 +22,11 @@ class AddMediaItemSortColumnsToCollectionPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      *
+     * @return void
+     *
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     *
-     * @return void
+     * @throws \LogicException
      */
     public function process(ContainerBuilder $container)
     {
@@ -39,11 +38,11 @@ class AddMediaItemSortColumnsToCollectionPass implements CompilerPassInterface
             $sortColumn = $container->getDefinition($serviceId);
             $interfaces = class_implements($sortColumn->getClass(), true);
             if (false === in_array(SortColumnInterface::class, $interfaces, true)) {
-                throw new LogicException(
+                throw new \LogicException(
                     sprintf('Sort column must implement SortColumnInterface in service %s', $serviceId)
                 );
             }
-            $serviceDefinitionCollection->addMethodCall('addColumn', array($sortColumn));
+            $serviceDefinitionCollection->addMethodCall('addColumn', [$sortColumn]);
         }
     }
 }

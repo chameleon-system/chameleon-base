@@ -8,14 +8,10 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use PHPUnit\Framework\MockObject\Stub\ReturnStub;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsPortalDomains;
 
 class DomainValidatorTest extends TestCase
 {
@@ -30,7 +26,7 @@ class DomainValidatorTest extends TestCase
      */
     private $actualResult;
     /**
-     * @var TdbCmsPortalDomains|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsPortalDomains|\PHPUnit_Framework_MockObject_MockObject
      */
     private $portalDomainMock;
     /**
@@ -38,7 +34,7 @@ class DomainValidatorTest extends TestCase
      */
     private $portalDomainServiceMock;
     /**
-     * @var TdbCmsPortal|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsPortal|\PHPUnit_Framework_MockObject_MockObject
      */
     private $portalMock;
     /**
@@ -54,11 +50,11 @@ class DomainValidatorTest extends TestCase
      */
     private $languageServiceMock;
     /**
-     * @var TdbCmsLanguage|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsLanguage|\PHPUnit_Framework_MockObject_MockObject
      */
     private $language1Mock;
     /**
-     * @var TdbCmsLanguage|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbCmsLanguage|\PHPUnit_Framework_MockObject_MockObject
      */
     private $language2Mock;
 
@@ -87,10 +83,10 @@ class DomainValidatorTest extends TestCase
      * @param string $domain
      * @param string $portalId
      * @param string $languageId
-     * @param bool   $secure
-     * @param bool   $forcePrimaryDomain
-     * @param bool   $isBackendMode
-     * @param bool   $isCurrentRequestSecure
+     * @param bool $secure
+     * @param bool $forcePrimaryDomain
+     * @param bool $isBackendMode
+     * @param bool $isCurrentRequestSecure
      * @param string $expectedValue
      */
     public function testGetValidatedDomain($domain, $portalId, $languageId, $secure, $forcePrimaryDomain, $isBackendMode, $isCurrentRequestSecure, $expectedValue)
@@ -102,10 +98,10 @@ class DomainValidatorTest extends TestCase
 
     /**
      * @param string $languageId
-     * @param bool   $forcePrimaryDomain
-     * @param bool   $secureArgument
-     * @param bool   $isBackendMode
-     * @param bool   $isCurrentRequestSecure
+     * @param bool $forcePrimaryDomain
+     * @param bool $secureArgument
+     * @param bool $isBackendMode
+     * @param bool $isCurrentRequestSecure
      */
     private function givenADomainValidator($languageId, $forcePrimaryDomain, $secureArgument, $isBackendMode, $isCurrentRequestSecure)
     {
@@ -119,22 +115,22 @@ class DomainValidatorTest extends TestCase
 
     /**
      * @param string $languageId
-     * @param bool   $secure
-     * @param bool   $isBackendMode
+     * @param bool $secure
+     * @param bool $isBackendMode
      */
     private function mockPortalDomainService($languageId, $secure, $isBackendMode)
     {
         $this->portalDomainMock = $this->getMockBuilder('TdbCmsPortalDomains')
             ->disableAutoload()
-            ->setMethods(array('GetActiveDomainName'))
+            ->setMethods(['GetActiveDomainName'])
             ->getMock();
         $this->portalDomainMock->method('GetActiveDomainName')->willReturn('active-domain.com');
 
         $this->portalMock = $this->getMockBuilder('TdbCmsPortal')
             ->disableAutoload()
-            ->setMethods(array(
+            ->setMethods([
                 'GetFieldCmsPortalDomainsList',
-            ))
+            ])
             ->getMock();
         $this->portalMock->method('GetFieldCmsPortalDomainsList')->will($this->getMockResultForGetFieldCmsPortalDomainsList());
         $this->portalMock->id = '1';
@@ -150,7 +146,7 @@ class DomainValidatorTest extends TestCase
 
         $portalDomainMockPrimaryLanguage1 = $this->getMockBuilder('TdbCmsPortalDomains')
             ->disableAutoload()
-            ->setMethods(array('getSecureDomainName', 'getInsecureDomainName'))
+            ->setMethods(['getSecureDomainName', 'getInsecureDomainName'])
             ->getMock();
         $portalDomainMockPrimaryLanguage1->method('getSecureDomainName')->willReturn('secure-primary-domain-with-language1.com');
         $portalDomainMockPrimaryLanguage1->method('getInsecureDomainName')->willReturn('insecure-primary-domain-with-language1.com');
@@ -158,7 +154,7 @@ class DomainValidatorTest extends TestCase
 
         $portalDomainMockPrimaryLanguage2 = $this->getMockBuilder('TdbCmsPortalDomains')
             ->disableAutoload()
-            ->setMethods(array('getSecureDomainName', 'getInsecureDomainName'))
+            ->setMethods(['getSecureDomainName', 'getInsecureDomainName'])
             ->getMock();
         $portalDomainMockPrimaryLanguage2->method('getSecureDomainName')->willReturn('secure-primary-domain-without-language.com');
         $portalDomainMockPrimaryLanguage2->method('getInsecureDomainName')->willReturn('insecure-primary-domain-without-language.com');
@@ -200,7 +196,7 @@ class DomainValidatorTest extends TestCase
      * @param string $domain
      * @param string $portalId
      * @param string $languageId
-     * @param bool   $secure
+     * @param bool $secure
      */
     private function whenGetValidatedDomainIsCalled($domain, $portalId, $languageId, $secure)
     {
@@ -213,7 +209,7 @@ class DomainValidatorTest extends TestCase
     /**
      * @param string $portalId
      *
-     * @return TdbCmsPortal|PHPUnit_Framework_MockObject_MockObject|null
+     * @return \TdbCmsPortal|\PHPUnit_Framework_MockObject_MockObject|null
      */
     private function getMockPortalForId($portalId)
     {
@@ -232,18 +228,18 @@ class DomainValidatorTest extends TestCase
         $domainListMock = $this
             ->getMockBuilder('TdbCmsPortalDomainList')
             ->disableAutoload()
-            ->setMethods(array(
+            ->setMethods([
                 'Next',
-            ))
+            ])
             ->getMock();
 
         $domainMock1 = $this
             ->getMockBuilder('TdbCmsPortalDomains')
             ->disableAutoload()
-            ->setMethods(array(
+            ->setMethods([
                 'getInsecureDomainName',
                 'getSecureDomainName',
-            ))
+            ])
             ->getMock();
         $domainMock1->fieldCmsLanguageId = '1';
         $domainMock1->method('getInsecureDomainName')->willReturn('insecure-primary-domain-with-language1.com');
@@ -253,10 +249,10 @@ class DomainValidatorTest extends TestCase
         $domainMock2 = $this
             ->getMockBuilder('TdbCmsPortalDomains')
             ->disableAutoload()
-            ->setMethods(array(
+            ->setMethods([
                 'getInsecureDomainName',
                 'getSecureDomainName',
-            ))
+            ])
             ->getMock();
         $domainMock2->fieldCmsLanguageId = '2';
         $domainMock2->method('getInsecureDomainName')->willReturn('insecure-domain-with-language2.com');
@@ -266,10 +262,10 @@ class DomainValidatorTest extends TestCase
         $domainMock3 = $this
             ->getMockBuilder('TdbCmsPortalDomains')
             ->disableAutoload()
-            ->setMethods(array(
+            ->setMethods([
                 'getInsecureDomainName',
                 'getSecureDomainName',
-            ))
+            ])
             ->getMock();
         $domainMock3->fieldCmsLanguageId = '';
         $domainMock3->method('getInsecureDomainName')->willReturn('insecure-primary-domain-without-language.com');
@@ -279,10 +275,10 @@ class DomainValidatorTest extends TestCase
         $domainMock4 = $this
             ->getMockBuilder('TdbCmsPortalDomains')
             ->disableAutoload()
-            ->setMethods(array(
+            ->setMethods([
                 'getInsecureDomainName',
                 'getSecureDomainName',
-            ))
+            ])
             ->getMock();
         $domainMock4->fieldCmsLanguageId = '';
         $domainMock4->method('getInsecureDomainName')->willReturn('domain-without-separate-secure-primary-domain-without-language.com');
@@ -292,10 +288,10 @@ class DomainValidatorTest extends TestCase
         $domainMock5 = $this
             ->getMockBuilder('TdbCmsPortalDomains')
             ->disableAutoload()
-            ->setMethods(array(
+            ->setMethods([
                 'getInsecureDomainName',
                 'getSecureDomainName',
-            ))
+            ])
             ->getMock();
         $domainMock5->fieldCmsLanguageId = '';
         $domainMock5->method('getInsecureDomainName')->willReturn('active-domain.com');
@@ -310,7 +306,7 @@ class DomainValidatorTest extends TestCase
     /**
      * @param string $languageId
      *
-     * @return TdbCmsLanguage|PHPUnit_Framework_MockObject_MockObject
+     * @return \TdbCmsLanguage|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getMockLanguageForId($languageId)
     {
@@ -334,8 +330,8 @@ class DomainValidatorTest extends TestCase
      */
     public function getDataForTestGetValidatedDomain()
     {
-        return array(
-            array(
+        return [
+            [
                 'domain' => null,
                 'portalId' => null,
                 'languageId' => '1',
@@ -344,8 +340,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'active-domain.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => null,
                 'portalId' => null,
                 'languageId' => '1',
@@ -354,8 +350,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'insecure-primary-domain-with-language1.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'insecure-primary-domain-without-language.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -364,8 +360,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'insecure-primary-domain-without-language.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'secure-primary-domain-without-language.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -374,8 +370,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'secure-primary-domain-without-language.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'secure-primary-domain-with-language1.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -384,8 +380,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'secure-primary-domain-with-language1.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'secure-primary-domain-with-language1.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -394,8 +390,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => true,
                 'expectedResult' => 'secure-primary-domain-with-language1.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'secure-domain-with-language2.com',
                 'portalId' => '1',
                 'languageId' => '2',
@@ -404,8 +400,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'secure-domain-with-language2.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'invalid-domain.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -414,8 +410,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => true,
                 'expectedResult' => 'active-domain.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'invalid-domain.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -424,8 +420,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'secure-primary-domain-with-language1.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'active-domain.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -434,8 +430,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => true,
                 'expectedResult' => 'active-domain.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'active-domain.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -444,8 +440,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'active-domain.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'active-domain.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -454,12 +450,12 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => true,
                 'expectedResult' => 'secure-primary-domain-with-language1.com',
-            ),
+            ],
             /*
              * Request primary domain for language 1, but with language 2 which has no explicit primary domain.
              * Therefore primary domain without language is expected.
              */
-            array(
+            [
                 'domain' => 'secure-primary-domain-with-language1.com',
                 'portalId' => '1',
                 'languageId' => '2',
@@ -468,11 +464,11 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => false,
                 'isCurrentRequestSecure' => true,
                 'expectedResult' => 'secure-primary-domain-without-language.com',
-            ),
+            ],
             /*
              * Backend.
              */
-            array(
+            [
                 'domain' => 'insecure-primary-domain-without-language.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -481,8 +477,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => true,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'insecure-primary-domain-without-language.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'invalid-domain.com',
                 'portalId' => '1',
                 'languageId' => '1',
@@ -491,13 +487,13 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => true,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'secure-primary-domain-with-language1.com',
-            ),
+            ],
             /*
              * If a domain is requested for an invalid domain (i.e. one that is not registered as portal domain) while
              * in the backend, and if the domain is not requested for a specific portal, the domain is regarded as
              * valid. This is because the backend can be run on any domain, not just on frontend domains.
              */
-            array(
+            [
                 'domain' => 'invalid-domain.com',
                 'portalId' => null,
                 'languageId' => '1',
@@ -506,8 +502,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => true,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'invalid-domain.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'invalid-domain.com',
                 'portalId' => null,
                 'languageId' => '1',
@@ -516,8 +512,8 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => true,
                 'isCurrentRequestSecure' => true,
                 'expectedResult' => 'invalid-domain.com',
-            ),
-            array(
+            ],
+            [
                 'domain' => 'invalid-domain.com',
                 'portalId' => null,
                 'languageId' => '1',
@@ -526,11 +522,11 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => true,
                 'isCurrentRequestSecure' => true,
                 'expectedResult' => 'invalid-domain.com',
-            ),
+            ],
             /*
              * If no specific domain is requested, the domain of the current request is returned.
              */
-            array(
+            [
                 'domain' => null,
                 'portalId' => null,
                 'languageId' => '1',
@@ -539,7 +535,7 @@ class DomainValidatorTest extends TestCase
                 'isBackendMode' => true,
                 'isCurrentRequestSecure' => false,
                 'expectedResult' => 'active-domain.com',
-            ),
-        );
+            ],
+        ];
     }
 }

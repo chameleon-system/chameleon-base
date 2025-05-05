@@ -10,12 +10,11 @@ class ModuleCustomlistConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Title */
         private string $name = '',
@@ -71,7 +70,6 @@ class ModuleCustomlistConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -84,7 +82,6 @@ class ModuleCustomlistConfig
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getIntro(): string
@@ -99,7 +96,6 @@ class ModuleCustomlistConfig
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getRecordsPerPage(): int
     {
@@ -113,7 +109,6 @@ class ModuleCustomlistConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getGroupField(): string
     {
@@ -126,8 +121,6 @@ class ModuleCustomlistConfig
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -160,6 +153,4 @@ class ModuleCustomlistConfig
 
         return $this;
     }
-
-
 }

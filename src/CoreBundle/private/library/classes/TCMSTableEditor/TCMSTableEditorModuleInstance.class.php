@@ -58,7 +58,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
                 /** @var $oModuleContentRecord TCMSRecord */
                 while ($oModuleContentRecord = $oModuleContentRecordList->Next()) {
                     $oTableEditorManager = TTools::GetTableEditorManager($oModuleTableConf->sqlData['name'], $oModuleContentRecord->id);
-                    $oTableEditorManager->DatabaseCopy(false, array('cms_tpl_module_instance_id' => $this->sId), $this->bIsCopyAllLanguageValues);
+                    $oTableEditorManager->DatabaseCopy(false, ['cms_tpl_module_instance_id' => $this->sId], $this->bIsCopyAllLanguageValues);
                 }
             }
         }
@@ -67,8 +67,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
     /**
      * Get all records from given table connected with given module instance.
      *
-     * @param TdbCmsTblConf           $oModuleTableConf
-     * @param TdbCmsTplModuleInstance $oCmsTplModuleInstance
+     * @param TdbCmsTblConf $oModuleTableConf
      *
      * @return TCMSRecordList $oModuleContentRecordList
      */
@@ -88,7 +87,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
      * copy linked foreign property records.
      *
      * @param TCMSField $oField
-     * @param string    $sourceRecordID
+     * @param string $sourceRecordID
      */
     public function CopyPropertyRecords($oField, $sourceRecordID)
     {
@@ -106,7 +105,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
      *
      * @return object TCMSstdClass
      */
-    public function GetObjectShortInfo($postData = array())
+    public function GetObjectShortInfo($postData = [])
     {
         /** @var $oRecordData TCMSstdClass */
         $oRecordData = parent::GetObjectShortInfo();
@@ -226,7 +225,7 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
                 if ($oTable) {
                     $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $oTable->fieldName).'List';
                     $sFunctionNme = TCMSTableToClass::GetClassName('GetListFor', $oCmsFieldConfig->fieldName);
-                    $oConnectedRecordList = call_user_func_array(array($sClassName, $sFunctionNme), array($this->sId));
+                    $oConnectedRecordList = call_user_func_array([$sClassName, $sFunctionNme], [$this->sId]);
                     if ($oConnectedRecordList && $oConnectedRecordList->Length() > 0) {
                         $bModuleInstanceField = true;
                         break;

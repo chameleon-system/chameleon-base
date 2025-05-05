@@ -37,7 +37,6 @@ interface MediaItemDataAccessInterface
     /**
      * Get multiple media items from the media pool at once.
      *
-     * @param array  $ids
      * @param string $languageId
      *
      * @return MediaItemDataModel[]
@@ -49,9 +48,8 @@ interface MediaItemDataAccessInterface
     /**
      * Get media items that are children of a media tree node.
      *
-     * @param MediaTreeNodeDataModel $mediaTreeNode
-     * @param string                 $languageId
-     * @param bool                   $includeSubtree
+     * @param string $languageId
+     * @param bool $includeSubtree
      *
      * @return MediaItemDataModel[]
      *
@@ -77,8 +75,7 @@ interface MediaItemDataAccessInterface
     /**
      * Get a list of media items for a list request.
      *
-     * @param MediaManagerListRequest $mediaManagerListRequest
-     * @param string                  $languageId
+     * @param string $languageId
      *
      * @return MediaManagerListResult
      *
@@ -116,7 +113,7 @@ interface MediaItemDataAccessInterface
      * Set tags of a media item, delete tags not in list.
      *
      * @param string $mediaItemId
-     * @param array  $tagList
+     * @param array $tagList
      * @param string $languageId
      *
      * @return void

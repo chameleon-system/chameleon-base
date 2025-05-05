@@ -13,7 +13,6 @@ namespace ChameleonSystem\TrackViewsBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use TPkgTrackObjectViews;
 
 class TrackViewsListener
 {
@@ -30,13 +29,13 @@ class TrackViewsListener
             return;
         }
 
-        TPkgTrackObjectViews::GetInstance()->WriteView();
+        \TPkgTrackObjectViews::GetInstance()->WriteView();
 
         $dummyGifData = \base64_decode('R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==');
 
         $response = new Response();
         $response->headers->set('Content-Type', 'image/gif');
-        $response->headers->set('Content-Length', (string)\strlen($dummyGifData));
+        $response->headers->set('Content-Length', (string) \strlen($dummyGifData));
 
         $response->setContent($dummyGifData);
 

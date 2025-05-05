@@ -38,7 +38,6 @@ class TPkgCmsFileManager_Utilities
      *
      * $result = debianSaveGlob("/path/to/my/cache", "*.inc.php"); // will do a glob for the pattern "/path/to/my/cache/*.inc.php"
      *
-     *
      * @param string $path
      * @param string $patternInPath
      * @param int|null $flags
@@ -50,7 +49,7 @@ class TPkgCmsFileManager_Utilities
         $pattern = $path.DIRECTORY_SEPARATOR.$patternInPath;
         $result = glob($pattern, $flags);
         if (false === $result && is_dir($path) && is_readable($path) && is_writable($path)) {
-            $result = array(); //fix for debian systems, which don't return an empty array, but false, when they find an empty folder.
+            $result = []; // fix for debian systems, which don't return an empty array, but false, when they find an empty folder.
         }
 
         return $result;

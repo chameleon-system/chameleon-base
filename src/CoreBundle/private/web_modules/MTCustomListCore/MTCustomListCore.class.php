@@ -15,7 +15,7 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 /**
  * a list which can be completely customized. it assumes that we have a category table (optional)
  * a list table, items that define each entry (defaults to TCMSRecord).
-/**/
+ * /**/
 class MTCustomListCore extends TUserCustomModelBase
 {
     /**
@@ -23,35 +23,35 @@ class MTCustomListCore extends TUserCustomModelBase
      *
      * @var MTCustomListCoreConfig
      */
-    protected $oListConfig = null;
+    protected $oListConfig;
 
     /**
      * the list config table.
      *
      * @var TdbModuleCustomlistConfig
      */
-    protected $oModuleConfig = null;
+    protected $oModuleConfig;
 
     /**
      * the TCMSTableConfig of the list Table.
      *
      * @var TCMSTableConf
      */
-    protected $oListTableConfig = null;
+    protected $oListTableConfig;
 
     /**
      * the current loaded item.
      *
      * @var object
      */
-    protected $oActiveItem = null;
+    protected $oActiveItem;
 
     /**
      * recordList object of all items.
      *
      * @var TCMSRecordList
      */
-    protected $oItemList = null;
+    protected $oItemList;
 
     /**
      * current page count.
@@ -104,7 +104,7 @@ class MTCustomListCore extends TUserCustomModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('ShowItem');
+        $externalFunctions = ['ShowItem'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -155,7 +155,7 @@ class MTCustomListCore extends TUserCustomModelBase
 
     protected function GetList()
     {
-        $oListRecords = new TCMSRecordList(); /*var $oListRecords TCMSRecordList*/
+        $oListRecords = new TCMSRecordList(); /* var $oListRecords TCMSRecordList */
 
         $oListRecords->sTableName = $this->oListConfig->sListTable;
         $oListRecords->SetLanguage($this->getLanguageService()->getActiveLanguageId());
@@ -194,7 +194,7 @@ class MTCustomListCore extends TUserCustomModelBase
          * @var TdbModuleCustomlistConfig $moduleConfiguration
          */
         $moduleConfigurationTableName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->oListConfig->sListConfigTable);
-        $moduleConfiguration = call_user_func(array($moduleConfigurationTableName, 'GetNewInstance'));
+        $moduleConfiguration = call_user_func([$moduleConfigurationTableName, 'GetNewInstance']);
         $moduleConfiguration->SetLanguage($this->getLanguageService()->getActiveLanguageId());
         $moduleConfiguration->LoadFromField('cms_tpl_module_instance_id', $this->instanceID);
         $this->oModuleConfig = $moduleConfiguration;
@@ -263,7 +263,7 @@ class MTCustomListCore extends TUserCustomModelBase
 
         // now either add order info from config list, or just use the name field of the list
         $oOrderFields = $this->oModuleConfig->GetFieldOrderinfoList();
-        $oOrderFields->ChangeOrderBy(array('position' => 'ASC'));
+        $oOrderFields->ChangeOrderBy(['position' => 'ASC']);
 
         if ($oOrderFields->Length() > 0) {
             while ($oOrderField = $oOrderFields->Next()) {
@@ -290,7 +290,7 @@ class MTCustomListCore extends TUserCustomModelBase
     protected function GetCategoryNameField($sCategoryTableName)
     {
         $oCatConf = new TCMSTableConf();
-        /** @var $oCatConf TCMSTableConf */
+        /* @var $oCatConf TCMSTableConf */
         $oCatConf->LoadFromField('name', $sCategoryTableName);
 
         return $oCatConf->GetNameColumn();
@@ -311,7 +311,7 @@ class MTCustomListCore extends TUserCustomModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -319,6 +319,6 @@ class MTCustomListCore extends TUserCustomModelBase
      */
     private function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 }

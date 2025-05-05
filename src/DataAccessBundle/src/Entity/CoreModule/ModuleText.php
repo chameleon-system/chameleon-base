@@ -12,12 +12,11 @@ class ModuleText
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsTplModuleInstance|null - Module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Headline */
         private string $name = '',
@@ -26,8 +25,7 @@ class ModuleText
         private string $subheadline = '',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Optional icon */
-        private ?CmsMedia $icon = null
-        ,
+        private ?CmsMedia $icon = null,
         // TCMSFieldWYSIWYG
         /** @var string - Content */
         private string $content = '',
@@ -74,7 +72,6 @@ class ModuleText
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -87,7 +84,6 @@ class ModuleText
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSubheadline(): string
@@ -102,7 +98,6 @@ class ModuleText
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getIcon(): ?CmsMedia
     {
@@ -116,7 +111,6 @@ class ModuleText
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getContent(): string
     {
@@ -129,8 +123,6 @@ class ModuleText
 
         return $this;
     }
-
-
 
     // TCMSFieldDownloads
 
@@ -163,6 +155,4 @@ class ModuleText
 
         return $this;
     }
-
-
 }

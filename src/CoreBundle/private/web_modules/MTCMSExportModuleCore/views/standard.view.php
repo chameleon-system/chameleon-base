@@ -1,1 +1,3 @@
-<?php echo $data['sContent'];
+<?php
+
+echo $data['sContent'];

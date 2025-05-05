@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\CoreBundle\DataModel\PageDataModel;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
 /**
  * SystemPageServiceInterface defines a service that provides methods to get information on system pages.
  */
@@ -29,9 +30,9 @@ interface SystemPageServiceInterface
      * Returns a system page with the passed internal name for the passed portal in the passed language, or null
      * if no system page matching these requirements exists.
      *
-     * @param string               $systemPageNameInternal
-     * @param \TdbCmsPortal|null   $portal                 if null, the active portal is used
-     * @param \TdbCmsLanguage|null $language               if null, the active language is used
+     * @param string $systemPageNameInternal
+     * @param \TdbCmsPortal|null $portal if null, the active portal is used
+     * @param \TdbCmsLanguage|null $language if null, the active language is used
      *
      * @return \TdbCmsPortalSystemPage|null
      */
@@ -45,14 +46,14 @@ interface SystemPageServiceInterface
      * Returns a URL to the system page with the passed internal name for the passed portal in the passed language.
      * Note that this link might be absolute if it requires HTTPS access.
      *
-     * @param string               $systemPageNameInternal
-     * @param array                $parameters             an array of key-value parameters to add to the URL. You may also pass the 'domain' parameter
-     *                                                     to generate the URL for a domain other than the default. When doing this, ask an implementation
-     *                                                     of ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getHostRequirementPlaceholder()
-     *                                                     for the exact name of the domain parameter. The domain parameter has no effect if the
-     *                                                     resulting URL is relative.
-     * @param \TdbCmsPortal|null   $portal                 if null, the active portal is used
-     * @param \TdbCmsLanguage|null $language               if null, the active language is used
+     * @param string $systemPageNameInternal
+     * @param array $parameters an array of key-value parameters to add to the URL. You may also pass the 'domain' parameter
+     *                          to generate the URL for a domain other than the default. When doing this, ask an implementation
+     *                          of ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getHostRequirementPlaceholder()
+     *                          for the exact name of the domain parameter. The domain parameter has no effect if the
+     *                          resulting URL is relative.
+     * @param \TdbCmsPortal|null $portal if null, the active portal is used
+     * @param \TdbCmsLanguage|null $language if null, the active language is used
      *
      * @return string
      *
@@ -68,14 +69,14 @@ interface SystemPageServiceInterface
     /**
      * Returns an absolute URL to the system page with the passed internal name for the passed portal in the passed language.
      *
-     * @param string               $systemPageNameInternal
-     * @param array                $parameters             an array of key-value parameters to add to the URL. You may also pass the 'domain' parameter
-     *                                                     to generate the URL for a domain other than the default. When doing this, ask an implementation
-     *                                                     of ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getHostRequirementPlaceholder()
-     *                                                     for the exact name of the domain parameter.
-     * @param \TdbCmsPortal|null   $portal                 if null, the active portal is used
-     * @param \TdbCmsLanguage|null $language               if null, the active language is used
-     * @param bool                 $forceSecure            if true, the resulting URL will be an HTTPS URL in any case
+     * @param string $systemPageNameInternal
+     * @param array $parameters an array of key-value parameters to add to the URL. You may also pass the 'domain' parameter
+     *                          to generate the URL for a domain other than the default. When doing this, ask an implementation
+     *                          of ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getHostRequirementPlaceholder()
+     *                          for the exact name of the domain parameter.
+     * @param \TdbCmsPortal|null $portal if null, the active portal is used
+     * @param \TdbCmsLanguage|null $language if null, the active language is used
+     * @param bool $forceSecure if true, the resulting URL will be an HTTPS URL in any case
      *
      * @return string
      *
@@ -92,7 +93,7 @@ interface SystemPageServiceInterface
     /**
      * Returns the tree node connected with the system page $systemPageNameInternal.
      *
-     * @param \TdbCmsPortal|null   $portal   if null, the active portal is used
+     * @param \TdbCmsPortal|null $portal if null, the active portal is used
      * @param \TdbCmsLanguage|null $language if null, the active language is used
      *
      * @throws RouteNotFoundException if there is no system page with the passed name or if no page is assigned
@@ -102,12 +103,12 @@ interface SystemPageServiceInterface
     /**
      * Returns an absolute URL to the system page with the passed internal name for the passed portal in the passed language.
      *
-     * @param array                $parameters an array of key-value parameters to add to the URL. You may also pass the 'domain' parameter
-     *                                         to generate the URL for a domain other than the default. When doing this, ask an implementation
-     *                                         of ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getHostRequirementPlaceholder()
-     *                                         for the exact name of the domain parameter.
-     * @param \TdbCmsPortal|null   $portal     if null, the active portal is used
-     * @param \TdbCmsLanguage|null $language   if null, the active language is used
+     * @param array $parameters an array of key-value parameters to add to the URL. You may also pass the 'domain' parameter
+     *                          to generate the URL for a domain other than the default. When doing this, ask an implementation
+     *                          of ChameleonSystem\CoreBundle\Util\RoutingUtilInterface::getHostRequirementPlaceholder()
+     *                          for the exact name of the domain parameter.
+     * @param \TdbCmsPortal|null $portal if null, the active portal is used
+     * @param \TdbCmsLanguage|null $language if null, the active language is used
      *
      * @return string
      *

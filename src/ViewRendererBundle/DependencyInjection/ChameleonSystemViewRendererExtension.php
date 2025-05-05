@@ -11,10 +11,10 @@
 
 namespace ChameleonSystem\ViewRendererBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 class ChameleonSystemViewRendererExtension extends ConfigurableExtension
 {
@@ -22,11 +22,12 @@ class ChameleonSystemViewRendererExtension extends ConfigurableExtension
      * {@inheritDoc}
      *
      * @param array<string, mixed> $mergedConfig
+     *
      * @return void
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
-        $loader = new XMLFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
 
         $lessCompiler = $container->getDefinition('chameleon_system_view_renderer.less_compiler');

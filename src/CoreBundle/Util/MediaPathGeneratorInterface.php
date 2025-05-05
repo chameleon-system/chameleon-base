@@ -25,7 +25,7 @@ interface MediaPathGeneratorInterface
      * @param string $rawFileName
      * @param string $rawFileExtension
      * @param string $imageId
-     * @param int    $imageCmsIdent
+     * @param int $imageCmsIdent
      *
      * @return string
      */

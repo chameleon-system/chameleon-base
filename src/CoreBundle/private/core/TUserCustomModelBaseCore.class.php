@@ -20,7 +20,7 @@ class TUserCustomModelBaseCore extends TUserModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('GenerateModuleNavigation');
+        $externalFunctions = ['GenerateModuleNavigation'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 

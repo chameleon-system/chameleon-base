@@ -15,10 +15,10 @@ use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 
 class LogChangeDataModel
 {
-    const TYPE_CUSTOM_QUERY = 'customQuery';
-    const TYPE_INSERT = 'insert';
-    const TYPE_UPDATE = 'update';
-    const TYPE_DELETE = 'delete';
+    public const TYPE_CUSTOM_QUERY = 'customQuery';
+    public const TYPE_INSERT = 'insert';
+    public const TYPE_UPDATE = 'update';
+    public const TYPE_DELETE = 'delete';
 
     /**
      * @var string|MigrationQueryData
@@ -31,7 +31,7 @@ class LogChangeDataModel
 
     /**
      * @param string|MigrationQueryData $data An array of string and/or MigrationQueryData objects
-     * @param string                    $type
+     * @param string $type
      */
     public function __construct($data, $type = self::TYPE_CUSTOM_QUERY)
     {

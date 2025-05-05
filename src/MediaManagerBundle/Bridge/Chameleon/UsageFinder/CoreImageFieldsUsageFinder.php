@@ -94,9 +94,8 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
     }
 
     /**
-     * @param string             $tableName
-     * @param string             $fieldName
-     * @param MediaItemDataModel $mediaItem
+     * @param string $tableName
+     * @param string $fieldName
      *
      * @return array
      */
@@ -119,9 +118,8 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
     }
 
     /**
-     * @param string             $tableName
-     * @param string             $fieldName
-     * @param MediaItemDataModel $mediaItem
+     * @param string $tableName
+     * @param string $fieldName
      *
      * @return array
      */
@@ -148,9 +146,8 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
     }
 
     /**
-     * @param string             $tableName
-     * @param string             $fieldName
-     * @param MediaItemDataModel $mediaItem
+     * @param string $tableName
+     * @param string $fieldName
      *
      * @return array
      */
@@ -183,9 +180,8 @@ class CoreImageFieldsUsageFinder extends AbstractImageFieldsUsageFinder
     }
 
     /**
-     * @param string             $tableName
-     * @param string             $fieldName
-     * @param MediaItemDataModel $mediaItem
+     * @param string $tableName
+     * @param string $fieldName
      *
      * @return array
      */

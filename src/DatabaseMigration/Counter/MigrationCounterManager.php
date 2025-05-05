@@ -12,7 +12,6 @@
 namespace ChameleonSystem\DatabaseMigration\Counter;
 
 use ChameleonSystem\DatabaseMigration\DataAccess\MigrationDataAccessInterface;
-use InvalidArgumentException;
 
 /**
  * {@inheritdoc}
@@ -24,9 +23,6 @@ class MigrationCounterManager implements MigrationCounterManagerInterface
      */
     private $migrationDataAccess;
 
-    /**
-     * @param MigrationDataAccessInterface $migrationDataAccess
-     */
     public function __construct(MigrationDataAccessInterface $migrationDataAccess)
     {
         $this->migrationDataAccess = $migrationDataAccess;
@@ -69,13 +65,13 @@ class MigrationCounterManager implements MigrationCounterManagerInterface
      *
      * @return string
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     private function getCounterIdForBundle($bundleName)
     {
         $countersByBundle = $this->migrationDataAccess->getMigrationCounterIdsByBundle();
         if (false === array_key_exists($bundleName, $countersByBundle)) {
-            throw new InvalidArgumentException('Invalid bundle name: '.$bundleName);
+            throw new \InvalidArgumentException('Invalid bundle name: '.$bundleName);
         }
 
         return $countersByBundle[$bundleName];

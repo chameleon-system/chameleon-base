@@ -11,13 +11,13 @@
 
 /**
  * use the event manager to trigger new events, or register observers for events - implements an observer pattern.
-/**/
+ * /**/
 class TPkgCmsEventManager
 {
     /**
      * @var array<string, IPkgCmsEventObserver[]>
      */
-    private $aObserver = array();
+    private $aObserver = [];
 
     /**
      * @return TPkgCmsEventManager
@@ -34,9 +34,8 @@ class TPkgCmsEventManager
     }
 
     /**
-     * @param string               $sEventContext - IPkgCmsEvent::CONTEXT_* or TPkgCmsEvent::CONTEXT_*
-     * @param string               $sEventName    - use IPkgCmsEvent::NAME_* or TPkgCmsEvent::NAME_*
-     * @param IPkgCmsEventObserver $oObserver
+     * @param string $sEventContext - IPkgCmsEvent::CONTEXT_* or TPkgCmsEvent::CONTEXT_*
+     * @param string $sEventName - use IPkgCmsEvent::NAME_* or TPkgCmsEvent::NAME_*
      *
      * @return void
      */
@@ -44,14 +43,12 @@ class TPkgCmsEventManager
     {
         $sFullEventName = $this->GetFullEventName($sEventContext, $sEventName);
         if (!isset($this->aObserver[$sFullEventName])) {
-            $this->aObserver[$sFullEventName] = array();
+            $this->aObserver[$sFullEventName] = [];
         }
         $this->aObserver[$sFullEventName][] = $oObserver;
     }
 
     /**
-     * @param IPkgCmsEvent $oEvent
-     *
      * @return IPkgCmsEvent
      */
     public function NotifyObservers(IPkgCmsEvent $oEvent)
@@ -68,8 +65,6 @@ class TPkgCmsEventManager
     }
 
     /**
-     * @param IPkgCmsEvent $oEvent
-     *
      * @return string
      */
     private function GetFullEventNameFromEvent(IPkgCmsEvent $oEvent)

@@ -15,7 +15,7 @@ class TCMSSmartURLHandler_robots extends TCMSSmartURLHandler
 {
     public function GetPageDef()
     {
-        $requestInfoService = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.request_info_service');
+        $requestInfoService = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.request_info_service');
 
         $requestURI = strtolower($requestInfoService->getPathInfoWithoutPortalAndLanguagePrefix());
         if ('/robots.txt' !== $requestURI) {
@@ -28,7 +28,7 @@ class TCMSSmartURLHandler_robots extends TCMSSmartURLHandler
             $robots = trim($activePortal->fieldRobots);
             echo $robots;
         }
-        exit();
+        exit;
     }
 
     /**
@@ -36,6 +36,6 @@ class TCMSSmartURLHandler_robots extends TCMSSmartURLHandler
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

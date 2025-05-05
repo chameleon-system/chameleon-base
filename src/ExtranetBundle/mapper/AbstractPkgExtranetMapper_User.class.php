@@ -20,10 +20,6 @@ abstract class AbstractPkgExtranetMapper_User extends AbstractViewMapper
      * $oRequirements->NeedsSourceObject("foo",'stdClass','default-value');
      * $oRequirements->NeedsSourceObject("bar");
      * $oRequirements->NeedsMappedValue("baz");
-     *
-     * @param IMapperRequirementsRestricted $oRequirements
-     *
-     * @return void
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
     {

@@ -11,7 +11,7 @@
 
 /**
  * URL.
-/**/
+ * /**/
 class TCMSFieldURL extends TCMSFieldVarchar
 {
     public function GetHTML()
@@ -19,7 +19,7 @@ class TCMSFieldURL extends TCMSFieldVarchar
         $html = parent::GetHTML();
         $html .= "<div style=\"padding-top: 3px;\">\n";
 
-        $buttonTitle = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_url.open');
+        $buttonTitle = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_url.open');
         $html .= TCMSRender::DrawButton($buttonTitle, "javascript:CreateModalIFrameDialogCloseButton(document.getElementById('".TGlobal::OutHTML($this->name)."').value,0,0,'".$buttonTitle."')", 'fas fa-globe-americas', 'urlZoom');
 
         $html .= "</div>\n";
@@ -57,7 +57,7 @@ class TCMSFieldURL extends TCMSFieldVarchar
                 $oMessageManager = TCMSMessageManager::GetInstance();
                 $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                 $sFieldTitle = $this->oDefinition->GetName();
-                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_URL_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_URL_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
             }
         }
 

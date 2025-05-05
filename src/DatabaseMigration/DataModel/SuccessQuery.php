@@ -11,9 +11,7 @@
 
 namespace ChameleonSystem\DatabaseMigration\DataModel;
 
-use JsonSerializable;
-
-class SuccessQuery implements JsonSerializable
+class SuccessQuery implements \JsonSerializable
 {
     /**
      * @var string
@@ -26,7 +24,7 @@ class SuccessQuery implements JsonSerializable
 
     /**
      * @param string $query
-     * @param int    $line
+     * @param int $line
      */
     public function __construct($query, $line)
     {

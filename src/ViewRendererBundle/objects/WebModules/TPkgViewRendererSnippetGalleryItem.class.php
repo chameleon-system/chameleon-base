@@ -14,34 +14,34 @@ class TPkgViewRendererSnippetGalleryItem
     /**
      * @var string|null
      */
-    public $sType = null;
+    public $sType;
     /**
      * @var string|null
      */
-    public $sRelativePath = null;
+    public $sRelativePath;
     /**
      * @var string|null
      */
-    public $sSnippetName = null;
+    public $sSnippetName;
     /**
      * @var string|null
      */
-    public $sFullDummyDataPath = null;
+    public $sFullDummyDataPath;
     /**
      * @var string|null
      */
-    public $sDummyDataFileName = null;
+    public $sDummyDataFileName;
     /**
      * @var TPkgViewRendererSnippetDummyData|null
      */
-    public $oDummyData = null;
+    public $oDummyData;
 
     /**
      * @return array
      */
     public function getDummyData()
     {
-        $aDummyData = array();
+        $aDummyData = [];
         if (null !== $this->oDummyData) {
             $aDummyData = $this->oDummyData->getDummyData();
         }

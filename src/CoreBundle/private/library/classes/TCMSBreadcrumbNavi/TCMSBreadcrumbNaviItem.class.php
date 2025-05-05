@@ -11,7 +11,7 @@
 
 /**
  * holds the navigation item data.
-/**/
+ * /**/
 class TCMSBreadcrumbNaviItem
 {
     /**
@@ -19,42 +19,42 @@ class TCMSBreadcrumbNaviItem
      *
      * @var string|null
      */
-    public $name = null;
+    public $name;
 
     /**
      * page id of the node.
      *
      * @var string|null
      */
-    public $page_id = null;
+    public $page_id;
 
     /**
      * id of the node.
      *
      * @var string|null
      */
-    public $id = null;
+    public $id;
 
     /**
      * parent id of the node.
      *
      * @var string|null
      */
-    public $parent_id = null;
+    public $parent_id;
 
     /**
      * the link from tree (can be set instead of a page).
      *
      * @var string|null
      */
-    public $link = null;
+    public $link;
 
     /**
      * if a link is given ( in tree) then this determines what window it will open in.
      *
      * @var string|null
      */
-    public $linkTarget = null;
+    public $linkTarget;
 
     /**
      * set to true if the item is active.
@@ -68,7 +68,7 @@ class TCMSBreadcrumbNaviItem
      *
      * @var array
      */
-    public $children = array();
+    public $children = [];
 
     /* ------------------------------------------------------------------------
      * overwrite this function to changes the way the node is rendered.

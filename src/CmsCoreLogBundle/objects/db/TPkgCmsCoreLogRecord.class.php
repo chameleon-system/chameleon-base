@@ -13,13 +13,13 @@ class TPkgCmsCoreLogRecord extends TPkgCmsCoreLogRecordAutoParent
 {
     /**
      * @param int $iLevel
-     * @param mixed $aRow
      * @param string $sField
+     *
      * @return string|int
      */
     public static function cmsListCallbackLevel($iLevel, $aRow, $sField = '')
     {
-        $aMapping = array(
+        $aMapping = [
             100 => '<span style="background-color:#5bc0de;color:#fff; display: block;  padding: 3px;">'.$iLevel.': DEBUG</span>',
             200 => '<span style="background-color:#62c462;color:#fff; display: block;  padding: 3px;">'.$iLevel.': INFO</span>',
             250 => '<span style="background-color:#5bc0de;color:#fff;  display: block;  padding: 3px;">'.$iLevel.': NOTICE</span>',
@@ -28,7 +28,7 @@ class TPkgCmsCoreLogRecord extends TPkgCmsCoreLogRecordAutoParent
             500 => '<span style="background-color:#bd362f;color:#ffffff;font-weight: bold; display: block;  padding: 3px;">'.$iLevel.': CRITICAL</span>',
             550 => '<span style="background-color:#bd362f;color:#ffffff;font-weight: bold; display: block;  padding: 3px;">'.$iLevel.': ALERT</span>',
             600 => '<span style="background-color:red;color:#ffffff;font-weight: bold; display: block;  padding: 3px;">'.$iLevel.': EMERGENCY</span>',
-        );
+        ];
         if (isset($aMapping[$iLevel])) {
             return $aMapping[$iLevel];
         } else {

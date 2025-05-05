@@ -11,19 +11,15 @@
 
 namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\ImageCrop\DataModel\ImageCropDataModel;
 use ChameleonSystem\MediaManager\DataModel\MediaItemUsageDataModel;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 
-class MediaManagerMediaItemUsagesAddCropsMapper extends AbstractViewMapper
+class MediaManagerMediaItemUsagesAddCropsMapper extends \AbstractViewMapper
 {
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $oRequirements->NeedsSourceObject('crops', 'array');
         $oRequirements->NeedsSourceObject('usages', 'array');
@@ -33,9 +29,9 @@ class MediaManagerMediaItemUsagesAddCropsMapper extends AbstractViewMapper
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         /**
          * @var ImageCropDataModel[] $crops
@@ -44,17 +40,17 @@ class MediaManagerMediaItemUsagesAddCropsMapper extends AbstractViewMapper
         $crops = $oVisitor->GetSourceObject('crops');
         $allUsages = $oVisitor->GetSourceObject('usages');
 
-        $cropIds = array();
+        $cropIds = [];
         foreach ($crops as $crop) {
             $cropIds[$crop->getId()] = true;
         }
 
-        $usagesByCrop = array();
+        $usagesByCrop = [];
         foreach ($allUsages as $usage) {
             $usageCropId = $usage->getCropId();
             if (null !== $usageCropId && '' !== $usageCropId && isset($cropIds[$usageCropId])) {
                 if (false === isset($usagesByCrop[$usageCropId])) {
-                    $usagesByCrop[$usageCropId] = array();
+                    $usagesByCrop[$usageCropId] = [];
                 }
                 $usagesByCrop[$usageCropId][] = $usage;
             }

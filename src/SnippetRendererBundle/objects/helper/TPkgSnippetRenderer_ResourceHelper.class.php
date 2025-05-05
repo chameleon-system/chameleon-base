@@ -20,9 +20,9 @@ class TPkgSnippetRenderer_ResourceHelper
     public function getResourcesFromSource($sSource, $bExcludeJS = false)
     {
         $sSource = trim($sSource);
-        $aResource = array('css' => array(), 'less' => array());
+        $aResource = ['css' => [], 'less' => []];
         if (false === $bExcludeJS) {
-            $aResource['js'] = array();
+            $aResource['js'] = [];
         }
 
         $aLines = explode("\n", $sSource);

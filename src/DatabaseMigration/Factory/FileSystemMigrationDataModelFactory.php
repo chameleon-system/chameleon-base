@@ -26,9 +26,6 @@ class FileSystemMigrationDataModelFactory implements FileSystemMigrationDataMode
      */
     private $kernel;
 
-    /**
-     * @param MigrationPathUtilInterface $migrationPathUtil
-     */
     public function __construct(MigrationPathUtilInterface $migrationPathUtil, KernelInterface $kernel)
     {
         $this->migrationPathUtil = $migrationPathUtil;
@@ -53,11 +50,8 @@ class FileSystemMigrationDataModelFactory implements FileSystemMigrationDataMode
     }
 
     /**
-     * @param array  $models
      * @param string $bundleName
      * @param string $updateDirectory
-     *
-     * @return array
      */
     private function addModelsForDirectory(array $models, $bundleName, $updateDirectory): array
     {

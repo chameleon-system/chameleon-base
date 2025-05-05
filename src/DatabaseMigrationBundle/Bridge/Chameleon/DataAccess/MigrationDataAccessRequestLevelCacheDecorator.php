@@ -24,9 +24,6 @@ class MigrationDataAccessRequestLevelCacheDecorator implements MigrationDataAcce
      */
     private $cache = [];
 
-    /**
-     * @param MigrationDataAccessInterface $subject
-     */
     public function __construct(MigrationDataAccessInterface $subject)
     {
         $this->subject = $subject;

@@ -12,27 +12,27 @@
 class TPkgCmsEvent implements IPkgCmsEvent
 {
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $sContext = null;
+    private $sContext;
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $sName = null;
+    private $sName;
 
     /**
      * @var array<string, mixed>
      */
-    private $aData = array();
+    private $aData = [];
 
     /**
-     * @var null|object
+     * @var object|null
      */
-    private $oSubject = null;
+    private $oSubject;
 
     /**
-     * @return null|object
+     * @return object|null
      */
     public function GetSubject()
     {
@@ -52,7 +52,7 @@ class TPkgCmsEvent implements IPkgCmsEvent
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetContext()
     {
@@ -60,7 +60,7 @@ class TPkgCmsEvent implements IPkgCmsEvent
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetName()
     {
@@ -119,7 +119,7 @@ class TPkgCmsEvent implements IPkgCmsEvent
      *
      * @return static
      */
-    public static function GetNewInstance($oSubject, $sContext, $sName, $aData = array())
+    public static function GetNewInstance($oSubject, $sContext, $sName, $aData = [])
     {
         $sCallingClass = get_called_class();
 

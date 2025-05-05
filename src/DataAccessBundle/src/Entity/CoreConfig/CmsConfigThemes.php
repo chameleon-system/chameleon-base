@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\CoreConfig;
 
-
 class CmsConfigThemes
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -58,7 +57,6 @@ class CmsConfigThemes
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getType(): string
     {
@@ -72,7 +70,6 @@ class CmsConfigThemes
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDirectory(): string
     {
@@ -85,6 +82,4 @@ class CmsConfigThemes
 
         return $this;
     }
-
-
 }

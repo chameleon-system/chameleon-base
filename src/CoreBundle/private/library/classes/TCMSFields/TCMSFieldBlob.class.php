@@ -15,7 +15,7 @@ use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInter
 /**
  * The class takes data and serializes it to db.
  *
-/**/
+ * /**/
 class TCMSFieldBlob extends TCMSFieldText implements DoctrineTransformableInterface
 {
     public function getDoctrineDataModelParts(string $namespace, array $tableNamespaceMapping): DataModelParts
@@ -28,8 +28,8 @@ class TCMSFieldBlob extends TCMSFieldText implements DoctrineTransformableInterf
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => 'null',
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -50,7 +50,6 @@ class TCMSFieldBlob extends TCMSFieldText implements DoctrineTransformableInterf
             'type' => 'object',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
-
         ];
         if ('' !== $this->oDefinition->sqlData['field_default_value']) {
             $parameter['default'] = $this->oDefinition->sqlData['field_default_value'];
@@ -70,8 +69,6 @@ class TCMSFieldBlob extends TCMSFieldText implements DoctrineTransformableInterf
     /**
      * this method converts post data like datetime (3 fields with date, hours, minutes in human readable format)
      * to sql format.
-     *
-     * @return mixed
      */
     public function ConvertPostDataToSQL()
     {
@@ -94,7 +91,7 @@ class TCMSFieldBlob extends TCMSFieldText implements DoctrineTransformableInterf
     public function RenderFieldPostLoadString()
     {
         $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
+        /* @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $aData = $this->GetFieldWriterData();
         $oViewParser->AddVarArray($aData);

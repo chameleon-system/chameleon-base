@@ -12,7 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Maintenance;
 
 use ChameleonSystem\CoreBundle\Maintenance\Migrator62\Migrator62;
-use InvalidArgumentException;
 
 class Migrator
 {
@@ -28,7 +27,7 @@ class Migrator
                 $migrator = new Migrator62();
                 break;
             default:
-                throw new InvalidArgumentException('Unsupported version:'.$version);
+                throw new \InvalidArgumentException('Unsupported version:'.$version);
         }
         $migrator->migrate();
     }

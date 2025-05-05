@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Security\Password;
 
 /**
  * HashAlgorithmInterface defines an interface for a hash algorithm that is e.g. used to hash user passwords.
+ *
  * @deprecated 7.2 - symfony security layer used
  */
 interface HashAlgorithmInterface

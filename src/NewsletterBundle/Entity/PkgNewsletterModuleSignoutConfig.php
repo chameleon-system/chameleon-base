@@ -8,12 +8,11 @@ class PkgNewsletterModuleSignoutConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Signout (title) */
         private string $signoutTitle = '',
@@ -81,7 +80,6 @@ class PkgNewsletterModuleSignoutConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSignoutTitle(): string
     {
@@ -94,7 +92,6 @@ class PkgNewsletterModuleSignoutConfig
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getSignoutText(): string
@@ -109,7 +106,6 @@ class PkgNewsletterModuleSignoutConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSignoutConfirmTitle(): string
     {
@@ -122,7 +118,6 @@ class PkgNewsletterModuleSignoutConfig
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getSignoutConfirmText(): string
@@ -137,7 +132,6 @@ class PkgNewsletterModuleSignoutConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSignedoutTitle(): string
     {
@@ -150,7 +144,6 @@ class PkgNewsletterModuleSignoutConfig
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getSignedoutText(): string
@@ -165,7 +158,6 @@ class PkgNewsletterModuleSignoutConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getNoNewsletterSignedup(): string
     {
@@ -178,7 +170,6 @@ class PkgNewsletterModuleSignoutConfig
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getNoNewsletterSignedupText(): string
@@ -193,7 +184,6 @@ class PkgNewsletterModuleSignoutConfig
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isUseDoubleOptOut(): bool
     {
@@ -206,6 +196,4 @@ class PkgNewsletterModuleSignoutConfig
 
         return $this;
     }
-
-
 }

@@ -11,7 +11,7 @@
 
 /**
  * holds config info for the custom list module (such as list table, category table, etc).
-/**/
+ * /**/
 class MTCustomListCoreConfig
 {
     /**
@@ -31,7 +31,7 @@ class MTCustomListCoreConfig
      *
      * @var string
      */
-    public $sCategoryFieldName = null;
+    public $sCategoryFieldName;
 
     public $sItemClass = 'MTCustomListCoreItem';
 }

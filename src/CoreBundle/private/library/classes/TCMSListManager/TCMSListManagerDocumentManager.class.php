@@ -17,7 +17,7 @@ use Doctrine\DBAL\Connection;
  * extends the standard listing so that a preview image is shown, and if the
  * class is called with the right parameters it will show an assign button to
  * assign an image from the list to the calling record.
-/**/
+ * /**/
 class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
 {
     /**
@@ -71,41 +71,39 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
         $this->tableObj->RemoveHeaderField('cmsident');
         $this->tableObj->RemoveColumn('cmsident');
 
-        $jsParas = array('id');
+        $jsParas = ['id'];
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('id' => '#'), 'left', null, 1, false);
-        $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackDocumentSelectBox'), null, 1);
+        $this->tableObj->AddHeaderField(['id' => '#'], 'left', null, 1, false);
+        $this->tableObj->AddColumn('id', 'left', [$this, 'CallBackDocumentSelectBox'], null, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('cms_filetype_id' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_type')), 'left', null, 1, false);
-        $this->tableObj->AddColumn('cms_filetype_id', 'left', array($this, 'CallBackGenerateDownloadLink'), null, 1);
+        $this->tableObj->AddHeaderField(['cms_filetype_id' => ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_type')], 'left', null, 1, false);
+        $this->tableObj->AddColumn('cms_filetype_id', 'left', [$this, 'CallBackGenerateDownloadLink'], null, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('name' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.title')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(['name' => ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.title')], 'left', null, 1, false);
         $sFieldNameTransformed = 'name';
 
         if (!empty($sLanguageIdent) && TdbCmsDocument::CMSFieldIsTranslated('name')) {
             $sFieldNameTransformed = $sFieldNameTransformed.'__'.$sLanguageIdent;
         }
-        $this->tableObj->AddColumn(array('name' => '`cms_document`.`name`'), 'left', null, $jsParas, 1, null, null, null, 'name');
+        $this->tableObj->AddColumn(['name' => '`cms_document`.`name`'], 'left', null, $jsParas, 1, null, null, null, 'name');
         $databaseConnection = $this->getDatabaseConnection();
         $quotedFieldNameTransformed = $databaseConnection->quoteIdentifier($sFieldNameTransformed);
         $this->tableObj->searchFields["`cms_document`.$quotedFieldNameTransformed"] = 'full'; // allow searching in this field
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('filename' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_name')), 'left', null, 1, false);
-        $this->tableObj->AddColumn('filename', 'left', array($this, 'CallBackFilenameShort'), $jsParas, 1);
+        $this->tableObj->AddHeaderField(['filename' => ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_name')], 'left', null, 1, false);
+        $this->tableObj->AddColumn('filename', 'left', [$this, 'CallBackFilenameShort'], $jsParas, 1);
         $this->tableObj->searchFields['`cms_document`.`filename`'] = 'full'; // allow searching in this field
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('filesize' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_size')), 'left', null, 1, false);
-        $this->tableObj->AddColumn('filesize', 'left', array($this, 'CallBackHumanRedableFileSize'), $jsParas, 1);
+        $this->tableObj->AddHeaderField(['filesize' => ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_size')], 'left', null, 1, false);
+        $this->tableObj->AddColumn('filesize', 'left', [$this, 'CallBackHumanRedableFileSize'], $jsParas, 1);
     }
 
     /**
      * any custom restrictions can be added to the query by overwriting this function.
-     *
-     * @param string $query
      */
     public function GetCustomRestriction()
     {
@@ -119,7 +117,7 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
 
             $MLTquery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTable)."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($recordID)."'";
             $MLTResult = MySqlLegacySupport::getInstance()->query($MLTquery);
-            $aIDList = array();
+            $aIDList = [];
 
             if (MySqlLegacySupport::getInstance()->num_rows($MLTResult) > 0) {
                 if (!empty($query)) {
@@ -132,7 +130,7 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
 
                 if (count($aIDList) > 0) {
                     $databaseConnection = $this->getDatabaseConnection();
-                    $idListString = implode(',', array_map(array($databaseConnection, 'quote'), $aIDList));
+                    $idListString = implode(',', array_map([$databaseConnection, 'quote'], $aIDList));
                     $query .= $this->CreateRestriction('id', " NOT IN ($idListString)");
                 }
             }
@@ -157,14 +155,14 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
      * returns a filetype icon that is linked with the download file.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
     public function CallBackGenerateDownloadLink($id, $row)
     {
         $oFile = new TCMSDownloadFile();
-        /** @var $oFile TCMSDownloadFile */
+        /* @var $oFile TCMSDownloadFile */
         $oFile->Load($row['id']);
         $sDownloadLink = $oFile->getDownloadHtmlTag(false, true, true);
 
@@ -175,7 +173,7 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
      * returns a checkbox field for document file selection with javascript onlick.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
@@ -189,6 +187,6 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 }

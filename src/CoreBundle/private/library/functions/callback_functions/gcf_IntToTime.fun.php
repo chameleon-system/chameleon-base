@@ -12,8 +12,8 @@
 /**
  * converts seconds in Hour:Minutes:Seconds output.
  *
- * @param string $sValue     - the field value
- * @param array  $aRow       - the whole record array
+ * @param string $sValue - the field value
+ * @param array $aRow - the whole record array
  * @param string $sFieldName
  *
  * @return string

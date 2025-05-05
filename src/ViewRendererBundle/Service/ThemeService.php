@@ -33,9 +33,9 @@ class ThemeService implements ThemeServiceInterface
     private $requestInfoService;
 
     /**
-     * @var null|\TdbPkgCmsTheme
+     * @var \TdbPkgCmsTheme|null
      */
-    private $themeOverride = null;
+    private $themeOverride;
 
     public function __construct(
         PortalDomainServiceInterface $portalDomainService,

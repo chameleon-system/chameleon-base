@@ -14,24 +14,21 @@ namespace ChameleonSystem\CoreBundle\Routing;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use TdbCmsLanguage;
-use TdbCmsPortal;
 
 interface PortalAndLanguageAwareRouterInterface extends RouterInterface
 {
     /**
-     * @param string              $name
-     * @param array               $parameters    Additional parameters for the route. There is a special parameter 'domain' which specifies
-     *                                           the host part for the generated URL (the name of the parameter may vary - always get
-     *                                           it via RoutingUtilInterface::getHostRequirementPlaceholder()).
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
-     * @param int                 $referenceType
+     * @param string $name
+     * @param array $parameters Additional parameters for the route. There is a special parameter 'domain' which specifies
+     *                          the host part for the generated URL (the name of the parameter may vary - always get
+     *                          it via RoutingUtilInterface::getHostRequirementPlaceholder()).
+     * @param int $referenceType
+     *
      * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      *
      * @throws RouteNotFoundException
      */
-    public function generateWithPrefixes($name, array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH);
+    public function generateWithPrefixes($name, array $parameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH);
 }

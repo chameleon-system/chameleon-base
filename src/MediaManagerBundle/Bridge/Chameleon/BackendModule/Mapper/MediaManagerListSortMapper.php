@@ -11,22 +11,15 @@
 
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\BackendModule\Mapper;
 
-use AbstractViewMapper;
 use ChameleonSystem\MediaManager\SortColumnCollection;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 
-class MediaManagerListSortMapper extends AbstractViewMapper
+class MediaManagerListSortMapper extends \AbstractViewMapper
 {
     /**
      * @var SortColumnCollection
      */
     private $sortColumnCollection;
 
-    /**
-     * @param SortColumnCollection $sortColumnCollection
-     */
     public function __construct(SortColumnCollection $sortColumnCollection)
     {
         $this->sortColumnCollection = $sortColumnCollection;
@@ -35,7 +28,7 @@ class MediaManagerListSortMapper extends AbstractViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
     }
 
@@ -43,9 +36,9 @@ class MediaManagerListSortMapper extends AbstractViewMapper
      * {@inheritDoc}
      */
     public function Accept(
-        IMapperVisitorRestricted $oVisitor,
+        \IMapperVisitorRestricted $oVisitor,
         $bCachingEnabled,
-        IMapperCacheTriggerRestricted $oCacheTriggerManager
+        \IMapperCacheTriggerRestricted $oCacheTriggerManager
     ): void {
         $oVisitor->SetMappedValue('sortColumns', $this->sortColumnCollection->getSortColumns());
     }

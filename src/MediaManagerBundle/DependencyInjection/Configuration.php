@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\MediaManagerBundle\DependencyInjection;
 
-use RuntimeException;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -20,7 +19,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      *
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
@@ -37,7 +36,7 @@ class Configuration implements ConfigurationInterface
                     ->requiresAtLeastOneElement()
                     ->prototype('integer')
                     ->end()
-                    ->defaultValue(array(12, 24, 48, 96, 204, 504, -1))
+                    ->defaultValue([12, 24, 48, 96, 204, 504, -1])
                 ->end()
                 ->integerNode('default_page_size')
                     ->defaultValue(24)

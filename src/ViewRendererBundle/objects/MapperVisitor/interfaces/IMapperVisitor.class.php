@@ -19,8 +19,6 @@ interface IMapperVisitor
     public function GetMappedValues();
 
     /**
-     * @param IMapperRequirements $oRequirements
-     *
      * @return void
      */
     public function SetCurrentRequirements(IMapperRequirements $oRequirements);
@@ -34,9 +32,7 @@ interface IMapperVisitor
 
     /**
      * @param string $key
-     * @param bool   $bCheckRequirements
-     *
-     * @return mixed
+     * @param bool $bCheckRequirements
      *
      * @throws MapperException
      */
@@ -44,7 +40,6 @@ interface IMapperVisitor
 
     /**
      * @param string $key
-     * @param mixed  $value
      *
      * @return void
      */
@@ -83,7 +78,6 @@ interface IMapperVisitor
 
     /**
      * @param string $mapperChainName
-     * @param array  $mapperInputData
      *
      * @return array
      *

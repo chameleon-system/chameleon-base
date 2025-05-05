@@ -17,7 +17,6 @@ use ChameleonSystem\CoreBundle\Event\LocaleChangedEvent;
 use ChameleonSystem\CoreBundle\Event\TreeIdMapCompletedEvent;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\SupportedLanguagesServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlNormalization\UrlNormalizationUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
@@ -36,7 +35,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      *
      * @var TCMSPortal
      */
-    protected $oOriginalPortal = null;
+    protected $oOriginalPortal;
 
     /**
      * {@inheritdoc}
@@ -48,19 +47,19 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         /** @var $oMenuItem TCMSTableEditorMenuItem */
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'editpagetree';
-        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.action_edit_tree');
+        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.action_edit_tree');
         $oMenuItem->sIcon = 'fas fa-sitemap';
-        $oMenuItem->sOnClick = "javascript:var navId = '".TGlobal::OutHTML($this->oTable->sqlData['main_node_tree'])."';if (document.cmseditform.main_node_tree) navId = document.cmseditform.main_node_tree.value; if (navId>0 || (navId != '' && navId != '0')) CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=navigationTreePlain&table=cms_tpl_page&noassign=1&rootID='+navId+'&isInIframe=1', 0,0,'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_page_tree.headline')."'); else alert('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.error_navigation_node_required')."');";
+        $oMenuItem->sOnClick = "javascript:var navId = '".TGlobal::OutHTML($this->oTable->sqlData['main_node_tree'])."';if (document.cmseditform.main_node_tree) navId = document.cmseditform.main_node_tree.value; if (navId>0 || (navId != '' && navId != '0')) CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=navigationTreePlain&table=cms_tpl_page&noassign=1&rootID='+navId+'&isInIframe=1', 0,0,'".ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_page_tree.headline')."'); else alert('".ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.error_navigation_node_required')."');";
         $this->oMenuItems->AddItem($oMenuItem);
 
         // Add language activator
         if (true === $this->allowShowActivateLanguageButton()) {
             $sFunction = 'ActivateLanguage';
-            $sText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.action_tmp_enable_inactive_language_for_me');
+            $sText = ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.action_tmp_enable_inactive_language_for_me');
             $sPostFunction = 'OpenPageWithActiveLanguages';
             if (true === $this->oTable->GetActivateAllPortalLanguages()) {
                 $sFunction = 'DeActivateLanguage';
-                $sText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.action_disable_tmp_enabled_languages');
+                $sText = ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_portal.action_disable_tmp_enabled_languages');
                 $sPostFunction = 'ReloadActivePage';
             }
             $oMenuItem = new TCMSTableEditorMenuItem();
@@ -69,14 +68,14 @@ class TCMSTableEditorPortal extends TCMSTableEditor
             $oMenuItem->sIcon = 'fas fa-globe-americas';
 
             $sCallURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(
-                array(
+                [
                      'pagedef' => 'tableeditor',
                      '_fnc' => $sFunction,
                      'id' => $this->sId,
                      'tableid' => $this->oTableConf->id,
-                     'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'),
+                     'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
                      '_noModuleFunction' => 'true',
-                )
+                ]
             );
             $oMenuItem->sOnClick = " GetSynchronouslyAjaxCall('".$sCallURL."',".$sPostFunction.');';
             $this->oMenuItems->AddItem($oMenuItem);
@@ -101,7 +100,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      * for copy of "property_navigations"  check $this->CopyNaviTree()
      *
      * @param TCMSField $oField
-     * @param string    $sourceRecordID
+     * @param string $sourceRecordID
      */
     public function CopyPropertyRecords($oField, $sourceRecordID)
     {
@@ -119,7 +118,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      */
     protected function GetPropertyRecordExcludes()
     {
-        return array('property_navigations', 'cms_portal_divisions');
+        return ['property_navigations', 'cms_portal_divisions'];
     }
 
     /**
@@ -130,7 +129,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     {
         parent::OnBeforeCopy();
 
-        /** @var $oSourcePortal TCMSPortal */
+        /* @var $oSourcePortal TCMSPortal */
         $this->oOriginalPortal = new TCMSPortal();
         $this->oOriginalPortal->Load($this->sSourceId);
 
@@ -142,7 +141,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     /**
      * return null if you won't change the main node of the new portal.
      *
-     * @return string | null
+     * @return string|null
      */
     protected function CreateNewMainNode()
     {
@@ -206,11 +205,9 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $cache = ServiceLocator::get('chameleon_system_cms_cache.cache');
 
         $cache->callTrigger('cms_user', $securityHelper->getUser()?->getId());
-
     }
 
     /**
-     *
      * @throws ErrorException
      * @throws TPkgCmsException_Log
      */
@@ -219,9 +216,9 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         if (null === $userId) {
             return;
         }
-        $query = "INSERT INTO `cms_user_cms_portal_mlt`
+        $query = 'INSERT INTO `cms_user_cms_portal_mlt`
                         SET `source_id` = :userId,
-                            `target_id` = :portalId";
+                            `target_id` = :portalId';
         $this->getDatabaseConnection()->executeQuery($query, ['userId' => $userId, 'portalId' => $this->sId]);
 
         /** @var BackendSessionInterface $backendSession */
@@ -229,12 +226,12 @@ class TCMSTableEditorPortal extends TCMSTableEditor
 
         $migrationQueryData = new MigrationQueryData('cms_user_cms_portal_mlt', $backendSession->getCurrentEditLanguageIso6391());
         $migrationQueryData
-            ->setFields(array(
+            ->setFields([
                 'source_id' => $userId,
                 'target_id' => $this->sId,
-            ))
+            ])
         ;
-        $aQuery = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_INSERT));
+        $aQuery = [new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_INSERT)];
 
         TCMSLogChange::WriteTransaction($aQuery);
     }
@@ -269,13 +266,14 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      */
     protected function UnsetSessionCopiedPortalId()
     {
-        if ((array_key_exists('sCopiedPortalId', $_SESSION))) {
+        if (array_key_exists('sCopiedPortalId', $_SESSION)) {
             unset($_SESSION['sCopiedPortalId']);
         }
     }
 
     /**
-     * Copy the portals cms_tree
+     * Copy the portals cms_tree.
+     *
      * @throws Exception
      */
     protected function CopyNaviTree()
@@ -317,10 +315,10 @@ class TCMSTableEditorPortal extends TCMSTableEditor
             }
             $treeEditorManager = TTools::GetTableEditorManager('cms_tree', $newTreeId, $languageObject->id);
             $treeEditorManager->AllowEditByAll($this->bAllowEditByAll);
-            /** @var \TCMSTableEditorTree $treeTableEditor */
+            /** @var TCMSTableEditorTree $treeTableEditor */
             $treeTableEditor = $treeEditorManager->oTableEditor;
             $newNameValue = $treeTableEditor->oTable->sqlData['name'].$copyText;
-            $urlName = $urlUtil->normalizeUrl( $treeTableEditor->oTable->sqlData['urlname'].$copyText);
+            $urlName = $urlUtil->normalizeUrl($treeTableEditor->oTable->sqlData['urlname'].$copyText);
             $treeTableEditor->SaveFields(['name' => $newNameValue, 'urlname' => $urlName], false);
             $treeTableEditor->UpdateSubtreePathCache($newTreeId);
         }
@@ -334,6 +332,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     /**
      * There are cases when you need to know the tree ids of the source and the copied tree node, to e.g. change a reference to the copied tree node in a proprietary bundle.
      * This dispatches an event that holds a map of all old tree ids to the new tree ids.
+     *
      * @return EventDispatcherInterface
      */
     protected function dispatchTreeIdMapCompletedEvent()
@@ -349,13 +348,13 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      */
     protected function GetPortalSystemPagesAsArray()
     {
-        $aPortalSystemPages = array();
+        $aPortalSystemPages = [];
         $oSystemPageList = $this->oTable->GetFieldCmsPortalSystemPageList();
         while ($oSystemPage = $oSystemPageList->Next()) {
             if (array_key_exists($oSystemPage->fieldCmsTreeId, $aPortalSystemPages)) {
                 if (!is_array($aPortalSystemPages[$oSystemPage->fieldCmsTreeId])) {
                     $oPortalSystemPage = $aPortalSystemPages[$oSystemPage->fieldCmsTreeId];
-                    $aPortalSystemPages[$oSystemPage->fieldCmsTreeId] = array();
+                    $aPortalSystemPages[$oSystemPage->fieldCmsTreeId] = [];
                     $aPortalSystemPages[$oSystemPage->fieldCmsTreeId][] = $oPortalSystemPage;
                 }
                 $aPortalSystemPages[$oSystemPage->fieldCmsTreeId][] = $oSystemPage;
@@ -372,7 +371,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      *
      * @param string $iSourceId
      * @param string $iTargetId
-     * @param array  $aPortalSystemPages
+     * @param array $aPortalSystemPages
      */
     protected function CopySubtree($iSourceId, $iTargetId, $aPortalSystemPages)
     {
@@ -393,16 +392,16 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      *
      * @param array $aSourceNode
      * @param string $targetParentId
-     * @param array  $aPortalSystemPages
+     * @param array $aPortalSystemPages
      *
      * @return string
      */
     protected function CopyOneNode($aSourceNode, $targetParentId, $aPortalSystemPages)
     {
         $oTreeManager = TTools::GetTableEditorManager('cms_tree', $aSourceNode['id']);
-        $oNewTree = $oTreeManager->DatabaseCopy(false, array('parent_id' => $targetParentId), $this->bIsCopyAllLanguageValues);
+        $oNewTree = $oTreeManager->DatabaseCopy(false, ['parent_id' => $targetParentId], $this->bIsCopyAllLanguageValues);
         $this->SetPortalSystemPageNodeToCopiedNode($aPortalSystemPages, $aSourceNode['id'], $oNewTree->id);
-        //Move Tree-Paths...
+        // Move Tree-Paths...
         if (isset($this->oOriginalPortal->sqlData['home_node_id'])) {
             if ($aSourceNode['id'] == $this->oOriginalPortal->sqlData['home_node_id']) {
                 $this->UpdateNodeIdOfPage($oTreeManager->sId, 'home_node_id');
@@ -441,7 +440,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     /**
      * Set copied tree id to given portal system pages.
      *
-     * @param array  $aPortalSystemPages
+     * @param array $aPortalSystemPages
      * @param string $sSourceNodeId
      * @param string $sCopiedNodeId
      */
@@ -462,7 +461,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      * Set given tree id to given portal system page.
      *
      * @param TdbCmsPortalSystemPage $oPortalSystemPage
-     * @param string                 $sCopiedNodeId
+     * @param string $sCopiedNodeId
      */
     protected function SaveCopiedTreeAtPortalSystemPageNode($oPortalSystemPage, $sCopiedNodeId)
     {
@@ -475,8 +474,6 @@ class TCMSTableEditorPortal extends TCMSTableEditor
 
     /**
      * saves the home node id via SaveField.
-     *
-     * @param string $sHomeNodeId
      */
     protected function UpdateNodeIdOfPage($iNotFoundNodeId, $sNodeName = '')
     {
@@ -488,7 +485,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     /**
      * copies the division of a source tree node to a target tree node.
      *
-     * @param array  $aSourceNode   - sqlData of the source node
+     * @param array $aSourceNode - sqlData of the source node
      * @param string $sTargetNodeId - id of the target tree node
      */
     protected function CopyNodeDivision($aSourceNode, $sTargetNodeId)
@@ -511,17 +508,17 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     }
 
     /**
-     * copies the navigations attached to a tree node to a new tree node
+     * copies the navigations attached to a tree node to a new tree node.
      *
-     * @param array  $aSourceNode   - sqlData of the source node
+     * @param array $aSourceNode - sqlData of the source node
      * @param string $sTargetNodeId - id of the target tree node
      */
     protected function CopyNodeNavigations($aSourceNode, $sTargetNodeId)
     {
         // it's possible that more than one navigation is attached to a tree node
         // so we need to loop through all navigations attached to the source node
-        $query = "SELECT id FROM `cms_portal_navigation` WHERE `tree_node` = :tree_node_id";
-        $navigationIds = $this->getDatabaseConnection()->fetchFirstColumn($query, array('tree_node_id' => $aSourceNode['id']));
+        $query = 'SELECT id FROM `cms_portal_navigation` WHERE `tree_node` = :tree_node_id';
+        $navigationIds = $this->getDatabaseConnection()->fetchFirstColumn($query, ['tree_node_id' => $aSourceNode['id']]);
         if (empty($navigationIds)) {
             return;
         }
@@ -543,9 +540,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
                 $oTableManager->Save($aDefaultData);
             }
         }
-
     }
-
 
     /**
      * Activate languages in the frontend for the current session.
@@ -577,7 +572,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         $oPortal = $this->oTable;
         $aIncludes = parent::GetHtmlHeadIncludes();
         try {
-            $portalLink = $this->getPageService()->getLinkToPortalHomePageAbsolute(array(), $oPortal);
+            $portalLink = $this->getPageService()->getLinkToPortalHomePageAbsolute([], $oPortal);
         } catch (Exception $e) {
             $portalLink = '#';
         }
@@ -625,8 +620,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     }
 
     /**
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param string                   $defaultLanguageBeforeChange
+     * @param string $defaultLanguageBeforeChange
      */
     private function dispatchChangeDefaultLanguageEvent(EventDispatcherInterface $eventDispatcher, $defaultLanguageBeforeChange)
     {
@@ -641,10 +635,6 @@ class TCMSTableEditorPortal extends TCMSTableEditor
         }
     }
 
-    /**
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param array                    $languagesBeforeChange
-     */
     private function dispatchChangeActiveLanguagesEvent(EventDispatcherInterface $eventDispatcher, array $languagesBeforeChange)
     {
         $languagesAfterChange = $this->oTable->GetMLTIdList('cms_language');
@@ -655,8 +645,7 @@ class TCMSTableEditorPortal extends TCMSTableEditor
     }
 
     /**
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param bool                     $useSlashInSeoUrlsBeforeChange
+     * @param bool $useSlashInSeoUrlsBeforeChange
      */
     private function dispatchChangeUseSlashInSeoUrlsEvent(EventDispatcherInterface $eventDispatcher, $useSlashInSeoUrlsBeforeChange)
     {
@@ -671,6 +660,6 @@ class TCMSTableEditorPortal extends TCMSTableEditor
      */
     private function getPageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.page_service');
+        return ServiceLocator::get('chameleon_system_core.page_service');
     }
 }

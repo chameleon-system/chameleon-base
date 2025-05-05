@@ -1,8 +1,8 @@
-            if (empty($this-><?= $aFieldData['sFieldName']; ?>)) {
+            if (empty($this-><?php echo $aFieldData['sFieldName']; ?>)) {
                 return null;
             }
             try {
-                $page = self::getPageService()->getByTreeId($this-><?= $aFieldData['sFieldName']; ?>);
+                $page = self::getPageService()->getByTreeId($this-><?php echo $aFieldData['sFieldName']; ?>);
                 if (null === $page) {
                     return null;
                 }

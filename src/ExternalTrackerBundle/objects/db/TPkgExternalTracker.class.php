@@ -14,10 +14,9 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     /**
      * factory creates a new instance and returns it.
      *
-     * @param string|array $sData     - either the id of the object to load, or the row with which the instance should be initialized
-     * @param string       $sLanguage - init with the language passed
-     *
-     * @return TdbPkgExternalTracker     */
+     * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
+     * @param string $sLanguage - init with the language passed
+     */
     public static function GetNewInstance($sData = null, $sLanguage = null): TdbPkgExternalTracker
     {
         $oObject = parent::GetNewInstance($sData, $sLanguage);
@@ -34,33 +33,27 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     }
 
     /**
-     * @param TPkgExternalTrackerState $oState
-     *
      * @return string[]
      */
     public function GetHTMLHeadIncludes(TPkgExternalTrackerState $oState)
     {
-        return array();
+        return [];
     }
 
     /**
-     * @param TPkgExternalTrackerState $oState
-     *
      * @return string[]
      */
     public function GetPostBodyOpeningCode(TPkgExternalTrackerState $oState)
     {
-        return array();
+        return [];
     }
 
     /**
-     * @param TPkgExternalTrackerState $oState
-     *
      * @return string[]
      */
     public function GetPreBodyClosingCode(TPkgExternalTrackerState $oState)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -80,7 +73,7 @@ class TPkgExternalTracker extends TPkgExternalTrackerAutoParent
     protected function PostLoadHook()
     {
         parent::PostLoadHook();
-        $demoMode = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_external_tracker.demo_mode');
+        $demoMode = ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_external_tracker.demo_mode');
         if (!TGlobal::IsCMSMode() && $demoMode) {
             if (isset($this->sqlData['test_identifier'])) {
                 $this->fieldIdentifier = $this->fieldTestIdentifier;

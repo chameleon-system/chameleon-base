@@ -11,7 +11,7 @@
 
 /**
  * deletes old tokens.
-/**/
+ * /**/
 class TCMSCronJob_ClearOldDownloadTokens extends TdbCmsCronjobs
 {
     protected function _ExecuteCron()

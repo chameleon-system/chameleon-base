@@ -18,11 +18,11 @@ class DataMappingServiceResponse implements DataMappingServiceResponseInterface
     /**
      * @var array
      */
-    private $mappedData = array();
+    private $mappedData = [];
     /**
      * @var array
      */
-    private $cacheTrigger = array();
+    private $cacheTrigger = [];
 
     /**
      * {@inheritdoc}

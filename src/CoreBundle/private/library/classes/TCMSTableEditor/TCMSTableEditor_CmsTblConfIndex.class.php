@@ -13,7 +13,7 @@ use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 
 /**
  * index management for tables.
-/**/
+ * /**/
 class TCMSTableEditor_CmsTblConfIndex extends TCMSTableEditor
 {
     /**
@@ -27,7 +27,7 @@ class TCMSTableEditor_CmsTblConfIndex extends TCMSTableEditor
         $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($oTableConf->sqlData['name'])."`
                         ADD {$oTable->fieldType}  `".MySqlLegacySupport::getInstance()->real_escape_string($oTable->fieldName)."` ( {$oTable->fieldDefinition} )";
         MySqlLegacySupport::getInstance()->query($query);
-        TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($query)));
+        TCMSLogChange::WriteTransaction([new LogChangeDataModel($query)]);
     }
 
     /*
@@ -40,7 +40,7 @@ class TCMSTableEditor_CmsTblConfIndex extends TCMSTableEditor
         $oTableConf = $oTable->GetFieldCmsTblConf();
         $query = 'ALTER TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($oTableConf->sqlData['name']).'` DROP INDEX  `'.MySqlLegacySupport::getInstance()->real_escape_string($oTable->fieldName).'`';
         MySqlLegacySupport::getInstance()->query($query);
-        TCMSLogChange::WriteTransaction(array(new LogChangeDataModel($query)));
+        TCMSLogChange::WriteTransaction([new LogChangeDataModel($query)]);
     }
 
     /**

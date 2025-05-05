@@ -24,7 +24,6 @@ class ComposerData
 
     /**
      * @param string $filePath
-     * @param array  $data
      */
     public function __construct($filePath, array $data)
     {

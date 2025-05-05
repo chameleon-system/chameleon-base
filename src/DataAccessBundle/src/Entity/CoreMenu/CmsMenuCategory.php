@@ -9,7 +9,7 @@ class CmsMenuCategory
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -66,7 +66,6 @@ class CmsMenuCategory
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -79,7 +78,6 @@ class CmsMenuCategory
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getSystemName(): string
@@ -94,7 +92,6 @@ class CmsMenuCategory
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIconFontCssClass(): string
     {
@@ -107,8 +104,6 @@ class CmsMenuCategory
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -141,6 +136,4 @@ class CmsMenuCategory
 
         return $this;
     }
-
-
 }

@@ -12,7 +12,6 @@
 namespace ChameleonSystem\MediaManagerBundle\DependencyInjection\Compiler;
 
 use ChameleonSystem\MediaManager\Interfaces\MediaManagerExtensionInterface;
-use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -23,11 +22,11 @@ class AddMediaManagerExtensionsToCollectionPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      *
+     * @return void
+     *
      * @throws ServiceNotFoundException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     *
-     * @return void
+     * @throws \LogicException
      */
     public function process(ContainerBuilder $container)
     {
@@ -39,14 +38,14 @@ class AddMediaManagerExtensionsToCollectionPass implements CompilerPassInterface
             $extensionServiceDefinition = $container->getDefinition($serviceId);
             $interfaces = class_implements($extensionServiceDefinition->getClass(), true);
             if (false === in_array(MediaManagerExtensionInterface::class, $interfaces, true)) {
-                throw new LogicException(
+                throw new \LogicException(
                     sprintf(
                         'Media manager extension must implement MediaManagerExtensionInterface in service %s',
                         $serviceId
                     )
                 );
             }
-            $serviceDefinitionCollection->addMethodCall('addExtension', array($extensionServiceDefinition));
+            $serviceDefinitionCollection->addMethodCall('addExtension', [$extensionServiceDefinition]);
         }
     }
 }

@@ -26,8 +26,8 @@ class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformabl
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => 'null',
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -48,7 +48,6 @@ class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformabl
             'type' => 'blob',
             'column' => $this->name,
             'comment' => $this->oDefinition->sqlData['translation'],
-
         ];
         if ('' !== $this->oDefinition->sqlData['field_default_value']) {
             $parameter['default'] = $this->oDefinition->sqlData['field_default_value'];
@@ -56,7 +55,6 @@ class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformabl
 
         return $this->getDoctrineRenderer('mapping/text.xml.twig', $parameter)->render();
     }
-
 
     public function ConvertDataToFieldBasedData($sData)
     {
@@ -68,9 +66,9 @@ class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformabl
 
     public function RenderFieldPostLoadString()
     {
-        //first we do our decoding stuff!
+        // first we do our decoding stuff!
         $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
+        /* @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $aData = $this->GetFieldWriterData();
         $oViewParser->AddVarArray($aData);
@@ -92,7 +90,7 @@ class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformabl
             $sKey = CMSFIELD_DATA_ENCODING_KEY;
             if (!empty($sKey)) {
                 $sKey = str_rot13($sKey);
-                //decode data
+                // decode data
                 $sQry = "SELECT DECODE('".MySqlLegacySupport::getInstance()->real_escape_string($sData)."','".MySqlLegacySupport::getInstance()->real_escape_string($sKey)."') AS decoded_value ";
                 $aDecodedData = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQry));
                 $sData = $aDecodedData['decoded_value'];
@@ -113,7 +111,7 @@ class TCMSFieldEncodedData extends TCMSFieldBlob implements DoctrineTransformabl
             $sKey = CMSFIELD_DATA_ENCODING_KEY;
             if (!empty($sKey)) {
                 $sKey = str_rot13($sKey);
-                //decode data
+                // decode data
                 $sQry = "SELECT ENCODE('".MySqlLegacySupport::getInstance()->real_escape_string($sData)."','".MySqlLegacySupport::getInstance()->real_escape_string($sKey)."') AS encoded_value ";
                 $aDecodedData = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($sQry));
                 $sData = $aDecodedData['encoded_value'];

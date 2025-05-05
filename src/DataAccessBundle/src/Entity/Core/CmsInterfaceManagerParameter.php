@@ -6,12 +6,11 @@ class CmsInterfaceManagerParameter
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsInterfaceManager|null - Belongs to interface */
-        private ?CmsInterfaceManager $cmsInterfaceManager = null
-        ,
+        private ?CmsInterfaceManager $cmsInterfaceManager = null,
         // TCMSFieldText
         /** @var string - Description */
         private string $description = '',
@@ -61,7 +60,6 @@ class CmsInterfaceManagerParameter
         return $this;
     }
 
-
     // TCMSFieldText
     public function getDescription(): string
     {
@@ -74,7 +72,6 @@ class CmsInterfaceManagerParameter
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -89,7 +86,6 @@ class CmsInterfaceManagerParameter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getValue(): string
     {
@@ -102,6 +98,4 @@ class CmsInterfaceManagerParameter
 
         return $this;
     }
-
-
 }

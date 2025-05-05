@@ -12,7 +12,7 @@
 interface TPkgViewRendererSnippetDirectoryInterface
 {
     /**
-     * @param bool              $bWithDummyData
+     * @param bool $bWithDummyData
      * @param TdbCmsPortal|null $oPortal
      *
      * @return TPkgViewRendererSnippetDirectoryInterface[]
@@ -21,7 +21,7 @@ interface TPkgViewRendererSnippetDirectoryInterface
 
     /**
      * @param TdbCmsPortal|null $oPortal
-     * @param string|null       $snippetPath
+     * @param string|null $snippetPath
      *
      * @return string[]
      */
@@ -48,7 +48,7 @@ interface TPkgViewRendererSnippetDirectoryInterface
 
     /**
      * @param TdbCmsPortal|null $oPortal
-     * @param string|null       $sBaseDirectory
+     * @param string|null $sBaseDirectory
      *
      * @return string[]
      */
@@ -56,7 +56,7 @@ interface TPkgViewRendererSnippetDirectoryInterface
 
     /**
      * @param TdbCmsPortal|null $oPortal
-     * @param string|null       $sBaseDirectory
+     * @param string|null $sBaseDirectory
      *
      * @return string[]
      */

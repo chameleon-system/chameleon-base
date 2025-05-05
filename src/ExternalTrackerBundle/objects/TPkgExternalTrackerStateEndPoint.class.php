@@ -11,22 +11,22 @@
 
 /**
  * do no extend from this class... instead extend from TTPkgExternalTrackerState.
-/**/
+ * /**/
 class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListener
 {
     /**
      * @var array<string, mixed>
      */
-    protected $aEventData = array();
+    protected $aEventData = [];
 
     /**
      * @var array<string, TdbCmsTplPage>
      */
-    protected $aStateData = array();
+    protected $aStateData = [];
 
-    const EVENT_EXTRANET_LOGIN = 'pkgExtranet__Login';
-    const EVENT_EXTRANET_REGISTRATION = 'pkgExtranet__Registration';
-    const EVENT_CONTACT_FORM_SUBMIT = 'contact_form__Submit';
+    public const EVENT_EXTRANET_LOGIN = 'pkgExtranet__Login';
+    public const EVENT_EXTRANET_REGISTRATION = 'pkgExtranet__Registration';
+    public const EVENT_CONTACT_FORM_SUBMIT = 'contact_form__Submit';
 
     /**
      * @var bool
@@ -37,7 +37,7 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
      *
      * @var string
      */
-    protected $rawEventData = null;
+    protected $rawEventData;
 
     public function __sleep()
     {
@@ -45,7 +45,7 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
             $this->Clear();
         }
 
-        return array('aEventData');
+        return ['aEventData'];
     }
 
     /**
@@ -83,6 +83,7 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
 
     /**
      * @return TCMSActivePage
+     *
      * @psalm-suppress FalsableReturnStatement
      */
     public function GetActivePage()
@@ -91,10 +92,9 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
     }
 
     /**
-     * @return void
-     *
      * @param string $sEventName
-     * @param mixed $aParameter
+     *
+     * @return void
      */
     public function AddEventData($sEventName, $aParameter)
     {
@@ -144,8 +144,8 @@ class TPkgExternalTrackerStateEndPoint implements IPkgCmsSessionPostWakeupListen
      */
     public function Clear()
     {
-        $this->aEventData = array();
-        $this->aStateData = array();
+        $this->aEventData = [];
+        $this->aStateData = [];
     }
 
     /**

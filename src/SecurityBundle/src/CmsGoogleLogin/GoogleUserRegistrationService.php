@@ -16,8 +16,6 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
     private const SSO_TYPE = 'google';
 
     /**
-     * @param CmsUserDataAccess $cmsUserDataAccess
-     * @param GuidCreationServiceInterface $guidService
      * @param array<string, array{clone_user_permissions_from: string}> $domainToBaseUserMapping
      */
     public function __construct(
@@ -35,7 +33,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
 
         $hostedDomain = $googleUser->getHostedDomain();
         $email = $googleUser->getEmail();
-        $mailDomain = mb_substr($email, mb_strpos($email, '@')+1);
+        $mailDomain = mb_substr($email, mb_strpos($email, '@') + 1);
         $baseUserName = $this->domainToBaseUserMapping[$hostedDomain]['clone_user_permissions_from'] ?? $this->domainToBaseUserMapping[$mailDomain]['clone_user_permissions_from'] ?? null;
         if (null === $baseUserName) {
             throw new RegisterUserErrorException('You may only register google users from the following domains: '.implode(', ', array_keys($this->domainToBaseUserMapping)));
@@ -47,15 +45,15 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
         }
 
         try {
-        $user = $this->cmsUserDataAccess->loadUserByIdentifier($baseUserName)
-                ->withId($userId)
-                ->withUserIdentifier($googleUser->getEmail())
-                ->withDateModified(new \DateTimeImmutable())
-                ->withCompany($googleUser->getHostedDomain())
-                ->withEmail($googleUser->getEmail())
-                ->withFirstname($googleUser->getFirstName())
-                ->withLastname($googleUser->getLastName())
-                ->withSsoId(new CmsUserSSOModel($userId, self::SSO_TYPE, $googleUser->getId(), $this->guidService->findUnusedId('cms_user_sso')));
+            $user = $this->cmsUserDataAccess->loadUserByIdentifier($baseUserName)
+                    ->withId($userId)
+                    ->withUserIdentifier($googleUser->getEmail())
+                    ->withDateModified(new \DateTimeImmutable())
+                    ->withCompany($googleUser->getHostedDomain())
+                    ->withEmail($googleUser->getEmail())
+                    ->withFirstname($googleUser->getFirstName())
+                    ->withLastname($googleUser->getLastName())
+                    ->withSsoId(new CmsUserSSOModel($userId, self::SSO_TYPE, $googleUser->getId(), $this->guidService->findUnusedId('cms_user_sso')));
         } catch (\Throwable $e) {
             throw new RegisterUserErrorException('Failed to register user - unable to load base user: '.$baseUserName, 0, $e);
         }

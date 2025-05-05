@@ -21,9 +21,6 @@ class ClearRoutingCacheListener
      */
     private $router;
 
-    /**
-     * @param ChameleonBaseRouter $router
-     */
     public function __construct(ChameleonBaseRouter $router)
     {
         $this->router = $router;

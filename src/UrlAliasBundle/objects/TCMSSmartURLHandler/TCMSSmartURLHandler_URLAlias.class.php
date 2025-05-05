@@ -28,7 +28,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
         $aUrlList = $this->getUrlAliasListAsSortedArray();
         foreach ($aUrlList as $oURLAlias) {
             // IF our URL has parameters AND we have ignore parameters, then we need to find out if there are any left after that
-            $aSourceParam = array();
+            $aSourceParam = [];
             $iSourceParamPos = strpos($oURLAlias->fieldSourceUrl, '?');
             if (false !== $iSourceParamPos) {
                 parse_str(substr($oURLAlias->fieldSourceUrl, $iSourceParamPos + 1), $aSourceParam);
@@ -90,9 +90,6 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
      * The array is sorted by URLs with fewest parts count first.
      * e.g. /home/, /products/, /products/merchant/, /service/law/about/.
      *
-     * @param TdbCmsUrlAlias $a
-     * @param TdbCmsUrlAlias $b
-     *
      * @return int
      */
     private function compareUrlAlias(TdbCmsUrlAlias $a, TdbCmsUrlAlias $b)
@@ -110,7 +107,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
         $dbConnection = $this->getDatabaseConnection();
         $request = $this->getCurrentRequest();
 
-        $conditions = array();
+        $conditions = [];
         $relativeSourceUrl = $request->getRequestUri();
         $paramStartPos = strpos($relativeSourceUrl, '?');
         $hasParameters = false !== $paramStartPos;
@@ -164,12 +161,12 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
      */
     protected function getUrlAliasListAsSortedArray()
     {
-        $aUrlList = array();
+        $aUrlList = [];
         $oCmsUrlAliasList = $this->getUrlAliasList();
         while ($oURLAlias = $oCmsUrlAliasList->Next()) {
             $aUrlList[] = $oURLAlias;
         }
-        usort($aUrlList, array($this, 'compareUrlAlias'));
+        usort($aUrlList, [$this, 'compareUrlAlias']);
 
         return $aUrlList;
     }
@@ -185,7 +182,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
      */
     protected function GetMappingParameter($oURLAlias)
     {
-        $aParameterList = array();
+        $aParameterList = [];
         if (!empty($oURLAlias->fieldParameterMapping)) {
             $sParameterString = trim($oURLAlias->fieldParameterMapping);
             if (!empty($sParameterString)) {
@@ -207,9 +204,9 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
     /**
      * Add mapped parameter to target url.
      *
-     * @param array            $aMapping
+     * @param array $aMapping
      * @param TCMSSmartURLData $oURLData
-     * @param string           $sTargetURL
+     * @param string $sTargetURL
      *
      * @return string
      */
@@ -221,7 +218,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
             } else {
                 $sTargetURL .= '?';
             }
-            $aMappedURLParameter = array();
+            $aMappedURLParameter = [];
             reset($aMapping);
             foreach ($aMapping as $sOldParameter => $sMappedToParameter) {
                 if (array_key_exists($sOldParameter, $oURLData->aParameters)) {
@@ -241,7 +238,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
     }
 
     /**
@@ -249,7 +246,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
      */
     private function getCurrentRequest()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -257,7 +254,7 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     /**
@@ -265,6 +262,6 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
      */
     private function getUrlUtilService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

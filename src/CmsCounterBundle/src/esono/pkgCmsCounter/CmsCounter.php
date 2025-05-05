@@ -28,7 +28,6 @@ class CmsCounter
     /**
      * return current counter value for named counter with given owner. returns null if no entry found.
      *
-     * @param \TCMSRecord $owner
      * @param string $systemName
      *
      * @return int|null
@@ -56,7 +55,6 @@ class CmsCounter
     /**
      * create or update counter.
      *
-     * @param \TCMSRecord $owner
      * @param string $systemName
      * @param int $value
      *
@@ -81,8 +79,7 @@ class CmsCounter
     /**
      * returns next free counter number and blocks it from being used by another call.
      *
-     * @param \TCMSRecord $owner
-     * @param string      $systemName
+     * @param string $systemName
      *
      * @return int
      */

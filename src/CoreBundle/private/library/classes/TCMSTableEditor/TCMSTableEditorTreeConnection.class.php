@@ -264,7 +264,7 @@ class TCMSTableEditorTreeConnection extends TCMSTableEditor
 
         $oMenuItem = new TCMSTableEditorMenuItem();
         $oMenuItem->sItemKey = 'BackToList';
-        $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_tree_connection.action_show_list');
+        $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_tree_connection.action_show_list');
         $oMenuItem->sIcon = 'far fa-list-alt';
         $oMenuItem->sOnClick = "location.href='".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript(['pagedef' => 'tablemanagerframe', 'id' => $this->oTableConf->sqlData['id'], 'sRestrictionField' => 'cms_tree_id', 'sRestriction' => $this->oTable->sqlData['cms_tree_id']])."'";
         $this->oMenuItems->AddItemToStart($oMenuItem);

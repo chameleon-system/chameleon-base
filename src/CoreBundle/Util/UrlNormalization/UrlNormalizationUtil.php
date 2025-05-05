@@ -16,11 +16,9 @@ class UrlNormalizationUtil
     /**
      * @var UrlNormalizerInterface[]
      */
-    private $normalizerList = array();
+    private $normalizerList = [];
 
     /**
-     * @param UrlNormalizerInterface $urlNormalizer
-     *
      * @return void
      */
     public function addNormalizer(UrlNormalizerInterface $urlNormalizer)
@@ -31,7 +29,7 @@ class UrlNormalizationUtil
     /**
      * Replaces special characters in URLs or URL parts by running a list of single-purpose normalizers.
      *
-     * @param string $url    the URL to normalize
+     * @param string $url the URL to normalize
      * @param string $spacer Character that is used to replace certain special characters (depending on the normalizer implementation)
      *
      * @return string The normalized URL

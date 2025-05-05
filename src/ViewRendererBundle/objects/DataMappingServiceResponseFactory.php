@@ -12,15 +12,13 @@
 namespace ChameleonSystem\ViewRendererBundle\objects;
 
 use ChameleonSystem\ViewRendererBundle\objects\interfaces\DataMappingServiceResponseFactoryInterface;
-use IMapperCacheTrigger;
-use IMapperVisitor;
 
 class DataMappingServiceResponseFactory implements DataMappingServiceResponseFactoryInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function createResponse(IMapperVisitor $visitor, IMapperCacheTrigger $cacheTrigger)
+    public function createResponse(\IMapperVisitor $visitor, \IMapperCacheTrigger $cacheTrigger)
     {
         $response = new DataMappingServiceResponse();
         $trigger = $cacheTrigger->getTrigger();

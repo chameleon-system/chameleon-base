@@ -18,8 +18,6 @@ class MapperVisitorPayloadProxy implements IMapperPayload
 
     /**
      * notice that we pass by reference. we WANT the modification cause by this class to affect the object outside of this class.
-     *
-     * @param IMapperVisitor $oComponent
      */
     public function __construct(IMapperVisitor $oComponent)
     {

@@ -16,10 +16,10 @@ class TPkgSnippetRendererFilter
      * By default return relative urls, but if is set static url return absolute path.
      * If is set to true or false force absolute or relative url.
      *
-     * @param string    $cmsMediaId
-     * @param int       $maxWidth
-     * @param int       $maxHeight
-     * @param bool      $forceSize
+     * @param string $cmsMediaId
+     * @param int $maxWidth
+     * @param int $maxHeight
+     * @param bool $forceSize
      * @param bool|null $returnAbsoluteUrl
      *
      * @return string
@@ -37,7 +37,7 @@ class TPkgSnippetRendererFilter
         ) {
             $oString = new TPkgCmsStringUtilities_VariableInjection();
 
-            return $oString->replace($cmsMediaId, array('width' => $maxWidth, 'height' => $maxHeight));
+            return $oString->replace($cmsMediaId, ['width' => $maxWidth, 'height' => $maxHeight]);
         }
 
         $cmsMedia = new TCMSImage();
@@ -46,7 +46,7 @@ class TPkgSnippetRendererFilter
         }
 
         if (true === $forceSize) {
-            $thumbnail = $cmsMedia->GetCenteredFixedSizeThumbnail($maxWidth, $maxHeight, 0, 'ffffff', array(), true);
+            $thumbnail = $cmsMedia->GetCenteredFixedSizeThumbnail($maxWidth, $maxHeight, 0, 'ffffff', [], true);
         } else {
             $thumbnail = $cmsMedia->GetThumbnail($maxWidth, $maxHeight);
         }

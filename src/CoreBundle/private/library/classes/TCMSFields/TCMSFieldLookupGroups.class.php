@@ -11,7 +11,7 @@
 
 /**
  * a lookup field with special cases to prevent non admins to select groups they are not allowed to (admin).
-/**/
+ * /**/
 class TCMSFieldLookupGroups extends TCMSFieldLookupMultiselectCheckboxes
 {
     protected function GetMLTRecordRestrictions()

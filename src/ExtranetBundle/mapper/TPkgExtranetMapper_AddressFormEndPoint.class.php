@@ -28,7 +28,7 @@ class TPkgExtranetMapper_AddressFormEndPoint extends AbstractPkgExtranetMapper_A
     {
         parent::Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
         $oAddress = $oVisitor->GetSourceObject('oAddressObject');
-        $aFieldList = array('aFieldFirstName' => 'firstname',
+        $aFieldList = ['aFieldFirstName' => 'firstname',
                             'aFieldLastName' => 'lastname',
                             'aFieldAdditionalInfo' => 'address_additional_info',
                             'aFieldStreet' => 'street',
@@ -37,14 +37,14 @@ class TPkgExtranetMapper_AddressFormEndPoint extends AbstractPkgExtranetMapper_A
                             'aFieldCity' => 'city',
                             'aFieldTel' => 'telefon',
                             'aFieldFax' => 'fax',
-        );
+        ];
         $this->SetInputFields($aFieldList, $oVisitor, $oAddress);
 
-        $aRadioFieldList = array('aFieldSalutation' => 'data_extranet_salutation_id');
+        $aRadioFieldList = ['aFieldSalutation' => 'data_extranet_salutation_id'];
         $oSalutationList = TdbDataExtranetSalutationList::GetList();
         $this->SetInputFields($aRadioFieldList, $oVisitor, $oAddress, 'radio', $oSalutationList);
 
-        $aSelectFieldList = array('aFieldCountry' => 'data_country_id');
+        $aSelectFieldList = ['aFieldCountry' => 'data_country_id'];
         $oCountryList = TdbDataCountryList::GetList();
         $this->SetInputFields($aSelectFieldList, $oVisitor, $oAddress, 'select', $oCountryList);
 
@@ -56,11 +56,11 @@ class TPkgExtranetMapper_AddressFormEndPoint extends AbstractPkgExtranetMapper_A
     /**
      * set errors and values for given field list.
      *
-     * @param array<string, string>      $aFieldList       (MappedFieldName(name used in template) => RealFieldName (user input field name) )
-     * @param IMapperVisitorRestricted   $oVisitor
+     * @param array<string, string> $aFieldList (MappedFieldName(name used in template) => RealFieldName (user input field name) )
+     * @param IMapperVisitorRestricted $oVisitor
      * @param TdbDataExtranetUserAddress $oAddress
-     * @param string                     $sFieldType
-     * @param TCMSRecordList|null        $oFieldOptionList
+     * @param string $sFieldType
+     * @param TCMSRecordList|null $oFieldOptionList
      *
      * @internal param string $sMSGConsumer
      *
@@ -69,17 +69,17 @@ class TPkgExtranetMapper_AddressFormEndPoint extends AbstractPkgExtranetMapper_A
     protected function SetInputFields($aFieldList, $oVisitor, $oAddress, $sFieldType = 'text', $oFieldOptionList = null)
     {
         foreach ($aFieldList as $sMappedFieldName => $sRealFieldName) {
-            $aField = array();
+            $aField = [];
             switch ($sFieldType) {
                 case 'radio':
                 case 'select':
                     $aField['sValue'] = isset($oAddress->sqlData[$sRealFieldName]) ? $oAddress->sqlData[$sRealFieldName] : ('');
                     $aField['sError'] = $this->GetMessageForField($sRealFieldName, $oVisitor->GetSourceObject('sCustomMSGConsumer'));
-                    $aField['aValueList'] = array();
+                    $aField['aValueList'] = [];
                     if (!is_null($oFieldOptionList)) {
                         /** @var TCMSRecord $oFieldOption */
                         while ($oFieldOption = $oFieldOptionList->Next()) {
-                            $aFieldOption = array();
+                            $aFieldOption = [];
                             $aFieldOption['sName'] = $oFieldOption->GetName();
                             $aFieldOption['sValue'] = $oFieldOption->id;
                             $aField['aValueList'][] = $aFieldOption;

@@ -15,16 +15,14 @@ use ChameleonSystem\CoreBundle\i18n\TranslationConstants;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use Doctrine\DBAL\Connection;
 use Monolog\Logger;
-use TCMSListManagerFullGroupTable;
-use ViewRenderer;
 
 /**
  * @deprecated since 6.3.0 - use Psr\Log\LoggerInterface in conjunction with Monolog logging instead
  */
-class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
+class TCMSListManagerLogEntries extends \TCMSListManagerFullGroupTable
 {
-    const ALL_SELECTION_VALUE = '0';
-    const ALL_ERROR_SELECTION_VALUE = '1';
+    public const ALL_SELECTION_VALUE = '0';
+    public const ALL_ERROR_SELECTION_VALUE = '1';
 
     /**
      * @var array<string, int>
@@ -62,18 +60,18 @@ class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
      */
     private function getFilterLogLevelSelect($filterLogLevel)
     {
-        $oViewRenderer = new ViewRenderer();
+        $oViewRenderer = new \ViewRenderer();
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm submitOnSelect');
         $oViewRenderer->AddSourceObject('sName', 'filterLogLevel');
         $oViewRenderer->AddSourceObject('sLabelText', $this->getTranslation('pkg_cms_core_log.log_table.field_level'));
 
-        $aValueList = array();
-        $aValueList[] = array('sName' => $this->getTranslation('pkg_cms_core_log.log_table.select_level_all'), 'sValue' => self::ALL_SELECTION_VALUE);
-        $aValueList[] = array('sName' => $this->getTranslation('pkg_cms_core_log.log_table.select_level_all_errors'), 'sValue' => self::ALL_ERROR_SELECTION_VALUE);
+        $aValueList = [];
+        $aValueList[] = ['sName' => $this->getTranslation('pkg_cms_core_log.log_table.select_level_all'), 'sValue' => self::ALL_SELECTION_VALUE];
+        $aValueList[] = ['sName' => $this->getTranslation('pkg_cms_core_log.log_table.select_level_all_errors'), 'sValue' => self::ALL_ERROR_SELECTION_VALUE];
 
         $onlyLevelPrefix = $this->getTranslation('pkg_cms_core_log.log_table.select_level_only');
         foreach (self::$levels as $name => $level) {
-            $aValueList[] = array('sName' => sprintf('%s: %s %s', $onlyLevelPrefix, $level, $name), 'sValue' => $level);
+            $aValueList[] = ['sName' => sprintf('%s: %s %s', $onlyLevelPrefix, $level, $name), 'sValue' => $level];
         }
 
         $oViewRenderer->AddSourceObject('aValueList', $aValueList);
@@ -107,7 +105,7 @@ class TCMSListManagerLogEntries extends TCMSListManagerFullGroupTable
 
     /**
      * @param string $id
-     * @param array  $data
+     * @param array $data
      *
      * @return string
      */

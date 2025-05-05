@@ -6,8 +6,6 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use TdbCmsLanguage;
-use TdbCmsPortal;
 
 class DomainValidator implements DomainValidatorInterface
 {
@@ -33,11 +31,7 @@ class DomainValidator implements DomainValidatorInterface
     private $languageService;
 
     /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param RequestInfoServiceInterface  $requestInfoService
-     * @param RequestStack                 $requestStack
-     * @param LanguageServiceInterface     $languageService
-     * @param bool                         $forcePrimaryDomain
+     * @param bool $forcePrimaryDomain
      */
     public function __construct(PortalDomainServiceInterface $portalDomainService, RequestInfoServiceInterface $requestInfoService, RequestStack $requestStack, LanguageServiceInterface $languageService, $forcePrimaryDomain = CHAMELEON_FORCE_PRIMARY_DOMAIN)
     {
@@ -51,7 +45,7 @@ class DomainValidator implements DomainValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getValidDomain($domain, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $secure = true)
+    public function getValidDomain($domain, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $secure = true)
     {
         if (true === $this->isDomainValid($domain, $portal, $language, $secure)) {
             return $domain;
@@ -61,14 +55,12 @@ class DomainValidator implements DomainValidatorInterface
     }
 
     /**
-     * @param string|null         $domain
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
-     * @param bool                $secure
+     * @param string|null $domain
+     * @param bool $secure
      *
      * @return bool
      */
-    private function isDomainValid($domain, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $secure = true)
+    private function isDomainValid($domain, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $secure = true)
     {
         if (null === $domain) {
             return false;
@@ -106,14 +98,12 @@ class DomainValidator implements DomainValidatorInterface
      * Checks if the validation check is made for the same parameters as the current request. As this will be the case
      * in >95% of cases, this will improve performance by making subsequent database calls unnecessary.
      *
-     * @param string         $domain
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     * @param bool           $secure
+     * @param string $domain
+     * @param bool $secure
      *
      * @return bool
      */
-    private function isRequestingForActiveParameters($domain, TdbCmsPortal $portal, TdbCmsLanguage $language, $secure)
+    private function isRequestingForActiveParameters($domain, \TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
         $activePortal = $this->portalDomainService->getActivePortal();
         $activeDomain = $this->portalDomainService->getActiveDomain();
@@ -129,14 +119,12 @@ class DomainValidator implements DomainValidatorInterface
     }
 
     /**
-     * @param string         $domain
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
-     * @param bool           $secure
+     * @param string $domain
+     * @param bool $secure
      *
      * @return bool
      */
-    private function isValidDomainForPortal($domain, TdbCmsPortal $portal, TdbCmsLanguage $language, $secure)
+    private function isValidDomainForPortal($domain, \TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
         $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
         while ($portalDomain = $portalDomainList->Next()) {
@@ -159,13 +147,11 @@ class DomainValidator implements DomainValidatorInterface
     }
 
     /**
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
-     * @param bool                $secure
+     * @param bool $secure
      *
      * @return string
      */
-    private function getDefaultDomain(TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $secure = true)
+    private function getDefaultDomain(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $secure = true)
     {
         if (null === $language) {
             $language = $this->languageService->getActiveLanguage();
@@ -194,11 +180,9 @@ class DomainValidator implements DomainValidatorInterface
     }
 
     /**
-     * @param TdbCmsLanguage $language
-     *
      * @return string
      */
-    private function getDefaultDomainForBackend(TdbCmsLanguage $language)
+    private function getDefaultDomainForBackend(\TdbCmsLanguage $language)
     {
         if (null !== $request = $this->requestStack->getCurrentRequest()) {
             return $request->getHost();

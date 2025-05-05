@@ -22,7 +22,7 @@ class MTPkgCmsSubNavigationEndPoint extends MTPkgViewRendererAbstractModuleMappe
 
         $oRootNode = new TPkgCmsNavigationNode();
         $oRootNode->loadFromNode($oRootTreeNode);
-        $aTree = array($oRootNode);
+        $aTree = [$oRootNode];
         $oVisitor->SetMappedValue('aTree', $aTree);
         if ($bCachingEnabled) {
             $oCacheTriggerManager->addTrigger('cms_tree_node');
@@ -55,7 +55,7 @@ class MTPkgCmsSubNavigationEndPoint extends MTPkgViewRendererAbstractModuleMappe
     {
         $activeUser = $this->getActiveUser();
         if (null === $activeUser) {
-            return array();
+            return [];
         }
 
         return $activeUser->GetUserGroupIds();
@@ -83,7 +83,7 @@ class MTPkgCmsSubNavigationEndPoint extends MTPkgViewRendererAbstractModuleMappe
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     private function getRootNodeId()
     {
@@ -112,6 +112,6 @@ class MTPkgCmsSubNavigationEndPoint extends MTPkgViewRendererAbstractModuleMappe
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

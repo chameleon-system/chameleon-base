@@ -8,7 +8,7 @@ class CmsMessageManagerMessageType
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -21,8 +21,7 @@ class CmsMessageManagerMessageType
         private string $color = '',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Icon */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldVarchar
         /** @var string - Class name */
         private string $class = ''
@@ -66,7 +65,6 @@ class CmsMessageManagerMessageType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemname(): string
     {
@@ -79,7 +77,6 @@ class CmsMessageManagerMessageType
 
         return $this;
     }
-
 
     // TCMSFieldColorpicker
     public function getColor(): string
@@ -94,7 +91,6 @@ class CmsMessageManagerMessageType
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -108,7 +104,6 @@ class CmsMessageManagerMessageType
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClass(): string
     {
@@ -121,6 +116,4 @@ class CmsMessageManagerMessageType
 
         return $this;
     }
-
-
 }

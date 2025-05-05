@@ -26,19 +26,19 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
         $oTreeSelect = new TCMSRenderDocumentTreeSelectBox();
 
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         $documentTreeId = $request->get('cms_document_tree_id');
         if (null === $documentTreeId) {
             $documentTreeId = '';
         }
 
-        $options = '<option value="">'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected')."</option>\n";
+        $options = '<option value="">'.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.form.select_box_nothing_selected')."</option>\n";
         $options .= $oTreeSelect->GetTreeOptions($documentTreeId);
 
         $oViewRenderer = new ViewRenderer();
         $oViewRenderer->AddSourceObject('sInputClass', 'form-control form-control-sm');
         $oViewRenderer->AddSourceObject('sName', 'cms_document_tree_id');
-        $oViewRenderer->AddSourceObject('sLabelText', \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_chooser.tree_node'));
+        $oViewRenderer->AddSourceObject('sLabelText', ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.document_chooser.tree_node'));
         $oViewRenderer->AddSourceObject('onChange', "document.forms['".TGlobal::OutHTML($this->tableObj->listName)."'].submit();");
         $oViewRenderer->AddSourceObject('options', $options);
 
@@ -49,8 +49,8 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
 
         $this->tableObj->searchBoxContent = $filterSection;
 
-        $this->tableObj->aHiddenFieldIgnoreList = array('cms_document_tree_id');
-        $customSearchFieldParams = array('cms_document_tree_id' => $documentTreeId);
+        $this->tableObj->aHiddenFieldIgnoreList = ['cms_document_tree_id'];
+        $customSearchFieldParams = ['cms_document_tree_id' => $documentTreeId];
         $this->tableObj->AddCustomSearchFieldParameter($customSearchFieldParams);
     }
 
@@ -79,28 +79,28 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
     {
         parent::AddFields();
 
-        $jsParas = array('id');
+        $jsParas = ['id'];
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('id' => '#'), 'left', null, 1, false);
-        $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackMediaSelectBox'), null, 1);
+        $this->tableObj->AddHeaderField(['id' => '#'], 'left', null, 1, false);
+        $this->tableObj->AddColumn('id', 'left', [$this, 'CallBackMediaSelectBox'], null, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('cms_filetype_id' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_type')), 'left', null, 1, false);
-        $this->tableObj->AddColumn('cms_filetype_id', 'left', array($this, 'CallBackDocumentFileType'), $jsParas, 1);
+        $this->tableObj->AddHeaderField(['cms_filetype_id' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_type')], 'left', null, 1, false);
+        $this->tableObj->AddColumn('cms_filetype_id', 'left', [$this, 'CallBackDocumentFileType'], $jsParas, 1);
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('name' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.title')), 'left', null, 1, false);
+        $this->tableObj->AddHeaderField(['name' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.title')], 'left', null, 1, false);
         $this->tableObj->AddColumn('name', 'left', null, $jsParas, 1);
         $this->tableObj->searchFields['`cms_document`.`name`'] = 'full';
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('filename' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_name')), 'left', null, 1, false);
-        $this->tableObj->AddColumn('filename', 'left', array($this, 'CallBackFilenameShort'), $jsParas, 1);
+        $this->tableObj->AddHeaderField(['filename' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_name')], 'left', null, 1, false);
+        $this->tableObj->AddColumn('filename', 'left', [$this, 'CallBackFilenameShort'], $jsParas, 1);
         $this->tableObj->searchFields['`cms_document`.`filename`'] = 'full';
 
         ++$this->columnCount;
-        $this->tableObj->AddHeaderField(array('filesize' => \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_size')), 'left', null, 1, false);
-        $this->tableObj->AddColumn('filesize', 'left', array($this, 'CallBackHumanRedableFileSize'), $jsParas, 1);
+        $this->tableObj->AddHeaderField(['filesize' => ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list_document.file_size')], 'left', null, 1, false);
+        $this->tableObj->AddColumn('filesize', 'left', [$this, 'CallBackHumanRedableFileSize'], $jsParas, 1);
     }
 
     /**
@@ -133,10 +133,10 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
         $list_group_field_column = 'category';
 
         $this->tableObj->showGroupSelector = false;
-        $this->tableObj->AddGroupField(array($list_group_field_column => $groupField), 'left', null, null, $this->columnCount);
+        $this->tableObj->AddGroupField([$list_group_field_column => $groupField], 'left', null, null, $this->columnCount);
         // $this->tableObj->showGroupSelectorText = 'Verzeichnis';
-        $this->tableObj->showAllGroupsText = '['.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
-        $tmpArray = array($list_group_field_column => 'ASC');
+        $this->tableObj->showAllGroupsText = '['.ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.group_show_all').']';
+        $tmpArray = [$list_group_field_column => 'ASC'];
         $this->tableObj->orderList = array_merge($tmpArray, $this->tableObj->orderList);
     }
 
@@ -148,14 +148,14 @@ class TCMSListManagerDocumentChooser extends TCMSListManagerFullGroupTable
      * returns the filetype as rendered html.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
     public function CallBackDocumentFileType($id, $row)
     {
         $oFileDownload = new TCMSDownloadFile();
-        /** @var $oFileDownload TCMSDownloadFile */
+        /* @var $oFileDownload TCMSDownloadFile */
         $oFileDownload->Load($row['id']);
 
         $html = $oFileDownload->GetPlainFileTypeIcon();

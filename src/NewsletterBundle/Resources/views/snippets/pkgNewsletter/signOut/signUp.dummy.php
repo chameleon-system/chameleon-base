@@ -2,7 +2,7 @@
 
 $oData = new TPkgViewRendererSnippetDummyData();
 
-$aData = array(
+$aData = [
     'sHeadLine' => 'Meine Headline',
     'sText' => 'mein html <b>text</b>',
     'sNewsletterLink' => '#',
@@ -10,50 +10,50 @@ $aData = array(
     'sMessageGeneral' => 'bei der eingabe der benutzerdaten ist ein fehler aufgetreten',
     'sMessageNewsletterList' => 'beim abonnieren einer newsletter liste ist ein fehler aufgetreten',
     'sFieldNamesPrefix' => 'newsletter_subscription',
-    'aFieldSalutation' => array(
+    'aFieldSalutation' => [
         'sError' => '',
         'sValue' => '',
         'aValueList' => '',
-    ),
-    'aFieldFirstName' => array(
+    ],
+    'aFieldFirstName' => [
         'sError',
         'sValue',
-    ),
-    'aFieldLastName' => array(
+    ],
+    'aFieldLastName' => [
         'sError',
         'sValue',
-    ),
-    'aFieldEmail' => array(
+    ],
+    'aFieldEmail' => [
         'sError',
         'sValue',
-    ),
-    'aGroupList' => array(
-        array(
+    ],
+    'aGroupList' => [
+        [
             'id' => 1,
             'sName' => 'erste gruppe',
             'sError' => '',
             'bIsChecked' => false,
-        ),
-        array(
+        ],
+        [
             'id' => 2,
             'sName' => 'zweite gruppe',
             'sError' => '',
             'bIsChecked' => false,
-        ),
-        array(
+        ],
+        [
             'id' => 3,
             'sName' => 'dritte gruppe',
             'sError' => '',
             'bIsChecked' => true,
-        ),
-        array(
+        ],
+        [
             'id' => 4,
             'sName' => 'vierte gruppe',
             'sError' => 'le mow',
             'bIsChecked' => false,
-        ),
-    ),
-);
+        ],
+    ],
+];
 
 $oData->addDummyDataArray($aData);
 

@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-class ChameleonRedirectException extends \Exception
+class ChameleonRedirectException extends Exception
 {
     /**
      * @var string
      */
-    private $url = null;
+    private $url;
 
     /**
      * @var int
      */
-    private $status = null;
+    private $status;
 
     /**
      * @return string

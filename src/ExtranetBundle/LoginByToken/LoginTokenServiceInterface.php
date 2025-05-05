@@ -17,7 +17,6 @@ namespace ChameleonSystem\ExtranetBundle\LoginByToken;
  */
 interface LoginTokenServiceInterface
 {
-
     /**
      * Returns false if the service is not ready to encode or decode tokens.
      * This can be the case if certain preconditions for safety are not met.

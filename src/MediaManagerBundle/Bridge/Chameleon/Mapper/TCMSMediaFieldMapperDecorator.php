@@ -12,9 +12,6 @@
 namespace ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\Mapper;
 
 use ChameleonSystem\CoreBundle\Interfaces\MediaManagerUrlGeneratorInterface;
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TCMSMediaFieldMapperDecorator implements \IViewMapper
@@ -47,7 +44,7 @@ class TCMSMediaFieldMapperDecorator implements \IViewMapper
     /**
      * {@inheritDoc}
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
+    public function Accept(\IMapperVisitorRestricted $oVisitor, $bCachingEnabled, \IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $this->subject->Accept($oVisitor, $bCachingEnabled, $oCacheTriggerManager);
 
@@ -66,7 +63,7 @@ class TCMSMediaFieldMapperDecorator implements \IViewMapper
     /**
      * {@inheritDoc}
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements): void
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements): void
     {
         $this->subject->GetRequirements($oRequirements);
     }

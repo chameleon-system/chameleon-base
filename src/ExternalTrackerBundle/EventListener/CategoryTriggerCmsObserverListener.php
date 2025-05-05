@@ -28,10 +28,10 @@ class CategoryTriggerCmsObserverListener
         $oPkgExternalTracker = \TdbPkgExternalTrackerList::GetActiveInstance();
         $oPkgExternalTracker->AddEvent(
             \TPkgExternalTrackerState::EVENT_PKG_SHOP_PRODUCT_LIST,
-            array(
+            [
                 'numberOfResults' => $this->getNumberOfResults($event),
                 'items' => $this->getResultItems($event),
-            )
+            ]
         );
     }
 
@@ -40,9 +40,9 @@ class CategoryTriggerCmsObserverListener
      */
     private function isCategoryEvent(ArticleListFilterExecutedEvent $event)
     {
-        $categoryFilterClasses = array('TShopModuleArticlelistFilterAllArticlesOfActiveCategoryTree',
+        $categoryFilterClasses = ['TShopModuleArticlelistFilterAllArticlesOfActiveCategoryTree',
                                        'TShopModuleArticlelistFilterAllArticlesOfActiveCategory',
-                                       'TShopModuleArticlelistFilterAllArticlesOfActiveNonLeafCategory', );
+                                       'TShopModuleArticlelistFilterAllArticlesOfActiveNonLeafCategory', ];
         foreach ($categoryFilterClasses as $categoryFilterClass) {
             if ($event->getFilter() instanceof $categoryFilterClass) {
                 return true;
@@ -61,7 +61,6 @@ class CategoryTriggerCmsObserverListener
     }
 
     /**
-     * @param ArticleListFilterExecutedEvent $event
      * @return int
      */
     private function getNumberOfResults(ArticleListFilterExecutedEvent $event)
@@ -74,12 +73,12 @@ class CategoryTriggerCmsObserverListener
      */
     private function getSearchParameters(ArticleListFilterExecutedEvent $event)
     {
-        $stateQuery = $event->getState()->getState(StateInterface::QUERY, array());
+        $stateQuery = $event->getState()->getState(StateInterface::QUERY, []);
 
-        $searchParameter = array(
+        $searchParameter = [
             \TShopModuleArticlelistFilterSearch::PARAM_QUERY => isset($stateQuery[\TShopModuleArticlelistFilterSearch::PARAM_QUERY]) ? $stateQuery[\TShopModuleArticlelistFilterSearch::PARAM_QUERY] : '',
-            \TShopModuleArticlelistFilterSearch::URL_FILTER => isset($stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER]) ? $stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER] : array(),
-        );
+            \TShopModuleArticlelistFilterSearch::URL_FILTER => isset($stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER]) ? $stateQuery[\TShopModuleArticlelistFilterSearch::URL_FILTER] : [],
+        ];
 
         return $searchParameter;
     }

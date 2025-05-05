@@ -16,12 +16,12 @@ class MTCMSWizardCore extends TUserCustomModelBase
      */
     protected $oActiveOrderStep;
 
-    const URL_PARAM_STEP_METHOD = 'cmswizardmethodcallname';
-    const URL_PARAM_STEP_SYSTEM_NAME = 'stepname';
-    const URL_PARAM_MODULE_SPOT = 'spot';
+    public const URL_PARAM_STEP_METHOD = 'cmswizardmethodcallname';
+    public const URL_PARAM_STEP_SYSTEM_NAME = 'stepname';
+    public const URL_PARAM_MODULE_SPOT = 'spot';
 
-    const SESSION_PARAM_NAME = 'MTCMSWizardCore';
-    const MSG_HANDLER_NAME = 'cmswizardmsg';
+    public const SESSION_PARAM_NAME = 'MTCMSWizardCore';
+    public const MSG_HANDLER_NAME = 'cmswizardmsg';
 
     /**
      * set to true if the user is executing a method.
@@ -48,7 +48,7 @@ class MTCMSWizardCore extends TUserCustomModelBase
             if (is_null($this->oActiveOrderStep)) {
                 // order step not found... go back to the caling step, but write a message
                 $oMsgManager = TCMSMessageManager::GetInstance();
-                $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'SYSTEM-ERROR-SHOP-ORDER-STEP-NOT-DEFINED', array('target' => $sStepName, 'calling' => TdbCmsWizardStep::GetCallingStepName()));
+                $oMsgManager->AddMessage(TCMSMessageManager::GLOBAL_CONSUMER_NAME, 'SYSTEM-ERROR-SHOP-ORDER-STEP-NOT-DEFINED', ['target' => $sStepName, 'calling' => TdbCmsWizardStep::GetCallingStepName()]);
                 $sStepName = TdbCmsWizardStep::GetCallingStepName();
                 $this->oActiveOrderStep = TdbCmsWizardStep::GetStep($sStepName, $this->instanceID);
             }
@@ -134,7 +134,7 @@ class MTCMSWizardCore extends TUserCustomModelBase
         } else {
             // error - method not allowed
             $oMsgManager = TCMSMessageManager::GetInstance();
-            $oMsgManager->AddMessage($this->sModuleSpotName, 'SYSTEM-ERROR-SHOP-ORDER-STEP-CALLED-METHOD-NOT-ALLOWED', array('methodName' => $sStepMethod));
+            $oMsgManager->AddMessage($this->sModuleSpotName, 'SYSTEM-ERROR-SHOP-ORDER-STEP-CALLED-METHOD-NOT-ALLOWED', ['methodName' => $sStepMethod]);
         }
     }
 
@@ -147,7 +147,7 @@ class MTCMSWizardCore extends TUserCustomModelBase
     {
         $aIncludes = parent::GetHtmlHeadIncludes();
         if (!is_array($aIncludes)) {
-            $aIncludes = array();
+            $aIncludes = [];
         }
         $this->LoadActiveStep();
         if (!is_null($this->oActiveOrderStep)) {

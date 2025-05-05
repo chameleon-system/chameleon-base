@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class CmsRight
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - CMS abbreviation of the rights type */
@@ -55,7 +54,6 @@ class CmsRight
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTrans(): string
     {
@@ -68,6 +66,4 @@ class CmsRight
 
         return $this;
     }
-
-
 }

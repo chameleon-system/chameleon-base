@@ -42,25 +42,25 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
         $html = '<input type="hidden" name="'.$sEscapedNameField.'[x]" value="-" id="'.$sEscapedNameField.'[]" />
       <div class="card">
         <div class="card-header p-1">
-          <a href="javascript:markCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink"><i class="fas fa-check pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all').'</a>
-          <a href="javascript:invertCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-random pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>';
+          <a href="javascript:markCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink"><i class="fas fa-check pr-2"></i>'.ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.select_deselect_all').'</a>
+          <a href="javascript:invertCheckboxes(\''.TGlobal::OutJS($this->name).'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-random pr-2"></i>'.ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_checkboxes.invert_selection').'</a>';
 
         if (true === $this->isRecordCreationAllowed($foreignTableName)) {
-            $html .= '<a href="javascript:document.cmseditform.tableid.value=\''.TGlobal::OutJS($oTargetTableConf->sqlData['id']).'\';ExecutePostCommand(\'Insert\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-plus pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.new').'</a>';
+            $html .= '<a href="javascript:document.cmseditform.tableid.value=\''.TGlobal::OutJS($oTargetTableConf->sqlData['id']).'\';ExecutePostCommand(\'Insert\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-plus pr-2"></i>'.ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.new').'</a>';
         }
         $urlUtil = $this->getUrlUtil();
         $bShowCustomsort = $this->oDefinition->GetFieldtypeConfigKey('bAllowCustomSortOrder');
         if (true == $bShowCustomsort) {
-            $sSortUrl = $urlUtil->getArrayAsUrl(array(
+            $sSortUrl = $urlUtil->getArrayAsUrl([
                 'pagedef' => 'CMSFieldMLTPosition',
                 '_rmhist' => 'false',
-                'module_fnc' => array('contentmodule' => 'GetSortElements'),
+                'module_fnc' => ['contentmodule' => 'GetSortElements'],
                 'tableSQLName' => $sSQLTableName,
                 'sRestriction' => $this->recordId,
                 'sRestrictionField' => $this->sTableName.'_mlt',
-            ), PATH_CMS_CONTROLLER.'?', '&');
+            ], PATH_CMS_CONTROLLER.'?', '&');
 
-            $html .= '<a href="javascript:parent.CreateModalIFrameDialogCloseButton(\''.$sSortUrl.'\',0,0,\''.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.sort').'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-sort-amount-down pr-2"></i>'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.sort').'</a>';
+            $html .= '<a href="javascript:parent.CreateModalIFrameDialogCloseButton(\''.$sSortUrl.'\',0,0,\''.ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.sort').'\');" class="checkBoxHeaderActionLink ml-2"><i class="fas fa-sort-amount-down pr-2"></i>'.ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.sort').'</a>';
         }
         $html .= '
         </div>
@@ -109,11 +109,11 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
 
             if (true === $hasEditPermissionForForeignTable) {
                 $url = $urlUtil->getArrayAsUrl(
-                    array(
+                    [
                         'tableid' => $oTargetTableConf->sqlData['id'],
                         'pagedef' => $inputFilter->getFilteredGetInput('pagedef', 'tableeditor'),
                         'id' => $recordId,
-                    ),
+                    ],
                     PATH_CMS_CONTROLLER.'?'
                 );
                 $html .= '<div class="entry-edit"><a href="'.$url.'"><i class="fas fa-edit"></i></a></div>';
@@ -129,7 +129,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
 
     private function sortRecordsAlphabetically(array $mltRecords): array
     {
-        \usort($mltRecords, static function(array $entry1, array $entry2) {
+        \usort($mltRecords, static function (array $entry1, array $entry2) {
             if ($entry1['group'] !== $entry2['group']) {
                 return \strcasecmp($entry1['group'], $entry2['group']);
             }
@@ -166,18 +166,18 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
      */
     protected function getMltRecordData($listGroupFieldColumn)
     {
-        $data = array();
+        $data = [];
         $mltTableName = $this->GetMLTTableName();
         $mltRecords = $this->FetchMLTRecords();
 
         while ($mltRecord = $mltRecords->Next()) {
-            $data[] = array(
+            $data[] = [
                 'id' => $mltRecord->id,
                 'group' => '' === $listGroupFieldColumn ? '' : $mltRecord->sqlData[$listGroupFieldColumn],
                 'connected' => $mltRecord->isConnected($this->sTableName, $this->oTableRow->sqlData['id'], $mltTableName),
                 'display_value' => $mltRecord->GetName(), // use name here (and not GetDisplayValue) as this will be used as simple label
                 'editable' => true,
-            );
+            ];
         }
 
         return $data;
@@ -228,7 +228,7 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
 
         /** @var $oMLTRecords TCMSRecordList */
         $sClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List';
-        $oMLTRecords = call_user_func(array($sClassName, 'GetList'), $sFilterQuery, null, false);
+        $oMLTRecords = call_user_func([$sClassName, 'GetList'], $sFilterQuery, null, false);
         $editLanguageId = $backendSession->getCurrentEditLanguageId();
         $oMLTRecords->SetLanguage($editLanguageId);
 
@@ -242,7 +242,6 @@ class TCMSFieldLookupMultiselectCheckboxes extends TCMSFieldLookupMultiselect
      */
     protected function GetMLTFilterQuery()
     {
-
         // because the method could be called from frontend, we need to check if we are in cms mode... else use method from parent
         if (false === TGlobal::IsCMSMode()) {
             return parent::GetMLTFilterQuery();

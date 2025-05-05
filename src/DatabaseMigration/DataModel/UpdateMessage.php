@@ -11,9 +11,7 @@
 
 namespace ChameleonSystem\DatabaseMigration\DataModel;
 
-use JsonSerializable;
-
-class UpdateMessage implements JsonSerializable
+class UpdateMessage implements \JsonSerializable
 {
     /**
      * @var string
@@ -26,7 +24,7 @@ class UpdateMessage implements JsonSerializable
 
     /**
      * @param string $text
-     * @param int    $level
+     * @param int $level
      */
     public function __construct($text, $level)
     {

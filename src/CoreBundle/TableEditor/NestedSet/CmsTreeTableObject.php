@@ -22,7 +22,7 @@ class CmsTreeTableObject extends \ChameleonSystemCoreBundleTableEditorNestedSetC
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getParentId()
     {
@@ -35,6 +35,7 @@ class CmsTreeTableObject extends \ChameleonSystemCoreBundleTableEditorNestedSetC
 
     /**
      * @return int
+     *
      * @psalm-suppress InvalidReturnStatement, InvalidReturnType - Technically returning an `int` here
      */
     public function getLeft()
@@ -44,6 +45,7 @@ class CmsTreeTableObject extends \ChameleonSystemCoreBundleTableEditorNestedSetC
 
     /**
      * @return int
+     *
      * @psalm-suppress InvalidReturnStatement, InvalidReturnType - Technically returning an `int` here
      */
     public function getRight()

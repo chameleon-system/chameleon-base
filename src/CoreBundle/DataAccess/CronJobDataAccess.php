@@ -29,5 +29,4 @@ class CronJobDataAccess
 
         $cmsConfig->SetConfigParameter(self::CRONJOB_TIMESTAMP_PARAMETER, time(), true);
     }
-
 }

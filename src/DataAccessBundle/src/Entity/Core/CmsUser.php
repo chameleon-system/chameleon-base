@@ -5,7 +5,6 @@ namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 use ChameleonSystem\DataAccessBundle\Entity\CoreMedia\CmsMedia;
 use ChameleonSystem\DataAccessBundle\Entity\CoreMenu\CmsMenuItem;
 use ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -13,7 +12,7 @@ class CmsUser
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Login */
@@ -32,8 +31,7 @@ class CmsUser
         private string $email = '',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Image */
-        private ?CmsMedia $images = null
-        ,
+        private ?CmsMedia $images = null,
         // TCMSFieldVarchar
         /** @var string - Company */
         private string $company = '',
@@ -51,27 +49,22 @@ class CmsUser
         private string $fax = '',
         // TCMSFieldLookup
         /** @var CmsLanguage|null - CMS language */
-        private ?CmsLanguage $cmsLanguage = null
-        ,
+        private ?CmsLanguage $cmsLanguage = null,
         // TCMSFieldVarchar
         /** @var string - Alternative languages */
         private string $languages = 'de',
         // TCMSFieldLookupGroups
         /** @var Collection<int, CmsUsergroup> - User groups */
-        private Collection $cmsUsergroupCollection = new ArrayCollection()
-        ,
+        private Collection $cmsUsergroupCollection = new ArrayCollection(),
         // TCMSFieldLookupRoles
         /** @var Collection<int, CmsRole> - User roles */
-        private Collection $cmsRoleCollection = new ArrayCollection()
-        ,
+        private Collection $cmsRoleCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - Portal / websites */
-        private Collection $cmsPortalCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalCollection = new ArrayCollection(),
         // TCMSFieldLookupMultiselectCheckboxesPossibleLanguages
         /** @var Collection<int, CmsLanguage> - Editing languages */
-        private Collection $cmsLanguageCollection = new ArrayCollection()
-        ,
+        private Collection $cmsLanguageCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Current editing language */
         private string $cmsCurrentEditLanguage = '',
@@ -80,8 +73,7 @@ class CmsUser
         private bool $allowCmsLogin = true,
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsUserSso> - SSO IDs */
-        private Collection $cmsUserSsoCollection = new ArrayCollection()
-        ,
+        private Collection $cmsUserSsoCollection = new ArrayCollection(),
         // TCMSFieldNumber
         /** @var int - Maximum displayed tasks */
         private int $taskShowCount = 5,
@@ -93,11 +85,10 @@ class CmsUser
         private bool $showAsRightsTemplate = false,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, CmsMenuItem> - Used menu entries */
-        private Collection $cmsMenuItemCollection = new ArrayCollection()
-        ,
+        private Collection $cmsMenuItemCollection = new ArrayCollection(),
         // TCMSFieldTimestamp
-        /** @var DateTime|null - Last modified */
-        private ?DateTime $dateModified = null
+        /** @var \DateTime|null - Last modified */
+        private ?\DateTime $dateModified = null
     ) {
     }
 
@@ -138,7 +129,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldPasswordEncrypted
     public function getCryptedPw(): string
     {
@@ -151,7 +141,6 @@ class CmsUser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getFirstname(): string
@@ -166,7 +155,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -179,7 +167,6 @@ class CmsUser
 
         return $this;
     }
-
 
     // TCMSFieldEmail
     public function getEmail(): string
@@ -194,7 +181,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getImages(): ?CmsMedia
     {
@@ -207,7 +193,6 @@ class CmsUser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getCompany(): string
@@ -222,7 +207,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDepartment(): string
     {
@@ -235,7 +219,6 @@ class CmsUser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getCity(): string
@@ -250,7 +233,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getTel(): string
     {
@@ -263,7 +245,6 @@ class CmsUser
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getFax(): string
@@ -278,7 +259,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsLanguage(): ?CmsLanguage
     {
@@ -292,7 +272,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getLanguages(): string
     {
@@ -305,8 +284,6 @@ class CmsUser
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupGroups
 
@@ -340,8 +317,6 @@ class CmsUser
         return $this;
     }
 
-
-
     // TCMSFieldLookupRoles
 
     /**
@@ -373,8 +348,6 @@ class CmsUser
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -408,8 +381,6 @@ class CmsUser
         return $this;
     }
 
-
-
     // TCMSFieldLookupMultiselectCheckboxesPossibleLanguages
 
     /**
@@ -442,7 +413,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCmsCurrentEditLanguage(): string
     {
@@ -456,7 +426,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isAllowCmsLogin(): bool
     {
@@ -469,8 +438,6 @@ class CmsUser
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -504,7 +471,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getTaskShowCount(): int
     {
@@ -517,7 +483,6 @@ class CmsUser
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isIsSystem(): bool
@@ -532,7 +497,6 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowAsRightsTemplate(): bool
     {
@@ -545,8 +509,6 @@ class CmsUser
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -580,19 +542,16 @@ class CmsUser
         return $this;
     }
 
-
     // TCMSFieldTimestamp
-    public function getDateModified(): ?DateTime
+    public function getDateModified(): ?\DateTime
     {
         return $this->dateModified;
     }
 
-    public function setDateModified(?DateTime $dateModified): self
+    public function setDateModified(?\DateTime $dateModified): self
     {
         $this->dateModified = $dateModified;
 
         return $this;
     }
-
-
 }

@@ -49,13 +49,11 @@ class AutoclassesDatabaseAdapter implements AutoclassesDatabaseAdapterInterface
     }
 
     /**
-     * @param array $all
-     *
      * @return string[]
      */
     private function getNamesArray(array $all)
     {
-        $result = array();
+        $result = [];
         foreach ($all as $entry) {
             $result[] = $entry['name'];
         }
@@ -68,7 +66,7 @@ class AutoclassesDatabaseAdapter implements AutoclassesDatabaseAdapterInterface
      */
     public function getTableNameForId($id)
     {
-        $result = $this->conn->fetchAllAssociative('SELECT `name` from `cms_tbl_conf` WHERE id=:id', array('id' => $id));
+        $result = $this->conn->fetchAllAssociative('SELECT `name` from `cms_tbl_conf` WHERE id=:id', ['id' => $id]);
         if (0 === count($result)) {
             return null;
         }

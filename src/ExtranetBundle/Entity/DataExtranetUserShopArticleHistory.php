@@ -3,25 +3,22 @@
 namespace ChameleonSystem\ExtranetBundle\Entity;
 
 use ChameleonSystem\ShopBundle\Entity\Product\ShopArticle;
-use DateTime;
 
 class DataExtranetUserShopArticleHistory
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var DataExtranetUser|null - Belongs to customer */
-        private ?DataExtranetUser $dataExtranetUser = null
-        ,
+        private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldLookup
         /** @var ShopArticle|null - Article */
-        private ?ShopArticle $shopArticle = null
-        ,
+        private ?ShopArticle $shopArticle = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Viewed on */
-        private ?DateTime $datecreated = null
+        /** @var \DateTime|null - Viewed on */
+        private ?\DateTime $datecreated = null
     ) {
     }
 
@@ -62,7 +59,6 @@ class DataExtranetUserShopArticleHistory
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getShopArticle(): ?ShopArticle
     {
@@ -76,19 +72,16 @@ class DataExtranetUserShopArticleHistory
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getDatecreated(): ?DateTime
+    public function getDatecreated(): ?\DateTime
     {
         return $this->datecreated;
     }
 
-    public function setDatecreated(?DateTime $datecreated): self
+    public function setDatecreated(?\DateTime $datecreated): self
     {
         $this->datecreated = $datecreated;
 
         return $this;
     }
-
-
 }

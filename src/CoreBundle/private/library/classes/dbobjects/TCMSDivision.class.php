@@ -21,9 +21,9 @@ class TCMSDivision extends TCMSDivisionAutoParent
         }
         if (!$aStopNodes || !array_key_exists($key, $aStopNodes)) {
             if (!isset($aStopNodes)) {
-                $aStopNodes = array();
+                $aStopNodes = [];
             }
-            $aStopNodes[$key] = array();
+            $aStopNodes[$key] = [];
             $query = 'SELECT `cms_division`.`cms_tree_id_tree`
                     FROM `cms_division`
                  ';
@@ -48,13 +48,13 @@ class TCMSDivision extends TCMSDivisionAutoParent
      */
     public static function GetPageDivision($oPage)
     {
-        $aKey = array(
+        $aKey = [
             'class' => __CLASS__,
             'method' => 'getPageDivision',
             'pageid' => $oPage->id,
             'language' => $oPage->GetLanguage(),
-        );
-        $cache = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
+        ];
+        $cache = ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.cache');
         $key = $cache->getKey($aKey, false);
         $oPageDivision = $cache->get($key);
         if (null === $oPageDivision) {
@@ -80,10 +80,10 @@ class TCMSDivision extends TCMSDivisionAutoParent
                 }
             }
 
-            $cache->set($key, $oPageDivision, array(
-                    array('table' => 'cms_tree', 'id' => null),
-                    array('table' => 'cms_tpl_page', 'id' => $oPage->id),
-                )
+            $cache->set($key, $oPageDivision, [
+                    ['table' => 'cms_tree', 'id' => null],
+                    ['table' => 'cms_tpl_page', 'id' => $oPage->id],
+                ]
             );
         }
 
@@ -113,8 +113,8 @@ class TCMSDivision extends TCMSDivisionAutoParent
      */
     public static function GetTreeNodeDivision($iTreeNode)
     {
-        static $aDivisionLookup = array();
-        static $aNodeLookup = array();
+        static $aDivisionLookup = [];
+        static $aNodeLookup = [];
         $oDivision = null;
         $iOriginalTreeNode = $iTreeNode;
         if (false == array_key_exists($iTreeNode, $aNodeLookup)) {
@@ -135,7 +135,7 @@ class TCMSDivision extends TCMSDivisionAutoParent
                         $notDone = ((false !== $parentNode) && (!in_array($iTreeNode, $aDivisionTreeNodes)));
                     } else {
                         // Something went wrong while querying mysql - bailing out
-                        die('No proper mysql result (db down?) or max iterations in while loop reached in '.__FILE__.' on line '.__LINE__.'...exiting!');
+                        exit('No proper mysql result (db down?) or max iterations in while loop reached in '.__FILE__.' on line '.__LINE__.'...exiting!');
                     }
                 }
 

@@ -22,7 +22,6 @@ interface StorageInterface
 
     /**
      * @param string $key
-     * @param mixed $value
      * @param int $expireInSeconds
      *
      * @return bool

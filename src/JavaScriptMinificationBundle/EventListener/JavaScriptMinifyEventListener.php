@@ -27,10 +27,6 @@ class JavaScriptMinifyEventListener
      */
     private $logger;
 
-    /**
-     * @param MinifyJsServiceInterface $minifyJsService
-     * @param LoggerInterface          $logger
-     */
     public function __construct(MinifyJsServiceInterface $minifyJsService, LoggerInterface $logger)
     {
         $this->minifyJsService = $minifyJsService;
@@ -38,8 +34,6 @@ class JavaScriptMinifyEventListener
     }
 
     /**
-     * @param ResourceCollectionJavaScriptCollectedEventInterface $event
-     *
      * @return void
      */
     public function onMinifyRequest(ResourceCollectionJavaScriptCollectedEventInterface $event)

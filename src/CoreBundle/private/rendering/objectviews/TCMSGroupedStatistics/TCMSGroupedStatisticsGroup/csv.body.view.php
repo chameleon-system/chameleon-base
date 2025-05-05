@@ -1,6 +1,6 @@
 <?php
 
-$aRow = array();
+$aRow = [];
 $oLocal = TCMSLocal::GetActive();
 echo $sRowPrefix;
 $aRow[] = $sGroupTitle;

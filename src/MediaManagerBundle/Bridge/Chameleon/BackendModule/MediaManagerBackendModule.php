@@ -954,7 +954,6 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $return = new JavascriptPluginRenderedContent();
         $return->hasError = false;
         try {
-
             /** @var string[]|null $mediaItemIds */
             $mediaItemIds = $this->inputFilterUtil->getFilteredPostInput('id');
 

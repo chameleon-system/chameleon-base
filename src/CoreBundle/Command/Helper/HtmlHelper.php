@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Command\Helper;
 
-use stdClass;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -24,18 +23,15 @@ class HtmlHelper
     /**
      * @var array
      */
-    private $lines = array();
+    private $lines = [];
     /**
      * @var string
      */
     private static $REPLACETOKEN = '_____REPLACETOKEN_____';
 
-    /**
-     * @param OutputInterface $output
-     */
     public function __construct(OutputInterface $output)
     {
-        $style = new OutputFormatterStyle('red', null, array('bold'));
+        $style = new OutputFormatterStyle('red', null, ['bold']);
         $output->getFormatter()->setStyle('header', $style);
 
         $this->output = $output;
@@ -62,8 +58,8 @@ class HtmlHelper
      */
     private function getLines($html)
     {
-        if (is_array($html) || $html instanceof stdClass) {
-            $htmlArray = array();
+        if (is_array($html) || $html instanceof \stdClass) {
+            $htmlArray = [];
             foreach ($html as $line) {
                 $htmlArray[] = $this->getLines($line);
             }
@@ -121,9 +117,9 @@ class HtmlHelper
      */
     private function killAllOtherTags(array $lines)
     {
-        $convertedLines = array();
+        $convertedLines = [];
         foreach ($lines as $line) {
-            $line = preg_replace_callback('/<.*?>/', array($this, 'replaceTagsCallback'), $line);
+            $line = preg_replace_callback('/<.*?>/', [$this, 'replaceTagsCallback'], $line);
             $convertedLines[] = $line;
         }
 
@@ -137,7 +133,7 @@ class HtmlHelper
      */
     private function replaceTagsCallback(array $matches)
     {
-        $blacklist = array("/<\/?header>/");
+        $blacklist = ["/<\/?header>/"];
 
         $inBlackList = false;
 

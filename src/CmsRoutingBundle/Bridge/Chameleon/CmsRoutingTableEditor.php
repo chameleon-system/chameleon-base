@@ -13,9 +13,8 @@ namespace ChameleonSystem\CmsRoutingBundle\Bridge\Chameleon;
 
 use ChameleonSystem\CmsRoutingBundle\Event\RoutingConfigChangedEvent;
 use ChameleonSystem\CoreBundle\CoreEvents;
-use TCMSTableEditor;
 
-class CmsRoutingTableEditor extends TCMSTableEditor
+class CmsRoutingTableEditor extends \TCMSTableEditor
 {
     /**
      * {@inheritDoc}

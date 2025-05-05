@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\MediaManager\Exception;
 
-use Exception;
-
-class AccessRightException extends Exception
+class AccessRightException extends \Exception
 {
 }

@@ -15,7 +15,7 @@ interface UrlUtilityServiceInterface
 {
     /**
      * @param string $url
-     * @param array $parameter
+     *
      * @return string
      */
     public function addParameterToUrl($url, array $parameter);

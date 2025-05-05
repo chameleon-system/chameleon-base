@@ -20,12 +20,12 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
     /**
      * @var Psr\Log\LoggerInterface
      */
-    private $logger = null;
+    private $logger;
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $requestUID = null;
+    private $requestUID;
 
     /**
      * @var bool
@@ -52,11 +52,10 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * @param string $message
      * @param string $sFile
      * @param int $iLine
-     * @param array $context
      *
      * @return void
      */
-    public function emergency($message, $sFile, $iLine, array $context = array())
+    public function emergency($message, $sFile, $iLine, array $context = [])
     {
         $context = $this->addMetaData($context, $sFile, $iLine);
         $this->logger->emergency($message, $context);
@@ -71,11 +70,10 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * @param string $message
      * @param string $sFile
      * @param int $iLine
-     * @param array $context
      *
      * @return void
      */
-    public function alert($message, $sFile, $iLine, array $context = array())
+    public function alert($message, $sFile, $iLine, array $context = [])
     {
         $context = $this->addMetaData($context, $sFile, $iLine);
         $this->logger->alert($message, $context);
@@ -89,11 +87,10 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * @param string $message
      * @param string $sFile
      * @param int $iLine
-     * @param array $context
      *
      * @return void
      */
-    public function critical($message, $sFile, $iLine, array $context = array())
+    public function critical($message, $sFile, $iLine, array $context = [])
     {
         $context = $this->addMetaData($context, $sFile, $iLine);
         $this->logger->critical($message, $context);
@@ -106,11 +103,10 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * @param string $message
      * @param string $sFile
      * @param int $iLine
-     * @param array $context
      *
      * @return void
      */
-    public function error($message, $sFile, $iLine, array $context = array())
+    public function error($message, $sFile, $iLine, array $context = [])
     {
         $context = $this->addMetaData($context, $sFile, $iLine);
         $this->logger->error($message, $context);
@@ -125,11 +121,10 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * @param string $message
      * @param string $sFile
      * @param int $iLine
-     * @param array $context
      *
      * @return void
      */
-    public function warning($message, $sFile, $iLine, array $context = array())
+    public function warning($message, $sFile, $iLine, array $context = [])
     {
         $context = $this->addMetaData($context, $sFile, $iLine);
         $this->logger->warning($message, $context);
@@ -141,11 +136,10 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * @param string $message
      * @param string $sFile
      * @param int $iLine
-     * @param array $context
      *
      * @return void
      */
-    public function notice($message, $sFile, $iLine, array $context = array())
+    public function notice($message, $sFile, $iLine, array $context = [])
     {
         $context = $this->addMetaData($context, $sFile, $iLine);
         $this->logger->notice($message, $context);
@@ -159,11 +153,10 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * @param string $message
      * @param string $sFile
      * @param int $iLine
-     * @param array $context
      *
      * @return void
      */
-    public function info($message, $sFile, $iLine, array $context = array())
+    public function info($message, $sFile, $iLine, array $context = [])
     {
         $context = $this->addMetaData($context, $sFile, $iLine);
         $this->logger->info($message, $context);
@@ -175,11 +168,10 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      * @param string $message
      * @param string $sFile
      * @param int $iLine
-     * @param array $context
      *
      * @return void
      */
-    public function debug($message, $sFile, $iLine, array $context = array())
+    public function debug($message, $sFile, $iLine, array $context = [])
     {
         $context = $this->addMetaData($context, $sFile, $iLine);
         $this->logger->debug($message, $context);
@@ -188,15 +180,14 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed  $level   - defined via Psr\Log\LogLevel
+     * @param mixed $level - defined via Psr\Log\LogLevel
      * @param string $message
      * @param string $sFile
      * @param int $iLine
-     * @param array $context
      *
      * @return void
      */
-    public function log($level, $message, $sFile, $iLine, array $context = array())
+    public function log($level, $message, $sFile, $iLine, array $context = [])
     {
         $context = $this->addMetaData($context, $sFile, $iLine);
         $this->logger->log($level, $message, $context);
@@ -233,7 +224,7 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
             return $context;
         }
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         if (null === $request) {
             return $context;
         }
@@ -242,7 +233,7 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
             $sSessionId = $request->getSession()->getId();
         }
 
-        $aRequestDetails = array(
+        $aRequestDetails = [
             'session' => $sSessionId,
             'uid' => $this->requestUID,
             'file' => $sFile,
@@ -255,7 +246,7 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
             'referrerURL' => '',
             'httpMethod' => $request->getMethod(),
             'server' => $request->server->get('SERVER_NAME', ''),
-        );
+        ];
 
         $aRequestDetails['ip'] = $request->getClientIp() ?? '';
 
@@ -280,7 +271,7 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
     {
         // the service should really be injected into the constructor. Unfortunately there are many uses of the class, making that
         // change in a patch level unacceptable.
-        $requestInfoService = \ChameleonSystem\CoreBundle\ServiceLocator::get(
+        $requestInfoService = ChameleonSystem\CoreBundle\ServiceLocator::get(
             'chameleon_system_core.request_info_service'
         );
 
@@ -294,13 +285,13 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
     {
         $oUser = $this->getActiveFrontendUser();
         if (null === $oUser) {
-            return array();
+            return [];
         }
 
-        return array(
+        return [
             'data_extranet_user_name' => $oUser->fieldName ?? '',
             'data_extranet_user_id' => $oUser->id ?? '',
-        );
+        ];
     }
 
     /**
@@ -308,7 +299,7 @@ class TPkgCmsCoreLog implements IPkgCmsCoreLog
      */
     private function getActiveFrontendUser()
     {
-        $userProvider = \ChameleonSystem\CoreBundle\ServiceLocator::get(
+        $userProvider = ChameleonSystem\CoreBundle\ServiceLocator::get(
             'chameleon_system_extranet.extranet_user_provider'
         );
 

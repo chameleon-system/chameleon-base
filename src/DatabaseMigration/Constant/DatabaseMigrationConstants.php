@@ -13,12 +13,12 @@ namespace ChameleonSystem\DatabaseMigration\Constant;
 
 class DatabaseMigrationConstants
 {
-    const MIGRATION_COUNTER_PREFIX = 'migration-counter-';
+    public const MIGRATION_COUNTER_PREFIX = 'migration-counter-';
 
-    const RESPONSE_STATE_SUCCESS = 'SUCCESS';
-    const RESPONSE_STATE_ERROR = 'ERROR';
+    public const RESPONSE_STATE_SUCCESS = 'SUCCESS';
+    public const RESPONSE_STATE_ERROR = 'ERROR';
 
-    const UPDATE_STATE_ERROR = 'error';
-    const UPDATE_STATE_EXECUTED = 'executed';
-    const UPDATE_STATE_SKIPPED = 'skipped';
+    public const UPDATE_STATE_ERROR = 'error';
+    public const UPDATE_STATE_EXECUTED = 'executed';
+    public const UPDATE_STATE_SKIPPED = 'skipped';
 }

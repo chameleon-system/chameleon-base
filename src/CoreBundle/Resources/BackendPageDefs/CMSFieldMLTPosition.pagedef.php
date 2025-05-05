@@ -1,4 +1,4 @@
 <?php
 
 $layoutTemplate = 'frame';
-$moduleList = array('contentmodule' => array('model' => 'CMSFieldMLTRPC', 'view' => 'sort'));
+$moduleList = ['contentmodule' => ['model' => 'CMSFieldMLTRPC', 'view' => 'sort']];

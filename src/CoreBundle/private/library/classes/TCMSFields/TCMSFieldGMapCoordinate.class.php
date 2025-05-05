@@ -29,8 +29,8 @@ class TCMSFieldGMapCoordinate extends TCMSField implements DoctrineTransformable
             'propertyName' => $this->snakeToCamelCase($this->name),
             'defaultValue' => sprintf("'%s'", addslashes($this->oDefinition->sqlData['field_default_value'])),
             'allowDefaultValue' => true,
-            'getterName' => 'get'. $this->snakeToPascalCase($this->name),
-            'setterName' => 'set'. $this->snakeToPascalCase($this->name),
+            'getterName' => 'get'.$this->snakeToPascalCase($this->name),
+            'setterName' => 'set'.$this->snakeToPascalCase($this->name),
         ];
         $propertyCode = $this->getDoctrineRenderer('model/default.property.php.twig', $parameters)->render();
         $methodCode = $this->getDoctrineRenderer('model/default.methods.php.twig', $parameters)->render();
@@ -138,7 +138,7 @@ class TCMSFieldGMapCoordinate extends TCMSField implements DoctrineTransformable
                     $oMessageManager = TCMSMessageManager::GetInstance();
                     $sConsumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
                     $sFieldTitle = $this->oDefinition->GetName();
-                    $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_GOOGLECOORDINATES_NOT_VALID', array('sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle));
+                    $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_FIELD_GOOGLECOORDINATES_NOT_VALID', ['sFieldName' => $this->name, 'sFieldTitle' => $sFieldTitle]);
                 }
             }
         }
@@ -180,7 +180,7 @@ class TCMSFieldGMapCoordinate extends TCMSField implements DoctrineTransformable
         $aMethodData['aParameters']['bHookMenuLinks'] = self::GetMethodParameterArray('boolean', 'false', 'hook menu links on map');
         $aMethodData['aParameters']['apiKey'] = self::GetMethodParameterArray('string', "'".$this->getGoogleMapsApiKey()."'", '');
         $oViewParser = new TViewParser();
-        /** @var $oViewParser TViewParser */
+        /* @var $oViewParser TViewParser */
         $oViewParser->bShowTemplatePathAsHTMLHint = false;
         $oViewParser->AddVarArray($aMethodData);
 
@@ -227,11 +227,11 @@ $(document).ready(function() {
 
         $urlUtil = $this->getUrlUtil();
 
-        return $urlUtil->getArrayAsUrl(array(
+        return $urlUtil->getArrayAsUrl([
             'pagedef' => 'gmap',
             '_pagedefType' => 'Core',
             'googleMapsApiKey' => $googleMapsApiKey,
-        ), PATH_CMS_CONTROLLER.'?');
+        ], PATH_CMS_CONTROLLER.'?');
     }
 
     /**
@@ -239,7 +239,7 @@ $(document).ready(function() {
      */
     protected function getGoogleApiKeyProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.google_api_key');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.service.google_api_key');
     }
 
     /**
@@ -247,7 +247,7 @@ $(document).ready(function() {
      */
     private function getViewRenderer()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
     /**
@@ -255,6 +255,6 @@ $(document).ready(function() {
      */
     private function getUrlUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.url');
     }
 }

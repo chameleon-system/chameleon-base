@@ -20,6 +20,7 @@ function gcf_CMSUser($name, $row)
     } else {
         $name = $name.', '.$row['firstname'];
     }
+
     // if(!empty($row['company'])) $name .= " [".$row['company']."]";
     return $name;
 }

@@ -9,7 +9,7 @@ class CmsInterfaceManager
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -31,8 +31,7 @@ class CmsInterfaceManager
         private string $description = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsInterfaceManagerParameter> - Parameter */
-        private Collection $cmsInterfaceManagerParameterCollection = new ArrayCollection()
-        ,
+        private Collection $cmsInterfaceManagerParameterCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Restrict to user groups */
         private bool $restrictToUserGroups = false,
@@ -79,7 +78,6 @@ class CmsInterfaceManager
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemname(): string
     {
@@ -92,7 +90,6 @@ class CmsInterfaceManager
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClass(): string
@@ -107,7 +104,6 @@ class CmsInterfaceManager
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getClassType(): string
     {
@@ -120,7 +116,6 @@ class CmsInterfaceManager
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getClassSubtype(): string
@@ -135,7 +130,6 @@ class CmsInterfaceManager
         return $this;
     }
 
-
     // TCMSFieldText
     public function getDescription(): string
     {
@@ -148,8 +142,6 @@ class CmsInterfaceManager
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -184,7 +176,6 @@ class CmsInterfaceManager
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isRestrictToUserGroups(): bool
     {
@@ -197,8 +188,6 @@ class CmsInterfaceManager
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -231,6 +220,4 @@ class CmsInterfaceManager
 
         return $this;
     }
-
-
 }

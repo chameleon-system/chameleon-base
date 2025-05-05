@@ -18,7 +18,7 @@ class TPkgViewRenderer_PkgCmsTheme extends TPkgViewRenderer_PkgCmsThemeAutoParen
      */
     public function getSnippetChainAsArray()
     {
-        $snippetChain = str_replace(array("\r\n", "\n\r", "\r"), array("\n", "\n", "\n"), $this->fieldSnippetChain);
+        $snippetChain = str_replace(["\r\n", "\n\r", "\r"], ["\n", "\n", "\n"], $this->fieldSnippetChain);
 
         return explode("\n", $snippetChain);
     }

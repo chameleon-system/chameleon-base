@@ -20,21 +20,21 @@ if (array_key_exists('sActionLocation', $aCallTimeVars)) {
 ?>
 <?php if (count($aActions) > 0) {
     ?>
-<tr class="actionrow actionlocation<?=$sLocation; ?>">
-    <td class="actionColumn actionRow actionArrow<?=$sLocation; ?>">&nbsp;</td>
-    <td class="selectionColumn actionRow" colspan="<?=$oColumns->Length(); ?>">
+<tr class="actionrow actionlocation<?php echo $sLocation; ?>">
+    <td class="actionColumn actionRow actionArrow<?php echo $sLocation; ?>">&nbsp;</td>
+    <td class="selectionColumn actionRow" colspan="<?php echo $oColumns->Length(); ?>">
         <a href="#"
-           onclick="THTMLTableSelectAll(document.<?=TGlobal::OutHTML($sCheckboxFormName); ?>,true);return false;"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Alle auswählen')); ?></a>
+           onclick="THTMLTableSelectAll(document.<?php echo TGlobal::OutHTML($sCheckboxFormName); ?>,true);return false;"><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Alle auswählen')); ?></a>
         | <a href="#"
-             onclick="THTMLTableSelectAll(document.<?=TGlobal::OutHTML($sCheckboxFormName); ?>,false);return false;"><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Auswahl aufheben')); ?></a>
-        <select name="actionselector<?=$sLocation; ?>"
-                onchange="if (confirm('<?=TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Wollen Sie diese Aktion wirklich auf alle ausgewählten Einträge anwenden?')); ?>')) {document.<?=TGlobal::OutHTML($sCheckboxFormName); ?>.elements['module_fnc[<?=TGlobal::OutHTML($sControllingModuleSpotName); ?>]'].value=this.value; document.<?=TGlobal::OutHTML($sCheckboxFormName); ?>.submit();}">
-            <option value=""><?=TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('markierte Einträge:')); ?></option>
+             onclick="THTMLTableSelectAll(document.<?php echo TGlobal::OutHTML($sCheckboxFormName); ?>,false);return false;"><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Auswahl aufheben')); ?></a>
+        <select name="actionselector<?php echo $sLocation; ?>"
+                onchange="if (confirm('<?php echo TGlobal::OutJS(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('Wollen Sie diese Aktion wirklich auf alle ausgewählten Einträge anwenden?')); ?>')) {document.<?php echo TGlobal::OutHTML($sCheckboxFormName); ?>.elements['module_fnc[<?php echo TGlobal::OutHTML($sControllingModuleSpotName); ?>]'].value=this.value; document.<?php echo TGlobal::OutHTML($sCheckboxFormName); ?>.submit();}">
+            <option value=""><?php echo TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('markierte Einträge:')); ?></option>
             <?php foreach ($aActions as $sMethod => $sName) {
-        ?>
-            <option value="<?=TGlobal::OutHTML($sMethod); ?>"><?=TGlobal::OutHTML($sName); ?></option>
+                ?>
+            <option value="<?php echo TGlobal::OutHTML($sMethod); ?>"><?php echo TGlobal::OutHTML($sName); ?></option>
             <?php
-    } ?>
+            } ?>
         </select>
     </td>
 </tr>

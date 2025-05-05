@@ -175,7 +175,7 @@ class CMSModulePageTreeRPC extends TCMSModelBase
 
         $name = $oTreeNode->sqlData['name'];
         if (empty($name)) {
-            $name = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
+            $name = ServiceLocator::get('translator')->trans('chameleon_system_core.text.unnamed_record');
         }
         $child['title'] = '<span class=\''.$classesString.'\'>'.TGlobal::OutHTML($name).'</span>';
 

@@ -2,15 +2,15 @@
 /**
  * @deprecated since 6.3.0 - not used anymore.
  */
-/** @var $oHTMLTable THTMLTable */
-/** @var $oRecordList TCMSRecordList */
-/** @var $oColumns TIterator */
+/* @var $oHTMLTable THTMLTable */
+/* @var $oRecordList TCMSRecordList */
+/* @var $oColumns TIterator */
 
-/** @var $sListIdentKey string */
-/** @var $iCurrentPage int */
-/** @var $sSearchTerm string */
+/* @var $sListIdentKey string */
+/* @var $iCurrentPage int */
+/* @var $sSearchTerm string */
 
-/** @var $aCallTimeVars array */
+/* @var $aCallTimeVars array */
 $oColumns->GoToStart();
 $bShowSortCount = ($oHTMLTable->GetNumberOfOrderedColumns() > 1);
 echo '<tr>';

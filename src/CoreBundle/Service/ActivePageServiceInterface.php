@@ -11,9 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
-use TCMSActivePage;
-use TdbCmsLanguage;
-
 /**
  * ActivePageServiceInterface defines a service that encapsulates getting and setting of the currently active page.
  */
@@ -22,7 +19,7 @@ interface ActivePageServiceInterface
     /**
      * @param bool $reload
      *
-     * @return TCMSActivePage|null
+     * @return \TCMSActivePage|null
      */
     public function getActivePage($reload = false);
 
@@ -37,23 +34,21 @@ interface ActivePageServiceInterface
     /**
      * Returns a link to the currently active page. Note that this link might be absolute if it requires HTTPS access.
      *
-     * @param array               $additionalParameters see $parameters attribute in PageServiceInterface::getLinkToActivePageRelative()
-     * @param array               $excludeParameters    parameters that should be excluded from the URL generation
-     * @param TdbCmsLanguage|null $language
+     * @param array $additionalParameters see $parameters attribute in PageServiceInterface::getLinkToActivePageRelative()
+     * @param array $excludeParameters parameters that should be excluded from the URL generation
      *
      * @return string
      */
-    public function getLinkToActivePageRelative(array $additionalParameters = array(), array $excludeParameters = array(), TdbCmsLanguage $language = null);
+    public function getLinkToActivePageRelative(array $additionalParameters = [], array $excludeParameters = [], ?\TdbCmsLanguage $language = null);
 
     /**
      * Returns the link to the currently active page. Note that this link might be absolute if it requires HTTPS access.
      *
-     * @param array               $additionalParameters see $parameters attribute in PageServiceInterface::getLinkToActivePageAbsolute()
-     * @param array               $excludeParameters    parameters that should be excluded from the URL generation
-     * @param TdbCmsLanguage|null $language
-     * @param bool|false          $forceSecure
+     * @param array $additionalParameters see $parameters attribute in PageServiceInterface::getLinkToActivePageAbsolute()
+     * @param array $excludeParameters parameters that should be excluded from the URL generation
+     * @param bool|false $forceSecure
      *
      * @return string
      */
-    public function getLinkToActivePageAbsolute(array $additionalParameters = array(), array $excludeParameters = array(), TdbCmsLanguage $language = null, $forceSecure = false);
+    public function getLinkToActivePageAbsolute(array $additionalParameters = [], array $excludeParameters = [], ?\TdbCmsLanguage $language = null, $forceSecure = false);
 }

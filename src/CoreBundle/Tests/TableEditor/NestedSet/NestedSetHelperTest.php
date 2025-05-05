@@ -29,7 +29,7 @@ class NestedSetHelperTest extends TestCase
      * @var Connection
      */
     private $db;
-    private static $fixtureDir = null;
+    private static $fixtureDir;
     /**
      * @var NestedSetHelper
      */
@@ -58,10 +58,10 @@ class NestedSetHelperTest extends TestCase
         $this->parentNodeName = null;
         $this->nodePosition = null;
         $config = new \Doctrine\DBAL\Configuration();
-        $this->db = DriverManager::getConnection(array(
+        $this->db = DriverManager::getConnection([
                 'driver' => 'pdo_sqlite',
                 'memory' => true,
-            ),
+            ],
             $config
         );
 
@@ -95,9 +95,10 @@ class NestedSetHelperTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderDelete
      */
-    public function it_should_remove_a_node($nodeName, $resultFile)
+    public function itShouldRemoveANode($nodeName, $resultFile)
     {
         $this->given_a_nested_set_helper();
         $this->given_a_node_with_name($nodeName);
@@ -107,9 +108,10 @@ class NestedSetHelperTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderInsert
      */
-    public function it_should_insert_a_node($nodeName, $parentNodeName, $resultFile)
+    public function itShouldInsertANode($nodeName, $parentNodeName, $resultFile)
     {
         $this->given_a_nested_set_helper();
         $this->given_a_node_with_name($nodeName);
@@ -120,9 +122,10 @@ class NestedSetHelperTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dataProviderMove
      */
-    public function it_should_move_a_root_node_into_another_root_node($nodeName, $parentNodeName, $newNodePosition, $resultFile)
+    public function itShouldMoveARootNodeIntoAnotherRootNode($nodeName, $parentNodeName, $newNodePosition, $resultFile)
     {
         $this->given_a_nested_set_helper();
         $this->given_a_node_with_name($nodeName);
@@ -135,7 +138,7 @@ class NestedSetHelperTest extends TestCase
     /**
      * @test
      */
-    public function it_should_initialize_a_tree()
+    public function itShouldInitializeATree()
     {
         $this->given_that_the_tree_has_no_lft_and_rgt_values_set();
         $this->given_a_nested_set_helper();
@@ -158,7 +161,7 @@ class NestedSetHelperTest extends TestCase
                     GROUP BY node.name
                     ORDER BY node.lft';
         $result = $this->db->fetchAllAssociative($query);
-        $resultString = array();
+        $resultString = [];
         foreach ($result as $res) {
             $resultString[] = str_repeat('_', 2 * $res['depth']).$res['name'];
         }
@@ -198,7 +201,7 @@ class NestedSetHelperTest extends TestCase
     private function getNodeData($nodeName)
     {
         $query = 'select * from tree where name = :name';
-        $data = $this->db->fetchAssociative($query, array('name' => $nodeName));
+        $data = $this->db->fetchAssociative($query, ['name' => $nodeName]);
 
         return $this->nodeMockFactory->createNodeFromArray('tree', $data);
     }
@@ -217,17 +220,17 @@ class NestedSetHelperTest extends TestCase
         $insertQuery = 'insert into tree (id, parent_id, lft, rgt, position, name)
           VALUES ( :newNodeId, :parentNodeId, 0, 0, :newNodePosition, :newNodeName)';
 
-        $parameter = array(
+        $parameter = [
             'newNodeId' => $this->GetUUID(),
             'parentNodeId' => '',
             'newNodePosition' => 1,
             'newNodeName' => $this->nodeName,
-        );
+        ];
         if (null !== $this->parentNodeName) {
             $parentNode = $this->getNodeData($this->parentNodeName);
             $parameter['parentNodeId'] = $parentNode->getId();
             $query = 'select MAX(position) from tree WHERE parent_id = :parentId';
-            $max = $this->db->fetchNumeric($query, array('parentId' => $parentNode->getId()));
+            $max = $this->db->fetchNumeric($query, ['parentId' => $parentNode->getId()]);
             $parameter['newNodePosition'] = $max[0] + 1;
         } else {
             $query = "select MAX(position) from tree WHERE parent_id = ''";
@@ -250,28 +253,28 @@ class NestedSetHelperTest extends TestCase
         $parentId = (null !== $newParent) ? $newParent->getId() : '';
         $query = 'UPDATE tree set position = position + 1 where parent_id = :newParentId and position >= :newPosition';
         $this->db->executeUpdate($query,
-            array(
+            [
                 'newParentId' => $parentId,
                 'newPosition' => $this->nodePosition,
-            ),
-            array(
+            ],
+            [
                 'newParentId' => \PDO::PARAM_STR,
                 'newPosition' => \PDO::PARAM_INT,
-            )
+            ]
         );
 
         $query = 'update tree set parent_id = :newParentId, position = :newPosition where id = :nodeId';
         $this->db->executeUpdate($query,
-            array(
+            [
                 'newParentId' => $parentId,
                 'nodeId' => $node->getId(),
                 'newPosition' => $this->nodePosition,
-            ),
-            array(
+            ],
+            [
                 'newParentId' => \PDO::PARAM_STR,
                 'nodeId' => \PDO::PARAM_STR,
                 'newPosition' => \PDO::PARAM_INT,
-            )
+            ]
         );
         $node = $this->getNodeData($this->nodeName);
         $this->nestedSetHelper->updateNode($node);
@@ -293,9 +296,9 @@ class NestedSetHelperTest extends TestCase
     private function deleteRecursive($id)
     {
         $query = 'delete from tree where id = :id';
-        $this->db->executeUpdate($query, array('id' => $id));
+        $this->db->executeUpdate($query, ['id' => $id]);
         $childrenQuery = 'select * from tree where parent_id = :id';
-        $children = $this->db->fetchAllAssociative($childrenQuery, array('id' => $id));
+        $children = $this->db->fetchAllAssociative($childrenQuery, ['id' => $id]);
         foreach ($children as $child) {
             $this->deleteRecursive($child['id']);
         }
@@ -303,86 +306,86 @@ class NestedSetHelperTest extends TestCase
 
     public function dataProviderDelete()
     {
-        return array(
-            array(
+        return [
+            [
                 'Jackets',
                 'removed_leaf_node.txt',
-            ),
-            array(
+            ],
+            [
                 'Slacks',
                 'removed_leaf_not_that_is_the_first_child.txt',
-            ),
-            array(
+            ],
+            [
                 'Dresses',
                 'removed_subtree.txt',
-            ),
-            array(
+            ],
+            [
                 'Women\'s',
                 'removed_root_node.txt',
-            ),
-        );
+            ],
+        ];
     }
 
     public function dataProviderInsert()
     {
-        return array(
-            array(
+        return [
+            [
                 'Shoes',
                 null,
                 'insert_root_node.txt',
-            ),
-            array(
+            ],
+            [
                 'Children',
                 'Clothing',
                 'insert_into_subtree.txt',
-            ),
-            array(
+            ],
+            [
                 'Short',
                 'Sun Dresses',
                 'insert_into_leaf.txt',
-            ),
-        );
+            ],
+        ];
     }
 
     public function dataProviderMove()
     {
-        return array(
+        return [
             // move root to root
-            array(
+            [
                 'Clothing',
                 'Other',
                 1,
                 'move_root_to_root.txt',
-            ),
+            ],
             // move leaf to another parent
-            array(
+            [
                 'Evening Gowns',
                 'Suits',
                 2,
                 'move_leaf_node_to_subtree.txt',
-            ),
+            ],
             // move subtree to another subtree
-            array(
+            [
                 'Dresses',
                 'Suits',
                 1,
                 'move_subtree_to_another_subtree.txt',
-            ),
+            ],
             // call move without a changing anything
-            array(
+            [
                 'Dresses',
                 'Women\'s',
                 1,
                 'initial-tree.txt',
-            ),
+            ],
             // moving a root node to the first position
-            array(
+            [
                 'Other',
                 null,
                 1,
                 'move_root_node_to_first_root_position.txt',
-            ),
-        );
+            ],
+        ];
     }
 
     private function GetUUID($prefix = '')

@@ -12,25 +12,21 @@
 namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use TdbCmsTreeNode;
 
 class ChangeNavigationTreeConnectionEvent extends Event
 {
     /**
-     * @var TdbCmsTreeNode
+     * @var \TdbCmsTreeNode
      */
     private $changedTreeConnection;
 
-    /**
-     * @param TdbCmsTreeNode $changedTreeConnection
-     */
-    public function __construct(TdbCmsTreeNode $changedTreeConnection)
+    public function __construct(\TdbCmsTreeNode $changedTreeConnection)
     {
         $this->changedTreeConnection = $changedTreeConnection;
     }
 
     /**
-     * @return TdbCmsTreeNode
+     * @return \TdbCmsTreeNode
      */
     public function getChangedTreeConnection()
     {

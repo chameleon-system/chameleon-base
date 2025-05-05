@@ -24,8 +24,8 @@ class TCMSTableEditor_PkgGenericTableExport extends TCMSTableEditor
     {
         parent::GetCustomMenuItems();
 
-        $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_noModuleFunction'));
-        $aParam['module_fnc'] = array(TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'RunExportToFileSystem');
+        $aParam = TGlobal::instance()->GetUserData(null, ['module_fnc', '_noModuleFunction']);
+        $aParam['module_fnc'] = [TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'RunExportToFileSystem'];
         $aParam['_noModuleFunction'] = 'true';
 
         $oMenuItem = new TCMSTableEditorMenuItem();
@@ -35,8 +35,8 @@ class TCMSTableEditor_PkgGenericTableExport extends TCMSTableEditor
         $oMenuItem->href = '?'.$this->getUrlUtil()->getArrayAsUrl($aParam, '', '&');
         $this->oMenuItems->AddItem($oMenuItem);
 
-        $aParam = TGlobal::instance()->GetUserData(null, array('module_fnc', '_noModuleFunction'));
-        $aParam['module_fnc'] = array(TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'RunExportToDownload');
+        $aParam = TGlobal::instance()->GetUserData(null, ['module_fnc', '_noModuleFunction']);
+        $aParam['module_fnc'] = [TGlobal::instance()->GetExecutingModulePointer()->sModuleSpotName => 'RunExportToDownload'];
         $aParam['_noModuleFunction'] = 'true';
 
         $oMenuItem = new TCMSTableEditorMenuItem();
@@ -72,6 +72,7 @@ class TCMSTableEditor_PkgGenericTableExport extends TCMSTableEditor
      * @return never
      *
      * @psalm-suppress NoValue, InvalidReturnType - A method that never returns contains a return statement
+     *
      * @FIXME `WriteExportToDownload` calls exit and never returns - saving its return or even returning at the end of this method value makes no sense.
      */
     public function RunExportToDownload()

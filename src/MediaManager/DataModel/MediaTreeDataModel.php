@@ -18,9 +18,6 @@ class MediaTreeDataModel
      */
     private $rootNode;
 
-    /**
-     * @param MediaTreeNodeDataModel $rootNode
-     */
     public function __construct(MediaTreeNodeDataModel $rootNode)
     {
         $this->rootNode = $rootNode;

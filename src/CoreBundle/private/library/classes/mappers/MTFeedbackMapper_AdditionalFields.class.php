@@ -25,7 +25,7 @@ class MTFeedbackMapper_AdditionalFields extends MTFeedbackMapper_StandardForm
         $oFeedbackErrorList = $oVisitor->GetSourceObject('oFeedbackErrorList');
         $aFieldInput = $oVisitor->GetSourceObject('aFieldInput');
 
-        $aSelectFieldList = array('aFieldCountry' => 'data_country_id');
+        $aSelectFieldList = ['aFieldCountry' => 'data_country_id'];
         $oCountryList = TdbDataCountryList::GetList();
 
         $aSelectFieldList = $this->SetInputFields(
@@ -45,14 +45,14 @@ class MTFeedbackMapper_AdditionalFields extends MTFeedbackMapper_StandardForm
     {
         $fields = parent::getFieldList();
 
-        $additionalFields = array(
+        $additionalFields = [
             'aFieldFirstName' => 'firstname',
             'aFieldAdditionalInfo' => 'address_additional_info',
             'aFieldStreet' => 'street',
             'aFieldPLZ' => 'postalcode',
             'aFieldCity' => 'city',
             'aFieldTel' => 'tel',
-        );
+        ];
 
         return array_merge($fields, $additionalFields);
     }

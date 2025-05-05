@@ -11,7 +11,7 @@
 
 /**
  * used to show and write article reviews.
-/**/
+ * /**/
 class MTPkgComment extends MTPkgCommentCore
 {
     /**
@@ -63,11 +63,11 @@ class MTPkgComment extends MTPkgCommentCore
           $('#comment_form').hide();
           $('#comment_preview .text').html($('#comment_form .commenttextarea').val());
           $('#comment_preview .title').html($('#comment_form .title').val());
-          $(this).html('".TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.edit'))."');
+          $(this).html('".TGlobal::OutHtml(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.edit'))."');
         },function(){
           $('#comment_preview').hide();
           $('#comment_form').show();
-          $(this).html('".TGlobal::OutHtml(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.preview'))."');
+          $(this).html('".TGlobal::OutHtml(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_comment.action.preview'))."');
         });
       });
       </script>";

@@ -17,15 +17,14 @@ class TPkgSnippetRendererLegacy extends PkgAbstractSnippetRenderer
      *
      * @static
      *
-     * @param string|TModelBase     $sSource          the snippet source (or path to a file containing it)
-     * @param int                   $iSourceType
-     * @param IResourceHandler|null $oResourceHandler
+     * @param string|TModelBase $sSource the snippet source (or path to a file containing it)
+     * @param int $iSourceType
      *
      * @psalm-param IPkgSnippetRenderer::SOURCE_TYPE_* $iSourceType
      *
-     * @return \TPkgSnippetRenderer|\TPkgSnippetRendererLegacy
+     * @return TPkgSnippetRenderer|TPkgSnippetRendererLegacy
      */
-    public static function GetNewInstance($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING, IResourceHandler $oResourceHandler = null)
+    public static function GetNewInstance($sSource, $iSourceType = IPkgSnippetRenderer::SOURCE_TYPE_STRING, ?IResourceHandler $oResourceHandler = null)
     {
         $oNewInstance = new self();
         $oNewInstance->InitializeSource($sSource, $iSourceType);

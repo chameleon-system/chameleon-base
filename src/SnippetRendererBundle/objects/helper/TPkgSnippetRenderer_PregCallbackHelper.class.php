@@ -12,16 +12,17 @@
 /**
  * used to abstract a preg replace callback (they need to be public and we don't want them being part of our
  * public API in TPkgSnippetRenderer...
-/**/
+ * /**/
 class TPkgSnippetRenderer_PregCallbackHelper
 {
     /**
-     * @var null|string|array
+     * @var string|array|null
      */
-    public $aResult = null;
+    public $aResult;
 
     /**
      * @param array $aMatches
+     *
      * @return string
      */
     public function PregReplaceCallback($aMatches)

@@ -13,8 +13,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TPkgViewRendererMapper_ListHandler extends AbstractViewMapper
 {
-    const SOURCE_DATA_NAME = '__cmsListHandlerData';
-    const SOURCE_DATA_INPUT = '__cmsListHandlerInput';
+    public const SOURCE_DATA_NAME = '__cmsListHandlerData';
+    public const SOURCE_DATA_INPUT = '__cmsListHandlerInput';
     /**
      * @var ContainerInterface
      */
@@ -50,7 +50,7 @@ class TPkgViewRendererMapper_ListHandler extends AbstractViewMapper
         foreach ($aListHandlerData as $oListHandlerData) {
             /** @var TCMSRecordList $oSourceList */
             $oSourceList = $aListHandlerInput[$oListHandlerData->getSourceVariableName()];
-            $aTargetData = array();
+            $aTargetData = [];
             $oSourceList->GoToStart();
             while ($oSource = $oSourceList->Next()) {
                 /**

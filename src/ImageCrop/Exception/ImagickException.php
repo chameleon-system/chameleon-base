@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\ImageCrop\Exception;
 
-use Exception;
-
-class ImagickException extends Exception
+class ImagickException extends \Exception
 {
 }

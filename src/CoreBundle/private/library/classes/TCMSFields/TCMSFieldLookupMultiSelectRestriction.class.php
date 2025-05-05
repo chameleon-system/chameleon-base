@@ -118,7 +118,7 @@ class TCMSFieldLookupMultiSelectRestriction extends TCMSFieldLookupMultiselect
             if (false === $result) {
                 return false;
             }
-        }catch (\Doctrine\DBAL\Exception $e) {
+        } catch (Doctrine\DBAL\Exception $e) {
             return false;
         }
 

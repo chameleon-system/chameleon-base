@@ -66,9 +66,9 @@ class ClassFromTableFieldProvider implements ClassFromTableFieldProviderInterfac
             return null;
         }
 
-        return array(
+        return [
             'tableName' => $tableConfIdSplit[0],
             'fieldName' => $tableConfIdSplit[1],
-        );
+        ];
     }
 }

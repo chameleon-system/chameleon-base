@@ -25,7 +25,7 @@ class TCMSMasterPagedefList extends TAdbCmsMasterPagedefList
             }
             $portalRestriction = implode(
                 ', ',
-                array_map(fn(string $portalId) => $this->getDatabaseConnection()->quote($portalId),
+                array_map(fn (string $portalId) => $this->getDatabaseConnection()->quote($portalId),
                     array_keys($portals))
             );
 

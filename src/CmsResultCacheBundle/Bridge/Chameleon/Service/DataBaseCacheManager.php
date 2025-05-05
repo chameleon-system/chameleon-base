@@ -47,7 +47,6 @@ class DataBaseCacheManager
 
     /**
      * @param string $key
-     * @param mixed $value
      */
     public function set(string $owner, $key, $value, ?int $expireTimestamp, bool $allowGarbageCollection = true): void
     {

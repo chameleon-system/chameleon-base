@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Util;
 
-use TGlobal;
-
 class MltFieldUtil
 {
     /*
@@ -30,7 +28,7 @@ class MltFieldUtil
     public function cutMultiMltFieldNumber($mltTableName)
     {
         if (1 === preg_match('#^(.*?)\d+$#', $mltTableName, $matches)) {
-            if (false === TGlobal::TableExists($mltTableName)) {
+            if (false === \TGlobal::TableExists($mltTableName)) {
                 return $matches[1];
             }
         }

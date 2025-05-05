@@ -14,7 +14,7 @@
 */
 class TGroupTableStyle
 {
-    use \ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
+    use ChameleonSystem\CoreBundle\BackwardsCompatibilityShims\NamedConstructorSupport;
 
     public $group; // style class name for the group field (default = NULL)
     public $emptyGroup; // style to use for the fill td's in the group by row (default = NULL)
@@ -30,7 +30,7 @@ class TGroupTableStyle
         $this->evenRow = null;
         $this->oddColumn = null;
         $this->evenColumn = null;
-        $this->columnList = array();
+        $this->columnList = [];
     }
 
     /**

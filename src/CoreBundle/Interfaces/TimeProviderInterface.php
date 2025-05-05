@@ -17,8 +17,6 @@ interface TimeProviderInterface
 
     /**
      * @param \DateTimeZone|null $timeZone - will use the systems current timezone if null is passed
-     *
-     * @return \DateTime
      */
     public function getDateTime(?\DateTimeZone $timeZone = null): \DateTime;
 }

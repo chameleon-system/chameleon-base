@@ -28,8 +28,8 @@ class DebugExtension extends AbstractExtension
 
     public function getTokenParsers()
     {
-        return array(
+        return [
             new IncludeNodeParser(),
-        );
+        ];
     }
 }

@@ -20,7 +20,7 @@ class MediaItemUsageChainDeleteService
     /**
      * @var MediaItemUsageDeleteServiceInterface[]
      */
-    private $mediaItemDeleteServices = array();
+    private $mediaItemDeleteServices = [];
 
     /**
      * @return void
@@ -33,9 +33,9 @@ class MediaItemUsageChainDeleteService
     /**
      * @param MediaItemUsageDataModel[] $usages
      *
-     * @throws UsageDeleteException
-     *
      * @return void
+     *
+     * @throws UsageDeleteException
      */
     public function deleteUsages(array $usages)
     {
@@ -45,11 +45,9 @@ class MediaItemUsageChainDeleteService
     }
 
     /**
-     * @param MediaItemUsageDataModel $usage
+     * @return void
      *
      * @throws UsageDeleteException
-     *
-     * @return void
      */
     public function deleteUsage(MediaItemUsageDataModel $usage)
     {

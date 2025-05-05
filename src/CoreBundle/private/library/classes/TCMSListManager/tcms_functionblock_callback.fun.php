@@ -19,7 +19,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
  *
  * @deprecated the method moved to TCMSListManagerFullGroupTable to allow easier extension
  *
- * @param int   $id
+ * @param int $id
  * @param array $row
  *
  * @return string
@@ -35,11 +35,11 @@ function tcms_functionblock_callback($id, $row)
     $returnValue = '<div class="tablelistfunctions">';
     if ($showButtons) {
         if ('cms_tpl_page' == $_SESSION['_tmpCurrentTableName'] && $securityHelper->isGranted('CMS_RIGHT_CMS_PAGE_PROPERTY')) {
-            $returnValue .= '<img src="'.URL_CMS."/images/icons/application_edit.png\" onclick=\"document.cmsform._id.value='".$row['id']."';document.cmsform._mode.value='display';document.cmsform.submit();\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.page_settings')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
+            $returnValue .= '<img src="'.URL_CMS."/images/icons/application_edit.png\" onclick=\"document.cmsform._id.value='".$row['id']."';document.cmsform._mode.value='display';document.cmsform.submit();\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".ServiceLocator::get('translator')->trans('chameleon_system_core.list.page_settings')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
         }
         $returnValue .= $sDeleteButton;
         if (true == $cms_user_new_record_right && 'cms_tpl_page' != $_SESSION['_tmpCurrentTableName']) {
-            $returnValue .= '<img src="'.URL_CMS."/images/icons/page_copy.png\" onclick=\"document.cmsform.elements['module_fnc[contentmodule]'].value='DatabaseCopy';document.cmsform.id.value='".$row['id']."';document.cmsform.submit();\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.copy')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
+            $returnValue .= '<img src="'.URL_CMS."/images/icons/page_copy.png\" onclick=\"document.cmsform.elements['module_fnc[contentmodule]'].value='DatabaseCopy';document.cmsform.id.value='".$row['id']."';document.cmsform.submit();\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".ServiceLocator::get('translator')->trans('chameleon_system_core.action.copy')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
         }
     } else {
         $returnValue = '&nbsp;';
@@ -57,14 +57,14 @@ function tcms_functionblock_callback($id, $row)
  * @deprecated the method moved to TCMSListManagerDocumentManager CallBackGenerateDownloadLink() to allow easier extension
  *
  * @param string $id
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
 function tcms_GenerateDownloadLink_callback($id, $row)
 {
     $oFile = new TCMSDownloadFile();
-    /** @var $oFile TCMSDownloadFile */
+    /* @var $oFile TCMSDownloadFile */
     $oFile->Load($row['id']);
     $sDownloadLink = $oFile->getDownloadHtmlTag(false, true, true);
 
@@ -77,14 +77,14 @@ function tcms_GenerateDownloadLink_callback($id, $row)
  *
  * @deprecated the method moved to TCMSListManagerMLT CallBackMLTFunctionBlock() to allow easier extension
  *
- * @param int   $id
+ * @param int $id
  * @param array $row
  *
  * @return string
  */
 function tcms_MLTfunctionblock_callback($id, $row)
 {
-    return '<img src="'.URL_CMS.'/images/icons/link_break.png" onclick="deleteConnection(\''.TGlobal::OutJS($row['id']).'\');" title="'.\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.remove_connection').'" />';
+    return '<img src="'.URL_CMS.'/images/icons/link_break.png" onclick="deleteConnection(\''.TGlobal::OutJS($row['id']).'\');" title="'.ServiceLocator::get('translator')->trans('chameleon_system_core.action.remove_connection').'" />';
 }
 
 /**
@@ -93,14 +93,14 @@ function tcms_MLTfunctionblock_callback($id, $row)
  * @deprecated the method moved to TCMSListManagerFullGroupTable CallBackImageWithZoom() to allow easier extension
  *
  * @param string $path
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
 function tcms_image_callback($path, $row)
 {
     $oImage = new TCMSImage();
-    /** @var $oImage TCMSImage */
+    /* @var $oImage TCMSImage */
     $oImage->Load($row['id']);
     $image = '';
 
@@ -120,14 +120,14 @@ function tcms_image_callback($path, $row)
  * not used in the core (maybe deprecated?).
  *
  * @param string $path
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
 function tcms_Fullimage_callback($path, $row)
 {
     $oImage = new TCMSImage();
-    /** @var $oImage TCMSImage */
+    /* @var $oImage TCMSImage */
     $oImage->Load($row['id']);
     $image = '';
 
@@ -147,7 +147,7 @@ function tcms_Fullimage_callback($path, $row)
  * @deprecated the method moved to TCMSListManagerFullGroupTable CallBackMediaSelectBox() to allow easier extension
  *
  * @param string $id
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
@@ -164,7 +164,7 @@ function tcms_mediaSelectBox_callback($id, $row)
  * @deprecated the method moved to TCMSListManagerDocumentManagerSelected CallBackDocumentAssignedSelectBox() to allow easier extension
  *
  * @param string $id
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
@@ -181,14 +181,14 @@ function tcms_mediaAssignedSelectBox_callback($id, $row)
  * @deprecated the method moved to TCMSListManagerDocumentChooser CallBackDocumentFileType() to allow easier extension
  *
  * @param string $id
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
 function tcms_documentFileType_callback($id, $row)
 {
     $oFileDownload = new TCMSDownloadFile();
-    /** @var $oFileDownload TCMSDownloadFile */
+    /* @var $oFileDownload TCMSDownloadFile */
     $oFileDownload->Load($row['id']);
 
     $html = $oFileDownload->GetPlainFileTypeIcon();
@@ -202,7 +202,7 @@ function tcms_documentFileType_callback($id, $row)
  * @deprecated the method moved to TCMSListManagerFullGroupTable CallBackFilenameShort() to allow easier extension
  *
  * @param string $filename
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
@@ -222,7 +222,7 @@ function tcms_documentFilenameShort_callback($filename, $row)
  * @deprecated the method moved to TCMSListManagerFullGroupTable CallBackHumanRedableFileSize() to allow easier extension
  *
  * @param string $fileSize
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
@@ -238,8 +238,8 @@ function tcms_HumanRedableFileSize_callback($fileSize, $row)
  *
  * @deprecated  the method moved to TCMSListManagerWebpages CallBackWebpageFunctionBlock() to allow easier extension
  *
- * @param string $id  - id of the current page
- * @param array  $row - all field/value pairs of the page
+ * @param string $id - id of the current page
+ * @param array $row - all field/value pairs of the page
  */
 function tcms_webpagefunctionblock_callback($id, $row)
 {
@@ -248,7 +248,7 @@ function tcms_webpagefunctionblock_callback($id, $row)
     /** @var SecurityHelperAccess $securityHelper */
     $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
     if ($securityHelper->isGranted('CMS_RIGHT_CMS_PAGE_PROPERTY')) {
-        $returnValue .= '<img src="'.URL_CMS."/images/icons/application_edit.png\" onclick=\"EditRecordInList('".TGlobal::OutHTML($row['id'])."');\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.page_settings')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
+        $returnValue .= '<img src="'.URL_CMS."/images/icons/application_edit.png\" onclick=\"EditRecordInList('".TGlobal::OutHTML($row['id'])."');\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".ServiceLocator::get('translator')->trans('chameleon_system_core.list.page_settings')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
     }
 
     $returnValue .= '<div id="functionTitle_'.$row['cmsident'].'" class="functionTitle"></div>';
@@ -263,7 +263,7 @@ function tcms_webpagefunctionblock_callback($id, $row)
  * @deprecated the method moved to TCMSListManagerFullGroupTable to allow easier extension
  *
  * @param string $id
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
@@ -274,7 +274,7 @@ function tcms_functionblock_deletebutton($id, $row)
     $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
     $cms_user_delete_right = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $_SESSION['_tmpCurrentTableName']);
     if (true == $cms_user_delete_right) {
-        $returnValue .= '<img src="'.URL_CMS."/images/icons/cross.png\" onclick=\"DeleteRecord('{$row['id']}');\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.delete')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
+        $returnValue .= '<img src="'.URL_CMS."/images/icons/cross.png\" onclick=\"DeleteRecord('{$row['id']}');\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".ServiceLocator::get('translator')->trans('chameleon_system_core.action.delete')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
     }
 
     return $returnValue;
@@ -285,7 +285,7 @@ function tcms_functionblock_deletebutton($id, $row)
  * not used in the core anymore, so maybe deprecated.
  *
  * @param string $id
- * @param array  $row
+ * @param array $row
  *
  * @return string
  */
@@ -296,7 +296,7 @@ function tcms_MLTfunctionblock_deletebutton($id, $row)
     $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
     $cms_user_delete_right = $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_DELETE, $_SESSION['_tmpCurrentTableName']);
     if (true == $cms_user_delete_right) {
-        $returnValue .= '<img src="'.URL_CMS."/images/icons/cross.png\" onclick=\"if (confirm('".TGlobal::OutJS(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.confirm_delete'))."')) {document.cmsformdel.elements['module_fnc[contentmodule]'].value='Delete';document.cmsformdel.id.value='{$row['id']}';document.cmsformdel.submit();}\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.delete')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
+        $returnValue .= '<img src="'.URL_CMS."/images/icons/cross.png\" onclick=\"if (confirm('".TGlobal::OutJS(ServiceLocator::get('translator')->trans('chameleon_system_core.action.confirm_delete'))."')) {document.cmsformdel.elements['module_fnc[contentmodule]'].value='Delete';document.cmsformdel.id.value='{$row['id']}';document.cmsformdel.submit();}\" onMouseOver=\"$('#functionTitle_'+".$row['cmsident'].").html('".ServiceLocator::get('translator')->trans('chameleon_system_core.action.delete')."');\" onMouseOut=\"$('#functionTitle_'+".$row['cmsident'].").html('');\" />";
     }
 
     return $returnValue;
@@ -308,7 +308,7 @@ function tcms_MLTfunctionblock_deletebutton($id, $row)
  * @deprecated the method moved to TCMSListManagerFullGroupTable CallBackDrawListItemSelectbox() to allow easier extension
  *
  * @param string $id
- * @param array  $row
+ * @param array $row
  * @param string $sFieldName
  *
  * @return string

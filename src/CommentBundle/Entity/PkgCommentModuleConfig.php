@@ -8,19 +8,17 @@ class PkgCommentModuleConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldVarchar
         /** @var string - Headline */
         private string $name = '',
         // TCMSFieldLookup
         /** @var PkgCommentType|null - Type of comment */
-        private ?PkgCommentType $pkgCommentType = null
-        ,
+        private ?PkgCommentType $pkgCommentType = null,
         // TCMSFieldWYSIWYG
         /** @var string - Introductory text */
         private string $introText = '',
@@ -88,7 +86,6 @@ class PkgCommentModuleConfig
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -101,7 +98,6 @@ class PkgCommentModuleConfig
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getPkgCommentType(): ?PkgCommentType
@@ -116,7 +112,6 @@ class PkgCommentModuleConfig
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getIntroText(): string
     {
@@ -129,7 +124,6 @@ class PkgCommentModuleConfig
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getClosingText(): string
@@ -144,7 +138,6 @@ class PkgCommentModuleConfig
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getNumberOfCommentsPerPage(): int
     {
@@ -157,7 +150,6 @@ class PkgCommentModuleConfig
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isGuestCanSeeComments(): bool
@@ -172,7 +164,6 @@ class PkgCommentModuleConfig
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isGuestCommentAllowed(): bool
     {
@@ -185,7 +176,6 @@ class PkgCommentModuleConfig
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getCommentOnDelete(): string
@@ -200,7 +190,6 @@ class PkgCommentModuleConfig
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isNewestOnTop(): bool
     {
@@ -213,7 +202,6 @@ class PkgCommentModuleConfig
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isUseSimpleReporting(): bool
@@ -228,7 +216,6 @@ class PkgCommentModuleConfig
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isShowReportedComments(): bool
     {
@@ -241,6 +228,4 @@ class PkgCommentModuleConfig
 
         return $this;
     }
-
-
 }

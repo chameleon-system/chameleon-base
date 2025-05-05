@@ -24,8 +24,8 @@ class AllowEmbeddingForDifferentDomainListener
     public function __construct(
         private readonly CmsPortalDomainsDataAccessInterface $domainsDataAccess,
         private readonly RequestInfoServiceInterface $requestInfoService
-    )
-    {}
+    ) {
+    }
 
     /**
      * @return void

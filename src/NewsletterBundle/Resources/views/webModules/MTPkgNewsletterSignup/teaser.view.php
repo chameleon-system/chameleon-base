@@ -7,7 +7,7 @@
     </div>
     <div class="content">
       <div class="inner dotlinebottom">
-        <a class="stdlink" href="<?=$data['aMainModuleInfo']['URL']; ?>" >Abonnieren Sie unseren kostenlosen Newsletter!</a>
+        <a class="stdlink" href="<?php echo $data['aMainModuleInfo']['URL']; ?>" >Abonnieren Sie unseren kostenlosen Newsletter!</a>
       </div>
     </div>
   </div>

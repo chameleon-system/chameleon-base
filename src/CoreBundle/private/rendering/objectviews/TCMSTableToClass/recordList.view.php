@@ -6,7 +6,7 @@
 */
 
 /****************************************************************************
-* Copyright <?=$year; ?> by ESONO AG, Freiburg, Germany
+* Copyright <?php echo $year; ?> by ESONO AG, Freiburg, Germany
 <?php
 if (is_array($aTableNotes)) {
     foreach ($aTableNotes as $sLine) {
@@ -19,9 +19,9 @@ $sTempTableName = '_tmp_'.$sTableDBName;
 ****************************************************************************/
 
 /**
- * @extends TCMSRecordList<<?=$sClassName; ?>>
+ * @extends TCMSRecordList<<?php echo $sClassName; ?>>
  */
-class <?=$sAutoClassName; ?>List extends TCMSRecordList
+class <?php echo $sAutoClassName; ?>List extends TCMSRecordList
 {
     /**
      * @var bool
@@ -33,10 +33,10 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      * @var int $iLimitResultSet
      */
     protected $iLimitResultSet = <?php if (is_array($aTableConf) && array_key_exists('auto_limit_results', $aTableConf)) {
-    echo $aTableConf['auto_limit_results'];
-} else {
-    echo '-1';
-} ?>;
+        echo $aTableConf['auto_limit_results'];
+    } else {
+        echo '-1';
+    } ?>;
 
     /**
      * create a new instance
@@ -46,8 +46,8 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      */
     public function __construct($sQuery=null, $sLanguageId=null)
     {
-        $this->sTableObject = '<?=$sClassName; ?>';
-        parent::__construct($this->sTableObject, '<?=$sTableDBName; ?>',$sQuery,$sLanguageId);
+        $this->sTableObject = '<?php echo $sClassName; ?>';
+        parent::__construct($this->sTableObject, '<?php echo $sTableDBName; ?>',$sQuery,$sLanguageId);
     }
 
     /**
@@ -58,17 +58,17 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      * @param boolean $bAllowCaching - set this to true if you want to cache the record list object
      * @param boolean $bForceWorkflow - (deprecated) set this to true to force adding the workflow query part even in cms backend mode
      * @param boolean $bUseGlobalFilterInsteadOfPreviewFilter - (deprecated) set this to true if you want to overload all workflow data instead of only the records that are marked for preview
-     * @return <?=$sClassName; ?>List
+     * @return <?php echo $sClassName; ?>List
      */
-    static public function GetList($sQuery=null,$iLanguageId=null, $bAllowCaching = false, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false): <?=$sClassName; ?>List
+    static public function GetList($sQuery=null,$iLanguageId=null, $bAllowCaching = false, $bForceWorkflow = false, $bUseGlobalFilterInsteadOfPreviewFilter = false): <?php echo $sClassName; ?>List
     {
         if (null === $iLanguageId) {
             $iLanguageId = self::getMyLanguageService()->getActiveLanguageId();
         }
         if (null === $sQuery) {
-            $sQuery = <?=$sClassName; ?>List::GetDefaultQuery($iLanguageId);
+            $sQuery = <?php echo $sClassName; ?>List::GetDefaultQuery($iLanguageId);
         }
-        $oList = new <?=$sClassName; ?>List(); /** @var $oList <?=$sClassName; ?>List*/
+        $oList = new <?php echo $sClassName; ?>List(); /** @var $oList <?php echo $sClassName; ?>List*/
         $oList->bAllowItemCache = $bAllowCaching;
         $oList->SetLanguage($iLanguageId);
         $sQuery = self::getFieldTranslationUtil()->getTranslatedQuery($sQuery);
@@ -87,7 +87,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
      */
     static public function GetDefaultQuery($iLanguageId, $sFilterString='1=1'): string
     {
-        $sDefaultQuery = "<?=$sCMSListQuery; ?>";
+        $sDefaultQuery = "<?php echo $sCMSListQuery; ?>";
         $sDefaultQuery = str_replace('[{sFilterConditions}]',$sFilterString,$sDefaultQuery);
         return $sDefaultQuery;
     }
@@ -126,7 +126,7 @@ class <?=$sAutoClassName; ?>List extends TCMSRecordList
     }
 
 <?php
-$oFields->GoToStart();
+    $oFields->GoToStart();
 while ($oField = $oFields->Next()) {
     $sProp = $oField->RenderFieldListMethodsString();
     if (!empty($sProp)) {
@@ -138,12 +138,12 @@ while ($oField = $oFields->Next()) {
      * factory returning an element for the list
      *
      * @param array $aData
-     * @return <?=$sClassName; ?>
+     * @return <?php echo $sClassName; ?>
      */
-    protected function _NewElement($aData): <?=$sClassName; ?>
+    protected function _NewElement($aData): <?php echo $sClassName; ?>
     {
         $this->bChangedDataChanged = true;
-        $oObj = <?=$sClassName; ?>::GetNewInstance($aData,$this->iLanguageId);
+        $oObj = <?php echo $sClassName; ?>::GetNewInstance($aData,$this->iLanguageId);
         return $oObj;
     }
 

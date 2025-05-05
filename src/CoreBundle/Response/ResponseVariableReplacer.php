@@ -47,6 +47,7 @@ class ResponseVariableReplacer implements ResponseVariableReplacerInterface
 
     /**
      * @return void
+     *
      * @throws TokenInjectionFailedException
      */
     public function handleResponse(FilterContentEvent $event)
@@ -77,10 +78,6 @@ class ResponseVariableReplacer implements ResponseVariableReplacerInterface
     }
 
     /**
-     * @param string $content
-     *
-     * @return string
-     *
      * @throws TokenInjectionFailedException
      */
     private function doReplaceVariables(string $content): string

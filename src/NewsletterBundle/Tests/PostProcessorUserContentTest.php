@@ -19,22 +19,24 @@ class PostProcessorUserContentTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider getUserData
      */
-    public function it_substitutes_correctly($salutation, $firstName, $lastName, $email, $unsubLink, $htmlLink)
+    public function itSubstitutesCorrectly($salutation, $firstName, $lastName, $email, $unsubLink, $htmlLink)
     {
         $mockUserData = new NewsletterUserDataModel($salutation, $firstName, $lastName, $email, $unsubLink, $htmlLink);
 
         $processor = new PostProcessorUserContent();
 
-        $this->assertEquals(join(', ', array($salutation, $firstName, $lastName, $email, $unsubLink, $htmlLink)), $processor->process('[{salutation}], [{firstname}], [{lastname}], [{email}], [{unsubscribelink}], [{htmllink}]', $mockUserData));
+        $this->assertEquals(join(', ', [$salutation, $firstName, $lastName, $email, $unsubLink, $htmlLink]), $processor->process('[{salutation}], [{firstname}], [{lastname}], [{email}], [{unsubscribelink}], [{htmllink}]', $mockUserData));
     }
 
     /**
      * @test
+     *
      * @dataProvider getUserData
      */
-    public function it_leaves_text_without_placeholders_unchanged($salutation, $firstName, $lastName, $email, $unsubLink, $htmlLink)
+    public function itLeavesTextWithoutPlaceholdersUnchanged($salutation, $firstName, $lastName, $email, $unsubLink, $htmlLink)
     {
         $mockUserData = new NewsletterUserDataModel($salutation, $firstName, $lastName, $email, $unsubLink, $htmlLink);
 
@@ -45,8 +47,8 @@ class PostProcessorUserContentTest extends TestCase
 
     public function getUserData()
     {
-        return array(
-            array('Mister', 'Dev', 'Eloper', 'dev.eloper@example.com', 'http://unsubscribe', 'http://html'),
-        );
+        return [
+            ['Mister', 'Dev', 'Eloper', 'dev.eloper@example.com', 'http://unsubscribe', 'http://html'],
+        ];
     }
 }

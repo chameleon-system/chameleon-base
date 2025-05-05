@@ -17,8 +17,10 @@ interface DataAccessCmsTblConfInterface
         CmsPermissionAttributeConstants::TABLE_EDITOR_WORKFLOW_PUBLISH => 'cms_role5_mlt',
         CmsPermissionAttributeConstants::TABLE_EDITOR_VERSIONING => 'cms_role7_mlt',
     ];
+
     /**
-     * returns array with table ids as key, and name as value
+     * returns array with table ids as key, and name as value.
+     *
      * @return array<string,TableConfigurationDataModel>
      */
     public function getTableConfigurations(): array;
@@ -26,9 +28,8 @@ interface DataAccessCmsTblConfInterface
     public function isTableName(string $tableName): bool;
 
     /**
-     * returns the roles assigned to the action
-     * @param string $action
-     * @param string $tableName
+     * returns the roles assigned to the action.
+     *
      * @return array<string>
      */
     public function getPermittedRoles(string $action, string $tableName): array;

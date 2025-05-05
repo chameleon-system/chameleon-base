@@ -27,7 +27,7 @@ class TPkgExtranetMapper_UserForm extends AbstractPkgExtranetMapper_User
     public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager): void
     {
         $oUser = $oVisitor->GetSourceObject('oUser');
-        $aFieldList = array(
+        $aFieldList = [
             'aFieldFirstName' => 'firstname',
             'aFieldLastName' => 'lastname',
             'aFieldAdditionalInfo' => 'address_additional_info',
@@ -37,14 +37,14 @@ class TPkgExtranetMapper_UserForm extends AbstractPkgExtranetMapper_User
             'aFieldCity' => 'city',
             'aFieldTel' => 'telefon',
             'aFieldFax' => 'fax',
-        );
+        ];
         $this->SetInputFields($aFieldList, $oVisitor, $oUser);
 
-        $aRadioFieldList = array('aFieldSalutation' => 'data_extranet_salutation_id');
+        $aRadioFieldList = ['aFieldSalutation' => 'data_extranet_salutation_id'];
         $oSalutationList = TdbDataExtranetSalutationList::GetList();
         $this->SetInputFields($aRadioFieldList, $oVisitor, $oUser, 'radio', $oSalutationList);
 
-        $aSelectFieldList = array('aFieldCountry' => 'data_country_id');
+        $aSelectFieldList = ['aFieldCountry' => 'data_country_id'];
         $oCountryList = TdbDataCountryList::GetList();
         $this->SetInputFields($aSelectFieldList, $oVisitor, $oUser, 'select', $oCountryList);
 
@@ -56,11 +56,11 @@ class TPkgExtranetMapper_UserForm extends AbstractPkgExtranetMapper_User
     /**
      * set errors and values for given field list.
      *
-     * @param array                      $aFieldList       (MappedFieldName(name used in template) => RealFieldName (user input field name) )
-     * @param IMapperVisitorRestricted   $oVisitor
+     * @param array $aFieldList (MappedFieldName(name used in template) => RealFieldName (user input field name) )
+     * @param IMapperVisitorRestricted $oVisitor
      * @param TdbDataExtranetUserAddress $oAddress
-     * @param string                     $sFieldType
-     * @param TCMSRecordList             $oFieldOptionList
+     * @param string $sFieldType
+     * @param TCMSRecordList $oFieldOptionList
      *
      * @internal param string $sMSGConsumer
      *
@@ -69,16 +69,16 @@ class TPkgExtranetMapper_UserForm extends AbstractPkgExtranetMapper_User
     protected function SetInputFields($aFieldList, $oVisitor, $oAddress, $sFieldType = 'text', $oFieldOptionList = null)
     {
         foreach ($aFieldList as $sMappedFieldName => $sRealFieldName) {
-            $aField = array();
+            $aField = [];
             switch ($sFieldType) {
                 case 'radio':
                 case 'select':
                     $aField['sValue'] = (isset($oAddress->sqlData[$sRealFieldName])) ? ($oAddress->sqlData[$sRealFieldName]) : ('');
                     $aField['sError'] = $this->GetMessageForField($sRealFieldName, $oVisitor->GetSourceObject('sCustomMSGConsumer'));
-                    $aField['aValueList'] = array();
+                    $aField['aValueList'] = [];
                     if (!is_null($oFieldOptionList)) {
                         while ($oFieldOption = $oFieldOptionList->Next()) {
-                            $aFieldOption = array();
+                            $aFieldOption = [];
                             $aFieldOption['sName'] = $oFieldOption->GetName();
                             $aFieldOption['sValue'] = $oFieldOption->id;
                             $aField['aValueList'][] = $aFieldOption;

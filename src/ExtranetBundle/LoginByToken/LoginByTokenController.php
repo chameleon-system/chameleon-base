@@ -14,7 +14,6 @@ namespace ChameleonSystem\ExtranetBundle\LoginByToken;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 

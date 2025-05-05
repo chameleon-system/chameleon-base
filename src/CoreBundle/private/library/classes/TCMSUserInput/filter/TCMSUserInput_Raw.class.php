@@ -25,8 +25,8 @@ class TCMSUserInput_Raw extends TCMSUserInputFilter_BaseClass
     {
         // protect content below 32 bit that we want to keep
         if (function_exists('filter_var')) {
-            $aProtect = array("\n" => '[{_SLASH-N_}]', "\r" => '[{_SLASH-R_}]', "\t" => '[{_SLASH-T_}]');
-            $aProtectProtect = array('[{_SLASH-N_}]' => '[{_SLASH-N__}]', '[{_SLASH-R_}]' => '[{_SLASH-R__}]', '[{_SLASH-T_}]' => '[{_SLASH-T__}]');
+            $aProtect = ["\n" => '[{_SLASH-N_}]', "\r" => '[{_SLASH-R_}]', "\t" => '[{_SLASH-T_}]'];
+            $aProtectProtect = ['[{_SLASH-N_}]' => '[{_SLASH-N__}]', '[{_SLASH-R_}]' => '[{_SLASH-R__}]', '[{_SLASH-T_}]' => '[{_SLASH-T__}]'];
 
             // prevent others from abusing the method...
             $sValue = str_replace(array_keys($aProtectProtect), array_values($aProtectProtect), $sValue);

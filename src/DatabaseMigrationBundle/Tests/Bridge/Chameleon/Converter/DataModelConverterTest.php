@@ -13,7 +13,6 @@ namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\Converter;
 
 use ChameleonSystem\DatabaseMigration\DataModel\MigrationDataModel;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 function realpath($path)
 {
@@ -37,7 +36,7 @@ class DataModelConverterTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_models_to_stdClasses()
+    public function itConvertsModelsToStdClasses()
     {
         $this->givenAMapOfModels();
         $this->givenATargetStructure();
@@ -58,7 +57,7 @@ class DataModelConverterTest extends TestCase
 
     private function givenAMapOfModels()
     {
-        $map = array();
+        $map = [];
 
         $map['ChameleonSystemFooBundle'] = new MigrationDataModel('ChameleonSystemFooBundle');
         $map['ChameleonSystemFooBundle']->addFile('1', '/foo/bar/baz/updateFile1.inc.php');
@@ -69,15 +68,15 @@ class DataModelConverterTest extends TestCase
 
     private function givenATargetStructure()
     {
-        $target = array();
-        $target['ChameleonSystemFooBundle'] = array();
+        $target = [];
+        $target['ChameleonSystemFooBundle'] = [];
 
-        $class = new stdClass();
+        $class = new \stdClass();
         $class->fileName = 'baz/updateFile1.inc.php';
         $class->buildNumber = '1';
         $class->bundleName = 'ChameleonSystemFooBundle';
         $target['ChameleonSystemFooBundle'][] = $class;
-        $class = new stdClass();
+        $class = new \stdClass();
         $class->fileName = 'baz/updateFile2.inc.php';
         $class->buildNumber = '2';
         $class->bundleName = 'ChameleonSystemFooBundle';

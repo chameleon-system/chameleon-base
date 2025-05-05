@@ -13,9 +13,9 @@ use Doctrine\DBAL\Connection;
 
 class TCMSTableToClass_MockRecord
 {
-    public $sqlData = null;
+    public $sqlData;
     public $table = '';
-    public $id = null;
+    public $id;
     private Connection $connection;
 
     public function __construct(Connection $connection, $sTable)

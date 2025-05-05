@@ -11,7 +11,7 @@
 
 /**
  * allow mlt selection of fields. Target table is defined via sShowFieldsFromTable.
-/**/
+ * /**/
 class TCMSFieldLookupMultiselectCheckboxesSelectFieldsFromTable extends TCMSFieldLookupMultiselectCheckboxes
 {
     protected function GetMLTRecordRestrictions()

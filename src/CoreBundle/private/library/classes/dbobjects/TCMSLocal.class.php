@@ -16,20 +16,20 @@ class TCMSLocal extends TCMSRecord
     protected $dNumberOfDecimals = 2;
     public $sDecimalSeperator = ',';
     public $sThousandSeperator = '.';
-    public $sActiveLocal = null;
+    public $sActiveLocal;
 
     //  128,64,32,16 8,4,2,1
-    const DATEFORMAT_SHOW_ALL = 238; // 1110 1110
-    const DATEFORMAT_SHOW_DATE = 224; // 1110 0000
-    const DATEFORMAT_SHOW_TIME = 14; // 0000 1110
+    public const DATEFORMAT_SHOW_ALL = 238; // 1110 1110
+    public const DATEFORMAT_SHOW_DATE = 224; // 1110 0000
+    public const DATEFORMAT_SHOW_TIME = 14; // 0000 1110
 
-    const DATEFORMAT_SHOW_DATE_YEAR = 128; // 1000 0000
-    const DATEFORMAT_SHOW_DATE_MONTH = 64; // 0100 0000
-    const DATEFORMAT_SHOW_DATE_DAY = 32; // 0010 0000
+    public const DATEFORMAT_SHOW_DATE_YEAR = 128; // 1000 0000
+    public const DATEFORMAT_SHOW_DATE_MONTH = 64; // 0100 0000
+    public const DATEFORMAT_SHOW_DATE_DAY = 32; // 0010 0000
 
-    const DATEFORMAT_SHOW_TIME_HOUR = 8; // 0000 1000
-    const DATEFORMAT_SHOW_TIME_MINUTE = 4; // 0000 0100
-    const DATEFORMAT_SHOW_TIME_SECOND = 2; // 0000 0010
+    public const DATEFORMAT_SHOW_TIME_HOUR = 8; // 0000 1000
+    public const DATEFORMAT_SHOW_TIME_MINUTE = 4; // 0000 0100
+    public const DATEFORMAT_SHOW_TIME_SECOND = 2; // 0000 0010
 
     public function __construct($id = null, $iLanguage = null)
     {
@@ -144,7 +144,7 @@ class TCMSLocal extends TCMSRecord
      * return formated number.
      *
      * @param numeric $dNumber
-     * @param int   $dDecimals
+     * @param int $dDecimals
      *
      * @return string
      */
@@ -182,7 +182,7 @@ class TCMSLocal extends TCMSRecord
      *   $oLocal->FormatDate('2008-02-03 09:10:13',TCMSLocal::DATEFORMAT_SHOW_DATE | TCMSLocal::DATEFORMAT_SHOW_TIME_HOUR | TCMSLocal::DATEFORMAT_SHOW_TIME_MINUTE)
      *
      * @param string $sqlDateString - date of the form yyyy-mm-dd HH:MM:SS
-     * @param int    $iShowDatePart - show which part of the date
+     * @param int $iShowDatePart - show which part of the date
      *
      * @return string
      */
@@ -201,16 +201,16 @@ class TCMSLocal extends TCMSRecord
             $sDate = $this->sqlData['date_format'];
             // kick any "do-not-show" parts...
             if (self::DATEFORMAT_SHOW_DATE_DAY != (self::DATEFORMAT_SHOW_DATE_DAY & $iShowDatePart)) {
-                $sDate = $this->KickFormatPart($sDate, 'd', array('m', 'y'));
+                $sDate = $this->KickFormatPart($sDate, 'd', ['m', 'y']);
             }
             if (self::DATEFORMAT_SHOW_DATE_MONTH != (self::DATEFORMAT_SHOW_DATE_MONTH & $iShowDatePart)) {
-                $sDate = $this->KickFormatPart($sDate, 'm', array('d', 'y'));
+                $sDate = $this->KickFormatPart($sDate, 'm', ['d', 'y']);
             }
             if (self::DATEFORMAT_SHOW_DATE_YEAR != (self::DATEFORMAT_SHOW_DATE_YEAR & $iShowDatePart)) {
-                $sDate = $this->KickFormatPart($sDate, 'y', array('m', 'd'));
+                $sDate = $this->KickFormatPart($sDate, 'y', ['m', 'd']);
             }
-            $sDate = $this->StripStringParts($sDate, array('d', 'm', 'y'), true);
-            $sDate = str_replace(array('d', 'm', 'y'), array($list[2], $list[1], $list[0]), $sDate);
+            $sDate = $this->StripStringParts($sDate, ['d', 'm', 'y'], true);
+            $sDate = str_replace(['d', 'm', 'y'], [$list[2], $list[1], $list[0]], $sDate);
 
             $sTime = '';
             if (!empty($parts[1])) {
@@ -218,18 +218,18 @@ class TCMSLocal extends TCMSRecord
                 if (3 == count($aTimeList)) {
                     $sTime = $this->sqlData['time_format'];
                     if (self::DATEFORMAT_SHOW_TIME_SECOND != (self::DATEFORMAT_SHOW_TIME_SECOND & $iShowDatePart)) {
-                        $sTime = $this->KickFormatPart($sTime, 's', array('m', 'h'));
+                        $sTime = $this->KickFormatPart($sTime, 's', ['m', 'h']);
                     }
                     if (self::DATEFORMAT_SHOW_TIME_MINUTE != (self::DATEFORMAT_SHOW_TIME_MINUTE & $iShowDatePart)) {
-                        $sTime = $this->KickFormatPart($sTime, 'm', array('s', 'h'));
+                        $sTime = $this->KickFormatPart($sTime, 'm', ['s', 'h']);
                     }
                     if (self::DATEFORMAT_SHOW_TIME_HOUR != (self::DATEFORMAT_SHOW_TIME_HOUR & $iShowDatePart)) {
-                        $sTime = $this->KickFormatPart($sTime, 'h', array('s', 'm'));
+                        $sTime = $this->KickFormatPart($sTime, 'h', ['s', 'm']);
                     }
 
                     // strip any non valid chars from the back
-                    $sTime = $this->StripStringParts($sTime, array('h', 'm', 's'), true);
-                    $sTime = str_replace(array('h', 'm', 's'), array($aTimeList[0], $aTimeList[1], $aTimeList[2]), $sTime);
+                    $sTime = $this->StripStringParts($sTime, ['h', 'm', 's'], true);
+                    $sTime = str_replace(['h', 'm', 's'], [$aTimeList[0], $aTimeList[1], $aTimeList[2]], $sTime);
                 }
             }
             if (!empty($sDate) && !empty($sTime)) {
@@ -243,7 +243,7 @@ class TCMSLocal extends TCMSRecord
 
     protected function KickFormatPart($sFormatString, $sKickPart, $aSafeParts)
     {
-        $aNewParts = array();
+        $aNewParts = [];
         $aParts = explode($sKickPart, $sFormatString);
         $iCount = 0;
         foreach ($aParts as $iKey => $sPart) {
@@ -303,16 +303,16 @@ class TCMSLocal extends TCMSRecord
         }
 
         // get date part
-        $aDateParts = array(0 => '', 1 => '', 2 => '');
-        $sDateFormatString = str_replace(array('d', 'm', 'y'), array('%d', '%d', '%d'), $this->sqlData['date_format']);
+        $aDateParts = [0 => '', 1 => '', 2 => ''];
+        $sDateFormatString = str_replace(['d', 'm', 'y'], ['%d', '%d', '%d'], $this->sqlData['date_format']);
         sscanf($sDatePart, $sDateFormatString, $aDateParts[0], $aDateParts[1], $aDateParts[2]);
-        $aPosData = array();
+        $aPosData = [];
         $aPosData[strpos($this->sqlData['date_format'], 'd')] = 'day';
         $aPosData[strpos($this->sqlData['date_format'], 'm')] = 'month';
         $aPosData[strpos($this->sqlData['date_format'], 'y')] = 'year';
         ksort($aPosData);
         $iIndex = 0;
-        $aNewDateParts = array('day' => '', 'month' => '', 'year' => '');
+        $aNewDateParts = ['day' => '', 'month' => '', 'year' => ''];
         foreach ($aPosData as $pos => $type) {
             $aNewDateParts[$type] = $aDateParts[$iIndex];
             ++$iIndex;
@@ -331,18 +331,18 @@ class TCMSLocal extends TCMSRecord
 
         // now do time part...
         if (!empty($sTimePart)) {
-            $aTimeParts = array(0 => '', 1 => '', 2 => '');
-            $sTimeFormatString = str_replace(array('h', 'm', 's'), array('%d', '%d', '%d'), $this->sqlData['time_format']);
+            $aTimeParts = [0 => '', 1 => '', 2 => ''];
+            $sTimeFormatString = str_replace(['h', 'm', 's'], ['%d', '%d', '%d'], $this->sqlData['time_format']);
             sscanf($sTimePart, $sTimeFormatString, $aTimeParts[0], $aTimeParts[1], $aTimeParts[2]);
 
             // find positions...
-            $aPosData = array();
+            $aPosData = [];
             $aPosData[strpos($this->sqlData['time_format'], 'h')] = 'hour';
             $aPosData[strpos($this->sqlData['time_format'], 'm')] = 'minute';
             $aPosData[strpos($this->sqlData['time_format'], 's')] = 'second';
             ksort($aPosData);
             $iIndex = 0;
-            $aNewTimeParts = array('hour' => '', 'minute' => '', 'second' => '');
+            $aNewTimeParts = ['hour' => '', 'minute' => '', 'second' => ''];
             foreach ($aPosData as $pos => $type) {
                 $aNewTimeParts[$type] = $aTimeParts[$iIndex];
                 ++$iIndex;
@@ -358,6 +358,6 @@ class TCMSLocal extends TCMSRecord
      */
     private static function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

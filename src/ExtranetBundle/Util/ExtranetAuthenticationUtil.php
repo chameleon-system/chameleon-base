@@ -22,9 +22,6 @@ class ExtranetAuthenticationUtil implements ExtranetAuthenticationUtilInterface
      */
     private $requestStack;
 
-    /**
-     * @param RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -44,9 +41,6 @@ class ExtranetAuthenticationUtil implements ExtranetAuthenticationUtilInterface
         return (string) $request->request->get(ExtranetUserConstants::LOGIN_FORM_FIELD_LOGIN_NAME, '');
     }
 
-    /**
-     * @return Request|null
-     */
     private function getCurrentRequest(): ?Request
     {
         return $this->requestStack->getCurrentRequest();

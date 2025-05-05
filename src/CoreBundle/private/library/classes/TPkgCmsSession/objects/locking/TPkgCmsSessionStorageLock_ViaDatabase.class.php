@@ -97,9 +97,6 @@ class TPkgCmsSessionStorageLock_ViaDatabase implements IPkgCmsSessionStorageLock
         return $bMyLock;
     }
 
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     */
     public function setDatabaseConnection(Connection $connection)
     {
         $this->databaseConnection = $connection;

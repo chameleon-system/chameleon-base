@@ -5,7 +5,6 @@ namespace ChameleonSystem\DataAccessBundle\Entity\CoreMedia;
 use ChameleonSystem\DataAccessBundle\Entity\Core\CmsTags;
 use ChameleonSystem\DataAccessBundle\Entity\Core\CmsUser;
 use ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -13,22 +12,20 @@ class CmsMedia
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldNumber
         /** @var int - Height */
         private int $height = 0,
         // TCMSFieldLookup
         /** @var CmsFiletype|null - Image type */
-        private ?CmsFiletype $cmsFiletype = null
-        ,
+        private ?CmsFiletype $cmsFiletype = null,
         // TCMSFieldNumber
         /** @var int - File size */
         private int $filesize = 0,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Image category */
-        private ?CmsTree $cmsMediaTree = null
-        ,
+        private ?CmsTree $cmsMediaTree = null,
         // TCMSFieldNumber
         /** @var int - Width */
         private int $width = 0,
@@ -49,8 +46,7 @@ class CmsMedia
         private string $systemname = '',
         // TCMSFieldLookupMultiselectTags
         /** @var Collection<int, CmsTags> - Tags */
-        private Collection $cmsTagsCollection = new ArrayCollection()
-        ,
+        private Collection $cmsTagsCollection = new ArrayCollection(),
         // TCMSFieldVarchar
         /** @var string - Custom file name */
         private string $customFilename = '',
@@ -59,8 +55,7 @@ class CmsMedia
         private string $path = '',
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Preview image */
-        private ?CmsMedia $cmsMedia = null
-        ,
+        private ?CmsMedia $cmsMedia = null,
         // TCMSFieldExternalVideoCode
         /** @var string - Video HTML code */
         private string $externalEmbedCode = '',
@@ -68,18 +63,17 @@ class CmsMedia
         /** @var string - Thumbnail of an external video */
         private string $externalVideoThumbnail = '',
         // TCMSFieldTimestamp
-        /** @var DateTime|null - Last changed on */
-        private ?DateTime $timeStamp = null,
+        /** @var \DateTime|null - Last changed on */
+        private ?\DateTime $timeStamp = null,
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - Last changed */
-        private ?DateTime $dateChanged = new DateTime(),
+        /** @var \DateTime|null - Last changed */
+        private ?\DateTime $dateChanged = new \DateTime(),
         // TCMSFieldVarchar
         /** @var string - Refresh Token */
         private string $refreshToken = '',
         // TCMSFieldCMSUser
         /** @var CmsUser|null - Last changed by */
-        private ?CmsUser $cmsUser = null
-        ,
+        private ?CmsUser $cmsUser = null,
         // TCMSFieldExternalVideoID
         /** @var string - Video ID with external host */
         private string $externalVideoId = ''
@@ -123,7 +117,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsFiletype(): ?CmsFiletype
     {
@@ -136,7 +129,6 @@ class CmsMedia
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getFilesize(): int
@@ -151,7 +143,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getCmsMediaTree(): ?CmsTree
     {
@@ -164,7 +155,6 @@ class CmsMedia
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getWidth(): int
@@ -179,7 +169,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getDescription(): string
     {
@@ -192,7 +181,6 @@ class CmsMedia
 
         return $this;
     }
-
 
     // TCMSFieldText
     public function getMetatags(): string
@@ -207,7 +195,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFiletypes(): string
     {
@@ -220,7 +207,6 @@ class CmsMedia
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getAltTag(): string
@@ -235,7 +221,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemname(): string
     {
@@ -248,8 +233,6 @@ class CmsMedia
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectTags
 
@@ -283,7 +266,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getCustomFilename(): string
     {
@@ -296,7 +278,6 @@ class CmsMedia
 
         return $this;
     }
-
 
     // TCMSFieldMediaPath
     public function getPath(): string
@@ -311,7 +292,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -324,7 +304,6 @@ class CmsMedia
 
         return $this;
     }
-
 
     // TCMSFieldExternalVideoCode
     public function getExternalEmbedCode(): string
@@ -339,7 +318,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldText
     public function getExternalVideoThumbnail(): string
     {
@@ -353,34 +331,31 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldTimestamp
-    public function getTimeStamp(): ?DateTime
+    public function getTimeStamp(): ?\DateTime
     {
         return $this->timeStamp;
     }
 
-    public function setTimeStamp(?DateTime $timeStamp): self
+    public function setTimeStamp(?\DateTime $timeStamp): self
     {
         $this->timeStamp = $timeStamp;
 
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getDateChanged(): ?DateTime
+    public function getDateChanged(): ?\DateTime
     {
         return $this->dateChanged;
     }
 
-    public function setDateChanged(?DateTime $dateChanged): self
+    public function setDateChanged(?\DateTime $dateChanged): self
     {
         $this->dateChanged = $dateChanged;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getRefreshToken(): string
@@ -395,7 +370,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldCMSUser
     public function getCmsUser(): ?CmsUser
     {
@@ -409,7 +383,6 @@ class CmsMedia
         return $this;
     }
 
-
     // TCMSFieldExternalVideoID
     public function getExternalVideoId(): string
     {
@@ -422,6 +395,4 @@ class CmsMedia
 
         return $this;
     }
-
-
 }

@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class PkgCmsCounter
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -18,7 +17,7 @@ class PkgCmsCounter
         // TCMSFieldExtendedLookupMultiTable
         /** @var string - Owner */
         private string $owner = '',
-// TCMSFieldExtendedLookupMultiTable
+        // TCMSFieldExtendedLookupMultiTable
         /** @var string - Owner */
         private string $ownerTableName = '',
         // TCMSFieldNumber
@@ -64,7 +63,6 @@ class PkgCmsCounter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemName(): string
     {
@@ -77,7 +75,6 @@ class PkgCmsCounter
 
         return $this;
     }
-
 
     // TCMSFieldExtendedLookupMultiTable
     public function getOwner(): string
@@ -92,7 +89,7 @@ class PkgCmsCounter
         return $this;
     }
 
-// TCMSFieldExtendedLookupMultiTable
+    // TCMSFieldExtendedLookupMultiTable
     public function getOwnerTableName(): string
     {
         return $this->ownerTableName;
@@ -104,7 +101,6 @@ class PkgCmsCounter
 
         return $this;
     }
-
 
     // TCMSFieldNumber
     public function getValue(): int
@@ -118,6 +114,4 @@ class PkgCmsCounter
 
         return $this;
     }
-
-
 }

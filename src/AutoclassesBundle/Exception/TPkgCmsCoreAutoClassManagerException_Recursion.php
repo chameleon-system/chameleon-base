@@ -16,17 +16,17 @@ class TPkgCmsCoreAutoClassManagerException_Recursion extends TPkgCmsCoreAutoClas
     /**
      * @var string|null
      */
-    private $sNameOfClassAttemptedToGenerate = null;
+    private $sNameOfClassAttemptedToGenerate;
     /**
      * @var array|null
      */
-    private $aClassCallStack = null;
+    private $aClassCallStack;
 
     /**
      * @param string $sNameOfClassAttemptedToGenerate
-     * @param array  $aClassCallStack
+     * @param array $aClassCallStack
      * @param string $filename
-     * @param int    $lineno
+     * @param int $lineno
      */
     public function __construct($sNameOfClassAttemptedToGenerate, $aClassCallStack, $filename, $lineno)
     {

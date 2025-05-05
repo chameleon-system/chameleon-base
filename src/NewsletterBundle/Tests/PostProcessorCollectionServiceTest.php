@@ -19,7 +19,7 @@ class PostProcessorCollectionServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_processes_text_using_a_processor()
+    public function itProcessesTextUsingAProcessor()
     {
         $processor1 = $this->getMockBuilder('\ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorInterface')->getMock();
         $processor1->expects($this->once())->method('process')->will($this->returnValue('1'));
@@ -37,7 +37,7 @@ class PostProcessorCollectionServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_processes_text_using_multiple_processors()
+    public function itProcessesTextUsingMultipleProcessors()
     {
         $userData = $this->getMockBuilder('\ChameleonSystem\NewsletterBundle\PostProcessing\Bridge\NewsletterUserDataModel')->disableOriginalConstructor()->getMock();
         $processor1 = $this->getMockBuilder('\ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorInterface')->getMock();
@@ -45,9 +45,9 @@ class PostProcessorCollectionServiceTest extends TestCase
         $processor2 = $this->getMockBuilder('\ChameleonSystem\NewsletterBundle\PostProcessing\PostProcessorInterface')->getMock();
         $processor2->expects($this->once())->method('process')->will(
             $this->returnValueMap(
-                array(
-                    array('1', $userData, 'correct'),
-                )
+                [
+                    ['1', $userData, 'correct'],
+                ]
             )
         );
 
@@ -63,7 +63,7 @@ class PostProcessorCollectionServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_processes_text_using_no_processors()
+    public function itProcessesTextUsingNoProcessors()
     {
         $userData = $this->getMockBuilder('\ChameleonSystem\NewsletterBundle\PostProcessing\Bridge\NewsletterUserDataModel')->disableOriginalConstructor()->getMock();
         $processorService = new PostProcessorCollectionService();

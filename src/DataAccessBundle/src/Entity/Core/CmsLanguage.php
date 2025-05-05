@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class CmsLanguage
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Name */
@@ -58,7 +57,6 @@ class CmsLanguage
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isActiveForFrontEnd(): bool
     {
@@ -72,7 +70,6 @@ class CmsLanguage
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getIso6391(): string
     {
@@ -85,6 +82,4 @@ class CmsLanguage
 
         return $this;
     }
-
-
 }

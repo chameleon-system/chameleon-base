@@ -11,7 +11,7 @@
 
 /**
  * Mapper for changelog items. Needs the pkgCmsChangeLog package installed.
-/**/
+ * /**/
 class Mapper_PkgCmsChangelog extends AbstractViewMapper
 {
     /**

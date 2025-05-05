@@ -12,10 +12,6 @@
 namespace ChameleonSystem\CoreBundle\Util;
 
 use Doctrine\DBAL\Connection;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsTplPage;
-use TdbCmsTree;
 
 class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
 {
@@ -32,11 +28,6 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
      */
     private $fieldTranslationUtil;
 
-    /**
-     * @param UrlUtil              $urlUtil
-     * @param Connection           $databaseConnection
-     * @param FieldTranslationUtil $fieldTranslationUtil
-     */
     public function __construct(UrlUtil $urlUtil, Connection $databaseConnection, FieldTranslationUtil $fieldTranslationUtil)
     {
         $this->urlUtil = $urlUtil;
@@ -47,13 +38,13 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
     /**
      * {@inheritdoc}
      */
-    public function getNaviLookup(TdbCmsPortal $portal, TdbCmsLanguage $language)
+    public function getNaviLookup(\TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
-        $lookup = array();
+        $lookup = [];
         $naviList = $portal->GetFieldPropertyNavigationsList();
         $naviList->GoToStart();
         while ($navi = $naviList->Next()) {
-            $rootNode = TdbCmsTree::GetNewInstance($navi->fieldTreeNode);
+            $rootNode = \TdbCmsTree::GetNewInstance($navi->fieldTreeNode);
             $naviNodes = $this->getTreeLookup($portal->fieldHomeNodeId, $rootNode, '', true, $portal, $language);
             $lookup = array_merge($lookup, $naviNodes);
         }
@@ -65,18 +56,15 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
      * loads the full subtree for a node
      * called recursively.
      *
-     * @param string         $portalHomeNodeId
-     * @param TdbCmsTree     $node
-     * @param string         $pathToNode
-     * @param bool           $jumpToChildren
-     * @param TdbCmsPortal   $portal
-     * @param TdbCmsLanguage $language
+     * @param string $portalHomeNodeId
+     * @param string $pathToNode
+     * @param bool $jumpToChildren
      *
      * @return array
      */
-    private function getTreeLookup($portalHomeNodeId, TdbCmsTree $node, $pathToNode, $jumpToChildren, TdbCmsPortal $portal, TdbCmsLanguage $language)
+    private function getTreeLookup($portalHomeNodeId, \TdbCmsTree $node, $pathToNode, $jumpToChildren, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
-        $lookup = array();
+        $lookup = [];
         if ('' !== $node->fieldLink) {
             return $lookup;
         }
@@ -85,17 +73,17 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
             $linkedPage = $node->GetLinkedPageObject();
             $pathToNode = $this->urlUtil->normalizeURL($pathToNode.'/'.$node->fieldUrlname, $portal, $language);
             if (null !== $linkedPage && false !== $linkedPage) {
-                $groups = array();
+                $groups = [];
                 if (true === $linkedPage->fieldExtranetPage) {
                     $groups = $linkedPage->GetMLTIdList('data_extranet_group', 'data_extranet_group_mlt');
                 }
-                $lookup[$pathToNode] = array(
+                $lookup[$pathToNode] = [
                     'id' => $linkedPage->id,
                     'usessl' => $linkedPage->fieldUsessl,
                     'extranet_page' => $linkedPage->fieldExtranetPage,
                     'access_not_confirmed_user' => $linkedPage->fieldAccessNotConfirmedUser,
                     'data_extranet_group_mlt' => $groups,
-                );
+                ];
 
                 if ($node->id === $portalHomeNodeId) {
                     $lookup['/'] = $lookup[$pathToNode];
@@ -114,7 +102,7 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
     /**
      * {@inheritdoc}
      */
-    public function getPageTreeNodes(TdbCmsTplPage $page, TdbCmsLanguage $language = null)
+    public function getPageTreeNodes(\TdbCmsTplPage $page, ?\TdbCmsLanguage $language = null)
     {
         $query = "SELECT *
           FROM `cms_tree`
@@ -137,7 +125,7 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
         $count = 0;
         $primaryTreeIdPosition = 0;
         while ($row = $result->fetchAssociative()) {
-            $node = new TdbCmsTree();
+            $node = new \TdbCmsTree();
             if (null !== $language) {
                 $node->SetLanguage($language->id);
             }
@@ -161,7 +149,7 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllPageAssignments(TdbCmsPortal $portal, TdbCmsLanguage $language)
+    public function getAllPageAssignments(\TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
         $activeFieldName = $this->fieldTranslationUtil->getTranslatedFieldName('cms_tree_node', 'active', $language);
         $activeFieldName = $this->databaseConnection->quoteIdentifier($activeFieldName);
@@ -192,8 +180,8 @@ class RoutingUtilDataAccess implements RoutingUtilDataAccessInterface
         ]);
 
         $pageAssignmentList = [];
-        foreach($result->fetchAllAssociative() as $row) {
-//        while ($row = $result->fetch()) {
+        foreach ($result->fetchAllAssociative() as $row) {
+            //        while ($row = $result->fetch()) {
             $pageId = $row['page_id'];
             $treeId = $row['tree_id'];
 

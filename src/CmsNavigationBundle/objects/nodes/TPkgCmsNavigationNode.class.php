@@ -26,10 +26,9 @@ class TPkgCmsNavigationNode extends AbstractPkgCmsNavigationNode
         }
         if (null === $this->aChildren) {
             if (null !== $this->getNodeCopy()) {
-                $this->aChildren = array();
+                $this->aChildren = [];
                 $oChildren = $this->getNodeCopy()->GetChildren();
                 while ($oChild = $oChildren->Next()) {
-
                     /** @psalm-var class-string<self> $sClass */
                     $sClass = get_class($this);
                     $oNaviNode = new $sClass();
@@ -73,8 +72,6 @@ class TPkgCmsNavigationNode extends AbstractPkgCmsNavigationNode
     }
 
     /**
-     * @param TdbCmsTree $oNode
-     *
      * @return void
      */
     private function setFromCmsTreeNode(TdbCmsTree $oNode)
@@ -143,6 +140,6 @@ class TPkgCmsNavigationNode extends AbstractPkgCmsNavigationNode
      */
     private function getTreeService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.tree_service');
     }
 }

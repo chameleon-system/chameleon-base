@@ -16,7 +16,7 @@ class NodeFactory implements NodeFactoryInterface
     /**
      * @var array<string, class-string>
      */
-    private $tableToClassCache = array();
+    private $tableToClassCache = [];
 
     /**
      * {@inheritdoc}
@@ -25,7 +25,7 @@ class NodeFactory implements NodeFactoryInterface
     {
         $className = $this->getClassNameForTable($tableName);
 
-        return call_user_func(array($className, 'GetNewInstance'), $nodeData);
+        return call_user_func([$className, 'GetNewInstance'], $nodeData);
     }
 
     /**
@@ -35,11 +35,12 @@ class NodeFactory implements NodeFactoryInterface
     {
         $className = $this->getClassNameForTable($tableName);
 
-        return call_user_func(array($className, 'GetNewInstance'), $nodeId);
+        return call_user_func([$className, 'GetNewInstance'], $nodeId);
     }
 
     /**
      * @param string $tableName
+     *
      * @return class-string
      */
     private function getClassNameForTable($tableName)

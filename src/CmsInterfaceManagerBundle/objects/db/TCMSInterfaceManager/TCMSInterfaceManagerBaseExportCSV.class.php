@@ -18,7 +18,7 @@
  */
 class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
 {
-    const TMP_TBL_PREFIX = '_tmpexport';
+    public const TMP_TBL_PREFIX = '_tmpexport';
 
     /**
      * write csv filepath to this variable so that the calling class can get the created csv file.
@@ -31,6 +31,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
      * OVERWRITE THIS TO FETCH THE DATA. MUST RETURN A TCMSRecordList.
      *
      * @return TCMSRecordList<TItem>
+     *
      * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      */
     protected function GetDataList()
@@ -46,7 +47,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
      */
     protected function GetFieldMapping()
     {
-        $aFields = array('datecreated' => 'DATETIME NOT NULL', 'somefield' => 'VARCHAR( 255 ) NOT NULL');
+        $aFields = ['datecreated' => 'DATETIME NOT NULL', 'somefield' => 'VARCHAR( 255 ) NOT NULL'];
 
         return $aFields;
     }
@@ -65,6 +66,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
 
     /**
      * @return string
+     *
      * @throws TPkgCmsException_Log
      */
     protected function GetExportTableName()
@@ -129,7 +131,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
     protected function SaveRow($aRow)
     {
         $aFields = $this->GetFieldMapping();
-        $aInsert = array();
+        $aInsert = [];
         foreach (array_keys($aFields) as $sKeyName) {
             if (array_key_exists($sKeyName, $aRow)) {
                 $aFields[$sKeyName] = $aRow[$sKeyName];
@@ -218,7 +220,7 @@ class TCMSInterfaceManagerBaseExportCSV extends TCMSInterfaceManagerBase
     {
         $sLine = '';
         foreach ($aRow as $sValue) {
-            $sValue = str_replace(array('"', "\n"), array('\\"', ' '), $sValue);
+            $sValue = str_replace(['"', "\n"], ['\\"', ' '], $sValue);
             $sLine .= '"'.$sValue.'";';
         }
         $sLine .= "\n";

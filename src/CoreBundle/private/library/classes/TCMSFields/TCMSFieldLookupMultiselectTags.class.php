@@ -32,7 +32,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
      *
      * @var TdbCmsTagsList|null
      */
-    protected $oConnectedMLTRecords = null;
+    protected $oConnectedMLTRecords;
 
     /**
      * defines the amount of tags that should be shown as suggestions.
@@ -51,10 +51,9 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
     /**
      * language suffix for name field of cms_tags if field based translation is active.
      *
-     *
      * @var string|null - "__en"
      */
-    protected $sLanguageIsoName = null;
+    protected $sLanguageIsoName;
 
     public function GetHTML()
     {
@@ -82,7 +81,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
 
         if ($this->bShowSuggestions) {
             $html .= '<p id="'.TGlobal::OutHTML($this->name).'_suggestions" class="mt-2 tagSuggestions">
-<span class="label">'.TGlobal::OutHTML(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_tag.suggestions')).': </span>
+<span class="label">'.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select_tag.suggestions')).': </span>
 <span class="tagSuggestionList"></span>
 </p>';
         }
@@ -94,7 +93,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
     {
         $tableConf = $this->oTableRow->GetTableConf();
 
-        return array(
+        return [
             'pagedef' => 'tableeditor',
             '_rmhist' => 'false',
             'module_fnc[contentmodule]' => 'ExecuteAjaxCall',
@@ -102,7 +101,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
             'id' => $this->recordId,
             'tableid' => $tableConf->id,
             '_fieldName' => $this->name,
-        );
+        ];
     }
 
     private function getTagAutocompleteUrl(): string
@@ -124,7 +123,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('GetTagList', 'GetTagSuggestions', 'getAutocompleteTagList');
+        $externalFunctions = ['GetTagList', 'GetTagSuggestions', 'getAutocompleteTagList'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -177,7 +176,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
      */
     public function GetTagList()
     {
-        $aFoundTags = array();
+        $aFoundTags = [];
         $oGlobal = TGlobal::instance();
 
         $inputFilter = $this->getInputFilterUtil();
@@ -229,7 +228,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
             $iTagUsageCount = $oRecord->fieldCount;
             $name = $oRecord->GetName();
             if (!empty($name)) {
-                $aFoundTags[] = array('tag' => $name, 'freq' => $iTagUsageCount);
+                $aFoundTags[] = ['tag' => $name, 'freq' => $iTagUsageCount];
             }
         }
 
@@ -254,7 +253,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         $oTagTableConf->LoadFromField('name', 'cms_tags');
 
         // loop through tags and insert missing tags to database
-        $aTagIDs = array();
+        $aTagIDs = [];
         foreach ($tags as $tag) {
             $cleanTag = trim(strtolower($tag));
             if ('' !== $cleanTag) {
@@ -266,7 +265,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
                     // tag not yet in database, so perform an insert
                     $oTableManager = new TCMSTableEditorManager();
                     $oTableManager->Init($oTagTableConf->id, null);
-                    $aDefaultData = array('name' => $cleanTag, 'urlname' => $this->getUrlNormalizationUtil()->normalizeUrl($cleanTag));
+                    $aDefaultData = ['name' => $cleanTag, 'urlname' => $this->getUrlNormalizationUtil()->normalizeUrl($cleanTag)];
                     $oTableManager->Save($aDefaultData);
                     $aTagIDs[] = $oTableManager->sId;
                 } else {
@@ -285,7 +284,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
             $oTableConf->LoadFromField('name', $this->sTableName);
 
             /** @var $aConnectedIds array */
-            $aConnectedIds = array();
+            $aConnectedIds = [];
 
             $sAlreadyConnectedQuery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTableName)."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($recordId)."'";
             $tRes = MySqlLegacySupport::getInstance()->query($sAlreadyConnectedQuery);
@@ -324,7 +323,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
      */
     public function GetTagSuggestions()
     {
-        $aTagSuggestions = array();
+        $aTagSuggestions = [];
 
         $oGlobal = TGlobal::instance();
         $sConnectedTagIds = '';
@@ -362,7 +361,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         /** @var BackendSessionInterface $backendSession */
         $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
-        $aTagSuggestionsFinal = array();
+        $aTagSuggestionsFinal = [];
         if (!empty($sConnectedTagIds)) {
             $sQuery = '
         SELECT DISTINCT `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`.* FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'`
@@ -392,14 +391,14 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
             $aTagSuggestions = array_reverse($aTagSuggestions);
 
             reset($aTagSuggestions);
-            $aTagSuggestionsFinal = array();
+            $aTagSuggestionsFinal = [];
             $i = 0;
             foreach ($aTagSuggestions as $sTag => $iCount) {
                 ++$i;
                 if ($i == $this->iMaxTagSuggestions) {
                     break;
                 }
-                $aTagSuggestionsFinal[] = array('id' => $sTag, 'name' => $sTag);
+                $aTagSuggestionsFinal[] = ['id' => $sTag, 'name' => $sTag];
             }
         }
 
@@ -428,7 +427,7 @@ class TCMSFieldLookupMultiselectTags extends TCMSFieldLookupMultiselect
         $sReturnTags = '';
         $aTagData = explode(',', $this->data);
         if (count($aTagData) > 0) {
-            $aValidTags = array();
+            $aValidTags = [];
             foreach ($aTagData as $sTagName) {
                 if ('' !== trim($sTagName)) {
                     $aValidTags[] = trim($sTagName);

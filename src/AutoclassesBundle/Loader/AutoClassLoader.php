@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * manages class auto-loading. Details see Ticket #8793.
-/**/
+ * /**/
 class AutoClassLoader
 {
     /**
@@ -26,7 +26,7 @@ class AutoClassLoader
     /**
      * @var array
      */
-    private static $runningNestedSearchForClass = array();
+    private static $runningNestedSearchForClass = [];
     /**
      * @var string we hold the autoclasses dir in this variable to avoid lots of container parameter lookups
      */
@@ -34,6 +34,7 @@ class AutoClassLoader
 
     /**
      * @param class-string $sClassName
+     *
      * @return bool
      */
     public static function loadClassDefinition($sClassName)
@@ -109,7 +110,7 @@ class AutoClassLoader
         }
         self::$aClassRepository = false;
         self::$autoclassesDir = self::getAutoclassesDir();
-        $sFullFile = self::$autoclassesDir.'/'.'autoloader.chameleon.txt';
+        $sFullFile = self::$autoclassesDir.'/autoloader.chameleon.txt';
         if (file_exists($sFullFile)) {
             self::$aClassRepository = include $sFullFile;
         }

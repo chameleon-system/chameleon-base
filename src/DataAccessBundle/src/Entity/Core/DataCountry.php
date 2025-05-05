@@ -6,7 +6,7 @@ class DataCountry
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldBoolean
         /** @var bool - Active */
@@ -16,8 +16,7 @@ class DataCountry
         private string $name = '',
         // TCMSFieldLookup
         /** @var TCountry|null - System country */
-        private ?TCountry $tCountry = null
-        ,
+        private ?TCountry $tCountry = null,
         // TCMSFieldBoolean
         /** @var bool - Belongs to main group */
         private bool $primaryGroup = false,
@@ -64,7 +63,6 @@ class DataCountry
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -77,7 +75,6 @@ class DataCountry
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getTCountry(): ?TCountry
@@ -92,7 +89,6 @@ class DataCountry
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isPrimaryGroup(): bool
     {
@@ -106,7 +102,6 @@ class DataCountry
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getPostalcodePattern(): string
     {
@@ -119,6 +114,4 @@ class DataCountry
 
         return $this;
     }
-
-
 }

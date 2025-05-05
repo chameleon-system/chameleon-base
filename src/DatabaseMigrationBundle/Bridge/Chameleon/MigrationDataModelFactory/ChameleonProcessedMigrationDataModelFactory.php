@@ -12,8 +12,8 @@
 namespace ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\MigrationDataModelFactory;
 
 use ChameleonSystem\DatabaseMigration\DataAccess\MigrationDataAccessInterface;
-use ChameleonSystem\DatabaseMigration\Factory\MigrationDataModelFactoryInterface;
 use ChameleonSystem\DatabaseMigration\DataModel\MigrationDataModel;
+use ChameleonSystem\DatabaseMigration\Factory\MigrationDataModelFactoryInterface;
 
 class ChameleonProcessedMigrationDataModelFactory implements MigrationDataModelFactoryInterface
 {
@@ -22,9 +22,6 @@ class ChameleonProcessedMigrationDataModelFactory implements MigrationDataModelF
      */
     private $migrationDataAccess;
 
-    /**
-     * @param MigrationDataAccessInterface $migrationDataAccess
-     */
     public function __construct(MigrationDataAccessInterface $migrationDataAccess)
     {
         $this->migrationDataAccess = $migrationDataAccess;

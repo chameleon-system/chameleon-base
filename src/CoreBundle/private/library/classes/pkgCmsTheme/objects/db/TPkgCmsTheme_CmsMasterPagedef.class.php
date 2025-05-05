@@ -26,7 +26,7 @@ class TPkgCmsTheme_CmsMasterPagedef extends TPkgCmsTheme_CmsMasterPagedefAutoPar
                                     WHERE `cms_master_pagedef_pkg_cms_theme_block_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
                         ";
         $oSpotsBlock = TdbCmsMasterPagedefSpotList::GetList($sQuery);
-        while ($oSpotBlock = $oSpotsBlock->Next()) { /*@var $oSpot TCMSMasterPagedefSpot*/
+        while ($oSpotBlock = $oSpotsBlock->Next()) { /* @var $oSpot TCMSMasterPagedefSpot */
             $aSpots[$oSpotBlock->sName] = $oSpotBlock;
         }
 

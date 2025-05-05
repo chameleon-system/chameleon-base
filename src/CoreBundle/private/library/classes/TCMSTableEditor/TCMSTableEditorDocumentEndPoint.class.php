@@ -592,7 +592,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
             // edit
             if ($securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT, $this->oTableConf->sqlData['name'])) {
                 $oMenuItem = new TCMSTableEditorMenuItem();
-                $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.action.save_and_return');
+                $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.action.save_and_return');
                 $oMenuItem->sIcon = 'far fa-save';
                 $oMenuItem->sOnClick = 'SaveViaAjaxCustomCallback(postSaveHook, true);';
                 $this->oMenuItems->AddItem($oMenuItem);
@@ -600,7 +600,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
 
             // usage
             $oMenuItem = new TCMSTableEditorMenuItem();
-            $oMenuItem->sDisplayName = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_document.action_use');
+            $oMenuItem->sDisplayName = ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_document.action_use');
             $oMenuItem->sItemKey = 'usage';
             $oMenuItem->sIcon = 'far fa-list-alt';
             $oMenuItem->sOnClick = "GetUsages('".$this->oTable->id."', 'document');";
@@ -651,7 +651,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
               assignedDocumentHTML += data.downloadHTML;
               assignedDocumentHTML += '</td>';
               assignedDocumentHTML += '<td>';
-              assignedDocumentHTML += '<button class=\"btn btn-danger btn-sm\" type=\"button\" onclick=\"if(confirm(\'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_document.action_remove_confirm')."?\')){removeDocument(parent._fieldName,data.id,parent._recordID,parent._tableID)};\"><i class=\"far fa-trash-alt mr-2\"></i>".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_document.action_remove')."';
+              assignedDocumentHTML += '<button class=\"btn btn-danger btn-sm\" type=\"button\" onclick=\"if(confirm(\'".ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_document.action_remove_confirm')."?\')){removeDocument(parent._fieldName,data.id,parent._recordID,parent._tableID)};\"><i class=\"far fa-trash-alt mr-2\"></i>".ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_document.action_remove')."';
               assignedDocumentHTML += '</td>';
               assignedDocumentHTML += '</tr>';
               assignedDocumentHTML += '</table>';

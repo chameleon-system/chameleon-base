@@ -12,13 +12,13 @@
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Psr\Log\LoggerInterface;
 
-class TPkgCmsSessionHandler_Decorator_Locking extends \Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy
+class TPkgCmsSessionHandler_Decorator_Locking extends Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy
 {
     // **************************************************************************
     /**
      * @var IPkgCmsSessionStorageLock
      */
-    private $oLockManager = null;
+    private $oLockManager;
     private $bRequireWriteLock = false;
 
     /**

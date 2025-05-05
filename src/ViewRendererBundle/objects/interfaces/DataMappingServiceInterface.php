@@ -11,35 +11,27 @@
 
 namespace ChameleonSystem\ViewRendererBundle\objects\interfaces;
 
-use IViewMapper;
-use MapperException;
-
 interface DataMappingServiceInterface
 {
-    /**
-     * @param DataMappingServiceHelperFactoryInterface $helperFactory
-     */
     public function __construct(DataMappingServiceHelperFactoryInterface $helperFactory);
 
     /**
-     * @param IViewMapper[] $aMappers
+     * @param \IViewMapper[] $aMappers
      *
      * @return void
      */
     public function addMappers(array $aMappers);
 
     /**
-     * @param IViewMapper $oMapper
-     * @param array<string, string>|null  $transformations
-     * @param string  $mapToArray
+     * @param array<string, string>|null $transformations
+     * @param string $mapToArray
      *
      * @return void
      */
-    public function addMapper(IViewMapper $oMapper, $transformations = null, $mapToArray = null);
+    public function addMapper(\IViewMapper $oMapper, $transformations = null, $mapToArray = null);
 
     /**
      * @param string $key
-     * @param mixed $value
      *
      * @return void
      */
@@ -51,8 +43,6 @@ interface DataMappingServiceInterface
     public function getSourceData();
 
     /**
-     * @param array $aVars
-     *
      * @return void
      */
     public function addSourceObjectsFromArray(array $aVars);
@@ -60,7 +50,7 @@ interface DataMappingServiceInterface
     /**
      * @return DataMappingServiceResponseInterface
      *
-     * @throws MapperException
+     * @throws \MapperException
      */
     public function performTransformation();
 
@@ -70,7 +60,7 @@ interface DataMappingServiceInterface
     public function hasMappers();
 
     /**
-     * @return class-string<IViewMapper>[]
+     * @return class-string<\IViewMapper>[]
      */
     public function getMapperNameList();
 
@@ -82,8 +72,7 @@ interface DataMappingServiceInterface
     public function reset();
 
     /**
-     * @param string                      $mappingServiceName
-     * @param DataMappingServiceInterface $mappingService
+     * @param string $mappingServiceName
      *
      * @return void
      */

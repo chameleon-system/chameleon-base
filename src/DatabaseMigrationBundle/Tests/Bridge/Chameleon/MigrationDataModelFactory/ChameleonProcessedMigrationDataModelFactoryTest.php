@@ -17,12 +17,13 @@ class ChameleonProcessedMigrationDataModelFactoryTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider getDatabaseAccessResultAndMigrationModels
      *
-     * @param array                $alreadyProcessedUpdates
+     * @param array $alreadyProcessedUpdates
      * @param MigrationDataModel[] $expectedMigrationModels
      */
-    public function it_creates_migration_data_models($alreadyProcessedUpdates, array $expectedMigrationModels)
+    public function itCreatesMigrationDataModels($alreadyProcessedUpdates, array $expectedMigrationModels)
     {
         $migrationManagerMock = $this->createMock('\ChameleonSystem\DatabaseMigration\DataAccess\MigrationDataAccessInterface');
         $migrationManagerMock->expects($this->any())->method('getProcessedMigrationData')->will($this->returnValue($alreadyProcessedUpdates));
@@ -36,21 +37,21 @@ class ChameleonProcessedMigrationDataModelFactoryTest extends TestCase
      */
     public function getDatabaseAccessResultAndMigrationModels()
     {
-        return array(
-            array(
+        return [
+            [
                 // processed updates
-                array(
+                [
                     ['bundle_name' => 'ChameleonSystemCmsClassManagerBundle', 'build_number' => 1],
                     ['bundle_name' => 'ChameleonSystemCmsClassManagerBundle', 'build_number' => 2],
                     ['bundle_name' => 'EsonoCustomerBundle', 'build_number' => 1],
                     ['bundle_name' => 'EsonoCustomerBundle', 'build_number' => 2],
-                ),
+                ],
                 // expected migration models
-                array(
-                    'ChameleonSystemCmsClassManagerBundle' => new MigrationDataModel('ChameleonSystemCmsClassManagerBundle', array('1' => '', '2' => '')),
-                    'EsonoCustomerBundle' => new MigrationDataModel('EsonoCustomerBundle', array('1' => '', '2' => '')),
-                ),
-            ),
-        );
+                [
+                    'ChameleonSystemCmsClassManagerBundle' => new MigrationDataModel('ChameleonSystemCmsClassManagerBundle', ['1' => '', '2' => '']),
+                    'EsonoCustomerBundle' => new MigrationDataModel('EsonoCustomerBundle', ['1' => '', '2' => '']),
+                ],
+            ],
+        ];
     }
 }

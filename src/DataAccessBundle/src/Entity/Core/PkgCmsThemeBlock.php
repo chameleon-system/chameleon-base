@@ -11,7 +11,7 @@ class PkgCmsThemeBlock
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Descriptive name */
@@ -21,16 +21,13 @@ class PkgCmsThemeBlock
         private string $systemName = '',
         // TCMSFieldPropertyTable
         /** @var Collection<int, CmsMasterPagedefSpot> - Spots */
-        private Collection $cmsMasterPagedefSpotCollection = new ArrayCollection()
-        ,
+        private Collection $cmsMasterPagedefSpotCollection = new ArrayCollection(),
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgCmsThemeBlockLayout> - Layouts */
-        private Collection $pkgCmsThemeBlockLayoutCollection = new ArrayCollection()
-        ,
+        private Collection $pkgCmsThemeBlockLayoutCollection = new ArrayCollection(),
         // TCMSFieldLookup
         /** @var PkgCmsThemeBlockLayout|null - Default layout */
-        private ?PkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout = null
-        ,
+        private ?PkgCmsThemeBlockLayout $pkgCmsThemeBlockLayout = null,
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Preview image */
         private ?CmsMedia $cmsMedia = null
@@ -74,7 +71,6 @@ class PkgCmsThemeBlock
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemName(): string
     {
@@ -87,8 +83,6 @@ class PkgCmsThemeBlock
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -122,8 +116,6 @@ class PkgCmsThemeBlock
         return $this;
     }
 
-
-
     // TCMSFieldPropertyTable
 
     /**
@@ -156,7 +148,6 @@ class PkgCmsThemeBlock
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getPkgCmsThemeBlockLayout(): ?PkgCmsThemeBlockLayout
     {
@@ -170,7 +161,6 @@ class PkgCmsThemeBlock
         return $this;
     }
 
-
     // TCMSFieldExtendedLookupMedia
     public function getCmsMedia(): ?CmsMedia
     {
@@ -183,6 +173,4 @@ class PkgCmsThemeBlock
 
         return $this;
     }
-
-
 }

@@ -12,12 +12,11 @@ class PkgNewsletterGroup
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldExtendedLookupMedia
         /** @var CmsMedia|null - Logo header image of newsletter */
-        private ?CmsMedia $logoHeader = null
-        ,
+        private ?CmsMedia $logoHeader = null,
         // TCMSFieldVarchar
         /** @var string - From (name) */
         private string $fromName = '',
@@ -35,8 +34,7 @@ class PkgNewsletterGroup
         private string $imprint = '',
         // TCMSFieldLookup
         /** @var CmsPortal|null - Portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldBoolean
         /** @var bool - Send to all newsletter users */
         private bool $includeAllNewsletterUsers = false,
@@ -89,7 +87,6 @@ class PkgNewsletterGroup
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFromName(): string
     {
@@ -102,7 +99,6 @@ class PkgNewsletterGroup
 
         return $this;
     }
-
 
     // TCMSFieldEmail
     public function getReplyEmail(): string
@@ -117,7 +113,6 @@ class PkgNewsletterGroup
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -130,7 +125,6 @@ class PkgNewsletterGroup
 
         return $this;
     }
-
 
     // TCMSFieldEmail
     public function getFromEmail(): string
@@ -145,7 +139,6 @@ class PkgNewsletterGroup
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getImprint(): string
     {
@@ -158,7 +151,6 @@ class PkgNewsletterGroup
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
@@ -173,7 +165,6 @@ class PkgNewsletterGroup
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIncludeAllNewsletterUsers(): bool
     {
@@ -186,7 +177,6 @@ class PkgNewsletterGroup
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isIncludeNewsletterUserNotAssignedToAnyGroup(): bool
@@ -201,7 +191,6 @@ class PkgNewsletterGroup
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIncludeAllNewsletterUsersWithNoExtranetAccount(): bool
     {
@@ -215,8 +204,6 @@ class PkgNewsletterGroup
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -249,6 +236,4 @@ class PkgNewsletterGroup
 
         return $this;
     }
-
-
 }

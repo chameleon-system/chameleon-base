@@ -162,6 +162,7 @@ class TDataExtranetCore extends TDataExtranetCoreAutoParent
      *
      * @param string $iNodeId
      * @param bool $bForcePortal - include domain?
+     *
      * @return string|null
      */
     protected function GetLinkForNode($iNodeId, $bForcePortal = false)

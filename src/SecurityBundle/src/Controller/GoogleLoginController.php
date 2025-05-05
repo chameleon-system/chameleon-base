@@ -13,7 +13,7 @@ class GoogleLoginController extends AbstractController
     private const GOOGLE_SCOPES = [
         'openid',
         'https://www.googleapis.com/auth/userinfo.email',
-        'https://www.googleapis.com/auth/userinfo.profile'
+        'https://www.googleapis.com/auth/userinfo.profile',
     ];
 
     public function __construct(private readonly ClientRegistry $clientRegistry)

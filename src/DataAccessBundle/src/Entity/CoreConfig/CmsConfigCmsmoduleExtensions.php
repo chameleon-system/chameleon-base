@@ -6,15 +6,14 @@ class CmsConfigCmsmoduleExtensions
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Overwritten by */
         private string $newclass = '',
         // TCMSFieldLookupParentID
         /** @var CmsConfig|null - Belongs to cms config */
-        private ?CmsConfig $cmsConfig = null
-        ,
+        private ?CmsConfig $cmsConfig = null,
         // TCMSFieldVarchar
         /** @var string - Module to overwrite */
         private string $name = '',
@@ -61,7 +60,6 @@ class CmsConfigCmsmoduleExtensions
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsConfig(): ?CmsConfig
     {
@@ -74,7 +72,6 @@ class CmsConfigCmsmoduleExtensions
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -89,7 +86,6 @@ class CmsConfigCmsmoduleExtensions
         return $this;
     }
 
-
     // TCMSFieldOption
     public function getType(): string
     {
@@ -102,6 +98,4 @@ class CmsConfigCmsmoduleExtensions
 
         return $this;
     }
-
-
 }

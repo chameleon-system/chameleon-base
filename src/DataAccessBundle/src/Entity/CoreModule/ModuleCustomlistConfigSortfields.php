@@ -6,12 +6,11 @@ class ModuleCustomlistConfigSortfields
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var ModuleCustomlistConfig|null - Belongs to list */
-        private ?ModuleCustomlistConfig $moduleCustomlistConfig = null
-        ,
+        private ?ModuleCustomlistConfig $moduleCustomlistConfig = null,
         // TCMSFieldVarchar
         /** @var string - Field name */
         private string $name = '',
@@ -61,7 +60,6 @@ class ModuleCustomlistConfigSortfields
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -74,7 +72,6 @@ class ModuleCustomlistConfigSortfields
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getDirection(): string
@@ -89,7 +86,6 @@ class ModuleCustomlistConfigSortfields
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -102,6 +98,4 @@ class ModuleCustomlistConfigSortfields
 
         return $this;
     }
-
-
 }

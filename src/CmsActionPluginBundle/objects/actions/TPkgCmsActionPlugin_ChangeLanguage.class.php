@@ -14,8 +14,6 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 class TPkgCmsActionPlugin_ChangeLanguage extends AbstractPkgActionPlugin
 {
     /**
-     * @param array $data
-     *
      * @return void
      */
     public function changeLanguage(array $data)
@@ -36,7 +34,7 @@ class TPkgCmsActionPlugin_ChangeLanguage extends AbstractPkgActionPlugin
      */
     private function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     /**
@@ -44,6 +42,6 @@ class TPkgCmsActionPlugin_ChangeLanguage extends AbstractPkgActionPlugin
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

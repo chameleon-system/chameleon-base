@@ -20,13 +20,13 @@ namespace {
 namespace esono\pkgcmscache\tests {
     use ChameleonSystem\CoreBundle\RequestState\Interfaces\RequestStateHashProviderInterface;
     use ChameleonSystem\CoreBundle\Util\HashInterface;
+    use Doctrine\DBAL\Connection;
     use esono\pkgCmsCache\Cache;
+    use esono\pkgCmsCache\StorageInterface;
     use PHPUnit\Framework\TestCase;
     use Prophecy\Argument;
-    use Symfony\Component\HttpFoundation\RequestStack;
-    use esono\pkgCmsCache\StorageInterface;
-    use Doctrine\DBAL\Connection;
     use Prophecy\PhpUnit\ProphecyTrait;
+    use Symfony\Component\HttpFoundation\RequestStack;
 
     class CacheTest extends TestCase
     {
@@ -55,7 +55,7 @@ namespace esono\pkgcmscache\tests {
         /**
          * @test
          */
-        public function it_creates_cache_key()
+        public function itCreatesCacheKey()
         {
             $this->cache->disable();
             $params = [
@@ -72,7 +72,7 @@ namespace esono\pkgcmscache\tests {
         /**
          * @test
          */
-        public function it_works_with_special_chars()
+        public function itWorksWithSpecialChars()
         {
             $this->cache->disable();
             $params = [

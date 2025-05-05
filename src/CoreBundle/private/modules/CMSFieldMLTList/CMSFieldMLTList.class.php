@@ -14,12 +14,12 @@ class CMSFieldMLTList extends TCMSModelBase
     /**
      * @var TdbCmsTblConf|null
      */
-    public $oTableConf = null;
+    public $oTableConf;
 
     /**
      * @var TCMSListManager|null
      */
-    public $oTableList = null;
+    public $oTableList;
 
     /**
      * {@inheritdoc}

@@ -18,7 +18,7 @@ class MTTextFieldCore extends TUserCustomModelBase
      *
      * @var TdbModuleText
      */
-    protected $_oTableRow = null;
+    protected $_oTableRow;
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -34,7 +34,7 @@ class MTTextFieldCore extends TUserCustomModelBase
     protected function LoadTableRow()
     {
         $oTdbModuleText = TdbModuleText::GetNewInstance();
-        /** @var $oTdbModuleText TdbModuleText */
+        /* @var $oTdbModuleText TdbModuleText */
         $oTdbModuleText->SetLanguage($this->getLanguageService()->getActiveLanguageId());
         if ($oTdbModuleText->LoadFromField('cms_tpl_module_instance_id', $this->instanceID)) {
             $this->_oTableRow = $oTdbModuleText;
@@ -66,18 +66,18 @@ class MTTextFieldCore extends TUserCustomModelBase
     {
         $tableInfo = parent::_GetCacheTableInfos();
         if (!is_array($tableInfo)) {
-            $tableInfo = array();
+            $tableInfo = [];
         }
         if (is_object($this->_oTableRow)) {
-            $tableInfo[] = array('table' => 'module_text', 'id' => $this->_oTableRow->id);
+            $tableInfo[] = ['table' => 'module_text', 'id' => $this->_oTableRow->id];
         }
-        $tableInfo[] = array('table' => 'cms_media', 'id' => null);
-        $tableInfo[] = array('table' => 'cms_document', 'id' => null);
-        $tableInfo[] = array('table' => 'cms_media_tree', 'id' => null);
-        $tableInfo[] = array('table' => 'cms_document_tree', 'id' => null);
-        $tableInfo[] = array('table' => 'module_gallery', 'id' => null);
-        $tableInfo[] = array('table' => 'cms_tree', 'id' => null);
-        $tableInfo[] = array('table' => 'cms_tree_node', 'id' => null);
+        $tableInfo[] = ['table' => 'cms_media', 'id' => null];
+        $tableInfo[] = ['table' => 'cms_document', 'id' => null];
+        $tableInfo[] = ['table' => 'cms_media_tree', 'id' => null];
+        $tableInfo[] = ['table' => 'cms_document_tree', 'id' => null];
+        $tableInfo[] = ['table' => 'module_gallery', 'id' => null];
+        $tableInfo[] = ['table' => 'cms_tree', 'id' => null];
+        $tableInfo[] = ['table' => 'cms_tree_node', 'id' => null];
 
         return $tableInfo;
     }
@@ -95,6 +95,6 @@ class MTTextFieldCore extends TUserCustomModelBase
      */
     private function getLanguageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.language_service');
     }
 }

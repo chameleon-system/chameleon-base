@@ -2,30 +2,27 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\CorePagedef;
 
-use DateTime;
-
 class CmsTreeNode
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldBoolean
         /** @var bool - Create link */
         private bool $active = false,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Activate connection from */
-        private ?DateTime $startDate = null,
+        /** @var \DateTime|null - Activate connection from */
+        private ?\DateTime $startDate = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - Deactivate connection after */
-        private ?DateTime $endDate = null,
+        /** @var \DateTime|null - Deactivate connection after */
+        private ?\DateTime $endDate = null,
         // TCMSFieldVarchar
         /** @var string - Table of linked record */
         private string $tbl = '',
         // TCMSFieldExtendedLookup
         /** @var CmsTplPage|null - ID of linked record */
-        private ?CmsTplPage $contid = null
-        ,
+        private ?CmsTplPage $contid = null,
         // TCMSFieldLookupParentID
         /** @var CmsTree|null - Navigation item */
         private ?CmsTree $cmsTree = null
@@ -69,34 +66,31 @@ class CmsTreeNode
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getStartDate(): ?DateTime
+    public function getStartDate(): ?\DateTime
     {
         return $this->startDate;
     }
 
-    public function setStartDate(?DateTime $startDate): self
+    public function setStartDate(?\DateTime $startDate): self
     {
         $this->startDate = $startDate;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getEndDate(): ?DateTime
+    public function getEndDate(): ?\DateTime
     {
         return $this->endDate;
     }
 
-    public function setEndDate(?DateTime $endDate): self
+    public function setEndDate(?\DateTime $endDate): self
     {
         $this->endDate = $endDate;
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getTbl(): string
@@ -111,7 +105,6 @@ class CmsTreeNode
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getContid(): ?CmsTplPage
     {
@@ -125,7 +118,6 @@ class CmsTreeNode
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsTree(): ?CmsTree
     {
@@ -138,6 +130,4 @@ class CmsTreeNode
 
         return $this;
     }
-
-
 }

@@ -14,12 +14,12 @@ class TPkgCmsActionPluginManager
     /**
      * @var array<string, object>|null
      */
-    private $aActionPluginList = null;
+    private $aActionPluginList;
 
     /**
      * @var TCMSActivePage|null
      */
-    private $oActivePage = null;
+    private $oActivePage;
 
     public function __construct(TCMSActivePage $oActivePage)
     {
@@ -41,18 +41,18 @@ class TPkgCmsActionPluginManager
     /**
      * @param string $sPluginName - systemname of the plugin
      * @param string $sActionName - the method to call
-     * @param array  $aParameter  - parameters to pass to the action
+     * @param array $aParameter - parameters to pass to the action
+     *
+     * @return void
      *
      * @throws TPkgCmsActionPluginException_ActionNotFound
      * @throws TPkgCmsActionPluginException_ActionNotPublic
-     *
-     * @return void
      */
     public function callAction($sPluginName, $sActionName, $aParameter)
     {
         $oPlugin = $this->getActionPlugin($sPluginName);
 
-        if (false === method_exists($oPlugin, $sActionName) || false === is_callable(array($oPlugin, $sActionName))) {
+        if (false === method_exists($oPlugin, $sActionName) || false === is_callable([$oPlugin, $sActionName])) {
             throw new TPkgCmsActionPluginException_ActionNotPublic('action "'.$sActionName.'" does not exists', 0, E_USER_WARNING, __FILE__, __LINE__);
         }
 
@@ -62,7 +62,7 @@ class TPkgCmsActionPluginManager
             throw new TPkgCmsActionPluginException_ActionNotFound('action "'.$sActionName.'" does not exists', 0, E_USER_WARNING, __FILE__, __LINE__);
         }
 
-        call_user_func(array($oPlugin, $sActionName), $aParameter);
+        call_user_func([$oPlugin, $sActionName], $aParameter);
     }
 
     /**
@@ -89,12 +89,12 @@ class TPkgCmsActionPluginManager
     protected function getActionPluginList()
     {
         if (null === $this->aActionPluginList) {
-            $this->aActionPluginList = array();
+            $this->aActionPluginList = [];
 
             $oPageDef = $this->oActivePage->GetFieldCmsMasterPagedef();
             $sList = '';
             if (property_exists($this->oActivePage->oActivePortal, 'fieldActionPluginList')) {
-                /** @psalm-suppress UndefinedPropertyFetch - Property is checked above. */
+                /* @psalm-suppress UndefinedPropertyFetch - Property is checked above. */
                 $sList .= trim($this->oActivePage->oActivePortal->fieldActionPluginList);
             }
             if (!empty($sList)) {

@@ -6,12 +6,11 @@ class CmsConfigParameter
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsConfig|null - Belongs to CMS config */
-        private ?CmsConfig $cmsConfig = null
-        ,
+        private ?CmsConfig $cmsConfig = null,
         // TCMSFieldVarchar
         /** @var string - System name */
         private string $systemname = '',
@@ -61,7 +60,6 @@ class CmsConfigParameter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSystemname(): string
     {
@@ -74,7 +72,6 @@ class CmsConfigParameter
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -89,7 +86,6 @@ class CmsConfigParameter
         return $this;
     }
 
-
     // TCMSFieldText
     public function getValue(): string
     {
@@ -102,6 +98,4 @@ class CmsConfigParameter
 
         return $this;
     }
-
-
 }

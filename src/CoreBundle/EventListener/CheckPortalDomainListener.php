@@ -16,11 +16,9 @@ use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use esono\pkgCmsRouting\exceptions\PortalNotFoundException;
-use LogicException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use TdbCmsPortalDomains;
 
 class CheckPortalDomainListener
 {
@@ -38,9 +36,7 @@ class CheckPortalDomainListener
     private $forcePrimaryDomain;
 
     /**
-     * @param PortalDomainServiceInterface $portalDomainService
-     * @param RequestInfoServiceInterface  $requestInfoService
-     * @param bool                         $forcePrimaryDomain
+     * @param bool $forcePrimaryDomain
      */
     public function __construct(PortalDomainServiceInterface $portalDomainService, RequestInfoServiceInterface $requestInfoService, $forcePrimaryDomain = CHAMELEON_FORCE_PRIMARY_DOMAIN)
     {
@@ -50,11 +46,11 @@ class CheckPortalDomainListener
     }
 
     /**
+     * @return void
+     *
      * @throws PortalNotFoundException
      * @throws InvalidPortalDomainException
-     * @throws LogicException
-     *
-     * @return void
+     * @throws \LogicException
      */
     public function onKernelRequest(RequestEvent $event)
     {
@@ -65,7 +61,7 @@ class CheckPortalDomainListener
         $request = $event->getRequest();
         $requestType = $this->requestInfoService->getChameleonRequestType();
         if (null === $requestType) {
-            throw new LogicException('RequestTypeListener needs to run before CheckPortalDomainListener. Please check the priorities.');
+            throw new \LogicException('RequestTypeListener needs to run before CheckPortalDomainListener. Please check the priorities.');
         }
         if (RequestTypeInterface::REQUEST_TYPE_FRONTEND !== $requestType || $this->requestInfoService->isCmsTemplateEngineEditMode()) {
             return;
@@ -81,16 +77,14 @@ class CheckPortalDomainListener
     }
 
     /**
-     * @param RequestEvent        $event
-     * @param TdbCmsPortalDomains $activeDomain
-     * @param string              $hostFromRequest
+     * @param string $hostFromRequest
+     *
+     * @return void
      *
      * @throws PortalNotFoundException
      * @throws InvalidPortalDomainException
-     *
-     * @return void
      */
-    private function redirectToPrimaryDomainIfRequired(RequestEvent $event, TdbCmsPortalDomains $activeDomain, $hostFromRequest)
+    private function redirectToPrimaryDomainIfRequired(RequestEvent $event, \TdbCmsPortalDomains $activeDomain, $hostFromRequest)
     {
         if (false === $this->forcePrimaryDomain) {
             return;

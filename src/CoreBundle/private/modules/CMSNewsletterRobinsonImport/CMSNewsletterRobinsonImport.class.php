@@ -14,7 +14,7 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 class CMSNewsletterRobinsonImport extends TCMSModelBase
 {
-    const MESSAGE_MANAGER_CONSUMER = 'CMSNewsletterRobinsonImport';
+    public const MESSAGE_MANAGER_CONSUMER = 'CMSNewsletterRobinsonImport';
 
     /**
      * {@inheritdoc}
@@ -44,7 +44,7 @@ class CMSNewsletterRobinsonImport extends TCMSModelBase
         if (null === $portalIds || 0 === count($portalIds)) {
             return;
         }
-        $portalIdList = implode(', ', array_map(static fn(string $portalId) => $portalId, array_keys($portalIds)));
+        $portalIdList = implode(', ', array_map(static fn (string $portalId) => $portalId, array_keys($portalIds)));
 
         $portals = TdbCmsPortalList::GetList(sprintf('SELECT * FROM `cms_portal` WHERE `id` IN (%s)', $portalIdList));
 
@@ -54,7 +54,7 @@ class CMSNewsletterRobinsonImport extends TCMSModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('ParseFile');
+        $externalFunctions = ['ParseFile'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -87,8 +87,8 @@ class CMSNewsletterRobinsonImport extends TCMSModelBase
             // split file by finding right CR.
             $expr = "/\n(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/";
             $rows = preg_split($expr, trim($fileContent));
-            unset($fileContent); //Free up some memory
-            $aData = array();
+            unset($fileContent); // Free up some memory
+            $aData = [];
             foreach ($rows as $row) {
                 // find right semikolon
                 $expr = '/;(?=(?:[^"]*"[^"]*")*(?![^"]*"))/';
@@ -101,11 +101,11 @@ class CMSNewsletterRobinsonImport extends TCMSModelBase
             $iTableID = TTools::GetCMSTableId('pkg_newsletter_robinson');
             $oTableEditor = new TCMSTableEditorManager();
             /** @var $oTableEditor TCMSTableEditorManager */
-            $aListImported = array();
-            $aListIgnored = array();
+            $aListImported = [];
+            $aListIgnored = [];
 
             foreach ($aData as $key => $aDataSet) {
-                $aInsertData = array();
+                $aInsertData = [];
                 $aInsertData['cms_portal_id'] = $portalID;
 
                 if (array_key_exists(0, $aDataSet) && !empty($aDataSet[0])) {

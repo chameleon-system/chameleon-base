@@ -8,12 +8,11 @@ class PkgMultiModuleModuleConfig
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsTplModuleInstance|null - Belongs to module instance */
-        private ?CmsTplModuleInstance $cmsTplModuleInstance = null
-        ,
+        private ?CmsTplModuleInstance $cmsTplModuleInstance = null,
         // TCMSFieldExtendedLookup
         /** @var PkgMultiModuleSet|null - Multimodule set */
         private ?PkgMultiModuleSet $pkgMultiModuleSet = null
@@ -57,7 +56,6 @@ class PkgMultiModuleModuleConfig
         return $this;
     }
 
-
     // TCMSFieldExtendedLookup
     public function getPkgMultiModuleSet(): ?PkgMultiModuleSet
     {
@@ -70,6 +68,4 @@ class PkgMultiModuleModuleConfig
 
         return $this;
     }
-
-
 }

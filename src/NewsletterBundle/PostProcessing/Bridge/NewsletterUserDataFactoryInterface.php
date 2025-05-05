@@ -18,12 +18,11 @@ interface NewsletterUserDataFactoryInterface
     /**
      * Creates a data model based on an existing TdbPkgNewsletterUser instance.
      *
-     * @param TdbPkgNewsletterUser $newsletterUser
-     * @param string               $newsletterGroupId
-     * @param array|string         $newsletterGroups
-     * @param bool                 $addAllUnsubscribeLinks
+     * @param string $newsletterGroupId
+     * @param array|string $newsletterGroups
+     * @param bool $addAllUnsubscribeLinks
      *
      * @return NewsletterUserDataModel
      */
-    public function createNewsletterUserData(\TdbPkgNewsletterCampaign $campaign, TdbPkgNewsletterUser $newsletterUser, $newsletterGroupId = null, $newsletterGroups = null, $addAllUnsubscribeLinks = false);
+    public function createNewsletterUserData(\TdbPkgNewsletterCampaign $campaign, \TdbPkgNewsletterUser $newsletterUser, $newsletterGroupId = null, $newsletterGroups = null, $addAllUnsubscribeLinks = false);
 }

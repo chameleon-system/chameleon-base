@@ -6,7 +6,6 @@ use ChameleonSystem\CoreBundle\DataModel\TableConfigurationDataModel;
 
 interface TableConfExporterInterface
 {
-
     /**
      * @return array<string,TableConfigurationDataModel>
      */
@@ -14,6 +13,7 @@ interface TableConfExporterInterface
 
     /**
      * @return string - fqn of the generated model
+     *
      * @throws \Exception
      */
     public function export(
@@ -24,5 +24,4 @@ interface TableConfExporterInterface
         string $metaConfigDir,
         array $tableNamespaceMapping
     ): string;
-
 }

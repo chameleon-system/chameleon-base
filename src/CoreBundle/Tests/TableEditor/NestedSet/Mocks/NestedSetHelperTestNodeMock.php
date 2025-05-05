@@ -16,7 +16,7 @@ use Doctrine\DBAL\Connection;
 
 class NestedSetHelperTestNodeMock implements NodeInterface
 {
-    private $data = array();
+    private $data = [];
     /**
      * @var Connection
      */
@@ -50,12 +50,9 @@ class NestedSetHelperTestNodeMock implements NodeInterface
     public function loadFromId($id)
     {
         $query = 'select * from tree where id = :id';
-        $this->data = $this->databaseConnection->fetchAssociative($query, array('id' => $id));
+        $this->data = $this->databaseConnection->fetchAssociative($query, ['id' => $id]);
     }
 
-    /**
-     * @param Connection $connection
-     */
     public function setDatabaseConnection(Connection $connection)
     {
         $this->databaseConnection = $connection;

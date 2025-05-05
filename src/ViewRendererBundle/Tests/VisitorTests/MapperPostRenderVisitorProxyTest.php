@@ -17,7 +17,7 @@ class MapperPostRenderVisitorProxyTest extends TestCase
     {
         $oRequirement = new MapperRequirements();
         $oRequirement->NeedsSourceObject('bar', 'string');
-        $aSource = array('bar' => 'foo');
+        $aSource = ['bar' => 'foo'];
         $oVisitor = new MapperVisitor($aSource);
         $oVisitor->SetCurrentRequirements($oRequirement);
         $oRestrictedProxy = new MapperPostRenderVisitorProxy($oVisitor);
@@ -28,7 +28,7 @@ class MapperPostRenderVisitorProxyTest extends TestCase
     {
         $oRequirement = new MapperRequirements();
         $oRequirement->NeedsSourceObject('bar', 'string');
-        $aSource = array('bar' => 'foo');
+        $aSource = ['bar' => 'foo'];
         $oVisitor = new MapperVisitor($aSource);
         $oVisitor->SetCurrentRequirements($oRequirement);
         $oRestrictedProxy = new MapperPostRenderVisitorProxy($oVisitor);
@@ -38,10 +38,10 @@ class MapperPostRenderVisitorProxyTest extends TestCase
 
     public function testSetMappedValue()
     {
-        $aSource = array('bar' => 'foo');
+        $aSource = ['bar' => 'foo'];
         $oVisitor = new MapperVisitor($aSource);
         $oRestrictedProxy = new MapperPostRenderVisitorProxy($oVisitor);
         $oRestrictedProxy->SetMappedValue('bar2', 'foo2');
-        $this->assertEquals(array('bar2' => 'foo2'), $oVisitor->GetMappedValues());
+        $this->assertEquals(['bar2' => 'foo2'], $oVisitor->GetMappedValues());
     }
 }

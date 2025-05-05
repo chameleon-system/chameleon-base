@@ -12,24 +12,24 @@
 /**
  * the classes for each step should be located @ ./extensions/library/classes/components/FormWizard
  * NOTE: Class is outdated - for new wizards, use TCMSWizardCore instead.
-/**/
+ * /**/
 class MTWizardCore extends TUserCustomModelBase
 {
-    protected $iState = null;
-    protected $iPreviousState = null;
+    protected $iState;
+    protected $iPreviousState;
     /**
      * the wizard step.
      *
      * @var TFormWizardStep
      */
-    protected $oWizardStep = null;
+    protected $oWizardStep;
 
     /**
      * a TIterator holding all items up to the current step.
      *
      * @var TIterator
      */
-    protected $oWizardPath = null;
+    protected $oWizardPath;
 
     protected $bAllowHTMLDivWrapping = true;
 
@@ -86,7 +86,7 @@ class MTWizardCore extends TUserCustomModelBase
     protected function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('PostData');
+        $externalFunctions = ['PostData'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -95,7 +95,7 @@ class MTWizardCore extends TUserCustomModelBase
         if ($this->oWizardStep->ProcessData()) {
             // redirect to next step
             $iNextStep = $this->oWizardStep->GetNextStepId();
-            //if ($iNextStep === false) $iNextStep = $this->iState;
+            // if ($iNextStep === false) $iNextStep = $this->iState;
             if (false !== $iNextStep) {
                 $this->RedirectToState($iNextStep);
             }
@@ -103,14 +103,14 @@ class MTWizardCore extends TUserCustomModelBase
     }
 
     /**
-     * @param int        $iState
+     * @param int $iState
      * @param array|null $aOptionalData
      */
     protected function RedirectToState($iState, $aOptionalData = null)
     {
         $this->iState = $iState;
         if (is_null($aOptionalData)) {
-            $aOptionalData = array();
+            $aOptionalData = [];
         }
         $aOptionalData['state'] = $this->iState;
 
@@ -192,6 +192,6 @@ class MTWizardCore extends TUserCustomModelBase
      */
     private function getRedirect()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
     }
 }

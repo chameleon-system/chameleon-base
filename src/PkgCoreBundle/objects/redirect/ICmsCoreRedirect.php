@@ -15,8 +15,8 @@ interface ICmsCoreRedirect
      * Redirects to another url sending the status code. If a relative URL is passed, it will be expanded to the current domain.
      *
      * @param string $url
-     * @param int    $status
-     * @param bool   $allowOnlyInternalUrls
+     * @param int $status
+     * @param bool $allowOnlyInternalUrls
      *
      * @return never-returns
      */

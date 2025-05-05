@@ -11,7 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\EventListener;
 
-use chameleon;
 use ChameleonSystem\CoreBundle\RequestType\AbstractRequestType;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -37,12 +36,6 @@ class RequestTypeListener implements ContainerAwareInterface
      */
     private $assetRequestType;
 
-    /**
-     * @param ContainerInterface  $container
-     * @param AbstractRequestType $backendRequestType
-     * @param AbstractRequestType $frontendRequestType
-     * @param AbstractRequestType $assetRequestType
-     */
     public function __construct(ContainerInterface $container, AbstractRequestType $backendRequestType, AbstractRequestType $frontendRequestType, AbstractRequestType $assetRequestType)
     {
         $this->container = $container;
@@ -62,7 +55,7 @@ class RequestTypeListener implements ContainerAwareInterface
         $request = $event->getRequest();
         $requestType = $this->getRequestType();
         $requestType->initialize();
-        
+
         $request->attributes->set('chameleon.request_type', $requestType->getRequestType());
         $this->container->set('chameleon_core.request_type', $requestType);
     }
@@ -72,7 +65,7 @@ class RequestTypeListener implements ContainerAwareInterface
      */
     protected function getRequestType()
     {
-        switch (chameleon::getRequestType()) {
+        switch (\chameleon::getRequestType()) {
             case RequestTypeInterface::REQUEST_TYPE_BACKEND:
                 return $this->backendRequestType;
             case RequestTypeInterface::REQUEST_TYPE_ASSETS:
@@ -87,7 +80,7 @@ class RequestTypeListener implements ContainerAwareInterface
      *
      * @return void
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(?ContainerInterface $container = null)
     {
         $this->container = $container;
     }

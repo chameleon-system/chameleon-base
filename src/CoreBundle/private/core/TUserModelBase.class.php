@@ -11,7 +11,7 @@
 
 /**
  * all user modules need to be derived from this class, or one of its children.
-/**/
+ * /**/
 class TUserModelBase extends TUserModelBaseCore
 {
 }

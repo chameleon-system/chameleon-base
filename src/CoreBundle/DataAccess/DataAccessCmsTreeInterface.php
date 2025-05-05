@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
-use TdbCmsTree;
-
 interface DataAccessCmsTreeInterface
 {
     /**
@@ -20,7 +18,7 @@ interface DataAccessCmsTreeInterface
      *
      * @param string|null $languageId if null, the currently active language is used
      *
-     * @return TdbCmsTree[]
+     * @return \TdbCmsTree[]
      */
     public function loadAll($languageId = null);
 

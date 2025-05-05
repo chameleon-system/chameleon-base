@@ -11,7 +11,7 @@ class DataExtranet
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldNumber
         /** @var int - Session lifetime (in seconds) */
@@ -24,8 +24,7 @@ class DataExtranet
         private string $noaccessTitle = '',
         // TCMSFieldLookup
         /** @var CmsPortal|null - Portal configuration */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldBoolean
         /** @var bool - Login must be an email address */
         private bool $loginIsEmail = true,
@@ -34,48 +33,37 @@ class DataExtranet
         private string $extranetSpotName = '',
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, DataExtranetGroup> - Automatically assign new customers to these groups */
-        private Collection $dataExtranetGroupCollection = new ArrayCollection()
-        ,
+        private Collection $dataExtranetGroupCollection = new ArrayCollection(),
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Login */
-        private ?CmsTree $nodeLogin = null
-        ,
+        private ?CmsTree $nodeLogin = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Login successful */
-        private ?CmsTree $loginSuccessNode = null
-        ,
+        private ?CmsTree $loginSuccessNode = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - My account */
-        private ?CmsTree $nodeMyAccountCmsTree = null
-        ,
+        private ?CmsTree $nodeMyAccountCmsTree = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Registration */
-        private ?CmsTree $nodeRegister = null
-        ,
+        private ?CmsTree $nodeRegister = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Confirm registration */
-        private ?CmsTree $nodeConfirmRegistration = null
-        ,
+        private ?CmsTree $nodeConfirmRegistration = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Registration successful */
-        private ?CmsTree $nodeRegistrationSuccess = null
-        ,
+        private ?CmsTree $nodeRegistrationSuccess = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Forgot password */
-        private ?CmsTree $forgotPasswordTreenode = null
-        ,
+        private ?CmsTree $forgotPasswordTreenode = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Access denied (not signed in) */
-        private ?CmsTree $accessRefusedNode = null
-        ,
+        private ?CmsTree $accessRefusedNode = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Access denied (group permissons) */
-        private ?CmsTree $groupRightDeniedNode = null
-        ,
+        private ?CmsTree $groupRightDeniedNode = null,
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Logout successful */
-        private ?CmsTree $logoutSuccessNode = null
-        ,
+        private ?CmsTree $logoutSuccessNode = null,
         // TCMSFieldWYSIWYG
         /** @var string - Registration successful */
         private string $registrationSuccess = '',
@@ -146,7 +134,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFpwdTitle(): string
     {
@@ -159,7 +146,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getNoaccessTitle(): string
@@ -174,7 +160,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -187,7 +172,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isLoginIsEmail(): bool
@@ -202,7 +186,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getExtranetSpotName(): string
     {
@@ -215,8 +198,6 @@ class DataExtranet
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -250,7 +231,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getNodeLogin(): ?CmsTree
     {
@@ -263,7 +243,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldTreeNode
     public function getLoginSuccessNode(): ?CmsTree
@@ -278,7 +257,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getNodeMyAccountCmsTree(): ?CmsTree
     {
@@ -291,7 +269,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldTreeNode
     public function getNodeRegister(): ?CmsTree
@@ -306,7 +283,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getNodeConfirmRegistration(): ?CmsTree
     {
@@ -319,7 +295,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldTreeNode
     public function getNodeRegistrationSuccess(): ?CmsTree
@@ -334,7 +309,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getForgotPasswordTreenode(): ?CmsTree
     {
@@ -347,7 +321,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldTreeNode
     public function getAccessRefusedNode(): ?CmsTree
@@ -362,7 +335,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getGroupRightDeniedNode(): ?CmsTree
     {
@@ -375,7 +347,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldTreeNode
     public function getLogoutSuccessNode(): ?CmsTree
@@ -390,7 +361,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getRegistrationSuccess(): string
     {
@@ -403,7 +373,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getRegistrationFailed(): string
@@ -418,7 +387,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isUserMustConfirmRegistration(): bool
     {
@@ -431,7 +399,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getFpwdIntro(): string
@@ -446,7 +413,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getFpwdEnd(): string
     {
@@ -459,7 +425,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldWYSIWYG
     public function getNoaccessText(): string
@@ -474,7 +439,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldWYSIWYG
     public function getCommunityPostRegistrationInfo(): string
     {
@@ -487,7 +451,6 @@ class DataExtranet
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isUseSaveForgotPassword(): bool
@@ -502,7 +465,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isLoginAllowedNotConfirmedUser(): bool
     {
@@ -516,7 +478,6 @@ class DataExtranet
         return $this;
     }
 
-
     // TCMSFieldNumber
     public function getPasswordChangeKeyTimeValidity(): int
     {
@@ -529,6 +490,4 @@ class DataExtranet
 
         return $this;
     }
-
-
 }

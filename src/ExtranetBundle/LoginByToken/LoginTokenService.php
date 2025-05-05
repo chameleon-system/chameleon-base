@@ -49,20 +49,20 @@ class LoginTokenService implements LoginTokenServiceInterface
     ): string {
         return $this->encodeToken([
             'userId' => $userId,
-            'expires' => $this->timeProvider->getUnixTimestamp() + $expiresAfterSeconds
+            'expires' => $this->timeProvider->getUnixTimestamp() + $expiresAfterSeconds,
         ]);
     }
 
     /** {@inheritdoc} */
     public function getUserIdFromToken(string $token): ?string
     {
-       $data = $this->decodeToken($token);
-       if (null === $data
-           || false === array_key_exists('expires', $data)
-           || false === array_key_exists('userId', $data)
-       ) {
-           return null;
-       }
+        $data = $this->decodeToken($token);
+        if (null === $data
+            || false === array_key_exists('expires', $data)
+            || false === array_key_exists('userId', $data)
+        ) {
+            return null;
+        }
 
         if ($this->timeProvider->getUnixTimestamp() > $data['expires']) {
             return null;

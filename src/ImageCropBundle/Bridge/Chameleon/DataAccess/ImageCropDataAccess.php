@@ -20,8 +20,6 @@ use ChameleonSystem\ImageCrop\Interfaces\ImageCropDataAccessInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropPresetDataAccessInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use TdbCmsImageCrop;
-use TTools;
 
 class ImageCropDataAccess implements ImageCropDataAccessInterface
 {
@@ -36,7 +34,7 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
     private $imageCropPresetDataAccess;
 
     /**
-     * @var TTools
+     * @var \TTools
      */
     private $tools;
 
@@ -45,16 +43,10 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
      */
     private $cmsMediaDataAccess;
 
-    /**
-     * @param Connection                         $databaseConnection
-     * @param ImageCropPresetDataAccessInterface $imageCropPresetDataAccess
-     * @param TTools                             $tools
-     * @param CmsMediaDataAccessInterface        $cmsMediaDataAccess
-     */
     public function __construct(
         Connection $databaseConnection,
         ImageCropPresetDataAccessInterface $imageCropPresetDataAccess,
-        TTools $tools,
+        \TTools $tools,
         CmsMediaDataAccessInterface $cmsMediaDataAccess
     ) {
         $this->databaseConnection = $databaseConnection;
@@ -74,7 +66,7 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
             $preset = $imageCrop->getImageCropPreset();
 
             $id = $this->tools->GetUUID();
-            $data = array(
+            $data = [
                 'id' => $id,
                 'cms_media_id' => $imageCrop->getCmsMedia()->getId(),
                 'cms_image_crop_preset_id' => null !== $preset ? $preset->getId() : '',
@@ -83,7 +75,7 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
                 'width' => $imageCrop->getWidth(),
                 'height' => $imageCrop->getHeight(),
                 'name' => $imageCrop->getName(),
-            );
+            ];
 
             $this->databaseConnection->insert('cms_image_crop', $data);
             $this->databaseConnection->commit();
@@ -109,7 +101,7 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
 
             $preset = $imageCrop->getImageCropPreset();
 
-            $data = array(
+            $data = [
                 'cms_media_id' => $imageCrop->getCmsMedia()->getId(),
                 'cms_image_crop_preset_id' => null !== $preset ? $preset->getId() : '',
                 'pos_x' => $imageCrop->getPosX(),
@@ -117,9 +109,9 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
                 'width' => $imageCrop->getWidth(),
                 'height' => $imageCrop->getHeight(),
                 'name' => $imageCrop->getName(),
-            );
+            ];
 
-            $this->databaseConnection->update('cms_image_crop', $data, array('id' => $imageCrop->getId()));
+            $this->databaseConnection->update('cms_image_crop', $data, ['id' => $imageCrop->getId()]);
             $this->databaseConnection->commit();
         } catch (DBALException $e) {
             $this->databaseConnection->rollBack();
@@ -134,10 +126,10 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
      */
     public function getImageCrop(CmsMediaDataModel $cmsMedia, ImageCropPresetDataModel $preset)
     {
-        $tableObject = TdbCmsImageCrop::GetNewInstance();
+        $tableObject = \TdbCmsImageCrop::GetNewInstance();
         if (false === $tableObject->LoadFromFields(
-                array('cms_media_id' => $cmsMedia->getId(), 'cms_image_crop_preset_id' => $preset->getId())
-            )
+            ['cms_media_id' => $cmsMedia->getId(), 'cms_image_crop_preset_id' => $preset->getId()]
+        )
         ) {
             return null;
         }
@@ -146,12 +138,9 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
     }
 
     /**
-     * @param TdbCmsImageCrop   $tableObject
-     * @param CmsMediaDataModel $cmsMedia
-     *
      * @return ImageCropDataModel
      */
-    private function createCropDataModelFromTableObject(TdbCmsImageCrop $tableObject, CmsMediaDataModel $cmsMedia)
+    private function createCropDataModelFromTableObject(\TdbCmsImageCrop $tableObject, CmsMediaDataModel $cmsMedia)
     {
         $preset = $this->imageCropPresetDataAccess->getPresetById($tableObject->fieldCmsImageCropPresetId);
 
@@ -178,7 +167,7 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
      */
     public function getImageCropById($cropId, $languageId)
     {
-        $tableObject = TdbCmsImageCrop::GetNewInstance();
+        $tableObject = \TdbCmsImageCrop::GetNewInstance();
         if (false === $tableObject->Load($cropId)
         ) {
             return null;
@@ -194,17 +183,17 @@ class ImageCropDataAccess implements ImageCropDataAccessInterface
      */
     public function getExistingCrops(CmsMediaDataModel $cmsMedia)
     {
-        $crops = array();
+        $crops = [];
 
         try {
             $query = 'SELECT * FROM `cms_image_crop` WHERE `cms_media_id` = :mediaItemId';
-            $rows = $this->databaseConnection->fetchAllAssociative($query, array('mediaItemId' => $cmsMedia->getId()));
+            $rows = $this->databaseConnection->fetchAllAssociative($query, ['mediaItemId' => $cmsMedia->getId()]);
         } catch (DBALException $e) {
             throw new ImageCropDataAccessException(sprintf('Could not get crops: %s', $e->getMessage()), 0, $e);
         }
 
         foreach ($rows as $row) {
-            $tableObject = TdbCmsImageCrop::GetNewInstance($row);
+            $tableObject = \TdbCmsImageCrop::GetNewInstance($row);
             $crops[] = $this->createCropDataModelFromTableObject($tableObject, $cmsMedia);
         }
 

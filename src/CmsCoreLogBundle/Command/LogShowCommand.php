@@ -89,7 +89,7 @@ class LogShowCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $infoStrings = array();
+        $infoStrings = [];
 
         /** @var string $channel */
         $channel = $input->getOption('channel');
@@ -106,7 +106,7 @@ class LogShowCommand extends Command
         /** @var string $sorting */
         $sorting = $input->getOption('sort');
 
-        if (!array_key_exists($sorting, array('desc', 'asc'))) {
+        if (!array_key_exists($sorting, ['desc', 'asc'])) {
             $sorting = 'desc';
         }
 
@@ -118,7 +118,7 @@ class LogShowCommand extends Command
 
         $sql = 'SELECT * FROM `pkg_cms_core_log`';
 
-        $conditions = array();
+        $conditions = [];
 
         if ($cmsident) {
             $sql .= " WHERE `pkg_cms_core_log`.`cmsident` = '".\MySqlLegacySupport::getInstance()->real_escape_string($cmsident)."'";
@@ -149,7 +149,7 @@ class LogShowCommand extends Command
             $rowCount = \MySqlLegacySupport::getInstance()->num_rows(\MySqlLegacySupport::getInstance()->query($sqlCount));
 
             $sql .= ' LIMIT '.\MySqlLegacySupport::getInstance()->real_escape_string((string) $limitOffset).','.\MySqlLegacySupport::getInstance()->real_escape_string($limitNumber);
-            //$infoStrings[] = '<comment>limit: '.$number.'</comment>';
+            // $infoStrings[] = '<comment>limit: '.$number.'</comment>';
             $limitEnd = $limitOffset + $limitNumber;
             $infoStrings[] = '<comment>showing entries '.$limitOffset.'-'.$limitEnd.' of '.$rowCount.' entries</comment>';
         }
@@ -162,34 +162,34 @@ class LogShowCommand extends Command
         $output->writeln('resulted query: '.$sql);
         $output->writeln(' ');
 
-        $tableColumns = array();
+        $tableColumns = [];
 
         $result = \MySqlLegacySupport::getInstance()->query($sql);
         while ($row = \MySqlLegacySupport::getInstance()->fetch_object($result)) {
             $timestamp = date('d.m.Y H:i:s', $row->timestamp);
 
             $message = $row->message;
-            $message = str_replace(array("\n", "\t", "\r"), '', $message);
+            $message = str_replace(["\n", "\t", "\r"], '', $message);
             if (strlen($message) > 100) {
-                $message = substr($message, 0, 50).' ... '.substr($message, (strlen($message) - 50), strlen($message));
+                $message = substr($message, 0, 50).' ... '.substr($message, strlen($message) - 50, strlen($message));
             }
 
             switch ($input->getOption('details')) {
                 case 'min':
-                    $tableColumns[] = array($row->cmsident, $timestamp, $row->channel, $row->level, $message);
+                    $tableColumns[] = [$row->cmsident, $timestamp, $row->channel, $row->level, $message];
                     break;
                 case 'med':
-                    $tableColumns[] = array(
+                    $tableColumns[] = [
                         $row->cmsident,
                         $timestamp,
                         $row->channel,
                         $row->level,
                         $message,
                         strtoupper($row->http_method).' '.$row->server.$row->request_url,
-                    );
+                    ];
                     break;
                 case 'max':
-                    $tableColumns[] = array(
+                    $tableColumns[] = [
                         $row->cmsident,
                         $timestamp,
                         $row->channel,
@@ -197,14 +197,14 @@ class LogShowCommand extends Command
                         $message,
                         strtoupper($row->http_method).' / '.$row->server.$row->request_url.' / '.$row->referrer_url,
                         $row->ip.' / '.$row->data_extranet_user_id.' / '.$row->data_extranet_user_name.' / '.$row->cms_user_id,
-                    );
+                    ];
                     break;
                 case 'single':
                     foreach ($row as $key => $value) {
                         if ('timestamp' === $key) {
                             $value = $timestamp.' ('.$value.')';
                         }
-                        $tableColumns[] = array($key, $value);
+                        $tableColumns[] = [$key, $value];
                     }
             }
         }
@@ -214,21 +214,21 @@ class LogShowCommand extends Command
 
             switch ($input->getOption('details')) {
                 case 'min':
-                    $table->setHeaders(array('cmsident', 'time', 'channel', 'level', 'message'));
+                    $table->setHeaders(['cmsident', 'time', 'channel', 'level', 'message']);
                     break;
                 case 'med':
-                    $table->setHeaders(array(
+                    $table->setHeaders([
                             'cmsident',
                             'time',
                             'channel',
                             'level',
                             'message',
                             'method / server + request_url',
-                        )
+                        ]
                     );
                     break;
                 case 'max':
-                    $table->setHeaders(array(
+                    $table->setHeaders([
                             'cmsident',
                             'time',
                             'channel',
@@ -236,7 +236,7 @@ class LogShowCommand extends Command
                             'message',
                             'method / server + request_url / referrer_url',
                             'ip / data_extranet_user_id / -_user_name / cms_user_id',
-                        )
+                        ]
                     );
                     break;
             }

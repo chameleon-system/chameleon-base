@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Prophecy\Prophet;
 
 class AbstractQueryTestCase extends TestCase
 {
@@ -56,7 +55,7 @@ class AbstractQueryTestCase extends TestCase
 
         $this->dataAccess = $this->prophesize('ChameleonSystem\DatabaseMigrationBundle\Bridge\Chameleon\DataAccess\AbstractQueryDataAccessInterface');
         $this->dataAccess->getBaseLanguageIso()->willReturn('en');
-        $this->dataAccess->getTranslatedFieldsForTable('foo_table')->willReturn(array('translatedField'));
+        $this->dataAccess->getTranslatedFieldsForTable('foo_table')->willReturn(['translatedField']);
     }
 
     protected function mockQuote()
@@ -73,10 +72,6 @@ class AbstractQueryTestCase extends TestCase
         });
     }
 
-    /**
-     * @param $expectedQuery
-     * @param $expectedQueryParams
-     */
     protected function thenIShouldGetQueryAndQueryParams($expectedQuery, $expectedQueryParams)
     {
         $this->assertEquals($expectedQuery, $this->actualQuery);
@@ -85,9 +80,6 @@ class AbstractQueryTestCase extends TestCase
 
     /**
      * Creates a MigrationQueryData object, avoiding the PHP 5.3 limitation of not being able to call "fluent constructors".
-     *
-     * @param $tableName
-     * @param $language
      *
      * @return MigrationQueryData
      */

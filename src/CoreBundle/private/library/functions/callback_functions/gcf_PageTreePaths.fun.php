@@ -11,7 +11,7 @@
 
 function gcf_PageTreePaths($sTreePathCache, $row)
 {
-    $sTreePaths = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.no_node_assigned');
+    $sTreePaths = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.no_node_assigned');
     $aAllPaths = explode("\n", $sTreePathCache);
 
     $sTreePaths = '';

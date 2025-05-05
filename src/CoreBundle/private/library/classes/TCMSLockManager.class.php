@@ -13,11 +13,11 @@
  * the class is used to implement global locks across clustered webserver -
  * we assume, that there is one database server, all webserver have access to - and use it
  * in combination with a memory table, to implement a locking mechanism.
-/**/
+ * /**/
 class TCMSLockManager
 {
-    const LOCKTABLE = '_cms_lockmanager';
-    const MAXAGE = 5;
+    public const LOCKTABLE = '_cms_lockmanager';
+    public const MAXAGE = 5;
 
     /**
      * Get a lock for Identifier $sIdentifier.

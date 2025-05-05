@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace  ChameleonSystem\CoreBundle\DependencyInjection;
+namespace ChameleonSystem\CoreBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
@@ -64,7 +64,7 @@ class Configuration implements ConfigurationInterface
         $subTree->addDefaultsIfNotSet();
         $subTree->children()
             ->arrayNode('ip_whitelist')
-                ->defaultValue(array())
+                ->defaultValue([])
                 ->prototype('scalar')->end()
             ->end()
             ->integerNode('fail_on_error_level')
@@ -122,7 +122,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('password')
             ->end()
             ->enumNode('peer_security')
-                ->values(array('strict', 'permissive'))
+                ->values(['strict', 'permissive'])
                 ->defaultValue('strict')
             ->end()
         ->end();

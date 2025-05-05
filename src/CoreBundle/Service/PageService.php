@@ -18,9 +18,6 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsTplPage;
 
 class PageService implements PageServiceInterface
 {
@@ -98,7 +95,7 @@ class PageService implements PageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToPageRelative($pageId, array $parameters = array(), TdbCmsLanguage $language = null)
+    public function getLinkToPageRelative($pageId, array $parameters = [], ?\TdbCmsLanguage $language = null)
     {
         $page = $this->getById($pageId);
         if (null === $page) {
@@ -111,24 +108,22 @@ class PageService implements PageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToPageObjectRelative(TdbCmsTplPage $page, array $parameters = array(), TdbCmsLanguage $language = null)
+    public function getLinkToPageObjectRelative(\TdbCmsTplPage $page, array $parameters = [], ?\TdbCmsLanguage $language = null)
     {
         return $this->getLinkToPageObject($page, $parameters, $language, false, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
     /**
-     * @param TdbCmsTplPage       $page
-     * @param array               $parameters
-     * @param TdbCmsLanguage|null $language
-     * @param bool                $forceSecure
-     * @param int                 $referenceType
+     * @param bool $forceSecure
+     * @param int $referenceType
+     *
      * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
      *
      * @throws RouteNotFoundException
      */
-    private function getLinkToPageObject(TdbCmsTplPage $page, array $parameters = array(), TdbCmsLanguage $language = null, $forceSecure = false, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    private function getLinkToPageObject(\TdbCmsTplPage $page, array $parameters = [], ?\TdbCmsLanguage $language = null, $forceSecure = false, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $portal = $page->GetPortal();
         if ($page->GetMainTreeId() === $portal->fieldHomeNodeId) {
@@ -153,11 +148,9 @@ class PageService implements PageServiceInterface
     }
 
     /**
-     * @param TdbCmsTplPage $page
-     *
-     * @return TdbCmsLanguage|null
+     * @return \TdbCmsLanguage|null
      */
-    private function getLanguageFallback(TdbCmsTplPage $page)
+    private function getLanguageFallback(\TdbCmsTplPage $page)
     {
         $language = $this->languageService->getActiveLanguage();
         if (null === $language) {
@@ -173,7 +166,7 @@ class PageService implements PageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToPageAbsolute($pageId, array $parameters = array(), TdbCmsLanguage $language = null, $forceSecure = false)
+    public function getLinkToPageAbsolute($pageId, array $parameters = [], ?\TdbCmsLanguage $language = null, $forceSecure = false)
     {
         $page = $this->getById($pageId);
         if (null === $page) {
@@ -186,7 +179,7 @@ class PageService implements PageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToPageObjectAbsolute(TdbCmsTplPage $page, array $parameters = array(), TdbCmsLanguage $language = null, $forceSecure = false)
+    public function getLinkToPageObjectAbsolute(\TdbCmsTplPage $page, array $parameters = [], ?\TdbCmsLanguage $language = null, $forceSecure = false)
     {
         return $this->getLinkToPageObject($page, $parameters, $language, $forceSecure, UrlGeneratorInterface::ABSOLUTE_URL);
     }
@@ -194,7 +187,7 @@ class PageService implements PageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToPortalHomePageRelative(array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    public function getLinkToPortalHomePageRelative(array $parameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
         return $this->getLinkToPortalHomePage($parameters, $portal, $language, false, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
@@ -202,17 +195,15 @@ class PageService implements PageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkToPortalHomePageAbsolute(array $parameters = array(), TdbCmsPortal $portal = null, TdbCmsLanguage $language = null, $forceSecure = false)
+    public function getLinkToPortalHomePageAbsolute(array $parameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $forceSecure = false)
     {
         return $this->getLinkToPortalHomePage($parameters, $portal, $language, $forceSecure, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**
-     * @param array               $parameters
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
-     * @param bool                $forceSecure
-     * @param int                 $referenceType
+     * @param bool $forceSecure
+     * @param int $referenceType
+     *
      * @psalm-param UrlGeneratorInterface::* $referenceType
      *
      * @return string
@@ -220,9 +211,9 @@ class PageService implements PageServiceInterface
      * @throws RouteNotFoundException
      */
     private function getLinkToPortalHomePage(
-        array $parameters = array(),
-        TdbCmsPortal $portal = null,
-        TdbCmsLanguage $language = null,
+        array $parameters = [],
+        ?\TdbCmsPortal $portal = null,
+        ?\TdbCmsLanguage $language = null,
         $forceSecure = false,
         $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
     ) {

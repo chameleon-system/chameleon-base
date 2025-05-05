@@ -17,7 +17,6 @@ interface IMapperRequirementsRestricted
      *
      * @param string $key
      * @param string $sType
-     * @param mixed $sDefault
      * @param bool $bOptional
      *
      * @return void

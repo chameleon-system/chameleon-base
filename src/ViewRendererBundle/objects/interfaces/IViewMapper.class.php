@@ -24,7 +24,6 @@ interface IViewMapper extends IVisitable
      * $oRequirements->NeedsSourceObject("bar");
      * $oRequirements->NeedsMappedValue("baz");
      *
-     * @param IMapperRequirementsRestricted $oRequirements
      * @return void
      */
     public function GetRequirements(IMapperRequirementsRestricted $oRequirements);

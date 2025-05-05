@@ -33,7 +33,6 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
             return $query;
         }
 
-
         // if the user is not an admin, then he may not view admin users and the public www user
 
         $tmpquery = "SELECT DISTINCT `cms_user_cms_role_mlt`.source_id
@@ -41,7 +40,7 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
              INNER JOIN  `cms_role` ON `cms_user_cms_role_mlt`.`target_id` = `cms_role`.`id`
                   WHERE `cms_role`.`name` = 'cms_admin' OR `cms_role`.`name` = 'www'";
         $adminRows = $this->getDatabaseConnection()->fetchAllAssociative($tmpquery);
-        $aAdminIds = array();
+        $aAdminIds = [];
         foreach ($adminRows as $admin) {
             $aAdminIds[] = $admin['source_id'];
         }
@@ -49,7 +48,7 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
         if (count($aAdminIds) > 0) {
             // get admin users and exclude them..
             $databaseConnection = $this->getDatabaseConnection();
-            $adminIdString = implode(',', array_map(array($databaseConnection, 'quote'), $aAdminIds));
+            $adminIdString = implode(',', array_map([$databaseConnection, 'quote'], $aAdminIds));
             $restrictionQuery = $this->CreateRestriction('id', "NOT IN ($adminIdString)");
         }
         if (!empty($restrictionQuery)) {
@@ -63,7 +62,7 @@ class TCMSListManagerCMSUser extends TCMSListManagerFullGroupTable
      * shows the delete button only if user is not required from system.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */

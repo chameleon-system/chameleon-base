@@ -269,6 +269,7 @@ class MySqlLegacySupport
             // No rows returned
             return null;
         }
+
         return (object) $row;
     }
 

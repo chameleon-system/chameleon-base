@@ -201,6 +201,7 @@ class AuthenticityTokenManagerTest extends TestCase
         if (is_string($expectedResult)) {
             $this->assertIsString($this->actualResult);
             $this->assertStringStartsWith($expectedResult, $this->actualResult);
+
             return;
         }
         if (is_array($expectedResult)) {
@@ -208,6 +209,7 @@ class AuthenticityTokenManagerTest extends TestCase
             foreach ($expectedResult as $expectedKey) {
                 $this->assertArrayHasKey($expectedKey, $this->actualResult);
             }
+
             return;
         }
         $this->assertTrue(false, 'Expected either a string or an array');
@@ -223,11 +225,6 @@ class AuthenticityTokenManagerTest extends TestCase
 
     /**
      * @dataProvider provideDataForTestIsAuthenticityTokenValid
-     *
-     * @param bool   $authenticityTokenUsageEnabled
-     * @param string $submittedToken
-     * @param string $storedToken
-     * @param bool   $expectedResult
      */
     public function testIsTokenValid(bool $authenticityTokenUsageEnabled, ?string $submittedToken, ?string $storedToken, bool $expectedResult): void
     {
@@ -392,9 +389,6 @@ class AuthenticityTokenManagerTest extends TestCase
 
     /**
      * @dataProvider provideDataForTestAddTokenToForms
-     *
-     * @param string $inputPath
-     * @param string $expectationPath
      */
     public function testAddTokenToForms(string $inputPath, string $expectationPath): void
     {
@@ -448,7 +442,6 @@ class AuthenticityTokenManagerTest extends TestCase
     /**
      * @dataProvider provideDataForTestGetTokenPlaceholderAsParameter
      *
-     * @param int          $format
      * @param string|array $expectedValue
      */
     public function testGetTokenPlaceholderAsParameter(int $format, $expectedValue): void
@@ -509,7 +502,6 @@ class AuthenticityTokenManagerTest extends TestCase
     /**
      * @dataProvider provideDataForTestGetResolvedTokenAsParameter
      *
-     * @param int          $format
      * @param string|array $expectedValue
      */
     public function testGetResolvedTokenAsParameter(int $format, $expectedValue): void

@@ -18,7 +18,7 @@ class TPkgCmsCaptcha_TextFieldJavascriptHidden extends TdbPkgCmsCaptcha
      * note: the code will be removed from session.
      *
      * @param string $sIdentifier
-     * @param string $sCode       will be ignored by this type of captcha and shall be passed as empty string
+     * @param string $sCode will be ignored by this type of captcha and shall be passed as empty string
      *
      * @return bool
      */
@@ -28,7 +28,7 @@ class TPkgCmsCaptcha_TextFieldJavascriptHidden extends TdbPkgCmsCaptcha
         if (false === $sCodeFromSession) {
             return false;
         }
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         $bValid = (null !== $request->get($sCodeFromSession, null));
         $sValue = $this->getInputFilterUtil()->getFilteredInput($sCodeFromSession, '');
         $bValid = ($bValid && '' === $sValue);
@@ -40,14 +40,14 @@ class TPkgCmsCaptcha_TextFieldJavascriptHidden extends TdbPkgCmsCaptcha
      * generates a code for an identifier only once within one session call.
      *
      * @param string $sIdentifier
-     * @param int    $iCharacters will be ignored by this type of captcha
+     * @param int $iCharacters will be ignored by this type of captcha
      *
      * @return string
      */
     protected function GenerateCode($sIdentifier, $iCharacters)
     {
         /** @var array<string, string> $aCodeCache */
-        static $aCodeCache = array(); // generate a code for an identifier only once within one session call
+        static $aCodeCache = []; // generate a code for an identifier only once within one session call
 
         if (!array_key_exists($sIdentifier, $aCodeCache)) {
             $sCode = TTools::GenerateNicePassword();
@@ -89,6 +89,6 @@ class TPkgCmsCaptcha_TextFieldJavascriptHidden extends TdbPkgCmsCaptcha
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 }

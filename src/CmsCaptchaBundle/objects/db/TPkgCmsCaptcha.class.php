@@ -11,15 +11,13 @@
 
 class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
 {
-    const URL_IDENTIFIER = '_cmscaptcha_';
+    public const URL_IDENTIFIER = '_cmscaptcha_';
 
     /**
      * factory creates a new instance and returns it.
      *
-     * @param string|array $sData     - either the id of the object to load, or the row with which the instance should be initialized
-     * @param string       $sLanguage - init with the language passed
-     *
-     * @return TdbPkgCmsCaptcha
+     * @param string|array $sData - either the id of the object to load, or the row with which the instance should be initialized
+     * @param string $sLanguage - init with the language passed
      */
     public static function GetNewInstance($sData = null, $sLanguage = null): TdbPkgCmsCaptcha
     {
@@ -55,7 +53,7 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      *
      * @return void
      */
-    public function GenerateNewCaptchaImage($sIdentifier, $aParameter = array())
+    public function GenerateNewCaptchaImage($sIdentifier, $aParameter = [])
     {
         $iLength = 6;
         $iWidth = 120;
@@ -193,7 +191,7 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
     protected static function SaveInSession($sIdentifier, $sCode)
     {
         if (!array_key_exists(self::URL_IDENTIFIER, $_SESSION)) {
-            $_SESSION[self::URL_IDENTIFIER] = array();
+            $_SESSION[self::URL_IDENTIFIER] = [];
         }
         $_SESSION[self::URL_IDENTIFIER][$sIdentifier] = $sCode;
     }
@@ -238,14 +236,14 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      * generates a code for an identifier only once within one session call.
      *
      * @param string $sIdentifier
-     * @param int    $iCharacters
+     * @param int $iCharacters
      *
      * @return string
      */
     protected function GenerateCode($sIdentifier, $iCharacters)
     {
         /** @var array<string, string> $aCodeCache */
-        static $aCodeCache = array();
+        static $aCodeCache = [];
         if (!array_key_exists($sIdentifier, $aCodeCache)) {
             $possible = '23456789bcdfghjkmnpqrstvwxyz';
             $code = '';
@@ -277,11 +275,11 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      * generates the url that creates a random captcha.
      *
      * @param string $sIdentifier
-     * @param array  $aParameter
+     * @param array $aParameter
      *
      * @return string
      */
-    public function GetRequestURL($sIdentifier, $aParameter = array())
+    public function GetRequestURL($sIdentifier, $aParameter = [])
     {
         $sURL = '/'.self::URL_IDENTIFIER.'/'.$this->sqlData['cmsident'].'/'.$sIdentifier;
         $aParameter['rnd'] = rand(1000000, 9999999);
@@ -303,7 +301,7 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      */
     public static function GetInstanceFromName($sName)
     {
-        static $aCache = array();
+        static $aCache = [];
         if (false == array_key_exists($sName, $aCache)) {
             $oInstance = TdbPkgCmsCaptcha::GetNewInstance();
             if ($oInstance->LoadFromField('name', $sName)) {
@@ -326,7 +324,7 @@ class TPkgCmsCaptcha extends TPkgCmsCaptchaAutoParent
      */
     public static function GetInstanceFromCmsIdent($iCmsIdent)
     {
-        static $aCache = array();
+        static $aCache = [];
         if (false == array_key_exists($iCmsIdent, $aCache)) {
             $oInstance = TdbPkgCmsCaptcha::GetNewInstance();
             if ($oInstance->LoadFromField('cmsident', $iCmsIdent)) {

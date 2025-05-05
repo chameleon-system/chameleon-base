@@ -73,7 +73,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
                     if ($this->aUploadData['size'] <= $imageUploadMaxSize) {
                         $isValid = true;
                     } else {
-                        throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_files.error_file_to_large',
+                        throw new Exception(ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_files.error_file_to_large',
                             [
                                 '%size%' => TCMSLocal::GetActive()->FormatNumber($this->aUploadData['size'], 0),
                                 '%allowed%' => TCMSLocal::GetActive()->FormatNumber($imageUploadMaxSize, 0),
@@ -165,7 +165,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
 
         if (!$isValid) {
             if ($bProportionExactMatch) {
-                throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_media.error_requires_exact_dimension',
+                throw new Exception(ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_media.error_requires_exact_dimension',
                     [
                         '%width%' => $iMediaWidth,
                         '%height%' => $iMediaHeight,
@@ -174,7 +174,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
                     ]
                 ), -240);
             } else {
-                throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_media.error_invalid_dimensions',
+                throw new Exception(ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_media.error_invalid_dimensions',
                     [
                         '%width%' => $iMediaWidth,
                         '%height%' => $iMediaHeight,
@@ -221,13 +221,13 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
                     if (in_array($realFileExtension, $allowedFileTypes)) {
                         // check for CMYK images
                         if (isset($imageInfo['channels']) && 4 == $imageInfo['channels']) {
-                            throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_media.error_cmyk'), -270);
+                            throw new Exception(ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_media.error_cmyk'), -270);
                         // image is CMYK
                         } else {
                             $isValid = true;
                         }
                     } else {
-                        throw new Exception(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_media.error_invalid_format'), -270);
+                        throw new Exception(ServiceLocator::get('translator')->trans('chameleon_system_core.table_editor_media.error_invalid_format'), -270);
                     }
                 }
             }

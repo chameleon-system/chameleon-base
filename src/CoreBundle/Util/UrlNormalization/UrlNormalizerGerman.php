@@ -16,7 +16,7 @@ class UrlNormalizerGerman implements UrlNormalizerInterface
     /**
      * @var array<string, string>
      */
-    private static $germanCharNormalization = array(
+    private static $germanCharNormalization = [
         'ä' => 'ae',
         'ö' => 'oe',
         'ü' => 'ue',
@@ -24,7 +24,7 @@ class UrlNormalizerGerman implements UrlNormalizerInterface
         'Ä' => 'Ae',
         'Ö' => 'Oe',
         'Ü' => 'Ue',
-    );
+    ];
 
     /**
      * {@inheritdoc}

@@ -11,7 +11,7 @@
 
 /**
  * field name in a table.
-/**/
+ * /**/
 class TCMSFieldTablefieldnameExport extends TCMSFieldTablefieldname
 {
     public function GetOptions()
@@ -33,7 +33,7 @@ class TCMSFieldTablefieldnameExport extends TCMSFieldTablefieldname
             $query = "SELECT `id` FROM `cms_tbl_conf` WHERE `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($tableName)."'";
             if ($tmp = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query))) {
                 $oTableConf = new TCMSTableConf();
-                /** @var $oTableConf TCMSTableConf */
+                /* @var $oTableConf TCMSTableConf */
                 $oTableConf->Load($tmp['id']);
 
                 $oFields = $oTableConf->GetFieldDefinitions();

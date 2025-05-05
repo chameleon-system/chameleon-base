@@ -11,8 +11,8 @@
 
 namespace ChameleonSystem\CoreBundle\UniversalUploader\Library;
 
-use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploadedFileDataModel;
 use ChameleonSystem\CoreBundle\UniversalUploader\Exception\UploaderPostDataException;
+use ChameleonSystem\CoreBundle\UniversalUploader\Library\DataModel\UploadedFileDataModel;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -23,8 +23,6 @@ interface UploaderPostHandlerServiceInterface
 {
     /**
      * handles file upload and accompanying form fields via post.
-     *
-     * @param UploaderConfigurationInterface $uploaderConfiguration
      *
      * @return UploadedFileDataModel[]
      *

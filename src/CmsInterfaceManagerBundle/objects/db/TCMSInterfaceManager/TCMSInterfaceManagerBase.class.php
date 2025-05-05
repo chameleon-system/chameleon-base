@@ -34,7 +34,7 @@ class TCMSInterfaceManagerBase extends TCMSRecord
      *
      * @var array
      */
-    protected $aMessages = array();
+    protected $aMessages = [];
 
     /**
      * @param string $id
@@ -69,6 +69,7 @@ class TCMSInterfaceManagerBase extends TCMSRecord
 
     /**
      * @param string $sKey
+     *
      * @return false|mixed
      */
     protected function GetParameter($sKey)

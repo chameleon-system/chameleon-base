@@ -14,7 +14,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 /**
  * fetches one (random) image for the current page. the image is loaded either from the page,
  * or from its division.
-/**/
+ * /**/
 class MTPageImageCore extends TUserModelBase
 {
     protected $bAllowHTMLDivWrapping = true;
@@ -71,7 +71,7 @@ class MTPageImageCore extends TUserModelBase
         if (array_key_exists('images', $activePage->sqlData)) {
             $oPageImages = $activePage->GetImages('images');
             if ($oPageImages->Length() > 0) {
-                /** @var $oImage TCMSImage */
+                /* @var $oImage TCMSImage */
                 if ($this->bPickRandomImage) {
                     $oImage = $oPageImages->Random();
                 } else {
@@ -99,7 +99,7 @@ class MTPageImageCore extends TUserModelBase
             $oDivisionImages = $oDivision->GetImages('images');
 
             if ($oDivisionImages->Length() > 0) {
-                /** @var $oImage TCMSImage */
+                /* @var $oImage TCMSImage */
                 if ($this->bPickRandomImage) {
                     $oImage = $oDivisionImages->Random();
                 } else {
@@ -143,9 +143,9 @@ class MTPageImageCore extends TUserModelBase
     {
         $aTableInfo = parent::_GetCacheTableInfos();
         $activePage = $this->getActivePageService()->getActivePage();
-        $aTableInfo[] = array('table' => 'cms_tpl_page', 'id' => $activePage->id);
-        $aTableInfo[] = array('table' => 'cms_portal', 'id' => '');
-        $aTableInfo[] = array('table' => 'cms_division', 'id' => '');
+        $aTableInfo[] = ['table' => 'cms_tpl_page', 'id' => $activePage->id];
+        $aTableInfo[] = ['table' => 'cms_portal', 'id' => ''];
+        $aTableInfo[] = ['table' => 'cms_division', 'id' => ''];
 
         return $aTableInfo;
     }
@@ -155,6 +155,6 @@ class MTPageImageCore extends TUserModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 }

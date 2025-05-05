@@ -2,16 +2,12 @@
 
 namespace ChameleonSystem\SecurityBundle\CmsGoogleLogin;
 
-use ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess;
-use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
-use JetBrains\PhpStorm\ArrayShape;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use League\OAuth2\Client\Provider\GoogleUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -19,12 +15,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 
-class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationEntrypointInterface
+class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationEntryPointInterface
 {
-
     /**
-     * @param ClientRegistry $clientRegistry
-     * @param GoogleUserRegistrationServiceInterface $registrationService
      * @param string[] $allowedDomains
      */
     public function __construct(
@@ -37,7 +30,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
     public function supports(Request $request): ?bool
     {
         // continue ONLY if the current ROUTE matches the check ROUTE
-        return $request->attributes->get('_route') === 'connect_google_check';
+        return 'connect_google_check' === $request->attributes->get('_route');
     }
 
     public function authenticate(Request $request): Passport
@@ -57,7 +50,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
         }
 
         return new SelfValidatingPassport(
-            new UserBadge($accessToken->getToken(), function() use ($accessToken, $client) {
+            new UserBadge($accessToken->getToken(), function () use ($accessToken, $client) {
                 /** @var GoogleUser $googleUser */
                 $googleUser = $client->fetchUserFromToken($accessToken);
 
@@ -86,7 +79,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
      * Called when authentication is needed, but it's not sent.
      * This redirects to the 'login'.
      */
-    public function start(Request $request, AuthenticationException $authException = null): Response
+    public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
         return new RedirectResponse(
             PATH_CMS_CONTROLLER,

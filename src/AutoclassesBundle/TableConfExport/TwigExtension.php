@@ -10,8 +10,7 @@ class TwigExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('chameleon_ucfirst', static fn($value) => ucfirst($value)),
+            new TwigFilter('chameleon_ucfirst', static fn ($value) => ucfirst($value)),
         ];
     }
-
 }

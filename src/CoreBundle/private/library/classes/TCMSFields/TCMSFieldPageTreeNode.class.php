@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -30,8 +29,8 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     {
         $primaryPath = $this->GetHTMLPrimaryTree();
         $additionalPaths = $this->GetHTMLSecondaryTree();
-        $selectPrimaryTreeNodeButton = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_primary_node'), "javascript:loadTreeNodeSelection('".TGlobal::OutJS($this->name)."',document.cmseditform.".TGlobalBase::OutHTML($this->name).'.value);', 'fas fa-check');
-        $selectAdditionalTreeNodesButton = TCMSRender::DrawButton(\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_secondary_nodes'), 'javascript:openFullTree();', 'fas fa-check-double');
+        $selectPrimaryTreeNodeButton = TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_primary_node'), "javascript:loadTreeNodeSelection('".TGlobal::OutJS($this->name)."',document.cmseditform.".TGlobalBase::OutHTML($this->name).'.value);', 'fas fa-check');
+        $selectAdditionalTreeNodesButton = TCMSRender::DrawButton(ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_secondary_nodes'), 'javascript:openFullTree();', 'fas fa-check-double');
 
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('fieldName', $this->name);
@@ -84,15 +83,13 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     /**
      * Constructs and renders a tree path in printable form or an optional fallback.
      *
-     * @param TdbCmsTree|null $tree
-     *
      * @return string
      */
-    private function getRenderedTreeNodePath(TdbCmsTree $tree = null)
+    private function getRenderedTreeNodePath(?TdbCmsTree $tree = null)
     {
         // If no tree node was supplied and rendering empty paths was requested, return fallback.
         if (null === $tree) {
-            return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.no_node_assigned');
+            return ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.no_node_assigned');
         }
         // Retrieve portal through referenced linked page.
         $path = $tree->GetTextPathToNode('/', false, true);
@@ -102,7 +99,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
         if (false !== $linkedPageObject) {
             $portal = $linkedPageObject->GetPortal();
             if (null !== $portal) {
-                $path = $portal->GetName() . '/' . $path;
+                $path = $portal->GetName().'/'.$path;
             }
         }
         // Form rendered path from slash separated path string.
@@ -244,7 +241,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
      * Delete given tree connection.
      *
      * @param TdbCmsTreeNode $oCmsTreeNode
-     * @param string         $sTableId
+     * @param string $sTableId
      */
     protected function DeleteTreeConnection($oCmsTreeNode, $sTableId)
     {
@@ -263,7 +260,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     {
         $oTableEditor = new TCMSTableEditorManager();
         $oTableEditor->Init($sTableId, null);
-        $aData = array('contid' => $this->recordId, 'tbl' => $this->sTableName, 'cms_tree_id' => $this->data, 'active' => '1');
+        $aData = ['contid' => $this->recordId, 'tbl' => $this->sTableName, 'cms_tree_id' => $this->data, 'active' => '1'];
         $oTableEditor->Save($aData);
     }
 
@@ -292,9 +289,9 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
             }
-            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER."?pagedef=".TGlobal::OutJS($this->treeNodeSelectModulePagedef)."&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID + '&currentPageId=".$this->oTableRow->id."', 0, 0, '".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_primary_node')."');
+            CreateModalIFrameDialogCloseButton('".PATH_CMS_CONTROLLER.'?pagedef='.TGlobal::OutJS($this->treeNodeSelectModulePagedef)."&id=' + id + '&fieldName=' + fieldName + '&portalID=' + portalID + '&currentPageId=".$this->oTableRow->id."', 0, 0, '".ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_primary_node')."');
           } else {
-            toasterMessage('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
+            toasterMessage('".ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
           }
         }
 
@@ -306,16 +303,16 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
               $('#cms_portal_id').remove();
               $('#tooltipcms_portal_id_content').parent('td').prepend('<input type=\"hidden\" name=\"cms_portal_id\" id=\"cms_portal_id\" value=\"' + portalID + '\" />' + portalName);
               $('#tooltipcms_portal_id_content').siblings('.switchToRecordBox').remove();
-              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
-              toasterMessage('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
+              toasterMessage('".ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }
           } else {
             var portalID = document.getElementById('cms_portal_id').value;
             if(portalID != '0' && portalID != '') {
-              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
+              CreateModalIFrameDialogCloseButton('".$navigationTreeUrl."',0,0,'".ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.assign_secondary_nodes')."');
             } else {
-              toasterMessage('".\ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
+              toasterMessage('".ServiceLocator::get('translator')->trans('chameleon_system_core.field_page_tree_node.error_no_portal_selected')."','WARNING');
             }
           }
         }
@@ -335,7 +332,7 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
                 'id' => $this->oTableRow->id,
                 'isInIframe' => '1',
                 'fieldName' => $this->name,
-                'primaryTreeNodeId' => $this->oTableRow->fieldPrimaryTreeIdHidden
+                'primaryTreeNodeId' => $this->oTableRow->fieldPrimaryTreeIdHidden,
             ], '', '&');
     }
 
@@ -353,5 +350,4 @@ class TCMSFieldPageTreeNode extends TCMSFieldTreeNode
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
-
 }

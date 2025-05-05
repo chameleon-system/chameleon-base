@@ -62,18 +62,18 @@ class MTBreadcrumbCore extends TUserModelBase
      */
     public function _GetCacheTableInfos()
     {
-        $tableInfo = array(array('table' => 'cms_tree_node', 'id' => ''));
+        $tableInfo = [['table' => 'cms_tree_node', 'id' => '']];
 
         $oActivePage = $this->getActivePageService()->getActivePage();
         while ($oTreeNode = $oActivePage->getBreadcrumb()->Next()) {
-            /** @var $oTreeNode TCMSTreeNode */
-            $tableInfo[] = array('table' => 'cms_tree', 'id' => $oTreeNode->id);
+            /* @var $oTreeNode TCMSTreeNode */
+            $tableInfo[] = ['table' => 'cms_tree', 'id' => $oTreeNode->id];
             if (method_exists($oTreeNode, 'GetAllLinkedPages')) {
                 $oPagesList = $oTreeNode->GetAllLinkedPages();
                 /** @var $oPagesList TCMSRecordList */
                 $aPageIDs = $oPagesList->GetIdList();
                 if (is_array($aPageIDs) && count($aPageIDs) > 0) {
-                    $tableInfo[] = array('table' => 'cms_tpl_page', 'id' => $aPageIDs);
+                    $tableInfo[] = ['table' => 'cms_tpl_page', 'id' => $aPageIDs];
                 }
             }
         }
@@ -94,7 +94,7 @@ class MTBreadcrumbCore extends TUserModelBase
      */
     protected function getActivePageService()
     {
-        $activePageService = \ChameleonSystem\CoreBundle\ServiceLocator::get(
+        $activePageService = ChameleonSystem\CoreBundle\ServiceLocator::get(
             'chameleon_system_core.active_page_service'
         );
 

@@ -6,7 +6,6 @@ use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\ExtranetBundle\objects\ExtranetUserEvent;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -16,7 +15,7 @@ class RehashPasswordListenerTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var \TdbDataExtranetUser|PHPUnit_Framework_MockObject_MockObject
+     * @var \TdbDataExtranetUser|\PHPUnit_Framework_MockObject_MockObject
      */
     private $user;
     /**
@@ -57,7 +56,7 @@ class RehashPasswordListenerTest extends TestCase
      *
      * @param string $oldHashedPassword
      * @param string $newPlainPassword
-     * @param bool   $isNewPasswordHashRequired
+     * @param bool $isNewPasswordHashRequired
      */
     public function testRehashPassword($oldHashedPassword, $newPlainPassword, $isNewPasswordHashRequired)
     {
@@ -70,7 +69,7 @@ class RehashPasswordListenerTest extends TestCase
 
     /**
      * @param string $oldHashedPassword
-     * @param bool   $isNewPasswordHashRequired
+     * @param bool $isNewPasswordHashRequired
      */
     private function givenAnExtranetUser($oldHashedPassword, $isNewPasswordHashRequired)
     {
@@ -78,7 +77,7 @@ class RehashPasswordListenerTest extends TestCase
             ->getMockBuilder('\TdbDataExtranetUser')
             ->disableAutoload()
             ->disableOriginalConstructor()
-            ->setMethods(array('SaveFieldsFast'))
+            ->setMethods(['SaveFieldsFast'])
             ->getMock();
         $this->user->fieldPassword = $oldHashedPassword;
         $this->user->expects($this->exactly($isNewPasswordHashRequired ? 1 : 0))->method('SaveFieldsFast');
@@ -120,17 +119,17 @@ class RehashPasswordListenerTest extends TestCase
      */
     public function getRehashPasswordData()
     {
-        return array(
-            array(
+        return [
+            [
                 'd4628394e|66752b939acaffc7f3c58f56676a995f7add1895',
                 'foo',
                 true,
-            ),
-            array(
+            ],
+            [
                 '$2y$12$LRDuXjBoib0Du5QxjUW2CuJJzxQLSyS2e4UZOctFCmvGkJv1UoRh2',
                 'foo',
                 false,
-            ),
-        );
+            ],
+        ];
     }
 }

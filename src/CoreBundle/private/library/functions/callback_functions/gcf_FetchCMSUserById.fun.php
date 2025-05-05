@@ -11,10 +11,10 @@
 
 function gcf_FetchCMSUserById($id, $row)
 {
-    $name = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.gcf_cms_user_unknown');
+    $name = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.gcf_cms_user_unknown');
     if (!empty($id)) {
         $oCmsUser = TdbCmsUser::GetNewInstance();
-        /** @var $oCmsUser TdbCmsUser */
+        /* @var $oCmsUser TdbCmsUser */
         $oCmsUser->Load($id);
         if (!is_null($oCmsUser)) {
             $name = $oCmsUser->GetDisplayValue();

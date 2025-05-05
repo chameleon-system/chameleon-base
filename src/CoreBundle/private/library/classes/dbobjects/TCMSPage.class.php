@@ -14,7 +14,7 @@ use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
 
 /**
  * holds a page object.
-/**/
+ * /**/
 class TCMSPage extends TCMSPageAutoParent
 {
     /**
@@ -22,21 +22,21 @@ class TCMSPage extends TCMSPageAutoParent
      *
      * @var array
      */
-    protected $_aDataCache = array();
+    protected $_aDataCache = [];
 
     /**
      * the active division.
      *
      * @var TdbCmsDivision
      */
-    private $division = null;
+    private $division;
 
     /**
      * breadcrumb to the current page.
      *
      * @var TCMSPageBreadcrumb
      */
-    private $breadcrumb = null;
+    private $breadcrumb;
 
     /**
      * @return TCMSPageBreadcrumb
@@ -54,7 +54,7 @@ class TCMSPage extends TCMSPageAutoParent
         // add navi nodes as stop nodes...
         $query = "SELECT `tree_node` FROM `cms_portal_navigation` WHERE `cms_portal_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($portal->id)."'";
         $navis = MySqlLegacySupport::getInstance()->query($query);
-        $naviStopNodes = array();
+        $naviStopNodes = [];
         while ($navi = MySqlLegacySupport::getInstance()->fetch_assoc($navis)) {
             $naviStopNodes[] = $navi['tree_node'];
         }
@@ -169,7 +169,7 @@ class TCMSPage extends TCMSPageAutoParent
      * be retrieved).
      *
      * @param array $aStopNodes
-     * @param int   $mainTreeNode
+     * @param int $mainTreeNode
      *
      * @return TCMSPageBreadcrumb
      */
@@ -180,7 +180,7 @@ class TCMSPage extends TCMSPageAutoParent
         }
         if (!array_key_exists('oTreePath', $this->_aDataCache) || !array_key_exists($mainTreeNode, $this->_aDataCache['oTreePath'])) {
             if (!array_key_exists('oTreePath', $this->_aDataCache)) {
-                $this->_aDataCache['oTreePath'] = array();
+                $this->_aDataCache['oTreePath'] = [];
             }
             $oTreeNodes = new TCMSPageBreadcrumb();
             $recordExists = true;
@@ -260,15 +260,15 @@ class TCMSPage extends TCMSPageAutoParent
     public function GetPageTreeNodes($showOnlyActiveNodes = true)
     {
         if (is_null($this->id)) {
-            return array();
+            return [];
         }
 
         if (!array_key_exists('pageTreeNodes', $this->_aDataCache)) {
-            $this->_aDataCache['pageTreeNodes'] = array();
+            $this->_aDataCache['pageTreeNodes'] = [];
 
-            $parameters = array(
+            $parameters = [
                 'pageId' => $this->id,
-            );
+            ];
             $query = "SELECT `cms_tree`.`id`
                         FROM `cms_tree_node`
                   INNER JOIN `cms_tree` ON `cms_tree_node`.`cms_tree_id` = `cms_tree`.`id`
@@ -333,7 +333,7 @@ class TCMSPage extends TCMSPageAutoParent
      */
     public function GetPortal()
     {
-        static $portalCache = array();
+        static $portalCache = [];
         $activePortal = self::getPortalDomainService()->getActivePortal();
         if ($activePortal && $this->fieldCmsPortalId === $activePortal->id) {
             return $activePortal;
@@ -350,15 +350,15 @@ class TCMSPage extends TCMSPageAutoParent
     /**
      * returns smart url for this page.
      *
-     * @param bool   $forceAbsolute
-     * @param array  $aAdditionalParameter
+     * @param bool $forceAbsolute
+     * @param array $aAdditionalParameter
      * @param string $sLanguageIsoName
      *
      * @return string
      *
      * @deprecated since 6.1.0 - use chameleon_system_core.page_service::getLinkToPageObject*() instead
      */
-    public function GetURL($forceAbsolute = false, $aAdditionalParameter = array(), $sLanguageIsoName = '')
+    public function GetURL($forceAbsolute = false, $aAdditionalParameter = [], $sLanguageIsoName = '')
     {
         if (empty($sLanguageIsoName)) {
             $language = null;
@@ -396,19 +396,19 @@ class TCMSPage extends TCMSPageAutoParent
     /**
      * returns the link to the current page including all current parameters.
      *
-     * @var array  $aAdditionalParameters
-     * @var array  $aExcludeParameters
-     * @var string $sLanguageIsoName
+     * @var array
+     * @var array
+     * @var string
      *
      * @return string
      */
-    public function GetRealURL($aAdditionalParameters = array(), $aExcludeParameters = array(), $sLanguageIsoName = '')
+    public function GetRealURL($aAdditionalParameters = [], $aExcludeParameters = [], $sLanguageIsoName = '')
     {
         $language = null;
         if (!empty($sLanguageIsoName)) {
             $language = self::getLanguageService()->getLanguageFromIsoCode($sLanguageIsoName);
         }
-        $sLink = self::getPageService()->getLinkToPageObjectRelative($this, array(), $language);
+        $sLink = self::getPageService()->getLinkToPageObjectRelative($this, [], $language);
 
         // now add all parameters
         if (count($aAdditionalParameters) > 0) {
@@ -440,7 +440,7 @@ class TCMSPage extends TCMSPageAutoParent
      *
      * @return string
      */
-    private function OutputDataAsURL($excludeArray = array())
+    private function OutputDataAsURL($excludeArray = [])
     {
         $aData = TGlobal::instance()->GetUserData();
         if (false === \is_array($aData)) {
@@ -521,7 +521,7 @@ class TCMSPage extends TCMSPageAutoParent
      */
     private function getExtranetUserProvider()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_extranet.extranet_user_provider');
     }
 
     /**
@@ -529,6 +529,6 @@ class TCMSPage extends TCMSPageAutoParent
      */
     private static function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

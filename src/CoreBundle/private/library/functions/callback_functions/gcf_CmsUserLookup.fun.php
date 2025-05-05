@@ -11,8 +11,8 @@
 
 function gcf_CmsUserLookup($field, $row, $fieldName)
 {
-    static $aCMSUserLookup = array();
-    $sText = \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.gcf_cms_user_unknown');
+    static $aCMSUserLookup = [];
+    $sText = ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.gcf_cms_user_unknown');
     if (!empty($field)) {
         if (!array_key_exists($field, $aCMSUserLookup)) {
             $oUser = TdbCmsUser::GetNewInstance();

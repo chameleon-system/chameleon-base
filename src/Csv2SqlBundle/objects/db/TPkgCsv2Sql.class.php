@@ -15,6 +15,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @psalm-suppress UndefinedDocblockClass
  * @psalm-suppress UndefinedClass
+ *
  * @see https://github.com/chameleon-system/chameleon-system/issues/773
  */
 class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
@@ -31,6 +32,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
 
     /**
      * @deprecated since 6.3.0 - not used anymore
+     *
      * @var string
      */
     protected $sLogFileName = 'csv2sql_import.log';
@@ -42,13 +44,14 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      *     bHasErrors: bool,
      * }
      */
-    protected $aImportStats = array('start' => null, 'end' => null, 'bHasErrors' => false);
+    protected $aImportStats = ['start' => null, 'end' => null, 'bHasErrors' => false];
 
     /**
      * @psalm-suppress UndefinedDocblockClass - https://github.com/chameleon-system/chameleon-system/issues/773
+     *
      * @var TPkgCmsBulkSql_LoadDataInfile
      */
-    protected $oBulkInsert = null;
+    protected $oBulkInsert;
 
     /**
      * @return bool
@@ -115,7 +118,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         MySqlLegacySupport::getInstance()->query($sQry);
         $logger->info('create table drop '.MySqlLegacySupport::getInstance()->error());
 
-        $sColumnSet = array();
+        $sColumnSet = [];
         $aRowDefinition = $this->GetRowDef();
         foreach ($aRowDefinition as $iKey => $aRowDef) {
             if ('IGNORE' != strtoupper(trim($aRowDef['type']))) {
@@ -183,7 +186,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     protected function GetRowDef()
     {
-        $aRows = array();
+        $aRows = [];
 
         $aMapDef = explode("\n", trim($this->fieldColumnMapping));
         foreach ($aMapDef as $iK => $sRowDef) {
@@ -191,7 +194,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             $aRowinfo = explode(';', $aRowTmp[1]);
 
             if ('IGNORE' != strtoupper(trim($aRowinfo[0]))) {
-                $aMappedRowInfo = array('name' => $aRowinfo[0], 'type' => $aRowinfo[1], 'convert' => '', 'index' => false);
+                $aMappedRowInfo = ['name' => $aRowinfo[0], 'type' => $aRowinfo[1], 'convert' => '', 'index' => false];
                 if (count($aRowinfo) > 2 && 'false' != $aRowinfo[2]) {
                     $aMappedRowInfo['convert'] = $aRowinfo[2];
                 }
@@ -203,7 +206,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                 }
                 $aRows[] = $aRowinfo;
             } else {
-                $aMappedRowInfo = array('name' => 'IGNORE', 'type' => 'IGNORE');
+                $aMappedRowInfo = ['name' => 'IGNORE', 'type' => 'IGNORE'];
                 foreach ($aMappedRowInfo as $sKey => $sVal) {
                     $aRowinfo[$sKey] = $sVal;
                 }
@@ -226,7 +229,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         $bRet = false;
         $bResult = $this->oBulkInsert->CommitData();
         if (true !== $bResult) {
-            return array('error importing data: '.$bResult);
+            return ['error importing data: '.$bResult];
         }
 
         $logger = $this->getLogger();
@@ -258,7 +261,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                     $bRet = true;
                 }
             } else {
-                //no data found! remove table?
+                // no data found! remove table?
                 $sQry = "DROP TABLE IF EXISTS $quotedTempTargetTableName ";
                 MySqlLegacySupport::getInstance()->query($sQry);
                 $logger->info('drop table because no data was found in CommitTable '.$sQry);
@@ -277,7 +280,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
     {
         $bRet = true;
         $aRowDefinition = $this->GetRowDef();
-        $aIndexDef = array();
+        $aIndexDef = [];
 
         $databaseConnection = $this->getDatabaseConnection();
         foreach ($aRowDefinition as $iKey => $aRowDef) {
@@ -312,14 +315,14 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      * - rename tmp table
      * - move files to archive directory.
      *
-     * @param null                $sLogName
+     * @param null $sLogName
      * @param IPkgCmsBulkSql|null $oBulkInsertManager alternative bulk insert manager if not passed TPkgCmsBulkSql_LoadDataInfile will be used
      *
      * @return array|bool - array of error strings or false on error
      *
      * @psalm-suppress UndefinedClass - https://github.com/chameleon-system/chameleon-system/issues/773
      */
-    public function Import($sLogName = null, IPkgCmsBulkSql $oBulkInsertManager = null)
+    public function Import($sLogName = null, ?IPkgCmsBulkSql $oBulkInsertManager = null)
     {
         $logger = $this->getLogger();
 
@@ -330,7 +333,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             $oBulkInsertManager = new TPkgCmsBulkSql_LoadDataInfile();
         }
         $this->oBulkInsert = $oBulkInsertManager;
-        $aFieldNames = array();
+        $aFieldNames = [];
         foreach ($aRowDefinition as $aMapping) {
             if ('IGNORE' != strtoupper(trim($aMapping['type']))) {
                 $aFieldNames[] = $aMapping['name'];
@@ -343,8 +346,8 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             return false;
         }
 
-        $aResultArray = array();
-        $aRes = array();
+        $aResultArray = [];
+        $aRes = [];
 
         $bDone = false;
         $sSource = trim($this->fieldSource);
@@ -359,13 +362,13 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         if ($bContainsWildcards) {
             $sImportDir = substr($sSource, 0, strrpos($sSource, '*'));
         }
-        //directory
+        // directory
         if (!$bDone && is_dir($sImportDir) && is_readable($sImportDir)) {
             $logger->info('importing dir '.$sImportDir);
             $aRes = $this->_ImportDir($sSource);
             $bDone = true;
         }
-        //file
+        // file
         if (!$bDone && is_file($sSource) && file_exists($sSource) && is_readable($sSource)) {
             $logger->info('importing FILE '.$sImportDir);
             $bTableOK = true;
@@ -403,11 +406,11 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     public static function ArrayConcat($aFirst, $aSecond)
     {
-        $aResult = array();
+        $aResult = [];
         if (is_array($aFirst) && count($aFirst)) {
             $aResult = $aFirst;
             if (is_array($aSecond) && count($aSecond)) {
-                //array_push($aResult, $aSecond);
+                // array_push($aResult, $aSecond);
                 $aResult = array_merge($aResult, $aSecond);
             }
         } else {
@@ -426,7 +429,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     protected function _ImportDir($sSource)
     {
-        $aResultArray = array();
+        $aResultArray = [];
 
         $sImportDir = $sSource;
         $sPattern = '*.csv';
@@ -471,20 +474,20 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     protected function _ImportFile($sFileName)
     {
-        $aResultArray = array();
+        $aResultArray = [];
         if (file_exists($sFileName)) {
-            //start import ...
+            // start import ...
             $sWorkFilename = $this->MoveFileToWorkingDirectory($sFileName);
 
             $bTableOK = true;
-            //do job ...
+            // do job ...
             if ($sWorkFilename) {
-                //remove BOM if exists
+                // remove BOM if exists
                 $this->removeUTF8BOM($sWorkFilename);
-                //check rows
+                // check rows
                 $aRowDefinition = $this->GetRowDef();
 
-                //Columns
+                // Columns
                 $aRowDefinition = $this->GetRowDef();
                 $iCountColumnsToImport = count($aRowDefinition);
                 foreach ($aRowDefinition as $iKey => $aRowDef) {
@@ -505,15 +508,15 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                     }
                     $aRows = explode(';', $buffer);
 
-                    //$old_locale = getlocale(LC_ALL);
-                    //$old_locale = setlocale(LC_ALL, "de_DE");
-                    //$aRows = fgetcsv($handle, 4096, ';', '"');
-                    //setlocale(LC_ALL, $old_locale);
+                    // $old_locale = getlocale(LC_ALL);
+                    // $old_locale = setlocale(LC_ALL, "de_DE");
+                    // $aRows = fgetcsv($handle, 4096, ';', '"');
+                    // setlocale(LC_ALL, $old_locale);
 
                     $iFileColumnCount = count($aRows);
                     if (1 === $iFileColumnCount && '' === trim($aRows[0])) {
                         $iFileColumnCount = 0;
-                        $aRows = array();
+                        $aRows = [];
                     }
 
                     if ($aRows && $iFileColumnCount) {
@@ -524,23 +527,23 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                                 $aResultArray[] = $sLastError;
                             }
                         } else {
-                            $aDataCol = array();
+                            $aDataCol = [];
                             reset($aRowDefinition);
                             foreach ($aRowDefinition as $iKey => $aRowDef) {
                                 if ('IGNORE' != $aRowDef['type']) {
                                     $sValue = $aRows[$iKey];
 
-                                    //check if value starts and ends with double quotes
+                                    // check if value starts and ends with double quotes
                                     if ('"' === substr($sValue, 0, 1) && '"' === substr($sValue, -1, 1)) {
-                                        //strip of double quotes from start and end
+                                        // strip of double quotes from start and end
                                         $sValue = substr($sValue, 1, -1);
 
-                                        //replace each double double quotes in the value with single double quotes
+                                        // replace each double double quotes in the value with single double quotes
                                         $sValue = str_replace('""', '"', $sValue);
                                     }
 
                                     if (!empty($aRowDef['convert']) && method_exists($this, $aRowDef['convert'])) {
-                                        $sValue = call_user_func_array(array($this, $aRowDef['convert']), array($sValue));
+                                        $sValue = call_user_func_array([$this, $aRowDef['convert']], [$sValue]);
                                     }
 
                                     $aDataCol[] = $sValue;
@@ -553,7 +556,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                 fclose($handle);
             }
 
-            //move file to archive
+            // move file to archive
             $this->MoveFileToArchiveDirectory($sWorkFilename);
         }
 
@@ -572,7 +575,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     public function Validate()
     {
-        $aResultArray = array();
+        $aResultArray = [];
 
         $bDone = false;
         $sSource = trim($this->fieldSource);
@@ -582,13 +585,13 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         $sSource = PATH_CMS_CUSTOMER_DATA.$sSource;
         $sSource = str_replace('//', '/', $sSource);
 
-        //directory
+        // directory
         if (!$bDone && is_dir($sSource) && is_readable($sSource)) {
             $aRes = $this->_ValidateDir($sSource);
             $aResultArray = self::ArrayConcat($aResultArray, $aRes);
             $bDone = true;
         }
-        //file
+        // file
         if (!$bDone && is_file($sSource) && file_exists($sSource) && is_readable($sSource)) {
             $aRes = $this->_ValidateFile($sSource);
             $aResultArray = self::ArrayConcat($aResultArray, $aRes);
@@ -610,7 +613,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     protected function _ValidateDir($sSource)
     {
-        $aResultArray = array();
+        $aResultArray = [];
         if (is_dir($sSource) && is_readable($sSource)) {
             $oFileList = TCMSFileList::GetInstance($sSource, '*.csv', false);
             $oFileList->GoToStart();
@@ -634,14 +637,14 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     protected function _ValidateFile($SourceFile)
     {
-        $aResultArray = array();
+        $aResultArray = [];
         if (is_file($SourceFile) && file_exists($SourceFile) && is_readable($SourceFile)) {
-            //move file to work dir
+            // move file to work dir
             $sWorkingOnFilename = $this->MoveFileToWorkingDirectory($SourceFile);
             if ($sWorkingOnFilename) {
-                //remove BOM if exists
+                // remove BOM if exists
                 $this->removeUTF8BOM($sWorkingOnFilename);
-                //check rows
+                // check rows
                 $handle = fopen($sWorkingOnFilename, 'r');
                 while (!feof($handle)) {
                     $aRows = fgetcsv($handle, 0, ';', '"');
@@ -695,7 +698,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                 }
                 fclose($handle);
 
-                return substr($contents, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf);
+                return substr($contents, 0, 3) == pack('CCC', 0xEF, 0xBB, 0xBF);
             } else {
                 $this->LogError($sFilename.' is not a file or not readable');
             }
@@ -713,7 +716,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
      */
     protected function _removeBOM($str = '')
     {
-        if (substr($str, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
+        if (substr($str, 0, 3) == pack('CCC', 0xEF, 0xBB, 0xBF)) {
             $str = substr($str, 3);
         }
 
@@ -789,7 +792,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
             $sTargetFileName = $aPathParts['basename'];
             $sDestinationType = strtoupper(trim($sDestinationType));
 
-            //if we are in debugging-mode - don't move files to "archive"
+            // if we are in debugging-mode - don't move files to "archive"
             if ($this->bDebugMode && ('ARCHIVE' === $sDestinationType)) {
                 $sDestinationType = 'INCOMING';
             }
@@ -801,7 +804,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
                     break;
                 case 'ARCHIVE':
                     $sArchiveDir = $aPathParts['dirname'].'/../archive/';
-                    //add new timestamp
+                    // add new timestamp
                     $sTargetFileName = substr($sTargetFileName, strpos($sTargetFileName, '-') + 1);
                     $sTargetFileName = date($this->sTimeStampFormat).'-'.$sTargetFileName;
                     break;
@@ -824,7 +827,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         if ($sRet) {
             $sArchiveFilename = $sArchiveDir.$sTargetFileName;
             if (!empty($sArchiveFilename)) {
-                //if(copy($SourceFile, $sArchiveFilename)) {
+                // if(copy($SourceFile, $sArchiveFilename)) {
                 if (@rename($SourceFile, $sArchiveFilename)) {
                     $sRet = $sArchiveFilename;
                 } else {
@@ -841,6 +844,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
 
     /**
      * @param string $sSource
+     *
      * @return string
      */
     protected function ConvertFromGermanDecimal($sSource)
@@ -853,6 +857,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
 
     /**
      * @param string $sSource
+     *
      * @return string
      */
     protected function ConvertFromGermanDate($sSource)
@@ -860,7 +865,7 @@ class TPkgCsv2Sql extends TPkgCsv2SqlAutoParent
         static $oLocal = null;
         if (is_null($oLocal)) {
             $oLocal = TdbCmsLocals::GetNewInstance();
-            $oLocal->LoadFromRow(array('date_format' => 'd.m.y', 'time_format' => 'h:m:s', 'numbers' => '2|,|.'));
+            $oLocal->LoadFromRow(['date_format' => 'd.m.y', 'time_format' => 'h:m:s', 'numbers' => '2|,|.']);
         }
         if (!empty($sSource)) {
             $aParts = explode(' ', $sSource);

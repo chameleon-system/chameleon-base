@@ -3,13 +3,12 @@
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
 use ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal;
-use DateTime;
 
 class PkgRunFrontendAction
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Class */
@@ -18,12 +17,11 @@ class PkgRunFrontendAction
         /** @var string - */
         private string $randomKey = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Expiry date */
-        private ?DateTime $expireDate = null,
+        /** @var \DateTime|null - Expiry date */
+        private ?\DateTime $expireDate = null,
         // TCMSFieldLookup
         /** @var CmsPortal|null - */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldText
         /** @var string - */
         private string $parameter = '',
@@ -70,7 +68,6 @@ class PkgRunFrontendAction
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getRandomKey(): string
     {
@@ -84,20 +81,18 @@ class PkgRunFrontendAction
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getExpireDate(): ?DateTime
+    public function getExpireDate(): ?\DateTime
     {
         return $this->expireDate;
     }
 
-    public function setExpireDate(?DateTime $expireDate): self
+    public function setExpireDate(?\DateTime $expireDate): self
     {
         $this->expireDate = $expireDate;
 
         return $this;
     }
-
 
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
@@ -112,7 +107,6 @@ class PkgRunFrontendAction
         return $this;
     }
 
-
     // TCMSFieldText
     public function getParameter(): string
     {
@@ -126,7 +120,6 @@ class PkgRunFrontendAction
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsLanguage(): ?CmsLanguage
     {
@@ -139,6 +132,4 @@ class PkgRunFrontendAction
 
         return $this;
     }
-
-
 }

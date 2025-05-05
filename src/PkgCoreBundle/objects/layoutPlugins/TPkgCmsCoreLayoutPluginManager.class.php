@@ -14,11 +14,8 @@ class TPkgCmsCoreLayoutPluginManager
     /**
      * @var TModuleLoader|null
      */
-    private $moduleLoader = null;
+    private $moduleLoader;
 
-    /**
-     * @param TModuleLoader $moduleLoader
-     */
     public function __construct(TModuleLoader $moduleLoader)
     {
         $this->moduleLoader = $moduleLoader;
@@ -27,11 +24,11 @@ class TPkgCmsCoreLayoutPluginManager
     /**
      * @param string $pluginClassName
      * @param string $contentIdentifier
-     * @param array  $config
+     * @param array $config
      *
      * @return void
      */
-    public function includePlugin($pluginClassName, $contentIdentifier, $config = array())
+    public function includePlugin($pluginClassName, $contentIdentifier, $config = [])
     {
         /** @var IPkgCmsCoreLayoutPlugin $oPlugin */
         $oPlugin = new $pluginClassName($this->moduleLoader);

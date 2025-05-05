@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Controller\ControllerResolver;
  */
 class ChameleonControllerResolver extends ControllerResolver
 {
-    /** @var ContainerInterface $container */
+    /** @var ContainerInterface */
     private $container;
     /** @var ControllerResolver The default Symfony resolver */
     private $defaultControllerResolver;
@@ -34,9 +34,7 @@ class ChameleonControllerResolver extends ControllerResolver
     private $defaultChameleonController;
 
     /**
-     * @param ContainerInterface  $container
-     * @param ControllerResolver  $defaultControllerResolver
-     * @param string[]            $controllerList
+     * @param string[] $controllerList
      * @param ChameleonController $defaultChameleonController
      */
     public function __construct(ContainerInterface $container, ControllerResolver $defaultControllerResolver, array $controllerList, $defaultChameleonController)
@@ -52,7 +50,7 @@ class ChameleonControllerResolver extends ControllerResolver
      */
     public function getController(Request $request): callable|false
     {
-        /** @var object|null|string $controller */
+        /** @var object|string|null $controller */
         $controller = $request->attributes->get('_controller', null);
         if (null === $controller) {
             return false;
@@ -61,7 +59,7 @@ class ChameleonControllerResolver extends ControllerResolver
             return $controller;
         }
 
-        /**
+        /*
          * First check if we have a ChameleonController.
          * If not, then use the default Symfony resolver.
          */

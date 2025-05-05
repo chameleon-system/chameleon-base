@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * add a menu item to switch to any user if the current user has that right.
-/**/
+ * /**/
 class TCMSTableEditorCMSUser extends TCMSTableEditor
 {
     private TranslatorInterface $translator;
@@ -27,7 +27,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
     public function DefineInterface()
     {
         parent::DefineInterface();
-        $externalFunctions = array('CopyUserRights', 'ActivateUser');
+        $externalFunctions = ['CopyUserRights', 'ActivateUser'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 
@@ -70,11 +70,10 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             $oMenuItem->sIcon = 'fas fa-user-check';
 
             $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.$this->getUrlUtil()->getArrayAsUrl(
-                    [
-                        '_switch_user' => $this->oTable->sqlData['login'],
-                    ]
-                    , '', '&'
-                );
+                [
+                    '_switch_user' => $this->oTable->sqlData['login'],
+                ], '', '&'
+            );
             $this->oMenuItems->AddItem($oMenuItem);
         }
         if (true === $this->isCopyPermissionsAllowed()) {
@@ -104,10 +103,12 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
             $this->oMenuItems->RemoveItem('sItemKey', 'delete');
         }
     }
+
     private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
+
     /**
      * @return bool
      */
@@ -238,9 +239,9 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
 
         if (false === $securityHelper->isGranted(
-                CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT,
-                $this->oTableConf
-            )) {
+            CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT,
+            $this->oTableConf
+        )) {
             return false;
         }
         $user = $securityHelper->getUser();
@@ -311,10 +312,9 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         $allowedPortals = array_keys($userPortals);
         $portalsOfTargetUser = $oTargetUser->GetFieldCmsPortalIdList();
 
-        return 0 === \count($portalsOfTargetUser) ||
-            \count(array_intersect($allowedPortals, $portalsOfTargetUser)) > 0;
+        return 0 === \count($portalsOfTargetUser)
+            || \count(array_intersect($allowedPortals, $portalsOfTargetUser)) > 0;
     }
-
 
     /**
      * copies the user group and role from one user to the current user.
@@ -455,7 +455,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
                 $listContent .= '
                 <div class="mt-5 mb-3">
                     <label>
-                        <input class="" id="radioUser'. $count .'" type="radio" name="copyUserRightsUserID" value="'.TGlobal::OutHTML($cmsUser->id).'" />
+                        <input class="" id="radioUser'.$count.'" type="radio" name="copyUserRightsUserID" value="'.TGlobal::OutHTML($cmsUser->id).'" />
                         <span class="pl-2 font-weight-bold font-xl">'.$cmsUser->GetName().'</span>
                     </label>
                 </div>';
@@ -480,7 +480,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
                 $roles = $cmsUser->GetFieldCmsRoleList();
                 if ($roles->Length() > 0) {
                     $listContent .= '<div class="font-weight-bold mt-3">'.$this->translator->trans('chameleon_system_core.table_editor_cms_user.user_rolls').'</div>';
-                    
+
                     $listContent .= '<div class="row mt-2">';
                     while ($role = $roles->Next()) {
                         $listContent .= '
@@ -518,7 +518,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
         if (0 !== $count) {
             $submitButton = '<button type="submit" class="mt-4 mb-1 btn btn-primary"> <span class="far fa-clone mr-1"></span>'.$this->translator->trans('chameleon_system_core.table_editor_cms_user.action_copy_permissions').'</button>';
         }
-        $sDialogContent .= $submitButton . $listContent . $submitButton."
+        $sDialogContent .= $submitButton.$listContent.$submitButton."
         </form>
       </div>\n";
 
@@ -599,8 +599,6 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      * Undoes any role assignments (both adding and removing) the user is not allowed to make.
      * A user that is not a CMS administrator is only allowed to modify roles they own themselves.
      *
-     * @param array $rolesToSave
-     *
      * @return array
      */
     private function getRestrictedRoleChanges(array $rolesToSave)
@@ -652,8 +650,8 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
      * prevent empty cms_current_edit_language field on save
      * because if this field is empty the user isn't able to login to the cms backend.
      *
-     * @param \TIterator  $oFields
-     * @param \TCMSRecord $oPostTable
+     * @param TIterator $oFields
+     * @param TCMSRecord $oPostTable
      */
     protected function PostSaveHook($oFields, $oPostTable)
     {

@@ -1,7 +1,7 @@
 <?php
 
 $layoutTemplate = 'tablemanager';
-$moduleList = array('tablemanager' => array('model' => 'MTTableManager', 'view' => 'standard'));
+$moduleList = ['tablemanager' => ['model' => 'MTTableManager', 'view' => 'standard']];
 
 addDefaultPageTitle($moduleList);
 addDefaultHeader($moduleList);

@@ -16,7 +16,7 @@ class TCMSRenderSeoPattern
      *
      * @var array
      */
-    protected $aPatternRepl = array();
+    protected $aPatternRepl = [];
 
     /**
      * Class constructor.
@@ -31,12 +31,10 @@ class TCMSRenderSeoPattern
      * If calling this function more then one times -  replacement values will be added up
      *
      * @param array $prepl_in values key=value
-     *
-     * @return
      */
     public function AddPatternReplaceValues($prepl_in)
     {
-        if (is_array($prepl_in) && (count($prepl_in))) {
+        if (is_array($prepl_in) && count($prepl_in)) {
             $this->aPatternRepl = array_merge($this->aPatternRepl, $prepl_in);
         }
     }
@@ -55,16 +53,16 @@ class TCMSRenderSeoPattern
         $sFound = stristr($sSeoPattern, '[{SHOW}]');
         if (!$sFound) {
             if (strlen($sSeoPattern) > 0) {
-                //replace all
+                // replace all
                 foreach ($this->aPatternRepl as $k => $v) {
                     $sToRepl = '[{'.$k.'}]';
                     $sSeoPattern = str_ireplace($sToRepl, $v, $sSeoPattern);
                 }
-                //clean all - not replaced -
+                // clean all - not replaced -
                 $sSeoPattern = preg_replace('/\[{.*}\]/i', '', $sSeoPattern);
             }
         } else {
-            //show all values
+            // show all values
             $sSeoPattern = '';
             foreach ($this->aPatternRepl as $k => $v) {
                 $sSeoPattern .= ' [{'.$k.'}]';

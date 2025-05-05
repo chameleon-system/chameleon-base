@@ -6,12 +6,11 @@ class CmsMasterPagedefSpotParameter
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookupParentID
         /** @var CmsMasterPagedefSpot|null - Belongs to cms page template spot */
-        private ?CmsMasterPagedefSpot $cmsMasterPagedefSpot = null
-        ,
+        private ?CmsMasterPagedefSpot $cmsMasterPagedefSpot = null,
         // TCMSFieldVarchar
         /** @var string - Name */
         private string $name = '',
@@ -58,7 +57,6 @@ class CmsMasterPagedefSpotParameter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getName(): string
     {
@@ -72,7 +70,6 @@ class CmsMasterPagedefSpotParameter
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getValue(): string
     {
@@ -85,6 +82,4 @@ class CmsMasterPagedefSpotParameter
 
         return $this;
     }
-
-
 }

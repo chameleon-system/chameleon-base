@@ -33,7 +33,7 @@ interface AutoclassesDataAccessInterface
      * Returns a TCMSConfig instance (not a TdbCmsConfig instance because we cannot expect that this class is already
      * generated when this method is called).
      *
-     * @return TCMSConfig
+     * @return \TCMSConfig
      */
     public function getConfig();
 

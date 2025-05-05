@@ -18,17 +18,17 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TPkgTrackObjectViews
 {
-    const VIEW_PATH = 'pkgTrackViews/views/';
+    public const VIEW_PATH = 'pkgTrackViews/views/';
 
     /**
      * @var array<string, array{ table_name: string, owner_id: string }>
      */
-    protected $aObjects = array();
+    protected $aObjects = [];
 
     /**
      * @var list<array{ table_name: string, owner_id: string }>
      */
-    protected $aClickObjects = array();
+    protected $aClickObjects = [];
 
     /**
      * return instance of Tracking object.
@@ -46,7 +46,7 @@ class TPkgTrackObjectViews
     }
 
     /**
-     * track a view - note: only none-bot-requests will be tracked
+     * track a view - note: only none-bot-requests will be tracked.
      *
      * @param bool $bCountReloads
      * @param bool $bAllowMultipleViewsPerPage
@@ -61,7 +61,7 @@ class TPkgTrackObjectViews
     public function TrackObject($oObject, $bCountReloads = true, $bAllowMultipleViewsPerPage = false)
     {
         if (false == TdbCmsConfig::RequestIsInBotList() && ($bCountReloads || false == self::WasViewedLast($oObject))) {
-            $aTmpObject = array('table_name' => $oObject->table, 'owner_id' => $oObject->id);
+            $aTmpObject = ['table_name' => $oObject->table, 'owner_id' => $oObject->id];
 
             $sKey = $oObject->table.'-'.$oObject->id;
             if ($bAllowMultipleViewsPerPage) {
@@ -78,12 +78,13 @@ class TPkgTrackObjectViews
     }
 
     /**
-     * render tracking html
+     * render tracking html.
      *
      * @param string $sViewName
      * @param string $sViewType
+     *
      * @return string
-    */
+     */
     public function Render($sViewName = 'standard', $sViewType = 'Core')
     {
         $oView = new TViewParser();
@@ -97,13 +98,13 @@ class TPkgTrackObjectViews
     * @param TCMSRecord $oTableObject
     */
     /**
-     * @return void
-     *
      * @param TCMSRecord $oTableObject
+     *
+     * @return void
      */
     protected static function SetLastViewObjectHistory($oTableObject)
     {
-        $_SESSION['TPkgTrackObjectViews'] = array('tbl' => $oTableObject->table, 'id' => $oTableObject->id);
+        $_SESSION['TPkgTrackObjectViews'] = ['tbl' => $oTableObject->table, 'id' => $oTableObject->id];
     }
 
     /**
@@ -132,13 +133,13 @@ class TPkgTrackObjectViews
         $sUserId = '';
         $oUser = TdbDataExtranetUser::GetInstance();
         /** @var Request $request */
-        $request = \ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
+        $request = ChameleonSystem\CoreBundle\ServiceLocator::get('request_stack')->getCurrentRequest();
         if ($oUser) {
             $sUserId = $oUser->id;
         }
         $aPayload = [
             'sType' => $sPayloadType,
-            'aObjects' => array(),
+            'aObjects' => [],
             'userId' => $sUserId,
             'ip' => $request->getClientIp(),
             'requestTime' => time(),
@@ -172,9 +173,9 @@ class TPkgTrackObjectViews
     * @return boolean
     */
     /**
-     * @return bool
-     *
      * @param TCMSRecord $oTableObject
+     *
+     * @return bool
      */
     protected static function WasViewedLast($oTableObject)
     {
@@ -193,11 +194,11 @@ class TPkgTrackObjectViews
     {
         $aPayload = $this->GetPayloadFromURL();
         if (is_array($aPayload)) {
-            $targetTable = \ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_track_views.target_table').'_history';
+            $targetTable = ChameleonSystem\CoreBundle\ServiceLocator::getParameter('chameleon_system_track_views.target_table').'_history';
             $databaseConnection = $this->getDatabaseConnection();
             $quotedTargetTable = $databaseConnection->quoteIdentifier($targetTable);
             foreach ($aPayload['aObjects'] as $aData) {
-                $aWrite = array(
+                $aWrite = [
                     'table_name' => $aData['table_name'],
                     'owner_id' => $aData['owner_id'],
                     'datecreated' => date('Y-m-d H:i:s', $aPayload['requestTime']),
@@ -206,9 +207,9 @@ class TPkgTrackObjectViews
                     'ip' => $aPayload['ip'],
                     'request_checksum' => $aPayload['request_checksum'],
                     'id' => TTools::GetUUID(),
-                );
-                $aKeys = array_map(array($databaseConnection, 'quoteIdentifier'), array_keys($aWrite));
-                $aValues = array_map(array($databaseConnection, 'quote'), array_values($aWrite));
+                ];
+                $aKeys = array_map([$databaseConnection, 'quoteIdentifier'], array_keys($aWrite));
+                $aValues = array_map([$databaseConnection, 'quote'], array_values($aWrite));
                 $query = "INSERT INTO $quotedTargetTable (".implode(',', $aKeys).') VALUES ('.implode(',', $aValues).')';
                 MySqlLegacySupport::getInstance()->query($query);
             }
@@ -217,11 +218,12 @@ class TPkgTrackObjectViews
 
     /**
      * @param TCMSRecord $oObject
+     *
      * @return string
      */
     public function GetTrackClickClass($oObject)
     {
-        $aPayload = array('table_name' => $oObject->table, 'owner_id' => $oObject->id);
+        $aPayload = ['table_name' => $oObject->table, 'owner_id' => $oObject->id];
         $this->aClickObjects[] = $aPayload;
 
         return 'cmstrack cmstrack-'.md5(serialize($aPayload));
@@ -232,6 +234,6 @@ class TPkgTrackObjectViews
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
     }
 }

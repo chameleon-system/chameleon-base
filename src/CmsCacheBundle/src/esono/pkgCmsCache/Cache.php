@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class Cache implements CacheInterface
 {
-    const REQUEST_STATE_HASH = '__requestStateHash';
+    public const REQUEST_STATE_HASH = '__requestStateHash';
     /**
      * @var RequestStack
      */
@@ -27,11 +27,11 @@ class Cache implements CacheInterface
     /**
      * @var Connection
      */
-    private $dbConnection = null;
+    private $dbConnection;
     /**
      * @var StorageInterface|null
      */
-    private $storage = null;
+    private $storage;
     /**
      * @var bool
      */
@@ -54,13 +54,8 @@ class Cache implements CacheInterface
     private $requestStateHashProvider;
 
     /**
-     * @param RequestStack                      $requestStack
-     * @param Connection                        $dbConnection
-     * @param StorageInterface                  $oCacheStorage
-     * @param string                            $cacheKeyPrefix
-     * @param bool                              $cacheAllowed
-     * @param HashInterface                     $hashArray
-     * @param RequestStateHashProviderInterface $requestStateHashProvider
+     * @param string $cacheKeyPrefix
+     * @param bool $cacheAllowed
      */
     public function __construct(
         RequestStack $requestStack,
@@ -81,8 +76,6 @@ class Cache implements CacheInterface
     }
 
     /**
-     * @param StorageInterface $oCacheStorage
-     *
      * @return void
      */
     public function setStorage(StorageInterface $oCacheStorage)
@@ -129,10 +122,10 @@ class Cache implements CacheInterface
     /**
      * adds or updates a cache object.
      *
-     * @param string $key               - the cache key
-     * @param mixed  $content           - object to be stored
-     * @param array  $trigger           - cache trigger array(array('table'=>'','id'=>''),array('table'=>'','id'=>''),...);
-     * @param int    $iMaxLiveInSeconds - max age in seconds before the cache content expires - default = never. please note that the value must not exceed 30 days (see http://www.php.net/manual/en/memcached.expiration.php)
+     * @param string $key - the cache key
+     * @param mixed $content - object to be stored
+     * @param array $trigger - cache trigger array(array('table'=>'','id'=>''),array('table'=>'','id'=>''),...);
+     * @param int $iMaxLiveInSeconds - max age in seconds before the cache content expires - default = never. please note that the value must not exceed 30 days (see http://www.php.net/manual/en/memcached.expiration.php)
      */
     public function set($key, $content, $trigger, $iMaxLiveInSeconds = null)
     {
@@ -146,7 +139,7 @@ class Cache implements CacheInterface
     /**
      * sets the triggers that will delete the cache object identified by $key.
      *
-     * @param array  $triggerList
+     * @param array $triggerList
      * @param string $key
      *
      * @return void
@@ -158,7 +151,7 @@ class Cache implements CacheInterface
         }
         $this->getDbConnection()->beginTransaction();
         $triggerGroup = $this->getTriggerGroup($triggerList);
-        $aTriggerWrite = array();
+        $aTriggerWrite = [];
         foreach ($triggerList as $trigger) {
             $idList = '';
             $table = '';
@@ -171,7 +164,7 @@ class Cache implements CacheInterface
                 $table = $trigger;
             }
             if (!is_array($idList)) {
-                $idList = array($idList);
+                $idList = [$idList];
             }
             foreach ($idList as $id) {
                 if ('' === $id) {
@@ -246,7 +239,7 @@ class Cache implements CacheInterface
             return;
         }
 
-        $aSelect = array();
+        $aSelect = [];
         while ($group = $result->fetchAssociative()) {
             $groupId = $group['id'];
             if (null === $id || '' === $id) {
@@ -283,8 +276,6 @@ class Cache implements CacheInterface
     }
 
     /**
-     * @param RequestStack $requestStack
-     *
      * @return void
      */
     public function setRequestStack(RequestStack $requestStack)
@@ -301,8 +292,6 @@ class Cache implements CacheInterface
     }
 
     /**
-     * @param Connection $dbConnection
-     *
      * @return void
      */
     public function setDbConnection(Connection $dbConnection)
@@ -319,7 +308,7 @@ class Cache implements CacheInterface
      */
     private function getTriggerGroup($aTriggerList)
     {
-        $aTableList = array();
+        $aTableList = [];
         foreach ($aTriggerList as $aTrigger) {
             if (is_array($aTrigger)) {
                 $aTableList[] = $aTrigger['table'];

@@ -17,14 +17,14 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
     /**
      * const to configure module set for static use.
      */
-    const NAME_STATIC_MODULE_SET_NAME_PARAMETER = 'systemName';
+    public const NAME_STATIC_MODULE_SET_NAME_PARAMETER = 'systemName';
 
     /**
      * holds the module config - will be loaded if needed.
      *
      * @var TdbPkgMultiModuleModuleConfig|null
      */
-    protected $oConfig = null;
+    protected $oConfig;
 
     /**
      * holds the array of TdbCmsTplModuleInstance objects
@@ -32,7 +32,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      *
      * @var TdbCmsTplModuleInstance[]|null
      */
-    protected $aModuleInstances = null;
+    protected $aModuleInstances;
 
     /**
      * holds the record list of all module configurations
@@ -40,7 +40,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      *
      * @var TdbCmsTplModule|TdbPkgMultiModuleSetItemList|null
      */
-    protected $oModuleList = null;
+    protected $oModuleList;
 
     /**
      * holds the array of TdbPkgMultiModuleSetItem objects
@@ -48,7 +48,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      *
      * @var array<string, TdbPkgMultiModuleSetItem>|null
      */
-    protected $aSetItems = null;
+    protected $aSetItems;
 
     /**
      * lookup array of all virtual spots
@@ -57,7 +57,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      *
      * @var array<string, string>
      */
-    protected $aModuleInstanceSpots = array();
+    protected $aModuleInstanceSpots = [];
 
     /**
      * holds the array of all moduel objects.
@@ -67,7 +67,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      *
      * @var array<string, TModelBase>
      */
-    protected $aModuleObjects = array();
+    protected $aModuleObjects = [];
 
     public function Execute()
     {
@@ -98,11 +98,9 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * call a method of this module. validates request.
      *
      * @param mixed[] $aMethodParameter - parameters to pass to the method
-     * @param string $sMethodName      - name of the function
-     *
-     * @return mixed
+     * @param string $sMethodName - name of the function
      */
-    public function _CallMethod($sMethodName, $aMethodParameter = array())
+    public function _CallMethod($sMethodName, $aMethodParameter = [])
     {
         $sFunctionResult = null;
         $this->LoadInstances();
@@ -172,10 +170,10 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
                         $oModuleInstance = $oModuleItem->GetFieldCmsTplModuleInstance();
                         if (is_object($oModuleInstance)) {
                             if (!is_array($this->aModuleInstances)) {
-                                $this->aModuleInstances = array();
+                                $this->aModuleInstances = [];
                             }
 
-                            /**
+                            /*
                              * overwrite the view configured by the instance,
                              * with the one set by the multi module item.
                              */
@@ -185,7 +183,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
                             $this->aModuleInstanceSpots[$oModuleInstance->id] = $this->sModuleSpotName.'__'.$i;
 
                             if (!is_array($this->aSetItems)) {
-                                $this->aSetItems = array();
+                                $this->aSetItems = [];
                             }
                             $this->aSetItems[$oModuleInstance->id] = $oModuleItem;
 
@@ -207,7 +205,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
             $oModuleSet = $this->GetMultiModuleSet();
             if (!is_null($oModuleSet)) {
                 $oModuleList = $oModuleSet->GetFieldPkgMultiModuleSetItemList();
-                $oModuleList->ChangeOrderBy(array('sort_order' => 'ASC'));
+                $oModuleList->ChangeOrderBy(['sort_order' => 'ASC']);
             }
             $this->oModuleList = $oModuleList;
         }
@@ -248,7 +246,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      */
     protected function RenderModuleAjax()
     {
-        $aRenderedModuleData = array();
+        $aRenderedModuleData = [];
         $oGlobal = TGlobal::instance();
         if ($oGlobal->UserDataExists('sShowModuleInstanceId')) {
             $sModuleInstanceToShow = $oGlobal->GetUserData('sShowModuleInstanceId');
@@ -256,7 +254,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
             if (is_array($this->aModuleInstances)) {
                 foreach ($this->aModuleInstances as $oModuleInstance) {
                     if ($oModuleInstance->id == $sModuleInstanceToShow) {
-                        $aRenderedModuleData['html'] = $oModuleInstance->Render(array(), $this->aModuleInstanceSpots[$oModuleInstance->id], $oModuleInstance->fieldTemplate);
+                        $aRenderedModuleData['html'] = $oModuleInstance->Render([], $this->aModuleInstanceSpots[$oModuleInstance->id], $oModuleInstance->fieldTemplate);
                         $aRenderedModuleData['sModuleContentIdentifier'] = $this->GetModuleContentIdentifier();
                     }
                 }
@@ -270,7 +268,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * hook is executed every time after a module instance was set into the array $aModuleInstances.
      *
      * @param TdbPkgMultiModuleSetItem $oSetItem
-     * @param TdbCmsTplModuleInstance  $oModuleInstance
+     * @param TdbCmsTplModuleInstance $oModuleInstance
      *
      * @return void
      */
@@ -327,6 +325,7 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
      * injects virtual module spots with modules in $oModuleLoader->modules.
      *
      * @param TUserModuleLoader $oModuleLoader
+     *
      * @return void
      */
     public function InjectVirtualModuleSpots($oModuleLoader)
@@ -349,21 +348,20 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
     }
 
     /**
-     * @param TdbCmsTplModuleInstance $oModuleInstance
      * @return TModelBase|null
      */
     protected function GetModuleObjectByInstance(TdbCmsTplModuleInstance $oModuleInstance)
     {
         $oModule = null;
         if (!is_array($this->aModuleObjects)) {
-            $this->aModuleObjects = array();
+            $this->aModuleObjects = [];
         }
         if (array_key_exists($oModuleInstance->id, $this->aModuleObjects)) {
             $oModule = $this->aModuleObjects[$oModuleInstance->id];
         } else {
-            $dbAccessModule = \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
+            $dbAccessModule = ServiceLocator::get('chameleon_system_core.database_access_layer_cms_tpl_module');
             $oDbModule = $dbAccessModule->loadFromId($oModuleInstance->fieldCmsTplModuleId);
-            $oModule = TTools::GetModuleObject($oDbModule->fieldClassname, $oModuleInstance->fieldTemplate, array(), $this->aModuleInstanceSpots[$oModuleInstance->id]);
+            $oModule = TTools::GetModuleObject($oDbModule->fieldClassname, $oModuleInstance->fieldTemplate, [], $this->aModuleInstanceSpots[$oModuleInstance->id]);
             $this->aModuleObjects[$oModuleInstance->id] = $oModule;
         }
 
@@ -388,9 +386,9 @@ class MTPkgMultiModuleCoreEndPoint extends TUserCustomModelBase
     /**
      * Returns the name of the module configured in static module parameters.
      *
-     * @return string
-     *
      * @param string $sFieldName
+     *
+     * @return string
      */
     protected function GetValueFromStaticParameters($sFieldName)
     {

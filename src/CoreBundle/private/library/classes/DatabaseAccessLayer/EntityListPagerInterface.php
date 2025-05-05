@@ -13,10 +13,5 @@ namespace ChameleonSystem\core\DatabaseAccessLayer;
 
 interface EntityListPagerInterface
 {
-    /**
-     * @param string $query
-     * @param int $pageNumberStartingAtZero
-     * @return string
-     */
     public function getQueryForPage(string $query, int $pageNumberStartingAtZero): string;
 }

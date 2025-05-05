@@ -11,9 +11,7 @@
 
 namespace ChameleonSystem\DatabaseMigration\DataModel;
 
-use JsonSerializable;
-
-class MigrationResult implements JsonSerializable
+class MigrationResult implements \JsonSerializable
 {
     /**
      * @var string
@@ -34,7 +32,7 @@ class MigrationResult implements JsonSerializable
     /**
      * @var UpdateException[]
      */
-    private $exceptions = array();
+    private $exceptions = [];
     /**
      * @var string
      */
@@ -46,7 +44,7 @@ class MigrationResult implements JsonSerializable
     /**
      * @var ErrorQuery[]
      */
-    private $errorQueries = array();
+    private $errorQueries = [];
     /**
      * @var string
      */
@@ -58,7 +56,7 @@ class MigrationResult implements JsonSerializable
     /**
      * @var UpdateMessage[]
      */
-    private $infoMessages = array();
+    private $infoMessages = [];
     /**
      * @var string
      */
@@ -70,7 +68,7 @@ class MigrationResult implements JsonSerializable
     /**
      * @var SuccessQuery[]
      */
-    private $successQueries = array();
+    private $successQueries = [];
     /**
      * @var string
      */

@@ -5,11 +5,9 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 use ChameleonSystem\CoreBundle\Event\ChangeActivePageEvent;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
-use ICmsCoreRedirect;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use TCMSActivePage;
 
 class RedirectToSecurePageListener
 {
@@ -22,7 +20,7 @@ class RedirectToSecurePageListener
      */
     private $urlUtil;
     /**
-     * @var ICmsCoreRedirect
+     * @var \ICmsCoreRedirect
      */
     private $redirect;
     /**
@@ -30,16 +28,10 @@ class RedirectToSecurePageListener
      */
     private $requestInfoService;
 
-    /**
-     * @param RequestStack                $requestStack
-     * @param UrlUtil                     $urlUtil
-     * @param ICmsCoreRedirect            $redirect
-     * @param RequestInfoServiceInterface $requestInfoService
-     */
     public function __construct(
         RequestStack $requestStack,
         UrlUtil $urlUtil,
-        ICmsCoreRedirect $redirect,
+        \ICmsCoreRedirect $redirect,
         RequestInfoServiceInterface $requestInfoService
     ) {
         $this->requestStack = $requestStack;
@@ -57,13 +49,13 @@ class RedirectToSecurePageListener
         }
 
         if ($this->needsRedirectToSecurePage($request, $event->getNewActivePage())) {
-            $url = $this->urlUtil->getModifiedUrlFromRequest($request, 'https', array('pagedef'));
+            $url = $this->urlUtil->getModifiedUrlFromRequest($request, 'https', ['pagedef']);
 
             $this->redirect->redirect($url, Response::HTTP_MOVED_PERMANENTLY);
         }
     }
 
-    private function needsRedirectToSecurePage(Request $request, TCMSActivePage $activePage): bool
+    private function needsRedirectToSecurePage(Request $request, \TCMSActivePage $activePage): bool
     {
         if (true === $request->isSecure()) {
             return false;

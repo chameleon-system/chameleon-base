@@ -33,12 +33,12 @@ interface MediaManagerUrlGeneratorInterface
     /**
      * Return URL to media manager for picking images.
      *
-     * @param string      $javaScriptCallbackFunctionName
-     * @param bool        $canUseCrop
-     * @param string|null $imageFieldName                 - legacy
-     * @param string|null $tableId                        - legacy
-     * @param string|null $recordId                       - legacy
-     * @param int         $position                       - legacy
+     * @param string $javaScriptCallbackFunctionName
+     * @param bool $canUseCrop
+     * @param string|null $imageFieldName - legacy
+     * @param string|null $tableId - legacy
+     * @param string|null $recordId - legacy
+     * @param int $position - legacy
      *
      * @return string
      */

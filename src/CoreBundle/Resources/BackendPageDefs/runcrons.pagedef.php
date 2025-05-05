@@ -1,4 +1,4 @@
 <?php
 
 $layoutTemplate = 'runcrons';
-$moduleList = array('main' => array('model' => 'CMSRunCrons', 'view' => 'standard'));
+$moduleList = ['main' => ['model' => 'CMSRunCrons', 'view' => 'standard']];

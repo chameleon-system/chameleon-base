@@ -3,7 +3,6 @@
 namespace ChameleonSystem\SecurityBundle\Voter;
 
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserHasRightVoter extends Voter
 {
-
     protected function supports(string $attribute, $subject): bool
     {
         return str_starts_with($attribute, 'CMS_RIGHT_');
@@ -32,7 +30,7 @@ class UserHasRightVoter extends Voter
         }
 
         $rights = $user->getRights();
+
         return in_array($attribute, $rights, true);
     }
-
 }

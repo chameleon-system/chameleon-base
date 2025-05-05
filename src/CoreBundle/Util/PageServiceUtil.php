@@ -13,9 +13,6 @@ namespace ChameleonSystem\CoreBundle\Util;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use TdbCmsLanguage;
-use TdbCmsPortal;
-use TdbCmsTplPage;
 
 class PageServiceUtil implements PageServiceUtilInterface
 {
@@ -33,9 +30,7 @@ class PageServiceUtil implements PageServiceUtilInterface
     private $removeTrailingSlash;
 
     /**
-     * @param UrlUtil            $urlUtil
-     * @param ContainerInterface $container
-     * @param bool               $removeTrailingSlash
+     * @param bool $removeTrailingSlash
      */
     public function __construct(UrlUtil $urlUtil, ContainerInterface $container, $removeTrailingSlash)
     {
@@ -47,7 +42,7 @@ class PageServiceUtil implements PageServiceUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function getPagePath(TdbCmsTplPage $page, TdbCmsLanguage $language)
+    public function getPagePath(\TdbCmsTplPage $page, \TdbCmsLanguage $language)
     {
         $portal = $page->GetPortal();
         $routes = $this->getRoutingUtil()->getAllPageRoutes($portal, $language);
@@ -76,7 +71,7 @@ class PageServiceUtil implements PageServiceUtilInterface
     /**
      * {@inheritdoc}
      */
-    public function postProcessUrl($url, TdbCmsPortal $portal, TdbCmsLanguage $language, $forceSecure)
+    public function postProcessUrl($url, \TdbCmsPortal $portal, \TdbCmsLanguage $language, $forceSecure)
     {
         if (true === $forceSecure) {
             $url = $this->getSecureUrlIfNeeded($url, $portal, $language);
@@ -89,13 +84,11 @@ class PageServiceUtil implements PageServiceUtilInterface
      * Symfony currently does not allow to enforce generation of secure URLs (a secure URL will only be generated if the
      * route requires HTTPS or if the current request is secure), therefore we turn the URL secure manually.
      *
-     * @param string              $url
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
+     * @param string $url
      *
      * @return string
      */
-    private function getSecureUrlIfNeeded($url, TdbCmsPortal $portal = null, TdbCmsLanguage $language = null)
+    private function getSecureUrlIfNeeded($url, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
         if (false === $this->urlUtil->isUrlSecure($url)) {
             $url = $this->urlUtil->getAbsoluteUrl($url, true, null, $portal, $language);
@@ -105,12 +98,11 @@ class PageServiceUtil implements PageServiceUtilInterface
     }
 
     /**
-     * @param TdbCmsPortal $portal
-     * @param string       $url
+     * @param string $url
      *
      * @return string
      */
-    private function handleTrailingSlash($url, TdbCmsPortal $portal)
+    private function handleTrailingSlash($url, \TdbCmsPortal $portal)
     {
         $urlParts = explode('?', $url);
         $path = $urlParts[0];

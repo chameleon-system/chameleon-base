@@ -15,11 +15,8 @@ use Doctrine\DBAL\Connection;
 
 class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugin
 {
-    private $moduleLoader = null;
+    private $moduleLoader;
 
-    /**
-     * @param TModuleLoader $oModuleLoader
-     */
     public function __construct(TModuleLoader $oModuleLoader)
     {
         $this->moduleLoader = $oModuleLoader;
@@ -40,7 +37,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
                         AND `pkg_cms_theme_block_layout`.`pkg_cms_theme_block_id` = :blockId
                         LIMIT 0,1
                         ';
-                $row = $this->getDatabaseConnection()->fetchAssociative($sQuery, array('themeId' => $oPortal->fieldPkgCmsThemeId, 'blockId' => $oThemeBlock->id));
+                $row = $this->getDatabaseConnection()->fetchAssociative($sQuery, ['themeId' => $oPortal->fieldPkgCmsThemeId, 'blockId' => $oThemeBlock->id]);
                 $oThemeBlockLayout = null;
                 if (false === $row) {
                     $oThemeBlockLayout = $oThemeBlock->GetFieldPkgCmsThemeBlockLayout();
@@ -118,7 +115,7 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ServiceLocator::get('database_connection');
     }
 
     private function getPortalDomainService(): PortalDomainServiceInterface
@@ -131,6 +128,6 @@ class TPkgCmsCoreLayoutPlugin_ThemeBlockLayout implements IPkgCmsCoreLayoutPlugi
      */
     private function getViewRendererSnippetDirectory()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
+        return ServiceLocator::get('chameleon_system_view_renderer.snippet_directory');
     }
 }

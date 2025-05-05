@@ -11,17 +11,17 @@
 
 /**
  * WYSIWYG Text field.
-/**/
+ * /**/
 class TCMSFieldWYSIWYGLight extends TCMSFieldWYSIWYG
 {
     protected function getToolbar()
     {
         $aToolbar = parent::getToolbar();
-        $aItemsToRemove = array(
+        $aItemsToRemove = [
             'Undo', 'Redo', 'Find', 'Replace', 'BulletedList', 'Outdent', 'Indent',
             'Blockquote', 'CreateDiv', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock',
             'Anchor', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe',
-        );
+        ];
         $aToolbar = $this->removeItemListFromToolbar($aToolbar, $aItemsToRemove);
         $aToolbar = $this->removeSectionFromToolbar($aToolbar, 'styles');
 

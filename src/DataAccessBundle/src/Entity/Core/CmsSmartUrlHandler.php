@@ -10,7 +10,7 @@ class CmsSmartUrlHandler
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - PHP class */
@@ -26,8 +26,7 @@ class CmsSmartUrlHandler
         private bool $active = true,
         // TCMSFieldLookupMultiselectCheckboxes
         /** @var Collection<int, CmsPortal> - Portal selection */
-        private Collection $cmsPortalCollection = new ArrayCollection()
-        ,
+        private Collection $cmsPortalCollection = new ArrayCollection(),
         // TCMSFieldPosition
         /** @var int - Position */
         private int $position = 0
@@ -71,7 +70,6 @@ class CmsSmartUrlHandler
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getClassSubtype(): string
     {
@@ -84,7 +82,6 @@ class CmsSmartUrlHandler
 
         return $this;
     }
-
 
     // TCMSFieldOption
     public function getClassType(): string
@@ -99,7 +96,6 @@ class CmsSmartUrlHandler
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isActive(): bool
     {
@@ -112,8 +108,6 @@ class CmsSmartUrlHandler
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselectCheckboxes
 
@@ -147,7 +141,6 @@ class CmsSmartUrlHandler
         return $this;
     }
 
-
     // TCMSFieldPosition
     public function getPosition(): int
     {
@@ -160,6 +153,4 @@ class CmsSmartUrlHandler
 
         return $this;
     }
-
-
 }

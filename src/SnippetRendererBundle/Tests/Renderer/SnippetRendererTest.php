@@ -28,9 +28,9 @@ class SnippetRendererTest extends TestCase
 
     public function setUp(): void
     {
-        //$twigEnv = $this->getMockBuilder('Twig_Environment')->getMock();
-        $snippetRenderer = new TPkgSnippetRenderer(new \Twig\Environment(new \Twig\Loader\FilesystemLoader()), new \Twig\Environment(new TwigStringLoader()), new \Psr\Log\NullLogger());
-        $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+        // $twigEnv = $this->getMockBuilder('Twig_Environment')->getMock();
+        $snippetRenderer = new TPkgSnippetRenderer(new Twig\Environment(new Twig\Loader\FilesystemLoader()), new Twig\Environment(new TwigStringLoader()), new Psr\Log\NullLogger());
+        $container = new Symfony\Component\DependencyInjection\ContainerBuilder();
         $container->set('chameleon_system_snippet_renderer.snippet_renderer', $snippetRenderer);
         ServiceLocator::setContainer($container);
     }
@@ -40,7 +40,7 @@ class SnippetRendererTest extends TestCase
         $oReflectionClass = new ReflectionClass('TPkgSnippetRenderer');
         $oReflectionMethod = $oReflectionClass->getMethod('setBasePaths');
         $oReflectionMethod->setAccessible(true);
-        $oReflectionMethod->invoke($oRenderer, array(__DIR__.'/_files'));
+        $oReflectionMethod->invoke($oRenderer, [__DIR__.'/_files']);
     }
 
     public function testSetCapturedVar()
@@ -58,7 +58,7 @@ class SnippetRendererTest extends TestCase
         $oAtr->setAccessible(true);
         $aSubstitutes = $oAtr->invoke($renderer);
 
-        $aExpected = array('bla' => 'BARBAZ', 'blubb' => 'BARBAZBAZZ');
+        $aExpected = ['bla' => 'BARBAZ', 'blubb' => 'BARBAZBAZZ'];
 
         $this->assertEquals($aExpected, $aSubstitutes);
     }

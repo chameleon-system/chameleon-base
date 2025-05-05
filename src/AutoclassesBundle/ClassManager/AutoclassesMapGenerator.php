@@ -29,7 +29,7 @@ class AutoclassesMapGenerator implements AutoclassesMapGeneratorInterface
      */
     private function getClassesFromDirectory($rootPath, $relativePath = '')
     {
-        $classes = array();
+        $classes = [];
         $dirPath = $rootPath;
         if (!empty($relativePath)) {
             $dirPath .= '/'.$relativePath;

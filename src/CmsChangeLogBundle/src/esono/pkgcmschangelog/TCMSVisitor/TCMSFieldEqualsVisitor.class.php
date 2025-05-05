@@ -20,10 +20,6 @@ class TCMSFieldEqualsVisitor implements TCMSFieldVisitorInterface
      */
     protected $oField2;
 
-    /**
-     * @param TCMSField $oField1
-     * @param TCMSField $oField2
-     */
     public function __construct(TCMSField $oField1, TCMSField $oField2)
     {
         $this->oField1 = $oField1;
@@ -43,8 +39,6 @@ class TCMSFieldEqualsVisitor implements TCMSFieldVisitorInterface
     }
 
     /**
-     * @param TCMSField $oField
-     *
      * @return bool
      */
     public function visit(TCMSField $oField)

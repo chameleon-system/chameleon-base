@@ -8,12 +8,11 @@ class PkgNewsletterRobinson
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldLookup
         /** @var CmsPortal|null - Portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldEmail
         /** @var string - Email address */
         private string $email = '',
@@ -60,7 +59,6 @@ class PkgNewsletterRobinson
         return $this;
     }
 
-
     // TCMSFieldEmail
     public function getEmail(): string
     {
@@ -74,7 +72,6 @@ class PkgNewsletterRobinson
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getReason(): string
     {
@@ -87,6 +84,4 @@ class PkgNewsletterRobinson
 
         return $this;
     }
-
-
 }

@@ -4,7 +4,6 @@ namespace ChameleonSystem\NewsletterBundle\Entity;
 
 use ChameleonSystem\DataAccessBundle\Entity\CorePagedef\CmsTree;
 use ChameleonSystem\DataAccessBundle\Entity\CorePortal\CmsPortal;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -12,7 +11,7 @@ class PkgNewsletterCampaign
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Campaign source (utm_source) */
@@ -31,8 +30,7 @@ class PkgNewsletterCampaign
         private string $name = '',
         // TCMSFieldTreeNode
         /** @var CmsTree|null - Newlsetter template page */
-        private ?CmsTree $cmsTreeNode = null
-        ,
+        private ?CmsTree $cmsTreeNode = null,
         // TCMSFieldBoolean
         /** @var bool - Newsletter queue active */
         private bool $active = false,
@@ -41,34 +39,31 @@ class PkgNewsletterCampaign
         private string $subject = '',
         // TCMSFieldLookup
         /** @var CmsPortal|null - Portal */
-        private ?CmsPortal $cmsPortal = null
-        ,
+        private ?CmsPortal $cmsPortal = null,
         // TCMSFieldPropertyTable
         /** @var Collection<int, PkgNewsletterQueue> - Queue items */
-        private Collection $pkgNewsletterQueueCollection = new ArrayCollection()
-        ,
+        private Collection $pkgNewsletterQueueCollection = new ArrayCollection(),
         // TCMSFieldText
         /** @var string - Content text */
         private string $contentPlain = '',
         // TCMSFieldDateTimeNow
-        /** @var DateTime|null - Desired shipping time */
-        private ?DateTime $queueDate = new DateTime(),
+        /** @var \DateTime|null - Desired shipping time */
+        private ?\DateTime $queueDate = new \DateTime(),
         // TCMSFieldNewsletterCampaignStatistics
         /** @var string - Send status */
         private string $sendStatistics = '',
         // TCMSFieldDateTime
-        /** @var DateTime|null - Start of shipping */
-        private ?DateTime $sendStartDate = null,
+        /** @var \DateTime|null - Start of shipping */
+        private ?\DateTime $sendStartDate = null,
         // TCMSFieldDateTime
-        /** @var DateTime|null - End of shipping */
-        private ?DateTime $sendEndDate = null,
+        /** @var \DateTime|null - End of shipping */
+        private ?\DateTime $sendEndDate = null,
         // TCMSFieldBoolean
         /** @var bool - Generate user-specific newsletters */
         private bool $generateUserDependingNewsletter = false,
         // TCMSFieldLookupMultiselect
         /** @var Collection<int, PkgNewsletterGroup> - Recipient list */
-        private Collection $pkgNewsletterGroupCollection = new ArrayCollection()
-        ,
+        private Collection $pkgNewsletterGroupCollection = new ArrayCollection(),
         // TCMSFieldBoolean
         /** @var bool - Enable Google Analytics tagging */
         private bool $googleAnalyticsActive = false
@@ -112,7 +107,6 @@ class PkgNewsletterCampaign
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUtmMedium(): string
     {
@@ -125,7 +119,6 @@ class PkgNewsletterCampaign
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getUtmContent(): string
@@ -140,7 +133,6 @@ class PkgNewsletterCampaign
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getUtmCampaign(): string
     {
@@ -153,7 +145,6 @@ class PkgNewsletterCampaign
 
         return $this;
     }
-
 
     // TCMSFieldVarchar
     public function getName(): string
@@ -168,7 +159,6 @@ class PkgNewsletterCampaign
         return $this;
     }
 
-
     // TCMSFieldTreeNode
     public function getCmsTreeNode(): ?CmsTree
     {
@@ -181,7 +171,6 @@ class PkgNewsletterCampaign
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isActive(): bool
@@ -196,7 +185,6 @@ class PkgNewsletterCampaign
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getSubject(): string
     {
@@ -210,7 +198,6 @@ class PkgNewsletterCampaign
         return $this;
     }
 
-
     // TCMSFieldLookup
     public function getCmsPortal(): ?CmsPortal
     {
@@ -223,8 +210,6 @@ class PkgNewsletterCampaign
 
         return $this;
     }
-
-
 
     // TCMSFieldPropertyTable
 
@@ -258,7 +243,6 @@ class PkgNewsletterCampaign
         return $this;
     }
 
-
     // TCMSFieldText
     public function getContentPlain(): string
     {
@@ -272,20 +256,18 @@ class PkgNewsletterCampaign
         return $this;
     }
 
-
     // TCMSFieldDateTimeNow
-    public function getQueueDate(): ?DateTime
+    public function getQueueDate(): ?\DateTime
     {
         return $this->queueDate;
     }
 
-    public function setQueueDate(?DateTime $queueDate): self
+    public function setQueueDate(?\DateTime $queueDate): self
     {
         $this->queueDate = $queueDate;
 
         return $this;
     }
-
 
     // TCMSFieldNewsletterCampaignStatistics
     public function getSendStatistics(): string
@@ -300,34 +282,31 @@ class PkgNewsletterCampaign
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getSendStartDate(): ?DateTime
+    public function getSendStartDate(): ?\DateTime
     {
         return $this->sendStartDate;
     }
 
-    public function setSendStartDate(?DateTime $sendStartDate): self
+    public function setSendStartDate(?\DateTime $sendStartDate): self
     {
         $this->sendStartDate = $sendStartDate;
 
         return $this;
     }
 
-
     // TCMSFieldDateTime
-    public function getSendEndDate(): ?DateTime
+    public function getSendEndDate(): ?\DateTime
     {
         return $this->sendEndDate;
     }
 
-    public function setSendEndDate(?DateTime $sendEndDate): self
+    public function setSendEndDate(?\DateTime $sendEndDate): self
     {
         $this->sendEndDate = $sendEndDate;
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isGenerateUserDependingNewsletter(): bool
@@ -341,8 +320,6 @@ class PkgNewsletterCampaign
 
         return $this;
     }
-
-
 
     // TCMSFieldLookupMultiselect
 
@@ -376,7 +353,6 @@ class PkgNewsletterCampaign
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isGoogleAnalyticsActive(): bool
     {
@@ -389,6 +365,4 @@ class PkgNewsletterCampaign
 
         return $this;
     }
-
-
 }

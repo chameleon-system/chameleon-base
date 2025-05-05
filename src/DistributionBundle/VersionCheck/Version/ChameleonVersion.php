@@ -39,8 +39,8 @@ class ChameleonVersion
     public function isDev()
     {
         return
-            '-dev' === substr($this->prettyVersion, -1 * strlen('-dev')) ||
-            'dev-' === substr($this->prettyVersion, 0, strlen('dev-'));
+            '-dev' === substr($this->prettyVersion, -1 * strlen('-dev'))
+            || 'dev-' === substr($this->prettyVersion, 0, strlen('dev-'));
     }
 
     /**
@@ -66,7 +66,7 @@ class ChameleonVersion
      */
     private function getVersionPart($part)
     {
-        $matches = array();
+        $matches = [];
         if (preg_match(",(dev-)?(\d+\.\d+\.\d+)(-dev)?,", $this->getPrettyVersion(), $matches)) {
             $parts = explode('.', $matches[2]);
 
@@ -82,10 +82,10 @@ class ChameleonVersion
     public function match(self $version)
     {
         if ($this->getPrettyVersion() === $version->getPrettyVersion()) {
-            return new MatchLevel(MatchLevel::$MATCH_SAME, array());
+            return new MatchLevel(MatchLevel::$MATCH_SAME, []);
         }
 
-        $misMatches = array();
+        $misMatches = [];
         $matchLevel = MatchLevel::$MATCH_SAME;
         if ($this->isDev() !== $version->isDev()) {
             $misMatches[] = MatchLevel::$MISSMATCH_TYPE_DEV_STABLE;

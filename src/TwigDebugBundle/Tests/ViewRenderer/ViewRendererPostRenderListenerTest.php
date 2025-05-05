@@ -21,14 +21,14 @@ class ViewRendererPostRenderListenerTest extends TestCase
     /**
      * @test
      */
-    public function it_modifies_the_content()
+    public function itModifiesTheContent()
     {
         $prophet = new Prophet();
-        $includes = array('foo', 'bar');
+        $includes = ['foo', 'bar'];
 
         $listener = new ViewRendererPostRenderListener();
 
-        $evt = new ViewRendererEvent('content', array('foo', 'bar'), 'fooView');
+        $evt = new ViewRendererEvent('content', ['foo', 'bar'], 'fooView');
 
         $expected = <<<EOF
 

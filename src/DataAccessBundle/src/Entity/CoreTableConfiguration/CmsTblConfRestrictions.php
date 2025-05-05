@@ -6,7 +6,7 @@ class CmsTblConfRestrictions
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - Field name */
@@ -57,7 +57,6 @@ class CmsTblConfRestrictions
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getFunction(): string
     {
@@ -71,7 +70,6 @@ class CmsTblConfRestrictions
         return $this;
     }
 
-
     // TCMSFieldLookupParentID
     public function getCmsTblConf(): ?CmsTblConf
     {
@@ -84,6 +82,4 @@ class CmsTblConfRestrictions
 
         return $this;
     }
-
-
 }

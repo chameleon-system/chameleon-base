@@ -12,17 +12,16 @@
 namespace ChameleonSystem\CoreBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
-use TdbShopOrderStep;
 
 class ChangeShopOrderStepEvent extends Event
 {
     /**
-     * @var TdbShopOrderStep[]
+     * @var \TdbShopOrderStep[]
      */
     private $changedShopOrderSteps;
 
     /**
-     * @param TdbShopOrderStep[] $changedShopOrderSteps
+     * @param \TdbShopOrderStep[] $changedShopOrderSteps
      */
     public function __construct(array $changedShopOrderSteps)
     {
@@ -30,7 +29,7 @@ class ChangeShopOrderStepEvent extends Event
     }
 
     /**
-     * @return TdbShopOrderStep[]
+     * @return \TdbShopOrderStep[]
      */
     public function getChangedShopOrderSteps()
     {

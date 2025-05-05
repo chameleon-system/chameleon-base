@@ -15,6 +15,6 @@ function gcf_ActivityFeedName($name, $row)
     if ($oNotify->Load($row['pkg_com_activity_feed_notify_id'])) {
         return $oNotify->GetName();
     } else {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.gcf_activity_feed_name_no_feed_found');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.list.gcf_activity_feed_name_no_feed_found');
     }
 }

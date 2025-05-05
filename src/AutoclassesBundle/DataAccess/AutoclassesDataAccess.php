@@ -12,13 +12,7 @@
 namespace ChameleonSystem\AutoclassesBundle\DataAccess;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\InvalidFieldNameException;
-use PDO;
-use TCMSConfig;
 use TCMSField;
-use TCMSTableToField_TCMSFieldType;
-use TCMSTableToField_TCMSTableFieldConf;
-use TIterator;
 
 class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 {
@@ -27,9 +21,6 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
      */
     private $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -40,7 +31,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
      */
     public function getTableExtensionData()
     {
-        $data = array();
+        $data = [];
         $query = 'SELECT *
                   FROM `cms_tbl_extension`
                   ORDER BY `position` DESC';
@@ -57,17 +48,17 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
      */
     public function getFieldData()
     {
-        $data = array();
+        $data = [];
         $query = 'SELECT `cms_field_conf`.*, `cms_tbl_conf`.`name` AS tablename
                   FROM `cms_field_conf`
                   INNER JOIN `cms_tbl_conf` ON `cms_field_conf`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
                   ORDER BY `position` ASC';
         $result = $this->connection->executeQuery($query);
-        $fieldTypes = array();
+        $fieldTypes = [];
         while ($row = $result->fetchAssociative()) {
             $tableConfId = $row['cms_tbl_conf_id'];
             if (false === isset($data[$tableConfId])) {
-                $data[$tableConfId] = new TIterator();
+                $data[$tableConfId] = new \TIterator();
             }
 
             /** @psalm-var class-string<TCMSField> $className */
@@ -75,7 +66,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
 
             $fieldType = $row['cms_field_type_id'];
             if (false === isset($fieldTypes[$fieldType])) {
-                $fieldDef = new TCMSTableToField_TCMSFieldType($this->connection);
+                $fieldDef = new \TCMSTableToField_TCMSFieldType($this->connection);
                 $fieldDef->Load($fieldType);
                 $fieldTypes[$fieldType] = $fieldDef;
             } else {
@@ -86,13 +77,13 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
                 $className = trim($fieldDef->sqlData['fieldclass']);
             }
 
-            /** @var TCMSField $field */
+            /** @var \TCMSField $field */
             $field = new $className();
             $field->setDatabaseConnection($this->connection);
             $field->data = $row['field_default_value'];
             $field->sTableName = $row['tablename'];
             $field->name = $row['name'];
-            $field->oDefinition = new TCMSTableToField_TCMSTableFieldConf($this->connection,$fieldDef);
+            $field->oDefinition = new \TCMSTableToField_TCMSTableFieldConf($this->connection, $fieldDef);
             $field->oDefinition->LoadFromRow($row);
             $data[$tableConfId]->AddItem($field);
         }
@@ -105,7 +96,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
      */
     public function getConfig()
     {
-        $cmsConfig = new TCMSConfig();
+        $cmsConfig = new \TCMSConfig();
         $cmsConfig->Load(1);
 
         return $cmsConfig;
@@ -116,8 +107,6 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
      */
     public function getTableOrderByData()
     {
-
-
         $query = 'SELECT * FROM `cms_tbl_display_orderfields` ORDER BY `position` ASC';
         $result = $this->connection->executeQuery($query);
 
@@ -143,7 +132,7 @@ class AutoclassesDataAccess implements AutoclassesDataAccessInterface
      */
     public function getTableConfigData()
     {
-        $data = array();
+        $data = [];
 
         $query = 'SELECT *
                   FROM `cms_tbl_conf`';

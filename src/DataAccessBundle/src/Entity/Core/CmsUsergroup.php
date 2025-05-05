@@ -2,12 +2,11 @@
 
 namespace ChameleonSystem\DataAccessBundle\Entity\Core;
 
-
 class CmsUsergroup
 {
     public function __construct(
         private string $id,
-        private int|null $cmsident = null,
+        private ?int $cmsident = null,
 
         // TCMSFieldVarchar
         /** @var string - German translation */
@@ -61,7 +60,6 @@ class CmsUsergroup
         return $this;
     }
 
-
     // TCMSFieldVarchar
     public function getInternalIdentifier(): string
     {
@@ -74,7 +72,6 @@ class CmsUsergroup
 
         return $this;
     }
-
 
     // TCMSFieldBoolean
     public function isIsChooseable(): bool
@@ -89,7 +86,6 @@ class CmsUsergroup
         return $this;
     }
 
-
     // TCMSFieldBoolean
     public function isIsSystem(): bool
     {
@@ -102,6 +98,4 @@ class CmsUsergroup
 
         return $this;
     }
-
-
 }

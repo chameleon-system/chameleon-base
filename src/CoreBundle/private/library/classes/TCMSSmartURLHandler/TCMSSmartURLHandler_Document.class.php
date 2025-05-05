@@ -26,7 +26,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
 
     protected function getSymLinkDownloadPath()
     {
-        return  URL_OUTBOX.'public/';
+        return URL_OUTBOX.'public/';
     }
 
     public function GetPageDef()
@@ -106,7 +106,7 @@ class TCMSSmartURLHandler_Document extends TCMSSmartURLHandler
 
     protected function handleNotFound($sMessage = '')
     {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+        throw new Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
     }
 
     /**

@@ -19,7 +19,7 @@ use ChameleonSystem\ExtranetBundle\Interfaces\ExtranetUserProviderInterface;
  * in the pagedef.
  * the parameter sNaviClass controlls which class in /classes/components/Navigation will
  * be used to generate the navi.
-/**/
+ * /**/
 class MTNavigationCoreEndPoint extends TUserModelBase
 {
     protected $bAllowHTMLDivWrapping = true;
@@ -29,7 +29,7 @@ class MTNavigationCoreEndPoint extends TUserModelBase
      *
      * @var TCCustomNavigation
      */
-    protected $oNavigation = null;
+    protected $oNavigation;
 
     /**
      * indicates that the navigation is extended by a subnavigation class.
@@ -135,12 +135,12 @@ class MTNavigationCoreEndPoint extends TUserModelBase
     {
         $tableInfo = parent::_GetCacheTableInfos();
 
-        $aTablesAffectingNavi = array(
+        $aTablesAffectingNavi = [
             'cms_tree_node', 'cms_portal', 'cms_config', 'cms_portal_domains', 'cms_tree', 'cms_tpl_page',
-        );
+        ];
 
         foreach ($aTablesAffectingNavi as $sTable) {
-            $tableInfo[] = array('table' => $sTable, 'id' => null);
+            $tableInfo[] = ['table' => $sTable, 'id' => null];
         }
 
         return $tableInfo;
@@ -151,7 +151,7 @@ class MTNavigationCoreEndPoint extends TUserModelBase
      */
     private function getActivePageService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.active_page_service');
+        return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     /**
@@ -167,6 +167,6 @@ class MTNavigationCoreEndPoint extends TUserModelBase
      */
     private function getPortalDomainService()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 }

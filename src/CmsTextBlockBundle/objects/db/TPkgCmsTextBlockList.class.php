@@ -57,10 +57,10 @@ class TPkgCmsTextBlockList extends TPkgCmsTextBlockListAutoParent
      */
     protected function RenderBlockListArrayItems($iWidth = 600)
     {
-        $aPortalTextBlockArray = array();
+        $aPortalTextBlockArray = [];
         $this->GoToStart();
         while ($oTextBlock = $this->Next()) {
-            $aPortalTextBlockArray['cmsblock_'.$oTextBlock->fieldSystemname] = $oTextBlock->Render('standard', 'Customer', array('iWidth' => $iWidth));
+            $aPortalTextBlockArray['cmsblock_'.$oTextBlock->fieldSystemname] = $oTextBlock->Render('standard', 'Customer', ['iWidth' => $iWidth]);
         }
 
         return $aPortalTextBlockArray;

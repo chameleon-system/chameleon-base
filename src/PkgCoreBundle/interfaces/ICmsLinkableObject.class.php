@@ -12,13 +12,11 @@
 interface ICmsLinkableObject
 {
     /**
-     * @param bool                $bAbsolute           set to true to include the domain in the link
-     * @param string|null         $sAnchor
-     * @param array               $aOptionalParameters
-     * @param TdbCmsPortal|null   $portal
-     * @param TdbCmsLanguage|null $language
+     * @param bool $bAbsolute set to true to include the domain in the link
+     * @param string|null $sAnchor
+     * @param array $aOptionalParameters
      *
      * @return string
      */
-    public function getLink($bAbsolute = false, $sAnchor = null, $aOptionalParameters = array(), \TdbCmsPortal $portal = null, \TdbCmsLanguage $language = null);
+    public function getLink($bAbsolute = false, $sAnchor = null, $aOptionalParameters = [], ?TdbCmsPortal $portal = null, ?TdbCmsLanguage $language = null);
 }

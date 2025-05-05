@@ -14,26 +14,26 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 
 /**
  * exports table data as TAB, CSV or RTF.
-/**/
+ * /**/
 class CMSTableExport extends TCMSModelBase
 {
-    protected $listParams = null;
-    protected $oTableManager = null;
-    protected $tableID = null;
+    protected $listParams;
+    protected $oTableManager;
+    protected $tableID;
 
     /**
      * TCMSTableConf object of table based on "tableID".
      *
      * @var TCMSTableConf
      */
-    protected $oTableConf = null;
+    protected $oTableConf;
 
     /**
      * holds the full group table object.
      *
      * @var TFullGroupTable
      */
-    protected $oTableList = null;
+    protected $oTableList;
 
     /*
      * path to temp file
@@ -45,7 +45,7 @@ class CMSTableExport extends TCMSModelBase
     /**
      * @var resource|null
      */
-    protected $pTempFilePointer = null;
+    protected $pTempFilePointer;
 
     public function Init()
     {
@@ -72,7 +72,7 @@ class CMSTableExport extends TCMSModelBase
 
         $aPortals = $securityHelper->getUser()?->getPortals();
         if (null === $aPortals) {
-            $aPortals = array();
+            $aPortals = [];
         }
 
         $aPortals = TTools::MysqlRealEscapeArray(array_keys($aPortals));
@@ -81,11 +81,11 @@ class CMSTableExport extends TCMSModelBase
         $profileOptions = '';
         if (!empty($portals)) {
             $query = 'SELECT * FROM `cms_export_profiles` WHERE `cms_portal_id` IN ('.$portals.") AND `cms_tbl_conf_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->tableID)."'";
-            $oRecordList = new TCMSRecordList(); /*@var $oRecordList TCMSRecordList*/
+            $oRecordList = new TCMSRecordList(); /* @var $oRecordList TCMSRecordList */
             $oRecordList->sTableName = 'cms_export_profiles';
             $oRecordList->Load($query);
 
-            while ($oRecord = $oRecordList->Next()) { /*@var $oRecord TCMSRecord */
+            while ($oRecord = $oRecordList->Next()) { /* @var $oRecord TCMSRecord */
                 $portalQuery = "SELECT `name` FROM `cms_portal` WHERE `id` = '".MySqlLegacySupport::getInstance()->real_escape_string($oRecord->sqlData['cms_portal_id'])."'";
                 $portalResult = MySqlLegacySupport::getInstance()->query($portalQuery);
                 $portalRow = MySqlLegacySupport::getInstance()->fetch_assoc($portalResult);
@@ -122,9 +122,9 @@ class CMSTableExport extends TCMSModelBase
         $sListCacheKey = $this->global->GetUserData('listCacheKey');
 
         if (!array_key_exists('_listObjCache', $_SESSION)) {
-            $_SESSION['_listObjCache'] = array();
+            $_SESSION['_listObjCache'] = [];
         }
-        $objectInSession = (array_key_exists($sListCacheKey, $_SESSION['_listObjCache']));
+        $objectInSession = array_key_exists($sListCacheKey, $_SESSION['_listObjCache']);
 
         if ($objectInSession) {
             $tmp = base64_decode($_SESSION['_listObjCache'][$sListCacheKey]);
@@ -178,7 +178,7 @@ class CMSTableExport extends TCMSModelBase
             return 0;
         }
 
-        return (int)preg_replace_callback('/(\-?\d+)(.?)/', function ($matches) {
+        return (int) preg_replace_callback('/(\-?\d+)(.?)/', function ($matches) {
             return $matches[1] * (1024 ** strpos('BKMG', $matches[2]));
         }, strtoupper($units));
     }
@@ -212,12 +212,12 @@ class CMSTableExport extends TCMSModelBase
             header('Content-Disposition: attachment; filename="'.$sNiceFileName.'";');
             header('Content-Transfer-Encoding: binary');
 
-            header('Content-Length: '.(string) (filesize($sTmpName)));
+            header('Content-Length: '.(string) filesize($sTmpName));
             $file = fopen($sTmpName, 'r');
             fpassthru($file);
             fclose($file);
             unlink($sTmpName);
-            exit();
+            exit;
         }
     }
 
@@ -230,9 +230,9 @@ class CMSTableExport extends TCMSModelBase
      */
     protected function FetchFieldConf($oProfileRecord)
     {
-        $aFieldConfig = array();
+        $aFieldConfig = [];
         $oFieldRecordList = $oProfileRecord->GetFieldCmsExportProfilesFieldsList();
-        $oFieldRecordList->ChangeOrderBy(array('sort_order' => 'ASC'));
+        $oFieldRecordList->ChangeOrderBy(['sort_order' => 'ASC']);
         /** @var $oField TCMSRecord */
         while ($oField = $oFieldRecordList->Next()) {
             $aFieldConfig[$oField->sqlData['fieldname']] = $oField->sqlData['html_template'];
@@ -251,7 +251,7 @@ class CMSTableExport extends TCMSModelBase
         $query = $this->oTableList->fullQuery;
         $this->oTableConf->sqlData['name'];
         $sClassName = TCMSTableToClass::GetClassName('Tdb', $this->oTableConf->sqlData['name']).'List';
-        $oRecordsList = call_user_func_array(array($sClassName, 'GetList'), array($query, null, false, true, true));
+        $oRecordsList = call_user_func_array([$sClassName, 'GetList'], [$query, null, false, true, true]);
 
         return $oRecordsList;
     }
@@ -259,8 +259,8 @@ class CMSTableExport extends TCMSModelBase
     /**
      * generates a CSV file using delimiter ";" or "\t".
      *
-     * @param array  $aFieldConfig - contains TCMSRecord field objects
-     * @param string $delimiter    - default ";"
+     * @param array $aFieldConfig - contains TCMSRecord field objects
+     * @param string $delimiter - default ";"
      */
     protected function GenerateCSVExport($aFieldConfig, $delimiter = ';')
     {
@@ -290,7 +290,7 @@ class CMSTableExport extends TCMSModelBase
                 reset($aFieldConfig);
             }
 
-            /**
+            /*
              * add cmsident.
              */
             $csvData .= '"'.$oRecord->sqlData['cmsident'].'"'.$delimiter;
@@ -363,7 +363,6 @@ class CMSTableExport extends TCMSModelBase
     /**
      * note: RTF export is disabled at the moment, needs rework with
      * new PHP5 RTF Generator class.
-     *
      *
      * generates export file in RTF format
      * uses GetRTFExport() method of field objects
@@ -543,7 +542,7 @@ class CMSTableExport extends TCMSModelBase
         $exportData = str_replace('<br> ', '<br>', $exportData);
         $exportData = str_replace('<em>', '<i>', $exportData);
         $exportData = str_replace('</em>', '</i>', $exportData);
-        //$exportData = str_replace('</div>', '<br>', $exportData);
+        // $exportData = str_replace('</div>', '<br>', $exportData);
 
         $allowedTags = '<b><i><u></u><sup><sub><br><br /><hr><hr /><p></p><table><tr><td><tbody><div>';
         $exportDataBak = $exportData;
@@ -561,7 +560,7 @@ class CMSTableExport extends TCMSModelBase
     {
         parent::DefineInterface();
 
-        $externalFunctions = array('GenerateExport');
+        $externalFunctions = ['GenerateExport'];
         $this->methodCallAllowed = array_merge($this->methodCallAllowed, $externalFunctions);
     }
 

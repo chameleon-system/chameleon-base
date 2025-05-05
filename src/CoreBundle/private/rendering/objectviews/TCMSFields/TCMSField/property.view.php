@@ -4,7 +4,7 @@
 foreach ($aFieldDesc as $sLine) {
     echo "      * {$sLine}\n";
 }
-?>
+     ?>
      * @var <?php echo $sFieldType."\n"; ?>
      */
-    <?= $sFieldVisibility; ?> $<?= $sFieldName; ?> = <?= $sFieldDefaultValue; ?>;
+    <?php echo $sFieldVisibility; ?> $<?php echo $sFieldName; ?> = <?php echo $sFieldDefaultValue; ?>;
