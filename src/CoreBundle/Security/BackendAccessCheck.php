@@ -15,9 +15,11 @@ use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\RouterInterface;
 
 class BackendAccessCheck
 {
+    private RouterInterface $router;
     private \ICmsCoreRedirect $redirect;
     private RequestStack $requestStack;
     /**
@@ -26,11 +28,13 @@ class BackendAccessCheck
     private array $ipRestrictedPageDefs = [];
 
     public function __construct(
+        RouterInterface $router,
         \ICmsCoreRedirect $redirect,
         RequestStack $requestStack,
         readonly private Security $security,
         readonly private bool $twoFactorEnabled = false
     ) {
+        $this->router = $router;
         $this->redirect = $redirect;
         $this->requestStack = $requestStack;
     }
@@ -86,7 +90,7 @@ class BackendAccessCheck
         }
 
         $this->checkLoginOnAjax();
-        $this->redirect->redirectToActivePage(['pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout']);
+        $this->redirectToLogout();
     }
 
     /**
@@ -100,12 +104,11 @@ class BackendAccessCheck
         if (null === $request) {
             return;
         }
+
         $aModuleFNC = $request->get('module_fnc');
         if (is_array($aModuleFNC) && array_key_exists('contentmodule', $aModuleFNC)
             && 'ExecuteAjaxCall' === $aModuleFNC['contentmodule']) {
-            $aParameters = ['pagedef' => 'login', 'module_fnc[contentmodule]' => 'Logout'];
-            $sLocation = PATH_CMS_CONTROLLER.'?'.http_build_query($aParameters);
-            $aJson = ['logedoutajax', $sLocation];
+            $aJson = ['logedoutajax', $this->router->generate('app_logout')];
             echo json_encode($aJson);
             exit;
         }
@@ -146,5 +149,11 @@ class BackendAccessCheck
         }
 
         return false;
+    }
+
+    private function redirectToLogout(): void
+    {
+        $logout = $this->router->generate('app_logout');
+        $this->redirect->redirect($logout);
     }
 }
