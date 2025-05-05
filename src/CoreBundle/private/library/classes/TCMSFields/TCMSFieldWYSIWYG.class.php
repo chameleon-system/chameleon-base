@@ -558,38 +558,23 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * Parses user css file and translate the styles for usage in javascript array collection / map.
+     * Parse custom user css definitions and prepare wysiwyg editor style setup.
      */
     private function getJSStylesSet(string $sUserCssUrl): array
     {
         $styles = [];
 
-        $aCustomCSSClasses = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
-        foreach ($aCustomCSSClasses as $sClassName) {
-            $styleData = [];
-            if (str_starts_with($sClassName, '@')) {
-                continue;
+        $customerStyles = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
+        foreach ($customerStyles as $className => $htmlTags) {
+            if (0 === count($htmlTags)) {
+                // if no elements are specified, we use the class for the following default elements
+                $elements = ['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li'];
             }
-            if (str_starts_with($sClassName, '.')) {
-                $sClassName = substr($sClassName, 1);
-                $styleData['name'] = "'".$sClassName."'";
-                $styleData['element'] = "['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li']";
-                $styleData['attributes']['class'] = "'".$sClassName."'";
-            } else {
-                // split tag type from css. note: we only allow one class!
-                $aClassParts = explode('.', $sClassName);
-                if (2 === count($aClassParts)) {
-                    $sElement = $aClassParts[0];
-                    $sElementSubParts = explode(' ', $sElement);
-                    $sElement = $sElementSubParts[count($sElementSubParts) - 1];
-                    $sClassName = $aClassParts[1];
-                    $styleData['name'] = "'".$sClassName.'('.$sElement.")'";
-                    $styleData['element'] = "'".$sElement."'";
-                    $styleData['attributes']['class'] = "'".$sClassName."'";
-                }
-            }
-
-            if (count($styleData) > 0) {
+            foreach ($htmlTags as $htmlTag) {
+                $styleData = [];
+                $styleData['name'] = "'".$className.'('.$htmlTag.")'";
+                $styleData['element'] = "'".$htmlTag."'";
+                $styleData['attributes']['class'] = "'".$className."'";
                 $styles[] = $styleData;
             }
         }
@@ -611,9 +596,8 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
             $key = $cache->getKey($aParameters, false);
             $styleCache = $cache->get($key);
             if (null === $styleCache) {
-                $aStyles = $this->getCssClassExtractor()->extractCssClasses($sUserCSSURL);
-                $styleCache = $aStyles;
-                $cache->set($key, $styleCache, null);
+                $styleCache = $this->getCssClassExtractor()->extractCssClasses($sUserCSSURL);
+                $cache->set($key, $styleCache, []);
             }
         }
 
