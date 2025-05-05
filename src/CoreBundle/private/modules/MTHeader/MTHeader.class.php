@@ -656,7 +656,6 @@ class MTHeader extends TCMSModelBase
 
         $includes[] = '<script src="'.TGlobal::GetStaticURLToWebLib('/javascript/jquery/cookie/jquery.cookie.js').'" type="text/javascript"></script>';
 
-
         $sessionTimeout = @ini_get('session.gc_maxlifetime');
         if (!empty($sessionTimeout)) {
             $router = $this->getRouter();
@@ -770,7 +769,8 @@ class MTHeader extends TCMSModelBase
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
     }
 
-    private function getRouter(): RouterInterface{
+    private function getRouter(): RouterInterface
+    {
         return ServiceLocator::get('router');
     }
 }
