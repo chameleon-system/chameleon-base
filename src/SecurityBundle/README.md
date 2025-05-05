@@ -1,14 +1,6 @@
-# 🔐 2FA Setup with Google Authenticator in ChameleonCMS (Symfony)
+# 2FA Setup with Google Authenticator in Chameleon
 
-This guide explains how to set up Two-Factor Authentication (2FA) using **Google Authenticator** in your ChameleonCMS (Symfony-based) project.
-
----
-
-### Attention! Known Bug
-During the setup process of the 2FA secret, the user is
-valid to use /cms, i have no idea on how to battle this issue
-
-## 📦 Requirements
+## Requirements
 
 - Symfony >= 6.x
 - `scheb/2fa-bundle`
@@ -18,7 +10,7 @@ valid to use /cms, i have no idea on how to battle this issue
 
 ---
 
-## 📥 Installation
+##  Installation
 
 ```bash
 composer require scheb/2fa-bundle scheb/2fa-google-authenticator endroid/qr-code
@@ -26,7 +18,10 @@ composer require scheb/2fa-bundle scheb/2fa-google-authenticator endroid/qr-code
 
 ---
 
-## ⚙️ Configuration
+## Configuration
+
+Edit your config file to implement 2fa with Google Authenticator. To activate or
+deactivate the 2fa, set `enabled` to `true` or `false`.
 
 ### `app/config/config.yml`
 
@@ -44,88 +39,27 @@ scheb_two_factor:
         template: '@ChameleonSystemSecurity/cms/2fa/form.html.twig'
 ```
 
----
+## Usage
 
-## 🧩 User Setup
+After enabling the 2fa, the user will be prompted with a setup page of the 
+google authentication. You can either scan the QR code with your phone or
+enter the secret manually.
 
-Your backend user model must implement:
+Route for setup process: `/cms/2fa/setup`
 
-```php
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+After setting up the 2fa the user wil be redirected to enter the 2fa
+code after a successful login was made.
 
-class CmsUserModel implements TwoFactorInterface
-{
-    public function isGoogleAuthenticatorEnabled(): bool;
-    public function getGoogleAuthenticatorSecret(): string;
-    public function getGoogleAuthenticatorUsername(): string;
-}
-```
-
----
-
-## 🔑 Custom 2FA Setup Page
-
-Add a controller route to allow users to set up their 2FA secret.
-
-```php
-#[Route('/cms/2fa/setup', name: '2fa_setup')]
-public function setup(Request $request): Response
-```
-
-This controller should:
-
-- Generate a secret using `$googleAuthenticator->generateSecret()`
-- Save the secret via `CmsUserDataAccess`
-- Regenerate the security token with the updated user
-- Render a QR code using `endroid/qr-code`
-
----
-
-## 🧠 Session Handling & Security Token Refresh
-
-Use a service like this:
-
-```php
-$token = new UsernamePasswordToken(
-    $updatedUser,
-    'backend',
-    $updatedUser->getRoles()
-);
-$tokenStorage->setToken($token);
-```
-
----
-
-## 🖼️ QR Code Display
-
-Use `endroid/qr-code`:
-
-```php
-$qrContent = $googleAuthenticator->getQRContent($user);
-$result = (new PngWriter())->write(new QrCode($qrContent));
-$dataUri = $result->getDataUri();
-```
-
-Render with:
-
-```twig
-<img src="{{ qrCode }}" alt="QR Code">
-```
+Route for entering the 2fa code: `/cms/2fa`
 
 ---
 
 ## 📄 Custom 2FA Challenge Template
 
-Override this file:
+Override or extend this file:
 
 ```
-templates/bundles/SchebTwoFactorBundle/Form/form.html.twig
-```
-
-Use your own layout and point the form to:
-
-```twig
-<form method="post" action="{{ path('2fa_login_check') }}">
+@ChameleonSystemSecurity/cms/2fa/form.html.twig
 ```
 
 ---
@@ -139,15 +73,3 @@ Run PHPUnit tests for:
 - `checkAuthorizationCode()`
 
 ---
-
-## ✅ Done!
-
-Your ChameleonCMS installation now has full support for Google Authenticator 2FA, including:
-
-- Secure QR setup flow
-- Custom login design
-- Symfony-native configuration
-
----
-
-_Last updated: 2025-04-17_
