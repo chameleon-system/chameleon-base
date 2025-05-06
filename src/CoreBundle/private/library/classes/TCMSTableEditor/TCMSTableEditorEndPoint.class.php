@@ -1311,7 +1311,7 @@ class TCMSTableEditorEndPoint
         }
 
         $todo = sprintf(
-            '//@todo (usually only in the Core) you may add this table/field entry in the "deletedFields.json" like: "%s": [..., "%s"]'."\n",
+            '// @todo (usually only in the Core) you may add this table/field entry in the "deletedFields.json" like: "%s": [..., "%s"]'."\n",
             $this->_oField->sTableName,
             $this->_oField->name,
         );

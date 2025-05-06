@@ -105,6 +105,8 @@ class TCMSCronJob extends TCMSRecord
 
     /**
      * executes the cron job (add your custom method calls here).
+     *
+     * @return void
      */
     protected function _ExecuteCron()
     {

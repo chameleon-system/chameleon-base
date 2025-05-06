@@ -34,12 +34,6 @@
                 <option name="comment"></option>
             </options>
         </many-to-one>
-        <field name="sessionId" type="string" column="session_id" length="255" nullable="false">
-            <options>
-                <option name="comment"></option>
-                <option name="default"></option>
-            </options>
-        </field>
         <field name="ip" type="string" column="ip" length="255" nullable="false">
             <options>
                 <option name="comment"></option>

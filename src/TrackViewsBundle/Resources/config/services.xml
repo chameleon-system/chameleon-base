@@ -17,5 +17,10 @@
         <service id="chameleon_system_track_views.listener.track_views" class="ChameleonSystem\TrackViewsBundle\EventListener\TrackViewsListener">
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
+
+        <!-- Twig extension to render tracking pixel in templates -->
+        <service id="chameleon_system_track_views.twig.extension" class="ChameleonSystem\TrackViewsBundle\Twig\TrackViewsExtension">
+            <tag name="twig.extension" />
+        </service>
     </services>
 </container>
