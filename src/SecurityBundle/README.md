@@ -19,18 +19,10 @@ deactivate the 2fa, set `enabled` to `true` or `false`.
 ### `app/config/config.yml`
 
 ```yaml
-scheb_two_factor:
-    security_tokens:
-        - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
-    google:
+chameleon_system_security:
+    two_factor:
         enabled: true
-        server_name: 'Chameleon Backend'
-        issuer: 'ChameleonCMS'
-        digits: 6
-        template: '@ChameleonSystemSecurity/cms/2fa/form.html.twig'
 ```
-
-To change the form of the 2fa authentication, adjust the "template".
 
 ## Usage
 
