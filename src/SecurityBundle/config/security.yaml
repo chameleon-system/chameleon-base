@@ -64,6 +64,12 @@ security:
    #- { path: ^/cms, roles: ROLE_ADMIN }
   # - { path: ^/profile, roles: ROLE_USER }
 
-chameleon_system_security:
-  two_factor:
+scheb_two_factor:
+  security_tokens:
+    - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+  google:
     enabled: true
+    server_name: 'Chameleon Backend'
+    issuer: 'ChameleonCMS'
+    digits: 6
+    template: '@ChameleonSystemSecurity/cms/2fa/form.html.twig'
