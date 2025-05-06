@@ -101,6 +101,7 @@ _errors:
   new \ChameleonSystem\EcommerceStatsBundle\ChameleonSystemEcommerceStatsBundle(),
   new \ChameleonSystem\ImageEditorBundle\ChameleonSystemImageEditorBundle(),
   new \ChameleonSystem\MarkdownCmsBundle\ChameleonSystemMarkdownCmsBundle(),
+  new \Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
   new \ChameleonSystem\CmsDashboardBundle\ChameleonSystemCmsDashboardBundle()` bundles to the `AppKernel::registerBundles` method at the end.
 
 # Removed bundles
@@ -145,6 +146,20 @@ after:
   if (true === $securityHelper->isGranted(CmsPermissionAttributeConstants::TABLE_EDITOR_ACCESS, $tableObject->fieldName)) {
       return true;
   }
+```
+
+## 2FA Setup with Google Authenticator
+
+We recommend enabling 2FA Security with Google Authenticator.
+
+Edit your config file to activate or deactivate the 2fa, set `enabled` to `true` or `false`.
+
+### `app/config/config.yml`
+
+```yaml
+chameleon_system_security:
+    two_factor:
+        enabled: true
 ```
 
 ### List Of Removed Or Changed Code
