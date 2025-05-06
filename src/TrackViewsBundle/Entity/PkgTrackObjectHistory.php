@@ -24,9 +24,6 @@ class PkgTrackObjectHistory
         private ?DataExtranetUser $dataExtranetUser = null,
         // TCMSFieldVarchar
         /** @var string - */
-        private string $sessionId = '',
-        // TCMSFieldVarchar
-        /** @var string - */
         private string $ip = '',
         // TCMSFieldVarchar
         /** @var string - */
@@ -112,19 +109,6 @@ class PkgTrackObjectHistory
     public function setDataExtranetUser(?DataExtranetUser $dataExtranetUser): self
     {
         $this->dataExtranetUser = $dataExtranetUser;
-
-        return $this;
-    }
-
-    // TCMSFieldVarchar
-    public function getSessionId(): string
-    {
-        return $this->sessionId;
-    }
-
-    public function setSessionId(string $sessionId): self
-    {
-        $this->sessionId = $sessionId;
 
         return $this;
     }

@@ -11,7 +11,7 @@
 
 /**
  * updates the total view count - we do this to easily allow ordering by the value.
- * /**/
+ **/
 class TCMSCronJob_pkgTrackViewsUpdateShopArticleViewCounter extends TdbCmsCronjobs
 {
     /**

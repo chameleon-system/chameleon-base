@@ -23,12 +23,12 @@ class TPkgTrackObjectViews
     /**
      * @var array<string, array{ table_name: string, owner_id: string }>
      */
-    protected $aObjects = [];
+    protected array $aObjects = [];
 
     /**
      * @var list<array{ table_name: string, owner_id: string }>
      */
-    protected $aClickObjects = [];
+    protected array $aClickObjects = [];
 
     /**
      * return instance of Tracking object.
@@ -52,15 +52,11 @@ class TPkgTrackObjectViews
      * @param bool $bAllowMultipleViewsPerPage
      * @param TCMSRecord $oObject
      *
-     * @psalm-suppress UndefinedPropertyFetch
-     *
-     * @FIXME Static access to non-static property. Should probably be $this->aObjects
-     *
      * @return void
      */
     public function TrackObject($oObject, $bCountReloads = true, $bAllowMultipleViewsPerPage = false)
     {
-        if (false == TdbCmsConfig::RequestIsInBotList() && ($bCountReloads || false == self::WasViewedLast($oObject))) {
+        if (false === TdbCmsConfig::RequestIsInBotList() && ($bCountReloads || false === self::WasViewedLast($oObject))) {
             $aTmpObject = ['table_name' => $oObject->table, 'owner_id' => $oObject->id];
 
             $sKey = $oObject->table.'-'.$oObject->id;
@@ -70,7 +66,7 @@ class TPkgTrackObjectViews
                 do {
                     $sKey = $sBaseKey.'-'.$iCount;
                     ++$iCount;
-                } while (array_key_exists($sKey, self::$aObjects));
+                } while (array_key_exists($sKey, $this->aObjects));
             }
             $this->aObjects[$sKey] = $aTmpObject;
             self::SetLastViewObjectHistory($oObject);
@@ -180,9 +176,8 @@ class TPkgTrackObjectViews
     protected static function WasViewedLast($oTableObject)
     {
         $bViewHistorySet = (array_key_exists('TPkgTrackObjectViews', $_SESSION) && is_array($_SESSION['TPkgTrackObjectViews']) && array_key_exists('tbl', $_SESSION['TPkgTrackObjectViews']) && array_key_exists('id', $_SESSION['TPkgTrackObjectViews']));
-        $bWasViewedLast = ($bViewHistorySet && $_SESSION['TPkgTrackObjectViews']['tbl'] == $oTableObject->table && $_SESSION['TPkgTrackObjectViews']['id'] == $oTableObject->id);
 
-        return $bWasViewedLast;
+        return $bViewHistorySet && $_SESSION['TPkgTrackObjectViews']['tbl'] == $oTableObject->table && $_SESSION['TPkgTrackObjectViews']['id'] == $oTableObject->id;
     }
 
     /**
@@ -203,7 +198,6 @@ class TPkgTrackObjectViews
                     'owner_id' => $aData['owner_id'],
                     'datecreated' => date('Y-m-d H:i:s', $aPayload['requestTime']),
                     'data_extranet_user_id' => $aPayload['userId'],
-                    'session_id' => '',
                     'ip' => $aPayload['ip'],
                     'request_checksum' => $aPayload['request_checksum'],
                     'id' => TTools::GetUUID(),
