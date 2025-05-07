@@ -67,6 +67,9 @@
             <argument type="service" id="security.token_storage" />
             <argument type="service" id="ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess" />
         </service>
+        <service id="chameleon_system_security.condition.google_login_deactivate_two_factor_condition"
+                 class="ChameleonSystem\SecurityBundle\Condition\GoogleLoginDeactivateTwoFactorCondition">
+        </service>
     </services>
 
 </container>

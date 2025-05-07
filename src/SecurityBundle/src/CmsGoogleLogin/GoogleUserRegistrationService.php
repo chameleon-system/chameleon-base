@@ -13,7 +13,7 @@ use League\OAuth2\Client\Provider\GoogleUser;
 
 class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInterface
 {
-    private const SSO_TYPE = 'google';
+    public const SSO_TYPE = 'google';
 
     /**
      * @param array<string, array{clone_user_permissions_from: string}> $domainToBaseUserMapping
