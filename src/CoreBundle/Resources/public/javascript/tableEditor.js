@@ -393,13 +393,14 @@ function loadMltPositionList(tableSQLName, sRestriction, sRestrictionField) {
 }
 
 function setTableEditorListFieldState(triggerDiv, requestURL) {
-    triggerDiv = $(triggerDiv);
-    var state = 0;
-    if (triggerDiv.data('fieldstate') != '1') {
-        state = 1;
-    }
-    triggerDiv.data('fieldstate', state);
-    GetAjaxCallTransparent(requestURL + '&state=' + state);
+    const state = triggerDiv.getAttribute('data-fieldstate') !== '1' ? 1 : 0;
+    triggerDiv.setAttribute('data-fieldstate', state.toString());
+
+    // Ajax request to update content
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', requestURL + '&state=' + state, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.send();
 }
 
 /*
@@ -1025,6 +1026,63 @@ CHAMELEON.CORE.MTTableEditor.initSwitchToEntryButtons = function () {
     });
 };
 
+CHAMELEON.CORE.MTTableEditor.initPropertyFieldFullscreen = function () {
+    document.querySelectorAll('.fullscreen-card-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const card = btn.closest('.card');
+            const iframe = card.querySelector('iframe');
+            const cardAction = card.querySelector('.card-action');
+            const iframeSrc = cardAction?.getAttribute('data-iframe-url') || '';
+            const iframeAlreadyLoaded = iframe?.getAttribute('src') && iframe?.contentWindow?.location.href !== 'about:blank';
+
+            const showLoading = () => {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+            };
+
+            const hideLoading = () => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-expand-arrows-alt"></i>';
+            };
+
+            const activateFullscreen = () => {
+                const isFullscreen = card.classList.toggle('fullscreen-mode');
+                btn.innerHTML = isFullscreen
+                    ? '<i class="fas fa-compress-arrows-alt"></i>'
+                    : '<i class="fas fa-expand-arrows-alt"></i>';
+                btn.disabled = false;
+            };
+
+            if (!iframeAlreadyLoaded && cardAction) {
+                showLoading();
+                cardAction.click();
+                iframe.addEventListener('load', function handler() {
+                    iframe.removeEventListener('load', handler);
+                    hideLoading();
+                    activateFullscreen();
+                });
+            } else {
+                activateFullscreen();
+            }
+        });
+    });
+
+    // ESC closed fullscreen
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.card.fullscreen-mode').forEach(function (card) {
+                card.classList.remove('fullscreen-mode');
+                const btn = card.querySelector('.fullscreen-card-toggle');
+                if (btn) {
+                    btn.innerHTML = '<i class="fas fa-expand-arrows-alt"></i>';
+                    btn.disabled = false;
+                }
+            });
+        }
+    });
+
+};
+
 $(function () {
     const $tabsWrapper = $("#tabs-wrapper");
     if ($tabsWrapper.length > 0) {
@@ -1039,5 +1097,6 @@ $(function () {
     CHAMELEON.CORE.MTTableEditor.resizeTemplateEngineIframe();
     CHAMELEON.CORE.MTTableEditor.idButtonCopyToClipboard();
     CHAMELEON.CORE.MTTableEditor.initSwitchToEntryButtons();
+    CHAMELEON.CORE.MTTableEditor.initPropertyFieldFullscreen();
     CHAMELEON.CORE.handleFormAndLinkTargetsInModals();
 });

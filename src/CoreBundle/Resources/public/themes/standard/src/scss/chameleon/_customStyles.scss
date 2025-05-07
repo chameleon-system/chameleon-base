@@ -53,3 +53,28 @@ a {
 .text-shadow-white-light {
   text-shadow: 2px 2px 1px rgba(255,255,255,0.65);
 }
+
+// fullscreen mode in property tables
+.card.fullscreen-mode {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1050;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.card.fullscreen-mode .card-body {
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+.card.fullscreen-mode iframe {
+  width: 100%;
+  height: 100%;
+}

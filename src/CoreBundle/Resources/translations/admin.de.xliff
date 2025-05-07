@@ -2400,6 +2400,18 @@
                 <source>chameleon_system_core.field.snippet_chain_copy_path</source>
                 <target>Pfad in Zwischenablage kopieren</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property.fullscreen">
+                <source>chameleon_system_core.field_property.fullscreen</source>
+                <target>Vollbild</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property.error_property_name">
+                <source>chameleon_system_core.field_property.error_property_name</source>
+                <target>Das Feld "%fieldname%" sollte den Namen der Property Tabelle enthalten</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_property.error_invalid_property_table">
+                <source>chameleon_system_core.field_property.error_invalid_property_table</source>
+                <target>Die Property Tabelle "%table%" ist entweder nicht angegeben, oder existiert nicht!</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

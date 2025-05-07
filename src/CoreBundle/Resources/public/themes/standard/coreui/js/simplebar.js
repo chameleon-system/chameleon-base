@@ -1,5 +1,5 @@
 /**
- * simplebar - v6.2.5
+ * simplebar - v6.3.0
  * Scrollbars, simpler.
  * https://grsmto.github.io/simplebar/
  *
@@ -41,205 +41,7 @@ var SimpleBar = (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
 
-    var canUseDOM = !!(
-      typeof window !== 'undefined' &&
-      window.document &&
-      window.document.createElement
-    );
-
-    var canUseDom = canUseDOM;
-
-    /** Detect free variable `global` from Node.js. */
-    var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
-
-    var freeGlobal$1 = freeGlobal;
-
-    /** Detect free variable `self`. */
-    var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-    /** Used as a reference to the global object. */
-    var root = freeGlobal$1 || freeSelf || Function('return this')();
-
-    var root$1 = root;
-
-    /** Built-in value references. */
-    var Symbol = root$1.Symbol;
-
-    var Symbol$1 = Symbol;
-
-    /** Used for built-in method references. */
-    var objectProto$1 = Object.prototype;
-
-    /** Used to check objects for own properties. */
-    var hasOwnProperty = objectProto$1.hasOwnProperty;
-
-    /**
-     * Used to resolve the
-     * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-     * of values.
-     */
-    var nativeObjectToString$1 = objectProto$1.toString;
-
-    /** Built-in value references. */
-    var symToStringTag$1 = Symbol$1 ? Symbol$1.toStringTag : undefined;
-
-    /**
-     * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
-     *
-     * @private
-     * @param {*} value The value to query.
-     * @returns {string} Returns the raw `toStringTag`.
-     */
-    function getRawTag(value) {
-      var isOwn = hasOwnProperty.call(value, symToStringTag$1),
-          tag = value[symToStringTag$1];
-
-      try {
-        value[symToStringTag$1] = undefined;
-        var unmasked = true;
-      } catch (e) {}
-
-      var result = nativeObjectToString$1.call(value);
-      if (unmasked) {
-        if (isOwn) {
-          value[symToStringTag$1] = tag;
-        } else {
-          delete value[symToStringTag$1];
-        }
-      }
-      return result;
-    }
-
-    /** Used for built-in method references. */
-    var objectProto = Object.prototype;
-
-    /**
-     * Used to resolve the
-     * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-     * of values.
-     */
-    var nativeObjectToString = objectProto.toString;
-
-    /**
-     * Converts `value` to a string using `Object.prototype.toString`.
-     *
-     * @private
-     * @param {*} value The value to convert.
-     * @returns {string} Returns the converted string.
-     */
-    function objectToString(value) {
-      return nativeObjectToString.call(value);
-    }
-
-    /** `Object#toString` result references. */
-    var nullTag = '[object Null]',
-        undefinedTag = '[object Undefined]';
-
-    /** Built-in value references. */
-    var symToStringTag = Symbol$1 ? Symbol$1.toStringTag : undefined;
-
-    /**
-     * The base implementation of `getTag` without fallbacks for buggy environments.
-     *
-     * @private
-     * @param {*} value The value to query.
-     * @returns {string} Returns the `toStringTag`.
-     */
-    function baseGetTag(value) {
-      if (value == null) {
-        return value === undefined ? undefinedTag : nullTag;
-      }
-      return (symToStringTag && symToStringTag in Object(value))
-        ? getRawTag(value)
-        : objectToString(value);
-    }
-
-    /**
-     * Checks if `value` is object-like. A value is object-like if it's not `null`
-     * and has a `typeof` result of "object".
-     *
-     * @static
-     * @memberOf _
-     * @since 4.0.0
-     * @category Lang
-     * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-     * @example
-     *
-     * _.isObjectLike({});
-     * // => true
-     *
-     * _.isObjectLike([1, 2, 3]);
-     * // => true
-     *
-     * _.isObjectLike(_.noop);
-     * // => false
-     *
-     * _.isObjectLike(null);
-     * // => false
-     */
-    function isObjectLike(value) {
-      return value != null && typeof value == 'object';
-    }
-
-    /** `Object#toString` result references. */
-    var symbolTag = '[object Symbol]';
-
-    /**
-     * Checks if `value` is classified as a `Symbol` primitive or object.
-     *
-     * @static
-     * @memberOf _
-     * @since 4.0.0
-     * @category Lang
-     * @param {*} value The value to check.
-     * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
-     * @example
-     *
-     * _.isSymbol(Symbol.iterator);
-     * // => true
-     *
-     * _.isSymbol('abc');
-     * // => false
-     */
-    function isSymbol(value) {
-      return typeof value == 'symbol' ||
-        (isObjectLike(value) && baseGetTag(value) == symbolTag);
-    }
-
-    /** Used to match a single whitespace character. */
-    var reWhitespace = /\s/;
-
-    /**
-     * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
-     * character of `string`.
-     *
-     * @private
-     * @param {string} string The string to inspect.
-     * @returns {number} Returns the index of the last non-whitespace character.
-     */
-    function trimmedEndIndex(string) {
-      var index = string.length;
-
-      while (index-- && reWhitespace.test(string.charAt(index))) {}
-      return index;
-    }
-
-    /** Used to match leading whitespace. */
-    var reTrimStart = /^\s+/;
-
-    /**
-     * The base implementation of `_.trim`.
-     *
-     * @private
-     * @param {string} string The string to trim.
-     * @returns {string} Returns the trimmed string.
-     */
-    function baseTrim(string) {
-      return string
-        ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
-        : string;
-    }
+    var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
     /**
      * Checks if `value` is the
@@ -266,10 +68,266 @@ var SimpleBar = (function () {
      * _.isObject(null);
      * // => false
      */
-    function isObject(value) {
+
+    function isObject$3(value) {
       var type = typeof value;
       return value != null && (type == 'object' || type == 'function');
     }
+
+    var isObject_1 = isObject$3;
+
+    /** Detect free variable `global` from Node.js. */
+
+    var freeGlobal$1 = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+
+    var _freeGlobal = freeGlobal$1;
+
+    var freeGlobal = _freeGlobal;
+
+    /** Detect free variable `self`. */
+    var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+    /** Used as a reference to the global object. */
+    var root$2 = freeGlobal || freeSelf || Function('return this')();
+
+    var _root = root$2;
+
+    var root$1 = _root;
+
+    /**
+     * Gets the timestamp of the number of milliseconds that have elapsed since
+     * the Unix epoch (1 January 1970 00:00:00 UTC).
+     *
+     * @static
+     * @memberOf _
+     * @since 2.4.0
+     * @category Date
+     * @returns {number} Returns the timestamp.
+     * @example
+     *
+     * _.defer(function(stamp) {
+     *   console.log(_.now() - stamp);
+     * }, _.now());
+     * // => Logs the number of milliseconds it took for the deferred invocation.
+     */
+    var now$1 = function() {
+      return root$1.Date.now();
+    };
+
+    var now_1 = now$1;
+
+    /** Used to match a single whitespace character. */
+
+    var reWhitespace = /\s/;
+
+    /**
+     * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+     * character of `string`.
+     *
+     * @private
+     * @param {string} string The string to inspect.
+     * @returns {number} Returns the index of the last non-whitespace character.
+     */
+    function trimmedEndIndex$1(string) {
+      var index = string.length;
+
+      while (index-- && reWhitespace.test(string.charAt(index))) {}
+      return index;
+    }
+
+    var _trimmedEndIndex = trimmedEndIndex$1;
+
+    var trimmedEndIndex = _trimmedEndIndex;
+
+    /** Used to match leading whitespace. */
+    var reTrimStart = /^\s+/;
+
+    /**
+     * The base implementation of `_.trim`.
+     *
+     * @private
+     * @param {string} string The string to trim.
+     * @returns {string} Returns the trimmed string.
+     */
+    function baseTrim$1(string) {
+      return string
+        ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+        : string;
+    }
+
+    var _baseTrim = baseTrim$1;
+
+    var root = _root;
+
+    /** Built-in value references. */
+    var Symbol$2 = root.Symbol;
+
+    var _Symbol = Symbol$2;
+
+    var Symbol$1 = _Symbol;
+
+    /** Used for built-in method references. */
+    var objectProto$1 = Object.prototype;
+
+    /** Used to check objects for own properties. */
+    var hasOwnProperty = objectProto$1.hasOwnProperty;
+
+    /**
+     * Used to resolve the
+     * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+     * of values.
+     */
+    var nativeObjectToString$1 = objectProto$1.toString;
+
+    /** Built-in value references. */
+    var symToStringTag$1 = Symbol$1 ? Symbol$1.toStringTag : undefined;
+
+    /**
+     * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+     *
+     * @private
+     * @param {*} value The value to query.
+     * @returns {string} Returns the raw `toStringTag`.
+     */
+    function getRawTag$1(value) {
+      var isOwn = hasOwnProperty.call(value, symToStringTag$1),
+          tag = value[symToStringTag$1];
+
+      try {
+        value[symToStringTag$1] = undefined;
+        var unmasked = true;
+      } catch (e) {}
+
+      var result = nativeObjectToString$1.call(value);
+      if (unmasked) {
+        if (isOwn) {
+          value[symToStringTag$1] = tag;
+        } else {
+          delete value[symToStringTag$1];
+        }
+      }
+      return result;
+    }
+
+    var _getRawTag = getRawTag$1;
+
+    /** Used for built-in method references. */
+
+    var objectProto = Object.prototype;
+
+    /**
+     * Used to resolve the
+     * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+     * of values.
+     */
+    var nativeObjectToString = objectProto.toString;
+
+    /**
+     * Converts `value` to a string using `Object.prototype.toString`.
+     *
+     * @private
+     * @param {*} value The value to convert.
+     * @returns {string} Returns the converted string.
+     */
+    function objectToString$1(value) {
+      return nativeObjectToString.call(value);
+    }
+
+    var _objectToString = objectToString$1;
+
+    var Symbol = _Symbol,
+        getRawTag = _getRawTag,
+        objectToString = _objectToString;
+
+    /** `Object#toString` result references. */
+    var nullTag = '[object Null]',
+        undefinedTag = '[object Undefined]';
+
+    /** Built-in value references. */
+    var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+    /**
+     * The base implementation of `getTag` without fallbacks for buggy environments.
+     *
+     * @private
+     * @param {*} value The value to query.
+     * @returns {string} Returns the `toStringTag`.
+     */
+    function baseGetTag$1(value) {
+      if (value == null) {
+        return value === undefined ? undefinedTag : nullTag;
+      }
+      return (symToStringTag && symToStringTag in Object(value))
+        ? getRawTag(value)
+        : objectToString(value);
+    }
+
+    var _baseGetTag = baseGetTag$1;
+
+    /**
+     * Checks if `value` is object-like. A value is object-like if it's not `null`
+     * and has a `typeof` result of "object".
+     *
+     * @static
+     * @memberOf _
+     * @since 4.0.0
+     * @category Lang
+     * @param {*} value The value to check.
+     * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+     * @example
+     *
+     * _.isObjectLike({});
+     * // => true
+     *
+     * _.isObjectLike([1, 2, 3]);
+     * // => true
+     *
+     * _.isObjectLike(_.noop);
+     * // => false
+     *
+     * _.isObjectLike(null);
+     * // => false
+     */
+
+    function isObjectLike$1(value) {
+      return value != null && typeof value == 'object';
+    }
+
+    var isObjectLike_1 = isObjectLike$1;
+
+    var baseGetTag = _baseGetTag,
+        isObjectLike = isObjectLike_1;
+
+    /** `Object#toString` result references. */
+    var symbolTag = '[object Symbol]';
+
+    /**
+     * Checks if `value` is classified as a `Symbol` primitive or object.
+     *
+     * @static
+     * @memberOf _
+     * @since 4.0.0
+     * @category Lang
+     * @param {*} value The value to check.
+     * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+     * @example
+     *
+     * _.isSymbol(Symbol.iterator);
+     * // => true
+     *
+     * _.isSymbol('abc');
+     * // => false
+     */
+    function isSymbol$1(value) {
+      return typeof value == 'symbol' ||
+        (isObjectLike(value) && baseGetTag(value) == symbolTag);
+    }
+
+    var isSymbol_1 = isSymbol$1;
+
+    var baseTrim = _baseTrim,
+        isObject$2 = isObject_1,
+        isSymbol = isSymbol_1;
 
     /** Used as references for various `Number` constants. */
     var NAN = 0 / 0;
@@ -309,16 +367,16 @@ var SimpleBar = (function () {
      * _.toNumber('3.2');
      * // => 3.2
      */
-    function toNumber(value) {
+    function toNumber$1(value) {
       if (typeof value == 'number') {
         return value;
       }
       if (isSymbol(value)) {
         return NAN;
       }
-      if (isObject(value)) {
+      if (isObject$2(value)) {
         var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-        value = isObject(other) ? (other + '') : other;
+        value = isObject$2(other) ? (other + '') : other;
       }
       if (typeof value != 'string') {
         return value === 0 ? value : +value;
@@ -330,27 +388,11 @@ var SimpleBar = (function () {
         : (reIsBadHex.test(value) ? NAN : +value);
     }
 
-    /**
-     * Gets the timestamp of the number of milliseconds that have elapsed since
-     * the Unix epoch (1 January 1970 00:00:00 UTC).
-     *
-     * @static
-     * @memberOf _
-     * @since 2.4.0
-     * @category Date
-     * @returns {number} Returns the timestamp.
-     * @example
-     *
-     * _.defer(function(stamp) {
-     *   console.log(_.now() - stamp);
-     * }, _.now());
-     * // => Logs the number of milliseconds it took for the deferred invocation.
-     */
-    var now = function() {
-      return root$1.Date.now();
-    };
+    var toNumber_1 = toNumber$1;
 
-    var now$1 = now;
+    var isObject$1 = isObject_1,
+        now = now_1,
+        toNumber = toNumber_1;
 
     /** Error message constants. */
     var FUNC_ERROR_TEXT$1 = 'Expected a function';
@@ -413,7 +455,7 @@ var SimpleBar = (function () {
      * // Cancel the trailing debounced invocation.
      * jQuery(window).on('popstate', debounced.cancel);
      */
-    function debounce(func, wait, options) {
+    function debounce$1(func, wait, options) {
       var lastArgs,
           lastThis,
           maxWait,
@@ -429,7 +471,7 @@ var SimpleBar = (function () {
         throw new TypeError(FUNC_ERROR_TEXT$1);
       }
       wait = toNumber(wait) || 0;
-      if (isObject(options)) {
+      if (isObject$1(options)) {
         leading = !!options.leading;
         maxing = 'maxWait' in options;
         maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
@@ -477,7 +519,7 @@ var SimpleBar = (function () {
       }
 
       function timerExpired() {
-        var time = now$1();
+        var time = now();
         if (shouldInvoke(time)) {
           return trailingEdge(time);
         }
@@ -506,11 +548,11 @@ var SimpleBar = (function () {
       }
 
       function flush() {
-        return timerId === undefined ? result : trailingEdge(now$1());
+        return timerId === undefined ? result : trailingEdge(now());
       }
 
       function debounced() {
-        var time = now$1(),
+        var time = now(),
             isInvoking = shouldInvoke(time);
 
         lastArgs = arguments;
@@ -537,6 +579,11 @@ var SimpleBar = (function () {
       debounced.flush = flush;
       return debounced;
     }
+
+    var debounce_1 = debounce$1;
+
+    var debounce = debounce_1,
+        isObject = isObject_1;
 
     /** Error message constants. */
     var FUNC_ERROR_TEXT = 'Expected a function';
@@ -603,8 +650,10 @@ var SimpleBar = (function () {
       });
     }
 
+    var throttle_1 = throttle;
+
     /**
-     * simplebar-core - v1.2.4
+     * simplebar-core - v1.3.0
      * Scrollbars, simpler.
      * https://grsmto.github.io/simplebar/
      *
@@ -637,33 +686,6 @@ var SimpleBar = (function () {
         };
         return __assign.apply(this, arguments);
     };
-
-    var cachedScrollbarWidth = null;
-    var cachedDevicePixelRatio = null;
-    if (canUseDom) {
-        window.addEventListener('resize', function () {
-            if (cachedDevicePixelRatio !== window.devicePixelRatio) {
-                cachedDevicePixelRatio = window.devicePixelRatio;
-                cachedScrollbarWidth = null;
-            }
-        });
-    }
-    function scrollbarWidth() {
-        if (cachedScrollbarWidth === null) {
-            if (typeof document === 'undefined') {
-                cachedScrollbarWidth = 0;
-                return cachedScrollbarWidth;
-            }
-            var body = document.body;
-            var box = document.createElement('div');
-            box.classList.add('simplebar-hide-scrollbar');
-            body.appendChild(box);
-            var width = box.getBoundingClientRect().right;
-            body.removeChild(box);
-            cachedScrollbarWidth = width;
-        }
-        return cachedScrollbarWidth;
-    }
 
     function getElementWindow$1(element) {
         if (!element ||
@@ -720,16 +742,47 @@ var SimpleBar = (function () {
     function classNamesToQuery$1(classNames) {
         return ".".concat(classNames.split(' ').join('.'));
     }
+    var canUseDOM$1 = !!(typeof window !== 'undefined' &&
+        window.document &&
+        window.document.createElement);
 
     var helpers = /*#__PURE__*/Object.freeze({
         __proto__: null,
-        getElementWindow: getElementWindow$1,
-        getElementDocument: getElementDocument$1,
-        getOptions: getOptions$1,
         addClasses: addClasses$1,
-        removeClasses: removeClasses$1,
-        classNamesToQuery: classNamesToQuery$1
+        canUseDOM: canUseDOM$1,
+        classNamesToQuery: classNamesToQuery$1,
+        getElementDocument: getElementDocument$1,
+        getElementWindow: getElementWindow$1,
+        getOptions: getOptions$1,
+        removeClasses: removeClasses$1
     });
+
+    var cachedScrollbarWidth = null;
+    var cachedDevicePixelRatio = null;
+    if (canUseDOM$1) {
+        window.addEventListener('resize', function () {
+            if (cachedDevicePixelRatio !== window.devicePixelRatio) {
+                cachedDevicePixelRatio = window.devicePixelRatio;
+                cachedScrollbarWidth = null;
+            }
+        });
+    }
+    function scrollbarWidth() {
+        if (cachedScrollbarWidth === null) {
+            if (typeof document === 'undefined') {
+                cachedScrollbarWidth = 0;
+                return cachedScrollbarWidth;
+            }
+            var body = document.body;
+            var box = document.createElement('div');
+            box.classList.add('simplebar-hide-scrollbar');
+            body.appendChild(box);
+            var width = box.getBoundingClientRect().right;
+            body.removeChild(box);
+            cachedScrollbarWidth = width;
+        }
+        return cachedScrollbarWidth;
+    }
 
     var getElementWindow = getElementWindow$1, getElementDocument = getElementDocument$1, getOptions$2 = getOptions$1, addClasses$2 = addClasses$1, removeClasses = removeClasses$1, classNamesToQuery = classNamesToQuery$1;
     var SimpleBarCore = /** @class */ (function () {
@@ -741,6 +794,7 @@ var SimpleBar = (function () {
             this.stopScrollDelay = 175;
             this.isScrolling = false;
             this.isMouseEntering = false;
+            this.isDragging = false;
             this.scrollXTicking = false;
             this.scrollYTicking = false;
             this.wrapperEl = null;
@@ -915,11 +969,12 @@ var SimpleBar = (function () {
                 var dragPos = eventOffset -
                     ((_h = (_g = track.rect) === null || _g === void 0 ? void 0 : _g[_this.axis[_this.draggedAxis].offsetAttr]) !== null && _h !== void 0 ? _h : 0) -
                     _this.axis[_this.draggedAxis].dragOffset;
-                dragPos = _this.draggedAxis === 'x' && _this.isRtl
-                    ? ((_k = (_j = track.rect) === null || _j === void 0 ? void 0 : _j[_this.axis[_this.draggedAxis].sizeAttr]) !== null && _k !== void 0 ? _k : 0) -
-                        scrollbar.size -
-                        dragPos
-                    : dragPos;
+                dragPos =
+                    _this.draggedAxis === 'x' && _this.isRtl
+                        ? ((_k = (_j = track.rect) === null || _j === void 0 ? void 0 : _j[_this.axis[_this.draggedAxis].sizeAttr]) !== null && _k !== void 0 ? _k : 0) -
+                            scrollbar.size -
+                            dragPos
+                        : dragPos;
                 // Convert the mouse position into a percentage of the scrollbar height/width.
                 var dragPerc = dragPos / (trackSize - scrollbar.size);
                 // Scroll the content by the same percentage.
@@ -937,11 +992,13 @@ var SimpleBar = (function () {
              * End scroll handle drag
              */
             this.onEndDrag = function (e) {
+                _this.isDragging = false;
                 var elDocument = getElementDocument(_this.el);
                 var elWindow = getElementWindow(_this.el);
                 e.preventDefault();
                 e.stopPropagation();
                 removeClasses(_this.el, _this.classNames.dragging);
+                _this.onStopScrolling();
                 elDocument.removeEventListener('mousemove', _this.drag, true);
                 elDocument.removeEventListener('mouseup', _this.onEndDrag, true);
                 _this.removePreventClickId = elWindow.setTimeout(function () {
@@ -993,10 +1050,10 @@ var SimpleBar = (function () {
             if (typeof this.el !== 'object' || !this.el.nodeName) {
                 throw new Error("Argument passed to SimpleBar must be an HTML element instead of ".concat(this.el));
             }
-            this.onMouseMove = throttle(this._onMouseMove, 64);
-            this.onWindowResize = debounce(this._onWindowResize, 64, { leading: true });
-            this.onStopScrolling = debounce(this._onStopScrolling, this.stopScrollDelay);
-            this.onMouseEntered = debounce(this._onMouseEntered, this.stopScrollDelay);
+            this.onMouseMove = throttle_1(this._onMouseMove, 64);
+            this.onWindowResize = debounce_1(this._onWindowResize, 64, { leading: true });
+            this.onStopScrolling = debounce_1(this._onStopScrolling, this.stopScrollDelay);
+            this.onMouseEntered = debounce_1(this._onMouseEntered, this.stopScrollDelay);
             this.init();
         }
         /**
@@ -1063,7 +1120,7 @@ var SimpleBar = (function () {
         };
         SimpleBarCore.prototype.init = function () {
             // We stop here on server-side
-            if (canUseDom) {
+            if (canUseDOM$1) {
                 this.initDOM();
                 this.rtlHelpers = SimpleBarCore.getRtlHelpers();
                 this.scrollbarWidth = this.getScrollbarWidth();
@@ -1295,6 +1352,8 @@ var SimpleBar = (function () {
         };
         SimpleBarCore.prototype.hideScrollbar = function (axis) {
             if (axis === void 0) { axis = 'y'; }
+            if (this.isDragging)
+                return;
             if (this.axis[axis].isOverflowing && this.axis[axis].scrollbar.isVisible) {
                 removeClasses(this.axis[axis].scrollbar.el, this.classNames.visible);
                 this.axis[axis].scrollbar.isVisible = false;
@@ -1351,6 +1410,7 @@ var SimpleBar = (function () {
         SimpleBarCore.prototype.onDragStart = function (e, axis) {
             var _a;
             if (axis === void 0) { axis = 'y'; }
+            this.isDragging = true;
             var elDocument = getElementDocument(this.el);
             var elWindow = getElementWindow(this.el);
             var scrollbar = this.axis[axis].scrollbar;
@@ -1484,6 +1544,7 @@ var SimpleBar = (function () {
             scrollbarMinSize: 25,
             scrollbarMaxSize: 0,
             ariaLabel: 'scrollable content',
+            tabIndex: 0,
             classNames: {
                 contentEl: 'simplebar-content',
                 contentWrapper: 'simplebar-content-wrapper',
@@ -1516,7 +1577,7 @@ var SimpleBar = (function () {
         return SimpleBarCore;
     }());
 
-    var _a = SimpleBarCore.helpers, getOptions = _a.getOptions, addClasses = _a.addClasses;
+    var _a = SimpleBarCore.helpers, getOptions = _a.getOptions, addClasses = _a.addClasses, canUseDOM = _a.canUseDOM;
     var SimpleBar = /** @class */ (function (_super) {
         __extends(SimpleBar, _super);
         function SimpleBar() {
@@ -1577,7 +1638,7 @@ var SimpleBar = (function () {
                 this.wrapperEl.appendChild(this.maskEl);
                 this.wrapperEl.appendChild(this.placeholderEl);
                 this.el.appendChild(this.wrapperEl);
-                (_a = this.contentWrapperEl) === null || _a === void 0 ? void 0 : _a.setAttribute('tabindex', '0');
+                (_a = this.contentWrapperEl) === null || _a === void 0 ? void 0 : _a.setAttribute('tabindex', this.options.tabIndex.toString());
                 (_b = this.contentWrapperEl) === null || _b === void 0 ? void 0 : _b.setAttribute('role', 'region');
                 (_c = this.contentWrapperEl) === null || _c === void 0 ? void 0 : _c.setAttribute('aria-label', this.options.ariaLabel);
             }
@@ -1643,17 +1704,17 @@ var SimpleBar = (function () {
                     }
                 });
                 mutation.removedNodes.forEach(function (removedNode) {
+                    var _a;
                     if (removedNode.nodeType === 1) {
                         if (removedNode.getAttribute('data-simplebar') === 'init') {
-                            SimpleBar.instances.has(removedNode) &&
-                                !document.documentElement.contains(removedNode) &&
-                                SimpleBar.instances.get(removedNode).unMount();
+                            !document.documentElement.contains(removedNode) &&
+                                ((_a = SimpleBar.instances.get(removedNode)) === null || _a === void 0 ? void 0 : _a.unMount());
                         }
                         else {
                             Array.prototype.forEach.call(removedNode.querySelectorAll('[data-simplebar="init"]'), function (el) {
-                                SimpleBar.instances.has(el) &&
-                                    !document.documentElement.contains(el) &&
-                                    SimpleBar.instances.get(el).unMount();
+                                var _a;
+                                !document.documentElement.contains(el) &&
+                                    ((_a = SimpleBar.instances.get(el)) === null || _a === void 0 ? void 0 : _a.unMount());
                             });
                         }
                     }
@@ -1667,7 +1728,7 @@ var SimpleBar = (function () {
      * HTML API
      * Called only in a browser env.
      */
-    if (canUseDom) {
+    if (canUseDOM) {
         SimpleBar.initHtmlApi();
     }
 

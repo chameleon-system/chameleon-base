@@ -2,6 +2,10 @@
 // Please note that all variables defined in 'chameleon/variables' might be overridden by the original CoreUI sources
 // unless the CoreUI theme marks them as a fallback with `!default`. This is the case i.e. for `$sidebar-width`.
 
+// build instuctions:
+// got to vendor/chameleon-system/chameleon-base/src/CoreBundle/Resources/Theme
+// run with node18: npm install && npm run prod && npm run copynpm
+
 @import './chameleon/customVariables';
 
 // Importing CoreUi
@@ -13,7 +17,7 @@
 
 
 // Import any other styles below.
-//@import './chameleon/example';
+// @import './chameleon/example';
 
-// Please note to leave a blank line at the end of this file. Thus this file will end with a line break. This is required
-// to pass lint tests.
+// Please note to leave a blank line at the end of this file. Thus this file will end with a line break.
+// This is required to pass lint tests.
