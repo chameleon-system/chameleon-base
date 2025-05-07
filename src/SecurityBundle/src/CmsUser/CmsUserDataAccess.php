@@ -225,7 +225,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             $userPortals,
             $ssoList,
             $userRow['dashboard_widget_config'],
-            $userRow['google_authenticator_secret']
+            $userRow['google_authenticator_secret'] ?? ''
         );
     }
 
