@@ -73,7 +73,6 @@ Additional Documentation
 - [ExternalTrackerGoogleAnalyticsBundle](./src/ExternalTrackerGoogleAnalyticsBundle/README.md)
 - [ExtranetBundle](./src/ExtranetBundle/README.md)
 - [GenericTableExportBundle](./src/GenericTableExportBundle/README.md)
-- [Google Maps](./src/CoreBundle/Resources/doc/google-maps.md)
 - [Head/Footer Includes (javascript, css)](./src/CoreBundle/Resources/doc/html-includes.md)
 - [ImageCropBundle](./src/ImageCropBundle/README.md)
 - [Internationalization](./src/CoreBundle/Resources/doc/i18n.md)

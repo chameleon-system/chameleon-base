@@ -12,10 +12,12 @@
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * presents a 1:n table (ie n records for the current table)
@@ -113,42 +115,37 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
     public function GetHTML()
     {
+        $translator = $this->getTranslator();
+
         /** @var TTableEditorListFieldState $stateContainer */
         $stateContainer = ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
 
-        $inputFilterUtil = $this->getInputFilterUtil();
-
-        $aStateURL = [
-            'pagedef' => $inputFilterUtil->getFilteredInput('pagedef'),
-            'tableid' => $inputFilterUtil->getFilteredInput('tableid'),
-            'id' => $inputFilterUtil->getFilteredInput('id'),
-            'fieldname' => $this->name,
-            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
-            '_fnc' => 'changeListFieldState',
-        ];
-        $sStateURL = '?'.TTools::GetArrayAsURLForJavascript($aStateURL);
+        $sStateURL = $this->getStateUrl();
 
         $html = '';
         $sPropertyTableName = $this->GetPropertyTableName();
         if (empty($sPropertyTableName) || !TGlobal::TableExists($sPropertyTableName)) {
-            $html = 'Die Property Tabelle ['.TGlobal::OutHTML($sPropertyTableName).'] ist entweder nicht angegeben, oder existiert nicht!';
+            $html = $translator->trans('chameleon_system_core.field_property.error_invalid_property_table', ['table' => $sPropertyTableName]);
             if (empty($sPropertyTableName)) {
-                $html .= '<br />Das Feld '.TGlobal::OutHTML($this->name).' sollte den Namen der Property Tabelle enthalten';
+                $html .= '<br />'.$translator->trans('chameleon_system_core.field_property.error_property_name', ['fieldname' => $this->name]);
             }
         } else {
-            $sOnClickEvent = $this->getOnClickEvent();
+            $onClickEvent = $this->getOnClickEvent();
 
             $sEscapedName = TGlobal::OutHTML($this->name);
 
             $html .= '<input type="hidden" id="'.TGlobal::OutHTML($this->name).'" name="'.TGlobal::OutHTML($this->name).'" value="'.TGlobal::OutHTML($sPropertyTableName).'" />';
             $html .= '<div class="card">
-            <div class="card-header p-1">
+            <div class="card-header p-1 d-flex justify-content-between align-items-center">
                 <div class="card-action"
-                data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'"
-                id="mltListControllButton'.$sEscapedName.'"
-                onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); '.$sOnClickEvent.'">
-                <i class="fas fa-eye"></i> '.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.field_property.open_or_close_list')).'
+                    data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'"
+                    id="mltListControllButton'.$sEscapedName.'"
+                    onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); '.$onClickEvent.'">
+                    <i class="fas fa-eye"></i> '.TGlobal::OutHTML($translator->trans('chameleon_system_core.field_property.open_or_close_list')).'
                 </div>
+                 <button type="button" class="btn btn-sm btn-light fullscreen-card-toggle" title="'.$translator->trans('chameleon_system_core.field_property.fullscreen').'">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                  </button>
             </div>
             <div class="card-body p-0">
                 <div id="'.$sEscapedName.'_iframe_block">
@@ -157,17 +154,33 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             </div>
             </div>';
 
-            if ('true' == $this->oDefinition->GetFieldtypeConfigKey('bOpenOnLoad') || $stateContainer->getState($this->sTableName, $this->name) == $stateContainer::STATE_OPEN) {
+            if ('true' === $this->oDefinition->GetFieldtypeConfigKey('bOpenOnLoad') || $stateContainer->getState($this->sTableName, $this->name) == $stateContainer::STATE_OPEN) {
                 $html .= "
             <script type=\"text/javascript\">
             $(document).ready(function() {
-              {$sOnClickEvent}
+              {$onClickEvent}
             }); </script>
           ";
             }
         }
 
         return $html;
+    }
+
+    protected function getStateUrl(): string
+    {
+        $inputFilterUtil = $this->getInputFilterUtil();
+
+        $stateUrlParams = [
+            'pagedef' => $inputFilterUtil->getFilteredInput('pagedef'),
+            'tableid' => $inputFilterUtil->getFilteredInput('tableid'),
+            'id' => $inputFilterUtil->getFilteredInput('id'),
+            'fieldname' => $this->name,
+            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
+            '_fnc' => 'changeListFieldState',
+        ];
+
+        return '?'.$this->getUrlUtil()->getArrayAsUrl($stateUrlParams, '', '&');
     }
 
     /**
@@ -180,11 +193,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         $sPropertyTableName = $this->GetPropertyTableName();
         $sOwningField = $this->GetMatchingParentFieldName();
         $oForeignTableConf = new TCMSTableConf();
-        /* @var $oForeignTableConf TCMSTableConf */
         $oForeignTableConf->LoadFromField('name', $sPropertyTableName);
 
         $aEditorRequest = ['pagedef' => 'tablemanagerframe', 'id' => $oForeignTableConf->id, 'sRestrictionField' => $sOwningField, 'sRestriction' => $this->recordId, 'bIsLoadedFromIFrame' => 1, 'field' => $this->name];
-        if ('true' == $this->oDefinition->GetFieldtypeConfigKey('bOnlyOneRecord') || '1' == $oForeignTableConf->sqlData['only_one_record_tbl']) {
+        if ('1' === $oForeignTableConf->sqlData['only_one_record_tbl'] || 'true' === $this->oDefinition->GetFieldtypeConfigKey('bOnlyOneRecord')) {
             $aEditorRequest['bOnlyOneRecord'] = 'true';
             $databaseConnection = $this->getDatabaseConnection();
             $quotedForeignName = $databaseConnection->quoteIdentifier($oForeignTableConf->sqlData['name']);
@@ -199,23 +211,21 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
                 $aEditorRequest['sTableEditorPagdef'] = 'tableeditorPopup';
             }
         }
-        $sOnClickEvent = "CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState('".TGlobal::OutJS($this->name)."_iframe','".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aEditorRequest)."');";
 
-        return $sOnClickEvent;
+        return "CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState('".TGlobal::OutJS($this->name)."_iframe','".PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aEditorRequest)."');";
     }
 
     private function isOneToOneConnection(): bool
     {
-        /** @var $oForeignTableConf TCMSTableConf */
-        $oForeignTableConf = new TCMSTableConf();
-        $sPropertyTableName = $this->GetPropertyTableName();
-        $oForeignTableConf->LoadFromField('name', $sPropertyTableName);
+        $foreignTableConf = new TCMSTableConf();
+        $propertyTableName = $this->GetPropertyTableName();
+        $foreignTableConf->LoadFromField('name', $propertyTableName);
 
-        return 'true' === $this->oDefinition->GetFieldtypeConfigKey('bOnlyOneRecord') || '1' === $oForeignTableConf->sqlData['only_one_record_tbl'];
+        return 'true' === $this->oDefinition->GetFieldtypeConfigKey('bOnlyOneRecord') || '1' === $foreignTableConf->sqlData['only_one_record_tbl'];
     }
 
     /**
-     * returns the connected proprty table name.
+     * returns the connected property table name.
      *
      * @return string
      */
@@ -285,15 +295,14 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
             $aMethodData['sCallMethodName'] = 'GetListFor'.TCMSTableToClass::GetClassName('', $sOwningField);
 
-            $oViewParser = new TViewParser();
-            /* @var $oViewParser TViewParser */
-            $oViewParser->bShowTemplatePathAsHTMLHint = false;
-            $oViewParser->AddVarArray($aMethodData);
+            $viewParser = new TViewParser();
+            $viewParser->bShowTemplatePathAsHTMLHint = false;
+            $viewParser->AddVarArray($aMethodData);
 
-            $sMethodCode = $oViewParser->RenderObjectView('getproperties', 'TCMSFields/TCMSFieldPropertyTable');
-            $oViewParser->AddVar('sMethodCode', $sMethodCode);
+            $sMethodCode = $viewParser->RenderObjectView('getproperties', 'TCMSFields/TCMSFieldPropertyTable');
+            $viewParser->AddVar('sMethodCode', $sMethodCode);
 
-            $sHTML = $oViewParser->RenderObjectView('method', 'TCMSFields/TCMSField');
+            $sHTML = $viewParser->RenderObjectView('method', 'TCMSFields/TCMSField');
         }
 
         return $sHTML;
@@ -324,10 +333,10 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             $oFieldDef = new TCMSFieldDefinition();
             $oFieldDef->LoadFromRow($aTargetFieldConf);
             $sTargetTable = $oFieldDef->GetFieldtypeConfigKey('connectedTableName');
-            if (is_null($sTargetTable)) {
+            if (null === $sTargetTable) {
                 $sTargetTable = substr($oFieldDef->sqlData['name'], 0, -3);
             }
-            if ($sTargetTable == $this->sTableName) {
+            if ($sTargetTable === $this->sTableName) {
                 $sOwningField = $oFieldDef->sqlData['name'];
             }
         }
@@ -352,23 +361,18 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
     public function GetDisplayType()
     {
         $modifier = parent::GetDisplayType();
-        $oGlobal = TGlobal::instance();
-        if ('1' == $this->oDefinition->sqlData['restrict_to_groups']) {
+        if ('1' === $this->oDefinition->sqlData['restrict_to_groups']) {
             // check if the user is in one of the connected groups
 
             /** @var SecurityHelperAccess $securityHelper */
             $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
             if (!$securityHelper->isGranted(CmsPermissionAttributeConstants::ACCESS, $this->oDefinition)) {
                 $modifier = 'hidden';
-            } else {
-                if (!$this->hasViewRightToPropertyTable()) {
-                    $modifier = 'hidden';
-                }
-            }
-        } else {
-            if (!$this->hasViewRightToPropertyTable()) {
+            } elseif (!$this->hasViewRightToPropertyTable()) {
                 $modifier = 'hidden';
             }
+        } elseif (!$this->hasViewRightToPropertyTable()) {
+            $modifier = 'hidden';
         }
 
         return $modifier;
@@ -422,6 +426,11 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
             }
         } elseif (!empty($this->oTableRow->id)) {
             $oFields = $this->GetFieldsTargetTableFrontend();
+
+            if (null === $oFields) {
+                return [];
+            }
+
             $sSql = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($sForeignTableName).'`
                   WHERE `'.MySqlLegacySupport::getInstance()->real_escape_string($this->sTableName).'_id'."`='".MySqlLegacySupport::getInstance()->real_escape_string($this->oTableRow->id)."'";
             $rRes = MySqlLegacySupport::getInstance()->query($sSql);
@@ -464,7 +473,6 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
 
     public function PkgCmsFormPostSaveHook($sId, $oForm)
     {
-        // -----------------------------------------------------------------------
         if (is_array($this->data) && array_key_exists('x', $this->data)) {
             unset($this->data['x']);
         }
@@ -556,11 +564,18 @@ class TCMSFieldPropertyTable extends TCMSFieldVarchar
         return true;
     }
 
-    /**
-     * @return InputFilterUtilInterface
-     */
-    private function getInputFilterUtil()
+    private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
     }
 }
