@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Security;
 
+use ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleUserRegistrationService;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -75,25 +76,6 @@ class BackendAccessCheck
     }
 
     /**
-     * @return void
-     */
-    protected function checkLogin()
-    {
-        if (true === $this->twoFactorEnabled) {
-            if (true === $this->checkTwoFactorIsSetupCorrectly()) {
-                return;
-            }
-        } else {
-            if (true === $this->security->isGranted(CmsUserRoleConstants::CMS_USER)) {
-                return;
-            }
-        }
-
-        $this->checkLoginOnAjax();
-        $this->redirectToLogout();
-    }
-
-    /**
      * if we are on a ajax call return status and redirect url. So ajax can do a redirect to login page if user was logged out.
      *
      * @return void
@@ -112,6 +94,37 @@ class BackendAccessCheck
             echo json_encode($aJson);
             exit;
         }
+    }
+
+    /**
+     * @return void
+     */
+    protected function checkLogin()
+    {
+        if (true === $this->isTwoFactorLoginValid() || true === $this->isSimpleLoginValid()) {
+            return;
+        }
+
+        $this->checkLoginOnAjax();
+        $this->redirectToLogout();
+    }
+
+    private function isTwoFactorLoginValid(): bool
+    {
+        if (false === $this->twoFactorEnabled) {
+            return false;
+        }
+
+        return $this->skipTwoFactorIfUserLoggedInViaGoogle() || $this->checkTwoFactorIsSetupCorrectly();
+    }
+
+    private function isSimpleLoginValid(): bool
+    {
+        if (true === $this->twoFactorEnabled) {
+            return false;
+        }
+
+        return $this->security->isGranted(CmsUserRoleConstants::CMS_USER);
     }
 
     private function pagedefIsAllowed(string $pagedef, string $clientIp): bool
@@ -145,6 +158,23 @@ class BackendAccessCheck
             && '' !== $user->getGoogleAuthenticatorSecret()
         ) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * If 2factor authorization is enabled but the users logged in via google
+     * we have to skip the 2fa check as a google login user never setup his
+     * 2fa.
+     */
+    private function skipTwoFactorIfUserLoggedInViaGoogle(): bool
+    {
+        $user = $this->security->getUser();
+        foreach ($user->getSsoIds() as $sso) {
+            if (GoogleUserRegistrationService::SSO_TYPE === $sso->getType()) {
+                return true;
+            }
         }
 
         return false;

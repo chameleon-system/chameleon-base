@@ -2,6 +2,8 @@
 
 namespace ChameleonSystem\SecurityBundle\EventListener;
 
+use ChameleonSystem\SecurityBundle\Badge\UsedAuthenticatorBadge;
+use ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -10,7 +12,7 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 class TwoFactorSetupRedirectListener
 {
     public function __construct(
-        private RouterInterface $router,
+        private readonly RouterInterface $router,
         private bool $twoFactorEnabled = false
     ) {
     }
@@ -20,9 +22,13 @@ class TwoFactorSetupRedirectListener
         if (false === $this->twoFactorEnabled) {
             return;
         }
-        /** @var UserInterface $user */
-        $user = $event->getUser();
 
+        $usedAuthBadge = $event->getPassport()->getBadge(UsedAuthenticatorBadge::class);
+        if (GoogleAuthenticator::class === $usedAuthBadge?->getName()) {
+            return;
+        }
+
+        $user = $event->getUser();
         if (
             true === ($user instanceof TwoFactorInterface)
             && false === $user->isGoogleAuthenticatorEnabled()

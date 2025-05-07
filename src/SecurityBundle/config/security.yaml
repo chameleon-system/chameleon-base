@@ -65,8 +65,10 @@ security:
   # - { path: ^/profile, roles: ROLE_USER }
 
 scheb_two_factor:
+  two_factor_condition: 'chameleon_system_security.condition.google_login_deactivate_two_factor_condition'
   security_tokens:
     - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+    - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
   google:
     enabled: true
     server_name: 'Chameleon Backend'

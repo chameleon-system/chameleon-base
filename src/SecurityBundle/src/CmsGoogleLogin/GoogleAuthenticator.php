@@ -2,6 +2,8 @@
 
 namespace ChameleonSystem\SecurityBundle\CmsGoogleLogin;
 
+use ChameleonSystem\SecurityBundle\Badge\UsedAuthenticatorBadge;
+use ChameleonSystem\SecurityBundle\ChameleonSystemSecurityConstants;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use League\OAuth2\Client\Provider\GoogleUser;
@@ -30,7 +32,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
     public function supports(Request $request): ?bool
     {
         // continue ONLY if the current ROUTE matches the check ROUTE
-        return 'connect_google_check' === $request->attributes->get('_route');
+        return ChameleonSystemSecurityConstants::GOOGLE_RETURN_ROUTE_NAME === $request->attributes->get('_route');
     }
 
     public function authenticate(Request $request): Passport
@@ -59,7 +61,8 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
                 }
 
                 return $this->registrationService->update($googleUser);
-            })
+            }),
+            [new UsedAuthenticatorBadge(GoogleAuthenticator::class)]
         );
     }
 
