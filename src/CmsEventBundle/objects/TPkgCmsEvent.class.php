@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @deprecated since 8.0 - use the symfony event dispatcher instead
+ */
 class TPkgCmsEvent implements IPkgCmsEvent
 {
     /**

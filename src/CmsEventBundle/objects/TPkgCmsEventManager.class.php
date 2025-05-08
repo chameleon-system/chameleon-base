@@ -11,7 +11,9 @@
 
 /**
  * use the event manager to trigger new events, or register observers for events - implements an observer pattern.
- * /**/
+ *
+ * @deprecated since 8.0 - use the symfony event dispatcher instead
+ **/
 class TPkgCmsEventManager
 {
     /**

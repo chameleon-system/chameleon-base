@@ -61,9 +61,9 @@ class TCMSActivePage extends TdbCmsTplPage
             $isSecure = null === $request ? false : $request->isSecure();
 
             return self::getActivePageService()->getLinkToActivePageAbsolute($aAdditionalParameters, $aExcludeParameters, $language, $isSecure);
-        } else {
-            return self::getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, $aExcludeParameters, $language);
         }
+
+        return self::getActivePageService()->getLinkToActivePageRelative($aAdditionalParameters, $aExcludeParameters, $language);
     }
 
     /**
@@ -134,18 +134,12 @@ class TCMSActivePage extends TdbCmsTplPage
         }
     }
 
-    /**
-     * @return ActivePageServiceInterface
-     */
-    private static function getActivePageService()
+    private static function getActivePageService(): ActivePageServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
-    /**
-     * @return Request|null
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): Request
     {
         return ServiceLocator::get('request_stack')->getCurrentRequest();
     }
