@@ -418,6 +418,10 @@
                 <source>chameleon_system_core.log_viewer.live_view_stopped</source>
                 <target>Live View stopped</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.document_manager.title">
+                <source>chameleon_system_core.document_manager.title</source>
+                <target>Documents</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

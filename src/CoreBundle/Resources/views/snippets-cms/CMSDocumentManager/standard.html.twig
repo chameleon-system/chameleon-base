@@ -7,75 +7,75 @@
     var _transImagePixel = '{{'chameleon_system_core.text.pixel'|trans}}';
 </script>
 
-<div{% if displayFull is not defined or displayFull == false %} class="p-4"{% endif %}>
+<div style="overflow-x: hidden;">
     <div class="row">
-        <div class="col-12 col-xl-3 mb-4 border-right">
-            {% if displayFull is not defined or displayFull == false %}
-                <h3>
-                    {{'chameleon_system_core.document_manager.folders'|trans}}
-                </h3>
-            {% endif %}
-            <div id="treePlacer"></div>
-        </div>
-
-        <div class="col-12 col-xl-9 mb-4">
-            <div class="row button-element">
-                {% if wysiwygMode != '' %}
-                    <div class="button-item col">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="InsertDocumentsInWYSIWYG();">
-                            <i class="fas fa-paperclip mr-2"></i>{{'chameleon_system_core.document_manager.insert_into_text'|trans}}
-                        </button>
-                    </div>
-                {% endif %}
-
-                {% if recordID != '' %}
-                    <div class="button-item col-auto">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="chooseSelectedFiles();">
-                            <i class="fas fa-check mr-2"></i>{{'chameleon_system_core.document_manager.action_select'|trans}}
-                        </button>
-                    </div>
-                {% endif %}
-                <div class="button-item col-auto">
-                    <button type="button" class="btn btn-sm btn-primary" onclick="cutSelectedFiles();">
-                        <i class="fas fa-cut mr-2"></i>{{'chameleon_system_core.action.cut'|trans}}
-                    </button>
-                </div>
-                <div class="button-item col-auto">
-                    <button type="button" class="btn btn-sm btn-danger" onclick="if(confirm('{{"chameleon_system_core.document_manager.confirm_delete"|trans}}')) deleteSelectedItem();">
-                        <i class="far fa-trash-alt mr-2"></i>{{'chameleon_system_core.action.delete'|trans}}
-                    </button>
+        <div class="col-12 col-md-3 mb-4 border-right">
+            <div class="card">
+                <div class="card-header"><span class="fa fa-folder-open pr-2"></span>{{'chameleon_system_core.document_manager.folders'|trans}}</div>
+                <div class="card-body p-2">
+                    <div id="treePlacer"></div>
                 </div>
             </div>
+        </div>
 
-            {% set url = pathCmsController ~ '?pagedef=tableManagerDocumentManager&id='~id~'&CKEditorFuncNum='~CKEditorFuncNum %}
-            {% set iFrameHeight = '660px' %}
-            {% if recordID != '' %}
-                {% set url = url~'&mltTable='~mltTable~'&recordID='~recordID %}
-                {% set iFrameHeight = '300px' %}
-            {% endif %}
+        <div class="col-12 col-md-9">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-file pr-2"></i>{{'chameleon_system_core.document_manager.title'|trans}}</span>
 
-            <iframe id="fileList" src="{{url}}" frameborder="0" style="width:100%; height: {{ iFrameHeight }};"></iframe>
+                    <div class="button-element">
+                        {% if wysiwygMode != '' %}
+                            <button type="button" class="btn btn-sm btn-primary" onclick="InsertDocumentsInWYSIWYG();">
+                                <i class="fas fa-paperclip mr-2"></i>{{'chameleon_system_core.document_manager.insert_into_text'|trans}}
+                            </button>
+                        {% endif %}
 
-            {% if recordID != '' %}
-                <hr />
-                <div>
-                    {{'chameleon_system_core.document_manager.selected_documents'|trans}}
-                </div>
-
-                <div class="row button-element">
-                    <div class="button-item col-auto">
-                        <button type="button" class="btn btn-sm btn-warning" onclick="removeSelectedFiles();">
-                            <i class="fas fa-times mr-2"></i>{{'chameleon_system_core.document_manager.remove_selected'|trans}}
+                        {% if recordID != '' %}
+                            <button type="button" class="btn btn-sm btn-primary" onclick="chooseSelectedFiles();">
+                                <i class="fas fa-check mr-2"></i>{{'chameleon_system_core.document_manager.action_select'|trans}}
+                            </button>
+                        {% endif %}
+                        <button type="button" class="btn btn-sm btn-primary" onclick="cutSelectedFiles();">
+                            <i class="fas fa-cut mr-2"></i>{{'chameleon_system_core.action.cut'|trans}}
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="if(confirm('{{"chameleon_system_core.document_manager.confirm_delete"|trans}}')) deleteSelectedItem();">
+                            <i class="far fa-trash-alt mr-2"></i>{{'chameleon_system_core.action.delete'|trans}}
                         </button>
                     </div>
-                    <div class="button-item col-auto">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="reloadSelectedFilesList();">
-                            <i class="fas fa-sync mr-2"></i>{{'chameleon_system_core.document_manager.refresh_list'|trans}}
-                        </button>
-                    </div>
                 </div>
 
-                <iframe id="selectedFileList" src="{{ pathCmsController }}?pagedef=tableManagerDocumentManagerSelected&id={{id}}&sRestrictionField={{tableName}}_mlt&sRestriction={{recordID}}&fieldName={{fieldName}}" frameborder="0" style="width:100%; height: {{ iFrameHeight }};"></iframe>
+                <div class="card-body">
+                    {% set url = pathCmsController ~ '?pagedef=tableManagerDocumentManager&id='~id~'&CKEditorFuncNum='~CKEditorFuncNum %}
+                    {% set iFrameHeight = '660px' %}
+                    {% if recordID != '' %}
+                        {% set url = url~'&mltTable='~mltTable~'&recordID='~recordID %}
+                        {% set iFrameHeight = '400px' %}
+                    {% endif %}
+                    <iframe id="fileList" src="{{url}}" frameborder="0" style="width:100%; min-height: {{ iFrameHeight }}; height: {{ iFrameHeight }};"></iframe>
+                </div>
+            </div>
+            {% if recordID != '' %}
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-clipboard-check text-success pr-2"></i>{{'chameleon_system_core.document_manager.selected_documents'|trans}}</span>
+
+                        <div class="button-element">
+                            <button type="button" class="btn btn-sm btn-warning" onclick="removeSelectedFiles();">
+                                <i class="fas fa-times mr-2"></i>{{'chameleon_system_core.document_manager.remove_selected'|trans}}
+                            </button>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="reloadSelectedFilesList();">
+                                <i class="fas fa-sync mr-2"></i>{{'chameleon_system_core.document_manager.refresh_list'|trans}}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if recordID != '' %}
+                            {% set iFrameHeight = '400px' %}
+                        {% endif %}
+                        <iframe id="selectedFileList" src="{{ pathCmsController }}?pagedef=tableManagerDocumentManagerSelected&id={{id}}&sRestrictionField={{tableName}}_mlt&sRestriction={{recordID}}&fieldName={{fieldName}}" frameborder="0"
+                                style="width:100%; min-height: {{ iFrameHeight }}; height: {{ iFrameHeight }};"></iframe>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>

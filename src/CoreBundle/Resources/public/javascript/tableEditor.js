@@ -57,7 +57,7 @@ function ExecutePostCommand(command) {
     document.cmseditform.elements['module_fnc[contentmodule]'].value = command;
     if (command == 'Save') {
         document.dispatchEvent(tableEditorBeforeSaveEvent);
-        
+
         // remove "something changed" message, because now the data was saved
         window.onbeforeunload = function () {
         };
@@ -302,7 +302,7 @@ function editDocument(fieldName, documentID, html) {
  * document manager field: opens document manager popup
  */
 function loadDocumentManager(recordID, tableID, fieldName) {
-    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName);
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName, 0, 0, CHAMELEON.CORE.i18n.Translate('chameleon_system_core.document_manager.title'));
 }
 
 function addMLTConnectionResponse(data, responseMessage) {
@@ -345,7 +345,6 @@ function removeMLTConnectionResponse(data, responseMessage) {
 
     CloseModalIFrameDialog();
 }
-
 
 /*
  * MLT field: removes MLT connection
@@ -492,7 +491,7 @@ function SaveViaAjaxCustomCallback(customCallbackFunction, closeAfterSave) {
     }
 
     document.dispatchEvent(tableEditorBeforeSaveEvent);
-    
+
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'ExecuteAjaxCall';
     document.cmseditform._fnc.value = 'AjaxSave';
 
@@ -529,7 +528,7 @@ function SaveFieldViaAjaxCustomCallback(customCallbackFunction) {
 
 function SaveViaAjax() {
     document.dispatchEvent(tableEditorBeforeSaveEvent);
-                
+
     if (typeof (framestosave) != 'undefined' && framestosave.length > 0) {
         $.map(framestosave, function (frameToSave, index) {
             $('.itemsave:first', $('#' + frameToSave).contents()).trigger('click')
@@ -598,7 +597,7 @@ function ShowMessages(messages) {
 
 function Save() {
     document.dispatchEvent(tableEditorBeforeSaveEvent);
-    
+
     CHAMELEON.CORE.showProcessingModal();
     document.cmseditform.elements['module_fnc[contentmodule]'].value = 'Save';
     document.cmseditform.submit();
