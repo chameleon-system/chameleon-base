@@ -680,16 +680,15 @@ class TTools
 
     /**
      * generates userfriendly temp passwords (should be changed by user) out of syllables.
-     *
-     * @return string
+     * the length of the password is at least $minLength. but the password can be longer!
      */
-    public static function GenerateNicePassword()
+    public static function GenerateNicePassword(int $minLength = 10): string
     {
         $makepass = '';
         $syllables = 'er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se';
         $syllable_array = explode(',', $syllables);
         srand((float) microtime() * 1000000);
-        for ($count = 1; $count <= 4; ++$count) {
+        while (strlen($makepass) <= $minLength) {
             if (1 === rand() % 10) {
                 $makepass .= sprintf('%0.0f', (rand() % 50) + 1);
             } else {
