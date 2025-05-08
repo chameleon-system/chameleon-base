@@ -681,8 +681,6 @@ class TTools
     /**
      * generates userfriendly temp passwords (should be changed by user) out of syllables.
      * the length of the password is at least $minLength. but the password can be longer!
-     *
-     * @return string
      */
     public static function GenerateNicePassword(int $minLength = 10): string
     {
