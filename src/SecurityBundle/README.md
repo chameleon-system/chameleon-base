@@ -24,6 +24,19 @@ chameleon_system_security:
         enabled: true
 ```
 
+If you really want to deactivate the 2fa for all users, we also need to set
+the scheb_two_factor.google.enabled to false in the config file.
+
+### `app/config/config.yml`
+
+```yaml
+scheb_two_factor:
+    google:
+        enabled: false
+```
+
+Otherwise after the login the user will be redirected to the 2fa page.
+
 ## Usage
 
 After enabling the 2fa, the user will be prompted with a setup page of the 
