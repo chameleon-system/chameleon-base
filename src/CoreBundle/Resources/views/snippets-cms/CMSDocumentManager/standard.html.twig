@@ -38,17 +38,17 @@
                         <button type="button" class="btn btn-sm btn-primary" onclick="cutSelectedFiles();">
                             <i class="fas fa-cut mr-2"></i>{{'chameleon_system_core.action.cut'|trans}}
                         </button>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="if(confirm('{{"chameleon_system_core.document_manager.confirm_delete"|trans}}')) deleteSelectedItem();">
+                        <button type="button" class="btn btn-sm btn-danger" onclick="if(confirm('{{'chameleon_system_core.document_manager.confirm_delete'|trans}}')) deleteSelectedItem();">
                             <i class="far fa-trash-alt mr-2"></i>{{'chameleon_system_core.action.delete'|trans}}
                         </button>
                     </div>
                 </div>
 
                 <div class="card-body">
-                    {% set url = pathCmsController ~ '?pagedef=tableManagerDocumentManager&id='~id~'&CKEditorFuncNum='~CKEditorFuncNum %}
+                    {% set url = pathCmsController ~ '?pagedef=tableManagerDocumentManager&id=' ~ id ~ '&CKEditorFuncNum=' ~ CKEditorFuncNum %}
                     {% set iFrameHeight = '660px' %}
                     {% if recordID != '' %}
-                        {% set url = url~'&mltTable='~mltTable~'&recordID='~recordID %}
+                        {% set url = url ~ '&mltTable=' ~ mltTable ~ '&recordID=' ~ recordID %}
                         {% set iFrameHeight = '400px' %}
                     {% endif %}
                     <iframe id="fileList" src="{{url}}" frameborder="0" style="width:100%; min-height: {{ iFrameHeight }}; height: {{ iFrameHeight }};"></iframe>
