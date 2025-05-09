@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
@@ -10,6 +11,7 @@ use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGroupInterface

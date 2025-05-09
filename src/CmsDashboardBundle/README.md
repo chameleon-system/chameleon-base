@@ -5,7 +5,7 @@ The `CmsDashboardBundle` provides a customizable dashboard for the CMS, allowing
 ## 📌 Features
 - **Dynamic Widget System** – Widgets can be registered and managed using Symfony services using tags.
 - **Drag & Drop Sorting** – Users can arrange, add and remove widget groups according to their preferences.
-- **API for Dynamic Updates** – Widgets can fetch and update data via AJAX.
+- **API for Dynamic Updates** – Widgets fetch and update data via AJAX by default.
 - **Caching Support** – Supports efficient caching for better performance.
 
 ---
@@ -48,15 +48,6 @@ class DashboardExampleWidget extends DashboardWidget
     public function getDropdownItems(): array
     {
         return [];
-    }
-
-    #[ExposeAsApi(description: 'API endpoint to reload the widget content dynamically')]
-    public function getWidgetHtmlAsJson(): JsonResponse
-    {
-        return new JsonResponse([
-            'htmlTable' => $this->getBodyHtml(true),
-            'dateTime' => date('d.m.Y H:i')
-        ]);
     }
 
     protected function generateBodyHtml(): string
@@ -120,7 +111,7 @@ public function getWidgetHtmlAsJson(): JsonResponse
 ```
 /cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson
 ```
-### 📌 **Reloading Widget Content Dynamically
+### 📌 **Reloading Widget Content Dynamically**
 
 Each widget can support dynamic content reloading using the **initializeWidgetReload** function.
 This allows refreshing widget data via AJAX without requiring a full page reload.

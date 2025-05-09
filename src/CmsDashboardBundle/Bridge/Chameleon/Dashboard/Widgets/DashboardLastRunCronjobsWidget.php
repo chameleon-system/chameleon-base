@@ -53,17 +53,6 @@ class DashboardLastRunCronjobsWidget extends DashboardWidget
         return [];
     }
 
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
-    public function getWidgetHtmlAsJson(): JsonResponse
-    {
-        $data = [
-            'htmlTable' => $this->getBodyHtml(true),
-            'dateTime' => date('d.m.Y H:i'),
-        ];
-
-        return new JsonResponse(json_encode($data));
-    }
-
     protected function generateBodyHtml(): string
     {
         $this->renderer->AddSourceObject('runningCronjobDataModels', $this->cronjobStateService->getRunningRunCronJobs());

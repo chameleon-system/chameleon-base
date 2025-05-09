@@ -66,19 +66,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let isEditMode = false;
     let draggedItem = null;
 
-    // Initialer asynchroner Load aller Widgets
+    // initial async load of all widgets
     document.querySelectorAll('.lazy-widget').forEach((widgetContainer) => {
         const serviceAlias = widgetContainer.getAttribute('data-service-alias');
         loadWidgetContent(serviceAlias);
     });
 
-    // Reload all widgets button
+    // reload all widgets button
     const reloadAllButton = document.getElementById('reload-all-widgets');
     if (reloadAllButton) {
         reloadAllButton.addEventListener('click', (event) => {
             event.preventDefault();
 
-            console.log('Reloading all widgets...');
             document.querySelectorAll('.lazy-widget').forEach((widgetContainer) => {
                 const serviceAlias = widgetContainer.getAttribute('data-service-alias');
                 loadWidgetContent(serviceAlias, true);

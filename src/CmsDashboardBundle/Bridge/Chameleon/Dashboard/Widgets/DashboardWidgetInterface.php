@@ -11,6 +11,7 @@
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 interface DashboardWidgetInterface
 {
@@ -30,6 +31,11 @@ interface DashboardWidgetInterface
     public function getFooterIncludes(): array;
 
     public function getBodyHtml(bool $forceCacheReload = false): string;
+
+    /**
+     * Expose this method as an API endpoint using the {@see ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi} attribute.
+     */
+    public function getWidgetHtmlAsJson(): JsonResponse;
 
     public function getFooterHtml(): string;
 
