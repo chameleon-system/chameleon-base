@@ -1,3 +1,44 @@
+function loadWidgetContent(serviceAlias) {
+    const widgetSelector = '#widget-' + serviceAlias.replace('widget-', '');
+    const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson`;
+
+    fetch(reloadUrl, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP-Error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const parsedData = typeof data === "string" ? JSON.parse(data) : data;
+            const { htmlTable, dateTime } = parsedData;
+
+            const targetDiv = document.querySelector(`${widgetSelector} .card-body`);
+            if (targetDiv) {
+                targetDiv.style.opacity = 0;
+
+                setTimeout(() => {
+                    targetDiv.innerHTML = htmlTable;
+                    targetDiv.style.transition = "opacity 0.5s";
+                    targetDiv.style.opacity = 1;
+                }, 300);
+            }
+
+            const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
+            if (footerElement) {
+                footerElement.textContent = dateTime;
+            }
+        })
+        .catch(error => {
+            console.error("Error loading the widget data:", error);
+        });
+}
+
 function initializeWidgetReload(buttonSelector) {
     const button = document.querySelector(buttonSelector);
 
@@ -6,44 +47,7 @@ function initializeWidgetReload(buttonSelector) {
             event.preventDefault();
 
             const serviceAlias = this.getAttribute("data-service-alias");
-            const widgetSelector = '#widget-' + serviceAlias.replace('widget-', '');
-            const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson`;
-
-            fetch(reloadUrl, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP-Error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const parsedData = typeof data === "string" ? JSON.parse(data) : data;
-                    const { htmlTable, dateTime } = parsedData;
-
-                    const targetDiv = document.querySelector(`${widgetSelector} .card-body`);
-                    if (targetDiv) {
-                        targetDiv.style.opacity = 0;
-
-                        setTimeout(() => {
-                            targetDiv.innerHTML = htmlTable;
-                            targetDiv.style.transition = "opacity 0.5s";
-                            targetDiv.style.opacity = 1;
-                        }, 300);
-                    }
-
-                    const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
-                    if (footerElement) {
-                        footerElement.textContent = dateTime;
-                    }
-                })
-                .catch(error => {
-                    console.error("Error loading the widget data:", error);
-                });
+            loadWidgetContent(serviceAlias);
         });
     }
 }
@@ -54,10 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const addWidgetButton = document.getElementById('add-widget-button');
     const widgetCollectionDropdown = document.getElementById('add-widget-collection');
     const widgetCollectionDropdownContainer = document.getElementById('add-widget-collection-container');
-    
+
 
     let isEditMode = false;
     let draggedItem = null;
+
+    // Initialer asynchroner Load aller Widgets
+    document.querySelectorAll('.lazy-widget').forEach((widgetContainer) => {
+        const serviceAlias = widgetContainer.getAttribute('data-service-alias');
+        loadWidgetContent(serviceAlias);
+    });
 
     // Switch edit mode
     toggleEditModeButton.addEventListener('click', () => {
