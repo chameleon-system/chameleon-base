@@ -40,7 +40,18 @@ function loadWidgetContent(serviceAlias, forceReload = false) {
         })
         .catch(error => {
             console.error("Error loading the widget data:", error);
-        });
+        })
+        .finally( () => {
+            // Dispatch a custom event after the widget is loaded
+            const widgetLoadedEvent = new CustomEvent('widget:loaded', {
+                detail: {
+                    serviceAlias,
+                    widgetElement: widgetContainer
+                }
+            });
+            document.dispatchEvent(widgetLoadedEvent);
+        })
+    ;
 }
 function initializeWidgetReload(buttonSelector) {
     const button = document.querySelector(buttonSelector);

@@ -5,7 +5,7 @@ The `CmsDashboardBundle` provides a customizable dashboard for the CMS, allowing
 ## 📌 Features
 - **Dynamic Widget System** – Widgets can be registered and managed using Symfony services using tags.
 - **Drag & Drop Sorting** – Users can arrange, add and remove widget groups according to their preferences.
-- **API for Dynamic Updates** – Widgets fetch and update data via AJAX by default.
+- **API for Dynamic Updates** – Widgets fetch and update data via AJAX by default. You can add your own API endpoints as well.
 - **Caching Support** – Supports efficient caching for better performance.
 
 ---
@@ -47,6 +47,7 @@ class DashboardExampleWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
+        // a reload widget button is automatically added for you
         return [];
     }
 
@@ -85,10 +86,30 @@ To make the widget available in the dashboard, register it as a **Symfony servic
 - **In Development Mode:** Cached using the **Database Cache** (even when caching is disabled).
 
 ### 📌 **How to Force Cache Reload**
+
+#### In PHP:
+
 To force a cache reload when retrieving the widget's HTML, pass `true` to `getBodyHtml()`:
 
 ```php
 $widgetHtml = $this->getBodyHtml(true); // Forces cache reload
+```
+
+#### In Twig/JS:
+
+To force a cache reload pass `true` as the second parameter of loadWidgetContent:
+
+```js
+loadWidgetContent(serviceAlias, true);
+```
+
+```twig
+<button class="dropdown-item"
+        type="button"
+        data-service-alias="{{ widget.widgetId|e('html_attr') }}"
+        onclick="loadWidgetContent('{{ widget.widgetId|e('js') }}', true)">
+    <i class="fas fa-sync-alt me-2"></i> {{ 'chameleon_system_cms_dashboard.widget.reload_button_label'|trans }}
+</button>
 ```
 
 ---
@@ -98,31 +119,36 @@ Widgets can expose API methods via **`ExposeAsApi`** attributes.
 
 ### 📌 **Example: Exposing an API Endpoint**
 ```php
-#[ExposeAsApi(description: 'API endpoint to reload the widget content dynamically')]
-public function getWidgetHtmlAsJson(): JsonResponse
+#[ExposeAsApi(description: 'API endpoint to get the widget clicks (possibly inverted)')]
+public function getWidgetClicks(bool $invert = false): JsonResponse
 {
     return new JsonResponse([
-        'htmlTable' => $this->getBodyHtml(true),
-        'dateTime' => date('d.m.Y H:i')
+        'clicks' => $this->getClickNumber() * ($invert ? -1 : 1),
     ]);
 }
 ```
 ➡ This API can be accessed at:
 ```
-/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson
+/cms/api/dashboard/widget/{widgetServiceId}/getWidgetClicks
 ```
+If you would want to invert the clicks (i.e. setting the `$invert` parameter), you can call:
+```
+/cms/api/dashboard/widget/{widgetServiceId}/getWidgetClicks?invert=true
+```
+Please note that parameters without default values are treated as required parameters and must be passed in the URL. So if $invert was not set to `false` in the example above, you would need to pass it in the URL like this:
+```
+/cms/api/dashboard/widget/{widgetServiceId}/getWidgetClicks?invert
+```
+
 ### 📌 **Reloading Widget Content Dynamically**
 
-Each widget can support dynamic content reloading using the **initializeWidgetReload** function.
-This allows refreshing widget data via AJAX without requiring a full page reload.
+Each widget supports (and uses) lazy loading by default. The `getWidgetHtmlAsJson` method is employed to...
 
-Initialize the widget reload by calling the **`initializeWidgetReload`** function in the widget's JavaScript file.
+1. lazy load the widget content on initial load.
+2. reload the widget using the option in the widget dropdown.
+3. reload all widgets using the "Reload all widgets" button.
 
-```javascript
-    document.addEventListener("DOMContentLoaded", function () {
-        initializeWidgetReload("#{{ reloadEventButtonId|e('html_attr') }}");
-    });
-```
+There is a default implementation for this in the `DashboardWidget` class. You can override it if you want to change the behavior.
 
 ---
 

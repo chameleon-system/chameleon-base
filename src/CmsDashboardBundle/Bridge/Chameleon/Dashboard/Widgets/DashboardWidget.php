@@ -17,6 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class DashboardWidget implements DashboardWidgetInterface
 {
+
     public function __construct(
         private readonly DashboardCacheService $dashboardCacheService,
         private readonly TranslatorInterface $translator)
@@ -25,8 +26,10 @@ abstract class DashboardWidget implements DashboardWidgetInterface
 
     abstract public function getTitle(): string;
 
-    abstract public function getWidgetId(): string;
-
+    abstract function getWidgetId(): string;
+    /**
+     * Please note: A reload button is added automatically, so no need to add it here.
+     */
     abstract public function getDropdownItems(): array;
 
     /**

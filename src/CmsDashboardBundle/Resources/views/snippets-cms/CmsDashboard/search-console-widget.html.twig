@@ -37,6 +37,15 @@
 </div>
 
 <canvas id="searchConsoleChart" style="max-height: 250px;"></canvas>
+<script type="application/json" id="search-console-chart-meta">
+{{ searchConsoleChartMeta|json_encode|raw }}
+</script>
+<script type="application/json" id="search-console-chart-data">
+{{ {
+    current: searchConsoleCurrentData,
+    previous: searchConsolePreviousData
+}|json_encode|raw }}
+</script>
 
 <div class="table-responsive">
     <table class="table table-sm mb-0 mt-3">
@@ -64,111 +73,3 @@
         </tbody>
     </table>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const currentData = {{ searchConsoleCurrentData|json_encode|raw }};
-        const previousData = {{ searchConsolePreviousData|json_encode|raw }};
-
-        if (currentData.labels.length === 0 || currentData.datasets.every(ds => ds.data.length === 0)) {
-            console.error("No data available for search console chart");
-            return;
-        }
-
-        const ctx = document.getElementById('searchConsoleChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: currentData.labels,
-                datasets: [
-                    {
-                        ...currentData.datasets[0],
-                        label: '{{ 'chameleon_system_cms_dashboard.widget.search_console_clicks'|trans|e('js') }} ({{ 'chameleon_system_cms_dashboard.widget.search_console_current_period'|trans|e('js') }})',
-                        borderDash: [],
-                        borderColor: '{{ generate_color(0,8)|e('js') }}',
-                        backgroundColor: '{{ generate_color(0,4,0.3)|e('js') }}',
-                        yAxisID: 'yright',
-                    },
-                    {
-                        ...currentData.datasets[1],
-                        label: '{{ 'chameleon_system_cms_dashboard.widget.search_console_impressions'|trans|e('js') }} ({{ 'chameleon_system_cms_dashboard.widget.search_console_current_period'|trans|e('js') }})',
-                        borderDash: [],
-                        borderColor: '{{ generate_color(1,4)|e('js') }}',
-                        backgroundColor: '{{ generate_color(1,4,0.3)|e('js') }}',
-                        yAxisID: 'yleft',
-                    },
-                    {
-                        ...previousData.datasets[0],
-                        label: '{{ 'chameleon_system_cms_dashboard.widget.search_console_clicks'|trans|e('js') }} ({{ 'chameleon_system_cms_dashboard.widget.search_console_previous_period'|trans|e('js') }})',
-                        borderDash: [5, 5],
-                        borderColor: '{{ generate_color(2,4)|e('js') }}',
-                        backgroundColor: '{{ generate_color(2,4,0.3)|e('js') }}',
-                        yAxisID: 'yright',
-                    },
-                    {
-                        ...previousData.datasets[1],
-                        label: '{{ 'chameleon_system_cms_dashboard.widget.search_console_impressions'|trans|e('js') }} ({{ 'chameleon_system_cms_dashboard.widget.search_console_previous_period'|trans|e('js') }})',
-                        borderDash: [5, 5],
-                        borderColor: '{{ generate_color(3,4)|e('js') }}',
-                        backgroundColor: '{{ generate_color(3,4,0.3)|e('js') }}',
-                        yAxisID: 'yleft',
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'day',
-                            displayFormats: {
-                                day: 'dd.MM'
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: '{{ 'chameleon_system_cms_dashboard.widget.search_console_date'|trans|e('js') }}'
-                        },
-                        ticks: {
-                            autoSkip: true,
-                            maxRotation: 45,
-                            minRotation: 45,
-                            callback: function(value, index, values) {
-                                return new Date(value).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' });
-                            }
-                        }
-                    },
-                    yleft: {
-                        position: 'left',
-                        ticks: {
-                            beginAtZero: true,
-                        },
-                        title: {
-                            display: true,
-                            text: '{{ 'chameleon_system_cms_dashboard.widget.search_console_impressions'|trans|e('js') }}'
-                        }
-                    },
-                    yright: {
-                        position: 'right',
-                        ticks: {
-                            beginAtZero: true,
-                        },
-                        grid: {
-                            drawOnChartArea: false,
-                        },
-                        title: {
-                            display: true,
-                            text: '{{ 'chameleon_system_cms_dashboard.widget.search_console_clicks'|trans|e('js') }}'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                    }
-                },
-                responsive: true
-            }
-        });
-    });
-</script>
