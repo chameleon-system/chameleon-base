@@ -51,15 +51,7 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
 
     public function getDropdownItems(): array
     {
-        $reloadItem = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getWidgetId(),
-            $this->translator->trans('chameleon_system_cms_dashboard.widget.reload_button_label'),
-            ''
-        );
-
-        $reloadItem->addDataAttribute('data-service-alias', $this->getWidgetId());
-
-        return [$reloadItem];
+        return [];
     }
 
     #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]

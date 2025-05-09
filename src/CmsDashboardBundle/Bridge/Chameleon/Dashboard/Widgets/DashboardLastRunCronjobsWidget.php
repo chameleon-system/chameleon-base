@@ -50,15 +50,7 @@ class DashboardLastRunCronjobsWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        $button = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getWidgetId(),
-            $this->translator->trans('chameleon_system_cms_dashboard.widget.reload_button_label'),
-            ''
-        );
-
-        $button->addDataAttribute('data-service-alias', $this->getWidgetId());
-
-        return [$button];
+        return [];
     }
 
     #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]

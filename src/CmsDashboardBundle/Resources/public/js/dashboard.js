@@ -1,6 +1,14 @@
-function loadWidgetContent(serviceAlias) {
+function loadWidgetContent(serviceAlias, forceReload = false) {
     const widgetSelector = '#widget-' + serviceAlias.replace('widget-', '');
-    const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson`;
+    const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson${forceReload ? '?forceReload=true' : ''}`;
+    const widgetContainer = document.querySelector(`${widgetSelector} .lazy-widget`);
+
+    if (!widgetContainer) return;
+
+    // Vorbereitungen: Spinner & Fade-Out
+    widgetContainer.style.transition = 'opacity 0.5s';
+    widgetContainer.style.opacity = 0;
+    widgetContainer.innerHTML = '<div class="loading-spinner">Lade Widget…</div>';
 
     fetch(reloadUrl, {
         method: "GET",
@@ -18,16 +26,12 @@ function loadWidgetContent(serviceAlias) {
             const parsedData = typeof data === "string" ? JSON.parse(data) : data;
             const { htmlTable, dateTime } = parsedData;
 
-            const targetDiv = document.querySelector(`${widgetSelector} .card-body`);
-            if (targetDiv) {
-                targetDiv.style.opacity = 0;
+            widgetContainer.innerHTML = htmlTable;
 
-                setTimeout(() => {
-                    targetDiv.innerHTML = htmlTable;
-                    targetDiv.style.transition = "opacity 0.5s";
-                    targetDiv.style.opacity = 1;
-                }, 300);
-            }
+            // sanfte Einblendung nach dem Ersetzen
+            requestAnimationFrame(() => {
+                widgetContainer.style.opacity = 1;
+            });
 
             const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
             if (footerElement) {
@@ -38,7 +42,6 @@ function loadWidgetContent(serviceAlias) {
             console.error("Error loading the widget data:", error);
         });
 }
-
 function initializeWidgetReload(buttonSelector) {
     const button = document.querySelector(buttonSelector);
 
@@ -68,6 +71,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const serviceAlias = widgetContainer.getAttribute('data-service-alias');
         loadWidgetContent(serviceAlias);
     });
+
+    // Reload all widgets button
+    const reloadAllButton = document.getElementById('reload-all-widgets');
+    if (reloadAllButton) {
+        reloadAllButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            console.log('Reloading all widgets...');
+            document.querySelectorAll('.lazy-widget').forEach((widgetContainer) => {
+                const serviceAlias = widgetContainer.getAttribute('data-service-alias');
+                loadWidgetContent(serviceAlias, true);
+            });
+        });
+    }
 
     // Switch edit mode
     toggleEditModeButton.addEventListener('click', () => {

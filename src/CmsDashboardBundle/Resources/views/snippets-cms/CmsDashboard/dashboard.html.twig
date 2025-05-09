@@ -13,7 +13,9 @@
                 <form action="">
                     <input type="hidden" name="reload" value="true">
                     <div class="btn-group" role="group">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-sync"></i> {{ 'chameleon_system_cms_dashboard.reload_all'|trans }}</button>
+                        <button type="button" class="btn btn-primary" id="reload-all-widgets">
+                            <i class="fas fa-sync"></i> {{ 'chameleon_system_cms_dashboard.reload_all'|trans }}
+                        </button>
 
                         <button type="button"
                                 id="toggle-edit-mode"
