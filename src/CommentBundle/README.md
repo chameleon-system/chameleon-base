@@ -1,35 +1,93 @@
 Chameleon System CommentBundle
 ==============================
 
-Setup
------
+Overview
+--------
+The CommentBundle enables frontend user comments on any CMS‐managed object. It provides:
 
-Copy the required views from the install directory into the customer bundle.
+- A comment posting and listing module
+- Configurable comment types
+- Reporting and moderation features
+- Email notifications for new and reported comments
 
-Create Module
--------------
+Installation
+------------
 
-Create a module that extends MTPkgCommentCore and register it in the Chameleon backend.
-Also create a views for commenting and a view for reporting comments.
+Note: The bundle is already registered with Chameleon System by default.
 
+Install via Composer:
 
-Create Comment Type
+    composer require chameleon-system/chameleon-base
+
+Bundle Registration
 -------------------
+For Symfony Flex (4+) the bundle is auto-registered.
+For earlier Symfony versions or without Flex, add it to your AppKernel:
 
-Create a comment type class that defines which table objects can be commented.
-This class needs to extend TPkgCommentType and override the method GetActiveItem().
+```php
+public function registerBundles()
+{
+    $bundles = [
+        // ...
+        new ChameleonSystem\CommentBundle\ChameleonSystemCommentBundle(),
+    ];
+    return $bundles;
+}
+```
 
-Also create a new comment type in the backend which uses that class.
+## Copy Views
 
-Report Comment
---------------
+To override frontend templates, copy the provided views into your project:
 
-To enable reporting of comments, create a new page and place the comment module with the reporting view on it.
-Assign this page to the system page entry "announcecomment".
+```bash
+cp -R vendor/chameleon-system/chameleon-base/src/CommentBundle/install/tocopy/private/framework/modules/MTPkgComment/views \
+       private/framework/modules/MTPkgComment/views
 
-You might also like to adjust the email template "reportcomment" to your needs.
+cp -R vendor/chameleon-system/chameleon-base/src/CommentBundle/install/tocopy/private/extensions/library/classes/pkgComment/views/db \
+       private/extensions/library/classes/pkgComment/views/db
+```
 
-Configure Module
-----------------
+## Creating a Comment Module
 
-Add the module to the detail page of the object you like to get comments for, and configure it.
+1. Use the provided `MTPkgComment` (in `install/tocopy`) or subclass `MTPkgCommentCore`.
+2. Register the module in the CMS backend and assign views for commenting and reporting.
+
+## Defining Comment Types
+
+Each comment type binds comments to a specific CMS object:
+
+1. Create a class extending `TPkgCommentType` and override `GetActiveItem()`.
+2. Add a record in the `pkg_comment_type` table with `className` = your PHP class.
+
+## Configuring Comment Modules
+
+Use pkg_comment_module_config records to configure:
+
+* `comment_type`: select the comment type
+* `moderation`: require admin approval
+* `notification_email`: email address for notifications
+* `per_page`: comments per page
+* `system_page_announce`: page for handling reports
+
+## Reporting Comments
+
+1. Create or designate a frontend page with the reporting view.
+2. In the backend, set this page as System Page `announcecomment`.
+3. Customize the `reportcomment` email template in `Resources/views/emails`.
+
+## Key Classes & Tables
+
+* `TdbPkgComment`, `TdbPkgCommentList`: comment records and collections
+* `TdbPkgCommentType`: comment type definitions
+* `TdbPkgCommentModuleConfig`: per-module settings
+* `MTPkgComment`: frontend module logic
+* `TPkgCommentType`: base class for comment types
+
+## Extending Functionality
+
+* Override `MTPkgComment::AddCustomDataToCommentBeforeSave()` to inject extra fields
+* Override `MTPkgComment::ValidateCommentData()` for custom validation
+
+## License
+
+This bundle is released under the same license as the Chameleon System.

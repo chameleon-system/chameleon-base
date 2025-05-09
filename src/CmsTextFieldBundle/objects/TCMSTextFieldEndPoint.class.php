@@ -15,90 +15,66 @@ use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
- * manages a wysiwyxg textfield.
- * /**/
+ * Manages a wysiwyxg textfield.
+ **/
 class TCMSTextFieldEndPoint
 {
     /**
      * if the size difference between the thumbnail and the original image is smaller than 5 pixel
      * the extra link for the original image will not be rendered.
-     *
-     * @var int
      */
-    protected $iThumbnailSizeThreshold = 5;
+    protected int $iThumbnailSizeThreshold = 5;
 
     /**
      * the wysiwyg text content.
-     *
-     * @var string - default = null
      */
-    public $content;
+    public ?string $content = null;
 
     /**
      * max width of a thumbnail inside the wysiwyg text content block
      * forces thumbnail creation to this value if image is to big.
-     *
-     * @var int
      */
-    protected $iMaxThumbWidth = 1200;
+    protected int $iMaxThumbWidth = 1200;
 
     /**
      * CSS rel tag name for lightbox/thickbox groups.
-     *
-     * @var string
      */
-    protected $sImageGroupName = 'lightbox';
+    protected string $sImageGroupName = 'lightbox';
 
     /**
      * array of image effects
      * See method TCMSImage::GetThumbnailPointer for available effects.
-     *
-     * @var array
      */
-    protected $aEffects = [];
+    protected array $aEffects = [];
 
     /**
      * max width of zoom images (thickbox/lightbox)
      * if full image is bigger a 2nd thumbnail will be generated.
-     *
-     * @var int
      */
-    protected $iMaxZoomImageWidth = -1;
+    protected int $iMaxZoomImageWidth = -1;
 
     /**
      * max height of zoom images (thickbox/lightbox)
      * if full image is bigger a 2nd thumbnail will be generated.
-     *
-     * @var int
      */
-    protected $iMaxZoomImageHeight = -1;
+    protected int $iMaxZoomImageHeight = -1;
 
     /**
      * array of cms_media object ids that are enclosed in the text.
-     *
-     * @var array
      */
-    protected $aEnclosedMediaIDs = [];
+    protected array $aEnclosedMediaIDs = [];
 
     /**
      * if set to true, the replace functions will force full urls.
-     *
-     * @var bool
      */
-    protected $bForceFullURLs = false;
-
-    /*
-     * used to pass variables to the callback methods called by the regex processes
-     */
-    /**
-     * @var array
-     */
-    protected $aProcessStack = [];
+    protected bool $bForceFullURLs = false;
 
     /**
-     * @param string $content
+     * used to pass variables to the callback methods called by the regex processes.
      */
-    public function __construct($content = null)
+    protected array $aProcessStack = [];
+
+    public function __construct(?string $content = null)
     {
         $this->content = $content;
     }
@@ -111,7 +87,7 @@ class TCMSTextFieldEndPoint
      */
     public function GetEnclosedMediaIDs()
     {
-        if (0 == count($this->aEnclosedMediaIDs)) {
+        if (0 === count($this->aEnclosedMediaIDs)) {
             $this->_ReplaceImages($this->content);
         }
 
@@ -121,12 +97,9 @@ class TCMSTextFieldEndPoint
     /**
      * sets the maximum width and height of zoomed images (thickbox/lightbox).
      *
-     * @param int $width - default 780
-     * @param int $height - default 600
-     *
      * @return void
      */
-    public function SetMaxImageZoomDimensions($width = 780, $height = 600)
+    public function SetMaxImageZoomDimensions(int $width = 780, int $height = 600)
     {
         $this->iMaxZoomImageWidth = $width;
         $this->iMaxZoomImageHeight = $height;
@@ -141,7 +114,7 @@ class TCMSTextFieldEndPoint
      * [{variable:number:decimalplaces}] - example: [{costs:number:2}].
      *
      * @param int $thumbnailWidth - max image width within the text
-     * @param bool $includeClearDiv - include a clear div at the end of the text block (is true by default)
+     * @param bool $includeClearDiv - @deprecated - nowadays not necessary anymore, set it to false
      * @param array $aCustomVariables - any custom variables you want to replace
      * @param string $sImageGroupName
      * @param array $aEffects - See method TCMSImage::GetThumbnailPointer for available effects
@@ -201,15 +174,15 @@ class TCMSTextFieldEndPoint
     /**
      * Outputs a WYSIWYG text for a field for external usage, such as emails, RSS feeds etc.
      *
-     * @see TCMSTextFieldEndPoint::GetText()
-     *
      * @param int $thumbnailWidth - max image width within the text
-     * @param bool $includeClearDiv - include a clear div at the end of the text block (is false by default)
+     * @param bool $includeClearDiv - @deprecated - nowadays not necessary anymore, set it to false
      * @param array $aCustomVariables - any custom variables you want to replace
      * @param bool $bClearThickBox - remove all a href with class thickbox
      * @param bool $bClearScriptTags - clear all script tags
      *
      * @return string
+     *
+     *@see TCMSTextFieldEndPoint::GetText()
      */
     public function GetTextForExternalUsage($thumbnailWidth = 1200, $includeClearDiv = false, $aCustomVariables = null, $bClearThickBox = false, $bClearScriptTags = false)
     {
@@ -346,9 +319,8 @@ class TCMSTextFieldEndPoint
             return $content;
         }
         $matchString = '/\\'.PATH_CUSTOMER_FRAMEWORK_CONTROLLER.'\\?pagedef=([^&#"]+)([^"]+)?/si';
-        $content = preg_replace_callback($matchString, [$this, '_callback_cmstextfield_linkparser'], $content);
 
-        return $content;
+        return preg_replace_callback($matchString, [$this, '_callback_cmstextfield_linkparser'], $content);
     }
 
     /**
@@ -364,9 +336,8 @@ class TCMSTextFieldEndPoint
             return $content;
         }
         $sPatter = '#<a.+?>(|.+?)</a>#';
-        $content = preg_replace_callback($sPatter, [$this, '_callback_cmstextfield_anchorparser'], $content);
 
-        return $content;
+        return preg_replace_callback($sPatter, [$this, '_callback_cmstextfield_anchorparser'], $content);
     }
 
     /**
@@ -382,9 +353,8 @@ class TCMSTextFieldEndPoint
             return $content;
         }
         $matchString = '#<a.+?>(|.+?)</a>#';
-        $content = preg_replace_callback($matchString, [$this, '_callback_cmstextfield_externallinkparser'], $content);
 
-        return $content;
+        return preg_replace_callback($matchString, [$this, '_callback_cmstextfield_externallinkparser'], $content);
     }
 
     /**
@@ -400,9 +370,8 @@ class TCMSTextFieldEndPoint
             return $content;
         }
         $sPatter = '#(<a.+?>)([^</a>]*?(<img.+?>).*?</a>|.*?</a>|([^<img]*?)</a>)#si';
-        $content = preg_replace_callback($sPatter, [$this, 'CallbackCmsTextfieldLinkSurroundImageParser'], $content);
 
-        return $content;
+        return preg_replace_callback($sPatter, [$this, 'CallbackCmsTextfieldLinkSurroundImageParser'], $content);
     }
 
     /**
@@ -435,9 +404,7 @@ class TCMSTextFieldEndPoint
      */
     protected function _callback_cmstextfield_image_thickbox_clear($aMatch)
     {
-        $returnString = $aMatch[5];
-
-        return $returnString;
+        return $aMatch[5];
     }
 
     /**
@@ -479,9 +446,8 @@ class TCMSTextFieldEndPoint
         }
 
         $oStringReplace = new TPkgCmsStringUtilities_VariableInjection_WYSIWYGDownloads();
-        $content = $oStringReplace->replace($content, [], false, false);
 
-        return $content;
+        return $oStringReplace->replace($content, [], false, false);
     }
 
     /**
@@ -511,7 +477,7 @@ class TCMSTextFieldEndPoint
     protected function _GetDownloadSpans($content)
     {
         $aFoundLinks = [];
-        while (null != $content) {
+        while (null !== $content) {
             $aResult = $this->_DoGetDownloadSpans($content);
             $content = $aResult['content'];
             if (array_key_exists('span', $aResult)) {
@@ -534,7 +500,7 @@ class TCMSTextFieldEndPoint
             $nextDocAttr = stripos($content, 'cmsdocument_', $pos);
             $endTagPos = stripos($content, '>', $pos);
             if ($nextDocAttr > -1 && ($endTagPos > $nextDocAttr)) {
-                $spanbuffer = substr($content, $pos, $endTagPos - $pos);
+                $spanBuffer = substr($content, $pos, $endTagPos - $pos);
                 $depth = 1;
                 $content = substr($content, $endTagPos);
                 while ($depth > 0) {
@@ -542,22 +508,22 @@ class TCMSTextFieldEndPoint
                     $nextClosingSpan = stripos($content, '</span>');
                     if ($nextOpenSpan && ($nextOpenSpan < $nextClosingSpan)) {
                         ++$depth;
-                        $spanbuffer .= substr($content, 0, $nextOpenSpan + 5);
+                        $spanBuffer .= substr($content, 0, $nextOpenSpan + 5);
                         $content = substr($content, $nextOpenSpan + 5);
                     } else {
                         --$depth;
-                        $spanbuffer .= substr($content, 0, $nextClosingSpan + 7);
+                        $spanBuffer .= substr($content, 0, $nextClosingSpan + 7);
                         $content = substr($content, $nextClosingSpan + 7);
                     }
                 }
 
-                return ['content' => $content, 'span' => $spanbuffer];
-            } else {
-                $nextEndTag = stripos($content, '</span>');
-                $content = substr($content, $nextEndTag + 7);
-
-                return ['content' => $content];
+                return ['content' => $content, 'span' => $spanBuffer];
             }
+
+            $nextEndTag = stripos($content, '</span>');
+            $content = substr($content, $nextEndTag + 7);
+
+            return ['content' => $content];
         }
 
         return ['content' => null];
@@ -573,9 +539,8 @@ class TCMSTextFieldEndPoint
     protected function _ReplaceInvalidDivs($content)
     {
         $content = str_replace('<div">', '', $content);
-        $content = str_replace('</div">', '', $content);
 
-        return $content;
+        return str_replace('</div">', '', $content);
     }
 
     /**
@@ -587,9 +552,7 @@ class TCMSTextFieldEndPoint
      */
     protected function _ReplaceEmptyAligns($content)
     {
-        $content = str_replace('align=""', 'align="bottom"', $content);
-
-        return $content;
+        return str_replace('align=""', 'align="bottom"', $content);
     }
 
     /**
@@ -612,9 +575,8 @@ class TCMSTextFieldEndPoint
     protected function _RemoveEmptyTags($content)
     {
         $content = str_replace('<strong></strong>', '', $content);
-        $content = str_replace('<em></em>', '', $content);
 
-        return $content;
+        return str_replace('<em></em>', '', $content);
     }
 
     /**
@@ -626,14 +588,11 @@ class TCMSTextFieldEndPoint
      */
     public function _callback_cmstextfield_downloadparser($aMatch)
     {
-        $sResult = '';
-        if ('wysiwyg_cmsdownloaditem' == $aMatch[1]) {
-            $sResult = $this->DownloadParserVersion2($aMatch);
-        } else {
-            $sResult = $this->DownloadParserVersion1($aMatch);
+        if ('wysiwyg_cmsdownloaditem' === $aMatch[1]) {
+            return $this->DownloadParserVersion2($aMatch);
         }
 
-        return $sResult;
+        return $this->DownloadParserVersion1($aMatch);
     }
 
     /**
@@ -646,7 +605,6 @@ class TCMSTextFieldEndPoint
      */
     protected function DownloadParserVersion2($aMatch)
     {
-        $sResult = '';
         $itemId = '';
         if (isset($aMatch[2])) {
             $itemId = $aMatch[2];
@@ -661,24 +619,24 @@ class TCMSTextFieldEndPoint
                 if (preg_match("#^(\[ico\])?(.*\\s*.*\\s*.*)(\[kb\])?$#", $aMatch[3], $aSubMatch)) {
                     $iLen = strlen($aSubMatch[0]);
                     $iStart = strpos($aSubMatch[0], '[ico]');
-                    if (false !== strpos($aSubMatch[0], '[ico]')) {
+                    if (str_contains($aSubMatch[0], '[ico]')) {
                         $iStart = strpos($aSubMatch[0], '[ico]') + 5;
                         $bHideIcon = false;
                     }
-                    if (false !== strpos($aSubMatch[0], '[kb]')) {
+                    if (str_contains($aSubMatch[0], '[kb]')) {
                         $iLen = $iLen - 4;
                         $bHideSize = false;
                     }
 
                     $sLinkName = substr($aSubMatch[0], $iStart, $iLen - $iStart);
-                    if ('' == trim($sLinkName)) {
+                    if ('' === trim($sLinkName)) {
                         $bHideName = true;
                     }
                 }
             } else {
                 $bHideName = true;
             }
-            if ($sLinkName != $oItem->GetName()) {
+            if ($sLinkName !== $oItem->GetName()) {
                 $sResult = $oItem->getDownloadHtmlTag(false, $bHideName, $bHideSize, $bHideIcon, $sLinkName);
             } else {
                 $sResult = $oItem->getDownloadHtmlTag(false, $bHideName, $bHideSize, $bHideIcon);
@@ -704,7 +662,7 @@ class TCMSTextFieldEndPoint
         $sLinkName = $aMatch[7];
         $oItem = new TCMSDownloadFile();
         if ($oItem->Load($sItemId)) {
-            if ($sLinkName != $oItem->GetName()) {
+            if ($sLinkName !== $oItem->GetName()) {
                 $sResult = $oItem->getDownloadHtmlTag(false, false, false, false, $sLinkName);
             } else {
                 $sResult = $oItem->getDownloadHtmlTag();
@@ -726,9 +684,9 @@ class TCMSTextFieldEndPoint
         preg_match_all('/ (?:[\w]*) *= *"(?:(?:(?:(?:(?:\\\W)*\\\W)*[^"]*)\\\W)*[^"]*")/', $sLink, $aLinkAttributes);
         if (isset($aLinkAttributes) && isset($aLinkAttributes[0])) {
             return $aLinkAttributes[0];
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
@@ -959,7 +917,7 @@ class TCMSTextFieldEndPoint
      */
     protected function _callback_cmstextfield_anchorparser($aMatch)
     {
-        if ('' == trim($aMatch[1]) && (strstr($aMatch[0], 'name="') || strstr($aMatch[0], 'id="'))) {
+        if ('' === trim($aMatch[1]) && (strstr($aMatch[0], 'name="') || strstr($aMatch[0], 'id="'))) {
             if (strstr($aMatch[0], 'class="')) {
                 $sReturnString = preg_replace('#class="#', 'class="cmsanchor ', $aMatch[0]);
             } else {
@@ -1105,33 +1063,8 @@ class TCMSTextFieldEndPoint
     protected function removeAllOccurences($sStyles, $cssAttribute)
     {
         $pattern = '/(^| )'.$cssAttribute.':\s*\d*\s*(px|%);*/';
-        $sStyles = preg_replace($pattern, '', $sStyles);
 
-        return $sStyles;
-    }
-
-    /**
-     * @return PageServiceInterface
-     */
-    private function getPageService()
-    {
-        return ServiceLocator::get('chameleon_system_core.page_service');
-    }
-
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
-    {
-        return ServiceLocator::get('chameleon_system_core.util.url');
-    }
-
-    /**
-     * @return ViewRenderer
-     */
-    private function getViewRenderer()
-    {
-        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        return preg_replace($pattern, '', $sStyles);
     }
 
     /**
@@ -1140,5 +1073,20 @@ class TCMSTextFieldEndPoint
     protected function isForceThumbnailGenerationOnFullSizeImagesEnabled()
     {
         return false;
+    }
+
+    private function getPageService(): PageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.page_service');
+    }
+
+    private function getUrlUtil(): UrlUtil
+    {
+        return ServiceLocator::get('chameleon_system_core.util.url');
+    }
+
+    private function getViewRenderer(): ViewRenderer
+    {
+        return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 }

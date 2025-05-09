@@ -1,7 +1,65 @@
 Chameleon System CmsTextFieldBundle
 ===================================
 
-This package parses CMS WYSIWYG Editor fields (based on CKEditor) and does some conversion.
+Installation
+------------
+Note: The bundle is already registered with Chameleon System by default.
+
+Install via Composer:
+
+    composer require chameleon-system/chameleon-base
+
+Bundle Registration
+-------------------
+For Symfony Flex (4+) the bundle is auto-registered.
+For earlier Symfony versions or without Flex, add it to your AppKernel:
+
+    // app/AppKernel.php
+    public function registerBundles()
+    {
+        $bundles = [
+            // ...
+            new ChameleonSystem\CmsTextFieldBundle\ChameleonSystemCmsTextFieldBundle(),
+        ];
+        return $bundles;
+    }
+
+Configuration
+-------------
+The following configuration is supported (default values shown):
+
+```yaml
+chameleon_system_cms_text_field:
+  # If false, <script> tags are stripped for security
+  allow_script_tags: false
+```
+
+Usage
+-----
+Process WYSIWYG content by instantiating the endpoint and calling `GetText`:
+
+```php
+use TCMSTextFieldEndPoint;
+
+$endpoint = new TCMSTextFieldEndPoint($rawHtmlContent);
+$rendered = $endpoint->GetText(
+    $thumbnailWidth = 600,
+    $includeClearDiv = true, // deprecated
+    $aCustomVars = [],
+    $imageGroup = 'lightbox',
+    $effects = []
+);
+echo $rendered;
+```
+
+Key Classes
+-----------
+- `TCMSTextFieldEndPoint`  Main processor for WYSIWYG fields.
+- `TPkgCmsTextfieldImage`  View mapper handling image thumbnails and responsive sources.
+- Config parameter `chameleon_system_cms_text_field.allow_script_tags` controls script tag stripping.
+
+Features
+--------
 
 * Adds the class 'cmsLinkSurroundsImage' to all links that enclose an image tag to allow custom styling or javascript 
   event handling.
@@ -20,8 +78,3 @@ pkgCmsTextblock
 
 If the package pkgCmsTextblock is installed, it will use the hook: _ReplaceCmsTextBlockInString to replace placeholders 
 in format [{fooBar}].
-
-Options
--------
-
-Check the properties of TCMSTextFieldEndPoint for some options.
