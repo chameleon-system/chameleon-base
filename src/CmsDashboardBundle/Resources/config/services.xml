@@ -79,7 +79,6 @@
             <argument></argument> <!-- Search Console Domain Property -->
             <argument>28</argument> <!-- Search Console Period in Days -->
             <argument id="chameleon_system_security.data_access.rights_data_access" type="service"/>
-            <argument id="chameleon_system_cms_dashboard.service.color_generator_service" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="search_console" priority="1"/>
         </service>
 

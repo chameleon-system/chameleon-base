@@ -2,17 +2,14 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
-use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
-use ChameleonSystem\CmsDashboardBundle\Library\Interfaces\ColorGeneratorServiceInterface;
 use ChameleonSystem\CmsDashboardBundle\Service\GoogleSearchConsoleService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
@@ -28,8 +25,7 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
         private readonly string $googleSearchConsoleAuthJson,
         private readonly string $googleSearchConsoleDomainProperty,
         private readonly int $googleSearchConsolePeriodDays,
-        private readonly RightsDataAccessInterface $rightsDataAccess,
-        private readonly ColorGeneratorServiceInterface $colorGeneratorService
+        private readonly RightsDataAccessInterface $rightsDataAccess
     ) {
         parent::__construct($dashboardCacheService, $translator);
     }
@@ -86,7 +82,6 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
         $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart.4.4.7.js"></script>';
         $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chartjs-adapter-date-fns.3.0.0.js"></script>';
         $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/chart-init.4.4.7.js"></script>';
-        $includes[] = '<script type="text/javascript" src="/bundles/chameleonsystemcmsdashboard/js/search-console-widget.js"></script>';
 
         return $includes;
     }
@@ -111,32 +106,13 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
         $this->renderer->AddSourceObject('searchConsolePreviousData', $comparisonData['previous']);
         $this->renderer->AddSourceObject('searchConsoleTopImprovedQueries', $comparisonData['topImprovedQueries']);
 
-        // zentrale Labels und Farben für Chart vorbereiten
-        $this->renderer->AddSourceObject('searchConsoleChartMeta', [
-            'labels' => [
-                'clicks_current' => $this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_clicks').' ('.$this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_current_period').')',
-                'impressions_current' => $this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_impressions').' ('.$this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_current_period').')',
-                'clicks_previous' => $this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_clicks').' ('.$this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_previous_period').')',
-                'impressions_previous' => $this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_impressions').' ('.$this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_previous_period').')',
-                'xlabel' => $this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_date'),
-                'ylabel_clicks' => $this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_clicks'),
-                'ylabel_impressions' => $this->translator->trans('chameleon_system_cms_dashboard.widget.search_console_impressions'),
-            ],
-            'colors' => [
-                'clicks_current_border' => $this->colorGeneratorService->generateColor(0, 8),
-                'clicks_current_bg' => $this->colorGeneratorService->generateColor(0, 4, 0.3),
-                'impressions_current_border' => $this->colorGeneratorService->generateColor(1, 8),
-                'impressions_current_bg' => $this->colorGeneratorService->generateColor(1, 4, 0.3),
-                'clicks_previous_border' => $this->colorGeneratorService->generateColor(2, 8),
-                'clicks_previous_bg' => $this->colorGeneratorService->generateColor(2, 4, 0.3),
-                'impressions_previous_border' => $this->colorGeneratorService->generateColor(3, 8),
-                'impressions_previous_bg' => $this->colorGeneratorService->generateColor(3, 4, 0.3),
-            ],
-        ]);
-
         $renderedTable = $this->renderer->Render('CmsDashboard/search-console-widget.html.twig');
 
-        return "<div><div class='bg-white'>".$renderedTable.'</div></div>';
+        return "<div>
+                    <div class='bg-white'>
+                        ".$renderedTable.'
+                    </div>
+                </div>';
     }
 
     /**

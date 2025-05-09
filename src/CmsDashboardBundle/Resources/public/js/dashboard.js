@@ -1,3 +1,26 @@
+function setInnerHtmlWithScripts(container, html) {
+    container.innerHTML = html;
+
+    const scripts = container.querySelectorAll("script");
+    scripts.forEach(oldScript => {
+        const newScript = document.createElement("script");
+
+        // Kopiere alle Attribute
+        Array.from(oldScript.attributes).forEach(attr => {
+            newScript.setAttribute(attr.name, attr.value);
+        });
+
+        // Inhalt übernehmen
+        if (oldScript.src) {
+            newScript.src = oldScript.src;
+        } else {
+            newScript.textContent = oldScript.textContent;
+        }
+
+        oldScript.replaceWith(newScript);
+    });
+}
+
 function loadWidgetContent(serviceAlias, forceReload = false) {
     const widgetSelector = '#widget-' + serviceAlias.replace('widget-', '');
     const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson${forceReload ? '?forceReload=true' : ''}`;
@@ -16,42 +39,40 @@ function loadWidgetContent(serviceAlias, forceReload = false) {
             "Content-Type": "application/json"
         }
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP-Error! Status: ${response.status}`);
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP-Error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const parsedData = typeof data === "string" ? JSON.parse(data) : data;
+        const { htmlTable, dateTime } = parsedData;
+        setInnerHtmlWithScripts(widgetContainer, htmlTable);
+
+        // sanfte Einblendung nach dem Ersetzen
+        requestAnimationFrame(() => {
+            widgetContainer.style.opacity = 1;
+        });
+
+        const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
+        if (footerElement) {
+            footerElement.textContent = dateTime;
+        }
+    })
+    .catch(error => {
+        console.error("Error loading the widget data:", error);
+    })
+    .finally( () => {
+        // Dispatch a custom event after the widget is loaded
+        const widgetLoadedEvent = new CustomEvent('widget:loaded', {
+            detail: {
+                serviceAlias,
+                widgetElement: widgetContainer
             }
-            return response.json();
-        })
-        .then(data => {
-            const parsedData = typeof data === "string" ? JSON.parse(data) : data;
-            const { htmlTable, dateTime } = parsedData;
-
-            widgetContainer.innerHTML = htmlTable;
-
-            // sanfte Einblendung nach dem Ersetzen
-            requestAnimationFrame(() => {
-                widgetContainer.style.opacity = 1;
-            });
-
-            const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
-            if (footerElement) {
-                footerElement.textContent = dateTime;
-            }
-        })
-        .catch(error => {
-            console.error("Error loading the widget data:", error);
-        })
-        .finally( () => {
-            // Dispatch a custom event after the widget is loaded
-            const widgetLoadedEvent = new CustomEvent('widget:loaded', {
-                detail: {
-                    serviceAlias,
-                    widgetElement: widgetContainer
-                }
-            });
-            document.dispatchEvent(widgetLoadedEvent);
-        })
-    ;
+        });
+        document.dispatchEvent(widgetLoadedEvent);
+    });
 }
 function initializeWidgetReload(buttonSelector) {
     const button = document.querySelector(buttonSelector);
