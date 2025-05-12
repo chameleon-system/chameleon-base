@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ChameleonSystem\MinifierJsJshrink\Services;
+namespace ChameleonSystem\MinifierJsJshrinkBundle\Services;
 
 use ChameleonSystem\JavaScriptMinification\Exceptions\MinifyJsIntegrationException;
 use ChameleonSystem\JavaScriptMinification\Interfaces\MinifyJsIntegrationInterface;

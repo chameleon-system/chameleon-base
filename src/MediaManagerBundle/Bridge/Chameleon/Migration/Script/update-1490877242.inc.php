@@ -8,7 +8,7 @@
 $backendModuleId = TCMSLogChange::createUnusedRecordId('cms_tpl_module');
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
     ->setFields(
-        array(
+        [
             'name' => 'Medienverwaltung Backendmodul',
             'description' => '',
             'icon_list' => 'image.gif',
@@ -21,19 +21,19 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
             'show_in_template_engine' => '0',
             'is_restricted' => '0',
             'id' => $backendModuleId,
-        )
+        ]
     );
 TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
     ->setFields(
-        array(
+        [
             'name' => 'Media manager backend module',
-        )
+        ]
     )
     ->setWhereEquals(
-        array(
+        [
             'id' => $backendModuleId,
-        )
+        ]
     );
 TCMSLogChange::update(__LINE__, $data);

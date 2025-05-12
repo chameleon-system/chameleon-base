@@ -5,7 +5,7 @@
     {% if mediaTreeNode.children | length > 0 %}
         <ul>
             {% for mediaTreeNodeChild in mediaTreeNode.children %}
-                {% include 'mediaManager/tree/mediaTreeNode.html.twig' with {'mediaTreeNode': mediaTreeNodeChild} %}
+                {{ include( 'mediaManager/tree/mediaTreeNode.html.twig' , {mediaTreeNode: mediaTreeNodeChild} ) }}
             {% endfor %}
         </ul>
     {% endif %}

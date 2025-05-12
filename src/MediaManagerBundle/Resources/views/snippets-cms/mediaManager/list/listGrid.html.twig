@@ -20,7 +20,7 @@
 
                         <div class="no-drag">
                             <div class="caption{% if accessRightsMedia.edit %} editable{% endif %}" data-type="description">{{ mediaItem.name }}</div>
-                            {% include('mediaManager/list/actions.html.twig') with {'mediaItem': mediaItem, 'pickImageMode': pickImageMode, 'pickImageCallback': pickImageCallback, 'pickImageWithCrop': pickImageWithCrop, 'accessRightsMedia': accessRightsMedia} %}
+                            {{ include( ('mediaManager/list/actions.html.twig') , {mediaItem: mediaItem, pickImageMode: pickImageMode, pickImageCallback: pickImageCallback, pickImageWithCrop: pickImageWithCrop, accessRightsMedia: accessRightsMedia} ) }}
                         </div>
                     </div>
                 </div>

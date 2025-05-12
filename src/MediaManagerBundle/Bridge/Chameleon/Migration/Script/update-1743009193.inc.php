@@ -17,4 +17,3 @@ overlay=mediaManager/module/overlay.html.twig
   ])
 ;
 TCMSLogChange::update(__LINE__, $data);
-

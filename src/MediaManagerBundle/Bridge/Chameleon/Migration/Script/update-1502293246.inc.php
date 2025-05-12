@@ -8,7 +8,7 @@
 $altTagFieldId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields(
-        array(
+        [
             'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_media'),
             'name' => 'alt_tag',
             'translation' => 'Alt-Tag',
@@ -29,7 +29,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
             'is_translatable' => '0',
             'validation_regex' => '',
             'id' => $altTagFieldId,
-        )
+        ]
     );
 TCMSLogChange::insert(__LINE__, $data);
 
@@ -39,14 +39,14 @@ TCMSLogChange::RunQuery(__LINE__, $query);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields(
-        array(
+        [
             'translation' => 'Alt tag',
-        )
+        ]
     )
     ->setWhereEquals(
-        array(
+        [
             'id' => $altTagFieldId,
-        )
+        ]
     );
 TCMSLogChange::update(__LINE__, $data);
 

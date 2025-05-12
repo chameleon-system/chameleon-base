@@ -7,13 +7,13 @@
 <?php
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields(
-        array(
+        [
             'isrequired' => '1',
-        )
+        ]
     )
     ->setWhereEquals(
-        array(
+        [
             'id' => TCMSLogChange::GetTableFieldId(TCMSLogChange::GetTableId('cms_media'), 'description'),
-        )
+        ]
     );
 TCMSLogChange::update(__LINE__, $data);

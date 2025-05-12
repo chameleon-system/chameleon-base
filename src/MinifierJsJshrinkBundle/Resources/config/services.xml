@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
-        <service id="chameleon_system.minify_js_jshrink" class="ChameleonSystem\MinifierJsJshrink\Services\MinifyJsJshrinkService">
+        <service id="chameleon_system.minify_js_jshrink" class="ChameleonSystem\MinifierJsJshrinkBundle\Services\MinifyJsJshrinkService">
             <tag name="chameleon_system.minify_js" alias="jshrink" />
         </service>
 
