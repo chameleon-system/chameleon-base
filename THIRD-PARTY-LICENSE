@@ -16,7 +16,6 @@ MIT License
 - Guzzle - https://github.com/guzzle/guzzle
 - Monolog - https://github.com/Seldaek/monolog
 - CssMin - https://code.google.com/p/cssmin/
-- PhpDocumentor - http://phpdoc.org
 - PHPSpec/Prophecy - https://github.com/phpspec/prophecy
 - PSR/Log - https://github.com/php-fig/log
 - Sensio/DistributionBundle - https://github.com/sensiolabs/SensioDistributionBundle
@@ -25,16 +24,12 @@ MIT License
 
 - jQuery - http://jquery.com
 - jQuery UI - http://jqueryui.com
-- jQuery GoogleMapsV3OverviewControl plugin - https://github.com/drcoen/Google-Maps-API-V3-Overview-Control
 - jQuery-bgiframe plugin - https://github.com/brandonaaron/bgiframe
 - jQuery ContextMenu plugin - http://medialize.github.io/jQuery-contextMenu/
 - jQuery Cookie plugin - https://github.com/js-cookie/js-cookie
 - jQuery File Download plugin - http://johnculviner.com/jquery-file-download-plugin-for-ajax-like-feature-rich-file-downloads/
 - jQuery File Upload plugin - https://github.com/blueimp/jQuery-File-Upload
-- jQuery Form plugin - http://malsup.com/jquery/form/
-- jQuery Hotkeys plugin - https://github.com/jeresig/jquery.hotkeys
 - jQuery jsTree plugin - https://www.jstree.com/
-- jQuery Modal plugin
 - jQuery Select2 - https://github.com/select2/select2/
 
 - Bootstrap - http://getbootstrap.com/
