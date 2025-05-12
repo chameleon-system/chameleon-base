@@ -7,7 +7,7 @@
 $moduleId = TCMSLogChange::createUnusedRecordId('cms_tpl_module');
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
     ->setFields(
-        array(
+        [
             'description' => 'This module shows the media list via the Chameleon ListManager',
             'icon_list' => 'application.png',
             'classname' => 'chameleon_system_media_manager.backend_module.media_manager_legacy_list',
@@ -21,20 +21,20 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
             'name' => 'Media manager: list via ListManager',
             'position' => '',
             'id' => $moduleId,
-        )
+        ]
     );
 TCMSLogChange::insert(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
     ->setFields(
-        array(
+        [
             'description' => 'Dieses Modul zeigt Medien als Liste über den Chameleon ListManager',
             'name' => 'Medienverwaltung: Liste per ListManager',
-        )
+        ]
     )
     ->setWhereEquals(
-        array(
+        [
             'id' => $moduleId,
-        )
+        ]
     );
 TCMSLogChange::update(__LINE__, $data);

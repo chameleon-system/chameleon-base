@@ -8,28 +8,28 @@ $cmsMediaTableId = TCMSLogChange::GetTableId('cms_media');
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields(
-        array(
+        [
             'translation' => 'Alt Tag',
-        )
+        ]
     )
     ->setWhereEquals(
-        array(
+        [
             'cms_tbl_conf_id' => $cmsMediaTableId,
             'name' => 'alt_tag',
-        )
+        ]
     );
 TCMSLogChange::update(__LINE__, $data);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields(
-        array(
+        [
             'translation' => 'Systemname',
-        )
+        ]
     )
     ->setWhereEquals(
-        array(
+        [
             'cms_tbl_conf_id' => $cmsMediaTableId,
             'name' => 'systemname',
-        )
+        ]
     );
 TCMSLogChange::update(__LINE__, $data);

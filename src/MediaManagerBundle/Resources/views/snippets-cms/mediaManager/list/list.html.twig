@@ -7,19 +7,19 @@
 {# mediaTreeNode \ChameleonSystem\MediaManager\DataModel\MediaTreeNodeDataModel #}
 
 {% if mediaTreeNode %}
-    {% if listState.listView  == 'tableList' %}
-        {% include 'mediaManager/list/tableList.html.twig' %}
+    {% if listState.listView == 'tableList' %}
+        {{ include( 'mediaManager/list/tableList.html.twig' ) }}
     {% else %}
-        {% include 'mediaManager/list/listHeader.html.twig' with({'mediaTreeNode': mediaTreeNode, 'mediaTreeNodeEditUrl': mediaTreeNodeEditUrl, 'listState': listState, 'sortColumns': sortColumns, 'accessRightsMedia': accessRightsMedia, 'accessRightsMediaTree': accessRightsMediaTree}) %}
+        {{ include( 'mediaManager/list/listHeader.html.twig' with({mediaTreeNode: mediaTreeNode, mediaTreeNodeEditUrl: mediaTreeNodeEditUrl, listState: listState, sortColumns: sortColumns, accessRightsMedia: accessRightsMedia, accessRightsMediaTree: accessRightsMediaTree}) ) }}
 
         {% if listState.listView == 'list' %}
-            {% include 'mediaManager/list/listList.html.twig' %}
+            {{ include( 'mediaManager/list/listList.html.twig' ) }}
         {% elseif listState.listView == 'gridLarge' %}
-            {% include 'mediaManager/list/listGrid.html.twig' with({'gridSize': 'large'}) %}
+            {{ include( 'mediaManager/list/listGrid.html.twig' with({gridSize: 'large'}) ) }}
         {% else %}
-            {% include 'mediaManager/list/listGrid.html.twig' with({'gridSize': 'small'}) %}
+            {{ include( 'mediaManager/list/listGrid.html.twig' with({gridSize: 'small'}) ) }}
         {% endif %}
 
-        {% include 'mediaManager/list/paging.html.twig' with({'listState': listState, 'numberOfPages': listResult.numberOfPages, 'numberOfItems': listResult.numberOfItems, 'pageSizes': pageSizes}) %}
+        {{ include( 'mediaManager/list/paging.html.twig' with({listState: listState, numberOfPages: listResult.numberOfPages, numberOfItems: listResult.numberOfItems, pageSizes: pageSizes}) ) }}
     {% endif %}
 {% endif %}

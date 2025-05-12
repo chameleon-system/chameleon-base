@@ -7,7 +7,7 @@
 $iconFieldId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields(
-        array(
+        [
             'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_media_tree'),
             'name' => 'icon',
             'translation' => 'Icon',
@@ -27,7 +27,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
             'is_translatable' => '0',
             'validation_regex' => '',
             'id' => $iconFieldId,
-        )
+        ]
     );
 TCMSLogChange::insert(__LINE__, $data);
 
@@ -37,14 +37,14 @@ TCMSLogChange::RunQuery(__LINE__, $query);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields(
-        array(
+        [
             'translation' => 'Icon',
-        )
+        ]
     )
     ->setWhereEquals(
-        array(
+        [
             'id' => $iconFieldId,
-        )
+        ]
     );
 TCMSLogChange::update(__LINE__, $data);
 

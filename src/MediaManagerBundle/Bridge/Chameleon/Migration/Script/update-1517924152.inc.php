@@ -11,14 +11,14 @@ $tableEditorClass = $databaseConnection->fetchOne(
 if ('TCMSTableEditorMedia' === $tableEditorClass) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'de')
         ->setFields(
-            array(
+            [
                 'table_editor_class' => '\ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\TableEditor\CmsMediaTableEditor',
-            )
+            ]
         )
         ->setWhereEquals(
-            array(
+            [
                 'name' => 'cms_media',
-            )
+            ]
         );
     TCMSLogChange::update(__LINE__, $data);
 } else {
@@ -37,14 +37,14 @@ $tableEditorClassTree = $databaseConnection->fetchOne(
 if ('TCMSTableEditorMediaTree' === $tableEditorClassTree) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'de')
         ->setFields(
-            array(
+            [
                 'table_editor_class' => '\ChameleonSystem\MediaManagerBundle\Bridge\Chameleon\TableEditor\CmsMediaMediaTableEditor',
-            )
+            ]
         )
         ->setWhereEquals(
-            array(
+            [
                 'name' => 'cms_media_tree',
-            )
+            ]
         );
     TCMSLogChange::update(__LINE__, $data);
 } else {

@@ -6,7 +6,7 @@
 <?php
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields(
-        array(
+        [
             'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_media'),
             'name' => 'systemname',
             'translation' => 'Systemname',
@@ -26,7 +26,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
             'is_translatable' => '0',
             'validation_regex' => '',
             'id' => TCMSLogChange::createUnusedRecordId('cms_field_conf'),
-        )
+        ]
     );
 TCMSLogChange::insert(__LINE__, $data);
 

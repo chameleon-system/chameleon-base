@@ -1,4 +1,4 @@
-# Chameleon System MinifierJsJshrinkBundle
+# MinifierJsJshrinkBundle
 
 This bundle uses JShrink to minify JavaScript content. To do this, the bundle requires an external bundle called JShrink.
 

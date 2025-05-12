@@ -55,7 +55,7 @@ if ('' === $fieldTypeId) {
           'mysql_standard_value' => '',
           'fieldclass' => 'ChameleonSystem\MarkdownCmsBundle\Bridge\Chameleon\Fields\MarkdownEditorField',
           'contains_images' => '0',
-          'id' => '80c149c6-f780-bc1b-a1cf-85fb021d5406'
+          'id' => '80c149c6-f780-bc1b-a1cf-85fb021d5406',
       ])
     ;
     TCMSLogChange::insert(__LINE__, $data);

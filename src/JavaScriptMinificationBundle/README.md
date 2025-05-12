@@ -1,70 +1,96 @@
 # Chameleon System JavaScriptMinificationBundle
+=============================================
 
-The JavaScriptMinificationBundle provides support to optimize JavaScript resources.
+Overview
+--------
+The JavaScriptMinificationBundle integrates a pluggable JavaScript minification pipeline into the Chameleon System resource collection.  
+It intercepts aggregated JavaScript content (event `chameleon_system_core.resource_collection_collected.javascript`) and applies a configured minifier before output.
 
-## Installation
+Installation
+------------
+- **Included** with `chameleon-system/chameleon-base`; no separate Composer require needed.
+- Symfony Flex auto-registers the bundle. Without Flex, register in **app/AppKernel.php**:
+  ```php
+  // app/AppKernel.php
+  public function registerBundles()
+  {
+      $bundles = [
+          // ...
+          new ChameleonSystem\JavaScriptMinificationBundle\ChameleonSystemJavaScriptMinificationBundle(),
+      ];
+      return $bundles;
+  }
+  ```
+- Clear the Symfony cache.
 
-### Step 1: Download the Bundle
-
-Open a command console in the project directory and execute the following command to download the latest stable version of this bundle:
-
-```bash
-$ composer require "chameleon-system/javascript-minification-bundle": "@stable"
+Configuration
+-------------
+Configure which minifier integration to use (or disable minification) in `config/packages/chameleon_system_java_script_minification.yaml`:
+```yaml
+chameleon_system_java_script_minification:
+  # alias of a tagged MinifyJsIntegration service, or null to disable auto-minification
+  js_minifier_to_use: 'jshrink'
 ```
+By default (`null`), the event listener is disabled and no JS is minified automatically.
 
-This command requires you to have Composer installed globally, as explained in the [installation chapter](https://getcomposer.org/doc/00-intro.md) of the Composer documentation. Be sure to adjust the version information "@stable" to the actual version you need.
+Services
+--------
+- `chameleon_system_javascript_minify.minify_js` – **MinifyJsService** (implements `MinifyJsServiceInterface`).  
+  Use `minifyJsContent(string $js): string` to invoke the configured integration manually.
+- `chameleon_system_javascript_minify.javascript_minify_event_listener` – listens to the JS resource collection event and calls `minifyJsContent` automatically.  
+  Uses Monolog channel **javascript_minify** for logging integration errors.
 
-### Step 2: Enable the Bundle
+Creating a Minifier Integration
+-------------------------------
+To add your own minifier:
+1. Create a class implementing `ChameleonSystem\JavaScriptMinification\Interfaces\MinifyJsIntegrationInterface`:
+   ```php
+   namespace App\Minifier;
 
-Then, enable the bundle by adding the following lines in the `app/AppKernel.php` file of your project:
+   use ChameleonSystem\JavaScriptMinification\Interfaces\MinifyJsIntegrationInterface;
+   use ChameleonSystem\JavaScriptMinification\Exceptions\MinifyJsIntegrationException;
 
+   class JsShrinkIntegration implements MinifyJsIntegrationInterface
+   {
+       public function minifyJsContent($jsContent)
+       {
+           // call external library, throw MinifyJsIntegrationException on error
+           return \JShrink\Minifier::minify($jsContent);
+       }
+   }
+   ```
+2. Register it as a Symfony service and tag it:
+   ```yaml
+   services:
+     App\Minifier\JsShrinkIntegration:
+       tags:
+         - { name: 'chameleon_system.minify_js', alias: 'jshrink' }
+   ```
+3. Set `js_minifier_to_use: 'jshrink'` in your bundle config.
+4. The `MinifyJsService` will receive your integration at compile time and perform minification.
+
+Usage
+-----
+**Automatic**: When the JS resource collector event fires, registered JS content is minified transparently.
+
+**Manual**: Inject `MinifyJsServiceInterface` to call on arbitrary JS strings:
 ```php
-<?php
-// app/AppKernel.php
+use ChameleonSystem\JavaScriptMinification\Interfaces\MinifyJsServiceInterface;
 
-// ...
+class MyService {
+    public function __construct(private MinifyJsServiceInterface $minifier) {}
 
-public function registerBundles()
-{
-    $bundles = array(
-        // ...
-        new \ChameleonSystem\JavaScriptMinificationBundle\ChameleonSystemJavaScriptMinificationBundle(),
-        new \Symfony\Bundle\MonologBundle\MonologBundle(),
-    );
+    public function doSomethingWithJs(string $script): string
+    {
+        return $this->minifier->minifyJsContent($script);
+    }
 }
 ```
 
-### Step 3: Configure Minifier Integration
+Logging
+-------
+Errors in the integration are logged via Monolog under channel **javascript_minify**.
 
-We use a service that manages minifying JavaScript content. Configure a JS minifier integration to minify JS content, e.g. JsMin or Jshrink. If this block is not set, no JS will be minified.
-
-```yaml
-chameleon_system_java_script_minification:
-    js_minifier_to_use: "service alias tag"
-```
-
-### Optional Step 4: Configure Logging
-
-The bundle uses standard logging (Monolog). It uses the channel "javascript_minify".
-
-## Usage
-
-1. You can use the service manually and call the "minifyJsContent" function to minify your JavaScript.
-
-```php
-$minfiyservice = new MinifyJsService();
-$minfiyservice->minifyJsContent($javaScriptContent);
-```
-
-2. Automatic JavaScript minification if event `chameleon_system_core.resource_collection_collected.javascript` was dispatched.
-
-3. To add your own minifier, do the following:
-
-- create a class the implements MinifyJsIntegrationInterface
-- register a Symfony service for this class
-- add the tag "chameleon_system.minify_js" to this service and specify an alias
-- set the configuration value `js_minifier_to_use` to this alias
-
-## Note
-
-This bundle does not contain any javascript minification integration. You will need an external integration bundle, such as chameleon-system/minifier-js-jshrink-bundle or your own implementation.
+License
+-------
+This bundle is released under the same license as the Chameleon System.

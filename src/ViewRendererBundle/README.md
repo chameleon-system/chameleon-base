@@ -1,71 +1,58 @@
-# Chameleon System ViewRendererBundle
+Chameleon System ViewRendererBundle
+===================================
 
-## Chameleon View Renderer
+Overview
+--------
+The ViewRendererBundle is part ofthe core of the Chameleon System frontend module architecture. 
+It provides:
+- A Twig-based snippet and module rendering engine with support for named blocks, variable substitution, and template inheritance.
+- A mapper pipeline that transforms domain objects into simple data structures consumed by templates.
+- Unified handling of CSS, LESS, and JavaScript resources declared alongside templates.
+- Dummy data support for offline snippet preview and development.
+- Caching triggers for mapped data to enable efficient fragment caching.
 
-As of Chameleon 4, a new system for creating frontend modules replaces the existing one. As part of this change, the way templates are created and managed has also been revised.
+Key Features
+------------
+- **Template Rendering**: Render from strings, files, or CMS module definitions via `ViewRenderer`.
+- **Twig Integration**: Leverage Twig DSL (loop, conditionals, filters, includes, extends) for templates.
+- **Mapper Architecture**: Define data requirements (`GetRequirements`) and mapping logic (`Accept`) in reusable mappers.
+- **Resource Injection**: Declare `css`, `less`, `js`, and `include` sections in `config.yml` files for snippet packages.
+- **Dummy Data**: Place `<snippet>.dummy.php` alongside templates for design-time data injection.
+- **Module Creation**: Build composite modules by combining mappers and a template under `MTPkgViewRendererAbstractModuleMapper`.
+- **Console Command**: `chameleon_system:less:compile` compiles LESS per portal with optional minification.
+- **URL Sanitation**: `sanitizeurl` Twig filter prevents unsafe `javascript:` and `data:` URLs.
+- **Legacy Support**: `TPkgSnippetRendererLegacy` bridges to the old `TViewParser` system.
 
-The new system uses Twig[^1] as the default template engine. However, the architecture allows for additional template systems to be added in the future.
-
-## Twig
-
-Twig is a template system developed by Fabien Potencier[^2], the creator of Symfony[^3].
-
-Twig has its own domain-specific language (DSL), which allows view logic like loops and conditionals to be implemented directly in the template.
-
-Direct object handling (e.g., `TShopArticle`) no longer occurs in the template. Instead, the template expects pre-prepared data (e.g., title, price, description). It is irrelevant to the template where this data comes from. This is handled by mappers.
-
-### Inserting Values
-
-Values in Twig templates are wrapped in double curly braces and replaced during the rendering process:
-
-```html
-<h1>Hello, {{ name }}.</h1>
+Installation
+------------
+This bundle is shipped with the `chameleon-system/chameleon-base` package and installed already.  
+To register manually (no Flex), add to `app/AppKernel.php`:
+```php
+// app/AppKernel.php
+public function registerBundles()
+{
+    $bundles = [
+        // ...
+        new ChameleonSystem\ViewRendererBundle\ChameleonSystemViewRendererBundle(),
+    ];
+    return $bundles;
+}
+```
+Clear the cache:
+```bash
+php bin/console cache:clear
 ```
 
-### Filters
+Usage
+-----
+**1) Render a Twig snippet from a string**
+```php
+use ChameleonSystem\ViewRendererBundle\interfaces\IPkgSnippetRenderer;
 
-Inserted values can be passed through filters using the pipe (`|`) character. Filters can be chained together.
-
-A full list can be found at [Twig Filters Documentation](http://twig.sensiolabs.org/doc/filters/index.html).
-
-Some useful filters:
-
-#### raw
-
-By default, all values are escaped before output. This can be disabled using the `raw` filter—useful for HTML entities:
-
-```html
-<div>{{ dropdown_element|raw }}</div>
-```
-
-#### default
-
-The `default` filter lets designers specify fallback values:
-
-```twig
-{{ greeting|default('Why hello there') }} good sir.
-```
-
-#### trans
-
-The `trans` filter is implemented by Chameleon and internally uses `TGlobal::Translate`:
-
-```twig
-{{ message|trans }}
-```
-
-`trans` is typically used as a tag for better readability:
-
-```twig
-{% trans %}Why hello good sir.{% endtrans %}
-```
-
-It also supports placeholders:
-
-```twig
-{% trans with {'name': name} %}
-Why hello good sir. People call me [{name}].
-{% endtrans %}
+$template = '<h1>[{ block title }]Hello[{ endblock }]</h1>';
+$renderer = IPkgSnippetRenderer::GetNewInstance($template, IPkgSnippetRenderer::SOURCE_TYPE_STRING);
+$renderer->setVar('title', 'World');
+$output = $renderer->render();
 ```
 
 ### Dummy Data
@@ -82,19 +69,28 @@ $foo = array(
 return $foo;
 ```
 
-### Including CSS/JS/LESS
+**3) Create a custom module**
+- Extend `MTPkgViewRendererAbstractModuleMapper`, inject source objects, and tag your mapper with `chameleon_system.mapper`.
+- Configure your module in the Table Editor with snippet path and mapper service.
 
-Snippet packages can include their own CSS, LESS, and JS files via a `config.yml` file in the snippet folder:
+**4) Compile LESS assets**
+```bash
+php bin/console chameleon_system:less:compile [--minify-css]
+```
 
+Configuration
+-------------
+No additional YAML configuration is required.  
+Declare snippet package resources in `config.yml` files alongside your templates:
 ```yaml
-less:
-  - /assets/snippets/shopFilter/shopFilterItem.less
-  - /assets/snippets/shopFilter/shopFilter.less
 css:
-  - /assets/snippets/shopFilter/shopFilterItem.css
+  - /assets/snippets/mySnippet/style.css
+less:
+  - /assets/snippets/mySnippet/style.less
 js:
-  - /assets/snippets/shopFilter/shopFilterItem.js
+  - /assets/snippets/mySnippet/script.js
 include:
+  - common/header
   - pkgArticleList
   - common/list
 ```
@@ -118,10 +114,16 @@ public function GetHtmlHeadIncludes()
 }
 ```
 
-### Includes
-
-Snippets can include other snippets using the `include` tag[^5]:
-
+Extensibility
+-------------
+- **Mappers**: Tag services with `chameleon_system.mapper` to participate in the mapping chain.
+- **Custom Engines**: Implement `IPkgSnippetRenderer` and register as a service to support non-Twig engines.
+- **Resource Handling**: Provide a custom `IResourceHandler` to override CSS/JS aggregation.
+- **Twig Extensions**: Add filters, functions, or node visitors in `Twig` directory and tag with `twig.extension`.
+- **Event Hooks**: Subscribe to `chameleon_system.viewrenderer.post_render` for additional HTML transformations.
+  
+### URL Sanitation
+Twig automatically escapes output for HTML contexts, but unsafe URI schemes (`javascript:`, `data:`) may still appear in attributes. Use the `sanitizeurl` Twig filter to sanitize URLs:
 ```twig
 {% include 'pkgGreeting/introduction.html.twig' %}
 ```
@@ -233,6 +235,7 @@ $oViewRenderer->AddSourceObject("oShopArticle", $oShopArticle);
 $oViewRenderer->AddMapper(new ArticleToContentMapper());
 $renderedHTML = $oViewRenderer->Render("article/article_detail.html.twig");
 ```
+The filter mimics the behavior of `escape`, replacing disallowed schemes with `#`. Options match the contexts supported by `escape` (e.g., `'html'`, `'js'`).
 
 ## Creating a New Module
 
@@ -248,7 +251,7 @@ Its `Accept` method is similar to `Execute` in older modules.
 <div class="wishlist">
   <span class="title">
     {% trans with {"username":username} %}
-      Der Merkzettel von [{username}]:
+      The wishlist of [{username}]:
     {% endtrans %}
   </span>
   <ul>

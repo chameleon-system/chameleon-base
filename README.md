@@ -40,7 +40,7 @@ Additional Documentation
 - [Bootstrap Colorpicker](./src/CoreBundle/Resources/public/javascript/bootstrap-colorpicker-3.0.3/README.md)
 - [Breacrumb Bundle](./src/BreadcrumbBundle/README.md)
 - [Building the CoreUI Theme for Chameleon](./src/CoreBundle/Resources/Theme/readme.md)
-- [ChameleonSystem GoogleAnalyticsBundle](./src/ExternalTrackerGoogleAnalyticsBundle/Resources/doc/index.md)
+- [GoogleAnalyticsBundle](./src/ExternalTrackerGoogleAnalyticsBundle/README.md)
 - [CmsActionPluginBundle](./src/CmsActionPluginBundle/README.md)
 - [CmsCacheBundle](./src/CmsCacheBundle/README.md)
 - [CmsCaptchaBundle](./src/CmsCaptchaBundle/README.md)

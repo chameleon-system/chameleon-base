@@ -23,7 +23,6 @@
                         </a>
                     </li>
 
-
                     {# always show first page#}
                     <li class="page-item{% if 0 == listState.pageNumber %} active{% endif %}">
                         <a href="#" class="page-link go-to-page" data-page-number="0">1</a>
@@ -34,37 +33,36 @@
                         <li class="page-item block"><a>...</a></li>
                     {% endif %}
 
-                    {% set endLoop = listState.pageNumber+1 %}
+                    {% set endLoop = listState.pageNumber + 1 %}
                     {% if listState.pageNumber == 0 %}
-                        {% set endLoop = listState.pageNumber+2 %}
+                        {% set endLoop = listState.pageNumber + 2 %}
                     {% endif %}
 
-                    {% for i in listState.pageNumber-1..endLoop %}
-                        {% if i > 0 and i <= numberOfPages-1 %}
+                    {% for i in listState.pageNumber - 1..endLoop %}
+                        {% if i > 0 and i <= numberOfPages - 1 %}
                             <li class="page-item{% if i == listState.pageNumber %} active{% endif %}">
-                                <a href="#" class="page-link go-to-page" data-page-number="{{ i }}">{{ i+1 }}</a>
+                                <a href="#" class="page-link go-to-page" data-page-number="{{ i }}">{{ i + 1 }}</a>
                             </li>
                         {% endif %}
                     {% endfor %}
 
-
-                    {% if listState.pageNumber < numberOfPages-1 and numberOfPages > 4 %}
-                        {% if listState.pageNumber < numberOfPages-3 %}
+                    {% if listState.pageNumber < numberOfPages - 1 and numberOfPages > 4 %}
+                        {% if listState.pageNumber < numberOfPages - 3 %}
                             <li class="page-item block"><a class="page-link">...</a></li>
                         {% endif %}
-                        {% if listState.pageNumber < numberOfPages-2 %}
+                        {% if listState.pageNumber < numberOfPages - 2 %}
                             <li class="page-item">
-                                <a href="#" class="page-link go-to-page" data-page-number="{{ numberOfPages-1 }}">{{ numberOfPages }}</a>
+                                <a href="#" class="page-link go-to-page" data-page-number="{{ numberOfPages - 1 }}">{{ numberOfPages }}</a>
                             </li>
                         {% endif %}
                     {% endif %}
 
-                    <li class="page-item{% if numberOfPages < listState.pageNumber+2 %} disabled{% endif %}">
+                    <li class="page-item{% if numberOfPages < listState.pageNumber + 2 %} disabled{% endif %}">
                         <a href="#" class="page-link go-to-page" data-page-number="{{ listState.pageNumber + 1 }}">
                             <i class="fas fa-forward"></i>
                         </a>
                     </li>
-                    <li class="page-item{% if numberOfPages < listState.pageNumber+2 %} disabled{% endif %}">
+                    <li class="page-item{% if numberOfPages < listState.pageNumber + 2 %} disabled{% endif %}">
                         <a href="#" class="page-link go-to-page" data-page-number="{{ numberOfPages - 1 }}">
                             <i class="fas fa-fast-forward"></i>
                         </a>

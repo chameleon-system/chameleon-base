@@ -9,17 +9,16 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
 class TPkgCmsActionPluginManager
 {
     /**
      * @var array<string, object>|null
      */
-    private $aActionPluginList;
+    private ?array $aActionPluginList;
 
-    /**
-     * @var TCMSActivePage|null
-     */
-    private $oActivePage;
+    private ?TCMSActivePage $oActivePage;
 
     public function __construct(TCMSActivePage $oActivePage)
     {
@@ -47,22 +46,23 @@ class TPkgCmsActionPluginManager
      *
      * @throws TPkgCmsActionPluginException_ActionNotFound
      * @throws TPkgCmsActionPluginException_ActionNotPublic
+     * @throws ReflectionException
      */
     public function callAction($sPluginName, $sActionName, $aParameter)
     {
-        $oPlugin = $this->getActionPlugin($sPluginName);
+        $plugin = $this->getActionPlugin($sPluginName);
 
-        if (false === method_exists($oPlugin, $sActionName) || false === is_callable([$oPlugin, $sActionName])) {
+        if (false === is_callable([$plugin, $sActionName]) || false === method_exists($plugin, $sActionName)) {
             throw new TPkgCmsActionPluginException_ActionNotPublic('action "'.$sActionName.'" does not exists', 0, E_USER_WARNING, __FILE__, __LINE__);
         }
 
         // make sure the method is public
-        $oRefl = new ReflectionMethod($oPlugin, $sActionName);
-        if (false === $oRefl->isPublic() || true === $oRefl->isStatic()) {
+        $reflection = new ReflectionMethod($plugin, $sActionName);
+        if (false === $reflection->isPublic() || true === $reflection->isStatic()) {
             throw new TPkgCmsActionPluginException_ActionNotFound('action "'.$sActionName.'" does not exists', 0, E_USER_WARNING, __FILE__, __LINE__);
         }
 
-        call_user_func([$oPlugin, $sActionName], $aParameter);
+        $plugin->$sActionName($aParameter);
     }
 
     /**
@@ -74,11 +74,11 @@ class TPkgCmsActionPluginManager
     {
         if (false === $this->actionPluginExists($sPluginName)) {
             return null;
-        } else {
-            $aActionPluginList = $this->getActionPluginList();
-
-            return $aActionPluginList[$sPluginName];
         }
+
+        $aActionPluginList = $this->getActionPluginList();
+
+        return $aActionPluginList[$sPluginName];
     }
 
     /**
@@ -91,18 +91,26 @@ class TPkgCmsActionPluginManager
         if (null === $this->aActionPluginList) {
             $this->aActionPluginList = [];
 
-            $oPageDef = $this->oActivePage->GetFieldCmsMasterPagedef();
+            $pageDef = $this->oActivePage->GetFieldCmsMasterPagedef();
             $sList = '';
-            if (property_exists($this->oActivePage->oActivePortal, 'fieldActionPluginList')) {
+
+            $activePortal = $this->getActivePortal();
+
+            if (null === $activePortal) {
+                return [];
+            }
+
+            if (property_exists($activePortal, 'fieldActionPluginList')) {
                 /* @psalm-suppress UndefinedPropertyFetch - Property is checked above. */
-                $sList .= trim($this->oActivePage->oActivePortal->fieldActionPluginList);
+                $sList .= trim($activePortal->fieldActionPluginList);
             }
             if (!empty($sList)) {
                 $sList .= "\n";
             }
 
-            if (property_exists($oPageDef, 'fieldActionPluginList')) {
-                $sList .= trim($oPageDef->fieldActionPluginList);
+            if (property_exists($pageDef, 'fieldActionPluginList')) {
+                /* @psalm-suppress UndefinedPropertyFetch - Property is checked above. */
+                $sList .= trim($pageDef->fieldActionPluginList);
             }
 
             $aList = explode("\n", $sList);
@@ -114,7 +122,7 @@ class TPkgCmsActionPluginManager
                     if (empty($aParts[$sKey])) {
                         unset($aParts[$sKey]);
                     }
-                    if (2 == count($aParts)) {
+                    if (2 === count($aParts)) {
                         $this->aActionPluginList[$aParts[0]] = new $aParts[1]();
                     }
                 }
@@ -122,5 +130,10 @@ class TPkgCmsActionPluginManager
         }
 
         return $this->aActionPluginList;
+    }
+
+    private function getActivePortal(): ?TCMSPortal
+    {
+        ServiceLocator::get('chameleon_system_core.portal_domain_service')->getActivePortal();
     }
 }

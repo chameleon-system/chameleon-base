@@ -9,7 +9,7 @@ if (false === TCMSLogChange::FieldExists('cms_media', 'cms_tags_mlt')) {
     $tagsFieldId = TCMSLogChange::createUnusedRecordId('cms_field_conf');
     $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
         ->setFields(
-            array(
+            [
                 'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_media'),
                 'name' => 'cms_tags_mlt',
                 'translation' => 'Tags',
@@ -30,20 +30,20 @@ if (false === TCMSLogChange::FieldExists('cms_media', 'cms_tags_mlt')) {
                 'is_translatable' => '0',
                 'validation_regex' => '',
                 'id' => $tagsFieldId,
-            )
+            ]
         );
     TCMSLogChange::insert(__LINE__, $data);
 
     $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
         ->setFields(
-            array(
+            [
                 'translation' => 'Tags',
-            )
+            ]
         )
         ->setWhereEquals(
-            array(
+            [
                 'id' => $tagsFieldId,
-            )
+            ]
         );
     TCMSLogChange::update(__LINE__, $data);
 

@@ -12,7 +12,7 @@ $rows = $databaseConnection->fetchAllAssociative('SELECT `id`, `time_stamp` FROM
 foreach ($rows as $row) {
     $databaseConnection->update(
         'cms_media',
-        array('date_changed' => date('Y-m-d H:i:s', strtotime($row['time_stamp']))),
-        array('id' => $row['id'])
+        ['date_changed' => date('Y-m-d H:i:s', strtotime($row['time_stamp']))],
+        ['id' => $row['id']]
     );
 }
