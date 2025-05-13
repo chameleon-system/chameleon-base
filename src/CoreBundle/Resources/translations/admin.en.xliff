@@ -732,6 +732,10 @@
                 <source>chameleon_system_core.field_map_coordinates.wrong_longitude</source>
                 <target>The longitude field contains invalid characters or an invalid value. Values between -180 and 180 are permitted.</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_map_coordinates.action_use_coordinates">
+                 <source>chameleon_system_core.field_map_coordinates.action_use_coordinates</source>
+                 <target>Use coordinates</target>
+             </trans-unit>
 
 
             <trans-unit id="chameleon_system_core.field_icon_list.select">
