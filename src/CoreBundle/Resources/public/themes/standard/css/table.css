@@ -205,3 +205,25 @@ table td[data-field-type="data-field-selectbox"] .checkbox-bedding {
 td[data-field-type="data-field-lock-status"] div[data-record-lock-status] {
     line-height: 1.75;
 }
+
+.full-group-table.table-responsive {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.TCMSListManagerFullGroupTable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.TCMSListManagerFullGroupTable thead th::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background: rgba(0,0,0,0.1);
+}

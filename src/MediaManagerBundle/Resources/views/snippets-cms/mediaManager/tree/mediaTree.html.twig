@@ -9,6 +9,6 @@
 
 <div class="snippetMediaManagerMediaTree tree-container">
     <ul>
-        {{ include( 'mediaManager/tree/mediaTreeNode.html.twig' , {mediaTreeNode: mediaTree.rootNode} ) }}
+        {% include 'mediaManager/tree/mediaTreeNode.html.twig' with {'mediaTreeNode': mediaTree.rootNode} %}
     </ul>
 </div>

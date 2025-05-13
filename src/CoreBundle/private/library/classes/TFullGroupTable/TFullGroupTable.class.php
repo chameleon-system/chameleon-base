@@ -24,10 +24,8 @@ class TFullGroupTable extends TGroupTable
      * array of TGroupTableFields
      * holds the header info
      * fields should be placed in here in the order of appearance.
-     *
-     * @var array
      */
-    public $headerCells = [];
+    public array $headerCells = [];
 
     /**
      * see class definition to view available styles.
@@ -38,216 +36,153 @@ class TFullGroupTable extends TGroupTable
 
     /**
      * string to display for showing the next page (default = 'next page').
-     *
-     * @var string
      */
-    public $nextPageText = 'next page';
+    public string $nextPageText = 'next page';
 
     /**
      * string to display for showing the previous page (default = 'previous page').
-     *
-     * @var string
      */
-    public $previousPageText = 'previous page';
+    public string $previousPageText = 'previous page';
 
     /**
      * text to display the current page records, and the total hits.
      * default: "Records $startRecord$ - $endRecord$ of $totalFound$"
      * you can use the following placeholders:
      * $startRecord$, $endRecord$, $totalFound$.
-     *
-     * @var string
      */
-    public $hitText = 'Records $startRecord$ - $endRecord$ of $totalFound$';
+    public string $hitText = 'Records $startRecord$ - $endRecord$ of $totalFound$';
 
     /**
      * a string that may have the value 'top', 'bottom', 'none', or 'top_and_bottom' (default: 'top_and_bottom').
-     *
-     * @var string
      */
-    public $pageingLocation = 'top_and_bottom';
+    public string $pageingLocation = 'top_and_bottom';
 
     /**
      * if set to true a select box will appear that allows you to reduce the list to one group (default = true);
      * set it to false if you use a external group selector, be sure $useGroupSelector is true!
-     *
-     * @var bool
      */
-    public $showGroupSelector = true;
+    public bool $showGroupSelector = true;
 
     /**
      * group by a given value.
-     *
-     * @var bool
      */
-    public $useGroupSelector = true;
+    public bool $useGroupSelector = true;
 
     /**
      * text to display for showing all groups (default: 'Show All').
-     *
-     * @var string
      */
-    public $showAllGroupsText = 'Show All';
+    public string $showAllGroupsText = 'Show All';
 
     /**
      * text to display for the group selector (default: 'group').
-     *
-     * @var string
      */
-    public $showGroupSelectorText = 'group';
+    public string $showGroupSelectorText = 'group';
 
     /**
      * an array of the form 'db_field'=>'search_style'. search style may be: 'none',
      * 'left', 'right', 'both', 'none', or 'full'
      * (default: NULL).
-     *
-     * @var mixed - array or null as default
      */
-    public $searchFields;
+    public ?array $searchFields = null;
 
     /**
      * text to display for the searchfield (default = 'search').
-     *
-     * @var string
      */
-    public $searchFieldText = 'search';
+    public string $searchFieldText = 'search';
 
     /**
      * text to display for the search button (default = 'search').
-     *
-     * @var string
      */
-    public $searchButtonText = 'search';
+    public string $searchButtonText = 'search';
 
     /**
      * the name of the list.
      * you need to set this if there is more than one list on one page and for caching.
-     *
-     * @var string
      */
-    public $listName = 'full_group_table';
+    public string $listName = 'full_group_table';
 
     /**
      * text to display when no records are found.
-     *
-     * @var string
      */
-    public $notFoundText = 'no records found';
+    public string $notFoundText = 'no records found';
 
     /**
      * internal post data.
-     *
-     * @var array
      */
-    public $_postData = [];
+    public array $_postData = [];
 
     /**
      * indicates if a searchbox should be shown.
-     *
-     * @var bool
      */
-    public $showSearchBox = true;
+    public bool $showSearchBox = true;
 
     /**
      * extra content to add into the search box row (default = NULL).
-     *
-     * @var mixed - string or null by default
      */
-    public $searchBoxContent;
+    public ?string $searchBoxContent = null;
 
     /**
      * extra content to add into below the search box row (default = NULL).
-     *
-     * @var mixed - string or null by default
      */
-    public $searchBoxRow;
+    public ?string $searchBoxRow = null;
 
     /**
      * has to be 'GET' or 'POST'. default is 'POST'
      * all form data (like search, change page, etc) will be submitted using this method.
-     *
-     * @var string
      */
-    public $formActionType = 'POST';
+    public string $formActionType = 'POST';
 
     /**
      * array of fieldnames that will be ignored as hidden fields.
-     *
-     * @var array
      */
-    public $aHiddenFieldIgnoreList = [];
+    public array $aHiddenFieldIgnoreList = [];
 
     /**
      * array that holds data for custom searchbox parameters.
      * We need this to store the table object including this parameters in CMS cache.
-     *
-     * @var array
      */
-    public $customSearchFieldParameter = [];
+    public array $customSearchFieldParameter = [];
 
     /**
      * optional show a rows per page pulldown menu.
-     *
-     * @var bool
      */
-    public $showRowsPerPageChooser = false;
+    public bool $showRowsPerPageChooser = false;
 
     /**
      * indicates if the search header is filled.
-     *
-     * @var bool
      */
-    public $somethingToShow = false;
+    public bool $somethingToShow = false;
 
     /**
      * the generated html header section.
-     *
-     * @var string
      */
-    public $sHeaderSection = '';
+    public string $sHeaderSection = '';
 
     /**
      * the generated html content section.
-     *
-     * @var string
      */
-    public $sContentSection = '';
+    public string $sContentSection = '';
 
     /**
      * the generated html filter section.
-     *
-     * @var string
      */
-    public $sFilterSection = '';
+    public string $sFilterSection = '';
 
     /**
      * the generated html paging section.
-     *
-     * @var string
      */
-    public $sPagingSection = '';
+    public string $sPagingSection = '';
 
     /**
      * CSS classes for the table tag.
-     *
-     * @var string
      */
-    protected $tableCSS = 'table table-sm table-hover TCMSListManagerFullGroupTable';
+    protected string $tableCSS = 'table table-sm table-hover TCMSListManagerFullGroupTable';
 
     public function __construct($postData = [])
     {
         parent::__construct();
         $this->style = new TFullGroupTableStyle();
         $this->_postData = $postData;
-    }
-
-    /**
-     * @deprecated Named constructors are deprecated and will be removed with PHP8. When calling from a parent, please use `parent::__construct` instead.
-     * @see self::__construct
-     */
-    public function TFullGroupTable()
-    {
-        $this->callConstructorAndLogDeprecation(func_get_args());
     }
 
     /**
@@ -262,18 +197,11 @@ class TFullGroupTable extends TGroupTable
     }
 
     /**
-     * @deprecated since 6.3.6 - not necessary anymore
-     */
-    public function setAutoCompleteState(bool $state)
-    {
-    }
-
-    /**
      * @param array|null $paramArray
      */
     public function AddCustomSearchFieldParameter($paramArray = null)
     {
-        if (!is_null($paramArray) && is_array($paramArray)) {
+        if (is_array($paramArray)) {
             $this->customSearchFieldParameter = array_merge($this->customSearchFieldParameter, $paramArray);
         }
     }
@@ -287,7 +215,7 @@ class TFullGroupTable extends TGroupTable
     public function getCustomSearchFieldParameter($param)
     {
         $val = null;
-        if (is_array($this->customSearchFieldParameter) && isset($this->customSearchFieldParameter[$param])) {
+        if (isset($this->customSearchFieldParameter[$param])) {
             $val = $this->customSearchFieldParameter[$param];
         }
 
@@ -317,7 +245,7 @@ class TFullGroupTable extends TGroupTable
             reset($this->headerCells);
             foreach ($this->headerCells as $key => $oTmpGroupTable) {
                 ++$count;
-                if ($key == $columnPosition) {
+                if ($key === $columnPosition) {
                     $aTmpHeaderFields[$count] = $oTGroupTableHeaderField;
                     ++$count;
                 }
@@ -460,11 +388,11 @@ class TFullGroupTable extends TGroupTable
         // now put the table together and return it
         // now show data only if records have been found...
         if ($this->recordCount > 0) {
-            if ('top' == $this->pageingLocation || 'top_and_bottom' == $this->pageingLocation) {
+            if ('top' === $this->pageingLocation || 'top_and_bottom' === $this->pageingLocation) {
                 $sTable .= $this->sPagingSection;
             }
 
-            $sTable .= '<div class="table-responsive">';
+            $sTable .= '<div class="full-group-table table-responsive">';
             $sTable .= '<table '.$this->getInlineFromAttributes($this->getManagedAttributes()).'class="'.$this->getTableCSS().'">';
             $sTable .= $this->GetCellWidths();
             $sTable .= $this->sHeaderSection;
@@ -472,7 +400,7 @@ class TFullGroupTable extends TGroupTable
             $sTable .= '</table>';
             $sTable .= '</div>';
 
-            if ('bottom' == $this->pageingLocation || 'top_and_bottom' == $this->pageingLocation) {
+            if ('bottom' === $this->pageingLocation || 'top_and_bottom' === $this->pageingLocation) {
                 $sTable .= $this->sPagingSection;
             }
         } else {

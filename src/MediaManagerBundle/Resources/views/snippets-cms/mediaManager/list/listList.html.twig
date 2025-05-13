@@ -71,7 +71,7 @@
                         </table>
                     </div>
                     <div class="col-12 col-md-2 col-xl-1 text-right align-self-end">
-                        {{ include( ('mediaManager/list/actionsInList.html.twig') , {mediaItem: mediaItem, pickImageMode: pickImageMode, pickImageCallback: pickImageCallback, pickImageWithCrop: pickImageWithCrop, accessRightsMedia: accessRightsMedia} ) }}
+                        {% include('mediaManager/list/actionsInList.html.twig') with {'mediaItem': mediaItem, 'pickImageMode': pickImageMode, 'pickImageCallback': pickImageCallback, 'pickImageWithCrop': pickImageWithCrop, 'accessRightsMedia': accessRightsMedia} %}
                     </div>
                 </div>
             </div>

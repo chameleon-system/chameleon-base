@@ -10,7 +10,7 @@
              data-configuration='{{ javascriptPluginConfiguration | json_encode() }}'>
             <div id="tree-container" class="split split-horizontal">
                 {% if mediaTree %}
-                    {{ include( 'mediaManager/tree/mediaTree.html.twig' ) }}
+                    {% include 'mediaManager/tree/mediaTree.html.twig' %}
                 {% endif %}
                 {% if messageCode %}
                     <div class="alert alert-danger">
