@@ -32,7 +32,7 @@
                 <div class="col-12 col-xl-10">
                     {% if usages | length > 0 %}
                         <div class="title-usages">{{ 'chameleon_system_media_manager.delete.table_header_usages' | trans }}</div>
-                        {{ include( 'mediaManager/usages/usageTable.html.twig' , {usages: usages} ) }}
+                        {% include 'mediaManager/usages/usageTable.html.twig' with {'usages': usages} %}
                     {% else %}
                         <div class="title-usages">
                             {% if enableUsageSearch %}
