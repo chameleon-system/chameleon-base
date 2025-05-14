@@ -16,7 +16,7 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
-class ModuleMenuItemProvider implements MenuItemProviderInterface
+class ModuleMenuItemProvider extends AbstractMenuItemProvider
 {
     /**
      * {@inheritdoc}
@@ -58,6 +58,8 @@ class ModuleMenuItemProvider implements MenuItemProviderInterface
             $url .= '&_pagedefType='.$cmsModule->fieldModuleLocation;
         }
 
-        return $url;
+        $url .= '&_rmhist=true&_histid=0';
+
+        return $this->addHistoryParameters($url);
     }
 }

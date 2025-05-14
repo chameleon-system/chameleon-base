@@ -16,7 +16,7 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
-class CustomMenuItemProvider implements MenuItemProviderInterface
+class CustomMenuItemProvider extends AbstractMenuItemProvider
 {
     /**
      * {@inheritdoc}
@@ -33,7 +33,7 @@ class CustomMenuItemProvider implements MenuItemProviderInterface
             $menuItem->id,
             $menuItem->fieldName,
             $menuItem->fieldIconFontCssClass,
-            $customItem->fieldUrl
+            $this->addHistoryParameters($customItem->fieldUrl)
         );
     }
 
