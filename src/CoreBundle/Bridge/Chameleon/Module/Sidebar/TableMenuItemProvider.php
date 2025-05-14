@@ -16,7 +16,7 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 
-class TableMenuItemProvider implements MenuItemProviderInterface
+class TableMenuItemProvider extends AbstractMenuItemProvider
 {
     /**
      * {@inheritdoc}
@@ -38,7 +38,7 @@ class TableMenuItemProvider implements MenuItemProviderInterface
             $menuItem->id,
             $menuItem->fieldName,
             $menuItem->fieldIconFontCssClass,
-            PATH_CMS_CONTROLLER."?pagedef=tablemanager&id={$tableConf->id}&_rmhist=true&_histid=0",
+            $this->addHistoryParameters(PATH_CMS_CONTROLLER."?pagedef=tablemanager&id={$tableConf->id}"),
             $tableConf->id
         );
     }
