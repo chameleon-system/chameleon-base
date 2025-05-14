@@ -58,6 +58,8 @@ class ModuleMenuItemProvider implements MenuItemProviderInterface
             $url .= '&_pagedefType='.$cmsModule->fieldModuleLocation;
         }
 
+        $url .= '&_rmhist=true&_histid=0';
+
         return $url;
     }
 }

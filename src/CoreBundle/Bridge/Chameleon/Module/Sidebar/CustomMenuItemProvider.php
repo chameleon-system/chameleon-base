@@ -33,7 +33,7 @@ class CustomMenuItemProvider implements MenuItemProviderInterface
             $menuItem->id,
             $menuItem->fieldName,
             $menuItem->fieldIconFontCssClass,
-            $customItem->fieldUrl
+            $customItem->fieldUrl.'&_rmhist=true&_histid=0'
         );
     }
 
