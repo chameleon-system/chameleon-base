@@ -10,7 +10,7 @@
  */
 
 /**
- * @deprecated since 7.1.6
+ * @deprecated since 7.1.6 - will be removed in 9.0.0
  */
 class TCMSFieldSmallIconList extends TCMSFieldIconList
 {
