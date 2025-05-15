@@ -25,3 +25,7 @@
 .dashboard-widget-collection {
   position: relative;
 }
+
+#dashboard-widget canvas{
+  max-height: 300px;
+}
