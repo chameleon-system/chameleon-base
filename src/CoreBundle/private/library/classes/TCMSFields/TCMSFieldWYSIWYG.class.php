@@ -568,7 +568,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         foreach ($customerStyles as $className => $htmlTags) {
             if (0 === count($htmlTags)) {
                 // if no elements are specified, we use the class for the following default elements
-                $elements = ['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li'];
+                $htmlTags = ['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li'];
             }
             foreach ($htmlTags as $htmlTag) {
                 $styleData = [];
