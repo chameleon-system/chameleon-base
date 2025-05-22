@@ -27,12 +27,20 @@ $sLoadCopy = (isset($bLoadCopy) && '1' === $bLoadCopy) ? ('&bLoadCopy='.$bLoadCo
                 alert('<?php echo ServiceLocator::get('translator')->trans('chameleon_system_core.template_engine.error_instance_locked'); ?>');
             } else {
                 const chooseModuleViewDialog = document.getElementById("chooseModuleViewDialog");
-                if (chooseModuleViewDialog) {
-                    chooseModuleViewDialog.outerHTML = data.html;
+                if (chooseModuleViewDialog && data.html) {
+                    const parser = new DOMParser();
+                    const newDoc = parser.parseFromString(data.html, 'text/html');
+                    const newDialog = newDoc.getElementById("chooseModuleViewDialog");
+
+                    if (newDialog) {
+                        chooseModuleViewDialog.replaceWith(newDialog);
+                    } else {
+                        console.warn("Dialog content could not be extracted.");
+                    }
                 }
 
                 if (data.bOpenDialog) {
-                    openModuleViewChooseDialog();
+                    CreateModalDialogFromContainer('chooseModuleViewDialog');
                 } else {
                     const loadModuleForm = document.getElementById("loadmoduleclass");
                     if (loadModuleForm) {

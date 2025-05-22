@@ -365,20 +365,38 @@ function CreateModalIFrameDialogFromContent(content, width, height, title, isDra
     CHAMELEON.CORE.showModal(title, content, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
 }
 
-/*
- * creates a ModalDialog with close button from DIV-Container (ID)
+/**
+ * Creates a ModalDialog with close button from DIV container (by ID).
  */
 function CreateModalDialogFromContainer(contentID, width, height, title, isDraggable, isResizable) {
-    let contentElemt = document.querySelector('#' + contentID).innerHTML;
-    if (contentElemt) {
-        var content = contentElemt.innerHTML;
-        contentElemt.innerHTML = '';
-        top.sLastDialogID = contentID;
-        var dialogContent = '<div style="width:100%;height:100%;" id="modal_dialog_content">' + content + '</div>';
-        CHAMELEON.CORE.showModal(title, dialogContent, CHAMELEON.CORE.getModalSizeClassByPixel(width), height);
+    const contentElem = document.getElementById(contentID);
+
+    if (!contentElem) {
+        console.warn(`CreateModalDialogFromContainer: Element with ID '${contentID}' not found.`);
+        return;
     }
 
+    const content = contentElem.innerHTML;
+    contentElem.innerHTML = '';
+
+    if (typeof top !== 'undefined') {
+        top.sLastDialogID = contentID;
+    }
+
+    const dialogContent = `
+        <div style="width:100%;height:100%;" id="modal_dialog_content">
+            ${content}
+        </div>
+    `;
+
+    CHAMELEON.CORE.showModal(
+        title,
+        dialogContent,
+        CHAMELEON.CORE.getModalSizeClassByPixel(width),
+        height
+    );
 }
+
 
 /*
  * creates a ModalDialog to show a full image from Image-URL
