@@ -61,6 +61,7 @@ class DataAccessCmsMasterPagedefCacheDecorator implements DataAccessCmsMasterPag
             ['table' => 'cms_tree', 'id' => null],
             ['table' => 'cms_tree_node', 'id' => null],
             ['table' => 'cms_master_pagedef', 'id' => null],
+            ['table' => 'cms_tpl_page_cms_master_pagedef_spot', 'id' => null],
         ];
         $this->cache->set($cacheKey, $pagedefData, $aTrigger);
 
