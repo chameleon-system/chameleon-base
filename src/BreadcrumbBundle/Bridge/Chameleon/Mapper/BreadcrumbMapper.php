@@ -2,14 +2,10 @@
 
 namespace ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Mapper;
 
-use IMapperCacheTriggerRestricted;
-use IMapperRequirementsRestricted;
-use IMapperVisitorRestricted;
 use ChameleonSystem\BreadcrumbBundle\Interfaces\BreadcrumbGeneratorProviderInterface;
 
 class BreadcrumbMapper extends \AbstractViewMapper
 {
-
     public function __construct(
         private readonly BreadcrumbGeneratorProviderInterface $breadcrumbGeneratorProvider,
     ) {
@@ -18,14 +14,14 @@ class BreadcrumbMapper extends \AbstractViewMapper
     /**
      * @inheritDoc
      */
-    public function GetRequirements(IMapperRequirementsRestricted $oRequirements)
+    public function GetRequirements(\IMapperRequirementsRestricted $oRequirements)
     {
     }
 
     /**
      * @inheritDoc
      */
-    public function Accept(IMapperVisitorRestricted $oVisitor, $bCachingEnabled, IMapperCacheTriggerRestricted $oCacheTriggerManager)
+    public function Accept(\IMapperVisitorRestricted $oVisitor, $bCachingEnabled, \IMapperCacheTriggerRestricted $oCacheTriggerManager)
     {
         $breadcrumb = $this->breadcrumbGeneratorProvider->generateBreadcrumb();
         $oVisitor->SetMappedValue('breadcrumb', $breadcrumb);
