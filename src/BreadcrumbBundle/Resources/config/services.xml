@@ -29,6 +29,12 @@
             <tag name="chameleon_system.module"/>
         </service>
 
+        <service id="chameleon_system_breadcrumb.mapper.breadcrumb"
+                 class="ChameleonSystem\BreadcrumbBundle\Bridge\Chameleon\Mapper\BreadcrumbMapper" public="true">
+            <tag name="chameleon_system.mapper"/>
+            <argument type="service" id="chameleon_system_breadcrumb.provider.breadcrumb_generator_provider" />
+        </service>
+
         <service id="chameleon_system_breadcrumb.provider.breadcrumb_generator_provider"
                  class="ChameleonSystem\BreadcrumbBundle\Provider\BreadcrumbGeneratorProvider">
             <argument key="$breadcrumbGeneratorList" type="collection"/>

@@ -7,7 +7,7 @@
 
         <service id="chameleon_system_cms_cache.cache_database_connection" alias="database_connection"  public="true"/>
 
-        <service id="chameleon_system_cms_cache.cache" class="esono\pkgCmsCache\Cache" public="true">
+        <service id="chameleon_system_cms_cache.cache" class="esono\pkgCmsCache\CacheInterface" public="true">
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_cms_cache.cache_database_connection" />
             <argument type="service" id="chameleon_system_cms_cache.storage.null" />

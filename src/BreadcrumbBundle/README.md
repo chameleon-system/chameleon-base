@@ -21,7 +21,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
         'name' => 'Breadcrumb',
         'classname' => 'chameleon_system_breadcrumb.module.breadcrumb',
         'description' => 'Breadcrumb',
-        'view_mapper_config' => 'standard=standard.html.twig',
+        'view_mapper_config' => 'standard=breadcrumb/standard.html.twig',
         'view_mapping' => 'standard=Standard',
         'position' => '0',
         'id' => '3dd468ef-d79e-d271-c72b-d8526786ea0f',
