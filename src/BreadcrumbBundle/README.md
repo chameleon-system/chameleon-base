@@ -13,33 +13,6 @@ new ChameleonSystem\BreadcrumbBundle\ChameleonSystemBreadcrumbBundle(),
 ```
 
 ### Database-Updates:
-
-add to template modules:
-```php
-$data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
-    ->setFields([
-        'name' => 'Breadcrumb',
-        'classname' => 'chameleon_system_breadcrumb.module.breadcrumb',
-        'description' => 'Breadcrumb',
-        'view_mapper_config' => 'standard=breadcrumb/standard.html.twig',
-        'view_mapping' => 'standard=Standard',
-        'position' => '0',
-        'id' => '3dd468ef-d79e-d271-c72b-d8526786ea0f',
-    ])
-;
-TCMSLogChange::insert(__LINE__, $data);
-
-$data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
-    ->setFields([
-        'name' => 'Breadcrumb',
-        'description' => 'Breadcrumb',
-        'view_mapping' => 'standard=Standard',
-    ])
-    ->setWhereEquals([
-        'id' => '3dd468ef-d79e-d271-c72b-d8526786ea0f',
-    ])
-;
-TCMSLogChange::update(__LINE__, $data);
  ```
 
 Add spot definition to page template(s) or Layout -> Theme block "Header"
@@ -60,11 +33,6 @@ Add Path to snippetChain of all "Themes" you need it
 ```php
 TCMSLogChange::addToSnippetChain('@ChameleonSystemBreadcrumbBundle/Resources/views', '@ChameleonSystemGoogleTagManagerBundle/Resources/views', ['53da5ef1-d266-9fdb-2313-860528fe4bf3', '151569e1-0799-19b5-b245-03df38a9f703']);
 ```
-
-
-
-### Spot-Declation in headers
-
 
 ### 2. Insert the Breadcrumb Module in Your Layout
 In your page template, render the `BreadcrumbModule` module at the desired location:

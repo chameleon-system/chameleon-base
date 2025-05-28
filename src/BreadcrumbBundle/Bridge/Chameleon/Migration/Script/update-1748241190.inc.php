@@ -5,28 +5,13 @@
 </div>
 <?php
 
-$id = TCMSLogChange::GetTableId('cms_tpl_module');
 $data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'de')
     ->setFields([
-        'name' => 'Breadcrumb',
-        'classname' => 'chameleon_system_breadcrumb.module.breadcrumb',
-        'description' => 'Breadcrumb',
-        'view_mapper_config' => 'standard=breadcrumb/standard.html.twig',
-        'view_mapping' => 'standard=Standard',
-        'position' => '0',
-        'id' => $id,
-    ])
-;
-TCMSLogChange::insert(__LINE__, $data);
-
-$data = TCMSLogChange::createMigrationQueryData('cms_tpl_module', 'en')
-    ->setFields([
-        'name' => 'Breadcrumb',
-        'description' => 'Breadcrumb',
-        'view_mapping' => 'standard=Standard',
+        // 'name' => 'Breadcrumb',
+        'view_mapper_config' => 'standard=breadcrumb/standard.html.twig', // prev.: 'standard=standard.html.twig'
     ])
     ->setWhereEquals([
-        'id' => $id,
+        'classname' => 'chameleon_system_breadcrumb.module.breadcrumb',
     ])
 ;
 TCMSLogChange::update(__LINE__, $data);
