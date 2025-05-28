@@ -21,7 +21,7 @@ namespace esono\pkgcmscache\tests {
     use ChameleonSystem\CoreBundle\RequestState\Interfaces\RequestStateHashProviderInterface;
     use ChameleonSystem\CoreBundle\Util\HashInterface;
     use Doctrine\DBAL\Connection;
-    use esono\pkgCmsCache\Cache;
+    use esono\pkgCmsCache\CacheInterface;
     use esono\pkgCmsCache\StorageInterface;
     use PHPUnit\Framework\TestCase;
     use Prophecy\Argument;
@@ -33,7 +33,7 @@ namespace esono\pkgcmscache\tests {
         use ProphecyTrait;
 
         /**
-         * @var Cache
+         * @var CacheInterface
          */
         private $cache;
 

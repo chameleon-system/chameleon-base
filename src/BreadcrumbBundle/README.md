@@ -12,8 +12,34 @@ Ensure the breadcrumb module is registered in your application kernel or `bundle
 new ChameleonSystem\BreadcrumbBundle\ChameleonSystemBreadcrumbBundle(),
 ```
 
+### Database-Updates:
+ ```
+
+Add spot definition to page template(s) or Layout -> Theme block "Header"
+```php
+$data = TCMSLogChange::createMigrationQueryData('cms_master_pagedef_spot', 'de')
+  ->setFields([
+      'pkg_cms_theme_block_id' => '1ed5d06b-e0ff-d641-f179-f8d7859dbf0f',
+      'name' => 'breadcrumb',
+      'model' => 'chameleon_system_breadcrumb.module.breadcrumb',
+      'view' => 'standard',
+      'id' => '792d2dd0-75a2-9ad7-4c98-e518527c543f',
+  ])
+;
+TCMSLogChange::insert(__LINE__, $data);
+```
+
+Add Path to snippetChain of all "Themes" you need it
+```php
+TCMSLogChange::addToSnippetChain('@ChameleonSystemBreadcrumbBundle/Resources/views', '@ChameleonSystemGoogleTagManagerBundle/Resources/views', ['53da5ef1-d266-9fdb-2313-860528fe4bf3', '151569e1-0799-19b5-b245-03df38a9f703']);
+```
+
 ### 2. Insert the Breadcrumb Module in Your Layout
 In your page template, render the `BreadcrumbModule` module at the desired location:
+
+```twig
+  {{ module('breadcrumb') }}
+```
 
 This will use the first active `BreadcrumbGenerator` to build a `BreadcrumbDataModel`.
 
