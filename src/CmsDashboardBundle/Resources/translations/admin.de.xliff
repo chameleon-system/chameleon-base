@@ -232,7 +232,7 @@
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.conversions">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.conversions</source>
-                <target>Conversions</target>
+                <target>Konversionen</target>
             </trans-unit>
             <!-- Traffic Source -->
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.traffic_source_title">
@@ -321,6 +321,10 @@
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.device_ratio_title">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.device_ratio_title</source>
                 <target>Geräteverteilung</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.sessions">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.sessions</source>
+                <target>Sitzungen</target>
             </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.device">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.device</source>

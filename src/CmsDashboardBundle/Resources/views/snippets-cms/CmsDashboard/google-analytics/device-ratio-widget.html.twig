@@ -2,10 +2,12 @@
 {% if deviceRatioData %}
 <div class="row">
     <div class="col-md-6">
-        <canvas id="deviceEngagementChart"></canvas>
+        <div class="text-center mt-2">{{ 'chameleon_system_cms_dashboard.widget.google_analytics.sessions'|trans }}</div>
+        <canvas id="deviceEngagementChart" style="max-height: 150px;"></canvas>
     </div>
     <div class="col-md-6">
-        <canvas id="deviceConversionChart"></canvas>
+        <div class="text-center mt-2">{{ 'chameleon_system_cms_dashboard.widget.google_analytics.conversions'|trans }}</div>
+        <canvas id="deviceConversionChart" style="max-height: 150px;"></canvas>
     </div>
 </div>
 
