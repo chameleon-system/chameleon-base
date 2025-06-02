@@ -51,6 +51,6 @@
     "url": "https://github.com/chameleon-system/chameleon-system/issues"
   },
   "engines": {
-    "node": "16"
+    "node": "18"
   }
 }

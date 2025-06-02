@@ -1,5 +1,5 @@
 /**
- * simplebar - v6.3.0
+ * simplebar - v6.3.1
  * Scrollbars, simpler.
  * https://grsmto.github.io/simplebar/
  *
@@ -41,8 +41,6 @@ var SimpleBar = (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
 
-    var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
     /**
      * Checks if `value` is the
      * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
@@ -68,31 +66,23 @@ var SimpleBar = (function () {
      * _.isObject(null);
      * // => false
      */
-
-    function isObject$3(value) {
+    function isObject(value) {
       var type = typeof value;
       return value != null && (type == 'object' || type == 'function');
     }
 
-    var isObject_1 = isObject$3;
-
     /** Detect free variable `global` from Node.js. */
+    var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
 
-    var freeGlobal$1 = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
-
-    var _freeGlobal = freeGlobal$1;
-
-    var freeGlobal = _freeGlobal;
+    var freeGlobal$1 = freeGlobal;
 
     /** Detect free variable `self`. */
     var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
 
     /** Used as a reference to the global object. */
-    var root$2 = freeGlobal || freeSelf || Function('return this')();
+    var root = freeGlobal$1 || freeSelf || Function('return this')();
 
-    var _root = root$2;
-
-    var root$1 = _root;
+    var root$1 = root;
 
     /**
      * Gets the timestamp of the number of milliseconds that have elapsed since
@@ -110,14 +100,13 @@ var SimpleBar = (function () {
      * }, _.now());
      * // => Logs the number of milliseconds it took for the deferred invocation.
      */
-    var now$1 = function() {
+    var now = function() {
       return root$1.Date.now();
     };
 
-    var now_1 = now$1;
+    var now$1 = now;
 
     /** Used to match a single whitespace character. */
-
     var reWhitespace = /\s/;
 
     /**
@@ -128,16 +117,12 @@ var SimpleBar = (function () {
      * @param {string} string The string to inspect.
      * @returns {number} Returns the index of the last non-whitespace character.
      */
-    function trimmedEndIndex$1(string) {
+    function trimmedEndIndex(string) {
       var index = string.length;
 
       while (index-- && reWhitespace.test(string.charAt(index))) {}
       return index;
     }
-
-    var _trimmedEndIndex = trimmedEndIndex$1;
-
-    var trimmedEndIndex = _trimmedEndIndex;
 
     /** Used to match leading whitespace. */
     var reTrimStart = /^\s+/;
@@ -149,22 +134,16 @@ var SimpleBar = (function () {
      * @param {string} string The string to trim.
      * @returns {string} Returns the trimmed string.
      */
-    function baseTrim$1(string) {
+    function baseTrim(string) {
       return string
         ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
         : string;
     }
 
-    var _baseTrim = baseTrim$1;
-
-    var root = _root;
-
     /** Built-in value references. */
-    var Symbol$2 = root.Symbol;
+    var Symbol = root$1.Symbol;
 
-    var _Symbol = Symbol$2;
-
-    var Symbol$1 = _Symbol;
+    var Symbol$1 = Symbol;
 
     /** Used for built-in method references. */
     var objectProto$1 = Object.prototype;
@@ -189,7 +168,7 @@ var SimpleBar = (function () {
      * @param {*} value The value to query.
      * @returns {string} Returns the raw `toStringTag`.
      */
-    function getRawTag$1(value) {
+    function getRawTag(value) {
       var isOwn = hasOwnProperty.call(value, symToStringTag$1),
           tag = value[symToStringTag$1];
 
@@ -209,10 +188,7 @@ var SimpleBar = (function () {
       return result;
     }
 
-    var _getRawTag = getRawTag$1;
-
     /** Used for built-in method references. */
-
     var objectProto = Object.prototype;
 
     /**
@@ -229,22 +205,16 @@ var SimpleBar = (function () {
      * @param {*} value The value to convert.
      * @returns {string} Returns the converted string.
      */
-    function objectToString$1(value) {
+    function objectToString(value) {
       return nativeObjectToString.call(value);
     }
-
-    var _objectToString = objectToString$1;
-
-    var Symbol = _Symbol,
-        getRawTag = _getRawTag,
-        objectToString = _objectToString;
 
     /** `Object#toString` result references. */
     var nullTag = '[object Null]',
         undefinedTag = '[object Undefined]';
 
     /** Built-in value references. */
-    var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+    var symToStringTag = Symbol$1 ? Symbol$1.toStringTag : undefined;
 
     /**
      * The base implementation of `getTag` without fallbacks for buggy environments.
@@ -253,7 +223,7 @@ var SimpleBar = (function () {
      * @param {*} value The value to query.
      * @returns {string} Returns the `toStringTag`.
      */
-    function baseGetTag$1(value) {
+    function baseGetTag(value) {
       if (value == null) {
         return value === undefined ? undefinedTag : nullTag;
       }
@@ -261,8 +231,6 @@ var SimpleBar = (function () {
         ? getRawTag(value)
         : objectToString(value);
     }
-
-    var _baseGetTag = baseGetTag$1;
 
     /**
      * Checks if `value` is object-like. A value is object-like if it's not `null`
@@ -288,15 +256,9 @@ var SimpleBar = (function () {
      * _.isObjectLike(null);
      * // => false
      */
-
-    function isObjectLike$1(value) {
+    function isObjectLike(value) {
       return value != null && typeof value == 'object';
     }
-
-    var isObjectLike_1 = isObjectLike$1;
-
-    var baseGetTag = _baseGetTag,
-        isObjectLike = isObjectLike_1;
 
     /** `Object#toString` result references. */
     var symbolTag = '[object Symbol]';
@@ -318,16 +280,10 @@ var SimpleBar = (function () {
      * _.isSymbol('abc');
      * // => false
      */
-    function isSymbol$1(value) {
+    function isSymbol(value) {
       return typeof value == 'symbol' ||
         (isObjectLike(value) && baseGetTag(value) == symbolTag);
     }
-
-    var isSymbol_1 = isSymbol$1;
-
-    var baseTrim = _baseTrim,
-        isObject$2 = isObject_1,
-        isSymbol = isSymbol_1;
 
     /** Used as references for various `Number` constants. */
     var NAN = 0 / 0;
@@ -367,16 +323,16 @@ var SimpleBar = (function () {
      * _.toNumber('3.2');
      * // => 3.2
      */
-    function toNumber$1(value) {
+    function toNumber(value) {
       if (typeof value == 'number') {
         return value;
       }
       if (isSymbol(value)) {
         return NAN;
       }
-      if (isObject$2(value)) {
+      if (isObject(value)) {
         var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-        value = isObject$2(other) ? (other + '') : other;
+        value = isObject(other) ? (other + '') : other;
       }
       if (typeof value != 'string') {
         return value === 0 ? value : +value;
@@ -387,12 +343,6 @@ var SimpleBar = (function () {
         ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
         : (reIsBadHex.test(value) ? NAN : +value);
     }
-
-    var toNumber_1 = toNumber$1;
-
-    var isObject$1 = isObject_1,
-        now = now_1,
-        toNumber = toNumber_1;
 
     /** Error message constants. */
     var FUNC_ERROR_TEXT$1 = 'Expected a function';
@@ -455,7 +405,7 @@ var SimpleBar = (function () {
      * // Cancel the trailing debounced invocation.
      * jQuery(window).on('popstate', debounced.cancel);
      */
-    function debounce$1(func, wait, options) {
+    function debounce(func, wait, options) {
       var lastArgs,
           lastThis,
           maxWait,
@@ -471,7 +421,7 @@ var SimpleBar = (function () {
         throw new TypeError(FUNC_ERROR_TEXT$1);
       }
       wait = toNumber(wait) || 0;
-      if (isObject$1(options)) {
+      if (isObject(options)) {
         leading = !!options.leading;
         maxing = 'maxWait' in options;
         maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
@@ -519,7 +469,7 @@ var SimpleBar = (function () {
       }
 
       function timerExpired() {
-        var time = now();
+        var time = now$1();
         if (shouldInvoke(time)) {
           return trailingEdge(time);
         }
@@ -548,11 +498,11 @@ var SimpleBar = (function () {
       }
 
       function flush() {
-        return timerId === undefined ? result : trailingEdge(now());
+        return timerId === undefined ? result : trailingEdge(now$1());
       }
 
       function debounced() {
-        var time = now(),
+        var time = now$1(),
             isInvoking = shouldInvoke(time);
 
         lastArgs = arguments;
@@ -579,11 +529,6 @@ var SimpleBar = (function () {
       debounced.flush = flush;
       return debounced;
     }
-
-    var debounce_1 = debounce$1;
-
-    var debounce = debounce_1,
-        isObject = isObject_1;
 
     /** Error message constants. */
     var FUNC_ERROR_TEXT = 'Expected a function';
@@ -650,10 +595,8 @@ var SimpleBar = (function () {
       });
     }
 
-    var throttle_1 = throttle;
-
     /**
-     * simplebar-core - v1.3.0
+     * simplebar-core - v1.3.1
      * Scrollbars, simpler.
      * https://grsmto.github.io/simplebar/
      *
@@ -1050,10 +993,10 @@ var SimpleBar = (function () {
             if (typeof this.el !== 'object' || !this.el.nodeName) {
                 throw new Error("Argument passed to SimpleBar must be an HTML element instead of ".concat(this.el));
             }
-            this.onMouseMove = throttle_1(this._onMouseMove, 64);
-            this.onWindowResize = debounce_1(this._onWindowResize, 64, { leading: true });
-            this.onStopScrolling = debounce_1(this._onStopScrolling, this.stopScrollDelay);
-            this.onMouseEntered = debounce_1(this._onMouseEntered, this.stopScrollDelay);
+            this.onMouseMove = throttle(this._onMouseMove, 64);
+            this.onWindowResize = debounce(this._onWindowResize, 64, { leading: true });
+            this.onStopScrolling = debounce(this._onStopScrolling, this.stopScrollDelay);
+            this.onMouseEntered = debounce(this._onMouseEntered, this.stopScrollDelay);
             this.init();
         }
         /**

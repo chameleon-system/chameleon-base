@@ -313,6 +313,10 @@
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.device_ratio_title</source>
                 <target>Device Ratio</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.sessions">
+                <source>chameleon_system_cms_dashboard.widget.google_analytics.sessions</source>
+                <target>Sessions</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.widget.google_analytics.device">
                 <source>chameleon_system_cms_dashboard.widget.google_analytics.device</source>
                 <target>Device</target>
