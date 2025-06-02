@@ -54,7 +54,7 @@ class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInt
         if ('' === $this->googleSearchConsoleAuthJson || '' === $this->googleAnalyticsPropertyId) {
             return false;
         }
-        
+
         if (true === $this->securityHelperAccess->isGranted(CmsPermissionAttributeConstants::DASHBOARD_ACCESS, $this)) {
             return true;
         }
@@ -139,7 +139,7 @@ class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInt
         $groups = [
             CmsPermissionAttributeConstants::DASHBOARD_ACCESS => [
                 CmsGroup::CMS_ADMIN,
-                CmsGroup::CMS_MANAGEMENT
+                CmsGroup::CMS_MANAGEMENT,
             ],
         ];
 

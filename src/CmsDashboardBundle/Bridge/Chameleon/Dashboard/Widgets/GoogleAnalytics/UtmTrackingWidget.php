@@ -140,7 +140,7 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
         $groups = [
             CmsPermissionAttributeConstants::DASHBOARD_ACCESS => [
                 CmsGroup::CMS_ADMIN,
-                CmsGroup::CMS_MANAGEMENT
+                CmsGroup::CMS_MANAGEMENT,
             ],
         ];
 

@@ -139,7 +139,7 @@ class TrafficSourceWidget extends DashboardWidget implements RestrictedByCmsGrou
         $groups = [
             CmsPermissionAttributeConstants::DASHBOARD_ACCESS => [
                 CmsGroup::CMS_ADMIN,
-                CmsGroup::CMS_MANAGEMENT
+                CmsGroup::CMS_MANAGEMENT,
             ],
         ];
 
