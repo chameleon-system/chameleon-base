@@ -3,6 +3,7 @@
 namespace ChameleonSystem\SecurityBundle\CmsUser;
 
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
+use ChameleonSystem\SecurityBundle\Voter\CmsVoterPrefixConstants;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -130,7 +131,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
             ['userId' => $userRow['id']]
         );
         $roles = array_reduce($roleRows, static function (array $carry, array $row) {
-            $carry[$row['id']] = sprintf('ROLE_%s', mb_strtoupper($row['name']));
+            $carry[$row['id']] = sprintf(CmsVoterPrefixConstants::ROLE.'%s', mb_strtoupper($row['name']));
 
             return $carry;
         }, []);
@@ -146,7 +147,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         );
 
         $userRights = array_reduce($userRightRows, static function (array $carry, array $row) {
-            $carry[$row['id']] = sprintf('CMS_RIGHT_%s', mb_strtoupper($row['name']));
+            $carry[$row['id']] = sprintf(CmsVoterPrefixConstants::RIGHT.'%s', mb_strtoupper($row['name']));
 
             return $carry;
         }, []);
@@ -160,7 +161,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         );
 
         $userGroups = array_reduce($userGroupRows, static function (array $carry, array $row) {
-            $carry[$row['id']] = sprintf('CMS_GROUP_%s', mb_strtoupper($row['internal_identifier']));
+            $carry[$row['id']] = sprintf(CmsVoterPrefixConstants::GROUP.'%s', mb_strtoupper($row['internal_identifier']));
 
             return $carry;
         }, []);
@@ -174,7 +175,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         );
 
         $userPortals = array_reduce($userPortalRows, static function (array $carry, array $row) {
-            $carry[$row['id']] = sprintf('CMS_PORTAL_%s', mb_strtoupper($row['external_identifier']));
+            $carry[$row['id']] = sprintf(CmsVoterPrefixConstants::PORTAL.'%s', mb_strtoupper($row['external_identifier']));
 
             return $carry;
         }, []);

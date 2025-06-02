@@ -27,4 +27,6 @@ final class CmsPermissionAttributeConstants
     public const TABLE_EDITOR_NEW_LANGUAGE = 'cms::tbl_edit_new-language';
     public const TABLE_EDITOR_WORKFLOW_PUBLISH = 'cms::tbl_edit_workflow-publish'; // @deprecated since 8.0
     public const TABLE_EDITOR_VERSIONING = 'cms::tbl_edit_versioning';
+
+    public const DASHBOARD_ACCESS = 'dashboard::access';
 }

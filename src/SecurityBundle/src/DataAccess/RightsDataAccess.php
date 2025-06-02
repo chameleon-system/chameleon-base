@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\SecurityBundle\DataAccess;
 
+use ChameleonSystem\SecurityBundle\Voter\CmsVoterPrefixConstants;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 
@@ -19,21 +20,45 @@ class RightsDataAccess implements RightsDataAccessInterface
     {
         $groups = $this->getAllGroups();
 
-        return $groups[$groupSystemName] ?? null;
+        // If the group name already has the prefix, use it as is
+        if (str_starts_with($groupSystemName, CmsVoterPrefixConstants::GROUP)) {
+            return $groups[$groupSystemName] ?? null;
+        }
+
+        // Otherwise, add the prefix and convert to uppercase
+        $formattedGroupName = sprintf(CmsVoterPrefixConstants::GROUP.'%s', mb_strtoupper($groupSystemName));
+
+        return $groups[$formattedGroupName] ?? null;
     }
 
     public function getRoleIdBySystemName(string $roleSystemName): ?string
     {
         $roles = $this->getAllRoles();
 
-        return $roles[$roleSystemName] ?? null;
+        // If the role name already has the prefix, use it as is
+        if (str_starts_with($roleSystemName, CmsVoterPrefixConstants::ROLE)) {
+            return $roles[$roleSystemName] ?? null;
+        }
+
+        // Otherwise, add the prefix and convert to uppercase
+        $formattedRoleName = sprintf(CmsVoterPrefixConstants::ROLE.'%s', mb_strtoupper($roleSystemName));
+
+        return $roles[$formattedRoleName] ?? null;
     }
 
     public function getRightIdBySystemName(string $rightSystemName): ?string
     {
         $rights = $this->getAllRights();
 
-        return $rights[$rightSystemName] ?? null;
+        // If the right name already has the prefix, use it as is
+        if (str_starts_with($rightSystemName, CmsVoterPrefixConstants::RIGHT)) {
+            return $rights[$rightSystemName] ?? null;
+        }
+
+        // Otherwise, add the prefix and convert to uppercase
+        $formattedRightName = sprintf(CmsVoterPrefixConstants::RIGHT.'%s', mb_strtoupper($rightSystemName));
+
+        return $rights[$formattedRightName] ?? null;
     }
 
     /**
@@ -50,7 +75,8 @@ class RightsDataAccess implements RightsDataAccessInterface
         $this->groups = [];
         $result = $this->databaseConnection->fetchAllAssociative($query);
         foreach ($result as $row) {
-            $this->groups[$row['internal_identifier']] = $row['id'];
+            $formattedName = sprintf(CmsVoterPrefixConstants::GROUP.'%s', mb_strtoupper($row['internal_identifier']));
+            $this->groups[$formattedName] = $row['id'];
         }
 
         return $this->groups;
@@ -70,7 +96,8 @@ class RightsDataAccess implements RightsDataAccessInterface
         $this->roles = [];
         $result = $this->databaseConnection->fetchAllAssociative($query);
         foreach ($result as $row) {
-            $this->roles[$row['name']] = $row['id'];
+            $formattedName = sprintf(CmsVoterPrefixConstants::ROLE.'%s', mb_strtoupper($row['name']));
+            $this->roles[$formattedName] = $row['id'];
         }
 
         return $this->roles;
@@ -90,7 +117,8 @@ class RightsDataAccess implements RightsDataAccessInterface
         $this->rights = [];
         $result = $this->databaseConnection->fetchAllAssociative($query);
         foreach ($result as $row) {
-            $this->rights[$row['name']] = $row['id'];
+            $formattedName = sprintf(CmsVoterPrefixConstants::RIGHT.'%s', mb_strtoupper($row['name']));
+            $this->rights[$formattedName] = $row['id'];
         }
 
         return $this->rights;

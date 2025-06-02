@@ -32,7 +32,7 @@ abstract class DashboardWidget implements DashboardWidgetInterface
      */
     public function showWidget(): bool
     {
-        return true;
+        return false;
     }
 
     public function useWidgetContainerTemplate(): bool
