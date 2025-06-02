@@ -283,8 +283,8 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
     {
         $groups = [
             CmsPermissionAttributeConstants::DASHBOARD_ACCESS => [
-                CmsGroup::CMS_ADMIN
-            ]
+                CmsGroup::CMS_ADMIN,
+            ],
         ];
 
         return $groups[$qualifier] ?? [];
