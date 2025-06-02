@@ -12,6 +12,7 @@ use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
 use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,10 +42,8 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
 
     public function showWidget(): bool
     {
-        foreach ($this->getPermittedGroupSystemNames() as $groupSystemName) {
-            if (true === $this->securityHelperAccess->isGranted($groupSystemName, $this)) {
-                return true;
-            }
+        if (true === $this->securityHelperAccess->isGranted(CmsPermissionAttributeConstants::DASHBOARD_ACCESS, $this)) {
+            return true;
         }
 
         return false;
@@ -267,7 +266,7 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
      */
     public function getPermittedGroups(?string $qualifier = null): array
     {
-        $groupSystemNames = $this->getPermittedGroupSystemNames();
+        $groupSystemNames = $this->getPermittedGroupSystemNames($qualifier);
 
         $groupIds = [];
         foreach ($groupSystemNames as $groupSystemName) {
@@ -280,10 +279,14 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
         return $groupIds;
     }
 
-    protected function getPermittedGroupSystemNames(): array
+    protected function getPermittedGroupSystemNames(?string $qualifier): array
     {
-        return [
-            CmsGroup::CMS_ADMIN,
+        $groups = [
+            CmsPermissionAttributeConstants::DASHBOARD_ACCESS => [
+                CmsGroup::CMS_ADMIN
+            ]
         ];
+
+        return $groups[$qualifier] ?? [];
     }
 }

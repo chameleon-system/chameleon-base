@@ -39,7 +39,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
-$query ="ALTER TABLE `cms_user`
+$query = "ALTER TABLE `cms_user`
                         ADD `date_modified` TIMESTAMP NOT NULL COMMENT 'Letzte änderung: Wann wurde der Datensatz zuletzt geändert'";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
@@ -51,4 +51,3 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf_cms_usergroup_ml
   ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
-

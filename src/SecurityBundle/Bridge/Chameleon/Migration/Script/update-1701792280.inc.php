@@ -8,10 +8,11 @@
 $tableExisis = TCMSLogChange::TableExists('cms_user_sso');
 if ($tableExisis) {
     TCMSLogChange::getLogger()->info('Table cms_user_sso already exists. Skipping migration script.');
+
     return;
 }
 
-$query ="CREATE TABLE `cms_user_sso` (
+$query = "CREATE TABLE `cms_user_sso` (
                   `id` CHAR( 36 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
                   `cmsident` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Key is used so that records can be easily identified in Chameleon',
                   PRIMARY KEY ( `id` ),
@@ -19,7 +20,7 @@ $query ="CREATE TABLE `cms_user_sso` (
                 ) ENGINE = InnoDB";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
-$query ="ALTER TABLE `cms_user_sso` COMMENT 'CMS User SSO Ids: '";
+$query = "ALTER TABLE `cms_user_sso` COMMENT 'CMS User SSO Ids: '";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'en')
@@ -68,14 +69,11 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'de')
     ->setFields([
         'translation' => 'CMS User SSO Ids',
         'notes' => 'Enthält SSO-IDs für den Benutzer von verschiedenen SSO-Diensten (z. B. Google).',
-
-
-    ])->setWhereEquals(['id' => 'c9c8c34b-76ad-3bab-c907-129365cdf9bd',])
+    ])->setWhereEquals(['id' => 'c9c8c34b-76ad-3bab-c907-129365cdf9bd'])
 ;
 TCMSLogChange::update(__LINE__, $data);
-TCMSLogChange::SetTableRolePermissions('cms_admin', 'cms_user_sso', false, [0,1,]);
-TCMSLogChange::SetTableRolePermissions('cms_manager', 'cms_user_sso', false, [2,3]);
-
+TCMSLogChange::SetTableRolePermissions('cms_admin', 'cms_user_sso', false, [0, 1]);
+TCMSLogChange::SetTableRolePermissions('cms_manager', 'cms_user_sso', false, [2, 3]);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
@@ -106,14 +104,13 @@ TCMSLogChange::insert(__LINE__, $data);
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
         'translation' => 'Gehört zu',
-
-    ])->setWhereEquals(['id' => 'de1dc57b-2070-8ee9-a88c-4d7d18d4242e',])
+    ])->setWhereEquals(['id' => 'de1dc57b-2070-8ee9-a88c-4d7d18d4242e'])
 ;
 TCMSLogChange::update(__LINE__, $data);
-$query ="ALTER TABLE `cms_user_sso`
+$query = "ALTER TABLE `cms_user_sso`
                         ADD `cms_user_id` CHAR(36) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'Gehört zu: '";
 TCMSLogChange::RunQuery(__LINE__, $query);
-$query ="ALTER TABLE `cms_user_sso` ADD INDEX `cms_user_id` (`cms_user_id`)";
+$query = 'ALTER TABLE `cms_user_sso` ADD INDEX `cms_user_id` (`cms_user_id`)';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
@@ -145,10 +142,10 @@ TCMSLogChange::insert(__LINE__, $data);
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
         'translation' => 'SSO Service',
-    ])->setWhereEquals(['id' => '217517dc-bbd9-8351-2827-97023b96663e',])
+    ])->setWhereEquals(['id' => '217517dc-bbd9-8351-2827-97023b96663e'])
 ;
 TCMSLogChange::update(__LINE__, $data);
-$query ="ALTER TABLE `cms_user_sso`
+$query = "ALTER TABLE `cms_user_sso`
                         ADD `type` VARCHAR(255) NOT NULL COMMENT 'SSO Service: '";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
@@ -181,10 +178,10 @@ TCMSLogChange::insert(__LINE__, $data);
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
         'translation' => 'SSO ID',
-    ])->setWhereEquals(['id' => 'eaf67226-5d7c-9a1b-407b-7af52ddaeb19',])
+    ])->setWhereEquals(['id' => 'eaf67226-5d7c-9a1b-407b-7af52ddaeb19'])
 ;
 TCMSLogChange::update(__LINE__, $data);
-$query ="ALTER TABLE `cms_user_sso`
+$query = "ALTER TABLE `cms_user_sso`
                         ADD `sso_id` VARCHAR(255) NOT NULL COMMENT 'SSO ID: '";
 TCMSLogChange::RunQuery(__LINE__, $query);
 
@@ -198,11 +195,9 @@ $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf_index', 'en')
     ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
-$query ="ALTER TABLE `cms_user_sso`
-                        ADD INDEX  `sso` ( `type`,`sso_id` )";
+$query = 'ALTER TABLE `cms_user_sso`
+                        ADD INDEX  `sso` ( `type`,`sso_id` )';
 TCMSLogChange::RunQuery(__LINE__, $query);
-
-
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_display_list_fields', 'en')
     ->setFields([
@@ -291,7 +286,7 @@ TCMSLogChange::insert(__LINE__, $data);
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
     ->setFields([
         'translation' => 'SSO IDs',
-    ])->setWhereEquals(['id' => '8f38a3bb-2039-7934-931d-c58f459bbe61',])
+    ])->setWhereEquals(['id' => '8f38a3bb-2039-7934-931d-c58f459bbe61'])
 ;
 TCMSLogChange::update(__LINE__, $data);
 TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_user'), 'cms_user_sso', 'allow_cms_login');

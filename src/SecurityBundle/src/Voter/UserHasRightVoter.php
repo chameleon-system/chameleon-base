@@ -14,7 +14,7 @@ class UserHasRightVoter extends Voter
 {
     protected function supports(string $attribute, $subject): bool
     {
-        return str_starts_with($attribute, 'CMS_RIGHT_');
+        return str_starts_with($attribute, CmsVoterPrefixConstants::RIGHT);
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
