@@ -9,6 +9,7 @@ use ChameleonSystem\CmsDashboardBundle\Library\Constants\CmsGroup;
 use ChameleonSystem\CmsDashboardBundle\Service\GoogleAnalyticsDashboardService;
 use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
+use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -53,10 +54,8 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
             return false;
         }
 
-        foreach ($this->getPermittedGroupSystemNames() as $groupSystemName) {
-            if (true === $this->securityHelperAccess->isGranted($groupSystemName, $this)) {
-                return true;
-            }
+        if (true === $this->securityHelperAccess->isGranted(CmsPermissionAttributeConstants::DASHBOARD_ACCESS, $this)) {
+            return true;
         }
 
         return false;
@@ -123,7 +122,7 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
 
     public function getPermittedGroups(?string $qualifier = null): array
     {
-        $groupSystemNames = $this->getPermittedGroupSystemNames();
+        $groupSystemNames = $this->getPermittedGroupSystemNames($qualifier);
 
         $groupIds = [];
         foreach ($groupSystemNames as $groupSystemName) {
@@ -136,11 +135,15 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
         return $groupIds;
     }
 
-    protected function getPermittedGroupSystemNames(): array
+    protected function getPermittedGroupSystemNames(?string $qualifier): array
     {
-        return [
-            CmsGroup::CMS_MANAGEMENT,
-            CmsGroup::CMS_ADMIN,
+        $groups = [
+            CmsPermissionAttributeConstants::DASHBOARD_ACCESS => [
+                CmsGroup::CMS_ADMIN,
+                CmsGroup::CMS_MANAGEMENT
+            ],
         ];
+
+        return $groups[$qualifier] ?? [];
     }
 }
