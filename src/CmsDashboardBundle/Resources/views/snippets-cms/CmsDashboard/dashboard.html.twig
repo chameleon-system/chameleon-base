@@ -9,6 +9,7 @@
     <div class="card mb-4 bg-image" style="background-image: url('{{ headerBackgroundImage|e('html_attr') }}');">
         <div class="card-body pb-5">
             <div class="float-right">
+                {% if availableCollections|length > 0 %}
                 <form action="">
                     <input type="hidden" name="reload" value="true">
                     <div class="btn-group" role="group">
@@ -26,6 +27,7 @@
                         </button>
                     </div>
                 </form>
+                {% endif %}
 
                 <div class="d-flex align-items-center mt-2 d-none" id="add-widget-collection-container">
                     {% if availableCollections|length > 0 %}
@@ -47,6 +49,13 @@
             <p class="lead text-shadow-white-light">{{ 'chameleon_system_cms_dashboard.for'|trans }} {{ loggedInUserName }} [{{ cmsOwner }}]</p>
         </div>
     </div>
+    {% if availableCollections|length <= 0 and widgetCollections|length <= 0 %}
+    <div class="mb-4">
+        <div class="alert alert-info pb-5">
+            {{ 'chameleon_system_cms_dashboard.no_widgets_message'|trans }}
+        </div>
+    </div>
+    {% else %}
     <div id="sortable-list">
     {% for widgetCollectionName, widgetCollection in widgetCollections %}
         {% set useWidgetContainerTemplate = true %}
@@ -103,4 +112,5 @@
         </div>
     {% endfor %}
     </div>
+    {% endif %}
 </div>

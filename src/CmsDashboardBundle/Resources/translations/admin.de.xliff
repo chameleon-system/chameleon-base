@@ -6,6 +6,10 @@
                 <source>chameleon_system_cms_dashboard.dashboard</source>
                 <target>Dashboard</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.no_widgets_message">
+                <source>chameleon_system_cms_dashboard.no_widgets_message</source>
+                <target>Aktuell sind leider keine Widgets für Sie freigeschaltet</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_cms_dashboard.for">
                 <source>chameleon_system_cms_dashboard.for</source>
                 <target>für</target>
