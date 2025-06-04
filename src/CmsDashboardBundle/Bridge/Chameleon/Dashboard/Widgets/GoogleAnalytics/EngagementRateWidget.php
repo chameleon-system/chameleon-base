@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EngagementRateWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-google-analytics-engagement-rate';
+    public const string WIDGET_ID = 'widget-google-analytics-engagement-rate';
 
     public function __construct(
         private readonly DashboardCacheService $dashboardCacheService,
@@ -78,7 +78,7 @@ class EngagementRateWidget extends DashboardWidget implements RestrictedByCmsGro
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     public function getFooterIncludes(): array

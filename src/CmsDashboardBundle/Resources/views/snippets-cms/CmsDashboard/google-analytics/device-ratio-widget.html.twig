@@ -36,7 +36,11 @@
     </table>
 </div>
 <script>
-    document.addEventListener("widget:loaded", function () {
+    document.addEventListener("widget:loaded", function (event) {
+        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\GoogleAnalytics\\DeviceRatioWidget::WIDGET_ID') }}) {
+            return;
+        }
+
         const deviceDataCurrent = {{ deviceRatioData.current|json_encode|raw }};
         const deviceDataPrevious = {{ deviceRatioData.previous|json_encode|raw }};
 

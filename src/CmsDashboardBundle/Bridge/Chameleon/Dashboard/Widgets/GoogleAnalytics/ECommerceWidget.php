@@ -17,7 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-google-analytics-e-commerce';
+    public const string WIDGET_ID = 'widget-google-analytics-e-commerce';
 
     public function __construct(
         private readonly DashboardCacheService $dashboardCacheService,
@@ -80,7 +80,7 @@ class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInt
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     public function getFooterIncludes(): array

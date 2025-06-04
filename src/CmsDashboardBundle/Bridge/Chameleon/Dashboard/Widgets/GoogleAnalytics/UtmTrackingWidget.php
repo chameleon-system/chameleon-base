@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-google-analytics-utm-tracking';
+    public const string WIDGET_ID = 'widget-google-analytics-utm-tracking';
     private const MAX_UTM_ELEMENTS = 10;
 
     public function __construct(
@@ -77,7 +77,7 @@ class UtmTrackingWidget extends DashboardWidget implements RestrictedByCmsGroupI
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     public function getFooterIncludes(): array

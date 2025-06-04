@@ -66,8 +66,7 @@
 </div>
 <script>
     document.addEventListener("widget:loaded", function (event) {
-        const { serviceAlias, widgetElement } = event.detail;
-        if (serviceAlias !== 'widget-search-console') {
+        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\SearchConsoleWidget::WIDGET_ID') }}) {
             return;
         }
 

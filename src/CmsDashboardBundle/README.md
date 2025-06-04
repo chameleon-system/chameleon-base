@@ -13,7 +13,13 @@ The `CmsDashboardBundle` provides a customizable dashboard for the CMS, allowing
 ## 🚀 Getting Started
 
 ### 1️⃣ **Registering a New Widget**
-To create a new widget, define a class that extends `DashboardWidget` and implement the required methods.
+To create a new widget, you need to do the following:
+
+- define a class that extends `DashboardWidget` and implement the required methods
+- register the widget as a Symfony service and tag it with `chameleon_system.dashboard_widget`
+- create a service alias with the widget id of the widget class (the widget id is a constant in the widget class)
+- create a Twig template for the widget content (used in `generateBodyHtml()` method) - optional, you can also return HTML directly from the `generateBodyHtml()` method.
+- make sure that any scripts in the template listen to the `widget:loaded` event (instead of `DOMContentLoaded`) - as the widget content is loaded dynamically via AJAX.
 
 #### 📌 **Example: Creating a New Widget**
 ```php

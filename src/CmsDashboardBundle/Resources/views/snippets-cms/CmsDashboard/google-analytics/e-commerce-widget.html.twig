@@ -2,7 +2,11 @@
 {% if eCommerceData %}
 <canvas id="ecommerceChart"></canvas>
 <script>
-    document.addEventListener("widget:loaded", function () {
+    document.addEventListener("widget:loaded", function (event) {
+        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\GoogleAnalytics\\ECommerceWidget::WIDGET_ID') }}) {
+            return;
+        }
+
         const ecommerceData = {{ eCommerceData|json_encode|raw }};
 
         new Chart(document.getElementById('ecommerceChart').getContext('2d'), {

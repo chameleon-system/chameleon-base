@@ -3,7 +3,7 @@ function setInnerHtmlWithScripts(container, html) {
 
     const scripts = container.querySelectorAll("script");
     scripts.forEach(oldScript => {
-        const newScript = document.createElement("script");
+        let newScript = document.createElement("script");
 
         // Kopiere alle Attribute
         Array.from(oldScript.attributes).forEach(attr => {
@@ -67,7 +67,7 @@ function loadWidgetContent(serviceAlias, forceReload = false) {
         // Dispatch a custom event after the widget is loaded
         const widgetLoadedEvent = new CustomEvent('widget:loaded', {
             detail: {
-                serviceAlias,
+                widgetId: serviceAlias,
                 widgetElement: widgetContainer
             }
         });

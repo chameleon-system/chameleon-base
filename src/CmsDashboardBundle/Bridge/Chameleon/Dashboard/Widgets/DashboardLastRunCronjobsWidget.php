@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class DashboardLastRunCronjobsWidget extends DashboardWidget
 {
     private const CRON_JOB_TABLE_NAME = 'cms_cronjobs';
-    protected const WIDGET_ID = 'widget-last-run-cronjobs';
+    public const string WIDGET_ID = 'widget-last-run-cronjobs';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,

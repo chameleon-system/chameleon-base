@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-server-status';
+    public const string WIDGET_ID = 'widget-server-status';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -56,7 +56,7 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     protected function generateBodyHtml(): string
