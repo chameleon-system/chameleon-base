@@ -35,7 +35,7 @@
 
 <canvas id="engagementChart" style="max-height: 250px;"></canvas>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("widget:loaded", function () {
         const currentEngagementData = {{ engagementRate.current|json_encode|raw }};
         const previousEngagementData = {{ engagementRate.previous|json_encode|raw }};
 

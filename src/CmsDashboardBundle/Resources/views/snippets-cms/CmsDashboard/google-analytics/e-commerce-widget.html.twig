@@ -2,7 +2,7 @@
 {% if eCommerceData %}
 <canvas id="ecommerceChart"></canvas>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("widget:loaded", function () {
         const ecommerceData = {{ eCommerceData|json_encode|raw }};
 
         new Chart(document.getElementById('ecommerceChart').getContext('2d'), {

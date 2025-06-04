@@ -36,7 +36,7 @@
     </table>
 </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("widget:loaded", function () {
         const deviceDataCurrent = {{ deviceRatioData.current|json_encode|raw }};
         const deviceDataPrevious = {{ deviceRatioData.previous|json_encode|raw }};
 

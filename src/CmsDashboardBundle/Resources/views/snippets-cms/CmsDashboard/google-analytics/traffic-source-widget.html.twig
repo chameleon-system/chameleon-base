@@ -3,7 +3,7 @@
 {% if trafficSource %}
 <canvas id="trafficSourceChart" style="max-height: 250px;"></canvas>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("widget:loaded", function () {
         const currentTrafficSource = {{ trafficSource.current|json_encode|raw }};
         const previousTrafficSource = {{ trafficSource.previous|json_encode|raw }};
 
