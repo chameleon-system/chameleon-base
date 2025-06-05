@@ -37,7 +37,7 @@
 </div>
 <script>
     document.addEventListener("widget:loaded", function (event) {
-        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\GoogleAnalytics\\DeviceRatioWidget::WIDGET_ID') }}) {
+        if (event?.detail?.widgetId !== "{{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\GoogleAnalytics\\DeviceRatioWidget::WIDGET_ID') }}") {
             return;
         }
 

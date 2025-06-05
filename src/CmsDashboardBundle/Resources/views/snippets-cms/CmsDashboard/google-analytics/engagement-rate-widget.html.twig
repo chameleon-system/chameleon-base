@@ -36,7 +36,7 @@
 <canvas id="engagementChart" style="max-height: 250px;"></canvas>
 <script>
     document.addEventListener("widget:loaded", function (event) {
-        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\GoogleAnalytics\\EngagementRateWidget::WIDGET_ID') }}) {
+        if (event?.detail?.widgetId !== "{{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\GoogleAnalytics\\EngagementRateWidget::WIDGET_ID') }}") {
             return;
         }
 
