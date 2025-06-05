@@ -5,7 +5,7 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
     document.addEventListener("widget:loaded", function (event) {
-        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\GoogleAnalytics\\GeoLocationWidget::WIDGET_ID') }}) {
+        if (event?.detail?.widgetId !== "{{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\GoogleAnalytics\\GeoLocationWidget::WIDGET_ID') }}") {
             return;
         }
 

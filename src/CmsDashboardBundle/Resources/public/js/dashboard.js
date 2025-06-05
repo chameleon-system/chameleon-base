@@ -28,7 +28,7 @@ function prepareWidgetSpinner(widgetContainer) {
     widgetContainer.innerHTML = '<div class="loading-spinner">Lade Widget…</div>';
 }
 
-function updateWidget(data) {
+function updateWidget(data, widgetContainer, widgetSelector) {
     const parsedData = typeof data === "string" ? JSON.parse(data) : data;
     const { htmlTable, dateTime } = parsedData;
     setInnerHtmlWithScripts(widgetContainer, htmlTable);
@@ -77,7 +77,7 @@ function loadWidgetContent(serviceAlias, forceReload = false) {
         return response.json();
     })
     .then(data => {
-        updateWidget(data);
+        updateWidget(data, widgetContainer, widgetSelector);
     })
     .catch(error => {
         console.error("Error loading the widget data:", error);
