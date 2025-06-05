@@ -17,7 +17,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class DashboardWidget implements DashboardWidgetInterface
 {
-
     public function __construct(
         private readonly DashboardCacheService $dashboardCacheService,
         private readonly TranslatorInterface $translator)
@@ -26,7 +25,8 @@ abstract class DashboardWidget implements DashboardWidgetInterface
 
     abstract public function getTitle(): string;
 
-    abstract function getWidgetId(): string;
+    abstract public function getWidgetId(): string;
+
     /**
      * Please note: A reload button is added automatically, so no need to add it here.
      */
@@ -72,7 +72,6 @@ abstract class DashboardWidget implements DashboardWidgetInterface
     #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
     public function getWidgetHtmlAsJson(bool $forceReload = false): JsonResponse
     {
-
         $data = [
             'htmlTable' => $this->getBodyHtml($forceReload),
             'dateTime' => date('d.m.Y H:i'),
