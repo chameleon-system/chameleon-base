@@ -73,7 +73,7 @@ class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGrou
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     public function getFooterIncludes(): array
