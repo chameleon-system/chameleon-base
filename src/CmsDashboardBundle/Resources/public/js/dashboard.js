@@ -5,12 +5,12 @@ function setInnerHtmlWithScripts(container, html) {
     scripts.forEach(oldScript => {
         let newScript = document.createElement("script");
 
-        // Kopiere alle Attribute
+        // copy old script attributes to new script
         Array.from(oldScript.attributes).forEach(attr => {
             newScript.setAttribute(attr.name, attr.value);
         });
 
-        // Inhalt übernehmen
+        // copy old script contents to new script
         if (oldScript.src) {
             newScript.src = oldScript.src;
         } else {
@@ -21,6 +21,40 @@ function setInnerHtmlWithScripts(container, html) {
     });
 }
 
+function prepareWidgetSpinner(widgetContainer) {
+    // prep: spinner & fade-Out
+    widgetContainer.style.transition = 'opacity 0.5s';
+    widgetContainer.style.opacity = 0;
+    widgetContainer.innerHTML = '<div class="loading-spinner">Lade Widget…</div>';
+}
+
+function updateWidget(data) {
+    const parsedData = typeof data === "string" ? JSON.parse(data) : data;
+    const { htmlTable, dateTime } = parsedData;
+    setInnerHtmlWithScripts(widgetContainer, htmlTable);
+
+    // fade-in after replace
+    requestAnimationFrame(() => {
+        widgetContainer.style.opacity = 1;
+    });
+
+    const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
+    if (footerElement) {
+        footerElement.textContent = dateTime;
+    }
+}
+
+function dispatchWidgetLoadedEvent(serviceAlias, widgetContainer) {
+    // dispatch a custom event after the widget is loaded
+    const widgetLoadedEvent = new CustomEvent('widget:loaded', {
+        detail: {
+            widgetId: serviceAlias,
+            widgetElement: widgetContainer
+        }
+    });
+    document.dispatchEvent(widgetLoadedEvent);
+}
+
 function loadWidgetContent(serviceAlias, forceReload = false) {
     const widgetSelector = '#widget-' + serviceAlias.replace('widget-', '');
     const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson${forceReload ? '?forceReload=true' : ''}`;
@@ -28,10 +62,7 @@ function loadWidgetContent(serviceAlias, forceReload = false) {
 
     if (!widgetContainer) return;
 
-    // Vorbereitungen: Spinner & Fade-Out
-    widgetContainer.style.transition = 'opacity 0.5s';
-    widgetContainer.style.opacity = 0;
-    widgetContainer.innerHTML = '<div class="loading-spinner">Lade Widget…</div>';
+    prepareWidgetSpinner(widgetContainer)
 
     fetch(reloadUrl, {
         method: "GET",
@@ -46,34 +77,16 @@ function loadWidgetContent(serviceAlias, forceReload = false) {
         return response.json();
     })
     .then(data => {
-        const parsedData = typeof data === "string" ? JSON.parse(data) : data;
-        const { htmlTable, dateTime } = parsedData;
-        setInnerHtmlWithScripts(widgetContainer, htmlTable);
-
-        // sanfte Einblendung nach dem Ersetzen
-        requestAnimationFrame(() => {
-            widgetContainer.style.opacity = 1;
-        });
-
-        const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
-        if (footerElement) {
-            footerElement.textContent = dateTime;
-        }
+        updateWidget(data);
     })
     .catch(error => {
         console.error("Error loading the widget data:", error);
     })
     .finally( () => {
-        // Dispatch a custom event after the widget is loaded
-        const widgetLoadedEvent = new CustomEvent('widget:loaded', {
-            detail: {
-                widgetId: serviceAlias,
-                widgetElement: widgetContainer
-            }
-        });
-        document.dispatchEvent(widgetLoadedEvent);
+        dispatchWidgetLoadedEvent(serviceAlias, widgetContainer)
     });
 }
+
 function initializeWidgetReload(buttonSelector) {
     const button = document.querySelector(buttonSelector);
 
