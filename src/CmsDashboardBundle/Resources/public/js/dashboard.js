@@ -1,3 +1,92 @@
+function setInnerHtmlWithScripts(container, html) {
+    container.innerHTML = html;
+
+    const scripts = container.querySelectorAll("script");
+    scripts.forEach(oldScript => {
+        let newScript = document.createElement("script");
+
+        // copy old script attributes to new script
+        Array.from(oldScript.attributes).forEach(attr => {
+            newScript.setAttribute(attr.name, attr.value);
+        });
+
+        // copy old script contents to new script
+        if (oldScript.src) {
+            newScript.src = oldScript.src;
+        } else {
+            newScript.textContent = oldScript.textContent;
+        }
+
+        oldScript.replaceWith(newScript);
+    });
+}
+
+function prepareWidgetSpinner(widgetContainer) {
+    // prep: spinner & fade-Out
+    widgetContainer.style.transition = 'opacity 0.5s';
+    widgetContainer.style.opacity = 0;
+    widgetContainer.innerHTML = '<div class="loading-spinner">Lade Widget…</div>';
+}
+
+function updateWidget(data) {
+    const parsedData = typeof data === "string" ? JSON.parse(data) : data;
+    const { htmlTable, dateTime } = parsedData;
+    setInnerHtmlWithScripts(widgetContainer, htmlTable);
+
+    // fade-in after replace
+    requestAnimationFrame(() => {
+        widgetContainer.style.opacity = 1;
+    });
+
+    const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
+    if (footerElement) {
+        footerElement.textContent = dateTime;
+    }
+}
+
+function dispatchWidgetLoadedEvent(serviceAlias, widgetContainer) {
+    // dispatch a custom event after the widget is loaded
+    const widgetLoadedEvent = new CustomEvent('widget:loaded', {
+        detail: {
+            widgetId: serviceAlias,
+            widgetElement: widgetContainer
+        }
+    });
+    document.dispatchEvent(widgetLoadedEvent);
+}
+
+function loadWidgetContent(serviceAlias, forceReload = false) {
+    const widgetSelector = '#widget-' + serviceAlias.replace('widget-', '');
+    const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson${forceReload ? '?forceReload=true' : ''}`;
+    const widgetContainer = document.querySelector(`${widgetSelector} .lazy-widget`);
+
+    if (!widgetContainer) return;
+
+    prepareWidgetSpinner(widgetContainer)
+
+    fetch(reloadUrl, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP-Error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        updateWidget(data);
+    })
+    .catch(error => {
+        console.error("Error loading the widget data:", error);
+    })
+    .finally( () => {
+        dispatchWidgetLoadedEvent(serviceAlias, widgetContainer)
+    });
+}
+
 function initializeWidgetReload(buttonSelector) {
     const button = document.querySelector(buttonSelector);
 
@@ -6,44 +95,7 @@ function initializeWidgetReload(buttonSelector) {
             event.preventDefault();
 
             const serviceAlias = this.getAttribute("data-service-alias");
-            const widgetSelector = '#widget-' + serviceAlias.replace('widget-', '');
-            const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson`;
-
-            fetch(reloadUrl, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP-Error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const parsedData = typeof data === "string" ? JSON.parse(data) : data;
-                    const { htmlTable, dateTime } = parsedData;
-
-                    const targetDiv = document.querySelector(`${widgetSelector} .card-body`);
-                    if (targetDiv) {
-                        targetDiv.style.opacity = 0;
-
-                        setTimeout(() => {
-                            targetDiv.innerHTML = htmlTable;
-                            targetDiv.style.transition = "opacity 0.5s";
-                            targetDiv.style.opacity = 1;
-                        }, 300);
-                    }
-
-                    const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
-                    if (footerElement) {
-                        footerElement.textContent = dateTime;
-                    }
-                })
-                .catch(error => {
-                    console.error("Error loading the widget data:", error);
-                });
+            loadWidgetContent(serviceAlias);
         });
     }
 }
@@ -54,10 +106,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const addWidgetButton = document.getElementById('add-widget-button');
     const widgetCollectionDropdown = document.getElementById('add-widget-collection');
     const widgetCollectionDropdownContainer = document.getElementById('add-widget-collection-container');
-    
+
 
     let isEditMode = false;
     let draggedItem = null;
+
+    // initial async load of all widgets
+    document.querySelectorAll('.lazy-widget').forEach((widgetContainer) => {
+        const serviceAlias = widgetContainer.getAttribute('data-service-alias');
+        loadWidgetContent(serviceAlias);
+    });
+
+    // reload all widgets button
+    const reloadAllButton = document.getElementById('reload-all-widgets');
+    if (reloadAllButton) {
+        reloadAllButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            document.querySelectorAll('.lazy-widget').forEach((widgetContainer) => {
+                const serviceAlias = widgetContainer.getAttribute('data-service-alias');
+                loadWidgetContent(serviceAlias, true);
+            });
+        });
+    }
 
     // Switch edit mode
     toggleEditModeButton.addEventListener('click', () => {

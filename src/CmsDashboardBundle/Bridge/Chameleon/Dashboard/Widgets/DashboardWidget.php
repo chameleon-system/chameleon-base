@@ -10,7 +10,9 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class DashboardWidget implements DashboardWidgetInterface
@@ -25,6 +27,9 @@ abstract class DashboardWidget implements DashboardWidgetInterface
 
     abstract public function getWidgetId(): string;
 
+    /**
+     * Please note: A reload button is added automatically, so no need to add it here.
+     */
     abstract public function getDropdownItems(): array;
 
     /**
@@ -63,6 +68,17 @@ abstract class DashboardWidget implements DashboardWidgetInterface
     }
 
     abstract protected function generateBodyHtml(): string;
+
+    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
+    public function getWidgetHtmlAsJson(bool $forceReload = false): JsonResponse
+    {
+        $data = [
+            'htmlTable' => $this->getBodyHtml($forceReload),
+            'dateTime' => date('d.m.Y H:i'),
+        ];
+
+        return new JsonResponse(json_encode($data));
+    }
 
     protected function getCacheCreationTime(): ?int
     {

@@ -82,6 +82,8 @@
             <tag name="chameleon_system.dashboard_widget" collection="search_console" priority="1"/>
         </service>
 
+        <service id="widget-search-console" alias="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.search_console_widget" public="true" />
+
         <service class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics\EngagementRateWidget"
                  id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.engagement_rate_widget">
             <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
@@ -95,6 +97,8 @@
             <argument id="chameleon_system_security.data_access.rights_data_access" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="google-analytics-engagement-rate" priority="1"/>
         </service>
+
+        <service id="widget-google-analytics-engagement-rate" alias="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.engagement_rate_widget" public="true" />
 
         <service class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics\GeoLocationWidget"
                  id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.geo_location_widget">
@@ -110,6 +114,8 @@
             <tag name="chameleon_system.dashboard_widget" collection="google-analytics-geo-location" priority="2"/>
         </service>
 
+        <service id="widget-google-analytics-geo-location" alias="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.geo_location_widget" public="true" />
+
         <service class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics\UtmTrackingWidget"
                  id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.utm_tracking_widget">
             <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
@@ -123,6 +129,8 @@
             <argument id="chameleon_system_security.data_access.rights_data_access" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="google-analytics-utm-tracking" priority="1"/>
         </service>
+
+        <service id="widget-google-analytics-utm-tracking" alias="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.utm_tracking_widget" public="true" />
 
         <service class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics\ECommerceWidget"
                  id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.e_commerce_widget">
@@ -138,6 +146,8 @@
             <tag name="chameleon_system.dashboard_widget" collection="google-analytics" priority="4"/>
         </service>
 
+        <service id="widget-google-analytics-e-commerce" alias="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.e_commerce_widget" public="true" />
+
         <service class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics\DeviceRatioWidget"
                  id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.device_ratio_widget">
             <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
@@ -152,6 +162,8 @@
             <tag name="chameleon_system.dashboard_widget" collection="google-analytics-device-source" priority="1"/>
         </service>
 
+        <service id="widget-google-analytics-device-ratio" alias="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.device_ratio_widget" public="true" />
+
         <service class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics\TrafficSourceWidget"
                  id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.traffic_source_widget">
             <argument id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_cache_service" type="service"/>
@@ -165,6 +177,8 @@
             <argument id="chameleon_system_security.data_access.rights_data_access" type="service"/>
             <tag name="chameleon_system.dashboard_widget" collection="google-analytics-device-source" priority="2"/>
         </service>
+
+        <service id="widget-google-analytics-traffic-source" alias="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.google_analytics.traffic_source_widget" public="true" />
 
         <service id="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.server_status_widget"
                  class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\ServerStatusDashboardWidget"

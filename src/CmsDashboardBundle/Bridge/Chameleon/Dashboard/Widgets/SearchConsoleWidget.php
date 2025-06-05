@@ -14,7 +14,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SearchConsoleWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-search-console';
+    public const string WIDGET_ID = 'widget-search-console';
 
     public function __construct(
         private readonly DashboardCacheService $dashboardCacheService,

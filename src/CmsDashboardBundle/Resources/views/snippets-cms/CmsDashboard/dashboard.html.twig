@@ -1,9 +1,9 @@
 {#
-    @var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget
-    @var array widgetCollections
-    @var array availableCollections
-    @var bool forceReload
-    @var string headerBackgroundImage
+@var \ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidgetInterface widget
+@var array widgetCollections
+@var array availableCollections
+@var bool forceReload
+@var string headerBackgroundImage
 #}
 <div id="cms-dashboard">
     <div class="card mb-4 bg-image" style="background-image: url('{{ headerBackgroundImage|e('html_attr') }}');">
@@ -13,7 +13,9 @@
                 <form action="">
                     <input type="hidden" name="reload" value="true">
                     <div class="btn-group" role="group">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-sync"></i> {{ 'chameleon_system_cms_dashboard.reload_all'|trans }}</button>
+                        <button type="button" class="btn btn-primary" id="reload-all-widgets">
+                            <i class="fas fa-sync"></i> {{ 'chameleon_system_cms_dashboard.reload_all'|trans }}
+                        </button>
 
                         <button type="button"
                                 id="toggle-edit-mode"
@@ -31,16 +33,16 @@
 
                 <div class="d-flex align-items-center mt-2 d-none" id="add-widget-collection-container">
                     {% if availableCollections|length > 0 %}
-                    <select id="add-widget-collection" class="form-control mr-2">
-                        <option value="">{{ 'chameleon_system_cms_dashboard.widget.collection_selection'|trans }}</option>
-                        {% for collectionId, name in availableCollections %}
-                            {% set collectionNameTranslationKey = 'chameleon_system_cms_dashboard.widget.group_name_' ~ name %}
-                            <option value="{{ name }}">{{ collectionNameTranslationKey|trans }}</option>
-                        {% endfor %}
-                    </select>
-                    <button id="add-widget-button" class="btn btn-success">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                        <select id="add-widget-collection" class="form-control mr-2">
+                            <option value="">{{ 'chameleon_system_cms_dashboard.widget.collection_selection'|trans }}</option>
+                            {% for collectionId, name in availableCollections %}
+                                {% set collectionNameTranslationKey = 'chameleon_system_cms_dashboard.widget.group_name_' ~ name %}
+                                <option value="{{ name }}">{{ collectionNameTranslationKey|trans }}</option>
+                            {% endfor %}
+                        </select>
+                        <button id="add-widget-button" class="btn btn-success">
+                            <i class="fas fa-plus"></i>
+                        </button>
                     {% endif %}
                 </div>
             </div>
@@ -57,60 +59,66 @@
     </div>
     {% else %}
     <div id="sortable-list">
-    {% for widgetCollectionName, widgetCollection in widgetCollections %}
-        {% set useWidgetContainerTemplate = true %}
-        {% for widgetData in widgetCollection %}
-            {% set widget = widgetData.widget %}
-            {% set useWidgetContainerTemplate = widget.useWidgetContainerTemplate %}
-        {% endfor %}
-
-        <div class="{% if useWidgetContainerTemplate %}row {% endif %}dashboard-widget-collection" id="dashboard-widget-collection-{{ widgetCollectionName|e('html_attr') }}" data-id="{{ widgetCollectionName|e('html_attr') }}">
-            {% set widgetCount = widgetCollection|length %}
-            {% if widgetCount == 1 %}
-                {% set colClass = 12 %}
-            {% elseif widgetCount == 2 %}
-                {% set colClass = 6 %}
-            {% elseif widgetCount == 3 %}
-                {% set colClass = 4 %}
-            {% else %}
-                {% set colClass = 4 %}
-            {% endif %}
-
+        {% for widgetCollectionName, widgetCollection in widgetCollections %}
+            {% set useWidgetContainerTemplate = true %}
             {% for widgetData in widgetCollection %}
                 {% set widget = widgetData.widget %}
-                {% if useWidgetContainerTemplate %}
-                <div class="col-{{ colClass }}">
-                    <div class="card mb-4{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" id="widget-{{ widget.widgetId|replace({'widget-' : ''})|escape('html_attr') }}">
-                        {% if loop.last %}
-                        <div class="delete-icon position-absolute top-0 end-0" style="display: none;">
-                            <button class="btn btn-danger delete-collection" title="{{ 'chameleon_system_cms_dashboard.widget.edit_hide'|trans|e('html_attr') }}">×</button>
-                        </div>
-                        {% endif %}
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <span>{{ widget.title }}</span>
-                            {{ include('@ChameleonSystemCmsDashboard/snippets-cms/CmsDashboard/components/widget-dropdown-menu.html.twig') }}
-                        </div>
-                        <div class="card-body p-0">
-                            {{ widget.bodyHtml(forceReload)|raw }}
-                        </div>
-                        {% if widget.footerHtml %}
-                            <div class="card-footer p-0">
-                                {{ widget.footerHtml|raw }}
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-                {% else %}
-                    <div>
-                        <div class="delete-icon position-absolute top-0 end-0" style="display: none;">
-                            <button class="btn btn-danger delete-collection" title="{{ 'chameleon_system_cms_dashboard.widget.edit_hide'|trans|e('html_attr') }}">&times;</button>
-                        </div>
-                        {{ widget.bodyHtml(forceReload)|raw }}
-                    </div>
-                {% endif %}
+                {% set useWidgetContainerTemplate = widget.useWidgetContainerTemplate %}
             {% endfor %}
-        </div>
-    {% endfor %}
+
+            <div class="{% if useWidgetContainerTemplate %}row {% endif %}dashboard-widget-collection" id="dashboard-widget-collection-{{ widgetCollectionName|e('html_attr') }}" data-id="{{ widgetCollectionName|e('html_attr') }}">
+                {% set widgetCount = widgetCollection|length %}
+                {% if widgetCount == 1 %}
+                    {% set colClass = 12 %}
+                {% elseif widgetCount == 2 %}
+                    {% set colClass = 6 %}
+                {% elseif widgetCount == 3 %}
+                    {% set colClass = 4 %}
+                {% else %}
+                    {% set colClass = 4 %}
+                {% endif %}
+
+                {% for widgetData in widgetCollection %}
+                    {% set widget = widgetData.widget %}
+                    {% if useWidgetContainerTemplate %}
+                        <div class="col-{{ colClass }}">
+                            <div class="card mb-4{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" id="widget-{{ widget.widgetId|replace({'widget-' : ''})|escape('html_attr') }}">
+                                {% if loop.last %}
+                                    <div class="delete-icon position-absolute top-0 end-0" style="display: none;">
+                                        <button class="btn btn-danger delete-collection" title="{{ 'chameleon_system_cms_dashboard.widget.edit_hide'|trans|e('html_attr') }}">×</button>
+                                    </div>
+                                {% endif %}
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span>{{ widget.title }}</span>
+                                    {{ include('@ChameleonSystemCmsDashboard/snippets-cms/CmsDashboard/components/widget-dropdown-menu.html.twig') }}
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="lazy-widget"
+                                         data-service-alias="{{ widget.widgetId|escape('html_attr') }}">
+                                        <div class="loading-spinner">Lade Widget…</div>
+                                    </div>
+                                </div>
+                                {% if widget.footerHtml %}
+                                    <div class="card-footer p-0">
+                                        {{ widget.footerHtml|raw }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div>
+                            <div class="delete-icon position-absolute top-0 end-0" style="display: none;">
+                                <button class="btn btn-danger delete-collection" title="{{ 'chameleon_system_cms_dashboard.widget.edit_hide'|trans|e('html_attr') }}">&times;</button>
+                            </div>
+                            <div class="lazy-widget"
+                                 data-service-alias="{{ widget.widgetId|escape('html_attr') }}">
+                                <div class="loading-spinner">Lade Widget…</div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
     </div>
     {% endif %}
 </div>

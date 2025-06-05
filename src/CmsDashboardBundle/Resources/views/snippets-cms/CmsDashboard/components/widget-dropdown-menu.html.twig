@@ -1,31 +1,40 @@
 {# @var ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel dropdownItem #}
 
-{% if widget.dropdownItems is not empty %}
-    <div class="dropdown dropleft">
-        <button class="btn btn-transparent p-0{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v"></i>
-        </button>
-        <div class="dropdown-menu">
-            {% for dropdownItem in widget.dropdownItems %}
-                {% if dropdownItem.url %}
-                    <a class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}" href="{{ dropdownItem.url|escape('html_attr') }}"
-                       {% if dropdownItem.target %}
-                            target="{{ dropdownItem.target|escape('html_attr') }}"
-                       {% endif %}
-                {% else %}
-                    <button class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}"
-                {% endif %}
-                {% for dataAttributeKey, dataAttributeVal in dropdownItem.dataAttributes %}
-                    {{ dataAttributeKey|escape('html_attr') }}="{{ dataAttributeVal|escape('html_attr') }}"
-                {% endfor %}
-                >
-                {{ dropdownItem.title }}
-                {% if dropdownItem.url %}
-                    </a>
-                {% else %}
-                    </button>
-                {% endif %}
+<div class="dropdown dropleft">
+    <button class="btn btn-transparent p-0{% if widget.colorCssClass %} {{ widget.colorCssClass|escape('html_attr') }}{% endif %}" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+    <div class="dropdown-menu">
+
+        {# dynamic items #}
+        {% for dropdownItem in widget.dropdownItems %}
+            {% if dropdownItem.url %}
+                <a class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}" href="{{ dropdownItem.url|escape('html_attr') }}"
+                   {% if dropdownItem.target %}
+                        target="{{ dropdownItem.target|escape('html_attr') }}"
+                   {% endif %}
+            {% else %}
+                <button class="dropdown-item" id="{{ dropdownItem.id|escape('html_attr') }}"
+            {% endif %}
+            {% for dataAttributeKey, dataAttributeVal in dropdownItem.dataAttributes %}
+                {{ dataAttributeKey|escape('html_attr') }}="{{ dataAttributeVal|escape('html_attr') }}"
             {% endfor %}
-        </div>
+            >
+            {{ dropdownItem.title }}
+            {% if dropdownItem.url %}
+                </a>
+            {% else %}
+                </button>
+            {% endif %}
+        {% endfor %}
+
+        {# always available reload button #}
+        <button class="dropdown-item"
+                type="button"
+                data-service-alias="{{ widget.widgetId|e('html_attr') }}"
+                onclick="loadWidgetContent('{{ widget.widgetId|e('js') }}', true)">
+            <i class="fas fa-sync-alt me-2"></i> {{ 'chameleon_system_cms_dashboard.widget.reload_button_label'|trans }}
+        </button>
+
     </div>
-{% endif %}
+</div>

@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TrafficSourceWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-google-analytics-traffic-source';
+    public const string WIDGET_ID = 'widget-google-analytics-traffic-source';
 
     public function __construct(
         private readonly DashboardCacheService $dashboardCacheService,
@@ -78,7 +78,7 @@ class TrafficSourceWidget extends DashboardWidget implements RestrictedByCmsGrou
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     public function getFooterIncludes(): array

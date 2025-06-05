@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class GeoLocationWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-google-analytics-geo-location';
+    public const string WIDGET_ID = 'widget-google-analytics-geo-location';
     private const WIDGET_AS_MAP = false;
     private const MAX_LOCATION_ELEMENTS = 10;
 
@@ -80,7 +80,7 @@ class GeoLocationWidget extends DashboardWidget implements RestrictedByCmsGroupI
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     protected function generateBodyHtml(): string

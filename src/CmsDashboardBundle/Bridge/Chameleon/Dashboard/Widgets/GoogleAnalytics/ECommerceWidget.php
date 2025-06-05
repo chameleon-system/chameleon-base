@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\GoogleAnalytics;
 
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets\DashboardWidget;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\WidgetDropdownItemDataModel;
@@ -11,11 +12,12 @@ use ChameleonSystem\SecurityBundle\DataAccess\RightsDataAccessInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 use ChameleonSystem\SecurityBundle\Voter\RestrictedByCmsGroupInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-google-analytics-e-commerce';
+    public const string WIDGET_ID = 'widget-google-analytics-e-commerce';
 
     public function __construct(
         private readonly DashboardCacheService $dashboardCacheService,
@@ -78,7 +80,7 @@ class ECommerceWidget extends DashboardWidget implements RestrictedByCmsGroupInt
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     public function getFooterIncludes(): array

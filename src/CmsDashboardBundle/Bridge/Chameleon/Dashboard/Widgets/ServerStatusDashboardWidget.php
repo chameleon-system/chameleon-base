@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
-    private const WIDGET_NAME = 'widget-server-status';
+    public const string WIDGET_ID = 'widget-server-status';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -51,31 +51,12 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
 
     public function getDropdownItems(): array
     {
-        $reloadItem = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getWidgetId(),
-            $this->translator->trans('chameleon_system_cms_dashboard.widget.reload_button_label'),
-            ''
-        );
-
-        $reloadItem->addDataAttribute('data-service-alias', $this->getWidgetId());
-
-        return [$reloadItem];
-    }
-
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
-    public function getWidgetHtmlAsJson(): JsonResponse
-    {
-        $data = [
-            'htmlTable' => $this->getBodyHtml(true),
-            'dateTime' => date('d.m.Y H:i'),
-        ];
-
-        return new JsonResponse(json_encode($data));
+        return [];
     }
 
     public function getWidgetId(): string
     {
-        return self::WIDGET_NAME;
+        return self::WIDGET_ID;
     }
 
     protected function generateBodyHtml(): string

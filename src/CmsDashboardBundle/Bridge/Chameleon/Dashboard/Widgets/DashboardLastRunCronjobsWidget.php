@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class DashboardLastRunCronjobsWidget extends DashboardWidget
 {
     private const CRON_JOB_TABLE_NAME = 'cms_cronjobs';
-    private const WIDGET_ID = 'widget-last-run-cronjobs';
+    public const string WIDGET_ID = 'widget-last-run-cronjobs';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -50,26 +50,7 @@ class DashboardLastRunCronjobsWidget extends DashboardWidget
 
     public function getDropdownItems(): array
     {
-        $button = new WidgetDropdownItemDataModel(
-            'reload-'.$this->getWidgetId(),
-            $this->translator->trans('chameleon_system_cms_dashboard.widget.reload_button_label'),
-            ''
-        );
-
-        $button->addDataAttribute('data-service-alias', $this->getWidgetId());
-
-        return [$button];
-    }
-
-    #[ExposeAsApi(description: 'Call this method dynamically via API:/cms/api/dashboard/widget/{widgetServiceId}/getWidgetHtmlAsJson')]
-    public function getWidgetHtmlAsJson(): JsonResponse
-    {
-        $data = [
-            'htmlTable' => $this->getBodyHtml(true),
-            'dateTime' => date('d.m.Y H:i'),
-        ];
-
-        return new JsonResponse(json_encode($data));
+        return [];
     }
 
     protected function generateBodyHtml(): string

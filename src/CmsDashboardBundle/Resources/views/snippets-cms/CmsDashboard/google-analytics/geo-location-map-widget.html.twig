@@ -4,7 +4,11 @@
 <div id="geoLocationChart" style="max-height: 800px;"></div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("widget:loaded", function (event) {
+        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\GoogleAnalytics\\GeoLocationWidget::WIDGET_ID') }}) {
+            return;
+        }
+
         google.charts.load('current', {
             'packages': ['geochart'],
         });

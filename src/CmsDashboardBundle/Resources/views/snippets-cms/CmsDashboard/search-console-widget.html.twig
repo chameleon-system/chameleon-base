@@ -65,7 +65,11 @@
     </table>
 </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("widget:loaded", function (event) {
+        if (event?.detail?.widgetId !== {{ constant('\\ChameleonSystem\\CmsDashboardBundle\\Bridge\\Chameleon\\Dashboard\\Widgets\\SearchConsoleWidget::WIDGET_ID') }}) {
+            return;
+        }
+
         const currentData = {{ searchConsoleCurrentData|json_encode|raw }};
         const previousData = {{ searchConsolePreviousData|json_encode|raw }};
 
