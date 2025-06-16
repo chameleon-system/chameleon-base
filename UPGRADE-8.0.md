@@ -321,6 +321,7 @@ chameleon_system_security:
 - `CMSDeliverFile` removed
 - `CMSGMap` removed
 - `CMSiconList` removed
+- chameleon-system/sanitycheck and chameleon-system/sanitycheckBundle have been removed
 
 ## jQuery in Theme
 
