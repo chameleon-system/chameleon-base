@@ -3,7 +3,9 @@
 namespace ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Dashboard\Widgets;
 
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Attribute\ExposeAsApi;
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Enum\ServerStatusDashboardWidgetCacheTypeEnum;
 use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardCacheService;
+use ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardMemcacheWrapperService;
 use ChameleonSystem\CmsDashboardBundle\DataModel\DatabaseStatusDataModel;
 use ChameleonSystem\CmsDashboardBundle\DataModel\MemcacheStatusDataModel;
 use ChameleonSystem\CmsDashboardBundle\DataModel\MemoryUsageDataModel;
@@ -21,6 +23,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedByCmsGroupInterface
 {
     public const string WIDGET_ID = 'widget-server-status';
+    private const string MEMCACHE_CACHE_SERVICE_ID = 'chameleon_system_cms_cache.memcache_cache';
+    private const string MEMCACHE_SESSION_SERVICE_ID = 'chameleon_system_cms_cache.memcache_session';
 
     public function __construct(
         protected readonly DashboardCacheService $dashboardCacheService,
@@ -28,8 +32,7 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
         protected readonly TranslatorInterface $translator,
         protected readonly SecurityHelperAccess $securityHelperAccess,
         private readonly RightsDataAccessInterface $rightsDataAccess,
-        private readonly \TCMSMemcache $memcacheCache,
-        private readonly \TCMSMemcache $memcacheCacheSession,
+        private readonly DashboardMemcacheWrapperService $memcacheWrapperService,
         private readonly Connection $databaseConnection
     ) {
         parent::__construct($dashboardCacheService, $translator);
@@ -101,10 +104,14 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
     private function getMemcacheStats(string $cacheType): MemcacheStatusDataModel
     {
         try {
-            if ('cache' === $cacheType) {
-                $driver = $this->memcacheCache->getDriver();
+            if (ServerStatusDashboardWidgetCacheTypeEnum::CACHE->value === $cacheType) {
+                $memcacheInstance = $this->memcacheWrapperService->getInstanceByServiceId(self::MEMCACHE_CACHE_SERVICE_ID);
+                $driver = $memcacheInstance?->getDriver();
+            } else if (ServerStatusDashboardWidgetCacheTypeEnum::SESSION->value === $cacheType) {
+                $memcacheInstance = $this->memcacheWrapperService->getInstanceByServiceId(self::MEMCACHE_SESSION_SERVICE_ID);
+                $driver = $memcacheInstance?->getDriver();
             } else {
-                $driver = $this->memcacheCacheSession->getDriver();
+                throw new \InvalidArgumentException('Invalid cache type provided: '.$cacheType);
             }
 
             if (null !== $driver) {
@@ -133,7 +140,11 @@ class ServerStatusDashboardWidget extends DashboardWidget implements RestrictedB
                 );
             }
         } catch (\Throwable $e) {
-            // ignore
+            if ($e instanceof \InvalidArgumentException) {
+                // rethrow invalid cache type exception
+                throw $e;
+            }
+            // ignore other errors, return default values
         }
 
         return new MemcacheStatusDataModel(
