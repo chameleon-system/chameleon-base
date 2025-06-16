@@ -188,10 +188,14 @@
             <argument type="service" id="chameleon_system_core.translator"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
             <argument type="service" id="chameleon_system_security.data_access.rights_data_access"/>
-            <argument type="service" id="chameleon_system_cms_cache.memcache_cache"/>
-            <argument type="service" id="chameleon_system_cms_cache.memcache_session"/>
+            <argument type="service" id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_memcache_wrapper_service"/>
             <argument type="service" id="database_connection"/>
             <tag name="chameleon_system.dashboard_widget" collection="system" priority="1"/>
+        </service>
+
+        <service id="chameleon_system_cms_dashboard.bridge_chameleon_service.dashboard_memcache_wrapper_service"
+                 class="ChameleonSystem\CmsDashboardBundle\Bridge\Chameleon\Service\DashboardMemcacheWrapperService"
+                 public="true">
         </service>
 
         <service id="widget-server-status" alias="chameleon_system_cms_dashboard.bridge_chameleon_dashboard_widgets.server_status_widget" public="true"/>
