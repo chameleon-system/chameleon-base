@@ -6,23 +6,55 @@ class FontAwesomeService implements FontAwesomeServiceInterface
 {
     public function filterFontAwesomeClasses(array $cssClassNames): array
     {
-        if (false === $this->hasFontAwesomeClass($cssClassNames)) {
-            return $cssClassNames;
-        }
-
         $filteredCssClassNames = [];
 
         foreach ($cssClassNames as $cssClassName) {
-            if (true === \str_contains($cssClassName, ':before')) {
-                $prefix = '.fas';
-                if ($this->isFontAwesomeBrand($cssClassName)) {
-                    $prefix = '.fab';
-                }
-                $filteredCssClassNames[] = $prefix.' '.$cssClassName;
+            if ($this->isExcludedClass($cssClassName)) {
+                continue;
             }
+
+            $prefix = '.fas';
+            if ($this->isFontAwesomeBrand($cssClassName)) {
+                $prefix = '.fab';
+            }
+
+            $filteredCssClassNames[] = $prefix.' .'.$cssClassName;
         }
 
         return $filteredCssClassNames;
+    }
+
+    private function isExcludedClass(string $className): bool
+    {
+        $className = ltrim($className, '.');
+
+        $excluded = [
+            'fa', 'fas', 'far', 'fab', 'fal', 'fad',
+            'fa-fw', 'fa-ul', 'fa-li', 'fa-border', 'fa-inverse',
+            'fa-stack', 'fa-stack-1x', 'fa-stack-2x',
+            'fa-pull-left', 'fa-pull-right',
+            'ul', 'li', 'table', 'xs', 'sm', 'md', 'lg', 'xl',
+        ];
+
+        $excludedPatterns = [
+            '/^fa-\d+x$/',
+            '/^fa-(spin|pulse)$/',
+            '/^fa-flip(-horizontal|-vertical|-both)?$/',
+            '/^fa-rotate-\d+$/',
+            '/^fa-(xs|sm|lg|xl)$/',
+        ];
+
+        if (in_array($className, $excluded, true)) {
+            return true;
+        }
+
+        foreach ($excludedPatterns as $pattern) {
+            if (preg_match($pattern, $className)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function hasFontAwesomeClass(array $cssClassNames): bool
