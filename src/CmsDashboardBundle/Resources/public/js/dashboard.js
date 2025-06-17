@@ -30,13 +30,18 @@ function prepareWidgetSpinner(widgetContainer) {
 
 function updateWidget(data, widgetContainer, widgetSelector) {
     const parsedData = typeof data === "string" ? JSON.parse(data) : data;
-    const { htmlTable, dateTime } = parsedData;
+    const { htmlTable, dateTime, title } = parsedData;
     setInnerHtmlWithScripts(widgetContainer, htmlTable);
 
     // fade-in after replace
     requestAnimationFrame(() => {
         widgetContainer.style.opacity = 1;
     });
+
+    const titleElement = document.querySelector(`${widgetSelector} .widget-title`);
+    if (titleElement) {
+        titleElement.textContent = title;
+    }
 
     const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
     if (footerElement) {

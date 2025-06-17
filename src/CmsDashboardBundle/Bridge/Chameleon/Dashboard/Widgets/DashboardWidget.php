@@ -75,6 +75,7 @@ abstract class DashboardWidget implements DashboardWidgetInterface
         $data = [
             'htmlTable' => $this->getBodyHtml($forceReload),
             'dateTime' => date('d.m.Y H:i'),
+            'title' => $this->getTitle(),
         ];
 
         return new JsonResponse(json_encode($data));
