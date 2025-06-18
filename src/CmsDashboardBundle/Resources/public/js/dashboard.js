@@ -30,13 +30,18 @@ function prepareWidgetSpinner(widgetContainer) {
 
 function updateWidget(data, widgetContainer, widgetSelector) {
     const parsedData = typeof data === "string" ? JSON.parse(data) : data;
-    const { htmlTable, dateTime } = parsedData;
+    const { htmlTable, dateTime, title } = parsedData;
     setInnerHtmlWithScripts(widgetContainer, htmlTable);
 
     // fade-in after replace
     requestAnimationFrame(() => {
         widgetContainer.style.opacity = 1;
     });
+
+    const titleElement = document.querySelector(`${widgetSelector} .widget-title`);
+    if (titleElement) {
+        titleElement.textContent = title;
+    }
 
     const footerElement = document.querySelector(`${widgetSelector} .card-footer .widget-timestamp`);
     if (footerElement) {
@@ -60,7 +65,9 @@ function loadWidgetContent(serviceAlias, forceReload = false) {
     const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson${forceReload ? '?forceReload=true' : ''}`;
     const widgetContainer = document.querySelector(`${widgetSelector} .lazy-widget`);
 
-    if (!widgetContainer) return;
+    if (!widgetContainer) {
+        return;
+    }
 
     prepareWidgetSpinner(widgetContainer)
 
