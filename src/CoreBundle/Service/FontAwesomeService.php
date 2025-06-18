@@ -33,7 +33,10 @@ class FontAwesomeService implements FontAwesomeServiceInterface
             'fa-fw', 'fa-ul', 'fa-li', 'fa-border', 'fa-inverse',
             'fa-stack', 'fa-stack-1x', 'fa-stack-2x',
             'fa-pull-left', 'fa-pull-right',
-            'ul', 'li', 'table', 'xs', 'sm', 'md', 'lg', 'xl',
+            'fa-lg', 'fa-10x', 'fa-9x', 'fa-8x', 'fa-7x', 'fa-6x',
+            'fa-5x', 'fa-4x', 'fa-3x', 'fa-2x', 'fa-1x',
+            'p', 'th', 'td', 'tr', 'thead', 'tbody', 'ul', 'li', 'table', 'ol', 'a',
+            'sr-only', 'sr-only-focusable',
         ];
 
         $excludedPatterns = [
@@ -41,7 +44,7 @@ class FontAwesomeService implements FontAwesomeServiceInterface
             '/^fa-(spin|pulse)$/',
             '/^fa-flip(-horizontal|-vertical|-both)?$/',
             '/^fa-rotate-\d+$/',
-            '/^fa-(xs|sm|lg|xl)$/',
+            '/^fa-(xs|sm|md|lg|xl)$/',
         ];
 
         if (in_array($className, $excluded, true)) {
@@ -67,6 +70,23 @@ class FontAwesomeService implements FontAwesomeServiceInterface
         $cssClass = \str_replace([':before', '.'], '', $cssClass);
 
         $fontAwesome5brands = [
+            'fa-nintendo-switch',
+            'fa-font-awesome-logo-full',
+            'fa-creative-commons',
+            'fa-creative-commons-by',
+            'fa-creative-commons-nc',
+            'fa-creative-commons-nc-eu',
+            'fa-creative-commons-nc-jp',
+            'fa-creative-commons-nd',
+            'fa-creative-commons-pd',
+            'fa-creative-commons-pd-alt',
+            'fa-creative-commons-sa',
+            'fa-creative-commons-sampling',
+            'fa-creative-commons-sampling-plus',
+            'fa-creative-commons-share',
+            'fa-creative-commons-zero',
+            'fa-creative-commons-remix',
+            'fa-critical-role',
             'fa-zhihu',
             'fa-youtube-square',
             'fa-youtube',
