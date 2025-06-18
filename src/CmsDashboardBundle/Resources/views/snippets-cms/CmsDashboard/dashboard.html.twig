@@ -106,7 +106,7 @@
                             </div>
                         </div>
                     {% else %}
-                        <div>
+                        <div id="widget-{{ widget.widgetId|replace({'widget-' : ''})|escape('html_attr') }}">
                             <div class="delete-icon position-absolute top-0 end-0" style="display: none;">
                                 <button class="btn btn-danger delete-collection" title="{{ 'chameleon_system_cms_dashboard.widget.edit_hide'|trans|e('html_attr') }}">&times;</button>
                             </div>

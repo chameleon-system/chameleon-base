@@ -65,7 +65,9 @@ function loadWidgetContent(serviceAlias, forceReload = false) {
     const reloadUrl = `/cms/api/dashboard/widget/${serviceAlias}/getWidgetHtmlAsJson${forceReload ? '?forceReload=true' : ''}`;
     const widgetContainer = document.querySelector(`${widgetSelector} .lazy-widget`);
 
-    if (!widgetContainer) return;
+    if (!widgetContainer) {
+        return;
+    }
 
     prepareWidgetSpinner(widgetContainer)
 
