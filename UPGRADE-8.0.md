@@ -73,8 +73,12 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 
 # Twig Changes
 
+## Accessing The Twig Environment
+
 The twig environment service now is inlined.
 To access it without service injection, you need to use ServiceLocator::get('chameleon_system_snippet_renderer.snippet_renderer')::getTwigEnvironment() as wrapper.
+
+## Updates To Error Routing
 
 Change the twig error routing from `config/routing_dev.yml`
 
@@ -91,6 +95,14 @@ _errors:
     resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
     prefix: /_error
 ```
+
+## Twig Namespace Changes For Bundles
+
+Twig namespaces in Symfony 6.4 have changed. Check out https://symfony.com/doc/6.4/templates.html#bundle-templates for more information.
+
+Here's [an exmaple MR](https://git.esono.de/customer/baumit/-/merge_requests/1842) that fixes a problem in this regard.
+
+
 # New mandatory bundles
 
 - `AppKernel::registerBundles` now needs the return type "iterable".
