@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\CoreBundle\Service;
 
+// fontawesome version 5.8.1
 class FontAwesomeService implements FontAwesomeServiceInterface
 {
     public function filterFontAwesomeClasses(array $cssClassNames): array
