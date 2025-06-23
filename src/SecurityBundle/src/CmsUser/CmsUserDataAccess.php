@@ -23,9 +23,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
 
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        // maybe this should look like this: But I cannot test this at this moment as this method needed to be added during a symfony upgrade
-        // $this->connection->update('cms_user', ['crypted_pw' => $newHashedPassword], ['id' => $user->getId()]);
-        throw new \RuntimeException('Not implemented');
+        $this->connection->update('cms_user', ['crypted_pw' => $newHashedPassword], ['id' => $user->getId()]);
     }
 
     public function refreshUser(UserInterface $user): CmsUserModel|UserInterface
