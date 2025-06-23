@@ -25,6 +25,19 @@ class MarkdownExtension extends AbstractExtension
 
     public function parseMarkdown(?string $content, ?array $replaceVariables = null): string
     {
-        return $this->markdownParser->parse($content);
+        if (null === $content) {
+            return '';
+        }
+
+        $html = $this->markdownParser->parse($content);
+
+        // surround table with wrapper div to make it easier to style (for example horizontal scrolling)
+        $html = preg_replace_callback(
+            '#<table.*?>.*?</table>#is',
+            fn($matches) => '<div class="markdown-table-wrapper">' . $matches[0] . '</div>',
+            $html
+        );
+
+        return $html;
     }
 }
