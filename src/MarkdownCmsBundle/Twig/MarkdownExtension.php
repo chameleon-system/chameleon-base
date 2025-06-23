@@ -34,7 +34,7 @@ class MarkdownExtension extends AbstractExtension
         // surround table with wrapper div to make it easier to style (for example horizontal scrolling)
         $html = preg_replace_callback(
             '#<table.*?>.*?</table>#is',
-            fn($matches) => '<div class="markdown-table-wrapper">' . $matches[0] . '</div>',
+            fn ($matches) => '<div class="markdown-table-wrapper">'.$matches[0].'</div>',
             $html
         );
 
