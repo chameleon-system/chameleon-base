@@ -259,7 +259,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
                 $this->connection->insert('cms_user_sso', $ssoData);
             }
 
-            foreach ($user->getAvailableEditLanguages() as $id => $code) {
+            foreach ($user->getAvailableEditLanguages() as $code => $id) {
                 $this->connection->insert('cms_user_cms_language_mlt', [
                     'source_id' => $user->getId(),
                     'target_id' => $id,
