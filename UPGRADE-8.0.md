@@ -104,13 +104,17 @@ Twig namespaces in Symfony 6.4 have changed. Check out https://symfony.com/doc/6
 
 Old:
 
+```
 {{ source('@MyBundle/Resources/public/icons/logo.svg')|raw }}
+```
 
 actual path to file: src/to/MyBundle/Resources/public/icons/logo.svg
 
 New:
 
+```
 {{ source('@MyBundle/icons/logo.svg')|raw }}
+```
 
 actual path to file: src/to/MyBundle/Resources/views/icons/logo.svg
 
