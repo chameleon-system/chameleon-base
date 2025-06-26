@@ -100,8 +100,19 @@ _errors:
 
 Twig namespaces in Symfony 6.4 have changed. Check out https://symfony.com/doc/6.4/templates.html#bundle-templates for more information.
 
-Here's [an exmaple MR](https://git.esono.de/customer/baumit/-/merge_requests/1842) that fixes a problem in this regard.
+### Example
 
+Old:
+
+{{ source('@MyBundle/Resources/public/icons/logo.svg')|raw }}
+
+actual path to file: src/to/MyBundle/Resources/public/icons/logo.svg
+
+New:
+
+{{ source('@MyBundle/icons/logo.svg')|raw }}
+
+actual path to file: src/to/MyBundle/Resources/views/icons/logo.svg
 
 # New mandatory bundles
 
