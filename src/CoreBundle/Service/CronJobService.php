@@ -68,9 +68,6 @@ class CronJobService implements CronJobServiceInterface
         }
     }
 
-    /**
-     * load a cron job class (TCMSCronJob) and executes it (calls "RunScript").
-     */
     protected function runCronJob(\TdbCmsCronjobs $cmsCronjobs, bool $forceExecution = false): void
     {
         $cronjob = $this->cronJobClassFactory($cmsCronjobs);
