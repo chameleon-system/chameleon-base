@@ -485,7 +485,7 @@ class imageMagick
 
     protected function getImageOrientation(): int
     {
-        $imagick = new Imagick($this->oSourceFile->sPath);
+        $imagick = new \Imagick($this->oSourceFile->sPath);
 
         return $imagick->getImageOrientation();
     }
