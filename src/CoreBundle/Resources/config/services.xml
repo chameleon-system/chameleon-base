@@ -205,6 +205,10 @@
             </call>
         </service>
 
+        <service class="ChameleonSystem\CoreBundle\Controller\CronJobController" id="chameleon_system_core.controller.cron_job_controller" public="true">
+            <argument type="service" id="chameleon_system_core.service.cron_job_service" />
+        </service>
+
         <service id="chameleon_system_core.image_not_found_controller" class="ChameleonSystem\CoreBundle\Controller\ImageNotFoundController" public="true">
         </service>
 
@@ -1012,5 +1016,18 @@
         <service id="chameleon_system_core.service.log_view_service" class="ChameleonSystem\CoreBundle\Service\LogViewerService" public="true">
             <argument type="service" id="parameter_bag"/>
         </service>
+
+        <service id="chameleon_system_core.service.cron_job_service" class="ChameleonSystem\CoreBundle\Service\CronJobService">
+            <argument type="service" id="chameleon_system_core.cronjob.cronjob_factory" />
+            <argument type="service" id="chameleon_system_core.cronjob.cronjob_enabling_service" />
+            <argument type="service" id="logger" />
+            <argument type="service" id="translator"  />
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_core.data_access.cron_job_data_access" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_view_renderer.view_renderer" />
+        </service>
+
     </services>
 </container>

@@ -1,0 +1,22 @@
+{% extends 'BackendLayout/base.html.twig' %}
+
+{% block title %}
+    <title>Cronjobs</title>
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+    <main>
+        {% if cronjobMessages | length > 0 %}
+            {% for cronjobMessage in cronjobMessages %}
+                {% if cronjobMessage %}
+            <div class="alert alert-info">
+                {{ cronjobMessage }}
+            </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </main>
+{% endblock %}
