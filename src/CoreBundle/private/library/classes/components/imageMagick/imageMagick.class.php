@@ -485,9 +485,21 @@ class imageMagick
 
     protected function getImageOrientation(): ?string
     {
-        $exifData = $this->getExifData();
+        if (function_exists('exif_read_data')) {
+            $exif = @exif_read_data($this->oSourceFile->sPath);
+            if (!empty($exif['Orientation'])) {
+                return (string) $exif['Orientation'];
+            }
+        }
 
-        return $exifData['Orientation'] ?? null;
+        $command = $this->sImageMagickDir.'/identify -format "%[EXIF:Orientation]" '.escapeshellarg($this->oSourceFile->sPath);
+        exec($command, $output, $returnCode);
+
+        if (0 === $returnCode && isset($output[0])) {
+            return trim($output[0]) ?: null;
+        }
+
+        return null;
     }
 
     protected function getRotationCommandForOrientation(string $orientation): ?string
@@ -533,6 +545,9 @@ class imageMagick
         return $command;
     }
 
+    /**
+     * Returns certain exif data, but at high performance cost.
+     */
     public function getExifData(): ?array
     {
         $command = $this->sImageMagickDir.'/identify -verbose '.escapeshellarg($this->oSourceFile->sPath);
