@@ -439,7 +439,7 @@ class imageMagick
 
         $orientation = $this->getImageOrientation();
 
-        if (0 !== $orientation) {
+        if (null !== $orientation) {
             $aParameter[] = $this->getRotationCommandForOrientation($orientation);
         }
 
@@ -483,11 +483,23 @@ class imageMagick
         return $returnVal;
     }
 
-    protected function getImageOrientation(): int
+    protected function getImageOrientation(): ?string
     {
-        $imagick = new \Imagick($this->oSourceFile->sPath);
+        if (function_exists('exif_read_data')) {
+            $exif = @exif_read_data($this->oSourceFile->sPath);
+            if (!empty($exif['Orientation'])) {
+                return (string) $exif['Orientation'];
+            }
+        }
 
-        return $imagick->getImageOrientation();
+        $command = $this->sImageMagickDir.'/identify -format "%[EXIF:Orientation]" '.escapeshellarg($this->oSourceFile->sPath);
+        exec($command, $output, $returnCode);
+
+        if (0 === $returnCode && isset($output[0])) {
+            return trim($output[0]) ?: null;
+        }
+
+        return null;
     }
 
     protected function getRotationCommandForOrientation(string $orientation): ?string
