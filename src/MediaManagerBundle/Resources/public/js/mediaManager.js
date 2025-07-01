@@ -20,7 +20,8 @@
                 uploaderUrlTemplate: '',
                 autoCompleteSearchUrl: '',
                 uploaderReplaceMediaItemUrl: '',
-                postSelectUrl: ''
+                postSelectUrl: '',
+                mediaItemFindUsagesUrl: ''
             },
             startDraggingDistance: 20,
             splitSizes: [20, 80],
@@ -1268,6 +1269,29 @@
                     },
                     success: function (jsonData) {
                         eval(self.sanitizeCallbackFunctionName(self.state.pickImageCallback) + '("' + mediaItemContainer.data('id') + '", "' + cropId + '")');
+                    },
+                    dataType: 'JSON'
+                });
+
+                evt.preventDefault();
+            });
+            $('.load-usages', self.editContainer).on('click', function(evt){
+                CHAMELEON.CORE.showProcessingModal();
+                var mediaItemContainer = $(this).parents('.cms-media-item');
+
+                $.ajax({
+                    type: "GET",
+                    async: true,
+                    url: self.settings.urls.mediaItemFindUsagesUrl,
+                    data: {
+                        'mediaItemId': mediaItemContainer.data('id')
+                    },
+                    error: function (responseData) {
+                        self.showErrorFromAjaxResponse();
+                    },
+                    success: function (jsonData) {
+                        CHAMELEON.CORE.hideProcessingModal();
+                        $('#usages-list', self.editContainer).html(jsonData.contentHtml);
                     },
                     dataType: 'JSON'
                 });

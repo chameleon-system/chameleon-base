@@ -281,6 +281,16 @@
                 <source>chameleon_system_core.text.copy_image_url_to_clipboard</source>
                 <target>Kopiere Bild URL in die Zwischenablage</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_media_manager.delete.usage_table_no_usages">
+                <source>chameleon_system_media_manager.delete.usage_table_no_usages</source>
+                <target>Es wurden keine Verwendungen gefunden.</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_core.table_editor_media.load_usages">
+                <source>chameleon_system_core.table_editor_media.load_usages</source>
+                <target>Verwendungen laden</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

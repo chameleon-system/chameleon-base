@@ -60,14 +60,12 @@
 
     <hr>
     <h3 class="usage-headline">{{ 'chameleon_system_core.table_editor_media.media_usage' | trans }}</h3>
+    <div class="row pb-1 pt-1"><button class="load-usages">{{ 'chameleon_system_core.table_editor_media.load_usages' | trans }}</button></div>
     {% if usagesErrorMessage %}
         <div class="alert alert-danger">{{ usagesErrorMessage }}</div>
     {% endif %}
-    {% if usages | length > 0 %}
-        {% include 'mediaManager/usages/usageTable.html.twig' with {'usages': usages} %}
-    {% else %}
-        <p>{{ 'chameleon_system_media_manager.usages.no_usages_yet' | trans }}</p>
-    {% endif %}
+
+    <div id="usages-list"></div>
 
     {% for additionalDetailViewTemplate in additionalDetailViewTemplates %}
         {% include(additionalDetailViewTemplate) %}

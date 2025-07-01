@@ -34,6 +34,7 @@ use ChameleonSystem\MediaManager\JavascriptPlugin\JavascriptPluginConfigurationU
 use ChameleonSystem\MediaManager\JavascriptPlugin\JavascriptPluginMessage;
 use ChameleonSystem\MediaManager\JavascriptPlugin\JavascriptPluginRenderedContent;
 use ChameleonSystem\MediaManager\JavascriptPlugin\MediaTreeNodeJsonObject;
+use ChameleonSystem\MediaManager\MediaItemChainUsageFinder;
 use ChameleonSystem\MediaManager\MediaManagerExtensionCollection;
 use ChameleonSystem\MediaManager\MediaManagerListState;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -53,83 +54,22 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     public const URL_TEMPLATE_PLACEHOLDER_ID = '--id--';
 
-    /**
-     * @var MediaTreeDataAccessInterface
-     */
-    private $mediaTreeDataAccess;
-
-    /**
-     * @var MediaItemDataAccessInterface
-     */
-    private $mediaItemDataAccess;
-
-    /**
-     * @var UrlUtil
-     */
-    private $urlUtil;
-
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-
-    /**
-     * @var MediaManagerListStateServiceInterface
-     */
-    private $mediaManagerListStateService;
-
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
-
-    /**
-     * @var MediaManagerListRequestFactoryInterface
-     */
-    private $mediaManagerListRequestService;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var MediaManagerExtensionCollection
-     */
-    private $mediaManagerExtensionCollection;
-
-    /**
-     * @var ResponseVariableReplacerInterface
-     */
-    private $responseVariableReplacer;
-    private LoggerInterface $logger;
-
     public function __construct(
-        MediaTreeDataAccessInterface $mediaTreeDataAccess,
-        MediaItemDataAccessInterface $mediaItemDataAccess,
-        UrlUtil $urlUtil,
-        InputFilterUtilInterface $inputFilterUtil,
-        MediaManagerListStateServiceInterface $mediaManagerListStateService,
-        LanguageServiceInterface $languageService,
-        MediaManagerListRequestFactoryInterface $mediaManagerListRequestService,
-        TranslatorInterface $translator,
-        MediaManagerExtensionCollection $mediaManagerExtensionCollection,
-        ResponseVariableReplacerInterface $responseVariableReplacer,
-        LoggerInterface $logger,
-        readonly private BackendSessionInterface $backendSession
+        private readonly MediaTreeDataAccessInterface $mediaTreeDataAccess,
+        private readonly MediaItemDataAccessInterface $mediaItemDataAccess,
+        private readonly UrlUtil $urlUtil,
+        private readonly InputFilterUtilInterface $inputFilterUtil,
+        private readonly MediaManagerListStateServiceInterface $mediaManagerListStateService,
+        private readonly LanguageServiceInterface $languageService,
+        private readonly MediaManagerListRequestFactoryInterface $mediaManagerListRequestService,
+        private readonly TranslatorInterface $translator,
+        private readonly MediaManagerExtensionCollection $mediaManagerExtensionCollection,
+        private readonly ResponseVariableReplacerInterface $responseVariableReplacer,
+        private readonly LoggerInterface $logger,
+        readonly private BackendSessionInterface $backendSession,
+        readonly private MediaItemChainUsageFinder $mediaItemChainUsageFinder
     ) {
         parent::__construct();
-        $this->mediaTreeDataAccess = $mediaTreeDataAccess;
-        $this->mediaItemDataAccess = $mediaItemDataAccess;
-        $this->urlUtil = $urlUtil;
-        $this->inputFilterUtil = $inputFilterUtil;
-        $this->mediaManagerListStateService = $mediaManagerListStateService;
-        $this->languageService = $languageService;
-        $this->mediaManagerListRequestService = $mediaManagerListRequestService;
-        $this->translator = $translator;
-        $this->mediaManagerExtensionCollection = $mediaManagerExtensionCollection;
-        $this->responseVariableReplacer = $responseVariableReplacer;
-        $this->logger = $logger;
     }
 
     /**
@@ -263,6 +203,8 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         );
         $configurationUrls->autoCompleteSearchUrl = $this->getUrlToModuleFunction('autoCompleteSearch');
         $configurationUrls->postSelectUrl = $this->getUrlToModuleFunction('postSelectHook');
+        $configurationUrls->mediaItemFindUsagesUrl = $this->getUrlToModuleFunction('ajaxMediaItemFindUsages');
+
 
         return $configurationUrls;
     }
@@ -398,10 +340,26 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         ).'"></script>';
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
         $includes[] = '<script src="'.\TGlobal::GetStaticURL(
-            '/bundles/chameleonsystemmediamanager/js/mediaManager.js?v=1'
+            '/bundles/chameleonsystemmediamanager/js/mediaManager.js?v='.microtime(true)
         ).'"></script>';
 
         return $includes;
+    }
+
+    public function ajaxMediaItemFindUsages(){
+        $mediaItemId = $this->inputFilterUtil->getFilteredInput(self::MEDIA_ITEM_URL_NAME);
+
+        $mediaItem = $this->mediaItemDataAccess->getMediaItem($mediaItemId, null);
+
+        $usagesObjectList = $this->mediaItemChainUsageFinder->findUsages($mediaItem);
+
+        $viewRenderer = $this->createViewRendererInstance();
+        $viewRenderer->AddSourceObject('usages', $usagesObjectList);
+
+        $listReturn = new JavascriptPluginRenderedContent();
+        $listReturn->contentHtml = $viewRenderer->Render('mediaManager/usages/ajax-usages.html.twig');
+
+        $this->returnAsAjaxResponse($listReturn);
     }
 
     /**
@@ -423,6 +381,7 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->methodCallAllowed[] = 'moveMediaTreeNode';
         $this->methodCallAllowed[] = 'insertMediaTreeNode';
         $this->methodCallAllowed[] = 'deleteMediaTreeNode';
+        $this->methodCallAllowed[] = 'ajaxMediaItemFindUsages';
     }
 
     /**
@@ -634,7 +593,6 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     protected function getDetailMappers()
     {
         $detailMappers = [
-            'chameleon_system_media_manager.backend_module_mapper.media_item_usages',
             'chameleon_system_media_manager.backend_module_mapper.pick_images',
         ];
 

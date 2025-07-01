@@ -125,4 +125,6 @@ class JavascriptPluginConfigurationUrls
      * @var string|null URL called after an image was picked
      */
     public $postSelectUrl;
+
+    public $mediaItemFindUsagesUrl;
 }
