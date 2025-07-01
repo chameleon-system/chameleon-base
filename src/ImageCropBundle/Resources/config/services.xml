@@ -75,14 +75,6 @@
             <argument type="service" id="chameleon_system_core.util.input_filter"/>
         </service>
 
-        <service id="chameleon_system_image_crop.mapper.media_manager_media_item_crops"
-                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\MediaManagerMediaItemCropsMapper">
-            <tag name="chameleon_system.mapper"/>
-
-            <argument type="service" id="chameleon_system_image_crop.image_crop_data_access"/>
-            <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
-        </service>
-
         <service id="chameleon_system_image_crop.mapper.media_manager_image_crop_editor_url"
                  class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\ImageCropEditorUrlMapper">
             <tag name="chameleon_system.mapper"/>
@@ -101,11 +93,5 @@
                  class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Extension\MediaManagerImageCropExtension">
             <tag name="chameleon_system_media_manager.extension"/>
         </service>
-
-        <service id="chameleon_system_image_crop.mapper.usages_add_crops_mapper"
-                 class="ChameleonSystem\ImageCropBundle\Bridge\Chameleon\MediaManager\Mapper\MediaManagerMediaItemUsagesAddCropsMapper">
-            <tag name="chameleon_system.mapper"/>
-        </service>
-
     </services>
 </container>

@@ -3,53 +3,7 @@
     <hr>
     <div class="versions">
         <h2 class="h3">{{ 'chameleon_system_image_crop.media_manager_crops.headline' | trans }}</h2>
-        {% if crops | length > 0 %}
-            <table class="version-list">
-                {% for crop in crops %}
-                    {# crop \ChameleonSystem\MediaManagerDataModel\ImageCropDataModel #}
-                    <tr>
-                        <td class="image">
-                            <img src=" {{ mediaItem.id | imageUrlWithCropFallbackSize(crop.id, 100, 100) }}">
-                        </td>
-                        <td>
-                            <div class="name"><span
-                                        class="version-name">{{ crop.name | default(crop.imageCropPreset.name) }}</span>
-                                ({{ crop.imageCropPreset.width | default(crop.width) }}
-                                x{{ crop.imageCropPreset.height | default(crop.height) }}
-                                px){% if crop.name and crop.imageCropPreset.name %} - {{ crop.imageCropPreset.name }}{% endif %}
-                            </div>
-                            {% if accessRightsCrop.edit %}<a class="btn btn-xs btn-default edit-version"
-                                                             href="{{ createCropUrl }}&{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_CROP_ID') }}={{ crop.id }}">
-                                <span class="fas fa-expand"></span> {{ 'chameleon_system_image_crop.media_manager_crops.edit' | trans }}
-                                </a>{% endif %}
-
-                            {% if accessRightsCrop.delete %}<a class="btn btn-xs btn-default delete-version"
-                                                             href="{{ deleteCropUrl }}&{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_CROP_ID') }}={{ crop.id }}">
-                                <span class="fas fa-trash-alt"></span> {{ 'chameleon_system_image_crop.media_manager_crops.delete' | trans }}
-                                </a>{% endif %}
-
-                            {% if pickImageMode and pickImageWithCrop %}
-                                <a class="btn btn-xs btn-default pick-version" data-crop-id="{{ crop.id }}"><span
-                                            class="fas fa-check-circle"></span> {{ 'chameleon_system_media_manager.list_actions.select' | trans }}
-                                </a>
-                            {% endif %}
-
-                            {% if usagesByCrop[crop.id] | length > 0 %}
-
-                                <div class="h4 usage-headline">{{ 'chameleon_system_core.table_editor_media.media_usage' | trans }}</div>
-
-                                {% include 'mediaManager/usages/usageTable.html.twig' with {'usages': usagesByCrop[crop.id]} %}
-
-                            {% endif %}
-
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-
-        {% else %}
-            <p>{{ 'chameleon_system_image_crop.media_manager_crops.no_crops_yet' | trans }}</p>
-        {% endif %}
-
+        <div class="row pb-1 pt-1"><button class="load-crops">{{ 'chameleon_system_image_crop.media_manager_crops.load_crops' | trans }}</button></div>
+        <div id="crops-list"></div>
     </div>
 {% endif %}

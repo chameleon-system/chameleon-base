@@ -23,8 +23,6 @@ class MediaManagerImageCropExtension implements MediaManagerExtensionInterface
         return [
             'chameleon_system_image_crop.mapper.media_manager_image_crop_access_rights',
             'chameleon_system_image_crop.mapper.media_manager_image_crop_editor_url',
-            'chameleon_system_image_crop.mapper.media_manager_media_item_crops',
-            'chameleon_system_image_crop.mapper.usages_add_crops_mapper',
         ];
     }
 

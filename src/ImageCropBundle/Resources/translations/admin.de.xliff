@@ -101,6 +101,11 @@
                 <source>chameleon_system_image_crop.editor.crop_not_deleted</source>
                 <target>Ausschnitt konnte nicht gelöscht werden.</target>
             </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.load_crops">
+                <source>chameleon_system_image_crop.media_manager_crops.load_crops</source>
+                <target>Ausschnitte laden</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

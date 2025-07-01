@@ -1298,6 +1298,29 @@
 
                 evt.preventDefault();
             });
+            $('.load-crops', self.editContainer).on('click', function(evt){
+                CHAMELEON.CORE.showProcessingModal();
+                var mediaItemContainer = $(this).parents('.cms-media-item');
+
+                $.ajax({
+                    type: "GET",
+                    async: true,
+                    url: self.settings.urls.mediaItemFindCropsUrl,
+                    data: {
+                        'mediaItemId': mediaItemContainer.data('id')
+                    },
+                    error: function (responseData) {
+                        self.showErrorFromAjaxResponse();
+                    },
+                    success: function (jsonData) {
+                        CHAMELEON.CORE.hideProcessingModal();
+                        $('#crops-list', self.editContainer).html(jsonData.contentHtml);
+                    },
+                    dataType: 'JSON'
+                });
+
+                evt.preventDefault();
+            });
         },
         open: function () {
             this.updateListView({});

@@ -18,113 +18,88 @@ class JavascriptPluginConfigurationUrls
 {
     /**
      * used to generate the URL to display a list.
-     *
-     * @var string|null
      */
-    public $listUrl;
+    public ?string $listUrl;
 
     /**
      * used to generate the URL to an editor for media tree properties
      * placeholders:
      * --id-- ID of the media tree node.
-     *
-     * @var string|null
      */
-    public $editMediaTreePropertiesUrlTemplate;
+    public ?string $editMediaTreePropertiesUrlTemplate;
 
     /**
      * used to generate the URL to get information about a media tree node
      * placeholders:
      * --id-- ID of the media tree node.
-     *
-     * @var string|null
      */
-    public $mediaTreeNodeInfoUrlTemplate;
+    public ?string $mediaTreeNodeInfoUrlTemplate;
 
     /**
      * URL to the endpoint which can be used to insert elements into tree.
-     *
-     * @var string|null
      */
-    public $mediaTreeNodeInsertUrl;
+    public ?string $mediaTreeNodeInsertUrl;
 
     /**
      * URL to the endpoint which can be used to rename a tree element.
-     *
-     * @var string|null
      */
-    public $mediaTreeNodeRenameUrl;
+    public ?string $mediaTreeNodeRenameUrl;
 
     /**
      * URL to the endpoint which can be used to delete a tree element.
-     *
-     * @var string|null
      */
-    public $mediaTreeNodeDeleteUrl;
+    public ?string $mediaTreeNodeDeleteUrl;
 
     /**
      * URL to the endpoint which can be used to move a tree element.
-     *
-     * @var string|null
      */
-    public $mediaTreeNodeMoveUrl;
+    public ?string $mediaTreeNodeMoveUrl;
 
     /**
      * URL to show a delete confirmation.
-     *
-     * @var string|null
      */
-    public $mediaItemDeleteConfirmationUrl;
+    public ?string $mediaItemDeleteConfirmationUrl;
 
     /**
      * URL to the endpoint which can be used to delete an image.
-     *
-     * @var string|null
      */
-    public $mediaItemDeleteUrl;
+    public ?string $mediaItemDeleteUrl;
 
     /**
      * URL to the endpoint which can be used to quickly edit image description or tags.
-     *
-     * @var string|null
      */
-    public $quickEditUrl;
+    public ?string $quickEditUrl;
 
     /**
      * URL to the endpoint which can be used to move images to another media tree node.
-     *
-     * @var string|null
      */
-    public $imagesMoveUrl;
+    public ?string $imagesMoveUrl;
 
-    /**
-     * @var string|null
-     */
-    public $uploaderUrlTemplate;
+    public ?string $uploaderUrlTemplate;
 
-    /**
-     * @var string|null
-     */
-    public $uploaderReplaceMediaItemUrl;
+    public ?string $uploaderReplaceMediaItemUrl;
 
     /**
      * URL to media details.
-     *
-     * @var string|null
      */
-    public $mediaItemDetailsUrlTemplate;
+    public ?string $mediaItemDetailsUrlTemplate;
 
     /**
      * URL to use for auto completing search results.
-     *
-     * @var string|null
      */
-    public $autoCompleteSearchUrl;
+    public ?string $autoCompleteSearchUrl;
 
     /**
-     * @var string|null URL called after an image was picked
+     * URL called after an image was picked.
      */
-    public $postSelectUrl;
+    public ?string $postSelectUrl;
+    /**
+     * url to the endpoint which can be used to find usages of a media item.
+     */
+    public ?string $mediaItemFindUsagesUrl;
 
-    public $mediaItemFindUsagesUrl;
+    /**
+     * url to the endpoint which can be used to find crops of a media item.
+     */
+    public ?string $mediaItemFindCropsUrl;
 }

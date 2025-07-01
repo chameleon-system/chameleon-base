@@ -102,6 +102,10 @@
                 <target>Cutout could not be deleted.</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_image_crop.media_manager_crops.load_crops">
+                <source>chameleon_system_image_crop.media_manager_crops.load_crops</source>
+                <target>Load crops</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
