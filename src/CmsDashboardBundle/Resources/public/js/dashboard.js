@@ -169,6 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
         Array.from(sortableList.querySelectorAll('.delete-icon')).forEach((icon) => {
             icon.style.display = isEditMode ? 'block' : 'none';
         });
+
+        if (!isEditMode) {
+            location.reload();
+        }
     });
 
     // Drag-and-Drop handling
