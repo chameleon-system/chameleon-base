@@ -1,9 +1,19 @@
 {# @var accessRightsCrop \ChameleonSystem\MediaManager\AccessRightsModel #}
 {% if accessRightsCrop.show %}
     <hr>
-    <div class="versions">
-        <h2 class="h3">{{ 'chameleon_system_image_crop.media_manager_crops.headline' | trans }}</h2>
-        <div class="row pb-1 pt-1"><button class="load-crops">{{ 'chameleon_system_image_crop.media_manager_crops.load_crops' | trans }}</button></div>
-        <div id="crops-list"></div>
+    <div class="row versions">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-solid fa-crop pr-2"> {{ 'chameleon_system_image_crop.media_manager_crops.headline' | trans }}</i></span>
+                    <div class="button-element">
+                        <button type="button" class="btn btn-sm btn-primary load-crops">
+                            <i class="fas fa-solid fa-spinner mr-2"></i>{{ 'chameleon_system_image_crop.media_manager_crops.load_crops' | trans }}
+                        </button>
+                    </div>
+                </div>
+                <div id="crops-list" class="card-body"></div>
+            </div>
+        </div>
     </div>
 {% endif %}

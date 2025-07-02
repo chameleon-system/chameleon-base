@@ -1,9 +1,9 @@
 {% if crops | length > 0 %}
-    <table class="version-list">
+    <table class="table table-sm table-hover TCMSListManagerFullGroupTable version-list">
+        <tbody>
         {% for crop in crops %}
-            {# crop \ChameleonSystem\MediaManagerDataModel\ImageCropDataModel #}
-            <tr>
-                <td class="image">
+            <tr class="TGroupTableItemRow">
+                <td class="action image">
                     <img src=" {{ mediaItemid | imageUrlWithCropFallbackSize(crop.id, 100, 100) }}">
                 </td>
                 <td>
@@ -22,26 +22,20 @@
                                                        href="{{ deleteCropUrl }}&{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_CROP_ID') }}={{ crop.id }}">
                         <span class="fas fa-trash-alt"></span> {{ 'chameleon_system_image_crop.media_manager_crops.delete' | trans }}
                         </a>{% endif %}
-
                     {% if pickImageMode and pickImageWithCrop %}
                         <a class="btn btn-xs btn-default pick-version" data-crop-id="{{ crop.id }}"><span
                                     class="fas fa-check-circle"></span> {{ 'chameleon_system_media_manager.list_actions.select' | trans }}
                         </a>
                     {% endif %}
-
                     {% if usagesByCrop[crop.id] | length > 0 %}
-
                         <div class="h4 usage-headline">{{ 'chameleon_system_core.table_editor_media.media_usage' | trans }}</div>
-
                         {{ include( 'mediaManager/usages/usageTable.html.twig' , {usages: usagesByCrop[crop.id]} ) }}
-
                     {% endif %}
-
                 </td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
-
 {% else %}
-    <p>{{ 'chameleon_system_image_crop.media_manager_crops.no_crops_yet' | trans }}</p>
+    <p>{{ 'chameleon_system_media_manager.delete.usage_table_no_usages' | trans }}</p>
 {% endif %}
