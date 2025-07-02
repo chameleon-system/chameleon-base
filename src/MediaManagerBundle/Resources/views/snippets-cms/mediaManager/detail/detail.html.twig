@@ -13,7 +13,7 @@
             {% endif %}
 
             {% for additionalButtonTemplate in additionalButtonTemplates %}
-                {% include additionalButtonTemplate %}
+                {{ include( additionalButtonTemplate ) }}
             {% endfor %}
 
             {% if pickImageMode %}
@@ -31,13 +31,13 @@
                     <td><i class="fas fa-expand-arrows-alt mr-2"></i></td>
                     <td>{{ mediaItem.width }} x {{ mediaItem.height }} px</td>
                 </tr>
-                <tr class="entry-id-copy-button" data-entry-id="{{ mediaItem.id | e("html_attr") }}" title="{{ 'chameleon_system_core.text.copy_id_to_clipboard' | trans | e("html_attr") }}">
+                <tr class="entry-id-copy-button" data-entry-id="{{ mediaItem.id | e('html_attr') }}" title="{{ 'chameleon_system_core.text.copy_id_to_clipboard' | trans | e('html_attr') }}">
                     <td>
                         <i class="fas fa-info-circle mr-2"></i>
                     </td>
                     <td>ID {{ mediaItem.id }} <i class="far fa-clipboard"></i></td>
                 </tr>
-                <tr class="image-url-copy-button" data-image-url="{{ constant('URL_MEDIA_LIBRARY') | e("html_attr") }}{{ mediaItem.path | e("html_attr") }}" title="{{ 'chameleon_system_core.text.copy_image_url_to_clipboard' | trans | e("html_attr") }}">
+                <tr class="image-url-copy-button" data-image-url="{{ constant('URL_MEDIA_LIBRARY') | e('html_attr') }}{{ mediaItem.path | e('html_attr') }}" title="{{ 'chameleon_system_core.text.copy_image_url_to_clipboard' | trans | e('html_attr') }}">
                     <td><i class="far fa-file mr-2"></i></td>
                     <td>
                         <input type="text" value="{{ mediaItem.path }}" class="border-0" style="width: 90%">
@@ -60,17 +60,15 @@
 
     <hr>
     <h3 class="usage-headline">{{ 'chameleon_system_core.table_editor_media.media_usage' | trans }}</h3>
+    <div class="row pb-1 pt-1"><button class="load-usages">{{ 'chameleon_system_core.table_editor_media.load_usages' | trans }}</button></div>
     {% if usagesErrorMessage %}
         <div class="alert alert-danger">{{ usagesErrorMessage }}</div>
     {% endif %}
-    {% if usages | length > 0 %}
-        {% include 'mediaManager/usages/usageTable.html.twig' with {'usages': usages} %}
-    {% else %}
-        <p>{{ 'chameleon_system_media_manager.usages.no_usages_yet' | trans }}</p>
-    {% endif %}
+
+    <div id="usages-list"></div>
 
     {% for additionalDetailViewTemplate in additionalDetailViewTemplates %}
-        {% include(additionalDetailViewTemplate) %}
+        {{ include( (additionalDetailViewTemplate) ) }}
     {% endfor %}
 
 </div>

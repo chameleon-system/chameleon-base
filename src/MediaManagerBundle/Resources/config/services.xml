@@ -119,6 +119,9 @@
             <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
             <argument type="service" id="logger"/>
             <argument type="service" id="chameleon_system_cms_backend.backend_session" />
+            <argument type="service" id="chameleon_system_media_manager.usages.chain_finder"/>
+            <argument type="service" id="chameleon_system_image_crop.image_crop_data_access"/>
+            <argument type="service" id="chameleon_system_image_crop.cms_media_data_access"/>
         </service>
 
         <service id="chameleon_system_media_manager.list_state_service"

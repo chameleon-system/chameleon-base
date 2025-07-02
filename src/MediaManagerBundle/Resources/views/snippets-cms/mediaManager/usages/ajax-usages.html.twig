@@ -1,0 +1,23 @@
+{# @var usage \ChameleonSystem\MediaManager\DataModel\MediaItemUsageDataModel #}
+<div class="show-usages">
+    {% if usages | length > 0 %}
+    <div class="row usages-header pb-1 pt-1">
+        <div class="col-6 col-lg-3 "><strong>{{ 'chameleon_system_media_manager.delete.usage_table_header_table' | trans }}</strong></div>
+        <div class="col-6 col-lg-3"><strong>{{ 'chameleon_system_media_manager.delete.usage_table_header_id' | trans }}</strong></div>
+        <div class="col-6 col-lg-3"><strong>{{ 'chameleon_system_media_manager.delete.usage_table_header_record_name' | trans }}</strong></div>
+        <div class="col-6 col-lg-3"><strong>{{ 'chameleon_system_media_manager.delete.usage_table_header_field' | trans }}</strong></div>
+    </div>
+    <div class="row">
+        {% for usage in usages %}
+            <div class="row pt-1 pb-1 usage-item">
+                <div class="col-6 col-lg-3">{{ usage.targetTableDescriptiveName }}</div>
+                <div class="col-6 col-lg-3">{{ usage.targetRecordId }}</div>
+                <div class="col-6 col-lg-3"><a href="{{ usage.url }}" target="_blank">{{ usage.targetRecordName }} <i class="fas fa-share-square"></i></a></div>
+                <div class="col-6 col-lg-3">{{ usage.targetFieldDescriptiveName }} ({{ usage.targetFieldName }})</div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>{{ 'chameleon_system_media_manager.delete.usage_table_no_usages' | trans }}</p>
+    {% endif %}
+</div>

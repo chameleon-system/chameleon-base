@@ -19,7 +19,10 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
+use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
+use ChameleonSystem\ImageCrop\Interfaces\ImageCropDataAccessInterface;
 use ChameleonSystem\MediaManager\AccessRightsModel;
+use ChameleonSystem\MediaManager\DataModel\MediaItemDataModel;
 use ChameleonSystem\MediaManager\DataModel\MediaTreeDataModel;
 use ChameleonSystem\MediaManager\DataModel\MediaTreeNodeDataModel;
 use ChameleonSystem\MediaManager\Exception\AccessRightException;
@@ -34,6 +37,7 @@ use ChameleonSystem\MediaManager\JavascriptPlugin\JavascriptPluginConfigurationU
 use ChameleonSystem\MediaManager\JavascriptPlugin\JavascriptPluginMessage;
 use ChameleonSystem\MediaManager\JavascriptPlugin\JavascriptPluginRenderedContent;
 use ChameleonSystem\MediaManager\JavascriptPlugin\MediaTreeNodeJsonObject;
+use ChameleonSystem\MediaManager\MediaItemChainUsageFinder;
 use ChameleonSystem\MediaManager\MediaManagerExtensionCollection;
 use ChameleonSystem\MediaManager\MediaManagerListState;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
@@ -53,83 +57,24 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
 
     public const URL_TEMPLATE_PLACEHOLDER_ID = '--id--';
 
-    /**
-     * @var MediaTreeDataAccessInterface
-     */
-    private $mediaTreeDataAccess;
-
-    /**
-     * @var MediaItemDataAccessInterface
-     */
-    private $mediaItemDataAccess;
-
-    /**
-     * @var UrlUtil
-     */
-    private $urlUtil;
-
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-
-    /**
-     * @var MediaManagerListStateServiceInterface
-     */
-    private $mediaManagerListStateService;
-
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
-
-    /**
-     * @var MediaManagerListRequestFactoryInterface
-     */
-    private $mediaManagerListRequestService;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var MediaManagerExtensionCollection
-     */
-    private $mediaManagerExtensionCollection;
-
-    /**
-     * @var ResponseVariableReplacerInterface
-     */
-    private $responseVariableReplacer;
-    private LoggerInterface $logger;
-
     public function __construct(
-        MediaTreeDataAccessInterface $mediaTreeDataAccess,
-        MediaItemDataAccessInterface $mediaItemDataAccess,
-        UrlUtil $urlUtil,
-        InputFilterUtilInterface $inputFilterUtil,
-        MediaManagerListStateServiceInterface $mediaManagerListStateService,
-        LanguageServiceInterface $languageService,
-        MediaManagerListRequestFactoryInterface $mediaManagerListRequestService,
-        TranslatorInterface $translator,
-        MediaManagerExtensionCollection $mediaManagerExtensionCollection,
-        ResponseVariableReplacerInterface $responseVariableReplacer,
-        LoggerInterface $logger,
-        readonly private BackendSessionInterface $backendSession
+        private readonly MediaTreeDataAccessInterface $mediaTreeDataAccess,
+        private readonly MediaItemDataAccessInterface $mediaItemDataAccess,
+        private readonly UrlUtil $urlUtil,
+        private readonly InputFilterUtilInterface $inputFilterUtil,
+        private readonly MediaManagerListStateServiceInterface $mediaManagerListStateService,
+        private readonly LanguageServiceInterface $languageService,
+        private readonly MediaManagerListRequestFactoryInterface $mediaManagerListRequestService,
+        private readonly TranslatorInterface $translator,
+        private readonly MediaManagerExtensionCollection $mediaManagerExtensionCollection,
+        private readonly ResponseVariableReplacerInterface $responseVariableReplacer,
+        private readonly LoggerInterface $logger,
+        readonly private BackendSessionInterface $backendSession,
+        readonly private MediaItemChainUsageFinder $mediaItemChainUsageFinder,
+        readonly private ImageCropDataAccessInterface $imageCropDataAccess,
+        readonly private CmsMediaDataAccessInterface $cmsMediaDataAccess
     ) {
         parent::__construct();
-        $this->mediaTreeDataAccess = $mediaTreeDataAccess;
-        $this->mediaItemDataAccess = $mediaItemDataAccess;
-        $this->urlUtil = $urlUtil;
-        $this->inputFilterUtil = $inputFilterUtil;
-        $this->mediaManagerListStateService = $mediaManagerListStateService;
-        $this->languageService = $languageService;
-        $this->mediaManagerListRequestService = $mediaManagerListRequestService;
-        $this->translator = $translator;
-        $this->mediaManagerExtensionCollection = $mediaManagerExtensionCollection;
-        $this->responseVariableReplacer = $responseVariableReplacer;
-        $this->logger = $logger;
     }
 
     /**
@@ -263,6 +208,8 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         );
         $configurationUrls->autoCompleteSearchUrl = $this->getUrlToModuleFunction('autoCompleteSearch');
         $configurationUrls->postSelectUrl = $this->getUrlToModuleFunction('postSelectHook');
+        $configurationUrls->mediaItemFindUsagesUrl = $this->getUrlToModuleFunction('ajaxMediaItemFindUsages');
+        $configurationUrls->mediaItemFindCropsUrl = $this->getUrlToModuleFunction('ajaxMediaItemFindCrops');
 
         return $configurationUrls;
     }
@@ -398,10 +345,79 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         ).'"></script>';
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
         $includes[] = '<script src="'.\TGlobal::GetStaticURL(
-            '/bundles/chameleonsystemmediamanager/js/mediaManager.js?v=1'
+            '/bundles/chameleonsystemmediamanager/js/mediaManager.js?v='.ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix')
         ).'"></script>';
 
         return $includes;
+    }
+
+    public function ajaxMediaItemFindUsages()
+    {
+        $mediaItem = $this->loadMediaItem();
+
+        $usagesObjectList = $this->mediaItemChainUsageFinder->findUsages($mediaItem);
+
+        $viewRenderer = $this->createViewRendererInstance();
+        $viewRenderer->AddSourceObject('usages', $usagesObjectList);
+
+        $listReturn = new JavascriptPluginRenderedContent();
+        $listReturn->contentHtml = $viewRenderer->Render('mediaManager/usages/ajax-usages.html.twig');
+
+        $this->returnAsAjaxResponse($listReturn);
+    }
+
+    /**
+     * @TODO Maybe wrong position, to much dependency from different bundle!
+     * I think we should move this to the ImageCropBundle!
+     */
+    public function ajaxMediaItemFindCrops()
+    {
+        $mediaItemId = $this->inputFilterUtil->getFilteredInput(self::MEDIA_ITEM_URL_NAME);
+        $mediaItem = $this->loadMediaItem();
+
+        $crops = $this->loadCropsByMediaItem($mediaItem);
+        $cropIds = [];
+        foreach ($crops as $crop) {
+            $cropIds[$crop->getId()] = true;
+        }
+
+        $usagesObjectList = $this->mediaItemChainUsageFinder->findUsages($mediaItem);
+
+        $usagesByCrop = [];
+        foreach ($usagesObjectList as $usage) {
+            $usageCropId = $usage->getCropId();
+            if (null !== $usageCropId && '' !== $usageCropId && isset($cropIds[$usageCropId])) {
+                if (false === isset($usagesByCrop[$usageCropId])) {
+                    $usagesByCrop[$usageCropId] = [];
+                }
+                $usagesByCrop[$usageCropId][] = $usage;
+            }
+        }
+
+        $viewRenderer = $this->createViewRendererInstance();
+        $viewRenderer->AddSourceObject('crops', $crops);
+        $viewRenderer->AddSourceObject('mediaItemId', $mediaItemId);
+        $viewRenderer->AddSourceObject('usagesByCrop', $usagesByCrop);
+
+        $listReturn = new JavascriptPluginRenderedContent();
+        $listReturn->contentHtml = $viewRenderer->Render('imageCrop/mediaManager/ajax-crops.html.twig');
+
+        $this->returnAsAjaxResponse($listReturn);
+    }
+
+    private function loadCropsByMediaItem(MediaItemDataModel $mediaItem): array
+    {
+        $cmsMedia = $this->cmsMediaDataAccess->getCmsMedia($mediaItem->getId(), $this->backendSession->getCurrentEditLanguageId());
+        if (null === $cmsMedia) {
+            throw new \MapperException(
+                sprintf(
+                    'Trying to get usages of crops: CMS media object for media item with ID %s could not be found.',
+                    $mediaItem->getId()
+                )
+            );
+        }
+
+        return $this->imageCropDataAccess->getExistingCrops($cmsMedia);
     }
 
     /**
@@ -423,6 +439,8 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->methodCallAllowed[] = 'moveMediaTreeNode';
         $this->methodCallAllowed[] = 'insertMediaTreeNode';
         $this->methodCallAllowed[] = 'deleteMediaTreeNode';
+        $this->methodCallAllowed[] = 'ajaxMediaItemFindUsages';
+        $this->methodCallAllowed[] = 'ajaxMediaItemFindCrops';
     }
 
     /**
@@ -562,18 +580,7 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     protected function renderDetail()
     {
-        $mediaItemId = $this->inputFilterUtil->getFilteredInput(self::MEDIA_ITEM_URL_NAME);
-        try {
-            $mediaItem = $this->mediaItemDataAccess->getMediaItem(
-                $mediaItemId,
-                $this->backendSession->getCurrentEditLanguageId()
-            );
-            if (null === $mediaItem) {
-                $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t find media item '.$mediaItemId);
-            }
-        } catch (DataAccessException $e) {
-            $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t find media item '.$mediaItemId, $e);
-        }
+        $mediaItem = $this->loadMediaItem();
 
         $viewRenderer = $this->createViewRendererInstance();
         $viewRenderer->AddSourceObject('language', \TdbCmsLanguage::GetNewInstance($this->backendSession->getCurrentEditLanguageId()));
@@ -634,7 +641,6 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     protected function getDetailMappers()
     {
         $detailMappers = [
-            'chameleon_system_media_manager.backend_module_mapper.media_item_usages',
             'chameleon_system_media_manager.backend_module_mapper.pick_images',
         ];
 
@@ -864,13 +870,7 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         try {
-            $mediaItem = $this->mediaItemDataAccess->getMediaItem(
-                $mediaItemId,
-                $this->backendSession->getCurrentEditLanguageId()
-            );
-            if (null === $mediaItem) {
-                $this->logAndReturnError('MediaManagerBackendModule: Media item not found '.$mediaItemId);
-            }
+            $mediaItem = $this->loadMediaItem();
 
             $languageId = $this->backendSession->getCurrentEditLanguageId();
 
@@ -992,5 +992,23 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     protected function postSelectHook()
     {
         $this->returnAsAjaxResponse(new \stdClass());
+    }
+
+    private function loadMediaItem(): MediaItemDataModel
+    {
+        $mediaItemId = $this->inputFilterUtil->getFilteredInput(self::MEDIA_ITEM_URL_NAME);
+        try {
+            $mediaItem = $this->mediaItemDataAccess->getMediaItem(
+                $mediaItemId,
+                $this->backendSession->getCurrentEditLanguageId()
+            );
+            if (null === $mediaItem) {
+                $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t find media item '.$mediaItemId);
+            }
+
+            return $mediaItem;
+        } catch (DataAccessException $e) {
+            $this->logAndReturnError('MediaManagerBackendModule: Couldn\'t find media item '.$mediaItemId, $e);
+        }
     }
 }
