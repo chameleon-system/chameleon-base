@@ -698,8 +698,10 @@ class MTTableEditor extends TCMSModelBase
      */
     public function AjaxSave()
     {
+        $request = $this->getCurrentRequest();
+
         $oRecordData = false;
-        if ($this->oTableManager->oTableEditor->AllowEdit()) {
+        if ($this->oTableManager->oTableEditor->AllowEdit() && true === $request?->isMethod('POST')) {
             $postData = $this->global->GetUserData(null);
             $oRecordData = $this->oTableManager->Save($postData);
 
@@ -735,7 +737,9 @@ class MTTableEditor extends TCMSModelBase
      */
     public function AjaxSaveField()
     {
-        if ($this->oTableManager->oTableEditor->AllowEdit()) {
+        $request = $this->getCurrentRequest();
+
+        if ($this->oTableManager->oTableEditor->AllowEdit() && true === $request?->isMethod('POST')) {
             $editFieldName = $this->global->GetUserData('_fieldName');
             $fieldValue = $this->global->GetUserData($editFieldName);
             $this->oTableManager->SaveField($editFieldName, $fieldValue);
