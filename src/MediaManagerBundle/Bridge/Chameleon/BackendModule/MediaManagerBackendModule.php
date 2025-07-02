@@ -345,7 +345,7 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         ).'"></script>';
         $includes[] = '<script src="'.\TGlobal::GetStaticURLToWebLib('/components/select2.v4/js/select2.full.min.js').'" type="text/javascript"></script>';
         $includes[] = '<script src="'.\TGlobal::GetStaticURL(
-            '/bundles/chameleonsystemmediamanager/js/mediaManager.js?v='.microtime(true)
+            '/bundles/chameleonsystemmediamanager/js/mediaManager.js?v='.ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix')
         ).'"></script>';
 
         return $includes;
