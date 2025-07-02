@@ -8,8 +8,9 @@
 <div id="cms-dashboard">
     <div class="card mb-4 bg-image" style="background-image: url('{{ headerBackgroundImage|e('html_attr') }}');">
         <div class="card-body pb-5">
+            <h1 class="display-5 text-shadow-white-light">{{ 'chameleon_system_cms_dashboard.dashboard'|trans }}</h1>
+            <p class="lead text-shadow-white-light">{{ 'chameleon_system_cms_dashboard.for'|trans }} {{ loggedInUserName }} [{{ cmsOwner }}]</p>
             <div class="float-right">
-                {% if availableCollections|length > 0 %}
                 <form action="">
                     <input type="hidden" name="reload" value="true">
                     <div class="btn-group" role="group">
@@ -29,7 +30,6 @@
                         </button>
                     </div>
                 </form>
-                {% endif %}
 
                 <div class="d-flex align-items-center mt-2 d-none" id="add-widget-collection-container">
                     {% if availableCollections|length > 0 %}
@@ -46,9 +46,6 @@
                     {% endif %}
                 </div>
             </div>
-
-            <h1 class="display-5 text-shadow-white-light">{{ 'chameleon_system_cms_dashboard.dashboard'|trans }}</h1>
-            <p class="lead text-shadow-white-light">{{ 'chameleon_system_cms_dashboard.for'|trans }} {{ loggedInUserName }} [{{ cmsOwner }}]</p>
         </div>
     </div>
     {% if availableCollections|length <= 0 and widgetCollections|length <= 0 %}
