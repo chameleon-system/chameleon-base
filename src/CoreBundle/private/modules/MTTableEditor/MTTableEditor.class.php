@@ -182,11 +182,11 @@ class MTTableEditor extends TCMSModelBase
             $this->handleUserRights();
 
             $this->data['oTabs'] = $this->GetTabsForTable();
+
+            $this->AddURLHistory();
         } else { // record is missing - show error template
             $this->handleMissingRecord();
         }
-
-        $this->AddURLHistory();
     }
 
     protected function handleUserRights(): void

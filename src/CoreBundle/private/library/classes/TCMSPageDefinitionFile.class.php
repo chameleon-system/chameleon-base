@@ -41,7 +41,7 @@ class TCMSPageDefinitionFile
      * is used).
      * example: layout (not layout.layout.php).
      */
-    public string $layoutTemplate;
+    public string $layoutTemplate = '';
 
     /**
      * array of the modules. form:
