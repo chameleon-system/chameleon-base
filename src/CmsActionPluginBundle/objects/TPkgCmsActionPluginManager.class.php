@@ -16,7 +16,7 @@ class TPkgCmsActionPluginManager
     /**
      * @var array<string, object>|null
      */
-    private ?array $aActionPluginList;
+    private ?array $aActionPluginList = null;
 
     private ?TCMSActivePage $oActivePage;
 
@@ -134,6 +134,6 @@ class TPkgCmsActionPluginManager
 
     private function getActivePortal(): ?TCMSPortal
     {
-        ServiceLocator::get('chameleon_system_core.portal_domain_service')->getActivePortal();
+        return ServiceLocator::get('chameleon_system_core.portal_domain_service')->getActivePortal();
     }
 }
