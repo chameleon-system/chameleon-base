@@ -40,7 +40,8 @@ interface CropImageServiceInterface
         $cmsMediaId,
         $presetId,
         $languageId,
-        $fallbackOnNoCrop = true
+        $fallbackOnNoCrop = true,
+        $maxTargetWidth = 0
     );
 
     /**
@@ -59,6 +60,7 @@ interface CropImageServiceInterface
         $cropId,
         $languageId,
         $targetWidth = 0,
-        $targetHeight = 0
+        $targetHeight = 0,
+        $maxTargetWidth = 0
     );
 }

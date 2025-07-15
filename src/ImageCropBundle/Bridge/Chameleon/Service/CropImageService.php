@@ -53,7 +53,9 @@ class CropImageService implements CropImageServiceInterface
         $cmsMediaId,
         $presetId,
         $languageId,
-        $fallbackOnNoCrop = true
+        $fallbackOnNoCrop = true,
+        $maxTargetWidth = 0,
+        $maxTargetHeight = 0
     ) {
         $cmsMedia = $this->cmsMediaDataAccess->getCmsMedia($cmsMediaId, $languageId);
         if (null === $cmsMedia) {
@@ -75,12 +77,50 @@ class CropImageService implements CropImageServiceInterface
             if (false === $fallbackOnNoCrop) {
                 return null;
             }
-            $cmsImage = new \TCMSImage($cmsMedia->getId());
+            $cmsImage = new \TCMSImage($cmsMediaId);
+            $croppedImage = $cmsImage->GetForcedSizeThumbnail($preset->getWidth(), $preset->getHeight());
 
-            return new ImageDataModel(
-                $cmsImage->GetForcedSizeThumbnail($preset->getWidth(), $preset->getHeight())->GetFullURL()
+            if ($preset->getWidth() > $maxTargetWidth && $croppedImage->aData['width'] > $maxTargetWidth) {
+                $croppedImage->aData['thumbOriginalUrl'] = $croppedImage->GetFullLocalPath();
+                $cropSmall = $croppedImage->decreaseThumbnail($maxTargetWidth);
+                if (null !== $cropSmall) {
+                    $croppedImage = $cropSmall;
+                }
+            }
+
+            $imageDataModel = new ImageDataModel(
+                $croppedImage->GetFullURL()
             );
+
+            return $imageDataModel;
         }
+
+
+//        @ToDo: Work in progress. If image crop exists in Media manager, it has to be handled here.
+//        But unfortunately $crop is something totally different from TCMSImage
+        if ($preset->getWidth() > $maxTargetWidth && $crop->getImageCropPreset()->getWidth() > $maxTargetWidth) {
+            $cmsMedia = $crop->getCmsMedia();
+            $tumbPath = $cmsMedia->getImagePath();
+
+            $cmsImage = new \TCMSImage($cmsMediaId);
+            $newTumbPath = $cmsImage->decreaseThumbnail($maxTargetWidth);
+
+
+//            $croppedImage = new \TCMSImage();
+////            $croppedImage->aData = ;
+//            $croppedImage->aData['width'] = 0;
+//            $croppedImage->aData['height'] = 0;
+////            $croppedImage->id = $this->id;
+//
+//
+////            $crop->aData['thumbOriginalUrl'] = $crop->getCmsMedia()->getImagePath();
+//            $cropSmall = $crop->decreaseThumbnail($maxTargetWidth);
+//            $crop->getImageCropPreset()
+//            if (null !== $cropSmall) {
+//                $crop = $cropSmall;
+//            }
+        }
+
 
         return $this->getCroppedImage($crop);
     }
@@ -131,7 +171,9 @@ class CropImageService implements CropImageServiceInterface
         $cropId,
         $languageId,
         $targetWidth = 0,
-        $targetHeight = 0
+        $targetHeight = 0,
+        $maxTargetWidth = 0,
+        $maxTargetHeight = 0
     ) {
         $crop = $this->imageCropDataAccess->getImageCropById($cropId, $languageId);
         if (null === $crop) {
@@ -150,6 +192,23 @@ class CropImageService implements CropImageServiceInterface
             $width = $crop->getWidth() * $ratio;
             $crop->setTargetHeight($targetHeight);
             $crop->setTargetWidth((int) $width);
+        }
+
+        if (0 !== $maxTargetWidth) {
+            $foo = 'bar';
+//            if ($crop->aData['width'] > $maxTargetWidth) {
+//                $croppedImage->aData['thumbOriginalUrl'] = $croppedImage->GetFullLocalPath();
+//                $croppedImageSmall = $croppedImage->decreaseThumbnail($maxTargetWidth);
+//                if (null !== $croppedImageSmall) {
+//                    $croppedImage = $croppedImageSmall;
+//                }
+//            }
+//
+//            $imageDataModel = new ImageDataModel(
+//                $croppedImage->GetFullURL()
+//            );
+//
+//            return $imageDataModel;
         }
 
         return $this->getCroppedImage($crop);
