@@ -66,7 +66,7 @@ class TCMSFieldSEOURLTitle extends TCMSFieldVarchar
         if ($oGlobal->UserDataExists('title')) {
             $title = $oGlobal->GetUserData('title');
             $title = str_replace('\n', '-', $title);
-            $URLTitle = $this->getUrlNormalizationUtil()->normalizeUrl($title);
+            $URLTitle = mb_strtolower($this->getUrlNormalizationUtil()->normalizeUrl($title));
         }
 
         return $URLTitle;
@@ -87,7 +87,7 @@ class TCMSFieldSEOURLTitle extends TCMSFieldVarchar
      */
     public function ConvertPostDataToSQL()
     {
-        return $this->getUrlNormalizationUtil()->normalizeUrl($this->data);
+        return mb_strtolower($this->getUrlNormalizationUtil()->normalizeUrl($this->data));
     }
 
     /**
