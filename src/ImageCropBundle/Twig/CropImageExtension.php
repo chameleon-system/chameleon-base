@@ -81,10 +81,7 @@ class CropImageExtension extends AbstractExtension
             $image = $this->cropImageService->getCroppedImageForCmsMediaIdAndCropId(
                 $imageId,
                 $cropId,
-                $this->getLanguageId(),
-                0,
-                0,
-                $maxTargetWidth
+                $this->getLanguageId()
             );
         } else {
             $presetId = $presetIdOrSystemName;
@@ -206,8 +203,7 @@ class CropImageExtension extends AbstractExtension
             $cropId,
             $this->getLanguageId(),
             $targetWidth,
-            $targetHeight,
-            $presetIdOrSystemName
+            $targetHeight
         );
         if (null === $image) {
             return null;

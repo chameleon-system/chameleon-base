@@ -60,7 +60,6 @@ interface CropImageServiceInterface
         $cropId,
         $languageId,
         $targetWidth = 0,
-        $targetHeight = 0,
-        $maxTargetWidth = 0
+        $targetHeight = 0
     );
 }
