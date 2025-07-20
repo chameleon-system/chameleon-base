@@ -96,31 +96,46 @@ class CropImageService implements CropImageServiceInterface
         }
 
 
-//        @ToDo: Work in progress. If image crop exists in Media manager, it has to be handled here.
-//        But unfortunately $crop is something totally different from TCMSImage
+        // If image crop exists in Media manager and is bigger than maxTargetWidth, decrease it
         if ($preset->getWidth() > $maxTargetWidth && $crop->getImageCropPreset()->getWidth() > $maxTargetWidth) {
-            $cmsMedia = $crop->getCmsMedia();
-            $tumbPath = $cmsMedia->getImagePath();
-
-            $cmsImage = new \TCMSImage($cmsMediaId);
-            $newTumbPath = $cmsImage->decreaseThumbnail($maxTargetWidth);
-
-
-//            $croppedImage = new \TCMSImage();
-////            $croppedImage->aData = ;
-//            $croppedImage->aData['width'] = 0;
-//            $croppedImage->aData['height'] = 0;
-////            $croppedImage->id = $this->id;
-//
-//
-////            $crop->aData['thumbOriginalUrl'] = $crop->getCmsMedia()->getImagePath();
-//            $cropSmall = $crop->decreaseThumbnail($maxTargetWidth);
-//            $crop->getImageCropPreset()
-//            if (null !== $cropSmall) {
-//                $crop = $cropSmall;
-//            }
+            // First get the cropped image using the existing crop data
+            $image = new \TCMSImage($crop->getCmsMedia()->getId());
+            
+            $croppedImage = $image->getCroppedImage(
+                $crop->getImageCropPreset()->getWidth(),
+                $crop->getImageCropPreset()->getHeight(),
+                $crop->getWidth(),
+                $crop->getHeight(),
+                $crop->getPosX(),
+                $crop->getPosY()
+            );
+            
+            if (null !== $croppedImage && $croppedImage->aData['width'] > $maxTargetWidth) {
+                // Save the cropped image to a temporary file to use as the source for decreaseThumbnail
+                $tempThumbPath = $croppedImage->GetFullLocalPath();
+                
+                // Create a new TCMSImage object with the same ID as the original image
+                // This ensures that the thumbOriginalUrl property is set on the object that will be used by GetThumbnailPointer
+                $newImage = new \TCMSImage($crop->getCmsMedia()->getId());
+                
+                // Copy the cropped image data to the new image
+                $newImage->aData = $croppedImage->aData;
+                $newImage->_isThumbnail = true;
+                
+                // Set the thumbOriginalUrl property required by decreaseThumbnail
+                // This is the key change - we're explicitly setting the source to be the cropped image
+                // on the object that will be used by GetThumbnailPointer
+                $newImage->aData['thumbOriginalUrl'] = $tempThumbPath;
+                
+                // Call decreaseThumbnail to reduce the size
+                $cropSmall = $newImage->decreaseThumbnail($maxTargetWidth);
+                
+                if (null !== $cropSmall) {
+                    // Return the decreased thumbnail
+                    return new ImageDataModel($cropSmall->GetFullURL());
+                }
+            }
         }
-
 
         return $this->getCroppedImage($crop);
     }
