@@ -71,7 +71,6 @@ class CropImageExtension extends AbstractExtension
      * @param string $imageId
      * @param string|null $cropId
      * @param string $presetIdOrSystemName
-     * @param int $targetWidth = 0
      *
      * @return string|null
      */
@@ -184,15 +183,11 @@ class CropImageExtension extends AbstractExtension
     }
 
     /**
-     * @param string $imageId
-     * @param string|null $cropId
-     * @param int $targetWidth
-     * @param int $targetHeight
      * @param string|null $presetIdOrSystemName
      *
      * @return string|null
      */
-    public function imageUrlWithCropSize(string $imageId, string|null $cropId, int $targetWidth = 0, int $targetHeight = 0, $presetIdOrSystemName = null)
+    public function imageUrlWithCropSize(string $imageId, ?string $cropId, int $targetWidth = 0, int $targetHeight = 0, $presetIdOrSystemName = null)
     {
         if ((null === $cropId || '' === $cropId) && (null === $presetIdOrSystemName || '' === $presetIdOrSystemName)) {
             return null;

@@ -1214,12 +1214,10 @@ class TCMSImageEndpoint
         return $oThumb;
     }
 
-
     /**
      * is used for crop images (=thumbnails) that are still too big
      * the crop preset gives the proportions, for example for teasers in a row,
      * then the $maxWidth decrease the image for the size needed.
-     *
      */
     public function decreaseThumbnail(int $maxWidth = 0)
     {
@@ -1266,13 +1264,12 @@ class TCMSImageEndpoint
 
         if (!file_exists($thumbPath)) {
             // now we need to resize the actual image
-            $image_p = $this->GetThumbnailPointer($newThumb);
-            $this->CreateThumbnail($image_p, $sOriginalExtension, $thumbPath, [], $newThumb);
+            $imagePointer = $this->GetThumbnailPointer($newThumb);
+            $this->CreateThumbnail($imagePointer, $sOriginalExtension, $thumbPath, [], $newThumb);
         }
 
         return $newThumb;
     }
-
 
     /**
      * Checks if png thumbnail should be transform to jpg.
@@ -1462,7 +1459,7 @@ class TCMSImageEndpoint
     /**
      * returns thumbnail object forced to the given
      * dimensions (by trim, not by distort).
-     * Is also used for crop images with Crop-Preset
+     * Is also used for crop images with Crop-Preset.
      *
      * @param int $iMaxWidth
      * @param int $iMaxHeight

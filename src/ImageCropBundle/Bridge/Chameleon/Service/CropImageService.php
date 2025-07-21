@@ -56,7 +56,6 @@ class CropImageService implements CropImageServiceInterface
         $fallbackOnNoCrop = true,
         $maxTargetWidth = 0
     ) {
-
         $preset = $this->imageCropPresetDataAccess->getPresetById($presetId);
         if (null === $preset) {
             return null;
