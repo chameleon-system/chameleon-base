@@ -21,15 +21,11 @@ $util = ServiceLocator::get('chameleon_system_core.util.field_translation');
 $germanLanguage = TdbCmsLanguage::GetNewInstance();
 $germanLanguage->LoadFromField('iso_6391', 'de');
 
-$fieldName = 'name';
-if ($util->isTranslationNeeded($germanLanguage)) {
-    $fieldName = $util->getTranslatedFieldName('cms_document_tree', 'name', $germanLanguage);
-}
-
-foreach ($namesToDelete as $name) {
+foreach ($namesToDelete as $nameToDelete) {
     $cmsDocumentTree = TdbCmsDocumentTree::GetNewInstance();
+    $cmsDocumentTree->SetLanguage($germanLanguage->id);
 
-    if ($cmsDocumentTree->LoadFromField($fieldName, $name)) {
+    if ($cmsDocumentTree->LoadFromField('name', $nameToDelete)) {
         $data = TCMSLogChange::createMigrationQueryData('cms_document_tree', 'de')
             ->setWhereEquals([
                 'id' => $cmsDocumentTree->id,
