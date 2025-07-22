@@ -13,6 +13,7 @@ namespace ChameleonSystem\ImageCropBundle\Bridge\Chameleon\Service;
 
 use ChameleonSystem\ImageCrop\DataModel\CmsMediaDataModel;
 use ChameleonSystem\ImageCrop\DataModel\ImageCropDataModel;
+use ChameleonSystem\ImageCrop\DataModel\ImageCropPresetDataModel;
 use ChameleonSystem\ImageCrop\DataModel\ImageDataModel;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
 use ChameleonSystem\ImageCrop\Interfaces\CropImageServiceInterface;
@@ -53,8 +54,14 @@ class CropImageService implements CropImageServiceInterface
         $cmsMediaId,
         $presetId,
         $languageId,
-        $fallbackOnNoCrop = true
+        $fallbackOnNoCrop = true,
+        $maxTargetWidth = 0
     ) {
+        $preset = $this->imageCropPresetDataAccess->getPresetById($presetId);
+        if (null === $preset) {
+            return null;
+        }
+
         $cmsMedia = $this->cmsMediaDataAccess->getCmsMedia($cmsMediaId, $languageId);
         if (null === $cmsMedia) {
             $cmsMedia = new CmsMediaDataModel(
@@ -65,24 +72,65 @@ class CropImageService implements CropImageServiceInterface
             );
         }
 
-        $preset = $this->imageCropPresetDataAccess->getPresetById($presetId);
-        if (null === $preset) {
-            return null;
-        }
-
         $crop = $this->imageCropDataAccess->getImageCrop($cmsMedia, $preset);
         if (null === $crop) {
             if (false === $fallbackOnNoCrop) {
                 return null;
             }
-            $cmsImage = new \TCMSImage($cmsMedia->getId());
 
-            return new ImageDataModel(
-                $cmsImage->GetForcedSizeThumbnail($preset->getWidth(), $preset->getHeight())->GetFullURL()
-            );
+            return $this->createCropAndCheckMaxTargetWidth($cmsMediaId, $preset, $maxTargetWidth);
         }
 
-        return $this->getCroppedImage($crop);
+        // Image crop exists in Media manager!
+        // $crop fits or is even smaller
+        if ($preset->getWidth() <= $maxTargetWidth || $crop->getImageCropPreset()->getWidth() <= $maxTargetWidth) {
+            return $this->getCroppedImage($crop);
+        }
+
+        return $this->convertCropToImageAndDecreaseToMaxTargetWidth($crop, $maxTargetWidth);
+    }
+
+    private function createCropAndCheckMaxTargetWidth(string $cmsMediaId, ImageCropPresetDataModel $preset, int $maxTargetWidth = 0): ImageDataModel
+    {
+        $cmsImage = new \TCMSImage($cmsMediaId);
+        $croppedImage = $cmsImage->GetForcedSizeThumbnail($preset->getWidth(), $preset->getHeight());
+
+        if ($croppedImage->aData['width'] > $maxTargetWidth) {
+            return $this->decreaseThumbnailToTargetWidth($croppedImage, $maxTargetWidth);
+        }
+
+        return new ImageDataModel($croppedImage->GetFullURL());
+    }
+
+    private function convertCropToImageAndDecreaseToMaxTargetWidth(ImageCropDataModel $crop, int $maxTargetWidth = 0): ImageDataModel
+    {
+        // Create a TCMSImage for using decreaseThumbnail with datas of $crop
+        $image = new \TCMSImage($crop->getCmsMedia()->getId());
+
+        $croppedImage = $image->getCroppedImage(
+            $crop->getImageCropPreset()->getWidth(),
+            $crop->getImageCropPreset()->getHeight(),
+            $crop->getWidth(),
+            $crop->getHeight(),
+            $crop->getPosX(),
+            $crop->getPosY()
+        );
+
+        return $this->decreaseThumbnailToTargetWidth($croppedImage, $maxTargetWidth);
+    }
+
+    private function decreaseThumbnailToTargetWidth(\TCMSImage $croppedImage, string $maxTargetWidth): ImageDataModel
+    {
+        $croppedImage->_isThumbnail = true;
+        $croppedImage->aData['thumbOriginalUrl'] = $croppedImage->GetFullLocalPath();
+
+        $cropSmall = $croppedImage->decreaseThumbnail($maxTargetWidth);
+
+        if (null === $cropSmall) {
+            return new ImageDataModel($croppedImage->GetFullURL());
+        }
+
+        return new ImageDataModel($cropSmall->GetFullURL());
     }
 
     /**

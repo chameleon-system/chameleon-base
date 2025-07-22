@@ -259,6 +259,6 @@ class ImageCropDataModel
      */
     public function setTargetWidth($targetWidth)
     {
-        $this->targetHeight = $targetWidth;
+        $this->targetWidth = $targetWidth;
     }
 }

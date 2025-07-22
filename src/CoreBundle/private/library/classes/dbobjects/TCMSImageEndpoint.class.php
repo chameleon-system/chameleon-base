@@ -930,12 +930,17 @@ class TCMSImageEndpoint
 
         $imageType = $this->GetImageType();
 
+        $fileName = $this->GetLocalMediaDirectory().$this->aData['path'];
+        if (isset($this->aData['thumbOriginalUrl']) && '' !== $this->aData['thumbOriginalUrl']) {
+            $fileName = $this->aData['thumbOriginalUrl'];
+        }
+
         if ('jpg' == $imageType) {
-            $image = imagecreatefromjpeg($this->GetLocalMediaDirectory().$this->aData['path']);
+            $image = imagecreatefromjpeg($fileName);
         } elseif ('gif' == $imageType) {
-            $image = imagecreatefromgif($this->GetLocalMediaDirectory().$this->aData['path']);
+            $image = imagecreatefromgif($fileName);
         } elseif ('png' == $imageType) {
-            $image = imagecreatefrompng($this->GetLocalMediaDirectory().$this->aData['path']);
+            $image = imagecreatefrompng($fileName);
             imagealphablending($image, true);
         }
 
@@ -1210,6 +1215,63 @@ class TCMSImageEndpoint
     }
 
     /**
+     * is used for crop images (=thumbnails) that are still too big
+     * the crop preset gives the proportions, for example for teasers in a row,
+     * then the $maxWidth decrease the image for the size needed.
+     */
+    public function decreaseThumbnail(int $maxWidth = 0)
+    {
+        if (false === $this->_isThumbnail || !isset($this->aData['thumbOriginalUrl'])) {
+            return null;
+        }
+
+        if (!file_exists($this->aData['thumbOriginalUrl'])) {
+            return null;
+        }
+
+        $newThumb = new TCMSImage();
+        $newThumb->aData = $this->aData;
+        $newThumb->aData['width'] = 0;
+        $newThumb->aData['height'] = 0;
+        $newThumb->id = $this->id;
+        $newThumb->_isThumbnail = true;
+
+        $needToCreateThumb = $this->GetThumbnailProportions($newThumb, $maxWidth, 2000);
+
+        if (false === $needToCreateThumb) {
+            return $this;
+        }
+
+        $thumbWidth = $newThumb->aData['width'];
+        $thumbHeight = $newThumb->aData['height'];
+
+        $bTransFormToJPG = $this->CheckImageTransformPngToJpg($newThumb);
+
+        $sOriginalExtension = 'jpg';
+        if ($this->SupportsTransparency()) {
+            $sOriginalExtension = 'png';
+        }
+        $sEffectFileNamePart = '';
+
+        if ('jpg' != strtolower($sOriginalExtension) && 'jpeg' != strtolower($sOriginalExtension) && $bTransFormToJPG) {
+            $sOriginalExtension = 'jpg';
+        }
+
+        $thumbName = $newThumb->GenerateThumbName($thumbWidth, $thumbHeight, $sEffectFileNamePart, $sOriginalExtension);
+        $thumbPath = $newThumb->GetLocalMediaDirectory(true).$thumbName;
+
+        $newThumb->aData['path'] = $thumbName;
+
+        if (!file_exists($thumbPath)) {
+            // now we need to resize the actual image
+            $imagePointer = $this->GetThumbnailPointer($newThumb);
+            $this->CreateThumbnail($imagePointer, $sOriginalExtension, $thumbPath, [], $newThumb);
+        }
+
+        return $newThumb;
+    }
+
+    /**
      * Checks if png thumbnail should be transform to jpg.
      * Check with imagemagick configured in cms config.
      *
@@ -1397,6 +1459,7 @@ class TCMSImageEndpoint
     /**
      * returns thumbnail object forced to the given
      * dimensions (by trim, not by distort).
+     * Is also used for crop images with Crop-Preset.
      *
      * @param int $iMaxWidth
      * @param int $iMaxHeight
@@ -1448,8 +1511,8 @@ class TCMSImageEndpoint
             // get thumbnail object
             $oThumb = $this->InitThumbnailing();
             $oThumb->_isThumbnail = true;
-            $oThumb->aData['width'] = $width;
-            $oThumb->aData['height'] = $height;
+            $oThumb->aData['width'] = $iMaxWidth;
+            $oThumb->aData['height'] = $iMaxHeight;
 
             $sOriginalExtension = 'jpg';
             if ($this->SupportsTransparency()) {

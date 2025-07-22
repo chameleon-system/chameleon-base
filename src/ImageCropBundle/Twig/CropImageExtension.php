@@ -74,7 +74,7 @@ class CropImageExtension extends AbstractExtension
      *
      * @return string|null
      */
-    public function imageUrlWithCropFallbackPreset($imageId, $cropId, $presetIdOrSystemName)
+    public function imageUrlWithCropFallbackPreset($imageId, $cropId, $presetIdOrSystemName, $maxTargetWidth = 0)
     {
         if (null !== $cropId && '' !== $cropId) {
             $image = $this->cropImageService->getCroppedImageForCmsMediaIdAndCropId(
@@ -92,7 +92,9 @@ class CropImageExtension extends AbstractExtension
             $image = $this->cropImageService->getCroppedImageForCmsMediaIdAndPresetId(
                 $imageId,
                 $presetId,
-                $this->getLanguageId()
+                $this->getLanguageId(),
+                true,
+                $maxTargetWidth
             );
         }
 
@@ -181,16 +183,13 @@ class CropImageExtension extends AbstractExtension
     }
 
     /**
-     * @param string $imageId
-     * @param string|null $cropId
-     * @param int $targetWidth
-     * @param int $targetHeight
+     * @param string|null $presetIdOrSystemName
      *
      * @return string|null
      */
-    public function imageUrlWithCropSize($imageId, $cropId, $targetWidth = 0, $targetHeight = 0)
+    public function imageUrlWithCropSize(string $imageId, ?string $cropId, int $targetWidth = 0, int $targetHeight = 0, $presetIdOrSystemName = null)
     {
-        if (null === $cropId || '' === $cropId) {
+        if ((null === $cropId || '' === $cropId) && (null === $presetIdOrSystemName || '' === $presetIdOrSystemName)) {
             return null;
         }
 
