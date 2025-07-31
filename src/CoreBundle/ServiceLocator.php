@@ -30,7 +30,7 @@ class ServiceLocator
     /**
      * @template T of object
      *
-     * @param string $serviceId
+     * @param class-string<T>|string $serviceId
      *
      * @return T|object
      *
