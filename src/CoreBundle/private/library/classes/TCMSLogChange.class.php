@@ -2186,6 +2186,7 @@ class TCMSLogChange
      */
     public static function addToSnippetChain($pathToAdd, $afterThisPath = null, array $toTheseThemes = [])
     {
+        self::getSnippetChainModifier()->removeFromSnippetChain($pathToAdd, $toTheseThemes);
         self::getSnippetChainModifier()->addToSnippetChain($pathToAdd, $afterThisPath, $toTheseThemes);
     }
 
