@@ -434,6 +434,10 @@
                 <source>chameleon_system_cms_dashboard.widget.group_name_system</source>
                 <target>Server Status</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_cms_dashboard.widget.group_name_cache">
+                <source>chameleon_system_cms_dashboard.widget.group_name_cache</source>
+                <target>Cache</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
