@@ -471,6 +471,8 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
      *
      * This method evaluates if a field is searchable by checking if it does not end with '_mlt' (indicating it's not a multi-link-table/one to many field)
      * and verifying the field's existence in the database. It handles fields that may be aliases or virtual fields that only work with a callback method.
+     *
+     * @throws Exception
      */
     protected function isListFieldSearchable(array $fieldConfig): bool
     {
@@ -490,7 +492,26 @@ class TCMSListManagerFullGroupTable extends TCMSListManager
             }
         }
 
+        // based on fieldConfig, list fields are part of this table as well,
+        // even if they are created from an alias referencing a different table,
+        // so we need to extract the information about the original table from
+        // the provided table object list query
+        $originalTableName = $this->resolveTableAlias($this->tableObj->sql, $tableName);
+        if (null !== $originalTableName) {
+            $tableName = $originalTableName;
+        }
+
         return !str_ends_with($fieldName, '_mlt') && $toolsService::FieldExists($tableName, $fieldName, false);
+    }
+
+    protected function resolveTableAlias(string $sql, string $alias): ?string
+    {
+        $pattern = "#JOIN\s+`?(\w+)`?\s+(?:AS\s+)?`?{$alias}`?#i";
+        if (preg_match($pattern, $sql, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
     }
 
     /**
