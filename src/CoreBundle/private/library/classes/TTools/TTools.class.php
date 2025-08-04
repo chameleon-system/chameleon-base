@@ -322,6 +322,7 @@ class TTools
      * @param bool $bCheckFieldConfig - optional param, if set to true cms_field_conf will be searched for the field instead of SHOW FIELDS
      *
      * @return bool
+     * @throws Exception
      */
     public static function FieldExists($sTableName, $sFieldName, $bCheckFieldConfig = false)
     {
