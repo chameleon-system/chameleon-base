@@ -7,54 +7,54 @@
 {% endblock %}
 
 {% block main %}
-    <main class="flex-grow-1 d-flex align-items-center justify-content-center">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-11 col-sm-9 col-md-8 col-lg-6 col-xl-4">
-                    <div class="card">
-                        {{ include('@ChameleonSystemSecurity/cms/components/card-header.html.twig') }}
-                        <div class="card-body">
-                            {% if error %}
-                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                            {% endif %}
+<main class="flex-grow-1 d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-11 col-sm-9 col-md-8 col-lg-6 col-xl-4">
+                <div class="card">
+                    {{ include('@ChameleonSystemSecurity/cms/components/card-header.html.twig') }}
+                    <div class="card-body">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
 
-                            <div class="text-center mt-1 m-3 text-dark">
-                                <h2>Backend Login</h2>
-                            </div>
-
-                            <form name="cmsform" action="{{ path('cms_login') }}" method="post">
-                                <fieldset>
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
-                                            <input class="form-control form-control-lg" placeholder="{{ 'chameleon_system_core.cms_module_login.form_user_name' | trans | e('html_attr') }}" type="text" id="username" name="_username" value="{{ last_username | e('html_attr') }}" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
-                                            <input class="form-control form-control-lg" placeholder="{{ 'chameleon_system_core.cms_module_login.form_password' | trans | e('html_attr') }}" type="password" id="password" name="_password" />
-                                        </div>
-                                    </div>
-                                    <input class="btn btn-lg btn-dark btn-block" type="submit" value="{{ 'chameleon_system_core.cms_module_login.action_login' | trans | e('html_attr') }}">
-                                </fieldset>
-                            </form>
-                            {% if googleLoginUrl %}
-                                <form class="mt-2" name="cms-google-login-form" method="post" action="{{ googleLoginUrl |e('html_attr') }}">
-                                    <fieldset>
-                                        <div class="form-group">
-                                            <button class="btn btn-lg btn-secondary btn-block"><span class="fab fa-google mr-2"></span> {{ 'chameleon_system_core.security.action_login_google' | trans }}</button>
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            {% endif %}
+                        <div class="text-center mt-1 m-3 text-dark">
+                            <h2>Backend Login</h2>
                         </div>
-                        {{ include('@ChameleonSystemSecurity/cms/components/card-footer.html.twig') }}
+
+                        <form name="cmsform" action="{{ path('cms_login') }}" method="post">
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
+                                        <input class="form-control form-control-lg" placeholder="{{ 'chameleon_system_core.cms_module_login.form_user_name' | trans | e('html_attr') }}" type="text" id="username" name="_username" value="{{ last_username | e('html_attr') }}" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
+                                        <input class="form-control form-control-lg" placeholder="{{ 'chameleon_system_core.cms_module_login.form_password' | trans | e('html_attr') }}" type="password" id="password" name="_password" />
+                                    </div>
+                                </div>
+                                <input class="btn btn-lg btn-dark btn-block" type="submit" value="{{ 'chameleon_system_core.cms_module_login.action_login' | trans | e('html_attr') }}">
+                            </fieldset>
+                        </form>
+                        {% if googleLoginUrl %}
+                        <form class="mt-2" name="cms-google-login-form" method="post" action="{{ googleLoginUrl |e('html_attr') }}">
+                            <fieldset>
+                                <div class="form-group">
+                                    <button class="btn btn-lg btn-secondary btn-block"><span class="fab fa-google mr-2"></span> {{ 'chameleon_system_core.security.action_login_google' | trans }}</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                        {% endif %}
                     </div>
+                    {{ include('@ChameleonSystemSecurity/cms/components/card-footer.html.twig') }}
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 {% endblock %}
 
 {% block backend_footer %}
