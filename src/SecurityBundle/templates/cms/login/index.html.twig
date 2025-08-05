@@ -37,10 +37,17 @@
                                     </div>
                                 </div>
                                 <input class="btn btn-lg btn-dark btn-block" type="submit" value="{{ 'chameleon_system_core.cms_module_login.action_login' | trans | e('html_attr') }}">
-
-                                {% if googleLoginUrl %}<a href="{{ googleLoginUrl |e('html_attr') }}" class="btn btn-lg btn-secondary btn-block"><span class="fab fa-google mr-2"></span> {{ 'chameleon_system_core.security.action_login_google' | trans }}</a>{% endif %}
                             </fieldset>
                         </form>
+                        {% if googleLoginUrl %}
+                        <form class="mt-2" name="cms-google-login-form" method="post" action="{{ googleLoginUrl |e('html_attr') }}">
+                            <fieldset>
+                                <div class="form-group">
+                                    <button class="btn btn-lg btn-secondary btn-block"><span class="fab fa-google mr-2"></span> {{ 'chameleon_system_core.security.action_login_google' | trans }}</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                        {% endif %}
                     </div>
                     {{ include('@ChameleonSystemSecurity/cms/components/card-footer.html.twig') }}
                 </div>
