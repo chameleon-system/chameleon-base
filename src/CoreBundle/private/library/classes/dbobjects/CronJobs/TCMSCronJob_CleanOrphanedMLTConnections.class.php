@@ -78,6 +78,11 @@ class TCMSCronJob_CleanOrphanedMLTConnections extends TdbCmsCronjobs
     protected function GetFieldObjectForCmsFieldConf($oTmpField)
     {
         $oTableConf = $oTmpField->GetFieldCmsTblConf();
+
+        if (null === $oTableConf) {
+            return null;
+        }
+
         $oField = $oTmpField->GetFieldObject();
         $oField->sTableName = $oTableConf->fieldName;
         $oField->oDefinition = $oTmpField;
