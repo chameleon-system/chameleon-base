@@ -353,6 +353,10 @@ chameleon_system_security:
 - `CMSGMap` removed
 - `CMSiconList` removed
 - chameleon-system/sanitycheck and chameleon-system/sanitycheckBundle have been removed
+- `@Route` PHPDoc annotations need to be changed to PHP attributes `#[Route`
+  - `@Route("/api/ebuch/retailer/get-login-token", name="get-login-token", methods={"POST"})` changes to `#[Route('/api/ebuch/retailer/get-login-token', name: 'get-login-token', methods: ['POST'])]` 
+  - Additionally, the route configurations in the routes.yml need to be adjusted
+    - `type: annotation` becomes `type: attribute`
 
 ## jQuery in Theme
 
