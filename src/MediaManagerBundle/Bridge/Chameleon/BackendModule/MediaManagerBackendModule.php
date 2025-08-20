@@ -826,7 +826,7 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $mediaTreeNodeId = $this->inputFilterUtil->getFilteredPostInput('treeId');
 
         /** @var string[]|null $imageIds */
-        $imageIds = $this->inputFilterUtil->getFilteredPostInput('imageIds');
+        $imageIds = $this->inputFilterUtil->getFilteredPostInputArray('imageIds');
 
         if (null === $mediaTreeNodeId || false === is_array($imageIds)) {
             $this->logAndReturnError('MediaManagerBackendModule: images ids or media tree node id are missing');
@@ -929,7 +929,7 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
     protected function confirmDeleteMediaItem()
     {
         $return = new JavascriptPluginRenderedContent();
-        $mediaItemIds = $this->inputFilterUtil->getFilteredPostInput('id');
+        $mediaItemIds = $this->inputFilterUtil->getFilteredPostInputArray('id');
         $return->hasError = true;
         if (true === is_array($mediaItemIds)) {
             $return->hasError = false;
@@ -955,7 +955,7 @@ class MediaManagerBackendModule extends \MTPkgViewRendererAbstractModuleMapper
         $return->hasError = false;
         try {
             /** @var string[]|null $mediaItemIds */
-            $mediaItemIds = $this->inputFilterUtil->getFilteredPostInput('id');
+            $mediaItemIds = $this->inputFilterUtil->getFilteredPostInputArray('id');
 
             if (true === is_array($mediaItemIds)) {
                 foreach ($mediaItemIds as $mediaItemId) {

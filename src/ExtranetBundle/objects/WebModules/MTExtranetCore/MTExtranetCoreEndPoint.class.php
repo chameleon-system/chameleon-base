@@ -1162,7 +1162,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
         $inputFilterUtil = $this->getInputFilterUtil();
 
         /** @var array $aData */
-        $aData = $inputFilterUtil->getFilteredPostInput($sInputArrayName);
+        $aData = $inputFilterUtil->getFilteredPostInputArray($sInputArrayName);
 
         if ($aData) {
             $aFieldBlacklist = $this->getFieldBlackList($fieldBlacklistType);
@@ -1185,7 +1185,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                 TCMSUserInput::FILTER_DEFAULT => ['name', 'email'],
                 TCMSUserInput::FILTER_PASSWORD => ['password', 'password2'],
             ];
-            $aUnfiltered = $inputFilterUtil->getFilteredPostInput($sInputArrayName, [], false, TCMSUserInput::FILTER_DEFAULT);
+            $aUnfiltered = $inputFilterUtil->getFilteredPostInputArray($sInputArrayName, [], false, TCMSUserInput::FILTER_DEFAULT);
             foreach ($aFilterList as $sFilterClass => $aFields) {
                 foreach ($aFields as $sFieldName) {
                     if (array_key_exists($sFieldName, $aUnfiltered)) {

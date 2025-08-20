@@ -84,7 +84,24 @@ class InputFilterUtil implements InputFilterUtilInterface
         try {
             return $this->filterValue($request->request->get($key, $default, $deep), $filter);
         } catch (\InvalidArgumentException|BadRequestException $e) {
-            $this->logger->warning('getFilteredPostInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredPostInputArray instead.', ['key' => $key, 'default' => $default, 'filter' => $filter]);
+            $trace = $e->getTrace();
+            $errorOrigin = '';
+
+            if (array_key_exists(1, $trace)) {
+                $errorOrigin = $trace[1]['file'];
+            }
+
+            $this->logger->warning(
+                sprintf(
+                    'getFilteredPostInput for receiving arrays is deprecated, it just works for scalar values. If you expect an array, please use getFilteredPostInputArray instead. (Triggered in %s)',
+                    $errorOrigin
+                ),
+                [
+                    'key'     => $key,
+                    'default' => $default,
+                    'filter'  => $filter,
+                ]
+            );
 
             return $this->getFilteredPostInputArray($key, $default, $filter);
         }
