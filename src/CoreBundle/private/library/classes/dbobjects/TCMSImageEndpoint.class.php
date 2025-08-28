@@ -929,6 +929,7 @@ class TCMSImageEndpoint
         $image = null;
 
         $imageType = $this->GetImageType();
+        $imageType = $this->checkExtensionFromPath($imageType);
 
         $fileName = $this->GetLocalMediaDirectory().$this->aData['path'];
         if (isset($this->aData['thumbOriginalUrl']) && '' !== $this->aData['thumbOriginalUrl']) {
@@ -1014,6 +1015,23 @@ class TCMSImageEndpoint
 
         return 'png' == $sFileType || 'gif' == $sFileType;
     }
+
+    private function checkExtensionFromPath(string $originalExtension): string
+    {
+        //See explanation in Ticket #67532
+        $purePath = parse_url($this->aData['path'], PHP_URL_PATH) ?: $this->aData['path'];
+        $extFromPath = strtolower(pathinfo($purePath, PATHINFO_EXTENSION));
+        if ('jpeg' === $extFromPath) {
+            $extFromPath = 'jpg';
+        }
+        if (('jpg' === $extFromPath || 'png' === $extFromPath) and $extFromPath !== $originalExtension) {
+            $originalExtension = $extFromPath;
+        }
+
+        return $originalExtension;
+    }
+
+
 
     /**
      * initialises a new TCMSImage object for the thumbnail.
@@ -1247,10 +1265,9 @@ class TCMSImageEndpoint
 
         $bTransFormToJPG = $this->CheckImageTransformPngToJpg($newThumb);
 
-        $sOriginalExtension = 'jpg';
-        if ($this->SupportsTransparency()) {
-            $sOriginalExtension = 'png';
-        }
+        $sOriginalExtension = $this->SupportsTransparency() ? 'png' : 'jpg';
+        $sOriginalExtension = $this->checkExtensionFromPath($sOriginalExtension);
+
         $sEffectFileNamePart = '';
 
         if ('jpg' != strtolower($sOriginalExtension) && 'jpeg' != strtolower($sOriginalExtension) && $bTransFormToJPG) {
@@ -1514,10 +1531,9 @@ class TCMSImageEndpoint
             $oThumb->aData['width'] = $iMaxWidth;
             $oThumb->aData['height'] = $iMaxHeight;
 
-            $sOriginalExtension = 'jpg';
-            if ($this->SupportsTransparency()) {
-                $sOriginalExtension = 'png';
-            }
+            $sOriginalExtension = $this->SupportsTransparency() ? 'png' : 'jpg';
+            $sOriginalExtension = $this->checkExtensionFromPath($sOriginalExtension);
+
             $sEffectFileNamePart = '-'.md5('square');
             $thumbName = $this->GenerateThumbName($iMaxWidth, $iMaxHeight, $sEffectFileNamePart, $sOriginalExtension);
             $thumbPath = $this->GetLocalMediaDirectory(true).$thumbName;
