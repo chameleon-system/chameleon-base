@@ -95,7 +95,7 @@ class CropImageService implements CropImageServiceInterface
         $cmsImage = new \TCMSImage($cmsMediaId);
         $croppedImage = $cmsImage->GetForcedSizeThumbnail($preset->getWidth(), $preset->getHeight());
 
-        if ($croppedImage->aData['width'] > $maxTargetWidth) {
+        if ($maxTargetWidth > 0 && $croppedImage->aData['width'] > $maxTargetWidth) {
             return $this->decreaseThumbnailToTargetWidth($croppedImage, $maxTargetWidth);
         }
 
