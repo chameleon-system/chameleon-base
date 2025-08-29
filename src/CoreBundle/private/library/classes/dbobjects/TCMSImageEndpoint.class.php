@@ -929,7 +929,7 @@ class TCMSImageEndpoint
         $image = null;
 
         $imageType = $this->GetImageType();
-        $imageType = $this->checkExtensionFromPath($imageType);
+        $imageType = $this->fixExtensionFromRealPath($imageType);
 
         $fileName = $this->GetLocalMediaDirectory().$this->aData['path'];
         if (isset($this->aData['thumbOriginalUrl']) && '' !== $this->aData['thumbOriginalUrl']) {
@@ -1016,19 +1016,22 @@ class TCMSImageEndpoint
         return 'png' == $sFileType || 'gif' == $sFileType;
     }
 
-    private function checkExtensionFromPath(string $originalExtension): string
+    private function fixExtensionFromRealPath(string $cmsMediaFileType): string
     {
+        $realExtension = $cmsMediaFileType;
+
         //See explanation in Ticket #67532
         $purePath = parse_url($this->aData['path'], PHP_URL_PATH) ?: $this->aData['path'];
         $extFromPath = strtolower(pathinfo($purePath, PATHINFO_EXTENSION));
         if ('jpeg' === $extFromPath) {
             $extFromPath = 'jpg';
         }
-        if (('jpg' === $extFromPath || 'png' === $extFromPath) and $extFromPath !== $originalExtension) {
-            $originalExtension = $extFromPath;
+        if (('jpg' === $extFromPath || 'png' === $extFromPath) and $extFromPath !== $cmsMediaFileType) {
+            $realExtension = $extFromPath;
+            $this->_imageType = $extFromPath;
         }
 
-        return $originalExtension;
+        return $realExtension;
     }
 
 
@@ -1265,16 +1268,16 @@ class TCMSImageEndpoint
 
         $bTransFormToJPG = $this->CheckImageTransformPngToJpg($newThumb);
 
-        $sOriginalExtension = $this->SupportsTransparency() ? 'png' : 'jpg';
-        $sOriginalExtension = $this->checkExtensionFromPath($sOriginalExtension);
+        $imageType = $this->GetImageType();
+        $imageType = $this->fixExtensionFromRealPath($imageType);
 
         $sEffectFileNamePart = '';
 
-        if ('jpg' != strtolower($sOriginalExtension) && 'jpeg' != strtolower($sOriginalExtension) && $bTransFormToJPG) {
-            $sOriginalExtension = 'jpg';
+        if ('jpg' != strtolower($imageType) && 'jpeg' != strtolower($imageType) && $bTransFormToJPG) {
+            $imageType = 'jpg';
         }
 
-        $thumbName = $newThumb->GenerateThumbName($thumbWidth, $thumbHeight, $sEffectFileNamePart, $sOriginalExtension);
+        $thumbName = $newThumb->GenerateThumbName($thumbWidth, $thumbHeight, $sEffectFileNamePart, $imageType);
         $thumbPath = $newThumb->GetLocalMediaDirectory(true).$thumbName;
 
         $newThumb->aData['path'] = $thumbName;
@@ -1282,7 +1285,7 @@ class TCMSImageEndpoint
         if (!file_exists($thumbPath)) {
             // now we need to resize the actual image
             $imagePointer = $this->GetThumbnailPointer($newThumb);
-            $this->CreateThumbnail($imagePointer, $sOriginalExtension, $thumbPath, [], $newThumb);
+            $this->CreateThumbnail($imagePointer, $imageType, $thumbPath, [], $newThumb);
         }
 
         return $newThumb;
@@ -1531,11 +1534,11 @@ class TCMSImageEndpoint
             $oThumb->aData['width'] = $iMaxWidth;
             $oThumb->aData['height'] = $iMaxHeight;
 
-            $sOriginalExtension = $this->SupportsTransparency() ? 'png' : 'jpg';
-            $sOriginalExtension = $this->checkExtensionFromPath($sOriginalExtension);
+            $imageType = $this->GetImageType();
+            $imageType = $this->fixExtensionFromRealPath($imageType);
 
             $sEffectFileNamePart = '-'.md5('square');
-            $thumbName = $this->GenerateThumbName($iMaxWidth, $iMaxHeight, $sEffectFileNamePart, $sOriginalExtension);
+            $thumbName = $this->GenerateThumbName($iMaxWidth, $iMaxHeight, $sEffectFileNamePart, $imageType);
             $thumbPath = $this->GetLocalMediaDirectory(true).$thumbName;
 
             // set new squaresized thumbnail name
@@ -1557,7 +1560,7 @@ class TCMSImageEndpoint
                     } else {
                         $thumbnailRealPath = realpath($thumbPath);
                         if (false !== $thumbnailRealPath) {
-                            $this->thumbnailCreatedHook($thumbnailRealPath, $sOriginalExtension);
+                            $this->thumbnailCreatedHook($thumbnailRealPath, $imageType);
                         }
                     }
                 } else {
