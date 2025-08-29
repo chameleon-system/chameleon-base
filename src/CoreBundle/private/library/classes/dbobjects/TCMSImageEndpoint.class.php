@@ -1020,7 +1020,7 @@ class TCMSImageEndpoint
     {
         $realExtension = $cmsMediaFileType;
 
-        //See explanation in Ticket #67532
+        // See explanation in Ticket #67532
         $purePath = parse_url($this->aData['path'], PHP_URL_PATH) ?: $this->aData['path'];
         $extFromPath = strtolower(pathinfo($purePath, PATHINFO_EXTENSION));
         if ('jpeg' === $extFromPath) {
@@ -1033,8 +1033,6 @@ class TCMSImageEndpoint
 
         return $realExtension;
     }
-
-
 
     /**
      * initialises a new TCMSImage object for the thumbnail.
