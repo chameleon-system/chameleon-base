@@ -1,0 +1,26 @@
+<div id="editor_holder"></div>
+<input type="hidden" name="json_editor" id="json_editor_field">
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const editor = new JSONEditor(document.getElementById('editor_holder'), {
+            theme: 'bootstrap5',
+            schema: {
+                type: 'object',
+                properties: {
+                    name: { type: 'string', title: 'Name' },
+                    age:  { type: 'integer', title: 'Alter' }
+                }
+            }
+        });
+
+        const hidden = document.getElementById('json_editor_field');
+
+        const sync = () => {
+            hidden.value = JSON.stringify(editor.getValue());
+        };
+
+        editor.on('change', sync);
+        sync();
+    });
+</script>
