@@ -2,12 +2,9 @@
 
 namespace ChameleonSystem\JsonFieldEditorBundle\Bridge\Chameleon\Field;
 
-use TCMSField;
-use TCMSFieldText;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ViewRenderer;
 
-class TCMSFieldJsonEditor extends TCMSField
+class TCMSFieldJsonEditor extends \TCMSField
 {
     public function GetHTML(): string
     {
@@ -38,8 +35,8 @@ class TCMSFieldJsonEditor extends TCMSField
     {
         $includes = $this->getHtmlHeadIncludes();
         $includes[] = '<script type="text/javascript" src="'.\TGlobal::GetStaticURL(
-                '/bundles/chameleonsystemjsonfieldeditor/js/json-editor/jsoneditor.min.js'
-            ).'"></script>';
+            '/bundles/chameleonsystemjsonfieldeditor/js/json-editor/jsoneditor.min.js'
+        ).'"></script>';
 
         return $includes;
     }
@@ -50,28 +47,16 @@ class TCMSFieldJsonEditor extends TCMSField
     public function GetSQL()
     {
         $sql = $this->ConvertDataToFieldBasedData($this->ConvertPostDataToSQL());
+
+        if (false === json_validate($sql)) {
+            return false;
+        }
+
         return $sql;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function PreGetSQLHook()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function PkgCmsFormPreGetSQLHook()
-    {
-        $test = 0;
-    }
-
-    protected function getViewRenderer(): ViewRenderer
+    protected function getViewRenderer(): \ViewRenderer
     {
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
-
 }
