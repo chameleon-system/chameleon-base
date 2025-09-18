@@ -42,6 +42,11 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
         parent::__construct('cms_document', $id);
     }
 
+    public function getLink(bool $absolute = false, ?string $anchor = null, array $optionalParameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
+    {
+        return $this->GetPlainDownloadLink(false, false, !$absolute);
+    }
+
     /**
      * returns the real file path on the server to the file.
      *

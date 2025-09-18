@@ -15,9 +15,4 @@ class DocumentFileDownload extends \ChameleonSystemMarkdownCmsBundleBridgeChamel
 
         return $fileName;
     }
-
-    public function getLink($bAbsolute = false, $sAnchor = null, $aOptionalParameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
-    {
-        return $this->GetPlainDownloadLink(false, false, !$bAbsolute);
-    }
 }
