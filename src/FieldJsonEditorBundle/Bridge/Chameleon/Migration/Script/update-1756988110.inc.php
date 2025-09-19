@@ -5,4 +5,4 @@
 </div>
 <?php
 
-TCMSLogChange::addToSnippetChain('ChameleonSystemJsonFieldEditorBundle', 'extensions', ['5f047d9b-0c20-0bfb-2dce-f8193653965c']);
+TCMSLogChange::addToSnippetChain('@ChameleonSystemFieldJsonEditorBundle/Resources/views', 'extensions', ['5f047d9b-0c20-0bfb-2dce-f8193653965c']);

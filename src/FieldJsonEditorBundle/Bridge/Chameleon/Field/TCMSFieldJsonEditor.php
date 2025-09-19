@@ -1,6 +1,6 @@
 <?php
 
-namespace ChameleonSystem\JsonFieldEditorBundle\Bridge\Chameleon\Field;
+namespace ChameleonSystem\FieldJsonEditorBundle\Bridge\Chameleon\Field;
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
 
@@ -12,7 +12,7 @@ class TCMSFieldJsonEditor extends \TCMSField
         $viewRenderer = $this->getViewRenderer();
 
         if (null === $editorLayout) {
-            return $viewRenderer->Render('Fields/jsonEditor/jsonEditorInputStandard.html.twig');
+            return $viewRenderer->Render('Fields/FieldJsonEditor/jsonEditorInputStandard.html.twig');
         }
 
         $jsonData = $this->_GetFieldValue();
@@ -25,17 +25,17 @@ class TCMSFieldJsonEditor extends \TCMSField
 
         $viewRenderer->AddSourceObject('jsonData', $jsonData);
 
-        return $viewRenderer->Render('Fields/jsonEditor/'.$editorLayout.'.html.twig');
+        return $viewRenderer->Render('Fields/FieldJsonEditor/'.$editorLayout.'.html.twig');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function GetCMSHtmlFooterIncludes(): array
+    public function GetCMSHtmlHeadIncludes(): array
     {
         $includes = $this->getHtmlHeadIncludes();
         $includes[] = '<script type="text/javascript" src="'.\TGlobal::GetStaticURL(
-            '/bundles/chameleonsystemjsonfieldeditor/js/json-editor/jsoneditor.min.js'
+            '/bundles/chameleonsystemfieldjsoneditor/js/json-editor/jsoneditor.min.js'
         ).'"></script>';
 
         return $includes;

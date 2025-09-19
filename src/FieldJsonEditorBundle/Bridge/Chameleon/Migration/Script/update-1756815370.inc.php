@@ -8,16 +8,21 @@
 $data = TCMSLogChange::createMigrationQueryData('cms_field_type', 'de')
   ->setFields([
       '049_trans' => 'Json Editor',
-      'fieldclass' => '\ChameleonSystem\JsonFieldEditorBundle\Bridge\Chameleon\Field\TCMSFieldJsonEditor',
+      'fieldclass' => '\ChameleonSystem\FieldJsonEditorBundle\Bridge\Chameleon\Field\TCMSFieldJsonEditor',
       'constname' => 'CMSFIELD_JSON_EDITOR',
       'mysql_type' => 'VARCHAR',
+      'length_set' => '255',
+      'base_type' => 'standard',
+      'indextype' => 'index',
+      'class_type' => 'Core',
+      'class_subtype' => '',
       'help_text' => '<div class="field-name"><strong>Feldname:</strong> json_editor
 </div>
 <div class="php-class"><strong>PHP Klasse:</strong> TCMSFieldJsonEditor extends TCMSField
 </div>
 <div>Erzeugt einen Json-Editor, mit dem einfach, korrekte Json Objekte erstellt und in der Datenbank gespeichert werden können.</div>
 <div>
-  Um ein Schema und somit Inhalt für den Edior anlegen zu können, muss ein entsprechendes Twig-Template unter snippets-cms/Fields/jsonEditor angelegt werden. Zur orientierung kann hier das standard File "jsonEditorInputStandard.html.twig" und die README des JsonFieldEditorBundles genutzt werden, indem sich ein Schema Beispiel befindet.
+  Um ein Schema und somit Inhalt für den Edior anlegen zu können, muss ein entsprechendes Twig-Template unter snippets-cms/Fields/jsonEditor angelegt werden. Zur orientierung kann hier das standard File "jsonEditorInputStandard.html.twig" und die README des FieldJsonEditorBundles genutzt werden, indem sich ein Schema Beispiel befindet.
 </div>
 <div>
   <ul>

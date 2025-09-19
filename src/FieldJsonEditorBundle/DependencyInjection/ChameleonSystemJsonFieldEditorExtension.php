@@ -1,13 +1,13 @@
 <?php
 
-namespace ChameleonSystem\JsonFieldEditorBundle\DependencyInjection;
+namespace ChameleonSystem\FieldJsonEditorBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class ChameleonSystemJsonFieldEditorExtension extends Extension
+class ChameleonSystemFieldJsonEditorExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
