@@ -39,9 +39,11 @@ class TCMSImageImageCrop extends \ChameleonSystemImageCropBundleBridgeChameleonT
             $originalExtension = 'png';
         }
         $sEffectFileNamePart = '-'.md5('cropped'.$cropWidth.$cropHeight.$x.$y);
-        $thumbName = $this->GenerateThumbName($targetWidth, $targetHeight, $sEffectFileNamePart, $originalExtension);
+        $thumbId = $this->getThumbId($targetWidth, $targetHeight, $sEffectFileNamePart);
+        $thumbName = $this->GenerateThumbName($targetWidth, $targetHeight, $sEffectFileNamePart, $originalExtension, $thumbId);
         $thumbPath = $this->GetLocalMediaDirectory(true).$thumbName;
         $thumbnail->aData['path'] = $thumbName;
+        $thumbnail->aData['thumbPathId'] = $thumbId;
 
         $originalSizeImagePointer = null;
 
