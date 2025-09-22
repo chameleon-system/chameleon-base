@@ -1346,24 +1346,43 @@ class TCMSImageEndpoint
      *
      * @return string
      */
-    protected function GenerateThumbName($iThumbWidth, $iThumbHeight, $sEffectFileNamePart, $sOriginalExtension)
+    protected function GenerateThumbName($iThumbWidth, $iThumbHeight, $sEffectFileNamePart, $sOriginalExtension, $thumbId = '')
     {
         $sFileName = trim($this->aData['description']);
         if (!empty($sFileName)) {
             $sFileName = TTools::StripTextWordSave(150, $this->aData['description']);
         }
         $sIDPart = '';
-        $sMD5Parts = $iThumbWidth.'x'.$iThumbHeight.$sEffectFileNamePart.$this->aData['time_stamp'];
-
         // to prevent masses of error images of the same size we add the image id only on real ids to the url and md5 key
         if (CHAMELEON_404_IMAGE_PATH_SMALL !== $this->aData['path'] && CHAMELEON_404_IMAGE_PATH_BIG !== $this->aData['path']) {
             $sIDPart = '-ID'.$this->aData['cmsident'];
-            $sMD5Parts = $this->id.'_'.$sMD5Parts;
         }
 
-        $sFileName = TTools::sanitizeFilename($this->getUrlNormalizationUtil()->normalizeUrl($sFileName)).'_'.$iThumbWidth.'x'.$iThumbHeight.$sIDPart.'-'.md5($sMD5Parts).'.'.$sOriginalExtension;
+        if ('' === $thumbId) {
+            $thumbId = $this->getThumbId($iThumbWidth, $iThumbHeight, $sEffectFileNamePart);
+        }
+
+        $sFileName = TTools::sanitizeFilename($this->getUrlNormalizationUtil()->normalizeUrl($sFileName)).'_'.$iThumbWidth.'x'.$iThumbHeight.$sIDPart.'-'.$thumbId.'.'.$sOriginalExtension;
 
         return $sFileName;
+    }
+
+    protected function getThumbId(int $thumbWidth, int $thumbHeight, string $effectFileNamePart): string
+    {
+        $md5Parts = $thumbWidth.'x'.$thumbHeight.$effectFileNamePart.$this->aData['time_stamp'];
+
+        $id = $this->id;
+        //The source is another thumbnail. Therefore, the name of the thumbnail must be generated based on this ID. Otherwise, the new thumbnails will not be overwritten.
+        //used from TCMSImageImageCrop->getCroppedImage
+        if (isset($this->aData['thumbPathId']) && '' !== $this->aData['thumbPathId']) {
+            $id = $this->aData['thumbPathId'];
+        }
+        // to prevent masses of error images of the same size we add the image id only on real ids to the url and md5 key
+        if (CHAMELEON_404_IMAGE_PATH_SMALL !== $this->aData['path'] && CHAMELEON_404_IMAGE_PATH_BIG !== $this->aData['path']) {
+            $md5Parts = $id.'_'.$md5Parts;
+        }
+
+        return md5($md5Parts);
     }
 
     /**
