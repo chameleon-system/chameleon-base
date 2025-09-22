@@ -1,0 +1,40 @@
+<div id="jsonEditor"></div>
+<input type="hidden" name="jsonEditorInput" id="jsonEditorInput">
+
+<script>
+    const jsonData = {{ jsonData|json_encode|raw }};
+</script>
+
+<script>
+    const schema = {
+        //insert schema for editor here. For an example, see the readme
+    };
+</script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const holder = document.getElementById('jsonEditor');
+        const hidden = document.getElementById('jsonEditorInput');
+
+        const editor = new JSONEditor(holder, {
+            theme: 'spectre',
+            schema,
+            disable_collapse: true,        // hides "Collapse"
+            disable_edit_json: true,       // hides "Edit JSON"
+            disable_properties: true,      // hides "Object Properties"
+            disable_array_add: true,       // hides "Add item"
+            disable_array_delete: true,    // hides trash/delete on array rows
+            disable_array_reorder: true,   // hides up/down reorder
+            compact: true,                 // tighter spacing
+            display_required_only: false,
+
+            startval: (jsonData && typeof jsonData === 'object' && !Array.isArray(jsonData)
+                && Object.keys(jsonData).length > 0) ? jsonData : undefined
+        });
+
+        const sync = () => { hidden.value = JSON.stringify(editor.getValue()); };
+
+        editor.on('ready', sync);
+        editor.on('change', sync);
+    });
+</script>
