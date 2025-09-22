@@ -1372,8 +1372,8 @@ class TCMSImageEndpoint
         $md5Parts = $thumbWidth.'x'.$thumbHeight.$effectFileNamePart.$this->aData['time_stamp'];
 
         $id = $this->id;
-        //The source is another thumbnail. Therefore, the name of the thumbnail must be generated based on this ID. Otherwise, the new thumbnails will not be overwritten.
-        //used from TCMSImageImageCrop->getCroppedImage
+        // The source is another thumbnail. Therefore, the name of the thumbnail must be generated based on this ID. Otherwise, the new thumbnails will not be overwritten.
+        // used from TCMSImageImageCrop->getCroppedImage
         if (isset($this->aData['thumbPathId']) && '' !== $this->aData['thumbPathId']) {
             $id = $this->aData['thumbPathId'];
         }
