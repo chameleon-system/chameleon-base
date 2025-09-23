@@ -132,6 +132,7 @@ actual path to file: src/to/MyBundle/Resources/views/icons/logo.svg
   new \ChameleonSystem\EcommerceStatsBundle\ChameleonSystemEcommerceStatsBundle(),
   new \ChameleonSystem\ImageEditorBundle\ChameleonSystemImageEditorBundle(),
   new \ChameleonSystem\MarkdownCmsBundle\ChameleonSystemMarkdownCmsBundle(),
+  new \ChameleonSystem\FieldJsonEditorBundle\ChameleonSystemFieldJsonEditorBundle(),
   new \Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
   new \ChameleonSystem\CmsDashboardBundle\ChameleonSystemCmsDashboardBundle()` bundles to the `AppKernel::registerBundles` method at the end.
 
