@@ -5,4 +5,4 @@
 </div>
 <?php
 
-TCMSLogChange::addInfoMessage('An new Bundle has been added called "ChameleonSystemFieldJsonEditorBundle". Please make sure to add "\ChameleonSystem\FieldJsonEditorBundle\ChameleonSystemFieldJsonEditorBundle()" to your AppKernel');
+TCMSLogChange::addInfoMessage('A new bundle has been added called "ChameleonSystemFieldJsonEditorBundle". Please make sure to add "\ChameleonSystem\FieldJsonEditorBundle\ChameleonSystemFieldJsonEditorBundle()" to your AppKernel');
