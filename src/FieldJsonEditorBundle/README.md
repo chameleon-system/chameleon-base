@@ -2,13 +2,14 @@
 This bundle adds a Json Editor as a selectable field into the cms.
 
 ## Usage
-1. Add the bundle to the AppKernel
-2. Run updates
-3. Add the editor as a field to one of your cms tables (for example products)
-4. Make sure to create a template in /snippets-cms/Fields/jsonEditor (for example "jsonEditor.html.twig")
-5. in the field type configuration, add your created template like this "layout=[name_of_your_layout]" (e.g. "layout="jsonEditor")
+1. Add the bundle to the AppKernel (\ChameleonSystem\FieldJsonEditorBundle\ChameleonSystemFieldJsonEditorBundle())
+2. Run 
+3. Execute ``app/console assets:install --symlink --relative web`` in your root directory
+4. Add the editor as a field to one of your cms tables (for example products)
+5. Make sure to create a template in /snippets-cms/Fields/FieldJsonEditor (for example "jsonEditor.html.twig")
+6. in the field type configuration, add your created template like this "layout=[name_of_your_layout]" (e.g. "layout="jsonEditor")
    - when no layout is provided or the layout you entered cant be found, a standard layout "jsonEditorInputStandard.html.twig" will be loaded instead
-6. To have an easy start, copy the content of jsonEditorInputStandard.html.twig into your new template. Now you can add the scheme for building your editor
+7. To have an easy start, copy the content of jsonEditorInputStandard.html.twig into your new template. Now you can add the scheme for building your editor
 
 ## Schema example
 An example of how a scheme can look like can be found below:
@@ -75,5 +76,7 @@ const schema = {
    }
 };
 ```
+
+Should changes made in your schema not be displayed directly after reloading, make sure to clear your cms cache
 
 For more reference, visit the official github page of the editor: https://github.com/json-editor/json-editor
