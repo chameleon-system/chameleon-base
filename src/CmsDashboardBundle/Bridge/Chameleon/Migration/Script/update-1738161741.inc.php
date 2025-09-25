@@ -4,6 +4,9 @@
     - ref #65684: add new field 'dashboard_bg' to cms_config
 </div>
 <?php
+
+TCMSLogChange::requireBundleUpdates('ChameleonSystemImageCropBundle', 1475685138);
+
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
   ->setFields([
       'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_config'),
