@@ -5,6 +5,8 @@
 </div>
 <?php
 
+TCMSLogChange::requireBundleUpdates('ChameleonSystemCoreBundle', 1713803713);
+
 $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
     ->setFields([
         'id' => 'b2933d91-6555-6587-afd9-3dff38b31f1f',
