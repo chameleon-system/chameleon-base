@@ -84,7 +84,7 @@ class CropImageService implements CropImageServiceInterface
         // Image crop exists in Media manager!
         // if $maxTargetWidth isn't used (=0) or
         // $crop fits or is even smaller, then get this crop and return
-        if ($maxTargetWidth === 0 || $preset->getWidth() <= $maxTargetWidth || $crop->getImageCropPreset()->getWidth() <= $maxTargetWidth) {
+        if (0 === $maxTargetWidth || $preset->getWidth() <= $maxTargetWidth || $crop->getImageCropPreset()->getWidth() <= $maxTargetWidth) {
             return $this->getCroppedImage($crop);
         }
 
