@@ -1,5 +1,13 @@
 # CmsDashboardBundle
 
+## Installation
+1. Add the Bundle to your AppKernel
+2. load routing in you `app/config/routing.yml` file
+```yaml
+chameleon_system_cms_dashboard_bundle:
+  resource: "@ChameleonSystemCmsDashboardBundle/Resources/config/routing.yml"
+``
+
 The `CmsDashboardBundle` provides a customizable dashboard for the CMS, allowing users to configure and manage widgets dynamically. Widgets are loaded using service tags and can be sorted, added, or removed by the user.
 
 ## 📌 Features
