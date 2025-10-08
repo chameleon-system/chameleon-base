@@ -42,3 +42,5 @@ TCMSLogChange::RunQuery(__LINE__, $query);
 
 $query = 'ALTER TABLE `cms_config` ADD INDEX ( `dashboard_bg_image_crop_id` )';
 TCMSLogChange::RunQuery(__LINE__, $query);
+
+TCMSLogChange::UpdateAutoClasses(TCMSLogChange::GetTableId('cms_config'));
