@@ -54,6 +54,10 @@ chameleon_system_security:
 app_logout:
     path: /cms/logout
     methods: GET
+
+chameleon_system_cms_dashboard_bundle:
+  resource: "@ChameleonSystemCmsDashboardBundle/Resources/config/routing.yml"
+
 ```
 
 ## Change Or Remove Deprecated Code (Symfony)
