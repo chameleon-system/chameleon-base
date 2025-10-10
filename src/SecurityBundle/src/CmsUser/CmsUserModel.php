@@ -73,6 +73,23 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface,
         return $this->groups;
     }
 
+    public function getGroupsForSqlQuery(): ?string
+    {
+        $groups = $this->getGroups();
+        if (empty($groups)) {
+            return false;
+        }
+        $keys = array_keys($groups);
+
+        // save quote for sql: ' -> ''
+        $quoted = array_map(
+            static fn ($v) => "'".str_replace("'", "''", (string) $v)."'",
+            $keys
+        );
+
+        return implode(',', $quoted);
+    }
+
     /**
      * List of users right - key is the permission id, the value IS CMS_RIGHT_<name>.
      *
