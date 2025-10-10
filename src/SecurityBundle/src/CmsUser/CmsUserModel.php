@@ -83,7 +83,7 @@ class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface,
 
         // save quote for sql: ' -> ''
         $quoted = array_map(
-            static fn ($v) => "'" . str_replace("'", "''", (string)$v) . "'",
+            static fn ($v) => "'".str_replace("'", "''", (string) $v)."'",
             $keys
         );
 
