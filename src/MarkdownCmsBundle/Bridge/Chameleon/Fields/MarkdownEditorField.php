@@ -4,9 +4,8 @@ namespace ChameleonSystem\MarkdownCmsBundle\Bridge\Chameleon\Fields;
 
 use ChameleonSystem\CmsStringUtilitiesBundle\Interfaces\UrlUtilityServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class MarkdownEditorField extends \TCMSFieldText
 {
@@ -192,7 +191,7 @@ class MarkdownEditorField extends \TCMSFieldText
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
-    private function getCmsUser(): UserInterface|CmsUserModel|null
+    private function getCmsUser(): ChameleonCmsUserInterface|null
     {
         return ServiceLocator::get(SecurityHelperAccess::class)->getUser();
     }

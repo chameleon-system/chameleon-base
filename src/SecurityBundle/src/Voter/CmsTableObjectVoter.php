@@ -3,10 +3,10 @@
 namespace ChameleonSystem\SecurityBundle\Voter;
 
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @template-extends Voter<string,\TCMSRecord>
@@ -39,7 +39,7 @@ class CmsTableObjectVoter extends Voter
      */
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        /** @var CmsUserModel|UserInterface $user */
+        /** @var ChameleonCmsUserInterface $user */
         $user = $token->getUser();
         if (false === ($user instanceof CmsUserModel)) {
             return false;

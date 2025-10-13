@@ -2,7 +2,7 @@
 
 namespace ChameleonSystem\SecurityBundle\Service;
 
-use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -20,7 +20,7 @@ class SecurityHelperAccess
         return $this->security;
     }
 
-    public function getUser(): UserInterface|CmsUserModel|null
+    public function getUser(): ChameleonCmsUserInterface|null
     {
         return $this->security->getUser();
     }

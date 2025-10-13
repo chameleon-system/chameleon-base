@@ -3,9 +3,9 @@
 namespace ChameleonSystem\SecurityBundle\Voter;
 
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Permit required access if the subject implements RestrictedByCmsRightsInterface and has at least one matching right for the active user.
@@ -41,7 +41,7 @@ class CmsRightVoter extends Voter
             return true;
         }
 
-        /** @var CmsUserModel|UserInterface $user */
+        /** @var ChameleonCmsUserInterface $user */
         $user = $token->getUser();
         if (false === $user instanceof CmsUserModel) {
             return false;

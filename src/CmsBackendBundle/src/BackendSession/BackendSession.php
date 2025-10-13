@@ -3,7 +3,7 @@
 namespace ChameleonSystem\CmsBackendBundle\BackendSession;
 
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -48,7 +48,7 @@ class BackendSession implements BackendSessionInterface
             return $currentEditLanguage;
         }
 
-        /** @var CmsUserModel $user */
+        /** @var ChameleonCmsUserInterface $user */
         $user = $this->security->getUser();
         if (null === $user) {
             return null;
@@ -79,7 +79,7 @@ class BackendSession implements BackendSessionInterface
 
         $session->set(self::SESSION_KEY, $language);
 
-        /** @var CmsUserModel $user */
+        /** @var ChameleonCmsUserInterface $user */
         $user = $this->security->getUser();
         if (null === $user) {
             return;
@@ -98,7 +98,7 @@ class BackendSession implements BackendSessionInterface
 
         $session->remove(self::SESSION_KEY);
 
-        /** @var CmsUserModel $user */
+        /** @var ChameleonCmsUserInterface $user */
         $user = $this->security->getUser();
         if (null === $user) {
             return;

@@ -1,12 +1,9 @@
 <?php
-
 namespace ChameleonSystem\SecurityBundle\CmsUser;
 
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 
-class CmsUserModel implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
+class CmsUserModel implements ChameleonCmsUserInterface
 {
     /**
      * @param array<string> $availableLanguagesIsoCodes

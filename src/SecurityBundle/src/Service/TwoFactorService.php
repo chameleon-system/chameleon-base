@@ -4,7 +4,7 @@ namespace ChameleonSystem\SecurityBundle\Service;
 
 use ChameleonSystem\SecurityBundle\ChameleonSystemSecurityConstants;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess;
-use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use ChameleonSystem\SecurityBundle\Exception\TwoFactorNotAvailableException;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
@@ -22,7 +22,7 @@ class TwoFactorService
     ) {
     }
 
-    public function cloneUserWithTwoFactorSecret(CmsUserModel $user, string $secret = ''): CmsUserModel
+    public function cloneUserWithTwoFactorSecret(ChameleonCmsUserInterface $user, string $secret = ''): ChameleonCmsUserInterface
     {
         if (null === $this->googleAuthenticator) {
             throw new TwoFactorNotAvailableException('2FA GoogleAuthenticator is not available.');
@@ -36,7 +36,7 @@ class TwoFactorService
         return $userWithSecret;
     }
 
-    public function saveCmsUserAuthenticatorSecret(CmsUserModel $user): void
+    public function saveCmsUserAuthenticatorSecret(ChameleonCmsUserInterface $user): void
     {
         $this->cmsUserDataAccess->setGoogleAuthenticatorSecret($user);
     }
@@ -45,7 +45,7 @@ class TwoFactorService
      * Generates the the data uri of for the authentiacator qr code
      * based on the user.
      */
-    public function generateQrCodeDataUri(CmsUserModel $user): string
+    public function generateQrCodeDataUri(ChameleonCmsUserInterface $user): string
     {
         if (null === $this->googleAuthenticator) {
             throw new TwoFactorNotAvailableException('2FA GoogleAuthenticator is not available.');
@@ -60,7 +60,7 @@ class TwoFactorService
         return $result->getDataUri();
     }
 
-    public function checkAuthorizationCode(CmsUserModel $user, string $code): bool
+    public function checkAuthorizationCode(ChameleonCmsUserInterface $user, string $code): bool
     {
         if (null === $this->googleAuthenticator) {
             throw new \LogicException('2FA GoogleAuthenticator is not available.');
@@ -69,7 +69,7 @@ class TwoFactorService
         return $this->googleAuthenticator->checkCode($user, $code);
     }
 
-    public function setTwoFactorTokenForSessionUser(CmsUserModel $user): void
+    public function setTwoFactorTokenForSessionUser(ChameleonCmsUserInterface $user): void
     {
         $preAuthToken = new UsernamePasswordToken(
             $user,
