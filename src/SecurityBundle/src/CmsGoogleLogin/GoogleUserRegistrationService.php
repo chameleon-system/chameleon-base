@@ -5,10 +5,10 @@ namespace ChameleonSystem\SecurityBundle\CmsGoogleLogin;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
 use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess;
-use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserSSOModel;
 use ChameleonSystem\SecurityBundle\Exception\RegisterUserErrorException;
 use ChameleonSystem\SecurityBundle\Exception\UpdateUserErrorException;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use League\OAuth2\Client\Provider\GoogleUser;
 
 class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInterface

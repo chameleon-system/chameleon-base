@@ -2,9 +2,9 @@
 
 namespace ChameleonSystem\SecurityBundle\CmsGoogleLogin;
 
-use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use ChameleonSystem\SecurityBundle\Exception\RegisterUserErrorException;
 use ChameleonSystem\SecurityBundle\Exception\UpdateUserErrorException;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use League\OAuth2\Client\Provider\GoogleUser;
 
 /**

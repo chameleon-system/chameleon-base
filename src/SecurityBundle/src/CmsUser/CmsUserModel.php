@@ -1,4 +1,5 @@
 <?php
+
 namespace ChameleonSystem\SecurityBundle\CmsUser;
 
 use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;

@@ -4,7 +4,6 @@ namespace ChameleonSystem\SecurityBundle\Service;
 
 use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Provides access to the private security helper.
@@ -20,7 +19,7 @@ class SecurityHelperAccess
         return $this->security;
     }
 
-    public function getUser(): ChameleonCmsUserInterface|null
+    public function getUser(): ?ChameleonCmsUserInterface
     {
         return $this->security->getUser();
     }

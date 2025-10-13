@@ -2,8 +2,8 @@
 
 namespace ChameleonSystem\SecurityBundle\Voter;
 
-use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
+use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
 use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

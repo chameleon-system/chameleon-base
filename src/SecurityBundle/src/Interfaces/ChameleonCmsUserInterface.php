@@ -32,7 +32,7 @@ interface ChameleonCmsUserInterface extends UserInterface, PasswordAuthenticated
 
     /**
      * comma separted id list, single quoted for queries for IN(...).
-     * for example: `'123','456'`, otherwise returns `null`
+     * for example: `'123','456'`, otherwise returns `null`.
      */
     public function getGroupsForSqlQuery(): ?string;
 

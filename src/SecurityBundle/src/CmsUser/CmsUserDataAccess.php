@@ -68,7 +68,6 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
      *  Throws a UserNotFoundException otherwise.
      */
     public function loadUserByUsername(string $username): ChameleonCmsUserInterface
-
     {
         return $this->loadUserByIdentifier($username);
     }

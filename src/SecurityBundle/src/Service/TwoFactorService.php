@@ -4,8 +4,8 @@ namespace ChameleonSystem\SecurityBundle\Service;
 
 use ChameleonSystem\SecurityBundle\ChameleonSystemSecurityConstants;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess;
-use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use ChameleonSystem\SecurityBundle\Exception\TwoFactorNotAvailableException;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;

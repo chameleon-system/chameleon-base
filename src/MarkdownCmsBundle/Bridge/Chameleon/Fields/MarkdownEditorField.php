@@ -191,7 +191,7 @@ class MarkdownEditorField extends \TCMSFieldText
         return ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
     }
 
-    private function getCmsUser(): ChameleonCmsUserInterface|null
+    private function getCmsUser(): ?ChameleonCmsUserInterface
     {
         return ServiceLocator::get(SecurityHelperAccess::class)->getUser();
     }
