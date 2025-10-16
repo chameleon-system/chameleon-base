@@ -35,7 +35,7 @@ class TCMSFieldJsonEditor extends \TCMSField
     {
         $includes = $this->getHtmlHeadIncludes();
         $includes[] = '<script type="text/javascript" src="'.\TGlobal::GetStaticURL(
-            '/bundles/chameleonsystemfieldjsoneditor/js/json-editor/jsoneditor.min.js'
+            '/bundles/chameleonsystemfieldjsoneditor/js/json-editor/NanoJSON.js'
         ).'"></script>';
 
         return $includes;

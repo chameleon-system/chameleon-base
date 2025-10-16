@@ -3,95 +3,19 @@
 
 <script>
     const jsonData = {{ jsonData|json_encode|raw }};
-</script>
 
-<script>
-    const schema = {
-        title: "Belletristik Suchanfrage",
-        type: "object",
-        required: ["filter", "sorting", "pagination"],
-        properties: {
-            filter: {
-                type: "object",
-                title: "Filter",
-                required: ["keywords", "productTypes", "availableWithinDays"],
-                properties: {
-                    keywords: {
-                        type: "array",
-                        title: "Keywords",
-                        items: { type: "string" },
-                        minItems: 1
-                    },
-                    productTypes: {
-                        type: "array",
-                        title: "Product Types",
-                        items: {
-                            type: "string",
-                            enum: ["BUCH", "EBOOK", "AUDIOCD", "DVD"]
-                        },
-                        minItems: 1
-                    },
-                    availableWithinDays: {
-                        type: "integer",
-                        title: "Available Within Days",
-                        minimum: 0
-                    }
-                }
-            },
-            sorting: {
-                type: "object",
-                title: "Sorting",
-                required: ["field", "order"],
-                properties: {
-                    field: {
-                        type: "string",
-                        enum: ["RANKING", "TITLE", "AUTHOR", "DATE", "PRICE"],
-                        title: "Sort Field"
-                    },
-                    order: {
-                        type: "string",
-                        enum: ["ascending", "descending"],
-                        title: "Order"
-                    }
-                }
-            },
-            pagination: {
-                type: "object",
-                title: "Pagination",
-                required: ["offset", "maxResults"],
-                properties: {
-                    offset: { type: "integer", title: "Offset", minimum: 0 },
-                    maxResults: { type: "integer", title: "Max Results", minimum: 1 }
-                }
-            }
-        }
-    };
-</script>
-
-<script>
     window.addEventListener('DOMContentLoaded', () => {
-        const holder = document.getElementById('editor_holder');
         const hidden = document.getElementById('json_editor_field');
 
-        const editor = new JSONEditor(holder, {
-            theme: 'bootstrap5',
-            schema,
-            disable_collapse: true,        // hides "Collapse"
-            disable_edit_json: true,       // hides "Edit JSON"
-            disable_properties: true,      // hides "Object Properties"
-            disable_array_add: true,       // hides "Add item"
-            disable_array_delete: true,    // hides trash/delete on array rows
-            disable_array_reorder: true,   // hides up/down reorder
-            compact: true,                 // tighter spacing
-            display_required_only: false,
-
-            startval: (jsonData && typeof jsonData === 'object' && !Array.isArray(jsonData)
-                && Object.keys(jsonData).length > 0) ? jsonData : undefined
+        const editor = new JSONEditor({
+            id: "editor_holder",
+            json: (jsonData && typeof jsonData === 'object') ? jsonData : {},
+            when: {
+                rendered: () => { hidden.value = editor.json; },
+                updated: ()  => { hidden.value = editor.json; }
+            }
         });
 
-        const sync = () => { hidden.value = JSON.stringify(editor.getValue()); };
-
-        editor.on('ready', sync);
-        editor.on('change', sync);
+        hidden.value = editor.json;
     });
 </script>
