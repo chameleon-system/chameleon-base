@@ -1,21 +1,46 @@
-<div id="editor_holder"></div>
-<input type="hidden" name="json_editor" id="json_editor_field">
+{% set editorId = fieldName ~ '_editor' %}
+{% set hiddenFieldId = fieldName ~ '_field' %}
+
+<div id="{{ editorId }}"></div>
+<input type="hidden" name="{{ fieldName }}" id="{{ hiddenFieldId }}">
 
 <script>
     const jsonData = {{ jsonData|json_encode|raw }};
 
     window.addEventListener('DOMContentLoaded', () => {
-        const hidden = document.getElementById('json_editor_field');
+        const hidden = document.getElementById('{{ hiddenFieldId|e('js') }}');
+        const editorRoot = document.getElementById('{{ editorId|e('js') }}');
+
+        const enforceButtonTypes = () => {
+            if (!editorRoot) {
+                return;
+            }
+
+            editorRoot.querySelectorAll('button:not([type])').forEach((button) => {
+                button.type = 'button';
+            });
+        };
+
+        const syncHiddenValue = (editorInstance) => {
+            hidden.value = editorInstance.json;
+        };
 
         const editor = new JSONEditor({
-            id: "editor_holder",
+            id: "{{ editorId|e('js') }}",
             json: (jsonData && typeof jsonData === 'object') ? jsonData : {},
             when: {
-                rendered: () => { hidden.value = editor.json; },
-                updated: ()  => { hidden.value = editor.json; }
+                rendered: () => {
+                    enforceButtonTypes();
+                    syncHiddenValue(editor);
+                },
+                updated: ()  => {
+                    enforceButtonTypes();
+                    syncHiddenValue(editor);
+                }
             }
         });
 
-        hidden.value = editor.json;
+        enforceButtonTypes();
+        syncHiddenValue(editor);
     });
 </script>
