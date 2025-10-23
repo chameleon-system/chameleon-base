@@ -3,9 +3,9 @@
 namespace ChameleonSystem\SecurityBundle\Voter;
 
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @template-extends Voter<string,RestrictedByCmsRoleInterface>
@@ -39,7 +39,7 @@ class CmsRoleVoter extends Voter
             return true;
         }
 
-        /** @var CmsUserModel|UserInterface $user */
+        /** @var ChameleonCmsUserInterface $user */
         $user = $token->getUser();
         if (false === $user instanceof CmsUserModel) {
             return false;

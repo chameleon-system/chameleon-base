@@ -13,6 +13,7 @@ use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\Security\Password\PasswordHashGeneratorInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,7 +82,7 @@ class TCMSUser extends TCMSRecord
             return self::$oActiveUser;
         }
 
-        /* @var CmsUserModel $user */
+        /* @var ChameleonCmsUserInterface $user */
         self::$oActiveUser = TdbCmsUser::GetNewInstance();
         self::$oActiveUser->Load($user->getId());
 

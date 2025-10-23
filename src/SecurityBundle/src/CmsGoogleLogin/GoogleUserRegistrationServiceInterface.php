@@ -2,9 +2,9 @@
 
 namespace ChameleonSystem\SecurityBundle\CmsGoogleLogin;
 
-use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
 use ChameleonSystem\SecurityBundle\Exception\RegisterUserErrorException;
 use ChameleonSystem\SecurityBundle\Exception\UpdateUserErrorException;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use League\OAuth2\Client\Provider\GoogleUser;
 
 /**
@@ -15,12 +15,12 @@ interface GoogleUserRegistrationServiceInterface
     /**
      * @throws RegisterUserErrorException
      */
-    public function register(GoogleUser $googleUser): CmsUserModel;
+    public function register(GoogleUser $googleUser): ChameleonCmsUserInterface;
 
     /**
      * @throws UpdateUserErrorException
      */
-    public function update(GoogleUser $googleUser): CmsUserModel;
+    public function update(GoogleUser $googleUser): ChameleonCmsUserInterface;
 
     public function exists(GoogleUser $googleUser): bool;
 }

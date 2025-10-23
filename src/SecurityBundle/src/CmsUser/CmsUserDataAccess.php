@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\SecurityBundle\CmsUser;
 
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use ChameleonSystem\SecurityBundle\Voter\CmsVoterPrefixConstants;
 use Doctrine\DBAL\Connection;
@@ -13,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
- * @template-implements UserProviderInterface<CmsUserModel>
+ * @template-implements UserProviderInterface<ChameleonCmsUserInterface>
  */
 class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterface
 {
@@ -26,7 +27,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         $this->connection->update('cms_user', ['crypted_pw' => $newHashedPassword], ['id' => $user->getId()]);
     }
 
-    public function refreshUser(UserInterface $user): CmsUserModel|UserInterface
+    public function refreshUser(UserInterface $user): ChameleonCmsUserInterface
     {
         if (!$user instanceof CmsUserModel) {
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
@@ -48,7 +49,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
      * returns the user with the login equal to the identifier passed, if that user is permitted to log into the cms backend.
      * Throws a UserNotFoundException otherwise.
      */
-    public function loadUserByIdentifier(string $identifier): CmsUserModel|UserInterface
+    public function loadUserByIdentifier(string $identifier): UserInterface
     {
         $query = "SELECT * FROM `cms_user` WHERE `login` = :username AND `allow_cms_login` = '1' LIMIT 0,1";
         $userRow = $this->connection->fetchAssociative($query, ['username' => $identifier]);
@@ -66,12 +67,12 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
      * returns the user with the login equal to the $username passed, if that user is permitted to log into the cms backend.
      *  Throws a UserNotFoundException otherwise.
      */
-    public function loadUserByUsername(string $username): CmsUserModel|UserInterface
+    public function loadUserByUsername(string $username): ChameleonCmsUserInterface
     {
         return $this->loadUserByIdentifier($username);
     }
 
-    private function userHasBeenModified(CmsUserModel $user): bool
+    private function userHasBeenModified(ChameleonCmsUserInterface $user): bool
     {
         try {
             // during upgrade from chameleon 7.1 to 8.0 the field does not yet exist @todo remove try/catch in chameleon 9.0
@@ -87,7 +88,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         }
     }
 
-    public function loadUserWithBackendLoginPermissionFromSSOID(string $ssoType, string $ssoId): ?CmsUserModel
+    public function loadUserWithBackendLoginPermissionFromSSOID(string $ssoType, string $ssoId): ?ChameleonCmsUserInterface
     {
         $query = "SELECT `cms_user`.*
                     FROM `cms_user`
@@ -104,7 +105,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return $this->createUserFromRow($userRow);
     }
 
-    public function loadUserWithBackendLoginPermissionByEMail(string $email): ?CmsUserModel
+    public function loadUserWithBackendLoginPermissionByEMail(string $email): ?ChameleonCmsUserInterface
     {
         $query = "SELECT * FROM `cms_user` WHERE `email` = :email AND `allow_cms_login` = '1' LIMIT 0,1";
         $userRow = $this->connection->fetchAssociative($query, ['email' => $email]);
@@ -119,7 +120,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
     /**
      * @throws \Doctrine\DBAL\Exception
      */
-    public function createUserFromRow(array $userRow): CmsUserModel
+    public function createUserFromRow(array $userRow): ChameleonCmsUserInterface
     {
         $roleRows = $this->connection->fetchAllAssociative(
             'SELECT `cms_role`.*
@@ -228,7 +229,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         );
     }
 
-    public function createUser(CmsUserModel $user): CmsUserModel|UserInterface
+    public function createUser(ChameleonCmsUserInterface $user): ChameleonCmsUserInterface
     {
         $this->connection->beginTransaction();
         try {
@@ -295,7 +296,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
-    public function updateUser(CmsUserModel $user): CmsUserModel|UserInterface
+    public function updateUser(ChameleonCmsUserInterface $user): ChameleonCmsUserInterface
     {
         $this->connection->beginTransaction();
 
@@ -372,7 +373,7 @@ class CmsUserDataAccess implements UserProviderInterface, PasswordUpgraderInterf
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
-    public function setGoogleAuthenticatorSecret(CmsUserModel $user): void
+    public function setGoogleAuthenticatorSecret(ChameleonCmsUserInterface $user): void
     {
         $this->connection->update('cms_user', [
             'google_authenticator_secret' => $user->getGoogleAuthenticatorSecret(),

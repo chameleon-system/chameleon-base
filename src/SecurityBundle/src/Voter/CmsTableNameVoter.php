@@ -4,9 +4,9 @@ namespace ChameleonSystem\SecurityBundle\Voter;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @template-extends Voter<CmsPermissionAttributeConstants::TABLE_EDITOR_ACTIONS,string>
@@ -37,7 +37,7 @@ class CmsTableNameVoter extends Voter
      */
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        /** @var CmsUserModel|UserInterface $user */
+        /** @var ChameleonCmsUserInterface $user */
         $user = $token->getUser();
         if (false === ($user instanceof CmsUserModel)) {
             return false;
@@ -69,7 +69,7 @@ class CmsTableNameVoter extends Voter
         return $this->userHasRoleForTable($attribute, $subject, $user);
     }
 
-    private function userHasRoleForTable(string $attribute, string $tableName, CmsUserModel $user): bool
+    private function userHasRoleForTable(string $attribute, string $tableName, ChameleonCmsUserInterface $user): bool
     {
         $permittedRoleIds = $this->accessCmsTblConf->getPermittedRoles($attribute, $tableName);
         $userRoleIds = array_keys($user->getRoles());

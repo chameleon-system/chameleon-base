@@ -5,10 +5,10 @@ namespace ChameleonSystem\SecurityBundle\CmsGoogleLogin;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
 use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserDataAccess;
-use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserSSOModel;
 use ChameleonSystem\SecurityBundle\Exception\RegisterUserErrorException;
 use ChameleonSystem\SecurityBundle\Exception\UpdateUserErrorException;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use League\OAuth2\Client\Provider\GoogleUser;
 
 class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInterface
@@ -25,7 +25,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
     ) {
     }
 
-    public function register(GoogleUser $googleUser): CmsUserModel
+    public function register(GoogleUser $googleUser): ChameleonCmsUserInterface
     {
         if ($this->exists($googleUser)) {
             throw new RegisterUserErrorException('User already exists');
@@ -65,7 +65,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
         }
     }
 
-    public function update(GoogleUser $googleUser): CmsUserModel
+    public function update(GoogleUser $googleUser): ChameleonCmsUserInterface
     {
         $cmsUser = $this->getCmsUser($googleUser);
 
@@ -104,7 +104,7 @@ class GoogleUserRegistrationService implements GoogleUserRegistrationServiceInte
         return null !== $this->getCmsUser($googleUser);
     }
 
-    private function getCmsUser(GoogleUser $googleUser): ?CmsUserModel
+    private function getCmsUser(GoogleUser $googleUser): ?ChameleonCmsUserInterface
     {
         $existingUser = $this->cmsUserDataAccess->loadUserWithBackendLoginPermissionFromSSOID(self::SSO_TYPE, $googleUser->getId());
         if (null !== $existingUser) {

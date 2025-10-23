@@ -3,9 +3,9 @@
 namespace ChameleonSystem\SecurityBundle\Voter;
 
 use ChameleonSystem\SecurityBundle\CmsUser\CmsUserModel;
+use ChameleonSystem\SecurityBundle\Interfaces\ChameleonCmsUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @template-extends Voter<string,mixed>
@@ -19,7 +19,7 @@ class UserHasRightVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        /** @var CmsUserModel|UserInterface|null $user */
+        /** @var ChameleonCmsUserInterface|null $user */
         $user = $token->getUser();
         if (null === $user) {
             return false;
