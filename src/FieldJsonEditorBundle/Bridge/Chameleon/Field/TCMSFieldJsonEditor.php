@@ -45,22 +45,31 @@ class TCMSFieldJsonEditor extends \TCMSField
         $includes[] = '<script type="text/javascript" src="'.\TGlobal::GetStaticURL(
             '/bundles/chameleonsystemfieldjsoneditor/js/json-editor/NanoJSON.js'
         ).'"></script>';
+        $includes[] = '<link rel="stylesheet" href="'.\TGlobal::GetStaticURL(
+                '/bundles/chameleonsystemfieldjsoneditor/css/NanoJSON.css'
+            ).'"></link>';
 
         return $includes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function GetSQL()
+    public function DataIsValid()
     {
-        $sql = $this->ConvertDataToFieldBasedData($this->ConvertPostDataToSQL());
+        $sqlData = $this->ConvertPostDataToSQL();
 
-        if (false === json_validate($sql)) {
-            return false;
+        if ('' === $sqlData) {
+            return true;
         }
 
-        return $sql;
+        return json_validate($sqlData);
+    }
+
+    public function ConvertPostDataToSQL()
+    {
+        if ('{}' === $this->data) {
+            return '';
+        }
+
+        return $this->data;
     }
 
     protected function getViewRenderer(): \ViewRenderer
