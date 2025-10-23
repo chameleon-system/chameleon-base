@@ -1,82 +1,18 @@
 # Json Editor Bundle
-This bundle adds a Json Editor as a selectable field into the cms.
+This bundle integrates [NanoJSON](https://github.com/pardnchiu/NanoJSON) as a JSON editor field into the Chameleon CMS.  
+NanoJSON is a lightweight tree-based JSON editor with no external dependencies.
 
 ## Usage
-1. Add the bundle to the AppKernel (\ChameleonSystem\FieldJsonEditorBundle\ChameleonSystemFieldJsonEditorBundle())
-2. Run 
-3. Execute ``app/console assets:install --symlink --relative web`` in your root directory
-4. Add the editor as a field to one of your cms tables (for example products)
-5. Make sure to create a template in /snippets-cms/Fields/FieldJsonEditor (for example "jsonEditor.html.twig")
-6. in the field type configuration, add your created template like this "layout=[name_of_your_layout]" (e.g. "layout="jsonEditor")
-   - when no layout is provided or the layout you entered cant be found, a standard layout "jsonEditorInputStandard.html.twig" will be loaded instead
-7. To have an easy start, copy the content of jsonEditorInputStandard.html.twig into your new template. Now you can add the scheme for building your editor
+1. Add the bundle to the AppKernel (`\ChameleonSystem\FieldJsonEditorBundle\ChameleonSystemFieldJsonEditorBundle()`)
+2. Run
+3. Execute `app/console assets:install --symlink --relative web` in your root directory
+4. Add the editor as a field to one of your CMS tables (for example `products`)
+5. Make sure to create a template in `/snippets-cms/Fields/FieldJsonEditor` (for example `jsonEditor.html.twig`)
+6. In the field type configuration, add your created template like this:  
+   `layout=[name_of_your_layout]` (e.g. `layout="jsonEditor"`)
+    - If no layout is provided or the layout you entered cannot be found, the standard template `jsonEditorInputStandard.html.twig` will be used automatically.
+7. If you need project-specific adjustments, copy `jsonEditorInputStandard.html.twig` into your project (e.g. `jsonEditor.html.twig`) and adapt it as required.
 
-## Schema example
-An example of how a scheme can look like can be found below:
-
-```js
-const schema = {
-   title: "Belletristik Suchanfrage",
-   type: "object",
-   required: ["filter", "sorting", "pagination"],
-   properties: {
-      filter: {
-         type: "object",
-         title: "Filter",
-         required: ["keywords", "productTypes", "availableWithinDays"],
-         properties: {
-            keywords: {
-               type: "array",
-               title: "Keywords",
-               items: { type: "string" },
-               minItems: 1
-            },
-            productTypes: {
-               type: "array",
-               title: "Product Types",
-               items: {
-                  type: "string",
-                  enum: ["BUCH", "EBOOK", "AUDIOCD", "DVD"] // erweiterbar
-               },
-               minItems: 1
-            },
-            availableWithinDays: {
-               type: "integer",
-               title: "Available Within Days",
-               minimum: 0
-            }
-         }
-      },
-      sorting: {
-         type: "object",
-         title: "Sorting",
-         required: ["field", "order"],
-         properties: {
-            field: {
-               type: "string",
-               enum: ["RANKING", "TITLE", "AUTHOR", "DATE", "PRICE"],
-               title: "Sort Field"
-            },
-            order: {
-               type: "string",
-               enum: ["ascending", "descending"],
-               title: "Order"
-            }
-         }
-      },
-      pagination: {
-         type: "object",
-         title: "Pagination",
-         required: ["offset", "maxResults"],
-         properties: {
-            offset: { type: "integer", title: "Offset", minimum: 0 },
-            maxResults: { type: "integer", title: "Max Results", minimum: 1 }
-         }
-      }
-   }
-};
-```
-
-Should changes made in your schema not be displayed directly after reloading, make sure to clear your cms cache
-
-For more reference, visit the official github page of the editor: https://github.com/json-editor/json-editor
+## NanoJSON
+For more reference, visit the official GitHub page of the editor:  
+👉 https://github.com/pardnchiu/NanoJSON

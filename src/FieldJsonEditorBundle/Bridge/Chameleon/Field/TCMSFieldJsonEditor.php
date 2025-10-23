@@ -11,19 +11,27 @@ class TCMSFieldJsonEditor extends \TCMSField
         $editorLayout = $this->getFieldTypeConfigKey('layout');
         $viewRenderer = $this->getViewRenderer();
 
-        if (null === $editorLayout) {
-            return $viewRenderer->Render('Fields/FieldJsonEditor/jsonEditorInputStandard.html.twig');
-        }
-
         $jsonData = $this->_GetFieldValue();
 
         if (false === $jsonData) {
-            $jsonData = [];
+            $jsonData = null;
         }
 
-        $jsonData = json_decode($jsonData, true);
+        $decodedJsonData = [];
+        if (null !== $jsonData && '' !== $jsonData) {
+            $decodedJsonData = json_decode((string) $jsonData, true);
 
-        $viewRenderer->AddSourceObject('jsonData', $jsonData);
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                $decodedJsonData = [];
+            }
+        }
+
+        $viewRenderer->AddSourceObject('jsonData', $decodedJsonData);
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+
+        if (null === $editorLayout) {
+            return $viewRenderer->Render('Fields/FieldJsonEditor/jsonEditorInputStandard.html.twig');
+        }
 
         return $viewRenderer->Render('Fields/FieldJsonEditor/'.$editorLayout.'.html.twig');
     }
@@ -35,7 +43,7 @@ class TCMSFieldJsonEditor extends \TCMSField
     {
         $includes = $this->getHtmlHeadIncludes();
         $includes[] = '<script type="text/javascript" src="'.\TGlobal::GetStaticURL(
-            '/bundles/chameleonsystemfieldjsoneditor/js/json-editor/jsoneditor.min.js'
+            '/bundles/chameleonsystemfieldjsoneditor/js/json-editor/NanoJSON.js'
         ).'"></script>';
 
         return $includes;
