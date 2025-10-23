@@ -210,6 +210,7 @@ chameleon_system_security:
   - `GetResponseForExceptionEvent` (use `ExceptionEvent`)
   - `PostResponseEvent` (use `TerminateEvent`)
   - `GetRequestEvent`
+- removed `\TDataExtranetCore::URL_PARAMETER_LOGINNAME` - if you make use of the constant, set it yourself to `public const URL_PARAMETER_LOGINNAME = 'loginname';`
 - Also note that the event class should match the event type (i.e. RequestEvent for "kernel.request").
 - Change the event base class `Symfony\Component\EventDispatcher\Event` to `\Symfony\Contracts\EventDispatcher\Event`.
 - The namespace of the `Symfony\Component\Translation\TranslatorInterface` changed to `Symfony\Contracts\Translation\TranslatorInterface`.
