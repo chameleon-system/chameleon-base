@@ -40,8 +40,10 @@ class MTLoginEndPoint extends TCMSModelBase
         $this->data['username'] = $this->global->GetUserData('username');
 
         $this->data['redirectParams'] = '';
-        if ($this->global->UserDataExists('redirectParams')) {
-            $this->data['redirectParams'] = $this->global->GetUserData('redirectParams');
+        $inputFilter = $this->getInputFilterUtilService();
+        $redirectParamsEncoded = $inputFilter->getFilteredInput('redirectParams', '', false, \TCMSUserInput::FILTER_URL_INTERNAL);
+        if ('' !== $redirectParamsEncoded) {
+            $this->data['redirectParams'] = $redirectParamsEncoded;
         } 
 
         return $this->data;
