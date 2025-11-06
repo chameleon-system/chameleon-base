@@ -6,7 +6,7 @@
                     <h4>Login</h4>
                 </div>
                 <div class="card-body">
-                    <form name="cmsform" method="post" action="<?php echo PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8">
+                    <form name="cmsform" method="post" action="<?php echo PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8" autocomplete="off">
                         <input type="hidden" name="pagedef" value="login" />
                         <input type="hidden" name="module_fnc[contentmodule]" value="Login" />
                         <input type="hidden" name="redirectParams" value="<?php echo $redirectParams; ?>" />
@@ -31,7 +31,7 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
-                                    <input class="form-control" placeholder="<?php echo ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_login.form_password'); ?>" name="password" type="password" value="">
+                                    <input class="form-control" placeholder="<?php echo ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_login.form_password'); ?>" name="password" type="password" value="" autocomplete="off">
                                 </div>
                             </div>
                             <input class="btn btn-lg btn-success btn-block" type="submit" value="<?php echo ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.cms_module_login.action_login'); ?>">
