@@ -31,7 +31,7 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
-                                    <input class="form-control" placeholder="<?php echo TGlobal::Translate('chameleon_system_core.cms_module_login.form_password'); ?>" name="password" type="password" value="">
+                                    <input class="form-control" placeholder="<?php echo TGlobal::Translate('chameleon_system_core.cms_module_login.form_password'); ?>" name="password" type="password" value="" autocomplete="off">
                                 </div>
                             </div>
                             <input class="btn btn-lg btn-success btn-block" type="submit" value="<?php echo TGlobal::Translate('chameleon_system_core.cms_module_login.action_login'); ?>">
