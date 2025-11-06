@@ -6,26 +6,26 @@
                     <h4>Login</h4>
                 </div>
                 <div class="card-body">
-                    <form name="cmsform" method="post" action="<?=PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8">
+                    <form name="cmsform" method="post" action="<?php echo PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8" autocomplete="off">
                         <input type="hidden" name="pagedef" value="login" />
                         <input type="hidden" name="module_fnc[contentmodule]" value="Login" />
-                        <input type="hidden" name="redirectParams" value="<?=$redirectParams; ?>" />
+                        <input type="hidden" name="redirectParams" value="<?php echo $redirectParams; ?>" />
                         <fieldset>
                             <?php
                             if (array_key_exists('errmsg', $data)) {
                                 ?>
                                 <div class="alert alert-warning">
-                                    <?=$data['errmsg']; ?>
+                                    <?php echo $data['errmsg']; ?>
                                 </div>
                             <?php
                             }
-                            ?>
+                    ?>
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
                                     <input class="form-control" placeholder="<?php echo TGlobal::Translate('chameleon_system_core.cms_module_login.form_user_name'); ?>" name="username" type="text" value="<?php if (array_key_exists('username', $data)) {
-                                echo $data['username'];
-                            }?>">
+                                        echo $data['username'];
+                                    }?>">
                                 </div>
                             </div>
                             <div class="form-group">
