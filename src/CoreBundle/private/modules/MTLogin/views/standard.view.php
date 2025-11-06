@@ -6,7 +6,7 @@
                     <h4>Login</h4>
                 </div>
                 <div class="card-body">
-                    <form name="cmsform" method="post" action="<?=PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8">
+                    <form name="cmsform" method="post" action="<?=PATH_CMS_CONTROLLER; ?>" accept-charset="UTF-8" autocomplete="off">
                         <input type="hidden" name="pagedef" value="login" />
                         <input type="hidden" name="module_fnc[contentmodule]" value="Login" />
                         <input type="hidden" name="redirectParams" value="<?=$redirectParams; ?>" />
