@@ -49,14 +49,14 @@ class PreviewModeService implements PreviewModeServiceInterface
     {
         try {
             if (false === $previewGranted) {
-                setcookie(self::COOKIE_NAME, '', time() - 3600, '/', '', false, true);
+                setcookie(self::COOKIE_NAME, '', time() - 3600, '/', '', true, true);
                 $this->connection->update('cms_user', ['preview_token' => ''], ['id' => $cmsUserId]);
 
                 return;
             }
             $token = $this->tools::GetUUID();
             $this->connection->update('cms_user', ['preview_token' => $token], ['id' => $cmsUserId]);
-            setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token), time() + self::PREVIEW_COOKIE_LIFETIME, '/', '', false, true);
+            setcookie(self::COOKIE_NAME, $token.'|'.$this->generateHash($token), time() + self::PREVIEW_COOKIE_LIFETIME, '/', '', true, true);
         } catch (Exception) {
             // ignore if field not exists yet
         }
