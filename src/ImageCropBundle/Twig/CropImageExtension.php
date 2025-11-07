@@ -76,6 +76,10 @@ class CropImageExtension extends AbstractExtension
      */
     public function imageUrlWithCropFallbackPreset($imageId, $cropId, $presetIdOrSystemName, $maxTargetWidth = 0)
     {
+        if (null === $imageId) {
+            return null;
+        }
+
         if (null !== $cropId && '' !== $cropId) {
             $image = $this->cropImageService->getCroppedImageForCmsMediaIdAndCropId(
                 $imageId,
