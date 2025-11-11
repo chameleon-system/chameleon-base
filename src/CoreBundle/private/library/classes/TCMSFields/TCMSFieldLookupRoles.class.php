@@ -39,7 +39,7 @@ class TCMSFieldLookupRoles extends TCMSFieldLookupMultiselectCheckboxes
         if (null === $roles) {
             $roles = [];
         }
-        $roles = array_keys($roles);
+        $roles = array_map('strval', array_keys($roles));
 
         foreach ($data as $key => $record) {
             if (false === $record['editable']) {
