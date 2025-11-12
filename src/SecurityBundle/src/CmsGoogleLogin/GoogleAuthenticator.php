@@ -4,6 +4,7 @@ namespace ChameleonSystem\SecurityBundle\CmsGoogleLogin;
 
 use ChameleonSystem\SecurityBundle\Badge\UsedAuthenticatorBadge;
 use ChameleonSystem\SecurityBundle\ChameleonSystemSecurityConstants;
+use ChameleonSystem\SecurityBundle\Controller\CmsLoginController;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use League\OAuth2\Client\Provider\GoogleUser;
@@ -25,6 +26,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
     public function __construct(
         private readonly ClientRegistry $clientRegistry,
         private readonly GoogleUserRegistrationServiceInterface $registrationService,
+        private readonly \ICmsCoreRedirect $redirect,
         private readonly array $allowedDomains = [],
     ) {
     }
@@ -68,6 +70,14 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        $redirectUrl = $request->getSession()->get(CmsLoginController::LOGIN_REDIRECT_COOKIE_NAME, '');
+        if('' === $redirectUrl) {
+            return new RedirectResponse(PATH_CMS_CONTROLLER);
+        }
+
+        if($this->redirect->isInternalURL($redirectUrl)) {
+            return new RedirectResponse($redirectUrl);
+        }
         return new RedirectResponse(PATH_CMS_CONTROLLER);
     }
 

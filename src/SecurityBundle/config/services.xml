@@ -7,6 +7,11 @@
     <services>
         <defaults autowire="true" autoconfigure="true"  />
         <prototype namespace="ChameleonSystem\SecurityBundle\" resource="../src/*" exclude="../src/{Model,DependencyInjection}"/>
+
+        <service id="ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleAuthenticator">
+            <argument key="$redirect" type="service" id="chameleon_system_core.redirect" />
+        </service>
+
         <service id="ChameleonSystem\SecurityBundle\CmsGoogleLogin\GoogleUserRegistrationService">
             <argument key="$guidService" type="service" id="chameleon_system_core.service.guid_creation" />
         </service>
