@@ -71,13 +71,14 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         $redirectUrl = $request->getSession()->get(CmsLoginController::LOGIN_REDIRECT_COOKIE_NAME, '');
-        if('' === $redirectUrl) {
+        if ('' === $redirectUrl) {
             return new RedirectResponse(PATH_CMS_CONTROLLER);
         }
 
-        if($this->redirect->isInternalURL($redirectUrl)) {
+        if ($this->redirect->isInternalURL($redirectUrl)) {
             return new RedirectResponse($redirectUrl);
         }
+
         return new RedirectResponse(PATH_CMS_CONTROLLER);
     }
 
