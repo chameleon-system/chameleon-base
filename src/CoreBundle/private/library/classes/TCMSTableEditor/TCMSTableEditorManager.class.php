@@ -178,10 +178,6 @@ class TCMSTableEditorManager
         $recordFound = null !== $sId && true === $record->LoadWithCaching($sId);
         unset($record);
 
-        if (null !== $sId && false === $recordFound) {
-            return false;
-        }
-
         $this->oTableEditor = $this->TableEditorFactory();
         $this->oTableEditor->AllowEditByAll($this->bAllowEditByAll);
         $this->oTableEditor->AllowEditByWebUser($this->bAllowEditByWebUser);

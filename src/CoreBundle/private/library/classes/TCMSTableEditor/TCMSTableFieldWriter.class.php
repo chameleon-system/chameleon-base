@@ -300,7 +300,9 @@ class TCMSTableFieldWriter extends TCMSTableEditor
         }
 
         $this->oTable->SetLanguage($this->oTableConf->GetLanguage());
-        $this->oTable->Load($this->sId);
+        if (false === $this->oTable->Load($this->sId)) {
+            return;
+        }
         $this->_sqlFieldName = $this->oTable->sqlData['name'];
         $this->_oParentRecord->Load($this->oTable->sqlData['cms_tbl_conf_id']);
 
