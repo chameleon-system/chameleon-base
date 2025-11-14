@@ -336,7 +336,7 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
      * get all newsletter users for campaign
      * - returns only users to which no mail was send yet
      * - and users which have an "optin"
-     * 	 (prevents sending newsletters to users which have optout after queue was created)
+     *      (prevents sending newsletters to users which have optout after queue was created)
      * - and users that are not blacklisted (robinson list).
      *
      * @return TdbPkgNewsletterUserList
@@ -345,11 +345,11 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     {
         $query = "SELECT `pkg_newsletter_user`.*, `pkg_newsletter_queue`.`id` as pkg_newsletter_queue_id FROM `pkg_newsletter_queue`
               INNER JOIN `pkg_newsletter_user` ON `pkg_newsletter_user`.`id` = `pkg_newsletter_queue`.`pkg_newsletter_user`
-			   LEFT JOIN `pkg_newsletter_robinson` ON `pkg_newsletter_user`.`email` = `pkg_newsletter_robinson`.`email`
-				   WHERE `pkg_newsletter_queue`.`pkg_newsletter_campaign_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-					 AND `pkg_newsletter_queue`.`date_sent` = '0000-00-00 00:00:00'
-					 AND `pkg_newsletter_user`.`optin` =  '1'
-					 AND `pkg_newsletter_robinson`.`email` IS NULL";
+               LEFT JOIN `pkg_newsletter_robinson` ON `pkg_newsletter_user`.`email` = `pkg_newsletter_robinson`.`email`
+                   WHERE `pkg_newsletter_queue`.`pkg_newsletter_campaign_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
+                     AND `pkg_newsletter_queue`.`date_sent` = '0000-00-00 00:00:00'
+                     AND `pkg_newsletter_user`.`optin` =  '1'
+                     AND `pkg_newsletter_robinson`.`email` IS NULL";
 
         return TdbPkgNewsletterUserList::GetList($query);
     }
@@ -404,44 +404,52 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 
     protected function generateNewsletterViaFrontend(TdbPkgNewsletterUser $oNewsletterUser): ?string
     {
-        $page = self::getPageService()->getByTreeId($this->fieldCmsTreeNodeId);
-        if (null === $page) {
-            return null;
+        if (true === $this->getNewsletterViaImportedZipEnabled()) {
+            $generatedNewsletter = $this->fieldNewsletterWithImport;
+
+            if (null === $generatedNewsletter) {
+                return null;
+            }
+        } else {
+            $page = self::getPageService()->getByTreeId($this->fieldCmsTreeNodeId);
+            if (null === $page) {
+                return null;
+            }
+
+            $portal = TdbCmsPortal::GetNewInstance();
+            if (false === $portal->Load($this->fieldCmsPortalId)) {
+                return null;
+            }
+            $this->getPortalDomainService()->setActivePortal($portal);
+            $domain = $this->getPortalDomainService()->getPrimaryDomain();
+            $hostName = $domain->fieldName;
+
+            $queryParams = true === $this->fieldGenerateUserDependingNewsletter
+                ? [TdbPkgNewsletterUser::URL_USER_ID_PARAMETER => $oNewsletterUser->id, TdbPkgNewsletterCampaign::URL_USER_ID_PARAMETER => $this->id]
+                : [];
+
+            $request = Request::createFromGlobals();
+            $request->query = new ParameterBag($queryParams);
+            $request->request = new ParameterBag();
+            $request->attributes = new ParameterBag(['pagedef' => $page->id]);
+            $request->server->set('HTTP_HOST', $hostName);
+            $request->headers->set('host', $hostName);
+
+            $requestStack = $this->getRequestStack();
+            $requestStack->push($request);
+
+            $requestInfoService = $this->getRequestInfoService();
+            $oldRequestType = $requestInfoService->getChameleonRequestType();
+            $requestInfoService->setChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_FRONTEND); // temporarily change state
+
+            // start request
+            $chameleonFrontendController = $this->getChameleonFrontendController();
+            $response = $chameleonFrontendController();
+            $generatedNewsletter = $response->getContent();
+
+            $requestInfoService->setChameleonRequestType($oldRequestType); // restore state
+            $requestStack->pop();
         }
-
-        $portal = TdbCmsPortal::GetNewInstance();
-        if (false === $portal->Load($this->fieldCmsPortalId)) {
-            return null;
-        }
-        $this->getPortalDomainService()->setActivePortal($portal);
-        $domain = $this->getPortalDomainService()->getPrimaryDomain();
-        $hostName = $domain->fieldName;
-
-        $queryParams = true === $this->fieldGenerateUserDependingNewsletter
-            ? [TdbPkgNewsletterUser::URL_USER_ID_PARAMETER => $oNewsletterUser->id, TdbPkgNewsletterCampaign::URL_USER_ID_PARAMETER => $this->id]
-            : [];
-
-        $request = Request::createFromGlobals();
-        $request->query = new ParameterBag($queryParams);
-        $request->request = new ParameterBag();
-        $request->attributes = new ParameterBag(['pagedef' => $page->id]);
-        $request->server->set('HTTP_HOST', $hostName);
-        $request->headers->set('host', $hostName);
-
-        $requestStack = $this->getRequestStack();
-        $requestStack->push($request);
-
-        $requestInfoService = $this->getRequestInfoService();
-        $oldRequestType = $requestInfoService->getChameleonRequestType();
-        $requestInfoService->setChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_FRONTEND); // temporarily change state
-
-        // start request
-        $chameleonFrontendController = $this->getChameleonFrontendController();
-        $response = $chameleonFrontendController();
-        $generatedNewsletter = $response->getContent();
-
-        $requestInfoService->setChameleonRequestType($oldRequestType); // restore state
-        $requestStack->pop();
 
         return $generatedNewsletter;
     }
@@ -496,5 +504,10 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     protected function getRequestInfoService(): RequestInfoServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.request_info_service');
+    }
+
+    protected function getNewsletterViaImportedZipEnabled(): bool
+    {
+        return ServiceLocator::getParameter('chameleon_system_newsletter_import_via_zip.enabled');
     }
 }
