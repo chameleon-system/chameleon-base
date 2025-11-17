@@ -722,6 +722,7 @@ class MTTableEditor extends TCMSModelBase
             $this->LoadMessages();
             if (false === $oRecordData || null === $oRecordData) {
                 $oRecordData = $this->oTableManager->oTableEditor->GetObjectShortInfo($postData);
+                $oMessageManager->AddMessage($sConsumerName, 'TABLEEDITOR_SAVE_FIELD_VALIDATION_ERROR');
             }
 
             $oRecordData->aMessages = $this->aMessages;
