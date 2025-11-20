@@ -75,7 +75,9 @@ class FieldIconFontSelector extends \TCMSFieldVarchar
 
         foreach ($iconFontCssUrlList as $iconFontCssUrl) {
             try {
-                $cssClassNames = $this->getCssClassExtractor()->extractCssClasses($iconFontCssUrl);
+                $cssClassesWithTags = $this->getCssClassExtractor()->extractCssClasses($iconFontCssUrl);
+                $cssClassNames = array_keys($cssClassesWithTags);
+                $cssClassNames = $this->addDotPrefixToCssClasses($cssClassNames);
                 $cssClassNames = $this->getFontAwesomeService()->filterFontAwesomeClasses($cssClassNames);
 
                 foreach ($cssClassNames as $cssClassName) {
@@ -89,6 +91,10 @@ class FieldIconFontSelector extends \TCMSFieldVarchar
         }
 
         return $filteredClassnames;
+    }
+    
+    private function addDotPrefixToCssClasses($cssClasses): array{
+        return array_map(static fn($v) => '.' . $v, $cssClasses);
     }
 
     protected function getIconFontCssUrls(): ?array
@@ -125,16 +131,19 @@ class FieldIconFontSelector extends \TCMSFieldVarchar
 
     private function getFontAwesomeService(): FontAwesomeServiceInterface
     {
+        /** @var FontAwesomeServiceInterface */
         return ServiceLocator::get('chameleon_system_core.service.font_awesome');
     }
 
     private function getTranslator(): TranslatorInterface
     {
+        /** @var TranslatorInterface */
         return ServiceLocator::get('chameleon_system_core.translator');
     }
 
     private function getCssClassExtractor(): CssClassExtractorInterface
     {
+        /** @var CssClassExtractorInterface */
         return ServiceLocator::get('chameleon_system_core.service.css_class_extractor');
     }
 }
