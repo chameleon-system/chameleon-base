@@ -1,209 +1,142 @@
-<button type="button" class="btn btn-info btn-sm mt-2 mb-2" id="extractBtn">{{ 'chameleon_system_newsletter_import.label.upload' | trans }}</button>
+{% extends '/TCMSFieldWYSIWYG/cKEditor/editor.html.twig' %}
 
-<div id="zipModal" style="display:none;
+{% block ck_editor_additions_header %}
+    <button type="button" class="btn btn-info btn-sm mt-2 mb-2" id="extractBtn">{{ 'chameleon_system_newsletter_import.label.upload' | trans }}</button>
+
+    <div id="zipModal" style="display:none;
      position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999;">
-    <div style="background:#fff; width:420px; margin:10% auto; padding:18px; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.2);">
-        <h4 style="margin:0 0 12px;">{{ 'chameleon_system_newsletter_import.modal.headline' | trans }}</h4>
+        <div style="background:#fff; width:420px; margin:10% auto; padding:18px; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.2);">
+            <h4 style="margin:0 0 12px;">{{ 'chameleon_system_newsletter_import.modal.headline' | trans }}</h4>
 
-        <form id="zipUploadForm" enctype="multipart/form-data" onsubmit="return false;">
-            <input type="file" name="zipFile" id="zipFile" accept=".zip" required>
-            <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:14px;">
-                <button type="button" id="cancelUpload" class="btn btn-secondary btn-sm">{{ 'chameleon_system_newsletter_import.modal.abortBtn' | trans }}</button>
-                <button type="button" id="doUpload" class="btn btn-primary btn-sm">{{ 'chameleon_system_newsletter_import.modal.uploadBtn' | trans }}</button>
-            </div>
-        </form>
+            <form id="zipUploadForm" enctype="multipart/form-data" onsubmit="return false;">
+                <input type="file" name="zipFile" id="zipFile" accept=".zip" required>
+                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:14px;">
+                    <button type="button" id="cancelUpload" class="btn btn-secondary btn-sm">{{ 'chameleon_system_newsletter_import.modal.abortBtn' | trans }}</button>
+                    <button type="button" id="doUpload" class="btn btn-primary btn-sm">{{ 'chameleon_system_newsletter_import.modal.uploadBtn' | trans }}</button>
+                </div>
+            </form>
 
-        <div id="uploadStatus" style="display:none; margin-top:10px; font-size:.9rem;"></div>
-    </div>
-</div>
-
-<script type="text/javascript">
-    $(function () {
-        const $modal = $('#zipModal');
-        const $status = $('#uploadStatus');
-
-        $('#extractBtn').on('click', function () {
-            $status.hide().text('');
-            $('#zipFile').val('');
-            $modal.fadeIn(120);
-        });
-
-        $('#cancelUpload').on('click', closeModal);
-        $('#zipModal').on('click', function (e) {
-            if (e.target === this) closeModal();
-        });
-        $(document).on('keydown', function (e) {
-            if (e.key === 'Escape') closeModal();
-        });
-        function closeModal() { $modal.fadeOut(120); }
-
-        $('#doUpload').on('click', function () {
-            const fileInput = $('#zipFile')[0];
-            if (!fileInput.files.length) {
-                alert('Bitte eine ZIP-Datei auswählen.');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('zipFile', fileInput.files[0]);
-
-            const headline = $('#headline').val();
-            const magazinZipId = $('#magazin_zip').val();
-            if (headline !== undefined) formData.append('headline', headline);
-            if (magazinZipId !== undefined) formData.append('magazinZipId', magazinZipId);
-
-           '{{ cmsauthenticitytoken|e('js') }}'
-
-            $status.show().text('Lade hoch …');
-
-            $.ajax({
-                url: '{{ ajaxUrl|e('js') }}',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (resp) {
-                    if (window.CKEDITOR && CKEDITOR.instances) {
-                        for (var name in CKEDITOR.instances) {
-                            if (Object.prototype.hasOwnProperty.call(CKEDITOR.instances, name)) {
-                                CKEDITOR.instances[name].resetDirty();
-                            }
-                        }
-                    }
-
-                    $(window).off('beforeunload');
-                    window.onbeforeunload = null;
-
-                    window.location.reload();
-                },
-                error: function (xhr, status, error) {
-                    $status.text('Fehler beim Hochladen: ' + (error || xhr.statusText));
-                }
-            });
-        });
-    });
-</script>
-
-{#copied from /TCMSFieldWYSIWYG/cKEditor/editor.html.twig since the editor data needed to get escaped,
-but wince the original has no blocks, we can not only overrite the parts we need#}
-
-{#
-@var string sEditorName
-@var string sFieldName
-@var array extraPluginsConfiguration
-@var array aEditorSettings
-@var bool couldNotLoadCustomCss
-@var string customCssUrl
-@var array cssStyles
-@var array data
-@var int editorHeight
-@var bool isCalledInModal
-#}
-
-<div>
-    {% if couldNotLoadCustomCss %}
-        <div class="alert alert-info">{{ 'chameleon_system_core.field_wysiwyg.custom_css_loading_error'|trans({'%url%': customCssUrl}) }}</div>
-    {% endif %}
-
-    <div class="card">
-        <div class="card-header p-1 d-flex align-items-center justify-content-between" id="{{ sEditorName }}header"
-             style="cursor: pointer;">
-            <span>Text Editor</span>
-            <i class="fas fa-chevron-down" id="{{ sEditorName }}ToggleIcon"></i>
-        </div>
-
-        <div class="card-body p-0">
-            <textarea cols="80" id="{{ sEditorName }}" name="{{ sFieldName }}" rows="10">
-                {{ data| e('html') }}
-            </textarea>
+            <div id="uploadStatus" style="display:none; margin-top:10px; font-size:.9rem;"></div>
         </div>
     </div>
+
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
-            const toggleIcon = document.getElementById('{{ sEditorName }}ToggleIcon');
-            const editorElement = document.getElementById('{{ sEditorName }}');
-            const editorInstanceName = '{{ sEditorName }}';
+            const modal   = document.getElementById('zipModal');
+            const status  = document.getElementById('uploadStatus');
+            const extractBtn   = document.getElementById('extractBtn');
+            const cancelUpload = document.getElementById('cancelUpload');
+            const doUpload     = document.getElementById('doUpload');
+            const zipFileInput = document.getElementById('zipFile');
 
-            let editorHeightEmpty = 30;
-            let editorHeightFilled = 150;
-            {% if isCalledInModal %}
-            editorHeightEmpty = {{ editorHeight }};
-            editorHeightFilled = {{ editorHeight }};
-            {% endif %}
-
-            let isExpanded = false;
-            const initialHeight = editorElement.value.trim() === '' ? editorHeightEmpty : editorHeightFilled;
-
-            var settingsSystem = {
-            {% for sSettingKey, sSettingValue in aEditorSettings %}
-            {{ sSettingKey|raw }}: {{ sSettingValue|raw }}{% if not loop.last %},{% endif %}
-            {% endfor %}
-        };
-
-            var settingsDefault = {
-                height: initialHeight,
-                on: {
-                    change: function (event) {
-                        const editor = event.editor;
-                        const instanceData = editor.getData();
-                        document.getElementById(editorInstanceName).value = instanceData;
-                    }
-                }
-            };
-
-            var settings = {};
-            $.extend(true, settings, settingsSystem, settingsDefault);
-
-            {{ include( 'TCMSFieldWYSIWYG/cKEditor/plugins.html.twig' ) }}
-
-            {% for extraPluginConfiguration in extraPluginsConfiguration %}
-            CKEDITOR.plugins.addExternal('{{ extraPluginConfiguration.name }}', '{{ extraPluginConfiguration.dir }}', '{{ extraPluginConfiguration.jsFile }}');
-            {% endfor %}
-
-            var editorStyleSets = '';
-            editorStyleSets = {{ aEditorSettings.stylesSet|raw }};
-            if (!(editorStyleSets in CKEDITOR.stylesSet.registered)) {
-                {% if aEditorSettings.stylesSet %}
-                CKEDITOR.stylesSet.add({{ aEditorSettings.stylesSet|raw }}, [
-                    {% for style in cssStyles %}
-                    {
-                        name: {{ style.name|raw }},
-                        element: {{ style.element|raw }},
-                        attributes: {
-                            'class': {{ style.attributes.class|raw }}
-                        }
-                    } {% if not loop.last %},{% endif %}{% endfor %}
-                ]);
-                {% endif %}
+            function closeModal() {
+                modal.style.display = 'none';
             }
 
-            CHAMELEON.CORE.CKEditor.instantiate(editorInstanceName, settings);
+            function openModal() {
+                modal.style.display = 'block';
+            }
 
-            document.getElementById('{{ sEditorName }}header').addEventListener('click', function () {
-                const editor = CKEDITOR.instances[editorInstanceName];
-                const toolbarHeight = 33 + CKEDITOR.instances[editorInstanceName].container.$.querySelector('.cke_top').offsetHeight || 50;
-                if (!isExpanded) {
-                    const fullHeight = {{ editorHeight }} + toolbarHeight;
-                    editor.resize('100%', fullHeight);
-                    toggleIcon.classList.remove('fa-chevron-down');
-                    toggleIcon.classList.add('fa-chevron-up');
-                } else {
-                    const collapsedHeight = (editorElement.value.trim() === '' ? editorHeightEmpty : editorHeightFilled) + toolbarHeight;
-                    editor.resize('100%', `${collapsedHeight}`);
-                    toggleIcon.classList.remove('fa-chevron-up');
-                    toggleIcon.classList.add('fa-chevron-down');
-                }
-                isExpanded = !isExpanded;
-            });
-
-            CKEDITOR.on('instanceReady', function () {
-                if (CKEDITOR.lang.de) CKEDITOR.lang.de.common.browseServer = 'CMS Quelle wählen';
-                else if (CKEDITOR.lang.en) CKEDITOR.lang.en.common.browseServer = 'Select CMS Source';
-
-                document.addEventListener('tableEditorBeforeSaveEvent', function () {
-                    document.getElementById('{{ sEditorName }}').value = CKEDITOR.instances[editorInstanceName].getData();
+            if (extractBtn) {
+                extractBtn.addEventListener('click', function () {
+                    if (status) {
+                        status.style.display = 'none';
+                        status.textContent = '';
+                    }
+                    if (zipFileInput) {
+                        zipFileInput.value = '';
+                    }
+                    openModal();
                 });
+            }
+
+            if (cancelUpload) {
+                cancelUpload.addEventListener('click', closeModal);
+            }
+
+            if (modal) {
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+            }
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
             });
+
+            if (doUpload) {
+                doUpload.addEventListener('click', function () {
+                    if (!zipFileInput || !zipFileInput.files.length) {
+                        alert('Bitte eine ZIP-Datei auswählen.');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('zipFile', zipFileInput.files[0]);
+
+                    const headlineInput   = document.getElementById('headline');
+                    const magazinZipInput = document.getElementById('magazin_zip');
+
+                    if (headlineInput) {
+                        formData.append('headline', headlineInput.value);
+                    }
+                    if (magazinZipInput) {
+                        formData.append('magazinZipId', magazinZipInput.value);
+                    }
+
+                    '{{ cmsauthenticitytoken|e('js') }}';
+
+                    if (status) {
+                        status.style.display = 'block';
+                        status.textContent = 'Lade hoch …';
+                    }
+
+                    fetch('{{ ajaxUrl|e('js') }}', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error(response.statusText || 'HTTP-Fehler ' + response.status);
+                            }
+
+                            return null;
+                        })
+                        .then(function () {
+                            if (window.CKEDITOR && CKEDITOR.instances) {
+                                for (var name in CKEDITOR.instances) {
+                                    if (Object.prototype.hasOwnProperty.call(CKEDITOR.instances, name)) {
+                                        CKEDITOR.instances[name].resetDirty();
+                                    }
+                                }
+                            }
+
+                            window.onbeforeunload = null;
+
+                            window.location.reload();
+                        })
+                        .catch(function (err) {
+                            if (status) {
+                                status.style.display = 'block';
+                                status.textContent = 'Fehler beim Hochladen: ' + (err && err.message ? err.message : 'Unbekannter Fehler');
+                            }
+                        });
+                });
+            }
         });
+
     </script>
-</div>
+{% endblock %}
+
+{% block ck_editor_data_text_area %}
+    <div class="card-body p-0">
+        <textarea cols="80" id="{{ sEditorName }}" name="{{ sFieldName }}" rows="10">
+            {{ data| e('html') }}
+        </textarea>
+    </div>
+{% endblock %}
+

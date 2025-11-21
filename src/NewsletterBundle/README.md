@@ -111,7 +111,7 @@ The Bundle can now handle to import newsletter created with canvas. To activate 
 to implement:
 ```
 chameleon_system_newsletter:
-  import_via_zip:
+  import_newsletter_from_zip:
     enabled: true
 ```
 On setting to true, the newsletter campaigns now contain a new WYSIWYG field with an upload button. The canvas ZIP can be uplaoded here.

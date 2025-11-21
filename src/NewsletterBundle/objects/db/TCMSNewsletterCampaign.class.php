@@ -508,6 +508,6 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 
     protected function getNewsletterViaImportedZipEnabled(): bool
     {
-        return ServiceLocator::getParameter('chameleon_system_newsletter.import_via_zip.enabled');
+        return ServiceLocator::getParameter('chameleon_system_newsletter.import_newsletter_from_zip.enabled');
     }
 }

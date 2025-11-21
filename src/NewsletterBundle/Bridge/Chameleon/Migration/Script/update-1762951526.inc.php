@@ -35,6 +35,16 @@ $data = TCMSLogChange::createMigrationQueryData('cms_media_tree', 'de')
 ;
 TCMSLogChange::update(__LINE__, $data);
 
+$data = TCMSLogChange::createMigrationQueryData('cms_media_tree', 'en')
+    ->setFields([
+        'name' => 'Newsletter Imports',
+    ])
+    ->setWhereEquals([
+        'id' => '2bf85916-fc60-6f9c-985d-1ac597cbb767',
+    ])
+;
+TCMSLogChange::update(__LINE__, $data);
+
 $data = TCMSLogChange::createMigrationQueryData('cms_media_tree', 'de')
   ->setFields([
       'path_cache' => '/media/newsletter-importe', // prev.: '/media/neuer-ordner'

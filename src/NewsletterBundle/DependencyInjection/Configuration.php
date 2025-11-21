@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
 
         $root
             ->children()
-                ->arrayNode('import_via_zip')
+                ->arrayNode('import_newsletter_from_zip')
                     ->addDefaultsIfNotSet()
                         ->children()
                             ->booleanNode('enabled')

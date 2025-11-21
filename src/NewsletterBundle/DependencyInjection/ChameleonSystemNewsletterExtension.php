@@ -32,8 +32,8 @@ class ChameleonSystemNewsletterExtension extends Extension
         $processedConfig = $this->processConfiguration($configuration, $config);
 
         $container->setParameter(
-            'chameleon_system_newsletter.import_via_zip.enabled',
-            $processedConfig['import_via_zip']['enabled']
+            'chameleon_system_newsletter.import_newsletter_from_zip.enabled',
+            $processedConfig['import_newsletter_from_zip']['enabled']
         );
     }
 }

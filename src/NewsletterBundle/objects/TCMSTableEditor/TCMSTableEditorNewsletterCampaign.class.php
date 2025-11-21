@@ -16,7 +16,7 @@ use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 {
     public const NEWSLETTER_CONTENT_VIA_TEMPLATE_PAGE_CONFIG_ID = '418216ea-e70c-c879-8f99-68d25cd9cc40';
-    public const NEWSLETTER_CONTENT_VIA_ZIP_CONFIG_ID = 'af3cdf0b-328d-69eb-e590-87a93c2d182a';
+    public const NEWSLETTER_CONTENT_VIA_ZIP_CONFIG_ID = 'd84b7e97-141e-f18b-17d5-966ed4f1c46c';
 
     protected int $iSubscribersAddedToQueue = 0;
 
@@ -317,6 +317,6 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 
     protected function getNewsletterWithZipImportEnabled(): bool
     {
-        return (bool) ServiceLocator::getParameter('chameleon_system_newsletter.import_via_zip.enabled');
+        return (bool) ServiceLocator::getParameter('chameleon_system_newsletter.import_newsletter_from_zip.enabled');
     }
 }
