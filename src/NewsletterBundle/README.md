@@ -106,6 +106,23 @@ Use the `NewsletterGroupSubscriberExportService` to export CSV lists of subscrib
 $exportService = ServiceLocator::get('chameleon_system_newsletter.service.newsletter_group_subscriber_export_service');
 ``` 
 
+### ZIP Import
+The Bundle can now handle to import newsletter created with canvas. To activate this functionality, the projects configuration needs
+to implement:
+```
+chameleon_system_newsletter:
+  import_newsletter_from_zip:
+    enabled: true
+```
+On setting to true, the newsletter campaigns now contain a new WYSIWYG field with an upload button. The canvas ZIP can be uplaoded here.
+The bundle generated a temp folder in which the unzipped files will be stored. Images are getting saved into the chameleon media manager 
+into a folder named "Newsletter Importe". The html files within the canvas zip are getting extracted and the src and href tags, which contain
+the original image links are getting replaced with version with the image urls from out chameleon system.
+
+The WYSIWYG field shows after the import the newsletter design. However, the field is set to readonly, so adjustements have to be mad ein canva.
+
+*important* when activated in the config, the zip import html is getting used for the Newsletter when getting send out
+
 Extensibility
 -------------
 - **View Mappers**: Tag mappers in `PostProcessing` or `Bridge/Chameleon` with `chameleon_system.mapper` to tailor module data for frontend rendering.

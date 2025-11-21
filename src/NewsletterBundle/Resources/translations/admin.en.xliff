@@ -53,7 +53,26 @@
                 <source>chameleon_system_newsletter_group.action.export_subscriber</source>
                 <target>Export Subscribers</target>
             </trans-unit>
-
+            <trans-unit id="chameleon_system_newsletter_import.label.upload">
+                <source>chameleon_system_newsletter_import.label.upload</source>
+                <target>Upload ZIP</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter_import.label.element">
+                <source>chameleon_system_newsletter_import.label.element</source>
+                <target>Import Newslette</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter_import.modal.headline">
+                <source>chameleon_system_newsletter_import.modal.headline</source>
+                <target>Upload ZIP</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter_import.modal.uploadBtn">
+                <source>chameleon_system_newsletter_import.modal.uploadBtn</source>
+                <target>Upload</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_newsletter_import.modal.abortBtn">
+                <source>chameleon_system_newsletter_import.modal.abortBtn</source>
+                <target>Abort</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

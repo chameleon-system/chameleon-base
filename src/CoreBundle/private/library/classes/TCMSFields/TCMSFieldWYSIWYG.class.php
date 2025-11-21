@@ -387,7 +387,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     /**
      * Loads a custom CSS file for the editor based on CMS config, portal, template or field configuration (in this order).
      */
-    private function getEditorCSSUrl(): string
+    protected function getEditorCSSUrl(): string
     {
         // load portal based CSS URL
         $portalCssUrl = $this->getPortalCssUrl();
@@ -565,7 +565,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     /**
      * Parses user css file and translate the styles for usage in javascript array collection / map.
      */
-    private function getJSStylesSet(string $sUserCssUrl): array
+    protected function getJSStylesSet(string $sUserCssUrl): array
     {
         $styles = [];
 
@@ -693,7 +693,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         $this->editorWidth = $sEditorWidth;
     }
 
-    private function isCalledInModal(): bool
+    protected function isCalledInModal(): bool
     {
         return '1' === $this->getCurrentRequest()->get('isInModal');
     }

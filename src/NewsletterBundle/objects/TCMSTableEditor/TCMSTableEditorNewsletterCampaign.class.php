@@ -15,7 +15,33 @@ use ChameleonSystem\SecurityBundle\Voter\CmsPermissionAttributeConstants;
 
 class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
 {
+    public const NEWSLETTER_CONTENT_VIA_TEMPLATE_PAGE_CONFIG_ID = '418216ea-e70c-c879-8f99-68d25cd9cc40';
+    public const NEWSLETTER_CONTENT_VIA_ZIP_CONFIG_ID = 'd84b7e97-141e-f18b-17d5-966ed4f1c46c';
+
     protected int $iSubscribersAddedToQueue = 0;
+
+    public function ProcessFieldsBeforeDisplay($oFields)
+    {
+        parent::ProcessFieldsBeforeDisplay($oFields);
+        $this->ToggleNewsletterContentFields($oFields);
+    }
+
+    protected function ToggleNewsletterContentFields(TIterator $oFields): void
+    {
+        foreach ($oFields as $oField) {
+            if (self::NEWSLETTER_CONTENT_VIA_TEMPLATE_PAGE_CONFIG_ID === $oField->oDefinition->sqlData['id']) {
+                if (true === $this->getNewsletterWithZipImportEnabled()) {
+                    $oField->oDefinition->sqlData['modifier'] = 'hidden';
+                }
+            }
+
+            if (self::NEWSLETTER_CONTENT_VIA_ZIP_CONFIG_ID === $oField->oDefinition->sqlData['id']) {
+                if (false === $this->getNewsletterWithZipImportEnabled()) {
+                    $oField->oDefinition->sqlData['modifier'] = 'hidden';
+                }
+            }
+        }
+    }
 
     /**
      * gets called after save if all posted data was valid.
@@ -287,5 +313,10 @@ class TCMSTableEditorNewsletterCampaign extends TCMSTableEditor
         }
 
         return $bAllowDeletingCampaignQueue;
+    }
+
+    protected function getNewsletterWithZipImportEnabled(): bool
+    {
+        return (bool) ServiceLocator::getParameter('chameleon_system_newsletter.import_newsletter_from_zip.enabled');
     }
 }

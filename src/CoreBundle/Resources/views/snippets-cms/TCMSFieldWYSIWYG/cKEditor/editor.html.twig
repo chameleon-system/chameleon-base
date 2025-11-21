@@ -10,6 +10,8 @@
     @var int editorHeight
     @var bool isCalledInModal
 #}
+{% block ck_editor_additions_header %}
+{% endblock %}
 
 <div>
     {% if couldNotLoadCustomCss %}
@@ -22,12 +24,13 @@
             <span>Text Editor</span>
             <i class="fas fa-chevron-down" id="{{ sEditorName }}ToggleIcon"></i>
         </div>
-
-        <div class="card-body p-0">
-            <textarea cols="80" id="{{ sEditorName }}" name="{{ sFieldName }}" rows="10">
-                {{ data|raw }}
-            </textarea>
-        </div>
+        {% block ck_editor_data_text_area %}
+            <div class="card-body p-0">
+                    <textarea cols="80" id="{{ sEditorName }}" name="{{ sFieldName }}" rows="10">
+                    {{ data|raw }}
+                </textarea>
+            </div>
+        {% endblock %}
     </div>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {

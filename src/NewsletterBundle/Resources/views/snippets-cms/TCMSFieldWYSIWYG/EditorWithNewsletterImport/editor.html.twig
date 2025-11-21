@@ -1,0 +1,142 @@
+{% extends '/TCMSFieldWYSIWYG/cKEditor/editor.html.twig' %}
+
+{% block ck_editor_additions_header %}
+    <button type="button" class="btn btn-info btn-sm mt-2 mb-2" id="extractBtn">{{ 'chameleon_system_newsletter_import.label.upload' | trans }}</button>
+
+    <div id="zipModal" style="display:none;
+     position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999;">
+        <div style="background:#fff; width:420px; margin:10% auto; padding:18px; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,.2);">
+            <h4 style="margin:0 0 12px;">{{ 'chameleon_system_newsletter_import.modal.headline' | trans }}</h4>
+
+            <form id="zipUploadForm" enctype="multipart/form-data" onsubmit="return false;">
+                <input type="file" name="zipFile" id="zipFile" accept=".zip" required>
+                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:14px;">
+                    <button type="button" id="cancelUpload" class="btn btn-secondary btn-sm">{{ 'chameleon_system_newsletter_import.modal.abortBtn' | trans }}</button>
+                    <button type="button" id="doUpload" class="btn btn-primary btn-sm">{{ 'chameleon_system_newsletter_import.modal.uploadBtn' | trans }}</button>
+                </div>
+            </form>
+
+            <div id="uploadStatus" style="display:none; margin-top:10px; font-size:.9rem;"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal   = document.getElementById('zipModal');
+            const status  = document.getElementById('uploadStatus');
+            const extractBtn   = document.getElementById('extractBtn');
+            const cancelUpload = document.getElementById('cancelUpload');
+            const doUpload     = document.getElementById('doUpload');
+            const zipFileInput = document.getElementById('zipFile');
+
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+
+            function openModal() {
+                modal.style.display = 'block';
+            }
+
+            if (extractBtn) {
+                extractBtn.addEventListener('click', function () {
+                    if (status) {
+                        status.style.display = 'none';
+                        status.textContent = '';
+                    }
+                    if (zipFileInput) {
+                        zipFileInput.value = '';
+                    }
+                    openModal();
+                });
+            }
+
+            if (cancelUpload) {
+                cancelUpload.addEventListener('click', closeModal);
+            }
+
+            if (modal) {
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+            }
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            if (doUpload) {
+                doUpload.addEventListener('click', function () {
+                    if (!zipFileInput || !zipFileInput.files.length) {
+                        alert('Bitte eine ZIP-Datei auswählen.');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('zipFile', zipFileInput.files[0]);
+
+                    const headlineInput   = document.getElementById('headline');
+                    const magazinZipInput = document.getElementById('magazin_zip');
+
+                    if (headlineInput) {
+                        formData.append('headline', headlineInput.value);
+                    }
+                    if (magazinZipInput) {
+                        formData.append('magazinZipId', magazinZipInput.value);
+                    }
+
+                    '{{ cmsauthenticitytoken|e('js') }}';
+
+                    if (status) {
+                        status.style.display = 'block';
+                        status.textContent = 'Lade hoch …';
+                    }
+
+                    fetch('{{ ajaxUrl|e('js') }}', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error(response.statusText || 'HTTP-Fehler ' + response.status);
+                            }
+
+                            return null;
+                        })
+                        .then(function () {
+                            if (window.CKEDITOR && CKEDITOR.instances) {
+                                for (var name in CKEDITOR.instances) {
+                                    if (Object.prototype.hasOwnProperty.call(CKEDITOR.instances, name)) {
+                                        CKEDITOR.instances[name].resetDirty();
+                                    }
+                                }
+                            }
+
+                            window.onbeforeunload = null;
+
+                            window.location.reload();
+                        })
+                        .catch(function (err) {
+                            if (status) {
+                                status.style.display = 'block';
+                                status.textContent = 'Fehler beim Hochladen: ' + (err && err.message ? err.message : 'Unbekannter Fehler');
+                            }
+                        });
+                });
+            }
+        });
+
+    </script>
+{% endblock %}
+
+{% block ck_editor_data_text_area %}
+    <div class="card-body p-0">
+        <textarea cols="80" id="{{ sEditorName }}" name="{{ sFieldName }}" rows="10">
+            {{ data| e('html') }}
+        </textarea>
+    </div>
+{% endblock %}
+

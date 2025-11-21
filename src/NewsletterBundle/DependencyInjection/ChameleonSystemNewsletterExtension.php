@@ -27,5 +27,13 @@ class ChameleonSystemNewsletterExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
+
+        $configuration = new Configuration();
+        $processedConfig = $this->processConfiguration($configuration, $config);
+
+        $container->setParameter(
+            'chameleon_system_newsletter.import_newsletter_from_zip.enabled',
+            $processedConfig['import_newsletter_from_zip']['enabled']
+        );
     }
 }
