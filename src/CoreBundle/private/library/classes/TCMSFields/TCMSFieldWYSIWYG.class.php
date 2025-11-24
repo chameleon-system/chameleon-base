@@ -569,7 +569,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     {
         $styles = [];
 
-        $aCustomCSSClasses = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
+        $aCustomCSSClasses = array_keys($this->GetWYSIWYGCustomerStyles($sUserCssUrl));
         foreach ($aCustomCSSClasses as $sClassName) {
             $styleData = [];
             if (str_starts_with($sClassName, '@')) {
