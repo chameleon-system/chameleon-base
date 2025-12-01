@@ -361,11 +361,11 @@ function removeMLTConnection(sourceTable, fieldName, sourceID, targetID) {
  */
 function loadPositionList(tableID, tableSQLName, fieldName, recordID, sRestriction, sRestrictionField) {
     // if the restrictionfield is given, but the value is missing, watch out for the field
-    if (sRestriction && sRestrictionField != '') {
+    if (sRestriction === '' && sRestrictionField !== '') {
         sRestriction = $('#' + sRestrictionField).val();
     }
 
-    if (typeof (sRestriction) == 'undefined') sRestriction = '';
+    sRestriction ||= '';
 
     var url = window.location.pathname + '?pagedef=CMSFieldPositionRPC&_rmhist=false&module_fnc[contentmodule]=GetSortElements';
     url += '&tableID=' + tableID;
