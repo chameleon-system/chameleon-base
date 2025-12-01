@@ -70,7 +70,7 @@ class TCMSFieldPosition extends TCMSField implements DoctrineTransformableInterf
         $oGlobal = TGlobal::instance();
 
         // check for custom restriction in fieldtype config
-        $restrictionField = $this->oDefinition->GetFieldtypeConfigKey('restrictionfield');
+        $restrictionField = $this->oDefinition->GetFieldtypeConfigKey('sPermanentRestrictionField');
 
         if (!isset($restrictionField) || is_null($restrictionField) || empty($restrictionField) || false == $restrictionField) {
             $restrictionField = $oGlobal->GetUserData('sRestrictionField');
