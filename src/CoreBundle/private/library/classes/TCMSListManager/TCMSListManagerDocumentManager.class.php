@@ -54,15 +54,10 @@ class TCMSListManagerDocumentManager extends TCMSListManagerFullGroupTable
     {
         parent::AddFields();
 
-        $sLanguageIdent = '';
         /** @var BackendSessionInterface $backendSession */
         $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
-        $oCmsConfig = TdbCmsConfig::GetInstance();
-        $oDefaultLang = $oCmsConfig->GetFieldTranslationBaseLanguage();
-        if ($oDefaultLang && $oDefaultLang->fieldIso6391 != $backendSession->getCurrentEditLanguageIso6391()) {
-            $sLanguageIdent = $backendSession->getCurrentEditLanguageIso6391();
-        }
+        $sLanguageIdent = TGlobal::GetLanguagePrefix($backendSession->getCurrentEditLanguageId());
 
         $sNameSQL = $this->oTableConf->GetNameColumn();
         $this->tableObj->RemoveHeaderField($sNameSQL);
