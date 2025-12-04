@@ -4,6 +4,7 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\CoreBundle\Interfaces\FieldExtensionInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FieldExtensionRenderServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class FieldExtensionRenderService implements FieldExtensionRenderServiceInterface
 {
@@ -19,12 +20,29 @@ class FieldExtensionRenderService implements FieldExtensionRenderServiceInterfac
 
     public function renderFieldExtension(\TCMSField $field): string
     {
-        $html = '';
+        $items = [];
         foreach ($this->fieldExtensions as $fieldExtension) {
-            $html .= $fieldExtension->getFieldExtensionHtml($field);
+            $html = trim($fieldExtension->getFieldExtensionHtml($field));
+            if ('' !== $html) {
+                $items[] = $html;
+            }
         }
 
-        return $html;
+        if ([] === $items) {
+            return '';
+        }
+
+        $fieldName = preg_replace('/[^a-zA-Z0-9_-]/', '-', $field->name);
+        $uniqueId = uniqid('', false);
+
+        /** @var \ViewRenderer $viewRenderer */
+        $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        $viewRenderer->AddSourceObject('fieldName', $fieldName);
+        $viewRenderer->AddSourceObject('items', $items);
+        $viewRenderer->AddSourceObject('menuId', 'field-extension-menu-'.$fieldName.'-'.$uniqueId);
+        $viewRenderer->AddSourceObject('toggleId', 'field-extension-toggle-'.$fieldName.'-'.$uniqueId);
+
+        return $viewRenderer->Render('FieldExtension/dropdown.html.twig');
     }
 
     public function getHtmlHeadIncludes(\TCMSField $field): array
