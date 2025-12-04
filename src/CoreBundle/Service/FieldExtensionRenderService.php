@@ -4,6 +4,7 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 use ChameleonSystem\CoreBundle\Interfaces\FieldExtensionInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FieldExtensionRenderServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 class FieldExtensionRenderService implements FieldExtensionRenderServiceInterface
 {
@@ -23,9 +24,7 @@ class FieldExtensionRenderService implements FieldExtensionRenderServiceInterfac
         foreach ($this->fieldExtensions as $fieldExtension) {
             $html = trim($fieldExtension->getFieldExtensionHtml($field));
             if ('' !== $html) {
-                // wrap to neutralize floats from individual extension buttons/links
-                $items[] = '<div class="field-extension-item" style="display: block; padding: 4px 0; float: none; text-align: left;">'
-                    .$html.'</div>';
+                $items[] = $html;
             }
         }
 
@@ -35,45 +34,15 @@ class FieldExtensionRenderService implements FieldExtensionRenderServiceInterfac
 
         $fieldName = preg_replace('/[^a-zA-Z0-9_-]/', '-', $field->name);
         $uniqueId = uniqid('', false);
-        $toggleId = 'field-extension-toggle-'.$fieldName.'-'.$uniqueId;
-        $menuId = 'field-extension-menu-'.$fieldName.'-'.$uniqueId;
-        $menuContent = implode('', $items);
 
-        return <<<HTML
-<div class="field-extension-dropdown" style="position: relative; display: block; text-align: right; margin-top: 6px;">
-    <button type="button" class="btn btn-outline-secondary btn-sm" id="{$toggleId}" title="Field extensions">
-        <span class="fas fa-ellipsis-h"></span>
-    </button>
-    <div class="field-extension-menu dropdown-menu" id="{$menuId}" style="display: none; position: absolute; right: 0; left: auto; top: calc(100% + 4px); z-index: 1000; min-width: 220px; max-width: min(420px, calc(100vw - 32px)); padding: 8px 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); white-space: normal; word-break: break-word; background: #fff; border: 1px solid #ddd; border-radius: 4px;">
-        {$menuContent}
-    </div>
-</div>
-<script>
-    (function () {
-        var toggle = document.getElementById('{$toggleId}');
-        var menu = document.getElementById('{$menuId}');
-        if (!toggle || !menu) {
-            return;
-        }
+        /** @var \ViewRenderer $viewRenderer */
+        $viewRenderer = ServiceLocator::get('chameleon_system_view_renderer.view_renderer');
+        $viewRenderer->AddSourceObject('fieldName', $fieldName);
+        $viewRenderer->AddSourceObject('items', $items);
+        $viewRenderer->AddSourceObject('menuId', 'field-extension-menu-'.$fieldName.'-'.$uniqueId);
+        $viewRenderer->AddSourceObject('toggleId', 'field-extension-toggle-'.$fieldName.'-'.$uniqueId);
 
-        toggle.addEventListener('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            if ('block' === menu.style.display) {
-                menu.style.display = 'none';
-            } else {
-                menu.style.display = 'block';
-            }
-        });
-
-        document.addEventListener('click', function (event) {
-            if (!menu.contains(event.target) && event.target !== toggle) {
-                menu.style.display = 'none';
-            }
-        });
-    })();
-</script>
-HTML;
+        return $viewRenderer->Render('FieldExtension/dropdown.html.twig');
     }
 
     public function getHtmlHeadIncludes(\TCMSField $field): array
