@@ -13,7 +13,7 @@
             </trans-unit>
             <trans-unit id="data_extranet_salutation.gender.other">
                 <source>data_extranet_salutation.gender.other</source>
-                <target>Egal</target>
+                <target>Divers</target>
             </trans-unit>
 
         </body>
