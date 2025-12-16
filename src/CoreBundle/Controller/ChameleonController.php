@@ -29,7 +29,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use TPkgCmsActionPluginException_ActionNotPublic;
 
 abstract class ChameleonController implements ChameleonControllerInterface
 {
@@ -228,33 +230,37 @@ abstract class ChameleonController implements ChameleonControllerInterface
             return;
         }
 
-        foreach ($moduleFunctions as $spotName => $method) {
-            $method = trim($method);
-            if ('' === $method) {
-                continue;
-            }
-            if (array_key_exists($spotName, $modulesObject->modules)) {
-                /**
-                 * @var \TModelBase $module
-                 */
-                $module = $modulesObject->modules[$spotName];
-                if ($this->isModuleMethodCallAllowed($module, $method)) {
-                    $this->global->SetExecutingModulePointer($module);
-                    $module->_CallMethod($method);
-                    $tmp = null;
-
-                    /* @psalm-suppress NullArgument */
-                    $this->global->SetExecutingModulePointer($tmp);
+        try {
+            foreach ($moduleFunctions as $spotName => $method) {
+                $method = trim($method);
+                if ('' === $method) {
+                    continue;
                 }
-            } else {
-                $oActivePage = $this->activePageService->getActivePage();
-                if ($oActivePage) {
-                    $oActionPluginManager = new \TPkgCmsActionPluginManager($oActivePage);
-                    if ($oActionPluginManager->actionPluginExists($spotName)) {
-                        $oActionPluginManager->callAction($spotName, $method, $this->global->GetUserData());
+                if (array_key_exists($spotName, $modulesObject->modules)) {
+                    /**
+                     * @var \TModelBase $module
+                     */
+                    $module = $modulesObject->modules[$spotName];
+                    if ($this->isModuleMethodCallAllowed($module, $method)) {
+                        $this->global->SetExecutingModulePointer($module);
+                        $module->_CallMethod($method);
+                        $tmp = null;
+
+                        /* @psalm-suppress NullArgument */
+                        $this->global->SetExecutingModulePointer($tmp);
+                    }
+                } else {
+                    $oActivePage = $this->activePageService->getActivePage();
+                    if ($oActivePage) {
+                        $oActionPluginManager = new \TPkgCmsActionPluginManager($oActivePage);
+                        if ($oActionPluginManager->actionPluginExists($spotName)) {
+                            $oActionPluginManager->callAction($spotName, $method, $this->global->GetUserData());
+                        }
                     }
                 }
             }
+        } catch(TPkgCmsActionPluginException_ActionNotPublic $e) {
+            throw new BadRequestException($e->getMessage(), 0, $e);
         }
     }
 
