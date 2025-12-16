@@ -237,17 +237,11 @@ abstract class ChameleonController implements ChameleonControllerInterface
                     continue;
                 }
                 if (array_key_exists($spotName, $modulesObject->modules)) {
-                    /**
-                     * @var \TModelBase $module
-                     */
                     $module = $modulesObject->modules[$spotName];
                     if ($this->isModuleMethodCallAllowed($module, $method)) {
                         $this->global->SetExecutingModulePointer($module);
                         $module->_CallMethod($method);
-                        $tmp = null;
-
-                        /* @psalm-suppress NullArgument */
-                        $this->global->SetExecutingModulePointer($tmp);
+                        $this->global->SetExecutingModulePointer(null);
                     }
                 } else {
                     $oActivePage = $this->activePageService->getActivePage();
