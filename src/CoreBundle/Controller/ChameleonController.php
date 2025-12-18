@@ -229,19 +229,19 @@ abstract class ChameleonController implements ChameleonControllerInterface
                 if ('' === $method) {
                     continue;
                 }
-                if (array_key_exists($spotName, $modulesObject->modules)) {
+                if (true === array_key_exists($spotName, $modulesObject->modules)) {
                     $module = $modulesObject->modules[$spotName];
-                    if ($this->isModuleMethodCallAllowed($module, $method)) {
+                    if (true === $this->isModuleMethodCallAllowed($module, $method)) {
                         $this->global->SetExecutingModulePointer($module);
                         $module->_CallMethod($method);
                         $this->global->SetExecutingModulePointer(null);
                     }
                 } else {
-                    $oActivePage = $this->activePageService->getActivePage();
-                    if ($oActivePage) {
-                        $oActionPluginManager = new \TPkgCmsActionPluginManager($oActivePage);
-                        if ($oActionPluginManager->actionPluginExists($spotName)) {
-                            $oActionPluginManager->callAction($spotName, $method, $this->global->GetUserData());
+                    $activePage = $this->activePageService->getActivePage();
+                    if (null !== $activePage) {
+                        $actionPluginManager = new \TPkgCmsActionPluginManager($activePage);
+                        if (true === $actionPluginManager->actionPluginExists($spotName)) {
+                            $actionPluginManager->callAction($spotName, $method, $this->global->GetUserData());
                         }
                     }
                 }
