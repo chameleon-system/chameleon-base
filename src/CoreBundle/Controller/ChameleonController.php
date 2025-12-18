@@ -26,6 +26,7 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use esono\pkgCmsCache\CacheInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -72,9 +73,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return $this->moduleLoader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __invoke()
     {
         $event = new ChameleonControllerInvokeEvent($this);
@@ -200,9 +198,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setCache(CacheInterface $cache)
     {
         $this->cache = $cache;
@@ -228,33 +223,31 @@ abstract class ChameleonController implements ChameleonControllerInterface
             return;
         }
 
-        foreach ($moduleFunctions as $spotName => $method) {
-            $method = trim($method);
-            if ('' === $method) {
-                continue;
-            }
-            if (array_key_exists($spotName, $modulesObject->modules)) {
-                /**
-                 * @var \TModelBase $module
-                 */
-                $module = $modulesObject->modules[$spotName];
-                if ($this->isModuleMethodCallAllowed($module, $method)) {
-                    $this->global->SetExecutingModulePointer($module);
-                    $module->_CallMethod($method);
-                    $tmp = null;
-
-                    /* @psalm-suppress NullArgument */
-                    $this->global->SetExecutingModulePointer($tmp);
+        try {
+            foreach ($moduleFunctions as $spotName => $method) {
+                $method = trim($method);
+                if ('' === $method) {
+                    continue;
                 }
-            } else {
-                $oActivePage = $this->activePageService->getActivePage();
-                if ($oActivePage) {
-                    $oActionPluginManager = new \TPkgCmsActionPluginManager($oActivePage);
-                    if ($oActionPluginManager->actionPluginExists($spotName)) {
-                        $oActionPluginManager->callAction($spotName, $method, $this->global->GetUserData());
+                if (true === array_key_exists($spotName, $modulesObject->modules)) {
+                    $module = $modulesObject->modules[$spotName];
+                    if (true === $this->isModuleMethodCallAllowed($module, $method)) {
+                        $this->global->SetExecutingModulePointer($module);
+                        $module->_CallMethod($method);
+                        $this->global->SetExecutingModulePointer(null);
+                    }
+                } else {
+                    $activePage = $this->activePageService->getActivePage();
+                    if (null !== $activePage) {
+                        $actionPluginManager = new \TPkgCmsActionPluginManager($activePage);
+                        if (true === $actionPluginManager->actionPluginExists($spotName)) {
+                            $actionPluginManager->callAction($spotName, $method, $this->global->GetUserData());
+                        }
                     }
                 }
             }
+        } catch (\TPkgCmsActionPluginException_ActionNotPublic $e) {
+            throw new BadRequestException($e->getMessage(), 0, $e);
         }
     }
 
@@ -515,9 +508,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         return $this->resourceCollector->CollectExternalResources($sPageContent);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function AddHTMLFooterLine($sLine)
     {
         if (!in_array($sLine, $this->aFooterIncludes)) {
@@ -525,9 +515,6 @@ abstract class ChameleonController implements ChameleonControllerInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function AddHTMLHeaderLine($sLine)
     {
         if (!in_array($sLine, $this->aHeaderIncludes)) {
@@ -539,7 +526,7 @@ abstract class ChameleonController implements ChameleonControllerInterface
      * outputs the final generated webpage.
      *
      * @param string $sContent
-     * @param bool $bContentLoadedFromCache
+     * @param bool   $bContentLoadedFromCache
      *
      * @return mixed|string
      */
@@ -566,8 +553,8 @@ abstract class ChameleonController implements ChameleonControllerInterface
     /**
      * performs a header redirect to a specified URL.
      *
-     * @param string $url - relative URL or full URL with http:// to which we want to redirect
-     * @param bool $bAllowOnlyRelativeURLs - strips scheme from URL and adds current HOST - default false
+     * @param string $url                    - relative URL or full URL with http:// to which we want to redirect
+     * @param bool   $bAllowOnlyRelativeURLs - strips scheme from URL and adds current HOST - default false
      *
      * @deprecated use \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect') instead
      *
