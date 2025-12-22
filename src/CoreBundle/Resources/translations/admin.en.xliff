@@ -2343,6 +2343,14 @@
                 <source>chameleon_system_core.field_css_icon.select_icon</source>
                 <target>Select Icon</target>
             </trans-unit>
+            <trans-unit id="chameleon_system_core.field_css_icon.search">
+                <source>chameleon_system_core.field_css_icon.search</source>
+                <target>Search</target>
+            </trans-unit>
+            <trans-unit id="chameleon_system_core.field_css_icon.no_results">
+                <source>chameleon_system_core.field_css_icon.no_results</source>
+                <target>No icons found matching your search.</target>
+            </trans-unit>
             <trans-unit id="chameleon_system_core.log_viewer.filename_label">
                 <source>chameleon_system_core.log_viewer.filename_label</source>
                 <target>Filename</target>
