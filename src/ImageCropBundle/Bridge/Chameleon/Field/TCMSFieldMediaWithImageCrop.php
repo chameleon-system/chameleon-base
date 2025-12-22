@@ -114,7 +114,9 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
         }
 
         $databaseConnection = $this->getDatabaseConnection();
-        $data = array($databaseConnection->quoteIdentifier($additionalFieldNameTranslated) => $cropId);
+        $dataRaw = [$additionalFieldNameTranslated => $cropId];
+        $data = [$databaseConnection->quoteIdentifier($additionalFieldNameTranslated) => $cropId];
+
         $identifier = array('id' => $recordId);
         $databaseConnection->update($databaseConnection->quoteIdentifier($this->sTableName), $data, $identifier);
 
@@ -123,7 +125,7 @@ class TCMSFieldMediaWithImageCrop extends TCMSFieldExtendedLookupMedia
             $this->getLanguageService()->getActiveEditLanguage()->fieldIso6391
         );
         $migrationQueryData
-            ->setFields($data)
+            ->setFields($dataRaw)
             ->setWhereEquals($identifier);
         $queryData = array(new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE));
         TCMSLogChange::WriteTransaction($queryData);
