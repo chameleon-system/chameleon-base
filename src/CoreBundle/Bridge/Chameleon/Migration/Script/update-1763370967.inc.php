@@ -18,7 +18,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_message_manager_backend_mes
       'name' => 'TABLEEDITOR_SAVE_FIELD_VALIDATION_ERROR', // prev.: ''
       'cms_message_manager_message_type_id' => '4', // prev.: ''
       'cms_config_id' => '1',
-      'message' => 'Die Feld-Validierung war nciht erfolgreich. Bitte überprüfen Sie Ihre Angaben', // prev.: ''
+      'message' => 'Die Feld-Validierung war nicht erfolgreich. Bitte überprüfen Sie Ihre Angaben', // prev.: ''
   ])
   ->setWhereEquals([
       'id' => '342b06d9-fb41-577d-83f4-6e5d53d17042',
