@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
@@ -22,6 +24,45 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      * view path for frontend.
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldLookupMultiselect';
+
+    public const MTL_TABLE_NAME_CONFIGURATION_KEY = 'mltTableName';
+    public const STRICT_MTL_TABLE_NAME = true;
+    public const TABLEEDITOR_TABLE_NAME_MUST_END_WITH_MLT_MESSAGE_NAME = 'TABLEEDITOR_TABLE_NAME_MUST_END_WITH_MLT';
+    public const TABLEEDITOR_TABLE_NAME_TOO_LONG_MESSAGE_NAME = 'TABLEEDITOR_TABLE_NAME_TOO_LONG';
+    public const TABLE_ALREADY_EXISTS_SHORT_MESSAGE_NAME = 'TABLEEDITOR_TABLE_ALREADY_EXISTS_SHORT';
+
+    /**
+     * Checks if an MLT table creation would be valid, and generates a backend error message if not.
+     */
+    protected function validateMltTableName(?string $mltTableName): bool
+    {
+        if (null === $mltTableName) {
+            return true;
+        }
+
+        $consumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
+
+        if (true === static::STRICT_MTL_TABLE_NAME && false === str_ends_with($mltTableName, '_mlt')) {
+            $this->getFlashMessageService()->addMessage($consumerName, static::TABLEEDITOR_TABLE_NAME_MUST_END_WITH_MLT_MESSAGE_NAME, ['tableName' => $mltTableName]);
+
+            return false;
+        }
+
+        $mltTableNameLength = strlen($mltTableName);
+        if ($mltTableNameLength > 64) {
+            $this->getFlashMessageService()->addMessage($consumerName, static::TABLEEDITOR_TABLE_NAME_TOO_LONG_MESSAGE_NAME, ['tableName' => $mltTableName, 'tableNameLength' => $mltTableNameLength]);
+
+            return false;
+        }
+
+        if (true === TGlobal::TableExists($mltTableName)) {
+            $this->getFlashMessageService()->addMessage($consumerName, static::TABLE_ALREADY_EXISTS_SHORT_MESSAGE_NAME, ['tableName' => $mltTableName]);
+
+            return false;
+        }
+
+        return true;
+    }
 
     public function GetHTML()
     {
@@ -197,6 +238,11 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      */
     public function GetMLTTableName($aFieldData = array())
     {
+        $mltTableName = $this->getMltTableNameFromFieldConfig($aFieldData);
+        if (null !== $mltTableName) {
+            return $mltTableName;
+        }
+
         if (count($aFieldData) > 0) {
             $sConnectedTableName = $this->GetConnectedTableNameFromFieldConfig($aFieldData);
             $sName = $aFieldData['name'];
@@ -244,8 +290,13 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      */
     public function CreateRelatedTables($returnDDL = false)
     {
-        $sReturnVal = '';
         $tableName = $this->GetMLTTableName();
+        if (false === $this->validateMltTableName($tableName)) {
+            return parent::CreateRelatedTables($returnDDL);
+        }
+
+        $sReturnVal = '';
+
         if (!TGlobal::TableExists($tableName)) {
             $query = 'CREATE TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName)."` (
                   `source_id` CHAR( 36 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
@@ -284,7 +335,14 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
             $bAllowCreateRelatedTables = true;
         }
 
-        return $bAllowCreateRelatedTables;
+        if (true === $bAllowCreateRelatedTables) {
+            return true;
+        }
+
+        $oldMltTableName = $this->getMltTableNameFromFieldConfig($aOldFieldData);
+        $newMltTableName = $this->getMltTableNameFromFieldConfig();
+
+        return $oldMltTableName !== $newMltTableName;
     }
 
     /**
@@ -425,13 +483,24 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      * @param array $aFieldSQLData sql data array of field config
      * @param string $sParameterKey
      *
-     * @return string
+     * @return string|null
      */
     protected function GetConnectedTableNameFromFieldConfig($aFieldSQLData, $sParameterKey = 'connectedTableName')
     {
         $oConfig = new TPkgCmsStringUtilities_ReadConfig($aFieldSQLData['fieldtype_config']);
 
         return $oConfig->getConfigValue($sParameterKey);
+    }
+
+    protected function getMltTableNameFromFieldConfig(array $fieldSQLData = []): ?string
+    {
+        if ([] === $fieldSQLData) {
+            return $this->oDefinition->GetFieldtypeConfigKey(static::MTL_TABLE_NAME_CONFIGURATION_KEY);
+        }
+
+        $oConfig = new TPkgCmsStringUtilities_ReadConfig($fieldSQLData['fieldtype_config'] ?? '');
+
+        return $oConfig->getConfigValue(static::MTL_TABLE_NAME_CONFIGURATION_KEY);
     }
 
     public function GetHTMLExport()
@@ -622,5 +691,10 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
     private static function getMltFieldUtil()
     {
         return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.mlt_field');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }

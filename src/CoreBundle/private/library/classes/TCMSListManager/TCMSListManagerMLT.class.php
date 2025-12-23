@@ -35,19 +35,6 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
     }
 
     /**
-     * Returns the mlt table name.
-     *
-     * @return string
-     */
-    protected function GetMLTTableName()
-    {
-        $sFieldMltName = $this->GetFieldMltName();
-        $sMLTTableName = substr($this->sRestrictionField, 0, -4).'_'.$sFieldMltName.'_mlt';
-
-        return $sMLTTableName;
-    }
-
-    /**
      * any custom restrictions can be added to the query by overwriting this function.
      *
      * @param string $query

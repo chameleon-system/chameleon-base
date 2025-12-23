@@ -52,11 +52,7 @@ class TCMSListManagerMLTList extends TCMSListManagerFullGroupTable
 
         // because one table may be connected more than once with the source table, we need
         // to use the parameter "name" instead of the tableconf
-        $oGlobal = TGlobal::instance();
-        $sFieldMltName = $this->GetFieldMltName();
-        $mltTable = substr($this->sRestrictionField, 0, -4).'_'.$sFieldMltName.'_mlt';
-        //echo $mltTable;
-        //echo "<pre>";var_dump($this); echo "</pre>";
+        $mltTable = $this->GetMLTTableName();
 
         $MLTquery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTable)."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sRestriction)."'";
         $MLTResult = MySqlLegacySupport::getInstance()->query($MLTquery);
