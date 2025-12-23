@@ -25,15 +25,64 @@ class FieldIconFontSelector extends \TCMSFieldVarchar
             </div>
         </div>';
 
-        $iconFontCssClassList = $this->getIconFontCssClassList();
+        $iconFontCssCategoryList = $this->getIconFontCssClassList();
 
         $fieldHtml .= '<div id="'.\TGlobal::OutHTML($this->name).'-icon-list" style="display: none;">
-            <div class="mt-4 ml-1 row">';
-        foreach ($iconFontCssClassList as $iconFontCssClass) {
-            $fieldHtml .= '<span class="col-1 '.\TGlobal::OutHTML($iconFontCssClass).'" style="font-size: 2.1em; cursor: pointer; padding-top: 4px; border: 1px solid #f0f3f5; min-height: 40px;" title="'.\TGlobal::OutHTML($iconFontCssClass).'" data-css-class="'.\TGlobal::OutHTML($iconFontCssClass).'" onclick="CHAMELEON.CORE.FieldIconFontSelector.selectIconClass(this, \''.$this->name.'\')"></span>';
+            <div class="icon-search-container p-1 bg-light border-bottom" style="position: sticky; top: 0; z-index: 1000;">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    </div>
+                    <input type="text" class="form-control icon-search" placeholder="'.\TGlobal::OutHTML($this->getTranslator()->trans('chameleon_system_core.field_css_icon.search')).'" onkeyup="CHAMELEON.CORE.FieldIconFontSelector.search(this)">
+                </div>
+            </div>
+            <div class="p-0 mt-3">
+                <ul class="nav nav-tabs icon-tabs" role="tablist">';
+
+        $first = true;
+        foreach ($iconFontCssCategoryList as $categoryName => $iconFontCssClassList) {
+            $categoryId = \TGlobal::OutHTML($this->name.'-'.str_replace(' ', '-', $categoryName));
+            $activeClass = $first ? 'active' : '';
+            $fieldHtml .= '<li class="nav-item">
+                                <a class="nav-link '.$activeClass.'" id="'.$categoryId.'-tab" data-toggle="tab" data-coreui-toggle="tab" href="#'.$categoryId.'" role="tab" aria-controls="'.$categoryId.'" aria-selected="'.($first ? 'true' : 'false').'">
+                                    '.\TGlobal::OutHTML($categoryName).'
+                                </a>
+                           </li>';
+            $first = false;
         }
-        $fieldHtml .= '</div>
-        </div>';
+
+        $fieldHtml .= '</ul>
+                <div class="tab-content icon-tab-content p-3">';
+
+        $first = true;
+        foreach ($iconFontCssCategoryList as $categoryName => $iconFontCssClassList) {
+            $categoryId = \TGlobal::OutHTML($this->name.'-'.str_replace(' ', '-', $categoryName));
+            $activeClass = $first ? 'show active' : '';
+            $headerIcon = 'fas fa-font';
+            if ('Font Awesome Brands' === $categoryName) {
+                $headerIcon = 'fab fa-font-awesome';
+            } elseif ('Custom' === $categoryName) {
+                $headerIcon = 'fas fa-cog';
+            }
+
+            $fieldHtml .= '<div class="tab-pane fade '.$activeClass.'" id="'.$categoryId.'" role="tabpanel" aria-labelledby="'.$categoryId.'-tab">
+                            <h6 class="mt-2 mb-3 pb-2 border-bottom font-weight-bold text-uppercase icon-category-header" style="letter-spacing: 1px; color: #495057;">
+                                <i class="'.$headerIcon.' mr-2"></i>'.\TGlobal::OutHTML($categoryName).'
+                            </h6>
+                            <div class="row no-gutters">';
+            foreach ($iconFontCssClassList as $iconFontCssClass) {
+                $fieldHtml .= '<span class="col-1 '.\TGlobal::OutHTML($iconFontCssClass).'" style="font-size: 2.1em; cursor: pointer; padding: 10px; border: 1px solid #f0f3f5; min-height: 60px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease-in-out;" title="'.\TGlobal::OutHTML($iconFontCssClass).'" data-css-class="'.\TGlobal::OutHTML($iconFontCssClass).'" onclick="CHAMELEON.CORE.FieldIconFontSelector.selectIconClass(this, \''.$this->name.'\')" onmouseover="this.style.backgroundColor=\'#007bff\'; this.style.color=\'#ffffff\'; this.style.transform=\'scale(1.1)\'; this.style.zIndex=\'10\'; this.style.boxShadow=\'0 4px 8px rgba(0,0,0,0.1)\';" onmouseout="this.style.backgroundColor=\'transparent\'; this.style.color=\'inherit\'; this.style.transform=\'scale(1)\'; this.style.zIndex=\'1\'; this.style.boxShadow=\'none\';"></span>';
+            }
+            $fieldHtml .= '</div></div>';
+            $first = false;
+        }
+
+        $fieldHtml .= '</div>';
+        $fieldHtml .= '<div class="no-results-message text-center p-5" style="display: none;">
+                            <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                            <p class="h5 text-muted">'.$this->getTranslator()->trans('chameleon_system_core.field_css_icon.no_results').'</p>
+                       </div>';
+        $fieldHtml .= '</div></div>';
 
         return $fieldHtml;
     }
@@ -71,18 +120,47 @@ class FieldIconFontSelector extends \TCMSFieldVarchar
             return [];
         }
 
-        $filteredClassnames = [];
+        $iconList = [
+            'Font Awesome' => [],
+            'Font Awesome Brands' => [],
+            'Custom' => [],
+        ];
 
         foreach ($iconFontCssUrlList as $iconFontCssUrl) {
             try {
                 $cssClassesWithTags = $this->getCssClassExtractor()->extractCssClasses($iconFontCssUrl);
                 $cssClassNames = array_keys($cssClassesWithTags);
-                $cssClassNames = $this->addDotPrefixToCssClasses($cssClassNames);
-                $cssClassNames = $this->getFontAwesomeService()->filterFontAwesomeClasses($cssClassNames);
+                $cssClassNamesWithDots = $this->addDotPrefixToCssClasses($cssClassNames);
+                $filteredFontAwesomeClassNames = $this->getFontAwesomeService()->filterFontAwesomeClasses($cssClassNamesWithDots);
 
+                $fontAwesomeClassesFromThisFile = [];
+                foreach ($filteredFontAwesomeClassNames as $cssClassName) {
+                    $cleanClassName = str_replace([':before', '.'], ['', ' '], $cssClassName);
+                    $fontAwesomeClassesFromThisFile[] = $cleanClassName;
+
+                    if ($this->getFontAwesomeService()->isFontAwesomeBrand($cleanClassName)) {
+                        $iconList['Font Awesome Brands'][] = $cleanClassName;
+                    } else {
+                        $iconList['Font Awesome'][] = $cleanClassName;
+                    }
+                }
+
+                // Identify custom icons (those not handled by FontAwesomeService)
                 foreach ($cssClassNames as $cssClassName) {
-                    if (\str_starts_with($cssClassName, '.')) {
-                        $filteredClassnames[] = str_replace([':before', '.'], ['', ' '], $cssClassName);
+                    if ($this->getFontAwesomeService()->isExcludedClass($cssClassName)) {
+                        continue;
+                    }
+
+                    $isFontAwesome = false;
+                    foreach ($fontAwesomeClassesFromThisFile as $faClass) {
+                        if (str_contains($faClass, $cssClassName)) {
+                            $isFontAwesome = true;
+                            break;
+                        }
+                    }
+
+                    if (false === $isFontAwesome) {
+                        $iconList['Custom'][] = $cssClassName;
                     }
                 }
             } catch (Exception $e) {
@@ -90,10 +168,15 @@ class FieldIconFontSelector extends \TCMSFieldVarchar
             }
         }
 
-        return $filteredClassnames;
+        foreach ($iconList as $key => $icons) {
+            $iconList[$key] = array_unique($icons);
+            sort($iconList[$key]);
+        }
+
+        return array_filter($iconList);
     }
 
-    private function addDotPrefixToCssClasses($cssClasses): array
+    private function addDotPrefixToCssClasses(array $cssClasses): array
     {
         return array_map(static fn ($v) => '.'.$v, $cssClasses);
     }
