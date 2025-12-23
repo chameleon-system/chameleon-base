@@ -72,7 +72,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
   Search for `_controller:` and `_controller :` in your code and fix missing double colons found in controller service calls.
   You also made need the Tag: `<tag name="controller.service_arguments" />` for your controllers.
 
-# Breaking Change
+# Breaking Changes
 - The return value changed, earlier the return value was null, now it is always an empty array! You need to be aware of this change and
    check every usage and the handling of the return value! 
 - `InputFilterUtil` has two new methods: `getFilteredGetInputArray` and `getFilteredPostInputArray`. Use them if you expect the value to be an array instead of a scalar value.
@@ -197,6 +197,11 @@ chameleon_system_security:
     two_factor:
         enabled: true
 ```
+
+### Deprecated Code
+
+- `\MTWizardCore` 
+- `\TFormWizardStep` used by MTWizardCore
 
 ### List Of Removed Or Changed Code
 
