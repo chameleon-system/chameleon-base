@@ -13,7 +13,11 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 
 /**
  * represents one step in the form wizzard.
- * /**/
+ * 
+ * @deprecated since 2025-12-23
+ * @note if deleted, we need to remove the tables module_wizard, 
+ * if they exists and hold a stub of this file till the table was removed.
+ */
 class TFormWizardStep extends TCMSRecord
 {
     protected $aInput;

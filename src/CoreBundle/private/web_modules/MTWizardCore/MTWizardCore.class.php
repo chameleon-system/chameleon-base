@@ -11,8 +11,10 @@
 
 /**
  * the classes for each step should be located @ ./extensions/library/classes/components/FormWizard
- * NOTE: Class is outdated - for new wizards, use TCMSWizardCore instead.
- * /**/
+ *
+ * @deprecated since 2025-12-23: for new wizards, use TCMSWizardCore instead.
+ * 
+ */
 class MTWizardCore extends TUserCustomModelBase
 {
     protected $iState;
