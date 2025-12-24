@@ -65,7 +65,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
     public function GetHTML()
     {
         /** @var TTableEditorListFieldState $stateContainer */
-        $stateContainer = ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
+        $stateContainer = ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
 
         $inputFilterUtil = $this->getInputFilterUtil();
 
@@ -84,11 +84,11 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         $html = '<input type="hidden" name="'.$sEscapedName.'[x]" value="-" id="'.$sEscapedName.'[]" />';
         $html .= '<div class="card">
         <div class="card-header p-1">
-            <div class="card-action" 
-            data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'" 
-            id="mltListControllButton'.$sEscapedName.'" 
+            <div class="card-action"
+            data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'"
+            id="mltListControllButton'.$sEscapedName.'"
             onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(\''.$sEscapedName.'_iframe\',\''.$this->GetSelectListURL().'\');">
-            <i class="fas fa-eye"></i> '.TGlobal::OutHTML(ChameleonSystem\CoreBundle\ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.open_or_close_list')).'
+            <i class="fas fa-eye"></i> '.TGlobal::OutHTML(ServiceLocator::get('translator')->trans('chameleon_system_core.field_lookup_multi_select.open_or_close_list')).'
             </div>
         </div>
         <div class="card-body p-0">
@@ -111,9 +111,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $html;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function GetReadOnly()
     {
         $html = $this->_GetHiddenField();
@@ -133,17 +130,11 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $html;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function _GetHiddenField()
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function GetForeignTableName()
     {
         return $this->GetConnectedTableName();
@@ -187,9 +178,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $oMLTRecords;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function GetMLTFilterQuery()
     {
         $foreignTableName = $this->GetForeignTableName();
@@ -265,9 +253,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $this->oDefinition->GetFieldtypeConfigKey('connectedTableName');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function GetSQL()
     {
         return false; // prevent saving of sql
@@ -283,9 +268,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         parent::DeleteFieldDefinition();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function CreateRelatedTables($returnDDL = false)
     {
         $tableName = $this->GetMLTTableName();
@@ -373,9 +355,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $bAllowRenameRelatedTables;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function RenameRelatedTables($aNewFieldData, $returnDDL = false)
     {
         $sReturnVal = '';
@@ -396,9 +375,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $sReturnVal;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function GetConnectedTableName($bExistingCount = true)
     {
         $sTableName = $this->getConnectedTableNameFromDefinition();
@@ -422,9 +398,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $sTableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function GetClearedTableName($sTableName, $aFieldData = [])
     {
         $mltFieldUtil = self::getMltFieldUtil();
@@ -442,9 +415,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $sTableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function DeleteRelatedTables()
     {
         $tableName = $this->GetMLTTableName();
@@ -530,9 +500,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function GetFieldMethodName($sMethodPostString = '')
     {
         $sName = parent::GetFieldMethodName($sMethodPostString);
@@ -588,9 +555,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $sMethodOutput;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function HasContent()
     {
         $bHasContent = false;
@@ -624,9 +588,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return self::getMltFieldUtil()->cutMultiMltFieldNumber($sTargetTable);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function PkgCmsFormPostSaveHook($sId, $oForm)
     {
         if (is_array($this->data)) {
@@ -671,9 +632,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $oMLTRecords;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function GetAdditionalViewData()
     {
         $aAdditionalViewData = parent::GetAdditionalViewData();
@@ -688,7 +646,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      */
     private function getInputFilterUtil()
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -696,7 +654,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      */
     private static function getMltFieldUtil()
     {
-        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.mlt_field');
+        return ServiceLocator::get('chameleon_system_core.util.mlt_field');
     }
 
     private function getFlashMessageService(): FlashMessageServiceInterface

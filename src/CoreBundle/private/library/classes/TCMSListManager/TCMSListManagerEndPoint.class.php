@@ -479,7 +479,7 @@ class TCMSListManagerEndPoint
 
         $fieldDefinition = $this->getBaseTableConfiguration()?->GetFieldDefinition($postFieldMltName);
 
-        return $fieldDefinition?->GetFieldtypeConfigKey(\TCMSFieldLookupMultiselect::MTL_TABLE_NAME_CONFIGURATION_KEY);
+        return $fieldDefinition?->GetFieldtypeConfigKey(TCMSFieldLookupMultiselect::MTL_TABLE_NAME_CONFIGURATION_KEY);
     }
 
     protected function getBaseTableConfiguration(): ?TdbCmsTblConf
