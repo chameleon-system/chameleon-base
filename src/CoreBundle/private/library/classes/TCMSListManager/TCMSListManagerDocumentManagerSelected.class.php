@@ -56,11 +56,14 @@ class TCMSListManagerDocumentManagerSelected extends TCMSListManagerFullGroupTab
 
         if (!is_null($this->sRestrictionField) && !is_null($this->sRestriction) && $oGlobal->UserDataExists('fieldName')) {
             if ('_mlt' == substr($this->sRestrictionField, -4)) {
-                $fieldName = $oGlobal->GetUserData('fieldName');
-                if (!is_null($this->fieldCount)) {
-                    $mltTable = substr($this->sRestrictionField, 0, -4).'_'.$fieldName.'_'.$this->oTableConf->sqlData['name'].$this->fieldCount.'_mlt';
-                } else {
-                    $mltTable = substr($this->sRestrictionField, 0, -4).'_'.$fieldName.'_'.$this->oTableConf->sqlData['name'].'_mlt';
+                $mltTable = $oGlobal->GetUserData('mltTable');
+                if ('' === $mltTable) {
+                    $fieldName = $oGlobal->GetUserData('fieldName');
+                    if (!is_null($this->fieldCount)) {
+                        $mltTable = substr($this->sRestrictionField, 0, -4).'_'.$fieldName.'_'.$this->oTableConf->sqlData['name'].$this->fieldCount.'_mlt';
+                    } else {
+                        $mltTable = substr($this->sRestrictionField, 0, -4).'_'.$fieldName.'_'.$this->oTableConf->sqlData['name'].'_mlt';
+                    }
                 }
 
                 $MLTquery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTable)."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sRestriction)."'";
