@@ -459,9 +459,24 @@ class TCMSListManagerEndPoint
             return null;
         }
 
-        $fieldDefinition = $this->oTableConf->GetFieldDefinition($postFieldMltName);
+        $fieldDefinition = $this->getBaseTableConfiguration()?->GetFieldDefinition($postFieldMltName);
 
         return $fieldDefinition?->GetFieldtypeConfigKey(\TCMSFieldLookupMultiselect::MTL_TABLE_NAME_CONFIGURATION_KEY);
+    }
+
+    protected function getBaseTableConfiguration(): ?TdbCmsTblConf
+    {
+        $baseTable = $this->tableObj->_postData['table'] ?? null;
+        if (null === $baseTable) {
+            return null;
+        }
+
+        $oTableConf = TdbCmsTblConf::GetNewInstance();
+        if (false === $oTableConf->LoadFromField('name', $baseTable)) {
+            return null;
+        }
+
+        return $oTableConf;
     }
 
     /**

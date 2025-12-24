@@ -977,7 +977,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
      */
     public function &GetDownloads($sDownloadField = 'data_pool', $allowedFileTypes = null, $bOrderByPosition = false)
     {
-        $mltTable = $this->table.'_'.$sDownloadField.'_cms_document_mlt';
+        $mltTable = $this->GetMltTableName($sDownloadField, $this->table);
 
         $databaseConnection = $this->getDatabaseConnection();
         $quotedMltTableName = $databaseConnection->quoteIdentifier($mltTable);

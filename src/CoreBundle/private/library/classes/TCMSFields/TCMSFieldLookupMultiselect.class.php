@@ -57,8 +57,6 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
 
         if (true === TGlobal::TableExists($mltTableName)) {
             $this->getFlashMessageService()->addMessage($consumerName, static::TABLE_ALREADY_EXISTS_SHORT_MESSAGE_NAME, ['tableName' => $mltTableName]);
-
-            return false;
         }
 
         return true;
@@ -474,7 +472,14 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
             $bAllowDeleteRelatedTables = true;
         }
 
-        return $bAllowDeleteRelatedTables;
+        if (true === $bAllowDeleteRelatedTables) {
+            return true;
+        }
+
+        $newMltTableName = $this->getMltTableNameFromFieldConfig($aNewFieldData);
+        $oldMltTableName = $this->getMltTableNameFromFieldConfig();
+
+        return $oldMltTableName !== $newMltTableName;
     }
 
     /**
@@ -494,11 +499,12 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
 
     protected function getMltTableNameFromFieldConfig(array $fieldSQLData = []): ?string
     {
-        if ([] === $fieldSQLData) {
+        $fieldTypeConfig = $fieldSQLData['fieldtype_config'] ?? null;
+        if (null === $fieldTypeConfig) {
             return $this->oDefinition->GetFieldtypeConfigKey(static::MTL_TABLE_NAME_CONFIGURATION_KEY);
         }
 
-        $oConfig = new TPkgCmsStringUtilities_ReadConfig($fieldSQLData['fieldtype_config'] ?? '');
+        $oConfig = new TPkgCmsStringUtilities_ReadConfig($fieldTypeConfig);
 
         return $oConfig->getConfigValue(static::MTL_TABLE_NAME_CONFIGURATION_KEY);
     }
