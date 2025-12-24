@@ -14,7 +14,7 @@ use Doctrine\DBAL\Connection;
 
 /**
  * uses the TFullGroupTable to manage the list.
-/**/
+ */
 class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
 {
     /* ------------------------------------------------------------------------
@@ -30,14 +30,12 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
     {
         ++$this->columnCount;
         $sTranslatedField = TGlobal::Translate('chameleon_system_core.list.column_name_actions');
-        $this->tableObj->AddHeaderField(array('id' => $sTranslatedField.'&nbsp;&nbsp;'), 'right', null, 1, false, 100);
-        $this->tableObj->AddColumn('id', 'left', array($this, 'CallBackMLTFunctionBlock'), null, 1);
+        $this->tableObj->AddHeaderField(['id' => $sTranslatedField.'&nbsp;&nbsp;'], 'right', null, 1, false, 100);
+        $this->tableObj->AddColumn('id', 'left', [$this, 'CallBackMLTFunctionBlock'], null, 1);
     }
 
     /**
      * any custom restrictions can be added to the query by overwriting this function.
-     *
-     * @param string $query
      */
     public function GetCustomRestriction()
     {
@@ -50,13 +48,13 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
                 } else {
                     $MLTquery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTable)."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sRestriction)."'";
                     $MLTResult = MySqlLegacySupport::getInstance()->query($MLTquery);
-                    $aIDList = array();
+                    $aIDList = [];
                     while ($row = MySqlLegacySupport::getInstance()->fetch_assoc($MLTResult)) {
                         $aIDList[] = $row['target_id'];
                     }
                     if (count($aIDList) > 0) {
                         $databaseConnection = $this->getDatabaseConnection();
-                        $idListString = implode(',', array_map(array($databaseConnection, 'quote'), $aIDList));
+                        $idListString = implode(',', array_map([$databaseConnection, 'quote'], $aIDList));
                         $quotedTableName = $databaseConnection->quoteIdentifier($this->oTableConf->sqlData['name']);
                         $query .= " $quotedTableName.`id` IN ($idListString)";
                     } else {
@@ -90,7 +88,7 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
      * returns HTML.
      *
      * @param string $id
-     * @param array  $row
+     * @param array $row
      *
      * @return string
      */
@@ -130,7 +128,7 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
             $quotedMltTableName = $databaseConnection->quoteIdentifier($sMLTTableName);
 
             $sMltField = "$quotedMltTableName.`entry_sort`";
-            $aTmpField = $this->TransformFieldForTranslations(array('name' => $sMltField, 'db_alias' => ''));
+            $aTmpField = $this->TransformFieldForTranslations(['name' => $sMltField, 'db_alias' => '']);
             $this->tableObj->orderList[$aTmpField['name']] = 'ASC';
         } else {
             parent::AddSortInformation();
@@ -161,7 +159,7 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
      */
     protected function getMltFieldUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.mlt_field');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.mlt_field');
     }
 
     /**
@@ -169,6 +167,6 @@ class TCMSListManagerMLT extends TCMSListManagerFullGroupTable
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
     }
 }

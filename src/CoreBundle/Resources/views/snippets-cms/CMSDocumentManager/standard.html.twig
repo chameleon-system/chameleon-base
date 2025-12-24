@@ -41,16 +41,16 @@
                     </button>
                 </div>
                 <div class="button-item col-auto">
-                    <button type="button" class="btn btn-sm btn-danger" onclick="if(confirm('{{"chameleon_system_core.document_manager.confirm_delete"|trans}}')) deleteSelectedItem();">
+                    <button type="button" class="btn btn-sm btn-danger" onclick="if(confirm('{{'chameleon_system_core.document_manager.confirm_delete'|trans}}')) deleteSelectedItem();">
                         <i class="far fa-trash-alt mr-2"></i>{{'chameleon_system_core.action.delete'|trans}}
                     </button>
                 </div>
             </div>
 
-            {% set url = pathCmsController ~ '?pagedef=tableManagerDocumentManager&id='~id~'&CKEditorFuncNum='~CKEditorFuncNum %}
+            {% set url = pathCmsController ~ '?pagedef=tableManagerDocumentManager&id=' ~ id ~ '&CKEditorFuncNum=' ~ CKEditorFuncNum %}
             {% set iFrameHeight = '660px' %}
             {% if recordID != '' %}
-                {% set url = url~'&mltTable='~mltTable~'&recordID='~recordID %}
+                {% set url = url ~ '&mltTable=' ~ mltTable ~ '&recordID=' ~ recordID %}
                 {% set iFrameHeight = '300px' %}
             {% endif %}
 
