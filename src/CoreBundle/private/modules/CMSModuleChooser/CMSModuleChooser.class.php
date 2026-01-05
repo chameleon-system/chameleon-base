@@ -139,7 +139,7 @@ class CMSModuleChooser extends TCMSModelBase
             while ($relatedTable = $relatedTablesList->Next()) {
                 $this->data['relatedTables'][] = [
                     'id' => $relatedTable->id,
-                    'name' => $relatedTable->sqlData['name'],
+                    'name' => $relatedTable->sqlData['translation'],
                 ];
             }
         }
