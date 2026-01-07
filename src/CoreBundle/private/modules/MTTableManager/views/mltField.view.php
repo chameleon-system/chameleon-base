@@ -1,14 +1,20 @@
 <?php
+
+/** @var array $data */
+/** @var TCMSUser $oCMSUser */
 $oCMSUser = $data['oCMSUser'];
-/** @var $oCMSUser TCMSUser */
 $oGlobal = TGlobal::instance();
 
-$url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(['pagedef' => 'mltfieldList', 'name' => $oGlobal->GetUserData('name'), 'id' => $data['id'], 'sRestriction' => $data['sRestriction'], 'sRestrictionField' => $data['sRestrictionField']]);
+$urlParams = ['pagedef' => 'mltfieldList', 'name' => $oGlobal->GetUserData('name'), 'id' => $data['id'], 'sRestriction' => $data['sRestriction'], 'sRestrictionField' => $data['sRestrictionField']];
 $sortUrlParameters = ['pagedef' => 'CMSFieldMLTPosition', '_rmhist' => 'false', 'field' => $data['field'], 'name' => $data['field'], 'module_fnc' => ['contentmodule' => 'GetSortElements'], 'tableSQLName' => $data['sTableName'], 'sRestriction' => $data['sRestriction'], 'sRestrictionField' => $data['sRestrictionField']];
-if (isset($sRestrictionField) && '_mlt' == substr($sRestrictionField, -4)) {
-    $sortUrlParameters['table'] = substr($sRestrictionField, 0, -4);
+
+$tableName = true === isset($sRestrictionField) && true === str_ends_with($sRestrictionField, '_mlt') ? substr($sRestrictionField, 0, -4) : null;
+if (null !== $tableName) {
+    $urlParams['table'] = $tableName;
+    $sortUrlParameters['table'] = $tableName;
 }
 
+$url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($urlParams);
 $sSortUrl = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($sortUrlParameters);
 
 ?>

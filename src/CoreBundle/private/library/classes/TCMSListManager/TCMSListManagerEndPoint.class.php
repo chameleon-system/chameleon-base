@@ -466,7 +466,35 @@ class TCMSListManagerEndPoint
 
     protected function GetMLTTableName()
     {
-        return substr($this->sRestrictionField, 0, -4).'_'.$this->GetFieldMltName().'_mlt';
+        return $this->getMltTableNameByConfig()
+            ?? substr($this->sRestrictionField, 0, -4).'_'.$this->GetFieldMltName().'_mlt';
+    }
+
+    protected function getMltTableNameByConfig(): ?string
+    {
+        $postFieldMltName = $this->tableObj->_postData['name'] ?? null;
+        if (null === $postFieldMltName) {
+            return null;
+        }
+
+        $fieldDefinition = $this->getBaseTableConfiguration()?->GetFieldDefinition($postFieldMltName);
+
+        return $fieldDefinition?->GetFieldtypeConfigKey(TCMSFieldLookupMultiselect::MTL_TABLE_NAME_CONFIGURATION_KEY);
+    }
+
+    protected function getBaseTableConfiguration(): ?TdbCmsTblConf
+    {
+        $baseTable = $this->tableObj->_postData['table'] ?? null;
+        if (null === $baseTable) {
+            return null;
+        }
+
+        $oTableConf = TdbCmsTblConf::GetNewInstance();
+        if (false === $oTableConf->LoadFromField('name', $baseTable)) {
+            return null;
+        }
+
+        return $oTableConf;
     }
 
     /**

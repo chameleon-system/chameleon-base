@@ -64,7 +64,7 @@ class CMSDocumentManager extends TCMSModelBase
             $this->data['recordID'] = $this->recordID;
             $this->data['tableID'] = $this->tableID;
             $this->data['fieldName'] = $this->fieldName;
-            $this->data['mltTable'] = $this->data['tableName'].'_'.$this->fieldName.'_cms_document_mlt';
+            $this->data['mltTable'] = $this->global->GetUserData('mltTable');
             $this->data['standaloneMode'] = false;
         } else {
             $this->data['recordID'] = false;
