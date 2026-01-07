@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
@@ -23,21 +25,58 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      */
     protected $sViewPath = 'TCMSFields/views/TCMSFieldLookupMultiselect';
 
+    public const MTL_TABLE_NAME_CONFIGURATION_KEY = 'mltTableName';
+    public const STRICT_MTL_TABLE_NAME = true;
+    public const TABLEEDITOR_TABLE_NAME_MUST_END_WITH_MLT_MESSAGE_NAME = 'TABLEEDITOR_TABLE_NAME_MUST_END_WITH_MLT';
+    public const TABLEEDITOR_TABLE_NAME_TOO_LONG_MESSAGE_NAME = 'TABLEEDITOR_TABLE_NAME_TOO_LONG';
+    public const TABLE_ALREADY_EXISTS_SHORT_MESSAGE_NAME = 'TABLEEDITOR_TABLE_ALREADY_EXISTS_SHORT';
+
+    /**
+     * Checks if an MLT table creation would be valid, and generates a backend error message if not.
+     */
+    protected function validateMltTableName(?string $mltTableName): bool
+    {
+        if (null === $mltTableName) {
+            return true;
+        }
+
+        $consumerName = TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER;
+
+        if (true === static::STRICT_MTL_TABLE_NAME && false === str_ends_with($mltTableName, '_mlt')) {
+            $this->getFlashMessageService()->addMessage($consumerName, static::TABLEEDITOR_TABLE_NAME_MUST_END_WITH_MLT_MESSAGE_NAME, ['tableName' => $mltTableName]);
+
+            return false;
+        }
+
+        $mltTableNameLength = strlen($mltTableName);
+        if ($mltTableNameLength > 64) {
+            $this->getFlashMessageService()->addMessage($consumerName, static::TABLEEDITOR_TABLE_NAME_TOO_LONG_MESSAGE_NAME, ['tableName' => $mltTableName, 'tableNameLength' => $mltTableNameLength]);
+
+            return false;
+        }
+
+        if (true === TGlobal::TableExists($mltTableName)) {
+            $this->getFlashMessageService()->addMessage($consumerName, static::TABLE_ALREADY_EXISTS_SHORT_MESSAGE_NAME, ['tableName' => $mltTableName]);
+        }
+
+        return true;
+    }
+
     public function GetHTML()
     {
         /** @var TTableEditorListFieldState $stateContainer */
-        $stateContainer = \ChameleonSystem\CoreBundle\ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
+        $stateContainer = ServiceLocator::get('cmsPkgCore.tableEditorListFieldState');
 
         $inputFilterUtil = $this->getInputFilterUtil();
 
-        $aStateURL = array(
+        $aStateURL = [
             'pagedef' => $inputFilterUtil->getFilteredInput('pagedef'),
             'tableid' => $inputFilterUtil->getFilteredInput('tableid'),
             'id' => $inputFilterUtil->getFilteredInput('id'),
             'fieldname' => $this->name,
-            'module_fnc' => array('contentmodule' => 'ExecuteAjaxCall'),
+            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
             '_fnc' => 'changeListFieldState',
-        );
+        ];
         $sStateURL = '?'.TTools::GetArrayAsURLForJavascript($aStateURL);
 
         $sEscapedName = TGlobal::OutHTML($this->name);
@@ -45,9 +84,9 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         $html = '<input type="hidden" name="'.$sEscapedName.'[x]" value="-" id="'.$sEscapedName.'[]" />';
         $html .= '<div class="card">
         <div class="card-header p-1">
-            <div class="card-action" 
-            data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'" 
-            id="mltListControllButton'.$sEscapedName.'" 
+            <div class="card-action"
+            data-fieldstate="'.TGlobal::OutHTML($stateContainer->getState($this->sTableName, $this->name)).'"
+            id="mltListControllButton'.$sEscapedName.'"
             onClick="setTableEditorListFieldState(this, \''.$sStateURL.'\'); CHAMELEON.CORE.MTTableEditor.switchMultiSelectListState(\''.$sEscapedName.'_iframe\',\''.$this->GetSelectListURL().'\');">
             <i class="fas fa-eye"></i> '.TGlobal::OutHTML(TGlobal::Translate('chameleon_system_core.field_lookup_multi_select.open_or_close_list')).'
             </div>
@@ -133,7 +172,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         } else {
             $query .= ' ORDER BY `'.MySqlLegacySupport::getInstance()->real_escape_string($sNameField).'` ';
         }
-        $oMLTRecords = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List', 'GetList'), $query);
+        $oMLTRecords = call_user_func([TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List', 'GetList'], $query);
 
         return $oMLTRecords;
     }
@@ -143,7 +182,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         $foreignTableName = $this->GetForeignTableName();
         $sFilterQuery = $this->GetMLTFilterQuery();
         /** @var $oMLTRecords TCMSRecordList */
-        $oMLTRecords = call_user_func(array(TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List', 'GetList'), $sFilterQuery);
+        $oMLTRecords = call_user_func([TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $foreignTableName).'List', 'GetList'], $sFilterQuery);
 
         return $oMLTRecords;
     }
@@ -181,8 +220,8 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         /** @var $oForeignTableConf TCMSTableConf */
         $oForeignTableConfig = new TCMSTableConf();
         $oForeignTableConfig->LoadFromField('name', $sForeignTableName);
-        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(array('_isiniframe' => 'true', 'pagedef' => 'mltfield', 'name' => $this->name, 'sRestriction' => $this->recordId, 'sRestrictionField' => $this->sTableName.'_mlt', 'id' => $oForeignTableConfig->id, 'table' => $this->sTableName, 'recordid' => $this->recordId, 'field' => $this->name,
-            ));
+        $url = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL(['_isiniframe' => 'true', 'pagedef' => 'mltfield', 'name' => $this->name, 'sRestriction' => $this->recordId, 'sRestrictionField' => $this->sTableName.'_mlt', 'id' => $oForeignTableConfig->id, 'table' => $this->sTableName, 'recordid' => $this->recordId, 'field' => $this->name,
+            ]);
 
         return $url;
     }
@@ -195,8 +234,13 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      *
      * @return string
      */
-    public function GetMLTTableName($aFieldData = array())
+    public function GetMLTTableName($aFieldData = [])
     {
+        $mltTableName = $this->getMltTableNameFromFieldConfig($aFieldData);
+        if (null !== $mltTableName) {
+            return $mltTableName;
+        }
+
         if (count($aFieldData) > 0) {
             $sConnectedTableName = $this->GetConnectedTableNameFromFieldConfig($aFieldData);
             $sName = $aFieldData['name'];
@@ -244,8 +288,13 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      */
     public function CreateRelatedTables($returnDDL = false)
     {
-        $sReturnVal = '';
         $tableName = $this->GetMLTTableName();
+        if (false === $this->validateMltTableName($tableName)) {
+            return parent::CreateRelatedTables($returnDDL);
+        }
+
+        $sReturnVal = '';
+
         if (!TGlobal::TableExists($tableName)) {
             $query = 'CREATE TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName)."` (
                   `source_id` CHAR( 36 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
@@ -258,7 +307,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
 
             if (!$returnDDL) {
                 MySqlLegacySupport::getInstance()->query($query);
-                $aQuery = array(new LogChangeDataModel($query));
+                $aQuery = [new LogChangeDataModel($query)];
 
                 TCMSLogChange::WriteTransaction($aQuery);
             } else {
@@ -284,7 +333,14 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
             $bAllowCreateRelatedTables = true;
         }
 
-        return $bAllowCreateRelatedTables;
+        if (true === $bAllowCreateRelatedTables) {
+            return true;
+        }
+
+        $oldMltTableName = $this->getMltTableNameFromFieldConfig($aOldFieldData);
+        $newMltTableName = $this->getMltTableNameFromFieldConfig();
+
+        return $oldMltTableName !== $newMltTableName;
     }
 
     /**
@@ -329,7 +385,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
             $query = 'RENAME TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($sTableName).'` TO `'.MySqlLegacySupport::getInstance()->real_escape_string($sNewTableName).'` ';
             if (!$returnDDL) {
                 MySqlLegacySupport::getInstance()->query($query);
-                $aQuery = array(new LogChangeDataModel($query));
+                $aQuery = [new LogChangeDataModel($query)];
 
                 TCMSLogChange::WriteTransaction($aQuery);
             } else {
@@ -369,7 +425,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
     /**
      * {@inheritdoc}
      */
-    protected function GetClearedTableName($sTableName, $aFieldData = array())
+    protected function GetClearedTableName($sTableName, $aFieldData = [])
     {
         $mltFieldUtil = self::getMltFieldUtil();
         if (is_null($sTableName) || empty($sTableName)) {
@@ -395,7 +451,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         if (TGlobal::TableExists($tableName)) {
             $query = 'DROP TABLE `'.MySqlLegacySupport::getInstance()->real_escape_string($tableName).'`';
             MySqlLegacySupport::getInstance()->query($query);
-            $aQuery = array(new LogChangeDataModel($query));
+            $aQuery = [new LogChangeDataModel($query)];
             TCMSLogChange::WriteTransaction($aQuery);
         }
     }
@@ -416,7 +472,14 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
             $bAllowDeleteRelatedTables = true;
         }
 
-        return $bAllowDeleteRelatedTables;
+        if (true === $bAllowDeleteRelatedTables) {
+            return true;
+        }
+
+        $newMltTableName = $this->getMltTableNameFromFieldConfig($aNewFieldData);
+        $oldMltTableName = $this->getMltTableNameFromFieldConfig();
+
+        return $oldMltTableName !== $newMltTableName;
     }
 
     /**
@@ -425,13 +488,25 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      * @param array $aFieldSQLData sql data array of field config
      * @param string $sParameterKey
      *
-     * @return string
+     * @return string|null
      */
     protected function GetConnectedTableNameFromFieldConfig($aFieldSQLData, $sParameterKey = 'connectedTableName')
     {
         $oConfig = new TPkgCmsStringUtilities_ReadConfig($aFieldSQLData['fieldtype_config']);
 
         return $oConfig->getConfigValue($sParameterKey);
+    }
+
+    protected function getMltTableNameFromFieldConfig(array $fieldSQLData = []): ?string
+    {
+        $fieldTypeConfig = $fieldSQLData['fieldtype_config'] ?? null;
+        if (null === $fieldTypeConfig) {
+            return $this->oDefinition->GetFieldtypeConfigKey(static::MTL_TABLE_NAME_CONFIGURATION_KEY);
+        }
+
+        $oConfig = new TPkgCmsStringUtilities_ReadConfig($fieldTypeConfig);
+
+        return $oConfig->getConfigValue(static::MTL_TABLE_NAME_CONFIGURATION_KEY);
     }
 
     public function GetHTMLExport()
@@ -580,13 +655,13 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
     protected function GetRecordsConnectedFrontend()
     {
         if (is_array($this->data) && count($this->data) > 0) {
-            //we assume data was already posted
+            // we assume data was already posted
             $foreignTableName = str_replace('_mlt', '', $this->name);
             $oMLTRecords = new TCMSRecordList();
             $oMLTRecords->sTableName = $foreignTableName;
             $databaseConnection = $this->getDatabaseConnection();
             $quotedForeignTableName = $databaseConnection->quoteIdentifier($foreignTableName);
-            $dataString = implode(',', array_map(array($databaseConnection, 'quote'), $this->data));
+            $dataString = implode(',', array_map([$databaseConnection, 'quote'], $this->data));
             $query = "SELECT * FROM $quotedForeignTableName WHERE `id` IN ($dataString)";
             $oMLTRecords->Load($query);
         } else {
@@ -613,7 +688,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      */
     private function getInputFilterUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.input_filter');
+        return ServiceLocator::get('chameleon_system_core.util.input_filter');
     }
 
     /**
@@ -621,6 +696,11 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
      */
     private static function getMltFieldUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.mlt_field');
+        return ServiceLocator::get('chameleon_system_core.util.mlt_field');
+    }
+
+    private function getFlashMessageService(): FlashMessageServiceInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.flash_messages');
     }
 }

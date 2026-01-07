@@ -14,7 +14,7 @@ use Doctrine\DBAL\Connection;
 
 /**
  * uses the TFullGroupTable to manage the list.
-/**/
+ */
 class TCMSListManagerMLTList extends TCMSListManagerFullGroupTable
 {
     /* ------------------------------------------------------------------------
@@ -43,8 +43,6 @@ class TCMSListManagerMLTList extends TCMSListManagerFullGroupTable
 
     /**
      * any custom restrictions can be added to the query by overwriting this function.
-     *
-     * @param string $query
      */
     public function GetCustomRestriction()
     {
@@ -52,22 +50,18 @@ class TCMSListManagerMLTList extends TCMSListManagerFullGroupTable
 
         // because one table may be connected more than once with the source table, we need
         // to use the parameter "name" instead of the tableconf
-        $oGlobal = TGlobal::instance();
-        $sFieldMltName = $this->GetFieldMltName();
-        $mltTable = substr($this->sRestrictionField, 0, -4).'_'.$sFieldMltName.'_mlt';
-        //echo $mltTable;
-        //echo "<pre>";var_dump($this); echo "</pre>";
+        $mltTable = $this->GetMLTTableName();
 
         $MLTquery = 'SELECT * FROM `'.MySqlLegacySupport::getInstance()->real_escape_string($mltTable)."` WHERE `source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->sRestriction)."'";
         $MLTResult = MySqlLegacySupport::getInstance()->query($MLTquery);
-        $aIDList = array();
+        $aIDList = [];
         while ($row = MySqlLegacySupport::getInstance()->fetch_assoc($MLTResult)) {
             $aIDList[] = $row['target_id'];
         }
 
         if (count($aIDList) > 0) {
             $databaseConnection = $this->getDatabaseConnection();
-            $idListString = implode(',', array_map(array($databaseConnection, 'quote'), $aIDList));
+            $idListString = implode(',', array_map([$databaseConnection, 'quote'], $aIDList));
             $quotedTableName = $databaseConnection->quoteIdentifier($this->oTableConf->sqlData['name']);
             $query .= " $quotedTableName.`id` NOT IN ($idListString)";
         }
@@ -118,7 +112,7 @@ class TCMSListManagerMLTList extends TCMSListManagerFullGroupTable
      */
     private function getDatabaseConnection()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('database_connection');
     }
 
     /**
@@ -126,6 +120,6 @@ class TCMSListManagerMLTList extends TCMSListManagerFullGroupTable
      */
     protected function getMltFieldUtil()
     {
-        return \ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.mlt_field');
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.util.mlt_field');
     }
 }

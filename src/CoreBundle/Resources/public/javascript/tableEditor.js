@@ -301,8 +301,8 @@ function editDocument(fieldName, documentID, html) {
 /*
  * document manager field: opens document manager popup
  */
-function loadDocumentManager(recordID, tableID, fieldName) {
-    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName);
+function loadDocumentManager(recordID, tableID, fieldName, mltTable) {
+    CreateModalIFrameDialogCloseButton(window.location.pathname + '?pagedef=CMSDocumentManager&recordID=' + recordID + '&tableID=' + tableID + '&fieldName=' + fieldName + '&mltTable=' + mltTable);
 }
 
 function addMLTConnectionResponse(data, responseMessage) {
