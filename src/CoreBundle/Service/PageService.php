@@ -126,6 +126,11 @@ class PageService implements PageServiceInterface
     private function getLinkToPageObject(\TdbCmsTplPage $page, array $parameters = [], ?\TdbCmsLanguage $language = null, $forceSecure = false, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $portal = $page->GetPortal();
+
+        if (null === $portal) {
+            throw new RouteNotFoundException('No portal found for page with ID: ' . $page->id);
+        }
+
         if ($page->GetMainTreeId() === $portal->fieldHomeNodeId) {
             return $this->getLinkToPortalHomePage($parameters, $portal, $language, $forceSecure, $referenceType);
         }
