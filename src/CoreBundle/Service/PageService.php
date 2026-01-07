@@ -128,7 +128,7 @@ class PageService implements PageServiceInterface
         $portal = $page->GetPortal();
 
         if (null === $portal) {
-            return '';
+            throw new RouteNotFoundException('No portal found for page with ID: ' . $page->id);
         }
 
         if ($page->GetMainTreeId() === $portal->fieldHomeNodeId) {
