@@ -262,7 +262,6 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
     {
         $send = false;
         if (!empty($generatedNewsletter)) {
-
             $generatedNewsletter = $this->addPreHeaderToNewsletterHTML($generatedNewsletter);
 
             // now send email using email object
@@ -308,24 +307,24 @@ class TCMSNewsletterCampaign extends TCMSNewsletterCampaignAutoParent
 
         $sPreHeaderText = $this->fieldPreheader;
 
-        //We need to create this invisible puffer zone to make sure only our pre header is visible in the preview.
+        // We need to create this invisible puffer zone to make sure only our pre header is visible in the preview.
         $sPadding = str_repeat('&nbsp;&zwnj;', 200);
 
         $sPreHeaderHTML = '
             <div style="display:none;font-size:1px;color:#333333;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;">
-                ' . htmlspecialchars($sPreHeaderText) . '
-                ' . $sPadding . '
+                '.htmlspecialchars($sPreHeaderText).'
+                '.$sPadding.'
             </div>';
 
         if (false !== stripos($generatedNewsletter, '<body')) {
             $generatedNewsletter = preg_replace(
                 '/(<body[^>]*>)/i',
-                '$1' . $sPreHeaderHTML,
+                '$1'.$sPreHeaderHTML,
                 $generatedNewsletter,
                 1
             );
         } else {
-            $generatedNewsletter = $sPreHeaderHTML . $generatedNewsletter;
+            $generatedNewsletter = $sPreHeaderHTML.$generatedNewsletter;
         }
 
         return $generatedNewsletter;
