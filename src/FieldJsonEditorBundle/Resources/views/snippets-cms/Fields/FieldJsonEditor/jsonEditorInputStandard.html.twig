@@ -1,9 +1,16 @@
 {% set editorId = fieldName ~ '_editor' %}
 {% set hiddenFieldId = fieldName ~ '_field' %}
+<div class="card">
+    <div class="card-header">
+        JSON Editor
+    </div>
+    <div class="card-body pd-json-editor-wrapper bg-light">
+        <div id="{{ editorId }}">
 
-<div id="{{ editorId }}"></div>
-<input type="hidden" name="{{ fieldName }}" id="{{ hiddenFieldId }}">
-
+        </div>
+        <input type="hidden" name="{{ fieldName }}" id="{{ hiddenFieldId }}">
+    </div>
+</div>
 <script>
     const jsonData = {{ jsonData|json_encode|raw }};
 
