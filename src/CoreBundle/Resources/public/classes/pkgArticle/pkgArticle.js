@@ -1,30 +1,56 @@
 if ( typeof CHAMELEON === "undefined" || !CHAMELEON ) { var CHAMELEON = {}; }
 CHAMELEON.CORE = CHAMELEON.CORE || {};
 CHAMELEON.CORE.pkgArticle = CHAMELEON.CORE.pkgArticle || {};
+CHAMELEON.CORE.pkgArticle._lastTargetUrl = null;
 
-CHAMELEON.CORE.pkgArticle.CallAjaxOnList = function(sURL, sSpotName, sListIdent, sMethod, sJsCallback) {
-  var sSep = '?';
-  var patt1=/\?/g;
-  if (sURL.match(patt1) == null) sSep = '?';
-  else sSep = '&';
-  sTargetURL = sURL
-  var sTargetURL = sURL + sSep +'listident='+encodeURIComponent(sListIdent) +'&' + encodeURIComponent("module_fnc["+sSpotName+"]") + "=ExecuteAjaxCall&_fnc="+encodeURIComponent(sMethod);
+CHAMELEON.CORE.pkgArticle.CallAjaxOnList = function(URL, spotName, listIdent, method, jsCallback) {
+    CHAMELEON.CORE.pkgArticle._lastTargetUrl = URL;
 
-  $.ajax({
-     url: sTargetURL,
-     processData: false,
-     dataType:  'json',
-     success: sJsCallback,
-     type: 'POST'
-   });
-  return false;
+    var sep = (URL.indexOf('?') === -1) ? '?' : '&';
+    var targetURL = URL + sep
+        + 'listident=' + encodeURIComponent(listIdent)
+        + '&' + encodeURIComponent("module_fnc["+spotName+"]") + '=ExecuteAjaxCall'
+        + '&_fnc=' + encodeURIComponent(method);
+
+    $.ajax({
+        url: targetURL,
+        processData: false,
+        dataType: 'json',
+        success: jsCallback,
+        type: 'POST'
+    });
+
+    return false;
 };
 
 CHAMELEON.CORE.pkgArticle.LoadArticleCollectionReturn = function(data, responseMessage) {
   var oContainer = $('.pkg-article-list-'+data.sSpotName + '-'+data.sListIdent);
   var oTmp = $(data.sResult);
   oContainer.replaceWith(oTmp);
+    // Refresh URL/History (Deep Linking + Back/Forward)
+    if (CHAMELEON.CORE.pkgArticle._lastTargetUrl) {
+        history.pushState(
+            { spot: data.sSpotName, listIdent: data.sListIdent, url: CHAMELEON.CORE.pkgArticle._lastTargetUrl },
+            '',
+            CHAMELEON.CORE.pkgArticle._lastTargetUrl
+        );
+    }
 };
+window.addEventListener('popstate', function(e) {
+    if (!e.state || !e.state.url) {
+        // Fallback: if there's no state, classic navigation
+        location.reload();
+        return;
+    }
+
+    CHAMELEON.CORE.pkgArticle.CallAjaxOnList(
+        e.state.url,
+        e.state.spot,
+        e.state.listIdent,
+        'ChangePage',
+        CHAMELEON.CORE.pkgArticle.LoadArticleCollectionReturn
+    );
+});
 
 CHAMELEON.CORE.pkgArticle.aTeaserItemCache = {};
 
