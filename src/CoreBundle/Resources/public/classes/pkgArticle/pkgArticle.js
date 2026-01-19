@@ -3,16 +3,16 @@ CHAMELEON.CORE = CHAMELEON.CORE || {};
 CHAMELEON.CORE.pkgArticle = CHAMELEON.CORE.pkgArticle || {};
 CHAMELEON.CORE.pkgArticle._lastTargetUrl = null;
 
-CHAMELEON.CORE.pkgArticle.CallAjaxOnList = function(URL, spotName, listIdent, method, jsCallback) {
-    CHAMELEON.CORE.pkgArticle._lastTargetUrl = URL;
+CHAMELEON.CORE.pkgArticle.CallAjaxOnList = function(url, spotName, listIdent, method, jsCallback) {
+    CHAMELEON.CORE.pkgArticle._lastTargetUrl = url;
 
-    var sep = (URL.indexOf('?') === -1) ? '?' : '&';
-    var targetURL = URL + sep
+    var sep = (url.indexOf('?') === -1) ? '?' : '&';
+    var targeturl = url + sep
         + 'listident=' + encodeURIComponent(listIdent)
         + '&' + encodeURIComponent("module_fnc["+spotName+"]") + '=ExecuteAjaxCall'
         + '&_fnc=' + encodeURIComponent(method);
 
-    fetch(targetURL, {
+    fetch(targeturl, {
         method: 'POST',
         headers: {
             'Accept': 'application/json'
@@ -71,7 +71,7 @@ LoadGenericTeaserList = function(url, spotName, callback) {
         return false;
     }
 
-    var sep = (URL.indexOf('?') === -1) ? '?' : '&';
+    var sep = (url.indexOf('?') === -1) ? '?' : '&';
     var targetUrl = url + sep
         + encodeURIComponent("module_fnc["+spotName+"]")
         + "=ExecuteAjaxCall"
