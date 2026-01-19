@@ -7,12 +7,12 @@ CHAMELEON.CORE.pkgArticle.CallAjaxOnList = function(url, spotName, listIdent, me
     CHAMELEON.CORE.pkgArticle._lastTargetUrl = url;
 
     var sep = (url.indexOf('?') === -1) ? '?' : '&';
-    var targeturl = url + sep
+    var targetUrl = url + sep
         + 'listident=' + encodeURIComponent(listIdent)
         + '&' + encodeURIComponent("module_fnc["+spotName+"]") + '=ExecuteAjaxCall'
         + '&_fnc=' + encodeURIComponent(method);
 
-    fetch(targeturl, {
+    fetch(targetUrl, {
         method: 'POST',
         headers: {
             'Accept': 'application/json'
@@ -77,7 +77,7 @@ LoadGenericTeaserList = function(url, spotName, callback) {
         + "=ExecuteAjaxCall"
         + "&_fnc=GetContentBlock";
 
-    fetch(targetURL, {
+    fetch(targetUrl, {
         method: 'POST',
         headers: {
             'Accept': 'application/json'
@@ -106,12 +106,12 @@ LoadGenericTeaserListShift = function(url, spotName, callback) {
 	if (typeof(CHAMELEON.CORE.pkgArticle.aGenericTeaserCache[CHAMELEON.CORE.pkgArticle.sGenericTeaserUrlRequested]) != 'undefined') {
 		CHAMELEON.CORE.pkgArticle.LoadGenericTeaserListReturn(CHAMELEON.CORE.pkgArticle.aGenericTeaserCache[CHAMELEON.CORE.pkgArticle.sGenericTeaserUrlRequested],null);
 	} else {
-        var sep = (URL.indexOf('?') === -1) ? '?' : '&';
-	    var targetURL = url + sep
+        var sep = (url.indexOf('?') === -1) ? '?' : '&';
+	    var targetUrl = url + sep
             + encodeURIComponent("module_fnc["+spotName+"]")
             + "=ExecuteAjaxCall"
             + "&_fnc=GetContentBlockShifted";
-	    GetAjaxCall(targetURL, callback);
+	    GetAjaxCall(targetUrl, callback);
 	}
     return false;
 };
