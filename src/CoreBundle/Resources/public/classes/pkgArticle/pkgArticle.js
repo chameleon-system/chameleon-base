@@ -12,21 +12,32 @@ CHAMELEON.CORE.pkgArticle.CallAjaxOnList = function(URL, spotName, listIdent, me
         + '&' + encodeURIComponent("module_fnc["+spotName+"]") + '=ExecuteAjaxCall'
         + '&_fnc=' + encodeURIComponent(method);
 
-    $.ajax({
-        url: targetURL,
-        processData: false,
-        dataType: 'json',
-        success: jsCallback,
-        type: 'POST'
+    fetch(targetURL, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function(response) {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    }).then(function(data){
+        if (typeof jsCallback === 'function') {
+            jsCallback(data);
+        }
+    }).catch(function(err){
+        if (window && window.console && console.error) {
+            console.error('Ajax error (CallAjaxOnList):', err);
+        }
     });
 
     return false;
 };
 
 CHAMELEON.CORE.pkgArticle.LoadArticleCollectionReturn = function(data, responseMessage) {
-  var oContainer = $('.pkg-article-list-'+data.sSpotName + '-'+data.sListIdent);
-  var oTmp = $(data.sResult);
-  oContainer.replaceWith(oTmp);
+  var container = document.querySelector('.pkg-article-list-'+data.sSpotName + '-'+data.sListIdent);
+  if (container) {
+    container.outerHTML = data.sResult;
+  }
     // Refresh URL/History (Deep Linking + Back/Forward)
     if (CHAMELEON.CORE.pkgArticle._lastTargetUrl) {
         history.pushState(
@@ -54,52 +65,61 @@ window.addEventListener('popstate', function(e) {
 
 CHAMELEON.CORE.pkgArticle.aTeaserItemCache = {};
 
-LoadGenericTeaserList = function(sURL, sSpotName, sCallback) {
-    if (CHAMELEON.CORE.pkgArticle.aTeaserItemCache[sURL] !== undefined) {
-        sCallback(CHAMELEON.CORE.pkgArticle.aTeaserItemCache[sURL],null);
+LoadGenericTeaserList = function(url, spotName, callback) {
+    if (CHAMELEON.CORE.pkgArticle.aTeaserItemCache[url] !== undefined) {
+        callback(CHAMELEON.CORE.pkgArticle.aTeaserItemCache[url],null);
         return false;
     }
 
-    var sSep = '?';
-    var patt1=/\?/g;
-    if (sURL.match(patt1) == null) sSep = '?';
-    else sSep = '&';
-    var tmpString = sURL + sSep + encodeURIComponent("module_fnc["+sSpotName+"]") + "=ExecuteAjaxCall&_fnc=GetContentBlock";
+    var sep = (URL.indexOf('?') === -1) ? '?' : '&';
+    var targetUrl = url + sep
+        + encodeURIComponent("module_fnc["+spotName+"]")
+        + "=ExecuteAjaxCall"
+        + "&_fnc=GetContentBlock";
 
-    $.ajax({
-       url: tmpString,
-       processData: false,
-       dataType:  'json',
-       success: function(data, responseMessage){
-           CHAMELEON.CORE.pkgArticle.aTeaserItemCache[sURL] = data;
-           sCallback(data,responseMessage);
-       },
-       type: 'POST'
-     });
+    fetch(targetURL, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function(response){
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    }).then(function(data){
+        CHAMELEON.CORE.pkgArticle.aTeaserItemCache[url] = data;
+        if (typeof callback === 'function') {
+            callback(data, null);
+        }
+    }).catch(function(err){
+        if (window && window.console && console.error) {
+            console.error('Ajax error (LoadGenericTeaserList):', err);
+        }
+    });
     return false;
-  };
+};
 
 CHAMELEON.CORE.pkgArticle.aGenericTeaserCache = new Array();
 CHAMELEON.CORE.pkgArticle.sGenericTeaserUrlRequested = '';
-LoadGenericTeaserListShift = function(sURL, sSpotName, sCallback) {
-CHAMELEON.CORE.pkgArticle.sGenericTeaserUrlRequested = sURL;
+
+LoadGenericTeaserListShift = function(url, spotName, callback) {
+    CHAMELEON.CORE.pkgArticle.sGenericTeaserUrlRequested = url;
 	if (typeof(CHAMELEON.CORE.pkgArticle.aGenericTeaserCache[CHAMELEON.CORE.pkgArticle.sGenericTeaserUrlRequested]) != 'undefined') {
 		CHAMELEON.CORE.pkgArticle.LoadGenericTeaserListReturn(CHAMELEON.CORE.pkgArticle.aGenericTeaserCache[CHAMELEON.CORE.pkgArticle.sGenericTeaserUrlRequested],null);
 	} else {
-	    var sSep = '?';
-	    var patt1=/\?/g;
-	    if (sURL.match(patt1) == null) sSep = '?';
-	    else sSep = '&';
-	    var tmpString = sURL + sSep + encodeURIComponent("module_fnc["+sSpotName+"]") + "=ExecuteAjaxCall&_fnc=GetContentBlockShifted";
-	    GetAjaxCall(tmpString, sCallback);
+        var sep = (URL.indexOf('?') === -1) ? '?' : '&';
+	    var targetURL = url + sep
+            + encodeURIComponent("module_fnc["+spotName+"]")
+            + "=ExecuteAjaxCall"
+            + "&_fnc=GetContentBlockShifted";
+	    GetAjaxCall(targetURL, callback);
 	}
     return false;
-  };
+};
 
 LoadGenericTeaserListReturn = function(data, responseMessage) {
   CHAMELEON.CORE.pkgArticle.aGenericTeaserCache[CHAMELEON.CORE.pkgArticle.sGenericTeaserUrlRequested] = data;
-  var oContainer = $('.pkg-article-teaser-list-'+data.sSpotName);
-  var oTmp = $(data.sResult);
-  oContainer.replaceWith(oTmp);
-
+  var container = document.querySelector('.pkg-article-teaser-list-'+data.sSpotName);
+  if (container) {
+    container.outerHTML = data.sResult;
+  }
 };
