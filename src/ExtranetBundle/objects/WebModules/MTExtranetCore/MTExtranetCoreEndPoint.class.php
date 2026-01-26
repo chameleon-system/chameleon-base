@@ -1070,6 +1070,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                         $oUser->Save();
                         $oMessage->AddMessage(TdbDataExtranetUser::MSG_FORM_FIELD, 'EXTRANET-FORGOT-PASSWORD-CHANGED');
                         $this->data['bPasswordChanged'] = true;
+                        $oUser->SaveFieldsFast(['session_key' => bin2hex(random_bytes(30))]);
                     }
                 }
             } elseif (null !== $oUser && false === $oUser->IsPasswordChangeKeyValid()) {
