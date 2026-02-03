@@ -48,6 +48,11 @@ class ServiceLocator
         return self::$container->get($serviceId);
     }
 
+    public static function hasParameter(string $name): bool
+    {
+        return self::$container->hasParameter($name);
+    }
+
     /**
      * @param string $name
      *

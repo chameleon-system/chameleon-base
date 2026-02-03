@@ -2049,6 +2049,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
          * injection in this class, we use the static keyword.
          */
         static $baseLanguageIso = null;
+
         if (null === $baseLanguageIso) {
             $languageService = self::getLanguageService();
             $baseLanguageIso = $languageService->getLanguageIsoCode($languageService->getCmsBaseLanguageId());
@@ -2069,6 +2070,16 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                     $this->sqlData[$sFieldName] = $this->sqlData[$fieldNameTargetLanguage];
                 } elseif (!$this->isFieldBasedTranslationFallbackActive() && !TGlobal::IsCMSMode()) {
                     $this->sqlData[$sFieldName] = '';
+                } else {
+                    // access fallback locale (e.g. 'de_CH' --> 'de')
+                    $fallbackLanguageIso = $this->getMappedCmsLocale($sFieldName, $sLanguagePrefix);
+                    $fallbackLanguageSuffix = $fallbackLanguageIso === $baseLanguageIso ? '' : '__'.$fallbackLanguageIso;
+
+                    $fallbackFieldName = $sFieldName.$fallbackLanguageSuffix;
+                    $fallbackFieldValue = $this->sqlData[$fallbackFieldName] ?? '';
+                    if ('' !== $fallbackFieldValue) {
+                        $this->sqlData[$sFieldName] = $fallbackFieldValue;
+                    }
                 }
             }
             $sFieldValue = $this->sqlData[$sFieldName];
@@ -2217,5 +2228,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     protected function getCacheService(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');
+    }
+
+    protected function getMappedCmsLocale(string $fieldName, string $languagePrefix): string
+    {
+        $map = true === ServiceLocator::hasParameter('cms_locale_map') ? ServiceLocator::getParameter('cms_locale_map') : null;
+
+        return $map[$languagePrefix] ?? $languagePrefix;
     }
 }
