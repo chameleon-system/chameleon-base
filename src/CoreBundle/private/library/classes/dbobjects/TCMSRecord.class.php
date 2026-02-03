@@ -18,7 +18,6 @@ use ChameleonSystem\CoreBundle\Session\ChameleonSessionManagerInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
 use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use esono\pkgCmsCache\CacheInterface;
@@ -2057,18 +2056,20 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
         if (null !== $baseLanguageIso) {
             $fieldNameBaseLanguage = $sFieldName.'__'.$baseLanguageIso;
-            if (!isset($this->sqlData[$fieldNameBaseLanguage])) {
+
+            if (false === isset($this->sqlData[$fieldNameBaseLanguage])) {
                 $this->sqlData[$fieldNameBaseLanguage] = $this->sqlData[$sFieldName];
             }
         }
 
-        $sFieldValue = '';
-        if (isset($this->sqlData[$sFieldName])) {
+        $fieldValue = '';
+        if (true === isset($this->sqlData[$sFieldName])) {
             $fieldNameTargetLanguage = $sFieldName.'__'.$sLanguagePrefix;
-            if (isset($this->sqlData[$fieldNameTargetLanguage])) {
+
+            if (true === isset($this->sqlData[$fieldNameTargetLanguage])) {
                 if ('' !== $this->sqlData[$fieldNameTargetLanguage]) {
                     $this->sqlData[$sFieldName] = $this->sqlData[$fieldNameTargetLanguage];
-                } elseif (!$this->isFieldBasedTranslationFallbackActive() && !TGlobal::IsCMSMode()) {
+                } elseif (false === $this->isFieldBasedTranslationFallbackActive() && false === TGlobal::IsCMSMode()) {
                     $this->sqlData[$sFieldName] = '';
                 } else {
                     // access fallback locale (e.g. 'de_CH' --> 'de')
@@ -2082,10 +2083,11 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                     }
                 }
             }
-            $sFieldValue = $this->sqlData[$sFieldName];
+
+            $fieldValue = $this->sqlData[$sFieldName];
         }
 
-        return $sFieldValue;
+        return $fieldValue;
     }
 
     public function setFieldBasedTranslationFallbackActive($bVal = true)
