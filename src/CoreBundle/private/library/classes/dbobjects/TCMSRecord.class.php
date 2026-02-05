@@ -2072,15 +2072,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                 } elseif (false === $this->isFieldBasedTranslationFallbackActive() && false === TGlobal::IsCMSMode()) {
                     $this->sqlData[$sFieldName] = '';
                 } else {
-                    // access fallback locale (e.g. 'de_CH' --> 'de')
-                    $fallbackLanguageIso = $this->getMappedCmsLocale($sFieldName, $sLanguagePrefix);
-                    $fallbackLanguageSuffix = $fallbackLanguageIso === $baseLanguageIso ? '' : '__'.$fallbackLanguageIso;
-
-                    $fallbackFieldName = $sFieldName.$fallbackLanguageSuffix;
-                    $fallbackFieldValue = $this->sqlData[$fallbackFieldName] ?? '';
-                    if ('' !== $fallbackFieldValue) {
-                        $this->sqlData[$sFieldName] = $fallbackFieldValue;
-                    }
+                    $this->sqlData[$sFieldName] = $this->getFallbackFieldValue($sFieldName, $sLanguagePrefix, $baseLanguageIso);
                 }
             }
 
@@ -2088,6 +2080,17 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         }
 
         return $fieldValue;
+    }
+
+    protected function getFallbackFieldValue(string $fieldName, string $languagePrefix, string $baseLanguageIso): string
+    {
+        // access fallback locale (e.g. 'de_CH' --> 'de')
+        $fallbackLanguageIso = $this->getMappedCmsLocale($fieldName, $languagePrefix) ?? $baseLanguageIso;
+        $fallbackLanguageSuffix = $fallbackLanguageIso === $baseLanguageIso ? '' : '__'.$fallbackLanguageIso;
+
+        $fallbackFieldName = $fieldName.$fallbackLanguageSuffix;
+
+        return $this->sqlData[$fallbackFieldName] ?? '';
     }
 
     public function setFieldBasedTranslationFallbackActive($bVal = true)
@@ -2232,10 +2235,10 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         return ServiceLocator::get('chameleon_system_core.cache');
     }
 
-    protected function getMappedCmsLocale(string $fieldName, string $languagePrefix): string
+    protected function getMappedCmsLocale(string $fieldName, string $languagePrefix): ?string
     {
         $map = true === ServiceLocator::hasParameter('cms_locale_map') ? ServiceLocator::getParameter('cms_locale_map') : null;
 
-        return $map[$languagePrefix] ?? $languagePrefix;
+        return $map[$languagePrefix] ?? null;
     }
 }
