@@ -18,7 +18,6 @@ use ChameleonSystem\CoreBundle\Session\ChameleonSessionManagerInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
 use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use esono\pkgCmsCache\CacheInterface;
@@ -2049,6 +2048,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
          * injection in this class, we use the static keyword.
          */
         static $baseLanguageIso = null;
+
         if (null === $baseLanguageIso) {
             $languageService = self::getLanguageService();
             $baseLanguageIso = $languageService->getLanguageIsoCode($languageService->getCmsBaseLanguageId());
@@ -2056,25 +2056,41 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
 
         if (null !== $baseLanguageIso) {
             $fieldNameBaseLanguage = $sFieldName.'__'.$baseLanguageIso;
-            if (!isset($this->sqlData[$fieldNameBaseLanguage])) {
+
+            if (false === isset($this->sqlData[$fieldNameBaseLanguage])) {
                 $this->sqlData[$fieldNameBaseLanguage] = $this->sqlData[$sFieldName];
             }
         }
 
-        $sFieldValue = '';
-        if (isset($this->sqlData[$sFieldName])) {
+        $fieldValue = '';
+        if (true === isset($this->sqlData[$sFieldName])) {
             $fieldNameTargetLanguage = $sFieldName.'__'.$sLanguagePrefix;
-            if (isset($this->sqlData[$fieldNameTargetLanguage])) {
+
+            if (true === isset($this->sqlData[$fieldNameTargetLanguage])) {
                 if ('' !== $this->sqlData[$fieldNameTargetLanguage]) {
                     $this->sqlData[$sFieldName] = $this->sqlData[$fieldNameTargetLanguage];
-                } elseif (!$this->isFieldBasedTranslationFallbackActive() && !TGlobal::IsCMSMode()) {
+                } elseif (false === $this->isFieldBasedTranslationFallbackActive() && false === TGlobal::IsCMSMode()) {
                     $this->sqlData[$sFieldName] = '';
+                } else {
+                    $this->sqlData[$sFieldName] = $this->getFallbackFieldValue($sFieldName, $sLanguagePrefix, $baseLanguageIso);
                 }
             }
-            $sFieldValue = $this->sqlData[$sFieldName];
+
+            $fieldValue = $this->sqlData[$sFieldName];
         }
 
-        return $sFieldValue;
+        return $fieldValue;
+    }
+
+    protected function getFallbackFieldValue(string $fieldName, string $languagePrefix, string $baseLanguageIso): string
+    {
+        // access fallback locale (e.g. 'de_CH' --> 'de')
+        $fallbackLanguageIso = $this->getMappedCmsLocale($fieldName, $languagePrefix) ?? $baseLanguageIso;
+        $fallbackLanguageSuffix = $fallbackLanguageIso === $baseLanguageIso ? '' : '__'.$fallbackLanguageIso;
+
+        $fallbackFieldName = $fieldName.$fallbackLanguageSuffix;
+
+        return $this->sqlData[$fallbackFieldName] ?? '';
     }
 
     public function setFieldBasedTranslationFallbackActive($bVal = true)
@@ -2217,5 +2233,12 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     protected function getCacheService(): CacheInterface
     {
         return ServiceLocator::get('chameleon_system_core.cache');
+    }
+
+    protected function getMappedCmsLocale(string $fieldName, string $languagePrefix): ?string
+    {
+        $map = true === ServiceLocator::hasParameter('cms_locale_map') ? ServiceLocator::getParameter('cms_locale_map') : null;
+
+        return $map[$languagePrefix] ?? null;
     }
 }
