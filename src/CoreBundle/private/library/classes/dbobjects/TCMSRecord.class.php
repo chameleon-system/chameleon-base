@@ -2089,8 +2089,13 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $fallbackLanguageSuffix = $fallbackLanguageIso === $baseLanguageIso ? '' : '__'.$fallbackLanguageIso;
 
         $fallbackFieldName = $fieldName.$fallbackLanguageSuffix;
+        $fieldValue = $this->sqlData[$fallbackFieldName] ?? '';
 
-        return $this->sqlData[$fallbackFieldName] ?? '';
+        if ('' !== $fieldValue) {
+            return $fieldValue;
+        }
+
+        return $this->sqlData[$fieldName] ?? ''; // base language field as final fallback
     }
 
     public function setFieldBasedTranslationFallbackActive($bVal = true)
