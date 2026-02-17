@@ -135,12 +135,12 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
      */
     public function GetUserEMail()
     {
-        $sEMail = trim($this->fieldEmail);
-        if (empty($sEMail)) {
-            $sEMail = trim($this->fieldName);
+        $email = trim($this->fieldEmail ?? '');
+        if ($email !== '') {
+            return $email;
         }
 
-        return $sEMail;
+        return trim($this->fieldName ?? '');
     }
 
     /**
