@@ -368,6 +368,7 @@ chameleon_system_security:
   - `@Route("/api/ebuch/retailer/get-login-token", name="get-login-token", methods={"POST"})` changes to `#[Route('/api/ebuch/retailer/get-login-token', name: 'get-login-token', methods: ['POST'])]` 
   - Additionally, the route configurations in the routes.yml need to be adjusted
     - `type: annotation` becomes `type: attribute`
+- `cronTriggerUrl` has changed. Adjust value in values.yaml to '/cms/cronjobs/run'
 
 ## jQuery in Theme
 
