@@ -96,29 +96,30 @@ if (!defined('moduleInstanceMenuloaded')) {
     function ensureCmsModuleMenuContainer() {
         var container = document.getElementById("cmsModuleMenu");
         if (container) {
-            var existingWrapper = document.getElementById("menuWrapper");
-            if (!existingWrapper) {
-                var wrapper = document.createElement("div");
-                wrapper.id = "menuWrapper";
-                wrapper.innerHTML = "&nbsp;";
-                container.appendChild(wrapper);
-            }
             return container;
         }
 
         container = document.createElement("div");
         container.id = "cmsModuleMenu";
         container.style.display = "none";
-        container.innerHTML = '<div class="moduleMenuHeader">'
-            + '<a href="#" onclick="document.getElementById(\'cmsModuleMenu\').style.display=\'none\'; return false;">'
-            + '<?php echo TGlobal::OutJS($translator->trans('chameleon_system_core.action.close')); ?>'
-            + '</a>'
-            + '</div>'
-            + '<div id="menuWrapper">&nbsp;</div>';
 
         document.body.appendChild(container);
 
         return container;
+    }
+
+    function renderModuleInstanceMenu(menu, menuContentHtml) {
+        menu.innerHTML = '<div class="moduleMenuHeader">'
+            + '<span id="closeModuleMenu"><i class="fas fa-window-close"></i></span>'
+            + '</div>'
+            + '<div id="menuWrapper">' + menuContentHtml + '</div>';
+
+        var closeControl = document.getElementById("closeModuleMenu");
+        if (closeControl) {
+            closeControl.addEventListener("click", function () {
+                menu.style.display = "none";
+            });
+        }
     }
 
     function getModuleInstanceMenuPrefix(buttonId) {
@@ -161,12 +162,7 @@ if (!defined('moduleInstanceMenuloaded')) {
         }
 
         var menu = ensureCmsModuleMenuContainer();
-        var wrapper = document.getElementById("menuWrapper");
-        if (!wrapper) {
-            return;
-        }
-
-        wrapper.innerHTML = menuTree.innerHTML;
+        renderModuleInstanceMenu(menu, menuTree.innerHTML);
 
         var xcoord = event.pageX;
         var ycoord = event.pageY;
