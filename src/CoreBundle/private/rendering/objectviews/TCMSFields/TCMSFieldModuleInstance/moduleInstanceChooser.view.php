@@ -280,18 +280,18 @@ if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
                     $isCreatable = (\count($viewMappings) > 0);
                     $cssClasses = [];
                     $jsFunction = ' onclick="return false;"';
-                    $accessabillityAttributes = '';
+                    $accessibilityAttributes. = '';
 
                     if (true === $isCreatable) {
                         $cssClasses[] = 'hasChildren';
                         $jsFunction = ' onclick="openMenuLevel(this);return false;"';
                     } else {
                         $cssClasses[] = 'disabledModuleItem';
-                        $accessabillityAttributes = ' aria-disabled="true" title="Kein anlegbarer View verfügbar"';
+                        $accessibilityAttributes. = ' aria-disabled="true" title="Kein anlegbarer View verfügbar"';
                     }
                     $classAttribute = implode(' ', $cssClasses);
                     ?>
-                <li><a href="#" class="<?php echo TGlobal::OutHTML($classAttribute); ?>"<?php echo $jsFunction; ?><?php echo $accessabillityAttributes; ?>><i class="<?php echo TGlobal::OutHTML($oModule->fieldIconFontCssClass); ?>"></i> <?php echo TGlobal::OutHTML($oModule->GetName()); ?></a>
+                <li><a href="#" class="<?php echo TGlobal::OutHTML($classAttribute); ?>"<?php echo $jsFunction; ?><?php echo $accessibilityAttributes.; ?>><i class="<?php echo TGlobal::OutHTML($oModule->fieldIconFontCssClass); ?>"></i> <?php echo TGlobal::OutHTML($oModule->GetName()); ?></a>
                     <?php
                         if (true === $isCreatable) {
                             echo "<ul>\n";
