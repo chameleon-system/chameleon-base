@@ -93,35 +93,111 @@ if (!defined('moduleInstanceMenuloaded')) {
         }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        if (!document.getElementById("cmsModuleMenu")) {
-            let container = document.createElement("div");
-            container.id = "cmsModuleMenu";
-            container.style.display = "none";
-            container.innerHTML = `
-            <div class="moduleMenuHeader">
-                <a href="#" onclick="document.getElementById('cmsModuleMenu').style.display='none'; return false;">
-                    <?php echo TGlobal::OutJS($translator->trans('chameleon_system_core.action.close')); ?>
-                </a>
-            </div>
-            <div id="menuWrapper">&nbsp;</div>`;
-
-            document.body.appendChild(container);
+    function ensureCmsModuleMenuContainer() {
+        var container = document.getElementById("cmsModuleMenu");
+        if (container) {
+            return container;
         }
 
-        document.getElementById("<?php echo $menuPrefix; ?>NewInstanceButton").addEventListener("click", function (event) {
-            var xcoord = event.pageX;
-            var ycoord = event.pageY;
-            var menu = document.getElementById("cmsModuleMenu");
+        container = document.createElement("div");
+        container.id = "cmsModuleMenu";
+        container.style.display = "none";
 
-            menu.style.top = ycoord + "px";
-            menu.style.left = xcoord + "px";
-            document.getElementById("menuWrapper").innerHTML = document.getElementById("<?php echo $menuPrefix; ?>MenuTree").innerHTML;
+        document.body.appendChild(container);
 
-            menu.style.display = "block";
-            event.preventDefault();
-        });
-    });
+        return container;
+    }
+
+    function renderModuleInstanceMenu(menu, menuContentHtml) {
+        menu.innerHTML = '<div class="moduleMenuHeader">'
+            + '<span id="closeModuleMenu"><i class="fas fa-window-close"></i></span>'
+            + '</div>'
+            + '<div id="menuWrapper">' + menuContentHtml + '</div>';
+
+        var closeControl = document.getElementById("closeModuleMenu");
+        if (closeControl) {
+            closeControl.addEventListener("click", function () {
+                menu.style.display = "none";
+            });
+        }
+    }
+
+    function getModuleInstanceMenuPrefix(buttonId) {
+        var suffix = "NewInstanceButton";
+        if (!buttonId || buttonId.length <= suffix.length) {
+            return null;
+        }
+
+        if (false === /NewInstanceButton$/.test(buttonId)) {
+            return null;
+        }
+
+        return buttonId.substring(0, buttonId.length - suffix.length);
+    }
+
+    function findModuleInstanceButtonTarget(target) {
+        if (!target) {
+            return null;
+        }
+
+        var current = target;
+        if (!current.tagName && current.parentElement) {
+            current = current.parentElement;
+        }
+
+        while (current) {
+            if (current.id && true === /NewInstanceButton$/.test(current.id)) {
+                return current;
+            }
+            current = current.parentElement;
+        }
+
+        return null;
+    }
+
+    function openModuleInstanceMenuByPrefix(menuPrefix, event, button) {
+        var menuTree = document.getElementById(menuPrefix + "MenuTree");
+        if (!menuTree) {
+            return;
+        }
+
+        var menu = ensureCmsModuleMenuContainer();
+        renderModuleInstanceMenu(menu, menuTree.innerHTML);
+
+        var xcoord = event.pageX;
+        var ycoord = event.pageY;
+        if ((undefined === xcoord || undefined === ycoord) && button && button.getBoundingClientRect) {
+            var rect = button.getBoundingClientRect();
+            xcoord = rect.left + window.pageXOffset;
+            ycoord = rect.bottom + window.pageYOffset;
+        }
+
+        menu.style.top = ycoord + "px";
+        menu.style.left = xcoord + "px";
+        menu.style.display = "block";
+        event.preventDefault();
+    }
+
+    function handleModuleInstanceNewInstanceButtonClick(event, explicitButton) {
+        var button = explicitButton || findModuleInstanceButtonTarget(event.target);
+        if (!button || !button.id) {
+            return;
+        }
+
+        var menuPrefix = getModuleInstanceMenuPrefix(button.id);
+        if (!menuPrefix) {
+            return;
+        }
+
+        openModuleInstanceMenuByPrefix(menuPrefix, event, button);
+    }
+
+    if (true !== window.__cmsModuleInstanceDelegatedBound) {
+        window.__cmsModuleInstanceDelegatedBound = true;
+        document.addEventListener("click", function (event) {
+            handleModuleInstanceNewInstanceButtonClick(event);
+        }, true);
+    }
     <?php
 }
 ?>
@@ -201,16 +277,23 @@ if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
                 $name = $oModule->GetName();
                 if (!empty($name)) {
                     $viewMappings = $oModule->GetViewMapping();
+                    $isCreatable = (\count($viewMappings) > 0);
+                    $cssClasses = [];
                     $jsFunction = ' onclick="return false;"';
-                    $hasChildren = '';
+                    $accessibilityAttributes = '';
 
-                    if (\count($viewMappings) > 0) {
-                        $hasChildren = 'hasChildren';
+                    if (true === $isCreatable) {
+                        $cssClasses[] = 'hasChildren';
                         $jsFunction = ' onclick="openMenuLevel(this);return false;"';
-                    } ?>
-                <li><a href="#" class="<?php echo $hasChildren; ?>"<?php echo $jsFunction; ?>><i class="<?php echo TGlobal::OutHTML($oModule->fieldIconFontCssClass); ?>"></i> <?php echo TGlobal::OutHTML($oModule->GetName()); ?></a>
+                    } else {
+                        $cssClasses[] = 'disabledModuleItem';
+                        $accessibilityAttributes = ' aria-disabled="true" title="Kein anlegbarer View verfügbar"';
+                    }
+                    $classAttribute = implode(' ', $cssClasses);
+                    ?>
+                <li><a href="#" class="<?php echo TGlobal::OutHTML($classAttribute); ?>"<?php echo $jsFunction; ?><?php echo $accessibilityAttributes; ?>><i class="<?php echo TGlobal::OutHTML($oModule->fieldIconFontCssClass); ?>"></i> <?php echo TGlobal::OutHTML($oModule->GetName()); ?></a>
                     <?php
-                        if (\count($viewMappings) > 0) {
+                        if (true === $isCreatable) {
                             echo "<ul>\n";
                             $moduleViewJSFunction = '';
                             foreach ($viewMappings as $internalName => $displayName) {
@@ -233,4 +316,3 @@ if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
     </ul>
 </div>
 <!-- chameleon modulechooser menu - end -->
-
