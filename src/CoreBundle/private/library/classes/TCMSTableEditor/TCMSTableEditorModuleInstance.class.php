@@ -31,6 +31,24 @@ class TCMSTableEditorModuleInstance extends TCMSTableEditor
     }
 
     /**
+     * Renames the current module instance and returns short info for AJAX consumers.
+     *
+     * @return false|TCMSstdClass
+     */
+    public function RenameInstance()
+    {
+        $returnVal = false;
+        $oGlobal = TGlobal::instance();
+        if ($oGlobal->UserDataExists('sName')) {
+            $sName = $oGlobal->GetUserData('sName');
+            $this->SaveField('name', $sName);
+            $returnVal = $this->GetObjectShortInfo();
+        }
+
+        return $returnVal;
+    }
+
+    /**
      * makes it possible to modify the contents written to database after the copy
      * is commited.
      */
