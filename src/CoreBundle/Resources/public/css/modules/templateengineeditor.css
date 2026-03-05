@@ -212,6 +212,17 @@
   line-height: 1px;
 }
 
+#menuWrapper ul li a.disabledModuleItem,
+#menuWrapper ul li a.disabledModuleItem span {
+  color: #7f8c9a;
+  background-color: #e6edf5;
+  cursor: not-allowed;
+}
+
+#menuWrapper ul li a.disabledModuleItem:hover {
+  background-color: #e6edf5;
+}
+
 #menuWrapper ul li a.expanded {
   color: #000;
   background-color: #fff;
