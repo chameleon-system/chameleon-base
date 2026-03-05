@@ -93,35 +93,155 @@ if (!defined('moduleInstanceMenuloaded')) {
         }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        if (!document.getElementById("cmsModuleMenu")) {
-            let container = document.createElement("div");
-            container.id = "cmsModuleMenu";
-            container.style.display = "none";
-            container.innerHTML = `
-            <div class="moduleMenuHeader">
-                <a href="#" onclick="document.getElementById('cmsModuleMenu').style.display='none'; return false;">
-                    <?php echo TGlobal::OutJS($translator->trans('chameleon_system_core.action.close')); ?>
-                </a>
-            </div>
-            <div id="menuWrapper">&nbsp;</div>`;
-
-            document.body.appendChild(container);
+    function ensureCmsModuleMenuContainer() {
+        console.log("[moduleInstanceChooser] ensure container called");
+        var container = document.getElementById("cmsModuleMenu");
+        if (container) {
+            console.log("[moduleInstanceChooser] existing cmsModuleMenu found");
+            var existingWrapper = document.getElementById("menuWrapper");
+            if (!existingWrapper) {
+                console.log("[moduleInstanceChooser] menuWrapper missing in existing menu, creating wrapper");
+                var wrapper = document.createElement("div");
+                wrapper.id = "menuWrapper";
+                wrapper.innerHTML = "&nbsp;";
+                container.appendChild(wrapper);
+            }
+            return container;
         }
 
-        document.getElementById("<?php echo $menuPrefix; ?>NewInstanceButton").addEventListener("click", function (event) {
-            var xcoord = event.pageX;
-            var ycoord = event.pageY;
-            var menu = document.getElementById("cmsModuleMenu");
+        container = document.createElement("div");
+        container.id = "cmsModuleMenu";
+        container.style.display = "none";
+        container.innerHTML = '<div class="moduleMenuHeader">'
+            + '<a href="#" onclick="document.getElementById(\'cmsModuleMenu\').style.display=\'none\'; return false;">'
+            + '<?php echo TGlobal::OutJS($translator->trans('chameleon_system_core.action.close')); ?>'
+            + '</a>'
+            + '</div>'
+            + '<div id="menuWrapper">&nbsp;</div>';
 
-            menu.style.top = ycoord + "px";
-            menu.style.left = xcoord + "px";
-            document.getElementById("menuWrapper").innerHTML = document.getElementById("<?php echo $menuPrefix; ?>MenuTree").innerHTML;
+        document.body.appendChild(container);
+        console.log("[moduleInstanceChooser] cmsModuleMenu created and appended");
 
-            menu.style.display = "block";
-            event.preventDefault();
-        });
-    });
+        return container;
+    }
+
+    function getModuleInstanceMenuPrefix(buttonId) {
+        var suffix = "NewInstanceButton";
+        if (!buttonId || buttonId.length <= suffix.length) {
+            return null;
+        }
+
+        if (false === /NewInstanceButton$/.test(buttonId)) {
+            return null;
+        }
+
+        return buttonId.substring(0, buttonId.length - suffix.length);
+    }
+
+    function findModuleInstanceButtonTarget(target) {
+        if (!target) {
+            return null;
+        }
+
+        var current = target;
+        if (!current.tagName && current.parentElement) {
+            current = current.parentElement;
+        }
+
+        while (current) {
+            if (current.id && true === /NewInstanceButton$/.test(current.id)) {
+                return current;
+            }
+            current = current.parentElement;
+        }
+
+        return null;
+    }
+
+    function openModuleInstanceMenuByPrefix(menuPrefix, event, button) {
+        console.log("[moduleInstanceChooser] open requested for prefix:", menuPrefix);
+        var menuTree = document.getElementById(menuPrefix + "MenuTree");
+        if (!menuTree) {
+            console.log("[moduleInstanceChooser] missing menu tree for prefix:", menuPrefix);
+            return;
+        }
+
+        var menu = ensureCmsModuleMenuContainer();
+        if (!menu) {
+            console.error("[moduleInstanceChooser] ensureCmsModuleMenuContainer returned no menu");
+            return;
+        }
+        var wrapper = document.getElementById("menuWrapper");
+        if (!wrapper) {
+            console.error("[moduleInstanceChooser] menuWrapper not found after ensure");
+            return;
+        }
+
+        wrapper.innerHTML = menuTree.innerHTML;
+        console.log("[moduleInstanceChooser] menu tree copied, html length:", menuTree.innerHTML.length);
+
+        var xcoord = event.pageX;
+        var ycoord = event.pageY;
+        if ((undefined === xcoord || undefined === ycoord) && button && button.getBoundingClientRect) {
+            var rect = button.getBoundingClientRect();
+            xcoord = rect.left + window.pageXOffset;
+            ycoord = rect.bottom + window.pageYOffset;
+            console.log("[moduleInstanceChooser] using fallback coords from button rect");
+        }
+
+        console.log("[moduleInstanceChooser] opening menu at coords:", xcoord, ycoord);
+        menu.style.top = ycoord + "px";
+        menu.style.left = xcoord + "px";
+        menu.style.display = "block";
+        event.preventDefault();
+        console.log("[moduleInstanceChooser] menu opened for prefix:", menuPrefix);
+    }
+
+    function handleModuleInstanceNewInstanceButtonClick(event, explicitButton) {
+        var button = explicitButton || findModuleInstanceButtonTarget(event.target);
+        if (!button || !button.id) {
+            return;
+        }
+
+        var menuPrefix = getModuleInstanceMenuPrefix(button.id);
+        if (!menuPrefix) {
+            console.log("[moduleInstanceChooser] no menu prefix for button id:", button.id);
+            return;
+        }
+
+        console.log("[moduleInstanceChooser] button click captured:", button.id, "prefix:", menuPrefix);
+        try {
+            openModuleInstanceMenuByPrefix(menuPrefix, event, button);
+        } catch (error) {
+            console.error("[moduleInstanceChooser] unexpected error while opening menu", error);
+        }
+    }
+
+    function bindDirectModuleInstanceButtons() {
+        var buttons = document.querySelectorAll("[id$='NewInstanceButton']");
+        console.log("[moduleInstanceChooser] direct bind scan, buttons found:", buttons.length);
+        for (var i = 0; i < buttons.length; ++i) {
+            var button = buttons[i];
+            if ("1" === button.getAttribute("data-module-instance-direct-bound")) {
+                continue;
+            }
+            button.setAttribute("data-module-instance-direct-bound", "1");
+            console.log("[moduleInstanceChooser] direct bound button:", button.id);
+            button.addEventListener("click", function (event) {
+                handleModuleInstanceNewInstanceButtonClick(event, this);
+            });
+        }
+    }
+
+    if (true !== window.__cmsModuleInstanceDelegatedBound) {
+        window.__cmsModuleInstanceDelegatedBound = true;
+        console.log("[moduleInstanceChooser] delegated click binding initialized");
+        document.addEventListener("click", function (event) {
+            handleModuleInstanceNewInstanceButtonClick(event);
+        }, true);
+    }
+
+    bindDirectModuleInstanceButtons();
     <?php
 }
 ?>
@@ -233,4 +353,3 @@ if ($securityHelper->isGranted('CMS_RIGHT_CMS_TEMPLATE_MODULE_EDIT')) {
     </ul>
 </div>
 <!-- chameleon modulechooser menu - end -->
-
