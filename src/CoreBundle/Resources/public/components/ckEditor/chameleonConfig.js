@@ -50,6 +50,11 @@ CKEDITOR.editorConfig = function (config) {
 
     config.minimumChangeMilliseconds = 300;
 
+    /**
+     * #69795 dont set automaticly iframe attributes as they break youtube integration
+     */
+    config.iframe_attributes = {};
+
     config.codemirror = {
 
         // Set this to the theme you wish to use (codemirror themes)
