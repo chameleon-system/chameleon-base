@@ -51,9 +51,36 @@ CKEDITOR.editorConfig = function (config) {
     config.minimumChangeMilliseconds = 300;
 
     /**
-     * #69795 dont set automaticly iframe attributes as they break youtube integration
+     * #69795 Ensures embedded iframes keep a provider-specific sandbox policy.
+     *
+     * CKEditor adds iframe sandbox attributes during editor processing and persists
+     * them back into the stored content on save. A globally empty sandbox attribute
+     * (`sandbox=""`) breaks script-based embeds such as YouTube in the frontend,
+     * because the player can no longer execute the scripts it requires.
+     *
+     * This callback assigns the minimal sandbox permissions needed for supported
+     * providers like YouTube, Vimeo and Google Maps, while keeping unknown iframes
+     * restricted by default.
      */
-    config.iframe_attributes = {};
+    config.iframe_attributes = function(iframe) {
+        const src = iframe.attributes.src || '';
+        if (src.includes('youtube.com') || src.includes('youtu.be')) {
+            return {
+                sandbox: 'allow-scripts allow-same-origin allow-presentation allow-popups'
+            };
+        }
+        if (src.includes('vimeo.com')) {
+            return {
+                sandbox: 'allow-scripts allow-same-origin allow-presentation'
+            };
+        }
+        if (src.includes('google.com/maps')) {
+            return {
+                sandbox: 'allow-scripts allow-same-origin'
+            };
+        }
+        return { sandbox: '' };
+    };
 
     config.codemirror = {
 
