@@ -589,7 +589,6 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
                     $allowedTags = $defaultElements;
                 } else {
                     $allowedTags = [];
-
                     $classParts = explode('.', $className);
                     if (2 === count($classParts)) {
                         $element = $classParts[0];
