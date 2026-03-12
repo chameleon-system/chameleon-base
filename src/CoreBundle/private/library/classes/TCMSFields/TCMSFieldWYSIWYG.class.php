@@ -588,14 +588,14 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
                     $className = substr($className, 1);
                     $allowedTags = $defaultElements;
                 } else {
+                    $allowedTags = [];
+
                     $classParts = explode('.', $className);
                     if (2 === count($classParts)) {
                         $element = $classParts[0];
                         $elementParts = explode(' ', $element);
                         $allowedTags = [end($elementParts)];
                         $className = $classParts[1];
-                    } else {
-                        $allowedTags = [];
                     }
                 }
             }
@@ -609,17 +609,6 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
                 $styles[] = [
                     'name' => "'".$className."'",
                     'element' => "['".implode("', '", $defaultElements)."']",
-                    'attributes' => [
-                        'class' => "'".$className."'",
-                    ],
-                ];
-                continue;
-            }
-
-            if (1 === count($allowedTags)) {
-                $styles[] = [
-                    'name' => "'".$className."'",
-                    'element' => "'".$allowedTags[0]."'",
                     'attributes' => [
                         'class' => "'".$className."'",
                     ],
