@@ -655,9 +655,8 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
             $key = $cache->getKey($aParameters, false);
             $styleCache = $cache->get($key);
             if (null === $styleCache) {
-                $aStyles = $this->getCssClassExtractor()->extractCssClasses($sUserCSSURL);
-                $styleCache = $aStyles;
-                $cache->set($key, $styleCache, null);
+                $styleCache = $this->getCssClassExtractor()->extractCssClasses($sUserCSSURL);
+                $cache->set($key, $styleCache, []);
             }
         }
 
