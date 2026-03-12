@@ -563,7 +563,13 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * Parses user css file and translate the styles for usage in javascript array collection / map.
+     * Builds the CKEditor styles set from the configured WYSIWYG CSS classes.
+     *
+     * Supports the current customer style format `cssClass => [allowedHtmlTags]`
+     * and legacy selector-based return values for backward compatibility.
+     *
+     * If no HTML tags are defined for a class, a default list of supported
+     * block/inline elements is used.
      */
     protected function getJSStylesSet(string $sUserCssUrl): array
     {
