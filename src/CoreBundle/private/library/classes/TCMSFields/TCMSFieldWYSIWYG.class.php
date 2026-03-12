@@ -568,46 +568,67 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     protected function getJSStylesSet(string $sUserCssUrl): array
     {
         $styles = [];
+        $defaultElements = ['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li'];
+        $customerStyles = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
 
-        $aCustomCSSClasses = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
-        foreach ($aCustomCSSClasses as $sClassName => $allowedTags) {
-            $styleData = [];
-            if (str_starts_with($sClassName, '@')) {
+        foreach ($customerStyles as $className => $allowedTags) {
+            if (!is_string($className) || '' === $className || str_starts_with($className, '@')) {
                 continue;
             }
 
             if (false === is_array($allowedTags)) {
                 // Backward compatibility for older selector-based return values.
-                if (str_starts_with($sClassName, '.')) {
-                    $sClassName = substr($sClassName, 1);
-                    $allowedTags = ['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li'];
+                if (true === str_starts_with($className, '.')) {
+                    $className = substr($className, 1);
+                    $allowedTags = $defaultElements;
                 } else {
-                    $aClassParts = explode('.', $sClassName);
-                    if (2 === count($aClassParts)) {
-                        $sElement = $aClassParts[0];
-                        $sElementSubParts = explode(' ', $sElement);
-                        $allowedTags = [$sElementSubParts[count($sElementSubParts) - 1]];
-                        $sClassName = $aClassParts[1];
+                    $classParts = explode('.', $className);
+                    if (2 === count($classParts)) {
+                        $element = $classParts[0];
+                        $elementParts = explode(' ', $element);
+                        $allowedTags = [end($elementParts)];
+                        $className = $classParts[1];
                     } else {
                         $allowedTags = [];
                     }
                 }
             }
 
-            $allowedTags = array_values(array_filter($allowedTags, static fn ($tag) => is_string($tag) && '' !== $tag));
+            $allowedTags = array_values(array_unique(array_filter(
+                $allowedTags,
+                static fn ($tag) => is_string($tag) && '' !== $tag
+            )));
 
-            $styleData['name'] = "'".$sClassName."'";
             if (0 === count($allowedTags)) {
-                $styleData['element'] = "['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li']";
-            } elseif (1 === count($allowedTags)) {
-                $styleData['element'] = "'".$allowedTags[0]."'";
-            } else {
-                $styleData['element'] = "['".implode("', '", $allowedTags)."']";
+                $styles[] = [
+                    'name' => "'".$className."'",
+                    'element' => "['".implode("', '", $defaultElements)."']",
+                    'attributes' => [
+                        'class' => "'".$className."'",
+                    ],
+                ];
+                continue;
             }
-            $styleData['attributes']['class'] = "'".$sClassName."'";
 
-            if (count($styleData) > 0) {
-                $styles[] = $styleData;
+            if (1 === count($allowedTags)) {
+                $styles[] = [
+                    'name' => "'".$className."'",
+                    'element' => "'".$allowedTags[0]."'",
+                    'attributes' => [
+                        'class' => "'".$className."'",
+                    ],
+                ];
+                continue;
+            }
+
+            foreach ($allowedTags as $allowedTag) {
+                $styles[] = [
+                    'name' => "'".$className.'('.$allowedTag.")'",
+                    'element' => "'".$allowedTag."'",
+                    'attributes' => [
+                        'class' => "'".$className."'",
+                    ],
+                ];
             }
         }
 
