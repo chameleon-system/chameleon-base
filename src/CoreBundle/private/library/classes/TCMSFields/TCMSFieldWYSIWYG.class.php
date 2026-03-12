@@ -572,7 +572,7 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
         $customerStyles = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
 
         foreach ($customerStyles as $className => $allowedTags) {
-            if (!is_string($className) || '' === $className || str_starts_with($className, '@')) {
+            if (false === is_string($className) || '' === $className || str_starts_with($className, '@')) {
                 continue;
             }
 
