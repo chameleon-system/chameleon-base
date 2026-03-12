@@ -569,30 +569,42 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     {
         $styles = [];
 
-        $aCustomCSSClasses = array_keys($this->GetWYSIWYGCustomerStyles($sUserCssUrl));
-        foreach ($aCustomCSSClasses as $sClassName) {
+        $aCustomCSSClasses = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
+        foreach ($aCustomCSSClasses as $sClassName => $allowedTags) {
             $styleData = [];
             if (str_starts_with($sClassName, '@')) {
                 continue;
             }
-            if (str_starts_with($sClassName, '.')) {
-                $sClassName = substr($sClassName, 1);
-                $styleData['name'] = "'".$sClassName."'";
-                $styleData['element'] = "['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li']";
-                $styleData['attributes']['class'] = "'".$sClassName."'";
-            } else {
-                // split tag type from css. note: we only allow one class!
-                $aClassParts = explode('.', $sClassName);
-                if (2 === count($aClassParts)) {
-                    $sElement = $aClassParts[0];
-                    $sElementSubParts = explode(' ', $sElement);
-                    $sElement = $sElementSubParts[count($sElementSubParts) - 1];
-                    $sClassName = $aClassParts[1];
-                    $styleData['name'] = "'".$sClassName.'('.$sElement.")'";
-                    $styleData['element'] = "'".$sElement."'";
-                    $styleData['attributes']['class'] = "'".$sClassName."'";
+
+            if (false === is_array($allowedTags)) {
+                // Backward compatibility for older selector-based return values.
+                if (str_starts_with($sClassName, '.')) {
+                    $sClassName = substr($sClassName, 1);
+                    $allowedTags = ['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li'];
+                } else {
+                    $aClassParts = explode('.', $sClassName);
+                    if (2 === count($aClassParts)) {
+                        $sElement = $aClassParts[0];
+                        $sElementSubParts = explode(' ', $sElement);
+                        $allowedTags = [$sElementSubParts[count($sElementSubParts) - 1]];
+                        $sClassName = $aClassParts[1];
+                    } else {
+                        $allowedTags = [];
+                    }
                 }
             }
+
+            $allowedTags = array_values(array_filter($allowedTags, static fn ($tag) => is_string($tag) && '' !== $tag));
+
+            $styleData['name'] = "'".$sClassName."'";
+            if (0 === count($allowedTags)) {
+                $styleData['element'] = "['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li']";
+            } elseif (1 === count($allowedTags)) {
+                $styleData['element'] = "'".$allowedTags[0]."'";
+            } else {
+                $styleData['element'] = "['".implode("', '", $allowedTags)."']";
+            }
+            $styleData['attributes']['class'] = "'".$sClassName."'";
 
             if (count($styleData) > 0) {
                 $styles[] = $styleData;
