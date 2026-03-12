@@ -563,39 +563,66 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
     }
 
     /**
-     * Parses user css file and translate the styles for usage in javascript array collection / map.
+     * Builds the CKEditor styles set from the configured WYSIWYG CSS classes.
+     *
+     * Supports the current customer style format `cssClass => [allowedHtmlTags]`
+     * and legacy selector-based return values for backward compatibility.
+     *
+     * If no HTML tags are defined for a class, a default list of supported
+     * block/inline elements is used.
      */
     protected function getJSStylesSet(string $sUserCssUrl): array
     {
         $styles = [];
+        $defaultElements = ['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li'];
+        $customerStyles = $this->GetWYSIWYGCustomerStyles($sUserCssUrl);
 
-        $aCustomCSSClasses = array_keys($this->GetWYSIWYGCustomerStyles($sUserCssUrl));
-        foreach ($aCustomCSSClasses as $sClassName) {
-            $styleData = [];
-            if (str_starts_with($sClassName, '@')) {
+        foreach ($customerStyles as $className => $allowedTags) {
+            if (false === is_string($className) || '' === $className || str_starts_with($className, '@')) {
                 continue;
             }
-            if (str_starts_with($sClassName, '.')) {
-                $sClassName = substr($sClassName, 1);
-                $styleData['name'] = "'".$sClassName."'";
-                $styleData['element'] = "['p', 'div', 'span', 'a', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li']";
-                $styleData['attributes']['class'] = "'".$sClassName."'";
-            } else {
-                // split tag type from css. note: we only allow one class!
-                $aClassParts = explode('.', $sClassName);
-                if (2 === count($aClassParts)) {
-                    $sElement = $aClassParts[0];
-                    $sElementSubParts = explode(' ', $sElement);
-                    $sElement = $sElementSubParts[count($sElementSubParts) - 1];
-                    $sClassName = $aClassParts[1];
-                    $styleData['name'] = "'".$sClassName.'('.$sElement.")'";
-                    $styleData['element'] = "'".$sElement."'";
-                    $styleData['attributes']['class'] = "'".$sClassName."'";
+
+            if (false === is_array($allowedTags)) {
+                // Backward compatibility for older selector-based return values.
+                if (true === str_starts_with($className, '.')) {
+                    $className = substr($className, 1);
+                    $allowedTags = $defaultElements;
+                } else {
+                    $allowedTags = [];
+                    $classParts = explode('.', $className);
+                    if (2 === count($classParts)) {
+                        $element = $classParts[0];
+                        $elementParts = explode(' ', $element);
+                        $allowedTags = [end($elementParts)];
+                        $className = $classParts[1];
+                    }
                 }
             }
 
-            if (count($styleData) > 0) {
-                $styles[] = $styleData;
+            $allowedTags = array_values(array_unique(array_filter(
+                $allowedTags,
+                static fn ($tag) => is_string($tag) && '' !== $tag
+            )));
+
+            if (0 === count($allowedTags)) {
+                $styles[] = [
+                    'name' => "'".$className."'",
+                    'element' => "['".implode("', '", $defaultElements)."']",
+                    'attributes' => [
+                        'class' => "'".$className."'",
+                    ],
+                ];
+                continue;
+            }
+
+            foreach ($allowedTags as $allowedTag) {
+                $styles[] = [
+                    'name' => "'".$className.'('.$allowedTag.")'",
+                    'element' => "'".$allowedTag."'",
+                    'attributes' => [
+                        'class' => "'".$className."'",
+                    ],
+                ];
             }
         }
 
@@ -616,9 +643,8 @@ class TCMSFieldWYSIWYG extends TCMSFieldText
             $key = $cache->getKey($aParameters, false);
             $styleCache = $cache->get($key);
             if (null === $styleCache) {
-                $aStyles = $this->getCssClassExtractor()->extractCssClasses($sUserCSSURL);
-                $styleCache = $aStyles;
-                $cache->set($key, $styleCache, null);
+                $styleCache = $this->getCssClassExtractor()->extractCssClasses($sUserCSSURL);
+                $cache->set($key, $styleCache, []);
             }
         }
 
