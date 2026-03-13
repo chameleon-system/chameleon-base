@@ -240,7 +240,7 @@ class TCMSTableEditorCMSUser extends TCMSTableEditor
 
         if (false === $securityHelper->isGranted(
             CmsPermissionAttributeConstants::TABLE_EDITOR_EDIT,
-                $this->oTableConf->fieldName
+            $this->oTableConf->fieldName
         )) {
             return false;
         }
