@@ -34,8 +34,9 @@ class MarkdownEditorField extends \TCMSFieldText
     public function GetCMSHtmlHeadIncludes()
     {
         $includes = parent::GetCMSHtmlHeadIncludes();
-        $includes[] = '<link href="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/css/toastuimarkdowneditor/toastui-editor.min.css').'" rel="stylesheet" />';
-        $includes[] = '<link href="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/css/toastuimarkdowneditor/toastui-editor-plugin-table-merged-cell.min.css').'" rel="stylesheet" />';
+        $versionSuffix = $this->getResourceVersionSuffix();
+        $includes[] = '<link href="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/css/toastuimarkdowneditor/toastui-editor.min.css').$versionSuffix.'" rel="stylesheet" />';
+        $includes[] = '<link href="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/css/toastuimarkdowneditor/toastui-editor-plugin-table-merged-cell.min.css').$versionSuffix.'" rel="stylesheet" />';
 
         return $includes;
     }
@@ -46,10 +47,11 @@ class MarkdownEditorField extends \TCMSFieldText
     public function GetCMSHtmlFooterIncludes()
     {
         $includes = parent::GetCMSHtmlFooterIncludes();
-        $includes[] = '<script src="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/js/toastuimarkdowneditor/toastui-editor-all.min.js').'"></script>';
-        $includes[] = '<script src="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/js/toastuimarkdowneditor/i18n/de-de.min.js').'"></script>';
-        $includes[] = '<script src="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/js/toastuimarkdowneditor/toastui-editor-plugin-table-merged-cell.min.js').'"></script>';
-        $includes[] = '<script src="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/js/toastuimarkdowneditor/toastui-init.js').'"></script>';
+        $versionSuffix = $this->getResourceVersionSuffix();
+        $includes[] = '<script src="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/js/toastuimarkdowneditor/toastui-editor-all.min.js').$versionSuffix.'"></script>';
+        $includes[] = '<script src="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/js/toastuimarkdowneditor/i18n/de-de.min.js').$versionSuffix.'"></script>';
+        $includes[] = '<script src="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/js/toastuimarkdowneditor/toastui-editor-plugin-table-merged-cell.min.js').$versionSuffix.'"></script>';
+        $includes[] = '<script src="'.$this->getGlobal()->GetStaticURL('/bundles/chameleonsystemmarkdowncms/js/toastuimarkdowneditor/toastui-init.js').$versionSuffix.'"></script>';
 
         return $includes;
     }
@@ -179,6 +181,11 @@ class MarkdownEditorField extends \TCMSFieldText
     private function getGlobal(): \TGlobal
     {
         return ServiceLocator::get('chameleon_system_core.global');
+    }
+
+    private function getResourceVersionSuffix(): string
+    {
+        return '?v='.ServiceLocator::getParameter('chameleon_system_core.resources.enable_external_resource_collection_refresh_prefix');
     }
 
     private function getUrlUtilService(): UrlUtilityServiceInterface

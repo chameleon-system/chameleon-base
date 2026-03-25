@@ -5,6 +5,7 @@ window.TUIEditorManager = {
         config.el = document.getElementById(editorId);
         const {tableMergedCell} = toastUiEditor.plugin;
         config.plugins = [tableMergedCell];
+        const dialogElement = document.querySelector("#toastui-custom-button-dialog-" + editorId);
         
         // this fixes, somehow the problem, that the preview mode renders hard breaks for soft brakes
         config.customHTMLRenderer = {
@@ -21,14 +22,16 @@ window.TUIEditorManager = {
         const inputElement = document.getElementById(inputFieldId);
 
         this.addLinkButton(editorId);
-        this.addLinkButtonEvent(editorId);
+        this.addLinkButtonEvent(editorId, dialogElement);
 
-        document.querySelector("#toastui-custom-button-dialog-" + editorId + " .select-button").addEventListener("click", function (event) {
-            event.preventDefault();
-            let tableId = document.querySelector(".toastui-modal .modal-dialog select").selectedOptions[0].value;
-            CreateModalIFrameDialog(modalLink + "&id=" + tableId, 0, 0, dialogTitle);
-            $("#toastui-custom-button-dialog-" + editorId).modal("hide");
-        });
+        if (null !== dialogElement) {
+            dialogElement.querySelector(".select-button").addEventListener("click", function (event) {
+                event.preventDefault();
+                let tableId = dialogElement.querySelector("select").selectedOptions[0].value;
+                CreateModalIFrameDialog(modalLink + "&id=" + tableId, 0, 0, dialogTitle);
+                $(dialogElement).modal("hide");
+            });
+        }
 
         this.editors[editorId].setMarkdown(inputElement.value);
 
@@ -37,12 +40,21 @@ window.TUIEditorManager = {
         }.bind(this));
     },
 
-    addLinkButtonEvent: function (editorId) {
-        document.addEventListener("click", function (event) {
-            if (event.target.matches("#" + editorId + " .toastui-custom-button")) {
-                $("#toastui-custom-button-dialog-" + editorId).modal();
-            }
-        });
+    addLinkButtonEvent: function (editorId, dialogElement) {
+        if (null === dialogElement) {
+            return;
+        }
+
+        const editorElement = document.getElementById(editorId);
+        const buttonElement = null !== editorElement ? editorElement.querySelector(".toastui-custom-button") : null;
+
+        if (null !== buttonElement) {
+            buttonElement.addEventListener("click", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                $(dialogElement).modal("show");
+            });
+        }
     },
 
     addLinkButton: function (editorId) {
