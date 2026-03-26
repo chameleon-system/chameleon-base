@@ -37,6 +37,7 @@
         "symfony/orm-pack": "~2.2.0",
         "google/apiclient": "^2.0",
         "google/analytics-data": "*",
+        "google/gax": "^1.42.1",
         "symfony/asset": "^6.4",
         "symfony/cache": "^6.4",
         "symfony/config": "^6.4",
