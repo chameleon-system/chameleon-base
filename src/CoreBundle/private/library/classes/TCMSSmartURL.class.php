@@ -12,6 +12,7 @@
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -70,17 +71,14 @@ class TCMSSmartURL
 
         $aNonSeoParameter = array_keys($oGlobal->GetRawUserData());
         $pagedef = false;
-        // if we have a pagedef in post, then we are done right away.
-        if ($oGlobal->UserDataExists('pagedef')) {
+        $requestInfoService = self::getRequestInfoService();
+        // only honor a direct pagedef request while preview mode is active
+        if (true === $requestInfoService->isPreviewMode() && $oGlobal->UserDataExists('pagedef')) {
             $pagedef = $oGlobal->GetUserData('pagedef');
+            $request->attributes->set('pagedef', $pagedef);
         } else {
             $aCustomURLParameters = [];
-            // need to check for pagedef again since TCMSSmartURLData may have set it
-            if ($oGlobal->UserDataExists('pagedef')) {
-                $pagedef = $oGlobal->GetUserData('pagedef');
-            } else {
-                $pagedef = self::RunCustomHandlers($request, $aCustomURLParameters);
-            }
+            $pagedef = self::RunCustomHandlers($request, $aCustomURLParameters);
 
             if (false === $pagedef) {
                 $oURLData->bPagedefFound = false;
@@ -255,5 +253,13 @@ class TCMSSmartURL
     private static function getRedirect()
     {
         return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.redirect');
+    }
+
+    /**
+     * @return RequestInfoServiceInterface
+     */
+    private static function getRequestInfoService()
+    {
+        return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.request_info_service');
     }
 }

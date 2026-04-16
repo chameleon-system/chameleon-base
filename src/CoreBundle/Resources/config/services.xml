@@ -468,6 +468,9 @@
             <call method="setPageService">
                 <argument type="service" id="chameleon_system_core.page_service" />
             </call>
+            <call method="setRequestInfoService">
+                <argument type="service" id="chameleon_system_core.request_info_service" />
+            </call>
         </service>
 
         <service id="chameleon_system_core.table_editor_nested_set_helper_node_factory" class="ChameleonSystem\CoreBundle\TableEditor\NestedSet\NodeFactory" public="false" />

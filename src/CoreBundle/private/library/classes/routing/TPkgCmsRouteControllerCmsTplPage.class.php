@@ -11,6 +11,7 @@
 
 use ChameleonSystem\CoreBundle\Controller\ChameleonControllerInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use esono\pkgCmsRouting\AbstractRouteController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,7 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
     private ChameleonControllerInterface $controller;
     private ICmsCoreRedirect $redirect;
     private ?PageServiceInterface $pageService = null;
+    private ?RequestInfoServiceInterface $requestInfoService = null;
 
     /**
      * @param string $pagePath
@@ -52,6 +54,13 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
      */
     private function getPagedef(Request $request, $pagePath)
     {
+        if (null !== $this->requestInfoService && true === $this->requestInfoService->isPreviewMode()) {
+            $pagedef = $request->query->get('pagedef');
+            if (null !== $pagedef) {
+                return $pagedef;
+            }
+        }
+
         $pagedef = $this->getPagedefForPath($pagePath);
 
         if (null === $pagedef) {
@@ -130,5 +139,10 @@ class TPkgCmsRouteControllerCmsTplPage extends AbstractRouteController
     public function setPageService(PageServiceInterface $pageService)
     {
         $this->pageService = $pageService;
+    }
+
+    public function setRequestInfoService(RequestInfoServiceInterface $requestInfoService)
+    {
+        $this->requestInfoService = $requestInfoService;
     }
 }
