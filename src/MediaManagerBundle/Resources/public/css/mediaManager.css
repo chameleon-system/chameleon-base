@@ -344,6 +344,10 @@
     left: -10px;
 }
 
+.snippetMediaManagerBackendModuleStandard .edit-container .media-manager-layover .image-background {
+    background: url('../img/transparency.png') repeat;
+}
+
 .snippetMediaManagerBackendModuleStandard .loading-animation {
     background: rgba(255, 255, 255, 0.8);
     width: 100%;

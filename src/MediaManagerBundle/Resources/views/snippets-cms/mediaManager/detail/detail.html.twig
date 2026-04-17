@@ -3,7 +3,9 @@
 <div class="snippetMediaManagerDetail cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
     <div class="row details">
         <div class="col-12 mb-4 col-xl-5 mb-xl-0 image mb-2">
-            <img src="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" alt="" class="preview">
+            <div class="image-background">
+                <img src="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" alt="" class="preview">
+            </div>
             <a href="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" target="_blank" class="btn btn-success btn-sm mt-2"><i class="fas fa-download mr-2"></i>{{ 'chameleon_system_media_manager.details.download_button' | trans }}</a>
             {% if accessRightsMedia.edit %}
                 <a href="#" target="_blank" class="btn btn-primary btn-sm mt-2 replace-image"><i class="fas fa-sync mr-2"></i>{{ 'chameleon_system_media_manager.details.replace_button' | trans }}</a>
