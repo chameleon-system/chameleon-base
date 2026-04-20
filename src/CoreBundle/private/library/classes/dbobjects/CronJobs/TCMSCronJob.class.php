@@ -194,7 +194,9 @@ class TCMSCronJob extends TCMSRecord
         try {
             $schedule = $this->getSchedule();
         } catch (InvalidArgumentException $e) {
-            $this->getCronjobLogger()->error($e->getMessage(), __FILE__, __LINE__);
+            $this->getCronjobLogger()->error($e->getMessage(), [
+                __FILE__, __LINE__, $e
+            ]);
 
             return;
         }
