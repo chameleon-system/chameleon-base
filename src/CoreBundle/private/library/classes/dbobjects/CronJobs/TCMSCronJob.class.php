@@ -52,11 +52,6 @@ class TCMSCronJob extends TCMSRecord
         $this->sMessageOutput .= $sMessage."\n";
     }
 
-    protected function getCronjobLogger(): LoggerInterface
-    {
-        return ServiceLocator::get('monolog.logger.cronjob');
-    }
-
     /**
      * checks if cronjob needs to be executed and executes it if necessary
      * logs cronjob execution.
@@ -104,43 +99,34 @@ class TCMSCronJob extends TCMSRecord
     }
 
     /**
-     * executes the cron job (add your custom method calls here).
+     * locks the cronjob as to prevent double execution.
      *
-     * @return void
+     * @return bool
      */
-    protected function _ExecuteCron()
+    public function _Lock()
     {
+        $connection = $this->getDatabaseConnection();
+        $tableNameQuoted = $connection->quoteIdentifier($this->table);
+
+        $numberOfRowsAffected = $connection->executeStatement(
+            "UPDATE $tableNameQuoted SET `lock` = '1' WHERE `id` = :id",
+            ['id' => $this->id]
+        );
+        $this->sqlData['lock'] = '1';
+
+        return 1 === $numberOfRowsAffected;
     }
 
     /**
-     * @param Exception|Error $error
+     * unlocks the cronjob.
      */
-    private function outputResult($error)
+    public function _Unlock()
     {
-        if (null === $error) {
-            $sMessage = sprintf('Cronjob "%s" completed. [pid: %s]', $this->sqlData['name'], getmypid());
-            $this->getCronjobLogger()->info($sMessage);
-        } else {
-            $sMessage = sprintf(
-                'Cronjob "%s" failed with PHP error: %s [pid: %s]',
-                $this->sqlData['name'],
-                $error->getMessage(),
-                getmypid()
-            );
-            $this->getCronjobLogger()->critical(
-                $sMessage,
-                [
-                    'fullMessage' => $error->getMessage(),
-                    'trace' => $error->getTraceAsString(),
-                ]
-            );
-        }
-        $this->AddMessageOutput($sMessage);
-    }
+        $connection = $this->getDatabaseConnection();
+        $tableNameQuoted = $connection->quoteIdentifier($this->table);
 
-    private function getCronJobScheduler(): CronJobSchedulerInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.cron_job.scheduler');
+        $connection->executeStatement("UPDATE $tableNameQuoted SET `lock` = '0' WHERE `id` = :id", ['id' => $this->id]);
+        $this->sqlData['lock'] = '0';
     }
 
     /**
@@ -185,6 +171,21 @@ class TCMSCronJob extends TCMSRecord
         );
     }
 
+    protected function getCronjobLogger(): LoggerInterface
+    {
+        /** @var LoggerInterface */
+        return ServiceLocator::get('monolog.logger.cronjob');
+    }
+
+    /**
+     * executes the cron job (add your custom method calls here).
+     *
+     * @return void
+     */
+    protected function _ExecuteCron()
+    {
+    }
+
     /**
      * updates the last execution time.
      */
@@ -194,7 +195,12 @@ class TCMSCronJob extends TCMSRecord
         try {
             $schedule = $this->getSchedule();
         } catch (InvalidArgumentException $e) {
-            $this->getCronjobLogger()->error($e->getMessage(), __FILE__, __LINE__);
+            $this->getCronjobLogger()->error(
+                $e->getMessage(),
+                [
+                    'exception' => $e,
+                ]
+            );
 
             return;
         }
@@ -237,7 +243,9 @@ class TCMSCronJob extends TCMSRecord
         try {
             $schedule = $this->getSchedule();
         } catch (InvalidArgumentException $e) {
-            $this->getCronjobLogger()->error($e->getMessage(), __FILE__, __LINE__);
+            $this->getCronjobLogger()->error($e->getMessage(), [
+                $e,
+            ]);
 
             return false;
         }
@@ -245,47 +253,49 @@ class TCMSCronJob extends TCMSRecord
         $requiresExecution = $scheduler->requiresExecution($schedule);
         if (true === $requiresExecution && true === $this->isLocked()) {
             $this->getCronjobLogger()->warning(
-                sprintf(
-                    'Cron job "%s" (%s) was force unlocked due to it being locked for longer than its unlock_after_n_minutes value',
-                    $this->sqlData['name'],
-                    $this->id
-                ),
-                __FILE__,
-                __LINE__,
-                ['schedule' => $schedule]
+                'Cronjob "{cronjobName}" (id: {cronjobId}) was force unlocked due to it being locked for longer than its unlock_after_n_minutes value',
+                [
+                    'cronjobName' => $this->sqlData['name'],
+                    'cronjobId' => $this->id,
+                    'schedule' => $schedule,
+                ]
             );
+
             $this->_Unlock();
         }
 
         return $requiresExecution;
     }
 
-    /**
-     * locks the cronjob as to prevent double execution.
-     *
-     * @return bool
-     */
-    public function _Lock()
+    protected function isLocked(): bool
     {
-        $connection = $this->getDatabaseConnection();
-        $tableNameQuoted = $connection->quoteIdentifier($this->table);
-
-        $numberOfRowsAffected = $connection->executeStatement("UPDATE $tableNameQuoted SET `lock` = '1' WHERE `id` = :id", ['id' => $this->id]);
-        $this->sqlData['lock'] = '1';
-
-        return 1 === $numberOfRowsAffected;
+        return '1' === $this->sqlData['lock'];
     }
 
     /**
-     * unlocks the cronjob.
+     * @param Exception|Error $error
      */
-    public function _Unlock()
+    private function outputResult($error)
     {
-        $connection = $this->getDatabaseConnection();
-        $tableNameQuoted = $connection->quoteIdentifier($this->table);
-
-        $connection->executeStatement("UPDATE $tableNameQuoted SET `lock` = '0' WHERE `id` = :id", ['id' => $this->id]);
-        $this->sqlData['lock'] = '0';
+        if (null === $error) {
+            $sMessage = sprintf('Cronjob "%s" completed. [pid: %s]', $this->sqlData['name'], getmypid());
+            $this->getCronjobLogger()->info($sMessage);
+        } else {
+            $sMessage = sprintf(
+                'Cronjob "%s" failed with PHP error: %s [pid: %s]',
+                $this->sqlData['name'],
+                $error->getMessage(),
+                getmypid()
+            );
+            $this->getCronjobLogger()->critical(
+                $sMessage,
+                [
+                    'fullMessage' => $error->getMessage(),
+                    'trace' => $error->getTraceAsString(),
+                ]
+            );
+        }
+        $this->AddMessageOutput($sMessage);
     }
 
     /**
@@ -305,11 +315,6 @@ class TCMSCronJob extends TCMSRecord
         );
     }
 
-    private function getFailureErrorLevel(): int
-    {
-        return ServiceLocator::getParameter('chameleon_system_core.cronjobs.fail_on_error_level');
-    }
-
     /**
      * @param callable $errorHandler
      */
@@ -318,13 +323,20 @@ class TCMSCronJob extends TCMSRecord
         set_error_handler($errorHandler);
     }
 
-    private function getTimeProvider(): TimeProviderInterface
+    private function getFailureErrorLevel(): int
     {
-        return ServiceLocator::get('chameleon_system_core.system_time_provider');
+        return ServiceLocator::getParameter('chameleon_system_core.cronjobs.fail_on_error_level');
     }
 
-    protected function isLocked(): bool
+    private function getCronJobScheduler(): CronJobSchedulerInterface
     {
-        return '1' === $this->sqlData['lock'];
+        /** @var CronJobSchedulerInterface */
+        return ServiceLocator::get('chameleon_system_core.cron_job.scheduler');
+    }
+
+    private function getTimeProvider(): TimeProviderInterface
+    {
+        /** @var TimeProviderInterface */
+        return ServiceLocator::get('chameleon_system_core.system_time_provider');
     }
 }
