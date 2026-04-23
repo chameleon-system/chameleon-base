@@ -14,9 +14,10 @@ namespace ChameleonSystem\CmsCacheBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class ChameleonSystemCmsCacheExtension extends Extension
+class ChameleonSystemCmsCacheExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * @return void
@@ -31,5 +32,14 @@ class ChameleonSystemCmsCacheExtension extends Extension
             $cacheDefinition = $container->getDefinition('chameleon_system_cms_cache.cache');
             $cacheDefinition->replaceArgument(2, $container->getDefinition('chameleon_system_cms_cache.storage.memcache'));
         }
+    }
+
+    public function prepend(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('doctrine', [
+            'dbal' => [
+                'wrapper_class' => 'ChameleonSystem\CmsCacheBundle\Doctrine\LoggingConnectionWrapper',
+            ],
+        ]);
     }
 }
