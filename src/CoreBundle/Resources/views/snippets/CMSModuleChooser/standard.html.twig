@@ -53,7 +53,7 @@
                 {% set viewName = viewMapping[moduleInstance.fieldTemplate] ?? moduleInstance.fieldTemplate %}
                 <div class="moduleInfo">
                     <strong>{{ 'chameleon_system_core.template_engine.module_view'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}:</strong>
-                    {{ viewName|replace({_: ' '})|e('html_attr') }}
+                    {{ viewName|replace({'_': ' '})|e('html_attr') }}
                 </div>
                 <div class="moduleInfo">
                     <strong>{{ 'chameleon_system_core.template_engine.slot_content'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}:</strong>
