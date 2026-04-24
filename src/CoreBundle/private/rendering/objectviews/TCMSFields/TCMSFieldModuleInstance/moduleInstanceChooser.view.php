@@ -229,6 +229,7 @@ if (!is_null($oField->oModuleInstance)) {
                             echo " onclick=\"EditTable('".TGlobal::OutJS($oRelatedTable->id)."','".TGlobal::OutJS($oField->oModuleInstance->id)."','');return false;\"";
                         } ?>><i class="fas fa-edit"></i> <?php echo $translator->trans('chameleon_system_core.link.edit'); ?></a>
             <ul>
+                <?php $oRelatedTables->GoToStart(); ?>
                 <?php while ($oTmpRelatedTable = $oRelatedTables->Next()) {
                     $sJS = " onclick=\"EditTable('".TGlobal::OutJS($oTmpRelatedTable->id)."','".TGlobal::OutJS(urlencode($oField->oModuleInstance->id))."','');return false;\"";
                     echo "<li><a href=\"#\" {$sJS}><i class=\"fas fa-edit\"></i> ".TGlobal::OutHTML($oTmpRelatedTable->GetName())."</a></li>\n";
