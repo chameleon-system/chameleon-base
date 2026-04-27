@@ -92,18 +92,17 @@
         <ul>
             {% if moduleInstance is not null %}
                 {% set relatedTable = relatedTables|first %}
-                {% set relatedTables = relatedTables|slice(1) %}
 
                 {% if relatedTable is not empty %}
                     <li>
-                        <a href="javascript:void(0);" 
-                        {% if relatedTables|length > 0 %}
+                        <a href="javascript:void(0);"
+                        {% if relatedTables|length > 1 %}
                             class="hasChildren" onclick="openMenuLevel(this); return false"
                         {% else %}
                             onclick="EditTable('{{ relatedTable.id|e('js') }}', '{{ moduleInstance.id|url_encode|e('js') }}', ''); return false;"
-                                {% endif %}>
+                        {% endif %}>
                             <span class="menueicon">
-                                <i class="fas fa-edit"></i> 
+                                <i class="fas fa-edit"></i>
                                 {{ 'chameleon_system_core.template_engine.slot_edit'|trans({}, constant('ChameleonSystem\\CoreBundle\\i18n\\TranslationConstants::DOMAIN_BACKEND')) }}
                             </span>
                         </a>
@@ -155,29 +154,29 @@
 
                     {% set functionMenuItems = [
                         {
-                            'right': 'instanceRenameInstanceAllowed',
-                            'icon': 'fas fa-font',
-                            'translationKey': 'chameleon_system_core.template_engine.slot_rename',
-                            'onClickMethod': 'Rename'
+                            right: 'instanceRenameInstanceAllowed',
+                            icon: 'fas fa-font',
+                            translationKey: 'chameleon_system_core.template_engine.slot_rename',
+                            onClickMethod: 'Rename',
                         },
                         {
-                            'right': 'instanceClearInstanceAllowed',
-                            'icon': 'fas fa-undo',
-                            'translationKey': 'chameleon_system_core.template_engine.slot_reset',
-                            'onClickMethod': 'ClearModuleInstance'
+                            right: 'instanceClearInstanceAllowed',
+                            icon: 'fas fa-undo',
+                            translationKey: 'chameleon_system_core.template_engine.slot_reset',
+                            onClickMethod: 'ClearModuleInstance',
                         },
                         {
-                            'right': 'instanceDeleteInstanceAllowed',
-                            'icon': 'fas fa-trash-alt',
-                            'translationKey': 'chameleon_system_core.template_engine.action_delete_instance_content',
-                            'onClickMethod': 'DeleteModuleInstance'
+                            right: 'instanceDeleteInstanceAllowed',
+                            icon: 'fas fa-trash-alt',
+                            translationKey: 'chameleon_system_core.template_engine.action_delete_instance_content',
+                            onClickMethod: 'DeleteModuleInstance',
                         },
                         {
-                            'right': 'instanceCopyInstanceAllowed',
-                            'icon': 'fas fa-copy',
-                            'translationKey': 'chameleon_system_core.template_engine.slot_copy_content',
-                            'onClickMethod': 'CopyModuleInstance'
-                        }
+                            right: 'instanceCopyInstanceAllowed',
+                            icon: 'fas fa-copy',
+                            translationKey: 'chameleon_system_core.template_engine.slot_copy_content',
+                            onClickMethod: 'CopyModuleInstance',
+                        },
                     ] %}
 
                     {% for functionMenuItem in functionMenuItems %}
