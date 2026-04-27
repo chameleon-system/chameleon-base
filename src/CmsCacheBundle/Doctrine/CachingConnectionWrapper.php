@@ -24,58 +24,12 @@ use esono\pkgCmsCache\CacheInterface;
 class CachingConnectionWrapper extends Connection
 {
     private const int LOG_SQL_PREVIEW_LENGTH = 300;
-
-    private const array CACHEABLE_TABLES = [
-        'cms_language',
-        'cms_portal',
-        'cms_locals',
-        'data_extranet',
-        'esono_ab_test',
-        'esono_ab_test_variant',
-        'esono_ab_test_variant_page_mapping',
-        'esono_ab_test_variant_static_module_mapping',
-        'shop',
-        'shop_cms_portal_mlt',
-        'pkg_shop_currency',
-        'cms_tpl_page',
-        'cms_master_pagedef',
-        'pkg_cms_theme',
-        'cms_tbl_conf',
-        'cms_field_conf',
-        'cms_field_type',
-        'cms_master_pagedef_spot',
-        'cms_master_pagedef_spot_parameter',
-        'cms_master_pagedef_spot_access',
-        'cms_tpl_page_cms_master_pagedef_spot',
-        'cms_portal_system_page',
-        'cms_tree',
-        'shop_attribute',
-        'shop_module_article_list',
-        'shop_module_article_list_filter',
-        'shop_module_articlelist_orderby',
-
-        //addition
-        'shop_category',
-        'shop_article_image_size',
-        'shop_stock_message_trigger',
-        'schafferer_notification_layover',
-        'pkg_cms_theme_block',
-        'pkg_cms_theme_block_layout',
-        'pkg_cms_theme_pkg_cms_theme_block_layout_mlt',
-        'pkg_shop_listfilter_item',
-        'cms_config_imagemagick',
-        'pkg_cms_text_block',
-        'cms_portal_domains',
-        'shop_module_articlelist_orderby',
-        'shop_module_article_list_shop_article_group_mlt',
-        'shop_module_article_list_schafferer_product_event_teaser_mlt',
-        'schafferer_notification_layover_cms_portal_domains_mlt',
-        'schafferer_circuit_breaker',
-        'cms_master_pagedef_spot',
-        'pkg_external_tracker'
-    ];
-
     private ?LoggerInterface $logger = null;
+    /**
+     * @var array<int, string>|null
+     */
+    private ?array $cacheableTables = null;
+
     public function __construct(
         array $params,
         Driver $driver,
@@ -254,20 +208,6 @@ class CachingConnectionWrapper extends Connection
     }
 
     /**
-     * Returns whether a query is safe to cache for the current parameter set.
-     *
-     * Queries with date parameters that contain a time component are excluded to
-     * avoid generating highly unique cache keys.
-     *
-     * @param mixed $sql
-     * @param array<string, mixed>|array<int, mixed> $params
-     */
-    private function isCacheableQuery($sql, array $params = []): bool
-    {
-        return $this->getCacheDecision($sql, $params)->isCacheable();
-    }
-
-    /**
      * @param mixed $sql
      * @param array<string, mixed>|array<int, mixed> $params
      */
@@ -298,7 +238,7 @@ class CachingConnectionWrapper extends Connection
 
         $uncacheableTables = [];
         foreach ($tables as $table) {
-            if (false === in_array($table, self::CACHEABLE_TABLES, true)) {
+            if (false === in_array($table, $this->getCacheableTables(), true)) {
                 $uncacheableTables[] = $table;
             }
         }
@@ -414,7 +354,7 @@ class CachingConnectionWrapper extends Connection
         $tables = $this->extractTables((string) $sql);
         $triggers = [];
         foreach ($tables as $table) {
-            if (true === in_array($table, self::CACHEABLE_TABLES, true)) {
+            if (true === in_array($table, $this->getCacheableTables(), true)) {
                 $triggers[] = [
                     'table' => $table,
                     'id' => null,
@@ -543,13 +483,32 @@ class CachingConnectionWrapper extends Connection
 
     private function getLogger(): LoggerInterface
     {
-
         if (null !== $this->logger) {
             return $this->logger;
         }
 
         $this->logger = ServiceLocator::get('logger');
         return $this->logger;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function getCacheableTables(): array
+    {
+        if (null !== $this->cacheableTables) {
+            return $this->cacheableTables;
+        }
+
+        $tables = ServiceLocator::getParameter('chameleon_system_cms_cache.dbal_query_cache.cacheable_tables');
+        if (false === is_array($tables)) {
+            return [];
+        }
+
+        /** @var array<int, string> $tables */
+        $this->cacheableTables = $tables;
+
+        return $this->cacheableTables;
     }
 
     private function getCache(): CacheInterface

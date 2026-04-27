@@ -43,6 +43,18 @@ framework:
   secret: '%env(APP_SECRET)%'
 ```
 
+Project-specific cacheable tables can be configured via bundle config:
+
+```yaml
+chameleon_system_cms_cache:
+  dbal_query_cache:
+    additional_cacheable_tables:
+      - shop_category
+      - schafferer_notification_layover
+    excluded_cacheable_tables:
+      - cms_tree
+```
+
 Usage
 -----
 Inject the cache service (`esono\pkgCmsCache\CacheInterface`) into your code:
@@ -98,8 +110,14 @@ A query is only cached when all of the following conditions are true:
 
 - the SQL is a `SELECT`
 - at least one table can be detected from `FROM` or `JOIN`
-- all detected tables are in the internal allowlist
+- all detected tables are in the configured allowlist
 - no parameter contains a date-time value with a non-midnight time component
+
+The configured allowlist is built from:
+
+- generic default tables from `chameleon-base`
+- `additional_cacheable_tables` from the project configuration
+- optional removals from `excluded_cacheable_tables`
 
 The cacheability decision is represented by
 `ChameleonSystem\CmsCacheBundle\DataModel\QueryCacheDecision`.
