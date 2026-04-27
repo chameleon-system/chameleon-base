@@ -38,7 +38,7 @@ class ChameleonSystemCmsCacheExtension extends Extension implements PrependExten
     {
         $container->prependExtensionConfig('doctrine', [
             'dbal' => [
-                'wrapper_class' => 'ChameleonSystem\CmsCacheBundle\Doctrine\LoggingConnectionWrapper',
+                'wrapper_class' => 'ChameleonSystem\CmsCacheBundle\Doctrine\CachingConnectionWrapper',
             ],
         ]);
     }

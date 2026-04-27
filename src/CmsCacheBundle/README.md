@@ -16,6 +16,9 @@ Features
 - Invalidation by trigger: `callTrigger(table, id)`
 - Full cache wipe: `clearAll()` or via console: `chameleon_system:cache:clear`
 - Storage backends: Memcache or NullStorage (no-op)
+- Automatic DBAL read caching via `CachingConnectionWrapper`
+- Structured cacheability decisions via `QueryCacheDecision`
+- Debug logging for cache hit, miss, skip, and store events
 
 Installation
 ------------
@@ -83,6 +86,78 @@ class MyService
     }
 }
 ```
+
+Doctrine Query Caching
+----------------------
+The bundle also registers `ChameleonSystem\CmsCacheBundle\Doctrine\CachingConnectionWrapper`
+as the Doctrine DBAL wrapper. This wrapper adds transparent cache handling for selected read
+queries executed through methods such as `fetchAssociative()`, `fetchNumeric()`, `fetchOne()`,
+and `fetchAllAssociative()`.
+
+A query is only cached when all of the following conditions are true:
+
+- the SQL is a `SELECT`
+- at least one table can be detected from `FROM` or `JOIN`
+- all detected tables are in the internal allowlist
+- no parameter contains a date-time value with a non-midnight time component
+
+The cacheability decision is represented by
+`ChameleonSystem\CmsCacheBundle\DataModel\QueryCacheDecision`.
+It exposes:
+
+- `isCacheable()`
+- `getReason()`
+- `getTables()`
+- `getUncacheableTables()`
+
+Current decision reasons are:
+
+- `ok`
+- `sql_not_string`
+- `sql_empty`
+- `not_select`
+- `datetime_parameter`
+- `no_tables_detected`
+- `contains_uncacheable_tables`
+
+When a query is cacheable, the wrapper derives a cache key from:
+
+- the wrapper class name
+- the SQL string
+- the bound parameters
+- the DBAL parameter types
+
+The stored cache entry is linked to invalidation triggers for each cacheable table found in the query.
+
+Debug Logging
+-------------
+The wrapper writes `debug` logs through the default PSR-3 logger for the following events:
+
+- `SQL cache skipped for query.`
+- `SQL cache read skipped because cache is inactive.`
+- `SQL cache miss.`
+- `SQL cache hit.`
+- `SQL cache write skipped because cache is inactive.`
+- `SQL cache entry stored.`
+
+The log context is intended to make SQL cache generation debuggable without stepping through the wrapper.
+Typical context keys are:
+
+- `sql_hash`
+- `sql_preview`
+- `tables`
+- `param_count`
+- `params`
+- `types`
+- `skip_reason`
+- `uncacheable_tables`
+- `cache_key`
+- `trigger_count`
+- `triggers`
+- `result_summary`
+
+`sql_preview` is intentionally shortened, while `sql_hash` gives you a stable identifier to correlate
+skip, miss, hit, and store log lines for the same query shape.
 
 Console Commands
 ----------------
