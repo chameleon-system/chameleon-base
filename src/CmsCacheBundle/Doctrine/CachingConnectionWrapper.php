@@ -411,7 +411,6 @@ class CachingConnectionWrapper extends Connection
         return array_merge([
             'sql_hash' => sha1((string) $sql),
             'sql_preview' => mb_substr($normalizedSql, 0, self::LOG_SQL_PREVIEW_LENGTH),
-            'tables' => $this->extractTables($normalizedSql),
             'param_count' => count($params),
             'params' => $this->normalizeForLog($params),
             'types' => $this->normalizeForLog($types),
