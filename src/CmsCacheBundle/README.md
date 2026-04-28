@@ -115,7 +115,7 @@ A query is only cached when all of the following conditions are true:
 
 The configured allowlist is built from:
 
-- generic default tables from `chameleon-base`
+- generic default tables from `chameleon-base`, `chameleon-shop`
 - `additional_cacheable_tables` from the project configuration
 - optional removals from `excluded_cacheable_tables`
 
