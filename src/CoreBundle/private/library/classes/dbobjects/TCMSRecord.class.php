@@ -18,8 +18,6 @@ use ChameleonSystem\CoreBundle\Session\ChameleonSessionManagerInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
-use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use esono\pkgCmsCache\CacheInterface;
 
 /**
@@ -1310,7 +1308,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                           WHERE `source_id` = $quotedSourceId
                           AND `target_id` = $quotedTargetId";
 
-
                 $result = $this->getDatabaseConnection()->executeQuery($query);
                 if ($result->rowCount() > 0) {
                     $bIsConnected = true;
@@ -2119,7 +2116,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             return $this->databaseConnection;
         }
 
-        /** @var Connection */
+        /* @var Connection */
         return ServiceLocator::get('database_connection');
     }
 
