@@ -9,7 +9,7 @@ use ChameleonSystem\BreadcrumbBundle\Library\DataModel\BreadcrumbItemDataModel;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\TreeService;
 use ChameleonSystem\CoreBundle\ServiceLocator;
-use esono\pkgCmsCache\Cache;
+use esono\pkgCmsCache\CacheInterface;
 
 class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
 {
@@ -21,7 +21,7 @@ class BreadcrumbStandardPageGenerator extends AbstractBreadcrumbGenerator
         private readonly BreadcrumbGeneratorUtilsInterface $breadcrumbGeneratorUtils,
         private readonly ActivePageServiceInterface $activePageService,
         private readonly TreeService $treeService,
-        private readonly Cache $cache
+        private readonly CacheInterface $cache
     ) {
     }
 
