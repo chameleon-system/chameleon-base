@@ -25,7 +25,7 @@ class EntityList implements EntityListInterface
 {
     private Connection $databaseConnection;
 
-    private array $entityList = [];
+    private null|array $entityList = null;
 
     private int $entityIndex = 0;
     private string $query;
@@ -57,6 +57,19 @@ class EntityList implements EntityListInterface
         $this->queryParameterTypes = $queryParameterTypes;
     }
 
+    private function getEntityList(): array
+    {
+        if (null !== $this->entityList ) {
+            return $this->entityList;
+        }
+        $this->entityList = $this->getDatabaseConnection()->fetchAllAssociative(
+            $this->getExecutableQuery($this->query),
+            $this->getQueryParameters(),
+            $this->getQueryParametersTypes()
+        );
+
+        return $this->entityList;
+    }
     /**
      * @return DriverStatement|DriverResultStatement
      */
@@ -86,13 +99,9 @@ class EntityList implements EntityListInterface
         if ($this->entityIndex < 0) {
             return false;
         }
-        if (isset($this->entityList[$this->entityIndex])) {
-            return $this->entityList[$this->entityIndex];
-        }
+        $entityList = $this->getEntityList();
 
-        $this->entityList[$this->entityIndex] = $this->getDatabaseEntityListStatement()->fetchAssociative();
-
-        return $this->entityList[$this->entityIndex];
+        return $entityList[$this->entityIndex] ?? false;
     }
 
     /**
@@ -100,7 +109,8 @@ class EntityList implements EntityListInterface
      */
     public function next(): void
     {
-        if (isset($this->entityList[$this->entityIndex]) && false === $this->entityList[$this->entityIndex]) {
+        $entityList = $this->getEntityList();
+        if (isset($entityList[$this->entityIndex]) && false === $entityList[$this->entityIndex]) {
             return;
         }
         ++$this->entityIndex;
@@ -158,7 +168,7 @@ class EntityList implements EntityListInterface
         }
 
         if (null === $this->entityCount) {
-            $this->entityCount = $this->getDatabaseEntityListStatement()->rowCount();
+            $this->entityCount = count($this->getEntityList());
         }
 
         return $this->correctCountUsingMaxNumberOfResultsAllowed($this->entityCount);
@@ -236,7 +246,7 @@ class EntityList implements EntityListInterface
     private function resetList(): void
     {
         $this->databaseEntityListStatement = null;
-        $this->entityList = [];
+        $this->entityList = null;
         $this->entityIndex = 0;
     }
 
@@ -261,8 +271,9 @@ class EntityList implements EntityListInterface
 
     public function seek(int $position): void
     {
+        $entityList = $this->getEntityList();
         // backwards seek
-        if (isset($this->entityList[$position])) {
+        if (isset($entityList[$position])) {
             $this->entityIndex = $position;
 
             return;
@@ -341,11 +352,6 @@ class EntityList implements EntityListInterface
 
     public function getNumberOfResultsOnPage(): int
     {
-        $result = $this->getDatabaseEntityListStatement();
-        if (null === $result) {
-            return 0;
-        }
-
-        return $result->rowCount();
+        return count($this->getEntityList());
     }
 }
