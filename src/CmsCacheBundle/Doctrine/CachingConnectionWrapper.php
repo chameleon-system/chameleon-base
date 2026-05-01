@@ -53,6 +53,9 @@ class CachingConnectionWrapper extends Connection
      */
     public function fetchAssociative(string $query, array $params = [], array $types = [])
     {
+        if (false === $this->getCache()->isActive()) {
+            return parent::fetchAssociative($query, $params, $types);
+        }
         $normalizedQuery = $this->normalizeQuery($query);
         $tableNames = $this->extractTables($normalizedQuery);
         $decision = $this->getQueryCacheDecisionMaker()->isCacheable($tableNames, $normalizedQuery, $params, $types);
@@ -84,6 +87,10 @@ class CachingConnectionWrapper extends Connection
      */
     public function fetchNumeric(string $query, array $params = [], array $types = [])
     {
+        if (false === $this->getCache()->isActive()) {
+            return parent::fetchNumeric($query, $params, $types);
+        }
+
         $normalizedQuery = $this->normalizeQuery($query);
         $tableNames = $this->extractTables($normalizedQuery);
         $decision = $this->getQueryCacheDecisionMaker()->isCacheable($tableNames, $normalizedQuery, $params, $types);
@@ -114,6 +121,9 @@ class CachingConnectionWrapper extends Connection
      */
     public function fetchOne(string $query, array $params = [], array $types = [])
     {
+        if (false === $this->getCache()->isActive()) {
+            return parent::fetchOne($query, $params, $types);
+        }
         $normalizedQuery = $this->normalizeQuery($query);
         $tableNames = $this->extractTables($normalizedQuery);
         $decision = $this->getQueryCacheDecisionMaker()->isCacheable($tableNames, $normalizedQuery, $params, $types);
@@ -143,6 +153,9 @@ class CachingConnectionWrapper extends Connection
      */
     public function fetchAllAssociative(string $query, array $params = [], array $types = []): array
     {
+        if (false === $this->getCache()->isActive()) {
+            return parent::fetchAllAssociative($query, $params, $types);
+        }
         $normalizedQuery = $this->normalizeQuery($query);
         $tableNames = $this->extractTables($normalizedQuery);
         $decision = $this->getQueryCacheDecisionMaker()->isCacheable($tableNames, $normalizedQuery, $params, $types);
