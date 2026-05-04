@@ -1,7 +1,7 @@
 <h1>Build #1777558170</h1>
 <h2>Date: 2026-04-30</h2>
 <div class="changelog">
-    -
+    - #70143: add query cache toggle and activate it for given base tables
 </div>
 <?php
 
@@ -15,14 +15,13 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
                 '049_helptext' => 'Ist der Cache für die Webseite aktiv, dann werden Abfragen gegen diese Tabelle in den Cache geschrieben.', // prev.: ''
                 'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_tbl_conf'),
                 'id' => '03be901a-7c88-d130-0c4b-2d7501e9c516',
-        ])
-;
+        ]);
 TCMSLogChange::insert(__LINE__, $data);
 
-$query ="ALTER TABLE `cms_tbl_conf`
-                        ADD `enable_query_cache` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Query Cache aktivieren: Ist der Cache für die Webseite aktiv, dann werden Abfragen gegen diese Tabelle in den Cache geschrieben.'";
+$query = "ALTER TABLE `cms_tbl_conf`
+                  ADD `enable_query_cache` ENUM('0','1') DEFAULT '0' NOT NULL COMMENT 'Query Cache aktivieren: Ist der Cache für die Webseite aktiv, dann werden Abfragen gegen diese Tabelle in den Cache geschrieben.'";
 TCMSLogChange::RunQuery(__LINE__, $query);
-$query ="ALTER TABLE `cms_tbl_conf` ADD INDEX `enable_query_cache` (`enable_query_cache`)";
+$query = 'ALTER TABLE `cms_tbl_conf` ADD INDEX `enable_query_cache` (`enable_query_cache`)';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $tableList = [
@@ -115,7 +114,7 @@ foreach ($tableList as $tableName) {
     $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf', 'de')
             ->setFields([
                     'enable_query_cache' => '1', // prev.: 'new_field'
-            ])->setWhereEquals(['name'=>$tableName]);
-    ;
+            ])->setWhereEquals(['name' => $tableName]);
+
     TCMSLogChange::update(__LINE__, $data);
 }

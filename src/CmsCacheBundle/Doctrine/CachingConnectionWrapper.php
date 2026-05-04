@@ -2,16 +2,15 @@
 
 namespace ChameleonSystem\CmsCacheBundle\Doctrine;
 
-use ChameleonSystem\CmsCacheBundle\DataModel\QueryCacheDecision;
 use ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerInterface;
 use ChameleonSystem\CmsCacheBundle\QueryCache\QueryIsCacheableDecision;
+use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver;
-use ChameleonSystem\CoreBundle\ServiceLocator;
-use Psr\Log\LoggerInterface;
+use Doctrine\DBAL\Exception;
 use esono\pkgCmsCache\CacheInterface;
 
 class CachingConnectionWrapper extends Connection
@@ -23,33 +22,33 @@ class CachingConnectionWrapper extends Connection
         Driver $driver,
         ?Configuration $config = null,
         ?EventManager $eventManager = null
-    ){
+    ) {
         parent::__construct($params, $driver, $config, $eventManager);
     }
+
     /**
-     * @param mixed $sql
      * @param array<string, mixed>|array<int, mixed> $params
      * @param array<string, mixed>|array<int, mixed> $types
+     *
+     * @throws Exception
      */
     public function executeQuery($sql, array $params = [], $types = [], ?QueryCacheProfile $qcp = null)
     {
         return parent::executeQuery($sql, $params, $types, $qcp);
     }
 
-    /**
-     * @param mixed $sql
-     */
     public function prepare($sql)
     {
         return parent::prepare($sql);
     }
 
     /**
-     * @param string $query
      * @param array<string, mixed>|array<int, mixed> $params
      * @param array<string, mixed>|array<int, mixed> $types
      *
      * @return array<string, mixed>|false
+     *
+     * @throws Exception
      */
     public function fetchAssociative(string $query, array $params = [], array $types = [])
     {
@@ -59,8 +58,6 @@ class CachingConnectionWrapper extends Connection
         $normalizedQuery = $this->normalizeQuery($query);
         $tableNames = $this->extractTables($normalizedQuery);
         $decision = $this->getQueryCacheDecisionMaker()->isCacheable($tableNames, $normalizedQuery, $params, $types);
-
-
 
         if (QueryIsCacheableDecision::YES === $decision) {
             $cachedResult = $this->getFromCache($normalizedQuery, $params, $types);
@@ -79,11 +76,12 @@ class CachingConnectionWrapper extends Connection
     }
 
     /**
-     * @param string $query
      * @param array<string, mixed>|array<int, mixed> $params
      * @param array<string, mixed>|array<int, mixed> $types
      *
      * @return array<int, mixed>|false
+     *
+     * @throws Exception
      */
     public function fetchNumeric(string $query, array $params = [], array $types = [])
     {
@@ -94,7 +92,6 @@ class CachingConnectionWrapper extends Connection
         $normalizedQuery = $this->normalizeQuery($query);
         $tableNames = $this->extractTables($normalizedQuery);
         $decision = $this->getQueryCacheDecisionMaker()->isCacheable($tableNames, $normalizedQuery, $params, $types);
-
 
         if (QueryIsCacheableDecision::YES === $decision) {
             $cachedResult = $this->getFromCache($normalizedQuery, $params, $types);
@@ -113,11 +110,12 @@ class CachingConnectionWrapper extends Connection
     }
 
     /**
-     * @param string $query
      * @param array<string, mixed>|array<int, mixed> $params
      * @param array<string, mixed>|array<int, mixed> $types
      *
      * @return mixed|false
+     *
+     * @throws Exception
      */
     public function fetchOne(string $query, array $params = [], array $types = [])
     {
@@ -145,11 +143,12 @@ class CachingConnectionWrapper extends Connection
     }
 
     /**
-     * @param string $query
      * @param array<string, mixed>|array<int, mixed> $params
      * @param array<string, mixed>|array<int, mixed> $types
      *
      * @return array<int, array<string, mixed>>
+     *
+     * @throws Exception
      */
     public function fetchAllAssociative(string $query, array $params = [], array $types = []): array
     {
@@ -176,44 +175,41 @@ class CachingConnectionWrapper extends Connection
     }
 
     /**
-     * @param mixed $sql
      * @param array<string, mixed>|array<int, mixed> $params
      * @param array<string, mixed>|array<int, mixed> $types
      *
      * @return int|string
+     *
+     * @throws Exception
      */
     public function executeStatement($sql, array $params = [], array $types = [])
     {
         return parent::executeStatement($sql, $params, $types);
     }
 
-    /**
-     * @param mixed ...$args
-     */
     public function query()
     {
         $args = func_get_args();
+
         return parent::query(...$args);
     }
 
     /**
-     * @param mixed $sql
-     *
      * @return int|string
+     *
+     * @throws Exception
      */
     public function exec($sql)
     {
         return parent::exec($sql);
     }
 
-    private function normalizeQuery(string $quer): string
+    private function normalizeQuery(string $query): string
     {
-        return trim(preg_replace('/\s+/', ' ', $quer) ?? '');
+        return trim(preg_replace('/\s+/', ' ', $query) ?? '');
     }
 
-
     /**
-     * @param mixed $sql
      * @param array<string, mixed>|array<int, mixed> $params
      * @param array<string, mixed>|array<int, mixed> $types
      */
@@ -221,7 +217,6 @@ class CachingConnectionWrapper extends Connection
     {
         $cache = $this->getCache();
         if (false === $cache->isActive()) {
-
             return null;
         }
 
@@ -241,8 +236,6 @@ class CachingConnectionWrapper extends Connection
     }
 
     /**
-     * @param mixed $queryResult
-     * @param mixed $sql
      * @param array<string, mixed>|array<int, mixed> $params
      * @param array<string, mixed>|array<int, mixed> $types
      */
@@ -250,7 +243,6 @@ class CachingConnectionWrapper extends Connection
     {
         $cache = $this->getCache();
         if (false === $cache->isActive()) {
-
             return;
         }
 
@@ -273,8 +265,6 @@ class CachingConnectionWrapper extends Connection
     }
 
     /**
-     * @param mixed $sql
-     *
      * @return array<int, string>
      */
     private function extractTables($sql): array
@@ -282,14 +272,14 @@ class CachingConnectionWrapper extends Connection
         preg_match_all('/\b(?:FROM|JOIN)\s+`?([a-zA-Z0-9_]+)`?/i', (string) $sql, $tableMatches);
 
         $tables = array_values(array_unique($tableMatches[1] ?? []));
-        return array_filter($tables, static fn(string $table) => !str_ends_with($table, '_mlt'));
+
+        return array_filter($tables, static fn (string $table) => !str_ends_with($table, '_mlt'));
     }
 
     public function setQueryCacheDecisionMaker(QueryCacheDecisionMakerInterface $queryCacheDecisionMaker): void
     {
         $this->queryCacheDecisionMaker = $queryCacheDecisionMaker;
     }
-
 
     private function getQueryCacheDecisionMaker(): QueryCacheDecisionMakerInterface
     {
@@ -302,7 +292,7 @@ class CachingConnectionWrapper extends Connection
 
     private function getCache(): CacheInterface
     {
-        /** @var CacheInterface */
+        /* @var CacheInterface */
         return ServiceLocator::get('chameleon_system_cms_cache.cache');
     }
 }

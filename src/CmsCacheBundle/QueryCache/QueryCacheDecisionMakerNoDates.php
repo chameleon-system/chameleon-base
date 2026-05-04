@@ -13,7 +13,6 @@ class QueryCacheDecisionMakerNoDates implements QueryCacheDecisionMakerInterface
         return QueryIsCacheableDecision::NOT_DECIDED;
     }
 
-
     /**
      * Checks the parameter list recursively for date values with a time component.
      *
@@ -29,7 +28,6 @@ class QueryCacheDecisionMakerNoDates implements QueryCacheDecisionMakerInterface
 
         return false;
     }
-
 
     /**
      * Detects whether a single parameter value contains a date with a time portion.
@@ -58,8 +56,8 @@ class QueryCacheDecisionMakerNoDates implements QueryCacheDecisionMakerInterface
         }
 
         return 1 === preg_match(
-                '/^\d{4}-\d{2}-\d{2}[ T]\d{1,2}:\d{2}(?::\d{2}(?:\.\d{1,6})?)?(?: ?(?:Z|[+-]\d{2}:\d{2}))?$/',
-                trim($parameter)
-            );
+            '/^\d{4}-\d{2}-\d{2}[ T]\d{1,2}:\d{2}(?::\d{2}(?:\.\d{1,6})?)?(?: ?(?:Z|[+-]\d{2}:\d{2}))?$/',
+            trim($parameter)
+        );
     }
 }

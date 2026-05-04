@@ -2,8 +2,6 @@
 
 namespace ChameleonSystem\CmsCacheBundle\QueryCache;
 
-use ChameleonSystem\CmsCacheBundle\DataModel\QueryCacheDecision;
-
 readonly class QueryCacheDecisionMakerChain implements QueryCacheDecisionMakerInterface
 {
     /**
