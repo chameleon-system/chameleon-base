@@ -13,6 +13,7 @@ namespace ChameleonSystem\core\DatabaseAccessLayer;
 
 use ChameleonSystem\core\DatabaseAccessLayer\LengthCalculationStrategy\EntityListLengthCalculationStrategyInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
 use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 
@@ -25,13 +26,13 @@ class EntityList implements EntityListInterface
 {
     private Connection $databaseConnection;
 
-    private null|array $entityList = null;
+    private ?array $entityList = null;
 
     private int $entityIndex = 0;
     private string $query;
 
     /**
-     * @var Statement|null
+     * @var DriverStatement|DriverResultStatement|null
      */
     private $databaseEntityListStatement;
 
@@ -59,7 +60,7 @@ class EntityList implements EntityListInterface
 
     private function getEntityList(): array
     {
-        if (null !== $this->entityList ) {
+        if (null !== $this->entityList) {
             return $this->entityList;
         }
         $this->entityList = $this->getDatabaseConnection()->fetchAllAssociative(
@@ -70,8 +71,10 @@ class EntityList implements EntityListInterface
 
         return $this->entityList;
     }
+
     /**
      * @return DriverStatement|DriverResultStatement
+     * @throws Exception
      */
     protected function getDatabaseEntityListStatement()
     {
@@ -272,7 +275,7 @@ class EntityList implements EntityListInterface
     public function seek(int $position): void
     {
         $entityList = $this->getEntityList();
-        // backwards seek
+        // backward seek
         if (isset($entityList[$position])) {
             $this->entityIndex = $position;
 
