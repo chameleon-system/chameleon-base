@@ -30,9 +30,6 @@ class QueryCacheDecisionMakerBasedOnTableName implements QueryCacheDecisionMaker
         return QueryIsCacheableDecision::YES;
     }
 
-    /**
-     * @throws Exception
-     */
     private function getTablesWithEnabledQueryCacheHashTable(): array
     {
         if (null !== $this->tablesWithEnabledQueryCacheHashTable) {
@@ -49,12 +46,18 @@ class QueryCacheDecisionMakerBasedOnTableName implements QueryCacheDecisionMaker
             return $this->tablesWithEnabledQueryCacheHashTable;
         }
 
-        $query = "SELECT `name` FROM `cms_tbl_conf` WHERE `enable_query_cache` = '1'";
-        $tableNames = $this->connection->fetchFirstColumn($query);
-        $this->tablesWithEnabledQueryCacheHashTable = array_flip($tableNames);
+        try {
+            $query = "SELECT `name` FROM `cms_tbl_conf` WHERE `enable_query_cache` = '1'";
+            $tableNames = $this->connection->fetchFirstColumn($query);
+            $this->tablesWithEnabledQueryCacheHashTable = array_flip($tableNames);
+            $this->cache->set($key, implode(',', $tableNames), [['table' => 'cms_tbl_conf', 'id' => null]]);
 
-        $this->cache->set($key, implode(',', $tableNames), [['table' => 'cms_tbl_conf', 'id' => null]]);
+            return $this->tablesWithEnabledQueryCacheHashTable;
+        } catch (Exception $e) {
+            // on initial usage (e.g., during setup), the field may not yet exist (and we do not need the caching there)
+            $this->tablesWithEnabledQueryCacheHashTable = null;
 
-        return $this->tablesWithEnabledQueryCacheHashTable;
+            return [];
+        }
     }
 }
