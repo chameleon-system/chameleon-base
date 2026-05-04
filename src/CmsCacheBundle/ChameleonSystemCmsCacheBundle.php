@@ -11,8 +11,17 @@
 
 namespace ChameleonSystem\CmsCacheBundle;
 
+use ChameleonSystem\CmsCacheBundle\DependencyInjection\Compiler\BuildQueryCacheDecisionMakerChainPass;
+use ChameleonSystem\CmsCacheBundle\DependencyInjection\Compiler\InjectQueryCacheDecisionMakerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ChameleonSystemCmsCacheBundle extends Bundle
 {
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+        $container->addCompilerPass(new BuildQueryCacheDecisionMakerChainPass());
+        $container->addCompilerPass(new InjectQueryCacheDecisionMakerPass());
+    }
 }

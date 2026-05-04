@@ -43,17 +43,10 @@ framework:
   secret: '%env(APP_SECRET)%'
 ```
 
-Project-specific cacheable tables can be configured via bundle config:
-
-```yaml
-chameleon_system_cms_cache:
-  dbal_query_cache:
-    additional_cacheable_tables:
-      - shop_category
-      - schafferer_notification_layover
-    excluded_cacheable_tables:
-      - cms_tree
-```
+DBAL is modified to cache queries to tables marked with `enable_query_cache` in `cms_tbl_conf`. Queries restricted by date or time
+parameters will be excluded (see `\ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerNoDates`).
+You may add additional query cache decisions by implementing `\ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerInterface`.
+This gives you controll over what queries will be cached.
 
 Usage
 -----

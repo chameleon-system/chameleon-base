@@ -4,13 +4,21 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults autowire="true" autoconfigure="true"/>
+        <prototype namespace="ChameleonSystem\CmsCacheBundle\" resource="../../*" exclude="../../{DependencyInjection,Resources,Tests,Bridge,src}"/>
+        <prototype namespace="esono\pkgCmsCache\" resource="../../src/esono/pkgCmsCache/*"/>
 
-        <service id="chameleon_system_cms_cache.cache_database_connection" alias="database_connection"  public="true"/>
+        <service id="chameleon_system_cms_cache.cache_database_connection" alias="database_connection" public="true"/>
+
+        <service id="esono\pkgCmsCache\CacheInterface" alias="chameleon_system_cms_cache.cache"/>
+        <service id="esono\pkgCmsCache\StorageInterface" alias="chameleon_system_cms_cache.storage.null"/>
+        <service id="ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerInterface"
+                 alias="ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerChain"/>
 
         <service id="chameleon_system_cms_cache.cache" class="esono\pkgCmsCache\Cache" public="true">
-            <argument type="service" id="request_stack" />
-            <argument type="service" id="chameleon_system_cms_cache.cache_database_connection" />
-            <argument type="service" id="chameleon_system_cms_cache.storage.null" />
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="chameleon_system_cms_cache.cache_database_connection"/>
+            <argument type="service" id="chameleon_system_cms_cache.storage.null"/>
             <argument>%secret%</argument>
             <argument>%chameleon_system_core.cache.allow%</argument>
             <argument type="service" id="chameleon_system_core.util.hash_array"/>
@@ -48,15 +56,21 @@
         </service>
 
         <service id="chameleon_system_cms_cache.storage.memcache" class="esono\pkgCmsCache\storage\Memcache">
-            <argument type="service" id="chameleon_system_cms_cache.memcache_cache" />
+            <argument type="service" id="chameleon_system_cms_cache.memcache_cache"/>
         </service>
 
         <service id="chameleon_system_cms_cache.storage.null" class="esono\pkgCmsCache\storage\NullStorage">
         </service>
 
-        <service id="chameleon_system_cms_cache.clear_chameleon_cache_command" class="ChameleonSystem\CmsCacheBundle\Command\ClearChameleonCacheCommand">
-            <argument type="service" id="chameleon_system_cms_cache.cache"/>
-            <tag name="console.command"/>
+        <service id="ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerNoDates">
+            <tag name="chameleon_system_cms_cache.query_cache_decision_maker" priority="200"/>
+        </service>
+
+        <service id="ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerBasedOnTableName">
+            <tag name="chameleon_system_cms_cache.query_cache_decision_maker" priority="100"/>
+        </service>
+
+        <service id="ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerChain">
         </service>
 
     </services>
