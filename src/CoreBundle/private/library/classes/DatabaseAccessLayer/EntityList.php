@@ -74,6 +74,7 @@ class EntityList implements EntityListInterface
 
     /**
      * @return DriverStatement|DriverResultStatement
+     *
      * @throws Exception
      */
     protected function getDatabaseEntityListStatement()
