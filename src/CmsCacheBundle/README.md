@@ -3,9 +3,9 @@
 
 Overview
 --------
-The CmsCacheBundle provides a flexible caching layer for the Chameleon System. It supports
-key-based caching, cache invalidation triggers, and multiple storage backends (e.g., Memcache,
-null storage, Redis using an additional bundle). 
+The CmsCacheBundle provides a flexible caching layer for the Chameleon System.
+It supports key-based caching, cache invalidation triggers, and multiple storage backends (e.g., Memcache, null storage,
+Redis using an additional bundle).
 You can enable or disable caching at runtime and clear or invalidate cache entries programmatically or via console commands.
 
 Features
@@ -22,13 +22,13 @@ Features
 
 Installation
 ------------
-The bundle is included and enabled by default in Chameleon System. Ensure parameters in your
-environment or `config/packages/chameleon_system_core.yaml` are set:
+The bundle is included and enabled by default in Chameleon System. Ensure parameters in your environment or
+`config/packages/chameleon_system_core.yaml` are set:
 
 ```yaml
 chameleon_system_core:
   cache:
-    allow: true                           # enable/disable caching globally
+    allow: true # enable/disable caching globally
     memcache_server1: '127.0.0.1'
     memcache_port1: 11211
     memcache_server2: null
@@ -43,10 +43,10 @@ framework:
   secret: '%env(APP_SECRET)%'
 ```
 
-DBAL is modified to cache queries to tables marked with `enable_query_cache` in `cms_tbl_conf`. Queries restricted by date or time
-parameters will be excluded (see `\ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerNoDates`).
+DBAL is modified to cache queries to tables marked with `enable_query_cache` in `cms_tbl_conf`.
+Queries restricted by date or time parameters will be excluded (see `\ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerNoDates`).
 You may add additional query cache decisions by implementing `\ChameleonSystem\CmsCacheBundle\QueryCache\QueryCacheDecisionMakerInterface`.
-This gives you controll over what queries will be cached.
+This gives you control over what queries will be cached.
 
 Usage
 -----
@@ -94,12 +94,11 @@ class MyService
 
 Doctrine Query Caching
 ----------------------
-The bundle also registers `ChameleonSystem\CmsCacheBundle\Doctrine\CachingConnectionWrapper`
-as the Doctrine DBAL wrapper. This wrapper adds transparent cache handling for selected read
-queries executed through methods such as `fetchAssociative()`, `fetchNumeric()`, `fetchOne()`,
-and `fetchAllAssociative()`.
+The bundle also registers `ChameleonSystem\CmsCacheBundle\Doctrine\CachingConnectionWrapper` as the Doctrine DBAL wrapper.
+This wrapper adds transparent cache handling for selected read queries executed through methods such as
+`fetchAssociative()`, `fetchNumeric()`, `fetchOne()`, and `fetchAllAssociative()`.
 
-A query is only cached when all of the following conditions are true:
+A query is only cached when all the following conditions are true:
 
 - the SQL is a `SELECT`
 - at least one table can be detected from `FROM` or `JOIN`
