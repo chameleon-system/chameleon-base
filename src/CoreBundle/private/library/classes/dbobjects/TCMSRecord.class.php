@@ -18,8 +18,6 @@ use ChameleonSystem\CoreBundle\Session\ChameleonSessionManagerInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ForwardCompatibility\DriverResultStatement;
-use Doctrine\DBAL\ForwardCompatibility\DriverStatement;
 use esono\pkgCmsCache\CacheInterface;
 
 /**
@@ -210,7 +208,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                 $query = $this->GetQueryString($conditions);
 
                 $query .= ' LIMIT 1';
-                $this->sqlData = $this->ExecuteSQLQueries($query, [$id])->fetchAssociative();
+                $this->sqlData = $this->getDatabaseConnection()->fetchAssociative($query, [$id]);
                 $foundRecord = (false !== $this->sqlData && is_array($this->sqlData) && count($this->sqlData) > 0);
                 if ($foundRecord) {
                     if ($this->bAllowPostLoadHookExecution) {
@@ -392,7 +390,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
         $query = $this->GetQueryString($conditions);
         $query .= ' LIMIT 1';
 
-        if ($this->sqlData = $this->ExecuteSQLQueries($query, array_values($fieldData))->fetchAssociative()) {
+        if ($this->sqlData = $this->getDatabaseConnection()->fetchAssociative($query, array_values($fieldData))) {
             $this->id = $this->sqlData['id'];
             if ($this->bAllowPostLoadHookExecution) {
                 $this->PostLoadHook();
@@ -731,8 +729,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $listQuery = preg_replace('/\s+WHERE\s+/i', $queryFilter.' AND ', $listQuery);
         }
 
-        $nameRecord = $this->ExecuteSQLQueries($listQuery)->fetchAssociative();
-
+        $nameRecord = $this->getDatabaseConnection()->fetchAssociative($listQuery);
         if (is_array($nameRecord) && isset($nameRecord[$nameColumn])) {
             return $nameRecord[$nameColumn];
         }
@@ -1224,7 +1221,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                     if (!$isConnected) {
                         $quotedMltTableName = $databaseConnection->quoteIdentifier($sMLTTableName);
                         $sQuery = "SELECT * FROM $quotedMltTableName WHERE `target_id` = ".$databaseConnection->quote($iRealId)." AND `source_id` = $quotedSourceId";
-                        $result = $this->ExecuteSQLQueries($sQuery);
+                        $result = $this->getDatabaseConnection()->executeQuery($sQuery);
                         if ($result->rowCount() > 0) {
                             $isConnected = true;
                         }
@@ -1311,8 +1308,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                           WHERE `source_id` = $quotedSourceId
                           AND `target_id` = $quotedTargetId";
 
-                $oMysqlRes = $this->ExecuteSQLQueries($query);
-                if ($oMysqlRes->rowCount() > 0) {
+                $result = $this->getDatabaseConnection()->executeQuery($query);
+                if ($result->rowCount() > 0) {
                     $bIsConnected = true;
                 }
                 $this->SetInternalCache($sCacheName, $bIsConnected);
@@ -1355,7 +1352,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $query .= ' WHERE `'.$lookupField.'` = :lookupFieldValue';
 
             $aMatches = [];
-            $res = $this->ExecuteSQLQueries($query, ['lookupFieldValue' => $this->id]);
+            $res = $this->getDatabaseConnection()->executeQuery($query, ['lookupFieldValue' => $this->id]);
             while ($match = $res->fetchAssociative()) {
                 $aMatches[] = $match[$selectField];
             }
@@ -1590,8 +1587,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $quotedOrderBy = $databaseConnection->quoteIdentifier($sOrderBy);
             $query .= "ORDER BY $quotedOrderBy";
 
-            $tres = $this->ExecuteSQLQueries($query);
-            while ($prop = $tres->fetchAssociative()) {
+            $result = $this->getDatabaseConnection()->executeQuery($query);
+            while ($prop = $result->fetchAssociative()) {
                 $aIdList[] = $prop['id'];
             }
             $this->SetInternalCache($sCacheName, $aIdList);
@@ -1618,7 +1615,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
                  ';
 
             $query .= ' AND `cms_tree_node`.`contid` = '.$this->getDatabaseConnection()->quote($this->id);
-            if ($node = $this->ExecuteSQLQueries($query)->fetchAssociative()) {
+            if ($node = $this->getDatabaseConnection()->fetchAssociative($query)) {
                 $oTreeNode = new TCMSTreeNode();
                 $oTreeNode->LoadFromRow($node);
             }
@@ -1764,8 +1761,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $tableName = $this->table.'_'.$oFieldDef->sqlData['name'];
             $quotedSubTableName = $databaseConnection->quoteIdentifier($tableName);
             $query = "SELECT * FROM $quotedSubTableName WHERE `source_id` = $quotedId";
-            $mltRecs = $this->ExecuteSQLQueries($query);
-            while ($mlt = $mltRecs->fetchAssociative()) {
+            $result = $this->getDatabaseConnection()->executeQuery($query);
+            while ($mlt = $result->fetchAssociative()) {
                 $sql .= "INSERT INTO $quotedSubTableName".'        SET `source_id` = @recordId'.$this->table.', `target_id` = '.$databaseConnection->quote($mlt['target_id']).";\n";
             }
         }
@@ -1779,8 +1776,8 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             $query = "SELECT * FROM $quotedSubTableName
                    WHERE $quotedSqlDataTableName = $quotedId
                    ";
-            $propertyRes = $this->ExecuteSQLQueries($query);
-            while ($property = $propertyRes->fetchAssociative()) {
+            $result = $this->getDatabaseConnection()->executeQuery($query);
+            while ($property = $result->fetchAssociative()) {
                 $oProperty = new self($tableName);
                 $property[$oTableConf->sqlData['name'].'_id'] = '##@recordId'.$this->table.'##';
                 $oProperty->LoadFromRow($property);
@@ -2025,14 +2022,6 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
     }
 
     /**
-     * @throws Doctrine\DBAL\Exception
-     */
-    private function ExecuteSQLQueries(string $query, array $parameter = [], array $types = []): DriverStatement|DriverResultStatement
-    {
-        return $this->getDatabaseConnection()->executeQuery($query, $parameter, $types);
-    }
-
-    /**
      * overloads $this->sqlData[$sFieldName] based on $sLanguagePrefix
      * returns the overloaded value of the field.
      *
@@ -2127,6 +2116,7 @@ class TCMSRecord implements IPkgCmsSessionPostWakeupListener
             return $this->databaseConnection;
         }
 
+        /* @var Connection */
         return ServiceLocator::get('database_connection');
     }
 
