@@ -11,6 +11,7 @@
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DoctrineTransformableInterface;
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -465,6 +466,10 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         return $sName;
     }
+    private function getTableConfService(): DataAccessCmsTblConfInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf');
+    }
 
     public function RenderFieldMethodsString()
     {
@@ -478,8 +483,8 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
             $aMethodData['sClassName'] = $class;
             $aMethodData['sReturnType'] = 'null|'.$class;
 
-            $query = "SELECT * FROM cms_tbl_conf where `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->GetConnectedTableName())."'";
-            $aTargetTable = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
+            $aTargetTable = $this->getTableConfService()->getTableConfRowByName($this->GetConnectedTableName());
+
             $aMethodData['sClassType'] = $aTargetTable['dbobject_type'] ?? '';
 
             $oViewParser = new TViewParser();
@@ -502,8 +507,7 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
      */
     public function RenderFieldListMethodsString()
     {
-        $query = "SELECT * FROM `cms_tbl_conf` WHERE `name` = '".$this->GetConnectedTableName()."'";
-        $aTableConf = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
+        $aTargetTable = $this->getTableConfService()->getTableConfRowByName($this->GetConnectedTableName());
 
         $aMethodData = $this->GetFieldMethodBaseDataArray();
         $sInputName = 'i'.ucfirst(TCMSTableToClass::ConvertToClassString($this->name));

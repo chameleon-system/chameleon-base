@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -511,14 +512,18 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         return $sName;
     }
 
+    private function getTableConfService(): DataAccessCmsTblConfInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf');
+    }
+
     public function RenderFieldMethodsString()
     {
         $aMethodData = $this->GetFieldMethodBaseDataArray();
 
         $sTargetTableName = $this->GetForeignTableName();
 
-        $query = "SELECT * FROM cms_tbl_conf where `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->GetConnectedTableName())."'";
-        $aTargetTable = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
+        $aTargetTable = $this->getTableConfService()->getTableConfRowByName($this->GetConnectedTableName());
 
         $aMethodData['sMethodName'] = $this->GetFieldMethodName().'List';
         $aMethodData['sMethodDescription'] = '';

@@ -35,4 +35,8 @@ interface DataAccessCmsTblConfInterface
     public function getPermittedRoles(string $action, string $tableName): array;
 
     public function getGroupIdForTable(string $tableName): ?string;
+
+    public function getTableConfRowByName(string $tableName): ?array;
+
+    public function getTableOrderFields(string $tableName): array;
 }

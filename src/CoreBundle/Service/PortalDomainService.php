@@ -57,6 +57,7 @@ class PortalDomainService implements PortalDomainServiceInterface
      * @var LanguageServiceInterface
      */
     private $languageService;
+    private ?\TdbCmsPortal $defaultPortal = null;
 
     public function __construct(EventDispatcherInterface $eventDispatcher, PortalDomainServiceInitializerInterface $portalDomainServiceInitializer, CmsPortalDomainsDataAccessInterface $domainDataAccess, LanguageServiceInterface $languageService)
     {
@@ -108,14 +109,17 @@ class PortalDomainService implements PortalDomainServiceInterface
      */
     public function getDefaultPortal()
     {
+        if (null !== $this->defaultPortal) {
+            return $this->defaultPortal;
+        }
         $tcmsPortal = \TdbCmsConfig::GetInstance()->GetPrimaryPortal();
 
-        $tdbPortal = \TdbCmsPortal::GetNewInstance();
-        if (false === $tdbPortal->Load($tcmsPortal->id)) {
+        $this->defaultPortal = \TdbCmsPortal::GetNewInstance();
+        if (false === $this->defaultPortal->Load($tcmsPortal->id)) {
             return null;
         }
 
-        return $tdbPortal;
+        return $this->defaultPortal;
     }
 
     /**

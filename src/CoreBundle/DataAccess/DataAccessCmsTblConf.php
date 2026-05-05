@@ -7,6 +7,7 @@ use Doctrine\DBAL\Connection;
 
 class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
 {
+    private array $tableConfigRuntimeCache = [];
     public function __construct(readonly private Connection $connection)
     {
     }
@@ -72,4 +73,37 @@ class DataAccessCmsTblConf implements DataAccessCmsTblConfInterface
 
         return $groupId;
     }
+
+    public function getTableConfRowByName(string $tableName): ?array
+    {
+        if (true === array_key_exists($tableName, $this->tableConfigRuntimeCache)) {
+            return $this->tableConfigRuntimeCache[$tableName];
+        }
+        $this->tableConfigRuntimeCache[$tableName] = $this->connection->fetchAssociative('SELECT * FROM `cms_tbl_conf` WHERE `name` = :tableName', ['tableName' => $tableName]);
+        if (false === $this->tableConfigRuntimeCache[$tableName]) {
+            $this->tableConfigRuntimeCache[$tableName] = null;
+        }
+
+        return $this->tableConfigRuntimeCache[$tableName];
+    }
+
+    private array $tableOrderFieldCache = [];
+    public function getTableOrderFields(string $tableName): array
+    {
+        if (true === array_key_exists($tableName, $this->tableOrderFieldCache)) {
+            return $this->tableOrderFieldCache[$tableName];
+        }
+
+        $query = 'SELECT `cms_tbl_display_orderfields`.*
+                        FROM `cms_tbl_display_orderfields`
+                  INNER JOIN `cms_tbl_conf` ON `cms_tbl_display_orderfields`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
+                       WHERE `cms_tbl_conf`.`name` = :targetTableName
+                    ORDER BY `cms_tbl_display_orderfields`.`position` ASC
+                     ';
+        $this->tableOrderFieldCache[$tableName] = $this->connection->fetchAllAssociative($query, ['targetTableName' => $tableName]);
+
+        return $this->tableOrderFieldCache[$tableName];
+    }
+
+
 }
