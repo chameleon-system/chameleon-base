@@ -502,6 +502,96 @@ class TTools
     }
 
     /**
+     * Returns the hardcoded allowlist for document uploads.
+     *
+     * Document uploads must not be controlled by mutable DB configuration alone.
+     *
+     * @return array
+     */
+    public static function GetAllowedDocumentFileTypes()
+    {
+        return [
+            '7z',
+            'aac',
+            'ai',
+            'aif',
+            'aiff',
+            'avi',
+            'bmp',
+            'bz2',
+            'cdr',
+            'csv',
+            'doc',
+            'docx',
+            'dot',
+            'dotx',
+            'dwg',
+            'dxf',
+            'eps',
+            'epub',
+            'f4v',
+            'flac',
+            'fli',
+            'flv',
+            'gif',
+            'gpx',
+            'gz',
+            'h264',
+            'ico',
+            'ics',
+            'jpe',
+            'jpeg',
+            'jpg',
+            'kml',
+            'kmz',
+            'm4u',
+            'midi',
+            'mkv',
+            'mov',
+            'mp3',
+            'mp4',
+            'mpe',
+            'mpeg',
+            'mpg',
+            'odc',
+            'odf',
+            'odg',
+            'odi',
+            'odp',
+            'ods',
+            'odt',
+            'ogg',
+            'ogv',
+            'pdf',
+            'pgp',
+            'png',
+            'pot',
+            'potx',
+            'pps',
+            'ppsx',
+            'ppt',
+            'pptx',
+            'psd',
+            'pub',
+            'rar',
+            'rtf',
+            's3m',
+            'tar',
+            'tar.gz',
+            'tgz',
+            'tif',
+            'tiff',
+            'txt',
+            'vcd',
+            'vcf',
+            'wmv',
+            'xls',
+            'xlsx',
+            'zip',
+        ];
+    }
+
+    /**
      * validates an ISO/mysql date format e.g. 2010-12-31.
      *
      * @var string - date in ISO format e.g. 2010-12-31

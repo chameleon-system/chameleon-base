@@ -116,7 +116,7 @@ class UploaderConfiguration implements UploaderConfigurationInterface
      */
     private function getAllowedFileTypesDocument()
     {
-        return \TTools::GetCMSFileTypes();
+        return \TTools::GetAllowedDocumentFileTypes();
     }
 
     /**

@@ -192,4 +192,52 @@ class TToolsTest extends TestCase
             [' ../such/directory/very/path', 'bar', '_such_directory_very_path.bar'],
         ];
     }
+
+    /**
+     * @test
+     *
+     * @dataProvider allowedDocumentFileTypesDataProvider
+     */
+    public function itShouldContainExpectedAllowedDocumentFileTypes($extension)
+    {
+        $this->assertContains($extension, TTools::GetAllowedDocumentFileTypes());
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider disallowedDocumentFileTypesDataProvider
+     */
+    public function itShouldNotContainDisallowedDocumentFileTypes($extension)
+    {
+        $this->assertNotContains($extension, TTools::GetAllowedDocumentFileTypes());
+    }
+
+    public function allowedDocumentFileTypesDataProvider()
+    {
+        return [
+            ['pdf'],
+            ['docx'],
+            ['xlsx'],
+            ['zip'],
+            ['jpg'],
+            ['mp4'],
+            ['tar.gz'],
+        ];
+    }
+
+    public function disallowedDocumentFileTypesDataProvider()
+    {
+        return [
+            ['php'],
+            ['html'],
+            ['css'],
+            ['js'],
+            ['svg'],
+            ['exe'],
+            ['jar'],
+            ['sql'],
+            ['conf'],
+        ];
+    }
 }

@@ -89,7 +89,7 @@ class TCMSTableEditorDocumentEndPoint extends TCMSTableEditorFiles
 
         if ($isValid) {
             // Array of valid extensions
-            $allowedFileTypes = TTools::GetCMSFileTypes();
+            $allowedFileTypes = TTools::GetAllowedDocumentFileTypes();
             $isValid = $this->IsValidFileExtension($allowedFileTypes);
         }
 
