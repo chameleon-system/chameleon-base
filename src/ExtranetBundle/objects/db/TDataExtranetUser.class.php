@@ -213,7 +213,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             }
         }
         if (is_null($this->id) || empty($this->id)) {
-            $this->sqlData['tmpconfirmkey'] = md5(uniqid((string) rand(), true));
+            $this->sqlData['tmpconfirmkey'] = bin2hex(random_bytes(16));
             $oExtranetConf = TdbDataExtranet::GetInstance();
             if ($oExtranetConf->fieldUserMustConfirmRegistration || $bForceUserConfirm) {
                 $this->sqlData['confirmed'] = '0';
@@ -2053,7 +2053,7 @@ class TDataExtranetUser extends TDataExtranetUserAutoParent
             $this->sqlData['confirmed'] = '0';
             $this->sqlData['confirmedon'] = '0000-00-00 00:00:00';
             $this->sqlData['reg_email_send'] = '1';
-            $this->sqlData['tmpconfirmkey'] = md5(uniqid((string) rand(), true));
+            $this->sqlData['tmpconfirmkey'] = bin2hex(random_bytes(16));
             $this->SendRegistrationNotification();
         }
     }
