@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\AutoclassesBundle\TableConfExport\DataModelParts;
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
@@ -364,7 +365,10 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
 
         return $sCode;
     }
-
+    private function getTableConfService(): DataAccessCmsTblConfInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf');
+    }
     /**
      * render any methods for the auto list class for this field.
      *
@@ -376,14 +380,12 @@ class TCMSFieldExtendedLookupMultiTable extends TCMSFieldExtendedLookup
         $sTableForMethodParameterDocumentation = '';
         if (count($aTables) > 0) {
             foreach ($aTables as $sTableName) {
-                $query = "SELECT * FROM cms_tbl_conf where `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($sTableName)."'";
-                $aTargetTable = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
+                $aTargetTable = $this->getTableConfService()->getTableConfRowByName($sTableName);
                 $sTableForMethodParameterDocumentation .= $aTargetTable['translation'].' ('.$aTargetTable['name'].') or ';
             }
             $sTableForMethodParameterDocumentation = substr($sTableForMethodParameterDocumentation, 0, -4);
         } else {
-            $query = "SELECT * FROM cms_tbl_conf where `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->GetConnectedTableName())."'";
-            $aTargetTable = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
+            $aTargetTable = $this->getTableConfService()->getTableConfRowByName($this->GetConnectedTableName());
             $sTableForMethodParameterDocumentation = $aTargetTable['translation'];
         }
 

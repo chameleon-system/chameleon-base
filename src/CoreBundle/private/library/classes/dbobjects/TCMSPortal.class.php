@@ -285,6 +285,7 @@ class TCMSPortal extends TCMSRecord
         return $sDomainHost;
     }
 
+    private ?string $privateThemePathCache = null;
     /**
      * returns the path to the theme directory for classes (dbobjects, modules etc.).
      *
@@ -296,21 +297,21 @@ class TCMSPortal extends TCMSRecord
      */
     public function GetPrivateThemePath()
     {
-        static $sPath;
+        if (null !== $this->privateThemePathCache) {
+            return $this->privateThemePathCache;
+        }
 
-        if (!$sPath) {
-            $sPath = '';
-            if (!empty($this->sqlData['pkg_cms_theme_id'])) {
-                $oWebTheme = TdbPkgCmsTheme::GetNewInstance();
-                /* @var $oWebTheme TdbPkgCmsTheme */
-                $oWebTheme->Load($this->sqlData['pkg_cms_theme_id']);
-                if (defined('PATH_WEB_THEMES_PRIVATE') && !empty($oWebTheme->fieldDirectory)) {
-                    $sPath = PATH_WEB_THEMES_PRIVATE.$oWebTheme->fieldDirectory;
-                }
+        $this->privateThemePathCache = '';
+        if (!empty($this->sqlData['pkg_cms_theme_id'])) {
+            $oWebTheme = TdbPkgCmsTheme::GetNewInstance();
+            /* @var $oWebTheme TdbPkgCmsTheme */
+            $oWebTheme->Load($this->sqlData['pkg_cms_theme_id']);
+            if (defined('PATH_WEB_THEMES_PRIVATE') && !empty($oWebTheme->fieldDirectory)) {
+                $this->privateThemePathCache = PATH_WEB_THEMES_PRIVATE.$oWebTheme->fieldDirectory;
             }
         }
 
-        return $sPath;
+        return $this->privateThemePathCache;
     }
 
     /**

@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
@@ -142,6 +143,7 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
 
     /**
      * @return TCMSRecordList
+     * @throws TPkgCmsException_Log
      */
     public function FetchConnectedMLTRecords()
     {
@@ -513,22 +515,18 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
 
     public function RenderFieldMethodsString()
     {
-        $aMethodData = $this->GetFieldMethodBaseDataArray();
-
         $sTargetTableName = $this->GetForeignTableName();
+        $sItemClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTargetTableName);
+        $aTargetTable = $this->getTableConfService()->getTableConfRowByName($this->GetConnectedTableName());
 
-        $query = "SELECT * FROM cms_tbl_conf where `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->GetConnectedTableName())."'";
-        $aTargetTable = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
-
+        $aMethodData = $this->GetFieldMethodBaseDataArray();
         $aMethodData['sMethodName'] = $this->GetFieldMethodName().'List';
         $aMethodData['sMethodDescription'] = '';
-        $sItemClassName = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $sTargetTableName);
         $aMethodData['sReturnType'] = $sItemClassName.'List';
         $aMethodData['sTargetTableName'] = $sTargetTableName;
         $aMethodData['sClassName'] = $sItemClassName;
         $aMethodData['sClassSubType'] = 'CMSDataObjects';
-        $aMethodData['sClassType'] = $aTargetTable['dbobject_type'];
-
+        $aMethodData['sClassType'] = $aTargetTable['dbobject_type'] ?? '';
         $aMethodData['aParameters']['sOrderBy'] = self::GetMethodParameterArray('string', "''", 'an sql order by string (without the order by)');
 
         $oViewParser = new TViewParser();
@@ -639,6 +637,11 @@ class TCMSFieldLookupMultiselect extends TCMSMLTField
         $aAdditionalViewData['oConnectedMLTRecords'] = $this->GetRecordsConnectedFrontend();
 
         return $aAdditionalViewData;
+    }
+
+    private function getTableConfService(): DataAccessCmsTblConfInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf');
     }
 
     /**

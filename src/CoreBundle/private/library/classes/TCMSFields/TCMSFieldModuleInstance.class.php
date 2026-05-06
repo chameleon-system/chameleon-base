@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -368,10 +369,7 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         if (!empty($aMethodData['sReturnType'])) {
             $aMethodData['sClassName'] = $aMethodData['sReturnType'];
             $aMethodData['sClassSubType'] = 'CMSDataObjects';
-
-            $query = "SELECT * FROM cms_tbl_conf where `name` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->GetConnectedTableName())."'";
-            $aTargetTable = MySqlLegacySupport::getInstance()->fetch_assoc(MySqlLegacySupport::getInstance()->query($query));
-
+            $aTargetTable = $this->getTableConfService()->getTableConfRowByName($this->GetConnectedTableName());
             $aMethodData['sClassType'] = $aTargetTable['dbobject_type'] ?? '';
 
             $oViewParser = new TViewParser();
@@ -385,6 +383,11 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         }
 
         return $sCode;
+    }
+
+    private function getTableConfService(): DataAccessCmsTblConfInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf');
     }
 
     private function getFieldTranslationUtil(): FieldTranslationUtil

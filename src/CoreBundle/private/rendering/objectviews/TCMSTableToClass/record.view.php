@@ -1,4 +1,8 @@
-<?php echo "<?php\n";
+<?php
+
+use ChameleonSystem\CoreBundle\ServiceLocator;
+
+echo "<?php\n";
 /**
  * @var $oTableConf TdbCmsTblConf
  * @var $cmsConfig  TdbCmsConfig|TCMSConfig
@@ -162,16 +166,11 @@ while ($oField = $oFields->Next()) {
             $sOrderBy = $databaseConnection->quoteIdentifier($oField->GetMLTTableName()).'.`entry_sort` ASC';
         } else {
             $sTargetTable = $oField->GetConnectedTableName();
-            $query = 'SELECT `cms_tbl_display_orderfields`.*
-                        FROM `cms_tbl_display_orderfields`
-                  INNER JOIN `cms_tbl_conf` ON `cms_tbl_display_orderfields`.`cms_tbl_conf_id` = `cms_tbl_conf`.`id`
-                       WHERE `cms_tbl_conf`.`name` = :targetTableName
-                    ORDER BY `cms_tbl_display_orderfields`.`position` ASC
-                     ';
-            $tRes = $databaseConnection->executeQuery($query, ['targetTableName' => $sTargetTable]);
+            $orderFields = ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf')->getTableOrderFields($sTargetTable);
             $aOrderByList = [];
-            while ($aOrder = $tRes->fetchAssociative()) {
-                $aOrderByList[] = "{$aOrder['name']} {$aOrder['sort_order_direction']}";
+            foreach ($orderFields as $orderField) {
+                $aOrderByList[] = "{$orderField['name']} {$orderField['sort_order_direction']}";
+
             }
             if (count($aOrderByList) > 0) {
                 $sOrderBy = implode(',', array_map([$databaseConnection, 'quote'], $aOrderByList));

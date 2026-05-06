@@ -98,4 +98,48 @@ class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterfac
 
         return $permittedRoleIds;
     }
+
+    public function getTableConfRowByName(string $tableName): ?array
+    {
+        $keyParam = [
+            'class' => __CLASS__,
+            'fnc' => 'getTableConRowByName',
+            'tableName' => $tableName,
+        ];
+        $key = $this->cache->getKey($keyParam, false);
+
+        $tableConf = $this->cache->get($key);
+        if (null !== $tableConf) {
+            return $tableConf;
+        }
+
+        $tableConf = $this->subject->getTableConfRowByName($tableName);
+        $this->cache->set(
+            $key,
+            $tableConf,
+            [['table' => 'cms_tbl_conf', 'id' => null === $tableConf ? null : $tableConf['id']]]
+        );
+
+        return $tableConf;
+    }
+
+    public function getTableOrderFields(string $tableName): array
+    {
+        $keyParam = [
+            'class' => __CLASS__,
+            'fnc' => 'getTableOrderFields',
+            'tableName' => $tableName,
+        ];
+        $key = $this->cache->getKey($keyParam, false);
+
+        $tableConf = $this->cache->get($key);
+        if (null !== $tableConf) {
+            return $tableConf;
+        }
+
+        $tableConf = $this->subject->getTableOrderFields($tableName);
+        $this->cache->set($key, $tableConf, [['table' => 'cms_tbl_conf', 'id' => null]]);
+
+        return $tableConf;
+    }
 }
