@@ -1,4 +1,6 @@
-<?php use ChameleonSystem\CoreBundle\ServiceLocator;
+<?php
+
+use ChameleonSystem\CoreBundle\ServiceLocator;
 
 echo "<?php\n";
 /**

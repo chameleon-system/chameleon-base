@@ -59,8 +59,12 @@ class PortalDomainService implements PortalDomainServiceInterface
     private $languageService;
     private ?\TdbCmsPortal $defaultPortal = null;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher, PortalDomainServiceInitializerInterface $portalDomainServiceInitializer, CmsPortalDomainsDataAccessInterface $domainDataAccess, LanguageServiceInterface $languageService)
-    {
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        PortalDomainServiceInitializerInterface $portalDomainServiceInitializer,
+        CmsPortalDomainsDataAccessInterface $domainDataAccess,
+        LanguageServiceInterface $languageService
+    ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->portalDomainServiceInitializer = $portalDomainServiceInitializer;
         $this->domainDataAccess = $domainDataAccess;
@@ -112,8 +116,8 @@ class PortalDomainService implements PortalDomainServiceInterface
         if (null !== $this->defaultPortal) {
             return $this->defaultPortal;
         }
-        $tcmsPortal = \TdbCmsConfig::GetInstance()->GetPrimaryPortal();
 
+        $tcmsPortal = \TdbCmsConfig::GetInstance()->GetPrimaryPortal();
         $this->defaultPortal = \TdbCmsPortal::GetNewInstance();
         if (false === $this->defaultPortal->Load($tcmsPortal->id)) {
             return null;
@@ -144,10 +148,10 @@ class PortalDomainService implements PortalDomainServiceInterface
         if (null !== $this->portalDomainNames) {
             return $this->portalDomainNames;
         }
+
         $this->portalDomainNames = [];
 
         $portal = $this->getActivePortal();
-
         if (null === $portal) {
             return $this->portalDomainNames;
         }
@@ -173,10 +177,14 @@ class PortalDomainService implements PortalDomainServiceInterface
     public function getPrimaryDomain($portalId = null, $languageId = null)
     {
         $domain = $this->doGetPrimaryDomain($portalId, $languageId);
-
         if (null === $domain) {
-            throw new InvalidPortalDomainException(sprintf(
-                'No primary domain for portal ID %s and language ID %s found. Be sure to configure a primary domain (also for each language if there is no domain without language selection).', $portalId, $languageId));
+            throw new InvalidPortalDomainException(
+                sprintf(
+                    'No primary domain for portal ID %s and language ID %s found. Be sure to configure a primary domain (also for each language if there is no domain without language selection).',
+                    $portalId,
+                    $languageId
+                )
+            );
         }
 
         return $domain;

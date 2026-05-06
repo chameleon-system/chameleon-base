@@ -466,10 +466,6 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
 
         return $sName;
     }
-    private function getTableConfService(): DataAccessCmsTblConfInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf');
-    }
 
     public function RenderFieldMethodsString()
     {
@@ -484,7 +480,6 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
             $aMethodData['sReturnType'] = 'null|'.$class;
 
             $aTargetTable = $this->getTableConfService()->getTableConfRowByName($this->GetConnectedTableName());
-
             $aMethodData['sClassType'] = $aTargetTable['dbobject_type'] ?? '';
 
             $oViewParser = new TViewParser();
@@ -507,8 +502,6 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
      */
     public function RenderFieldListMethodsString()
     {
-        $aTargetTable = $this->getTableConfService()->getTableConfRowByName($this->GetConnectedTableName());
-
         $aMethodData = $this->GetFieldMethodBaseDataArray();
         $sInputName = 'i'.ucfirst(TCMSTableToClass::ConvertToClassString($this->name));
         $aParameters = [
@@ -523,22 +516,16 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
                 'sType' => 'string|null',
             ],
         ];
+
         $aMethodData['aParameters'] = $aParameters;
-
-        $sMethodName = 'GetListFor'.TCMSTableToClass::ConvertToClassString($this->name);
-
-        $aMethodData['sMethodName'] = $sMethodName;
+        $aMethodData['sMethodName'] = 'GetListFor'.TCMSTableToClass::ConvertToClassString($this->name);;
         $aMethodData['sReturnType'] = TCMSTableToClass::GetClassName(TCMSTableToClass::PREFIX_CLASS, $this->sTableName).'List';
-
         $aMethodData['sClassName'] = $aMethodData['sReturnType'];
         $aMethodData['sClassSubType'] = 'CMSDataObjects';
         $aMethodData['sVisibility'] = 'static public';
-
         $aMethodData['sClassType'] = $aTableConf['dbobject_type'] ?? '';
-
         $aMethodData['iLookupFieldName'] = $sInputName;
         $aMethodData['sTableDatabaseName'] = $this->sTableName;
-
         $aMethodData['aFieldData']['sFieldFullName'] = 'Return all records belonging to the '.($aTableConf['translation'] ?? ' [not found]');
 
         $oViewParser = new TViewParser();
@@ -662,6 +649,11 @@ class TCMSFieldLookup extends TCMSField implements DoctrineTransformableInterfac
         }
 
         return implode(', ', $aRetValueArray);
+    }
+
+    private function getTableConfService(): DataAccessCmsTblConfInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf');
     }
 
     private function getFieldTranslationUtil(): FieldTranslationUtil

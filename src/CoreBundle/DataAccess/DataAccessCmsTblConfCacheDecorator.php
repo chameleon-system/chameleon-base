@@ -114,7 +114,11 @@ class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterfac
         }
 
         $tableConf = $this->subject->getTableConfRowByName($tableName);
-        $this->cache->set($key, $tableConf, [['table' => 'cms_tbl_conf', 'id' => null === $tableConf ? null : $tableConf['id']]]);
+        $this->cache->set(
+            $key,
+            $tableConf,
+            [['table' => 'cms_tbl_conf', 'id' => null === $tableConf ? null : $tableConf['id']]]
+        );
 
         return $tableConf;
     }
@@ -138,6 +142,4 @@ class DataAccessCmsTblConfCacheDecorator implements DataAccessCmsTblConfInterfac
 
         return $tableConf;
     }
-
-
 }

@@ -2,103 +2,142 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
     <services>
-        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConf" id="chameleon_system_core.data_access_cms_tbl_conf" public="true">
-            <argument type="service" id="database_connection" />
+
+        <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConf"
+                 id="chameleon_system_core.data_access_cms_tbl_conf"
+                 public="true">
+            <argument type="service" id="database_connection"/>
         </service>
+
         <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTblConfCacheDecorator"
                  id="chameleon_system_core.data_access_cms_tbl_conf_cache_decorator"
                  decorates="chameleon_system_core.data_access_cms_tbl_conf">
             <argument type="service" id="chameleon_system_core.data_access_cms_tbl_conf_cache_decorator.inner"/>
-            <argument type="service" id="chameleon_system_cms_cache.cache" />
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
         </service>
 
-        <service id="chameleon_system_core.data_access.cron_job_data_access" class="ChameleonSystem\CoreBundle\DataAccess\CronJobDataAccess" public="true" />
+        <service id="chameleon_system_core.data_access.cron_job_data_access"
+                 class="ChameleonSystem\CoreBundle\DataAccess\CronJobDataAccess"
+                 public="true"/>
 
         <!-- cms_portal_domains -->
 
-        <service id="chameleon_system_core.data_access_cms_portal_domains" class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccess" public="true">
-            <argument type="service" id="database_connection" />
+        <service id="chameleon_system_core.data_access_cms_portal_domains"
+                 class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccess"
+                 public="true">
+            <argument type="service" id="database_connection"/>
         </service>
-        <service id="chameleon_system_core.data_access_cms_portal_domains_cache_decorator" class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessCacheDecorator" public="false">
-            <argument type="service" id="service_container" />
-            <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains_cache_decorator.inner" />
+
+        <service id="chameleon_system_core.data_access_cms_portal_domains_cache_decorator"
+                 class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessCacheDecorator"
+                 public="false">
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains_cache_decorator.inner"/>
         </service>
-        <service id="chameleon_system_core.data_access_cms_portal_domains_request_level_cache_decorator" class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessRequestLevelCacheDecorator" decorates="chameleon_system_core.data_access_cms_portal_domains" public="false">
-            <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains_request_level_cache_decorator.inner" />
+
+        <service id="chameleon_system_core.data_access_cms_portal_domains_request_level_cache_decorator"
+                 class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessRequestLevelCacheDecorator"
+                 decorates="chameleon_system_core.data_access_cms_portal_domains" public="false">
+            <argument type="service"
+                      id="chameleon_system_core.data_access_cms_portal_domains_request_level_cache_decorator.inner"/>
         </service>
 
         <!-- cms_portal_system_page -->
 
-        <service id="chameleon_system_core.data_access_cms_portal_system_page" class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsPortalSystemPage" public="false">
-            <argument type="service" id="database_connection" />
+        <service id="chameleon_system_core.data_access_cms_portal_system_page"
+                 class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsPortalSystemPage" public="false">
+            <argument type="service" id="database_connection"/>
         </service>
-        <service id="chameleon_system_core.cache_data_access_cms_portal_system_page" class="ChameleonSystem\CoreBundle\DataAccess\CacheDataAccess" public="false">
-            <argument type="service" id="chameleon_system_cms_cache.cache" />
-            <argument type="service" id="chameleon_system_core.language_service" />
-            <argument type="service" id="chameleon_system_core.cache_data_access_cms_portal_system_page.inner" />
+
+        <service id="chameleon_system_core.cache_data_access_cms_portal_system_page"
+                 class="ChameleonSystem\CoreBundle\DataAccess\CacheDataAccess" public="false">
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.cache_data_access_cms_portal_system_page.inner"/>
         </service>
-        <service id="chameleon_system_core.request_cache_data_access_cms_portal_system_page" class="ChameleonSystem\CoreBundle\DataAccess\RequestCacheDataAccess" public="false">
-            <argument type="service" id="chameleon_system_core.language_service" />
-            <argument type="service" id="chameleon_system_core.request_cache_data_access_cms_portal_system_page.inner" />
+
+        <service id="chameleon_system_core.request_cache_data_access_cms_portal_system_page"
+                 class="ChameleonSystem\CoreBundle\DataAccess\RequestCacheDataAccess" public="false">
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.request_cache_data_access_cms_portal_system_page.inner"/>
         </service>
 
         <!-- cms_tpl_page -->
 
-        <service id="chameleon_system_core.data_access_cms_tpl_page" class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTplPage" public="false">
-            <argument type="service" id="database_connection" />
+        <service id="chameleon_system_core.data_access_cms_tpl_page"
+                 class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTplPage" public="false">
+            <argument type="service" id="database_connection"/>
         </service>
-        <service id="chameleon_system_core.cache_data_access_cms_tpl_page" class="ChameleonSystem\CoreBundle\DataAccess\CacheDataAccess" public="false">
-            <argument type="service" id="chameleon_system_cms_cache.cache" />
-            <argument type="service" id="chameleon_system_core.language_service" />
-            <argument type="service" id="chameleon_system_core.cache_data_access_cms_tpl_page.inner" />
+
+        <service id="chameleon_system_core.cache_data_access_cms_tpl_page"
+                 class="ChameleonSystem\CoreBundle\DataAccess\CacheDataAccess" public="false">
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.cache_data_access_cms_tpl_page.inner"/>
         </service>
-        <service id="chameleon_system_core.request_cache_data_access_cms_tpl_page" class="ChameleonSystem\CoreBundle\DataAccess\RequestCacheDataAccess" public="false">
-            <argument type="service" id="chameleon_system_core.language_service" />
-            <argument type="service" id="chameleon_system_core.request_cache_data_access_cms_tpl_page.inner" />
+
+        <service id="chameleon_system_core.request_cache_data_access_cms_tpl_page"
+                 class="ChameleonSystem\CoreBundle\DataAccess\RequestCacheDataAccess" public="false">
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.request_cache_data_access_cms_tpl_page.inner"/>
         </service>
 
         <!-- cms_tree -->
 
-        <service id="chameleon_system_core.data_access_cms_tree" class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTree" public="false">
-            <argument type="service" id="database_connection" />
-            <argument type="service" id="chameleon_system_core.language_service" />
+        <service id="chameleon_system_core.data_access_cms_tree"
+                 class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTree" public="false">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
-        <service id="chameleon_system_core.data_access_cms_tree_request_level_cache_decorator"  class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTreeRequestLevelCacheDecorator" decorates="chameleon_system_core.data_access_cms_tree">
-            <argument id="chameleon_system_core.data_access_cms_tree_request_level_cache_decorator.inner" type="service"/>
+
+        <service id="chameleon_system_core.data_access_cms_tree_request_level_cache_decorator"
+                 class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTreeRequestLevelCacheDecorator"
+                 decorates="chameleon_system_core.data_access_cms_tree">
+            <argument id="chameleon_system_core.data_access_cms_tree_request_level_cache_decorator.inner"
+                      type="service"/>
             <argument id="chameleon_system_core.language_service" type="service"/>
         </service>
 
         <!-- cms_tree_node -->
 
-        <service id="chameleon_system_core.cache_data_access_cms_tree_node" class="ChameleonSystem\CoreBundle\DataAccess\CacheDataAccess" public="false">
-            <argument type="service" id="chameleon_system_cms_cache.cache" />
-            <argument type="service" id="chameleon_system_core.language_service" />
-            <argument type="service" id="chameleon_system_core.cache_data_access_cms_tree_node.inner" />
+        <service id="chameleon_system_core.cache_data_access_cms_tree_node"
+                 class="ChameleonSystem\CoreBundle\DataAccess\CacheDataAccess" public="false">
+            <argument type="service" id="chameleon_system_cms_cache.cache"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.cache_data_access_cms_tree_node.inner"/>
         </service>
-        <service id="chameleon_system_core.request_cache_data_access_cms_tree_node" class="ChameleonSystem\CoreBundle\DataAccess\RequestCacheDataAccess" public="false">
-            <argument type="service" id="chameleon_system_core.language_service" />
-            <argument type="service" id="chameleon_system_core.request_cache_data_access_cms_tree_node.inner" />
+
+        <service id="chameleon_system_core.request_cache_data_access_cms_tree_node"
+                 class="ChameleonSystem\CoreBundle\DataAccess\RequestCacheDataAccess" public="false">
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.request_cache_data_access_cms_tree_node.inner"/>
         </service>
-        <service id="chameleon_system_core.data_access_cms_tree_node" class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTreeNode" public="false">
-            <argument type="service" id="database_connection" />
-            <argument type="service" id="chameleon_system_core.language_service" />
+
+        <service id="chameleon_system_core.data_access_cms_tree_node"
+                 class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsTreeNode" public="false">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
 
         <!-- cms_language -->
 
-        <service id="chameleon_system_core.data_access_cms_language" class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsLanguage" public="false">
+        <service id="chameleon_system_core.data_access_cms_language"
+                 class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsLanguage" public="false">
             <argument type="service" id="database_connection"/>
         </service>
 
-        <service id="chameleon_system_core.data_access_cms_language_request_level_cache_decorator" class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsLanguageRequestLevelCacheDecorator" decorates="chameleon_system_core.data_access_cms_language" public="false">
-            <argument type="service" id="chameleon_system_core.data_access_cms_language_request_level_cache_decorator.inner" />
+        <service id="chameleon_system_core.data_access_cms_language_request_level_cache_decorator"
+                 class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsLanguageRequestLevelCacheDecorator"
+                 decorates="chameleon_system_core.data_access_cms_language" public="false">
+            <argument type="service"
+                      id="chameleon_system_core.data_access_cms_language_request_level_cache_decorator.inner"/>
         </service>
 
         <!-- providers -->
 
-        <service id="chameleon_system_core.data_access_class_from_table_field_provider" class="ChameleonSystem\CoreBundle\DataAccess\DataAccessClassFromTableTableFieldProvider">
+        <service id="chameleon_system_core.data_access_class_from_table_field_provider"
+                 class="ChameleonSystem\CoreBundle\DataAccess\DataAccessClassFromTableTableFieldProvider">
             <argument type="service" id="database_connection"/>
         </service>
 
@@ -107,6 +146,7 @@
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
             <argument id="chameleon_system_core.global" type="service"/>
         </service>
+
         <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefCacheDecorator"
                  id="chameleon_system_core.data_access_cms_master_pagedef_file_cache_decorator"
                  decorates="chameleon_system_core.data_access_cms_master_pagedef_file" public="false">
@@ -114,7 +154,7 @@
                       type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
             <argument id="chameleon_system_cms_cache.cache" type="service"/>
-            <argument id="chameleon_system_core.request_info_service" type="service" />
+            <argument id="chameleon_system_core.request_info_service" type="service"/>
         </service>
 
         <service class="ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsMasterPagedefDatabase"
@@ -130,7 +170,7 @@
             <argument id="chameleon_system_core.data_access_cms_master_pagedef_cache_decorator.inner" type="service"/>
             <argument id="chameleon_system_core.util.input_filter" type="service"/>
             <argument id="chameleon_system_cms_cache.cache" type="service"/>
-            <argument id="chameleon_system_core.request_info_service" type="service" />
+            <argument id="chameleon_system_core.request_info_service" type="service"/>
         </service>
 
     </services>

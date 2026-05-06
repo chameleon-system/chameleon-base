@@ -355,10 +355,6 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         TCMSLogChange::WriteTransaction($aQuery);
     }
 
-    private function getTableConfService(): DataAccessCmsTblConfInterface
-    {
-        return ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf');
-    }
     /**
      * {@inheritdoc}
      */
@@ -374,7 +370,6 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
             $aMethodData['sClassName'] = $aMethodData['sReturnType'];
             $aMethodData['sClassSubType'] = 'CMSDataObjects';
             $aTargetTable = $this->getTableConfService()->getTableConfRowByName($this->GetConnectedTableName());
-
             $aMethodData['sClassType'] = $aTargetTable['dbobject_type'] ?? '';
 
             $oViewParser = new TViewParser();
@@ -388,6 +383,11 @@ class TCMSFieldModuleInstance extends TCMSFieldExtendedLookup
         }
 
         return $sCode;
+    }
+
+    private function getTableConfService(): DataAccessCmsTblConfInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.data_access_cms_tbl_conf');
     }
 
     private function getFieldTranslationUtil(): FieldTranslationUtil
