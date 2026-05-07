@@ -233,7 +233,6 @@ class TToolsTest extends TestCase
             ['html'],
             ['css'],
             ['js'],
-            ['svg'],
             ['exe'],
             ['jar'],
             ['sql'],

@@ -326,6 +326,7 @@ class TTools
      * @param bool $bCheckFieldConfig - optional param, if set to true cms_field_conf will be searched for the field instead of SHOW FIELDS
      *
      * @return bool
+     *
      * @throws Exception
      */
     public static function FieldExists($sTableName, $sFieldName, $bCheckFieldConfig = false)
@@ -502,92 +503,59 @@ class TTools
     }
 
     /**
-     * Returns the hardcoded allowlist for document uploads.
+     * Returns the effective allowed document file types.
      *
-     * Document uploads must not be controlled by mutable DB configuration alone.
+     * Allowed document extensions come from cms_filetype, minus hardcoded blocked extensions.
      *
      * @return array
      */
     public static function GetAllowedDocumentFileTypes()
     {
+        $allowedFileTypesFromDb = self::GetCMSFileTypes();
+        $allowedFileTypesFromDb = array_map('strtolower', $allowedFileTypesFromDb);
+
+        return array_values(array_diff($allowedFileTypesFromDb, self::GetDisallowedDocumentFileTypes()));
+    }
+
+    /**
+     * Returns the hardcoded blocklist for document uploads.
+     *
+     * Document uploads must not be controlled by mutable DB configuration alone.
+     *
+     * @return array
+     */
+    public static function GetDisallowedDocumentFileTypes()
+    {
         return [
-            '7z',
-            'aac',
-            'ai',
-            'aif',
-            'aiff',
-            'avi',
-            'bmp',
-            'bz2',
-            'cdr',
-            'csv',
-            'doc',
-            'docx',
-            'dot',
-            'dotx',
-            'dwg',
-            'dxf',
-            'eps',
-            'epub',
-            'f4v',
-            'flac',
-            'fli',
-            'flv',
-            'gif',
-            'gpx',
-            'gz',
-            'h264',
-            'ico',
-            'ics',
-            'jpe',
-            'jpeg',
-            'jpg',
-            'kml',
-            'kmz',
-            'm4u',
-            'midi',
-            'mkv',
-            'mov',
-            'mp3',
-            'mp4',
-            'mpe',
-            'mpeg',
-            'mpg',
-            'odc',
-            'odf',
-            'odg',
-            'odi',
-            'odp',
-            'ods',
-            'odt',
-            'ogg',
-            'ogv',
-            'pdf',
-            'pgp',
-            'png',
-            'pot',
-            'potx',
-            'pps',
-            'ppsx',
-            'ppt',
-            'pptx',
-            'psd',
-            'pub',
-            'rar',
-            'rtf',
-            's3m',
-            'tar',
-            'tar.gz',
-            'tgz',
-            'tif',
-            'tiff',
-            'txt',
-            'vcd',
-            'vcf',
-            'wmv',
-            'xls',
-            'xlsx',
-            'zip',
+            'php',
+            'php3',
+            'php4',
+            'php5',
+            'php7',
+            'php8',
+            'phtml',
+            'phar',
+            'inc',
+            'module',
+            'cgi',
+            'pl',
+            'py',
+            'rb',
+            'sh',
+            'bash',
+            'zsh',
+            'java',
+            'class',
+            'jar',
+            'jsp',
+            'js',
+            'mjs',
+            'cjs',
+            'html',
+            'htm',
+            'xhtml',
+            'xml',
+            'swf',
         ];
     }
 
