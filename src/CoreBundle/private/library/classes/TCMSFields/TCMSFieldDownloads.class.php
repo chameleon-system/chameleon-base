@@ -418,7 +418,7 @@ class TCMSFieldDownloads extends TCMSFieldLookupMultiselect
                                         $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-DOCUMENT-TOO-LARGE');
                                         break;
                                     }
-                                    $aAllowedFileTypes = TTools::GetCMSFileTypes();
+                                    $aAllowedFileTypes = TTools::GetAllowedDocumentFileTypes();
                                     if (!in_array($sFileExtension, $aAllowedFileTypes)) {
                                         $bIsValid = false;
                                         $oMsgManager->AddMessage($sConsumerName, 'ERROR-INVALID-DOCUMENT-UNKNOWN-EXTENSION');

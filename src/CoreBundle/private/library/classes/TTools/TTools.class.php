@@ -326,6 +326,7 @@ class TTools
      * @param bool $bCheckFieldConfig - optional param, if set to true cms_field_conf will be searched for the field instead of SHOW FIELDS
      *
      * @return bool
+     *
      * @throws Exception
      */
     public static function FieldExists($sTableName, $sFieldName, $bCheckFieldConfig = false)
@@ -499,6 +500,63 @@ class TTools
         }
 
         return $file_types_array;
+    }
+
+    /**
+     * Returns the effective allowed document file types.
+     *
+     * Allowed document extensions come from cms_filetype, minus hardcoded blocked extensions.
+     *
+     * @return array
+     */
+    public static function GetAllowedDocumentFileTypes()
+    {
+        $allowedFileTypesFromDb = self::GetCMSFileTypes();
+        $allowedFileTypesFromDb = array_map('strtolower', $allowedFileTypesFromDb);
+
+        return array_values(array_diff($allowedFileTypesFromDb, self::GetDisallowedDocumentFileTypes()));
+    }
+
+    /**
+     * Returns the hardcoded blocklist for document uploads.
+     *
+     * Document uploads must not be controlled by mutable DB configuration alone.
+     *
+     * @return array
+     */
+    public static function GetDisallowedDocumentFileTypes()
+    {
+        return [
+            'php',
+            'php3',
+            'php4',
+            'php5',
+            'php7',
+            'php8',
+            'phtml',
+            'phar',
+            'inc',
+            'module',
+            'cgi',
+            'pl',
+            'py',
+            'rb',
+            'sh',
+            'bash',
+            'zsh',
+            'java',
+            'class',
+            'jar',
+            'jsp',
+            'js',
+            'mjs',
+            'cjs',
+            'html',
+            'htm',
+            'xhtml',
+            'xml',
+            'swf',
+        ];
     }
 
     /**
