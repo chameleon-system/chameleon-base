@@ -155,7 +155,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
     {
         self::$bRegistrationConfirmationSuccess = false;
         $sKey = $this->getInputFilterUtil()->getFilteredInput('key');
-        if (!empty($sKey)) {
+        if (!empty($sKey) && 1 === preg_match('/^[a-f0-9]{32}$/', $sKey)) {
             $extranetUserProvider = $this->getExtranetUserProvider();
             $oUser = $extranetUserProvider->getActiveUser();
             $oUser->Logout();
@@ -167,6 +167,7 @@ class MTExtranetCoreEndPoint extends TUserCustomModelBase
                     $aData = $oUser->sqlData;
                     $aData['confirmed'] = '1';
                     $aData['confirmedon'] = date('Y-m-d H:i:s');
+                    $aData['tmpconfirmkey'] = '';
                     $oUser->LoadFromRow($aData);
                     $oUser->AllowEditByAll(true);
                     $oUser->Save();
