@@ -66,7 +66,7 @@ class MTCMSWizardCore extends TUserCustomModelBase
         parent::Execute();
         $this->LoadActiveStep();
         $this->data['oActiveOrderStep'] = $this->oActiveOrderStep;
-        $this->data['oStepNavi'] = $this->oActiveOrderStep ? TdbCmsWizardStepList::GetListNavigationForInstance($this->oActiveOrderStep) : null;
+        $this->data['oStepNavi'] = null !== $this->oActiveOrderStep ? TdbCmsWizardStepList::GetListNavigationForInstance($this->oActiveOrderStep) : null;
         $this->data['sBasketRequestURL'] = self::GetCallingURL();
 
         $oWizardConf = TdbCmsWizardConfig::GetNewInstance();
