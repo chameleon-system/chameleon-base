@@ -21,6 +21,8 @@
     <input type="hidden" name="pos_y" id="pos_y" value="">
     <input type="hidden" name="width" id="width" value="">
     <input type="hidden" name="height" id="height" value="">
+    <input type="hidden" name="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_AJAX_MODE') }}" id="imageCropAjaxMode" value="0">
+    <input type="hidden" name="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_SAVE_ACTION') }}" id="saveAction" value="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::SAVE_ACTION_SAVE') }}">
 
     <div class="d-flex flex-wrap">
         {% set placeholderTranslationsKey = 'chameleon_system_image_crop.editor.crop_name_placeholder' %}
@@ -36,12 +38,16 @@
         {% endif %}
     </div>
     <hr>
-    {% set saveButtonTranslationKey = 'chameleon_system_image_crop.editor.save' %}
+    <button type="submit" class="btn btn-success mr-2 mt-2" data-save-action="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::SAVE_ACTION_SAVE') }}">
+        <span class="fas fa-save"></span> {{ 'chameleon_system_image_crop.editor.save' | trans({'%savingMode%': savingMode}) }}
+    </button>
     {% if enableCallback %}
-        {% set saveButtonTranslationKey = saveButtonTranslationKey ~ '_and_set' %}
+        <button type="submit" class="btn btn-primary mr-2 mt-2" data-save-action="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::SAVE_ACTION_SAVE_AND_SET') }}">
+            <span class="fas fa-check"></span> {{ 'chameleon_system_image_crop.editor.save_and_set' | trans({'%savingMode%': savingMode}) }}
+        </button>
     {% endif %}
-    <button type="submit" class="btn btn-success mr-2 mt-2">
-        <span class="fas fa-save"></span> {{ saveButtonTranslationKey | trans({'%savingMode%': savingMode}) }}
+    <button type="button" class="btn btn-default mt-2" id="closeImageCropEditorButton">
+        <span class="fas fa-times"></span> Schließen
     </button>
 
 
@@ -62,12 +68,6 @@
             {% elseif preset %}
                 data-cropper-crop-width="{{ preset.width|e('html_attr') }}"
                 data-cropper-crop-height="{{ preset.height|e('html_attr') }}"
-            {% endif %}
-            {% if saved and enableCallback %}
-                data-callback-field-name="{{ fieldName|e('html_attr') }}"
-                data-callback-existing-crop-id="{{ existingCrop.id|e('html_attr') }}"
-                data-callback-cms-image-id="{{ cmsImage.id|e('html_attr') }}"
-                data-callback-url-to-get-image="{{  urlToGetImage|e('html_attr') }}"
             {% endif %}
     >
 </div>
