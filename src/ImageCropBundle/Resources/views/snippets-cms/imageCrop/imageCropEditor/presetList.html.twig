@@ -1,14 +1,33 @@
 <div class="snippetImageCropImageCropEditorPresetList">
     {% if presetList|length > 0 or customCropList|length > 0 %}
+{#        {{ dump(presetList) }}#}
+{#        {{ dump(customCropList) }}#}
+
+        <h3>Bildausschnitts-Vorlagen:</h3>
         <ul>
             {% for preset in presetList %}
-                <li{% if preset.active %} class="active"{% endif %}><a href="{{ preset.url }}">{{ preset.name }}</a>
+                <li class="{% if preset.active %}active{% endif %} {% if preset.hasSavedCrop %}has-saved-crop{% endif %}">
+                    <a href="{{ preset.url }}">{{ preset.name }}</a>
                 </li>
             {% endfor %}
-            {% for customCrop in customCropList %}
-                <li{% if customCrop.active %} class="active"{% endif %}><a
-                            href="{{ customCrop.url }}">{{ customCrop.name }}</a></li>
+        </ul>
+        <h3>Eigene Ausschnitte:</h3>
+        {% set newOwnCropButton = customCropList|last %}
+
+        <ul>
+            {% for customCrop in customCropList|slice(0, customCropList|length - 1) %}
+                <li class="{% if customCrop.active %}active{% endif %} {% if customCrop.hasSavedCrop %}has-saved-crop{% endif %}">
+                    <a href="{{ customCrop.url }}">{{ customCrop.name }}</a>
+                </li>
             {% endfor %}
         </ul>
+
+        {% if newOwnCropButton is not empty %}
+            <ul>
+                <li class="{% if newOwnCropButton.active %}active{% endif %} {% if newOwnCropButton.hasSavedCrop %}has-saved-crop{% endif %}">
+                    <a href="{{ newOwnCropButton.url }}">{{ newOwnCropButton.name }}</a>
+                </li>
+            </ul>
+        {% endif %}
     {% endif %}
 </div>

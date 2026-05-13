@@ -25,6 +25,7 @@
     margin-right: 10px;
     line-height: 30px;
     margin-bottom: 10px;
+    border: 2px solid transparent;
 }
 
 .snippetImageCropImageCropEditorPresetList ul > li a {
@@ -38,6 +39,10 @@
 
 .snippetImageCropImageCropEditorPresetList ul > li.active {
     background: rgb(179, 232, 255);
+}
+
+.snippetImageCropImageCropEditorPresetList ul > li.has-saved-crop {
+    border-color: #2e9f42;
 }
 
 .snippetImageCropImageCropEditorImageCropEditorForm input.crop-name {

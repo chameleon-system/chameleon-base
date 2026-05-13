@@ -34,15 +34,16 @@
         {% if existingCrop.id %}
             {% set savingMode = 'chameleon_system_image_crop.editor.saving_mode.update_existing' | trans %}
         {% endif %}
-
-        {% set saveButtonTranslationKey = 'chameleon_system_image_crop.editor.save' %}
-        {% if enableCallback %}
-            {% set saveButtonTranslationKey = saveButtonTranslationKey ~ '_and_set' %}
-        {% endif %}
-        <button type="submit" class="btn btn-success mr-2 mt-2">
-            <span class="fas fa-save"></span> {{ saveButtonTranslationKey | trans({'%savingMode%': savingMode}) }}
-        </button>
     </div>
+    <hr>
+    {% set saveButtonTranslationKey = 'chameleon_system_image_crop.editor.save' %}
+    {% if enableCallback %}
+        {% set saveButtonTranslationKey = saveButtonTranslationKey ~ '_and_set' %}
+    {% endif %}
+    <button type="submit" class="btn btn-success mr-2 mt-2">
+        <span class="fas fa-save"></span> {{ saveButtonTranslationKey | trans({'%savingMode%': savingMode}) }}
+    </button>
+
 
 </form>
 
