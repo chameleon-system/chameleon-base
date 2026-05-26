@@ -3,10 +3,14 @@
 <div class="snippetMediaManagerDetail cms-media-item" data-id="{{ mediaItem.id }}" data-name="{{ mediaItem.name }}">
     <div class="row details">
         <div class="col-12 mb-4 col-xl-5 mb-xl-0 image mb-2">
+            {% set mediaPreviewUrl = constant('URL_MEDIA_LIBRARY') ~ mediaItem.path %}
+            {% if mediaItem.refreshToken %}
+                {% set mediaPreviewUrl = mediaPreviewUrl ~ '?ck=' ~ mediaItem.refreshToken %}
+            {% endif %}
             <div class="image-background">
-                <img src="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" alt="" class="preview">
+                <img src="{{ mediaPreviewUrl }}" alt="" class="preview">
             </div>
-            <a href="{{ constant('URL_MEDIA_LIBRARY') }}{{ mediaItem.path }}" target="_blank" class="btn btn-success btn-sm mt-2"><i class="fas fa-download mr-2"></i>{{ 'chameleon_system_media_manager.details.download_button' | trans }}</a>
+            <a href="{{ mediaPreviewUrl }}" target="_blank" class="btn btn-success btn-sm mt-2"><i class="fas fa-download mr-2"></i>{{ 'chameleon_system_media_manager.details.download_button' | trans }}</a>
             {% if accessRightsMedia.edit %}
                 <a href="#" target="_blank" class="btn btn-primary btn-sm mt-2 replace-image"><i class="fas fa-sync mr-2"></i>{{ 'chameleon_system_media_manager.details.replace_button' | trans }}</a>
             {% endif %}
@@ -39,7 +43,7 @@
                     </td>
                     <td>ID {{ mediaItem.id }} <i class="far fa-clipboard"></i></td>
                 </tr>
-                <tr class="image-url-copy-button" data-image-url="{{ constant('URL_MEDIA_LIBRARY') | e('html_attr') }}{{ mediaItem.path | e('html_attr') }}" title="{{ 'chameleon_system_core.text.copy_image_url_to_clipboard' | trans | e('html_attr') }}">
+                <tr class="image-url-copy-button" data-image-url="{{ mediaPreviewUrl | e('html_attr') }}" title="{{ 'chameleon_system_core.text.copy_image_url_to_clipboard' | trans | e('html_attr') }}">
                     <td><i class="far fa-file mr-2"></i></td>
                     <td>
                         <input type="text" value="{{ mediaItem.path }}" class="border-0" style="width: 90%">
