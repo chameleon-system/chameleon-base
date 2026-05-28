@@ -68,6 +68,8 @@ class MediaItemDataModel
      */
     private $iconHtml = '';
 
+    private ?string $refreshToken = null;
+
     /**
      * @param string $id
      * @param string $path
@@ -246,5 +248,15 @@ class MediaItemDataModel
     public function setIconHtml(string $iconHtml): void
     {
         $this->iconHtml = $iconHtml;
+    }
+
+    public function getRefreshToken(): ?string
+    {
+        return $this->refreshToken;
+    }
+
+    public function setRefreshToken(?string $refreshToken): void
+    {
+        $this->refreshToken = $refreshToken;
     }
 }

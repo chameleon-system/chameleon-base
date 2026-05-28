@@ -150,6 +150,7 @@ class MediaItemDataAccess implements MediaItemDataAccessInterface
         }
         $dataModel->setSystemName($cmsMediaTableObject->fieldSystemname);
         $dataModel->setIconHtml($this->getFileTypeIconHtml($cmsMediaTableObject->id));
+        $dataModel->setRefreshToken($cmsMediaTableObject->fieldRefreshToken);
 
         return $dataModel;
     }
