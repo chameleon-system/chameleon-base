@@ -68,10 +68,7 @@ class MediaItemDataModel
      */
     private $iconHtml = '';
 
-    /**
-     * @var string|null
-     */
-    private $refreshToken;
+    private ?string $refreshToken = null;
 
     /**
      * @param string $id
