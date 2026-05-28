@@ -17,6 +17,12 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class TCMSTableEditorMedia extends TCMSTableEditorFiles
 {
+    /**
+     * Holds the resolved media path for the current upload cycle.
+     * This prevents path drift between file move and DB path save.
+     */
+    private ?string $resolvedUploadMediaPath = null;
+
     protected function GetTableName()
     {
         return 'cms_media';
@@ -256,7 +262,9 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
     protected function GetTargetDirectory()
     {
         $sMediaPathString = '';
-        if (!is_null($this->oTable)) {
+        if (null !== $this->resolvedUploadMediaPath) {
+            $sMediaPathString = $this->resolvedUploadMediaPath;
+        } elseif (!is_null($this->oTable)) {
             $sMediaPathString = $this->oTable->GetImageNameAsSeoName();
         }
         $sFullPath = $this->GetBaseTargetDirectory();
@@ -353,7 +361,7 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
              * @var TCmsMedia $media
              */
             $media = $this->oTable;
-            $sNewName = $media->GetImageNameAsSeoName();
+            $sNewName = $this->resolvedUploadMediaPath ?? $media->GetImageNameAsSeoName();
             $this->SaveField('path', $sNewName);
 
             if (!is_null($this->aUploadData)) {
@@ -482,8 +490,9 @@ class TCMSTableEditorMedia extends TCMSTableEditorFiles
     protected function GetTargetFileName()
     {
         $sTargetDir = $this->GetBaseTargetDirectory();
+        $this->resolvedUploadMediaPath = $this->oTable->GetImageNameAsSeoName();
 
-        return $sTargetDir.'/'.$this->oTable->GetImageNameAsSeoName();
+        return $sTargetDir.'/'.$this->resolvedUploadMediaPath;
     }
 
     /**
