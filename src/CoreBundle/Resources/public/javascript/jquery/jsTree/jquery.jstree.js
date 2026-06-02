@@ -25,6 +25,10 @@
  * jsTree core
  */
 (function ($) {
+	if(!$.fn.andSelf && $.fn.addBack) {
+		$.fn.andSelf = $.fn.addBack;
+	}
+
 	// Common functions not related to jsTree 
 	// decided to move them to a `vakata` "namespace"
 	$.vakata = {};
