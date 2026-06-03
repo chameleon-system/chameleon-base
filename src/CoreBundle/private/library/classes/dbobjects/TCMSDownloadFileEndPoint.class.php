@@ -42,7 +42,7 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
         parent::__construct('cms_document', $id);
     }
 
-    public function getLink(bool $absolute = false, ?string $anchor = null, array $optionalParameters = [], ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
+    public function getLink(bool $absolute = false, ?string $anchor = null, array $optionalParameters = [], ?TdbCmsPortal $portal = null, ?TdbCmsLanguage $language = null)
     {
         return $this->GetPlainDownloadLink(false, false, !$absolute);
     }
@@ -182,7 +182,11 @@ class TCMSDownloadFileEndPoint extends TCMSRecord
 
         if (false === $hideIcon) {
             $fileType = $this->GetFileType();
-            $iconClass = $this->getFileTypeIconCssStyle().TGlobalBase::OutHTML($fileType->sqlData['file_extension']);
+            $fileExtension = '';
+            if (\is_object($fileType) && \is_array($fileType->sqlData) && array_key_exists('file_extension', $fileType->sqlData)) {
+                $fileExtension = TGlobalBase::OutHTML((string) $fileType->sqlData['file_extension']);
+            }
+            $iconClass = $this->getFileTypeIconCssStyle().$fileExtension;
             $downloadLinkDataModel->setIconCssClass($iconClass);
         }
 
