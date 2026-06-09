@@ -22,6 +22,9 @@ class CmsExportProfiles
         // TCMSFieldOption
         /** @var string - Export format */
         private string $exportType = 'TABs',
+        // TCMSFieldBoolean
+        /** @var bool - Split multi-value fields into separate columns */
+        private bool $expandMultiValueFields = true,
         // TCMSFieldLookup
         /** @var CmsTblConf|null - Table */
         private ?CmsTblConf $cmsTblConf = null,
@@ -90,6 +93,19 @@ class CmsExportProfiles
     public function setExportType(string $exportType): self
     {
         $this->exportType = $exportType;
+
+        return $this;
+    }
+
+    // TCMSFieldBoolean
+    public function isExpandMultiValueFields(): bool
+    {
+        return $this->expandMultiValueFields;
+    }
+
+    public function setExpandMultiValueFields(bool $expandMultiValueFields): self
+    {
+        $this->expandMultiValueFields = $expandMultiValueFields;
 
         return $this;
     }
