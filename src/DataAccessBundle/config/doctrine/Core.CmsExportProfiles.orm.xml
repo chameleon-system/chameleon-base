@@ -29,6 +29,12 @@
                 <option name="default">TABs</option>
             </options>
         </field>
+        <field name="expandMultiValueFields" type="boolean" column="expand_multi_value_fields" nullable="false">
+            <options>
+                <option name="comment">Split multi-value fields into separate columns</option>
+                <option name="default">true</option>
+            </options>
+        </field>
         <many-to-one field="cmsTblConf"
                      target-entity="\ChameleonSystem\DataAccessBundle\Entity\CoreTableConfiguration\CmsTblConf">
             <join-column name="cms_tbl_conf_id" referenced-column-name="id"/>

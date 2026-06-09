@@ -17,6 +17,12 @@ use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
  * /**/
 class CMSTableExport extends TCMSModelBase
 {
+    private const FIELD_CONFIG_KEY_NAME = 'fieldName';
+    private const FIELD_CONFIG_KEY_TEMPLATE = 'htmlTemplate';
+    private const FIELD_CONFIG_KEY_EXPANDABLE = 'isExpandable';
+    private const FIELD_CONFIG_KEY_HEADER = 'header';
+    private const FIELD_CONFIG_KEY_DYNAMIC_COLUMNS = 'dynamicColumns';
+
     protected $listParams;
     protected $oTableManager;
     protected $tableID;
@@ -142,12 +148,13 @@ class CMSTableExport extends TCMSModelBase
         $oProfileRecord->Load($export_profile_id);
 
         $aFieldConfig = $this->FetchFieldConf($oProfileRecord);
+        $expandMultiValueFields = $this->isExpandMultiValueFieldsEnabled($oProfileRecord);
 
         $sFileType = 'txt';
         if ('CSV' == $oProfileRecord->sqlData['export_type']) {
-            $this->GenerateCSVExport($aFieldConfig, ';');
+            $this->GenerateCSVExport($aFieldConfig, ';', $expandMultiValueFields);
         } elseif ('TABs' == $oProfileRecord->sqlData['export_type']) {
-            $this->GenerateCSVExport($aFieldConfig, "\t");
+            $this->GenerateCSVExport($aFieldConfig, "\t", $expandMultiValueFields);
         }
 
         // close temp file handler
@@ -235,7 +242,13 @@ class CMSTableExport extends TCMSModelBase
         $oFieldRecordList->ChangeOrderBy(['sort_order' => 'ASC']);
         /** @var $oField TCMSRecord */
         while ($oField = $oFieldRecordList->Next()) {
-            $aFieldConfig[$oField->sqlData['fieldname']] = $oField->sqlData['html_template'];
+            $aFieldConfig[] = [
+                self::FIELD_CONFIG_KEY_NAME => $oField->sqlData['fieldname'],
+                self::FIELD_CONFIG_KEY_TEMPLATE => $oField->sqlData['html_template'],
+                self::FIELD_CONFIG_KEY_EXPANDABLE => false,
+                self::FIELD_CONFIG_KEY_HEADER => '',
+                self::FIELD_CONFIG_KEY_DYNAMIC_COLUMNS => [],
+            ];
         }
 
         return $aFieldConfig;
@@ -262,59 +275,63 @@ class CMSTableExport extends TCMSModelBase
      * @param array $aFieldConfig - contains TCMSRecord field objects
      * @param string $delimiter - default ";"
      */
-    protected function GenerateCSVExport($aFieldConfig, $delimiter = ';')
+    protected function GenerateCSVExport($aFieldConfig, $delimiter = ';', $expandMultiValueFields = false)
     {
         $this->SetTemplate('CMSTableExport', 'csv');
-        $oRecordList = $this->GetRecordListObject();
-
         $oTableConf = TdbCmsTblConf::GetNewInstance($this->tableID);
+        $aFieldConfig = $this->prepareFieldConfigForCsvExport($aFieldConfig, $oTableConf, (bool) $expandMultiValueFields);
+        $oRecordList = $this->GetRecordListObject();
 
         $count = 0;
         /** @var $oRecord TCMSRecord */
         while ($oRecord = $oRecordList->Next()) {
             $csvData = '';
-            reset($aFieldConfig);
 
             // export column names in first row
             if (0 == $count) {
                 $csvData .= '"ID"'.$delimiter;
-                foreach ($aFieldConfig as $sFieldName => $htmlTemplate) {
-                    if (!empty($sFieldName)) {
-                        $oField = $oTableConf->GetField($sFieldName, $oRecord);
-                        $csvData .= '"'.$this->FilterCSVData($oField->oDefinition->fieldTranslation).'"'.$delimiter;
-                        unset($oField);
+                foreach ($aFieldConfig as $fieldConfig) {
+                    foreach ($this->getCsvHeaderColumnsForField($fieldConfig) as $headerColumn) {
+                        $csvData .= '"'.$this->FilterCSVData($headerColumn).'"'.$delimiter;
                     }
                 }
 
                 $csvData .= "\n";
-                reset($aFieldConfig);
             }
 
             /*
              * add cmsident.
              */
             $csvData .= '"'.$oRecord->sqlData['cmsident'].'"'.$delimiter;
-            foreach ($aFieldConfig as $sFieldName => $htmlTemplate) {
-                if (!empty($sFieldName)) {
-                    $oField = $oTableConf->GetField($sFieldName, $oRecord);
-                    if (is_object($oField)) {
-                        $text = $oField->GetHTMLExport();
-                        // $text = strip_tags($text);
-                        if (stristr($htmlTemplate, '@text@')) {
-                            $text = str_replace('@text@', $text, $htmlTemplate);
-                            $text = $this->FilterCSVData($text);
-                            $csvData .= '"'.$text.'"'.$delimiter;
-                        } else {
-                            $text = $this->FilterCSVData($text);
-                            $csvData .= '"'.$text.'"'.$delimiter;
-                        }
-                    }
-                    unset($oField);
+            foreach ($aFieldConfig as $fieldConfig) {
+                $sFieldName = $fieldConfig[self::FIELD_CONFIG_KEY_NAME];
+                if (empty($sFieldName)) {
+                    continue;
                 }
+
+                $oField = $oTableConf->GetField($sFieldName, $oRecord);
+                if (!is_object($oField)) {
+                    continue;
+                }
+
+                if (true === $fieldConfig[self::FIELD_CONFIG_KEY_EXPANDABLE]) {
+                    $fieldValueMap = $this->getRecordMultiValueMap($oRecord, $oField);
+                    foreach ($fieldConfig[self::FIELD_CONFIG_KEY_DYNAMIC_COLUMNS] as $dynamicColumnValue => $dynamicColumnLabel) {
+                        $csvData .= '"'.(array_key_exists($dynamicColumnValue, $fieldValueMap) ? '1' : '0').'"'.$delimiter;
+                    }
+                } else {
+                    $text = $oField->GetHTMLExport();
+                    $htmlTemplate = $fieldConfig[self::FIELD_CONFIG_KEY_TEMPLATE];
+                    if (stristr($htmlTemplate, '@text@')) {
+                        $text = str_replace('@text@', $text, $htmlTemplate);
+                    }
+                    $csvData .= '"'.$this->FilterCSVData($text).'"'.$delimiter;
+                }
+                unset($oField);
             }
 
             // kill last delimiter
-            if (';' == substr($csvData, -1, 1)) {
+            if ($delimiter === substr($csvData, -1, 1)) {
                 $csvData = substr($csvData, 0, -1);
             }
 
@@ -328,8 +345,150 @@ class CMSTableExport extends TCMSModelBase
         }
     }
 
+    protected function prepareFieldConfigForCsvExport(array $aFieldConfig, TdbCmsTblConf $oTableConf, bool $expandMultiValueFields): array
+    {
+        $oRecordList = $this->GetRecordListObject();
+
+        /** @var $oRecord TCMSRecord */
+        while ($oRecord = $oRecordList->Next()) {
+            foreach ($aFieldConfig as $index => $fieldConfig) {
+                $sFieldName = $fieldConfig[self::FIELD_CONFIG_KEY_NAME];
+                if (empty($sFieldName)) {
+                    continue;
+                }
+
+                $oField = $oTableConf->GetField($sFieldName, $oRecord);
+                if (!is_object($oField)) {
+                    continue;
+                }
+
+                if (empty($aFieldConfig[$index][self::FIELD_CONFIG_KEY_HEADER])) {
+                    $header = $oField->oDefinition->fieldTranslation;
+                    if (empty($header)) {
+                        $header = $sFieldName;
+                    }
+                    $aFieldConfig[$index][self::FIELD_CONFIG_KEY_HEADER] = $header;
+                }
+
+                if (false === $expandMultiValueFields || false === $this->isExpandableMultiValueField($oField)) {
+                    continue;
+                }
+
+                $aFieldConfig[$index][self::FIELD_CONFIG_KEY_EXPANDABLE] = true;
+                foreach ($this->getRecordMultiValueMap($oRecord, $oField) as $columnKey => $columnLabel) {
+                    $aFieldConfig[$index][self::FIELD_CONFIG_KEY_DYNAMIC_COLUMNS][$columnKey] = $columnLabel;
+                }
+            }
+        }
+
+        foreach ($aFieldConfig as $index => $fieldConfig) {
+            if (false === $fieldConfig[self::FIELD_CONFIG_KEY_EXPANDABLE]) {
+                continue;
+            }
+
+            $aFieldConfig[$index][self::FIELD_CONFIG_KEY_DYNAMIC_COLUMNS] = $this->sortDynamicColumnsByLabel(
+                $fieldConfig[self::FIELD_CONFIG_KEY_DYNAMIC_COLUMNS]
+            );
+        }
+
+        return $aFieldConfig;
+    }
+
+    protected function isExpandMultiValueFieldsEnabled(TdbCmsExportProfiles $oProfileRecord): bool
+    {
+        return '1' === (string) ($oProfileRecord->sqlData['expand_multi_value_fields'] ?? '0');
+    }
+
+    protected function isExpandableMultiValueField($oField): bool
+    {
+        return $oField instanceof TCMSMLTField || $oField instanceof TCMSFieldPropertyTable;
+    }
+
     /**
-     * filters CSV field values by different quote types newlines etc.
+     * @return array<string,string>
+     */
+    protected function getRecordMultiValueMap(TCMSRecord $oRecord, $oField): array
+    {
+        $fieldValueMap = [];
+
+        if ($oField instanceof TCMSMLTField) {
+            $oConnectedRecords = $oField->FetchConnectedMLTRecords();
+            while ($oConnectedRecord = $oConnectedRecords->Next()) {
+                $displayValue = $this->getRecordDisplayValueForMultiValueExport($oConnectedRecord);
+                if ('' !== $displayValue) {
+                    $fieldValueMap[$displayValue] = $displayValue;
+                }
+            }
+
+            return $fieldValueMap;
+        }
+
+        if ($oField instanceof TCMSFieldPropertyTable) {
+            $oPropertyList = $oRecord->GetProperties(
+                $oField->name,
+                null,
+                '`cmsident`',
+                null,
+                $oField->GetMatchingParentFieldName()
+            );
+            while ($oPropertyRecord = $oPropertyList->Next()) {
+                $displayValue = $this->getRecordDisplayValueForMultiValueExport($oPropertyRecord);
+                if ('' !== $displayValue) {
+                    $fieldValueMap[$displayValue] = $displayValue;
+                }
+            }
+        }
+
+        return $fieldValueMap;
+    }
+
+    protected function getRecordDisplayValueForMultiValueExport(TCMSRecord $oRecord): string
+    {
+        $displayValue = trim((string) $oRecord->GetDisplayValue());
+        if ('' === $displayValue && isset($oRecord->sqlData['name'])) {
+            $displayValue = trim((string) $oRecord->sqlData['name']);
+        }
+
+        return $displayValue;
+    }
+
+    /**
+     * @param array<string,string> $dynamicColumns
+     *
+     * @return array<string,string>
+     */
+    protected function sortDynamicColumnsByLabel(array $dynamicColumns): array
+    {
+        if (0 === count($dynamicColumns)) {
+            return [];
+        }
+
+        asort($dynamicColumns, SORT_NATURAL | SORT_FLAG_CASE);
+
+        return $dynamicColumns;
+    }
+
+    /**
+     * @param array<string,mixed> $fieldConfig
+     *
+     * @return string[]
+     */
+    protected function getCsvHeaderColumnsForField(array $fieldConfig): array
+    {
+        if (false === $fieldConfig[self::FIELD_CONFIG_KEY_EXPANDABLE]) {
+            return [$fieldConfig[self::FIELD_CONFIG_KEY_HEADER]];
+        }
+
+        $headerColumns = [];
+        foreach ($fieldConfig[self::FIELD_CONFIG_KEY_DYNAMIC_COLUMNS] as $columnValueLabel) {
+            $headerColumns[] = sprintf('%s: %s', $fieldConfig[self::FIELD_CONFIG_KEY_HEADER], $columnValueLabel);
+        }
+
+        return $headerColumns;
+    }
+
+    /**
+     * filters CSV field values by different quote types newlines etc. by different quote types newlines etc.
      *
      * @param string $csvData
      *
@@ -379,10 +538,12 @@ class CMSTableExport extends TCMSModelBase
         while ($oRecord = $oRecordList->Next()) {
             $rtfData = '';
             reset($aFieldConfig);
-            foreach ($aFieldConfig as $sFieldName => $htmlTemplate) {
+            foreach ($aFieldConfig as $fieldConfig) {
+                $sFieldName = $fieldConfig[self::FIELD_CONFIG_KEY_NAME] ?? '';
                 if (!empty($sFieldName)) {
                     $oField = $oTableConf->GetField($sFieldName, $oRecord);
                     $text = $oField->GetRTFExport();
+                    $htmlTemplate = $fieldConfig[self::FIELD_CONFIG_KEY_TEMPLATE] ?? '';
 
                     if (stristr($htmlTemplate, '@text@')) {
                         $rtfData .= str_replace('@text@', $text, $htmlTemplate).'<br>';
