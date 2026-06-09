@@ -1,7 +1,7 @@
 <h1>Build #1780983145</h1>
 <h2>Date: 2026-06-09</h2>
 <div class="changelog">
-    -
+    - #70283: Add new field to export profiles to expand multi value fields
 </div>
 <?php
 
