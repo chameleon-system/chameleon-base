@@ -345,11 +345,6 @@ class CMSTableExport extends TCMSModelBase
         }
     }
 
-    /**
-     * @param array $aFieldConfig
-     *
-     * @return array
-     */
     protected function prepareFieldConfigForCsvExport(array $aFieldConfig, TdbCmsTblConf $oTableConf, bool $expandMultiValueFields): array
     {
         $oRecordList = $this->GetRecordListObject();
