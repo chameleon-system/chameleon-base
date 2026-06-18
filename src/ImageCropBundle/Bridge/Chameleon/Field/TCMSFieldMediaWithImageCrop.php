@@ -447,7 +447,7 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
         return URL_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameters, '?', '&');
     }
 
-    private function getImageCropPresetSystemName(): string|null
+    private function getImageCropPresetSystemName(): ?string
     {
         return $this->getFieldTypeConfigKey('imageCropPresetSystemName');
     }
