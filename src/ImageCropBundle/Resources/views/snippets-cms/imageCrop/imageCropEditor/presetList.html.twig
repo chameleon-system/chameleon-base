@@ -1,23 +1,20 @@
 <div class="snippetImageCropImageCropEditorPresetList">
     {% if presetList|length > 0 or customCropList|length > 0 %}
-{#        {{ dump(presetList) }}#}
-{#        {{ dump(customCropList) }}#}
-
         <h3>Bildausschnitts-Vorlagen:</h3>
         <ul>
             {% for preset in presetList %}
                 <li class="{% if preset.active %}active{% endif %} {% if preset.hasSavedCrop %}has-saved-crop{% endif %}">
-                    <a href="{{ preset.url }}">{{ preset.name }}</a>
+                    <a href="{{ preset.url }}">{% if preset.hasSavedCrop %}<i class="fas fa-file-image pr-2"></i>{% endif %}{{ preset.displayName|default(preset.name) }}</a>
                 </li>
             {% endfor %}
         </ul>
-        <h3>Eigene Ausschnitte:</h3>
+        <h3 class="mt-3">{{ 'chameleon_system_image_crop.editor.own_croppings'|trans }}</h3>
         {% set newOwnCropButton = customCropList|last %}
 
         <ul>
             {% for customCrop in customCropList|slice(0, customCropList|length - 1) %}
                 <li class="{% if customCrop.active %}active{% endif %} {% if customCrop.hasSavedCrop %}has-saved-crop{% endif %}">
-                    <a href="{{ customCrop.url }}">{{ customCrop.name }}</a>
+                    <a href="{{ customCrop.url }}"><i class="fas fa-file-image pr-2"></i>{{ customCrop.name }}</a>
                 </li>
             {% endfor %}
         </ul>

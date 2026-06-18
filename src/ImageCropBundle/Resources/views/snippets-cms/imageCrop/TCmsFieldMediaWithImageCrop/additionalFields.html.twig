@@ -4,9 +4,9 @@
 <div class="row mt-2">
     <div class="col-12 col-lg-6 align-items-stretch d-flex flex-column justify-content-between">
         <div class="">
-            <div id="label_{{ fieldName }}_image_crop_id" class="d-inline-block mb-2 py-1 px-2 border">
-                {{ 'chameleon_system_image_crop.field.selected_crop' | trans }}
-                <span class="fw-bold px-2">{% if crop %}{{ crop.name | default(crop.imageCropPreset.name) }}{% if crop.name and crop.imageCropPreset.name %} ({{ crop.imageCropPreset.name }}){% endif %}{% else %}-{% endif %}</span>
+            <div id="label_{{ fieldName }}_image_crop_id" class="d-inline-block mb-2 py-1 px-2 border w-100">
+                {{ 'chameleon_system_image_crop.field.selected_crop' | trans }}<br>
+                <span class="fw-bold">{{ selectedCropLabel|default('-') }}</span>
             </div>
             <div>
                 <a class="btn btn-sm btn-light mb-3" id="{{ fieldName }}_image_crop_id_reset_button"{% if not crop %} style="display: none;"{% endif %}

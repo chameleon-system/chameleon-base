@@ -17,24 +17,24 @@
                 <target>Cutout: %cropName%</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_image_crop.editor.own_croppings">
+                <source>chameleon_system_image_crop.editor.own_croppings</source>
+                <target>Own croppings</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_image_crop.editor.save">
                 <source>chameleon_system_image_crop.editor.save</source>
-                <target>Save (%savingMode%)</target>
+                <target>Save</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.editor.save_and_set">
                 <source>chameleon_system_image_crop.editor.save_and_set</source>
-                <target>Save (%savingMode%) and set cutout</target>
+                <target>Save and set cutout</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_image_crop.editor.saving_mode.update_existing">
-                <source>chameleon_system_image_crop.editor.saving_mode.update_existing</source>
-                <target>update existing</target>
-            </trans-unit>
-
-            <trans-unit id="chameleon_system_image_crop.editor.saving_mode.create_new">
-                <source>chameleon_system_image_crop.editor.saving_mode.create_new</source>
-                <target>create new</target>
+            <trans-unit id="chameleon_system_image_crop.editor.close">
+                <source>chameleon_system_image_crop.editor.close</source>
+                <target>Close</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder">
@@ -60,6 +60,11 @@
             <trans-unit id="chameleon_system_image_crop.field.selected_crop">
                 <source>chameleon_system_image_crop.field.selected_crop</source>
                 <target>Selected cutout:</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.field.custom_crop_suffix">
+                <source>chameleon_system_image_crop.field.custom_crop_suffix</source>
+                <target>Custom cutout</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.field.reset_crop">

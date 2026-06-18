@@ -332,8 +332,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $presetRestriction = $this->getPresetRestriction();
         $presetSystemName = $this->getPresetSystemName();
         $parameters = $this->getUrlParameters();
-        $savedPresetSystemNames = $this->getSavedPresetSystemNames();
-        $isNamedCustomCropActive = null !== $activeCrop && '' !== $activeCrop->getName();
+        $savedPresetCrops = $this->getSavedPresetCrops();
         $presetList = [];
         $presets = \TdbCmsImageCropPresetList::GetList();
         $presetRestrictionCount = \count($presetRestriction);
@@ -353,12 +352,16 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             $presetList[] = [
                 'cropPresetId' => $presetAvailable->id,
                 'name' => $presetAvailable->fieldName,
+                'displayName' => $presetAvailable->fieldName,
                 'systemName' => $presetAvailable->fieldSystemName,
                 'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&'),
-                'active' => false === $isNamedCustomCropActive && $presetAvailable->fieldSystemName === $presetSystemName,
-                'hasSavedCrop' => true === isset($savedPresetSystemNames[$presetAvailable->fieldSystemName]),
-                'cropImageId' => true === isset($savedPresetSystemNames[$presetAvailable->fieldSystemName]) ? $savedPresetSystemNames[$presetAvailable->fieldSystemName] : '',
+                'active' => $presetAvailable->fieldSystemName === $presetSystemName,
+                'hasSavedCrop' => true === isset($savedPresetCrops[$presetAvailable->fieldSystemName]),
+                'cropImageId' => true === isset($savedPresetCrops[$presetAvailable->fieldSystemName]) ? $savedPresetCrops[$presetAvailable->fieldSystemName]['id'] : '',
             ];
+            if (true === isset($savedPresetCrops[$presetAvailable->fieldSystemName])) {
+                $presetList[\count($presetList) - 1]['displayName'] = $savedPresetCrops[$presetAvailable->fieldSystemName]['displayName'];
+            }
         }
 
         return $presetList;
@@ -410,7 +413,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         try {
             $crops = $this->imageCropDataAccess->getExistingCrops($this->getCmsImage());
             foreach ($crops as $crop) {
-                if ('' !== $crop->getName()) {
+                if (null === $crop->getImageCropPreset() && '' !== trim((string) $crop->getName())) {
                     $cropParameters = $baseParameters;
                     $cropParameters[self::URL_PARAM_CROP_ID] = $crop->getId();
                     $customCropList[] = [
@@ -465,7 +468,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = '
             <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.css').'" rel="stylesheet">
-            <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/css/imageCropEditor.css?v=test').'" rel="stylesheet">
+            <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/css/imageCropEditor.css?v=1').'" rel="stylesheet">
             <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.js').'"></script>
         ';
 
@@ -524,11 +527,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $cropName = '-';
         if (null !== $crop) {
-            $cropName = $crop->getName();
-            $preset = $crop->getImageCropPreset();
-            if (null !== $preset) {
-                $cropName = ('' === $cropName) ? $preset->getName() : $cropName.' ('.$preset->getName().')';
-            }
+            $cropName = $this->getCropDisplayName($crop);
         }
         $return['cropName'] = $cropName;
         $return['savedCrops'] = $this->getSavedCropsForField(
@@ -708,38 +707,33 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
     }
 
     /**
-     * @return array<string, true>
+     * @return array<string, array{id: string, displayName: string}>
      */
-    private function getSavedPresetSystemNames(): array
+    private function getSavedPresetCrops(): array
     {
-        $savedPresetSystemNames = [];
+        $savedPresetCrops = [];
         $image = $this->getCmsImage();
         if (null === $image) {
-            return $savedPresetSystemNames;
+            return $savedPresetCrops;
         }
 
         try {
             $crops = $this->imageCropDataAccess->getExistingCrops($image);
             foreach ($crops as $crop) {
-                if ('' !== $crop->getName()) { //it's a custom crop
-                    continue;
-                }
                 $preset = $crop->getImageCropPreset();
                 if (null === $preset) {
                     continue;
                 }
-                $savedPresetSystemNames[$preset->getSystemName()] = $crop->getId();
+                $savedPresetCrops[$preset->getSystemName()] = [
+                    'id' => $crop->getId(),
+                    'displayName' => $this->getCropDisplayName($crop),
+                ];
             }
         } catch (ImageCropDataAccessException $e) {
-            return $savedPresetSystemNames;
+            return $savedPresetCrops;
         }
 
-        return $savedPresetSystemNames;
-
-//existing crops:
-//        5afde613-18d5-f048-ad80-57dc9dd4a401
-//        c2ec82ff-c5d9-002a-0b81-e099c4368330 //test1 no saved preset
-//        fca64d22-8892-b0b9-3bf7-b6a2b72a3908
+        return $savedPresetCrops;
     }
 
     /**
@@ -765,19 +759,18 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             foreach ($crops as $crop) {
                 $preset = $crop->getImageCropPreset();
                 $cropName = trim($crop->getName());
-                if ('' === $cropName && null !== $preset) {
+                if (null !== $preset) {
                     if (0 !== count($restrictionLookup) && false === isset($restrictionLookup[$preset->getSystemName()])) {
                         continue;
                     }
-                    $cropName = $preset->getName();
                 }
 
-                if ('' === $cropName) {
+                if ('' === $cropName && null === $preset) {
                     continue;
                 }
 
                 $savedCrops[] = [
-                    'name' => $cropName,
+                    'name' => $this->getCropDisplayName($crop),
                     'id' => $crop->getId(),
                     'selected' => null !== $selectedCropId && '' !== $selectedCropId && $selectedCropId === $crop->getId(),
                 ];
@@ -801,5 +794,29 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $restrictionParts = array_map('trim', $restrictionParts);
 
         return array_values(array_filter($restrictionParts));
+    }
+
+    private function getCropDisplayName(ImageCropDataModel $crop): string
+    {
+        $preset = $crop->getImageCropPreset();
+        $cropName = trim((string) $crop->getName());
+
+        if (null !== $preset) {
+            if ('' === $cropName) {
+                return $preset->getName();
+            }
+
+            return sprintf('%s (%s)', $cropName, $preset->getName());
+        }
+
+        if ('' === $cropName) {
+            return '';
+        }
+
+        return sprintf(
+            '%s (%s)',
+            $cropName,
+            $this->translator->trans('chameleon_system_image_crop.field.custom_crop_suffix')
+        );
     }
 }
