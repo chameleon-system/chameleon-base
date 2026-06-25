@@ -26,7 +26,7 @@ class TCMSFieldLookupMediaTree extends TCMSFieldLookup
         $escapedName = TGlobal::OutHTML($this->name);
 
         $html = "<div>\n";
-        $selectTag = '<select name="%s" id="%s" class="form-control form-control-sm" data-select2-option=\'{"width": "100%"}\' >';
+        $selectTag = '<select name="%s" id="%s" class="form-control form-control-sm" data-select2-option=\'{"width": "100%%"}\' >';
         $html .= sprintf($selectTag, $escapedName, $escapedName);
 
         $oTreeSelect = new TCMRenderMediaTreeSelectBox();
