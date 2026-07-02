@@ -29,6 +29,12 @@
                 <option name="default"></option>
             </options>
         </field>
+        <field name="urlSuffix" type="string" column="url_suffix" length="64" nullable="false">
+            <options>
+                <option name="comment">Optional URL suffix</option>
+                <option name="default"></option>
+            </options>
+        </field>
         <many-to-one field="cmsLanguage" target-entity="\ChameleonSystem\DataAccessBundle\Entity\Core\CmsLanguage">
             <join-column name="cms_language_id" referenced-column-name="id"/>
             <options>
