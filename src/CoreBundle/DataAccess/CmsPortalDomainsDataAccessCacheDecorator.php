@@ -114,6 +114,55 @@ class CmsPortalDomainsDataAccessCacheDecorator implements CmsPortalDomainsDataAc
         return $value;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getDomainCandidatesByHost(string $host): array
+    {
+        $cache = $this->getCache();
+        $cacheKey = $cache->getKey([
+            __METHOD__,
+            \get_class($this->subject),
+            $host,
+        ]);
+        $value = $cache->get($cacheKey);
+        if (null !== $value) {
+            return $value;
+        }
+
+        $value = $this->subject->getDomainCandidatesByHost($host);
+        $cache->set($cacheKey, $value, [
+            ['table' => 'cms_portal_domains', 'id' => null],
+        ]);
+
+        return $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDomainCandidatesByHostAndPortal(string $host, string $portalId): array
+    {
+        $cache = $this->getCache();
+        $cacheKey = $cache->getKey([
+            __METHOD__,
+            \get_class($this->subject),
+            $host,
+            $portalId,
+        ]);
+        $value = $cache->get($cacheKey);
+        if (null !== $value) {
+            return $value;
+        }
+
+        $value = $this->subject->getDomainCandidatesByHostAndPortal($host, $portalId);
+        $cache->set($cacheKey, $value, [
+            ['table' => 'cms_portal_domains', 'id' => null],
+        ]);
+
+        return $value;
+    }
+
     private function getCache(): CacheInterface
     {
         return $this->container->get('chameleon_system_cms_cache.cache');
