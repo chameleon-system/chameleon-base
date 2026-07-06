@@ -27,12 +27,19 @@ interface UrlPrefixGeneratorInterface
      * Generates the complete URL prefix, including a leading slash and slashes as separators between the different
      * URL parts. The result is of varying length, depending on if the prefix parts are needed.
      *
-     * @return string the combined URL prefix of getLanguagePrefix() and getPortalPrefix()
+     * @return string the combined URL prefix of getUrlLanguagePrefix() and getPortalPrefix()
      */
     public function generatePrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null);
 
     /**
-     * Returns only the language-specific part of the URL prefix, without any slashes.
+     * Returns the URL-specific language part of the prefix, without any slashes.
+     *
+     * @return string the configured domain URL suffix or legacy language prefix of the given language, or an empty string (depending on the implementation)
+     */
+    public function getUrlLanguagePrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null);
+
+    /**
+     * Returns the legacy language-specific part of the URL prefix, without any slashes.
      *
      * @return string the language ISO6391 code of the given language, or an empty string (depending on the implementation)
      */

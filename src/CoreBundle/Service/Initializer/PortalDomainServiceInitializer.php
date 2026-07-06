@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
 use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolutionResult;
 use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolver;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
@@ -76,6 +77,8 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
             return;
         }
 
+        $portalDomainService->setActiveDomainPathVariantResolutionResult(null);
+
         $requestInfoService = $this->getRequestInfoService();
         if ($requestInfoService->isChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_FRONTEND)
             && true === $requestInfoService->isCmsTemplateEngineEditMode()
@@ -85,7 +88,8 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
             $portal = null;
             $domain = null;
         } else {
-            list($portal, $domain) = $this->determinePortalAndDomainDefault($request, $portalDomainService);
+            list($portal, $domain, $resolutionResult) = $this->determinePortalAndDomainDefault($request, $portalDomainService);
+            $portalDomainService->setActiveDomainPathVariantResolutionResult($resolutionResult);
         }
 
         $portalDomainService->setActivePortal($portal);
@@ -112,6 +116,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
     {
         $portal = null;
         $domain = null;
+        $resolutionResult = null;
 
         $sName = $request->getHost();
         $sRelativePath = $request->getPathInfo();
@@ -134,7 +139,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
                         $previewLanguageId = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
                         $domain = $portalDomainService->getPrimaryDomain($portal->id, $previewLanguageId);
 
-                        return [$portal, $domain];
+                        return [$portal, $domain, null];
                     }
                 }
             }
@@ -161,30 +166,36 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         if (null !== $aResultData) {
             $portal = $aResultData['portal'];
             $domain = $aResultData['domain'];
+            $resolutionResult = $this->createResolutionResultFromCacheData($aResultData['domainPathVariantResolution'] ?? null);
 
-            return [$portal, $domain];
+            return [$portal, $domain, $resolutionResult];
         }
 
         $aResultData = [
             'portal' => null,
             'domain' => null,
+            'domainPathVariantResolution' => null,
         ];
 
-        $resolvedPortalAndDomain = $this->resolvePortalAndDomainFromPathVariants(
+        $resolutionResult = $this->resolveDomainPathVariant(
             $sName,
             $sRelativePath,
             $domainCandidates,
             $portalPrefixList,
             $isUserSignedInToBackend
         );
+        $portalDomainService->setActiveDomainPathVariantResolutionResult($resolutionResult);
+        $resolvedPortalAndDomain = $this->createPortalAndDomainFromResolution($resolutionResult, $isUserSignedInToBackend);
         if (null !== $resolvedPortalAndDomain) {
             $aResultData = $resolvedPortalAndDomain;
+            $aResultData['domainPathVariantResolution'] = $resolutionResult?->toArray();
         } else {
             $aResultData = $this->determinePortalAndDomainFallback(
                 $domainCandidates,
                 $prefix,
                 $isUserSignedInToBackend
             );
+            $aResultData['domainPathVariantResolution'] = $resolutionResult?->toArray();
         }
 
         $cache->set(
@@ -199,7 +210,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         $portal = $aResultData['portal'];
         $domain = $aResultData['domain'];
 
-        return [$portal, $domain];
+        return [$portal, $domain, $resolutionResult];
     }
 
     /**
@@ -208,20 +219,29 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
      *
      * @return array{portal: \TCMSPortal|null, domain: \TCMSPortalDomain|null}|null
      */
-    protected function resolvePortalAndDomainFromPathVariants(
+    protected function resolveDomainPathVariant(
         string $host,
         string $path,
         array $domainCandidates,
         array $portalPrefixList,
         bool $allowInactivePortals
-    ): ?array {
+    ): ?DomainPathVariantResolutionResult {
         if ([] === $domainCandidates) {
             return null;
         }
 
         $portalIdentifiers = $this->buildPortalIdentifierMap($domainCandidates, $portalPrefixList, $allowInactivePortals);
-        $resolution = $this->domainPathVariantResolver->resolve($host, $path, $domainCandidates, $portalIdentifiers);
-        if (false === $resolution->isDomainVariantMatched() || null === $resolution->getMatchedDomain()) {
+        return $this->domainPathVariantResolver->resolve($host, $path, $domainCandidates, $portalIdentifiers);
+    }
+
+    /**
+     * @return array{portal: \TCMSPortal|null, domain: \TCMSPortalDomain|null}|null
+     */
+    protected function createPortalAndDomainFromResolution(
+        ?DomainPathVariantResolutionResult $resolution,
+        bool $allowInactivePortals
+    ): ?array {
+        if (null === $resolution || false === $resolution->isDomainVariantMatched() || null === $resolution->getMatchedDomain()) {
             return null;
         }
 
@@ -443,5 +463,17 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
     private function getActivePageService(): ActivePageServiceInterface
     {
         return $this->container->get('chameleon_system_core.active_page_service');
+    }
+
+    /**
+     * @param array<string, mixed>|null $cacheData
+     */
+    private function createResolutionResultFromCacheData(?array $cacheData): ?DomainPathVariantResolutionResult
+    {
+        if (null === $cacheData) {
+            return null;
+        }
+
+        return DomainPathVariantResolutionResult::createFromArray($cacheData);
     }
 }
