@@ -78,6 +78,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         }
 
         $portalDomainService->setActiveDomainPathVariantResolutionResult(null);
+        $request->attributes->set(DomainPathVariantResolutionResult::REQUEST_ATTRIBUTE_NAME, null);
 
         $requestInfoService = $this->getRequestInfoService();
         if ($requestInfoService->isChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_FRONTEND)
@@ -90,6 +91,7 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         } else {
             list($portal, $domain, $resolutionResult) = $this->determinePortalAndDomainDefault($request, $portalDomainService);
             $portalDomainService->setActiveDomainPathVariantResolutionResult($resolutionResult);
+            $request->attributes->set(DomainPathVariantResolutionResult::REQUEST_ATTRIBUTE_NAME, $resolutionResult);
         }
 
         $portalDomainService->setActivePortal($portal);

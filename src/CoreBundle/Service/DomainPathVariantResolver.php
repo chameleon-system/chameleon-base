@@ -40,14 +40,17 @@ class DomainPathVariantResolver
         $suffixSegment = $pathSegments[$pathOffset] ?? null;
         if (null !== $suffixSegment) {
             $suffixCandidates = $this->filterCandidatesBySuffix($domainCandidates, $suffixSegment);
+            if ([] === $suffixCandidates) {
+                $suffixCandidates = $this->filterCandidatesBySuffixCaseInsensitive($domainCandidates, $suffixSegment);
+            }
             if ([] !== $suffixCandidates) {
-                $consumedDomainSuffix = $suffixSegment;
                 $hasDomainSuffix = true;
                 $pathOffset++;
 
                 $candidateSelection = $this->selectCandidate($suffixCandidates, false);
                 $matchedDomain = $candidateSelection['candidate'];
                 $isAmbiguous = $candidateSelection['isAmbiguous'];
+                $consumedDomainSuffix = $this->resolveConsumedDomainSuffix($suffixSegment, $suffixCandidates, $matchedDomain);
             }
         }
 
@@ -166,6 +169,20 @@ class DomainPathVariantResolver
     }
 
     /**
+     * @param array<int, array<string, mixed>> $domainCandidates
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function filterCandidatesBySuffixCaseInsensitive(array $domainCandidates, string $suffix): array
+    {
+        return \array_values(\array_filter(
+            $domainCandidates,
+            static fn (array $candidate): bool => '' !== (string) ($candidate['url_suffix'] ?? '')
+                && 0 === \strcasecmp($suffix, (string) ($candidate['url_suffix'] ?? ''))
+        ));
+    }
+
+    /**
      * @param array<int, array<string, mixed>> $candidates
      *
      * @return array{candidate: array<string, mixed>|null, isAmbiguous: bool}
@@ -229,9 +246,24 @@ class DomainPathVariantResolver
      */
     private function getPathSegments(string $path): array
     {
-        $pathPart = parse_url($path, \PHP_URL_PATH);
-        if (false === $pathPart || null === $pathPart) {
-            $pathPart = '';
+        $pathPart = $path;
+        if (false === str_starts_with($pathPart, '/')) {
+            $parsedPath = parse_url($pathPart, \PHP_URL_PATH);
+            if (false === $parsedPath || null === $parsedPath) {
+                $pathPart = '';
+            } else {
+                $pathPart = $parsedPath;
+            }
+        } else {
+            $queryPosition = strpos($pathPart, '?');
+            if (false !== $queryPosition) {
+                $pathPart = substr($pathPart, 0, $queryPosition);
+            }
+
+            $fragmentPosition = strpos($pathPart, '#');
+            if (false !== $fragmentPosition) {
+                $pathPart = substr($pathPart, 0, $fragmentPosition);
+            }
         }
 
         $segments = \array_filter(explode('/', trim($pathPart, '/')), static fn (string $segment): bool => '' !== $segment);
@@ -283,6 +315,32 @@ class DomainPathVariantResolver
         }
 
         return DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITHOUT_SUFFIX;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $suffixCandidates
+     * @param array<string, mixed>|null        $matchedDomain
+     */
+    private function resolveConsumedDomainSuffix(string $requestedSuffix, array $suffixCandidates, ?array $matchedDomain): string
+    {
+        if (null !== $matchedDomain) {
+            return (string) ($matchedDomain['url_suffix'] ?? $requestedSuffix);
+        }
+
+        $configuredSuffixes = [];
+        foreach ($suffixCandidates as $suffixCandidate) {
+            $configuredSuffix = (string) ($suffixCandidate['url_suffix'] ?? '');
+            if ('' === $configuredSuffix) {
+                continue;
+            }
+            $configuredSuffixes[$configuredSuffix] = $configuredSuffix;
+        }
+
+        if (1 === \count($configuredSuffixes)) {
+            return \array_values($configuredSuffixes)[0];
+        }
+
+        return $requestedSuffix;
     }
 
     /**

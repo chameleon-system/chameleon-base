@@ -32,6 +32,31 @@ interface UrlPrefixGeneratorInterface
     public function generatePrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null);
 
     /**
+     * Generates the complete URL prefix for a concrete domain variant.
+     *
+     * If no domain is passed, implementations should fall back to the default/primary domain behavior of generatePrefix().
+     *
+     * @return string the combined URL prefix of the given portal and language for the passed domain variant
+     */
+    public function generatePrefixForDomain(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null);
+
+    /**
+     * Generates the complete URL path prefix for a concrete portal/language/domain combination.
+     *
+     * The path prefix consists of the optional portal suffix followed by the optional domain-language suffix.
+     *
+     * @return string the combined path prefix including a leading slash, or an empty string if no prefix segments are needed
+     */
+    public function getPathPrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null);
+
+    /**
+     * Returns the domain-language-specific path segment of the URL prefix, without any slashes.
+     *
+     * @return string the configured domain URL suffix, the legacy language prefix, or an empty string (depending on the implementation)
+     */
+    public function getDomainLanguagePathSegment(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null);
+
+    /**
      * Returns the URL-specific language part of the prefix, without any slashes.
      *
      * @return string the configured domain URL suffix or legacy language prefix of the given language, or an empty string (depending on the implementation)

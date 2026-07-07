@@ -72,14 +72,14 @@ class CmsRouteLoader extends Loader
             if (isset($routeConfig['portal_id'])) {
                 $portal = \TdbCmsPortal::GetNewInstance();
                 $portal->Load($routeConfig['portal_id']);
-                $languageList = $portal->GetFieldCmsLanguageList();
                 $defaultLanguage = $this->getDefaultPortalLanguage($portal);
                 $defaultLanguageId = (null === $defaultLanguage) ? null : $defaultLanguage->id;
 
-                while ($language = $languageList->Next()) {
+                foreach ($this->getRouteLanguagesForPortal($portal) as $language) {
                     if ($language->id === $defaultLanguageId) {
                         continue;
                     }
+                    $this->importAdditionalDomainVariantRoutes($collection, $routeConfig, $portal, $language);
                     $this->importRoutes($collection, $routeConfig, $portal, $language);
                 }
                 /*
@@ -91,6 +91,7 @@ class CmsRouteLoader extends Loader
                  *   way. This is currently needed for the product paths.
                  */
                 if (null !== $defaultLanguage) {
+                    $this->importAdditionalDomainVariantRoutes($collection, $routeConfig, $portal, $defaultLanguage);
                     $this->importRoutes($collection, $routeConfig, $portal, $defaultLanguage);
                 }
             } else {
@@ -99,6 +100,48 @@ class CmsRouteLoader extends Loader
         }
 
         return $collection;
+    }
+
+    /**
+     * @return \TdbCmsLanguage[]
+     */
+    private function getRouteLanguagesForPortal(\TdbCmsPortal $portal): array
+    {
+        $languagesById = [];
+
+        $portalLanguageList = $portal->GetFieldCmsLanguageList();
+        while ($language = $portalLanguageList->Next()) {
+            $languagesById[$language->id] = $language;
+        }
+
+        foreach ($this->getDomainLanguagesForPortal($portal) as $domainLanguage) {
+            $languagesById[$domainLanguage->id] = $domainLanguage;
+        }
+
+        return array_values($languagesById);
+    }
+
+    /**
+     * @return \TdbCmsLanguage[]
+     */
+    private function getDomainLanguagesForPortal(\TdbCmsPortal $portal): array
+    {
+        $languagesById = [];
+        $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
+        while ($domain = $portalDomainList->Next()) {
+            if ('' === $domain->fieldCmsLanguageId) {
+                continue;
+            }
+
+            $language = \TdbCmsLanguage::GetNewInstance();
+            if (false === $language->Load($domain->fieldCmsLanguageId)) {
+                continue;
+            }
+
+            $languagesById[$language->id] = $language;
+        }
+
+        return array_values($languagesById);
     }
 
     /**
@@ -121,9 +164,9 @@ class CmsRouteLoader extends Loader
      *
      * @throws \LogicException
      */
-    private function importRoutes(RouteCollection $collection, array $routeConfig, $portal = null, $language = null)
+    private function importRoutes(RouteCollection $collection, array $routeConfig, $portal = null, $language = null, ?\TdbCmsPortalDomains $domain = null)
     {
-        $importedRoutes = $this->getImportedRoutes($routeConfig, $portal, $language);
+        $importedRoutes = $this->getImportedRoutes($routeConfig, $portal, $language, $domain);
         $collection->addCollection($importedRoutes);
     }
 
@@ -132,7 +175,7 @@ class CmsRouteLoader extends Loader
      *
      * @throws \LogicException
      */
-    private function getImportedRoutes(array $routeConfig, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
+    private function getImportedRoutes(array $routeConfig, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null)
     {
         switch ($routeConfig['type']) {
             case 'service':
@@ -184,13 +227,19 @@ class CmsRouteLoader extends Loader
             $this->handleSecurityAndFinalRoutePath($route);
         }
         if (null !== $portal && null !== $language) {
-            $importedRoutes = $this->getRoutesWithFinalNames($importedRoutes, $portal, $language);
+            $importedRoutes = $this->getRoutesWithFinalNames($importedRoutes, $portal, $language, $domain);
             $domainRequirementPlaceholder = $this->routingUtil->getHostRequirementPlaceholder();
-            $urlPrefix = $this->urlPrefixGenerator->generatePrefix($portal, $language);
+            $urlPrefix = $this->urlPrefixGenerator->generatePrefixForDomain($portal, $language, $domain);
+            $currentDomainPathSegment = $this->urlPrefixGenerator->getDomainLanguagePathSegment($portal, $language, $domain);
+            $excludedDomainSuffixes = [];
+            if ('' === $currentDomainPathSegment) {
+                $excludedDomainSuffixes = $this->getConfiguredDomainSuffixesForPortal($portal);
+            }
             $hasTrailingSlash = false === CHAMELEON_SEO_URL_REMOVE_TRAILING_SLASH && true === $portal->fieldUseSlashInSeoUrls;
             foreach ($importedRoutes as $route) {
                 $this->handlePortalAndLanguagePrefix($route, $urlPrefix);
                 $this->handleTrailingSlash($route, $urlPrefix, $hasTrailingSlash);
+                $this->preventDomainSuffixFromBeingCapturedAsPagePath($route, $excludedDomainSuffixes);
                 $this->handleDomainRequirements($route, $domainRequirementPlaceholder, $portal, $language);
                 $this->handleLocale($route, $language);
             }
@@ -205,11 +254,12 @@ class CmsRouteLoader extends Loader
     private function getRoutesWithFinalNames(
         RouteCollection $importedRoutes,
         \TdbCmsPortal $portal,
-        \TdbCmsLanguage $language
+        \TdbCmsLanguage $language,
+        ?\TdbCmsPortalDomains $domain = null
     ) {
         $adjustedRoutes = new RouteCollection();
         foreach ($importedRoutes->all() as $name => $route) {
-            $finalRouteName = $this->getRouteNameWithPortalAndLanguageInformation($name, $portal, $language);
+            $finalRouteName = $this->getRouteNameWithPortalAndLanguageInformation($name, $portal, $language, $domain);
             $adjustedRoutes->add($finalRouteName, $route);
         }
 
@@ -221,9 +271,70 @@ class CmsRouteLoader extends Loader
      *
      * @return string
      */
-    private function getRouteNameWithPortalAndLanguageInformation($name, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
+    private function getRouteNameWithPortalAndLanguageInformation($name, \TdbCmsPortal $portal, \TdbCmsLanguage $language, ?\TdbCmsPortalDomains $domain = null)
     {
+        if (null !== $domain) {
+            return $name.'-'.$portal->id.'-'.$language->fieldIso6391.'-domain-'.$domain->id;
+        }
+
         return $name.'-'.$portal->id.'-'.$language->fieldIso6391;
+    }
+
+    private function importAdditionalDomainVariantRoutes(RouteCollection $collection, array $routeConfig, \TdbCmsPortal $portal, \TdbCmsLanguage $language): void
+    {
+        $primaryDomain = $this->getPrimaryDomain($portal, $language);
+        if (null === $primaryDomain) {
+            return;
+        }
+
+        $primaryPrefix = $this->urlPrefixGenerator->generatePrefixForDomain($portal, $language, $primaryDomain);
+        foreach ($this->getCompatiblePortalDomains($portal, $language) as $domain) {
+            if ($domain->id === $primaryDomain->id) {
+                continue;
+            }
+
+            $domainPrefix = $this->urlPrefixGenerator->generatePrefixForDomain($portal, $language, $domain);
+            if ($domainPrefix === $primaryPrefix) {
+                continue;
+            }
+
+            $this->importRoutes($collection, $routeConfig, $portal, $language, $domain);
+        }
+    }
+
+    /**
+     * @return \TdbCmsPortalDomains[]
+     */
+    private function getCompatiblePortalDomains(\TdbCmsPortal $portal, \TdbCmsLanguage $language): array
+    {
+        $domains = [];
+        $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
+        while ($domain = $portalDomainList->Next()) {
+            if ('' !== $domain->fieldCmsLanguageId && $domain->fieldCmsLanguageId !== $language->id) {
+                continue;
+            }
+            $domains[] = $domain;
+        }
+
+        return $domains;
+    }
+
+    private function getPrimaryDomain(\TdbCmsPortal $portal, \TdbCmsLanguage $language): ?\TdbCmsPortalDomains
+    {
+        $fallbackDomain = null;
+        foreach ($this->getCompatiblePortalDomains($portal, $language) as $domain) {
+            if (true !== (bool) $domain->fieldIsMasterDomain) {
+                continue;
+            }
+            if ($domain->fieldCmsLanguageId === $language->id) {
+                return $domain;
+            }
+            if ('' === $domain->fieldCmsLanguageId) {
+                $fallbackDomain = $domain;
+            }
+        }
+
+        return $fallbackDomain;
     }
 
     /**
@@ -266,10 +377,61 @@ class CmsRouteLoader extends Loader
         if (true === $hasTrailingSlash) {
             return;
         }
+        if ('/' === ($route->getDefault('pagePath') ?? null)) {
+            return;
+        }
         $path = rtrim($route->getPath(), '/');
         if ($path === $urlPrefix) {
             $route->setPath($path);
         }
+    }
+
+    /**
+     * @param string[] $excludedDomainSuffixes
+     */
+    private function preventDomainSuffixFromBeingCapturedAsPagePath(Route $route, array $excludedDomainSuffixes): void
+    {
+        if ([] === $excludedDomainSuffixes || false === $route->hasRequirement('pagePath')) {
+            return;
+        }
+
+        $requirement = (string) $route->getRequirement('pagePath');
+        if ('' === $requirement) {
+            return;
+        }
+
+        $suffixPattern = implode('|', array_map(
+            static fn (string $suffix): string => preg_quote($suffix, '#'),
+            $excludedDomainSuffixes
+        ));
+        if ('' === $suffixPattern) {
+            return;
+        }
+
+        $guard = '(?!(?:'.$suffixPattern.')(?:/|$))';
+        if (str_contains($requirement, $guard)) {
+            return;
+        }
+
+        $route->setRequirement('pagePath', $guard.$requirement);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getConfiguredDomainSuffixesForPortal(\TdbCmsPortal $portal): array
+    {
+        $suffixes = [];
+        $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
+        while ($domain = $portalDomainList->Next()) {
+            $suffix = trim((string) $domain->fieldUrlSuffix);
+            if ('' === $suffix) {
+                continue;
+            }
+            $suffixes[$suffix] = $suffix;
+        }
+
+        return array_values($suffixes);
     }
 
     /**

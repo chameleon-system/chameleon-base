@@ -57,6 +57,26 @@ class DomainPathVariantResolverTest extends TestCase
         );
     }
 
+    public function testResolvesConfiguredDomainSuffixCaseInsensitivelyToCanonicalCase(): void
+    {
+        $result = $this->subject->resolve('www.tischwelt.ch', '/FR/foo', [
+            $this->createDomainCandidate('domain-de', 'portal-1', 'lang-de', ''),
+            $this->createDomainCandidate('domain-fr', 'portal-1', 'lang-fr', 'fr', false),
+        ]);
+
+        $this->assertResolvedMatch(
+            $result,
+            'domain-fr',
+            'portal-1',
+            'lang-fr',
+            '',
+            'fr',
+            '/foo',
+            '/fr',
+            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
+        );
+    }
+
     public function testUnknownSegmentStaysInRemainingPath(): void
     {
         $result = $this->subject->resolve('www.tischwelt.ch', '/frankfurt/foo', [
@@ -122,6 +142,31 @@ class DomainPathVariantResolverTest extends TestCase
             'shop',
             '',
             '/foo',
+            '/shop',
+            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER
+        );
+    }
+
+    public function testPortalIdentifierKeepsUnknownSecondSegmentInRemainingPath(): void
+    {
+        $result = $this->subject->resolve(
+            'www.tischwelt.ch',
+            '/shop/frankfurt/',
+            [
+                $this->createDomainCandidate('domain-de', 'portal-1', 'lang-de', ''),
+                $this->createDomainCandidate('domain-fr', 'portal-1', 'lang-fr', 'fr', false),
+            ],
+            ['shop' => 'portal-1']
+        );
+
+        $this->assertResolvedMatch(
+            $result,
+            'domain-de',
+            'portal-1',
+            'lang-de',
+            'shop',
+            '',
+            '/frankfurt',
             '/shop',
             DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER
         );

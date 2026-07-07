@@ -6,6 +6,7 @@ namespace ChameleonSystem\CoreBundle\Tests\Service;
 
 use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
+use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolutionResult;
 use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolver;
 use ChameleonSystem\CoreBundle\Service\Initializer\PortalDomainServiceInitializer;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
@@ -111,8 +112,14 @@ class PortalDomainServiceInitializerTest extends TestCase
 
         $this->portalDomainService->setActivePortal($portal)->shouldBeCalled();
         $this->portalDomainService->setActiveDomain($domain)->shouldBeCalled();
+        $this->portalDomainService->setActiveDomainPathVariantResolutionResult(Argument::type(DomainPathVariantResolutionResult::class))->shouldBeCalled();
 
         $this->subject->initialize($this->portalDomainService->reveal());
+
+        self::assertInstanceOf(
+            DomainPathVariantResolutionResult::class,
+            $request->attributes->get(DomainPathVariantResolutionResult::REQUEST_ATTRIBUTE_NAME)
+        );
     }
 
     public function testRootPathUsesSuffixlessVariantWhenHostHasMultipleLanguageDomains(): void

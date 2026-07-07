@@ -192,7 +192,12 @@
     ],
     "config": {
         "bin-dir": "vendor/bin",
-        "sort-packages": true
+        "sort-packages": true,
+        "policy": {
+            "advisories": {
+                "ignore-id": ["PKSA-sd3x-9jwt-jn4s", "PKSA-4d16-gn5t-2wt7"]
+            }
+        }
     },
     "replace": {
         "chameleon-system/autoclasses-bundle": "*",

@@ -6,6 +6,8 @@ namespace ChameleonSystem\CoreBundle\Service;
 
 class DomainPathVariantResolutionResult
 {
+    public const REQUEST_ATTRIBUTE_NAME = 'chameleon.domain_path_variant_resolution';
+
     public const MATCH_TYPE_NO_MATCH = 'no_match';
     public const MATCH_TYPE_AMBIGUOUS = 'ambiguous';
     public const MATCH_TYPE_HOST_MATCH_WITHOUT_SUFFIX = 'host_match_without_suffix';
