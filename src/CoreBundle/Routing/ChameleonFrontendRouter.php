@@ -331,7 +331,7 @@ SQL;
         if (null !== $activePortal
             && null !== $activeDomain
             && $activePortal->id === $portal->id
-            && $this->isDomainCompatibleWithLanguage($activeDomain, $language)
+            && $this->shouldReuseActiveDomainForLanguage($activeDomain, $portal, $language)
         ) {
             return $activeDomain;
         }
@@ -359,6 +359,29 @@ SQL;
     private function isDomainCompatibleWithLanguage(\TdbCmsPortalDomains $domain, \TdbCmsLanguage $language): bool
     {
         return '' === $domain->fieldCmsLanguageId || $domain->fieldCmsLanguageId === $language->id;
+    }
+
+    private function shouldReuseActiveDomainForLanguage(\TdbCmsPortalDomains $activeDomain, \TdbCmsPortal $portal, \TdbCmsLanguage $language): bool
+    {
+        if (false === $this->isDomainCompatibleWithLanguage($activeDomain, $language)) {
+            return false;
+        }
+
+        if ($activeDomain->fieldCmsLanguageId === $language->id) {
+            return true;
+        }
+
+        if ('' !== $activeDomain->fieldCmsLanguageId) {
+            return false;
+        }
+
+        try {
+            $primaryDomain = $this->portalDomainService->getPrimaryDomain($portal->id, $language->id);
+        } catch (\Throwable $e) {
+            return true;
+        }
+
+        return $primaryDomain->id === $activeDomain->id;
     }
 
     /**
