@@ -8,14 +8,14 @@ class DomainPathVariantResolver
 {
     /**
      * @param array<int, array<string, mixed>> $domainCandidates
-     * @param array<string, string>            $portalIdentifiers
+     * @param array<string, string> $portalIdentifiers
      */
     public function resolve(
         string $host,
         string $path,
         array $domainCandidates,
         array $portalIdentifiers = []
-    ): DomainPathVariantResolutionResult {
+    ): DomainPathMatch {
         $pathSegments = $this->getPathSegments($path);
         $domainCandidates = $this->filterCandidatesForHost($host, $domainCandidates);
 
@@ -45,9 +45,9 @@ class DomainPathVariantResolver
             }
             if ([] !== $suffixCandidates) {
                 $hasDomainSuffix = true;
-                $pathOffset++;
+                ++$pathOffset;
 
-                $candidateSelection = $this->selectCandidate($suffixCandidates, false);
+                $candidateSelection = $this->identifySuitableCandiate($suffixCandidates, false);
                 $matchedDomain = $candidateSelection['candidate'];
                 $isAmbiguous = $candidateSelection['isAmbiguous'];
                 $consumedDomainSuffix = $this->resolveConsumedDomainSuffix($suffixSegment, $suffixCandidates, $matchedDomain);
@@ -57,16 +57,20 @@ class DomainPathVariantResolver
         if (null === $matchedDomain && false === $isAmbiguous) {
             $suffixlessCandidates = $this->filterCandidatesBySuffix($domainCandidates, '');
             if ([] !== $suffixlessCandidates) {
-                $candidateSelection = $this->selectCandidate($suffixlessCandidates, true);
+                $candidateSelection = $this->identifySuitableCandiate($suffixlessCandidates, true);
                 $matchedDomain = $candidateSelection['candidate'];
                 $isAmbiguous = $candidateSelection['isAmbiguous'];
             }
         }
 
-        $remainingPath = $this->buildPath(\array_slice($pathSegments, $pathOffset));
+        $remainingPath = '/'.\implode('/', \array_slice($pathSegments, $pathOffset));
 
-        if (true === $isAmbiguous) {
-            return new DomainPathVariantResolutionResult(
+        if (true === $isAmbiguous || null === $matchedDomain) {
+            $matchType = (true === $isAmbiguous) ?
+                DomainPathMatch::MATCH_TYPE_AMBIGUOUS :
+                DomainPathMatch::MATCH_TYPE_NO_MATCH;
+
+            return new DomainPathMatch(
                 null,
                 null,
                 $matchedPortalId,
@@ -78,34 +82,16 @@ class DomainPathVariantResolver
                 $hasPortalIdentifier,
                 $hasDomainSuffix,
                 false,
-                DomainPathVariantResolutionResult::MATCH_TYPE_AMBIGUOUS,
+                $matchType,
                 true
             );
         }
 
-        if (null === $matchedDomain) {
-            return new DomainPathVariantResolutionResult(
-                null,
-                null,
-                $matchedPortalId,
-                null,
-                $consumedPortalIdentifier,
-                $consumedDomainSuffix,
-                $remainingPath,
-                '',
-                $hasPortalIdentifier,
-                $hasDomainSuffix,
-                false,
-                DomainPathVariantResolutionResult::MATCH_TYPE_NO_MATCH,
-                false
-            );
-        }
-
         $matchedPortalId = (string) ($matchedDomain['cms_portal_id'] ?? $matchedPortalId);
-        $matchedDomainId = $this->getNullableStringValue($matchedDomain, 'id');
-        $matchedLanguageId = $this->getNullableStringValue($matchedDomain, 'cms_language_id');
+        $matchedDomainId = $matchedDomain['id'] ?? null;
+        $matchedLanguageId = $matchedDomain['cms_language_id'] ?? null;
 
-       return new DomainPathVariantResolutionResult(
+        return new DomainPathMatch(
             $matchedDomain,
             $matchedDomainId,
             $matchedPortalId,
@@ -149,10 +135,17 @@ class DomainPathVariantResolver
      */
     private function filterCandidatesByPortalId(array $domainCandidates, string $portalId): array
     {
-        return \array_values(\array_filter(
-            $domainCandidates,
-            static fn (array $candidate): bool => $portalId === (string) ($candidate['cms_portal_id'] ?? '')
-        ));
+        $filteredCandidates = [];
+
+        foreach ($domainCandidates as $candidate) {
+            if ($portalId !== (string) ($candidate['cms_portal_id'] ?? '')) {
+                continue;
+            }
+
+            $filteredCandidates[] = $candidate;
+        }
+
+        return $filteredCandidates;
     }
 
     /**
@@ -162,10 +155,17 @@ class DomainPathVariantResolver
      */
     private function filterCandidatesBySuffix(array $domainCandidates, string $suffix): array
     {
-        return \array_values(\array_filter(
-            $domainCandidates,
-            static fn (array $candidate): bool => $suffix === (string) ($candidate['url_suffix'] ?? '')
-        ));
+        $filteredCandidates = [];
+
+        foreach ($domainCandidates as $candidate) {
+            if ($suffix !== (string) ($candidate['url_suffix'] ?? '')) {
+                continue;
+            }
+
+            $filteredCandidates[] = $candidate;
+        }
+
+        return $filteredCandidates;
     }
 
     /**
@@ -175,11 +175,23 @@ class DomainPathVariantResolver
      */
     private function filterCandidatesBySuffixCaseInsensitive(array $domainCandidates, string $suffix): array
     {
-        return \array_values(\array_filter(
-            $domainCandidates,
-            static fn (array $candidate): bool => '' !== (string) ($candidate['url_suffix'] ?? '')
-                && 0 === \strcasecmp($suffix, (string) ($candidate['url_suffix'] ?? ''))
-        ));
+        $filteredCandidates = [];
+
+        foreach ($domainCandidates as $candidate) {
+            $candidateSuffix = (string) ($candidate['url_suffix'] ?? '');
+
+            if ('' === $candidateSuffix) {
+                continue;
+            }
+
+            if (0 !== \strcasecmp($suffix, $candidateSuffix)) {
+                continue;
+            }
+
+            $filteredCandidates[] = $candidate;
+        }
+
+        return $filteredCandidates;
     }
 
     /**
@@ -187,7 +199,7 @@ class DomainPathVariantResolver
      *
      * @return array{candidate: array<string, mixed>|null, isAmbiguous: bool}
      */
-    private function selectCandidate(array $candidates, bool $allowMasterDomainTieBreaker): array
+    private function identifySuitableCandiate(array $candidates, bool $allowMasterDomainTieBreaker): array
     {
         if (0 === \count($candidates)) {
             return [
@@ -303,23 +315,23 @@ class DomainPathVariantResolver
     private function determineMatchType(bool $hasPortalIdentifier, bool $hasDomainSuffix): string
     {
         if ($hasPortalIdentifier && $hasDomainSuffix) {
-            return DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER_AND_DOMAIN_SUFFIX;
+            return DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER_AND_DOMAIN_SUFFIX;
         }
 
         if ($hasPortalIdentifier) {
-            return DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER;
+            return DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER;
         }
 
         if ($hasDomainSuffix) {
-            return DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX;
+            return DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX;
         }
 
-        return DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITHOUT_SUFFIX;
+        return DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITHOUT_SUFFIX;
     }
 
     /**
      * @param array<int, array<string, mixed>> $suffixCandidates
-     * @param array<string, mixed>|null        $matchedDomain
+     * @param array<string, mixed>|null $matchedDomain
      */
     private function resolveConsumedDomainSuffix(string $requestedSuffix, array $suffixCandidates, ?array $matchedDomain): string
     {
@@ -341,22 +353,5 @@ class DomainPathVariantResolver
         }
 
         return $requestedSuffix;
-    }
-
-    /**
-     * @param array<string, mixed> $candidate
-     */
-    private function getNullableStringValue(array $candidate, string $key): ?string
-    {
-        if (false === \array_key_exists($key, $candidate)) {
-            return null;
-        }
-
-        $value = $candidate[$key];
-        if (null === $value || '' === $value) {
-            return null;
-        }
-
-        return (string) $value;
     }
 }

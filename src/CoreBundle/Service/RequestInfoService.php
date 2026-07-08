@@ -164,11 +164,11 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         $activeLanguage = $this->languageService->getActiveLanguage();
-        $domainPathVariantResolution = $this->getDomainPathVariantResolution($request);
+        $domainPathMatch = $this->getDomainPathMatch($request);
 
-        if (null !== $domainPathVariantResolution && true === $domainPathVariantResolution->isDomainVariantMatched()) {
+        if (null !== $domainPathMatch && true === $domainPathMatch->isMatched()) {
             $this->pathInfoWithoutPortalAndLanguagePrefix = $this->applyTrailingSlashFromRequest(
-                $domainPathVariantResolution->getRemainingPath(),
+                $domainPathMatch->getRemainingPath(),
                 $fullPath
             );
 
@@ -177,29 +177,26 @@ class RequestInfoService implements RequestInfoServiceInterface
 
         $prefixToCut = $this->urlPrefixGenerator->generatePrefix($activePortal, $activeLanguage);
 
+        $this->pathInfoWithoutPortalAndLanguagePrefix = $fullPath;
         if (empty($prefixToCut)) {
-            $this->pathInfoWithoutPortalAndLanguagePrefix = $fullPath;
-
             return $fullPath;
         }
 
         if (str_starts_with($fullPath, $prefixToCut)) {
             $this->pathInfoWithoutPortalAndLanguagePrefix = substr($fullPath, strlen($prefixToCut));
-        } else {
-            $this->pathInfoWithoutPortalAndLanguagePrefix = $fullPath;
         }
 
         return $this->pathInfoWithoutPortalAndLanguagePrefix;
     }
 
-    private function getDomainPathVariantResolution(Request $request): ?DomainPathVariantResolutionResult
+    private function getDomainPathMatch(Request $request): ?DomainPathMatch
     {
-        $requestResolution = $request->attributes->get(DomainPathVariantResolutionResult::REQUEST_ATTRIBUTE_NAME);
-        if ($requestResolution instanceof DomainPathVariantResolutionResult) {
-            return $requestResolution;
+        $requestDomainPathMatch = $request->attributes->get(DomainPathMatch::REQUEST_ATTRIBUTE_NAME);
+        if ($requestDomainPathMatch instanceof DomainPathMatch) {
+            return $requestDomainPathMatch;
         }
 
-        return $this->portalDomainService->getActiveDomainPathVariantResolutionResult();
+        return $this->portalDomainService->getActiveDomainPathMatch();
     }
 
     private function applyTrailingSlashFromRequest(string $path, string $requestPath): string

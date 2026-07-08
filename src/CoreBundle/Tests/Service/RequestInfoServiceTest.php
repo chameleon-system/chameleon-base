@@ -12,7 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Tests\Service;
 
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolutionResult;
+use ChameleonSystem\CoreBundle\Service\DomainPathMatch;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PreviewModeServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoService;
@@ -136,8 +136,8 @@ class RequestInfoServiceTest extends TestCase
         $language = $this->createMock(\TdbCmsLanguage::class);
         $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
         $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('/fr', '/service')
+        $this->mockPortalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('/fr', '/service')
         );
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
 
@@ -154,8 +154,8 @@ class RequestInfoServiceTest extends TestCase
         $language = $this->createMock(\TdbCmsLanguage::class);
         $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
         $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('/shop/fr', '/service')
+        $this->mockPortalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('/shop/fr', '/service')
         );
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
 
@@ -172,8 +172,8 @@ class RequestInfoServiceTest extends TestCase
         $language = $this->createMock(\TdbCmsLanguage::class);
         $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
         $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('/shop/fr', '/service')
+        $this->mockPortalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('/shop/fr', '/service')
         );
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
 
@@ -190,8 +190,8 @@ class RequestInfoServiceTest extends TestCase
         $language = $this->createMock(\TdbCmsLanguage::class);
         $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
         $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('', '/frankfurt/service')
+        $this->mockPortalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('', '/frankfurt/service')
         );
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->willReturn('');
 
@@ -208,8 +208,8 @@ class RequestInfoServiceTest extends TestCase
         $language = $this->createMock(\TdbCmsLanguage::class);
         $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
         $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('/shop', '/service')
+        $this->mockPortalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('/shop', '/service')
         );
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
 
@@ -226,8 +226,8 @@ class RequestInfoServiceTest extends TestCase
         $language = $this->createMock(\TdbCmsLanguage::class);
         $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
         $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('/de', '/service')
+        $this->mockPortalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('/de', '/service')
         );
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
 
@@ -244,8 +244,8 @@ class RequestInfoServiceTest extends TestCase
         $language = $this->createMock(\TdbCmsLanguage::class);
         $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
         $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('/fr', '/')
+        $this->mockPortalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('/fr', '/')
         );
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
 
@@ -257,8 +257,8 @@ class RequestInfoServiceTest extends TestCase
         $request = Request::create('https://www.tischwelt.ch/shop/frankfurt/');
         $request->attributes->set('chameleon.request_type', 0);
         $request->attributes->set(
-            DomainPathVariantResolutionResult::REQUEST_ATTRIBUTE_NAME,
-            $this->createResolutionResult('/shop', '/frankfurt')
+            DomainPathMatch::REQUEST_ATTRIBUTE_NAME,
+            $this->createDomainPathMatch('/shop', '/frankfurt')
         );
         $this->mockRequestStack->getCurrentRequest()->willReturn($request);
 
@@ -266,7 +266,7 @@ class RequestInfoServiceTest extends TestCase
         $language = $this->createMock(\TdbCmsLanguage::class);
         $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
         $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->shouldNotBeCalled();
+        $this->mockPortalDomainService->getActiveDomainPathMatch()->shouldNotBeCalled();
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
 
         self::assertSame('/frankfurt/', $this->subject->getPathInfoWithoutPortalAndLanguagePrefix());
@@ -282,15 +282,15 @@ class RequestInfoServiceTest extends TestCase
         $language = $this->createMock(\TdbCmsLanguage::class);
         $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
         $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('', '/fr/service', false)
+        $this->mockPortalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('', '/fr/service', false)
         );
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->willReturn('/fr');
 
         self::assertSame('/service/', $this->subject->getPathInfoWithoutPortalAndLanguagePrefix());
     }
 
-    private function createResolutionResult(string $canonicalPrefix, string $remainingPath, bool $isMatched = true): DomainPathVariantResolutionResult
+    private function createDomainPathMatch(string $canonicalPrefix, string $remainingPath, bool $isMatched = true): DomainPathMatch
     {
         $prefixParts = array_values(array_filter(explode('/', trim($canonicalPrefix, '/'))));
         $consumedPortalIdentifier = '';
@@ -302,7 +302,7 @@ class RequestInfoServiceTest extends TestCase
             $consumedDomainSuffix = $prefixParts[0];
         }
 
-        return new DomainPathVariantResolutionResult(
+        return new DomainPathMatch(
             $isMatched ? ['id' => 'domain-1', 'cms_portal_id' => 'portal-1', 'cms_language_id' => 'lang-1'] : null,
             $isMatched ? 'domain-1' : null,
             $isMatched ? 'portal-1' : null,
@@ -314,7 +314,7 @@ class RequestInfoServiceTest extends TestCase
             '' !== $consumedPortalIdentifier,
             '' !== $consumedDomainSuffix,
             $isMatched,
-            $isMatched ? DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX : DomainPathVariantResolutionResult::MATCH_TYPE_NO_MATCH,
+            $isMatched ? DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX : DomainPathMatch::MATCH_TYPE_NO_MATCH,
             false
         );
     }

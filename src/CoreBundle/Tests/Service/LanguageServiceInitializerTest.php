@@ -6,7 +6,7 @@ namespace ChameleonSystem\CoreBundle\Tests\Service;
 
 use ChameleonSystem\CoreBundle\DataAccess\DataAccessCmsLanguageInterface;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
-use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolutionResult;
+use ChameleonSystem\CoreBundle\Service\DomainPathMatch;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\Initializer\LanguageServiceInitializer;
 use ChameleonSystem\CoreBundle\Service\LanguageService;
@@ -214,8 +214,8 @@ class LanguageServiceInitializerTest extends TestCase
         $this->requestStack->push($request);
 
         $this->portalDomainService->getActiveDomain()->willReturn(null);
-        $this->portalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            new DomainPathVariantResolutionResult(
+        $this->portalDomainService->getActiveDomainPathMatch()->willReturn(
+            new DomainPathMatch(
                 [
                     'id' => 'domain-fr',
                     'cms_portal_id' => 'portal-1',
@@ -231,11 +231,50 @@ class LanguageServiceInitializerTest extends TestCase
                 false,
                 true,
                 true,
-                DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX,
+                DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX,
                 false
             )
         );
         $this->portalDomainService->getActivePortal()->willReturn($this->createPortal('de-id', true));
+
+        $languageService = $this->createLanguageService([
+            'fr-id' => 'fr',
+        ]);
+
+        self::assertSame('fr-id', $languageService->getActiveLanguageId());
+        self::assertSame('fr', $request->attributes->get('_locale'));
+    }
+
+    public function testUsesRequestDomainPathMatchBeforePortalDomainServiceState(): void
+    {
+        $request = Request::create('https://www.tischwelt.ch/fr/');
+        $request->attributes->set(
+            DomainPathMatch::REQUEST_ATTRIBUTE_NAME,
+            new DomainPathMatch(
+                [
+                    'id' => 'domain-fr',
+                    'cms_portal_id' => 'portal-1',
+                    'cms_language_id' => 'fr-id',
+                ],
+                'domain-fr',
+                'portal-1',
+                'fr-id',
+                '',
+                'fr',
+                '/',
+                '/fr',
+                false,
+                true,
+                true,
+                DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX,
+                false
+            )
+        );
+        $this->requestStack->push($request);
+
+        $this->portalDomainService->getActiveDomain()->shouldNotBeCalled();
+        $this->portalDomainService->getActiveDomainPathMatch()->shouldNotBeCalled();
+        $this->portalDomainService->getActivePortal()->shouldNotBeCalled();
 
         $languageService = $this->createLanguageService([
             'fr-id' => 'fr',

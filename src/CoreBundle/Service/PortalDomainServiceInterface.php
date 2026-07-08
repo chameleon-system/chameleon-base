@@ -96,7 +96,7 @@ interface PortalDomainServiceInterface
      */
     public function setActiveDomain(?\TCMSPortalDomain $domain);
 
-    public function getActiveDomainPathVariantResolutionResult(): ?DomainPathVariantResolutionResult;
+    public function getActiveDomainPathMatch(): ?DomainPathMatch;
 
-    public function setActiveDomainPathVariantResolutionResult(?DomainPathVariantResolutionResult $resolutionResult): void;
+    public function setActiveDomainPathMatch(?DomainPathMatch $domainPathMatch): void;
 }

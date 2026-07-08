@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ChameleonSystem\CoreBundle\Tests\Service;
 
-use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolutionResult;
+use ChameleonSystem\CoreBundle\Service\DomainPathMatch;
 use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolver;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +33,7 @@ class DomainPathVariantResolverTest extends TestCase
             '',
             '/foo',
             '',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITHOUT_SUFFIX
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITHOUT_SUFFIX
         );
     }
 
@@ -53,7 +53,7 @@ class DomainPathVariantResolverTest extends TestCase
             'fr',
             '/foo',
             '/fr',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
         );
     }
 
@@ -73,7 +73,7 @@ class DomainPathVariantResolverTest extends TestCase
             'fr',
             '/foo',
             '/fr',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
         );
     }
 
@@ -93,7 +93,7 @@ class DomainPathVariantResolverTest extends TestCase
             '',
             '/frankfurt/foo',
             '',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITHOUT_SUFFIX
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITHOUT_SUFFIX
         );
     }
 
@@ -118,7 +118,7 @@ class DomainPathVariantResolverTest extends TestCase
             'fr',
             '/foo',
             '/shop/fr',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER_AND_DOMAIN_SUFFIX
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER_AND_DOMAIN_SUFFIX
         );
     }
 
@@ -143,7 +143,7 @@ class DomainPathVariantResolverTest extends TestCase
             '',
             '/foo',
             '/shop',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER
         );
     }
 
@@ -168,7 +168,7 @@ class DomainPathVariantResolverTest extends TestCase
             '',
             '/frankfurt',
             '/shop',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER
         );
     }
 
@@ -188,7 +188,7 @@ class DomainPathVariantResolverTest extends TestCase
             'de',
             '/foo',
             '/de',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
         );
     }
 
@@ -203,8 +203,8 @@ class DomainPathVariantResolverTest extends TestCase
         self::assertNull($result->getMatchedDomainId());
         self::assertSame('/foo', $result->getRemainingPath());
         self::assertSame('', $result->getCanonicalPrefix());
-        self::assertSame(DomainPathVariantResolutionResult::MATCH_TYPE_NO_MATCH, $result->getMatchType());
-        self::assertFalse($result->isDomainVariantMatched());
+        self::assertSame(DomainPathMatch::MATCH_TYPE_NO_MATCH, $result->getMatchType());
+        self::assertFalse($result->isMatched());
         self::assertFalse($result->isAmbiguous());
     }
 
@@ -224,7 +224,7 @@ class DomainPathVariantResolverTest extends TestCase
             'fr',
             '/foo',
             '/fr',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
         );
     }
 
@@ -252,7 +252,7 @@ class DomainPathVariantResolverTest extends TestCase
             'fr',
             '/foo',
             '/shop/fr',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER_AND_DOMAIN_SUFFIX
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_PORTAL_IDENTIFIER_AND_DOMAIN_SUFFIX
         );
     }
 
@@ -268,8 +268,8 @@ class DomainPathVariantResolverTest extends TestCase
         self::assertNull($result->getMatchedPortalId());
         self::assertSame('/foo', $result->getRemainingPath());
         self::assertSame('', $result->getCanonicalPrefix());
-        self::assertSame(DomainPathVariantResolutionResult::MATCH_TYPE_AMBIGUOUS, $result->getMatchType());
-        self::assertFalse($result->isDomainVariantMatched());
+        self::assertSame(DomainPathMatch::MATCH_TYPE_AMBIGUOUS, $result->getMatchType());
+        self::assertFalse($result->isMatched());
         self::assertTrue($result->isAmbiguous());
     }
 
@@ -289,12 +289,12 @@ class DomainPathVariantResolverTest extends TestCase
             'fr',
             '/foo',
             '/fr',
-            DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
+            DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX
         );
     }
 
     private function assertResolvedMatch(
-        DomainPathVariantResolutionResult $result,
+        DomainPathMatch $result,
         string $expectedDomainId,
         string $expectedPortalId,
         string $expectedLanguageId,
@@ -315,7 +315,7 @@ class DomainPathVariantResolverTest extends TestCase
         self::assertSame($expectedMatchType, $result->getMatchType());
         self::assertSame('' !== $expectedPortalIdentifier, $result->hasPortalIdentifier());
         self::assertSame('' !== $expectedDomainSuffix, $result->hasDomainSuffix());
-        self::assertTrue($result->isDomainVariantMatched());
+        self::assertTrue($result->isMatched());
         self::assertFalse($result->isAmbiguous());
     }
 
