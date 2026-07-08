@@ -13,8 +13,8 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 
 use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
-use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\DomainPathMatch;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
@@ -49,8 +49,7 @@ class CheckPortalDomainListener
         LanguageServiceInterface $languageService,
         UrlPrefixGeneratorInterface $urlPrefixGenerator,
         $forcePrimaryDomain = CHAMELEON_FORCE_PRIMARY_DOMAIN
-    )
-    {
+    ) {
         $this->portalDomainService = $portalDomainService;
         $this->requestInfoService = $requestInfoService;
         $this->languageService = $languageService;

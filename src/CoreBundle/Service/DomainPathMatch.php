@@ -33,7 +33,6 @@ class DomainPathMatch
         private string $matchType,
         private bool $isAmbiguous
     ) {
-
     }
 
     /**
