@@ -15,24 +15,12 @@ use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
 use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 
-class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
+readonly class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
 {
-    /**
-     * @var PortalDomainServiceInterface
-     */
-    private $portalDomainService;
-    /**
-     * @var CmsPortalDomainsDataAccessInterface
-     */
-    private $cmsPortalDomainsDataAccess;
-
     public function __construct(
-        PortalDomainServiceInterface $portalDomainService,
-        CmsPortalDomainsDataAccessInterface $cmsPortalDomainsDataAccess
-    )
-    {
-        $this->portalDomainService = $portalDomainService;
-        $this->cmsPortalDomainsDataAccess = $cmsPortalDomainsDataAccess;
+        private PortalDomainServiceInterface $portalDomainService,
+        private CmsPortalDomainsDataAccessInterface $cmsPortalDomainsDataAccess
+    ) {
     }
 
     /**
