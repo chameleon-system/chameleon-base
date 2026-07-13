@@ -24,7 +24,7 @@ class DomainPathVariantResolver
         $hasPortalIdentifier = false;
         $pathOffset = 0;
 
-        if (isset($pathSegments[0], $portalIdentifiers[$pathSegments[0]])) {
+        if (true === isset($pathSegments[0], $portalIdentifiers[$pathSegments[0]])) {
             $consumedPortalIdentifier = $pathSegments[0];
             $matchedPortalId = (string) $portalIdentifiers[$consumedPortalIdentifier];
             $hasPortalIdentifier = true;

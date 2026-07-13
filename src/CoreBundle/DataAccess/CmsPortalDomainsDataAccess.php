@@ -203,9 +203,7 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
             $parameters[] = $portalId;
         }
 
-        $query .= '
-                ORDER BY `cms_portal_id` ASC, `url_suffix` ASC, `id` ASC
-               ';
+        $query .= ' ORDER BY `cms_portal_id` ASC, `url_suffix` ASC, `id` ASC';
 
         return $this->connection->fetchAllAssociative($query, $parameters);
     }
