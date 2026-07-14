@@ -86,10 +86,10 @@ class TCMSSmartURLData
         $activeLanguage = $this->getLanguageService()->getActiveLanguage();
 
         switch ($var) {
-            case 'sRelativeFullURL':
             case 'sRelativeURL':
                 return $this->getRequestInfoService()->getPathInfoWithoutPortalAndLanguagePrefix();
             case 'sOriginalURL':
+            case 'sRelativeFullURL':
                 return $request->getPathInfo();
             case 'oActiveDomain':
                 return $activeDomain;
