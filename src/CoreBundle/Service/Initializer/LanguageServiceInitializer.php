@@ -246,12 +246,13 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     }
 
     /**
+     * @param string $languageCode
      * @return string|null
      *
      * @throws InvalidLanguageException if the language was found, but is not available in the frontend in the $activePortal
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, string $languageCode)
+    public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, $languageCode)
     {
         $query = $this->getLanguageQuery();
         $statement = $this->databaseConnection->prepare($query);
