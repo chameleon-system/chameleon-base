@@ -201,8 +201,7 @@ class TCMSTableEditorDomain extends TCMSTableEditor
         }
 
         $urlSuffix = trim((string) ($postData['url_suffix'] ?? ''));
-        $hosts = $this->getConfiguredHosts($postData);
-        if ('' === $urlSuffix || 0 === count($hosts)) {
+        if ('' === $urlSuffix) {
             return true;
         }
 
@@ -217,16 +216,8 @@ class TCMSTableEditorDomain extends TCMSTableEditor
             $parameters['recordId'] = $this->sId;
         }
 
-        $hostConditions = [];
-        foreach ($hosts as $index => $host) {
-            $parameterName = 'host'.$index;
-            $hostConditions[] = sprintf('LOWER(TRIM(COALESCE(`name`, \'\'))) = :%1$s OR LOWER(TRIM(COALESCE(`sslname`, \'\'))) = :%1$s', $parameterName);
-            $parameters[$parameterName] = $host;
-        }
-
         $queryParts[] = '`cms_portal_id` = :portalId';
         $queryParts[] = 'LOWER(TRIM(COALESCE(`url_suffix`, \'\'))) = :urlSuffix';
-        $queryParts[] = '('.implode(' OR ', $hostConditions).')';
 
         $query = 'SELECT `id`
                     FROM `cms_portal_domains`
@@ -234,23 +225,6 @@ class TCMSTableEditorDomain extends TCMSTableEditor
                    LIMIT 1';
 
         return false === $this->getDatabaseConnection()->fetchOne($query, $parameters);
-    }
-
-    /**
-     * @return list<string>
-     */
-    private function getConfiguredHosts(array $postData): array
-    {
-        $hosts = [];
-        foreach (['name', 'sslname'] as $fieldName) {
-            $value = trim((string) ($postData[$fieldName] ?? $this->oTable?->sqlData[$fieldName] ?? ''));
-            if ('' !== $value) {
-                $normalizedHost = mb_strtolower($value);
-                $hosts[$normalizedHost] = $normalizedHost;
-            }
-        }
-
-        return array_values($hosts);
     }
 
     private function getPortalId(array $postData): ?string
