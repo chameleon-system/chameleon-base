@@ -133,11 +133,13 @@ class CheckPortalDomainListener
         \TdbCmsPortalDomains $targetDomain
     ): string {
         $domainPathMatch = $request->attributes->get(DomainPathMatch::REQUEST_ATTRIBUTE_NAME);
-        if (false === $domainPathMatch instanceof DomainPathMatch || false === $domainPathMatch->isMatched()) {
+        if (false === $domainPathMatch instanceof DomainPathMatch) {
             return $request->getPathInfo();
         }
 
-        $remainingPath = $this->requestInfoService->getPathInfoWithoutPortalAndLanguagePrefix();
+        $remainingPath = true === $domainPathMatch->isMatched()
+            ? $this->requestInfoService->getPathInfoWithoutPortalAndLanguagePrefix()
+            : $this->applyTrailingSlashFromRequest($domainPathMatch->getRemainingPath(), $request->getPathInfo());
         $prefix = $this->urlPrefixGenerator->generatePrefixForDomain($portal, $language, $targetDomain);
 
         if ('/' === $remainingPath) {
@@ -149,6 +151,19 @@ class CheckPortalDomainListener
         }
 
         return $prefix.$remainingPath;
+    }
+
+    private function applyTrailingSlashFromRequest(string $path, string $requestPath): string
+    {
+        if ('/' === $path) {
+            return '/';
+        }
+
+        if (str_ends_with($requestPath, '/') && false === str_ends_with($path, '/')) {
+            return $path.'/';
+        }
+
+        return $path;
     }
 
     private function buildAbsoluteUrl(\Symfony\Component\HttpFoundation\Request $request, string $host, string $path): string

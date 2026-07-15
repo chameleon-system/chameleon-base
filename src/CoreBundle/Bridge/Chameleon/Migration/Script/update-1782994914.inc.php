@@ -45,7 +45,7 @@ if (false === $connection->fetchOne(
             '049_helptext' => 'Optionaler URL-Suffix für diese Domain-Sprachvariante. Ohne führenden oder abschließenden Slash, z. B. fr für /fr/. Leer lassen, wenn diese Domain-Variante ohne Sprachsuffix erreichbar sein soll.',
             'row_hexcolor' => '',
             'is_translatable' => '0',
-            'validation_regex' => '^$|^[a-z0-9]+(?:[-_][a-z0-9]+)*$',
+            'validation_regex' => '^[a-z0-9]+(?:[-_][a-z0-9]+)*$',
             'id' => $fieldId,
         ]);
     TCMSLogChange::insert(__LINE__, $data);
