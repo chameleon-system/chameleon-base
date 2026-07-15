@@ -118,7 +118,7 @@ class CheckPortalDomainListener
         $targetPath = $this->buildCanonicalPath($request, $portal, $language, $targetDomain);
         $targetUrl = $this->buildAbsoluteUrl($request, $targetHost, $targetPath);
 
-        if ($this->isCurrentRequestCanonical($request, $targetUrl, $activeDomain, $hostFromRequest, $targetHost)) {
+        if ($this->isCurrentRequestCanonical($request, $targetUrl, $hostFromRequest)) {
             return;
         }
 
@@ -180,22 +180,11 @@ class CheckPortalDomainListener
     private function isCurrentRequestCanonical(
         \Symfony\Component\HttpFoundation\Request $request,
         string $targetUrl,
-        \TdbCmsPortalDomains $activeDomain,
-        string $hostFromRequest,
-        string $targetHost
+        string $hostFromRequest
     ): bool {
         $currentUrl = $request->getScheme().'://'.$hostFromRequest.$request->getRequestUri();
-        if ($currentUrl === $targetUrl) {
-            return true;
-        }
 
-        if (false === $this->forcePrimaryDomain) {
-            return false;
-        }
-
-        $domainName = $activeDomain->GetActiveDomainName();
-
-        return $activeDomain->fieldIsMasterDomain && $domainName === $hostFromRequest && $hostFromRequest === $targetHost;
+        return $currentUrl === $targetUrl;
     }
 
     private function getDomainNameForRequest(\TdbCmsPortalDomains $domain, bool $isSecureRequest): string
