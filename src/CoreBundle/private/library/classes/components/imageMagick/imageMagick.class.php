@@ -804,9 +804,9 @@ class imageMagick
         } else {
             $cmd = $this->sImageMagickDir.'/convert ';
             $cmd .= escapeshellarg($sOldTmpFileName);
-            $cmd .= ' \\( ' . escapeshellarg($overlayFile) . ' -resize ' . escapeshellarg($overlayWidth.'x'.$overlayHeight) . ' \\)';
-            $cmd .= ' -gravity southeast -geometry ' . escapeshellarg('+'.$padding.'+'.$padding);
-            $cmd .= ' -compose Over -composite ' . escapeshellarg($sNewTmpFileName);
+            $cmd .= ' \\( '.escapeshellarg($overlayFile).' -resize '.escapeshellarg($overlayWidth.'x'.$overlayHeight).' \\)';
+            $cmd .= ' -gravity southeast -geometry '.escapeshellarg('+'.$padding.'+'.$padding);
+            $cmd .= ' -compose Over -composite '.escapeshellarg($sNewTmpFileName);
 
             exec($cmd, $returnarray, $returnvalue);
             if ($returnvalue) {
