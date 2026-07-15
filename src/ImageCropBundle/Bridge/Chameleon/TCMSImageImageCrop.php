@@ -121,6 +121,7 @@ class TCMSImageImageCrop extends \ChameleonSystemImageCropBundleBridgeChameleonT
             $oImageMagick->ResizeImage($targetWidth, $targetHeight);
         }
 
+        $this->applyAiLabelToImageMagick($oImageMagick, $targetWidth, $targetHeight);
         $oImageMagick->SaveToFile($thumbPath);
         $thumbnailRealPath = realpath($thumbPath);
         if (false !== $thumbnailRealPath) {
@@ -205,6 +206,7 @@ class TCMSImageImageCrop extends \ChameleonSystemImageCropBundleBridgeChameleonT
             $imagePointer = $this->UnsharpMask($imagePointer);
         }
 
+        $imagePointer = $this->applyAiLabelToImageResource($imagePointer);
         imagejpeg($imagePointer, $targetThumbPath, $jpgQuality);
         $thumbnailRealPath = realpath($targetThumbPath);
         if (false !== $thumbnailRealPath) {

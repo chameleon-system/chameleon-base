@@ -769,6 +769,61 @@ class imageMagick
     }
 
     /**
+     * Adds a PNG overlay at the bottom right of the current temporary image.
+     */
+    public function AddPngOverlayBottomRight(string $overlayFile, int $overlayWidth, int $overlayHeight, int $padding): bool
+    {
+        $returnVal = false;
+        if (!file_exists($overlayFile) || $this->bHasErrors) {
+            return false;
+        }
+
+        $sOldTmpFileName = $this->sTempDir.'/'.$this->sTempFileName;
+        if (!file_exists($sOldTmpFileName)) {
+            $this->AddError('temporary image file not found for PNG overlay');
+
+            return false;
+        }
+
+        $sNewTmpFileName = $this->sTempDir.'/'.$this->GetTempFileName($this->sSourceFile, 'ai-label');
+
+        if ($this->bUsePHPLibrary) {
+            $baseImage = new Imagick($sOldTmpFileName);
+            $overlayImage = new Imagick($overlayFile);
+            $overlayImage->resizeImage($overlayWidth, $overlayHeight, Imagick::FILTER_LANCZOS, 1);
+            $baseImage->compositeImage(
+                $overlayImage,
+                Imagick::COMPOSITE_OVER,
+                $this->iThumbWidth - $overlayWidth - $padding,
+                $this->iThumbHeight - $overlayHeight - $padding
+            );
+            $baseImage->writeImage($sNewTmpFileName);
+            $overlayImage->destroy();
+            $baseImage->destroy();
+            $returnVal = true;
+        } else {
+            $cmd = $this->sImageMagickDir.'/convert ';
+            $cmd .= escapeshellarg($sOldTmpFileName);
+            $cmd .= ' \\( ' . escapeshellarg($overlayFile) . ' -resize ' . escapeshellarg($overlayWidth.'x'.$overlayHeight) . ' \\)';
+            $cmd .= ' -gravity southeast -geometry ' . escapeshellarg('+'.$padding.'+'.$padding);
+            $cmd .= ' -compose Over -composite ' . escapeshellarg($sNewTmpFileName);
+
+            exec($cmd, $returnarray, $returnvalue);
+            if ($returnvalue) {
+                $this->AddError('could not add PNG overlay to image');
+            } else {
+                $returnVal = true;
+            }
+        }
+
+        if ($returnVal && file_exists($sOldTmpFileName) && !is_dir($sOldTmpFileName)) {
+            unlink($sOldTmpFileName);
+        }
+
+        return $returnVal;
+    }
+
+    /**
      * Convert a tiff image to a jpg image.
      *
      * @param string $sJPGPath if is not set then save jgp image in same dir like the tiff image

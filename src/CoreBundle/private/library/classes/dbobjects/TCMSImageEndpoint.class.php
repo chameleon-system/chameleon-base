@@ -24,6 +24,13 @@ use Symfony\Component\Filesystem\Filesystem;
  **/
 class TCMSImageEndpoint
 {
+    private const AI_LABEL_VARIANT_DARK = 'dark';
+    private const AI_LABEL_VARIANT_LIGHT = 'light';
+    private const AI_LABEL_MAX_WIDTH_PERCENT = 10;
+    private const AI_LABEL_PADDING_PERCENT = 2;
+    private const AI_LABEL_MIN_WIDTH = 5;
+    private const AI_LABEL_CACHE_VERSION = 2;
+
     /**
      * holds the sql record.
      */
@@ -535,6 +542,7 @@ class TCMSImageEndpoint
                         $oImageMagick->LoadImage($this->GetLocalMediaDirectory().'/'.$this->aData['path'], $this);
                         $oImageMagick->ResizeImage((int) $oThumb->aData['width'], (int) $oThumb->aData['height']);
                         $oImageMagick->CenterImage($width, $height, '#'.$bgcolor);
+                        $this->applyAiLabelToImageMagick($oImageMagick, $width, $height);
                         $oImageMagick->SaveToFile($thumbPath);
                         if (0 === filesize($thumbPath)) {
                             unlink($thumbPath);
@@ -571,6 +579,7 @@ class TCMSImageEndpoint
                             } else {
                                 imagecopymerge($rDestImage, $imagePointer, $iNewpaddingX, $iNewpaddingY, 0, 0, $oThumb->aData['width'], $oThumb->aData['height'], 100);
                             }
+                            $rDestImage = $this->applyAiLabelToImageResource($rDestImage);
                             if ($this->SupportsTransparency() && !$this->CheckImageTransformPngToJpg($oThumb)) {
                                 imagepng($rDestImage, $thumbPath);
                             } else {
@@ -1163,7 +1172,7 @@ class TCMSImageEndpoint
                 $thumbnailNeeded = $this->GetThumbnailProportions($oThumb, $maxWidth, $maxHeight);
 
                 $bTransFormToJPG = $this->CheckImageTransformPngToJpg($oThumb);
-                if ($thumbnailNeeded || (count($aEffects) > 0) || $bTransFormToJPG) {
+                if ($thumbnailNeeded || (count($aEffects) > 0) || $bTransFormToJPG || $this->shouldApplyAiLabel()) {
                     $oThumb->_isThumbnail = true;
 
                     if (!$this->IsExternalMovie()) {
@@ -1381,8 +1390,136 @@ class TCMSImageEndpoint
         if (CHAMELEON_404_IMAGE_PATH_SMALL !== $this->aData['path'] && CHAMELEON_404_IMAGE_PATH_BIG !== $this->aData['path']) {
             $md5Parts = $id.'_'.$md5Parts;
         }
+        if ($this->shouldApplyAiLabel()) {
+            $md5Parts .= '_ai-label-'.$this->getAiLabelVariant()
+                .'-w'.self::AI_LABEL_MAX_WIDTH_PERCENT
+                .'-p'.self::AI_LABEL_PADDING_PERCENT
+                .'-min'.self::AI_LABEL_MIN_WIDTH
+                .'-v'.self::AI_LABEL_CACHE_VERSION;
+        }
 
         return md5($md5Parts);
+    }
+
+    protected function shouldApplyAiLabel(): bool
+    {
+        return isset($this->aData['ai_generated_image']) && '1' === (string) $this->aData['ai_generated_image'];
+    }
+
+    protected function getAiLabelVariant(): string
+    {
+        if (isset($this->aData['ai_label_variant']) && self::AI_LABEL_VARIANT_LIGHT === $this->aData['ai_label_variant']) {
+            return self::AI_LABEL_VARIANT_LIGHT;
+        }
+
+        return self::AI_LABEL_VARIANT_DARK;
+    }
+
+    protected function getAiLabelAssetPath(): ?string
+    {
+        $assetPath = dirname(__DIR__, 4).'/Resources/public/images/ai-label-'.$this->getAiLabelVariant().'.png';
+
+        return is_file($assetPath) ? $assetPath : null;
+    }
+
+    protected function getAiLabelPlacement(int $canvasWidth, int $canvasHeight): ?array
+    {
+        if (!$this->shouldApplyAiLabel()) {
+            return null;
+        }
+
+        $assetPath = $this->getAiLabelAssetPath();
+        if (null === $assetPath) {
+            return null;
+        }
+
+        $labelSize = getimagesize($assetPath);
+        if (false === $labelSize || 0 === $labelSize[0] || 0 === $labelSize[1]) {
+            return null;
+        }
+
+        $labelWidth = min($labelSize[0], (int) floor($canvasWidth / 100 * self::AI_LABEL_MAX_WIDTH_PERCENT));
+        if ($labelWidth < self::AI_LABEL_MIN_WIDTH) {
+            return null;
+        }
+
+        $labelHeight = (int) round($labelSize[1] * ($labelWidth / $labelSize[0]));
+        $padding = max(4, (int) round(min($canvasWidth, $canvasHeight) / 100 * self::AI_LABEL_PADDING_PERCENT));
+        if ($labelWidth + (2 * $padding) > $canvasWidth || $labelHeight + (2 * $padding) > $canvasHeight) {
+            return null;
+        }
+
+        return [
+            'assetPath' => $assetPath,
+            'width' => $labelWidth,
+            'height' => $labelHeight,
+            'padding' => $padding,
+        ];
+    }
+
+    protected function applyAiLabelToImageResource($imageResource)
+    {
+        $canvasWidth = imagesx($imageResource);
+        $canvasHeight = imagesy($imageResource);
+        $placement = $this->getAiLabelPlacement($canvasWidth, $canvasHeight);
+        if (null === $placement) {
+            return $imageResource;
+        }
+
+        $labelResource = imagecreatefrompng($placement['assetPath']);
+        if (false === $labelResource) {
+            return $imageResource;
+        }
+
+        $scaledLabel = imagecreatetruecolor($placement['width'], $placement['height']);
+        imagealphablending($scaledLabel, false);
+        imagesavealpha($scaledLabel, true);
+        $transparent = imagecolorallocatealpha($scaledLabel, 0, 0, 0, 127);
+        imagefill($scaledLabel, 0, 0, $transparent);
+        imagecopyresampled(
+            $scaledLabel,
+            $labelResource,
+            0,
+            0,
+            0,
+            0,
+            $placement['width'],
+            $placement['height'],
+            imagesx($labelResource),
+            imagesy($labelResource)
+        );
+
+        imagealphablending($imageResource, true);
+        imagecopy(
+            $imageResource,
+            $scaledLabel,
+            $canvasWidth - $placement['width'] - $placement['padding'],
+            $canvasHeight - $placement['height'] - $placement['padding'],
+            0,
+            0,
+            $placement['width'],
+            $placement['height']
+        );
+
+        imagedestroy($scaledLabel);
+        imagedestroy($labelResource);
+
+        return $imageResource;
+    }
+
+    protected function applyAiLabelToImageMagick(imageMagick $imageMagick, int $canvasWidth, int $canvasHeight): void
+    {
+        $placement = $this->getAiLabelPlacement($canvasWidth, $canvasHeight);
+        if (null === $placement) {
+            return;
+        }
+
+        $imageMagick->AddPngOverlayBottomRight(
+            $placement['assetPath'],
+            $placement['width'],
+            $placement['height'],
+            $placement['padding']
+        );
     }
 
     /**
@@ -1405,6 +1542,7 @@ class TCMSImageEndpoint
             }
         }
         if (!is_null($image_p)) {
+            $image_p = $this->applyAiLabelToImageResource($image_p);
             if ('png' == $sOriginalExtension || count($aEffects) > 0) {
                 $sOriginalExtension = 'png';
                 imagepng($image_p, $thumbPath);
@@ -1464,6 +1602,7 @@ class TCMSImageEndpoint
             }
         }
 
+        $this->applyAiLabelToImageMagick($oImageMagick, $iThumbWidth, $iThumbHeight);
         $oImageMagick->SaveToFile($sTargetFilePath);
         if ($oImageMagick->bHasErrors) {
             if (file_exists($sTargetFilePath)) {
@@ -1568,6 +1707,7 @@ class TCMSImageEndpoint
                     $oImageMagick->LoadImage($this->GetLocalMediaDirectory().'/'.$this->aData['path'], $this);
                     $oImageMagick->ResizeImage($width, $height);
                     $oImageMagick->CropImage($iMaxWidth, $iMaxHeight, $bCenter);
+                    $this->applyAiLabelToImageMagick($oImageMagick, $iMaxWidth, $iMaxHeight);
                     if (false === $oImageMagick->SaveToFile($thumbPath)) {
                         return $oThumb;
                     }
@@ -1592,6 +1732,7 @@ class TCMSImageEndpoint
                             $image_p = $this->UnsharpMask($image_p);
                         }
 
+                        $image_p = $this->applyAiLabelToImageResource($image_p);
                         $iJPGQuality = $this->GetTransformJPGQuality($oThumb);
                         if (false === $iJPGQuality) {
                             $iJPGQuality = 100;
