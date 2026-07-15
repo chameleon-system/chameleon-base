@@ -54,7 +54,7 @@ if (false === $connection->fetchOne(
         ->setFields([
             'translation' => 'URL suffix',
             '049_helptext' => 'Optional URL suffix for this domain language variant. Enter it without leading or trailing slashes, for example fr for /fr/. Leave empty if this domain variant should stay reachable without a language suffix.',
-        ])<
+        ])
         ->setWhereEquals([
             'id' => $fieldId,
         ]);
