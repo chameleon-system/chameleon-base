@@ -18,6 +18,8 @@ use Psr\Log\LoggerInterface;
 
 class TCMSTableEditorDomain extends TCMSTableEditor
 {
+    private const URL_SUFFIX_REGEX = '/^[a-z0-9]+(?:[-_][a-z0-9]+)*$/';
+
     /**
      * {@inheritdoc}
      */
@@ -83,6 +85,20 @@ class TCMSTableEditorDomain extends TCMSTableEditor
     /**
      * {@inheritdoc}
      */
+    protected function DataIsValid($postData, $oFields = null)
+    {
+        $isValid = parent::DataIsValid($postData, $oFields);
+
+        if (false === $this->isUrlSuffixConfigurationValid($postData)) {
+            $isValid = false;
+        }
+
+        return $isValid;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function PostInsertHook($oFields)
     {
         parent::PostInsertHook($oFields);
@@ -138,5 +154,106 @@ class TCMSTableEditorDomain extends TCMSTableEditor
     private function getPortalDomainService()
     {
         return ChameleonSystem\CoreBundle\ServiceLocator::get('chameleon_system_core.portal_domain_service');
+    }
+
+    private function isUrlSuffixConfigurationValid(array $postData): bool
+    {
+        $isValid = true;
+        $urlSuffix = (string) ($postData['url_suffix'] ?? '');
+        $portalIdentifier = $this->getPortalIdentifier($postData);
+
+        if ('' !== $urlSuffix && 1 !== preg_match(self::URL_SUFFIX_REGEX, $urlSuffix)) {
+            return $isValid;
+        }
+
+        if ('' !== $urlSuffix && '' === (string) ($postData['cms_language_id'] ?? '')) {
+            $this->getFlashMessageService()->addMessage(
+                TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+                'TABLEEDITOR_DOMAIN_URL_SUFFIX_REQUIRES_LANGUAGE'
+            );
+            $isValid = false;
+        }
+
+        if ('' !== $urlSuffix && null !== $portalIdentifier && mb_strtolower($portalIdentifier) === $urlSuffix) {
+            $this->getFlashMessageService()->addMessage(
+                TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+                'TABLEEDITOR_DOMAIN_URL_SUFFIX_PORTAL_IDENTIFIER_CONFLICT'
+            );
+            $isValid = false;
+        }
+
+        if (false === $this->isUrlSuffixUniqueWithinPortal($postData)) {
+            $this->getFlashMessageService()->addMessage(
+                TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+                'TABLEEDITOR_DOMAIN_URL_SUFFIX_NOT_UNIQUE'
+            );
+            $isValid = false;
+        }
+
+        return $isValid;
+    }
+
+    private function isUrlSuffixUniqueWithinPortal(array $postData): bool
+    {
+        $portalId = $this->getPortalId($postData);
+        if (null === $portalId) {
+            return true;
+        }
+
+        $urlSuffix = trim((string) ($postData['url_suffix'] ?? ''));
+        if ('' === $urlSuffix) {
+            return true;
+        }
+
+        $queryParts = [];
+        $parameters = [
+            'portalId' => $portalId,
+            'urlSuffix' => mb_strtolower($urlSuffix),
+        ];
+
+        if (null !== $this->sId) {
+            $queryParts[] = '`id` != :recordId';
+            $parameters['recordId'] = $this->sId;
+        }
+
+        $queryParts[] = '`cms_portal_id` = :portalId';
+        $queryParts[] = 'LOWER(TRIM(COALESCE(`url_suffix`, \'\'))) = :urlSuffix';
+
+        $query = 'SELECT `id`
+                    FROM `cms_portal_domains`
+                   WHERE '.implode(' AND ', $queryParts).'
+                   LIMIT 1';
+
+        return false === $this->getDatabaseConnection()->fetchOne($query, $parameters);
+    }
+
+    private function getPortalId(array $postData): ?string
+    {
+        $portalId = (string) ($postData['cms_portal_id'] ?? $this->oTable?->sqlData['cms_portal_id'] ?? $this->sRestriction ?? '');
+
+        if ('' === $portalId) {
+            return null;
+        }
+
+        return $portalId;
+    }
+
+    private function getPortalIdentifier(array $postData): ?string
+    {
+        $portalId = $this->getPortalId($postData);
+        if (null === $portalId) {
+            return null;
+        }
+
+        $portalIdentifier = $this->getDatabaseConnection()->fetchOne(
+            'SELECT `identifier` FROM `cms_portal` WHERE `id` = :portalId',
+            ['portalId' => $portalId]
+        );
+
+        if (false === $portalIdentifier) {
+            return null;
+        }
+
+        return (string) $portalIdentifier;
     }
 }

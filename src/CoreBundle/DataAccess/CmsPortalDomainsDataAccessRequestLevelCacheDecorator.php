@@ -83,4 +83,14 @@ class CmsPortalDomainsDataAccessRequestLevelCacheDecorator implements CmsPortalD
     {
         return $this->subject->getDomainDataByName($domainName);
     }
+
+    public function getDomainCandidatesByHost(string $host): array
+    {
+        return $this->subject->getDomainCandidatesByHost($host);
+    }
+
+    public function getDomainCandidatesByHostAndPortal(string $host, string $portalId): array
+    {
+        return $this->subject->getDomainCandidatesByHostAndPortal($host, $portalId);
+    }
 }

@@ -15,6 +15,8 @@ use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
 use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\DomainPathMatch;
+use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolver;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -31,29 +33,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class PortalDomainServiceInitializer implements PortalDomainServiceInitializerInterface
 {
-    /**
-     * @var InputFilterUtilInterface
-     */
-    private $inputFilterUtil;
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var CmsPortalDomainsDataAccessInterface
-     */
-    private $cmsPortalDomainsDataAccess;
-
-    public function __construct(InputFilterUtilInterface $inputFilterUtil, ContainerInterface $container, RequestStack $requestStack, CmsPortalDomainsDataAccessInterface $cmsPortalDomainsDataAccess)
-    {
-        $this->inputFilterUtil = $inputFilterUtil;
-        $this->container = $container; // avoid circular dependencies
-        $this->requestStack = $requestStack;
-        $this->cmsPortalDomainsDataAccess = $cmsPortalDomainsDataAccess;
+    public function __construct(
+        private readonly InputFilterUtilInterface $inputFilterUtil,
+        private readonly ContainerInterface $container,
+        private readonly RequestStack $requestStack,
+        private readonly CmsPortalDomainsDataAccessInterface $cmsPortalDomainsDataAccess,
+        private readonly DomainPathVariantResolver $domainPathVariantResolver
+    ) {
     }
 
     /**
@@ -61,20 +47,23 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
      */
     public function initialize(PortalDomainServiceInterface $portalDomainService)
     {
-        if (null === $request = $this->requestStack->getCurrentRequest()) {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
             return;
         }
+
+        $this->storeDomainPathMatchState($portalDomainService, $request, null);
 
         $requestInfoService = $this->getRequestInfoService();
         if ($requestInfoService->isChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_FRONTEND)
             && true === $requestInfoService->isCmsTemplateEngineEditMode()
         ) {
-            list($portal, $domain) = $this->determinePortalAndDomainForCmsTemplateEngineMode($portalDomainService);
+            [$portal, $domain] = $this->determinePortalAndDomainForCmsTemplateEngineMode($portalDomainService);
         } elseif ($requestInfoService->isChameleonRequestType(RequestTypeInterface::REQUEST_TYPE_BACKEND)) {
             $portal = null;
             $domain = null;
         } else {
-            list($portal, $domain) = $this->determinePortalAndDomainDefault($request, $portalDomainService);
+            [$portal, $domain] = $this->determinePortalAndDomainDefault($request, $portalDomainService);
         }
 
         $portalDomainService->setActivePortal($portal);
@@ -101,15 +90,11 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
     {
         $portal = null;
         $domain = null;
+        $domainPathMatch = null;
 
         $sName = $request->getHost();
         $sRelativePath = $request->getPathInfo();
-        $isUserSignedInToBackend = false;
-        if ($request->hasSession()) {
-            /** @var SecurityHelperAccess $securityHelper */
-            $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
-            $isUserSignedInToBackend = $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
-        }
+        $isUserSignedInToBackend = $this->isUserSignedInToBackend($request);
 
         $frontController = PATH_CUSTOMER_FRAMEWORK_CONTROLLER;
         if ('/' !== substr($frontController, 0, 1)) {
@@ -128,33 +113,22 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
                         $previewLanguageId = $this->inputFilterUtil->getFilteredInput('previewLanguageId');
                         $domain = $portalDomainService->getPrimaryDomain($portal->id, $previewLanguageId);
 
-                        return [$portal, $domain];
+                        return [$portal, $domain, null];
                     }
                 }
             }
         }
 
-        $prefix = '';
-        if (\strlen($sRelativePath) > 1) {
-            $secondSlashPosition = strpos($sRelativePath, '/', 1);
-            if (false === $secondSlashPosition) {
-                $prefix = substr($sRelativePath, 1);
-            } else {
-                $prefix = substr($sRelativePath, 1, $secondSlashPosition - 1);
-            }
-            if ('' !== $prefix) {
-                $aPermittedPrefixList = $this->cmsPortalDomainsDataAccess->getPortalPrefixListForDomain($sName);
-                if (false === in_array($prefix, $aPermittedPrefixList)) {
-                    $prefix = '';
-                }
-            }
-        }
+        $domainCandidates = $this->cmsPortalDomainsDataAccess->getDomainCandidatesByHost($sName);
+        $portalPrefixList = $this->cmsPortalDomainsDataAccess->getPortalPrefixListForDomain($sName);
+        $portalPrefix = $this->extractPortalPrefixFromRelativePath($sRelativePath, $portalPrefixList);
 
         $aKey = [
             'class' => __CLASS__,
             'method' => 'setPortalAndDomainFromRequest',
             'host' => $sName,
-            'prefix' => $prefix,
+            'path' => $sRelativePath,
+            'prefix' => $portalPrefix,
             'userIsSignedIntoCMSBackend' => $isUserSignedInToBackend,
             'bTemplateEngineEditMode' => false,
         ];
@@ -164,10 +138,10 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
 
         $aResultData = $cache->get($sKey);
         if (null !== $aResultData) {
-            $portal = $aResultData['portal'];
-            $domain = $aResultData['domain'];
+            $domainPathMatch = $this->createDomainPathMatchFromCacheData($aResultData['domainPathMatch'] ?? null);
+            $this->storeDomainPathMatchState($portalDomainService, $request, $domainPathMatch);
 
-            return [$portal, $domain];
+            return [$aResultData['portal'], $aResultData['domain']];
         }
 
         $aResultData = [
@@ -175,45 +149,21 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
             'domain' => null,
         ];
 
-        $domainList = $this->cmsPortalDomainsDataAccess->getDomainDataByName($sName);
-
-        $iPortalId = null;
-        $domainCount = \count($domainList);
-        // If we have more than one possible domain, we need to use the first part of the path as the portal prefix.
-        if ($domainCount > 1) {
-            $portalIdList = [];
-            foreach ($domainList as $domain) {
-                $portalIdList[] = $domain['cms_portal_id'];
-            }
-
-            $aPortal = $this->cmsPortalDomainsDataAccess->getActivePortalCandidate($portalIdList, $prefix, $isUserSignedInToBackend);
-            if (null !== $aPortal) {
-                $oPortal = \TdbCmsPortal::GetNewInstance($aPortal);
-                $aResultData['portal'] = $oPortal;
-                $iPortalId = $aPortal['id'];
-
-                foreach ($domainList as $domain) {
-                    if ($domain['cms_portal_id'] === $iPortalId) {
-                        $aResultData['domain'] = \TdbCmsPortalDomains::GetNewInstance($domain);
-                        break;
-                    }
-                }
-            }
-        } elseif (1 === $domainCount) {
-            $aResultData['domain'] = \TdbCmsPortalDomains::GetNewInstance($domainList[0]);
-        }
-
-        if (null === $aResultData['portal']) {
-            if (null === $iPortalId && $domainCount > 0) {
-                $iPortalId = $domainList[0]['cms_portal_id'];
-            }
-            $portal = \TdbCmsPortal::GetNewInstance();
-            if (false !== $portal->Load($iPortalId)) {
-                if (false === $portal->fieldDeactivePortal || true === $isUserSignedInToBackend) {
-                    $aResultData['portal'] = $portal;
-                }
-            }
-        }
+        $domainPathMatch = $this->resolveDomainPathVariant(
+            $sName,
+            $sRelativePath,
+            $domainCandidates,
+            $portalPrefixList,
+            $isUserSignedInToBackend
+        );
+        $this->storeDomainPathMatchState($portalDomainService, $request, $domainPathMatch);
+        $resolvedPortalAndDomain = $this->loadPortalAndDomainFromMatch($domainPathMatch, $isUserSignedInToBackend);
+        $aResultData = $resolvedPortalAndDomain ?? $this->determinePortalAndDomainFallback(
+            $domainCandidates,
+            $portalPrefix,
+            $isUserSignedInToBackend
+        );
+        $aResultData['domainPathMatch'] = $domainPathMatch?->toArray();
 
         $cache->set(
             $sKey,
@@ -230,6 +180,249 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
         return [$portal, $domain];
     }
 
+    /**
+     * @param array<int, array<string, mixed>> $domainCandidates
+     * @param string[] $portalPrefixList
+     *
+     * @return array{portal: \TCMSPortal|null, domain: \TCMSPortalDomain|null}|null
+     */
+    protected function resolveDomainPathVariant(
+        string $host,
+        string $path,
+        array $domainCandidates,
+        array $portalPrefixList,
+        bool $allowInactivePortals
+    ): ?DomainPathMatch {
+        if ([] === $domainCandidates) {
+            return null;
+        }
+
+        $portalIdentifiers = $this->buildPortalIdentifierMap($domainCandidates, $portalPrefixList, $allowInactivePortals);
+
+        return $this->domainPathVariantResolver->resolve($host, $path, $domainCandidates, $portalIdentifiers);
+    }
+
+    /**
+     * @return array{portal: \TCMSPortal|null, domain: \TCMSPortalDomain|null}|null
+     */
+    protected function loadPortalAndDomainFromMatch(
+        ?DomainPathMatch $domainPathMatch,
+        bool $allowInactivePortals
+    ): ?array {
+        if (null === $domainPathMatch || false === $domainPathMatch->isMatched() || null === $domainPathMatch->getMatchedDomain()) {
+            return null;
+        }
+
+        return [
+            'portal' => $this->loadPortalById($domainPathMatch->getMatchedPortalId(), $allowInactivePortals),
+            'domain' => \TdbCmsPortalDomains::GetNewInstance($domainPathMatch->getMatchedDomain()),
+        ];
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $domainCandidates
+     *
+     * @return array{
+     *     portal: \TdbCmsPortal|null,
+     *     domain: \TdbCmsPortalDomains|null
+     * }
+     */
+    protected function determinePortalAndDomainFallback(
+        array $domainCandidates,
+        string $prefix,
+        bool $allowInactivePortals
+    ): array {
+        $emptyResult = [
+            'portal' => null,
+            'domain' => null,
+        ];
+
+        if ([] === $domainCandidates) {
+            return $emptyResult;
+        }
+
+        $portalIdList = $this->getUniquePortalIds($domainCandidates);
+
+        if ([] === $portalIdList) {
+            return $emptyResult;
+        }
+
+        $portalData = null;
+
+        if (\count($portalIdList) > 1) {
+            $portalData = $this->cmsPortalDomainsDataAccess->getActivePortalCandidate(
+                $portalIdList,
+                $prefix,
+                $allowInactivePortals
+            );
+
+            if (null === $portalData) {
+                return $emptyResult;
+            }
+
+            $resolvedPortalId = (string) $portalData['id'];
+        } else {
+            $resolvedPortalId = (string) $portalIdList[0];
+        }
+
+        $resolvedDomain = $this->getFallbackDomainForPortal($domainCandidates, $resolvedPortalId);
+
+        return [
+            'portal' => null !== $portalData
+                ? \TdbCmsPortal::GetNewInstance($portalData)
+                : $this->loadPortalById($resolvedPortalId, $allowInactivePortals),
+
+            'domain' => null !== $resolvedDomain
+                ? \TdbCmsPortalDomains::GetNewInstance($resolvedDomain)
+                : null,
+        ];
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $domainCandidates
+     * @param string[] $portalPrefixList
+     *
+     * @return array<string, string>
+     */
+    protected function buildPortalIdentifierMap(
+        array $domainCandidates,
+        array $portalPrefixList,
+        bool $allowInactivePortals
+    ): array {
+        if ([] === $domainCandidates || [] === $portalPrefixList) {
+            return [];
+        }
+
+        $portalIdList = $this->getUniquePortalIds($domainCandidates);
+        $portalIdentifierMap = [];
+        foreach ($portalPrefixList as $portalPrefix) {
+            if ('' === $portalPrefix) {
+                continue;
+            }
+            $portalData = $this->cmsPortalDomainsDataAccess->getActivePortalCandidate($portalIdList, $portalPrefix, $allowInactivePortals);
+            if (null === $portalData) {
+                continue;
+            }
+            if ($portalPrefix !== (string) ($portalData['identifier'] ?? '')) {
+                continue;
+            }
+            $portalIdentifierMap[$portalPrefix] = (string) $portalData['id'];
+        }
+
+        return $portalIdentifierMap;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $domainCandidates
+     *
+     * @return string[]
+     */
+    protected function getUniquePortalIds(array $domainCandidates): array
+    {
+        $portalIds = [];
+        foreach ($domainCandidates as $domainCandidate) {
+            $portalId = (string) ($domainCandidate['cms_portal_id'] ?? '');
+            if ('' === $portalId) {
+                continue;
+            }
+            $portalIds[$portalId] = $portalId;
+        }
+
+        return array_values($portalIds);
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $domainCandidates
+     *
+     * @return array<string, mixed>|null
+     */
+    protected function getFallbackDomainForPortal(array $domainCandidates, ?string $portalId): ?array
+    {
+        if (null === $portalId || '' === $portalId) {
+            return null;
+        }
+
+        $portalDomains = [];
+        foreach ($domainCandidates as $domainCandidate) {
+            if ($portalId === (string) ($domainCandidate['cms_portal_id'] ?? '')) {
+                $portalDomains[] = $domainCandidate;
+            }
+        }
+
+        if (1 === \count($portalDomains)) {
+            return $portalDomains[0];
+        }
+
+        $suffixlessDomains = [];
+        foreach ($portalDomains as $portalDomain) {
+            if ('' !== (string) ($portalDomain['url_suffix'] ?? '')) {
+                continue;
+            }
+
+            $suffixlessDomains[] = $portalDomain;
+        }
+
+        if (1 === \count($suffixlessDomains)) {
+            return $suffixlessDomains[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string[] $portalPrefixList
+     */
+    protected function extractPortalPrefixFromRelativePath(string $relativePath, array $portalPrefixList): string
+    {
+        $prefix = '';
+        if (\strlen($relativePath) <= 1) {
+            return $prefix;
+        }
+
+        $secondSlashPosition = strpos($relativePath, '/', 1);
+        if (false === $secondSlashPosition) {
+            $prefix = substr($relativePath, 1);
+        } else {
+            $prefix = substr($relativePath, 1, $secondSlashPosition - 1);
+        }
+
+        if ('' !== $prefix && false === in_array($prefix, $portalPrefixList, true)) {
+            $prefix = '';
+        }
+
+        return $prefix;
+    }
+
+    protected function isUserSignedInToBackend(Request $request): bool
+    {
+        if (false === $request->hasSession()) {
+            return false;
+        }
+
+        /** @var SecurityHelperAccess $securityHelper */
+        $securityHelper = ServiceLocator::get(SecurityHelperAccess::class);
+
+        return $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER);
+    }
+
+    protected function loadPortalById(?string $portalId, bool $allowInactivePortals): ?\TCMSPortal
+    {
+        if (null === $portalId || '' === $portalId) {
+            return null;
+        }
+
+        $portal = \TdbCmsPortal::GetNewInstance();
+        if (false === $portal->Load($portalId)) {
+            return null;
+        }
+
+        if (false === $allowInactivePortals && true === $portal->fieldDeactivePortal) {
+            return null;
+        }
+
+        return $portal;
+    }
+
     private function getRequestInfoService(): RequestInfoServiceInterface
     {
         return $this->container->get('chameleon_system_core.request_info_service');
@@ -243,5 +436,26 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
     private function getActivePageService(): ActivePageServiceInterface
     {
         return $this->container->get('chameleon_system_core.active_page_service');
+    }
+
+    /**
+     * @param array<string, mixed>|null $cacheData
+     */
+    private function createDomainPathMatchFromCacheData(?array $cacheData): ?DomainPathMatch
+    {
+        if (null === $cacheData) {
+            return null;
+        }
+
+        return DomainPathMatch::createFromArray($cacheData);
+    }
+
+    private function storeDomainPathMatchState(
+        PortalDomainServiceInterface $portalDomainService,
+        Request $request,
+        ?DomainPathMatch $domainPathMatch
+    ): void {
+        $portalDomainService->setActiveDomainPathMatch($domainPathMatch);
+        $request->attributes->set(DomainPathMatch::REQUEST_ATTRIBUTE_NAME, $domainPathMatch);
     }
 }

@@ -281,9 +281,10 @@ class ActivePageService implements ActivePageServiceInterface
             return $route;
         }
 
-        $activePortalId = $this->activePage->fieldCmsPortalId;
+        $activePortalId = \preg_quote((string) $this->activePage->fieldCmsPortalId, '#');
+        $baseRouteName = \preg_replace("#-$activePortalId-[^-]+(?:-domain-.+)?$#", '', $route);
 
-        return \preg_replace("#-$activePortalId-..$#", '', $route);
+        return null === $baseRouteName ? $route : $baseRouteName;
     }
 
     /**

@@ -65,6 +65,14 @@ class TCMSPortalDomain extends TCMSRecord
         return $this->sqlData['sslname'];
     }
 
+    /**
+     * Returns the configured optional URL suffix without surrounding slashes.
+     */
+    public function getUrlSuffix()
+    {
+        return $this->sqlData['url_suffix'] ?? '';
+    }
+
     public static function ConvertFromIDN($domain)
     {
         static $idnConverter;

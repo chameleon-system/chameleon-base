@@ -117,6 +117,27 @@ class ChameleonFrontendRouterTest extends TestCase
         $this->thenTheExpectedUrlShouldBeGenerated($expectedResult);
     }
 
+    public function testGenerateWithPrefixesUsesVariantSpecificRouteNameForActiveDomainVariant(): void
+    {
+        $this->givenAChameleonFrontendRouter('validated-domain.com', false);
+        $this->mockPortal('42', false);
+        $this->mockLanguage('en');
+
+        $this->portalDomainMock->id = 'variant-domain-id';
+        $this->portalDomainMock->fieldCmsLanguageId = '1';
+        $this->portalDomainServiceMock->getActivePortal()->willReturn($this->portalMock);
+
+        $primaryDomain = $this->getMockBuilder('TdbCmsPortalDomains')
+            ->disableAutoload()
+            ->getMock();
+        $primaryDomain->id = 'primary-domain-id';
+        $this->portalDomainServiceMock->getPrimaryDomain('42', '1')->willReturn($primaryDomain);
+
+        $result = $this->router->generateWithPrefixes('foo', [], $this->portalMock, $this->languageMock, UrlGeneratorInterface::RELATIVE_PATH);
+
+        self::assertSame('/foo-42-en-domain-variant-domain-id', $result);
+    }
+
     /**
      * @param string $activeDomain
      * @param bool $isCurrentRequestSecure

@@ -211,6 +211,14 @@ SQL;
      */
     private function getFinalRouteName($name, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
+        $routingDomain = $this->getRoutingDomainVariant($portal, $language);
+        if (null !== $routingDomain && false === $this->isPrimaryRoutingDomain($routingDomain, $portal, $language)) {
+            $variantRouteName = $name.'-'.$portal->id.'-'.$language->fieldIso6391.'-domain-'.$routingDomain->id;
+            if (null !== $this->getRouteCollection()->get($variantRouteName)) {
+                return $variantRouteName;
+            }
+        }
+
         return $name.'-'.$portal->id.'-'.$language->fieldIso6391;
     }
 
@@ -314,6 +322,66 @@ SQL;
         }
 
         return $activeDomain->GetActiveDomainName();
+    }
+
+    private function getRoutingDomainVariant(\TdbCmsPortal $portal, \TdbCmsLanguage $language): ?\TdbCmsPortalDomains
+    {
+        $activePortal = $this->portalDomainService->getActivePortal();
+        $activeDomain = $this->portalDomainService->getActiveDomain();
+        if (null !== $activePortal
+            && null !== $activeDomain
+            && $activePortal->id === $portal->id
+            && $this->shouldReuseActiveDomainForLanguage($activeDomain, $portal, $language)
+        ) {
+            return $activeDomain;
+        }
+
+        try {
+            return $this->portalDomainService->getPrimaryDomain($portal->id, $language->id);
+        } catch (RouteNotFoundException $e) {
+            return null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    private function isPrimaryRoutingDomain(\TdbCmsPortalDomains $domain, \TdbCmsPortal $portal, \TdbCmsLanguage $language): bool
+    {
+        try {
+            $primaryDomain = $this->portalDomainService->getPrimaryDomain($portal->id, $language->id);
+        } catch (\Throwable $e) {
+            return false;
+        }
+
+        return $primaryDomain->id === $domain->id;
+    }
+
+    private function isDomainCompatibleWithLanguage(\TdbCmsPortalDomains $domain, \TdbCmsLanguage $language): bool
+    {
+        return '' === $domain->fieldCmsLanguageId || $domain->fieldCmsLanguageId === $language->id;
+    }
+
+    private function shouldReuseActiveDomainForLanguage(\TdbCmsPortalDomains $activeDomain, \TdbCmsPortal $portal, \TdbCmsLanguage $language): bool
+    {
+        if (false === $this->isDomainCompatibleWithLanguage($activeDomain, $language)) {
+            return false;
+        }
+
+        if ($activeDomain->fieldCmsLanguageId === $language->id) {
+            return true;
+        }
+
+        if ('' !== $activeDomain->fieldCmsLanguageId) {
+            return false;
+        }
+
+        try {
+            $primaryDomain = $this->portalDomainService->getPrimaryDomain($portal->id, $language->id);
+        } catch (\Throwable $e) {
+            return true;
+        }
+
+        return $primaryDomain->id === $activeDomain->id;
     }
 
     /**

@@ -13,6 +13,7 @@ namespace ChameleonSystem\CoreBundle\Tests\Util;
 
 use ChameleonSystem\CoreBundle\Routing\DomainValidatorInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
+use ChameleonSystem\CoreBundle\Service\DomainPathMatch;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
@@ -25,6 +26,10 @@ use Symfony\Component\HttpFoundation\Request;
 class UrlUtilTest extends TestCase
 {
     use ProphecyTrait;
+
+    private $urlPrefixGenerator;
+    private $portalDomainService;
+    private $languageService;
 
     /**
      * @var Request
@@ -69,9 +74,9 @@ class UrlUtilTest extends TestCase
 
     private function givenAUrlUtil()
     {
-        $urlPrefixGenerator = $this->prophesize(UrlPrefixGeneratorInterface::class);
-        $portalDomainService = $this->prophesize(PortalDomainServiceInterface::class);
-        $languageService = $this->prophesize(LanguageServiceInterface::class);
+        $this->urlPrefixGenerator = $this->prophesize(UrlPrefixGeneratorInterface::class);
+        $this->portalDomainService = $this->prophesize(PortalDomainServiceInterface::class);
+        $this->languageService = $this->prophesize(LanguageServiceInterface::class);
         $domainValidator = $this->prophesize(DomainValidatorInterface::class);
         $domainValidator
             ->getValidDomain(Argument::any(), Argument::any(), Argument::any(), Argument::any())
@@ -81,9 +86,9 @@ class UrlUtilTest extends TestCase
         $authenticityTokenManager->getTokenPlaceholderAsParameter()->willReturn('cmsauthenticitytoken=[{cmsauthenticitytoken}]');
 
         $this->urlUtil = new UrlUtil(
-            $urlPrefixGenerator->reveal(),
-            $portalDomainService->reveal(),
-            $languageService->reveal(),
+            $this->urlPrefixGenerator->reveal(),
+            $this->portalDomainService->reveal(),
+            $this->languageService->reveal(),
             $domainValidator->reveal(),
             $authenticityTokenManager->reveal()
         );
@@ -316,5 +321,114 @@ class UrlUtilTest extends TestCase
                 'http://valid-domain.com/foo?bar=baz',
             ],
         ];
+    }
+
+    public function testCutsConsumedDomainSuffixFromUrl(): void
+    {
+        $this->givenAUrlUtil();
+
+        $portal = $this->createMock(\TdbCmsPortal::class);
+        $language = $this->createMock(\TdbCmsLanguage::class);
+        $this->portalDomainService->getActivePortal()->willReturn($portal);
+        $this->languageService->getActiveLanguage()->willReturn($language);
+        $this->portalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('/fr')
+        );
+        $this->urlPrefixGenerator->generatePrefixParts($portal, $language)->willReturn(['fr']);
+
+        self::assertSame('/service/', $this->urlUtil->cutPortalAndLanguagePrefixFromUrl('/fr/service/', $portal, $language));
+    }
+
+    public function testCutsConsumedPortalAndDomainSuffixFromUrl(): void
+    {
+        $this->givenAUrlUtil();
+
+        $portal = $this->createMock(\TdbCmsPortal::class);
+        $language = $this->createMock(\TdbCmsLanguage::class);
+        $this->portalDomainService->getActivePortal()->willReturn($portal);
+        $this->languageService->getActiveLanguage()->willReturn($language);
+        $this->portalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('/shop/fr')
+        );
+        $this->urlPrefixGenerator->generatePrefixParts($portal, $language)->willReturn(['shop', 'fr']);
+
+        self::assertSame('/service/', $this->urlUtil->cutPortalAndLanguagePrefixFromUrl('/shop/fr/service/', $portal, $language));
+    }
+
+    public function testUnknownSegmentIsNotCutWhenResolverDidNotConsumeSuffix(): void
+    {
+        $this->givenAUrlUtil();
+
+        $portal = $this->createMock(\TdbCmsPortal::class);
+        $language = $this->createMock(\TdbCmsLanguage::class);
+        $this->portalDomainService->getActivePortal()->willReturn($portal);
+        $this->languageService->getActiveLanguage()->willReturn($language);
+        $this->portalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('')
+        );
+        $this->urlPrefixGenerator->generatePrefixParts($portal, $language)->willReturn([]);
+
+        self::assertSame('/frankfurt/service/', $this->urlUtil->cutPortalAndLanguagePrefixFromUrl('/frankfurt/service/', $portal, $language));
+    }
+
+    public function testLegacyPrefixStrippingStillWorksWithoutDomainVariantMatch(): void
+    {
+        $this->givenAUrlUtil();
+
+        $portal = $this->createMock(\TdbCmsPortal::class);
+        $language = $this->createMock(\TdbCmsLanguage::class);
+        $this->portalDomainService->getActivePortal()->willReturn($portal);
+        $this->languageService->getActiveLanguage()->willReturn($language);
+        $this->portalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('', false)
+        );
+        $this->urlPrefixGenerator->generatePrefixParts($portal, $language)->willReturn(['fr']);
+
+        self::assertSame('/service/', $this->urlUtil->cutPortalAndLanguagePrefixFromUrl('/fr/service/', $portal, $language));
+    }
+
+    public function testCutsConsumedPortalPrefixAndKeepsUnknownSegment(): void
+    {
+        $this->givenAUrlUtil();
+
+        $portal = $this->createMock(\TdbCmsPortal::class);
+        $language = $this->createMock(\TdbCmsLanguage::class);
+        $this->portalDomainService->getActivePortal()->willReturn($portal);
+        $this->languageService->getActiveLanguage()->willReturn($language);
+        $this->portalDomainService->getActiveDomainPathMatch()->willReturn(
+            $this->createDomainPathMatch('/shop', true, '/frankfurt')
+        );
+        $this->urlPrefixGenerator->generatePrefixParts($portal, $language)->shouldNotBeCalled();
+
+        self::assertSame('/frankfurt/', $this->urlUtil->cutPortalAndLanguagePrefixFromUrl('/shop/frankfurt/', $portal, $language));
+    }
+
+    private function createDomainPathMatch(string $canonicalPrefix, bool $isMatched = true, string $remainingPath = '/'): DomainPathMatch
+    {
+        $prefixParts = array_values(array_filter(explode('/', trim($canonicalPrefix, '/'))));
+        $consumedPortalIdentifier = '';
+        $consumedDomainSuffix = '';
+        if (2 <= count($prefixParts)) {
+            $consumedPortalIdentifier = $prefixParts[0];
+            $consumedDomainSuffix = $prefixParts[1];
+        } elseif (1 === count($prefixParts)) {
+            $consumedDomainSuffix = $prefixParts[0];
+        }
+
+        return new DomainPathMatch(
+            $isMatched ? ['id' => 'domain-1', 'cms_portal_id' => 'portal-1', 'cms_language_id' => 'lang-1'] : null,
+            $isMatched ? 'domain-1' : null,
+            $isMatched ? 'portal-1' : null,
+            $isMatched ? 'lang-1' : null,
+            $consumedPortalIdentifier,
+            $consumedDomainSuffix,
+            $remainingPath,
+            $canonicalPrefix,
+            '' !== $consumedPortalIdentifier,
+            '' !== $consumedDomainSuffix,
+            $isMatched,
+            $isMatched ? DomainPathMatch::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX : DomainPathMatch::MATCH_TYPE_NO_MATCH,
+            false
+        );
     }
 }

@@ -157,4 +157,54 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
             $domainName,
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDomainCandidatesByHost(string $host): array
+    {
+        return $this->getDomainCandidates($host);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDomainCandidatesByHostAndPortal(string $host, string $portalId): array
+    {
+        if ('' === $portalId) {
+            return [];
+        }
+
+        return $this->getDomainCandidates($host, $portalId);
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getDomainCandidates(string $host, ?string $portalId = null): array
+    {
+        if ('' === $host) {
+            return [];
+        }
+
+        $query = 'SELECT *
+                    FROM `cms_portal_domains`
+                   WHERE (
+                        (`name` = ? AND `name` != \'\')
+                        OR (`sslname` = ? AND `sslname` != \'\')
+                   )';
+        $parameters = [
+            $host,
+            $host,
+        ];
+
+        if (null !== $portalId) {
+            $query .= ' AND `cms_portal_id` = ?';
+            $parameters[] = $portalId;
+        }
+
+        $query .= ' ORDER BY `cms_portal_id` ASC, `url_suffix` ASC, `id` ASC';
+
+        return $this->connection->fetchAllAssociative($query, $parameters);
+    }
 }
