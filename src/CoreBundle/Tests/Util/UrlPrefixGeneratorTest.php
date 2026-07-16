@@ -146,6 +146,26 @@ class UrlPrefixGeneratorTest extends TestCase
         self::assertSame('/fr', $subject->generatePrefixForDomain($portal, $language, $variantDomain));
     }
 
+    public function testDoesNotUseLanguageIsoCodeForExplicitDomainWithoutSuffix(): void
+    {
+        $portal = $this->createPortal('portal-id', '', 'de-id', true);
+        $language = $this->createLanguage('it-id', 'it');
+        $targetDomain = $this->createDomain('', '', 'www.tischwelt.de.example.com', 'www.tischwelt.de.example.com');
+
+        $portalDomainService = $this->prophesize(PortalDomainServiceInterface::class);
+
+        $domainDataAccess = $this->prophesize(CmsPortalDomainsDataAccessInterface::class);
+        $domainDataAccess->getDomainCandidatesByHostAndPortal('www.tischwelt.de.example.com', 'portal-id')->willReturn([
+            ['id' => '1', 'url_suffix' => ''],
+        ]);
+
+        $subject = new UrlPrefixGenerator($portalDomainService->reveal(), $domainDataAccess->reveal());
+
+        self::assertSame('', $subject->getDomainLanguagePathSegment($portal, $language, $targetDomain));
+        self::assertSame('', $subject->getPathPrefix($portal, $language, $targetDomain));
+        self::assertSame('', $subject->generatePrefixForDomain($portal, $language, $targetDomain));
+    }
+
     public function testKeepsPortalPrefixWithoutDomainSuffixWhenFamilyUsesDomainSuffixes(): void
     {
         $portal = $this->createPortal('portal-id', 'shop', 'de-id', true);
