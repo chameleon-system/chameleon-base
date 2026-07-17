@@ -11,6 +11,11 @@
 
 namespace ChameleonSystem\CoreBundle;
 
+use ChameleonSystem\CoreBundle\Event\BeforeRecordDeleteEvent;
+use ChameleonSystem\CoreBundle\Event\RecordAssignmentAddedEvent;
+use ChameleonSystem\CoreBundle\Event\RecordAssignmentRemovedEvent;
+use ChameleonSystem\CoreBundle\Event\RecordPositionUpdatedEvent;
+
 final class CoreEvents
 {
     public const GLOBAL_HTML_FOOTER_INCLUDE = 'chameleon_system_core.html_includes.footer';
@@ -56,6 +61,11 @@ final class CoreEvents
     public const INSERT_RECORD = 'chameleon_system_core.insert_record';
     public const UPDATE_RECORD = 'chameleon_system_core.update_record';
     public const DELETE_RECORD = 'chameleon_system_core.delete_record';
+    public const BEFORE_RECORD_DELETE = BeforeRecordDeleteEvent::class;
+
+    public const RECORD_ASSIGNMENT_ADDED = RecordAssignmentAddedEvent::class;
+    public const RECORD_ASSIGNMENT_REMOVED = RecordAssignmentRemovedEvent::class;
+    public const RECORD_POSITION_UPDATED = RecordPositionUpdatedEvent::class;
 
     public const BEFORE_DELETE_MEDIA = 'chameleon_system_core.before_delete_media';
 

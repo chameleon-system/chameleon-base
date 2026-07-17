@@ -10,10 +10,14 @@
  */
 
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
+use ChameleonSystem\CoreBundle\Event\RecordAssignmentAddedEvent;
+use ChameleonSystem\CoreBundle\Event\RecordAssignmentRemovedEvent;
+use ChameleonSystem\CoreBundle\Event\RecordPositionUpdatedEvent;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Reorder position module for MLT records.
@@ -77,6 +81,10 @@ class CMSFieldMLTRPC extends TCMSModelBase
 
             $returnVal = new stdClass();
             $returnVal->fieldName = $targetField;
+
+            $event = new RecordAssignmentRemovedEvent($this->sourceTable, $this->sourceID);
+            $this->getEventDispatcher()->dispatch($event);
+
         }
 
         return $returnVal;
@@ -99,6 +107,10 @@ class CMSFieldMLTRPC extends TCMSModelBase
             $oTableEditor->AddMLTConnection($targetField, $sTargetID);
             $returnVal = new stdClass();
             $returnVal->fieldName = $targetField;
+
+            $event = new RecordAssignmentAddedEvent($this->sourceTable, $this->sourceID);
+            $this->getEventDispatcher()->dispatch($event);
+
         }
 
         return $returnVal;
@@ -400,6 +412,10 @@ class CMSFieldMLTRPC extends TCMSModelBase
             $aQuery[] = new LogChangeDataModel($migrationQueryData, LogChangeDataModel::TYPE_UPDATE);
         }
 
+        $event = new RecordPositionUpdatedEvent($tableSQLName, $sSourcerecordId);
+        $this->getEventDispatcher()->dispatch($event);
+
+
         TCMSLogChange::WriteTransaction($aQuery);
 
         return true;
@@ -424,5 +440,10 @@ class CMSFieldMLTRPC extends TCMSModelBase
     private function getBackendSession(): BackendSessionInterface
     {
         return ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+    }
+
+    private function getEventDispatcher(): EventDispatcherInterface
+    {
+        return ServiceLocator::get('event_dispatcher');
     }
 }

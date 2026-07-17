@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Service\Initializer;
 
+use ChameleonSystem\CoreBundle\Exception\InvalidLanguageException;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 
 /**
@@ -21,10 +22,16 @@ interface LanguageServiceInitializerInterface
     /**
      * @return void
      */
-    public function initialize(LanguageServiceInterface $languageService);
+    public function initialize(LanguageServiceInterface $languageService): void;
 
     /**
      * @return void
      */
-    public function initializeFallbackLanguage(LanguageServiceInterface $languageService);
+    public function initializeFallbackLanguage(LanguageServiceInterface $languageService): void;
+
+    /**
+     * @throws InvalidLanguageException if the language was found, but is not available in the frontend in the $activePortal
+     * @throws \Doctrine\DBAL\Driver\Exception
+     */
+    public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, string $languageCode): ?string;
 }
