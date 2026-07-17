@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use ChameleonSystem\CoreBundle\Event\RecordPositionUpdatedEvent;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
@@ -246,6 +247,8 @@ class CMSFieldPositionRPC extends TCMSModelBase
         if ($record->Load($sActiveItemId)) {
             $newPositionOfCurrentRecord = $record->sqlData[$fieldName];
         }
+        $event = new RecordPositionUpdatedEvent($tableSQLName, $sActiveItemId);
+        $this->getEventDispatcher()->dispatch($event);
 
         return $newPositionOfCurrentRecord;
     }
@@ -331,5 +334,9 @@ COMMAND;
     private function getDatabaseConnection(): Connection
     {
         return ServiceLocator::get('database_connection');
+    }
+    private function getEventDispatcher(): EventDispatcherInterface
+    {
+        return ServiceLocator::get('event_dispatcher');
     }
 }

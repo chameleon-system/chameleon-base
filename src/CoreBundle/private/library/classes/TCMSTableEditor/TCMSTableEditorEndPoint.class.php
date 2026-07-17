@@ -12,7 +12,9 @@
 use ChameleonSystem\CmsBackendBundle\BackendSession\BackendSessionInterface;
 use ChameleonSystem\CoreBundle\CoreEvents;
 use ChameleonSystem\CoreBundle\DataModel\CommentDataModel;
+use ChameleonSystem\CoreBundle\Event\BeforeRecordDeleteEvent;
 use ChameleonSystem\CoreBundle\Event\RecordChangeEvent;
+use ChameleonSystem\CoreBundle\Event\RecordPositionUpdatedEvent;
 use ChameleonSystem\CoreBundle\Exception\GuidCreationFailedException;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Interfaces\GuidCreationServiceInterface;
@@ -1271,6 +1273,8 @@ class TCMSTableEditorEndPoint
     {
         $deleteId = $this->sId; // prevent delete of wrong records when id is accidentally reset
         $tableName = $this->oTableConf->sqlData['name'];
+        $event = new BeforeRecordDeleteEvent($tableName, $deleteId);
+        $this->getEventDispatcher()->dispatch($event);
 
         if (!is_null($this->oTableConf) && TCMSRecord::TableExists('shop_search_indexer') && !defined('CMSUpdateManagerRunning')) {
             TdbShopSearchIndexer::UpdateIndex($tableName, $deleteId, 'delete');
@@ -2482,6 +2486,8 @@ class TCMSTableEditorEndPoint
                 }
             }
         }
+        $event = new RecordPositionUpdatedEvent($this->oTableConf->sqlData['name'], $this->sId);
+        $this->getEventDispatcher()->dispatch($event);
 
         return $iNewPositionOfCurrentRecord;
     }
