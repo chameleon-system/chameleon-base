@@ -29,7 +29,7 @@ class TCMSImageEndpoint
     private const AI_LABEL_MAX_WIDTH_PERCENT = 10;
     private const AI_LABEL_PADDING_PERCENT = 2;
     private const AI_LABEL_MIN_WIDTH = 5;
-    private const AI_LABEL_CACHE_VERSION = 2;
+    private const AI_LABEL_CACHE_VERSION = 3;
 
     /**
      * holds the sql record.
