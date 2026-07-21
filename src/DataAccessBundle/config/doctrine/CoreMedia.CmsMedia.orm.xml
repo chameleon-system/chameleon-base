@@ -88,6 +88,18 @@
                 <option name="default"></option>
             </options>
         </field>
+        <field name="aiGeneratedImage" type="string" column="ai_generated_image" length="1" nullable="false">
+            <options>
+                <option name="comment">AI-generated image</option>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="aiLabelVariant" type="string" column="ai_label_variant" length="10" nullable="false">
+            <options>
+                <option name="comment">AI label variant</option>
+                <option name="default">dark</option>
+            </options>
+        </field>
         <field name="path" type="string" column="path" length="255" nullable="false">
             <options>
                 <option name="comment">Path</option>
