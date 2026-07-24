@@ -31,6 +31,7 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
      */
     public function getPrimaryDomain($portalId, $languageId)
     {
+        // todo: for multi-language domains we need to check if there is another language that matches the requested language assigned from the language assigned directly to the domain
         $query = "SELECT *
                   FROM `cms_portal_domains` WHERE `cms_portal_id` = :portalId
                   AND `is_master_domain` = '1'
@@ -87,6 +88,7 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
             return [];
         }
 
+        // todo: multi-language domains need to be included.
         $query = 'SELECT `cms_portal`.`identifier`
                     FROM `cms_portal_domains`
               INNER JOIN `cms_portal` ON `cms_portal_domains`.`cms_portal_id` = `cms_portal`.`id`

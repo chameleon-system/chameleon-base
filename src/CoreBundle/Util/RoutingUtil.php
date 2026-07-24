@@ -75,6 +75,7 @@ class RoutingUtil implements RoutingUtilInterface
      */
     public function getDomainRequirement(\TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
+        // todo: if we are using multi language domains, we need to change thisO to get those domains that match one of the languages assigned to the domain. this is IN ADDITION to the default language set by the domain
         $domainList = \TdbCmsPortalDomainsList::GetListForCmsPortalId($portal->id, $language->id);
         $primaryDomain = null;
         $otherDomains = [];

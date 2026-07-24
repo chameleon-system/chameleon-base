@@ -73,6 +73,7 @@ class CmsRouteLoader extends Loader
                 $portal = \TdbCmsPortal::GetNewInstance();
                 $portal->Load($routeConfig['portal_id']);
                 $languageList = $portal->GetFieldCmsLanguageList();
+                // todo: the default language is currently set via portal. If we use multi language domains, the default language must become the language of the domain
                 $defaultLanguage = $this->getDefaultPortalLanguage($portal);
                 $defaultLanguageId = (null === $defaultLanguage) ? null : $defaultLanguage->id;
 

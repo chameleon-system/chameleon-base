@@ -163,6 +163,7 @@ class RequestInfoService implements RequestInfoServiceInterface
             return $fullPath;
         }
 
+        // todo: make sure that multi-language domains are properly handled. the should be, but we should validate this
         $activeLanguage = $this->languageService->getActiveLanguage();
 
         $prefixToCut = $this->urlPrefixGenerator->generatePrefix($activePortal, $activeLanguage);

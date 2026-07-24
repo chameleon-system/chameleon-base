@@ -128,6 +128,8 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 
         $portalDomainService = $this->getPortalDomainService();
         // language set via domain
+        // todo - for multi-language domains, this can no longer work since a domain may have multiple languages. Instead, the URL prefix must be used alongside the language.
+        // see line 148 - fetching lanugage from prefix.
         $domain = $portalDomainService->getActiveDomain();
         if (null === $domain) {
             return null;
