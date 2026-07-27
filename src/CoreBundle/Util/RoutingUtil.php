@@ -16,6 +16,8 @@ use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 
 class RoutingUtil implements RoutingUtilInterface
 {
+    use DomainSupportsLanguageTrait;
+
     /**
      * @var RoutingUtilDataAccessInterface
      */
@@ -108,30 +110,6 @@ class RoutingUtil implements RoutingUtilInterface
         }
 
         return implode('|', $domains);
-    }
-
-    private function domainSupportsLanguage(
-        \TdbCmsPortalDomains $domain,
-        \TdbCmsPortal $portal,
-        \TdbCmsLanguage $language
-    ): bool {
-        // note that this logic is much the same as \ChameleonSystem\CoreBundle\Routing\DomainValidator::isValidDomainForPortal
-        // we duplicated because we do not want to change the public interface of the class.
-        $additionalLanguageIds = $domain->GetFieldCmsLanguageIdList();
-        $portalLanguageIds = $portal->GetFieldCmsLanguageIdList();
-        $defaultLanguageId = '' !== $portal->fieldCmsLanguageId ? $portal->fieldCmsLanguageId : \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
-        $isPortalLanguage = $defaultLanguageId === $language->id || in_array($language->id, $portalLanguageIds, true);
-        if (false === $isPortalLanguage) {
-            return true === $portal->fieldUseMultilanguage
-                && in_array($language->id, $additionalLanguageIds, true);
-        }
-        if (false === $portal->fieldUseMultilanguage || [] === $additionalLanguageIds) {
-            return '' === $domain->fieldCmsLanguageId || $domain->fieldCmsLanguageId === $language->id;
-        }
-
-        $defaultLanguageId = '' !== $domain->fieldCmsLanguageId ? $domain->fieldCmsLanguageId : $defaultLanguageId;
-
-        return $defaultLanguageId === $language->id || in_array($language->id, $additionalLanguageIds, true);
     }
 
     /**

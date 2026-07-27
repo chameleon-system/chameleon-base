@@ -5,10 +5,13 @@ namespace ChameleonSystem\CoreBundle\Routing;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\Util\DomainSupportsLanguageTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class DomainValidator implements DomainValidatorInterface
 {
+    use DomainSupportsLanguageTrait;
+
     /**
      * @var PortalDomainServiceInterface
      */
@@ -126,53 +129,17 @@ class DomainValidator implements DomainValidatorInterface
      */
     private function isValidDomainForPortal($domain, \TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
-        $portalLanguageIds = $portal->GetFieldCmsLanguageIdList();
-        $portalDefaultLanguageId = '' !== $portal->fieldCmsLanguageId ? $portal->fieldCmsLanguageId : \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
         $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
 
-        $domainWithoutLanguageCandidates = [];
-        while($portalDomain = $portalDomainList->Next()) {
-            // make sure the domain matches
+        while ($portalDomain = $portalDomainList->Next()) {
             $nameOfPortalDomainBeingChecked = (true === $secure) ? $portalDomain->getSecureDomainName() : $portalDomain->getInsecureDomainName();
             if ($domain !== $nameOfPortalDomainBeingChecked) {
                 continue;
             }
 
-            // now check if the language of the domain matches.
-
-            // directly assigned to additional language?
-            $validDomainLanguages = true === $portal->fieldUseMultilanguage ? $portalDomain->GetFieldCmsLanguageIdList() : [];
-            if (in_array($language->id, $validDomainLanguages, true)) {
+            if ($this->domainSupportsLanguage($portalDomain, $portal, $language)) {
                 return true;
             }
-
-            // directly assigned to the domain
-            if ($language->id === $portalDomain->fieldCmsLanguageId) {
-                return true;
-            }
-            // if the current language is the default language and the domain has no active language
-            if ($portalDefaultLanguageId === $language->id && '' === $portalDomain->fieldCmsLanguageId) {
-                $domainWithoutLanguageCandidates[] = $portalDomain;
-                continue;
-            }
-            /**
-             * if the current language is a supported portal language, and the domain has no language and no additional languages
-             * Example:
-             *
-             * - Portal default: de
-             * - Portal languages: [de, en]
-             * - Domain: no direct language and no additional languages
-             * - Requested language: en
-             */
-            if (''===$portalDomain->fieldCmsLanguageId && [] === $validDomainLanguages && in_array($language->id, $portalLanguageIds, true)) {
-                $domainWithoutLanguageCandidates[] = $portalDomain;
-                continue;
-            }
-        }
-
-        // other domain candidates that do not have a direct language match but are valid for other reasons
-        if ([] !== $domainWithoutLanguageCandidates) {
-            return true;
         }
 
         return false;
