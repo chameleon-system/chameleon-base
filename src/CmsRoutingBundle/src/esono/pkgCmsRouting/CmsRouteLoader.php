@@ -233,10 +233,7 @@ class CmsRouteLoader extends Loader
             $currentDomainPathSegment = $this->urlPrefixGenerator->getDomainLanguagePathSegment($portal, $language, $domain);
             $excludedDomainSuffixes = [];
             if ('' === $currentDomainPathSegment) {
-                $referenceDomain = $domain ?? $this->getPrimaryDomain($portal, $language);
-                if (null !== $referenceDomain) {
-                    $excludedDomainSuffixes = $this->getConfiguredDomainSuffixesForDomainFamily($portal, $referenceDomain);
-                }
+                $excludedDomainSuffixes = $this->getConfiguredDomainSuffixesForPortal($portal);
             }
             $hasTrailingSlash = false === CHAMELEON_SEO_URL_REMOVE_TRAILING_SLASH && true === $portal->fieldUseSlashInSeoUrls;
             foreach ($importedRoutes as $route) {
@@ -422,15 +419,11 @@ class CmsRouteLoader extends Loader
     /**
      * @return string[]
      */
-    private function getConfiguredDomainSuffixesForDomainFamily(\TdbCmsPortal $portal, \TdbCmsPortalDomains $referenceDomain): array
+    private function getConfiguredDomainSuffixesForPortal(\TdbCmsPortal $portal): array
     {
         $suffixes = [];
-        $familyHosts = $this->getDomainHosts($referenceDomain);
         $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
         while ($domain = $portalDomainList->Next()) {
-            if (false === $this->belongsToDomainFamily($domain, $familyHosts)) {
-                continue;
-            }
             $suffix = trim((string) $domain->fieldUrlSuffix);
             if ('' === $suffix) {
                 continue;
@@ -439,37 +432,6 @@ class CmsRouteLoader extends Loader
         }
 
         return array_values($suffixes);
-    }
-
-    /**
-     * @param string[] $familyHosts
-     */
-    private function belongsToDomainFamily(\TdbCmsPortalDomains $domain, array $familyHosts): bool
-    {
-        foreach ($this->getDomainHosts($domain) as $host) {
-            if (isset($familyHosts[$host])) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function getDomainHosts(\TdbCmsPortalDomains $domain): array
-    {
-        $hosts = [];
-        foreach ([$domain->fieldName, $domain->fieldSslname] as $host) {
-            $host = trim((string) $host);
-            if ('' === $host) {
-                continue;
-            }
-            $hosts[$host] = $host;
-        }
-
-        return $hosts;
     }
 
     /**
