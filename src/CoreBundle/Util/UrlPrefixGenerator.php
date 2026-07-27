@@ -20,10 +20,7 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
      * @var PortalDomainServiceInterface
      */
     private $portalDomainService;
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
+    private LanguageServiceInterface $languageService;
 
     public function __construct(PortalDomainServiceInterface $portalDomainService, LanguageServiceInterface $languageService)
     {

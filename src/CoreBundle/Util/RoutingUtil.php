@@ -31,10 +31,7 @@ class RoutingUtil implements RoutingUtilInterface
      * @var UrlPrefixGeneratorInterface
      */
     private $urlPrefixGenerator;
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
+    private LanguageServiceInterface $languageService;
 
     public function __construct(
         RoutingUtilDataAccessInterface $routingUtilDataAccess,

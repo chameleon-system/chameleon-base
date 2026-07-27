@@ -42,7 +42,7 @@ class CmsRouteLoader extends Loader
     /**
      * @var LanguageServiceInterface
      */
-    private $languageService;
+    private LanguageServiceInterface $languageService;
 
     public function __construct(
         ContainerInterface $container,
