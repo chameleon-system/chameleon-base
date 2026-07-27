@@ -75,12 +75,15 @@ class RoutingUtil implements RoutingUtilInterface
      */
     public function getDomainRequirement(\TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
-        // todo: if we are using multi language domains, we need to change thisO to get those domains that match one of the languages assigned to the domain. this is IN ADDITION to the default language set by the domain
         $domainList = \TdbCmsPortalDomainsList::GetListForCmsPortalId($portal->id, $language->id);
         $primaryDomain = null;
         $otherDomains = [];
+        $routePrefix = $this->urlPrefixGenerator->generatePrefix($portal, $language);
         while ($domain = $domainList->Next()) {
-            if (!empty($domain->fieldCmsLanguageId) && $domain->fieldCmsLanguageId !== $language->id) {
+            if (false === $this->domainSupportsLanguage($domain, $portal, $language)) {
+                continue;
+            }
+            if ($routePrefix !== $this->urlPrefixGenerator->generatePrefix($portal, $language, $domain)) {
                 continue;
             }
             if ($domain->fieldIsMasterDomain) {
@@ -105,6 +108,30 @@ class RoutingUtil implements RoutingUtilInterface
         }
 
         return implode('|', $domains);
+    }
+
+    private function domainSupportsLanguage(
+        \TdbCmsPortalDomains $domain,
+        \TdbCmsPortal $portal,
+        \TdbCmsLanguage $language
+    ): bool {
+        // note that this logic is much the same as \ChameleonSystem\CoreBundle\Routing\DomainValidator::isValidDomainForPortal
+        // we duplicated because we do not want to change the public interface of the class.
+        $additionalLanguageIds = $domain->GetFieldCmsLanguageIdList();
+        $portalLanguageIds = $portal->GetFieldCmsLanguageIdList();
+        $defaultLanguageId = '' !== $portal->fieldCmsLanguageId ? $portal->fieldCmsLanguageId : \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
+        $isPortalLanguage = $defaultLanguageId === $language->id || in_array($language->id, $portalLanguageIds, true);
+        if (false === $isPortalLanguage) {
+            return true === $portal->fieldUseMultilanguage
+                && in_array($language->id, $additionalLanguageIds, true);
+        }
+        if (false === $portal->fieldUseMultilanguage || [] === $additionalLanguageIds) {
+            return '' === $domain->fieldCmsLanguageId || $domain->fieldCmsLanguageId === $language->id;
+        }
+
+        $defaultLanguageId = '' !== $domain->fieldCmsLanguageId ? $domain->fieldCmsLanguageId : $defaultLanguageId;
+
+        return $defaultLanguageId === $language->id || in_array($language->id, $additionalLanguageIds, true);
     }
 
     /**

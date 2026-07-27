@@ -245,6 +245,9 @@
             <call method="setDomainValidator">
                 <argument type="service" id="chameleon_system_core.routing.domain_validator" />
             </call>
+            <call method="setUrlPrefixGenerator">
+                <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
+            </call>
         </service>
 
         <service id="chameleon_system_core.router.chameleon_backend" class="ChameleonSystem\CoreBundle\Routing\ChameleonBackendRouter" parent="chameleon_system_core.router.chameleon_base" public="true">

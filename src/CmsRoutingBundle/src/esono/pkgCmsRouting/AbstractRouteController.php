@@ -39,9 +39,10 @@ abstract class AbstractRouteController implements RouteControllerInterface
         $diff = substr($prefixedURL, 0, -1 * strlen($relativeURL));
 
         $activePortal = $this->portalDomainService->getActivePortal();
+        $activeDomain = $this->portalDomainService->getActiveDomain();
         $activeLanguage = $this->languageService->getActiveLanguage();
 
-        $prefix = $this->urlPrefixGenerator->generatePrefix($activePortal, $activeLanguage);
+        $prefix = $this->urlPrefixGenerator->generatePrefix($activePortal, $activeLanguage, $activeDomain);
 
         if (mb_strtolower($diff) === mb_strtolower($prefix)) {
             return ($diff.$relativeURL) === $prefixedURL;

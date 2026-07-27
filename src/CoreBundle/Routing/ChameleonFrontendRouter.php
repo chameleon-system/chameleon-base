@@ -15,6 +15,7 @@ use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
@@ -51,6 +52,7 @@ class ChameleonFrontendRouter extends ChameleonBaseRouter implements PortalAndLa
      * @var DomainValidatorInterface
      */
     private $domainValidator;
+    private UrlPrefixGeneratorInterface $urlPrefixGenerator;
 
     /**
      * {@inheritdoc}
@@ -192,7 +194,6 @@ SQL;
         if (null === $language) {
             $language = $this->languageService->getCmsBaseLanguage();
         }
-        $name = $this->getFinalRouteName($name, $portal, $language);
         $domainParamName = $this->routingUtil->getHostRequirementPlaceholder();
 
         if (isset($parameters[$domainParamName])) {
@@ -209,9 +210,23 @@ SQL;
      *
      * @return string
      */
-    private function getFinalRouteName($name, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
+    private function getFinalRouteName($name, \TdbCmsPortal $portal, \TdbCmsLanguage $language, string $domainName)
     {
-        return $name.'-'.$portal->id.'-'.$language->fieldIso6391;
+        $name .= '-'.$portal->id.'-'.$language->fieldIso6391;
+        $domainList = $portal->GetFieldCmsPortalDomainsList();
+        foreach ($domainList as $domain) {
+            if ($domainName !== $domain->getSecureDomainName() && $domainName !== $domain->getInsecureDomainName()) {
+                continue;
+            }
+            if ($this->urlPrefixGenerator->generatePrefix($portal, $language)
+                !== $this->urlPrefixGenerator->generatePrefix($portal, $language, $domain)
+            ) {
+                $name .= '-domain-'.$domain->id;
+            }
+            break;
+        }
+
+        return $name;
     }
 
     /**
@@ -226,6 +241,7 @@ SQL;
     private function getUrlForCustomDomain($routeName, \TdbCmsPortal $portal, \TdbCmsLanguage $language, array $parameters, $domainParamName, $referenceType)
     {
         $parameters[$domainParamName] = $this->domainValidator->getValidDomain($parameters[$domainParamName], $portal, $language, $this->isForceSecure());
+        $routeName = $this->getFinalRouteName($routeName, $portal, $language, $parameters[$domainParamName]);
         if ($this->isRelativeReferenceType($referenceType)) {
             $activeDomain = $this->portalDomainService->getActiveDomain();
             if (null === $activeDomain || $activeDomain->GetActiveDomainName() !== $parameters[$domainParamName]) {
@@ -259,6 +275,7 @@ SQL;
      */
     private function getUrlForDefaultDomain($routeName, \TdbCmsPortal $portal, \TdbCmsLanguage $language, array $parameters, $domainParamName, $referenceType)
     {
+        $baseRouteName = $routeName;
         $secure = $this->isForceSecure();
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
@@ -271,7 +288,8 @@ SQL;
             }
         }
         $parameters[$domainParamName] = $this->domainValidator->getValidDomain($domain, $portal, $language, $secure);
-        if ($this->isRelativeReferenceType($referenceType) && $domain !== $parameters[$domainParamName]) {
+        $routeName = $this->getFinalRouteName($baseRouteName, $portal, $language, $parameters[$domainParamName]);
+        if ($domain !== $parameters[$domainParamName] && $this->isRelativeReferenceType($referenceType)) {
             $referenceType = UrlGeneratorInterface::ABSOLUTE_URL;
         }
         if ($secure) {
@@ -288,6 +306,7 @@ SQL;
             return $this->generate($routeName, $parameters, $referenceType);
         } catch (InvalidParameterException $e) {
             $parameters[$domainParamName] = $this->portalDomainService->getPrimaryDomain($portal->id, $language->id)->getSecureDomainName();
+            $routeName = $this->getFinalRouteName($baseRouteName, $portal, $language, $parameters[$domainParamName]);
 
             return $this->generate($routeName, $parameters, $referenceType);
         }
@@ -372,5 +391,10 @@ SQL;
     public function setDomainValidator(DomainValidatorInterface $domainValidator)
     {
         $this->domainValidator = $domainValidator;
+    }
+
+    public function setUrlPrefixGenerator(UrlPrefixGeneratorInterface $urlPrefixGenerator): void
+    {
+        $this->urlPrefixGenerator = $urlPrefixGenerator;
     }
 }

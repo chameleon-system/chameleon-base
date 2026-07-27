@@ -31,12 +31,25 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
      */
     public function getPrimaryDomain($portalId, $languageId)
     {
-        // todo: for multi-language domains we need to check if there is another language that matches the requested language assigned from the language assigned directly to the domain
-        $query = "SELECT *
-                  FROM `cms_portal_domains` WHERE `cms_portal_id` = :portalId
-                  AND `is_master_domain` = '1'
-                  AND (`cms_language_id` = :languageId OR `cms_language_id` = '')
-                  ORDER BY `cms_language_id` DESC LIMIT 0,1
+        $query = "SELECT `cms_portal_domains`.*,
+                         `cms_portal`.`use_multilanguage`,
+                         `cms_portal`.`cms_language_id` AS `portal_language_id`,
+                         EXISTS(
+                             SELECT 1
+                               FROM `cms_portal_domain_cms_language_mlt`
+                              WHERE `source_id` = `cms_portal_domains`.`id`
+                         ) AS `has_additional_languages`,
+                         EXISTS(
+                             SELECT 1
+                               FROM `cms_portal_domain_cms_language_mlt`
+                              WHERE `source_id` = `cms_portal_domains`.`id`
+                                AND `target_id` = :languageId
+                         ) AS `has_requested_language`
+                    FROM `cms_portal_domains`
+              INNER JOIN `cms_portal` ON `cms_portal`.`id` = `cms_portal_domains`.`cms_portal_id`
+                   WHERE `cms_portal_domains`.`cms_portal_id` = :portalId
+                     AND `cms_portal_domains`.`is_master_domain` = '1'
+                ORDER BY `cms_portal_domains`.`cms_language_id` DESC
                  ";
 
         $rows = $this->connection->fetchAllAssociative($query, [
@@ -44,11 +57,54 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
             'languageId' => $languageId,
         ]);
 
-        if (0 === count($rows)) {
+        /*
+         * Domain selection priority:
+         * 1. the requested language is assigned directly to the domain;
+         * 2. it is the domain default (domain, portal, then global default) for a multilanguage domain;
+         * 3. it is assigned as an additional language to a multilanguage domain;
+         * 4. a legacy language-neutral domain.
+         */
+        $bestRow = null;
+        $bestRank = 0;
+        foreach ($rows as $row) {
+            if ($row['cms_language_id'] === $languageId) {
+                $bestRow = $row;
+                break;
+            }
+
+            $usesAdditionalLanguages = 1 === (int) $row['use_multilanguage'] && 1 === (int) $row['has_additional_languages'];
+            $portalDefaultLanguageId = $row['portal_language_id'];
+            if ('' === $portalDefaultLanguageId) {
+                $portalDefaultLanguageId = \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
+            }
+            if ($usesAdditionalLanguages) {
+                $defaultLanguageId = $row['cms_language_id'];
+                if ('' === $defaultLanguageId) {
+                    $defaultLanguageId = $portalDefaultLanguageId;
+                }
+                $rank = $defaultLanguageId === $languageId ? 3 : (1 === (int) $row['has_requested_language'] ? 2 : 0);
+            } else {
+                $rank = '' === $row['cms_language_id'] ? 1 : 0;
+            }
+
+            if ($rank > $bestRank) {
+                $bestRow = $row;
+                $bestRank = $rank;
+            }
+        }
+
+        if (null === $bestRow) {
             return null;
         }
 
-        return \TdbCmsPortalDomains::GetNewInstance($rows[0]);
+        unset(
+            $bestRow['use_multilanguage'],
+            $bestRow['portal_language_id'],
+            $bestRow['has_additional_languages'],
+            $bestRow['has_requested_language']
+        );
+
+        return \TdbCmsPortalDomains::GetNewInstance($bestRow);
     }
 
     /**
@@ -88,7 +144,6 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
             return [];
         }
 
-        // todo: multi-language domains need to be included.
         $query = 'SELECT `cms_portal`.`identifier`
                     FROM `cms_portal_domains`
               INNER JOIN `cms_portal` ON `cms_portal_domains`.`cms_portal_id` = `cms_portal`.`id`
