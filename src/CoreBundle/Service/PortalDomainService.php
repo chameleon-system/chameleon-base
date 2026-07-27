@@ -58,7 +58,6 @@ class PortalDomainService implements PortalDomainServiceInterface
      */
     private $languageService;
     private ?\TdbCmsPortal $defaultPortal = null;
-    private ?DomainPathVariantResolutionResult $domainPathVariantResolutionResult = null;
 
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
@@ -251,19 +250,5 @@ class PortalDomainService implements PortalDomainServiceInterface
             $event = new ChangeActiveDomainEvent($oldActiveDomain, $domain);
             $this->eventDispatcher->dispatch($event, CoreEvents::CHANGE_ACTIVE_PORTAL);
         }
-    }
-
-    public function getActiveDomainPathVariantResolutionResult(): ?DomainPathVariantResolutionResult
-    {
-        if (null === $this->portal && null === $this->domain) {
-            $this->initialize();
-        }
-
-        return $this->domainPathVariantResolutionResult;
-    }
-
-    public function setActiveDomainPathVariantResolutionResult(?DomainPathVariantResolutionResult $resolutionResult): void
-    {
-        $this->domainPathVariantResolutionResult = $resolutionResult;
     }
 }

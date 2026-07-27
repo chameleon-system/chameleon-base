@@ -235,8 +235,6 @@ class UrlUtil
      */
     public function cutPortalAndLanguagePrefixFromUrl($url, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
-        $url = $this->cutConsumedPrefixFromUrl($url, $portal, $language);
-
         $urlPrefixGenerator = $this->urlPrefixGenerator;
         $prefixToCutParts = $urlPrefixGenerator->generatePrefixParts($portal, $language);
 
@@ -249,44 +247,6 @@ class UrlUtil
         if (strlen($url) === strlen($urlBefore)) {
             $prefixToCut = '/'.$prefixToCut;
             $url = $this->cutPrefixFromString($url, $prefixToCut);
-        }
-
-        return $url;
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return string
-     */
-    private function cutConsumedPrefixFromUrl($url, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
-    {
-        $resolution = $this->portalDomainService->getActiveDomainPathVariantResolutionResult();
-        if (null === $resolution || false === $resolution->isDomainVariantMatched()) {
-            return $url;
-        }
-
-        $activePortal = $this->portalDomainService->getActivePortal();
-        $activeLanguage = $this->languageService->getActiveLanguage();
-        if (null === $activePortal || null === $activeLanguage) {
-            return $url;
-        }
-        if ($activePortal->id !== $portal->id || $activeLanguage->id !== $language->id) {
-            return $url;
-        }
-
-        $consumedPrefix = $resolution->getCanonicalPrefix();
-        if ('' === $consumedPrefix) {
-            return $url;
-        }
-
-        $urlBefore = $url;
-        $url = $this->cutPrefixFromString($url, $consumedPrefix.'/');
-        if (strlen($url) === strlen($urlBefore) && '/' === $consumedPrefix) {
-            return $url;
-        }
-        if (strlen($url) === strlen($urlBefore)) {
-            $url = $this->cutPrefixFromString($url, $consumedPrefix);
         }
 
         return $url;

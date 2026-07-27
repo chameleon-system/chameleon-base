@@ -164,22 +164,10 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         $activeLanguage = $this->languageService->getActiveLanguage();
-        $domainPathVariantResolution = $this->portalDomainService->getActiveDomainPathVariantResolutionResult();
-
-        if (null !== $domainPathVariantResolution && true === $domainPathVariantResolution->isDomainVariantMatched()) {
-            $this->pathInfoWithoutPortalAndLanguagePrefix = $this->cutConsumedPrefixFromPath(
-                $fullPath,
-                $domainPathVariantResolution->getCanonicalPrefix()
-            );
-
-            return $this->pathInfoWithoutPortalAndLanguagePrefix;
-        }
 
         $prefixToCut = $this->urlPrefixGenerator->generatePrefix($activePortal, $activeLanguage);
 
         if (empty($prefixToCut)) {
-            $this->pathInfoWithoutPortalAndLanguagePrefix = $fullPath;
-
             return $fullPath;
         }
 
@@ -190,23 +178,6 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         return $this->pathInfoWithoutPortalAndLanguagePrefix;
-    }
-
-    private function cutConsumedPrefixFromPath(string $fullPath, string $consumedPrefix): string
-    {
-        if ('' === $consumedPrefix) {
-            return $fullPath;
-        }
-
-        if ($consumedPrefix === $fullPath) {
-            return '/';
-        }
-
-        if (str_starts_with($fullPath, $consumedPrefix.'/')) {
-            return substr($fullPath, strlen($consumedPrefix));
-        }
-
-        return $fullPath;
     }
 
     /**

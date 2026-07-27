@@ -102,7 +102,7 @@ class DomainPathVariantResolver
         $matchedDomainId = $this->getNullableStringValue($matchedDomain, 'id');
         $matchedLanguageId = $this->getNullableStringValue($matchedDomain, 'cms_language_id');
 
-       return new DomainPathVariantResolutionResult(
+        return new DomainPathVariantResolutionResult(
             $matchedDomain,
             $matchedDomainId,
             $matchedPortalId,

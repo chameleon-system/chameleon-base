@@ -116,6 +116,8 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
      */
     protected function getLanguageFromRequestData(Request $request)
     {
+        $sLanguageId = null;
+
         // special rule: can be overwritten by previewLanguageId in __previewmode
         $previewMode = $this->isPreviewMode();
         /** @var string|null $previewLanguageId */
@@ -124,13 +126,18 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             return $previewLanguageId;
         }
 
-        $languageFromActiveDomain = $this->getLanguageFromActiveDomain();
-        if (null !== $languageFromActiveDomain) {
-            return $languageFromActiveDomain;
+        $portalDomainService = $this->getPortalDomainService();
+        // language set via domain
+        $domain = $portalDomainService->getActiveDomain();
+        if (null === $domain) {
+            return null;
+        }
+
+        if (!empty($domain->fieldCmsLanguageId)) {
+            return $domain->fieldCmsLanguageId;
         }
 
         // language set via url prefix?
-        $portalDomainService = $this->getPortalDomainService();
         $activePortal = $portalDomainService->getActivePortal();
         if (null === $activePortal) {
             return null;
@@ -154,39 +161,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         }
 
         return \TdbCmsConfig::GetInstance()?->fieldTranslationBaseLanguageId;
-    }
-
-    private function getLanguageFromActiveDomain(): ?string
-    {
-        $domain = $this->getPortalDomainService()->getActiveDomain();
-        if (null !== $domain) {
-            $languageId = $domain->fieldCmsLanguageId;
-            if ('' !== $languageId) {
-                return $languageId;
-            }
-        }
-
-        $domainPathVariantResolution = $this->getPortalDomainService()->getActiveDomainPathVariantResolutionResult();
-        if (null === $domainPathVariantResolution || false === $domainPathVariantResolution->isDomainVariantMatched()) {
-            return null;
-        }
-
-        $languageId = $domainPathVariantResolution->getMatchedLanguageId();
-        if (null !== $languageId && '' !== $languageId) {
-            return $languageId;
-        }
-
-        $matchedDomain = $domainPathVariantResolution->getMatchedDomain();
-        if (null === $matchedDomain) {
-            return null;
-        }
-
-        $languageId = (string) ($matchedDomain['cms_language_id'] ?? '');
-        if ('' === $languageId) {
-            return null;
-        }
-
-        return $languageId;
     }
 
     /**

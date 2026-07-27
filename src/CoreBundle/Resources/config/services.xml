@@ -685,7 +685,6 @@
 
         <service id="chameleon_system_core.util.url_prefix_generator" class="ChameleonSystem\CoreBundle\Util\UrlPrefixGenerator" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
         </service>
 
         <service id="chameleon_system_core.event_listener.clear_frontend_router_cache" class="ChameleonSystem\CoreBundle\EventListener\ClearRoutingCacheListener">
