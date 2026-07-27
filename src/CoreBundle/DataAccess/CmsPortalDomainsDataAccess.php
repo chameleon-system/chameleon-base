@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\DataAccess;
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 
@@ -20,10 +21,15 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
      * @var Connection
      */
     private $connection;
+    /**
+     * @var LanguageServiceInterface
+     */
+    private $languageService;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, LanguageServiceInterface $languageService)
     {
         $this->connection = $connection;
+        $this->languageService = $languageService;
     }
 
     /**
@@ -75,7 +81,7 @@ class CmsPortalDomainsDataAccess implements CmsPortalDomainsDataAccessInterface
             $usesAdditionalLanguages = 1 === (int) $row['use_multilanguage'] && 1 === (int) $row['has_additional_languages'];
             $portalDefaultLanguageId = $row['portal_language_id'];
             if ('' === $portalDefaultLanguageId) {
-                $portalDefaultLanguageId = \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
+                $portalDefaultLanguageId = $this->languageService->getCmsBaseLanguageId();
             }
             if ($usesAdditionalLanguages) {
                 $defaultLanguageId = $row['cms_language_id'];

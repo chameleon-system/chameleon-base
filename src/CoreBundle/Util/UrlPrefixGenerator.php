@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Util;
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 
 class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
@@ -19,10 +20,15 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
      * @var PortalDomainServiceInterface
      */
     private $portalDomainService;
+    /**
+     * @var LanguageServiceInterface
+     */
+    private $languageService;
 
-    public function __construct(PortalDomainServiceInterface $portalDomainService)
+    public function __construct(PortalDomainServiceInterface $portalDomainService, LanguageServiceInterface $languageService)
     {
         $this->portalDomainService = $portalDomainService;
+        $this->languageService = $languageService;
     }
 
     /**
@@ -95,7 +101,7 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
                 $defaultLanguageId = $portal->fieldCmsLanguageId;
             }
             if ('' === $defaultLanguageId) {
-                $defaultLanguageId = \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
+                $defaultLanguageId = $this->languageService->getCmsBaseLanguageId();
             }
 
             return $defaultLanguageId === $language->id ? '' : $language->fieldIso6391;

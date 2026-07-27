@@ -137,7 +137,7 @@ class DomainValidator implements DomainValidatorInterface
                 continue;
             }
 
-            if ($this->domainSupportsLanguage($portalDomain, $portal, $language)) {
+            if ($this->domainSupportsLanguage($portalDomain, $portal, $language, $this->languageService->getCmsBaseLanguageId())) {
                 return true;
             }
         }

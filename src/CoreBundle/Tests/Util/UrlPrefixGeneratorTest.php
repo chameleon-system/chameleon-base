@@ -3,6 +3,7 @@
 namespace ChameleonSystem\CoreBundle\Tests\Util;
 
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGenerator;
 use PHPUnit\Framework\TestCase;
 
@@ -11,7 +12,8 @@ class UrlPrefixGeneratorTest extends TestCase
     public function testDomainAdditionalLanguagesOnlyChangeTheAdditionalLanguageUrl(): void
     {
         $portalDomainService = $this->createMock(PortalDomainServiceInterface::class);
-        $generator = new UrlPrefixGenerator($portalDomainService);
+        $languageService = $this->createMock(LanguageServiceInterface::class);
+        $generator = new UrlPrefixGenerator($portalDomainService, $languageService);
 
         $portal = $this->getMockBuilder('TdbCmsPortal')->disableAutoload()->getMock();
         $portal->fieldIdentifier = 'shop';

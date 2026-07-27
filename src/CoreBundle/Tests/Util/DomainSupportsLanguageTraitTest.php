@@ -14,7 +14,7 @@ class DomainSupportsLanguageTraitTest extends TestCase
 
             public function supports(\TdbCmsPortalDomains $domain, \TdbCmsPortal $portal, \TdbCmsLanguage $language): bool
             {
-                return $this->domainSupportsLanguage($domain, $portal, $language);
+                return $this->domainSupportsLanguage($domain, $portal, $language, 'de');
             }
         };
 

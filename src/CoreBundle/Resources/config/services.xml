@@ -258,6 +258,7 @@
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
             <argument type="service" id="chameleon_system_core.util.routing" />
             <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="chameleon_system_core.language_service" />
             <tag name="routing.loader" />
         </service>
 
@@ -664,6 +665,7 @@
             <argument type="service" id="chameleon_system_core.util.routing_data_access" />
             <argument type="service" id="chameleon_system_core.tree_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
 
 
@@ -685,6 +687,7 @@
 
         <service id="chameleon_system_core.util.url_prefix_generator" class="ChameleonSystem\CoreBundle\Util\UrlPrefixGenerator" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
 
         <service id="chameleon_system_core.event_listener.clear_frontend_router_cache" class="ChameleonSystem\CoreBundle\EventListener\ClearRoutingCacheListener">

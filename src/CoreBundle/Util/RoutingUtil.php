@@ -12,6 +12,7 @@
 namespace ChameleonSystem\CoreBundle\Util;
 
 use ChameleonSystem\CoreBundle\DataModel\Routing\PagePath;
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\TreeServiceInterface;
 
 class RoutingUtil implements RoutingUtilInterface
@@ -30,12 +31,22 @@ class RoutingUtil implements RoutingUtilInterface
      * @var UrlPrefixGeneratorInterface
      */
     private $urlPrefixGenerator;
+    /**
+     * @var LanguageServiceInterface
+     */
+    private $languageService;
 
-    public function __construct(RoutingUtilDataAccessInterface $routingUtilDataAccess, TreeServiceInterface $treeService, UrlPrefixGeneratorInterface $urlPrefixGenerator)
+    public function __construct(
+        RoutingUtilDataAccessInterface $routingUtilDataAccess,
+        TreeServiceInterface $treeService,
+        UrlPrefixGeneratorInterface $urlPrefixGenerator,
+        LanguageServiceInterface $languageService
+    )
     {
         $this->routingUtilDataAccess = $routingUtilDataAccess;
         $this->treeService = $treeService;
         $this->urlPrefixGenerator = $urlPrefixGenerator;
+        $this->languageService = $languageService;
     }
 
     /**
@@ -82,7 +93,7 @@ class RoutingUtil implements RoutingUtilInterface
         $otherDomains = [];
         $routePrefix = $this->urlPrefixGenerator->generatePrefix($portal, $language);
         while ($domain = $domainList->Next()) {
-            if (false === $this->domainSupportsLanguage($domain, $portal, $language)) {
+            if (false === $this->domainSupportsLanguage($domain, $portal, $language, $this->languageService->getCmsBaseLanguageId())) {
                 continue;
             }
             if ($routePrefix !== $this->urlPrefixGenerator->generatePrefix($portal, $language, $domain)) {

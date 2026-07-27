@@ -16,7 +16,8 @@ trait DomainSupportsLanguageTrait
     private function domainSupportsLanguage(
         \TdbCmsPortalDomains $domain,
         \TdbCmsPortal $portal,
-        \TdbCmsLanguage $language
+        \TdbCmsLanguage $language,
+        string $cmsBaseLanguageId
     ): bool {
         $additionalLanguageIds = true === $portal->fieldUseMultilanguage ? $domain->GetFieldCmsLanguageIdList() : [];
 
@@ -32,7 +33,7 @@ trait DomainSupportsLanguageTrait
             return false;
         }
 
-        $portalDefaultLanguageId = '' !== $portal->fieldCmsLanguageId ? $portal->fieldCmsLanguageId : \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
+        $portalDefaultLanguageId = '' !== $portal->fieldCmsLanguageId ? $portal->fieldCmsLanguageId : $cmsBaseLanguageId;
 
         if ($language->id === $portalDefaultLanguageId) {
             return true;

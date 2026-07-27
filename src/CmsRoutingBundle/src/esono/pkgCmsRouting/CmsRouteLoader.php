@@ -11,6 +11,7 @@
 
 namespace esono\pkgCmsRouting;
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -38,17 +39,23 @@ class CmsRouteLoader extends Loader
      * @var UrlUtil
      */
     private $urlUtil;
+    /**
+     * @var LanguageServiceInterface
+     */
+    private $languageService;
 
     public function __construct(
         ContainerInterface $container,
         UrlPrefixGeneratorInterface $urlPrefixGenerator,
         RoutingUtilInterface $routingUtil,
-        UrlUtil $urlUtil
+        UrlUtil $urlUtil,
+        LanguageServiceInterface $languageService
     ) {
         $this->container = $container;
         $this->urlPrefixGenerator = $urlPrefixGenerator;
         $this->routingUtil = $routingUtil;
         $this->urlUtil = $urlUtil;
+        $this->languageService = $languageService;
     }
 
     /**
@@ -326,7 +333,7 @@ class CmsRouteLoader extends Loader
             return $portal->fieldCmsLanguageId;
         }
 
-        return \TdbCmsConfig::GetInstance()->fieldTranslationBaseLanguageId;
+        return $this->languageService->getCmsBaseLanguageId();
     }
 
     private function getDomainRequirement(\TdbCmsPortalDomains $domain, bool $secure): string
