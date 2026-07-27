@@ -411,7 +411,7 @@ class TCMSImageEndpoint
             $sPath = $this->GetLocalMediaDirectory(true);
         }
 
-        $sPath .= $this->aData['path'];
+        $sPath .= $this->aData['path'] ?? '';
 
         return $sPath;
     }
