@@ -5,16 +5,16 @@
 </div>
 <?php
 if (TCMSLogChange::FieldExists('cms_portal_domains', 'url_suffix')) {
-
-    TCMSLogChange::deleteField('cms_portal_domains', 'url_suffix');
-
     $query = 'ALTER TABLE cms_portal_domains
     DROP INDEX uniq_portal_url_suffix,
     DROP INDEX idx_portal_name_url_suffix,
     DROP INDEX idx_portal_sslname_url_suffix,
     DROP COLUMN url_suffix_unique,
-    DROP COLUMN url_suffix;';
+    DROP COLUMN url_suffix';
     TCMSLogChange::RunQuery(__LINE__, $query);
+
+    TCMSLogChange::deleteField('cms_portal_domains', 'url_suffix');
+
 }
 
 TCMSLogChange::deleteBackEndMessage('TABLEEDITOR_DOMAIN_URL_SUFFIX_REQUIRES_LANGUAGE');
