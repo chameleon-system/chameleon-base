@@ -20,19 +20,6 @@ if (false === $connection->fetchOne("SHOW COLUMNS FROM `cms_portal_domains` WHER
     TCMSLogChange::RunQuery(__LINE__, $query);
 }
 
-if (false === $connection->fetchOne("SHOW COLUMNS FROM `cms_portal_domains` WHERE `Field` = 'url_suffix_unique'")) {
-    $query = "ALTER TABLE `cms_portal_domains`
-                   ADD `url_suffix_unique` VARCHAR(64)
-                       GENERATED ALWAYS AS (NULLIF(LOWER(TRIM(`url_suffix`)), '')) STORED";
-    TCMSLogChange::RunQuery(__LINE__, $query);
-}
-
-if (false === $connection->fetchOne("SHOW INDEX FROM `cms_portal_domains` WHERE `Key_name` = 'uniq_portal_url_suffix'")) {
-    $query = "ALTER TABLE `cms_portal_domains`
-                   ADD UNIQUE INDEX `uniq_portal_url_suffix` (`cms_portal_id`, `url_suffix_unique`)";
-    TCMSLogChange::RunQuery(__LINE__, $query);
-}
-
 if (false === $connection->fetchOne(
     'SELECT `id` FROM `cms_field_conf` WHERE `cms_tbl_conf_id` = :tableId AND `name` = :fieldName',
     ['tableId' => $tableId, 'fieldName' => 'url_suffix']
@@ -55,7 +42,7 @@ if (false === $connection->fetchOne(
             'restrict_to_groups' => '0',
             'field_width' => '0',
             'position' => '0',
-            '049_helptext' => 'Optionaler, innerhalb des Portals eindeutiger URL-Suffix für diese Domain-Sprachvariante. Ohne führenden oder abschließenden Slash, z. B. fr für /fr/. Leer lassen, wenn diese Domain-Variante ohne Sprachsuffix erreichbar sein soll.',
+            '049_helptext' => 'Optionaler URL-Suffix für diese Domain-Sprachvariante. Ohne führenden oder abschließenden Slash, z. B. fr für /fr/. Leer lassen, wenn diese Domain-Variante ohne Sprachsuffix erreichbar sein soll.',
             'row_hexcolor' => '',
             'is_translatable' => '0',
             'validation_regex' => '^[a-z0-9]+(?:[-_][a-z0-9]+)*$',
@@ -66,7 +53,7 @@ if (false === $connection->fetchOne(
     $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
         ->setFields([
             'translation' => 'URL suffix',
-            '049_helptext' => 'Optional URL suffix for this domain language variant, unique within the portal. Enter it without leading or trailing slashes, for example fr for /fr/. Leave empty if this domain variant should stay reachable without a language suffix.',
+            '049_helptext' => 'Optional URL suffix for this domain language variant. Enter it without leading or trailing slashes, for example fr for /fr/. Leave empty if this domain variant should stay reachable without a language suffix.',
         ])
         ->setWhereEquals([
             'id' => $fieldId,
@@ -84,8 +71,8 @@ $backendMessages = [
     ],
     'TABLEEDITOR_DOMAIN_URL_SUFFIX_NOT_UNIQUE' => [
         'id' => '05bdb820-82d2-494d-9a77-87712d5c9447',
-        'de' => 'Der URL-Suffix ist für dieses Portal bereits vorhanden.',
-        'en' => 'The URL suffix already exists for this portal.',
+        'de' => 'Die Kombination aus Portal, Domain-Host und URL-Suffix ist bereits vorhanden.',
+        'en' => 'The combination of portal, domain host, and URL suffix already exists.',
     ],
     'TABLEEDITOR_DOMAIN_URL_SUFFIX_PORTAL_IDENTIFIER_CONFLICT' => [
         'id' => 'ca5278f6-8562-429d-9460-e09034bc23b0',
