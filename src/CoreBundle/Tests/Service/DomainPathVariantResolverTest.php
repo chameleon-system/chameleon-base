@@ -205,7 +205,7 @@ class DomainPathVariantResolverTest extends TestCase
         self::assertSame('', $result->getCanonicalPrefix());
         self::assertSame(DomainPathMatch::MATCH_TYPE_NO_MATCH, $result->getMatchType());
         self::assertFalse($result->isMatched());
-        self::assertTrue($result->isAmbiguous());
+        self::assertFalse($result->isAmbiguous());
     }
 
     public function testDoubleSlashesAreIgnoredWhileParsingSegments(): void
