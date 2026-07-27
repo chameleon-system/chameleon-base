@@ -151,10 +151,6 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
             if ('' !== $targetDomain->fieldCmsLanguageId) {
                 return '';
             }
-
-            if (null !== $domain) {
-                return '';
-            }
         }
 
         if ('' === $portal->fieldCmsLanguageId || $portal->fieldCmsLanguageId === $language->id) {
