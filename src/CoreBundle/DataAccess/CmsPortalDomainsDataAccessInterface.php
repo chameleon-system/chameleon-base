@@ -46,25 +46,6 @@ interface CmsPortalDomainsDataAccessInterface
 
     /**
      * Returns domain Tdb objects for a given domain name (either default name or SSL domain matches).
-     *
-     * This is a legacy lookup that groups by portal and may therefore drop additional domain rows for the same host.
-     * It is not suitable for host resolution that needs to distinguish multiple domain variants per portal.
      */
     public function getDomainDataByName(string $domainName): array;
-
-    /**
-     * Returns all domain candidates for a given host (either default name or SSL domain matches).
-     *
-     * In contrast to getDomainDataByName(), this method does not group by portal and therefore keeps
-     * multiple domain rows for the same host intact.
-     */
-    public function getDomainCandidatesByHost(string $host): array;
-
-    /**
-     * Returns all domain candidates for a given host restricted to a single portal.
-     *
-     * In contrast to getDomainDataByName(), this method does not group by portal and therefore keeps
-     * multiple domain rows for the same host intact.
-     */
-    public function getDomainCandidatesByHostAndPortal(string $host, string $portalId): array;
 }
