@@ -6,7 +6,7 @@ namespace ChameleonSystem\CoreBundle\Tests\Service;
 
 use ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccessInterface;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
-use ChameleonSystem\CoreBundle\Service\DomainPathMatch;
+use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolutionResult;
 use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolver;
 use ChameleonSystem\CoreBundle\Service\Initializer\PortalDomainServiceInitializer;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
@@ -112,13 +112,13 @@ class PortalDomainServiceInitializerTest extends TestCase
 
         $this->portalDomainService->setActivePortal($portal)->shouldBeCalled();
         $this->portalDomainService->setActiveDomain($domain)->shouldBeCalled();
-        $this->portalDomainService->setActiveDomainPathMatch(Argument::type(DomainPathMatch::class))->shouldBeCalled();
+        $this->portalDomainService->setActiveDomainPathVariantResolutionResult(Argument::type(DomainPathVariantResolutionResult::class))->shouldBeCalled();
 
         $this->subject->initialize($this->portalDomainService->reveal());
 
         self::assertInstanceOf(
-            DomainPathMatch::class,
-            $request->attributes->get(DomainPathMatch::REQUEST_ATTRIBUTE_NAME)
+            DomainPathVariantResolutionResult::class,
+            $request->attributes->get(DomainPathVariantResolutionResult::REQUEST_ATTRIBUTE_NAME)
         );
     }
 
@@ -169,33 +169,6 @@ class PortalDomainServiceInitializerTest extends TestCase
         $this->portalDomainService->setActiveDomain($domain)->shouldBeCalled();
 
         $this->subject->initialize($this->portalDomainService->reveal());
-    }
-
-    public function testStoresDomainPathMatchOnRequestBeforeLoadingPortalFromMatch(): void
-    {
-        $host = 'www.tischwelt.ch';
-        $portal = $this->mockPortal('portal-1');
-        $domain = $this->mockDomain('domain-fr');
-        $this->subject->setPortal('portal-1', $portal);
-        $this->subject->setDomain('domain-fr', $domain);
-        $this->subject->expectRequestMatchDuringPortalLoad('lang-domain-fr');
-
-        $request = Request::create('https://'.$host.'/fr/');
-        $this->requestStack->push($request);
-
-        $this->domainDataAccess->getDomainCandidatesByHost($host)->willReturn([
-            $this->createDomainCandidate('domain-de', 'portal-1', $host, ''),
-            $this->createDomainCandidate('domain-fr', 'portal-1', $host, 'fr'),
-        ]);
-        $this->domainDataAccess->getPortalPrefixListForDomain($host)->willReturn([]);
-
-        $this->portalDomainService->setActiveDomainPathMatch(Argument::type(DomainPathMatch::class))->shouldBeCalled();
-        $this->portalDomainService->setActivePortal($portal)->shouldBeCalled();
-        $this->portalDomainService->setActiveDomain($domain)->shouldBeCalled();
-
-        $this->subject->initialize($this->portalDomainService->reveal());
-
-        self::assertTrue($this->subject->wasRequestMatchAvailableDuringPortalLoad());
     }
 
     public function testUnknownSegmentRemainsRegularPathAndUsesSuffixlessDomain(): void
@@ -338,27 +311,6 @@ class TestPortalDomainServiceInitializer extends PortalDomainServiceInitializer
      * @var array<string, \TCMSPortalDomain>
      */
     private array $domains = [];
-    private RequestStack $testRequestStack;
-    private ?string $expectedLanguageIdDuringPortalLoad = null;
-    private bool $requestMatchAvailableDuringPortalLoad = false;
-
-    public function __construct(
-        InputFilterUtilInterface $inputFilterUtil,
-        ContainerInterface $container,
-        RequestStack $requestStack,
-        CmsPortalDomainsDataAccessInterface $cmsPortalDomainsDataAccess,
-        DomainPathVariantResolver $domainPathVariantResolver
-    ) {
-        parent::__construct(
-            $inputFilterUtil,
-            $container,
-            $requestStack,
-            $cmsPortalDomainsDataAccess,
-            $domainPathVariantResolver
-        );
-
-        $this->testRequestStack = $requestStack;
-    }
 
     public function setPortal(string $portalId, \TCMSPortal $portal): void
     {
@@ -368,16 +320,6 @@ class TestPortalDomainServiceInitializer extends PortalDomainServiceInitializer
     public function setDomain(string $domainId, \TCMSPortalDomain $domain): void
     {
         $this->domains[$domainId] = $domain;
-    }
-
-    public function expectRequestMatchDuringPortalLoad(string $languageId): void
-    {
-        $this->expectedLanguageIdDuringPortalLoad = $languageId;
-    }
-
-    public function wasRequestMatchAvailableDuringPortalLoad(): bool
-    {
-        return $this->requestMatchAvailableDuringPortalLoad;
     }
 
     protected function isUserSignedInToBackend(Request $request): bool
@@ -392,15 +334,6 @@ class TestPortalDomainServiceInitializer extends PortalDomainServiceInitializer
 
     protected function loadPortalById(?string $portalId, bool $allowInactivePortals): ?\TCMSPortal
     {
-        $request = $this->testRequestStack->getCurrentRequest();
-        $domainPathMatch = $request?->attributes->get(DomainPathMatch::REQUEST_ATTRIBUTE_NAME);
-        if (null !== $this->expectedLanguageIdDuringPortalLoad
-            && $domainPathMatch instanceof DomainPathMatch
-            && $this->expectedLanguageIdDuringPortalLoad === $domainPathMatch->getMatchedLanguageId()
-        ) {
-            $this->requestMatchAvailableDuringPortalLoad = true;
-        }
-
         if (null === $portalId) {
             return null;
         }

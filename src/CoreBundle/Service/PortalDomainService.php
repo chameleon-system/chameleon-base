@@ -37,21 +37,39 @@ class PortalDomainService implements PortalDomainServiceInterface
      * @var array|null
      */
     private $portalDomainNames;
-
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+    /**
+     * @var PortalDomainServiceInitializerInterface
+     */
+    private $portalDomainServiceInitializer;
     /**
      * @var bool
      */
     private $isInitializing = false;
-
+    /**
+     * @var CmsPortalDomainsDataAccessInterface
+     */
+    private $domainDataAccess;
+    /**
+     * @var LanguageServiceInterface
+     */
+    private $languageService;
     private ?\TdbCmsPortal $defaultPortal = null;
-    private ?DomainPathMatch $domainPathMatch = null;
+    private ?DomainPathVariantResolutionResult $domainPathVariantResolutionResult = null;
 
     public function __construct(
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly PortalDomainServiceInitializerInterface $portalDomainServiceInitializer,
-        private readonly CmsPortalDomainsDataAccessInterface $domainDataAccess,
-        private readonly LanguageServiceInterface $languageService
+        EventDispatcherInterface $eventDispatcher,
+        PortalDomainServiceInitializerInterface $portalDomainServiceInitializer,
+        CmsPortalDomainsDataAccessInterface $domainDataAccess,
+        LanguageServiceInterface $languageService
     ) {
+        $this->eventDispatcher = $eventDispatcher;
+        $this->portalDomainServiceInitializer = $portalDomainServiceInitializer;
+        $this->domainDataAccess = $domainDataAccess;
+        $this->languageService = $languageService;
     }
 
     /**
@@ -59,7 +77,7 @@ class PortalDomainService implements PortalDomainServiceInterface
      */
     public function getActivePortal()
     {
-        if (null === $this->portal && false === $this->isInitializing) {
+        if (null === $this->portal) {
             $this->initialize();
         }
 
@@ -71,7 +89,7 @@ class PortalDomainService implements PortalDomainServiceInterface
      */
     public function getActiveDomain()
     {
-        if (null === $this->domain && false === $this->isInitializing) {
+        if (null === $this->domain) {
             $this->initialize();
         }
 
@@ -235,21 +253,17 @@ class PortalDomainService implements PortalDomainServiceInterface
         }
     }
 
-    public function getActiveDomainPathMatch(): ?DomainPathMatch
+    public function getActiveDomainPathVariantResolutionResult(): ?DomainPathVariantResolutionResult
     {
-        if (null !== $this->domainPathMatch) {
-            return $this->domainPathMatch;
-        }
-
-        if (false === $this->isInitializing && null === $this->portal && null === $this->domain) {
+        if (null === $this->portal && null === $this->domain) {
             $this->initialize();
         }
 
-        return $this->domainPathMatch;
+        return $this->domainPathVariantResolutionResult;
     }
 
-    public function setActiveDomainPathMatch(?DomainPathMatch $domainPathMatch): void
+    public function setActiveDomainPathVariantResolutionResult(?DomainPathVariantResolutionResult $resolutionResult): void
     {
-        $this->domainPathMatch = $domainPathMatch;
+        $this->domainPathVariantResolutionResult = $resolutionResult;
     }
 }

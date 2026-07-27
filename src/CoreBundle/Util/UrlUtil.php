@@ -261,8 +261,8 @@ class UrlUtil
      */
     private function cutConsumedPrefixFromUrl($url, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
-        $domainPathMatch = $this->portalDomainService->getActiveDomainPathMatch();
-        if (null === $domainPathMatch || false === $domainPathMatch->isMatched()) {
+        $resolution = $this->portalDomainService->getActiveDomainPathVariantResolutionResult();
+        if (null === $resolution || false === $resolution->isDomainVariantMatched()) {
             return $url;
         }
 
@@ -275,12 +275,12 @@ class UrlUtil
             return $url;
         }
 
-        $consumedPrefix = $domainPathMatch->getCanonicalPrefix();
+        $consumedPrefix = $resolution->getCanonicalPrefix();
         if ('' === $consumedPrefix) {
             return $url;
         }
 
-        return $this->mapRemainingPathToUrlShape($domainPathMatch->getRemainingPath(), $url);
+        return $this->mapRemainingPathToUrlShape($resolution->getRemainingPath(), $url);
     }
 
     /**

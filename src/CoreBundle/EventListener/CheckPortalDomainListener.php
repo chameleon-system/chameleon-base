@@ -14,7 +14,7 @@ namespace ChameleonSystem\CoreBundle\EventListener;
 use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\DomainPathMatch;
+use ChameleonSystem\CoreBundle\Service\DomainPathVariantResolutionResult;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
@@ -133,8 +133,8 @@ class CheckPortalDomainListener
         \TdbCmsLanguage $language,
         \TdbCmsPortalDomains $targetDomain
     ): string {
-        $domainPathMatch = $request->attributes->get(DomainPathMatch::REQUEST_ATTRIBUTE_NAME);
-        if (false === $domainPathMatch instanceof DomainPathMatch || false === $domainPathMatch->isMatched()) {
+        $resolution = $request->attributes->get(DomainPathVariantResolutionResult::REQUEST_ATTRIBUTE_NAME);
+        if (false === $resolution instanceof DomainPathVariantResolutionResult || false === $resolution->isDomainVariantMatched()) {
             return $request->getPathInfo();
         }
 

@@ -14,7 +14,6 @@ namespace ChameleonSystem\CoreBundle\Service\Initializer;
 use ChameleonSystem\CoreBundle\Exception\InvalidLanguageException;
 use ChameleonSystem\CoreBundle\RequestType\RequestTypeInterface;
 use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
-use ChameleonSystem\CoreBundle\Service\DomainPathMatch;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
@@ -30,12 +29,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 {
-    public function __construct(
-        private readonly InputFilterUtilInterface $inputFilterUtil,
+    public function __construct(private readonly InputFilterUtilInterface $inputFilterUtil,
         private readonly RequestStack $requestStack,
         private readonly Container $container,
-        private readonly Connection $databaseConnection
-    ) {
+        private readonly Connection $databaseConnection)
+    {
     }
 
     /**
@@ -160,11 +158,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 
     private function getLanguageFromActiveDomain(): ?string
     {
-        $languageId = $this->getLanguageFromRequestDomainPathMatch();
-        if (null !== $languageId) {
-            return $languageId;
-        }
-
         $domain = $this->getPortalDomainService()->getActiveDomain();
         if (null !== $domain) {
             $languageId = $domain->fieldCmsLanguageId;
@@ -173,41 +166,17 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             }
         }
 
-        $domainPathMatch = $this->getPortalDomainService()->getActiveDomainPathMatch();
-        if (null === $domainPathMatch) {
+        $domainPathVariantResolution = $this->getPortalDomainService()->getActiveDomainPathVariantResolutionResult();
+        if (null === $domainPathVariantResolution || false === $domainPathVariantResolution->isDomainVariantMatched()) {
             return null;
         }
 
-        return $this->getLanguageFromDomainPathMatch($domainPathMatch);
-    }
-
-    private function getLanguageFromRequestDomainPathMatch(): ?string
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            return null;
-        }
-
-        $domainPathMatch = $request->attributes->get(DomainPathMatch::REQUEST_ATTRIBUTE_NAME);
-        if (false === $domainPathMatch instanceof DomainPathMatch) {
-            return null;
-        }
-
-        return $this->getLanguageFromDomainPathMatch($domainPathMatch);
-    }
-
-    private function getLanguageFromDomainPathMatch(DomainPathMatch $domainPathMatch): ?string
-    {
-        if (false === $domainPathMatch->isMatched()) {
-            return null;
-        }
-
-        $languageId = $domainPathMatch->getMatchedLanguageId();
+        $languageId = $domainPathVariantResolution->getMatchedLanguageId();
         if (null !== $languageId && '' !== $languageId) {
             return $languageId;
         }
 
-        $matchedDomain = $domainPathMatch->getMatchedDomain();
+        $matchedDomain = $domainPathVariantResolution->getMatchedDomain();
         if (null === $matchedDomain) {
             return null;
         }
@@ -246,12 +215,14 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     }
 
     /**
+     * @param string $languageCode
+     *
      * @return string|null
      *
      * @throws InvalidLanguageException if the language was found, but is not available in the frontend in the $activePortal
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, string $languageCode)
+    public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, $languageCode)
     {
         $query = $this->getLanguageQuery();
         $statement = $this->databaseConnection->prepare($query);
@@ -326,7 +297,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     /**
      * {@inheritDoc}
      */
-    public function initializeFallbackLanguage(LanguageServiceInterface $languageService): void
+    public function initializeFallbackLanguage(LanguageServiceInterface $languageService)
     {
         if (!class_exists('\TdbCmsLanguage')) {
             return;

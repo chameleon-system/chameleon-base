@@ -22,12 +22,33 @@ use Symfony\Component\Routing\RouteCollection;
 
 class CmsRouteLoader extends Loader
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+    /**
+     * @var UrlPrefixGeneratorInterface
+     */
+    private $urlPrefixGenerator;
+    /**
+     * @var RoutingUtilInterface
+     */
+    private $routingUtil;
+    /**
+     * @var UrlUtil
+     */
+    private $urlUtil;
+
     public function __construct(
-        private readonly ContainerInterface $container,
-        private readonly UrlPrefixGeneratorInterface $urlPrefixGenerator,
-        private readonly RoutingUtilInterface $routingUtil,
-        private readonly UrlUtil $urlUtil
+        ContainerInterface $container,
+        UrlPrefixGeneratorInterface $urlPrefixGenerator,
+        RoutingUtilInterface $routingUtil,
+        UrlUtil $urlUtil
     ) {
+        $this->container = $container;
+        $this->urlPrefixGenerator = $urlPrefixGenerator;
+        $this->routingUtil = $routingUtil;
+        $this->urlUtil = $urlUtil;
     }
 
     /**
@@ -36,9 +57,11 @@ class CmsRouteLoader extends Loader
      * @param mixed $resource The resource
      * @param string $type The resource type
      *
+     * @return RouteCollection
+     *
      * @throws \LogicException
      */
-    public function load(mixed $resource, $type = null): RouteCollection
+    public function load(mixed $resource, $type = null)
     {
         $collection = new RouteCollection();
         if (!is_array($resource)) {
@@ -46,34 +69,33 @@ class CmsRouteLoader extends Loader
         }
         foreach ($resource as $routeConfig) {
             $portal = null;
-            if (false === isset($routeConfig['portal_id'])) {
-                $this->importRoutes($collection, $routeConfig);
-                continue;
-            }
+            if (isset($routeConfig['portal_id'])) {
+                $portal = \TdbCmsPortal::GetNewInstance();
+                $portal->Load($routeConfig['portal_id']);
+                $defaultLanguage = $this->getDefaultPortalLanguage($portal);
+                $defaultLanguageId = (null === $defaultLanguage) ? null : $defaultLanguage->id;
 
-            $portal = \TdbCmsPortal::GetNewInstance();
-            $portal->Load($routeConfig['portal_id']);
-            $defaultLanguage = $this->getDefaultPortalLanguage($portal);
-            $defaultLanguageId = (null === $defaultLanguage) ? null : $defaultLanguage->id;
-
-            foreach ($this->getRouteLanguagesForPortalAndDomains($portal) as $language) {
-                if ($language->id === $defaultLanguageId) {
-                    continue;
+                foreach ($this->getRouteLanguagesForPortal($portal) as $language) {
+                    if ($language->id === $defaultLanguageId) {
+                        continue;
+                    }
+                    $this->importAdditionalDomainVariantRoutes($collection, $routeConfig, $portal, $language);
+                    $this->importRoutes($collection, $routeConfig, $portal, $language);
                 }
-                $this->importRoutes($collection, $routeConfig, $portal, $language);
-                $this->importAdditionalDomainVariantRoutes($collection, $routeConfig, $portal, $language);
-            }
-            /*
-             * For the default language no language prefix will be generated. Therefore we generate the default
-             * language routes last for the following reasons:
-             * - route matching is slightly more performant because large "blocks" of routes starting with language
-             *   prefixes can be skipped with few checks.
-             * - routes can be defined more deliberately, as "match-all" routes can be matched in a language-specific
-             *   way. This is currently needed for the product paths.
-             */
-            if (null !== $defaultLanguage) {
-                $this->importRoutes($collection, $routeConfig, $portal, $defaultLanguage);
-                $this->importAdditionalDomainVariantRoutes($collection, $routeConfig, $portal, $defaultLanguage);
+                /*
+                 * For the default language no language prefix will be generated. Therefore we generate the default
+                 * language routes last for the following reasons:
+                 * - route matching is slightly more performant because large "blocks" of routes starting with language
+                 *   prefixes can be skipped with few checks.
+                 * - routes can be defined more deliberately, as "match-all" routes can be matched in a language-specific
+                 *   way. This is currently needed for the product paths.
+                 */
+                if (null !== $defaultLanguage) {
+                    $this->importAdditionalDomainVariantRoutes($collection, $routeConfig, $portal, $defaultLanguage);
+                    $this->importRoutes($collection, $routeConfig, $portal, $defaultLanguage);
+                }
+            } else {
+                $this->importRoutes($collection, $routeConfig);
             }
         }
 
@@ -83,7 +105,7 @@ class CmsRouteLoader extends Loader
     /**
      * @return \TdbCmsLanguage[]
      */
-    private function getRouteLanguagesForPortalAndDomains(\TdbCmsPortal $portal): array
+    private function getRouteLanguagesForPortal(\TdbCmsPortal $portal): array
     {
         $languagesById = [];
 
@@ -92,11 +114,25 @@ class CmsRouteLoader extends Loader
             $languagesById[$language->id] = $language;
         }
 
+        foreach ($this->getDomainLanguagesForPortal($portal) as $domainLanguage) {
+            $languagesById[$domainLanguage->id] = $domainLanguage;
+        }
+
+        return array_values($languagesById);
+    }
+
+    /**
+     * @return \TdbCmsLanguage[]
+     */
+    private function getDomainLanguagesForPortal(\TdbCmsPortal $portal): array
+    {
+        $languagesById = [];
         $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
         while ($domain = $portalDomainList->Next()) {
             if ('' === $domain->fieldCmsLanguageId) {
                 continue;
             }
+
             $language = \TdbCmsLanguage::GetNewInstance();
             if (false === $language->Load($domain->fieldCmsLanguageId)) {
                 continue;
@@ -108,7 +144,10 @@ class CmsRouteLoader extends Loader
         return array_values($languagesById);
     }
 
-    private function getDefaultPortalLanguage(\TdbCmsPortal $portal): ?\TdbCmsLanguage
+    /**
+     * @return \TdbCmsLanguage|null
+     */
+    private function getDefaultPortalLanguage(\TdbCmsPortal $portal)
     {
         if ('' !== $portal->fieldCmsLanguageId) {
             return $portal->GetFieldCmsLanguage();
@@ -125,13 +164,8 @@ class CmsRouteLoader extends Loader
      *
      * @throws \LogicException
      */
-    private function importRoutes(
-        RouteCollection $collection,
-        array $routeConfig,
-        $portal = null,
-        $language = null,
-        ?\TdbCmsPortalDomains $domain = null
-    ) {
+    private function importRoutes(RouteCollection $collection, array $routeConfig, $portal = null, $language = null, ?\TdbCmsPortalDomains $domain = null)
+    {
         $importedRoutes = $this->getImportedRoutes($routeConfig, $portal, $language, $domain);
         $collection->addCollection($importedRoutes);
     }
@@ -141,12 +175,8 @@ class CmsRouteLoader extends Loader
      *
      * @throws \LogicException
      */
-    private function getImportedRoutes(
-        array $routeConfig,
-        ?\TdbCmsPortal $portal = null,
-        ?\TdbCmsLanguage $language = null,
-        ?\TdbCmsPortalDomains $domain = null
-    ) {
+    private function getImportedRoutes(array $routeConfig, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null)
+    {
         switch ($routeConfig['type']) {
             case 'service':
             case 'class':
@@ -203,7 +233,7 @@ class CmsRouteLoader extends Loader
             $currentDomainPathSegment = $this->urlPrefixGenerator->getDomainLanguagePathSegment($portal, $language, $domain);
             $excludedDomainSuffixes = [];
             if ('' === $currentDomainPathSegment) {
-                $referenceDomain = $domain ?? $this->getPrimaryRoutingDomain($portal, $language);
+                $referenceDomain = $domain ?? $this->getPrimaryDomain($portal, $language);
                 if (null !== $referenceDomain) {
                     $excludedDomainSuffixes = $this->getConfiguredDomainSuffixesForDomainFamily($portal, $referenceDomain);
                 }
@@ -232,7 +262,7 @@ class CmsRouteLoader extends Loader
     ) {
         $adjustedRoutes = new RouteCollection();
         foreach ($importedRoutes->all() as $name => $route) {
-            $finalRouteName = $this->getRouteNameWithPortalDomainAndLanguageInformation($name, $portal, $language, $domain);
+            $finalRouteName = $this->getRouteNameWithPortalAndLanguageInformation($name, $portal, $language, $domain);
             $adjustedRoutes->add($finalRouteName, $route);
         }
 
@@ -240,14 +270,12 @@ class CmsRouteLoader extends Loader
     }
 
     /**
+     * @param string $name
+     *
      * @return string
      */
-    private function getRouteNameWithPortalDomainAndLanguageInformation(
-        string $name,
-        \TdbCmsPortal $portal,
-        \TdbCmsLanguage $language,
-        ?\TdbCmsPortalDomains $domain = null
-    ) {
+    private function getRouteNameWithPortalAndLanguageInformation($name, \TdbCmsPortal $portal, \TdbCmsLanguage $language, ?\TdbCmsPortalDomains $domain = null)
+    {
         if (null !== $domain) {
             return $name.'-'.$portal->id.'-'.$language->fieldIso6391.'-domain-'.$domain->id;
         }
@@ -255,20 +283,15 @@ class CmsRouteLoader extends Loader
         return $name.'-'.$portal->id.'-'.$language->fieldIso6391;
     }
 
-    private function importAdditionalDomainVariantRoutes(
-        RouteCollection $collection,
-        array $routeConfig,
-        \TdbCmsPortal $portal,
-        \TdbCmsLanguage $language
-    ): void {
-        $primaryDomain = $this->getPrimaryRoutingDomain($portal, $language);
+    private function importAdditionalDomainVariantRoutes(RouteCollection $collection, array $routeConfig, \TdbCmsPortal $portal, \TdbCmsLanguage $language): void
+    {
+        $primaryDomain = $this->getPrimaryDomain($portal, $language);
         if (null === $primaryDomain) {
             return;
         }
 
         $primaryPrefix = $this->urlPrefixGenerator->generatePrefixForDomain($portal, $language, $primaryDomain);
-        $domainList = $this->getCompatiblePortalDomains($portal, $language);
-        foreach ($domainList as $domain) {
+        foreach ($this->getCompatiblePortalDomains($portal, $language) as $domain) {
             if ($domain->id === $primaryDomain->id) {
                 continue;
             }
@@ -317,21 +340,12 @@ class CmsRouteLoader extends Loader
         return $fallbackDomain;
     }
 
-    private function getPrimaryRoutingDomain(\TdbCmsPortal $portal, \TdbCmsLanguage $language): ?\TdbCmsPortalDomains
-    {
-        foreach ($this->getCompatiblePortalDomains($portal, $language) as $domain) {
-            if ($domain->fieldCmsLanguageId === $language->id) {
-                return $domain;
-            }
-        }
-
-        return $this->getPrimaryDomain($portal, $language);
-    }
-
     /**
      * @param string $prefix
+     *
+     * @return void
      */
-    private function handlePortalAndLanguagePrefix(Route $route, $prefix): void
+    private function handlePortalAndLanguagePrefix(Route $route, $prefix)
     {
         if ($route->hasDefault('containsPortalAndLanguagePrefix')) {
             if (false === $route->getDefault('containsPortalAndLanguagePrefix')) {
@@ -347,8 +361,10 @@ class CmsRouteLoader extends Loader
 
     /**
      * @param string $prefix
+     *
+     * @return void
      */
-    private function addPrefix(Route $route, $prefix): void
+    private function addPrefix(Route $route, $prefix)
     {
         $route->setPath($prefix.$route->getPath());
     }
@@ -356,8 +372,10 @@ class CmsRouteLoader extends Loader
     /**
      * @param string $urlPrefix
      * @param bool $hasTrailingSlash
+     *
+     * @return void
      */
-    private function handleTrailingSlash(Route $route, $urlPrefix, $hasTrailingSlash): void
+    private function handleTrailingSlash(Route $route, $urlPrefix, $hasTrailingSlash)
     {
         if (true === $hasTrailingSlash) {
             return;
@@ -404,10 +422,8 @@ class CmsRouteLoader extends Loader
     /**
      * @return string[]
      */
-    private function getConfiguredDomainSuffixesForDomainFamily(
-        \TdbCmsPortal $portal,
-        \TdbCmsPortalDomains $referenceDomain
-    ): array {
+    private function getConfiguredDomainSuffixesForDomainFamily(\TdbCmsPortal $portal, \TdbCmsPortalDomains $referenceDomain): array
+    {
         $suffixes = [];
         $familyHosts = $this->getDomainHosts($referenceDomain);
         $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
@@ -480,12 +496,18 @@ class CmsRouteLoader extends Loader
         $route->setRequirements($requirements);
     }
 
-    private function handleLocale(Route $route, \TdbCmsLanguage $language): void
+    /**
+     * @return void
+     */
+    private function handleLocale(Route $route, \TdbCmsLanguage $language)
     {
         $route->setDefault('_locale', $language->fieldIso6391);
     }
 
-    private function handleSecurityAndFinalRoutePath(Route $route): void
+    /**
+     * @return void
+     */
+    private function handleSecurityAndFinalRoutePath(Route $route)
     {
         $path = $route->getPath();
         if (0 === strpos($path, '/http://') || 0 === strpos($path, '/https://')) {
