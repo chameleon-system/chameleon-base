@@ -86,7 +86,6 @@ class TCMSSmartURLData
         $activeLanguage = $this->getLanguageService()->getActiveLanguage();
 
         switch ($var) {
-            case 'sRelativeFullURL':
             case 'sRelativeURL':
                 return $this->getRequestInfoService()->getPathInfoWithoutPortalAndLanguagePrefix();
             case 'sOriginalURL':
@@ -105,6 +104,8 @@ class TCMSSmartURLData
                 return $request->isSecure();
             case 'sRelativeURLPortalIdentifier':
                 return (null !== $activePortal) ? $activePortal->fieldIdentifier : null;
+            case 'sRelativeFullURL':
+                return $request->getPathInfo();
             case 'aParameters':
                 return $request->query->all();
             case 'iPortalId':

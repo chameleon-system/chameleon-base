@@ -164,12 +164,12 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         $activeLanguage = $this->languageService->getActiveLanguage();
-        $domainPathVariantResolution = $this->getDomainPathVariantResolution($request);
+        $domainPathVariantResolution = $this->portalDomainService->getActiveDomainPathVariantResolutionResult();
 
         if (null !== $domainPathVariantResolution && true === $domainPathVariantResolution->isDomainVariantMatched()) {
-            $this->pathInfoWithoutPortalAndLanguagePrefix = $this->applyTrailingSlashFromRequest(
-                $domainPathVariantResolution->getRemainingPath(),
-                $fullPath
+            $this->pathInfoWithoutPortalAndLanguagePrefix = $this->cutConsumedPrefixFromPath(
+                $fullPath,
+                $domainPathVariantResolution->getCanonicalPrefix()
             );
 
             return $this->pathInfoWithoutPortalAndLanguagePrefix;
@@ -192,27 +192,21 @@ class RequestInfoService implements RequestInfoServiceInterface
         return $this->pathInfoWithoutPortalAndLanguagePrefix;
     }
 
-    private function getDomainPathVariantResolution(Request $request): ?DomainPathVariantResolutionResult
+    private function cutConsumedPrefixFromPath(string $fullPath, string $consumedPrefix): string
     {
-        $requestResolution = $request->attributes->get(DomainPathVariantResolutionResult::REQUEST_ATTRIBUTE_NAME);
-        if ($requestResolution instanceof DomainPathVariantResolutionResult) {
-            return $requestResolution;
+        if ('' === $consumedPrefix) {
+            return $fullPath;
         }
 
-        return $this->portalDomainService->getActiveDomainPathVariantResolutionResult();
-    }
-
-    private function applyTrailingSlashFromRequest(string $path, string $requestPath): string
-    {
-        if ('/' === $path) {
+        if ($consumedPrefix === $fullPath) {
             return '/';
         }
 
-        if (str_ends_with($requestPath, '/') && false === str_ends_with($path, '/')) {
-            return $path.'/';
+        if (str_starts_with($fullPath, $consumedPrefix.'/')) {
+            return substr($fullPath, strlen($consumedPrefix));
         }
 
-        return $path;
+        return $fullPath;
     }
 
     /**

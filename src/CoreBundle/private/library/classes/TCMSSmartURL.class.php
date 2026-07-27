@@ -78,15 +78,7 @@ class TCMSSmartURL
             $request->attributes->set('pagedef', $pagedef);
         } else {
             $aCustomURLParameters = [];
-            if ('/' === $oURLData->sRelativeURL) {
-                $activePortal = self::getPortalDomainService()->getActivePortal();
-                if (null !== $activePortal) {
-                    $pagedef = self::GetPortalRootPagedef($activePortal->id);
-                }
-            }
-            if (false === $pagedef) {
-                $pagedef = self::RunCustomHandlers($request, $aCustomURLParameters);
-            }
+            $pagedef = self::RunCustomHandlers($request, $aCustomURLParameters);
 
             if (false === $pagedef) {
                 $oURLData->bPagedefFound = false;

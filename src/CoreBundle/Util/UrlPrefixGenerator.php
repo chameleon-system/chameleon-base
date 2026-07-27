@@ -40,7 +40,18 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
      */
     public function generatePrefixParts(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
-        return $this->generatePrefixPartsForDomain($portal, $language);
+        $portalPrefix = $this->getPortalPrefix($portal);
+        $languagePrefix = $this->getUrlLanguagePrefix($portal, $language);
+
+        $prefixParts = [];
+        if (!empty($portalPrefix)) {
+            $prefixParts[] = $portalPrefix;
+        }
+        if (!empty($languagePrefix)) {
+            $prefixParts[] = $languagePrefix;
+        }
+
+        return $prefixParts;
     }
 
     /**
@@ -48,17 +59,7 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
      */
     public function generatePrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
-        return $this->generatePrefixForDomain($portal, $language);
-    }
-
-    public function generatePrefixForDomain(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null)
-    {
-        return $this->getPathPrefix($portal, $language, $domain);
-    }
-
-    public function getPathPrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null)
-    {
-        $prefixParts = $this->generatePrefixPartsForDomain($portal, $language, $domain);
+        $prefixParts = $this->generatePrefixParts($portal, $language);
         if (empty($prefixParts)) {
             return '';
         }
@@ -103,32 +104,6 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
 
     public function getUrlLanguagePrefix(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null)
     {
-        return $this->getDomainLanguagePathSegment($portal, $language);
-    }
-
-    public function getDomainLanguagePathSegment(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null)
-    {
-        return $this->getUrlLanguagePrefixForDomain($portal, $language, $domain);
-    }
-
-    private function generatePrefixPartsForDomain(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null): array
-    {
-        $portalPrefix = $this->getPortalPrefix($portal);
-        $languagePrefix = $this->getDomainLanguagePathSegment($portal, $language, $domain);
-
-        $prefixParts = [];
-        if (!empty($portalPrefix)) {
-            $prefixParts[] = $portalPrefix;
-        }
-        if (!empty($languagePrefix)) {
-            $prefixParts[] = $languagePrefix;
-        }
-
-        return $prefixParts;
-    }
-
-    private function getUrlLanguagePrefixForDomain(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, ?\TdbCmsPortalDomains $domain = null)
-    {
         if (null === $portal) {
             return '';
         }
@@ -141,14 +116,14 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
             return '';
         }
 
-        $targetDomain = $domain ?? $this->getPrimaryTargetDomain($portal, $language);
-        if (null !== $targetDomain) {
-            $configuredDomainPrefix = $this->getConfiguredDomainPrefix($portal, $targetDomain);
+        $primaryTargetDomain = $this->getPrimaryTargetDomain($portal, $language);
+        if (null !== $primaryTargetDomain) {
+            $configuredDomainPrefix = $this->getConfiguredDomainPrefix($portal, $primaryTargetDomain);
             if (null !== $configuredDomainPrefix) {
                 return $configuredDomainPrefix;
             }
 
-            if ('' !== $targetDomain->fieldCmsLanguageId) {
+            if ('' !== $primaryTargetDomain->fieldCmsLanguageId) {
                 return '';
             }
         }

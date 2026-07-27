@@ -304,8 +304,6 @@
         <service id="chameleon_system_core.listener.redirect_to_primary_domain" class="ChameleonSystem\CoreBundle\EventListener\CheckPortalDomainListener">
             <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.request_info_service" />
-            <argument type="service" id="chameleon_system_core.language_service" />
-            <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
 
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="252" />
         </service>

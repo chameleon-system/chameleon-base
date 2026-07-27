@@ -82,6 +82,7 @@ class RequestInfoServiceTest extends TestCase
         $this->mockUrlPrefixGenerator = $this->prophesize(UrlPrefixGeneratorInterface::class);
         $this->mockPreviewModeService = $this->prophesize(PreviewModeServiceInterface::class);
         $this->mockPreviewModeService->currentSessionHasPreviewAccess()->willReturn(false);
+        $this->mockPreviewModeService->previewTokenExists('')->willReturn(false);
 
         $this->subject = new RequestInfoService(
             $this->mockRequestStack->reveal(),
@@ -162,24 +163,6 @@ class RequestInfoServiceTest extends TestCase
         self::assertSame('/service/', $this->subject->getPathInfoWithoutPortalAndLanguagePrefix());
     }
 
-    public function testUsesConsumedPortalAndDomainSuffixFromResolverWithoutTrailingSlash(): void
-    {
-        $request = Request::create('https://www.tischwelt.ch/shop/fr/service');
-        $request->attributes->set('chameleon.request_type', 0);
-        $this->mockRequestStack->getCurrentRequest()->willReturn($request);
-
-        $portal = $this->createMock(\TdbCmsPortal::class);
-        $language = $this->createMock(\TdbCmsLanguage::class);
-        $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
-        $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('/shop/fr', '/service')
-        );
-        $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
-
-        self::assertSame('/service', $this->subject->getPathInfoWithoutPortalAndLanguagePrefix());
-    }
-
     public function testUnknownSegmentStaysUntouchedWhenResolverDidNotConsumeSuffix(): void
     {
         $request = Request::create('https://www.tischwelt.ch/frankfurt/service/');
@@ -250,26 +233,6 @@ class RequestInfoServiceTest extends TestCase
         $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
 
         self::assertSame('/', $this->subject->getPathInfoWithoutPortalAndLanguagePrefix());
-    }
-
-    public function testUsesConsumedPortalIdentifierAndKeepsUnknownSegmentForRootPathInfo(): void
-    {
-        $request = Request::create('https://www.tischwelt.ch/shop/frankfurt/');
-        $request->attributes->set('chameleon.request_type', 0);
-        $request->attributes->set(
-            DomainPathVariantResolutionResult::REQUEST_ATTRIBUTE_NAME,
-            $this->createResolutionResult('/shop', '/frankfurt')
-        );
-        $this->mockRequestStack->getCurrentRequest()->willReturn($request);
-
-        $portal = $this->createMock(\TdbCmsPortal::class);
-        $language = $this->createMock(\TdbCmsLanguage::class);
-        $this->mockPortalDomainService->getActivePortal()->willReturn($portal);
-        $this->mockLanguageService->getActiveLanguage()->willReturn($language);
-        $this->mockPortalDomainService->getActiveDomainPathVariantResolutionResult()->shouldNotBeCalled();
-        $this->mockUrlPrefixGenerator->generatePrefix($portal, $language)->shouldNotBeCalled();
-
-        self::assertSame('/frankfurt/', $this->subject->getPathInfoWithoutPortalAndLanguagePrefix());
     }
 
     public function testFallsBackToLegacyPrefixStrippingWithoutDomainVariantMatch(): void

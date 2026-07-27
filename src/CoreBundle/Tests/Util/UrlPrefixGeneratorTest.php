@@ -40,8 +40,6 @@ class UrlPrefixGeneratorTest extends TestCase
         $subject = new UrlPrefixGenerator($portalDomainService->reveal(), $domainDataAccess->reveal());
 
         self::assertSame('fr', $subject->getLanguagePrefix($portal, $language));
-        self::assertSame('fr', $subject->getDomainLanguagePathSegment($portal, $language));
-        self::assertSame('/shop/fr', $subject->getPathPrefix($portal, $language));
         self::assertSame('/shop/fr', $subject->generatePrefix($portal, $language));
     }
 
@@ -65,10 +63,6 @@ class UrlPrefixGeneratorTest extends TestCase
 
         $subject = new UrlPrefixGenerator($portalDomainService->reveal(), $domainDataAccess->reveal());
 
-        self::assertSame('', $subject->getDomainLanguagePathSegment($portal, $languageDe));
-        self::assertSame('fr', $subject->getDomainLanguagePathSegment($portal, $languageFr));
-        self::assertSame('', $subject->getPathPrefix($portal, $languageDe));
-        self::assertSame('/fr', $subject->getPathPrefix($portal, $languageFr));
         self::assertSame('', $subject->generatePrefix($portal, $languageDe));
         self::assertSame('/fr', $subject->generatePrefix($portal, $languageFr));
     }
@@ -93,10 +87,6 @@ class UrlPrefixGeneratorTest extends TestCase
 
         $subject = new UrlPrefixGenerator($portalDomainService->reveal(), $domainDataAccess->reveal());
 
-        self::assertSame('de', $subject->getDomainLanguagePathSegment($portal, $languageDe));
-        self::assertSame('fr', $subject->getDomainLanguagePathSegment($portal, $languageFr));
-        self::assertSame('/de', $subject->getPathPrefix($portal, $languageDe));
-        self::assertSame('/fr', $subject->getPathPrefix($portal, $languageFr));
         self::assertSame('/de', $subject->generatePrefix($portal, $languageDe));
         self::assertSame('/fr', $subject->generatePrefix($portal, $languageFr));
     }
@@ -118,32 +108,7 @@ class UrlPrefixGeneratorTest extends TestCase
 
         $subject = new UrlPrefixGenerator($portalDomainService->reveal(), $domainDataAccess->reveal());
 
-        self::assertSame('fr', $subject->getDomainLanguagePathSegment($portal, $language));
-        self::assertSame('/shop/fr', $subject->getPathPrefix($portal, $language));
         self::assertSame('/shop/fr', $subject->generatePrefix($portal, $language));
-    }
-
-    public function testGeneratesVariantPrefixForExplicitDomainVariant(): void
-    {
-        $portal = $this->createPortal('portal-id', '', 'de-id', true);
-        $language = $this->createLanguage('de-id', 'de');
-        $primaryDomain = $this->createDomain('de-id', '', 'www.example.com', 'www.example.com');
-        $variantDomain = $this->createDomain('de-id', 'fr', 'www.example.com', 'www.example.com');
-
-        $portalDomainService = $this->prophesize(PortalDomainServiceInterface::class);
-        $portalDomainService->getPrimaryDomain('portal-id', 'de-id')->willReturn($primaryDomain);
-
-        $domainDataAccess = $this->prophesize(CmsPortalDomainsDataAccessInterface::class);
-        $domainDataAccess->getDomainCandidatesByHostAndPortal('www.example.com', 'portal-id')->willReturn([
-            ['id' => '1', 'url_suffix' => ''],
-            ['id' => '2', 'url_suffix' => 'fr'],
-        ]);
-
-        $subject = new UrlPrefixGenerator($portalDomainService->reveal(), $domainDataAccess->reveal());
-
-        self::assertSame('fr', $subject->getDomainLanguagePathSegment($portal, $language, $variantDomain));
-        self::assertSame('/fr', $subject->getPathPrefix($portal, $language, $variantDomain));
-        self::assertSame('/fr', $subject->generatePrefixForDomain($portal, $language, $variantDomain));
     }
 
     public function testKeepsPortalPrefixWithoutDomainSuffixWhenFamilyUsesDomainSuffixes(): void
@@ -163,8 +128,6 @@ class UrlPrefixGeneratorTest extends TestCase
 
         $subject = new UrlPrefixGenerator($portalDomainService->reveal(), $domainDataAccess->reveal());
 
-        self::assertSame('', $subject->getDomainLanguagePathSegment($portal, $language));
-        self::assertSame('/shop', $subject->getPathPrefix($portal, $language));
         self::assertSame('/shop', $subject->generatePrefix($portal, $language));
     }
 
@@ -185,8 +148,6 @@ class UrlPrefixGeneratorTest extends TestCase
 
         $subject = new UrlPrefixGenerator($portalDomainService->reveal(), $domainDataAccess->reveal());
 
-        self::assertSame('francais', $subject->getDomainLanguagePathSegment($portal, $language));
-        self::assertSame('/francais', $subject->getPathPrefix($portal, $language));
         self::assertSame('/francais', $subject->generatePrefix($portal, $language));
     }
 
@@ -202,8 +163,6 @@ class UrlPrefixGeneratorTest extends TestCase
 
         $subject = new UrlPrefixGenerator($portalDomainService->reveal(), $domainDataAccess->reveal());
 
-        self::assertSame('fr', $subject->getDomainLanguagePathSegment($portal, $language));
-        self::assertSame('/fr', $subject->getPathPrefix($portal, $language));
         self::assertSame('/fr', $subject->generatePrefix($portal, $language));
     }
 

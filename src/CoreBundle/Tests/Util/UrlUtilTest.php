@@ -387,45 +387,19 @@ class UrlUtilTest extends TestCase
         self::assertSame('/service/', $this->urlUtil->cutPortalAndLanguagePrefixFromUrl('/fr/service/', $portal, $language));
     }
 
-    public function testCutsConsumedPortalPrefixAndKeepsUnknownSegment(): void
+    private function createResolutionResult(string $canonicalPrefix, bool $isMatched = true): DomainPathVariantResolutionResult
     {
-        $this->givenAUrlUtil();
-
-        $portal = $this->createMock(\TdbCmsPortal::class);
-        $language = $this->createMock(\TdbCmsLanguage::class);
-        $this->portalDomainService->getActivePortal()->willReturn($portal);
-        $this->languageService->getActiveLanguage()->willReturn($language);
-        $this->portalDomainService->getActiveDomainPathVariantResolutionResult()->willReturn(
-            $this->createResolutionResult('/shop', true, '/frankfurt')
-        );
-        $this->urlPrefixGenerator->generatePrefixParts($portal, $language)->shouldNotBeCalled();
-
-        self::assertSame('/frankfurt/', $this->urlUtil->cutPortalAndLanguagePrefixFromUrl('/shop/frankfurt/', $portal, $language));
-    }
-
-    private function createResolutionResult(string $canonicalPrefix, bool $isMatched = true, string $remainingPath = '/'): DomainPathVariantResolutionResult
-    {
-        $prefixParts = array_values(array_filter(explode('/', trim($canonicalPrefix, '/'))));
-        $consumedPortalIdentifier = '';
-        $consumedDomainSuffix = '';
-        if (2 <= count($prefixParts)) {
-            $consumedPortalIdentifier = $prefixParts[0];
-            $consumedDomainSuffix = $prefixParts[1];
-        } elseif (1 === count($prefixParts)) {
-            $consumedDomainSuffix = $prefixParts[0];
-        }
-
         return new DomainPathVariantResolutionResult(
             $isMatched ? ['id' => 'domain-1', 'cms_portal_id' => 'portal-1', 'cms_language_id' => 'lang-1'] : null,
             $isMatched ? 'domain-1' : null,
             $isMatched ? 'portal-1' : null,
             $isMatched ? 'lang-1' : null,
-            $consumedPortalIdentifier,
-            $consumedDomainSuffix,
-            $remainingPath,
+            '',
+            '' === $canonicalPrefix ? '' : basename($canonicalPrefix),
+            '/',
             $canonicalPrefix,
-            '' !== $consumedPortalIdentifier,
-            '' !== $consumedDomainSuffix,
+            str_contains(trim($canonicalPrefix, '/'), '/'),
+            '' !== $canonicalPrefix,
             $isMatched,
             $isMatched ? DomainPathVariantResolutionResult::MATCH_TYPE_HOST_MATCH_WITH_DOMAIN_SUFFIX : DomainPathVariantResolutionResult::MATCH_TYPE_NO_MATCH,
             false

@@ -280,7 +280,16 @@ class UrlUtil
             return $url;
         }
 
-        return $this->mapRemainingPathToUrlShape($resolution->getRemainingPath(), $url);
+        $urlBefore = $url;
+        $url = $this->cutPrefixFromString($url, $consumedPrefix.'/');
+        if (strlen($url) === strlen($urlBefore) && '/' === $consumedPrefix) {
+            return $url;
+        }
+        if (strlen($url) === strlen($urlBefore)) {
+            $url = $this->cutPrefixFromString($url, $consumedPrefix);
+        }
+
+        return $url;
     }
 
     /**
@@ -303,27 +312,6 @@ class UrlUtil
         }
 
         return $string;
-    }
-
-    private function mapRemainingPathToUrlShape(string $remainingPath, string $originalUrl): string
-    {
-        if ('/' === $remainingPath) {
-            if ('/' === substr($originalUrl, 0, 1)) {
-                return '/';
-            }
-
-            return '';
-        }
-
-        if ('/' !== substr($originalUrl, 0, 1)) {
-            $remainingPath = ltrim($remainingPath, '/');
-        }
-
-        if (str_ends_with($originalUrl, '/') && false === str_ends_with($remainingPath, '/')) {
-            return $remainingPath.'/';
-        }
-
-        return $remainingPath;
     }
 
     /**
