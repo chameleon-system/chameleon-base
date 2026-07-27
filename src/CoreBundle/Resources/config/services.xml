@@ -362,8 +362,6 @@
             <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
 
-        <service id="chameleon_system_core.service.domain_path_variant_resolver" class="ChameleonSystem\CoreBundle\Service\DomainPathVariantResolver" public="false" />
-
         <service id="chameleon_system_core.preview_mode_service" class="ChameleonSystem\CoreBundle\Service\PreviewModeService" public="true">
             <argument type="string">%secret%</argument>
             <argument type="service" id="database_connection"/>
@@ -377,7 +375,6 @@
             <argument type="service" id="service_container" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
-            <argument type="service" id="chameleon_system_core.service.domain_path_variant_resolver" />
         </service>
 
         <service id="chameleon_system_core.language_service" class="ChameleonSystem\CoreBundle\Service\LanguageService" public="true">
