@@ -39,9 +39,6 @@ class CmsRouteLoader extends Loader
      * @var UrlUtil
      */
     private $urlUtil;
-    /**
-     * @var LanguageServiceInterface
-     */
     private LanguageServiceInterface $languageService;
 
     public function __construct(
