@@ -78,6 +78,7 @@ Chameleon 7.1 project. Any change should also be working with "old" Symfony 4.4.
 - `InputFilterUtil` has two new methods: `getFilteredGetInputArray` and `getFilteredPostInputArray`. Use them if you expect the value to be an array instead of a scalar value.
   - This is due to a change in symfony's ParameterBag, which does not support arrays on its `query.get` and `request.get` methods anymore. You now have to use the `all` method for expected arrays.
   - If you are using the `InputFilterUtil` class, there is currently a fallback so the project won't crash immediately. However, this fallback will be removed in the future.
+- if you have implemented `UrlPrefixGeneratorInterface` you must make sure to update the signatures to include the domain
 
 # Twig Changes
 

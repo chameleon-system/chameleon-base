@@ -164,8 +164,9 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         $activeLanguage = $this->languageService->getActiveLanguage();
+        $activeDomain = $this->portalDomainService->getActiveDomain();
 
-        $prefixToCut = $this->urlPrefixGenerator->generatePrefix($activePortal, $activeLanguage);
+        $prefixToCut = $this->urlPrefixGenerator->generatePrefix($activePortal, $activeLanguage, $activeDomain);
 
         if (empty($prefixToCut)) {
             return $fullPath;

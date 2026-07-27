@@ -127,14 +127,9 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         }
 
         $portalDomainService = $this->getPortalDomainService();
-        // language set via domain
         $domain = $portalDomainService->getActiveDomain();
         if (null === $domain) {
             return null;
-        }
-
-        if (!empty($domain->fieldCmsLanguageId)) {
-            return $domain->fieldCmsLanguageId;
         }
 
         // language set via url prefix?
@@ -143,11 +138,16 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             return null;
         }
 
+        // language set via url prefix?
         if (true === $activePortal->fieldUseMultilanguage) {
             $languageId = $this->getLanguageFromUri($request, $activePortal);
             if (null !== $languageId) {
                 return $languageId;
             }
+        }
+
+        if (false === empty($domain->fieldCmsLanguageId)) {
+            return $domain->fieldCmsLanguageId;
         }
 
         $activePage = $this->getActivePageService()->getActivePage();
@@ -199,13 +199,12 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, $languageCode)
     {
         $query = $this->getLanguageQuery();
-        $statement = $this->databaseConnection->prepare($query);
-        $result = $statement->executeQuery([
+        $rows = $this->databaseConnection->fetchAllAssociative($query, [
             'languageCode' => $languageCode,
         ]);
         $theLanguage = null;
         $languageFound = false;
-        while ($row = $result->fetchAssociative()) {
+        foreach ($rows as $row) {
             $languageFound = true;
             $portalId = $row['portal_id'];
             $languageId = $row['language_id'];

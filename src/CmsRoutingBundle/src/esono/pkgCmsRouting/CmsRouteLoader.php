@@ -11,6 +11,7 @@
 
 namespace esono\pkgCmsRouting;
 
+use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
@@ -22,33 +23,13 @@ use Symfony\Component\Routing\RouteCollection;
 
 class CmsRouteLoader extends Loader
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-    /**
-     * @var UrlPrefixGeneratorInterface
-     */
-    private $urlPrefixGenerator;
-    /**
-     * @var RoutingUtilInterface
-     */
-    private $routingUtil;
-    /**
-     * @var UrlUtil
-     */
-    private $urlUtil;
-
     public function __construct(
-        ContainerInterface $container,
-        UrlPrefixGeneratorInterface $urlPrefixGenerator,
-        RoutingUtilInterface $routingUtil,
-        UrlUtil $urlUtil
+        private readonly ContainerInterface $container,
+        private readonly UrlPrefixGeneratorInterface $urlPrefixGenerator,
+        private readonly RoutingUtilInterface $routingUtil,
+        private readonly UrlUtil $urlUtil,
+        private readonly LanguageServiceInterface $languageService
     ) {
-        $this->container = $container;
-        $this->urlPrefixGenerator = $urlPrefixGenerator;
-        $this->routingUtil = $routingUtil;
-        $this->urlUtil = $urlUtil;
     }
 
     /**
@@ -73,10 +54,14 @@ class CmsRouteLoader extends Loader
                 $portal = \TdbCmsPortal::GetNewInstance();
                 $portal->Load($routeConfig['portal_id']);
                 $languageList = $portal->GetFieldCmsLanguageList();
+                $languages = [];
+                while ($language = $languageList->Next()) {
+                    $languages[$language->id] = $language;
+                }
                 $defaultLanguage = $this->getDefaultPortalLanguage($portal);
                 $defaultLanguageId = (null === $defaultLanguage) ? null : $defaultLanguage->id;
 
-                while ($language = $languageList->Next()) {
+                foreach ($languages as $language) {
                     if ($language->id === $defaultLanguageId) {
                         continue;
                     }
@@ -184,36 +169,60 @@ class CmsRouteLoader extends Loader
             $this->handleSecurityAndFinalRoutePath($route);
         }
         if (null !== $portal && null !== $language) {
-            $importedRoutes = $this->getRoutesWithFinalNames($importedRoutes, $portal, $language);
-            $domainRequirementPlaceholder = $this->routingUtil->getHostRequirementPlaceholder();
-            $urlPrefix = $this->urlPrefixGenerator->generatePrefix($portal, $language);
-            $hasTrailingSlash = false === CHAMELEON_SEO_URL_REMOVE_TRAILING_SLASH && true === $portal->fieldUseSlashInSeoUrls;
-            foreach ($importedRoutes as $route) {
-                $this->handlePortalAndLanguagePrefix($route, $urlPrefix);
-                $this->handleTrailingSlash($route, $urlPrefix, $hasTrailingSlash);
-                $this->handleDomainRequirements($route, $domainRequirementPlaceholder, $portal, $language);
-                $this->handleLocale($route, $language);
-            }
+            $importedRoutes = $this->createPortalAndLanguageRoutes(
+                $importedRoutes,
+                $portal,
+                $language
+            );
         }
 
         return $importedRoutes;
     }
 
-    /**
-     * @return RouteCollection
-     */
-    private function getRoutesWithFinalNames(
+    private function createPortalAndLanguageRoutes(
         RouteCollection $importedRoutes,
         \TdbCmsPortal $portal,
         \TdbCmsLanguage $language
-    ) {
-        $adjustedRoutes = new RouteCollection();
+    ): RouteCollection {
+        $urlPrefix = $this->urlPrefixGenerator->generatePrefix($portal, $language);
+        $hasTrailingSlash = false === CHAMELEON_SEO_URL_REMOVE_TRAILING_SLASH && true === $portal->fieldUseSlashInSeoUrls;
+        $routes = new RouteCollection();
+        $domainPlaceholder = $this->routingUtil->getHostRequirementPlaceholder();
+        $alternativeDomains = $this->getAlternativeDomains($portal, $language, $urlPrefix);
+
         foreach ($importedRoutes->all() as $name => $route) {
+            $this->removeExistingPrefix($route, $urlPrefix);
             $finalRouteName = $this->getRouteNameWithPortalAndLanguageInformation($name, $portal, $language);
-            $adjustedRoutes->add($finalRouteName, $route);
+            $secure = in_array('https', $route->getSchemes(), true);
+            $domainRequirement = $this->routingUtil->getDomainRequirement($portal, $language, $secure);
+
+            if ('' !== $domainRequirement) {
+                $defaultRoute = clone $route;
+                $this->configureRoute($defaultRoute, $urlPrefix, $hasTrailingSlash, $domainPlaceholder, $domainRequirement, $language);
+                $routes->add($finalRouteName, $defaultRoute);
+            }
+
+            foreach ($alternativeDomains as $domain) {
+                $domainRoute = clone $route;
+                $domainPrefix = $this->urlPrefixGenerator->generatePrefix($portal, $language, $domain);
+                $this->configureRoute(
+                    $domainRoute,
+                    $domainPrefix,
+                    $hasTrailingSlash,
+                    $domainPlaceholder,
+                    $this->getDomainRequirement($domain, $secure),
+                    $language
+                );
+                $routes->add($finalRouteName.'-domain-'.$domain->id, $domainRoute);
+            }
         }
 
-        return $adjustedRoutes;
+        if (0 === $routes->count()) {
+            // todo #70643: replace exception with a log message. The exception is not new, but since it breaks routing for all portals, we should remove it!
+            throw new \LogicException(sprintf('There is no domain configured for portal ID %s and language ID %s.', $portal->id, $language->id));
+        }
+
+        return $routes;
     }
 
     /**
@@ -226,23 +235,93 @@ class CmsRouteLoader extends Loader
         return $name.'-'.$portal->id.'-'.$language->fieldIso6391;
     }
 
-    /**
-     * @param string $prefix
-     *
-     * @return void
-     */
-    private function handlePortalAndLanguagePrefix(Route $route, $prefix)
+    private function removeExistingPrefix(Route $route, string $prefix): void
     {
         if ($route->hasDefault('containsPortalAndLanguagePrefix')) {
-            if (false === $route->getDefault('containsPortalAndLanguagePrefix')) {
-                $this->addPrefix($route, $prefix);
+            if ('' !== $prefix
+                && true === $route->getDefault('containsPortalAndLanguagePrefix')
+                && str_starts_with($route->getPath(), $prefix)
+            ) {
+                $route->setPath(substr($route->getPath(), strlen($prefix)));
             }
             $defaults = $route->getDefaults();
             unset($defaults['containsPortalAndLanguagePrefix']);
             $route->setDefaults($defaults);
-        } else {
-            $this->addPrefix($route, $prefix);
         }
+    }
+
+    private function configureRoute(
+        Route $route,
+        string $prefix,
+        bool $hasTrailingSlash,
+        string $domainPlaceholder,
+        string $domainRequirement,
+        \TdbCmsLanguage $language
+    ): void {
+        $this->addPrefix($route, $prefix);
+        $this->handleTrailingSlash($route, $prefix, $hasTrailingSlash);
+        $this->handleDomainRequirements($route, $domainPlaceholder, $domainRequirement);
+        $this->handleLocale($route, $language);
+    }
+
+    /**
+     * @return \TdbCmsPortalDomains[]
+     */
+    private function getAlternativeDomains(
+        \TdbCmsPortal $portal,
+        \TdbCmsLanguage $language,
+        string $defaultPrefix
+    ): array {
+        if (false === $portal->fieldUseMultilanguage) {
+            return [];
+        }
+
+        $domains = [];
+        $domainList = $portal->GetFieldCmsPortalDomainsList();
+        while ($domain = $domainList->Next()) {
+            $additionalLanguageIds = $domain->GetFieldCmsLanguageIdList();
+            if ([] === $additionalLanguageIds) {
+                continue;
+            }
+            if ($language->id !== $this->getDefaultLanguageId($portal, $domain)
+                && false === in_array($language->id, $additionalLanguageIds, true)
+            ) {
+                continue;
+            }
+            if ($defaultPrefix === $this->urlPrefixGenerator->generatePrefix($portal, $language, $domain)) {
+                continue;
+            }
+
+            $domains[] = $domain;
+        }
+
+        return $domains;
+    }
+
+    private function getDefaultLanguageId(\TdbCmsPortal $portal, \TdbCmsPortalDomains $domain): string
+    {
+        if ('' !== $domain->fieldCmsLanguageId) {
+            return $domain->fieldCmsLanguageId;
+        }
+        if ('' !== $portal->fieldCmsLanguageId) {
+            return $portal->fieldCmsLanguageId;
+        }
+
+        return $this->languageService->getCmsBaseLanguageId();
+    }
+
+    private function getDomainRequirement(\TdbCmsPortalDomains $domain, bool $secure): string
+    {
+        if ('' !== $domain->fieldSslname) {
+            if ($secure) {
+                return $domain->fieldSslname;
+            }
+            if ($domain->fieldSslname !== $domain->fieldName) {
+                return $domain->fieldSslname.'|'.$domain->fieldName;
+            }
+        }
+
+        return $domain->fieldName;
     }
 
     /**
@@ -272,26 +351,13 @@ class CmsRouteLoader extends Loader
         }
     }
 
-    /**
-     * @param string $domainRequirementPlaceholder
-     *
-     * @return void
-     *
-     * @throws \LogicException if no primary domain is set
-     */
     private function handleDomainRequirements(
         Route $route,
-        $domainRequirementPlaceholder,
-        \TdbCmsPortal $portal,
-        \TdbCmsLanguage $language
-    ) {
+        string $domainRequirementPlaceholder,
+        string $domainRequirementValue
+    ): void {
         $route->setHost('{'.$domainRequirementPlaceholder.'}');
         $requirements = $route->getRequirements();
-        $secure = in_array('https', $route->getSchemes(), true);
-        $domainRequirementValue = $this->routingUtil->getDomainRequirement($portal, $language, $secure);
-        if ('' === $domainRequirementValue) {
-            throw new \LogicException(sprintf('There is no primary domain configured for the portal with ID %s. Route generation will only work with a primary domain.', $portal->id));
-        }
         $requirements[$domainRequirementPlaceholder] = $domainRequirementValue;
         $route->setRequirements($requirements);
     }

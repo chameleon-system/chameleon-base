@@ -7,6 +7,7 @@ use ChameleonSystem\CoreBundle\Routing\DomainValidatorInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Util\RoutingUtilInterface;
+use ChameleonSystem\CoreBundle\Util\UrlPrefixGeneratorInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use PHPUnit\Framework\MockObject\Stub\ReturnStub;
 use PHPUnit\Framework\TestCase;
@@ -75,6 +76,10 @@ class ChameleonFrontendRouterTest extends TestCase
      * @var DomainValidatorInterface|ObjectProphecy
      */
     private $domainValidatorMock;
+    /**
+     * @var UrlPrefixGeneratorInterface|ObjectProphecy
+     */
+    private $urlPrefixGeneratorMock;
 
     /**
      * {@inheritdoc}
@@ -96,6 +101,7 @@ class ChameleonFrontendRouterTest extends TestCase
         $this->routingUtilMock = null;
         $this->urlUtilMock = null;
         $this->domainValidatorMock = null;
+        $this->urlPrefixGeneratorMock = null;
     }
 
     /**
@@ -146,6 +152,9 @@ class ChameleonFrontendRouterTest extends TestCase
 
         $this->mockDomainValidator();
         $this->router->setDomainValidator($this->domainValidatorMock->reveal());
+
+        $this->urlPrefixGeneratorMock = $this->prophesize(UrlPrefixGeneratorInterface::class);
+        $this->router->setUrlPrefixGenerator($this->urlPrefixGeneratorMock->reveal());
     }
 
     private function mockContainer()
@@ -288,10 +297,17 @@ class ChameleonFrontendRouterTest extends TestCase
             ->disableAutoload()
             ->setMethods([
                 'GetPrimaryDomain',
+                'GetFieldCmsPortalDomainsList',
                 ])
             ->getMock();
         $this->portalMock->id = null === $portalId ? '7' : $portalId;
         $this->portalMock->method('GetPrimaryDomain')->will($this->getMockResultForGetPrimaryDomain($isCurrentRequestSecure));
+        $domainList = $this->getMockBuilder('TdbCmsPortalDomainsList')
+            ->disableAutoload()
+            ->setMethods(['Next'])
+            ->getMock();
+        $domainList->method('Next')->willReturn(false);
+        $this->portalMock->method('GetFieldCmsPortalDomainsList')->willReturn($domainList);
     }
 
     /**

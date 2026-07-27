@@ -119,7 +119,7 @@ class TCMSSmartURLData
             case 'sLanguageId':
                 return $this->getLanguageService()->getActiveLanguageId();
             case 'sLanguageIdentifier':
-                return $this->getUrlPrefixGenerator()->getLanguagePrefix($activePortal, $activeLanguage);
+                return $this->getUrlPrefixGenerator()->getLanguagePrefix($activePortal, $activeLanguage, $activeDomain);
             case 'bDomainBasedLanguage':
                 return $activeDomain && '' !== $activeDomain->fieldCmsLanguageId;
         }

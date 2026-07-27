@@ -27,6 +27,7 @@
                  class="ChameleonSystem\CoreBundle\DataAccess\CmsPortalDomainsDataAccess"
                  public="true">
             <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
 
         <service id="chameleon_system_core.data_access_cms_portal_domains_cache_decorator"

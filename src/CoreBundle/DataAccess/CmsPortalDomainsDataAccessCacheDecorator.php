@@ -52,6 +52,9 @@ class CmsPortalDomainsDataAccessCacheDecorator implements CmsPortalDomainsDataAc
         $primaryDomain = $this->subject->getPrimaryDomain($portalId, $languageId);
         $cache->set($cacheKey, $primaryDomain, [
             ['table' => 'cms_portal_domains', 'id' => null],
+            ['table' => 'cms_portal_domain_cms_language_mlt', 'id' => null],
+            ['table' => 'cms_portal', 'id' => null],
+            ['table' => 'cms_config', 'id' => null],
         ]);
 
         return $primaryDomain;

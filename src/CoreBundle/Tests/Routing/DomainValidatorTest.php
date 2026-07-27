@@ -130,9 +130,11 @@ class DomainValidatorTest extends TestCase
             ->disableAutoload()
             ->setMethods([
                 'GetFieldCmsPortalDomainsList',
+                'GetFieldCmsLanguageIdList',
             ])
             ->getMock();
         $this->portalMock->method('GetFieldCmsPortalDomainsList')->will($this->getMockResultForGetFieldCmsPortalDomainsList());
+        $this->portalMock->method('GetFieldCmsLanguageIdList')->willReturn(['1', '2']);
         $this->portalMock->id = '1';
 
         $this->portalDomainServiceMock = $this->prophesize('\ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface');

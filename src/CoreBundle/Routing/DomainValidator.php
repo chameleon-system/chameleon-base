@@ -5,10 +5,13 @@ namespace ChameleonSystem\CoreBundle\Routing;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
+use ChameleonSystem\CoreBundle\Util\DomainSupportsLanguageTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class DomainValidator implements DomainValidatorInterface
 {
+    use DomainSupportsLanguageTrait;
+
     /**
      * @var PortalDomainServiceInterface
      */
@@ -127,19 +130,15 @@ class DomainValidator implements DomainValidatorInterface
     private function isValidDomainForPortal($domain, \TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
         $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
+
         while ($portalDomain = $portalDomainList->Next()) {
-            if ('' !== $portalDomain->fieldCmsLanguageId && $portalDomain->fieldCmsLanguageId !== $language->id) {
+            $nameOfPortalDomainBeingChecked = (true === $secure) ? $portalDomain->getSecureDomainName() : $portalDomain->getInsecureDomainName();
+            if ($domain !== $nameOfPortalDomainBeingChecked) {
                 continue;
             }
 
-            if (true === $secure) {
-                if ($domain === $portalDomain->getSecureDomainName()) {
-                    return true;
-                }
-            } else {
-                if ($domain === $portalDomain->getInsecureDomainName()) {
-                    return true;
-                }
+            if ($this->domainSupportsLanguage($portalDomain, $portal, $language, $this->languageService->getCmsBaseLanguageId())) {
+                return true;
             }
         }
 
