@@ -178,9 +178,7 @@ readonly class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
         $domainCandidates = $this->getDomainFamilyCandidates($portal->id, $primaryTargetDomain);
         foreach ($domainCandidates as $domainCandidate) {
             if ('' !== trim((string) ($domainCandidate['url_suffix'] ?? ''))) {
-                $configuredSuffix = trim((string) $primaryTargetDomain->getUrlSuffix());
-
-                return '' !== $configuredSuffix ? $configuredSuffix : null;
+                return trim((string) $primaryTargetDomain->getUrlSuffix());
             }
         }
 
