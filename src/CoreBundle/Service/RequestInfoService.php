@@ -164,52 +164,20 @@ class RequestInfoService implements RequestInfoServiceInterface
         }
 
         $activeLanguage = $this->languageService->getActiveLanguage();
-        $domainPathMatch = $this->getDomainPathMatch($request);
-
-        if (null !== $domainPathMatch && true === $domainPathMatch->isMatched()) {
-            $this->pathInfoWithoutPortalAndLanguagePrefix = $this->applyTrailingSlashFromRequest(
-                $domainPathMatch->getRemainingPath(),
-                $fullPath
-            );
-
-            return $this->pathInfoWithoutPortalAndLanguagePrefix;
-        }
 
         $prefixToCut = $this->urlPrefixGenerator->generatePrefix($activePortal, $activeLanguage);
 
-        $this->pathInfoWithoutPortalAndLanguagePrefix = $fullPath;
         if (empty($prefixToCut)) {
             return $fullPath;
         }
 
         if (str_starts_with($fullPath, $prefixToCut)) {
             $this->pathInfoWithoutPortalAndLanguagePrefix = substr($fullPath, strlen($prefixToCut));
+        } else {
+            $this->pathInfoWithoutPortalAndLanguagePrefix = $fullPath;
         }
 
         return $this->pathInfoWithoutPortalAndLanguagePrefix;
-    }
-
-    private function getDomainPathMatch(Request $request): ?DomainPathMatch
-    {
-        $requestDomainPathMatch = $request->attributes->get(DomainPathMatch::REQUEST_ATTRIBUTE_NAME);
-        if ($requestDomainPathMatch instanceof DomainPathMatch) {
-            return $requestDomainPathMatch;
-        }
-
-        return $this->portalDomainService->getActiveDomainPathMatch();
-    }
-
-    private function applyTrailingSlashFromRequest(string $path, string $requestPath): string
-    {
-        if ('/' === $path) {
-            return '/';
-        }
-
-        if (str_ends_with($requestPath, '/') && false === str_ends_with($path, '/')) {
-            return $path.'/';
-        }
-
-        return $path;
     }
 
     /**

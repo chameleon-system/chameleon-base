@@ -18,33 +18,33 @@
         <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="true"/>
 
         <service id="ChameleonSystem\CoreBundle\EventListener\ReleaseOldLocksListener">
-            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess"/>
-            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout"/>
-            <argument type="service" id="database_connection"/>
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LoginSuccessEvent" method="onLoginSuccess" />
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout" />
+            <argument type="service" id="database_connection" />
         </service>
 
         <service id="ChameleonSystem\CoreBundle\EventListener\ListCacheResetListener">
-            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout"/>
+            <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout" />
         </service>
 
         <service id="esono_customer.twig.version_extension" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\BackendTwigExtension">
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <argument type="service" id="chameleon_system_core.moduleloader"/>
             <tag name="twig.extension"/>
         </service>
 
         <service id="chameleon_system_core.pdo" class="PDO" public="false">
-            <factory service="database_connection" method="getWrappedConnection"/>
+            <factory service="database_connection" method="getWrappedConnection" />
             <deprecated package="CmsCoreLogBundle" version="8">The %service_id% service is deprecated since Chameleon 6.3.0. Use database_connection::getWrappedConnection() instead.</deprecated>
         </service>
 
         <service id="chameleon_system_core.sessionPdo" class="PDO">
-            <factory service="database_connection" method="getWrappedConnection"/>
+            <factory service="database_connection" method="getWrappedConnection" />
         </service>
 
         <service id="chameleon_system_core.global" class="TGlobal" public="true">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
             <argument type="service" id="kernel"/>
         </service>
 
@@ -53,7 +53,7 @@
         <service id="chameleon_system_core.filemanager" class="TPkgCmsFileManager_FileSystem" public="true"/>
 
         <service id="chameleon_system_core.redirectstrategy.registershutdown" class="ChameleonRedirectStrategyRegisterShutdown" public="false">
-            <argument type="service" id="request_stack"/>
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="chameleon_system_core.redirectstrategy.throwexception" class="ChameleonRedirectStrategyThrowException" public="false">
@@ -61,70 +61,70 @@
 
 
         <service id="chameleon_system_core.redirect" class="cmsCoreRedirect" public="true">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="chameleon_system_core.redirectstrategy.registershutdown"/>
-            <argument type="service" id="chameleon_system_core.util.url"/>
-            <argument type="service" id="service_container"/>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_core.redirectstrategy.registershutdown" />
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="service_container" />
             <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
-            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
         </service>
 
         <service id="chameleon_system_core.cache" alias="chameleon_system_cms_cache.cache" public="true"/>
 
         <service id="chameleon_system_core.viewPathManager" class="TViewPathManager" public="true">
-            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_view_renderer.snippet_directory"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_view_renderer.snippet_directory" />
         </service>
 
         <service id="chameleon_system_core.http_kernel" class="ChameleonSystem\CoreBundle\ChameleonHttpKernel" public="true">
-            <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="controller_resolver"/>
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="argument_resolver"/>
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="controller_resolver" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="argument_resolver" />
             <call method="setTrustedProxies">
                 <argument>%chameleon_system_core.request.trusted_proxies%</argument>
             </call>
         </service>
 
         <service id="chameleon_system_core.controller_resolver" class="ChameleonSystem\CoreBundle\Controller\ChameleonControllerResolver" public="true">
-            <argument type="service" id="service_container"/>
-            <argument type="service" id="default.controller_resolver"/>
+            <argument type="service" id="service_container" />
+            <argument type="service" id="default.controller_resolver" />
             <argument type="collection">
                 <argument>chameleon_system_core.frontend_controller</argument>
                 <argument>chameleon_system_core.backend_controller</argument>
             </argument>
-            <argument type="service" id="chameleon_system_core.frontend_controller"/>
+            <argument type="service" id="chameleon_system_core.frontend_controller" />
         </service>
 
         <service id="chameleon_system_core.service_initializer.request" class="ChameleonSystem\CoreBundle\Service\Initializer\RequestInitializer">
-            <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
+            <argument type="service" id="chameleon_system_core.response.response_variable_replacer" />
             <call method="setSessionManager">
-                <argument type="service" id="chameleon_system_core.session.chameleon_session_manager"/>
+                <argument type="service" id="chameleon_system_core.session.chameleon_session_manager" />
             </call>
         </service>
 
         <service id="chameleon_system_core.InitializeRequestListener" class="ChameleonSystem\CoreBundle\EventListener\InitializeRequestListener" public="true">
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="252"/>
-            <argument type="service" id="chameleon_system_core.service_initializer.request"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="252" />
+            <argument type="service" id="chameleon_system_core.service_initializer.request" />
             <argument type="service" id="chameleon_system_core.maintenance_mode_service"/>
             <argument type="service" id="chameleon_system_core.request_info_service"/>
         </service>
 
         <service id="chameleon_system_core.event_listener.cms_locale_sync_listener" class="ChameleonSystem\CoreBundle\EventListener\CmsLocaleSyncListener">
-            <argument type="service" id="translation.locale_switcher"/>
+            <argument type="service" id="translation.locale_switcher" />
             <tag name="kernel.event_subscriber"/>
         </service>
 
         <service id="chameleon_system_core.session.chameleon_session_manager" class="ChameleonSystem\CoreBundle\Session\ChameleonSessionManager" public="true">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="database_connection"/>
-            <argument type="service" id="chameleon_system_core.sessionPdo"/>
-            <argument type="service" id="service_container"/>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_core.sessionPdo" />
+            <argument type="service" id="service_container" />
             <argument>%session.metadata.update_threshold%</argument>
             <argument>%session.storage.options%</argument>
-            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
-            <argument type="service" id="logger"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.request_info_service" />
+            <argument type="service" id="logger" />
         </service>
 
         <service id="session" synthetic="true" public="true"/>
@@ -144,11 +144,11 @@
         </service>
 
         <service id="chameleon_system_core.moduleloader" class="TModuleLoader" public="false">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="chameleon_system_core.module_resolver"/>
-            <argument type="service" id="chameleon_system_core.viewPathManager"/>
-            <argument type="service" id="chameleon_system_cms_cache.cache"/>
-            <argument type="service" id="chameleon_system_core.global"/>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_core.module_resolver" />
+            <argument type="service" id="chameleon_system_core.viewPathManager" />
+            <argument type="service" id="chameleon_system_cms_cache.cache" />
+            <argument type="service" id="chameleon_system_core.global" />
             <argument />  <!-- Module execution strategy will be set by ChameleonSystemCoreExtension -->
             <argument type="service" id="chameleon_system_core.request_info_service"/>
             <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
@@ -156,94 +156,94 @@
         <service id="chameleon_system_core.usermoduleloader" class="TUserModuleLoader" parent="chameleon_system_core.moduleloader" public="true">
 
         </service>
-        <service id="chameleon_system_core.subusermoduleloader" parent="chameleon_system_core.usermoduleloader" shared="false" public="true"/>
+        <service id="chameleon_system_core.subusermoduleloader" parent="chameleon_system_core.usermoduleloader" shared="false" public="true" />
 
         <service id="chameleon_system_core.base_controller" abstract="true">
             <argument type="service" id="request_stack"/>
-            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="event_dispatcher" />
             <call method="setCache">
-                <argument type="service" id="chameleon_system_cms_cache.cache"/>
+                <argument type="service" id="chameleon_system_cms_cache.cache" />
             </call>
             <call method="setGlobal">
-                <argument type="service" id="chameleon_system_core.global"/>
+                <argument type="service" id="chameleon_system_core.global" />
             </call>
             <call method="setActivePageService">
-                <argument type="service" id="chameleon_system_core.active_page_service"/>
+                <argument type="service" id="chameleon_system_core.active_page_service" />
             </call>
             <call method="setRequestInfoService">
-                <argument type="service" id="chameleon_system_core.request_info_service"/>
+                <argument type="service" id="chameleon_system_core.request_info_service" />
             </call>
             <call method="setInputFilterUtil">
-                <argument type="service" id="chameleon_system_core.util.input_filter"/>
+                <argument type="service" id="chameleon_system_core.util.input_filter" />
             </call>
             <call method="setAuthenticityTokenManager">
-                <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
+                <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager" />
             </call>
             <call method="setResourceCollector">
-                <argument type="service" id="chameleon_system_core.resource_collector"/>
+                <argument type="service" id="chameleon_system_core.resource_collector" />
             </call>
             <call method="setResponseVariableReplacer">
-                <argument type="service" id="chameleon_system_core.response.response_variable_replacer"/>
+                <argument type="service" id="chameleon_system_core.response.response_variable_replacer" />
             </call>
         </service>
 
         <service id="chameleon_system_core.frontend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonFrontendController" parent="chameleon_system_core.base_controller" public="true">
-            <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_database"/>
-            <argument type="service" id="chameleon_system_core.usermoduleloader"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
-            <argument type="service" id="chameleon_system_core.viewPathManager"/>
-            <argument type="service" id="service_container"/>
-            <argument type="service" id="chameleon_system_view_renderer.mapper.config_to_less"/>
+            <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_database" />
+            <argument type="service" id="chameleon_system_core.usermoduleloader" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="chameleon_system_core.viewPathManager" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="chameleon_system_view_renderer.mapper.config_to_less" />
         </service>
 
         <service id="chameleon_system_core.backend_controller" class="ChameleonSystem\CoreBundle\Controller\ChameleonBackendController" parent="chameleon_system_core.base_controller" public="true">
-            <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_file"/>
-            <argument type="service" id="chameleon_system_core.moduleloader"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
+            <argument type="service" id="chameleon_system_core.data_access_cms_master_pagedef_file" />
+            <argument type="service" id="chameleon_system_core.moduleloader" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
             <call method="setBackendAccessCheck">
-                <argument type="service" id="chameleon_system_core.security.backend_access_check"/>
+                <argument type="service" id="chameleon_system_core.security.backend_access_check" />
             </call>
         </service>
 
         <service class="ChameleonSystem\CoreBundle\Controller\CronJobController" id="chameleon_system_core.controller.cron_job_controller" public="true">
-            <argument type="service" id="chameleon_system_core.service.cron_job_service"/>
+            <argument type="service" id="chameleon_system_core.service.cron_job_service" />
         </service>
 
         <service id="chameleon_system_core.image_not_found_controller" class="ChameleonSystem\CoreBundle\Controller\ImageNotFoundController" public="true">
         </service>
 
         <service id="chameleon_system_core.controller_invoke_listener" class="%chameleon_system_core.controller_invoke_listener.class%">
-            <argument type="service" id="service_container"/>
-            <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="service_container" />
+            <tag name="kernel.event_subscriber" />
         </service>
 
         <service id="chameleon_system_core.router.chameleon_base" class="ChameleonSystem\CoreBundle\Routing\ChameleonBaseRouter" parent="router.default" abstract="true">
             <call method="setUrlUtil">
-                <argument type="service" id="chameleon_system_core.util.url"/>
+                <argument type="service" id="chameleon_system_core.util.url" />
             </call>
         </service>
 
         <service id="chameleon_system_core.router.chameleon_frontend" class="ChameleonSystem\CoreBundle\Routing\ChameleonFrontendRouter" parent="chameleon_system_core.router.chameleon_base" public="true">
             <call method="setLanguageService">
-                <argument type="service" id="chameleon_system_core.language_service"/>
+                <argument type="service" id="chameleon_system_core.language_service" />
             </call>
             <call method="setPortalDomainService">
-                <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+                <argument type="service" id="chameleon_system_core.portal_domain_service" />
             </call>
             <call method="setRequestStack">
-                <argument type="service" id="request_stack"/>
+                <argument type="service" id="request_stack" />
             </call>
             <call method="setRoutingUtil">
-                <argument type="service" id="chameleon_system_core.util.routing"/>
+                <argument type="service" id="chameleon_system_core.util.routing" />
             </call>
             <call method="setControllerId">
                 <argument>chameleon_system_core.frontend_controller</argument>
             </call>
             <call method="setRequestInfoService">
-                <argument type="service" id="chameleon_system_core.request_info_service"/>
+                <argument type="service" id="chameleon_system_core.request_info_service" />
             </call>
             <call method="setDomainValidator">
-                <argument type="service" id="chameleon_system_core.routing.domain_validator"/>
+                <argument type="service" id="chameleon_system_core.routing.domain_validator" />
             </call>
         </service>
 
@@ -251,11 +251,11 @@
         </service>
 
         <service id="chameleon_system_core.routing.loader.chameleon" class="esono\pkgCmsRouting\CmsRouteLoader">
-            <argument type="service" id="service_container"/>
-            <argument type="service" id="chameleon_system_core.util.url_prefix_generator"/>
-            <argument type="service" id="chameleon_system_core.util.routing"/>
-            <argument type="service" id="chameleon_system_core.util.url"/>
-            <tag name="routing.loader"/>
+            <argument type="service" id="service_container" />
+            <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
+            <argument type="service" id="chameleon_system_core.util.routing" />
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <tag name="routing.loader" />
         </service>
 
         <service id="chameleon_system_core.routing.domain_validator" class="ChameleonSystem\CoreBundle\Routing\DomainValidator">
@@ -269,61 +269,59 @@
                  class="ChameleonSystem\CoreBundle\Routing\DomainValidatorRequestLevelCacheDecorator"
                  decorates="chameleon_system_core.routing.domain_validator"
         >
-            <argument type="service" id="chameleon_system_core.routing.domain_validator_request_level_cache_decorator.inner"/>
+            <argument type="service" id="chameleon_system_core.routing.domain_validator_request_level_cache_decorator.inner" />
         </service>
 
         <service id="chameleon_system_core.listener.backend_breadcrumb" class="ChameleonSystem\CoreBundle\EventListener\BackendBreadcrumbListener">
             <argument type="service" id="request_stack"/>
             <argument type="service" id="chameleon_system_core.request_info_service"/>
-            <argument type="service" id="chameleon_system_core.util.input_filter"/>
-            <argument type="service" id="chameleon_system_core.service.backend_breadcrumb"/>
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
+            <argument type="service" id="chameleon_system_core.service.backend_breadcrumb" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
 
         <service id="chameleon_system_core.listener.request_type" class="ChameleonSystem\CoreBundle\EventListener\RequestTypeListener">
-            <argument type="service" id="service_container"/>
-            <argument type="service" id="chameleon_system_core.request_type_backend"/>
-            <argument type="service" id="chameleon_system_core.request_type_frontend"/>
-            <argument type="service" id="chameleon_system_core.request_type_asset"/>
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="254"/>
+            <argument type="service" id="service_container" />
+            <argument type="service" id="chameleon_system_core.request_type_backend" />
+            <argument type="service" id="chameleon_system_core.request_type_frontend" />
+            <argument type="service" id="chameleon_system_core.request_type_asset" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="254" />
         </service>
 
-        <service id="chameleon_system_core.request_type_frontend" class="ChameleonSystem\CoreBundle\RequestType\FrontendRequestType"/>
+        <service id="chameleon_system_core.request_type_frontend" class="ChameleonSystem\CoreBundle\RequestType\FrontendRequestType" />
 
-        <service id="chameleon_system_core.request_type_backend" class="ChameleonSystem\CoreBundle\RequestType\BackendRequestType"/>
+        <service id="chameleon_system_core.request_type_backend" class="ChameleonSystem\CoreBundle\RequestType\BackendRequestType" />
 
-        <service id="chameleon_system_core.request_type_asset" class="ChameleonSystem\CoreBundle\RequestType\AssetRequestType"/>
+        <service id="chameleon_system_core.request_type_asset" class="ChameleonSystem\CoreBundle\RequestType\AssetRequestType" />
 
         <service id="chameleon_system_core.listener.template_engine_access" class="ChameleonSystem\CoreBundle\EventListener\TemplateEngineAccessListener">
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
-            <argument type="service" id="security.helper"/>
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="-250"/>
+            <argument type="service" id="chameleon_system_core.request_info_service" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="security.helper" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="-250" />
         </service>
 
         <service id="chameleon_system_core.listener.redirect_to_primary_domain" class="ChameleonSystem\CoreBundle\EventListener\CheckPortalDomainListener">
-            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
-            <argument type="service" id="chameleon_system_core.util.url_prefix_generator"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.request_info_service" />
 
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="252"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="252" />
         </service>
 
         <service id="chameleon_system_core.listener.allow_embedding_for_different_domain" class="ChameleonSystem\CoreBundle\EventListener\AllowEmbeddingForDifferentDomainListener">
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="12"/>
 
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <argument type="service" id="chameleon_system_core.request_info_service" />
         </service>
 
-        <service id="chameleon_system_core.request_type" synthetic="true"/>
+        <service id="chameleon_system_core.request_type" synthetic="true" />
 
         <service id="chameleon_system_core.security.backend_access_check" class="ChameleonSystem\CoreBundle\Security\BackendAccessCheck" public="true">
-            <argument type="service" id="router"/>
-            <argument type="service" id="chameleon_system_core.redirect"/>
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="security.helper"/>
+            <argument type="service" id="router" />
+            <argument type="service" id="chameleon_system_core.redirect" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="security.helper" />
             <bind key="$twoFactorEnabled">%chameleon_system_security.two_factor.enabled%</bind>
             <call method="unrestrictPagedef">
                 <argument>login</argument>
@@ -332,39 +330,37 @@
         </service>
 
         <service id="chameleon_system_core.request_info_service" class="ChameleonSystem\CoreBundle\Service\RequestInfoService" public="true">
-            <argument type="service" id="request_stack"/>
+            <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
-            <argument type="service" id="chameleon_system_core.util.url_prefix_generator"/>
-            <argument type="service" id="chameleon_system_core.preview_mode_service"/>
+            <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
+            <argument type="service" id="chameleon_system_core.preview_mode_service" />
         </service>
 
         <service id="chameleon_system_core.active_page_service" class="ChameleonSystem\CoreBundle\Service\ActivePageService" public="true">
-            <argument type="service" id="chameleon_system_core.language_service"/>
-            <argument type="service" id="chameleon_system_core.service_initializer.active_page_service"/>
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="router"/>
-            <argument type="service" id="chameleon_system_core.router.chameleon_frontend"/>
-            <argument type="service" id="chameleon_system_core.util.url"/>
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_core.service_initializer.active_page_service" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="router" />
+            <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="chameleon_system_core.request_info_service" />
             <argument type="service" id="chameleon_system_core.util.routing"/>
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="chameleon_system_core.util.page_service_util"/>
         </service>
 
         <service id="chameleon_system_core.service_initializer.active_page_service" class="ChameleonSystem\CoreBundle\Service\Initializer\ActivePageServiceInitializer" public="false">
-            <argument type="service" id="service_container"/>
-            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="service_container" />
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
         </service>
 
         <service id="chameleon_system_core.portal_domain_service" class="ChameleonSystem\CoreBundle\Service\PortalDomainService" public="true">
-            <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="chameleon_system_core.service_initializer.portal_domain_service"/>
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="chameleon_system_core.service_initializer.portal_domain_service" />
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
             <argument type="service" id="chameleon_system_core.language_service"/>
         </service>
-
-        <service id="chameleon_system_core.service.domain_path_variant_resolver" class="ChameleonSystem\CoreBundle\Service\DomainPathVariantResolver" public="false"/>
 
         <service id="chameleon_system_core.preview_mode_service" class="ChameleonSystem\CoreBundle\Service\PreviewModeService" public="true">
             <argument type="string">%secret%</argument>
@@ -375,46 +371,45 @@
         <service class="ChameleonSystem\CoreBundle\Service\RegistryService" id="chameleon_system_core.service.registry_service" public="true"/>
 
         <service id="chameleon_system_core.service_initializer.portal_domain_service" class="ChameleonSystem\CoreBundle\Service\Initializer\PortalDomainServiceInitializer" public="false">
-            <argument type="service" id="chameleon_system_core.util.input_filter"/>
-            <argument type="service" id="service_container"/>
-            <argument type="service" id="request_stack"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
-            <argument type="service" id="chameleon_system_core.service.domain_path_variant_resolver"/>
         </service>
 
         <service id="chameleon_system_core.language_service" class="ChameleonSystem\CoreBundle\Service\LanguageService" public="true">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="chameleon_system_core.service_initializer.language_service"/>
-            <argument type="service" id="chameleon_system_core.data_access_cms_language"/>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="chameleon_system_core.service_initializer.language_service" />
+            <argument type="service" id="chameleon_system_core.data_access_cms_language" />
         </service>
 
         <service id="chameleon_system_core.service_initializer.language_service" class="ChameleonSystem\CoreBundle\Service\Initializer\LanguageServiceInitializer" public="false">
-            <argument type="service" id="chameleon_system_core.util.input_filter"/>
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="service_container"/>
-            <argument type="service" id="database_connection"/>
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="database_connection" />
         </service>
 
         <service id="chameleon_system_core.supported_languages_service" class="ChameleonSystem\CoreBundle\Service\SupportedLanguagesService">
-            <argument type="service" id="database_connection"/>
+            <argument type="service" id="database_connection" />
         </service>
 
         <service id="chameleon_system_core.system_page_service" class="ChameleonSystem\CoreBundle\Service\SystemPageService" public="true">
-            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
-            <argument type="service" id="chameleon_system_core.util.url"/>
-            <argument type="service" id="chameleon_system_core.util.routing"/>
-            <argument type="service" id="chameleon_system_core.tree_service"/>
-            <argument type="service" id="chameleon_system_core.data_access_cms_portal_system_page"/>
-            <argument type="service" id="chameleon_system_core.active_page_service"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="chameleon_system_core.util.routing" />
+            <argument type="service" id="chameleon_system_core.tree_service" />
+            <argument type="service" id="chameleon_system_core.data_access_cms_portal_system_page" />
+            <argument type="service" id="chameleon_system_core.active_page_service" />
         </service>
 
         <service id="chameleon_system_core.page_service" class="ChameleonSystem\CoreBundle\Service\PageService" public="true">
-            <argument type="service" id="chameleon_system_core.router.chameleon_frontend"/>
-            <argument type="service" id="chameleon_system_core.data_access_cms_tpl_page"/>
-            <argument type="service" id="chameleon_system_core.tree_node_service"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
+            <argument type="service" id="chameleon_system_core.data_access_cms_tpl_page" />
+            <argument type="service" id="chameleon_system_core.tree_node_service" />
+            <argument type="service" id="chameleon_system_core.language_service" />
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
             <argument type="service" id="chameleon_system_core.util.page_service_util"/>
             <argument type="service" id="request_stack"/>
@@ -422,13 +417,13 @@
         </service>
 
         <service id="chameleon_system_core.tree_service" class="ChameleonSystem\CoreBundle\Service\TreeService" public="true">
-            <argument type="service" id="chameleon_system_core.page_service"/>
-            <argument type="service" id="chameleon_system_core.data_access_cms_tree"/>
-            <argument type="service" id="chameleon_system_core.util.url"/>
+            <argument type="service" id="chameleon_system_core.page_service" />
+            <argument type="service" id="chameleon_system_core.data_access_cms_tree" />
+            <argument type="service" id="chameleon_system_core.util.url" />
         </service>
 
         <service id="chameleon_system_core.tree_node_service" class="ChameleonSystem\CoreBundle\Service\TreeNodeService" public="true">
-            <argument type="service" id="chameleon_system_core.data_access_cms_tree_node"/>
+            <argument type="service" id="chameleon_system_core.data_access_cms_tree_node" />
         </service>
 
         <service id="chameleon_system_core.query_modifier.order_by" class="ChameleonSystem\core\DatabaseAccessLayer\QueryModifierOrderBy" public="true">
@@ -436,106 +431,106 @@
 
         <service id="chameleon_system_core.update_manager_virtual_fields" class="ChameleonSystem\CoreBundle\UpdateManager\VirtualFieldManager" public="false">
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
 
         <service id="chameleon_system_core.update_manager_strip_virtual_fields_from_query" class="ChameleonSystem\CoreBundle\UpdateManager\StripVirtualFieldsFromQuery" public="true">
-            <argument type="service" id="chameleon_system_core.update_manager_virtual_fields"/>
+            <argument type="service" id="chameleon_system_core.update_manager_virtual_fields" />
         </service>
 
         <service id="chameleon_system_core.flash_messages" class="ChameleonSystem\CoreBundle\Service\FlashMessageService" public="true">
-            <argument type="service" id="request_stack"/>
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="chameleon_system_core.command.update.run" class="ChameleonSystem\CoreBundle\Command\RunUpdateCommand">
-            <argument type="service" id="chameleon_system_cms_cache.cache"/>
-            <argument type="service" id="chameleon_system_autoclasses.cache_warmer"/>
-            <tag name="console.command"/>
+            <argument type="service" id="chameleon_system_cms_cache.cache" />
+            <argument type="service" id="chameleon_system_autoclasses.cache_warmer" />
+            <tag name="console.command" />
         </service>
 
         <service id="chameleon_system_core.command.update.list" class="ChameleonSystem\CoreBundle\Command\ListUpdateCommand">
-            <tag name="console.command"/>
+            <tag name="console.command" />
         </service>
 
         <service id="chameleon_system_core.tpl_page_controller" class="%chameleon_system_core.tpl_page_controller.class%" public="true">
-            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
-            <argument type="service" id="chameleon_system_core.util.url_prefix_generator"/>
-            <argument type="service" id="chameleon_system_core.util.url"/>
-            <argument type="service" id="chameleon_system_core.util.routing"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="chameleon_system_core.util.routing" />
             <call method="setMainController">
-                <argument type="service" id="chameleon_system_core.frontend_controller"/>
+                <argument type="service" id="chameleon_system_core.frontend_controller" />
             </call>
             <call method="setRedirect">
-                <argument type="service" id="chameleon_system_core.redirect"/>
+                <argument type="service" id="chameleon_system_core.redirect" />
             </call>
             <call method="setPageService">
-                <argument type="service" id="chameleon_system_core.page_service"/>
+                <argument type="service" id="chameleon_system_core.page_service" />
             </call>
             <call method="setRequestInfoService">
-                <argument type="service" id="chameleon_system_core.request_info_service"/>
+                <argument type="service" id="chameleon_system_core.request_info_service" />
             </call>
         </service>
 
-        <service id="chameleon_system_core.table_editor_nested_set_helper_node_factory" class="ChameleonSystem\CoreBundle\TableEditor\NestedSet\NodeFactory" public="false"/>
+        <service id="chameleon_system_core.table_editor_nested_set_helper_node_factory" class="ChameleonSystem\CoreBundle\TableEditor\NestedSet\NodeFactory" public="false" />
         <service id="chameleon_system_core.table_editor_nested_set_helper_factory" class="ChameleonSystem\CoreBundle\TableEditor\NestedSet\NestedSetHelperFactory" public="true">
-            <argument type="service" id="chameleon_system_core.table_editor_nested_set_helper_node_factory"/>
+            <argument type="service" id="chameleon_system_core.table_editor_nested_set_helper_node_factory" />
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
 
         <service id="chameleon_system_core.database_access_layer_file_types" class="ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerFileTypes" public="true">
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
 
         <service id="chameleon_system_core.database_access_layer_cms_tpl_page" class="ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsTplPage" public="true">
-            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
 
         <service id="chameleon_system_core.database_access_layer_cms_tpl_module" class="ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsTPlModule" public="true">
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
 
         <service id="chameleon_system_core.database_access_layer_cms_tree" class="ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsTree">
-            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.language_service" />
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
 
         <service id="chameleon_system_core.database_access_layer_cms_master_pagedef_spot_parameter" class="ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsMasterPagedefSpotParameter" public="true">
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
         <service id="chameleon_system_core.database_access_layer_media" class="ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsMedia" public="true">
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
         <service id="chameleon_system_core.database_access_layer_cms_field_type" class="ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerFieldTypes" public="true">
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
         <service id="chameleon_system_core.database_access_layer_field_config" class="ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerFieldConfig" public="true">
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
         <service id="chameleon_system_core.database_access_layer_cms_master_pagedef_spot_access" class="ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsMasterPagedefSpotAccess" public="true">
             <call method="setDatabaseConnection">
-                <argument type="service" id="database_connection"/>
+                <argument type="service" id="database_connection" />
             </call>
         </service>
         <service id="chameleon_system_core.updatemanager.update_filter_service" class="ChameleonSystem\CoreBundle\UpdateManager\UpdateFilterService" public="true">
@@ -546,45 +541,45 @@
             <argument>error_controller</argument>
             <argument type="service" id="twig.error_renderer.html"/>
             <call method="setMainController">
-                <argument type="service" id="chameleon_system_core.frontend_controller"/>
+                <argument type="service" id="chameleon_system_core.frontend_controller" />
             </call>
             <call method="setPortalDomainService">
-                <argument type="service" id="chameleon_system_core.portal_domain_service"/>
+                <argument type="service" id="chameleon_system_core.portal_domain_service" />
             </call>
             <call method="setRequestInfoService">
-                <argument type="service" id="chameleon_system_core.request_info_service"/>
+                <argument type="service" id="chameleon_system_core.request_info_service" />
             </call>
             <call method="setPageService">
-                <argument type="service" id="chameleon_system_core.page_service"/>
+                <argument type="service" id="chameleon_system_core.page_service" />
             </call>
             <call method="setExtranetConfiguration">
-                <argument type="service" id="chameleon_system_extranet.extranet_config"/>
+                <argument type="service" id="chameleon_system_extranet.extranet_config" />
             </call>
             <call method="setExtranetUserProvider">
-                <argument type="service" id="chameleon_system_extranet.extranet_user_provider"/>
+                <argument type="service" id="chameleon_system_extranet.extranet_user_provider" />
             </call>
         </service>
 
         <service id="chameleon_system_core.util.url" class="ChameleonSystem\CoreBundle\Util\UrlUtil" public="true">
-            <argument type="service" id="chameleon_system_core.util.url_prefix_generator"/>
-            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
-            <argument type="service" id="chameleon_system_core.routing.domain_validator"/>
+            <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_core.routing.domain_validator" />
             <argument type="service" id="chameleon_system_core.security.authenticity_token.authenticity_token_manager"/>
         </service>
 
         <service id="chameleon_system_core.util.mlt_field" class="ChameleonSystem\CoreBundle\Util\MltFieldUtil" public="true">
-            <argument type="service" id="request_stack"/>
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="chameleon_system_core.view_port_manager" class="TCMSViewPortManager" public="true">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="chameleon_system_core.util.input_filter"/>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_core.util.input_filter" />
         </service>
 
         <service id="chameleon_system_core.util.input_filter" class="ChameleonSystem\CoreBundle\Util\InputFilterUtil" public="true">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="logger"/>
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="logger" />
         </service>
 
         <service id="chameleon_system_core.util.media_path_generator" class="ChameleonSystem\CoreBundle\Util\MediaPathGenerator" public="true">
@@ -592,9 +587,9 @@
         </service>
 
         <service id="chameleon_system_core.util.field_translation" class="ChameleonSystem\CoreBundle\Util\FieldTranslationUtil" public="true">
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
-            <argument type="service" id="chameleon_system_cms_backend.backend_session"/>
+            <argument type="service" id="chameleon_system_core.request_info_service" />
+            <argument type="service" id="chameleon_system_core.language_service" />
+            <argument type="service" id="chameleon_system_cms_backend.backend_session" />
         </service>
 
         <service id="chameleon_system_core.util.page_service_util" class="ChameleonSystem\CoreBundle\Util\PageServiceUtil">
@@ -616,97 +611,96 @@
         </service>
 
         <service id="chameleon_system_core.change_chameleon_objects_locale_listener" class="ChameleonSystem\CoreBundle\EventListener\ChangeChameleonObjectsLocaleListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.locale_changed" method="onLocaleChangedEvent"/>
-            <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.language_service"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.locale_changed" method="onLocaleChangedEvent" />
+            <argument type="service" id="chameleon_system_core.portal_domain_service" />
+            <argument type="service" id="chameleon_system_core.language_service" />
         </service>
 
         <service id="chameleon_system_core.i18n.export_service" class="ChameleonSystem\CoreBundle\i18n\TranslationExporterJSON">
-            <argument type="service" id="translator"/>
+            <argument type="service" id="translator" />
         </service>
         <service id="chameleon_system_core.i18n.active_user_permission" class="ChameleonSystem\CoreBundle\i18n\ActiveCmsUserPermission">
 
         </service>
         <service id="chameleon_system_core.i18n.export_translation_db_controller" class="ChameleonSystem\CoreBundle\i18n\Controller\JsTranslationController" public="true">
-            <argument type="service" id="chameleon_system_core.i18n.export_service"/>
-            <argument type="service" id="chameleon_system_core.i18n.active_user_permission"/>
+            <argument type="service" id="chameleon_system_core.i18n.export_service" />
+            <argument type="service" id="chameleon_system_core.i18n.active_user_permission" />
         </service>
 
         <service id="chameleon_system_core.event_listener.add_backend_jquery_include" class="ChameleonSystem\CoreBundle\EventListener\AddBackendJqueryIncludeListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="250"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="250" />
         </service>
 
         <service id="chameleon_system_core.event_listener.add_global_head_includes" class="ChameleonSystem\CoreBundle\EventListener\AddGlobalHeadIncludesListener">
-            <argument type="service" id="chameleon_system_view_renderer.snippet_directory"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="240"/>
+            <argument type="service" id="chameleon_system_view_renderer.snippet_directory" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="240" />
         </service>
 
         <service id="chameleon_system_core.event_listener.add_module_includes" class="ChameleonSystem\CoreBundle\EventListener\AddModuleIncludesListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="230"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.footer" method="onGlobalHtmlFooterInclude" priority="230"/>
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
-            <argument type="service" id="chameleon_system_core.moduleloader"/>
-            <argument type="service" id="chameleon_system_core.usermoduleloader"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="230" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.footer" method="onGlobalHtmlFooterInclude" priority="230" />
+            <argument type="service" id="chameleon_system_core.request_info_service" />
+            <argument type="service" id="chameleon_system_core.moduleloader" />
+            <argument type="service" id="chameleon_system_core.usermoduleloader" />
         </service>
 
         <service id="chameleon_system_core.event_listener.add_controller_head_includes" class="ChameleonSystem\CoreBundle\EventListener\AddControllerIncludesListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="220"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.footer" method="onGlobalHtmlFooterInclude" priority="220"/>
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
-            <argument type="service" id="chameleon_system_core.backend_controller"/>
-            <argument type="service" id="chameleon_system_core.frontend_controller"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.header" method="onGlobalHtmlHeaderInclude" priority="220" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.html_includes.footer" method="onGlobalHtmlFooterInclude" priority="220" />
+            <argument type="service" id="chameleon_system_core.request_info_service" />
+            <argument type="service" id="chameleon_system_core.backend_controller" />
+            <argument type="service" id="chameleon_system_core.frontend_controller" />
         </service>
 
         <service id="chameleon_system_core.event_listener.case_insensitive_portal_exception_listener" class="ChameleonSystem\CoreBundle\EventListener\CaseInsensitivePortalExceptionListener">
             <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
-            <tag name="kernel.event_listener" event="kernel.exception"/>
+            <tag name="kernel.event_listener" event="kernel.exception" />
         </service>
 
         <service id="chameleon_system_core.util.routing" class="ChameleonSystem\CoreBundle\Util\RoutingUtil" public="true">
-            <argument type="service" id="chameleon_system_core.util.routing_data_access"/>
-            <argument type="service" id="chameleon_system_core.tree_service"/>
+            <argument type="service" id="chameleon_system_core.util.routing_data_access" />
+            <argument type="service" id="chameleon_system_core.tree_service" />
             <argument type="service" id="chameleon_system_core.util.url_prefix_generator"/>
         </service>
 
 
         <service id="chameleon_system_core.util.routing_util_cache_decorator" class="ChameleonSystem\CoreBundle\Util\RoutingUtilCacheDecorator" public="false">
             <!-- service becomes a decorator for chameleon_system_core.util.routing_data_access if caching is enabled  -->
-            <argument type="service" id="chameleon_system_core.util.routing_util_cache_decorator.inner"/>
-            <argument type="service" id="chameleon_system_cms_cache.cache"/>
+            <argument type="service" id="chameleon_system_core.util.routing_util_cache_decorator.inner" />
+            <argument type="service" id="chameleon_system_cms_cache.cache" />
         </service>
 
         <service id="chameleon_system_core.util.request_cache_routing" class="ChameleonSystem\CoreBundle\Util\RequestCacheRoutingUtil">
-            <argument type="service" id="chameleon_system_core.util.request_cache_routing.inner"/>
+            <argument type="service" id="chameleon_system_core.util.request_cache_routing.inner" />
         </service>
 
         <service id="chameleon_system_core.util.routing_data_access" class="ChameleonSystem\CoreBundle\Util\RoutingUtilDataAccess" public="false">
-            <argument type="service" id="chameleon_system_core.util.url"/>
-            <argument type="service" id="database_connection"/>
-            <argument type="service" id="chameleon_system_core.util.field_translation"/>
+            <argument type="service" id="chameleon_system_core.util.url" />
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_core.util.field_translation" />
         </service>
 
         <service id="chameleon_system_core.util.url_prefix_generator" class="ChameleonSystem\CoreBundle\Util\UrlPrefixGenerator" public="true">
             <argument type="service" id="chameleon_system_core.portal_domain_service"/>
-            <argument type="service" id="chameleon_system_core.data_access_cms_portal_domains"/>
         </service>
 
         <service id="chameleon_system_core.event_listener.clear_frontend_router_cache" class="ChameleonSystem\CoreBundle\EventListener\ClearRoutingCacheListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.add_domain" method="clearRoutingCache"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.update_domain" method="clearRoutingCache"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.delete_domain" method="clearRoutingCache"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.add_shop_order_step" method="clearRoutingCache"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.update_shop_order_step" method="clearRoutingCache"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.delete_shop_order_step" method="clearRoutingCache"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.change_default_language_for_portal" method="clearRoutingCache"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.change_active_languages_for_portal" method="clearRoutingCache"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.change_use_slash_in_seo_urls_for_portal" method="clearRoutingCache"/>
-            <tag name="kernel.event_listener" event="chameleon_system_core.change_routing_config" method="clearRoutingCache"/>
-            <argument type="service" id="chameleon_system_core.router.chameleon_frontend"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.add_domain" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.update_domain" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.delete_domain" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.add_shop_order_step" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.update_shop_order_step" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.delete_shop_order_step" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.change_default_language_for_portal" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.change_active_languages_for_portal" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.change_use_slash_in_seo_urls_for_portal" method="clearRoutingCache" />
+            <tag name="kernel.event_listener" event="chameleon_system_core.change_routing_config" method="clearRoutingCache" />
+            <argument type="service" id="chameleon_system_core.router.chameleon_frontend" />
         </service>
 
         <service id="chameleon_system_core.translator" class="ChameleonSystem\CoreBundle\Translation\ChameleonTranslator" decorates="translator" decoration-priority="-255" public="true">
-            <argument type="service" id="chameleon_system_core.translator.inner"/>
-            <argument type="service" id="chameleon_system_core.request_info_service"/>
+            <argument type="service" id="chameleon_system_core.translator.inner" />
+            <argument type="service" id="chameleon_system_core.request_info_service" />
         </service>
 
         <service id="chameleon_system_core.service.google_api_key" class="ChameleonSystem\CoreBundle\Service\GoogleApiKeyProvider" public="true">
@@ -734,14 +728,14 @@
         </service>
 
         <service id="chameleon_system_core.field.provider.class_from_table_field" class="ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProvider" public="true">
-            <argument type="service" id="chameleon_system_core.data_access_class_from_table_field_provider"/>
+            <argument type="service" id="chameleon_system_core.data_access_class_from_table_field_provider" />
         </service>
 
         <service id="chameleon_system_core.field.provider.class_from_table_field_request_level_cache"
                  class="ChameleonSystem\CoreBundle\Field\Provider\ClassFromTableFieldProviderRequestLevelCacheDecorator"
                  decorates="chameleon_system_core.field.provider.class_from_table_field"
         >
-            <argument type="service" id="chameleon_system_core.field.provider.class_from_table_field_request_level_cache.inner"/>
+            <argument type="service" id="chameleon_system_core.field.provider.class_from_table_field_request_level_cache.inner" />
         </service>
 
         <service id="chameleon_system_core.cronjob.cronjob_factory" class="ChameleonSystem\CoreBundle\CronJob\CronJobFactory" public="true">
@@ -763,7 +757,7 @@
         </service>
 
         <service id="chameleon_system_core.security.authenticity_token.authenticity_token_manager" class="ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManager" public="true">
-            <argument type="service" id="security.csrf.token_manager"/>
+            <argument type="service" id="security.csrf.token_manager" />
             <argument type="service" id="chameleon_system_core.request_info_service"/>
             <argument type="service" id="chameleon_system_core.util.input_filter"/>
         </service>
@@ -779,12 +773,12 @@
         <service class="ChameleonSystem\CoreBundle\Util\Hash" id="chameleon_system_core.util.hash_array" public="true"/>
         <service class="ChameleonSystem\CoreBundle\RequestState\RequestStateHashProvider" id="chameleon_system_core.request_state_hash_provider" public="true">
             <argument id="chameleon_system_core.util.hash_array" type="service"/>
-            <argument id="chameleon_system_core.request_state.hash_calculation_lock" type="service"/>
+            <argument id="chameleon_system_core.request_state.hash_calculation_lock" type="service" />
             <argument id="request_stack" type="service"/>
             <argument/><!-- set via compiler pass with services tagged with chameleon_system_core.request_state_elements_provider -->
         </service>
         <service class="ChameleonSystem\CoreBundle\RequestState\CoreStateElementProvider" id="chameleon_system_core.request_state.core_state_element_provider" public="false">
-            <tag name="chameleon_system_core.request_state_element_provider"/>
+            <tag name="chameleon_system_core.request_state_element_provider" />
             <argument id="chameleon_system_core.portal_domain_service" type="service"/>
             <argument id="chameleon_system_core.language_service" type="service"/>
         </service>
@@ -851,10 +845,10 @@
             <tag name="kernel.event_listener" event="chameleon_system_core.filter_content" method="handleResponse" priority="253"/>
         </service>
 
-        <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" public="true"/>
+        <service id="cmsPkgCore.tableEditorListFieldState" class="TTableEditorListFieldState" public="true" />
 
         <service id="chameleon_system_core.module.sidebar.sidebar_backend_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\SidebarBackendModule" shared="false">
-            <tag name="chameleon_system.module"/>
+            <tag name="chameleon_system.module" />
 
             <argument type="service" id="chameleon_system_core.util.url"/>
             <argument type="service" id="request_stack"/>
@@ -865,16 +859,16 @@
             <argument type="service" id="chameleon_system_core.sidebar.user_menu_access"/>
         </service>
 
-        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItemFactory"/>
+        <service id="chameleon_system_core.bridge.chameleon.module.sidebar.menu_item_factory" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\MenuItemFactory" />
 
         <service id="chameleon_system_core.bridge.chameleon.module.sidebar.table_menu_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\TableMenuItemProvider">
-            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsTblConf"/>
+            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsTblConf" />
         </service>
         <service id="chameleon_system_core.bridge.chameleon.module.sidebar.module_menu_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\ModuleMenuItemProvider">
-            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsModule"/>
+            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsModule" />
         </service>
         <service id="chameleon_system_core.bridge.chameleon.module.sidebar.custom_item_provider" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\Sidebar\CustomMenuItemProvider">
-            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsMenuCustomItem"/>
+            <tag name="chameleon_system.backend_menu_item_provider" databaseclass="TdbCmsMenuCustomItem" />
         </service>
 
         <service id="chameleon_system_core.sidebar.menu_access" class="ChameleonSystem\CoreBundle\DataAccess\MenuItemDataAccess" public="true">
@@ -894,7 +888,7 @@
 
         <service id="chameleon_system_core.module.static_view_module" class="ChameleonSystem\CoreBundle\Bridge\Chameleon\Module\StaticView\StaticViewModule" shared="false">
             <argument type="service" id="chameleon_system_core.language_service"/>
-            <tag name="chameleon_system.module"/>
+            <tag name="chameleon_system.module" />
         </service>
 
         <service id="chameleon_system_core.service.backend_breadcrumb" class="ChameleonSystem\CoreBundle\Service\BackendBreadcrumbService" public="true">
@@ -913,7 +907,7 @@
 
         <service id="chameleon_system_core.event_listener.cleanup_breadcrumb_after_delete_listener"
                  class="ChameleonSystem\CoreBundle\EventListener\CleanupBreadcrumbAfterDeleteListener">
-            <tag name="kernel.event_listener" event="chameleon_system_core.delete_record" method="onRecordDelete"/>
+            <tag name="kernel.event_listener" event="chameleon_system_core.delete_record" method="onRecordDelete" />
             <argument type="service" id="chameleon_system_core.service.backend_breadcrumb"/>
         </service>
 
@@ -926,7 +920,7 @@
             <argument id="chameleon_system_core.portal_domain_service" type="service"/>
             <argument id="chameleon_system_core.translator" type="service"/>
             <argument id="chameleon_system_core.util.url" type="service"/>
-            <argument id="chameleon_system_core.table_editor_nested_set_helper_factory" type="service"/>
+            <argument id="chameleon_system_core.table_editor_nested_set_helper_factory" type="service" />
             <argument id="chameleon_system_core.tools" type="service"/>
             <argument id="chameleon_system_core.global" type="service"/>
             <argument type="service" id="chameleon_system_core.util.field_translation"/>
@@ -985,18 +979,18 @@
         </service>
 
         <service id="chameleon_system_core.http_client" class="Symfony\Contracts\HttpClient\HttpClientInterface" public="true">
-            <factory class="Symfony\Component\HttpClient\HttpClient" method="create"/>
+            <factory class="Symfony\Component\HttpClient\HttpClient" method="create" />
         </service>
 
         <service id="chameleon_system_core.geocoding.geocoder" class="ChameleonSystem\CoreBundle\Geocoding\GeoJsonGeocoder" public="true">
-            <argument type="string"/> <!-- Endpoint is set by extension from configuration -->
-            <argument type="service" id="chameleon_system_core.http_client"/>
-            <argument type="service" id="logger"/>
-            <tag name="monolog.logger" channel="chameleon_system.geocoding"/>
+            <argument type="string" /> <!-- Endpoint is set by extension from configuration -->
+            <argument type="service" id="chameleon_system_core.http_client" />
+            <argument type="service" id="logger" />
+            <tag name="monolog.logger" channel="chameleon_system.geocoding" />
         </service>
         <service id="chameleon_system_core.geocoding.geocoding_controller" class="ChameleonSystem\CoreBundle\Geocoding\GeocodingController" public="true">
-            <argument type="service" id="chameleon_system_core.geocoding.geocoder"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
+            <argument type="service" id="chameleon_system_core.geocoding.geocoder" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
         </service>
 
         <service id="chameleon_system_core.service.css_class_extractor" class="ChameleonSystem\CoreBundle\Service\CssClassExtractor" public="true">
@@ -1028,15 +1022,15 @@
         </service>
 
         <service id="chameleon_system_core.service.cron_job_service" class="ChameleonSystem\CoreBundle\Service\CronJobService">
-            <argument type="service" id="chameleon_system_core.cronjob.cronjob_factory"/>
-            <argument type="service" id="chameleon_system_core.cronjob.cronjob_enabling_service"/>
-            <argument type="service" id="logger"/>
+            <argument type="service" id="chameleon_system_core.cronjob.cronjob_factory" />
+            <argument type="service" id="chameleon_system_core.cronjob.cronjob_enabling_service" />
+            <argument type="service" id="logger" />
             <argument type="service" id="translator"  />
-            <argument type="service" id="database_connection"/>
-            <argument type="service" id="chameleon_system_core.data_access.cron_job_data_access"/>
-            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess"/>
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="chameleon_system_view_renderer.view_renderer"/>
+            <argument type="service" id="database_connection" />
+            <argument type="service" id="chameleon_system_core.data_access.cron_job_data_access" />
+            <argument type="service" id="ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="chameleon_system_view_renderer.view_renderer" />
         </service>
 
     </services>

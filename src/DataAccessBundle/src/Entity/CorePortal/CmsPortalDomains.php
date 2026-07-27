@@ -19,9 +19,6 @@ class CmsPortalDomains
         // TCMSFieldVarchar
         /** @var string - SSL domain name */
         private string $sslname = '',
-        // TCMSFieldVarchar
-        /** @var string - Optional URL suffix */
-        private string $urlSuffix = '',
         // TCMSFieldLookup
         /** @var CmsLanguage|null - Language */
         private ?CmsLanguage $cmsLanguage = null,
@@ -93,19 +90,6 @@ class CmsPortalDomains
     public function setSslname(string $sslname): self
     {
         $this->sslname = $sslname;
-
-        return $this;
-    }
-
-    // TCMSFieldVarchar
-    public function getUrlSuffix(): string
-    {
-        return $this->urlSuffix;
-    }
-
-    public function setUrlSuffix(string $urlSuffix): self
-    {
-        $this->urlSuffix = $urlSuffix;
 
         return $this;
     }

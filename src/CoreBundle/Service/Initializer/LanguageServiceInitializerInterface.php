@@ -22,16 +22,17 @@ interface LanguageServiceInitializerInterface
     /**
      * @return void
      */
-    public function initialize(LanguageServiceInterface $languageService): void;
+    public function initialize(LanguageServiceInterface $languageService);
 
     /**
      * @return void
      */
-    public function initializeFallbackLanguage(LanguageServiceInterface $languageService): void;
+    public function initializeFallbackLanguage(LanguageServiceInterface $languageService);
 
     /**
+     * @return null|string
      * @throws InvalidLanguageException if the language was found, but is not available in the frontend in the $activePortal
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, string $languageCode): ?string;
+    public function getLanguageFromPersistence(\TdbCmsPortal $activePortal, string $languageCode);
 }

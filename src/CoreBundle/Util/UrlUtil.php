@@ -235,8 +235,6 @@ class UrlUtil
      */
     public function cutPortalAndLanguagePrefixFromUrl($url, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
     {
-        $url = $this->cutConsumedPrefixFromUrl($url, $portal, $language);
-
         $urlPrefixGenerator = $this->urlPrefixGenerator;
         $prefixToCutParts = $urlPrefixGenerator->generatePrefixParts($portal, $language);
 
@@ -252,35 +250,6 @@ class UrlUtil
         }
 
         return $url;
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return string
-     */
-    private function cutConsumedPrefixFromUrl($url, \TdbCmsPortal $portal, \TdbCmsLanguage $language)
-    {
-        $domainPathMatch = $this->portalDomainService->getActiveDomainPathMatch();
-        if (null === $domainPathMatch || false === $domainPathMatch->isMatched()) {
-            return $url;
-        }
-
-        $activePortal = $this->portalDomainService->getActivePortal();
-        $activeLanguage = $this->languageService->getActiveLanguage();
-        if (null === $activePortal || null === $activeLanguage) {
-            return $url;
-        }
-        if ($activePortal->id !== $portal->id || $activeLanguage->id !== $language->id) {
-            return $url;
-        }
-
-        $consumedPrefix = $domainPathMatch->getCanonicalPrefix();
-        if ('' === $consumedPrefix) {
-            return $url;
-        }
-
-        return $this->mapRemainingPathToUrlShape($domainPathMatch->getRemainingPath(), $url);
     }
 
     /**
@@ -303,27 +272,6 @@ class UrlUtil
         }
 
         return $string;
-    }
-
-    private function mapRemainingPathToUrlShape(string $remainingPath, string $originalUrl): string
-    {
-        if ('/' === $remainingPath) {
-            if ('/' === substr($originalUrl, 0, 1)) {
-                return '/';
-            }
-
-            return '';
-        }
-
-        if ('/' !== substr($originalUrl, 0, 1)) {
-            $remainingPath = ltrim($remainingPath, '/');
-        }
-
-        if (str_ends_with($originalUrl, '/') && false === str_ends_with($remainingPath, '/')) {
-            return $remainingPath.'/';
-        }
-
-        return $remainingPath;
     }
 
     /**

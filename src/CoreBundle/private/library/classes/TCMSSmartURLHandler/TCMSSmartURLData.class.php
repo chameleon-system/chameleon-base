@@ -89,7 +89,6 @@ class TCMSSmartURLData
             case 'sRelativeURL':
                 return $this->getRequestInfoService()->getPathInfoWithoutPortalAndLanguagePrefix();
             case 'sOriginalURL':
-            case 'sRelativeFullURL':
                 return $request->getPathInfo();
             case 'oActiveDomain':
                 return $activeDomain;
@@ -105,6 +104,8 @@ class TCMSSmartURLData
                 return $request->isSecure();
             case 'sRelativeURLPortalIdentifier':
                 return (null !== $activePortal) ? $activePortal->fieldIdentifier : null;
+            case 'sRelativeFullURL':
+                return $request->getPathInfo();
             case 'aParameters':
                 return $request->query->all();
             case 'iPortalId':
