@@ -163,7 +163,6 @@ class PortalDomainServiceInitializer implements PortalDomainServiceInitializerIn
             $portalPrefix,
             $isUserSignedInToBackend
         );
-        $aResultData['domainPathMatch'] = $domainPathMatch?->toArray();
 
         $cache->set(
             $sKey,
