@@ -23,36 +23,13 @@ use Symfony\Component\Routing\RouteCollection;
 
 class CmsRouteLoader extends Loader
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-    /**
-     * @var UrlPrefixGeneratorInterface
-     */
-    private $urlPrefixGenerator;
-    /**
-     * @var RoutingUtilInterface
-     */
-    private $routingUtil;
-    /**
-     * @var UrlUtil
-     */
-    private $urlUtil;
-    private LanguageServiceInterface $languageService;
-
     public function __construct(
-        ContainerInterface $container,
-        UrlPrefixGeneratorInterface $urlPrefixGenerator,
-        RoutingUtilInterface $routingUtil,
-        UrlUtil $urlUtil,
-        LanguageServiceInterface $languageService
+        private readonly ContainerInterface $container,
+        private readonly UrlPrefixGeneratorInterface $urlPrefixGenerator,
+        private readonly RoutingUtilInterface $routingUtil,
+        private readonly UrlUtil $urlUtil,
+        private readonly LanguageServiceInterface $languageService
     ) {
-        $this->container = $container;
-        $this->urlPrefixGenerator = $urlPrefixGenerator;
-        $this->routingUtil = $routingUtil;
-        $this->urlUtil = $urlUtil;
-        $this->languageService = $languageService;
     }
 
     /**

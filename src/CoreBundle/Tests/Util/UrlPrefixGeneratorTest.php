@@ -2,8 +2,8 @@
 
 namespace ChameleonSystem\CoreBundle\Tests\Util;
 
-use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
+use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Util\UrlPrefixGenerator;
 use PHPUnit\Framework\TestCase;
 

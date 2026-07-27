@@ -38,8 +38,7 @@ class RoutingUtil implements RoutingUtilInterface
         TreeServiceInterface $treeService,
         UrlPrefixGeneratorInterface $urlPrefixGenerator,
         LanguageServiceInterface $languageService
-    )
-    {
+    ) {
         $this->routingUtilDataAccess = $routingUtilDataAccess;
         $this->treeService = $treeService;
         $this->urlPrefixGenerator = $urlPrefixGenerator;

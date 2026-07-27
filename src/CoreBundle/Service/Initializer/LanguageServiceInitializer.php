@@ -132,7 +132,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             return null;
         }
 
-
         // language set via url prefix?
         $activePortal = $portalDomainService->getActivePortal();
         if (null === $activePortal) {
@@ -147,8 +146,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             }
         }
 
-
-        if (!empty($domain->fieldCmsLanguageId)) {
+        if (false === empty($domain->fieldCmsLanguageId)) {
             return $domain->fieldCmsLanguageId;
         }
 
