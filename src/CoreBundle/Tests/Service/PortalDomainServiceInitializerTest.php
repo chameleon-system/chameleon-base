@@ -30,7 +30,7 @@ class PortalDomainServiceInitializerTest extends TestCase
         }
     }
 
-    public function testSoleSuffixedDomainCanBeUsedForCanonicalization(): void
+    public function testSoleSuffixedDomainCanBeUsedAsCanonicalRedirectTarget(): void
     {
         $domain = [
             'id' => 'domain-fr',
