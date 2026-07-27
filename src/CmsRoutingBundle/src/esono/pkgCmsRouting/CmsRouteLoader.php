@@ -431,7 +431,7 @@ class CmsRouteLoader extends Loader
     private function belongsToDomainFamily(\TdbCmsPortalDomains $domain, array $familyHosts): bool
     {
         foreach ($this->getDomainHosts($domain) as $host) {
-            if (true === isset($familyHosts[$host])) {
+            if (isset($familyHosts[$host])) {
                 return true;
             }
         }
@@ -461,7 +461,7 @@ class CmsRouteLoader extends Loader
      *
      * @return void
      *
-     * @throws \LogicException if no primary domain isw set
+     * @throws \LogicException if no primary domain is set
      */
     private function handleDomainRequirements(
         Route $route,
