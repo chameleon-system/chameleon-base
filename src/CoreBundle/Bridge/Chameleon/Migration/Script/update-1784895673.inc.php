@@ -1,4 +1,4 @@
-<h1>Build #1784895672</h1>
+<h1>Build #1784895673</h1>
 <h2>Date: 2026-07-24</h2>
 <div class="changelog">
     - 70643 add additional domains
@@ -14,12 +14,23 @@ bOpenOnLoad=true', // prev.: 'mltTableName=cms_portal_domain_cms_language_mlt'
           'translation' => 'Weitere Sprachen', // prev.: ''
           'cms_field_type_id' => TCMSLogChange::GetFieldType('CMSFIELD_MULTITABLELIST'), // prev.: '46'
           'position' => '3294', // prev.: '0'
-          '049_helptext' => 'Wenn für das Portal prefixbasierte Mehrsprachigkeit aktiviert wurde, dann werden die hier hinterlegten Sprachen für die domain via URL-Prefix ansteuerbar.', // prev.: ''
+          '049_helptext' => 'Ist für das Portal die präfixbasierte Mehrsprachigkeit aktiviert, können die hier für die Domain hinterlegten Sprachen über ein URL-Präfix aufgerufen werden.', // prev.: ''
       'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_portal_domains'),
       'id' => '2a0c5d0e-b1fb-0f4d-8c87-3f78ac357b74',
   ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
+
+$data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'en')
+        ->setFields([
+                'translation' => 'Additional languages', // prev.: ''
+                '049_helptext' => 'If prefix-based multilingual support has been enabled for the portal, the languages configured here can be accessed for the domain via a URL prefix.', // prev.: ''
+        ])->setWhereEquals(['id' => '2a0c5d0e-b1fb-0f4d-8c87-3f78ac357b74'])
+;
+TCMSLogChange::update(__LINE__, $data);
+
+
+
 
 TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_portal_domains'), 'cms_language_mlt', 'cms_language_id');
 
