@@ -1,4 +1,4 @@
-<h1>Build #1784895671</h1>
+<h1>Build #1784895672</h1>
 <h2>Date: 2026-07-24</h2>
 <div class="changelog">
     - 70643 add additional domains
@@ -20,6 +20,8 @@ bOpenOnLoad=true', // prev.: 'mltTableName=cms_portal_domain_cms_language_mlt'
   ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
+
+TCMSLogChange::SetFieldPosition(TCMSLogChange::GetTableId('cms_portal_domains'), 'cms_language_mlt', 'cms_language_id');
 
 $query ="CREATE TABLE `cms_portal_domain_cms_language_mlt` (
                   `source_id` CHAR( 36 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
