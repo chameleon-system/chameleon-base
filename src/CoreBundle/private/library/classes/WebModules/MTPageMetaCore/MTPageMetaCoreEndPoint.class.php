@@ -673,25 +673,25 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
 
     private function getActivePageService(): ActivePageServiceInterface
     {
-        /** @var ActivePageServiceInterface */
+        /* @var ActivePageServiceInterface */
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     private function getPortalDomainService(): PortalDomainServiceInterface
     {
-        /** @var PortalDomainServiceInterface */
+        /* @var PortalDomainServiceInterface */
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     private function getLanguageService(): LanguageServiceInterface
     {
-        /** @var LanguageServiceInterface */
+        /* @var LanguageServiceInterface */
         return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     private function getLogger(): LoggerInterface
     {
-        /** @var LoggerInterface */
+        /* @var LoggerInterface */
         return ServiceLocator::get('logger');
     }
 }
