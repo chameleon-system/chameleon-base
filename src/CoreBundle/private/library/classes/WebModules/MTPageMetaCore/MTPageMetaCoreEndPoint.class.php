@@ -617,29 +617,14 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             return [];
         }
 
-        $activeDomain = $this->getPortalDomainService()->getActiveDomain();
-        if (null === $activeDomain) {
-            return [];
-        }
-
-        $activeLanguage = $this->getLanguageService()->getActiveLanguage();
-        if (null === $activeLanguage) {
-            return [];
-        }
-
         $activePage = $this->getActivePageService()->getActivePage();
         if (null === $activePage || true === $this->isNotFoundPage($activePage, $activePortal)) {
             return [];
         }
 
-        $portalLanguages = $activePortal->GetActiveLanguages();
+        $activeLanguageList = $activePortal->GetActiveLanguages();
         $alternatives = [];
-        $cmsBaseLanguageId = $this->getLanguageService()->getCmsBaseLanguageId();
-        while (false !== ($alternativeLanguage = $portalLanguages->Next())) {
-            if (false === $this->domainSupportsLanguage($activeDomain, $activePortal, $alternativeLanguage, $cmsBaseLanguageId)) {
-                continue;
-            }
-
+        while (false !== ($alternativeLanguage = $activeLanguageList->Next())) {
             $iso = $alternativeLanguage->fieldIso6391;
             try {
                 $url = $alternativeLanguage->GetTranslatedPageURL();
