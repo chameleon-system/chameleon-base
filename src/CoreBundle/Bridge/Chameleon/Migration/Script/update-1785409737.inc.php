@@ -55,19 +55,25 @@ TCMSLogChange::RunQuery(__LINE__, $query);
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf_index', 'de')
     ->setFields([
             'id' => '2392ef6f-ef78-dc86-2016-dc1f4024bfcb',
+            'definition' => 'url_prefix',
             'name' => 'cms_language_url_prefix',
+            'type'            => 'INDEX',
+            'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_language'),
     ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
 
 $query = 'ALTER TABLE `cms_language`
-                        ADD INDEX  `cms_language_iso_6391` ( cms_language_iso_6391 )';
+                        ADD INDEX  `cms_language_iso_6391` ( iso_6391 )';
 TCMSLogChange::RunQuery(__LINE__, $query);
 
 $data = TCMSLogChange::createMigrationQueryData('cms_tbl_conf_index', 'de')
     ->setFields([
             'id' => 'c87a40bc-bc33-cf1e-1237-72b53324cf25',
-            'name' => 'cms_language_cms_language_iso_6391',
+            'definition' => 'iso_6391',
+            'name' => 'cms_language_iso_6391',
+            'type'            => 'INDEX',
+            'cms_tbl_conf_id' => TCMSLogChange::GetTableId('cms_language'),
     ])
 ;
 TCMSLogChange::insert(__LINE__, $data);
