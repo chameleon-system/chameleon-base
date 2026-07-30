@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\Service\ActivePageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Util\DomainSupportsLanguageTrait;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use ChameleonSystem\SecurityBundle\Voter\CmsUserRoleConstants;
 use Monolog\Logger;
@@ -24,6 +25,8 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  */
 class MTPageMetaCoreEndPoint extends TUserModelBase
 {
+    use DomainSupportsLanguageTrait;
+
     /**
      * you can add additional breadcrumb elements for the title tag in your extension.
      *
@@ -614,14 +617,13 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             return [];
         }
 
-        $languageService = $this->getLanguageService();
-        $activeLanguage = $languageService->getActiveLanguage();
-        if (null === $activeLanguage) {
+        $activeDomain = $this->getPortalDomainService()->getActiveDomain();
+        if (null === $activeDomain) {
             return [];
         }
 
-        $activeLanguages = $activePortal->GetActiveLanguages();
-        if ($activeLanguages->Length() < 2) {
+        $activeLanguage = $this->getLanguageService()->getActiveLanguage();
+        if (null === $activeLanguage) {
             return [];
         }
 
@@ -630,8 +632,14 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             return [];
         }
 
+        $portalLanguages = $activePortal->GetActiveLanguages();
         $alternatives = [];
-        while (false !== ($alternativeLanguage = $activeLanguages->Next())) {
+        $cmsBaseLanguageId = $this->getLanguageService()->getCmsBaseLanguageId();
+        while (false !== ($alternativeLanguage = $portalLanguages->Next())) {
+            if (false === $this->domainSupportsLanguage($activeDomain, $activePortal, $alternativeLanguage, $cmsBaseLanguageId)) {
+                continue;
+            }
+
             $iso = $alternativeLanguage->fieldIso6391;
             try {
                 $url = $alternativeLanguage->GetTranslatedPageURL();
@@ -656,26 +664,34 @@ class MTPageMetaCoreEndPoint extends TUserModelBase
             }
         }
 
+        if (\count($alternatives) < 2) {
+            return [];
+        }
+
         return $alternatives;
     }
 
     private function getActivePageService(): ActivePageServiceInterface
     {
+        /** @var ActivePageServiceInterface */
         return ServiceLocator::get('chameleon_system_core.active_page_service');
     }
 
     private function getPortalDomainService(): PortalDomainServiceInterface
     {
+        /** @var PortalDomainServiceInterface */
         return ServiceLocator::get('chameleon_system_core.portal_domain_service');
     }
 
     private function getLanguageService(): LanguageServiceInterface
     {
+        /** @var LanguageServiceInterface */
         return ServiceLocator::get('chameleon_system_core.language_service');
     }
 
     private function getLogger(): LoggerInterface
     {
+        /** @var LoggerInterface */
         return ServiceLocator::get('logger');
     }
 }

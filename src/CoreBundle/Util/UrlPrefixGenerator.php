@@ -101,7 +101,7 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
                 $defaultLanguageId = $this->languageService->getCmsBaseLanguageId();
             }
 
-            return $defaultLanguageId === $language->id ? '' : $language->fieldIso6391;
+            return $defaultLanguageId === $language->id ? '' : $this->getRoutingLanguageCode($language);
         }
 
         $primaryTargetDomain = $this->portalDomainService->getPrimaryDomain($portal->id, $language->id);
@@ -113,7 +113,7 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
             return '';
         }
 
-        return $language->fieldIso6391;
+        return $this->getRoutingLanguageCode($language);
     }
 
     /**
@@ -126,5 +126,14 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
         }
 
         return $portal->fieldIdentifier;
+    }
+
+    private function getRoutingLanguageCode(\TdbCmsLanguage $language): string
+    {
+        if ('' !== trim((string) $language->fieldUrlPrefix)) {
+            return $language->fieldUrlPrefix;
+        }
+
+        return $language->fieldIso6391;
     }
 }
