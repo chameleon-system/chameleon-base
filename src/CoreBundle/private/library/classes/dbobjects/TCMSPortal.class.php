@@ -663,10 +663,10 @@ class TCMSPortal extends TCMSRecord
     /**
      * Returns the frontend-active portal languages for the current request context.
      *
-     * The base language list is still taken from the portal language assignment.
-     * If prefix-based multilingual routing is enabled and the active domain belongs
-     * to this portal, frontend-active languages configured directly on the active
-     * domain are added as well.
+     * The base language list is taken from the portal language assignment. If prefix-based
+     * multilingual routing is enabled and the active domain belongs to this portal, the
+     * result is limited to languages that are configured for this domain as well.
+     *
      * @param string $sOrderBy
      *
      * @return TdbCmsLanguageList
@@ -678,10 +678,14 @@ class TCMSPortal extends TCMSRecord
         }
 
         $sCacheKey = 'oActiveLanguageList'.$sOrderBy;
+        $oActiveDomain = null;
+
         if ('1' === $this->sqlData['use_multilanguage']) {
             $oActiveDomain = self::getPortalDomainService()->getActiveDomain();
             if (null !== $oActiveDomain && $oActiveDomain->fieldCmsPortalId === $this->id) {
                 $sCacheKey .= $oActiveDomain->id;
+            } else {
+                $oActiveDomain = null;
             }
         }
 
@@ -691,9 +695,9 @@ class TCMSPortal extends TCMSRecord
         }
 
         $sQuery = "SELECT * FROM `cms_portal_cms_language_mlt`
-                  INNER JOIN `cms_language` ON `cms_language`.`id` = `cms_portal_cms_language_mlt`.`target_id`
-                  WHERE `cms_portal_cms_language_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                  AND `cms_language`.`active_for_front_end` = '1'";
+                      INNER JOIN `cms_language` ON `cms_language`.`id` = `cms_portal_cms_language_mlt`.`target_id`
+                      WHERE `cms_portal_cms_language_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
+                      AND `cms_language`.`active_for_front_end` = '1'";
 
         if ('' !== $sOrderBy) {
             $sQuery .= ' ORDER BY '.$sOrderBy;
@@ -701,11 +705,8 @@ class TCMSPortal extends TCMSRecord
 
         $oLanguageList = TdbCmsLanguageList::GetList($sQuery);
 
-        if ('1' === $this->sqlData['use_multilanguage']) {
-            $oActiveDomain = self::getPortalDomainService()->getActiveDomain();
-            if (null !== $oActiveDomain && $oActiveDomain->fieldCmsPortalId === $this->id) {
-                $this->addDomainLanguagesToList($oLanguageList, $oActiveDomain);
-            }
+        if (null !== $oActiveDomain) {
+            $this->filterLanguageListByActiveDomain($oLanguageList, $oActiveDomain);
         }
 
         $this->SetInternalCache($sCacheKey, $oLanguageList);
@@ -714,46 +715,49 @@ class TCMSPortal extends TCMSRecord
     }
 
     /**
-     * Extends the portal language list with frontend-active languages allowed on the active domain.
+     * Limits the given portal language list to frontend-active languages allowed on the active domain.
      *
-     * The active domain can expose a default language via `cms_language_id` and additional
-     * languages via `cms_language_mlt`. Both sources are merged into the given portal
-     * language list. Languages that are already present or not frontend-active are ignored.
+     * The allowed domain language set consists of the domain default language and the
+     * additional domain language assignment. Portal languages that are not part of this
+     * set are removed from the list.
      *
      * @param TdbCmsLanguageList  $oLanguageList
      * @param TdbCmsPortalDomains $oActiveDomain
      *
      * @return void
      */
-    private function addDomainLanguagesToList(TdbCmsLanguageList $oLanguageList, TdbCmsPortalDomains $oActiveDomain): void
+    private function filterLanguageListByActiveDomain(TdbCmsLanguageList $oLanguageList, TdbCmsPortalDomains $oActiveDomain)
     {
-        $aKnownLanguageIds = [];
-        $oClonedList = clone $oLanguageList;
-        while ($oLanguage = $oClonedList->Next()) {
-            $aKnownLanguageIds[$oLanguage->id] = true;
-        }
+        $aAllowedLanguageIds = [];
 
-        $aDomainLanguages = [];
         $oDomainDefaultLanguage = $oActiveDomain->GetFieldCmsLanguage();
-        if (null !== $oDomainDefaultLanguage && '' !== $oDomainDefaultLanguage->id) {
-            $aDomainLanguages[$oDomainDefaultLanguage->id] = $oDomainDefaultLanguage;
+        if (null !== $oDomainDefaultLanguage
+            && '' !== $oDomainDefaultLanguage->id
+            && '1' === $oDomainDefaultLanguage->fieldActiveForFrontEnd
+        ) {
+            $aAllowedLanguageIds[$oDomainDefaultLanguage->id] = true;
         }
 
         $oAdditionalLanguages = $oActiveDomain->GetFieldCmsLanguageList();
         while ($oLanguage = $oAdditionalLanguages->Next()) {
-            $aDomainLanguages[$oLanguage->id] = $oLanguage;
-        }
-
-        foreach ($aDomainLanguages as $oLanguage) {
             if ('1' !== $oLanguage->fieldActiveForFrontEnd) {
                 continue;
             }
-            if (isset($aKnownLanguageIds[$oLanguage->id])) {
-                continue;
-            }
 
+            $aAllowedLanguageIds[$oLanguage->id] = true;
+        }
+
+        $oFilteredLanguageList = TdbCmsLanguageList::GetNewInstance();
+        while ($oLanguage = $oLanguageList->Next()) {
+            if (isset($aAllowedLanguageIds[$oLanguage->id])) {
+                $oFilteredLanguageList->AddItem($oLanguage);
+            }
+        }
+
+        $oLanguageList->Clear();
+        $oFilteredLanguageList->GoToStart();
+        while ($oLanguage = $oFilteredLanguageList->Next()) {
             $oLanguageList->AddItem($oLanguage);
-            $aKnownLanguageIds[$oLanguage->id] = true;
         }
     }
 
