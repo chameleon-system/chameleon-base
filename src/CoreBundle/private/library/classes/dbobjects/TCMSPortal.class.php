@@ -689,76 +689,40 @@ class TCMSPortal extends TCMSRecord
             }
         }
 
-        $oLanguageList = $this->GetFromInternalCache($sCacheKey);
-        if (null !== $oLanguageList) {
-            return $oLanguageList;
+        $activeFrontendLanguages = $this->GetFromInternalCache($sCacheKey);
+        if (null !== $activeFrontendLanguages) {
+            return $activeFrontendLanguages;
         }
 
-        $sQuery = "SELECT * FROM `cms_portal_cms_language_mlt`
-                      INNER JOIN `cms_language` ON `cms_language`.`id` = `cms_portal_cms_language_mlt`.`target_id`
-                      WHERE `cms_portal_cms_language_mlt`.`source_id` = '".MySqlLegacySupport::getInstance()->real_escape_string($this->id)."'
-                      AND `cms_language`.`active_for_front_end` = '1'";
+        $queryParam = ['portalId' => $this->id];
+        $queryTypes = [];
 
-        if ('' !== $sOrderBy) {
-            $sQuery .= ' ORDER BY '.$sOrderBy;
-        }
-
-        $oLanguageList = TdbCmsLanguageList::GetList($sQuery);
+        $query = "SELECT `cms_language`.* 
+                    FROM `cms_portal_cms_language_mlt`
+              INNER JOIN `cms_language` ON `cms_language`.`id` = `cms_portal_cms_language_mlt`.`target_id`
+                   WHERE `cms_portal_cms_language_mlt`.`source_id` = :portalId
+                     AND `cms_language`.`active_for_front_end` = '1'";
 
         if (null !== $oActiveDomain) {
-            $this->filterLanguageListByActiveDomain($oLanguageList, $oActiveDomain);
-        }
-
-        $this->SetInternalCache($sCacheKey, $oLanguageList);
-
-        return $oLanguageList;
-    }
-
-    /**
-     * Limits the given portal language list to frontend-active languages allowed on the active domain.
-     *
-     * The allowed domain language set consists of the domain default language and the
-     * additional domain language assignment. Portal languages that are not part of this
-     * set are removed from the list.
-     *
-     * @param TdbCmsLanguageList  $oLanguageList
-     * @param TdbCmsPortalDomains $oActiveDomain
-     *
-     * @return void
-     */
-    private function filterLanguageListByActiveDomain(TdbCmsLanguageList $oLanguageList, TdbCmsPortalDomains $oActiveDomain)
-    {
-        $aAllowedLanguageIds = [];
-
-        $oDomainDefaultLanguage = $oActiveDomain->GetFieldCmsLanguage();
-        if (null !== $oDomainDefaultLanguage
-            && '' !== $oDomainDefaultLanguage->id
-            && '1' === $oDomainDefaultLanguage->fieldActiveForFrontEnd
-        ) {
-            $aAllowedLanguageIds[$oDomainDefaultLanguage->id] = true;
-        }
-
-        $oAdditionalLanguages = $oActiveDomain->GetFieldCmsLanguageList();
-        while ($oLanguage = $oAdditionalLanguages->Next()) {
-            if ('1' !== $oLanguage->fieldActiveForFrontEnd) {
-                continue;
-            }
-
-            $aAllowedLanguageIds[$oLanguage->id] = true;
-        }
-
-        $oFilteredLanguageList = TdbCmsLanguageList::GetNewInstance();
-        while ($oLanguage = $oLanguageList->Next()) {
-            if (isset($aAllowedLanguageIds[$oLanguage->id])) {
-                $oFilteredLanguageList->AddItem($oLanguage);
+            $languagesSupportedByDomain = $oActiveDomain->getDomainLanguageIds();
+            if ([] === $languagesSupportedByDomain) {
+                $query .= " AND 1=0";
+            } else {
+                $query .= " AND `cms_language`.`id` IN (:languagesSupportedByDomain)";
+                $queryParam['languagesSupportedByDomain'] = $languagesSupportedByDomain;
+                $queryTypes['languagesSupportedByDomain'] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
             }
         }
-
-        $oLanguageList->Clear();
-        $oFilteredLanguageList->GoToStart();
-        while ($oLanguage = $oFilteredLanguageList->Next()) {
-            $oLanguageList->AddItem($oLanguage);
+        if ('' !== $sOrderBy) {
+            $query .= ' ORDER BY ' . $sOrderBy;
         }
+
+        $activeFrontendLanguages = new TdbCmsLanguageList();
+        $activeFrontendLanguages->Load($query, $queryParam, $queryTypes);
+
+        $this->SetInternalCache($sCacheKey, $activeFrontendLanguages);
+
+        return $activeFrontendLanguages;
     }
 
     /**
