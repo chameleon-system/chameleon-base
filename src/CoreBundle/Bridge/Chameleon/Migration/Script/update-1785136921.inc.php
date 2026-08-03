@@ -5,6 +5,5 @@
 </div><?php
 
 TCMSLogChange::makeFieldMultilingual('module_faq', 'name');
-TCMSLogChange::makeFieldMultilingual('module_faq', 'headline');
 TCMSLogChange::makeFieldMultilingual('module_faq', 'qdescription');
 TCMSLogChange::makeFieldMultilingual('module_faq', 'artikel');
