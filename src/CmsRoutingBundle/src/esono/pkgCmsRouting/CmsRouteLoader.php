@@ -169,6 +169,10 @@ class CmsRouteLoader extends Loader
             $this->handleSecurityAndFinalRoutePath($route);
         }
         if (null !== $portal && null !== $language) {
+            // Collection generators may legitimately return no routes for a given portal/language pair.
+            if (0 === $importedRoutes->count()) {
+                return $importedRoutes;
+            }
             $importedRoutes = $this->createPortalAndLanguageRoutes(
                 $importedRoutes,
                 $portal,
