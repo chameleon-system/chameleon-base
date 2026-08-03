@@ -224,7 +224,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
     private function getCrop()
     {
         $cropId = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_CROP_ID);
-        if (null === $cropId) {
+        if (null === $cropId || '' === $cropId) {
             return null;
         }
 
@@ -275,7 +275,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             return $preset->getSystemName();
         }
 
-        $presetSystemNameFromRequest = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PRESET_NAME);
+        $presetSystemNameFromRequest = $this->getPresetSystemNameFromRequest(self::URL_PARAM_PRESET_NAME);
         if (null !== $presetSystemNameFromRequest) {
             if (false === $this->isPresetAllowedByRestriction($presetSystemNameFromRequest)) {
                 return null;
@@ -285,6 +285,18 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         return null;
+    }
+
+    private function getPresetSystemNameFromRequest(string $parameterName): ?string
+    {
+        $presetSystemName = $this->inputFilterUtil->getFilteredInput($parameterName);
+        if (null === $presetSystemName) {
+            return null;
+        }
+        $presetSystemName = trim($presetSystemName);
+        $presetSystemName = rtrim($presetSystemName, ';');
+
+        return '' !== $presetSystemName ? $presetSystemName : null;
     }
 
     /**

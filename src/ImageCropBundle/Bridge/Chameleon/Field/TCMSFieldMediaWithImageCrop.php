@@ -449,7 +449,14 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
 
     private function getImageCropPresetSystemName(): ?string
     {
-        return $this->getFieldTypeConfigKey('imageCropPresetSystemName');
+        $presetSystemName = $this->getFieldTypeConfigKey('imageCropPresetSystemName');
+        if (null === $presetSystemName) {
+            return null;
+        }
+        $presetSystemName = trim($presetSystemName);
+        $presetSystemName = rtrim($presetSystemName, ';');
+
+        return '' !== $presetSystemName ? $presetSystemName : null;
     }
 
     private function getImageCropEditorUrl(): string
@@ -459,20 +466,24 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
             '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
         ];
 
+        $presetSystemName = null;
         $additionalFieldName = $this->getFieldNameOfAdditionalField($this->name);
         if ('' !== $this->oTableRow->sqlData[$additionalFieldName]) {
             $crop = \TdbCmsImageCrop::GetNewInstance();
             if ($crop->Load($this->oTableRow->sqlData[$additionalFieldName]) && '' !== $crop->fieldCmsImageCropPresetId) {
                 $preset = \TdbCmsImageCropPreset::GetNewInstance();
                 if ($preset->Load($crop->fieldCmsImageCropPresetId) && $this->isPresetAllowedByRestriction($preset->fieldSystemName)) {
-                    $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $preset->fieldSystemName;
+                    $presetSystemName = $preset->fieldSystemName;
                 }
             }
-        } else {
+        }
+
+        if (null === $presetSystemName) {
             $presetSystemName = $this->getImageCropPresetSystemName();
-            if (null !== $presetSystemName && $this->isPresetAllowedByRestriction($presetSystemName)) {
-                $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $presetSystemName;
-            }
+        }
+
+        if (null !== $presetSystemName && $this->isPresetAllowedByRestriction($presetSystemName)) {
+            $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $presetSystemName;
         }
 
         $restriction = $this->getImageCropPresetRestriction();
