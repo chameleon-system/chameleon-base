@@ -61,13 +61,16 @@
                 $('#label_' + fieldName + '_image_crop_id span').html(jsonData.cropName);
                 var $savedCropsList = $('#saved_crops_list_' + fieldName);
                 if ($savedCropsList.length) {
+                    var $savedCropsListContainer = $('#' + fieldName + '-saved-crops-list-container');
                     $savedCropsList.empty();
                     if (jsonData.savedCrops && jsonData.savedCrops.length > 0) {
+                        $savedCropsListContainer.removeClass('d-none');
                         jsonData.savedCrops.forEach(function (savedCrop) {
                             var liClass = savedCrop.selected ? ' class="active"' : '';
                             $savedCropsList.append('<li' + liClass + '><a href="#" data-crop-id="' + savedCrop.id + '" data-field-name="' + fieldName + '" data-image-id="' + imageId + '">' + savedCrop.name + '</a></li>');
                         });
                     } else {
+                        $savedCropsListContainer.addClass('d-none');
                         $savedCropsList.append('<li>-</li>');
                     }
                 }
@@ -132,8 +135,7 @@
         $('#' + fieldName + '_image_crop_id').val('');
         $('#label_' + fieldName + '_image_crop_id span').html('-');
         $('#' + fieldName + '_image_crop_id_reset_button').hide();
-        $('#' + fieldName + '-crop-button').addClass('d-none');
-        $('#' + fieldName + '-saved-crops').addClass('d-none');
+        $('#' + fieldName + '-saved-crops-list-container').addClass('d-none');
     };
 
     var oldSetFunction = window._SetImage;
@@ -143,8 +145,6 @@
         $('#label_' + fieldName + '_image_crop_id span').html('-');
         $('#' + fieldName + '_image_crop_id_reset_button').hide();
         oldSetFunction(imageID, customCallback);
-        $('#' + fieldName + '-crop-button').removeClass('d-none');
-        $('#' + fieldName + '-saved-crops').removeClass('d-none');
         if ('function' === typeof window.refreshImageCropFieldDetails && imageID) {
             window.refreshImageCropFieldDetails(fieldName, imageID);
         }

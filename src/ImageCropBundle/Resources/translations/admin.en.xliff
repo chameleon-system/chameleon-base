@@ -49,12 +49,12 @@
 
             <trans-unit id="chameleon_system_image_crop.field.crop_list_headline">
                 <source>chameleon_system_image_crop.field.crop_list_headline</source>
-                <target>All saved and approved cutout(s)</target>
+                <target>Selectable cutout(s)</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.field.edit_crop">
                 <source>chameleon_system_image_crop.field.edit_crop</source>
-                <target>Edit cutout(s)</target>
+                <target>Add/Edit cutout(s)</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.field.selected_crop">

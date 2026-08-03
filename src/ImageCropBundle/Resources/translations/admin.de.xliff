@@ -49,12 +49,12 @@
 
             <trans-unit id="chameleon_system_image_crop.field.crop_list_headline">
                 <source>chameleon_system_image_crop.field.crop_list_headline</source>
-                <target>Alle gespeicherten and erlaubten Ausschnitte</target>
+                <target>Auswählbare Ausschnitte</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.field.edit_crop">
                 <source>chameleon_system_image_crop.field.edit_crop</source>
-                <target>Bild-Ausschnitt(e) bearbeiten</target>
+                <target>Bild-Ausschnitt(e) anlegen/bearbeiten</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.field.selected_crop">

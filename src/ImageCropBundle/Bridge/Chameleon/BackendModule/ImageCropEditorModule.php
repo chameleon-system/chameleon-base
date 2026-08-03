@@ -261,11 +261,6 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             return null;
         }
 
-        $presetSystemNameFromRequest = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PRESET_NAME);
-        if (null !== $presetSystemNameFromRequest) {
-            return $presetSystemNameFromRequest;
-        }
-
         $crop = $this->getCrop();
         if (null !== $crop) {
             $preset = $crop->getImageCropPreset();
@@ -273,12 +268,20 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
                 return null;
             }
 
+            if (false === $this->isPresetAllowedByRestriction($preset->getSystemName())) {
+                return null;
+            }
+
             return $preset->getSystemName();
         }
 
-        $presetRestriction = $this->getPresetRestriction();
-        if (count($presetRestriction) > 0) {
-            return $presetRestriction[0];
+        $presetSystemNameFromRequest = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PRESET_NAME);
+        if (null !== $presetSystemNameFromRequest) {
+            if (false === $this->isPresetAllowedByRestriction($presetSystemNameFromRequest)) {
+                return null;
+            }
+
+            return $presetSystemNameFromRequest;
         }
 
         return null;
@@ -382,6 +385,16 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         return array_filter($restriction);
     }
 
+    private function isPresetAllowedByRestriction(string $presetSystemName): bool
+    {
+        $presetRestriction = $this->getPresetRestriction();
+        if (0 === count($presetRestriction)) {
+            return true;
+        }
+
+        return true === in_array($presetSystemName, $presetRestriction, true);
+    }
+
     /**
      * @param ImageCropDataModel|null $activeCrop
      *
@@ -392,6 +405,10 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
     private function getCustomCropList($activeCrop = null)
     {
         $customCropList = [];
+        if (0 !== count($this->getPresetRestriction())) {
+            return $customCropList;
+        }
+
         $presetSystemName = $this->getPresetSystemName();
         $baseParameters = $this->getUrlParameters();
         unset($baseParameters[self::URL_PARAM_PRESET_NAME], $baseParameters[self::URL_PARAM_CROP_ID]);
@@ -591,6 +608,22 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         );
 
         $preset = $this->getPreset();
+        if (null === $preset && 0 !== count($this->getPresetRestriction())) {
+            if ($isAjaxMode) {
+                $this->returnAsAjaxError([
+                    'errorMessage' => 'IMAGE-CROP-SAVE-FAILED',
+                ]);
+            }
+            $this->flashMessageService->addMessage(
+                \TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+                'IMAGE-CROP-SAVE-FAILED'
+            );
+            $parameters = $this->getUrlParameters();
+            $this->redirectService->redirect(
+                URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&')
+            );
+        }
+
         if (null !== $preset) {
             $imageCrop->setImageCropPreset($preset);
         }
@@ -763,6 +796,8 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
                     if (0 !== count($restrictionLookup) && false === isset($restrictionLookup[$preset->getSystemName()])) {
                         continue;
                     }
+                } elseif (0 !== count($restrictionLookup) && (null === $selectedCropId || $selectedCropId !== $crop->getId())) {
+                    continue;
                 }
 
                 if ('' === $cropName && null === $preset) {

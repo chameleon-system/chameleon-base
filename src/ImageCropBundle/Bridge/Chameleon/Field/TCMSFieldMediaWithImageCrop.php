@@ -461,13 +461,16 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
 
         $additionalFieldName = $this->getFieldNameOfAdditionalField($this->name);
         if ('' !== $this->oTableRow->sqlData[$additionalFieldName]) {
-            $preset = \TdbCmsImageCropPreset::GetNewInstance();
-            if ($preset->Load($this->oTableRow->sqlData[$additionalFieldName])) {
-                $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $preset->fieldSystemName;
+            $crop = \TdbCmsImageCrop::GetNewInstance();
+            if ($crop->Load($this->oTableRow->sqlData[$additionalFieldName]) && '' !== $crop->fieldCmsImageCropPresetId) {
+                $preset = \TdbCmsImageCropPreset::GetNewInstance();
+                if ($preset->Load($crop->fieldCmsImageCropPresetId) && $this->isPresetAllowedByRestriction($preset->fieldSystemName)) {
+                    $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $preset->fieldSystemName;
+                }
             }
         } else {
             $presetSystemName = $this->getImageCropPresetSystemName();
-            if (null !== $presetSystemName) {
+            if (null !== $presetSystemName && $this->isPresetAllowedByRestriction($presetSystemName)) {
                 $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $presetSystemName;
             }
         }
@@ -497,6 +500,16 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
         $systemNames = array_map('trim', $systemNames);
 
         return array_values(array_filter($systemNames));
+    }
+
+    private function isPresetAllowedByRestriction(string $presetSystemName): bool
+    {
+        $restriction = $this->getImageCropPresetRestriction();
+        if (0 === count($restriction)) {
+            return true;
+        }
+
+        return true === in_array($presetSystemName, $restriction, true);
     }
 
     private function getUrlUtil(): UrlUtil
@@ -568,6 +581,8 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
                     if (0 !== count($restrictionLookup) && false === isset($restrictionLookup[$preset->getSystemName()])) {
                         continue;
                     }
+                } elseif (0 !== count($restrictionLookup) && (null === $selectedCrop || $selectedCrop->getId() !== $crop->getId())) {
+                    continue;
                 }
                 if ('' === $name && null === $preset) {
                     continue;
