@@ -697,7 +697,7 @@ class TCMSPortal extends TCMSRecord
         $queryParam = ['portalId' => $this->id];
         $queryTypes = [];
 
-        $query = "SELECT `cms_language`.* 
+        $query = "SELECT `cms_language`.*
                     FROM `cms_portal_cms_language_mlt`
               INNER JOIN `cms_language` ON `cms_language`.`id` = `cms_portal_cms_language_mlt`.`target_id`
                    WHERE `cms_portal_cms_language_mlt`.`source_id` = :portalId
@@ -706,15 +706,15 @@ class TCMSPortal extends TCMSRecord
         if (null !== $oActiveDomain) {
             $languagesSupportedByDomain = $oActiveDomain->getDomainLanguageIds();
             if ([] === $languagesSupportedByDomain) {
-                $query .= " AND 1=0";
+                $query .= ' AND 1=0';
             } else {
-                $query .= " AND `cms_language`.`id` IN (:languagesSupportedByDomain)";
+                $query .= ' AND `cms_language`.`id` IN (:languagesSupportedByDomain)';
                 $queryParam['languagesSupportedByDomain'] = $languagesSupportedByDomain;
-                $queryTypes['languagesSupportedByDomain'] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+                $queryTypes['languagesSupportedByDomain'] = Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
             }
         }
         if ('' !== $sOrderBy) {
-            $query .= ' ORDER BY ' . $sOrderBy;
+            $query .= ' ORDER BY '.$sOrderBy;
         }
 
         $activeFrontendLanguages = new TdbCmsLanguageList();

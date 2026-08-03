@@ -29,18 +29,20 @@ class TCMSPortalDomain extends TCMSRecord
     }
 
     /**
-     * Return the ids of all languages supported by this domain
+     * Return the ids of all languages supported by this domain.
+     *
      * @return string[]
-     * @throws \Doctrine\DBAL\Exception
+     *
+     * @throws Doctrine\DBAL\Exception
      */
     public function getDomainLanguageIds(): array
     {
-        $query = "SELECT target_id FROM cms_portal_domain_cms_language_mlt WHERE source_id = :domainId";
+        $query = 'SELECT target_id FROM cms_portal_domain_cms_language_mlt WHERE source_id = :domainId';
         $additionalLanguages = $this->getDatabaseConnection()->fetchFirstColumn($query, ['domainId' => $this->id]);
         $additionalLanguages[] = $this->sqlData['cms_language_id'];
         $additionalLanguages = array_unique($additionalLanguages);
 
-        return array_filter($additionalLanguages, static fn(string $languageId) => !empty($languageId));
+        return array_filter($additionalLanguages, static fn (string $languageId) => !empty($languageId));
     }
 
     /**
