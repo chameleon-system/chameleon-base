@@ -21,9 +21,15 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
      */
     private $portalDomainService;
     private LanguageServiceInterface $languageService;
+    /**
+     * @var array<string, string>
+     */
+    private array $languagePrefixRuntimeCache = [];
 
-    public function __construct(PortalDomainServiceInterface $portalDomainService, LanguageServiceInterface $languageService)
-    {
+    public function __construct(
+        PortalDomainServiceInterface $portalDomainService,
+        LanguageServiceInterface $languageService
+    ) {
         $this->portalDomainService = $portalDomainService;
         $this->languageService = $languageService;
     }
@@ -92,6 +98,11 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
             return '';
         }
 
+        $runtimeCacheKey = $this->getLanguagePrefixRuntimeCacheKey($portal, $language, $domain);
+        if (true === array_key_exists($runtimeCacheKey, $this->languagePrefixRuntimeCache)) {
+            return $this->languagePrefixRuntimeCache[$runtimeCacheKey];
+        }
+
         if (null !== $domain && [] !== $domain->GetFieldCmsLanguageIdList()) {
             $defaultLanguageId = $domain->fieldCmsLanguageId;
             if ('' === $defaultLanguageId) {
@@ -101,19 +112,21 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
                 $defaultLanguageId = $this->languageService->getCmsBaseLanguageId();
             }
 
-            return $defaultLanguageId === $language->id ? '' : $language->fieldIso6391;
+            return $this->languagePrefixRuntimeCache[$runtimeCacheKey] = $defaultLanguageId === $language->id
+                ? ''
+                : $this->getRoutingLanguageCode($language);
         }
 
         $primaryTargetDomain = $this->portalDomainService->getPrimaryDomain($portal->id, $language->id);
         if ($primaryTargetDomain->fieldCmsLanguageId === $language->id) {
-            return '';
+            return $this->languagePrefixRuntimeCache[$runtimeCacheKey] = '';
         }
 
         if ('' === $portal->fieldCmsLanguageId || $portal->fieldCmsLanguageId === $language->id) {
-            return '';
+            return $this->languagePrefixRuntimeCache[$runtimeCacheKey] = '';
         }
 
-        return $language->fieldIso6391;
+        return $this->languagePrefixRuntimeCache[$runtimeCacheKey] = $this->getRoutingLanguageCode($language);
     }
 
     /**
@@ -126,5 +139,22 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
         }
 
         return $portal->fieldIdentifier;
+    }
+
+    private function getRoutingLanguageCode(\TdbCmsLanguage $language): string
+    {
+        if ('' !== trim((string) $language->fieldUrlPrefix)) {
+            return $language->fieldUrlPrefix;
+        }
+
+        return $language->fieldIso6391;
+    }
+
+    private function getLanguagePrefixRuntimeCacheKey(
+        \TdbCmsPortal $portal,
+        \TdbCmsLanguage $language,
+        ?\TdbCmsPortalDomains $domain = null
+    ): string {
+        return sprintf('%s-%s-%s', $portal->id, $language->id, $domain?->id ?? 'null');
     }
 }

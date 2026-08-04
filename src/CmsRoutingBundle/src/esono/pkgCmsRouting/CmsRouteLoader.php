@@ -61,10 +61,7 @@ class CmsRouteLoader extends Loader
                 $defaultLanguage = $this->getDefaultPortalLanguage($portal);
                 $defaultLanguageId = (null === $defaultLanguage) ? null : $defaultLanguage->id;
 
-                foreach ($languages as $language) {
-                    if ($language->id === $defaultLanguageId) {
-                        continue;
-                    }
+                foreach ($this->getNonDefaultLanguagesSortedByPrefix($portal, $languages, $defaultLanguageId) as $language) {
                     $this->importRoutes($collection, $routeConfig, $portal, $language);
                 }
                 /*
@@ -96,6 +93,40 @@ class CmsRouteLoader extends Loader
         }
 
         return \TdbCmsConfig::GetInstance()->GetFieldTranslationBaseLanguage();
+    }
+
+    /**
+     * Orders non-default languages so that prefixed routes are registered before prefixless ones.
+     *
+     * This prevents generic catch-all routes such as "/{pagePath}" from swallowing more specific language-prefixed
+     * routes like "/it/" or "/fr/" during route matching.
+     *
+     * @param array<string, \TdbCmsLanguage> $languages
+     *
+     * @return \TdbCmsLanguage[]
+     */
+    private function getNonDefaultLanguagesSortedByPrefix(
+        \TdbCmsPortal $portal,
+        array $languages,
+        ?string $defaultLanguageId
+    ): array {
+        $prefixedLanguages = [];
+        $prefixlessLanguages = [];
+
+        foreach ($languages as $language) {
+            if ($language->id === $defaultLanguageId) {
+                continue;
+            }
+
+            if ('' === $this->urlPrefixGenerator->generatePrefix($portal, $language)) {
+                $prefixlessLanguages[] = $language;
+                continue;
+            }
+
+            $prefixedLanguages[] = $language;
+        }
+
+        return array_merge($prefixedLanguages, $prefixlessLanguages);
     }
 
     /**

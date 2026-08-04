@@ -286,6 +286,7 @@ class TCMSPortal extends TCMSRecord
     }
 
     private ?string $privateThemePathCache = null;
+
     /**
      * returns the path to the theme directory for classes (dbobjects, modules etc.).
      *
@@ -660,7 +661,11 @@ class TCMSPortal extends TCMSRecord
     }
 
     /**
-     * Get only for frontend activated languages selected in portal.
+     * Returns the frontend-active portal languages for the current request context.
+     *
+     * The base language list is taken from the portal language assignment. If prefix-based
+     * multilingual routing is enabled and the active domain belongs to this portal, the
+     * result is limited to languages that are configured for this domain as well.
      *
      * @param string $sOrderBy
      *
@@ -669,23 +674,55 @@ class TCMSPortal extends TCMSRecord
     public function GetActiveLanguages($sOrderBy = '')
     {
         if (true === $this->GetActivateAllPortalLanguages()) {
-            $oLanguageList = $this->GetFieldCmsLanguageList($sOrderBy);
-        } else {
-            $oLanguageList = $this->GetFromInternalCache('oActiveLanguageList'.$sOrderBy);
-            if (is_null($oLanguageList)) {
-                $sQuery = "SELECT * FROM `cms_portal_cms_language_mlt`
-                            INNER JOIN `cms_language` ON `cms_language`.`id` = `cms_portal_cms_language_mlt`.`target_id`
-                            WHERE `cms_portal_cms_language_mlt`.`source_id` = '".$this->id."'
-                            AND `cms_language`.`active_for_front_end` = '1' ";
-                if ('' != $sOrderBy) {
-                    $sQuery .= ' ORDER BY '.$sOrderBy;
-                }
-                $oLanguageList = TdbCmsLanguageList::GetList($sQuery);
-                $this->SetInternalCache('oActiveLanguageList'.$sOrderBy, $oLanguageList);
+            return $this->GetFieldCmsLanguageList($sOrderBy);
+        }
+
+        $sCacheKey = 'oActiveLanguageList'.$sOrderBy;
+        $oActiveDomain = null;
+
+        if ('1' === $this->sqlData['use_multilanguage']) {
+            $oActiveDomain = self::getPortalDomainService()->getActiveDomain();
+            if (null !== $oActiveDomain && $oActiveDomain->fieldCmsPortalId === $this->id) {
+                $sCacheKey .= $oActiveDomain->id;
+            } else {
+                $oActiveDomain = null;
             }
         }
 
-        return $oLanguageList;
+        $activeFrontendLanguages = $this->GetFromInternalCache($sCacheKey);
+        if (null !== $activeFrontendLanguages) {
+            return $activeFrontendLanguages;
+        }
+
+        $queryParam = ['portalId' => $this->id];
+        $queryTypes = [];
+
+        $query = "SELECT `cms_language`.*
+                    FROM `cms_portal_cms_language_mlt`
+              INNER JOIN `cms_language` ON `cms_language`.`id` = `cms_portal_cms_language_mlt`.`target_id`
+                   WHERE `cms_portal_cms_language_mlt`.`source_id` = :portalId
+                     AND `cms_language`.`active_for_front_end` = '1'";
+
+        if (null !== $oActiveDomain) {
+            $languagesSupportedByDomain = $oActiveDomain->getDomainLanguageIds();
+            if ([] === $languagesSupportedByDomain) {
+                $query .= ' AND 1=0';
+            } else {
+                $query .= ' AND `cms_language`.`id` IN (:languagesSupportedByDomain)';
+                $queryParam['languagesSupportedByDomain'] = $languagesSupportedByDomain;
+                $queryTypes['languagesSupportedByDomain'] = Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+            }
+        }
+        if ('' !== $sOrderBy) {
+            $query .= ' ORDER BY '.$sOrderBy;
+        }
+
+        $activeFrontendLanguages = new TdbCmsLanguageList();
+        $activeFrontendLanguages->Load($query, $queryParam, $queryTypes);
+
+        $this->SetInternalCache($sCacheKey, $activeFrontendLanguages);
+
+        return $activeFrontendLanguages;
     }
 
     /**

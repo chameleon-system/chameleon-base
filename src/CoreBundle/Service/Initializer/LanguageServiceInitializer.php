@@ -180,7 +180,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         $languageId = null;
         if (isset($aPathParts[$iLangIndex])) {
             $languageCode = $aPathParts[$iLangIndex];
-            if (2 === strlen($languageCode)) {
+            if ('' !== $languageCode) {
                 $languageId = $this->getLanguageFromPersistence($activePortal, $languageCode);
             }
         }
@@ -231,7 +231,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
                   FROM `cms_portal_cms_language_mlt` AS pl
                   RIGHT OUTER JOIN `cms_language` AS l
                   ON pl.`target_id` = l.`id`
-                  WHERE l.`iso_6391` = :languageCode';
+                  WHERE l.`iso_6391` = :languageCode OR l.`url_prefix` = :languageCode';
     }
 
     /**
