@@ -11,7 +11,7 @@ $data = TCMSLogChange::createMigrationQueryData('cms_field_conf', 'de')
       'length_set' => '5', // prev.: '4'
     ])
     ->setWhereEquals([
-      'id' => TCMSLogChange::GetTableFieldId('cms_language', 'iso_6391'),
+      'id' => TCMSLogChange::GetTableFieldId(TCMSLogChange::getTableId('cms_language'), 'iso_6391'),
     ])
 ;
 TCMSLogChange::update(__LINE__, $data);

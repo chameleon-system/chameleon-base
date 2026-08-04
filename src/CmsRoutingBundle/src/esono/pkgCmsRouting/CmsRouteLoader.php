@@ -118,11 +118,7 @@ class CmsRouteLoader extends Loader
                 continue;
             }
 
-            $languagePrefix = '' !== trim((string) $language->fieldUrlPrefix)
-                ? $language->fieldUrlPrefix
-                : $language->fieldIso6391;
-
-            if ('' === $languagePrefix) {
+            if ('' === $this->urlPrefixGenerator->generatePrefix($portal, $language)) {
                 $prefixlessLanguages[] = $language;
                 continue;
             }
