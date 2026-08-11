@@ -665,7 +665,8 @@ class TCMSPortal extends TCMSRecord
      *
      * The base language list is taken from the portal language assignment. If prefix-based
      * multilingual routing is enabled and the active domain belongs to this portal, the
-     * result is limited to languages that are configured for this domain as well.
+     * result is limited to languages configured for that domain. Domains without a language
+     * configuration continue to support all portal languages.
      *
      * @param string $sOrderBy
      *
@@ -705,9 +706,7 @@ class TCMSPortal extends TCMSRecord
 
         if (null !== $oActiveDomain) {
             $languagesSupportedByDomain = $oActiveDomain->getDomainLanguageIds();
-            if ([] === $languagesSupportedByDomain) {
-                $query .= ' AND 1=0';
-            } else {
+            if ([] !== $languagesSupportedByDomain) {
                 $query .= ' AND `cms_language`.`id` IN (:languagesSupportedByDomain)';
                 $queryParam['languagesSupportedByDomain'] = $languagesSupportedByDomain;
                 $queryTypes['languagesSupportedByDomain'] = Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
