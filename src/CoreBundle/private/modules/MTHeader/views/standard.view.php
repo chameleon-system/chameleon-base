@@ -8,6 +8,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @var string $activeEditLanguageIso
+ * @var string|null $activeEditLanguageSelectionKey
+ * @var array<int, array{selectionKey: string, label: string, iconIsoCode: string}> $editLanguageItems
  * @var array $aPortalLinks
  * @var string $clearCacheURL
  * @var string $sLogoURL
@@ -62,7 +64,41 @@ if (false === $securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
           <?php
       }
 
-if (isset($editLanguages) && count($editLanguages) > 1) {
+if (isset($editLanguageItems) && count($editLanguageItems) > 1) {
+    $urlToActiveLanguageFlag = TGlobal::GetPathTheme().'/images/icons/language-flags/'.strtolower($activeEditLanguageIso).'.png'; ?>
+        <li class="nav-item px-2 dropdown">
+          <a
+              id="navbarDropdownLanguage"
+              class="nav-link dropdown-toggle"
+              data-coreui-toggle="dropdown"
+              data-coreui-auto-close="outside"
+              href="#"
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+          >
+            <span class="cmsNavIcon" style="background-image: url(<?php echo $urlToActiveLanguageFlag; ?>)"></span>
+            <span class="d-md-down-none">
+                            <?php echo TGlobal::OutHTML($activeEditLanguageLabel ?? $translator->trans('chameleon_system_core.cms_module_header.menu_edit_language_menu')); ?>
+                        </span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-start">
+              <?php
+        $authenticityTokenId = AuthenticityTokenManagerInterface::TOKEN_ID;
+    $aParam = TGlobal::instance()->GetUserData(null, ['module_fnc', '_fnc', 'editLanguageIsoCode', $authenticityTokenId]);
+    foreach ($editLanguageItems as $editLanguageItem) {
+        if (($activeEditLanguageSelectionKey ?? null) !== $editLanguageItem['selectionKey']) {
+            $aParam['module_fnc'] = [$data['sModuleSpotName'] => 'ChangeEditLanguage'];
+            $aParam['editLanguageIsoCode'] = $editLanguageItem['selectionKey'];
+            $sLanguageURL = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURL($aParam);
+            $urlToLanguageFlag = TGlobal::GetPathTheme().'/images/icons/language-flags/'.strtolower($editLanguageItem['iconIsoCode']).'.png';
+            echo '<a href="'.$sLanguageURL.'" class="dropdown-item"><span class="cmsNavIcon" style="background-image: url('.$urlToLanguageFlag.')"></span>'.TGlobal::OutHTML($editLanguageItem['label']).'</a>';
+        }
+    } ?>
+          </div>
+        </li>
+          <?php
+} elseif (isset($editLanguages) && count($editLanguages) > 1) {
     $urlToActiveLanguageFlag = TGlobal::GetPathTheme().'/images/icons/language-flags/'.strtolower($activeEditLanguageIso).'.png'; ?>
         <li class="nav-item px-2 dropdown">
           <a

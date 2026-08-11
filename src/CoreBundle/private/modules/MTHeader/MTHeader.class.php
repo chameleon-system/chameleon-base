@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -549,7 +550,35 @@ class MTHeader extends TCMSModelBase
         $securityHelper = $this->getSecurityHelperAccess();
 
         if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
-            /** @var BackendSessionInterface $backendSession */
+            $editLanguageSelectorProvider = $this->getEditLanguageSelectorProvider();
+            if (null !== $editLanguageSelectorProvider && true === $editLanguageSelectorProvider->isEnabled()) {
+                $selectorData = $editLanguageSelectorProvider->getSelectorData();
+                $activeItem = $selectorData['active'] ?? null;
+
+                if (null !== $activeItem) {
+                    $currentLanguage = strtoupper((string) $activeItem['iconIsoCode']);
+                    $this->data['activeEditLanguageSelectionKey'] = (string) $activeItem['selectionKey'];
+                    $this->data['activeEditLanguageLabel'] = (string) $activeItem['label'];
+                }
+
+                foreach ($selectorData['items'] as $item) {
+                    $editLanguageItems[] = [
+                        'selectionKey' => (string) $item['selectionKey'],
+                        'label' => (string) $item['label'],
+                        'iconIsoCode' => strtoupper((string) $item['iconIsoCode']),
+                    ];
+                    $editLanguages[(string) $item['selectionKey']] = (string) $item['label'];
+                }
+
+                $this->data['editLanguageItems'] = $editLanguageItems;
+                $this->data['editLanguageOptions'] = $html;
+                $this->data['editLanguages'] = $editLanguages;
+                $this->data['activeEditLanguageIso'] = $currentLanguage;
+
+                return;
+            }
+
+            /**  BackendSessionInterface $backendSession */
             $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
             $currentLanguage = $backendSession->getCurrentEditLanguageIso6391();
@@ -595,9 +624,14 @@ class MTHeader extends TCMSModelBase
         if (null === $editLanguageIso) {
             return;
         }
-        /** @var BackendSessionInterface $backendSession */
-        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
-        $backendSession->setCurrentEditLanguageIso6391($editLanguageIso);
+        $editLanguageSelectorProvider = $this->getEditLanguageSelectorProvider();
+        if (null !== $editLanguageSelectorProvider && true === $editLanguageSelectorProvider->isEnabled()) {
+            $editLanguageSelectorProvider->applySelection($editLanguageIso);
+        } else {
+            /**  BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+            $backendSession->setCurrentEditLanguageIso6391($editLanguageIso);
+        }
 
         // we need to redirect to the current page to ensure the change from taking hold
         // now call page again... but without module_fnc
@@ -772,5 +806,14 @@ class MTHeader extends TCMSModelBase
     private function getRouter(): RouterInterface
     {
         return ServiceLocator::get('router');
+    }
+
+    private function getEditLanguageSelectorProvider(): ?object
+    {
+        try {
+            return ServiceLocator::get('chameleon_system_core.cms_module_header.edit_language_selector_provider');
+        } catch (ServiceNotFoundException) {
+            return null;
+        }
     }
 }
