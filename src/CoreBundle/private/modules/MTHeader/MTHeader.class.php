@@ -639,10 +639,14 @@ class MTHeader extends TCMSModelBase
         $parameterList = $this->global->GetUserData(null, [
             'module_fnc',
             'editLanguageID',
+            'editLanguageIsoCode',
             '_noModuleFunction',
             '_fnc',
             $authenticityTokenId,
             ]);
+        if (null !== $editLanguageSelectorProvider && method_exists($editLanguageSelectorProvider, 'getRedirectParameterListAfterSelection')) {
+            $parameterList = $editLanguageSelectorProvider->getRedirectParameterListAfterSelection($parameterList);
+        }
         $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameterList, '?', '&');
         $this->getRedirect()->redirect($url);
     }
