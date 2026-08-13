@@ -214,7 +214,7 @@ class TCMSListManagerEndPoint
     {
         try {
             return ServiceLocator::get('esono_i18n.backend_locale_context.domain_restriction');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
     }
