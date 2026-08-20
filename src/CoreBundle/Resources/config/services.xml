@@ -984,6 +984,11 @@
         <service id="chameleon_system_core.service.field_extension_render_service" class="ChameleonSystem\CoreBundle\Service\FieldExtensionRenderService" public="true">
         </service>
 
+        <service id="chameleon_system_core.cms_module_header.edit_language_selector_provider"
+                 class="ChameleonSystem\CoreBundle\Service\EditLanguageSelectorProvider"
+                 public="true">
+        </service>
+
         <service id="chameleon_system_core.http_client" class="Symfony\Contracts\HttpClient\HttpClientInterface" public="true">
             <factory class="Symfony\Component\HttpClient\HttpClient" method="create" />
         </service>

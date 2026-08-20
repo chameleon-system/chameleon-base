@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\BackendTwigExtension;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
+use ChameleonSystem\CoreBundle\Service\EditLanguageSelectorProviderInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -26,7 +27,6 @@ use ChameleonSystem\ViewRendererBundle\objects\TPkgViewRendererLessCompiler;
 use Doctrine\DBAL\Connection;
 use esono\pkgCmsCache\CacheInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -551,29 +551,11 @@ class MTHeader extends TCMSModelBase
 
         if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
             $editLanguageSelectorProvider = $this->getEditLanguageSelectorProvider();
-            if (null !== $editLanguageSelectorProvider && true === $editLanguageSelectorProvider->isEnabled()) {
-                $selectorData = $editLanguageSelectorProvider->getSelectorData();
-                $activeItem = $selectorData['active'] ?? null;
-
-                if (null !== $activeItem) {
-                    $currentLanguage = strtoupper((string) $activeItem['iconIsoCode']);
-                    $this->data['activeEditLanguageSelectionKey'] = (string) $activeItem['selectionKey'];
-                    $this->data['activeEditLanguageLabel'] = (string) $activeItem['label'];
-                }
-
-                foreach ($selectorData['items'] as $item) {
-                    $editLanguageItems[] = [
-                        'selectionKey' => (string) $item['selectionKey'],
-                        'label' => (string) $item['label'],
-                        'iconIsoCode' => strtoupper((string) $item['iconIsoCode']),
-                    ];
-                    $editLanguages[(string) $item['selectionKey']] = (string) $item['label'];
-                }
-
-                $this->data['editLanguageItems'] = $editLanguageItems;
-                $this->data['editLanguageOptions'] = $html;
-                $this->data['editLanguages'] = $editLanguages;
-                $this->data['activeEditLanguageIso'] = $currentLanguage;
+            if (true === $editLanguageSelectorProvider->isEnabled()) {
+                $this->data = array_merge(
+                    $this->data,
+                    $editLanguageSelectorProvider->getModuleViewData($editLanguageSelectorProvider->getSelectorData())
+                );
 
                 return;
             }
@@ -625,7 +607,7 @@ class MTHeader extends TCMSModelBase
             return;
         }
         $editLanguageSelectorProvider = $this->getEditLanguageSelectorProvider();
-        if (null !== $editLanguageSelectorProvider && true === $editLanguageSelectorProvider->isEnabled()) {
+        if (true === $editLanguageSelectorProvider->isEnabled()) {
             $editLanguageSelectorProvider->applySelection($editLanguageIso);
         } else {
             /**  BackendSessionInterface $backendSession */
@@ -644,9 +626,7 @@ class MTHeader extends TCMSModelBase
             '_fnc',
             $authenticityTokenId,
             ]);
-        if (null !== $editLanguageSelectorProvider && method_exists($editLanguageSelectorProvider, 'getRedirectParameterListAfterSelection')) {
-            $parameterList = $editLanguageSelectorProvider->getRedirectParameterListAfterSelection($parameterList);
-        }
+        $parameterList = $editLanguageSelectorProvider->getRedirectParameterListAfterSelection($parameterList);
         $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameterList, '?', '&');
         $this->getRedirect()->redirect($url);
     }
@@ -812,12 +792,8 @@ class MTHeader extends TCMSModelBase
         return ServiceLocator::get('router');
     }
 
-    private function getEditLanguageSelectorProvider(): ?object
+    private function getEditLanguageSelectorProvider(): EditLanguageSelectorProviderInterface
     {
-        try {
-            return ServiceLocator::get('chameleon_system_core.cms_module_header.edit_language_selector_provider');
-        } catch (ServiceNotFoundException) {
-            return null;
-        }
+        return ServiceLocator::get('chameleon_system_core.cms_module_header.edit_language_selector_provider');
     }
 }
