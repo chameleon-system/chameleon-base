@@ -14,6 +14,7 @@ use ChameleonSystem\CoreBundle\Bridge\Chameleon\Twig\BackendTwigExtension;
 use ChameleonSystem\CoreBundle\Interfaces\FlashMessageServiceInterface;
 use ChameleonSystem\CoreBundle\Security\AuthenticityToken\AuthenticityTokenManagerInterface;
 use ChameleonSystem\CoreBundle\Service\BackendBreadcrumbServiceInterface;
+use ChameleonSystem\CoreBundle\Service\EditLanguageSelectorProviderInterface;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
@@ -549,7 +550,17 @@ class MTHeader extends TCMSModelBase
         $securityHelper = $this->getSecurityHelperAccess();
 
         if ($securityHelper->isGranted(CmsUserRoleConstants::CMS_USER)) {
-            /** @var BackendSessionInterface $backendSession */
+            $editLanguageSelectorProvider = $this->getEditLanguageSelectorProvider();
+            if (true === $editLanguageSelectorProvider->isEnabled()) {
+                $this->data = array_merge(
+                    $this->data,
+                    $editLanguageSelectorProvider->getModuleViewData($editLanguageSelectorProvider->getSelectorData())
+                );
+
+                return;
+            }
+
+            /**  BackendSessionInterface $backendSession */
             $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
 
             $currentLanguage = $backendSession->getCurrentEditLanguageIso6391();
@@ -595,9 +606,14 @@ class MTHeader extends TCMSModelBase
         if (null === $editLanguageIso) {
             return;
         }
-        /** @var BackendSessionInterface $backendSession */
-        $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
-        $backendSession->setCurrentEditLanguageIso6391($editLanguageIso);
+        $editLanguageSelectorProvider = $this->getEditLanguageSelectorProvider();
+        if (true === $editLanguageSelectorProvider->isEnabled()) {
+            $editLanguageSelectorProvider->applySelection($editLanguageIso);
+        } else {
+            /**  BackendSessionInterface $backendSession */
+            $backendSession = ServiceLocator::get('chameleon_system_cms_backend.backend_session');
+            $backendSession->setCurrentEditLanguageIso6391($editLanguageIso);
+        }
 
         // we need to redirect to the current page to ensure the change from taking hold
         // now call page again... but without module_fnc
@@ -605,10 +621,12 @@ class MTHeader extends TCMSModelBase
         $parameterList = $this->global->GetUserData(null, [
             'module_fnc',
             'editLanguageID',
+            'editLanguageIsoCode',
             '_noModuleFunction',
             '_fnc',
             $authenticityTokenId,
             ]);
+        $parameterList = $editLanguageSelectorProvider->getRedirectParameterListAfterSelection($parameterList);
         $url = PATH_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameterList, '?', '&');
         $this->getRedirect()->redirect($url);
     }
@@ -772,5 +790,10 @@ class MTHeader extends TCMSModelBase
     private function getRouter(): RouterInterface
     {
         return ServiceLocator::get('router');
+    }
+
+    private function getEditLanguageSelectorProvider(): EditLanguageSelectorProviderInterface
+    {
+        return ServiceLocator::get('chameleon_system_core.cms_module_header.edit_language_selector_provider');
     }
 }
