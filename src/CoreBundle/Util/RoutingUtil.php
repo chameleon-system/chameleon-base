@@ -85,7 +85,7 @@ class RoutingUtil implements RoutingUtilInterface
     public function getDomainRequirement(\TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
         $domainList = \TdbCmsPortalDomainsList::GetListForCmsPortalId($portal->id, $language->id);
-        $primaryDomain = null;
+        $primaryDomains = [];
         $otherDomains = [];
         $routePrefix = $this->urlPrefixGenerator->generatePrefix($portal, $language);
         while ($domain = $domainList->Next()) {
@@ -96,14 +96,14 @@ class RoutingUtil implements RoutingUtilInterface
                 continue;
             }
             if ($domain->fieldIsMasterDomain) {
-                $primaryDomain = $domain;
+                $primaryDomains[] = $domain;
             } else {
                 $otherDomains[] = $domain;
             }
         }
 
         $domains = [];
-        if (null !== $primaryDomain) {
+        foreach ($primaryDomains as $primaryDomain) {
             $domainNames = $this->getDomainNames($primaryDomain, $secure);
             if ('' !== $domainNames) {
                 $domains[] = $domainNames;
