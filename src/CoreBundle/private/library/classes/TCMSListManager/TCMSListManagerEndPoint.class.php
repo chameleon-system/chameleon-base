@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\ServiceLocator;
+use ChameleonSystem\CoreBundle\Service\ListManagerQueryRestrictionProviderInterface;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
 use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\MltFieldUtil;
@@ -195,12 +196,10 @@ class TCMSListManagerEndPoint
                 }
             }
 
-            $backendLocaleRestrictionService = $this->GetBackendLocaleRestrictionService();
-            if (null !== $backendLocaleRestrictionService) {
-                $backendLocaleRestriction = $backendLocaleRestrictionService->getSqlRestrictionForManagedListTable($this->oTableConf->sqlData['name'] ?? null);
-                if (!empty($backendLocaleRestriction)) {
-                    $filterQuery = $backendLocaleRestrictionService->appendSqlRestriction($filterQuery, $backendLocaleRestriction);
-                }
+            $listManagerQueryRestrictionProvider = $this->GetListManagerQueryRestrictionProvider();
+            $listManagerQueryRestriction = $listManagerQueryRestrictionProvider->getSqlRestrictionForManagedListTable($this->oTableConf->sqlData['name'] ?? null);
+            if (!empty($listManagerQueryRestriction)) {
+                $filterQuery = $listManagerQueryRestrictionProvider->appendSqlRestriction($filterQuery, $listManagerQueryRestriction);
             }
 
             $sCustomGroupBy = $this->GetCustomGroupBy();
@@ -210,13 +209,9 @@ class TCMSListManagerEndPoint
         return $filterQuery;
     }
 
-    protected function GetBackendLocaleRestrictionService(): ?object
+    protected function GetListManagerQueryRestrictionProvider(): ListManagerQueryRestrictionProviderInterface
     {
-        try {
-            return ServiceLocator::get('esono_i18n.backend_locale_context.domain_restriction');
-        } catch (Throwable) {
-            return null;
-        }
+        return ServiceLocator::get('chameleon_system_core.list_manager_query_restriction_provider');
     }
 
     /**
