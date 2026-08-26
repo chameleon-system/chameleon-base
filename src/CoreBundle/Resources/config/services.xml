@@ -989,6 +989,11 @@
                  public="true">
         </service>
 
+        <service id="chameleon_system_core.list_manager_query_restriction_provider"
+                 class="ChameleonSystem\CoreBundle\Service\ListManagerQueryRestrictionProvider"
+                 public="true">
+        </service>
+
         <service id="chameleon_system_core.http_client" class="Symfony\Contracts\HttpClient\HttpClientInterface" public="true">
             <factory class="Symfony\Component\HttpClient\HttpClient" method="create" />
         </service>
