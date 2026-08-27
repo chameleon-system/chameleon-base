@@ -13,6 +13,7 @@ use ChameleonSystem\CoreBundle\Event\RecordPositionUpdatedEvent;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use Doctrine\DBAL\Connection;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class CMSFieldPositionRPC extends TCMSModelBase
 {
@@ -335,6 +336,7 @@ COMMAND;
     {
         return ServiceLocator::get('database_connection');
     }
+
     private function getEventDispatcher(): EventDispatcherInterface
     {
         return ServiceLocator::get('event_dispatcher');
