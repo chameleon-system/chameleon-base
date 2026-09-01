@@ -502,9 +502,9 @@ class TCMSTableEditorEndPoint
                         $oMenuItem->href = PATH_CMS_CONTROLLER.'?'.TTools::GetArrayAsURLForJavascript($aParameter);
                         $this->oMenuItems->AddItem($oMenuItem);
                     }
-                    // now add custom items
-                    $this->GetCustomMenuItems();
                 }
+                // now add custom items
+                $this->GetCustomMenuItems();
             } else {
                 $this->oMenuItems->GoToStart();
             }
