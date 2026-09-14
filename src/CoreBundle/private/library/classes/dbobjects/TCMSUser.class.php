@@ -272,7 +272,9 @@ class TCMSUser extends TCMSRecord
         if ($sImageID >= 1000 || !is_numeric($sImageID)) {
             $oImage = new TCMSImage();
             /* @var $oImage TCMSImage */
-            $oImage->Load($sImageID);
+            if (false === $oImage->Load($sImageID)) {
+                return $imageTag;
+            };
             $oThumbnail = $oImage->GetSquareThumbnail($iThumbWidthHeight);
             /* @var $oThumbnail TCMSImage */
             if ($bWithZoom) {
