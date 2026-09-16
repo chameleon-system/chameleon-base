@@ -29,6 +29,13 @@ Reporting an Issue or a Feature Request
 Please report issues and feature requests at the [Chameleon System main
 repository](https://github.com/chameleon-system/chameleon-system/issues).
 
+Security and Contributing
+-------------------------
+
+Please follow the central [security policy](https://github.com/chameleon-system/chameleon-system/blob/master/SECURITY.md)
+and [contribution guide](https://github.com/chameleon-system/chameleon-system/blob/master/CONTRIBUTING.md) in the
+Chameleon System main repository.
+
 Additional Documentation
 ------------------------
 
