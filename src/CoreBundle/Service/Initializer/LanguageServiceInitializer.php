@@ -23,6 +23,8 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\SecurityBundle\Service\SecurityHelperAccess;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use esono\pkgCmsCache\CacheInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -32,7 +34,9 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     public function __construct(private readonly InputFilterUtilInterface $inputFilterUtil,
         private readonly RequestStack $requestStack,
         private readonly Container $container,
-        private readonly Connection $databaseConnection)
+        private readonly Connection $databaseConnection,
+        private readonly LoggerInterface $logger,
+    )
     {
     }
 
@@ -91,6 +95,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             try {
                 $languageId = $this->getLanguageFromRequestData($this->requestStack->getCurrentRequest());
             } catch (InvalidLanguageException $e) {
+                $this->logger->warning($e->getMessage());
                 $languageId = $this->getFallbackLanguage();
             }
         }
@@ -140,7 +145,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
 
         // language set via url prefix?
         if (true === $activePortal->fieldUseMultilanguage) {
-            $languageId = $this->getLanguageFromUri($request, $activePortal);
+            $languageId = $this->getLanguageFromUri($request, $activePortal, $domain);
             if (null !== $languageId) {
                 return $languageId;
             }
@@ -164,12 +169,87 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     }
 
     /**
+     * @throws Exception
+     * @throws InvalidLanguageException
+     */
+    private function getPermittedLanguageForPortalDomain(\TdbCmsPortal $activePortal, \TdbCmsPortalDomains $domain): array
+    {
+        $cache = $this->getCacheService();
+        $key = $cache->getKey(
+            [
+                'method'=>__METHOD__,
+                'id'=>$activePortal->id,
+                'domain'=> $domain->id,
+                'enable_all_languages_for_frontend' => $activePortal->GetActivateAllPortalLanguages()
+            ], false);
+        $permittedLanguages = $cache->get($key);
+        if (null !== $permittedLanguages) {
+            return $permittedLanguages;
+        }
+        $permittedIds = $domain->getDomainLanguageIds();
+        if ([] === $permittedIds) {
+            $permittedIds = $activePortal->GetFieldCmsLanguageIdList();
+        }
+        if ([] === $permittedIds) {
+            return [];
+        }
+
+        $query = "SELECT LANG.`id`, 
+                         LANG.`iso_6391`, 
+                         LANG.`url_prefix`, 
+                         COALESCE(NULLIF(LANG.`url_prefix`, ''), LANG.`iso_6391`) AS url_alias
+                    FROM cms_language AS LANG
+              INNER JOIN cms_portal_cms_language_mlt AS PORTAL_LANG ON PORTAL_LANG.target_id = LANG.id
+                   WHERE PORTAL_LANG.source_id = :portalId AND LANG.id IN (:permittedIds)";
+        if (false === $activePortal->GetActivateAllPortalLanguages()) {
+            $query .= " AND LANG.`active_for_front_end` = '1'";
+        }
+        $permittedLanguageRows = $this->databaseConnection->fetchAllAssociative($query,
+            [
+                'portalId' => $activePortal->id,
+                'permittedIds' => $permittedIds
+            ],
+            [
+                'permittedIds' => Connection::PARAM_STR_ARRAY
+            ]
+        );
+        $permittedLanguages = [];
+        foreach ($permittedLanguageRows as $permittedLanguageRow) {
+            if (true === isset($permittedLanguages[$permittedLanguageRow['url_alias']])) {
+                throw new InvalidLanguageException(
+                    sprintf(
+                        "There is more than one language for the active portal (%s) and domain (%s) that is set to use the url same prefix '%s'. language %s and %s",
+                        $activePortal->id, $domain->id,
+                        $permittedLanguageRow['url_alias'],
+                        $permittedLanguages[$permittedLanguageRow['url_alias']]['id'],
+                        $permittedLanguageRow['id'],
+                    )
+                );
+            }
+            $permittedLanguages[$permittedLanguageRow['url_alias']] = $permittedLanguageRow;
+        }
+        $cache->set($key, $permittedLanguages, [
+            ['table'=>'cms_portal', 'id'=>$activePortal->id],
+            ['table'=>'cms_portal_domains', 'id'=>$domain->id],
+            ['table'=>'cms_language', 'id'=>null]
+        ]);
+
+        return $permittedLanguages;
+    }
+
+    /**
      * @return string|null
      *
      * @throws InvalidLanguageException
      */
-    private function getLanguageFromUri(Request $request, \TdbCmsPortal $activePortal)
+    private function getLanguageFromUri(Request $request, \TdbCmsPortal $activePortal, \TdbCmsPortalDomains $domain)
     {
+        $permittedLanguages = $this->getPermittedLanguageForPortalDomain($activePortal, $domain);
+
+        if ([] === $permittedLanguages) {
+            return null;
+        }
+
         $sRelativePath = $request->getPathInfo();
         $sRelativePath = substr($sRelativePath, 1); // remove "/";
         $aPathParts = explode('/', $sRelativePath);
@@ -177,15 +257,20 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
         if ('' !== $activePortal->fieldIdentifier && count($aPathParts) > 0) {
             ++$iLangIndex;
         }
-        $languageId = null;
-        if (isset($aPathParts[$iLangIndex])) {
-            $languageCode = $aPathParts[$iLangIndex];
-            if ('' !== $languageCode) {
-                $languageId = $this->getLanguageFromPersistence($activePortal, $languageCode);
-            }
+        if (false === isset($aPathParts[$iLangIndex])) {
+            return null;
         }
 
-        return $languageId;
+        $languageCode = $aPathParts[$iLangIndex];
+        if (empty($languageCode)) {
+            return null;
+        }
+
+        if (false === isset($permittedLanguages[$languageCode])) {
+            return null;
+        }
+
+        return $permittedLanguages[$languageCode]['id'];
     }
 
     /**
@@ -231,7 +316,7 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
                   FROM `cms_portal_cms_language_mlt` AS pl
                   RIGHT OUTER JOIN `cms_language` AS l
                   ON pl.`target_id` = l.`id`
-                  WHERE l.`iso_6391` = :languageCode OR l.`url_prefix` = :languageCode';
+                  WHERE l.`iso_6391` = :languageCode';
     }
 
     /**
@@ -359,5 +444,10 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
     private function getPageService(): PageServiceInterface
     {
         return $this->container->get('chameleon_system_core.page_service');
+    }
+
+    private function getCacheService(): CacheInterface
+    {
+        return $this->container->get('chameleon_system_cms_cache.cache');
     }
 }
