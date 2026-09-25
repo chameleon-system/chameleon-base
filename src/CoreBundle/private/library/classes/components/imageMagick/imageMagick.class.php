@@ -492,7 +492,8 @@ class imageMagick
             }
         }
 
-        $command = $this->sImageMagickDir.'/identify -format "%[EXIF:Orientation]" '.escapeshellarg($this->oSourceFile->sPath);
+        // ImageMagick's "orientation" includes EXIF orientation and returns Undefined without a warning when absent.
+        $command = $this->sImageMagickDir.'/identify -format "%[orientation]" '.escapeshellarg($this->oSourceFile->sPath);
         exec($command, $output, $returnCode);
 
         if (0 === $returnCode && isset($output[0])) {
