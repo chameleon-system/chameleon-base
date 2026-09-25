@@ -184,7 +184,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             ], false);
         $permittedLanguages = $cache->get($key);
         if (null !== $permittedLanguages) {
-
             return $permittedLanguages;
         }
         $permittedIds = $domain->getDomainLanguageIds();
@@ -192,7 +191,6 @@ class LanguageServiceInitializer implements LanguageServiceInitializerInterface
             $permittedIds = $activePortal->GetFieldCmsLanguageIdList();
         }
         if ([] === $permittedIds) {
-
             return [];
         }
 
