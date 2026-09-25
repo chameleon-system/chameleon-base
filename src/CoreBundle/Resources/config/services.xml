@@ -393,6 +393,7 @@
             <argument type="service" id="request_stack" />
             <argument type="service" id="service_container" />
             <argument type="service" id="database_connection" />
+            <argument type="service" id="logger" />
         </service>
 
         <service id="chameleon_system_core.supported_languages_service" class="ChameleonSystem\CoreBundle\Service\SupportedLanguagesService">
