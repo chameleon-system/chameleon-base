@@ -16,7 +16,8 @@ namespace ChameleonSystem\CoreBundle\Service;
  */
 interface LanguageServiceInterface
 {
-    public function isInitialized():bool;
+    public function isInitialized(): bool;
+
     /**
      * Returns the language ID defined in the backend as the base language.
      * This is the language used for all multi-language fields if you do not specify the locale as part of the field name.
