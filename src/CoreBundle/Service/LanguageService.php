@@ -37,6 +37,13 @@ class LanguageService implements LanguageServiceInterface
     ) {
     }
 
+    public function isInitialized(): bool
+    {
+        if (true === $this->isInitializing) {
+            return false;
+        }
+        return null !== $this->activeLanguage;
+    }
     /**
      * {@inheritdoc}
      */
