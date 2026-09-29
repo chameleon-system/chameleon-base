@@ -1712,6 +1712,8 @@ class TCMSTableEditorEndPoint
         }
 
         if ($databaseChanged) {
+            // Invalidate query results before reloading the saved record.
+            $this->getCacheService()->callTrigger($tableName, $this->sId);
             $this->LoadDataFromDatabase();
             if (true === $this->isRecordingActive() && \count($dataForChangeRecorder) > 0) {
                 $this->writePostWriteLogChangeData(
@@ -1722,8 +1724,6 @@ class TCMSTableEditorEndPoint
                     $comments
                 );
             }
-
-            $this->getCacheService()->callTrigger($tableName, $this->sId);
         } else {
             // we need this because we use a redirect later and would not see the error message
             TTools::WriteLogEntrySimple('SQL Error: '.$error, 1, __FILE__, __LINE__);
