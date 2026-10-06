@@ -2244,9 +2244,42 @@ class TCMSLogChange
         /** @var QueryInterface $operation */
         $operation = ServiceLocator::get($serviceId);
         try {
+            $oldField = null;
+            $fieldId = $migrationQueryData->getWhereEquals()['id'] ?? null;
+            if (
+                'chameleon_system_database_migration.query.update' === $serviceId
+                && 'cms_field_conf' === $migrationQueryData->getTableName()
+                && array_key_exists('field_default_value', $migrationQueryData->getFields())
+                && null !== $fieldId
+            ) {
+                $oldField = self::getDatabaseConnection()->fetchAssociative(
+                    'SELECT `cms_field_conf`.`name`, `cms_field_conf`.`field_default_value`,
+                            `cms_tbl_conf`.`name` AS `table_name`, `cms_field_type`.`mysql_type`
+                       FROM `cms_field_conf`
+                       JOIN `cms_tbl_conf` ON `cms_tbl_conf`.`id` = `cms_field_conf`.`cms_tbl_conf_id`
+                       JOIN `cms_field_type` ON `cms_field_type`.`id` = `cms_field_conf`.`cms_field_type_id`
+                      WHERE `cms_field_conf`.`id` = ?',
+                    [$fieldId]
+                );
+            }
+
             [$query, $queryParams] = $operation->execute($migrationQueryData);
             self::outputSuccess($line, $query, $queryParams);
             self::logSuccess($line, $query, $queryParams);
+
+            if (is_array($oldField) && !empty($oldField['mysql_type'])) {
+                $newDefault = $migrationQueryData->getFields()['field_default_value'];
+                $oldDefault = $oldField['field_default_value'];
+                $db = self::getDatabaseConnection();
+                $savedField = $db->fetchAssociative('SELECT `field_default_value` FROM `cms_field_conf` WHERE `id` = ?', [$fieldId]);
+                if ((string) $oldDefault !== (string) $newDefault && false !== $savedField && (string) $savedField['field_default_value'] === (string) $newDefault) {
+                    [$defaultQuery, $defaultParams] = TCMSField::updateDefaultValueInTable(
+                        $db, $oldField['table_name'], $oldField['name'], (string) $newDefault, (string) $oldDefault, true
+                    );
+                    self::outputSuccess($line, $defaultQuery, $defaultParams);
+                    self::logSuccess($line, $defaultQuery, $defaultParams);
+                }
+            }
         } catch (Exception $e) {
             self::outputError($e);
             self::logError($line, $e);

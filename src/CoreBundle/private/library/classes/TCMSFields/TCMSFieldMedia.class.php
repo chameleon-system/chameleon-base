@@ -456,10 +456,11 @@ class TCMSFieldMedia extends TCMSField implements DoctrineTransformableInterface
      * @param string $sFieldDefaultValue
      * @param string $sFieldName
      * @param bool $bUpdateExistingRecords
+     * @param string|null $previousDefaultValue
      */
-    protected function UpdateFieldDefaultValue($sFieldDefaultValue, $sFieldName, $bUpdateExistingRecords = false)
+    protected function UpdateFieldDefaultValue($sFieldDefaultValue, $sFieldName, $bUpdateExistingRecords = false, $previousDefaultValue = null)
     {
-        parent::UpdateFieldDefaultValue($sFieldDefaultValue, $sFieldName, $bUpdateExistingRecords);
+        parent::UpdateFieldDefaultValue($sFieldDefaultValue, $sFieldName, $bUpdateExistingRecords, $previousDefaultValue);
 
         // make default value string to an array so we can count and loop
         $aFieldDefaultValue = explode(',', $sFieldDefaultValue);

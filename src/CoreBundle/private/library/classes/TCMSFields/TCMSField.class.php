@@ -583,6 +583,7 @@ class TCMSField implements TCMSFieldVisitableInterface
         if (null !== $postData) {
             $field_default_value = '';
             $updateExistingRecords = false;
+            $previousDefaultValue = $postData['previous_field_default_value'] ?? null;
             if (isset($postData['field_default_value'])) {
                 $field_default_value = $postData['field_default_value'];
             }
@@ -592,10 +593,14 @@ class TCMSField implements TCMSFieldVisitableInterface
         } else {
             $updateExistingRecords = (bool) $inputFilterUtil->getFilteredInput('UpdateRecordsWithOldDefaultValue');
             $field_default_value = $inputFilterUtil->getFilteredInput('field_default_value');
+            $previousDefaultValue = null;
         }
 
-        if ('' !== $field_default_value) {
-            $this->UpdateFieldDefaultValue($field_default_value, $newName, $updateExistingRecords);
+        $defaultChanged = null === $previousDefaultValue
+            ? '' !== $field_default_value
+            : (string) $previousDefaultValue !== (string) $field_default_value;
+        if ($defaultChanged) {
+            $this->UpdateFieldDefaultValue($field_default_value, $newName, $updateExistingRecords, $previousDefaultValue);
         }
 
         $transaction = [new LogChangeDataModel($query)];
@@ -608,30 +613,36 @@ class TCMSField implements TCMSFieldVisitableInterface
      * @param string $fieldDefaultValue
      * @param string $fieldName
      * @param bool $updateExistingRecords
+     * @param string|null $previousDefaultValue
      *
      * @throws Doctrine\DBAL\DBALException
      */
-    protected function UpdateFieldDefaultValue($fieldDefaultValue, $fieldName, $updateExistingRecords = false)
+    protected function UpdateFieldDefaultValue($fieldDefaultValue, $fieldName, $updateExistingRecords = false, $previousDefaultValue = null)
     {
         if (true === $this->oDefinition->isVirtualField()) {
             return;
         }
 
-        $connection = $this->getDatabaseConnection();
+        self::updateDefaultValueInTable(
+            $this->getDatabaseConnection(),
+            $this->sTableName,
+            $fieldName,
+            $fieldDefaultValue,
+            $previousDefaultValue ?? $this->oDefinition->sqlData['field_default_value'],
+            $updateExistingRecords
+        );
+    }
 
-        $quotedTableName = $connection->quoteIdentifier($this->sTableName);
-        $quotedFieldName = $connection->quoteIdentifier($fieldName);
-        $quotedFieldDefaultValue = $connection->quote($fieldDefaultValue);
+    public static function updateDefaultValueInTable(Connection $connection, string $tableName, string $fieldName, string $newDefault, string $oldDefault, bool $updateExistingRecords = false): array
+    {
+        $quotedTable = $connection->quoteIdentifier($tableName);
+        $quotedField = $connection->quoteIdentifier($fieldName);
+        $query = "UPDATE $quotedTable SET $quotedField = ? WHERE $quotedField = ?";
+        $params = [$newDefault, $updateExistingRecords ? $oldDefault : ''];
 
-        $updateQuery = "UPDATE $quotedTableName
-                        SET $quotedFieldName = $quotedFieldDefaultValue
-                        WHERE $quotedFieldName = ''";
-        if ($updateExistingRecords) {
-            $quotedFieldDefaultValueFromSqlData = $connection->quote($this->oDefinition->sqlData['field_default_value']);
-            $updateQuery .= " OR $quotedFieldName = $quotedFieldDefaultValueFromSqlData";
-        }
+        $connection->executeStatement($query, $params);
 
-        $connection->executeQuery($updateQuery);
+        return [$query, $params];
     }
 
     /**
