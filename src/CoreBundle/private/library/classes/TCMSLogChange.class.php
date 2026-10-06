@@ -178,7 +178,7 @@ class TCMSLogChange
 
         if (false !== $aType) {
             $fieldTypeId = $aType['id'];
-        } else if(true === $displayErrorOnUnknownField) {
+        } elseif (true === $displayErrorOnUnknownField) {
             self::DisplayErrorMessage("ERROR: Unable to find field type [{$fieldTypeCodename}] in TCMSLogChange::GetFieldType");
         }
 
