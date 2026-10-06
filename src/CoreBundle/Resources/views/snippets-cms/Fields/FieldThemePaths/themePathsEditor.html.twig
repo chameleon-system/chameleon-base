@@ -90,7 +90,7 @@
 
         function updateTextarea() {
             const items = list.querySelectorAll('.path-text');
-            const values = Array.from(items).reverse().map(el => el.textContent.trim());
+            const values = Array.from(items).map(el => el.textContent.trim());
             if (textarea) {
                 textarea.value = values.join("\n");
                 CHAMELEON.CORE.MTTableEditor.bCmsContentChanged = true;
@@ -108,7 +108,7 @@
             }
 
             const li = createListItem(value);
-            list.insertBefore(li, list.firstChild);
+            list.appendChild(li);
             input.value = '';
             updateTextarea();
             updateOrderNumbers();
@@ -119,7 +119,7 @@
         if (initialPathsJson) {
             try {
                 const initialPaths = JSON.parse(initialPathsJson);
-                initialPaths.reverse().forEach(path => {
+                initialPaths.forEach(path => {
                     list.appendChild(createListItem(path));
                 });
                 updateOrderNumbers();
