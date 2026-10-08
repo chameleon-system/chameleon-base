@@ -10,9 +10,6 @@ class FieldThemePaths extends \TCMSFieldText
     {
         $paths = array_filter(array_map('trim', explode("\n", $this->data)));
 
-        // Invert the list: last entry is first
-        $paths = array_reverse($paths);
-
         $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('paths', $paths);
         $viewRenderer->AddSourceObject('id', $this->name);
