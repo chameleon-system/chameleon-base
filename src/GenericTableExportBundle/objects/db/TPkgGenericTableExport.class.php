@@ -221,15 +221,13 @@ class TPkgGenericTableExport extends TPkgGenericTableExportAutoParent
 
         // Check if we have additional, profile-specific mappers
         if (!empty($this->fieldMapperConfig)) {
-            $aMapperList = explode(';', $this->fieldMapperConfig);
-            if (count($aMapperList) > 0) {
-                foreach ($aMapperList as $sMapperConf) {
-                    $aMapper = explode(',', $sMapperConf);
-                    if (count($aMapper) > 0) {
-                        $mapperIdentifier = $aMapper[0];
-                        $oViewRenderer->addMapperFromIdentifier($mapperIdentifier);
-                    }
+            foreach (explode(';', $this->fieldMapperConfig) as $mapperConfig) {
+                $mapperIdentifier = trim(explode(',', $mapperConfig, 2)[0]);
+                if ('' === $mapperIdentifier) {
+                    continue;
                 }
+
+                $oViewRenderer->addMapperFromIdentifier($mapperIdentifier);
             }
         }
 
