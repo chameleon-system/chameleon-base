@@ -10,6 +10,7 @@
  */
 
 use ChameleonSystem\CoreBundle\DatabaseAccessLayer\DatabaseAccessLayerCmsMedia;
+use ChameleonSystem\CoreBundle\Service\AiImageLabelService;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\ServiceLocator;
 use ChameleonSystem\CoreBundle\Util\FieldTranslationUtil;
@@ -24,13 +25,6 @@ use Symfony\Component\Filesystem\Filesystem;
  **/
 class TCMSImageEndpoint
 {
-    private const AI_LABEL_VARIANT_DARK = 'dark';
-    private const AI_LABEL_VARIANT_LIGHT = 'light';
-    private const AI_LABEL_MAX_WIDTH_PERCENT = 10;
-    private const AI_LABEL_PADDING_PERCENT = 2;
-    private const AI_LABEL_MIN_WIDTH = 5;
-    private const AI_LABEL_CACHE_VERSION = 3;
-
     /**
      * holds the sql record.
      */
@@ -1391,11 +1385,7 @@ class TCMSImageEndpoint
             $md5Parts = $id.'_'.$md5Parts;
         }
         if ($this->shouldApplyAiLabel()) {
-            $md5Parts .= '_ai-label-'.$this->getAiLabelVariant()
-                .'-w'.self::AI_LABEL_MAX_WIDTH_PERCENT
-                .'-p'.self::AI_LABEL_PADDING_PERCENT
-                .'-min'.self::AI_LABEL_MIN_WIDTH
-                .'-v'.self::AI_LABEL_CACHE_VERSION;
+            $md5Parts .= $this->getAiImageLabelService()->getCacheKeySuffix(true, $this->getAiLabelVariant());
         }
 
         return md5($md5Parts);
@@ -1403,23 +1393,17 @@ class TCMSImageEndpoint
 
     protected function shouldApplyAiLabel(): bool
     {
-        return isset($this->aData['ai_generated_image']) && '1' === (string) $this->aData['ai_generated_image'];
+        return $this->getAiImageLabelService()->isEnabled($this->aData);
     }
 
     protected function getAiLabelVariant(): string
     {
-        if (isset($this->aData['ai_label_variant']) && self::AI_LABEL_VARIANT_LIGHT === $this->aData['ai_label_variant']) {
-            return self::AI_LABEL_VARIANT_LIGHT;
-        }
-
-        return self::AI_LABEL_VARIANT_DARK;
+        return $this->getAiImageLabelService()->getVariant($this->aData);
     }
 
     protected function getAiLabelAssetPath(): ?string
     {
-        $assetPath = dirname(__DIR__, 4).'/Resources/public/images/ai-label-'.$this->getAiLabelVariant().'.png';
-
-        return is_file($assetPath) ? $assetPath : null;
+        return $this->getAiImageLabelService()->getAssetPath($this->getAiLabelVariant());
     }
 
     protected function getAiLabelPlacement(int $canvasWidth, int $canvasHeight): ?array
@@ -1428,83 +1412,14 @@ class TCMSImageEndpoint
             return null;
         }
 
-        $assetPath = $this->getAiLabelAssetPath();
-        if (null === $assetPath) {
-            return null;
-        }
-
-        $labelSize = getimagesize($assetPath);
-        if (false === $labelSize || 0 === $labelSize[0] || 0 === $labelSize[1]) {
-            return null;
-        }
-
-        $labelWidth = min($labelSize[0], (int) floor($canvasWidth / 100 * self::AI_LABEL_MAX_WIDTH_PERCENT));
-        if ($labelWidth < self::AI_LABEL_MIN_WIDTH) {
-            return null;
-        }
-
-        $labelHeight = (int) round($labelSize[1] * ($labelWidth / $labelSize[0]));
-        $padding = max(4, (int) round(min($canvasWidth, $canvasHeight) / 100 * self::AI_LABEL_PADDING_PERCENT));
-        if ($labelWidth + (2 * $padding) > $canvasWidth || $labelHeight + (2 * $padding) > $canvasHeight) {
-            return null;
-        }
-
-        return [
-            'assetPath' => $assetPath,
-            'width' => $labelWidth,
-            'height' => $labelHeight,
-            'padding' => $padding,
-        ];
+        return $this->getAiImageLabelService()->calculatePlacement($this->getAiLabelAssetPath(), $canvasWidth, $canvasHeight);
     }
 
     protected function applyAiLabelToImageResource($imageResource)
     {
-        $canvasWidth = imagesx($imageResource);
-        $canvasHeight = imagesy($imageResource);
-        $placement = $this->getAiLabelPlacement($canvasWidth, $canvasHeight);
-        if (null === $placement) {
-            return $imageResource;
-        }
+        $placement = $this->getAiLabelPlacement(imagesx($imageResource), imagesy($imageResource));
 
-        $labelResource = imagecreatefrompng($placement['assetPath']);
-        if (false === $labelResource) {
-            return $imageResource;
-        }
-
-        $scaledLabel = imagecreatetruecolor($placement['width'], $placement['height']);
-        imagealphablending($scaledLabel, false);
-        imagesavealpha($scaledLabel, true);
-        $transparent = imagecolorallocatealpha($scaledLabel, 0, 0, 0, 127);
-        imagefill($scaledLabel, 0, 0, $transparent);
-        imagecopyresampled(
-            $scaledLabel,
-            $labelResource,
-            0,
-            0,
-            0,
-            0,
-            $placement['width'],
-            $placement['height'],
-            imagesx($labelResource),
-            imagesy($labelResource)
-        );
-
-        imagealphablending($imageResource, true);
-        imagecopy(
-            $imageResource,
-            $scaledLabel,
-            $canvasWidth - $placement['width'] - $placement['padding'],
-            $canvasHeight - $placement['height'] - $placement['padding'],
-            0,
-            0,
-            $placement['width'],
-            $placement['height']
-        );
-
-        imagedestroy($scaledLabel);
-        imagedestroy($labelResource);
-
-        return $imageResource;
+        return $this->getAiImageLabelService()->applyToGd($imageResource, $placement);
     }
 
     protected function applyAiLabelToImageMagick(imageMagick $imageMagick, int $canvasWidth, int $canvasHeight): void
@@ -2465,6 +2380,11 @@ class TCMSImageEndpoint
     private function getFieldTranslationUtil(): FieldTranslationUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.field_translation');
+    }
+
+    private function getAiImageLabelService(): AiImageLabelService
+    {
+        return ServiceLocator::get('chameleon_system_core.ai_image_label');
     }
 
     private function getPortalDomainService(): PortalDomainServiceInterface
