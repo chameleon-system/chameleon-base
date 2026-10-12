@@ -1,15 +1,44 @@
 {# crop \ChameleonSystem\CoreBundle\MediaManager\LibraryDataModel\ImageCropDataModel #}
 <input type="hidden" name="{{ fieldName }}_image_crop_id" id="{{ fieldName }}_image_crop_id" value="{{ crop.id }}">
-<br>
-<div id="label_{{ fieldName }}_image_crop_id"
-     class="label-image-crop-field">{{ 'chameleon_system_image_crop.field.selected_crop' | trans }}
-    <span>{% if crop %}{{ crop.name | default(crop.imageCropPreset.name) }}{% if crop.name and crop.imageCropPreset.name %} ({{ crop.imageCropPreset.name }}){% endif %}{% else %}-{% endif %}</span>
-</div><br>
-<a class="btn btn-sm btn-default"
-   id="{{ fieldName }}_image_crop_id_reset_button"{% if not crop %} style="display: none;"{% endif %}
-   data-field-name="{{ fieldName }}"><span
-            class="fas fa-trash-alt text-danger"></span> {{ 'chameleon_system_image_crop.field.reset_crop' | trans }}
-</a>
+
+<div class="row mt-2">
+    <div class="col-12 col-lg-6 align-items-stretch d-flex flex-column justify-content-between">
+        <div class="">
+            <div id="label_{{ fieldName }}_image_crop_id" class="d-inline-block mb-2 py-1 px-2 border w-100">
+                {{ 'chameleon_system_image_crop.field.selected_crop' | trans }}<br>
+                <span class="fw-bold">{{ selectedCropLabel|default('-') }}</span>
+            </div>
+            <div>
+                <a class="btn btn-sm btn-light mb-3" id="{{ fieldName }}_image_crop_id_reset_button"{% if not crop %} style="display: none;"{% endif %}
+                   data-field-name="{{ fieldName }}"><i class="fas fa-unlink text-danger pe-2"></i>{{ 'chameleon_system_image_crop.field.reset_crop' | trans }}
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-6">
+        <div id="{{ fieldName }}-saved-crops">
+            <div id="{{ fieldName }}-saved-crops-list-container"{% if savedCrops|default([])|length < 1 %} class="d-none"{% endif %}>
+                <p class="fw-bold mb-0">{{ 'chameleon_system_image_crop.field.crop_list_headline'|trans }}</p>
+                <ul id="saved_crops_list_{{ fieldName }}" class="saved-crops-list p-0 ms-3 my-2">
+                    {% if savedCrops|default([])|length > 0 %}
+                        {% for savedCrop in savedCrops|default([]) %}
+                            <li{% if savedCrop.selected %} class="active"{% endif %}>
+                                <a href="#" data-crop-id="{{ savedCrop.id|e('html_attr') }}" data-field-name="{{ fieldName|e('html_attr') }}" data-image-id="{{ imageId|e('html_attr') }}">{{ savedCrop.name }}</a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li>-</li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div>
+                {{ buttonHtml | raw }}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% if crop %}
     <script type="text/javascript">
         (function ($, window) {
@@ -40,5 +69,8 @@
         window.returnUrlToGetCroppedImageForImageCropField = function () {
             return '{{ urlToGetImage | raw }}';
         };
+        if ('function' === typeof window.refreshImageCropFieldDetails) {
+            window.refreshImageCropFieldDetails('{{ fieldName|e('js') }}', '{{ imageId|e('js') }}');
+        }
     })(jQuery, window);
 </script>

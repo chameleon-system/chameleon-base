@@ -17,24 +17,24 @@
                 <target>Bildausschnitt: %cropName%</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_image_crop.editor.own_croppings">
+                <source>chameleon_system_image_crop.editor.own_croppings</source>
+                <target>Eigene Ausschnitte:</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_image_crop.editor.save">
                 <source>chameleon_system_image_crop.editor.save</source>
-                <target>Ausschnitt speichern (%savingMode%)</target>
+                <target>Ausschnitt speichern</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.editor.save_and_set">
                 <source>chameleon_system_image_crop.editor.save_and_set</source>
-                <target>Ausschnitt speichern (%savingMode%) und setzen</target>
+                <target>Ausschnitt speichern und wählen</target>
             </trans-unit>
 
-            <trans-unit id="chameleon_system_image_crop.editor.saving_mode.update_existing">
-                <source>chameleon_system_image_crop.editor.saving_mode.update_existing</source>
-                <target>bestehenden aktualisieren</target>
-            </trans-unit>
-
-            <trans-unit id="chameleon_system_image_crop.editor.saving_mode.create_new">
-                <source>chameleon_system_image_crop.editor.saving_mode.create_new</source>
-                <target>neuen erstellen</target>
+            <trans-unit id="chameleon_system_image_crop.editor.close">
+                <source>chameleon_system_image_crop.editor.close</source>
+                <target>Schließen</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.editor.crop_name_placeholder">
@@ -47,14 +47,24 @@
                 <target>Name vergeben</target>
             </trans-unit>
 
+            <trans-unit id="chameleon_system_image_crop.field.crop_list_headline">
+                <source>chameleon_system_image_crop.field.crop_list_headline</source>
+                <target>Auswählbare Ausschnitte</target>
+            </trans-unit>
+
             <trans-unit id="chameleon_system_image_crop.field.edit_crop">
                 <source>chameleon_system_image_crop.field.edit_crop</source>
-                <target>Bild-Ausschnitt anpassen</target>
+                <target>Bild-Ausschnitt(e) anlegen/bearbeiten</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.field.selected_crop">
                 <source>chameleon_system_image_crop.field.selected_crop</source>
                 <target>Gewählter Ausschnitt:</target>
+            </trans-unit>
+
+            <trans-unit id="chameleon_system_image_crop.field.custom_crop_suffix">
+                <source>chameleon_system_image_crop.field.custom_crop_suffix</source>
+                <target>Eigener Ausschnitt</target>
             </trans-unit>
 
             <trans-unit id="chameleon_system_image_crop.field.reset_crop">

@@ -50,6 +50,11 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
     public const URL_PARAM_CROP_ID = 'cropId';
 
     public const URL_PARAM_PARENT_IFRAME = 'parentIFrame';
+    public const URL_PARAM_CUSTOM_CROP_NEW = 'customCropNew';
+    public const URL_PARAM_AJAX_MODE = 'ajaxMode';
+    public const URL_PARAM_SAVE_ACTION = 'saveAction';
+    public const SAVE_ACTION_SAVE = 'save';
+    public const SAVE_ACTION_SAVE_AND_SET = 'save_and_set';
 
     public const MESSAGE_CONSUMER_NAME = 'imageCropEditor';
 
@@ -169,7 +174,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $oVisitor->SetMappedValue('urlParameters', $parameters);
         $oVisitor->SetMappedValue('pagedef', self::PAGEDEF_NAME);
 
-        $oVisitor->SetMappedValue('presetList', $this->getPresetList());
+        $oVisitor->SetMappedValue('presetList', $this->getPresetList($crop));
         try {
             $oVisitor->SetMappedValue('customCropList', $this->getCustomCropList($crop));
         } catch (ImageCropEditorException $e) {
@@ -219,7 +224,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
     private function getCrop()
     {
         $cropId = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_CROP_ID);
-        if (null === $cropId) {
+        if (null === $cropId || '' === $cropId) {
             return null;
         }
 
@@ -252,6 +257,10 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
      */
     private function getPresetSystemName()
     {
+        if ('1' === $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_CUSTOM_CROP_NEW, '0')) {
+            return null;
+        }
+
         $crop = $this->getCrop();
         if (null !== $crop) {
             $preset = $crop->getImageCropPreset();
@@ -259,19 +268,35 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
                 return null;
             }
 
+            if (false === $this->isPresetAllowedByRestriction($preset->getSystemName())) {
+                return null;
+            }
+
             return $preset->getSystemName();
         }
 
-        if (null === $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PRESET_NAME)) {
-            $presetRestriction = $this->getPresetRestriction();
-            if (count($presetRestriction) > 0) {
-                return $presetRestriction[0];
+        $presetSystemNameFromRequest = $this->getPresetSystemNameFromRequest(self::URL_PARAM_PRESET_NAME);
+        if (null !== $presetSystemNameFromRequest) {
+            if (false === $this->isPresetAllowedByRestriction($presetSystemNameFromRequest)) {
+                return null;
             }
 
-            return null;
+            return $presetSystemNameFromRequest;
         }
 
-        return $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PRESET_NAME);
+        return null;
+    }
+
+    private function getPresetSystemNameFromRequest(string $parameterName): ?string
+    {
+        $presetSystemName = $this->inputFilterUtil->getFilteredInput($parameterName);
+        if (null === $presetSystemName) {
+            return null;
+        }
+        $presetSystemName = trim($presetSystemName);
+        $presetSystemName = rtrim($presetSystemName, ';');
+
+        return '' !== $presetSystemName ? $presetSystemName : null;
     }
 
     /**
@@ -306,18 +331,23 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             $parameters[self::URL_PARAM_PARENT_IFRAME] = $parentIFrame;
         }
 
+        $presetRestriction = $this->inputFilterUtil->getFilteredInput(self::URL_PARAM_PRESET_RESTRICTION);
+        if (null !== $presetRestriction && '' !== $presetRestriction) {
+            $parameters[self::URL_PARAM_PRESET_RESTRICTION] = $presetRestriction;
+        }
+
         return $parameters;
     }
 
     /**
      * @return array
      */
-    private function getPresetList()
+    private function getPresetList($activeCrop)
     {
         $presetRestriction = $this->getPresetRestriction();
         $presetSystemName = $this->getPresetSystemName();
         $parameters = $this->getUrlParameters();
-
+        $savedPresetCrops = $this->getSavedPresetCrops();
         $presetList = [];
         $presets = \TdbCmsImageCropPresetList::GetList();
         $presetRestrictionCount = \count($presetRestriction);
@@ -333,11 +363,20 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             if ($presetRestrictionCount > 0) {
                 $parameters[self::URL_PARAM_PRESET_RESTRICTION] = implode(';', $presetRestriction);
             }
+
             $presetList[] = [
+                'cropPresetId' => $presetAvailable->id,
                 'name' => $presetAvailable->fieldName,
+                'displayName' => $presetAvailable->fieldName,
+                'systemName' => $presetAvailable->fieldSystemName,
                 'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&'),
                 'active' => $presetAvailable->fieldSystemName === $presetSystemName,
+                'hasSavedCrop' => true === isset($savedPresetCrops[$presetAvailable->fieldSystemName]),
+                'cropImageId' => true === isset($savedPresetCrops[$presetAvailable->fieldSystemName]) ? $savedPresetCrops[$presetAvailable->fieldSystemName]['id'] : '',
             ];
+            if (true === isset($savedPresetCrops[$presetAvailable->fieldSystemName])) {
+                $presetList[\count($presetList) - 1]['displayName'] = $savedPresetCrops[$presetAvailable->fieldSystemName]['displayName'];
+            }
         }
 
         return $presetList;
@@ -353,14 +392,19 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             return [];
         }
         $restriction = explode(';', $restriction);
-        array_walk(
-            $restriction,
-            function ($element) {
-                return trim($element);
-            }
-        );
+        $restriction = array_map('trim', $restriction);
 
-        return $restriction;
+        return array_filter($restriction);
+    }
+
+    private function isPresetAllowedByRestriction(string $presetSystemName): bool
+    {
+        $presetRestriction = $this->getPresetRestriction();
+        if (0 === count($presetRestriction)) {
+            return true;
+        }
+
+        return true === in_array($presetSystemName, $presetRestriction, true);
     }
 
     /**
@@ -373,39 +417,56 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
     private function getCustomCropList($activeCrop = null)
     {
         $customCropList = [];
-        $presetSystemName = $this->getPresetSystemName();
-        $presetRestriction = $this->getPresetRestriction();
-        $parameters = $this->getUrlParameters();
-        unset($parameters[self::URL_PARAM_PRESET_NAME]);
-
-        if (0 !== count($presetRestriction)) {
+        if (0 !== count($this->getPresetRestriction())) {
             return $customCropList;
         }
 
-        $customCropList[] = [
-            'name' => $this->translator->trans('chameleon_system_image_crop.editor.custom_crop_new'),
-            'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&'),
-            'active' => null === $presetSystemName && null === $activeCrop,
-        ];
+        $presetSystemName = $this->getPresetSystemName();
+        $baseParameters = $this->getUrlParameters();
+        unset($baseParameters[self::URL_PARAM_PRESET_NAME], $baseParameters[self::URL_PARAM_CROP_ID]);
 
         $image = $this->getCmsImage();
         if (null === $image) {
+            $customCropNewParameters = $baseParameters;
+            $customCropNewParameters[self::URL_PARAM_CUSTOM_CROP_NEW] = '1';
+            $customCropList[] = [
+                'name' => $this->translator->trans('chameleon_system_image_crop.editor.custom_crop_new'),
+                'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($customCropNewParameters, '?', '&'),
+                'active' => null === $presetSystemName && null === $activeCrop,
+                'hasSavedCrop' => false,
+            ];
+
             return $customCropList;
         }
 
         try {
             $crops = $this->imageCropDataAccess->getExistingCrops($this->getCmsImage());
             foreach ($crops as $crop) {
-                $parameters[self::URL_PARAM_CROP_ID] = $crop->getId();
-                $customCropList[] = [
-                    'name' => $crop->getName(),
-                    'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&'),
-                    'active' => null !== $activeCrop && $crop->getId() === $activeCrop->getId(),
-                ];
+                if (null === $crop->getImageCropPreset() && '' !== trim((string) $crop->getName())) {
+                    $cropParameters = $baseParameters;
+                    $cropParameters[self::URL_PARAM_CROP_ID] = $crop->getId();
+                    $customCropList[] = [
+                        'cropPresetId' => 'custom',
+                        'name' => $crop->getName(),
+                        'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($cropParameters, '?', '&'),
+                        'active' => null !== $activeCrop && $crop->getId() === $activeCrop->getId(),
+                        'hasSavedCrop' => true,
+                        'cropImageId' => $crop->getId(),
+                    ];
+                }
             }
         } catch (ImageCropDataAccessException $e) {
             throw new ImageCropEditorException($e->getMessage(), 0, $e);
         }
+
+        $customCropNewParameters = $baseParameters;
+        $customCropNewParameters[self::URL_PARAM_CUSTOM_CROP_NEW] = '1';
+        $customCropList[] = [
+            'name' => $this->translator->trans('chameleon_system_image_crop.editor.custom_crop_new'),
+            'url' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($customCropNewParameters, '?', '&'),
+            'active' => null === $presetSystemName && null === $activeCrop,
+            'hasSavedCrop' => false,
+        ];
 
         return $customCropList;
     }
@@ -436,7 +497,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $includes = parent::GetHtmlHeadIncludes();
         $includes[] = '
             <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.css').'" rel="stylesheet">
-            <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/css/imageCropEditor.css').'" rel="stylesheet">
+            <link  href="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/css/imageCropEditor.css?v=1').'" rel="stylesheet">
             <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/cropper-1-6-2-dist/cropper.min.js').'"></script>
         ';
 
@@ -450,7 +511,7 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
     {
         $includes = parent::GetHtmlFooterIncludes();
         $includes[] = '
-            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/js/imageCropEditor.js?v1').'"></script>
+            <script src="'.\TGlobal::GetStaticURL('/bundles/chameleonsystemimagecrop/js/imageCropEditor.js?v=1').'"></script>
         ';
 
         return $includes;
@@ -465,12 +526,15 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
 
         $imageId = $this->inputFilterUtil->getFilteredGetInput('imageId');
         $cropId = $this->inputFilterUtil->getFilteredGetInput('cropId');
-        $crop = $this->imageCropDataAccess->getImageCropById(
-            $cropId,
-            $this->backendSession->getCurrentEditLanguageId()
-        );
+        $crop = null;
+        if (null !== $cropId && '' !== $cropId) {
+            $crop = $this->imageCropDataAccess->getImageCropById(
+                $cropId,
+                $this->backendSession->getCurrentEditLanguageId()
+            );
+        }
 
-        if (null === $imageId || null === $crop) {
+        if (null === $imageId) {
             $return['errorMessage'] = $this->translator->trans(
                 'chameleon_system_image_crop.editor.image_or_crop_not_found'
             );
@@ -478,22 +542,28 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         }
 
         $url = null;
-        $croppedImage = $this->cropImageService->getCroppedImageForCmsMediaIdAndCropId(
-            $imageId,
-            $cropId,
-            $this->backendSession->getCurrentEditLanguageId()
-        );
-        if (null !== $croppedImage) {
-            $url = $croppedImage->getImageUrl();
+        if (null !== $cropId && '' !== $cropId) {
+            $croppedImage = $this->cropImageService->getCroppedImageForCmsMediaIdAndCropId(
+                $imageId,
+                $cropId,
+                $this->backendSession->getCurrentEditLanguageId()
+            );
+            if (null !== $croppedImage) {
+                $url = $croppedImage->getImageUrl();
+            }
         }
         $return['imageUrl'] = $url;
 
-        $cropName = $crop->getName();
-        $preset = $crop->getImageCropPreset();
-        if (null !== $preset) {
-            $cropName = ('' === $cropName) ? $preset->getName() : $cropName.' ('.$preset->getName().')';
+        $cropName = '-';
+        if (null !== $crop) {
+            $cropName = $this->getCropDisplayName($crop);
         }
         $return['cropName'] = $cropName;
+        $return['savedCrops'] = $this->getSavedCropsForField(
+            $imageId,
+            $cropId,
+            $this->getPresetRestrictionFromString($this->inputFilterUtil->getFilteredGetInput(self::URL_PARAM_PRESET_RESTRICTION, ''))
+        );
 
         $this->returnAsAjaxResponse($return);
     }
@@ -535,12 +605,10 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         $this->methodCallAllowed[] = 'deleteCrop';
     }
 
-    /**
-     * @return never
-     */
-    protected function saveCrop()
+    protected function saveCrop(): void
     {
         $cmsImage = $this->getCmsImage();
+        $isAjaxMode = '1' === $this->inputFilterUtil->getFilteredPostInput(self::URL_PARAM_AJAX_MODE, '0');
 
         $imageCrop = new ImageCropDataModel(
             null,
@@ -552,6 +620,22 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
         );
 
         $preset = $this->getPreset();
+        if (null === $preset && 0 !== count($this->getPresetRestriction())) {
+            if ($isAjaxMode) {
+                $this->returnAsAjaxError([
+                    'errorMessage' => 'IMAGE-CROP-SAVE-FAILED',
+                ]);
+            }
+            $this->flashMessageService->addMessage(
+                \TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
+                'IMAGE-CROP-SAVE-FAILED'
+            );
+            $parameters = $this->getUrlParameters();
+            $this->redirectService->redirect(
+                URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&')
+            );
+        }
+
         if (null !== $preset) {
             $imageCrop->setImageCropPreset($preset);
         }
@@ -568,12 +652,17 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
 
         try {
             if (null !== $cropId) {
-                $imageCrop->setId($this->inputFilterUtil->getFilteredPostInput(self::URL_PARAM_CROP_ID));
+                $imageCrop->setId($cropId);
                 $this->imageCropDataAccess->updateImageCrop($imageCrop);
             } else {
                 $cropId = $this->imageCropDataAccess->insertImageCrop($imageCrop);
             }
         } catch (ImageCropDataAccessException $e) {
+            if ($isAjaxMode) {
+                $this->returnAsAjaxError([
+                    'errorMessage' => 'IMAGE-CROP-SAVE-FAILED',
+                ]);
+            }
             $this->flashMessageService->addMessage(
                 \TCMSTableEditorManager::MESSAGE_MANAGER_CONSUMER,
                 'IMAGE-CROP-SAVE-FAILED'
@@ -585,14 +674,27 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
             $this->redirectService->redirect(
                 URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&')
             );
-
-            return;
         }
 
         $parameters = $this->getUrlParameters();
 
         $parameters[self::URL_PARAM_SAVED] = 1;
         $parameters[self::URL_PARAM_CROP_ID] = $cropId;
+        $parameters[self::URL_PARAM_AJAX_MODE] = 1;
+
+        $saveAction = $this->inputFilterUtil->getFilteredPostInput(self::URL_PARAM_SAVE_ACTION, self::SAVE_ACTION_SAVE);
+        if ($isAjaxMode) {
+            $return = [
+                'success' => true,
+                'redirectUrl' => URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&'),
+                'cropId' => $cropId,
+                'saveAction' => $saveAction,
+                'fieldName' => $this->inputFilterUtil->getFilteredPostInput(self::URL_PARAM_FIELD_NAME, ''),
+                'cmsImageId' => null !== $cmsImage ? $cmsImage->getId() : '',
+                'urlToGetImage' => $this->generateUrlToGetImage($cmsImage),
+            ];
+            $this->returnAsAjaxResponse($return);
+        }
 
         $this->redirectService->redirect(
             URL_CMS_CONTROLLER.$this->urlUtil->getArrayAsUrl($parameters, '?', '&')
@@ -647,5 +749,121 @@ class ImageCropEditorModule extends \MTPkgViewRendererAbstractModuleMapper
     private function getBreadcrumbService(): BackendBreadcrumbServiceInterface
     {
         return ServiceLocator::get('chameleon_system_core.service.backend_breadcrumb');
+    }
+
+    /**
+     * @return array<string, array{id: string, displayName: string}>
+     */
+    private function getSavedPresetCrops(): array
+    {
+        $savedPresetCrops = [];
+        $image = $this->getCmsImage();
+        if (null === $image) {
+            return $savedPresetCrops;
+        }
+
+        try {
+            $crops = $this->imageCropDataAccess->getExistingCrops($image);
+            foreach ($crops as $crop) {
+                $preset = $crop->getImageCropPreset();
+                if (null === $preset) {
+                    continue;
+                }
+                $savedPresetCrops[$preset->getSystemName()] = [
+                    'id' => $crop->getId(),
+                    'displayName' => $this->getCropDisplayName($crop),
+                ];
+            }
+        } catch (ImageCropDataAccessException $e) {
+            return $savedPresetCrops;
+        }
+
+        return $savedPresetCrops;
+    }
+
+    /**
+     * @param string[] $presetRestriction
+     *
+     * @return array<int, array{name: string, id: string, selected: bool}>
+     */
+    private function getSavedCropsForField(string $imageId, ?string $selectedCropId, array $presetRestriction): array
+    {
+        $savedCrops = [];
+        $image = $this->cmsMediaDataAccess->getCmsMedia($imageId, $this->backendSession->getCurrentEditLanguageId());
+        if (null === $image) {
+            return $savedCrops;
+        }
+
+        $restrictionLookup = [];
+        foreach ($presetRestriction as $restrictedPreset) {
+            $restrictionLookup[$restrictedPreset] = true;
+        }
+
+        try {
+            $crops = $this->imageCropDataAccess->getExistingCrops($image);
+            foreach ($crops as $crop) {
+                $preset = $crop->getImageCropPreset();
+                $cropName = trim($crop->getName());
+                if (null !== $preset) {
+                    if (0 !== count($restrictionLookup) && false === isset($restrictionLookup[$preset->getSystemName()])) {
+                        continue;
+                    }
+                } elseif (0 !== count($restrictionLookup) && (null === $selectedCropId || $selectedCropId !== $crop->getId())) {
+                    continue;
+                }
+
+                if ('' === $cropName && null === $preset) {
+                    continue;
+                }
+
+                $savedCrops[] = [
+                    'name' => $this->getCropDisplayName($crop),
+                    'id' => $crop->getId(),
+                    'selected' => null !== $selectedCropId && '' !== $selectedCropId && $selectedCropId === $crop->getId(),
+                ];
+            }
+        } catch (ImageCropDataAccessException $e) {
+            return [];
+        }
+
+        return $savedCrops;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getPresetRestrictionFromString(string $restriction): array
+    {
+        if ('' === $restriction) {
+            return [];
+        }
+        $restrictionParts = explode(';', $restriction);
+        $restrictionParts = array_map('trim', $restrictionParts);
+
+        return array_values(array_filter($restrictionParts));
+    }
+
+    private function getCropDisplayName(ImageCropDataModel $crop): string
+    {
+        $preset = $crop->getImageCropPreset();
+        $cropName = trim((string) $crop->getName());
+
+        if (null !== $preset) {
+            if ('' === $cropName) {
+                return $preset->getName();
+            }
+
+            return sprintf('%s (%s)', $cropName, $preset->getName());
+        }
+
+        if ('' === $cropName) {
+            return '';
+        }
+
+        return sprintf(
+            '%s (%s)',
+            $cropName,
+            $this->translator->trans('chameleon_system_image_crop.field.custom_crop_suffix')
+        );
     }
 }

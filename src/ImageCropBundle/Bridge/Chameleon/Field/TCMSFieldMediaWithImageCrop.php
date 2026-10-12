@@ -19,10 +19,14 @@ use ChameleonSystem\CoreBundle\Util\InputFilterUtilInterface;
 use ChameleonSystem\CoreBundle\Util\UrlUtil;
 use ChameleonSystem\DatabaseMigration\DataModel\LogChangeDataModel;
 use ChameleonSystem\DatabaseMigration\Query\MigrationQueryData;
+use ChameleonSystem\ImageCrop\DataModel\CmsMediaDataModel;
+use ChameleonSystem\ImageCrop\DataModel\ImageCropDataModel;
+use ChameleonSystem\ImageCrop\Exception\ImageCropDataAccessException;
 use ChameleonSystem\ImageCrop\Interfaces\CmsMediaDataAccessInterface;
 use ChameleonSystem\ImageCrop\Interfaces\ImageCropDataAccessInterface;
 use ChameleonSystem\ImageCropBundle\Bridge\Chameleon\BackendModule\ImageCropEditorModule;
 use Doctrine\DBAL\DBALException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * {@inheritdoc}
@@ -91,13 +95,13 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
     /**
      * {@inheritDoc}
      */
-    public function ChangeFieldDefinition($sOldName, $sNewName, $postData = null)
+    public function ChangeFieldDefinition($oldName, $newName, $postData = null)
     {
         $originalDefinitionData = $this->oDefinition->sqlData;
-        parent::ChangeFieldDefinition($sOldName, $sNewName, $postData);
+        parent::ChangeFieldDefinition($oldName, $newName, $postData);
 
-        $additionalFieldNameOldFieldName = $this->getFieldNameOfAdditionalField($sOldName);
-        $additionalFieldNameNewFieldName = $this->getFieldNameOfAdditionalField($sNewName);
+        $additionalFieldNameOldFieldName = $this->getFieldNameOfAdditionalField($oldName);
+        $additionalFieldNameNewFieldName = $this->getFieldNameOfAdditionalField($newName);
         $databaseConnection = $this->getDatabaseConnection();
 
         $tableName = $databaseConnection->quoteIdentifier($this->sTableName);
@@ -315,7 +319,7 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
     {
         $includes = parent::getHtmlHeadIncludes();
         $includes[] = '<script type="text/javascript" src="'.\TGlobal::GetStaticURL(
-            '/bundles/chameleonsystemimagecrop/js/imageFieldWithCrop.js?v=1'
+            '/bundles/chameleonsystemimagecrop/js/imageFieldWithCrop.js?v=7'
         ).'"></script>';
         $includes[] = '<link href="'.\TGlobal::GetStaticURL(
             '/bundles/chameleonsystemimagecrop/css/imageCropField.css'
@@ -384,12 +388,6 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
         $fieldHtml = '<div class="TCMSFieldMediaWithImageCrop">';
         $fieldHtml .= parent::getHtmlRenderedHtml($bReadOnly);
 
-        $viewRenderer = $this->getViewRenderer();
-        $viewRenderer->AddSourceObject('cropEditorUrl', $this->getImageCropEditorUrl());
-        $viewRenderer->AddSourceObject('fieldName', $this->name);
-        $viewRenderer->AddSourceObject('imageIsSet', $this->isImageSet());
-        $fieldHtml .= $viewRenderer->Render('imageCrop/TCmsFieldMediaWithImageCrop/button.html.twig');
-
         $imageId = $this->_GetFieldValue();
         $languageId = \TdbCmsLanguage::GetNewInstance($this->getBackendSession()->getCurrentEditLanguageId())->id;
         $crop = null;
@@ -403,20 +401,18 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
         }
 
         $viewRenderer = $this->getViewRenderer();
+        $viewRenderer->AddSourceObject('cropEditorUrl', $this->getImageCropEditorUrl());
+        $viewRenderer->AddSourceObject('fieldName', $this->name);
+        $buttonHtml = $viewRenderer->Render('imageCrop/TCmsFieldMediaWithImageCrop/button.html.twig');
+
+        $viewRenderer = $this->getViewRenderer();
         $viewRenderer->AddSourceObject('fieldName', $this->name);
         $viewRenderer->AddSourceObject('crop', $crop);
+        $viewRenderer->AddSourceObject('selectedCropLabel', null !== $crop ? $this->getCropDisplayName($crop) : '-');
         $viewRenderer->AddSourceObject('imageId', $imageId);
-
-        $parameters = [
-            'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
-            ImageCropEditorModule::URL_PARAM_IMAGE_ID => $imageId,
-            '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
-            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
-            '_fnc' => 'getImageFieldInformation',
-        ];
-        $urlToGetImage = URL_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameters, '?', '&');
-        $viewRenderer->AddSourceObject('urlToGetImage', $urlToGetImage);
-
+        $viewRenderer->AddSourceObject('savedCrops', $this->getSavedCropsForField($cmsMedia, $crop));
+        $viewRenderer->AddSourceObject('buttonHtml', $buttonHtml);
+        $viewRenderer->AddSourceObject('urlToGetImage', $this->getUrlToGetImage($imageId));
         $fieldHtml .= $viewRenderer->Render('imageCrop/TCmsFieldMediaWithImageCrop/additionalFields.html.twig');
 
         $fieldHtml .= '</div>';
@@ -424,47 +420,70 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
         return $fieldHtml;
     }
 
-    /**
-     * @return \ViewRenderer
-     */
-    protected function getViewRenderer()
+    protected function getViewRenderer(): \ViewRenderer
     {
         $viewRenderer = parent::getViewRenderer();
         $viewRenderer->AddSourceObject('cmsMediaId', $this->_GetFieldValue());
         $viewRenderer->AddSourceObject('imageCropPresetSystemName', $this->getImageCropPresetSystemName());
+        $viewRenderer->AddSourceObject('imageIsSet', $this->isImageSet());
 
         return $viewRenderer;
     }
 
-    /**
-     * @return string|null
-     */
-    private function getImageCropPresetSystemName()
+    private function getUrlToGetImage(string $imageId): string
     {
-        return $this->getFieldTypeConfigKey('imageCropPresetSystemName');
+        $parameters = [
+            'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
+            ImageCropEditorModule::URL_PARAM_IMAGE_ID => $imageId,
+            '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
+            'module_fnc' => ['contentmodule' => 'ExecuteAjaxCall'],
+            '_fnc' => 'getImageFieldInformation',
+        ];
+        $restriction = $this->getImageCropPresetRestriction();
+        if (0 !== count($restriction)) {
+            $parameters[ImageCropEditorModule::URL_PARAM_PRESET_RESTRICTION] = implode(';', $restriction);
+        }
+
+        return URL_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameters, '?', '&');
     }
 
-    /**
-     * @return string
-     */
-    private function getImageCropEditorUrl()
+    private function getImageCropPresetSystemName(): ?string
+    {
+        $presetSystemName = $this->getFieldTypeConfigKey('imageCropPresetSystemName');
+        if (null === $presetSystemName) {
+            return null;
+        }
+        $presetSystemName = trim($presetSystemName);
+        $presetSystemName = rtrim($presetSystemName, ';');
+
+        return '' !== $presetSystemName ? $presetSystemName : null;
+    }
+
+    private function getImageCropEditorUrl(): string
     {
         $parameters = [
             'pagedef' => ImageCropEditorModule::PAGEDEF_NAME,
             '_pagedefType' => ImageCropEditorModule::PAGEDEF_TYPE,
         ];
 
+        $presetSystemName = null;
         $additionalFieldName = $this->getFieldNameOfAdditionalField($this->name);
         if ('' !== $this->oTableRow->sqlData[$additionalFieldName]) {
-            $preset = \TdbCmsImageCropPreset::GetNewInstance();
-            if ($preset->Load($this->oTableRow->sqlData[$additionalFieldName])) {
-                $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $preset->fieldSystemName;
+            $crop = \TdbCmsImageCrop::GetNewInstance();
+            if ($crop->Load($this->oTableRow->sqlData[$additionalFieldName]) && '' !== $crop->fieldCmsImageCropPresetId) {
+                $preset = \TdbCmsImageCropPreset::GetNewInstance();
+                if ($preset->Load($crop->fieldCmsImageCropPresetId) && $this->isPresetAllowedByRestriction($preset->fieldSystemName)) {
+                    $presetSystemName = $preset->fieldSystemName;
+                }
             }
-        } else {
+        }
+
+        if (null === $presetSystemName) {
             $presetSystemName = $this->getImageCropPresetSystemName();
-            if (null !== $presetSystemName) {
-                $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $presetSystemName;
-            }
+        }
+
+        if (null !== $presetSystemName && $this->isPresetAllowedByRestriction($presetSystemName)) {
+            $parameters[ImageCropEditorModule::URL_PARAM_PRESET_NAME] = $presetSystemName;
         }
 
         $restriction = $this->getImageCropPresetRestriction();
@@ -482,56 +501,46 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
         return URL_CMS_CONTROLLER.$this->getUrlUtil()->getArrayAsUrl($parameters, '?', '&');
     }
 
-    /**
-     * @return string[]
-     */
-    private function getImageCropPresetRestriction()
+    private function getImageCropPresetRestriction(): array
     {
         $systemNames = $this->getFieldTypeConfigKey('imageCropPresetRestrictionSystemNames');
         if ('' === $systemNames) {
             return [];
         }
         $systemNames = explode(';', $systemNames);
-        array_walk(
-            $systemNames,
-            function ($element) {
-                return trim($element);
-            }
-        );
+        $systemNames = array_map('trim', $systemNames);
 
-        return $systemNames;
+        return array_values(array_filter($systemNames));
     }
 
-    /**
-     * @return UrlUtil
-     */
-    private function getUrlUtil()
+    private function isPresetAllowedByRestriction(string $presetSystemName): bool
+    {
+        $restriction = $this->getImageCropPresetRestriction();
+        if (0 === count($restriction)) {
+            return true;
+        }
+
+        return true === in_array($presetSystemName, $restriction, true);
+    }
+
+    private function getUrlUtil(): UrlUtil
     {
         return ServiceLocator::get('chameleon_system_core.util.url');
     }
 
-    /**
-     * @return bool
-     */
-    protected function isImageSet()
+    protected function isImageSet(): bool
     {
         $fieldValue = $this->_GetFieldValue();
 
         return '' !== $fieldValue && (false === is_numeric($fieldValue) || $fieldValue >= 1000);
     }
 
-    /**
-     * @return CmsMediaDataAccessInterface
-     */
-    private function getCmsMediaDataAccess()
+    private function getCmsMediaDataAccess(): CmsMediaDataAccessInterface
     {
         return ServiceLocator::get('chameleon_system_image_crop.cms_media_data_access');
     }
 
-    /**
-     * @return ImageCropDataAccessInterface
-     */
-    private function getImageCropDataAccess()
+    private function getImageCropDataAccess(): ImageCropDataAccessInterface
     {
         return ServiceLocator::get('chameleon_system_image_crop.image_crop_data_access');
     }
@@ -560,5 +569,74 @@ class TCMSFieldMediaWithImageCrop extends \TCMSFieldExtendedLookupMedia
     private function getInputFilterUtil(): InputFilterUtilInterface
     {
         return ServiceLocator::get('chameleon_system_core.util.input_filter');
+    }
+
+    /**
+     * @return array<int, array{id: string, name: string, selected: bool}>
+     */
+    private function getSavedCropsForField(?CmsMediaDataModel $cmsMedia, ?ImageCropDataModel $selectedCrop): array
+    {
+        if (null === $cmsMedia) {
+            return [];
+        }
+
+        $savedCrops = [];
+        $restriction = $this->getImageCropPresetRestriction();
+        $restrictionLookup = array_fill_keys($restriction, true);
+        try {
+            $crops = $this->getImageCropDataAccess()->getExistingCrops($cmsMedia);
+            foreach ($crops as $crop) {
+                $preset = $crop->getImageCropPreset();
+                $name = trim($crop->getName());
+                if (null !== $preset) {
+                    if (0 !== count($restrictionLookup) && false === isset($restrictionLookup[$preset->getSystemName()])) {
+                        continue;
+                    }
+                } elseif (0 !== count($restrictionLookup) && (null === $selectedCrop || $selectedCrop->getId() !== $crop->getId())) {
+                    continue;
+                }
+                if ('' === $name && null === $preset) {
+                    continue;
+                }
+                $savedCrops[] = [
+                    'id' => $crop->getId(),
+                    'name' => $this->getCropDisplayName($crop),
+                    'selected' => null !== $selectedCrop && $selectedCrop->getId() === $crop->getId(),
+                ];
+            }
+        } catch (ImageCropDataAccessException $e) {
+            return [];
+        }
+
+        return $savedCrops;
+    }
+
+    private function getCropDisplayName(ImageCropDataModel $crop): string
+    {
+        $preset = $crop->getImageCropPreset();
+        $cropName = trim((string) $crop->getName());
+
+        if (null !== $preset) {
+            if ('' === $cropName) {
+                return $preset->getName();
+            }
+
+            return sprintf('%s (%s)', $cropName, $preset->getName());
+        }
+
+        if ('' === $cropName) {
+            return '';
+        }
+
+        return sprintf(
+            '%s (%s)',
+            $cropName,
+            $this->getTranslator()->trans('chameleon_system_image_crop.field.custom_crop_suffix')
+        );
+    }
+
+    private function getTranslator(): TranslatorInterface
+    {
+        return ServiceLocator::get('translator');
     }
 }

@@ -21,6 +21,8 @@
     <input type="hidden" name="pos_y" id="pos_y" value="">
     <input type="hidden" name="width" id="width" value="">
     <input type="hidden" name="height" id="height" value="">
+    <input type="hidden" name="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_AJAX_MODE') }}" id="imageCropAjaxMode" value="0">
+    <input type="hidden" name="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::URL_PARAM_SAVE_ACTION') }}" id="saveAction" value="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::SAVE_ACTION_SAVE') }}">
 
     <div class="d-flex flex-wrap">
         {% set placeholderTranslationsKey = 'chameleon_system_image_crop.editor.crop_name_placeholder' %}
@@ -29,21 +31,19 @@
         {% endif %}
         <input type="text" name="name" value="{{ existingCrop.name }}" class="form-control mr-2 mt-2 crop-name"
                placeholder="{{ placeholderTranslationsKey | trans }}"{% if not aspectRatio %} required{% endif %}>
-
-        {% set savingMode = 'chameleon_system_image_crop.editor.saving_mode.create_new' | trans %}
-        {% if existingCrop.id %}
-            {% set savingMode = 'chameleon_system_image_crop.editor.saving_mode.update_existing' | trans %}
-        {% endif %}
-
-        {% set saveButtonTranslationKey = 'chameleon_system_image_crop.editor.save' %}
-        {% if enableCallback %}
-            {% set saveButtonTranslationKey = saveButtonTranslationKey ~ '_and_set' %}
-        {% endif %}
-        <button type="submit" class="btn btn-success mr-2 mt-2">
-            <span class="fas fa-save"></span> {{ saveButtonTranslationKey | trans({'%savingMode%': savingMode}) }}
-        </button>
     </div>
-
+    <hr>
+    <button type="submit" class="btn btn-success mr-2 mt-2" data-save-action="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::SAVE_ACTION_SAVE') }}">
+        <i class="fas fa-file-image pr-2"></i> {{ 'chameleon_system_image_crop.editor.save' | trans }}
+    </button>
+    {% if enableCallback %}
+        <button type="submit" class="btn btn-primary mr-2 mt-2" data-save-action="{{ constant('\\ChameleonSystem\\ImageCropBundle\\Bridge\\Chameleon\\BackendModule\\ImageCropEditorModule::SAVE_ACTION_SAVE_AND_SET') }}">
+            <i class="fas fa-file-image pr-2"></i><span class="fas fa-check"></span> {{ 'chameleon_system_image_crop.editor.save_and_set' | trans }}
+        </button>
+        <button type="button" class="btn btn-secondary mt-2" id="closeImageCropEditorButton">
+            <span class="fas fa-times"></span> {{ 'chameleon_system_image_crop.editor.close'|trans }}
+        </button>
+    {% endif %}
 </form>
 
 {% if not aspectRatio %}
@@ -61,12 +61,6 @@
             {% elseif preset %}
                 data-cropper-crop-width="{{ preset.width|e('html_attr') }}"
                 data-cropper-crop-height="{{ preset.height|e('html_attr') }}"
-            {% endif %}
-            {% if saved and enableCallback %}
-                data-callback-field-name="{{ fieldName|e('html_attr') }}"
-                data-callback-existing-crop-id="{{ existingCrop.id|e('html_attr') }}"
-                data-callback-cms-image-id="{{ cmsImage.id|e('html_attr') }}"
-                data-callback-url-to-get-image="{{  urlToGetImage|e('html_attr') }}"
             {% endif %}
     >
 </div>
