@@ -13,6 +13,8 @@
 
     <services>
 
+        <service id="chameleon_system_core.ai_image_label" class="ChameleonSystem\CoreBundle\Service\AiImageLabelService" public="true"/>
+
         <service id="Psr\Container\ContainerInterface" alias="service_container" public="true"/>
 
         <service class="ChameleonSystem\CoreBundle\Service\SystemTimeProvider" id="chameleon_system_core.system_time_provider" public="true"/>
