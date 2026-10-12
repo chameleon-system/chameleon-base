@@ -346,8 +346,9 @@ class TCMSFieldPortalLanguageMatrix extends TCMSField implements DoctrineNotTran
      * @param string $sFieldDefaultValue
      * @param string $sFieldName
      * @param bool $bUpdateExistingRecords
+     * @param string|null $previousDefaultValue
      */
-    protected function UpdateFieldDefaultValue($sFieldDefaultValue, $sFieldName, $bUpdateExistingRecords = false)
+    protected function UpdateFieldDefaultValue($sFieldDefaultValue, $sFieldName, $bUpdateExistingRecords = false, $previousDefaultValue = null)
     {
     }
 

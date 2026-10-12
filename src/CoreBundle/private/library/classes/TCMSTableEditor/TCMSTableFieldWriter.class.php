@@ -135,11 +135,20 @@ class TCMSTableFieldWriter extends TCMSTableEditor
      */
     public function Save($postData, $bDataIsInSQLForm = false)
     {
+        $this->oldData = $this->oTable->sqlData;
+        if (
+            isset($postData['field_default_value'])
+            && (string) $postData['field_default_value'] !== (string) $this->oldData['field_default_value']
+            && !($postData['UpdateRecordsWithOldDefaultValue'] ?? false)
+        ) {
+            $postData['field_default_value'] = $this->oldData['field_default_value'];
+        }
+
         if (false === $this->DataIsValid($postData, null)) {
             return false;
         }
 
-        $this->oldData = $this->oTable->sqlData;
+        $postData['previous_field_default_value'] = $this->oldData['field_default_value'];
         $this->oldTableName = $this->_oParentRecord->sqlData['name'];
         $this->prohibitChangesOnRelatedTables = $postData['bTargetTableChangeForMLTField'] ?? false; // true (from TCMSTableWriter) prohibits target changes
 
