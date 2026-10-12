@@ -58,7 +58,7 @@
                 if (jsonData.imageUrl) {
                     $('#cmsimagefielditem_imagediv_' + fieldName + '0 img').attr('src', jsonData.imageUrl);
                 }
-                $('#label_' + fieldName + '_image_crop_id span').html(jsonData.cropName);
+                $('#label_' + fieldName + '_image_crop_id span').text(jsonData.cropName);
                 var $savedCropsList = $('#saved_crops_list_' + fieldName);
                 if ($savedCropsList.length) {
                     var $savedCropsListContainer = $('#' + fieldName + '-saved-crops-list-container');
@@ -66,8 +66,16 @@
                     if (jsonData.savedCrops && jsonData.savedCrops.length > 0) {
                         $savedCropsListContainer.removeClass('d-none');
                         jsonData.savedCrops.forEach(function (savedCrop) {
-                            var liClass = savedCrop.selected ? ' class="active"' : '';
-                            $savedCropsList.append('<li' + liClass + '><a href="#" data-crop-id="' + savedCrop.id + '" data-field-name="' + fieldName + '" data-image-id="' + imageId + '">' + savedCrop.name + '</a></li>');
+                            $('<li>')
+                                .toggleClass('active', !!savedCrop.selected)
+                                .append($('<a href="#">')
+                                    .attr({
+                                        'data-crop-id': savedCrop.id,
+                                        'data-field-name': fieldName,
+                                        'data-image-id': imageId
+                                    })
+                                    .text(savedCrop.name))
+                                .appendTo($savedCropsList);
                         });
                     } else {
                         $savedCropsListContainer.addClass('d-none');
@@ -96,7 +104,7 @@
             },
             success: function (jsonData) {
                 $('#cmsimagefielditem_imagediv_' + fieldName + '0 img').attr('src', jsonData.imageUrl);
-                $('#label_' + fieldName + '_image_crop_id span').html(jsonData.cropName);
+                $('#label_' + fieldName + '_image_crop_id span').text(jsonData.cropName);
                 $('#' + fieldName + '_image_crop_id_reset_button').on('click', window.imageCropResetButtonCallBack);
                 window.refreshImageCropFieldDetails(fieldName, imageId);
                 if (true === closeModal) {
