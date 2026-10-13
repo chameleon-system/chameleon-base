@@ -130,7 +130,7 @@ class DomainValidator implements DomainValidatorInterface
     private function isValidDomainForPortal($domain, \TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
     {
         $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
-        // We need to go back to start here, otherwise the while loop get's skipped in certain cases (cronjob -> generate product link)
+        // the list pointer is shared and therefore needs a reset on usage
         $portalDomainList->GoToStart();
         while ($portalDomain = $portalDomainList->Next()) {
             $nameOfPortalDomainBeingChecked = (true === $secure) ? $portalDomain->getSecureDomainName() : $portalDomain->getInsecureDomainName();
