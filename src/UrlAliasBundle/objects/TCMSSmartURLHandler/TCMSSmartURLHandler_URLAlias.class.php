@@ -137,9 +137,9 @@ class TCMSSmartURLHandler_URLAlias extends TCMSSmartURLHandler
             $conditions[] = '`source_url` = '.$dbConnection->quote($absoluteSourceUrl.'/');
         }
 
-        // handle non exact match records
-        $conditions[] = sprintf("(`exact_match` = '0' AND `source_url` LIKE %s)", $dbConnection->quote('/'.$relativeSourceUrl.'%'));
-        $conditions[] = sprintf("(`exact_match` = '0' AND `source_url` LIKE %s)", $dbConnection->quote($absoluteSourceUrl.'%'));
+        // handle non-exact match records
+        $conditions[] = sprintf("(`exact_match` = '0' AND `source_url` != '' AND LEFT(%s, CHAR_LENGTH(`source_url`)) = `source_url`)", $dbConnection->quote('/'.$relativeSourceUrl));
+        $conditions[] = sprintf("(`exact_match` = '0' AND `source_url` != '' AND LEFT(%s, CHAR_LENGTH(`source_url`)) = `source_url`)", $dbConnection->quote($absoluteSourceUrl));
 
         /** @var TdbCmsPortal $oPortal */
         $oPortal = $this->getPortalDomainService()->getActivePortal();
