@@ -13,7 +13,7 @@ namespace ChameleonSystem\CoreBundle\Util;
 
 /**
  * Interface UrlPrefixGeneratorInterface defines a service that generates prefixes which are part of every
- * Chameleon URL, but not part of the route. By default this prefix contains information on a given portal and
+ * Chameleon URL, but not part of the route. By default, this prefix contains information on a given portal and
  * given language.
  */
 interface UrlPrefixGeneratorInterface

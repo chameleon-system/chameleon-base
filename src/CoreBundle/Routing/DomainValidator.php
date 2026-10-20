@@ -2,6 +2,7 @@
 
 namespace ChameleonSystem\CoreBundle\Routing;
 
+use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 use ChameleonSystem\CoreBundle\Service\RequestInfoServiceInterface;
@@ -12,44 +13,26 @@ class DomainValidator implements DomainValidatorInterface
 {
     use DomainSupportsLanguageTrait;
 
-    /**
-     * @var PortalDomainServiceInterface
-     */
-    private $portalDomainService;
-    /**
-     * @var RequestInfoServiceInterface
-     */
-    private $requestInfoService;
-    /**
-     * @var bool
-     */
-    private $forcePrimaryDomain;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
-     * @var LanguageServiceInterface
-     */
-    private $languageService;
-
-    /**
-     * @param bool $forcePrimaryDomain
-     */
-    public function __construct(PortalDomainServiceInterface $portalDomainService, RequestInfoServiceInterface $requestInfoService, RequestStack $requestStack, LanguageServiceInterface $languageService, $forcePrimaryDomain = CHAMELEON_FORCE_PRIMARY_DOMAIN)
-    {
-        $this->portalDomainService = $portalDomainService;
-        $this->requestInfoService = $requestInfoService;
-        $this->requestStack = $requestStack;
-        $this->languageService = $languageService;
-        $this->forcePrimaryDomain = $forcePrimaryDomain;
+    public function __construct(
+        private readonly PortalDomainServiceInterface $portalDomainService,
+        private readonly RequestInfoServiceInterface $requestInfoService,
+        private readonly RequestStack $requestStack,
+        private readonly LanguageServiceInterface $languageService,
+        private readonly bool $forcePrimaryDomain = CHAMELEON_FORCE_PRIMARY_DOMAIN
+    ) {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws InvalidPortalDomainException
      */
-    public function getValidDomain($domain, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $secure = true)
-    {
+    public function getValidDomain(
+        $domain,
+        ?\TdbCmsPortal $portal = null,
+        ?\TdbCmsLanguage $language = null,
+        $secure = true
+    ) {
         if (true === $this->isDomainValid($domain, $portal, $language, $secure)) {
             return $domain;
         }
@@ -58,14 +41,15 @@ class DomainValidator implements DomainValidatorInterface
     }
 
     /**
-     * @param string|null $domain
-     * @param bool $secure
-     *
-     * @return bool
+     * @throws InvalidPortalDomainException
      */
-    private function isDomainValid($domain, ?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $secure = true)
-    {
-        if (null === $domain) {
+    private function isDomainValid(
+        ?string $domainName,
+        ?\TdbCmsPortal $portal = null,
+        ?\TdbCmsLanguage $language = null,
+        bool $secure = true
+    ): bool {
+        if (null === $domainName) {
             return false;
         }
         if (null === $portal) {
@@ -87,27 +71,26 @@ class DomainValidator implements DomainValidatorInterface
                 $primaryDomainName = $primaryDomain->getInsecureDomainName();
             }
 
-            return $primaryDomainName === $domain;
+            return $primaryDomainName === $domainName;
         }
         if (false === $this->requestInfoService->isBackendMode()
-            && $this->isRequestingForActiveParameters($domain, $portal, $language, $secure)) {
+            && $this->isRequestingForActiveParameters($domainName, $portal, $language, $secure)) {
             return true;
         }
 
-        return $this->isValidDomainForPortal($domain, $portal, $language, $secure);
+        return $this->isValidDomainForPortal($domainName, $portal, $language, $secure);
     }
 
     /**
      * Checks if the validation check is made for the same parameters as the current request. As this will be the case
-     * in >95% of cases, this will improve performance by making subsequent database calls unnecessary.
-     *
-     * @param string $domain
-     * @param bool $secure
-     *
-     * @return bool
+     * in >95% of cases, this will improve performance by making later database calls unnecessary.
      */
-    private function isRequestingForActiveParameters($domain, \TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
-    {
+    private function isRequestingForActiveParameters(
+        string $domainName,
+        \TdbCmsPortal $portal,
+        \TdbCmsLanguage $language,
+        bool $secure
+    ): bool {
         $activePortal = $this->portalDomainService->getActivePortal();
         $activeDomain = $this->portalDomainService->getActiveDomain();
         $activeLanguage = $this->languageService->getActiveLanguage();
@@ -117,28 +100,31 @@ class DomainValidator implements DomainValidatorInterface
         return $activePortal->id === $portal->id
             && $activeLanguage->id === $language->id
             && $isCurrentRequestSecure === $secure
-            && $activeDomain->GetActiveDomainName() === $domain
-        ;
+            && $activeDomain->GetActiveDomainName() === $domainName;
     }
 
-    /**
-     * @param string $domain
-     * @param bool $secure
-     *
-     * @return bool
-     */
-    private function isValidDomainForPortal($domain, \TdbCmsPortal $portal, \TdbCmsLanguage $language, $secure)
-    {
+    private function isValidDomainForPortal(
+        string $domainName,
+        \TdbCmsPortal $portal,
+        \TdbCmsLanguage $language,
+        bool $secure
+    ): bool {
         $portalDomainList = $portal->GetFieldCmsPortalDomainsList();
         // the list pointer is shared and therefore needs a reset on usage
         $portalDomainList->GoToStart();
         while ($portalDomain = $portalDomainList->Next()) {
-            $nameOfPortalDomainBeingChecked = (true === $secure) ? $portalDomain->getSecureDomainName() : $portalDomain->getInsecureDomainName();
-            if ($domain !== $nameOfPortalDomainBeingChecked) {
+            $nameOfPortalDomainBeingChecked = (true === $secure) ? $portalDomain->getSecureDomainName()
+                : $portalDomain->getInsecureDomainName();
+            if ($domainName !== $nameOfPortalDomainBeingChecked) {
                 continue;
             }
 
-            if ($this->domainSupportsLanguage($portalDomain, $portal, $language, $this->languageService->getCmsBaseLanguageId())) {
+            if ($this->domainSupportsLanguage(
+                $portalDomain,
+                $portal,
+                $language,
+                $this->languageService->getCmsBaseLanguageId()
+            )) {
                 return true;
             }
         }
@@ -147,12 +133,13 @@ class DomainValidator implements DomainValidatorInterface
     }
 
     /**
-     * @param bool $secure
-     *
-     * @return string
+     * @throws InvalidPortalDomainException
      */
-    private function getDefaultDomain(?\TdbCmsPortal $portal = null, ?\TdbCmsLanguage $language = null, $secure = true)
-    {
+    private function getDefaultDomain(
+        ?\TdbCmsPortal $portal = null,
+        ?\TdbCmsLanguage $language = null,
+        bool $secure = true
+    ): string {
         if (null === $language) {
             $language = $this->languageService->getActiveLanguage();
         }
@@ -162,7 +149,8 @@ class DomainValidator implements DomainValidatorInterface
             }
             $portal = $this->portalDomainService->getActivePortal();
         }
-        if (true === $this->forcePrimaryDomain || null === $activeDomain = $this->portalDomainService->getActiveDomain()) {
+        if (true === $this->forcePrimaryDomain
+            || null === $activeDomain = $this->portalDomainService->getActiveDomain()) {
             $domain = $this->portalDomainService->getPrimaryDomain($portal->id, $language->id);
 
             return true === $secure ? $domain->getSecureDomainName() : $domain->getInsecureDomainName();
@@ -180,15 +168,18 @@ class DomainValidator implements DomainValidatorInterface
     }
 
     /**
-     * @return string
+     * @throws InvalidPortalDomainException
      */
-    private function getDefaultDomainForBackend(\TdbCmsLanguage $language)
+    private function getDefaultDomainForBackend(\TdbCmsLanguage $language): string
     {
         if (null !== $request = $this->requestStack->getCurrentRequest()) {
             return $request->getHost();
         }
 
-        $domain = $this->portalDomainService->getPrimaryDomain($this->portalDomainService->getDefaultPortal()->id, $language->id);
+        $domain = $this->portalDomainService->getPrimaryDomain(
+            $this->portalDomainService->getDefaultPortal()->id,
+            $language->id
+        );
 
         return $domain->getSecureDomainName();
     }

@@ -14,39 +14,29 @@ namespace ChameleonSystem\CoreBundle\i18n;
 use ChameleonSystem\CoreBundle\i18n\Interfaces\TranslationDomainExportInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 
-class TranslationExporterJSON implements TranslationDomainExportInterface
+readonly class TranslationExporterJSON implements TranslationDomainExportInterface
 {
-    /**
-     * @var TranslatorBagInterface
-     */
-    private $translator;
-
-    public function __construct(TranslatorBagInterface $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private TranslatorBagInterface $translator
+    ) {
     }
 
-    /**
-     * @param string $locale
-     * @param string $domain
-     *
-     * @return string
-     */
-    public function export($locale, $domain)
+    public function export($locale, $domain): false|string
     {
         $messageArray = $this->getMessages($locale, $domain);
 
         return json_encode($messageArray);
     }
 
-    /**
-     * @param string $locale
-     * @param string $domain
-     *
-     * @return array
-     */
-    private function getMessages($locale, $domain)
+    private function getMessages($locale, $domain): array
     {
-        return $this->translator->getCatalogue($locale)->all($domain);
+        $catalogue = $this->translator->getCatalogue($locale);
+        $messages = [];
+        while (null !== $catalogue) {
+            $messages += $catalogue->all($domain);
+            $catalogue = $catalogue->getFallbackCatalogue();
+        }
+
+        return $messages;
     }
 }
