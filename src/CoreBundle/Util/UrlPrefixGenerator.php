@@ -17,31 +17,21 @@ use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
 {
     /**
-     * @var PortalDomainServiceInterface
-     */
-    private $portalDomainService;
-    private LanguageServiceInterface $languageService;
-    /**
      * @var array<string, string>
      */
     private array $languagePrefixRuntimeCache = [];
 
     public function __construct(
-        PortalDomainServiceInterface $portalDomainService,
-        LanguageServiceInterface $languageService
+        private readonly PortalDomainServiceInterface $portalDomainService,
+        private readonly LanguageServiceInterface $languageService
     ) {
-        $this->portalDomainService = $portalDomainService;
-        $this->languageService = $languageService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generatePrefixParts(
         ?\TdbCmsPortal $portal = null,
         ?\TdbCmsLanguage $language = null,
         ?\TdbCmsPortalDomains $domain = null
-    ) {
+    ): array {
         $portalPrefix = $this->getPortalPrefix($portal);
         $languagePrefix = $this->getLanguagePrefix($portal, $language, $domain);
 
@@ -56,14 +46,11 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
         return $prefixParts;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generatePrefix(
         ?\TdbCmsPortal $portal = null,
         ?\TdbCmsLanguage $language = null,
         ?\TdbCmsPortalDomains $domain = null
-    ) {
+    ): string {
         $prefixParts = $this->generatePrefixParts($portal, $language, $domain);
         if (empty($prefixParts)) {
             return '';
@@ -85,7 +72,7 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
         ?\TdbCmsPortal $portal = null,
         ?\TdbCmsLanguage $language = null,
         ?\TdbCmsPortalDomains $domain = null
-    ) {
+    ): string {
         if (null === $portal) {
             return '';
         }
@@ -129,16 +116,13 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
         return $this->languagePrefixRuntimeCache[$runtimeCacheKey] = $this->getRoutingLanguageCode($language);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPortalPrefix(?\TdbCmsPortal $portal = null)
+    public function getPortalPrefix(?\TdbCmsPortal $portal = null): string
     {
         if (null === $portal) {
             return '';
         }
 
-        return $portal->fieldIdentifier;
+        return $portal->fieldIdentifier ?? '';
     }
 
     private function getRoutingLanguageCode(\TdbCmsLanguage $language): string

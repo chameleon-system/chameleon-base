@@ -61,7 +61,6 @@
         <service id="chameleon_system_core.redirectstrategy.throwexception" class="ChameleonRedirectStrategyThrowException" public="false">
         </service>
 
-
         <service id="chameleon_system_core.redirect" class="cmsCoreRedirect" public="true">
             <argument type="service" id="request_stack" />
             <argument type="service" id="chameleon_system_core.redirectstrategy.registershutdown" />
@@ -256,12 +255,13 @@
         </service>
 
         <service id="chameleon_system_core.routing.loader.chameleon" class="esono\pkgCmsRouting\CmsRouteLoader">
-            <argument type="service" id="service_container" />
-            <argument type="service" id="chameleon_system_core.util.url_prefix_generator" />
-            <argument type="service" id="chameleon_system_core.util.routing" />
-            <argument type="service" id="chameleon_system_core.util.url" />
-            <argument type="service" id="chameleon_system_core.language_service" />
-            <tag name="routing.loader" />
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="chameleon_system_core.util.url_prefix_generator"/>
+            <argument type="service" id="chameleon_system_core.util.routing"/>
+            <argument type="service" id="chameleon_system_core.util.url"/>
+            <argument type="service" id="chameleon_system_core.language_service"/>
+            <argument type="service" id="logger"/>
+            <tag name="routing.loader"/>
         </service>
 
         <service id="chameleon_system_core.routing.domain_validator" class="ChameleonSystem\CoreBundle\Routing\DomainValidator">
