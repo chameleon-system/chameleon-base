@@ -11,8 +11,6 @@
 
 namespace ChameleonSystem\CoreBundle\Util;
 
-use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
-
 /**
  * Interface UrlPrefixGeneratorInterface defines a service that generates prefixes which are part of every
  * Chameleon URL, but not part of the route. By default, this prefix contains information on a given portal and
@@ -22,46 +20,40 @@ interface UrlPrefixGeneratorInterface
 {
     /**
      * @return string[]
-     *
-     * @throws InvalidPortalDomainException
      */
     public function generatePrefixParts(
         ?\TdbCmsPortal $portal = null,
         ?\TdbCmsLanguage $language = null,
         ?\TdbCmsPortalDomains $domain = null
-    ): array;
+    );
 
     /**
      * Generates the complete URL prefix, including a leading slash and slashes as separators between the different
      * URL parts. The result is of varying length, depending on if the prefix parts are needed.
      *
      * @return string the combined URL prefix of getLanguagePrefix() and getPortalPrefix()
-     *
-     * @throws InvalidPortalDomainException
      */
     public function generatePrefix(
         ?\TdbCmsPortal $portal = null,
         ?\TdbCmsLanguage $language = null,
         ?\TdbCmsPortalDomains $domain = null
-    ): string;
+    );
 
     /**
      * Returns only the language-specific part of the URL prefix, without any slashes.
      *
      * @return string the language ISO6391 code of the given language, or an empty string (depending on the implementation)
-     *
-     * @throws InvalidPortalDomainException
      */
     public function getLanguagePrefix(
         ?\TdbCmsPortal $portal = null,
         ?\TdbCmsLanguage $language = null,
         ?\TdbCmsPortalDomains $domain = null
-    ): string;
+    );
 
     /**
      * Returns only the portal-specific part of the URL prefix, without any slashes.
      *
      * @return string the portal prefix as defined in the portal backend configuration, or an empty string (depending on the implementation)
      */
-    public function getPortalPrefix(?\TdbCmsPortal $portal = null): string;
+    public function getPortalPrefix(?\TdbCmsPortal $portal = null);
 }

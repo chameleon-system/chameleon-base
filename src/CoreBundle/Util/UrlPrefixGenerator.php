@@ -11,6 +11,7 @@
 
 namespace ChameleonSystem\CoreBundle\Util;
 
+use ChameleonSystem\CoreBundle\Exception\InvalidPortalDomainException;
 use ChameleonSystem\CoreBundle\Service\LanguageServiceInterface;
 use ChameleonSystem\CoreBundle\Service\PortalDomainServiceInterface;
 
@@ -67,6 +68,8 @@ class UrlPrefixGenerator implements UrlPrefixGeneratorInterface
      *                - the given language is null
      *                - the given portal is not set to support multi-language
      *                - the domain associated with the portal has a language setting
+     *
+     * @throws InvalidPortalDomainException
      */
     public function getLanguagePrefix(
         ?\TdbCmsPortal $portal = null,

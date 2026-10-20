@@ -13,5 +13,11 @@ namespace ChameleonSystem\CoreBundle\i18n\Interfaces;
 
 interface TranslationDomainExportInterface
 {
-    public function export(string $locale, string $domain): false|string;
+    /**
+     * @param string $locale
+     * @param string $domain
+     *
+     * @return string
+     */
+    public function export($locale, $domain);
 }

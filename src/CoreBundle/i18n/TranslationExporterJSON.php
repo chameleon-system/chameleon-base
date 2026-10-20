@@ -21,14 +21,14 @@ readonly class TranslationExporterJSON implements TranslationDomainExportInterfa
     ) {
     }
 
-    public function export(string $locale, string $domain): false|string
+    public function export($locale, $domain): false|string
     {
         $messageArray = $this->getMessages($locale, $domain);
 
         return json_encode($messageArray);
     }
 
-    private function getMessages(string $locale, string $domain): array
+    private function getMessages($locale, $domain): array
     {
         $catalogue = $this->translator->getCatalogue($locale);
         $messages = [];
