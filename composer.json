@@ -98,16 +98,16 @@
         "scheb/2fa-google-authenticator": "^7.7"
     },
     "require-dev": {
-        "symfony/stopwatch": "^6.4",
-        "symfony/web-profiler-bundle": "^6.4",
-        "symfony/debug-bundle": "^6.4",
-        "symfony/var-dumper": "^6.4",
-        "symfony/var-exporter": "^6.4",
-
         "chameleon-system/code-style-config": "dev-master@dev",
+        "phpcompatibility/php-compatibility": "^10.0.0@dev",
         "phpspec/prophecy-phpunit": "^2.0.0",
         "phpunit/phpunit": "^9.5.1",
         "psalm/plugin-symfony": "^3.1",
+        "symfony/debug-bundle": "^6.4",
+        "symfony/stopwatch": "^6.4",
+        "symfony/var-dumper": "^6.4",
+        "symfony/var-exporter": "^6.4",
+        "symfony/web-profiler-bundle": "^6.4",
         "vimeo/psalm": "^4.22"
     },
     "autoload": {
@@ -192,7 +192,10 @@
     ],
     "config": {
         "bin-dir": "vendor/bin",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "replace": {
         "chameleon-system/autoclasses-bundle": "*",

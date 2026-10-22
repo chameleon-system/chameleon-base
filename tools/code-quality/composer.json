@@ -2,11 +2,13 @@
     "name": "esono/tools",
     "repositories": [
         {
-            "type": "composer",
-            "url": "https://composer.esono.de",
-            "canonical": false
+            "type": "vcs",
+            "url": "git@git.esono.de:devops/code-quality.git"
         }
     ],
+    "config": {
+        "gitlab-domains": ["git.esono.de"]
+    },
     "require-dev": {
         "esono/code-quality": "dev-main"
     }
