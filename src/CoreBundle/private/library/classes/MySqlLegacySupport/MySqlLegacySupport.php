@@ -33,6 +33,11 @@ if (!defined('MYSQL_BOTH')) {
  */
 class MySqlLegacySupport
 {
+    // same values as the global MYSQL_* polyfills above, which stay for external callers
+    private const FETCH_ASSOC = 1;
+    private const FETCH_NUM = 2;
+    private const FETCH_BOTH = 3;
+
     private Connection $databaseConnection;
     /**
      * @var DriverResultStatement|DriverStatement|bool|null
@@ -199,17 +204,17 @@ class MySqlLegacySupport
      * @param DriverResultStatement|DriverStatement $result
      * @param int $result_type
      */
-    public function fetch_array($result, $result_type = MYSQL_ASSOC)
+    public function fetch_array($result, $result_type = self::FETCH_ASSOC)
     {
         $mappedType = null;
         switch ($result_type) {
-            case MYSQL_ASSOC:
+            case self::FETCH_ASSOC:
                 return $result->fetchAssociative();
                 break;
-            case MYSQL_NUM:
+            case self::FETCH_NUM:
                 return $result->fetchNumeric();
                 break;
-            case MYSQL_BOTH:
+            case self::FETCH_BOTH:
                 throw new TPkgCmsException_Log('MySqlLegacySupport::fetch_array MYSQL_BOTH is no longer supported!');
                 break;
         }

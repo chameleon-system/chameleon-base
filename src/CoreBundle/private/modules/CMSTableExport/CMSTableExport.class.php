@@ -632,7 +632,7 @@ class CMSTableExport extends TCMSModelBase
         $rtfData = html_entity_decode($rtfData, ENT_QUOTES, 'ISO8859-15');
 
         // convert tags to lowercase
-        $rtfData = preg_replace(',<(/?)([a-zA-Z]+)([^>]+)?(/?)>,ie', '"<\1".strtolower("\2")."\3\4>"', $rtfData);
+        $rtfData = preg_replace_callback(',<(/?)([a-zA-Z]+)([^>]+)?(/?)>,i', fn ($m) => '<'.$m[1].strtolower($m[2]).$m[3].$m[4].'>', $rtfData);
 
         $rtfData = str_replace('<br />', '<br>', $rtfData);
 
@@ -693,7 +693,7 @@ class CMSTableExport extends TCMSModelBase
         // $exportData = utf8_decode($exportData);
 
         // convert tags to lowercase
-        $exportData = preg_replace(',<(/?)([a-zA-Z]+)([^>]+)?(/?)>,ie', '"<\1".strtolower("\2")."\3\4>"', $exportData);
+        $exportData = preg_replace_callback(',<(/?)([a-zA-Z]+)([^>]+)?(/?)>,i', fn ($m) => '<'.$m[1].strtolower($m[2]).$m[3].$m[4].'>', $exportData);
         $exportData = str_replace('<br />', '<br>', $exportData);
 
         $exportData = str_replace('<strong>', '<b>', $exportData);
