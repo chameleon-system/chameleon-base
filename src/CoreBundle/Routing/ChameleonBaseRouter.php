@@ -30,7 +30,7 @@ abstract class ChameleonBaseRouter extends Router
     protected $urlUtil;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct(ContainerInterface $container, $resource, array $options = [], ?RequestContext $context = null)
     {
@@ -49,7 +49,7 @@ abstract class ChameleonBaseRouter extends Router
     abstract protected function generateCacheDirPath(string $baseCacheDir): string;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRouteCollection(): RouteCollection
     {
@@ -70,7 +70,7 @@ abstract class ChameleonBaseRouter extends Router
      */
     public function clearCache()
     {
-        $currentDir = $this->generateCacheDirPath($this->getOption('cache_dir'));
+        $currentDir = $this->getOption('cache_dir');
         if (false === is_dir($currentDir)) {
             return;
         }
@@ -86,7 +86,7 @@ abstract class ChameleonBaseRouter extends Router
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
