@@ -10,6 +10,7 @@ class TCMSTableEditorChangeLogTest extends TestCase
 {
     /**
      * @runInSeparateProcess
+     *
      * @preserveGlobalState disabled
      */
     #[RunInSeparateProcess]
@@ -19,7 +20,7 @@ class TCMSTableEditorChangeLogTest extends TestCase
         // Replace the generated parent only in this isolated test process.
         class_alias(ChangeLogInsertParentStub::class, 'TCMSTableEditorChangeLogAutoParent');
 
-        $editor = new class extends \TCMSTableEditorChangeLog {
+        $editor = new class() extends \TCMSTableEditorChangeLog {
             public array $changes = [];
             public ?string $action = null;
 
