@@ -5,7 +5,12 @@
 </div>
 <?php
 
-TCMSLogChange::makeFieldMultilingual('module_faq', 'name');
-TCMSLogChange::makeFieldMultilingual('module_faq', 'qdescription');
-TCMSLogChange::makeFieldMultilingual('module_faq', 'artikel');
-TCMSLogChange::UpdateTranslationFields();
+// module_faq only exists in installations that use the FAQ module.
+if (TCMSLogChange::TableExists('module_faq')) {
+    foreach (['name', 'qdescription', 'artikel'] as $fieldName) {
+        if (TCMSLogChange::FieldExists('module_faq', $fieldName)) {
+            TCMSLogChange::makeFieldMultilingual('module_faq', $fieldName);
+        }
+    }
+    TCMSLogChange::UpdateTranslationFields();
+}
