@@ -28,6 +28,11 @@ class ChameleonSystemCmsCacheExtension extends Extension implements PrependExten
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
         $container->registerForAutoconfiguration(QueryCacheDecisionMakerInterface::class)->addTag('chameleon_system_cms_cache.query_cache_decision_maker');
+
+        if ($container->getParameter('chameleon_system_core.cache.memcache_activate')) {
+            $cacheDefinition = $container->getDefinition('chameleon_system_cms_cache.cache');
+            $cacheDefinition->replaceArgument(2, $container->getDefinition('chameleon_system_cms_cache.storage.memcache'));
+        }
     }
 
     public function prepend(ContainerBuilder $container): void
