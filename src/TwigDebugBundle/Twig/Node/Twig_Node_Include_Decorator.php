@@ -16,82 +16,34 @@ use Twig\Compiler;
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
 use Twig\Node\NodeOutputInterface;
-use Twig\Source;
 
 #[YieldReady]
 class Twig_Node_Include_Decorator extends Node implements NodeOutputInterface
 {
-    /**
-     * @var IncludeNode
-     */
-    private $original;
-
     public function __construct(IncludeNode $original)
     {
-        $this->original = $original;
+        parent::__construct(['include' => $original], [], $original->getTemplateLine());
     }
 
-    /**
-     * @return void
-     */
-    public function compile(Compiler $compiler)
+    public function compile(Compiler $compiler): void
     {
-        $snippet = $this->original->getNode('expr')->hasAttribute('value') ? $snippet = $this->original->getNode('expr')->getAttribute('value') : null;
-        if ($snippet) {
-            $compiler->write('yield "\n\n<!-- START INCLUDE '.$snippet.' -->\n\n";');
+        $include = $this->getNode('include');
+        $snippet = null;
+        if ($include instanceof IncludeNode) {
+            $expression = $include->getNode('expr');
+            if ($expression->hasAttribute('value')) {
+                $snippet = $expression->getAttribute('value');
+            }
         }
-        $this->original->compile($compiler);
-        if ($snippet) {
-            $compiler->write('yield "\n\n<!-- END INCLUDE '.$snippet.' -->\n\n";');
+
+        if (\is_string($snippet) && $snippet) {
+            $compiler->write('yield ')->string("\n\n<!-- START INCLUDE ".$snippet." -->\n\n")->raw(";\n");
         }
-    }
 
-    public function getIterator(): \Traversable
-    {
-        return $this->original->getIterator();
-    }
+        $compiler->subcompile($include);
 
-    public function getNodeTag(): string
-    {
-        return (string) $this->original->getNodeTag();
-    }
-
-    public function count(): int
-    {
-        return $this->original->count();
-    }
-
-    public function getTemplateLine(): int
-    {
-        return $this->original->getTemplateLine();
-    }
-
-    /**
-     * @psalm-suppress UndefinedMethod
-     *
-     * @FIXME `setTemplateName` does not exist on the original class. This method should probably be removed.
-     *
-     * @param string $name
-     *
-     * @return void
-     */
-    public function setTemplateName($name)
-    {
-        $this->original->setTemplateName($name);
-    }
-
-    public function getTemplateName(): string
-    {
-        return (string) $this->original->getTemplateName();
-    }
-
-    public function setSourceContext(Source $source): void
-    {
-        $this->original->setSourceContext($source);
-    }
-
-    public function getSourceContext(): ?Source
-    {
-        return $this->original->getSourceContext();
+        if (\is_string($snippet) && $snippet) {
+            $compiler->write('yield ')->string("\n\n<!-- END INCLUDE ".$snippet." -->\n\n")->raw(";\n");
+        }
     }
 }
