@@ -242,7 +242,7 @@ class TCMSTableEditorChangeLog extends TCMSTableEditorChangeLogAutoParent
             $aDiff = [];
             foreach ($oFields as $oField) {
                 if ('' !== $oField->data) {
-                    $aDiff[] = [$oField->id, '', $oField->data];
+                    $aDiff[] = [$oField->oDefinition->id, '', $oField->data];
                 }
             }
             $this->createChangeItems($sChangeSetId, $aDiff);
